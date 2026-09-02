@@ -2237,8 +2237,9 @@ app.whenReady().then(async () => {
     && projectMenu.rect.width > 0
     && projectMenu.rect.height > 0
     && projectMenu.focusedRole === 'menuitem'
+    // 37번 보드 — ⋯ 는 셋뿐이다(고정·탐색기·제거). 편집·작업 트리·보관은 사라졌다.
     && JSON.stringify(projectMenu.itemLabels) === JSON.stringify([
-      '고정', '편집', '탐색기에서 열기', '영구 작업 트리 생성', '대화 보관', '프로젝트 제거',
+      '최상단 고정', '탐색기에서 열기', '프로젝트 제거',
     ]));
 
   // ---------- 검증 4: 접근성 3종 (CDP Emulation.setEmulatedMedia) ----------

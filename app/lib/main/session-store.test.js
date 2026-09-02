@@ -228,3 +228,21 @@ test('손상된 workspace_json이 있어도 세션은 열린다', (t) => {
   assert.equal(loaded.messages.length, 1);
   assert.ok(loaded.workspace);
 });
+
+test('putCards는 넘어온 배열을 스택의 전부로 본다 — 빠진 카드는 지운다', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-sess-stack-'));
+  const store = createSessionStore({ dbPath: path.join(dir, 's.sqlite3') });
+  try {
+    store.createSession({ id: 'S', mode: 'chat', projectId: 'default', title: 't' });
+    store.putCards('S', [{ cardId: 'a', kind: 'table', channel: 'fixture' }, { cardId: 'b', kind: 'chart', channel: 'live' }]);
+    assert.equal(store.getSession('S').canvasCards.length, 2);
+    // 다시 그린 뒤 보고: b만 남았다(a는 닫힘) → a는 지워지고 b만 남는다.
+    store.putCards('S', [{ cardId: 'b', kind: 'chart', channel: 'live' }]);
+    const cards = store.getSession('S').canvasCards;
+    assert.deepEqual(cards.map((c) => c.cardId), ['b']);
+    assert.equal(cards[0].seq, 0);
+  } finally {
+    store.close();
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});

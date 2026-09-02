@@ -407,8 +407,49 @@ async function loadEmptyCanvasExtras() {
 }
 
 // ---------- 캔버스 카드 추가/초기화/하이라이트 ----------
-window.athena.on('athena:add-canvas', ({ type }) => {
-  addCard(type);
+// ---------- 세션 카드 스택 보고(42번 보드) ----------
+// 카드 DOM에 그린 근거(봉투)를 매달아 두고, 추가·닫기·비우기 뒤마다 그리드의
+// 스택을 main에 보고한다. main이 세션에 적고, 복원은 같은 봉투를 같은 페인트
+// 채널로 다시 흘려 그린다 — 별도 렌더러를 두지 않는다. 봉투가 없는 카드(알림·
+// 상태 카드)는 스택에 넣지 않는다: 그릴 근거가 없는 것을 있다고 저장하지 않는다.
+// 렌더 함수들은 카드 노드를 돌려주지 않는 것이 많다(renderTable은 문자열, 일부는 undefined).
+// 그리드에 마지막으로 붙은 카드가 곧 방금 그린 카드다 — 그것을 태그한다.
+function lastCardOr(node) {
+  if (node && node.classList && node.classList.contains('card')) return node;
+  const cards = grid.querySelectorAll('.card');
+  return cards.length ? cards[cards.length - 1] : null;
+}
+
+function tagSessionCard(node, meta) {
+  if (!node || !node.classList || !node.classList.contains('card') || !meta) return node;
+  // 재생(복원)된 카드는 저장된 id를 그대로 쓴다 — 새 id를 주면 같은 카드가 두 장으로 저장된다.
+  if (meta.cardId) node.dataset.sessionCardId = meta.cardId;
+  if (!node.dataset.sessionCardId) node.dataset.sessionCardId = crypto.randomUUID();
+  node.__athenaSessionCard = meta;
+  return node;
+}
+
+function reportSessionCards() {
+  const cards = [];
+  for (const node of grid.querySelectorAll('.card')) {
+    const meta = node.__athenaSessionCard;
+    if (!meta) continue;
+    cards.push({
+      cardId: node.dataset.sessionCardId,
+      kind: meta.kind || null,
+      channel: meta.channel,
+      envelope: meta.envelope || null,
+      protected: node.dataset.protected === 'true',
+    });
+  }
+  try { window.athena.send('athena:session-cards', { cards }); } catch { /* 채널이 없는 하네스 — 보고는 그림의 필요조건이 아니다 */ }
+}
+
+window.athena.on('athena:add-canvas', ({ type, sessionCardId }) => {
+  Promise.resolve(addCard(type)).then((node) => {
+    tagSessionCard(lastCardOr(node), { channel: 'fixture', kind: type, envelope: { type }, cardId: sessionCardId || null });
+    reportSessionCards();
+  });
 });
 
 // 카드 비우기 — 옛 판에서는 main이 캔버스 창을 수축시킬 때 `athena:clear-canvases`
@@ -419,6 +460,7 @@ function clearCanvases() {
     destroyCard(card);
   }
   activeDatasetId = null;
+  reportSessionCards();
 }
 
 window.AthenaShell.registerCanvasClear(clearCanvases);
@@ -433,6 +475,8 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
       operation_args: payload.operationArgs,
     });
     const card = await addLiveCard({ status: 'success', envelope });
+    tagSessionCard(lastCardOr(card), { channel: 'rest', kind: envelope.canvas_type || null, envelope });
+    reportSessionCards();
     if (card && REST_RETRY_CARD_ID_PATTERN.test(String(payload.retryCardId || ''))) {
       Object.defineProperty(card, '__athenaRestRetryCardId', {
         value: String(payload.retryCardId), configurable: true, writable: false,
@@ -554,6 +598,8 @@ window.athena.on('athena:add-canvas-live', async (result) => {
   const rendererReceivedAt = performance.now();
   const node = await addLiveCard(result);
   if (!node || !result || (result.status !== 'success' && result.status !== 'fallback')) return;
+  tagSessionCard(lastCardOr(node), { channel: 'live', kind: result.envelope && result.envelope.canvas_type || null, envelope: result.envelope || null, cardId: result.sessionCardId || null });
+  reportSessionCards();
   window.AthenaProviderFirstPaint.claimFirstVisible({
     clientSubmitId: result.clientSubmitId,
     turnId: result.turnId,
@@ -1756,6 +1802,7 @@ function closeCard(card) {
   // 부모에서 remove → 그리드가 비면 캔버스 접기는 ui-kit.js의
   // removeCard로 settings-cards.js와 공용화했다(포니테일 감사).
   removeCard(card);
+  reportSessionCards();
 }
 
 function cardCloseButton(card) {

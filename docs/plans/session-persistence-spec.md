@@ -165,7 +165,10 @@
 
 편집 규율: main.js·chat.js·preload.js는 CRLF/LF 혼합이라 Edit 도구가 파일을 통째로 정규화한다. 반드시 node로 바이트를 확인하고 바이트 보존 패치로 고친다.
 
-### Wave 4 — 세션 스토어 배선 (main·preload·chat 적용됨 42f0045 · canvas.js 보고는 대기)
+### Wave 4 — 세션 스토어 배선 (적용 완료)
+- [x] canvas.js — 카드 스택 보고(추가·닫기·비우기), 재생 카드는 저장된 id를 유지. 스토어는 보고된 배열을 스택의 전부로 본다(빠진 카드는 삭제).
+- [x] chat.js — 입력 초안·스크롤 보고(patch), 복원 시 초안(입력이 비었을 때만)·스크롤 적용. main이 patch를 병합하고 kind를 그 대화의 모드로 찍는다.
+- 실앱 프로브 21/21.
 - `app/lib/main/session-bridge.js`(작성 중) — 저장 타이밍 정책. 메시지 즉시, 스트리밍 5s/2KB 저널, 카드 200ms, 워크스페이스 300ms/1s, 뷰포트 400ms/2s, 종료 flushSync.
 - main.js 배선 지점(실측): 사용자 메시지 `runLiveQuery` 진입부(historySink.saveChatMessage 직후), 델타 `sendLiveTextDelta`, 툴 단계 `sendLiveToolStep`, 최종 `persistLocalLiveResult`/turn 종료(3684~), 종료 `before-quit`의 conversations.flushSync 옆.
 - 캔버스 카드: 렌더러가 스택을 보고한다. `addLiveCard(result)`가 카드 DOM에 봉투를 매달고(`__athenaSessionEnvelope`), 추가·닫기·비우기 뒤에 `athena:session-cards`로 `[{cardId, kind, channel, envelope, protected}]`를 보낸다. main이 bridge.saveCards로 적는다. 복원은 저장된 봉투를 `athena:add-canvas-live`로 다시 흘려 같은 렌더 경로로 그린다(별도 렌더러 없음). 큰 payload는 dataRef만 남기는 것은 그 다음.
@@ -176,4 +179,4 @@
 ### Wave 5 — 프로젝트 = 폴더 (36·37·38번 보드)
 - [x] `conversations.js` — 프로젝트 레코드에 `path`·`pinned`. 폴더 하나 = 프로젝트 하나(경로 중복 접기), `addProject({id,path,label})`·`setProjectPinned`·`removeProject`·`projectById`. 사이드바 프로젝트와 백엔드 프로젝트 레지스트리(`athena_api/api/projects.py`)는 같은 것 — id를 공유한다.
 - [x] `main.js` — `athena:project-add`(폴더 대화상자 → 백엔드 open 등록 → 사이드바 레코드), `project-pin`, `project-reveal`(shell.openPath), `project-remove`(이름을 그대로 다시 쳐야 하는 영구 삭제, 세션 본문도 함께).
-- [ ] `sidebar.js` — ⋯ 메뉴 셋(고정·탐색기·제거), 폴더 추가, 펜 = 모드 골라 새 대화창(작업 중)
+- [x] `sidebar.js` — ⋯ 메뉴 셋(고정·탐색기·제거), 폴더 추가, 펜 = 모드 골라 새 대화창. 순수 규칙은 `sidebar-project-menu.js`

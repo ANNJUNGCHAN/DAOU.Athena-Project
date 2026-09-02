@@ -136,6 +136,59 @@ async function main() {
   const unknown = await wc.executeJavaScript(`window.athena.invoke('athena:conversations-set-active', { id: 'no-such' })`);
   check('모르는 id: restorable=false · 기록 대상은 그대로', unknown && unknown.restorable === false && unknown.activeId === 'conv-bt', { restorable: unknown && unknown.restorable, activeId: unknown && unknown.activeId });
 
+  // 7) 카드 스택이 세션에 남고, 돌아오면 같은 채널로 다시 그려진다(42번 보드)
+  const bridge = typeof mainMod.getSessionBridge === 'function' ? mainMod.getSessionBridge() : null;
+  check('세션 스토어: 브리지가 열린다', Boolean(bridge));
+  if (bridge) {
+    // conv-bt가 기록 대상인 상태에서 fixture 카드 하나를 흘린다 → 렌더러가 스택을 보고한다.
+    await wc.executeJavaScript(`window.AthenaShell.openConversation({ id: 'conv-bt', title: '추세추종 v3' })`);
+    shellWin.webContents.send('athena:add-canvas', { type: 'table' });
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    const gridState = await wc.executeJavaScript(`(() => {
+      const cards = Array.from(document.querySelectorAll('#grid .card'));
+      return { cards: cards.length, tagged: cards.filter((c) => c.__athenaSessionCard).length, ids: cards.map((c) => c.dataset.sessionCardId || null) };
+    })()`);
+    check('카드: fixture table이 그리드에 그려지고 세션 태그가 붙는다', gridState.cards === 1 && gridState.tagged === 1, gridState);
+    bridge.flush('conv-bt');
+    const stored = bridge.load('conv-bt');
+    const storedCards = stored && Array.isArray(stored.canvasCards) ? stored.canvasCards : [];
+    check('카드: 렌더러 보고가 세션 스토어에 적힌다(fixture table 1장)',
+      storedCards.length === 1 && storedCards[0].channel === 'fixture' && storedCards[0].kind === 'table',
+      storedCards.map((c) => `${c.channel}:${c.kind}`));
+
+    // 다른 대화로 갔다가 돌아오면 카드가 다시 그려진다.
+    await wc.executeJavaScript(`window.AthenaShell.openConversation({ id: 'conv-chat', title: '삼성전자 수급 확인' })`);
+    const afterLeave = await wc.executeJavaScript(`document.querySelectorAll('#grid .card').length`);
+    check('카드: 다른 대화로 가면 캔버스가 비워진다', afterLeave === 0, afterLeave);
+    await wc.executeJavaScript(`window.AthenaShell.openConversation({ id: 'conv-bt', title: '추세추종 v3' })`);
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    const afterReturn = await wc.executeJavaScript(`document.querySelectorAll('#grid .card').length`);
+    check('카드: 돌아오면 저장된 봉투로 같은 카드가 다시 그려진다', afterReturn === 1, afterReturn);
+    bridge.flush('conv-bt');
+    const restored = bridge.load('conv-bt');
+    check('카드: 다시 그려진 스택이 같은 모양으로 다시 저장된다', restored && restored.canvasCards.length === 1, restored && restored.canvasCards.length);
+
+    // 8) 입력 초안·스크롤이 세션에 남고, 돌아오면 그대로 돌아온다(42번 보드 "폼 값·입력 초안", "스크롤")
+    await wc.executeJavaScript(`(() => {
+      const input = document.getElementById('input');
+      input.value = '손절 -3%로 바꿔서';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      return true;
+    })()`);
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    bridge.flush('conv-bt');
+    const withDraft = bridge.load('conv-bt');
+    check('초안: 입력 중인 글이 세션 워크스페이스에 적히고 kind는 그 대화의 모드다',
+      withDraft && withDraft.workspace && withDraft.workspace.draft && withDraft.workspace.draft.text === '손절 -3%로 바꿔서'
+      && withDraft.workspace.kind === 'backtest', withDraft && withDraft.workspace);
+    // 다른 대화로 갔다가(입력이 비워진 채) 돌아오면 초안이 다시 채워진다.
+    await wc.executeJavaScript(`window.AthenaShell.openConversation({ id: 'conv-chat', title: '삼성전자 수급 확인' })`);
+    await wc.executeJavaScript(`(() => { document.getElementById('input').value = ''; return true; })()`);
+    await wc.executeJavaScript(`window.AthenaShell.openConversation({ id: 'conv-bt', title: '추세추종 v3' })`);
+    const draftBack = await wc.executeJavaScript(`document.getElementById('input').value`);
+    check('초안: 돌아오면 입력창에 그 글이 다시 들어온다', draftBack === '손절 -3%로 바꿔서', draftBack);
+  }
+
   const failed = checks.filter((c) => !c.ok);
   console.log(`\n${checks.length - failed.length}/${checks.length} 통과${failed.length ? ` — 실패 ${failed.length}` : ''}`);
   app.exit(failed.length ? 1 : 0);

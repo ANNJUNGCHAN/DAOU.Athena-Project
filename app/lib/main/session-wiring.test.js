@@ -57,8 +57,13 @@ test('렌더러 보고 채널과 복원 채널이 main에 있고, 세션 id는 m
   }
   for (const channel of ['athena:session-cards', 'athena:session-workspace', 'athena:session-viewport']) {
     const handler = slice(`ipcMain.on('${channel}'`, '});');
-    assert.match(handler, /sessionId: historyConversationId\(\)/, `${channel}는 렌더러가 보낸 id를 믿지 않는다`);
+    assert.match(handler, /historyConversationId\(\)/, `${channel}는 main의 기록 대상을 세션 id로 쓴다`);
+    assert.doesNotMatch(handler, /payload\.sessionId/, `${channel}는 렌더러가 보낸 id를 믿지 않는다`);
   }
+  // 워크스페이스는 조각(patch)을 병합하고 kind는 그 대화의 모드로 main이 찍는다.
+  const workspace = slice("ipcMain.on('athena:session-workspace'", 'bridge.saveWorkspace({ sessionId, workspace: merged });');
+  assert.match(workspace, /payload\.patch/);
+  assert.match(workspace, /kind: record \? record\.mode : listed\.activeMode/);
   // 복원 재생은 봉투가 있는 카드만, 같은 페인트 채널로.
   const replay = slice("ipcMain.handle('athena:session-replay-cards'", 'return { replayed };');
   assert.match(replay, /if \(!card \|\| !card\.envelope\) continue;/);
