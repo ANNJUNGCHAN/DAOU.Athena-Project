@@ -296,10 +296,17 @@ function buildBacktestModePrefix(context, today) {
   // 라벨은 표시 문자열일 뿐이라 visual_patch가 가리킬 수 없고(평가 문서 §데이터 계약),
   // diagnostic은 code·node_id·port를 한 줄에 붙여 모델이 어느 포트를 말해야 하는지
   // 고르게 한다. hashes는 visual_patch의 base_graph_hash로 그대로 되돌려 보낼 값이다.
+  //
+  // 필드 위치 주의(2026-09-03 실측 — us011 프로브가 잡았다): diagnostics·
+  // validation_state·hashes는 map.graph 안이 아니라 **map 바로 밑**에 있다
+  // (backtest-canvas.js mapContext()). map.graph는 visualGraphContext()가 만드는
+  // {nodes, edges}뿐이다. 한 단계 깊게 읽었더니 오류가 있는데도 매 턴 "오류 없음 /
+  // 검증 상태 모름"을 실어 보내 모델이 visual_question을 한 번도 부르지 않았다
+  // (probe-backtest-chat-scenario.js step 13: "지금 화면에는 고칠 오류가 없습니다").
   const graph = obj(map && map.graph);
   const graphNodes = graph && Array.isArray(graph.nodes) ? graph.nodes : [];
   const graphEdges = graph && Array.isArray(graph.edges) ? graph.edges : [];
-  const graphDiags = graph && Array.isArray(graph.diagnostics) ? graph.diagnostics : [];
+  const graphDiags = map && Array.isArray(map.diagnostics) ? map.diagnostics : [];
   const stateLabel = {
     unvalidated: '아직 검증하지 않음',
     valid: '검증 통과',
@@ -318,12 +325,37 @@ function buildBacktestModePrefix(context, today) {
         }))
         : ['오류(diagnostics): 없음'])
       .concat([
-        `검증 상태: ${stateLabel[graph.validation_state] || '모름'}(${label(graph.validation_state)})`,
-        `그래프 해시: ${json(graph.hashes, '없음')}`,
+        `검증 상태: ${stateLabel[map.validation_state] || '모름'}(${label(map.validation_state)})`,
+        `그래프 해시: ${json(map.hashes, '없음')}`,
       ])
       .join('\n')
     : '';
-  const mapBlock = [nodesBlock, graphBlock].filter(Boolean).join('\n')
+  // 대기 중인 것과 분기 상태(mapContext()의 pendingQuestion·pendingPatch·code_only) —
+  // 값이 있을 때만 줄이 선다. 없는데 매 턴 "대기 없음"을 실으면 소음이고, 있는데 안 실으면
+  // 모델이 같은 질문을 다시 만들거나(질문 카드가 이미 떠 있는데 visual_question 재호출)
+  // 아직 아무도 누르지 않은 수정안을 "고쳤다"고 말한다. code_only는 그래프가 마지막 호환
+  // snapshot일 뿐이라는 사실이라, 이 줄이 없으면 "동기화됐다"는 거짓말을 막을 근거가 없다.
+  const pendingQuestion = obj(map && map.pendingQuestion);
+  const pendingPatch = obj(map && map.pendingPatch);
+  const choices = pendingQuestion && Array.isArray(pendingQuestion.choices)
+    ? pendingQuestion.choices
+    : [];
+  const visualPending = [
+    pendingQuestion
+      ? `대기 중인 질문: ${label(pendingQuestion.code)} — ${label(pendingQuestion.question_ko)}`
+        + `${choices.length ? ` · 선택지: ${choices.join(', ')}` : ''}`
+        + ' · 사용자가 카드에서 고르기 전에는 visual_question을 다시 부르지 않는다'
+      : '',
+    pendingPatch
+      ? `대기 중인 수정안: ${label(pendingPatch.patch_id)} · ${label(pendingPatch.summary_ko)}`
+        + ' · 사용자가 [적용]을 누르기 전에는 고쳤다고 말하지 않는다'
+      : '',
+    map && map.code_only
+      ? '코드 전용 분기 상태 — 그래프와 코드가 동기화됐다고 말하지 않는다;'
+        + ' 코드 수정은 propose_code/propose_file로만'
+      : '',
+  ];
+  const mapBlock = [nodesBlock, graphBlock].concat(visualPending).filter(Boolean).join('\n')
     || '지도: 아직 만들어지지 않았다';
 
   const fileDraft = obj(project && project.fileDraft)

@@ -771,6 +771,13 @@ test('buildBacktestModePrefix: 칸 번호로 말하고 코드 줄 번호는 말�
 // 노드 id와 diagnostic이 접두에 없으면 모델은 "어느 포트가 비었나"를 지어낸다.
 // (2) 오류를 만난 모델이 코드/graph JSON을 직접 쓰지 않고 질문 하나 → 비활성 패치
 // 순서로만 움직이는가 — 이 경계가 무너지면 LLM이 전략을 조용히 바꿔 저장한다.
+//
+// 아래 fixture는 backtest-canvas.js의 **mapContext() 반환값 그대로**여야 한다:
+// diagnostics·validation_state·hashes·code_only는 map 바로 밑에 있고, map.graph는
+// visualGraphContext()가 만드는 {nodes, edges}뿐이다. 처음에 이 fixture를 손으로
+// 지어내면서 셋을 graph 안에 넣었더니, 접두가 한 단계 깊게 읽어 오류가 있는데도
+// 매 턴 "오류 없음"을 싣는 것을 테스트가 통과시켰다(2026-09-03 us011 프로브 실측:
+// 모델이 "지금 화면에는 고칠 오류가 없습니다"라고 답하고 visual_question 미호출).
 
 const BT_GRAPH_CONTEXT = {
   tab: 'design',
@@ -782,30 +789,29 @@ const BT_GRAPH_CONTEXT = {
     graph: {
       nodes: [
         { id: 'sma-slow-01', kind: 'sma', label: '느린 이동평균', params: { length: 60 } },
-        { id: 'exit-cross-below-01', kind: 'cross_below', label: '청산 교차', params: {} },
+        { id: 'cond-exit-1', kind: 'cross_below', label: '청산 교차', params: {} },
       ],
       edges: [
         {
           id: 'e-01',
           from: { node_id: 'sma-slow-01', port: 'value' },
-          to: { node_id: 'exit-cross-below-01', port: 'fast' },
+          to: { node_id: 'cond-exit-1', port: 'left' },
         },
       ],
-      diagnostics: [
-        {
-          code: 'BTG-PORT-002', severity: 'error',
-          node_id: 'exit-cross-below-01', port: 'slow',
-          message_ko: '느린 SMA 입력이 없습니다.',
-        },
-        {
-          code: 'BTG-GRAPH-001', severity: 'error',
-          node_id: null, port: null,
-          message_ko: '진입 출력이 없습니다.',
-        },
-      ],
-      validation_state: 'invalid',
-      hashes: { graph: 'g-abc', spec: null },
     },
+    validation_state: 'invalid',
+    code_only: false,
+    hashes: { graph: 'g-abc', spec: null },
+    diagnostics: [
+      {
+        code: 'BTG-PORT-002',
+        node_id: 'cond-exit-1', port: 'right',
+        message_ko: '오른쪽 입력이 없습니다.',
+      },
+      { code: 'BTG-GRAPH-001', node_id: null, port: null, message_ko: '진입 출력이 없습니다.' },
+    ],
+    pendingQuestion: null,
+    pendingPatch: null,
   },
 };
 
@@ -813,31 +819,50 @@ test('buildBacktestModePrefix: 시각 그래프는 노드 id·라벨·종류와 
   const p = buildBacktestModePrefix(BT_GRAPH_CONTEXT, '20260903');
   assert.ok(p.includes('지도 v7 — 시각 그래프(노드 2 · 연결 1):'));
   assert.ok(p.includes('- sma-slow-01 · 느린 이동평균 (sma)'));
-  assert.ok(p.includes('- exit-cross-below-01 · 청산 교차 (cross_below)'));
-  assert.ok(p.includes('- BTG-PORT-002 @ exit-cross-below-01.slow: 느린 SMA 입력이 없습니다.'));
+  assert.ok(p.includes('- cond-exit-1 · 청산 교차 (cross_below)'));
+  assert.ok(p.includes('- BTG-PORT-002 @ cond-exit-1.right: 오른쪽 입력이 없습니다.'));
   // 위치를 특정할 수 없는 오류는 node_id·port가 null이다(평가 문서 §오류 diagnostic).
   assert.ok(p.includes('- BTG-GRAPH-001 @ 그래프 전체: 진입 출력이 없습니다.'));
   assert.ok(p.includes('검증 상태: 오류 있음(invalid)'));
   // visual_patch의 base_graph_hash로 그대로 되돌려 보낼 값이다.
-  assert.ok(p.includes(`그래프 해시: ${JSON.stringify(BT_GRAPH_CONTEXT.map.graph.hashes)}`));
+  assert.ok(p.includes(`그래프 해시: ${JSON.stringify(BT_GRAPH_CONTEXT.map.hashes)}`));
   // 칸 번호(①~④)는 그대로 남는다 — 그래프가 왔다고 사람 말 지도가 사라지지 않는다.
   assert.ok(p.includes('지도 v7 — 대화가 고치는 칸:'));
   assert.ok(p.includes('- ① 조절할 값을 정합니다: fast 20 (5–60) · slow 60 (20–240)'));
+});
+
+test('buildBacktestModePrefix: 오류·검증 상태·해시는 map 밑에서 읽는다(graph 안이 아니다)', () => {
+  // us011 프로브가 실측한 회귀 그대로다 — graph 안에 같은 이름의 값이 들어 있어도
+  // 그쪽을 읽으면 안 된다. mapContext()가 주는 자리는 map 바로 밑 하나뿐이다.
+  const decoyed = {
+    map: Object.assign({}, BT_GRAPH_CONTEXT.map, {
+      graph: Object.assign({}, BT_GRAPH_CONTEXT.map.graph, {
+        diagnostics: [], validation_state: 'valid', hashes: { graph: 'WRONG' },
+      }),
+    }),
+  };
+  const p = buildBacktestModePrefix(decoyed, '20260903');
+  assert.ok(p.includes('- BTG-PORT-002 @ cond-exit-1.right: 오른쪽 입력이 없습니다.'));
+  assert.ok(p.includes('검증 상태: 오류 있음(invalid)'));
+  assert.ok(!p.includes('오류(diagnostics): 없음'));
+  assert.ok(!p.includes('WRONG'));
 });
 
 test('buildBacktestModePrefix: 그래프만 있고 칸이 없어도 지도 v{n}과 검증 상태를 낸다', () => {
   const p = buildBacktestModePrefix({
     map: {
       version: 2,
-      graph: {
-        nodes: [], edges: [], diagnostics: [],
-        validation_state: 'valid', hashes: {},
-      },
+      nodes: [],
+      graph: { nodes: [], edges: [] },
+      validation_state: 'valid',
+      hashes: null,
+      diagnostics: [],
     },
   }, '20260903');
   assert.ok(p.includes('지도 v2 — 시각 그래프(노드 0 · 연결 0):'));
   assert.ok(p.includes('오류(diagnostics): 없음'));
   assert.ok(p.includes('검증 상태: 검증 통과(valid)'));
+  assert.ok(p.includes('그래프 해시: 없음'));
   assert.ok(!p.includes('지도: 아직 만들어지지 않았다'));
 });
 
@@ -880,4 +905,50 @@ test('buildBacktestModePrefix: 어떤 규칙도 모델에게 실행·활성화·
   assert.ok(p.includes('run·optimize·backfill 액션을 직접 부르지 않는다'));
   assert.ok(p.includes('실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
   assert.ok(p.includes('실행·활성화·저장은 절대 모델이 하지 않는다'));
+});
+
+// ---- 대기 중인 것과 코드 전용 분기(mapContext()의 pendingQuestion·pendingPatch·code_only) ----
+// 셋 다 "값이 있을 때만" 줄이 선다. 없는데 매 턴 "대기 없음"을 실으면 소음이고, 있는데 안
+// 실으면 세 가지 거짓이 새어 나온다: 이미 뜬 질문 카드를 두고 visual_question을 다시
+// 부르기, 아무도 누르지 않은 수정안을 "고쳤다"고 말하기, 코드 전용으로 갈라진 뒤에도
+// "그래프와 동기화됐다"고 말하기.
+
+function withGraphMap(extra) {
+  return { map: Object.assign({}, BT_GRAPH_CONTEXT.map, extra) };
+}
+
+test('buildBacktestModePrefix: 대기 중인 질문은 코드·문장·선택지와 재호출 금지를 함께 싣는다', () => {
+  const p = buildBacktestModePrefix(withGraphMap({
+    pendingQuestion: {
+      code: 'BTG-PORT-002',
+      question_ko: '청산 교차의 오른쪽에 무엇을 붙일까요?',
+      choices: ['connect-sma-slow', 'use-constant'],
+    },
+  }), '20260903');
+  assert.ok(p.includes('대기 중인 질문: BTG-PORT-002 — 청산 교차의 오른쪽에 무엇을 붙일까요?'
+    + ' · 선택지: connect-sma-slow, use-constant'
+    + ' · 사용자가 카드에서 고르기 전에는 visual_question을 다시 부르지 않는다'));
+  // 없으면 줄 자체가 서지 않는다 — "대기 없음"을 매 턴 싣지 않는다.
+  assert.ok(!buildBacktestModePrefix(BT_GRAPH_CONTEXT, '20260903').includes('대기 중인 질문'));
+});
+
+test('buildBacktestModePrefix: 대기 중인 수정안은 누르기 전에 고쳤다고 말하지 말라고 못박는다', () => {
+  const p = buildBacktestModePrefix(withGraphMap({
+    pendingPatch: {
+      patch_id: 'patch_7',
+      graph_compatible: true,
+      summary_ko: '느린 SMA를 오른쪽에 연결합니다',
+    },
+  }), '20260903');
+  assert.ok(p.includes('대기 중인 수정안: patch_7 · 느린 SMA를 오른쪽에 연결합니다'
+    + ' · 사용자가 [적용]을 누르기 전에는 고쳤다고 말하지 않는다'));
+  assert.ok(!buildBacktestModePrefix(BT_GRAPH_CONTEXT, '20260903').includes('대기 중인 수정안'));
+});
+
+test('buildBacktestModePrefix: code_only면 동기화됐다고 말하지 말고 코드 경로로만 고치라고 한다', () => {
+  const p = buildBacktestModePrefix(withGraphMap({ code_only: true }), '20260903');
+  assert.ok(p.includes('코드 전용 분기 상태 — 그래프와 코드가 동기화됐다고 말하지 않는다;'
+    + ' 코드 수정은 propose_code/propose_file로만'));
+  // code_only:false인 기본 fixture에는 줄이 없다.
+  assert.ok(!buildBacktestModePrefix(BT_GRAPH_CONTEXT, '20260903').includes('코드 전용 분기'));
 });
