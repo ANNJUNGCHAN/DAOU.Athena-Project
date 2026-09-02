@@ -59,6 +59,7 @@ test('begin은 새 id/프로젝트를 활성화하지만 첫 touch 전에는 목
       createdAt: touched.conversations[0].createdAt,
       updatedAt: touched.conversations[0].updatedAt,
       projectId: 'p1',
+      mode: 'chat',
     });
 
     conversations.touch({ id: 'fresh-1', title: '두 번째 질문' });
@@ -112,4 +113,63 @@ test('연속으로 몰아친 touch가 서로를 덮어써 갱신을 잃지 않�
     const ids = onDisk.conversations.map((row) => row.id).sort();
     assert.deepEqual(ids, Array.from({ length: 20 }, (_, i) => `rapid-${i}`).sort());
   });
+});
+
+test('대화는 만들어진 모드에 묶인다 — begin의 view가 레코드의 mode가 된다', async () => {
+  await withTempState({
+    projects: [{ id: 'p1', label: '프로젝트 1' }],
+    currentProjectId: 'p1',
+    conversations: [],
+  }, () => {
+    // 사이드바는 view 어휘('summary')를 보내고 레코드는 mode 어휘('chat')로 남는다.
+    conversations.begin({ id: 'c-chat', projectId: 'p1', mode: 'summary' });
+    const chat = conversations.touch({ id: 'c-chat', title: '수급 물어봄' });
+    assert.equal(chat.conversations[0].mode, 'chat');
+    assert.equal(chat.activeMode, 'chat');
+
+    conversations.begin({ id: 'c-bt', projectId: 'p1', mode: 'backtest' });
+    const bt = conversations.touch({ id: 'c-bt', title: '추세추종 v3' });
+    assert.equal(bt.activeMode, 'backtest');
+    assert.equal(bt.conversations.find((c) => c.id === 'c-bt').mode, 'backtest');
+    // 앞 대화의 모드는 그대로다 — 모드가 대화의 경계다.
+    assert.equal(bt.conversations.find((c) => c.id === 'c-chat').mode, 'chat');
+  });
+});
+
+test('이미 있는 대화의 모드는 나중 touch가 바꾸지 못한다', async () => {
+  await withTempState({
+    projects: [{ id: 'p1', label: '프로젝트 1' }],
+    currentProjectId: 'p1',
+    conversations: [],
+  }, () => {
+    conversations.begin({ id: 'c1', projectId: 'p1', mode: 'graph' });
+    conversations.touch({ id: 'c1', title: '성향 지도' });
+    const after = conversations.touch({ id: 'c1', title: '무시됨', mode: 'backtest' });
+    assert.equal(after.conversations[0].mode, 'graph');
+    assert.equal(after.activeMode, 'graph');
+  });
+});
+
+test('setActive는 그 대화의 모드로 activeMode를 옮긴다', async () => {
+  await withTempState({
+    projects: [{ id: 'p1', label: '프로젝트 1' }],
+    currentProjectId: 'p1',
+    conversations: [
+      { id: 'a', title: '대화', projectId: 'p1', mode: 'chat', createdAt: '2026-09-01T00:00:00.000Z', updatedAt: '2026-09-01T00:00:00.000Z' },
+      { id: 'b', title: '백테스트', projectId: 'p1', mode: 'backtest', createdAt: '2026-09-02T00:00:00.000Z', updatedAt: '2026-09-02T00:00:00.000Z' },
+    ],
+  }, () => {
+    assert.equal(conversations.setActive('b').activeMode, 'backtest');
+    assert.equal(conversations.setActive('a').activeMode, 'chat');
+  });
+});
+
+test('mode가 없는 옛 레코드는 마이그레이션 없이 chat으로 읽힌다', () => {
+  const state = conversations.normalizeState({
+    projects: [{ id: 'p1', label: '프로젝트 1' }],
+    currentProjectId: 'p1',
+    conversations: [{ id: 'old', title: '옛 대화', projectId: 'p1' }],
+  });
+  assert.equal(state.conversations[0].mode, 'chat');
+  assert.equal(state.activeMode, 'chat');
 });

@@ -7,6 +7,9 @@ const fs = require('fs');
 const path = require('path');
 const { app } = require('electron');
 const { writeJsonAtomic, writeJsonAtomicAsync } = require('./json-store');
+// 모드 어휘의 진실은 session-snapshot 하나다 — 화면은 대화 모드를 'summary'라
+// 부르고 레코드는 'chat'이라 부르는데, 그 다리를 여기서 또 만들면 두 벌이 된다.
+const { viewToMode } = require('../session-snapshot');
 
 const TITLE_MAX = 40;
 const STATE_VERSION = 2;
@@ -66,12 +69,16 @@ function normalizeState(raw) {
       createdAt,
       updatedAt,
       projectId,
+      // 대화는 만들어진 모드에 묶인다(35·40번 보드). 옛 레코드에는 이 필드가
+      // 없으므로 viewToMode가 'chat'으로 떨어뜨린다 — 마이그레이션 없이 읽힌다.
+      mode: viewToMode(row.mode),
     });
   }
 
   return {
     version: STATE_VERSION,
     activeId: validString(source.activeId),
+    activeMode: viewToMode(source.activeMode),
     currentProjectId,
     projects,
     conversations,
@@ -136,6 +143,7 @@ function projectConversations(state, projectId) {
 function snapshot(state) {
   return {
     activeId: state.activeId,
+    activeMode: state.activeMode,
     currentProjectId: state.currentProjectId,
     projects: state.projects,
     conversations: sortedConversations(state),
@@ -147,7 +155,7 @@ function list() {
 }
 
 // 새 id를 현재 대화로 시작하되, 첫 사용자 입력 전에는 목록에 빈 행을 만들지 않는다.
-function begin({ id, projectId } = {}) {
+function begin({ id, projectId, mode } = {}) {
   const nextId = validString(id);
   if (!nextId) return list();
   const state = readState();
@@ -155,6 +163,8 @@ function begin({ id, projectId } = {}) {
     ? projectId
     : state.currentProjectId;
   state.activeId = nextId;
+  // 행은 첫 입력 때 만들어지므로 모드는 여기서 기억해 두고 touch()가 쓴다.
+  state.activeMode = viewToMode(mode);
   state.currentProjectId = selectedProjectId;
   writeState(state);
   return snapshot(state);
@@ -162,7 +172,7 @@ function begin({ id, projectId } = {}) {
 
 // 첫 사용자 메시지에서 목록에 한 번만 추가한다. begin()을 거치지 않은 기존
 // 호출도 현재 프로젝트로 안전하게 귀속된다.
-function touch({ id, title, projectId } = {}) {
+function touch({ id, title, projectId, mode } = {}) {
   const conversationId = validString(id);
   if (!conversationId) return list();
   const state = readState();
@@ -170,6 +180,9 @@ function touch({ id, title, projectId } = {}) {
   const requestedProjectId = state.projects.some((project) => project.id === projectId)
     ? projectId
     : state.currentProjectId;
+  // 모드는 만들 때 한 번 정해지고 바뀌지 않는다 — 모드가 대화의 경계라서,
+  // 이미 있는 행의 모드를 나중에 갈아끼우면 그 경계가 무너진다(40번 보드).
+  const requestedMode = mode === undefined ? state.activeMode : viewToMode(mode);
   const nowIso = new Date().toISOString();
   if (existing) {
     existing.updatedAt = nowIso;
@@ -180,9 +193,11 @@ function touch({ id, title, projectId } = {}) {
       createdAt: nowIso,
       updatedAt: nowIso,
       projectId: requestedProjectId,
+      mode: requestedMode,
     });
   }
   state.activeId = conversationId;
+  state.activeMode = existing ? existing.mode : requestedMode;
   state.currentProjectId = existing ? existing.projectId : requestedProjectId;
   writeState(state);
   return snapshot(state);
@@ -193,6 +208,9 @@ function setActive(id) {
   const conversation = state.conversations.find((row) => row.id === id);
   if (!conversation) return list();
   state.activeId = conversation.id;
+  // 이력 행을 누르면 그 대화의 모드로 화면이 따라간다 — 백테스트 대화를 열면
+  // 백테스트 캔버스가 뜬다. 셸이 이 값을 읽어 view를 맞춘다.
+  state.activeMode = conversation.mode;
   state.currentProjectId = conversation.projectId;
   writeState(state);
   return snapshot(state);
