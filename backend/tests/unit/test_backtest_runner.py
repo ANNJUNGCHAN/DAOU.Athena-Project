@@ -54,6 +54,26 @@ risk:
 """
 
 
+# 코드 경로 검증용 — §7.1 계약 예시를 위 yaml과 같은 SMA 교차로 맞췄다.
+_SMA_CROSS_SOURCE = """\
+PARAMS = {
+    "fast": {"default": 3, "min": 2, "max": 10, "step": 1},
+    "slow": {"default": 5, "min": 2, "max": 20, "step": 1},
+}
+
+
+def signals(df, p):
+    import athena_bt as bt
+
+    fast = bt.sma(df.close, p["fast"])
+    slow = bt.sma(df.close, p["slow"])
+    return df.assign(
+        entry=bt.cross_above(fast, slow),
+        exit=bt.cross_below(fast, slow),
+    )[["entry", "exit"]]
+"""
+
+
 @pytest.fixture
 async def owner(tmp_path: Path):
     instance = SqliteOwner(tmp_path / "athena-backtest.sqlite3")
@@ -193,6 +213,31 @@ async def test_start_run_applies_param_overrides(store: BacktestStore) -> None:
     equity_a = [p.equity for p in await store.equity("run-a")]
     equity_b = [p.equity for p in await store.equity("run-b")]
     assert equity_a != equity_b
+
+
+async def test_start_run_stores_buy_hold_benchmark_on_both_paths(store: BacktestStore) -> None:
+    """매수보유 곡선은 결과 화면이 전략 곡선과 같은 축에 겹쳐 그리는 벤치마크다(보드 03).
+    폼 경로와 코드 경로는 같은 지표 페이로드를 만들어야 한다 — 한쪽만 실리면 그 경로에서만
+    범례는 있는데 선이 없다."""
+    spec = from_kis_yaml(_SMA_CROSS_YAML)
+    df = _synthetic_df()
+    expected = [c / df["close"].iloc[0] for c in df["close"]]
+    runner = BacktestRunner(store)
+
+    await _seed_run(store, "run-bm-form")
+    await runner.start_run("run-bm-form", spec=spec, df=df, overrides=None).task
+    await _seed_run(store, "run-bm-code")
+    await runner.start_run(
+        "run-bm-code", spec=spec, df=df, overrides=None, source=_SMA_CROSS_SOURCE
+    ).task
+
+    for run_id in ("run-bm-form", "run-bm-code"):
+        row = await store.run(run_id)
+        assert row is not None and row.status == "done", run_id
+        assert row.metrics_json is not None
+        benchmark = json.loads(row.metrics_json)["benchmark"]
+        assert len(benchmark) == len(df), run_id
+        assert benchmark == pytest.approx(expected), run_id
 
 
 async def test_start_run_failure_sets_failed_status_and_records_error(

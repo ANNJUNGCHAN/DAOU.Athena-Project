@@ -160,6 +160,37 @@ def test_metrics_carry_mdd_window_and_trade_counts(tmp_path: Path) -> None:
         assert metrics["warmup_bars"] >= 4
 
 
+def test_run_detail_carries_buy_hold_curve_and_list_stays_small(tmp_path: Path) -> None:
+    """보드 03의 자산곡선은 "전략 vs 매수보유" 두 선이다 — 값 하나(`buy_hold_return`)로는
+    선을 못 그려서 상세 응답이 봉마다의 배수를 같이 준다. 목록은 그 배열을 싣지 않는다
+    (실행 수만큼 곱해지는 배열이라 목록 응답이 통째로 커진다)."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+        run_id = client.post(f"{BASE}/runs", json={"yaml": yaml_text}).json()["run_id"]
+        _await_run(client, run_id)
+
+        detail = client.get(f"{BASE}/runs/{run_id}").json()
+        benchmark = detail["benchmark"]
+        assert len(benchmark) == len(detail["equity"])
+        # 정규화 기준은 첫 종가다 — app/lib/backtest-equity-chart.js `normalize`와 같은 정의.
+        assert benchmark[0] == 1.0
+        expected = [r.close / rows[0].close for r in rows]
+        assert all(
+            math.isclose(a, b, rel_tol=1e-12)
+            for a, b in zip(benchmark, expected, strict=True)
+        )
+        assert "benchmark" not in detail["metrics"]
+
+        listed = client.get(f"{BASE}/runs").json()["runs"]
+        item = next(r for r in listed if r["run_id"] == run_id)
+        assert "benchmark" not in item
+        assert "benchmark" not in item["metrics"]
+
+
 # ── 전략 · 버전 ─────────────────────────────────────────────────────────────
 
 

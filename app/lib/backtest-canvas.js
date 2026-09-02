@@ -1602,7 +1602,9 @@ function createBacktestCanvas(options) {
     if (typeof document.createElementNS === 'function') {
       EquityChart.renderEquityChart(host, {
         equity: (state.result && state.result.equity) || [],
-        closes: state.closes || [],
+        // 매수보유 곡선은 실행 결과가 들고 온다(GET /runs/{id}의 top-level benchmark) —
+        // 첫 종가 대비 배수라 차트가 한 번 더 정규화해도 값이 그대로다.
+        closes: (state.result && state.result.benchmark) || [],
         trades: state.trades || [],
       });
     }

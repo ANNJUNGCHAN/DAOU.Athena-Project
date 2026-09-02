@@ -129,6 +129,26 @@ def _json_safe(payload: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
+def _benchmark_series(df: pd.DataFrame) -> list[float]:
+    """매수보유 곡선 — 첫 종가 대비 배수를 봉마다 하나씩.
+
+    **왜 값 하나가 아니라 배열인가.** `metrics.buy_hold_return`은 마지막 한 점이라 곡선을
+    못 그린다 — 결과 화면(보드 03)은 전략 곡선 **옆에 겹친 선**을 그린다.
+
+    **왜 원시 종가가 아니라 배수인가.** 화면이 `normalize`로 배수를 만드는데, 그 정의
+    (`v / 첫값`, 첫값이 0이면 전부 1)를 여기서 그대로 따른다 — 정규화가 한 번 더 걸려도
+    첫값이 1이라 값이 그대로여서 두 정의가 갈라질 수 없다
+    (app/lib/backtest-equity-chart.js `normalize`/`buyHoldSeries`).
+    """
+    closes = [float(c) for c in df["close"]]
+    if not closes:
+        return []
+    base = closes[0]
+    if not base:
+        return [1.0] * len(closes)
+    return [c / base for c in closes]
+
+
 @dataclass(frozen=True, slots=True)
 class BackfillProgress:
     page: int
@@ -276,6 +296,9 @@ class BacktestRunner:
                 metrics_payload["run_path"] = "code" if source is not None else "form"
                 if flags:
                     metrics_payload["flags"] = flags
+                # 자산곡선과 같은 봉 위에 겹치는 벤치마크. 목록 응답(GET /runs)은 이 배열을
+                # 떼고 나간다(api/backtest.py `_metrics_view`) — flags와 같은 규율이다.
+                metrics_payload["benchmark"] = _benchmark_series(df)
                 await self._store.save_trades(
                     run_id,
                     [
