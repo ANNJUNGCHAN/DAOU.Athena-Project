@@ -2575,6 +2575,27 @@ function beginSessionTurn(conversationId, text, userMessageId) {
   return null;
 }
 
+// 카드·워크스페이스·뷰포트 보고는 첫 턴 전에도 온다(카드가 먼저 도착하는 대화). 세션
+// 행이 없으면 스토어가 조용히 버리므로, 보고를 적기 전에 이력 레코드로 세션을 만들어 둔다.
+function ensureSessionRecord(sessionId) {
+  const bridge = getSessionBridge();
+  if (!bridge || !sessionId) return null;
+  const listed = conversations.list();
+  const record = listed.conversations.find((row) => row.id === sessionId) || null;
+  try {
+    bridge.ensureSession({
+      id: sessionId,
+      mode: record ? record.mode : listed.activeMode,
+      projectId: record ? record.projectId : listed.currentProjectId,
+      title: record ? record.title : '',
+    });
+  } catch (error) {
+    mdlog(`세션 행 만들기 실패 — ${String((error && error.message) || error)}`);
+    return null;
+  }
+  return bridge;
+}
+
 // 디스크 목록은 제목/프로젝트 메타데이터만 보존하고 Claude 세션/메시지 본문은
 // 복원하지 않는다. 따라서 앱 시작 때 이전 activeId를 다시 기록 대상으로 쓰지
 // 않고, 현재 프로젝트 안의 새 빈 대화 경계를 원자적으로 만든다.
@@ -4443,15 +4464,31 @@ ipcMain.handle('athena:session-load', (_e, payload = {}) => {
 // 투영이고 쓰기 주체는 main이다 — 브리지가 디바운스해 스토어에 적는다.
 // 렌더러는 세션 id를 모른다 — 기록 대상의 진실은 main의 historyConversationId()다.
 ipcMain.on('athena:session-cards', (_e, payload = {}) => {
-  const bridge = getSessionBridge();
+  const bridge = ensureSessionRecord(historyConversationId());
   if (bridge && payload) bridge.saveCards({ sessionId: historyConversationId(), cards: payload.cards });
 });
+// 렌더러는 바뀐 조각(patch)만 보낸다 — 모드마다 다른 컨트롤러가 자기 조각만 알기 때문이다.
+// 병합과 kind(=그 대화의 모드) 도장은 여기서 한다. 통째로 온 workspace도 받는다(옛 계약).
+const sessionWorkspaceCache = new Map();
 ipcMain.on('athena:session-workspace', (_e, payload = {}) => {
-  const bridge = getSessionBridge();
-  if (bridge && payload) bridge.saveWorkspace({ sessionId: historyConversationId(), workspace: payload.workspace });
+  const sessionId = historyConversationId();
+  const bridge = ensureSessionRecord(sessionId);
+  if (!bridge || !payload) return;
+  let base = sessionWorkspaceCache.get(sessionId);
+  if (!base) {
+    const stored = bridge.load(sessionId);
+    base = stored && stored.workspace && typeof stored.workspace === 'object' ? stored.workspace : {};
+  }
+  const patch = payload.patch && typeof payload.patch === 'object' ? payload.patch
+    : (payload.workspace && typeof payload.workspace === 'object' ? payload.workspace : {});
+  const listed = conversations.list();
+  const record = listed.conversations.find((row) => row.id === sessionId) || null;
+  const merged = { ...base, ...patch, kind: record ? record.mode : listed.activeMode };
+  sessionWorkspaceCache.set(sessionId, merged);
+  bridge.saveWorkspace({ sessionId, workspace: merged });
 });
 ipcMain.on('athena:session-viewport', (_e, payload = {}) => {
-  const bridge = getSessionBridge();
+  const bridge = ensureSessionRecord(historyConversationId());
   if (bridge && payload) bridge.saveViewport({ sessionId: historyConversationId(), viewport: payload.viewport });
 });
 // 복원 — 저장된 카드 봉투를 같은 페인트 채널로 다시 흘린다(별도 렌더러 없음, 42번 보드).
@@ -4467,9 +4504,9 @@ ipcMain.handle('athena:session-replay-cards', (_e, payload = {}) => {
   for (const card of cards) {
     if (!card || !card.envelope) continue;
     if (card.channel === 'fixture') {
-      shellWin.webContents.send('athena:add-canvas', { type: card.envelope.type || card.kind });
+      shellWin.webContents.send('athena:add-canvas', { type: card.envelope.type || card.kind, sessionCardId: card.cardId });
     } else {
-      shellWin.webContents.send('athena:add-canvas-live', { status: 'success', envelope: card.envelope });
+      shellWin.webContents.send('athena:add-canvas-live', { status: 'success', envelope: card.envelope, sessionCardId: card.cardId });
     }
     replayed += 1;
   }

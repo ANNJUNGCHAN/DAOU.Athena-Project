@@ -697,7 +697,34 @@ document.documentElement.style.setProperty('--glass-alpha', GLASS_WINDOW.toFixed
 let stickToBottom = true;
 $history.addEventListener('scroll', () => {
   stickToBottom = $history.scrollHeight - $history.scrollTop - $history.clientHeight < 24;
+  reportChatViewport();
 });
+
+// 세션 보고(42번 보드) — 스크롤 위치와 입력 초안은 세션의 일부다. 렌더러는 무엇이
+// 바뀌었는지만 보내고(patch), 어느 세션인지·어떤 모드인지는 main이 안다. 디바운스는
+// 여기서 한 번, main의 브리지에서 한 번 더 — 키 입력마다 IPC를 쏘지 않기 위한 것이다.
+let chatViewportTimer = null;
+function reportChatViewport() {
+  if (chatViewportTimer) clearTimeout(chatViewportTimer);
+  chatViewportTimer = setTimeout(() => {
+    chatViewportTimer = null;
+    try {
+      window.athena.send('athena:session-viewport', {
+        viewport: { chat: { scrollTop: $history.scrollTop, atBottom: stickToBottom } },
+      });
+    } catch { /* 채널이 없는 하네스 */ }
+  }, 400);
+}
+let chatDraftTimer = null;
+function reportChatDraft() {
+  if (chatDraftTimer) clearTimeout(chatDraftTimer);
+  chatDraftTimer = setTimeout(() => {
+    chatDraftTimer = null;
+    try {
+      window.athena.send('athena:session-workspace', { patch: { draft: { text: $input.value } } });
+    } catch { /* 채널이 없는 하네스 */ }
+  }, 300);
+}
 
 function scrollHistoryToBottom(force) {
   if (force) stickToBottom = true;
@@ -1893,7 +1920,7 @@ function pastMessageTurn(message) {
   return line;
 }
 
-function restoreConversation(conv, switched, messages) {
+function restoreConversation(conv, switched, messages, snapshot) {
   while ($history.firstChild) $history.removeChild($history.firstChild);
   if (window.AthenaShell && typeof window.AthenaShell.clearCanvases === 'function') {
     window.AthenaShell.clearCanvases();
@@ -1934,7 +1961,20 @@ function restoreConversation(conv, switched, messages) {
     for (const message of messages) $history.appendChild(pastMessageTurn(message));
   }
   setLocked(false);
-  scrollHistoryToBottom(true);
+  // 초안과 스크롤도 그 대화의 것이다. 초안은 지금 입력이 비어 있을 때만 채운다 —
+  // 사용자가 치던 글자를 저장본이 덮으면 안 된다. 스크롤은 저장된 자리로, 바닥이었으면 바닥으로.
+  const ws = snapshot && snapshot.workspace;
+  if (ws && ws.draft && typeof ws.draft.text === 'string' && !$input.value) {
+    $input.value = ws.draft.text;
+    autoGrowInput();
+  }
+  const vp = snapshot && snapshot.viewport && snapshot.viewport.chat;
+  if (vp && vp.atBottom === false && typeof vp.scrollTop === 'number') {
+    stickToBottom = false;
+    $history.scrollTop = vp.scrollTop;
+  } else {
+    scrollHistoryToBottom(true);
+  }
 }
 
 // sidebar.js가 부르는 다리(shell.js 버스). 돌아갔으면 true.
@@ -1956,7 +1996,7 @@ window.AthenaShell.registerOpenConversation(async (conv) => {
       .catch(() => null);
     messages = res && res.ok && Array.isArray(res.messages) ? res.messages : [];
   }
-  restoreConversation(conv, switched, messages);
+  restoreConversation(conv, switched, messages, snapshot);
   // 카드는 main이 저장된 봉투를 같은 페인트 채널로 다시 흘린다 — 캔버스를 비운 뒤라 순서가 맞는다.
   void window.athena.invoke('athena:session-replay-cards', { id: conv.id }).catch(() => {});
   return true;
@@ -2094,6 +2134,7 @@ function dispatchUserQuery(text) {
 // 사람이 타이핑하는 동안에도 자란다(붙여넣기·한글 조합 포함 — input 이벤트가
 // keydown보다 확실하다).
 $input.addEventListener('input', autoGrowInput);
+$input.addEventListener('input', reportChatDraft);
 
 $input.addEventListener('keydown', (e) => {
   // 멘션 메뉴가 열려 있으면 방향키·Enter·Tab·Esc는 메뉴 몫이다 — 제출보다 먼저.

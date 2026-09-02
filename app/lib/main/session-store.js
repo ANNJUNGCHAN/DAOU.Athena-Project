@@ -368,6 +368,12 @@ class SessionStore {
     const list = (Array.isArray(cards) ? cards : []).map((card) => normalizeCard(card));
     const at = new Date().toISOString();
     return this.#tx(() => {
+      // 넘어온 배열이 스택의 전부다 — 없는 카드는 닫힌 카드다. 남겨 두면 다시 그릴 때
+      // 닫은 카드가 되살아나고, 다시 그린 카드가 새 id를 받으면 두 장이 된다.
+      const keep = new Set(list.map((card) => card.cardId));
+      const existing = this.db.prepare('SELECT card_id FROM session_cards WHERE session_id = ?').all(sessionId);
+      const del = this.db.prepare('DELETE FROM session_cards WHERE session_id = ? AND card_id = ?');
+      for (const row of existing) if (!keep.has(row.card_id)) del.run(sessionId, row.card_id);
       const stmt = this.db.prepare(`
         INSERT INTO session_cards (
           session_id, card_id, seq, kind, channel, envelope_json,

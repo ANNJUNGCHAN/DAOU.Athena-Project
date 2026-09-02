@@ -98,6 +98,9 @@
   // 3단계(리프 1.2.2, Paper 보드 39 보강본) — 순수 포매팅/상태아이콘은
   // agent-sidebar-list.js가 갖고 DOM은 여기서 조립한다(다른 make*Item과 같은 자리).
   const agentSidebarList = window.AthenaLib && window.AthenaLib.AgentSidebarList;
+  // 프로젝트 행이 "무엇을 보일까"(⋯ 셋·모드 다섯·삭제 확인)는 순수 함수 쪽에 있다
+  // (36·37·38번 보드, sidebar-project-menu.js) — 여기서는 DOM 조립과 IPC 왕복만.
+  const projectMenu = window.AthenaLib && window.AthenaLib.SidebarProjectMenu;
   let agentRoutinesCache = [];
   let agentRoutinesRequestId = 0; // stale-응답 가드 — 아래 주석 참고.
 
@@ -137,6 +140,11 @@
   let currentProjectId = null;
   let activeConversationId = null;
   let openProjectMenuId = null;
+  // 프로젝트 행이 여는 것은 셋(⋯ 메뉴·모드 선택·삭제 확인)이고 한 번에 하나만 열린다.
+  let openModePickerId = null;
+  let openRemoveProjectId = null;
+  let projectRemoveDraft = '';  // 5초 폴링 재렌더가 입력을 지우지 않게 초안을 밖에 둔다.
+  let projectRemoveHint = '';   // IPC가 거절한 이유(name_mismatch 등) 한 줄.
   let selectedNotifyId = null;
   let showOlder = false;
   let searchQuery = '';
@@ -204,10 +212,196 @@
     }
   }
 
+  // 모드 선택·삭제 확인은 렌더 상태로만 산다(⋯ 메뉴처럼 DOM에 미리 만들어두지
+  // 않는다) — 상태를 지운 뒤 다시 그려야 사라진다. 무언가 열려 있었는지를
+  // 돌려줘서 호출자가 불필요한 재렌더를 피한다.
+  function resetProjectPopovers() {
+    const had = Boolean(openModePickerId || openRemoveProjectId);
+    openModePickerId = null;
+    openRemoveProjectId = null;
+    projectRemoveDraft = '';
+    projectRemoveHint = '';
+    return had;
+  }
+
+  // 상태를 지우면서 이미 그려진 노드도 그 자리에서 감춘다 — closeProjectMenus와
+  // 같은 방식이다. 여기서 다시 그리면 mousedown 도중 DOM이 갈려 그 다음에 올
+  // click이 사라진 노드 위에서 죽는다(+ 폴더 추가·더 보기가 한 번에 안 눌린다).
+  function closeProjectPopovers() {
+    resetProjectPopovers();
+    for (const node of $list.querySelectorAll('.sidebar-mode-picker, .sidebar-project-remove')) {
+      node.hidden = true;
+    }
+    for (const btn of $list.querySelectorAll('.sidebar-project-new-chat')) {
+      btn.setAttribute('aria-expanded', 'false');
+    }
+    closeProjectMenus();
+  }
+
+  async function toggleProjectPin(project) {
+    let snap = null;
+    try {
+      snap = await window.athena.invoke('athena:project-pin', { id: project.id, pinned: !project.pinned });
+    } catch (e) {
+      console.warn('프로젝트 고정 실패', e);
+      return;
+    }
+    // 고정은 정렬을 바꾼다 — 응답 스냅샷이 그 순서의 진실이라 그대로 갈아끼운다.
+    if (snap && Array.isArray(snap.projects)) projectsCache = snap.projects;
+    if (snap && Array.isArray(snap.conversations)) conversationsCache = snap.conversations;
+    updateModeCounts();
+    renderList();
+  }
+
+  async function revealProject(project) {
+    try {
+      const res = await window.athena.invoke('athena:project-reveal', { id: project.id });
+      if (!res || !res.ok) console.warn('탐색기에서 열기 실패', (res && (res.reason || res.error)) || '');
+    } catch (e) {
+      console.warn('탐색기에서 열기 실패', e);
+    }
+  }
+
+  const REMOVE_FAIL_HINT = {
+    name_mismatch: '이름이 달라 아무것도 지우지 않았습니다.',
+    default_project: '기본 프로젝트는 지울 수 없습니다.',
+    unknown_project: '이미 없는 프로젝트입니다.',
+    rm_failed: '폴더를 지우지 못했습니다.',
+  };
+
+  async function removeProject(project, typed) {
+    let res = null;
+    try {
+      res = await window.athena.invoke('athena:project-remove', { id: project.id, confirmName: typed });
+    } catch (e) {
+      console.warn('프로젝트 제거 실패', e);
+      res = null;
+    }
+    if (res && res.ok) {
+      closeProjectPopovers();
+      loadConversations();
+      return;
+    }
+    projectRemoveHint = (res && REMOVE_FAIL_HINT[res.reason]) || '프로젝트를 지우지 못했습니다.';
+    renderList();
+  }
+
+  // 폴더 대화상자는 main이 띄운다 — 여기서는 결과 네 갈래를 받아 화면만 맞춘다.
+  async function addProjectFolder() {
+    let res = null;
+    try {
+      res = await window.athena.invoke('athena:project-add');
+    } catch (e) {
+      console.warn('프로젝트 추가 실패', e);
+      return;
+    }
+    if (!res) return;
+    if (res.canceled) return;
+    if (res.ok) { loadConversations(); return; }
+    // 같은 폴더를 두 번 등록하지 않는다(main.js folder_taken) — 새로 만드는 대신
+    // 이미 있는 그 프로젝트로 선택을 옮긴다.
+    if (res.reason === 'folder_taken') {
+      if (res.project && res.project.id) currentProjectId = res.project.id;
+      renderList();
+      return;
+    }
+    console.warn('프로젝트 추가 실패', res.error || res.reason || '');
+  }
+
+  function makeProjectAddButton() {
+    const btn = el('button', 'sidebar-project-add');
+    btn.type = 'button';
+    btn.textContent = '+ 폴더 추가';
+    btn.title = '폴더를 골라 프로젝트로 추가';
+    btn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      closeProjectPopovers();
+      addProjectFolder();
+    });
+    return btn;
+  }
+
+  // 펜 = 새 대화창(38번 보드) — 어느 모드로 열지를 사람이 고른다.
+  function makeModePicker(project) {
+    const picker = el('div', 'sidebar-mode-picker');
+    picker.setAttribute('role', 'menu');
+    picker.setAttribute('aria-label', `${project.label} 새 대화창`);
+    const choices = projectMenu ? projectMenu.modeChoices() : [];
+    for (const choice of choices) {
+      const btn = el('button', 'sidebar-mode-picker-item');
+      btn.type = 'button';
+      btn.setAttribute('role', 'menuitem');
+      btn.dataset.view = choice.view;
+      btn.appendChild(el('span', 'sidebar-mode-picker-label', choice.label));
+      btn.appendChild(el('span', 'sidebar-mode-picker-hint', choice.hint));
+      btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        closeProjectPopovers();
+        startNewConversation(project.id, choice.view);
+        // 고른 모드로 화면까지 옮긴다 — 대화만 그 모드로 만들고 캔버스가 그대로면
+        // 방금 무엇을 골랐는지가 화면 어디에도 안 남는다.
+        if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+          window.AthenaCanvasMode.setView(choice.view);
+        }
+        if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+          window.AthenaModeNav.setActive(choice.view);
+        }
+      });
+      picker.appendChild(btn);
+    }
+    return picker;
+  }
+
+  // 제거는 폴더를 지우는 영구 삭제라 이름을 그대로 다시 쳐야 열린다(37번 보드).
+  function makeProjectRemovePanel(project) {
+    const panel = el('div', 'sidebar-project-remove');
+    panel.appendChild(el('p', 'sidebar-project-remove-copy',
+      '폴더와 그 안의 모든 파일이 지워집니다. 되돌릴 수 없습니다.'));
+    if (project.path) panel.appendChild(el('p', 'sidebar-project-remove-path', project.path));
+    const input = el('input', 'sidebar-project-remove-input');
+    input.type = 'text';
+    input.placeholder = '프로젝트 이름을 그대로 입력';
+    input.value = projectRemoveDraft;
+    panel.appendChild(input);
+    const hint = el('p', 'sidebar-project-remove-hint');
+    panel.appendChild(hint);
+    const cancel = el('button', 'sidebar-project-remove-cancel', '취소');
+    cancel.type = 'button';
+    const confirm = el('button', 'sidebar-project-remove-confirm is-danger', '영구 삭제');
+    confirm.type = 'button';
+    const sync = () => {
+      const state = projectMenu
+        ? projectMenu.removeConfirmState(project, input.value)
+        : { canRemove: false, hint: '' };
+      confirm.disabled = !state.canRemove;
+      hint.textContent = projectRemoveHint || state.hint;
+    };
+    input.addEventListener('input', () => {
+      projectRemoveDraft = input.value;
+      projectRemoveHint = ''; // 다시 치기 시작하면 지난 거절 이유는 낡은 말이 된다.
+      sync();
+    });
+    cancel.addEventListener('click', (event) => {
+      event.stopPropagation();
+      closeProjectPopovers();
+      renderList();
+    });
+    confirm.addEventListener('click', (event) => {
+      event.stopPropagation();
+      removeProject(project, input.value);
+    });
+    sync();
+    panel.appendChild(cancel);
+    panel.appendChild(confirm);
+    return panel;
+  }
+
   function makeProjectRow(project, conversations) {
     const wrap = el('div', 'sidebar-project');
     wrap.dataset.projectId = project.id;
     if (project.id === currentProjectId) wrap.classList.add('is-current');
+    // 고정의 진실은 레코드다 — 화면에서 클래스만 흉내 내면 재조회 때 뒤집힌다.
+    if (project.pinned) wrap.classList.add('is-pinned');
 
     const row = el('div', 'sidebar-project-row');
     const main = el('button', 'sidebar-project-main');
@@ -242,7 +436,7 @@
     main.addEventListener('blur', hideDescription);
     main.addEventListener('click', () => {
       currentProjectId = project.id;
-      closeProjectMenus();
+      closeProjectPopovers();
       renderList();
     });
     row.appendChild(main);
@@ -251,13 +445,17 @@
     if (openProjectMenuId === project.id) actions.classList.add('is-open');
     const newChat = el('button', 'sidebar-project-new-chat');
     newChat.type = 'button';
-    newChat.setAttribute('aria-label', `${project.label} 프로젝트 수정`);
-    newChat.title = '프로젝트 수정';
+    newChat.setAttribute('aria-label', `${project.label} 새 대화창`);
+    newChat.title = '새 대화창';
+    newChat.setAttribute('aria-haspopup', 'menu');
+    newChat.setAttribute('aria-expanded', openModePickerId === project.id ? 'true' : 'false');
     newChat.appendChild(pencilIcon());
     newChat.addEventListener('click', (event) => {
       event.stopPropagation();
-      if (description.hidden) showDescription();
-      else hideDescription();
+      const opening = openModePickerId !== project.id;
+      closeProjectPopovers();
+      openModePickerId = opening ? project.id : null;
+      renderList();
     });
     actions.appendChild(newChat);
 
@@ -273,30 +471,29 @@
     menu.hidden = openProjectMenuId !== project.id;
     menu.setAttribute('role', 'menu');
     menu.setAttribute('aria-label', `${project.label} 관리`);
-    const menuItems = [
-      { label: '고정', action: () => wrap.classList.toggle('is-pinned') },
-      { label: '편집', action: showDescription },
-      { label: '탐색기에서 열기', unavailable: true },
-      { label: '영구 작업 트리 생성', unavailable: true },
-      { label: '대화 보관', unavailable: true },
-      { label: '프로젝트 제거', unavailable: true, danger: true },
-    ];
+    const menuItems = projectMenu ? projectMenu.menuItemsFor(project) : [];
     let firstMenuItem = null;
     for (const item of menuItems) {
       const button = el('button', `sidebar-project-menu-item${item.danger ? ' is-danger' : ''}`);
       button.type = 'button';
       button.setAttribute('role', 'menuitem');
       button.textContent = item.label;
-      if (item.unavailable) {
+      if (item.disabled) {
         button.disabled = true;
-        button.title = '프로젝트 연결 정보가 있을 때 사용할 수 있습니다';
+        if (item.reason) button.title = item.reason;
       } else {
         button.addEventListener('click', () => {
-          if (item.action) item.action();
           openProjectMenuId = null;
           menu.hidden = true;
           actions.classList.remove('is-open');
           menuTrigger.setAttribute('aria-expanded', 'false');
+          if (item.key === 'pin') { toggleProjectPin(project); return; }
+          if (item.key === 'reveal') { revealProject(project); return; }
+          if (item.key === 'remove') {
+            resetProjectPopovers();
+            openRemoveProjectId = project.id;
+            renderList();
+          }
         });
       }
       if (!firstMenuItem) firstMenuItem = button;
@@ -309,16 +506,22 @@
       // aria-expanded를 단일 상태 권위로 쓴다. CSS/플랫폼이 [hidden] 표시를
       // 재계산해도 첫 클릭이 닫기 동작으로 뒤집히지 않아야 한다.
       const opening = menuTrigger.getAttribute('aria-expanded') !== 'true';
+      const hadPopover = resetProjectPopovers();
       openProjectMenuId = opening ? project.id : null;
       closeProjectMenus(menu);
       menu.hidden = !opening;
       actions.classList.toggle('is-open', opening);
       menuTrigger.setAttribute('aria-expanded', opening ? 'true' : 'false');
+      // 모드 선택·삭제 확인은 렌더 상태라 지우려면 다시 그려야 한다. 다시 그려도
+      // openProjectMenuId가 그대로라 방금 연 메뉴는 열린 채로 복원된다.
+      if (hadPopover) { renderList(); return; }
       if (opening && firstMenuItem) firstMenuItem.focus();
     });
 
     row.appendChild(actions);
     wrap.appendChild(row);
+    if (openModePickerId === project.id) wrap.appendChild(makeModePicker(project));
+    if (openRemoveProjectId === project.id) wrap.appendChild(makeProjectRemovePanel(project));
     if (project.id === currentProjectId) {
       for (const conversation of conversations) {
         wrap.appendChild(makeConversationItem(conversation, 'project'));
@@ -374,6 +577,11 @@
       ? document.activeElement.closest('.sidebar-project')
       : null;
     const focusedProjectId = focusedMenuItem && focusedMenuItem.dataset.projectId;
+    // 삭제 확인 입력은 5초 폴링 재렌더를 그대로 맞는다 — 값은 projectRemoveDraft가
+    // 지키고, 커서는 여기서 되돌린다(안 그러면 타이핑 도중 포커스가 튄다).
+    const focusedRemoveInput = Boolean(document.activeElement
+      && document.activeElement.classList
+      && document.activeElement.classList.contains('sidebar-project-remove-input'));
     while ($list.firstChild) $list.removeChild($list.firstChild);
 
     // 에이전트모드 우선 노출(원칙3, Paper 보드 39 보강본) — 대화 이력보다
@@ -395,7 +603,9 @@
     }
 
     if (projectsCache.length) {
-      $list.appendChild(makeSectionLabel('프로젝트', 'is-project-caption'));
+      const projectCaption = makeSectionLabel('프로젝트', 'is-project-caption');
+      projectCaption.appendChild(makeProjectAddButton()); // 폴더 추가는 캡션 오른쪽(36번 보드)
+      $list.appendChild(projectCaption);
       for (const project of projectsCache) {
         const projectRows = filtered.filter((conversation) => conversation.projectId === project.id);
         $list.appendChild(makeProjectRow(project, projectRows));
@@ -428,6 +638,15 @@
         .find((project) => project.dataset.projectId === openProjectMenuId);
       const firstAction = restored && restored.querySelector('.sidebar-project-menu-item:not(:disabled)');
       if (firstAction) firstAction.focus();
+    }
+
+    if (openRemoveProjectId && focusedRemoveInput) {
+      const input = $list.querySelector('.sidebar-project-remove-input');
+      if (input) {
+        input.focus();
+        const end = input.value.length;
+        if (typeof input.setSelectionRange === 'function') input.setSelectionRange(end, end);
+      }
     }
   }
 
@@ -626,7 +845,9 @@
     if ($input) { $input.value = ''; $input.focus(); }
   }
 
-  async function startNewConversation(projectId) {
+  // view를 주면 그 모드의 대화창으로 연다(38번 보드 펜 = 새 대화창). 없으면
+  // 지금 보고 있는 모드 그대로다(상단 + 버튼의 기존 동작).
+  async function startNewConversation(projectId, view) {
     const selectedProjectId = projectsCache.some((project) => project.id === projectId)
       ? projectId
       : currentProjectId;
@@ -636,7 +857,7 @@
       try {
         pending = window.athena.invoke('athena:conversations-new', {
           projectId: selectedProjectId,
-          mode: currentMode(),
+          mode: view || currentMode(),
         });
       } catch {
         pending = null;
@@ -780,10 +1001,12 @@
   });
 
   document.addEventListener('mousedown', (e) => {
-    const inProjectActions = e.target && typeof e.target.closest === 'function'
-      ? e.target.closest('.sidebar-project-actions')
+    // 모드 선택·삭제 확인은 행 안(.sidebar-project)에 있고 .sidebar-project-actions
+    // 밖이다 — 판정 범위를 행 전체로 넓혀야 패널 안을 눌러도 닫히지 않는다.
+    const inProject = e.target && typeof e.target.closest === 'function'
+      ? e.target.closest('.sidebar-project')
       : null;
-    if (!inProjectActions) closeProjectMenus();
+    if (!inProject) closeProjectPopovers();
     if (!$accountMenu.hidden
         && !$accountMenu.contains(e.target)
         && !$accountRow.contains(e.target)) {
@@ -793,7 +1016,7 @@
 
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
-    closeProjectMenus();
+    closeProjectPopovers();
     closeAccountMenu();
   });
 
