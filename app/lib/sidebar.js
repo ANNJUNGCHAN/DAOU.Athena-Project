@@ -192,6 +192,15 @@
     const label = el('span', 'sidebar-item-label');
     label.textContent = conv.title;
     btn.appendChild(label);
+    // 점 하나로 읽는 네 가지 상태(39번 보드): 실행 중은 스피너, 대기 주황, 완료 회색,
+    // 실패 빨강. 상태가 없으면 아무것도 그리지 않는다 — 없는 실행을 있다고 하지 않는다.
+    if (conv.runState && RUN_STATE_LABELS[conv.runState]) {
+      const run = el('span', `sidebar-item-run sidebar-item-run-${conv.runState}`);
+      run.setAttribute('role', 'img');
+      run.setAttribute('aria-label', RUN_STATE_LABELS[conv.runState]);
+      btn.classList.add(`is-run-${conv.runState}`);
+      btn.appendChild(run);
+    }
     if (isSelected) {
       const dot = el('span', 'sidebar-item-dot sidebar-current-dot');
       btn.appendChild(dot);
@@ -655,13 +664,43 @@
   // 접기)의 주인은 session-history-view.js 하나라 여기서 다시 세지 않고,
   // 레코드 어휘(chat…) ↔ 화면 어휘(summary…)의 다리도 session-snapshot.js
   // 한 쌍뿐이다. 모듈이 없으면 조용히 건너뛴다(위 modeNav 가드와 같은 방식).
+  const RUN_STATE_LABELS = { running: '실행 중', waiting: '대기', done: '완료', failed: '실패' };
+
+  // 이력 머리의 "실행 중 3 · 대기 1" 알약(39번 보드). 하나도 없으면 사라진다.
+  let $runSummary = null;
+  function renderRunSummary() {
+    const nav = document.getElementById('sidebarModeNav');
+    if (!nav || !nav.parentElement) return;
+    let running = 0;
+    let waiting = 0;
+    for (const c of conversationsCache) {
+      if (c.runState === 'running') running += 1;
+      else if (c.runState === 'waiting') waiting += 1;
+    }
+    if (!running && !waiting) {
+      if ($runSummary) $runSummary.hidden = true;
+      return;
+    }
+    if (!$runSummary) {
+      $runSummary = el('div', 'sidebar-run-summary');
+      $runSummary.id = 'sidebarRunSummary';
+      nav.parentElement.insertBefore($runSummary, nav);
+    }
+    const parts = [];
+    if (running) parts.push(`실행 중 ${running}`);
+    if (waiting) parts.push(`대기 ${waiting}`);
+    $runSummary.textContent = parts.join(' · ');
+    $runSummary.classList.toggle('is-waiting-only', running === 0);
+    $runSummary.hidden = false;
+  }
+
   function updateModeCounts() {
+    renderRunSummary();
     const historyView = window.AthenaLib && window.AthenaLib.SessionHistoryView;
     const snapshot = window.AthenaLib && window.AthenaLib.SessionSnapshot;
     if (!modeNav || !historyView || !snapshot) return;
-    // runState는 전부 null이다 — 지금 대화 레코드에는 실행 중인지를 말해주는
-    // 근거가 없다. 없는 "실행 중"을 있다고 그리지 않는다(P3). 실행 상태 배선은
-    // job 레코드가 생기는 다음 단계의 몫이다(명세 §5).
+    // runState는 main이 목록에 얹어 준 세션의 대표 실행 상태다(job 레코드, 명세 §5).
+    // 없으면 null — 없는 "실행 중"을 있다고 그리지 않는다(P3).
     const view = historyView.buildHistoryView({
       sessions: conversationsCache.map((c) => ({
         id: c.id,
@@ -671,7 +710,7 @@
         pinned: false,
         archived: false,
         updatedAt: c.updatedAt,
-        runState: null,
+        runState: c.runState || null,
       })),
     });
     const counts = {};
@@ -683,6 +722,18 @@
     }
     modeNav.setCounts(counts);
     modeNav.setRunning(running);
+  }
+
+  // main이 실행 상태 변화를 밀어준다 — 목록을 다시 받지 않고 그 행만 고쳐 다시 그린다.
+  // 모르는 대화면(방금 생긴 대화) 목록을 통째로 다시 받는다.
+  function handleSessionRunState(payload) {
+    const id = payload && payload.id;
+    if (!id) return;
+    const conv = conversationsCache.find((c) => c.id === id);
+    if (!conv) { loadConversations(); return; }
+    conv.runState = payload.runState || null;
+    updateModeCounts();
+    renderList();
   }
 
   async function loadConversations() {
@@ -1084,6 +1135,7 @@
 
   if (window.athena && typeof window.athena.on === 'function') {
     window.athena.on('athena:routine-event', handleRoutineEvent);
+    window.athena.on('athena:session-run-state', handleSessionRunState);
     window.athena.on('athena:auth-token-changed', () => loadAccount());
   }
 })();

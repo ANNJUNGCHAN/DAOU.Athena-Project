@@ -106,6 +106,26 @@ const JOB_PATCH_COLUMNS = {
   error: 'error',
 };
 
+// job 상태 어휘 → 39번 보드의 점 하나. 백엔드(running/done/failed/cancelled)와
+// 여기(interrupted)가 쓰는 말을 네 가지로 접는다. 모르는 상태는 점을 찍지 않는다.
+const RUN_RANK = { running: 4, waiting: 3, failed: 2, done: 1 };
+const JOB_RUN_STATES = {
+  running: 'running',
+  queued: 'waiting',
+  waiting: 'waiting',
+  pending: 'waiting',
+  done: 'done',
+  completed: 'done',
+  cancelled: 'done',
+  failed: 'failed',
+  error: 'failed',
+  interrupted: 'failed',
+};
+
+function jobRunState(status) {
+  return JOB_RUN_STATES[String(status || '').toLowerCase()] || null;
+}
+
 const JSON_PATCH_KEYS = new Set(['toolSteps', 'cardRefs', 'attachments', 'usage', 'progress']);
 
 function parseJson(text, fallback) {
@@ -509,6 +529,30 @@ class SessionStore {
     `).run(cutoff).changes;
   }
 
+  getJob(jobId) {
+    return this.#jobById(jobId);
+  }
+
+  listJobsByStatus(status) {
+    return this.db
+      .prepare('SELECT * FROM session_jobs WHERE status = ? ORDER BY attached_at ASC, id ASC')
+      .all(status)
+      .map(rowToJob);
+  }
+
+  // 세션마다 대표 상태 하나(실행 중 > 대기 > 실패 > 완료). job이 없는 세션은 키가 없다 —
+  // 없는 "실행 중"을 있다고 그리지 않는다.
+  runStates() {
+    const out = {};
+    for (const row of this.db.prepare('SELECT session_id, status FROM session_jobs').all()) {
+      const state = jobRunState(row.status);
+      if (!state) continue;
+      const prev = out[row.session_id];
+      if (!prev || RUN_RANK[state] > RUN_RANK[prev]) out[row.session_id] = state;
+    }
+    return out;
+  }
+
   searchMessages(query, { limit } = {}) {
     if (typeof query !== 'string' || !query) return [];
     const rows = this.db.prepare(`
@@ -587,4 +631,4 @@ function createSessionStore(options) {
   return new SessionStore(options);
 }
 
-module.exports = { SessionStore, createSessionStore };
+module.exports = { SessionStore, createSessionStore, jobRunState };

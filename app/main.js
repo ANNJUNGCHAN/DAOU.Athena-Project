@@ -1328,17 +1328,29 @@ ipcMain.handle('athena:backtest-plan', async (_e, body = {}) => {
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 ipcMain.handle('athena:backtest-run', async (_e, body = {}) => {
-  try { return await backtestBridge.runBacktest({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body }); }
+  try {
+    const res = await backtestBridge.runBacktest({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body });
+    attachSessionJob(res, 'run_id', 'backtest.run');
+    return res;
+  }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 // 백필 잡 상태(수집 승인 카드가 진행률을 폴링한다).
 ipcMain.handle('athena:backtest-status', async (_e, { job_id } = {}) => {
-  try { return await backtestBridge.fetchJobStatus({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, job_id }); }
+  try {
+    const res = await backtestBridge.fetchJobStatus({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, job_id });
+    syncSessionJob(job_id, res);
+    return res;
+  }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 // 실행 상태+지표+자산곡선+stdout — running 상태가 1초 간격으로 이 채널을 폴링한다.
 ipcMain.handle('athena:backtest-result', async (_e, { run_id } = {}) => {
-  try { return await backtestBridge.fetchRunResult({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, run_id }); }
+  try {
+    const res = await backtestBridge.fetchRunResult({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, run_id });
+    syncSessionJob(run_id, res);
+    return res;
+  }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 ipcMain.handle('athena:backtest-trades', async (_e, { run_id } = {}) => {
@@ -1352,7 +1364,11 @@ ipcMain.handle('athena:backtest-runs', async () => {
 // 사람 클릭 전용 경로(계획서 §7.6/§9와 같은 원칙) — 쿼터를 태우는 백필은 모델 툴에 없다.
 // 캔버스의 [수집하고 실행] 버튼 클릭에서만 이 IPC를 부른다.
 ipcMain.handle('athena:backtest-backfill', async (_e, body = {}) => {
-  try { return await backtestBridge.backfillBacktest({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body }); }
+  try {
+    const res = await backtestBridge.backfillBacktest({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body });
+    attachSessionJob(res, 'job_id', 'backtest.backfill');
+    return res;
+  }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 
@@ -2545,12 +2561,66 @@ function getSessionBridge() {
     sessionBridge = createSessionBridge({
       store: createSessionStore({ dbPath }),
       log: (scope, error) => mdlog(`${scope} — ${String((error && error.message) || error)}`),
+      onRunState: ({ sessionId, runState }) => sendSessionRunState(sessionId, runState),
     });
   } catch (error) {
     mdlog(`세션 스토어 열기 실패 — ${String((error && error.message) || error)}`);
     sessionBridge = false;
   }
   return sessionBridge || null;
+}
+
+// ---------- 실행 상태(39번 보드) ----------
+// 세션의 대표 실행 상태가 바뀌면 사이드바로 흘린다 — 행의 스피너·점, 모드 옆 스피너.
+function sendSessionRunState(id, runState) {
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:session-run-state', { id, runState });
+}
+
+// 백테스트 채널 응답에 실행 id가 있으면 지금 기록 대상 대화의 실행으로 붙인다. 렌더러가
+// 어느 대화인지 말하지 않는다 — main의 기록 대상이 곧 그 실행의 주인이다.
+function attachSessionJob(res, idKey, kind) {
+  const id = res && res.ok && res.data && res.data[idKey];
+  if (!id) return;
+  const bridge = getSessionBridge();
+  const sessionId = historyConversationId();
+  if (!bridge || !sessionId) return;
+  ensureSessionRecord(bridge, sessionId);
+  bridge.attachJob({ sessionId, job: { id: String(id), kind, status: 'running' } });
+}
+
+// 폴링 응답의 status로 실행 레코드를 갱신한다(heartbeat 포함). 모르는 id는 그냥 지나간다.
+function syncSessionJob(id, res) {
+  if (!id || !res || !res.ok || !res.data || typeof res.data.status !== 'string') return;
+  const bridge = getSessionBridge();
+  if (!bridge) return;
+  const patch = { status: res.data.status, heartbeatAt: new Date().toISOString() };
+  if (res.data.error) patch.error = String(res.data.error);
+  if (res.data.progress !== undefined) patch.progress = res.data.progress;
+  bridge.updateJob({ jobId: String(id), patch });
+}
+
+// 부팅 때 지난 프로세스가 남긴 running 실행을 정리한다. 답변 턴은 그 프로세스와 함께
+// 죽었으니 바로 interrupted, 백테스트는 백엔드가 따로 살아 있으니 물어보고 맞춘다
+// (Orca의 warm reattach). 백엔드가 아직 안 떴으면 15초 간격으로 세 번 더 묻고 포기한다.
+async function reconcileSessionJobs(attempt = 0) {
+  const bridge = getSessionBridge();
+  if (!bridge) return;
+  let running;
+  try { running = bridge.store.listJobsByStatus('running'); } catch { return; }
+  let unreachable = false;
+  for (const job of running) {
+    if (job.kind === 'chat.turn') { bridge.updateJob({ jobId: job.id, patch: { status: 'interrupted' } }); continue; }
+    const opts = { backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch };
+    const res = job.kind === 'backtest.backfill'
+      ? await backtestBridge.fetchJobStatus({ ...opts, job_id: job.id }).catch(() => null)
+      : await backtestBridge.fetchRunResult({ ...opts, run_id: job.id }).catch(() => null);
+    if (res && res.ok) { syncSessionJob(job.id, res); continue; }
+    if (res && res.status === 404) { bridge.updateJob({ jobId: job.id, patch: { status: 'interrupted' } }); continue; }
+    unreachable = true;
+  }
+  if (!unreachable) return;
+  if (attempt < 3) { setTimeout(() => { reconcileSessionJobs(attempt + 1).catch(() => {}); }, 15_000); return; }
+  try { bridge.store.reconcileStaleJobs({ staleMs: 0 }); } catch { /* 다음 부팅에 다시 */ }
 }
 
 // 사용자 메시지를 세션에 즉시 적는다(명세 4절). 실패하면 턴을 시작하지 않는다 —
@@ -4451,7 +4521,15 @@ function handleAuthTokenRevoke(e, { id } = {}) {
 }
 
 // 이력 사이드바(리프 1.2.2) — athena:conversations-list -> { activeId, conversations }
-ipcMain.handle('athena:conversations-list', () => conversations.list());
+ipcMain.handle('athena:conversations-list', () => {
+  const listed = conversations.list();
+  const bridge = getSessionBridge();
+  const states = bridge ? bridge.runStates() : {};
+  return {
+    ...listed,
+    conversations: listed.conversations.map((row) => ({ ...row, runState: states[row.id] || null })),
+  };
+});
 // 세션 스냅샷(메시지·카드·워크스페이스·뷰포트) — 이력 행을 다시 눌렀을 때 화면을
 // 되살리는 원본. 스토어에 없으면 null이고, 렌더러는 브레인 이력 조회로 폴백한다.
 ipcMain.handle('athena:session-load', (_e, payload = {}) => {
@@ -5157,6 +5235,7 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
       mdlog(`대화 이력 SQLite 준비 실패 — ${String((error && error.message) || error)}`);
     }
     const createWindowsPromise = createWindows();
+    reconcileSessionJobs().catch((error) => mdlog(`실행 정리 실패 — ${String((error && error.message) || error)}`));
     if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') startBootReadinessForVerify();
     else void startLiveBoot(createWindowsPromise);
   });
@@ -5196,6 +5275,7 @@ module.exports = {
   setBriefingClaudeRunnerForVerify,
   getLiveSessionId: () => liveSessionId,
   getSessionBridge,
+  reconcileSessionJobs,
   getBriefingBusyDepth: () => briefingBusyDepth,
   // 셸 창을 앞으로 — verify.js가 트레이 복귀·카드 푸시 경로를 검증할 때 쓴다.
   revealShell,

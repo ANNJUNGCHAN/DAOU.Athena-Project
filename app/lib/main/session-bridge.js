@@ -20,13 +20,16 @@ function asText(value) {
 }
 
 class SessionBridge {
-  constructor({ store, now, setTimer, clearTimer, log }) {
+  constructor({ store, now, setTimer, clearTimer, log, onRunState }) {
     if (!store) throw new TypeError('session bridge store is required');
     this.store = store;
     this.now = now;
     this.setTimer = setTimer;
     this.clearTimer = clearTimer;
     this.log = log;
+    // 세션의 대표 실행 상태가 바뀔 때마다 { sessionId, runState }로 알린다(39번 보드의
+    // 스피너·점). 누가 듣는지는 모른다 — main이 사이드바로 흘린다.
+    this.onRunState = typeof onRunState === 'function' ? onRunState : null;
     this.buffers = new Map();
     this.pending = new Map();
     this.savedWorkspace = new Map();
@@ -53,7 +56,7 @@ class SessionBridge {
 
   beginAssistant({ sessionId, messageId, parentId } = {}) {
     this.#buffer(sessionId, messageId);
-    return this.#guard(() => this.store.appendMessage(sessionId, {
+    const appended = this.#guard(() => this.store.appendMessage(sessionId, {
       id: messageId,
       parentId,
       role: 'assistant',
@@ -61,6 +64,9 @@ class SessionBridge {
       done: false,
       occurredAt: this.now(),
     }));
+    // 답변 턴도 실행이다 — 다른 대화로 옮겨가 있어도 이 행에 스피너가 돈다(39번 보드).
+    this.attachJob({ sessionId, job: { id: messageId, kind: 'chat.turn', status: 'running' } });
+    return appended;
   }
 
   journalDelta({ sessionId, messageId, text, thinking } = {}) {
@@ -111,7 +117,10 @@ class SessionBridge {
       error: error ? String(error.message || error) : (interrupted ? 'interrupted' : null),
     };
     if (buf && buf.toolSteps.length) patch.toolSteps = buf.toolSteps.slice();
-    return this.#guard(() => this.store.updateMessage(sessionId, messageId, patch));
+    const updated = this.#guard(() => this.store.updateMessage(sessionId, messageId, patch));
+    // 오류면 빨강, 그 외(정상·사용자 중단)는 회색 — 중단은 사용자의 뜻이지 실패가 아니다.
+    this.updateJob({ jobId: messageId, patch: { status: error ? 'failed' : 'done', error: patch.error } });
+    return updated;
   }
 
   saveCards({ sessionId, cards } = {}) {
@@ -146,6 +155,35 @@ class SessionBridge {
     } catch (err) {
       this.log('session-bridge', err);
     }
+  }
+
+  // ---------- 실행(job) — 39번 보드 ----------
+  // 실행 레코드는 즉시 쓴다(디바운스 없음). 백테스트 run·백필·답변 턴이 다 여기로 온다.
+  // 상태가 바뀌면 그 세션의 대표 상태를 다시 계산해 알린다.
+  attachJob({ sessionId, job } = {}) {
+    const attached = this.#guard(() => this.store.attachJob(sessionId, job));
+    if (attached) this.#notifyRunState(sessionId);
+    return attached || null;
+  }
+
+  updateJob({ jobId, patch } = {}) {
+    const job = this.#guard(() => this.store.getJob(jobId));
+    if (!job) return false;
+    const changed = this.#guard(() => this.store.updateJob(jobId, patch));
+    if (changed && patch && Object.prototype.hasOwnProperty.call(patch, 'status') && patch.status !== job.status) {
+      this.#notifyRunState(job.sessionId);
+    }
+    return Boolean(changed);
+  }
+
+  runStates() {
+    return this.#guard(() => this.store.runStates()) || {};
+  }
+
+  #notifyRunState(sessionId) {
+    if (!this.onRunState) return;
+    const runState = this.runStates()[sessionId] || null;
+    try { this.onRunState({ sessionId, runState }); } catch (error) { if (this.log) this.log('session run-state notify', error); }
   }
 
   load(sessionId) {
@@ -243,8 +281,9 @@ function createSessionBridge({
   setTimer = setTimeout,
   clearTimer = clearTimeout,
   log = () => {},
+  onRunState,
 } = {}) {
-  return new SessionBridge({ store, now, setTimer, clearTimer, log });
+  return new SessionBridge({ store, now, setTimer, clearTimer, log, onRunState });
 }
 
 module.exports = { createSessionBridge, JOURNAL_INTERVAL_MS, JOURNAL_BYTES, DEBOUNCE };

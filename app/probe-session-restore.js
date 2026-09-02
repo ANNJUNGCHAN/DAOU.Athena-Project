@@ -38,7 +38,8 @@ async function main() {
     version: 2,
     activeId: null,
     currentProjectId: 'default',
-    projects: [{ id: 'default', label: '기본 프로젝트' }],
+    // 폴더가 있는 고정 프로젝트 하나 — ⋯ 메뉴의 제거·탐색기가 살아 있고 고정 표시가 붙는지 본다.
+    projects: [{ id: 'default', label: '기본 프로젝트' }, { id: 'proj-athena', label: '아테나', path: root, pinned: true }],
     conversations: [
       { id: 'conv-chat', title: '삼성전자 수급 확인', projectId: 'default', mode: 'chat',
         createdAt: '2026-09-01T00:00:00.000Z', updatedAt: '2026-09-01T00:00:00.000Z', resumeSessionId: null },
@@ -47,10 +48,21 @@ async function main() {
     ],
   }, null, 2), 'utf8');
 
+  // 지난 프로세스가 답변 도중 죽은 흔적을 세션 스토어에 미리 심는다(39번 보드 부팅 정리).
+  const sessionsDbPath = path.join(root, 'athena-sessions.sqlite3');
+  {
+    const { createSessionStore } = require(path.join(APP_DIR, 'lib', 'main', 'session-store.js'));
+    const seed = createSessionStore({ dbPath: sessionsDbPath });
+    seed.createSession({ id: 'conv-chat', mode: 'chat', projectId: 'default', title: '삼성전자 수급 확인' });
+    seed.attachJob('conv-chat', { id: 'turn-stale', kind: 'chat.turn', status: 'running' });
+    seed.close();
+  }
+
   Object.assign(process.env, {
     ATHENA_NO_AUTOSTART: '1',
     ATHENA_CANVAS_SOURCE: 'live',
     ATHENA_CONVERSATIONS_PATH: conversationsPath,
+    ATHENA_SESSIONS_DB_PATH: sessionsDbPath,
     ATHENA_BACKEND_URL: 'http://127.0.0.1:9',   // 닫힌 포트 — 백엔드 없음이 곧 조건이다
     ATHENA_LOCAL_BEARER_TOKEN: 'probe',
     ATHENA_ROUTINES_ENABLED: 'false',
@@ -187,6 +199,63 @@ async function main() {
     await wc.executeJavaScript(`window.AthenaShell.openConversation({ id: 'conv-bt', title: '추세추종 v3' })`);
     const draftBack = await wc.executeJavaScript(`document.getElementById('input').value`);
     check('초안: 돌아오면 입력창에 그 글이 다시 들어온다', draftBack === '손절 -3%로 바꿔서', draftBack);
+
+    // 9) 실행 상태(39번 보드) — 부팅 정리, 행의 스피너·점, 모드 옆 스피너, 머리 알약, 목록의 runState
+    await mainMod.reconcileSessionJobs();
+    const staleJob = bridge.store.getJob('turn-stale');
+    check('부팅 정리: 지난 프로세스의 답변 턴은 interrupted가 된다', staleJob && staleJob.status === 'interrupted', staleJob && staleJob.status);
+    const readSidebarRun = () => wc.executeJavaScript(`(() => {
+      const rowOf = (id) => document.querySelector('.sidebar-item[data-conversation-id="' + id + '"]');
+      const runOf = (id) => { const row = rowOf(id); const run = row && row.querySelector('.sidebar-item-run'); return run ? run.className : null; };
+      const nav = document.getElementById('modeNavBacktest');
+      const pill = document.getElementById('sidebarRunSummary');
+      return { bt: runOf('conv-bt'), chat: runOf('conv-chat'),
+        navRunning: nav ? nav.classList.contains('has-running') : null,
+        pill: pill && !pill.hidden ? pill.textContent : null };
+    })()`);
+    await wc.executeJavaScript(`window.AthenaShell.openConversation({ id: 'conv-bt', title: '추세추종 v3' })`);
+    const listedStale = await wc.executeJavaScript(`window.athena.invoke('athena:conversations-list')`);
+    const chatRow = listedStale.conversations.find((c) => c.id === 'conv-chat');
+    check('목록: 중단된 턴이 있는 대화는 runState=failed로 얹혀 나온다', chatRow && chatRow.runState === 'failed', chatRow && chatRow.runState);
+
+    bridge.attachJob({ sessionId: 'conv-bt', job: { id: 'run-probe-1', kind: 'backtest.run', status: 'running' } });
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    const running = await readSidebarRun();
+    check('실행: 붙는 즉시 그 행에 스피너, 모드 옆에도 스피너, 머리에 "실행 중 1"',
+      /sidebar-item-run-running/.test(running.bt || '') && running.navRunning === true && running.pill === '실행 중 1', running);
+    check('실행: 실패한 대화 행은 빨간 점(failed)', /sidebar-item-run-failed/.test(running.chat || ''), running.chat);
+    const listedRunning = await wc.executeJavaScript(`window.athena.invoke('athena:conversations-list')`);
+    const btRow = listedRunning.conversations.find((c) => c.id === 'conv-bt');
+    check('목록: 실행 중인 대화는 runState=running', btRow && btRow.runState === 'running', btRow && btRow.runState);
+    // 눈으로 보는 확인 — ATHENA_PROBE_SHOT=경로 면 이 순간(실행 중 + 실패)의 셸을 PNG로 남긴다.
+    if (process.env.ATHENA_PROBE_SHOT) {
+      const shot = async (suffix) => {
+        const target = process.env.ATHENA_PROBE_SHOT.replace(/\.png$/i, `${suffix}.png`);
+        fs.writeFileSync(target, (await shellWin.capturePage()).toPNG());
+        console.log(`shot ${target}`);
+      };
+      await shot('');
+      // 펜 → 모드 고르기(37번 보드), ⋯ → 삭제 → 확인 패널(38번 보드)도 눈으로 본다.
+      await wc.executeJavaScript(`(() => { const pen = document.querySelector('.sidebar-project-new-chat'); if (pen) pen.click(); return Boolean(pen); })()`);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      await shot('-picker');
+      await wc.executeJavaScript(`(() => {
+        for (const node of document.querySelectorAll('.sidebar-mode-picker')) node.remove();
+        // 폴더가 있는 마지막 프로젝트(아테나)의 ⋯ — 기본 프로젝트는 폴더가 없어 제거가 잠겨 있다.
+        const triggers = document.querySelectorAll('.sidebar-project-menu-trigger');
+        const trigger = triggers[triggers.length - 1]; if (trigger) trigger.click();
+        const danger = document.querySelector('.sidebar-project-menu-item.is-danger:not(:disabled)'); if (danger) danger.click();
+        return Boolean(trigger && danger);
+      })()`);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      await shot('-remove');
+    }
+
+    bridge.updateJob({ jobId: 'run-probe-1', patch: { status: 'done' } });
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    const finished = await readSidebarRun();
+    check('완료: 스피너가 회색 점이 되고 모드 옆 스피너·머리 알약이 사라진다',
+      /sidebar-item-run-done/.test(finished.bt || '') && finished.navRunning === false && finished.pill === null, finished);
   }
 
   const failed = checks.filter((c) => !c.ok);

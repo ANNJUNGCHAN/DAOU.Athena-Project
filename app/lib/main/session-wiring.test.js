@@ -15,7 +15,8 @@ const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf
 function slice(startMarker, endMarker) {
   const start = source.indexOf(startMarker);
   assert.ok(start >= 0, `marker missing: ${startMarker}`);
-  const end = endMarker ? source.indexOf(endMarker, start) : source.length;
+  // 끝 표식은 시작 표식 뒤에서 찾는다 — 같은 접두(ipcMain.handle()로 시작하는 다음 핸들러를 끝으로 쓸 수 있게.
+  const end = endMarker ? source.indexOf(endMarker, start + startMarker.length) : source.length;
   assert.ok(end > start, `end marker missing: ${endMarker}`);
   return source.slice(start, end);
 }
@@ -74,9 +75,45 @@ test('preload가 세션 채널을 연다', () => {
   const preload = fs.readFileSync(path.join(__dirname, '..', '..', 'preload.js'), 'utf8');
   const invoke = preload.slice(preload.indexOf('const INVOKE_CHANNELS'), preload.indexOf('const SEND_CHANNELS'));
   const send = preload.slice(preload.indexOf('const SEND_CHANNELS'), preload.indexOf('const ON_CHANNELS'));
+  const on = preload.slice(preload.indexOf('const ON_CHANNELS'));
   assert.match(invoke, /'athena:session-load'/);
   assert.match(invoke, /'athena:session-replay-cards'/);
   for (const channel of ['athena:session-cards', 'athena:session-workspace', 'athena:session-viewport']) {
     assert.match(send, new RegExp(`'${channel}'`), channel);
   }
+  assert.match(on, /'athena:session-run-state'/);
+});
+
+// 39번 보드 — 실행은 백테스트 채널 응답에서 붙고, 폴링 응답으로 갱신되며, 목록에 얹혀 나간다.
+test('백테스트 run·backfill 응답이 실행으로 붙고 status·result 폴링이 그것을 갱신한다', () => {
+  const run = slice("ipcMain.handle('athena:backtest-run'", "ipcMain.handle('athena:backtest-status'");
+  assert.match(run, /attachSessionJob\(res, 'run_id', 'backtest\.run'\)/);
+  const backfill = slice("ipcMain.handle('athena:backtest-backfill'", 'ipcMain.handle(');
+  assert.match(backfill, /attachSessionJob\(res, 'job_id', 'backtest\.backfill'\)/);
+  const status = slice("ipcMain.handle('athena:backtest-status'", 'ipcMain.handle(');
+  assert.match(status, /syncSessionJob\(job_id, res\)/);
+  const result = slice("ipcMain.handle('athena:backtest-result'", 'ipcMain.handle(');
+  assert.match(result, /syncSessionJob\(run_id, res\)/);
+  // 실행의 주인은 main의 기록 대상 대화다 — 렌더러가 고르지 않는다.
+  const attach = slice('function attachSessionJob(', 'function syncSessionJob(');
+  assert.match(attach, /historyConversationId\(\)/);
+  assert.match(attach, /ensureSessionRecord\(bridge, sessionId\)/);
+  assert.match(attach, /status: 'running'/);
+});
+
+test('목록은 대표 실행 상태를 얹어 주고, 변화는 사이드바로 밀리며, 부팅 때 지난 실행을 정리한다', () => {
+  const list = slice("ipcMain.handle('athena:conversations-list'", 'ipcMain.handle(');
+  assert.match(list, /bridge\.runStates\(\)/);
+  assert.match(list, /runState: states\[row\.id\] \|\| null/);
+  const bridge = slice('function getSessionBridge() {', 'function sendSessionRunState(');
+  assert.match(bridge, /onRunState: \(\{ sessionId, runState \}\) => sendSessionRunState\(sessionId, runState\)/);
+  const send = slice('function sendSessionRunState(', 'function attachSessionJob(');
+  assert.match(send, /'athena:session-run-state', \{ id, runState \}/);
+  const boot = slice('app.whenReady().then(() => {', 'startBootReadinessForVerify');
+  assert.match(boot, /reconcileSessionJobs\(\)/);
+  // 답변 턴은 프로세스와 함께 죽었으니 바로 interrupted, 백테스트는 백엔드에 물어본다.
+  const reconcile = slice('async function reconcileSessionJobs(', '// 사용자 메시지를 세션에 즉시 적는다');
+  assert.match(reconcile, /job\.kind === 'chat\.turn'[\s\S]*?status: 'interrupted'/);
+  assert.match(reconcile, /fetchRunResult\(/);
+  assert.match(reconcile, /fetchJobStatus\(/);
 });
