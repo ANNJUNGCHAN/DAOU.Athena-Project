@@ -39,7 +39,15 @@ from athena_api.backtest.data import compute_plan, kiwoom_fetch_page
 from athena_api.backtest.runner import BacktestRunner, _align_signals, _run_code_signals
 from athena_api.backtest.sandbox.guard import BLOCKED_TOP_LEVEL_IMPORTS
 from athena_api.backtest.schema import StrategySpec, from_kis_yaml
-from athena_api.backtest.store import BacktestStore, Candle, Coverage
+from athena_api.backtest.store import (
+    BacktestStore,
+    Candle,
+    Coverage,
+    StrategyVersion,
+    VersionBundle,
+    hash_bundle,
+    sha256_text,
+)
 from athena_api.dependencies import KiwoomClientDep
 from athena_api.projects.store import venv_packages, venv_python
 
@@ -665,6 +673,211 @@ async def list_versions_route(request: Request, strategy_id: str) -> dict[str, A
     }
 
 
+@router.get("/strategies/{strategy_id}/versions/{version_id}")
+async def get_version_route(
+    request: Request, strategy_id: str, version_id: str
+) -> dict[str, Any]:
+    """버전 하나를 bundle까지 펼쳐 돌려준다.
+
+    목록 라우트는 소스만 준다 — 지난 시각 버전을 **다시 열어** 그래프를 보려면 graph와
+    source map, 그리고 그때의 compiler version이 있어야 한다(재현성). 없으면 화면은
+    "예전 그래프"를 새로 추정할 수밖에 없고, 그건 재현이 아니라 창작이다.
+    """
+    store = _store(request)
+    if await store.strategy(strategy_id) is None:
+        raise HTTPException(status_code=404, detail="전략이 존재하지 않는다")
+    version = await store.version(version_id)
+    if version is None or version.strategy_id != strategy_id:
+        raise HTTPException(status_code=404, detail="그 전략에 속한 버전이 아니다")
+    bundle = version.bundle
+    return {
+        "id": version.id,
+        "version": version.version,
+        "source": version.source,
+        "note": version.note,
+        "origin": version.origin,
+        "created_at": version.created_at,
+        "active": version.active,
+        # `is_active`는 §8 receipt가 쓰는 이름이고 `active`는 기존 목록 라우트가 쓰는
+        # 이름이다 — 같은 값이다. 호출자가 둘 중 무엇을 읽어도 같은 답을 보게 둔다.
+        "is_active": version.active,
+        "graph": None if bundle is None else json.loads(bundle.graph_json),
+        "spec_yaml": None if bundle is None else bundle.spec_yaml,
+        "source_map": None if bundle is None else json.loads(bundle.source_map_json),
+        "hashes": None if bundle is None else json.loads(bundle.hashes_json),
+        "compiler_version": None if bundle is None else bundle.compiler_version,
+        "apply_receipt": (
+            None
+            if bundle is None or bundle.apply_receipt_json is None
+            else json.loads(bundle.apply_receipt_json)
+        ),
+    }
+
+
+# ── 시각 버전 저장 (visual · code_only) ──────────────────────────────────────
+
+# 사람이 patch를 검토하고 눌렀다는 증거. 하나라도 없으면 "그냥 versions API를 불렀다"와
+# 구분되지 않으므로 저장하지 않는다(연구 문서 §사용자 적용 이후 서버 처리).
+_RECEIPT_FIELDS = (
+    "base_version_id",
+    "base_graph_hash",
+    "base_artifact_hash",
+    "patch_id",
+    "patch_hash",
+    "applied_at",
+)
+
+
+def _apply_receipt(body: dict[str, Any]) -> dict[str, str]:
+    raw = body.get("apply_receipt")
+    if not isinstance(raw, dict):
+        raise HTTPException(
+            status_code=422, detail="origin=visual은 apply_receipt가 필요하다(사람의 적용 증거)"
+        )
+    missing = [
+        field
+        for field in _RECEIPT_FIELDS
+        if not isinstance(raw.get(field), str) or not str(raw[field]).strip()
+    ]
+    if missing:
+        raise HTTPException(
+            status_code=422, detail=f"apply_receipt 필수 필드가 없다: {', '.join(missing)}"
+        )
+    return {field: str(raw[field]) for field in _RECEIPT_FIELDS}
+
+
+def _visual_bundle(
+    body: dict[str, Any], source: str, receipt: dict[str, str]
+) -> VersionBundle:
+    """bundle을 검사하고 hash를 **다시 계산**한다 — 클라이언트가 보낸 hash를 믿지 않는다.
+
+    hash를 그대로 저장하면 그래프와 코드가 어긋난 bundle도 "일치한다"고 서명해 준다.
+    재유도한 값과 다르면 저장하지 않는다.
+    """
+    raw = body.get("bundle")
+    if not isinstance(raw, dict):
+        raise HTTPException(status_code=422, detail="origin=visual은 bundle 객체가 필요하다")
+    graph = raw.get("graph")
+    spec_yaml = raw.get("spec_yaml")
+    source_map = raw.get("source_map")
+    compiler_version = raw.get("compiler_version")
+    claimed = raw.get("hashes")
+    if not isinstance(graph, dict):
+        raise HTTPException(status_code=422, detail="bundle.graph는 객체여야 한다")
+    if not isinstance(spec_yaml, str) or not spec_yaml.strip():
+        raise HTTPException(status_code=422, detail="bundle.spec_yaml은 비어 있지 않아야 한다")
+    if not isinstance(source_map, dict):
+        raise HTTPException(status_code=422, detail="bundle.source_map은 객체여야 한다")
+    if not isinstance(compiler_version, str) or not compiler_version.strip():
+        raise HTTPException(
+            status_code=422, detail="bundle.compiler_version은 비어 있지 않아야 한다"
+        )
+    if not isinstance(claimed, dict):
+        raise HTTPException(status_code=422, detail="bundle.hashes는 객체여야 한다")
+    derived = hash_bundle(graph, spec_yaml, source)
+    mismatched = sorted(name for name, value in derived.items() if claimed.get(name) != value)
+    if mismatched:
+        raise HTTPException(
+            status_code=422,
+            detail=f"bundle hash가 본문에서 다시 계산한 값과 다르다: {', '.join(mismatched)}",
+        )
+    return VersionBundle(
+        graph_json=json.dumps(graph, ensure_ascii=False, sort_keys=True),
+        spec_yaml=spec_yaml,
+        source_map_json=json.dumps(source_map, ensure_ascii=False, sort_keys=True),
+        hashes_json=json.dumps(derived, ensure_ascii=False, sort_keys=True),
+        compiler_version=compiler_version,
+        apply_receipt_json=json.dumps(receipt, ensure_ascii=False, sort_keys=True),
+    )
+
+
+def _check_base_is_fresh(
+    existing: tuple[StrategyVersion, ...], receipt: dict[str, str]
+) -> None:
+    """optimistic concurrency — patch가 본 base가 아직 이 전략의 머리인지 확인한다.
+
+    409를 내는 이유는 요청이 잘못돼서(422)가 아니라 **그 사이 세상이 바뀌어서**다.
+    화면은 다시 읽어 patch를 새로 만들어야 하며, 그 구분이 사용자에게 보여야 한다.
+    """
+    if not existing:
+        raise HTTPException(status_code=409, detail="base로 삼을 버전이 없다")
+    head = max(existing, key=lambda v: v.version)
+    if receipt["base_version_id"] != head.id:
+        raise HTTPException(
+            status_code=409,
+            detail="base 버전이 최신이 아니다 — 최신 버전을 다시 읽고 patch를 만들어야 한다",
+        )
+    if receipt["base_artifact_hash"] != sha256_text(head.source):
+        raise HTTPException(status_code=409, detail="base 코드가 그 사이 바뀌었다")
+    # 그래프 없는 base(사람이 손으로 쓴 첫 버전) 위에 첫 시각 버전을 만드는 길은 막지
+    # 않는다 — 대조할 저장된 그래프가 없을 뿐, 코드 hash는 위에서 이미 대조했다.
+    if head.bundle is not None:
+        stored = json.loads(head.bundle.hashes_json)
+        if receipt["base_graph_hash"] != stored.get("graph_hash"):
+            raise HTTPException(status_code=409, detail="base 그래프가 그 사이 바뀌었다")
+
+
+async def _add_inactive_version(
+    store: BacktestStore,
+    strategy_id: str,
+    body: dict[str, Any],
+    *,
+    source: str,
+    origin: str,
+    existing: tuple[StrategyVersion, ...],
+) -> dict[str, Any]:
+    """`visual`·`code_only` 버전을 **항상 비활성으로** 저장한다.
+
+    저장이 곧 활성화가 아니다 — 활성화는 `/activate`의 사람 클릭이고, 실행은 `/runs`다.
+    클라이언트가 `active: true`를 보내면 조용히 무시하지 않고 거부한다: 무시하면 화면은
+    켜졌다고 믿고 서버는 껐다고 믿는 상태가 남는다.
+    """
+    if body.get("active") is not None and bool(body.get("active")):
+        raise HTTPException(
+            status_code=422,
+            detail=f"origin={origin} 버전은 활성으로 저장할 수 없다 — 활성화는 /activate 전용이다",
+        )
+    receipt: dict[str, str] | None = None
+    bundle: VersionBundle | None = None
+    if origin == "visual":
+        receipt = _apply_receipt(body)
+        _check_base_is_fresh(existing, receipt)
+        bundle = _visual_bundle(body, source, receipt)
+    elif body.get("bundle") is not None:
+        # code-only 분기는 "코드가 그래프로 표현되지 않는다"는 뜻이다 — 여기에 그래프를
+        # 같이 저장하면 동기화됐다고 표시하는 것과 같다(연구 문서 §표현 불가능한 코드 수정).
+        raise HTTPException(
+            status_code=422, detail="origin=code_only 버전은 bundle을 가질 수 없다"
+        )
+    before = await store.active_version_id(strategy_id)
+    next_version = max((v.version for v in existing), default=0) + 1
+    version_id = str(uuid4())
+    await store.add_version(
+        version_id, strategy_id, next_version, source,
+        note=body.get("note"), origin=origin,
+        created_at=datetime.now(UTC), active=False, bundle=bundle,
+    )
+    after = await store.active_version_id(strategy_id)
+    if after != before:
+        # 저장층이 같은 불변식을 이미 지키지만, 뚫렸다면 조용히 200을 돌려주면 안 된다.
+        raise HTTPException(status_code=500, detail="저장 중 활성 버전이 바뀌었다")
+    # 응답은 저장된 값을 **다시 읽어** 만든다 — 보낸 값을 되돌려주면 receipt가 아니다.
+    saved = await store.version(version_id)
+    if saved is None:  # pragma: no cover - 같은 트랜잭션에서 방금 쓴 행이다
+        raise HTTPException(status_code=500, detail="저장된 버전을 다시 읽지 못했다")
+    return {
+        "version_id": saved.id,
+        "version": saved.version,
+        "active": saved.active,
+        "is_active": saved.active,
+        "origin": saved.origin,
+        "active_version_id": after,
+        "hashes": None if saved.bundle is None else json.loads(saved.bundle.hashes_json),
+        "compiler_version": None if saved.bundle is None else saved.bundle.compiler_version,
+        "apply_receipt": receipt,
+    }
+
+
 @router.post("/strategies/{strategy_id}/versions")
 async def add_version_route(
     request: Request, strategy_id: str, body: dict[str, Any]
@@ -673,7 +886,8 @@ async def add_version_route(
 
     `origin`이 `llm_draft`면 **활성화하지 않는다** — 모델이 코드를 바꿔놓고 사람은 옛 코드가
     도는 줄 아는 경로를 원천 차단한다(§7.3). `human`은 즉시 활성이다(사람의 편집은 사람의
-    클릭이다). 이 분기가 이 라우트의 존재 이유다.
+    클릭이다). 이 분기가 이 라우트의 존재 이유다. `visual`·`code_only`는 세 번째 갈래로,
+    저장은 하되 절대 켜지 않는다 — 그 갈래는 `_add_inactive_version()`이 맡는다.
     """
     store = _store(request)
     if await store.strategy(strategy_id) is None:
@@ -682,9 +896,15 @@ async def add_version_route(
     origin = body.get("origin", "human")
     if not isinstance(source, str) or not source.strip():
         raise HTTPException(status_code=422, detail="source는 비어 있지 않은 문자열이어야 한다")
-    if origin not in ("human", "form", "llm_draft"):
-        raise HTTPException(status_code=422, detail="origin은 human|form|llm_draft여야 한다")
+    if origin not in ("human", "form", "llm_draft", "visual", "code_only"):
+        raise HTTPException(
+            status_code=422, detail="origin은 human|form|llm_draft|visual|code_only여야 한다"
+        )
     existing = await store.versions(strategy_id)
+    if origin in ("visual", "code_only"):
+        return await _add_inactive_version(
+            store, strategy_id, body, source=source, origin=origin, existing=existing
+        )
     next_version = max((v.version for v in existing), default=0) + 1
     version_id = str(uuid4())
     await store.add_version(
