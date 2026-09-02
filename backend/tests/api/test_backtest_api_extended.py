@@ -607,3 +607,35 @@ def test_form_path_run_stays_form_and_carries_no_code_flag(tmp_path: Path) -> No
         assert result["metrics"]["run_path"] == "form"
         assert not any("코드 경로" in f for f in result["flags"])
         assert result["stdout"] == ""
+
+
+_CODE_WITHOUT_PARAMS = '''\
+def signals(df, p):
+    import athena_bt as bt
+    print("p:", sorted(p))
+    fast = bt.sma(df.close, int(p["fast"]))
+    slow = bt.sma(df.close, int(p["slow"]))
+    out = df.assign(entry=bt.cross_above(fast, slow), exit=bt.cross_below(fast, slow))
+    return out[["entry", "exit"]]
+'''
+
+
+def test_code_path_inherits_form_param_defaults_when_code_has_no_params(tmp_path: Path) -> None:
+    """코드에 PARAMS가 없어도 폼(yaml)의 파라미터 기본값이 p에 깔린다(2026-09-02 실측 —
+    모델이 PARAMS를 빠뜨려 p["period"]가 KeyError로 죽었다).
+    우선순위는 폼 < 코드 PARAMS < override."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+        accepted = client.post(
+            f"{BASE}/runs", json={"yaml": yaml_text, "source": _CODE_WITHOUT_PARAMS}
+        )
+        assert accepted.status_code == 202
+        run_id = accepted.json()["run_id"]
+        _await_run(client, run_id)
+        result = client.get(f"{BASE}/runs/{run_id}").json()
+        assert result["status"] == "done", result["error"]
+        assert "'fast'" in result["stdout"] and "'slow'" in result["stdout"]

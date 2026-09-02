@@ -74,7 +74,10 @@ def _align_signals(signals: pd.DataFrame, index: pd.Index) -> pd.DataFrame:
 
 
 async def _run_code_signals(
-    source: str, df: pd.DataFrame, overrides: dict[str, int | float] | None
+    source: str,
+    df: pd.DataFrame,
+    overrides: dict[str, int | float] | None,
+    base_params: dict[str, int | float] | None = None,
 ) -> dict[str, Any]:
     """전략 코드를 샌드박스 자식 프로세스에서 돌리고 결과 한 장을 회수한다(§7.2).
 
@@ -82,7 +85,11 @@ async def _run_code_signals(
     남지 않는다. 프로세스 기동은 블로킹이라 `to_thread`로 옮긴다(이벤트 루프를 막으면
     같은 루프의 다른 잡 폴링이 멈춘다).
     """
-    params = {**params_defaults(source), **(overrides or {})}
+    # p의 우선순위: 폼(yaml)의 파라미터 기본값 < 코드의 PARAMS 기본값 < 호출자 override.
+    # 폼 값을 바닥에 까는 이유(2026-09-02 실측): 모델이 짠 코드가 PARAMS를 빠뜨리거나 이름을
+    # 다르게 적으면 p["period"]가 KeyError로 죽었다 — 폼 슬라이더가 이미 같은 이름의 값을
+    # 갖고 있으니 그걸 넘겨 코드 경로도 폼의 파라미터를 그대로 쓰게 한다.
+    params = {**(base_params or {}), **params_defaults(source), **(overrides or {})}
     jobdir = Path(tempfile.mkdtemp(prefix="athena-bt-run-"))
 
     def run_and_clean() -> dict[str, Any]:
@@ -229,7 +236,10 @@ class BacktestRunner:
             stdout_text = ""
             try:
                 if source is not None:
-                    outcome = await _run_code_signals(source, df, overrides)
+                    outcome = await _run_code_signals(
+                        source, df, overrides,
+                        base_params={name: p.default for name, p in spec.strategy.params.items()},
+                    )
                     stdout_text = outcome["stdout"]
                     if not outcome["ok"]:
                         err = outcome["error"]
