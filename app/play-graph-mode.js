@@ -141,6 +141,24 @@ async function main() {
 
   await waitForBackendReady(backendUrl, bearerToken);
 
+  // 모델 노출 게이트를 직접 켠다(2026-09-02).
+  //
+  // 백엔드는 안전측으로 expose_to_model=False로 시작하고(lifespan.py), 앱은 저장된
+  // prefs 값(기본 true)을 **브레인 준비를 확인한 자리**에서 밀어 넣는다
+  // (history-sink.refreshBrainReady → pushExposeToModel). 그런데 그 자리로 가는
+  // 시작 경로(main.js waitForBrainStartup)는 `extraction_enabled === true`를 먼저
+  // 요구한다 — 이 런처는 추출기를 끄고 띄우므로(그래프는 씨앗 스크립트가 넣는다)
+  // 그 push가 한 번도 안 돈다. 결과: 화면 토글은 "켜짐"인데 실제 게이트는 닫혀 있고,
+  // 채팅이 athena_brain을 부르면 503을 받아 "노출이 꺼져 있다"고 답한다(실측).
+  //
+  // 여기서 켜는 것은 런처의 몫이다 — 씨앗된 페르소나는 실사용자 데이터가 아니다.
+  const exposeRes = await fetch(`${backendUrl}/api/v1/settings/expose-to-model`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${bearerToken}` },
+    body: JSON.stringify({ enabled: true }),
+  });
+  log(`      모델 노출 게이트: ${exposeRes.ok ? '켜짐' : `실패(HTTP ${exposeRes.status})`}`);
+
   log('[3/3] 셸 기동 중...');
   app.setPath('userData', userDataDir);
   await app.whenReady();
