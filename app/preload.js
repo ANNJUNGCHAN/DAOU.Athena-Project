@@ -218,6 +218,8 @@ const ON_CHANNELS = new Set([
   'athena:window-state',
   'athena:boot-readiness',
   'athena:app-notification',
+  // 8XX  \ ‰â ¡‹(39à Ù‹)  ¨t‹ âX §<∑.
+  'athena:session-run-state',
   'athena:add-canvas',
   'athena:add-canvas-live',
   'athena:add-rest-canvas',

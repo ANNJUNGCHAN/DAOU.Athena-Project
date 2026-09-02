@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { SessionStore, createSessionStore } = require('./session-store');
+const { SessionStore, createSessionStore, jobRunState } = require('./session-store');
 const snapshot = require('../session-snapshot');
 
 const MODE_LIST = Array.isArray(snapshot.MODES) ? snapshot.MODES : Object.values(snapshot.MODES || {});
@@ -245,4 +245,21 @@ test('putCards는 넘어온 배열을 스택의 전부로 본다 — 빠진 카�
     store.close();
     fs.rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('runStates는 세션마다 점 하나 — 실행 중 > 대기 > 실패 > 완료, job 없는 세션은 키가 없다', (t) => {
+  const store = openStore(t);
+  store.createSession({ id: 'sess_run', mode: MODE_A, projectId: 'proj_a', title: '도는 중' });
+  store.createSession({ id: 'sess_done', mode: MODE_A, projectId: 'proj_a', title: '끝남' });
+  store.createSession({ id: 'sess_idle', mode: MODE_A, projectId: 'proj_a', title: '없음' });
+  store.attachJob('sess_run', { id: 'j1', kind: 'backtest.run', status: 'done' });
+  store.attachJob('sess_run', { id: 'j2', kind: 'chat.turn', status: 'running' });
+  store.attachJob('sess_done', { id: 'j3', kind: 'backtest.run', status: 'cancelled' });
+  store.attachJob('sess_done', { id: 'j4', kind: 'backtest.run', status: 'interrupted' });
+  assert.deepEqual(store.runStates(), { sess_run: 'running', sess_done: 'failed' });
+  assert.equal(store.getJob('j2').sessionId, 'sess_run');
+  assert.equal(store.getJob('없음'), null);
+  assert.deepEqual(store.listJobsByStatus('running').map((j) => j.id), ['j2']);
+  assert.equal(jobRunState('queued'), 'waiting');
+  assert.equal(jobRunState('모름'), null);
 });

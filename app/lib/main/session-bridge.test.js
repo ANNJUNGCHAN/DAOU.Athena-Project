@@ -356,3 +356,44 @@ test('pendingCount는 대기 중인 쓰기를 정확히 센다', (t) => {
   clock.tick(5000);
   assert.equal(bridge.pendingCount(), 0);
 });
+
+test('실행 레코드는 즉시 적히고 대표 상태가 바뀔 때만 알린다', (t) => {
+  const { store, clock } = setup(t);
+  const events = [];
+  const bridge = createSessionBridge({
+    store, now: clock.now, setTimer: clock.setTimer, clearTimer: clock.clearTimer, log: () => {},
+    onRunState: (evt) => events.push(evt),
+  });
+  bridge.ensureSession({ id: 'sess_1', mode: 'backtest', projectId: 'proj', title: '추세추종 v3' });
+  assert.equal(bridge.attachJob({ sessionId: 'sess_1', job: { id: 'run_1', kind: 'backtest.run', status: 'running' } }).id, 'run_1');
+  assert.deepEqual(events, [{ sessionId: 'sess_1', runState: 'running' }]);
+  // heartbeat만 갱신 — 상태가 같으니 알리지 않는다(1초 폴링마다 사이드바를 다시 그리지 않는다).
+  assert.equal(bridge.updateJob({ jobId: 'run_1', patch: { status: 'running', heartbeatAt: clock.now() } }), true);
+  assert.equal(events.length, 1);
+  assert.equal(bridge.updateJob({ jobId: 'run_1', patch: { status: 'done' } }), true);
+  assert.deepEqual(events[1], { sessionId: 'sess_1', runState: 'done' });
+  assert.equal(bridge.updateJob({ jobId: '없는-job', patch: { status: 'done' } }), false);
+  // 세션이 없으면 붙지 않고 알림도 없다.
+  assert.equal(bridge.attachJob({ sessionId: '없는-세션', job: { id: 'x', kind: 'backtest.run', status: 'running' } }), null);
+  assert.equal(events.length, 2);
+  assert.deepEqual(bridge.runStates(), { sess_1: 'done' });
+});
+
+test('답변 턴은 실행이다 — 시작하면 running, 끝나면 done, 오류면 failed', (t) => {
+  const { store, clock } = setup(t);
+  const events = [];
+  const bridge = createSessionBridge({
+    store, now: clock.now, setTimer: clock.setTimer, clearTimer: clock.clearTimer, log: () => {},
+    onRunState: (evt) => events.push(evt.runState),
+  });
+  bridge.ensureSession({ id: 'sess_1', mode: 'chat', projectId: 'proj', title: '질문' });
+  bridge.beginAssistant({ sessionId: 'sess_1', messageId: 'a1' });
+  assert.equal(store.getJob('a1').kind, 'chat.turn');
+  assert.deepEqual(events, ['running']);
+  bridge.finishAssistant({ sessionId: 'sess_1', messageId: 'a1', text: '답', interrupted: true });
+  assert.equal(store.getJob('a1').status, 'done');
+  bridge.beginAssistant({ sessionId: 'sess_1', messageId: 'a2' });
+  bridge.finishAssistant({ sessionId: 'sess_1', messageId: 'a2', error: new Error('boom') });
+  assert.equal(store.getJob('a2').status, 'failed');
+  assert.deepEqual(events, ['running', 'done', 'running', 'failed']);
+});

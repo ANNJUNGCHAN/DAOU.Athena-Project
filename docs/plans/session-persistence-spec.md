@@ -180,3 +180,12 @@
 - [x] `conversations.js` — 프로젝트 레코드에 `path`·`pinned`. 폴더 하나 = 프로젝트 하나(경로 중복 접기), `addProject({id,path,label})`·`setProjectPinned`·`removeProject`·`projectById`. 사이드바 프로젝트와 백엔드 프로젝트 레지스트리(`athena_api/api/projects.py`)는 같은 것 — id를 공유한다.
 - [x] `main.js` — `athena:project-add`(폴더 대화상자 → 백엔드 open 등록 → 사이드바 레코드), `project-pin`, `project-reveal`(shell.openPath), `project-remove`(이름을 그대로 다시 쳐야 하는 영구 삭제, 세션 본문도 함께).
 - [x] `sidebar.js` — ⋯ 메뉴 셋(고정·탐색기·제거), 폴더 추가, 펜 = 모드 골라 새 대화창. 순수 규칙은 `sidebar-project-menu.js`
+- [x] `styles/sidebar-session.css` — 모드 수·스피너·행 점·폴더 추가·모드 선택·삭제 확인·고정 표시. shell.css는 다른 세션 소유라 별도 파일로 두고 shell.html에서 link.
+
+### Wave 6 — 실행 상태 (39번 보드, 적용 완료)
+- [x] `session-store.js` — `runStates()`(세션마다 대표 상태 하나: running > waiting > failed > done), `getJob`, `listJobsByStatus`. 상태 어휘 접기 `jobRunState`: 백엔드 running/done/failed/cancelled + 여기의 interrupted.
+- [x] `session-bridge.js` — `attachJob`·`updateJob`·`runStates`·`onRunState`. 답변 턴도 실행이다: `beginAssistant`가 `chat.turn` job을 붙이고 `finishAssistant`가 done(정상·사용자 중단)/failed(오류)로 닫는다.
+- [x] `main.js` — `athena:backtest-run`(run_id)·`-backfill`(job_id) 응답을 지금 기록 대상 대화의 실행으로 붙이고, `-result`·`-status` 폴링 응답으로 상태·heartbeat를 갱신한다. 대표 상태가 바뀌면 `athena:session-run-state`로 사이드바에 민다. `athena:conversations-list`가 `runState`를 얹어 준다. 부팅 때 `reconcileSessionJobs`: 지난 프로세스의 답변 턴은 interrupted, 백테스트는 백엔드에 물어 맞춘다(15초 × 3회 뒤 포기).
+- [x] `sidebar.js` — 행의 점 하나(실행 중 = 스피너, 대기 주황, 완료 회색, 실패 빨강), 모드 옆 스피너, 머리의 "실행 중 N · 대기 M" 알약. 푸시를 받으면 그 행만 고쳐 다시 그린다.
+- 실앱 프로브 27/27 (`ATHENA_PROBE_SHOT=경로`면 사이드바·모드 선택·삭제 확인 PNG를 남긴다).
+- 남은 것: 백테스트가 아닌 모드(그래프·에이전트·플러그인)의 실행은 아직 job을 붙이지 않는다 — 그 모드의 컨트롤러가 다른 세션 소유라 `bridge.attachJob` 호출 지점만 합의하면 된다. 워크스페이스 저장도 같은 이유로 그 모드들은 미배선.
