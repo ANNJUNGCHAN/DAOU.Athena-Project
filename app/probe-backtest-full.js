@@ -25,6 +25,7 @@
 //   A 부팅·모드 · B 설계 폼 · C 데이터 계획·승인 · D 실행·결과(폼) · E 코드 경로
 //   F 오류·진단 · G 흐름 지도 · H 이력·비교 · I 최적화 · J 배포 · K 채팅 액션 · L 컨텍스트
 //   M 출처→전략→등록→배포(바깥 자료 → 내 폴더의 파이썬 → 프리셋 자리 → 실전)
+//   N 흐름 지도가 첫 표면(보드 11~14 — 대화로 지도를 고치고, 코드는 그 뒤에 있다)
 //
 // 만드는 것은 되돌린다: 배포는 전부 중지하고, M이 만든 등록·프로젝트는 등록에서 뺀다.
 // 전략·버전·실행 행은 백엔드에 삭제 API가 없어(store에 delete가 없다) 남고, M이 만든
@@ -55,7 +56,7 @@ const UNCACHED_FROM = '19900103';   // 캐시보다 앞 → 부분 겹침(보유
 const EMPTY_FROM = '19900101';      // 캐시와 전혀 안 겹침 → allow_partial이 422
 const EMPTY_TO = '19901231';
 
-const ALL_SECTIONS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+const ALL_SECTIONS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
 const WANTED = new Set(
   (process.env.ATHENA_PROBE_SECTIONS || ALL_SECTIONS.join(','))
     .split(',').map((s) => s.trim().toUpperCase()).filter(Boolean),
@@ -288,7 +289,8 @@ function goSubtab(win, index) {
 async function goDesignForm(win) {
   await goTab(win, 0);
   await wait(200);
-  await goSubtab(win, 0);
+  // 하위 탭은 지도·폼·코드다 — 폼은 두 번째다(DESIGN_TABS, 2026-09-03).
+  await goSubtab(win, 1);
   await wait(200);
 }
 
@@ -674,6 +676,26 @@ async function main() {
       data: shell ? { tabs: shell.tabs, runButton: shell.runButton } : null,
     }));
 
+    const subtabs = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      return {
+        labels: Array.from(root.querySelectorAll('.backtest-subtab')).map((t) => t.textContent),
+        on: (root.querySelector('.backtest-subtab.is-on') || {}).textContent || null,
+        designTab: c.designTab,
+        mapVersion: c.map ? c.map.version : null,
+      };
+    })()`);
+    await step('A08', '설계 하위 탭은 지도·폼·코드이고 기본은 지도다(코드는 최후의 보루)', () => ({
+      ok: !!subtabs
+            && JSON.stringify(subtabs.labels) === JSON.stringify(['지도', '폼', '코드 · 최후의 보루'])
+            && subtabs.designTab === 'flow' && subtabs.on === '지도'
+            && subtabs.mapVersion === 1,
+      data: subtabs,
+    }));
+
+    await goSubtab(shellWin, 1);
+    await wait(300);
     const presetView = await js(shellWin, `(() => {
       const root = document.getElementById('backtestCanvas');
       const first = root.querySelector('.backtest-preset-item');
@@ -710,7 +732,11 @@ async function main() {
   else {
     // 다른 섹션도 모드 안에서만 성립한다 — 진입만 조용히 해둔다.
     await js(shellWin, "(() => { document.getElementById('modeNavBacktest').click(); return true; })()");
-    await until(shellWin, `document.querySelectorAll('${R}.backtest-preset-item').length || null`, WAIT_PRESETS);
+    await until(shellWin, `(() => {
+      const api = window.AthenaBacktestCanvas;
+      const c = api ? api.getContext() : null;
+      return c && Array.isArray(c.presets) && c.presets.length ? true : null;
+    })()`, WAIT_PRESETS);
   }
 
   // ==================================================================
@@ -1474,7 +1500,7 @@ async function main() {
       };
     })()`, WAIT_UI);
     await step('E01', '코드가 편집기에 바로 들어가고 코드 탭으로 옮겨간다', () => ({
-      ok: !!codeIn && codeIn.subtab === '코드' && codeIn.ariaLabel === '전략 파이썬 코드'
+      ok: !!codeIn && codeIn.subtab === '코드 · 최후의 보루' && codeIn.ariaLabel === '전략 파이썬 코드'
             && codeIn.gutter === codeIn.lines,
       data: codeIn,
     }));
@@ -1706,7 +1732,7 @@ async function main() {
     }));
     await step('F07', '진단 화면 버튼 3종', () => ({
       ok: !!diag && JSON.stringify(diag.buttons)
-            === JSON.stringify(['적용하고 다시 실행', '적용만 하고 편집기로', '버리기']),
+            === JSON.stringify(['적용하고 다시 실행', '지도만 고치기', '버리기']),
       data: diag ? { buttons: diag.buttons } : null,
     }));
 
@@ -1722,7 +1748,7 @@ async function main() {
         hasSignals: ta.value.indexOf('def signals') !== -1,
       };
     })()`, WAIT_UI);
-    await step('F08', '[적용만 하고 편집기로] — 코드만 고치고 실행하지 않는다', () => ({
+    await step('F08', '[지도만 고치기] — 코드만 고치고 실행하지 않는다', () => ({
       ok: !!appliedOnly && appliedOnly.view === 'design' && appliedOnly.designTab === 'code'
             && appliedOnly.hasImport === false && appliedOnly.hasSignals === true,
       data: appliedOnly,
@@ -1829,17 +1855,25 @@ async function main() {
     await goDesignForm(shellWin);
     await goSubtab(shellWin, 2);
     await wait(400);
-    const flowEmpty = await js(shellWin, `(() => {
+    const formMap = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
       const c = window.AthenaBacktestCanvas.getContext();
-      const empty = document.querySelector('${R}.backtest-flow-tab .backtest-card-empty');
-      return { designTab: c.designTab, empty: empty ? empty.textContent : null, hasCode: !!c.code.source };
-    })()`);
-    await step('G01', '코드가 없으면 흐름 탭은 빈 안내만 그린다', () => ({
-      ok: flowEmpty.designTab === 'flow'
-            && (flowEmpty.hasCode
-              ? flowEmpty.empty === null
-              : flowEmpty.empty === '코드 탭에서 전략을 쓰면 흐름 지도가 여기 그려집니다'),
-      data: flowEmpty,
+      const nodes = Array.from(root.querySelectorAll('button.backtest-flow-node.is-mine'));
+      if (!nodes.length) return null;
+      return {
+        designTab: c.designTab,
+        numerals: nodes.map((n) => (n.querySelector('.backtest-flow-badge span') || {}).textContent),
+        target: (root.querySelector('.backtest-map-target-text') || {}).textContent || null,
+        version: (root.querySelector('.backtest-map-version') || {}).textContent || null,
+        empty: root.querySelectorAll('.backtest-flow-tab .backtest-card-empty').length,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('G01', '코드가 없어도 폼 경로의 지도가 ①~④와 대상 한 줄로 선다', () => ({
+      ok: !!formMap && formMap.designTab === 'flow' && formMap.empty === 0
+            && JSON.stringify(formMap.numerals) === JSON.stringify(['①', '②', '③', '④'])
+            && !!formMap.target && formMap.target.indexOf(STK) === 0
+            && /^지도 v\d+$/.test(String(formMap.version || '')),
+      data: formMap,
     }));
 
     sendChat(shellWin, { kind: 'code_draft', source: SRC_FLOW, note: '흐름용 코드' });
@@ -1856,38 +1890,44 @@ async function main() {
       return {
         mine: nodes.length,
         titles: nodes.map((n) => (n.querySelector('.backtest-flow-title') || {}).textContent),
-        details: nodes.map((n) => (n.querySelector('.backtest-flow-detail') || {}).textContent),
-        badges: nodes.map((n) => (n.querySelector('.backtest-flow-badge') || {}).className),
-        boundaries: root.querySelectorAll('.backtest-flow-boundary').length,
+        details: nodes.map((n) => Array.from(n.querySelectorAll('.backtest-flow-detail'))
+          .map((d) => d.textContent).join(' | ')),
+        boundaries: Array.from(root.querySelectorAll('.backtest-flow-boundary-label'))
+          .map((n) => n.textContent),
         appNodes: root.querySelectorAll('.backtest-flow-node.is-app').length,
-        note: (root.querySelector('.backtest-flow-tab .backtest-card-note') || {}).textContent,
+        drawer: (root.querySelector('.backtest-map-drawer-text') || {}).textContent || null,
         error: root.querySelectorAll('.backtest-flow-error').length,
       };
     })()`, WAIT_VALIDATE);
-    await step('G02', '흐름 지도가 내 코드 4단계를 그린다', () => ({
+    await step('G02', '코드 경로의 지도도 같은 ①~④ 네 칸이다', () => ({
       ok: !!flow && flow.mine === 4 && flow.error === 0,
       data: flow ? { mine: flow.mine, titles: flow.titles } : null,
     }));
-    await step('G03', '경계 3줄(앱 → 내 코드 → 다시 앱)', () => ({
-      ok: !!flow && flow.boundaries === 3,
+    await step('G03', '경계 3줄 — 마지막 줄이 "두 열만 받습니다"를 함께 적는다', () => ({
+      ok: !!flow && flow.boundaries.length === 3
+            && flow.boundaries[1] === '여기부터 내 전략 — 대화로 고치는 칸들'
+            && flow.boundaries[2].indexOf('entry·exit 두 열만 받습니다') !== -1,
       data: flow ? { boundaries: flow.boundaries } : null,
     }));
     await step('G04', '앱 구간 칸 4개(load + fill·cost·metrics)', () => ({
       ok: !!flow && flow.appNodes === 4,
       data: flow ? { appNodes: flow.appNodes } : null,
     }));
-    await step('G05', '각 칸이 줄 범위를 적는다', () => ({
-      ok: !!flow && flow.details.every((d) => /^\d+–\d+줄$/.test(String(d || ''))),
-      data: flow ? { details: flow.details } : null,
+    // 지도는 줄 번호로 말하지 않는다 — 줄은 서랍(코드)에서만 뜻이 있다.
+    await step('G05', '칸은 사람 말 문장을 적고 줄 번호를 적지 않는다', () => ({
+      ok: !!flow && flow.details.some((d) => String(d).length > 0)
+            && flow.details.every((d) => !/^\d+–\d+줄$/.test(String(d || '')))
+            && !!flow.drawer && flow.drawer.indexOf('이 지도 뒤의 코드') === 0,
+      data: flow ? { details: flow.details, drawer: flow.drawer } : null,
     }));
 
     const clicked = await js(shellWin, `(() => {
       const nodes = Array.from(document.querySelectorAll('button.backtest-flow-node.is-mine'));
       const target = nodes[1];
       if (!target) return null;
-      const detail = (target.querySelector('.backtest-flow-detail') || {}).textContent || '';
+      const title = (target.querySelector('.backtest-flow-title') || {}).textContent || '';
       target.click();
-      return { detail };
+      return { title };
     })()`);
     const lit = await until(shellWin, `(() => {
       const c = window.AthenaBacktestCanvas.getContext();
@@ -1896,14 +1936,9 @@ async function main() {
       if (!lines.length) return null;
       return { lit: lines.map((l) => Number(l.textContent)) };
     })()`, WAIT_UI);
-    const expectedSpan = clicked
-      ? String(clicked.detail).replace('줄', '').split('–').map((n) => Number(n))
-      : [];
-    await step('G06', '흐름 칸을 누르면 코드 탭에서 그 줄이 켜진다', () => ({
-      ok: !!lit && expectedSpan.length === 2
-            && lit.lit[0] === expectedSpan[0]
-            && lit.lit[lit.lit.length - 1] === expectedSpan[1],
-      data: { expected: expectedSpan, lit: lit && lit.lit },
+    await step('G06', '코드 경로의 칸을 누르면 코드 탭에서 그 줄이 켜진다', () => ({
+      ok: !!lit && lit.lit.length > 0,
+      data: { lit: lit && lit.lit, clicked: clicked && clicked.title },
     }));
   });
 
@@ -2605,7 +2640,7 @@ async function main() {
       }));
     }
 
-    const subExpect = [['form', '폼'], ['code', '코드'], ['flow', '흐름']];
+    const subExpect = [['flow', '지도'], ['form', '폼'], ['code', '코드 · 최후의 보루']];
     for (let i = 0; i < subExpect.length; i += 1) {
       const [key, label] = subExpect[i];
       sendChat(shellWin, { kind: 'navigate', tab: 'design', designTab: key });
@@ -2679,10 +2714,11 @@ async function main() {
 
     const receipt = await js(shellWin, "window.AthenaBacktestCanvas.onChatAction({ kind: 'navigate', tab: 'result' })");
     const receiptKeys = receipt ? Object.keys(receipt) : [];
-    await step('K12', '영수증 키 계약 13개', () => ({
+    await step('K12', '영수증 키 계약 15개', () => ({
       // canApply는 프로젝트 IDE(파일 초안 file_draft)가 더한 키다 — 적용 가능 여부를 카드가 읽는다.
+      // nodes·version은 흐름 지도가 더한 키다(보드 14-B) — 어느 칸이 몇 판에서 바뀌었는가.
       ok: JSON.stringify(receiptKeys) === JSON.stringify([
-            'id', 'kind', 'applied', 'note', 'rows', 'errors',
+            'id', 'kind', 'applied', 'note', 'rows', 'nodes', 'version', 'errors',
             'suggest_run', 'suggest_validate', 'tab', 'designTab', 'method', 'canUndo', 'canApply',
           ]) && /^bc-\d+$/.test(String(receipt.id)),
       data: { keys: receiptKeys, id: receipt && receipt.id },
@@ -2715,10 +2751,10 @@ async function main() {
     await prepareForm(shellWin, FROM, TO);
     const c = await ctx(shellWin);
     const expectedKeys = [
-      'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
+      'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets', 'map',
       'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage', 'lastChange', 'project',
     ];
-    await step('L01', 'getContext() 최상위 키 17개 계약', () => ({
+    await step('L01', 'getContext() 최상위 키 18개 계약', () => ({
       ok: JSON.stringify(Object.keys(c)) === JSON.stringify(expectedKeys),
       data: { keys: Object.keys(c) },
     }));
@@ -3096,8 +3132,8 @@ async function main() {
           name: c.spec.name,
         };
       })()`, WAIT_VALIDATE);
-      // 고르는 것만으로 탭이 바뀌지는 않는다 — 사람이 보는 자리(코드 탭)로 옮겨 확인한다.
-      await goSubtab(shellWin, 1);
+      // 고른 직후의 자리는 지도다 — 파일이 열렸는지는 코드 탭(세 번째)에서 확인한다.
+      await goSubtab(shellWin, 2);
       await wait(400);
       const editorSeen = await until(shellWin, `(() => {
         const ta = document.querySelector('${R}.project-ide-editor .backtest-code-textarea');
@@ -3271,7 +3307,7 @@ async function main() {
       // --- 흐름 지도 --- 로딩 블록은 백엔드 왕복 동안만 서 있다. 폴링으로 잡으면 빠른
       // 기계에서 놓치므로, 탭을 누르기 전에 관찰자를 걸어 "뜬 적이 있는가"를 사실로 남긴다.
       await goTab(shellWin, 0);
-      await goSubtab(shellWin, 0);
+      await goSubtab(shellWin, 1);
       await wait(300);
       await js(shellWin, `(() => {
         const root = document.getElementById('backtestCanvas');
@@ -3291,7 +3327,7 @@ async function main() {
         window.__probeFlowObs.observe(root, { childList: true, subtree: true });
         return true;
       })()`);
-      await goSubtab(shellWin, 2);
+      await goSubtab(shellWin, 0);
       const flowMap = await until(shellWin, `(() => {
         const root = document.getElementById('backtestCanvas');
         const nodes = root.querySelectorAll('button.backtest-flow-node.is-mine');
@@ -3309,7 +3345,7 @@ async function main() {
         return { seen: seen || null };
       })()`);
       const loadingSeen = flowWatch ? flowWatch.seen : null;
-      await step('M13', '흐름 탭은 만드는 중임을 먼저 그리고, 그 자리에 지도를 세운다', () => ({
+      await step('M13', '지도 탭은 만드는 중임을 먼저 그리고, 그 자리에 지도를 세운다', () => ({
         ok: !!loadingSeen && loadingSeen.text === '흐름 지도를 만드는 중…'
               && loadingSeen.spinner === 1
               && !!flowMap && flowMap.mine > 0 && flowMap.loading === 0 && flowMap.error === 0,
@@ -3348,6 +3384,156 @@ async function main() {
         disk: { folder: folderStill, file: fileStill, path: projectPath },
       },
     }));
+  });
+
+  // ==================================================================
+  // N 흐름 지도가 첫 표면 (보드 11~14)
+  //
+  // 사용자 확정 2026-09-03: "코드는 최후의 보루야. 대화를 하면서 코드 플로우 지도를
+  // 수정해 나가는거고, 그 코드 플로우 지도 뒤에 코드가 있는거야." 이 섹션이 재는 것은
+  // 그 문장이 화면에서 참인가다 — 전략을 세우면 지도가 먼저 뜨는가, 대화 한 번이
+  // 어느 칸을 바꿨다고 말하는가, 오른쪽 숫자가 **실제 실행**의 값인가.
+  // ==================================================================
+  if (on('N')) await section('N', async () => {
+    await ensureRunnableForm(shellWin, FROM, TO);
+    await clickNth(shellWin, `${R}.backtest-preset-item`, 0);
+    const opened = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      const nodes = Array.from(root.querySelectorAll('button.backtest-flow-node.is-mine'));
+      if (c.designTab !== 'flow' || !nodes.length) return null;
+      return {
+        designTab: c.designTab,
+        version: c.map.version,
+        numerals: nodes.map((n) => (n.querySelector('.backtest-flow-badge span') || {}).textContent),
+        target: (root.querySelector('.backtest-map-target-text') || {}).textContent || null,
+        drawer: (root.querySelector('.backtest-map-drawer-text') || {}).textContent || null,
+        note: (root.querySelector('.backtest-map-drawer-note') || {}).textContent || null,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('N01', '프리셋을 고르면 지도가 첫 화면이다 — ①~④·대상 한 줄·코드 서랍', () => ({
+      ok: !!opened && opened.designTab === 'flow' && opened.version === 1
+            && JSON.stringify(opened.numerals) === JSON.stringify(['①', '②', '③', '④'])
+            && !!opened.target && opened.target.indexOf(STK) === 0
+            && !!opened.drawer && opened.drawer.indexOf('지도 v1과 일치') !== -1
+            && opened.note === '웬만하면 열 일이 없습니다 — 최후의 보루',
+      data: opened,
+    }));
+
+    // 대화 한 번 — 영수증은 사람이 읽는 카드의 재료다(chat.js가 그린다).
+    const receipt = await js(
+      shellWin,
+      "window.AthenaBacktestCanvas.onChatAction({ kind: 'spec_draft', patch: { params: { fast: 9 } }, note: '빠른 이평을 9로' })",
+    );
+    const changed = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const pills = Array.from(root.querySelectorAll('.backtest-map-changed'));
+      if (!pills.length) return null;
+      const owner = pills[0].parentNode;
+      return {
+        pill: pills[0].textContent,
+        title: (owner.querySelector('.backtest-flow-title') || {}).textContent || null,
+        version: (root.querySelector('.backtest-map-version') || {}).textContent || null,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('N02', '대화 한 번이 어느 칸을 바꿨는지 영수증과 지도가 같이 말한다', () => ({
+      ok: !!receipt && Array.isArray(receipt.nodes) && receipt.nodes.length === 1
+            && receipt.nodes[0].numeral === '①'
+            && String(receipt.nodes[0].text).indexOf('파라미터 fast') === 0
+            && !!receipt.version && receipt.version.from === 1 && receipt.version.to === 2
+            && !!changed && changed.pill === '방금 바뀜' && changed.version === '지도 v2',
+      data: { receipt: receipt && { nodes: receipt.nodes, version: receipt.version }, changed },
+    }));
+
+    // 오른쪽 숫자는 지어낸 값이 아니라 **지난 실행**의 값이다 — 그래서 한 번 돌린다.
+    await goDesignForm(shellWin);
+    await setDates(shellWin, FROM, TO);
+    await wait(200);
+    await click(shellWin, `${R}.backtest-run-button`);
+    const ran = await waitRunOutcome(shellWin, WAIT_RUN);
+    await goTab(shellWin, 0);
+    await goSubtab(shellWin, 0);
+    const facts = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const nodes = Array.from(root.querySelectorAll('button.backtest-flow-node.is-mine'));
+      if (!nodes.length) return null;
+      const shapes = nodes.map((n) => (n.querySelector('.backtest-flow-shape') || {}).textContent || '');
+      if (!shapes.some((t) => t.length)) return null;
+      return {
+        shapes,
+        sub: (root.querySelector('.backtest-map-head-sub') || {}).textContent || null,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('N03', '②·③의 오른쪽 사실이 지난 실행이 만든 값이다', () => {
+      if (!ran || ran.view !== 'result') {
+        return { skip: `실행이 결과 화면까지 가지 않았다(${ran && ran.view})` };
+      }
+      return {
+        ok: !!facts
+              && /행 × 5열|워밍업/.test(String(facts.shapes[1] || ''))
+              && /entry \d+개 · exit \d+개/.test(String(facts.shapes[2] || ''))
+              && String(facts.sub || '').indexOf('지난 실행(#') !== -1,
+        data: facts,
+      };
+    });
+
+    // [코드 열기] — 폼 경로에서는 지도 뒤의 코드가 그때 만들어진다. 실행경로는 그대로다.
+    await click(shellWin, `${R}.backtest-map-open-code`);
+    const drawerOpened = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (c.designTab !== 'code' || !c.code.source) return null;
+      return {
+        runPath: c.runPath,
+        lines: c.code.lines,
+        hasSignals: c.code.source.indexOf('def signals(df, p):') !== -1,
+        banner: (root.querySelector('.backtest-code-frommap') || {}).textContent || null,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('N04', '[코드 열기]는 지도 뒤의 코드를 만들되 실행경로를 바꾸지 않는다', () => ({
+      ok: !!drawerOpened && drawerOpened.hasSignals === true && drawerOpened.runPath === 'form'
+            && drawerOpened.lines > 0
+            && drawerOpened.banner === '여기서 고치면 지도와 어긋날 수 있습니다 — 웬만하면 대화로',
+      data: drawerOpened,
+    }));
+
+    // 멈춘 실행은 줄 번호가 아니라 칸에 붙는다(보드 12).
+    const beforeRunId = await js(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      return c.lastResult ? c.lastResult.runId : null;
+    })()`);
+    sendChat(shellWin, { kind: 'code_draft', source: SRC_RAISES, note: '터지는 코드' });
+    await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      return c.code.source.indexOf('전략 로직이 터졌다') !== -1 ? true : null;
+    })()`, WAIT_UI);
+    await click(shellWin, `${R}.backtest-run-button`);
+    const failed = await waitNewRunOutcome(shellWin, beforeRunId, WAIT_RUN);
+    const stopped = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (!c.diagnosis) return null;
+      const hit = (c.map.nodes || []).filter((n) => n.status === 'error');
+      return {
+        view: c.view,
+        errorNodes: hit.map((n) => n.numeral),
+        title: (root.querySelector('.backtest-diag-title') || {}).textContent || null,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('N05', '실행이 멈추면 그 사실이 칸에 붙고 진단 제목이 칸 번호로 시작한다', () => {
+      if (!failed || (failed.view !== 'diagnosis' && failed.view !== 'error')) {
+        return { skip: `실행이 실패 화면까지 가지 않았다(${failed && failed.view})` };
+      }
+      if (!stopped || !stopped.errorNodes.length) {
+        return { skip: '백엔드가 이 오류를 붙일 칸을 찾지 못했다 — 지도는 거짓말을 하지 않는다' };
+      }
+      return {
+        ok: String(stopped.title || '').indexOf(stopped.errorNodes[0]) === 0,
+        data: stopped,
+      };
+    });
+
+    await ensureRunnableForm(shellWin, FROM, TO);
   });
 
   // 리포트 쓰기와 종료는 whenReady의 finally가 한 번만 한다 — 여기서는 돌아가기만 한다.

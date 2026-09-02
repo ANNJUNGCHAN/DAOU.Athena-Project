@@ -276,6 +276,23 @@ function buildBacktestModePrefix(context, today) {
     ? shownFiles.join(', ')
       + (pyFiles.length > shownFiles.length ? ` … 외 ${pyFiles.length - shownFiles.length}개` : '')
     : '없음';
+  // 지도(보드 11~14) — 대화가 다루는 것은 칸이다. 칸 번호·제목·사람 말 문장만 싣는다:
+  // 코드 줄 번호를 여기 실으면 모델이 그 번호로 답하고, 그 순간 코드가 첫 표면이 된다.
+  // 상태가 ok가 아닌 칸은 그 사실을 함께 적는다 — 멈춘 자리에서 말문을 열게 하는 값이다.
+  const map = obj(ctx && ctx.map);
+  const mapNodes = map && Array.isArray(map.nodes) ? map.nodes : [];
+  const mapBlock = mapNodes.length
+    ? [`지도 v${map.version} — 대화가 고치는 칸:`].concat(mapNodes.map((node) => {
+      const lines = Array.isArray(node.lines) && node.lines.length
+        ? node.lines.join(' · ')
+        : '아직 없음';
+      const state = node.status && node.status !== 'ok'
+        ? ` [${node.status}${node.note ? ` — ${node.note}` : ''}]`
+        : '';
+      return `- ${node.numeral} ${node.title}: ${lines}${state}`;
+    })).join('\n')
+    : '지도: 아직 만들어지지 않았다';
+
   const fileDraft = obj(project && project.fileDraft)
     ? JSON.stringify({
       path: project.fileDraft.path,
@@ -288,6 +305,9 @@ function buildBacktestModePrefix(context, today) {
     `[모드: 백테스트] 오늘: ${today ? String(today) : '미상'}`,
     '사용자는 백테스트 캔버스에 있고, 캔버스는 채팅이 제어한다. 이 턴의 규칙:',
     '- 캔버스 카드를 올리지 않는다 — athena__render_canvas를 호출하지 않는다. athena_search/athena_describe/athena_resolve/athena_call은 종목코드·시세 같은 정보 확인에만 쓴다.',
+    '- **설명은 지도의 칸으로 한다.** 사용자에게 말할 때는 칸 번호(①~④)와 사람 말을 쓰고, 코드 줄 번호·파이썬 문법·함수 이름을 말하지 않는다 — 코드는 최후의 보루라 사람이 열 일이 거의 없다.',
+    '- **칸을 고쳐달라는 말은 바로 반영한다.** 폼 경로면 propose_spec, 코드 경로면 propose_code로 보내고, 답 첫 줄에 어느 칸이 어떻게 바뀌는지 한 줄로 적는다(예: "③ 사고·파는 순간 — 청산을 …로 바꿨습니다").',
+    '- **실행이 칸에서 멈추면 그 칸 번호로 시작한다.** 아래 지도에서 상태가 ok가 아닌 칸을 찾아 그 번호로 말문을 열고, 왜 멈췄는지와 어떻게 고칠지를 사람 말로 잇는다.',
     '- 말풍선에 코드·수치 표·지어낸 결과를 쓰지 않는다. 결과 수치는 아래 컨텍스트나 result·list_runs 액션이 준 값만 말한다 — 없으면 "아직 실행 결과가 없다"고 말한다.',
     '- 설정은 athena_backtest action=propose_spec 으로 patch를 보내면 폼에 바로 반영된다 — 빈 종목·날짜처럼 검증에 걸리는 값이 있어도 반영되고, 그 항목은 아래 "실행 전 확인"에 실린다(다음 턴에 마저 채운다). 코드는 propose_code로 보내면 편집기에 바로 들어간다. 채팅에는 변경 내역과 [되돌리기]가 뜬다.',
     '- 요청별 경로 — 폼 설정: propose_spec(대상→기간·주기→지표→진입 조건→청산 조건→리스크·비용 순서, 한 턴에 한 항목) · 코드 작성/수정: propose_code(전체 파일 — PARAMS 딕셔너리 + def signals(df, p). signals는 entry·exit 불리언 열을 가진 DataFrame 하나를 반환한다, 예: return df.assign(entry=..., exit=...)[["entry", "exit"]] — 튜플이나 시리즈 반환 금지. import athena_bt as bt) · 오류 수정: 아래 마지막 실행 오류·진단·현재 코드를 읽고 propose_code(고친 전체 코드, suggest_run:true) · 실행: 폼이면 propose_spec(빈 patch, suggest_run:true), 코드면 propose_code(현재 코드, suggest_run:true) · 결과 설명: 아래 마지막 실행 · 이력·비교: navigate(history) + list_runs · 최적화: propose_optimize(method) · 흐름 지도: navigate(design, flow) · 배포: navigate(deploy) 후 사람이 한다고 안내 · 데이터 필요량: plan. 사용자가 "알아서"·"한 번에"·"전부" 해달라고 하면 한 턴에 필요한 항목을 모두 채운다.',
@@ -301,6 +321,7 @@ function buildBacktestModePrefix(context, today) {
     '- 실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다.',
     '- 이미 채워진 값은 되묻지 않는다. 모르면 짧게 하나만 묻는다. 실행당 종목 1개, 날짜 YYYYMMDD. 답은 두세 문장 — 무엇을 바꿨는지 한 줄과 다음 질문 한 줄.',
     `현재 화면: tab=${label(ctx && ctx.tab)} · designTab=${label(ctx && ctx.designTab)} · 실행경로=${label(ctx && ctx.runPath)}`,
+    mapBlock,
     `현재 폼(JSON): ${spec}`,
     `실행 전 확인: ${pending}`,
     `코드 초안 대기: ${codeDraft}`,

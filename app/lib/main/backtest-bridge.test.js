@@ -119,7 +119,7 @@ test('fetchRuns: GET /api/v1/backtest/runs', async () => {
 
 // ── 프로젝트 파일 API(2026-09-02) ────────────────────────────────────────────
 
-test('프로젝트 목록·생성·열기: 경로와 몸체가 계약 그대로다', async () => {
+test('프로젝트 목록·생성·열기·등록 해제: 경로와 몸체가 계약 그대로다', async () => {
   const calls = [];
   const fetchImpl = async (url, opts) => {
     calls.push([opts.method, url, opts.body ? JSON.parse(opts.body) : null]);
@@ -128,10 +128,12 @@ test('프로젝트 목록·생성·열기: 경로와 몸체가 계약 그대로�
   await backtestBridge.listProjects({ backendBase: 'http://x', fetchImpl });
   await backtestBridge.createProject({ backendBase: 'http://x', fetchImpl, name: '내 전략' });
   await backtestBridge.openProject({ backendBase: 'http://x', fetchImpl, path: 'D:/quant/my' });
+  await backtestBridge.unregisterProject({ backendBase: 'http://x', fetchImpl, project_id: 'p 1' });
   assert.deepEqual(calls, [
     ['GET', 'http://x/api/v1/projects', null],
     ['POST', 'http://x/api/v1/projects', { name: '내 전략' }],
     ['POST', 'http://x/api/v1/projects/open', { path: 'D:/quant/my' }],
+    ['DELETE', 'http://x/api/v1/projects/p%201', null],
   ]);
 });
 
@@ -253,4 +255,45 @@ test('가상환경 409(이미 도는 중)도 봉투를 지킨다 — 사유가 j
   assert.equal(res.ok, false);
   assert.equal(res.status, 409);
   assert.match(res.error, /job_id=j1/);
+});
+
+test('흐름 지도: 폼이든 코드든 같은 라우트에 몸체를 그대로 보낸다', async () => {
+  const calls = [];
+  const fetchImpl = async (url, opts) => {
+    calls.push([opts.method, url, JSON.parse(opts.body)]);
+    return { ok: true, status: 200, json: async () => ({ version: 3, nodes: [] }) };
+  };
+  const form = await backtestBridge.fetchMap({
+    backendBase: 'http://x', fetchImpl, yaml: 'version: "1.0"', run_id: 'r1', version: 3,
+  });
+  await backtestBridge.fetchMap({
+    backendBase: 'http://x', fetchImpl, source: 'def signals(df, p):\n    return df\n',
+  });
+  assert.deepEqual(calls, [
+    ['POST', 'http://x/api/v1/backtest/map', { yaml: 'version: "1.0"', run_id: 'r1', version: 3 }],
+    ['POST', 'http://x/api/v1/backtest/map', { source: 'def signals(df, p):\n    return df\n' }],
+  ]);
+  assert.deepEqual(form, { ok: true, data: { version: 3, nodes: [] } });
+});
+
+test('지도→코드 생성: 422(읽을 수 없는 yaml)도 봉투를 지킨다', async () => {
+  const ok = await backtestBridge.fetchCodegen({
+    backendBase: 'http://x',
+    fetchImpl: async (url, opts) => {
+      assert.equal(url, 'http://x/api/v1/backtest/codegen');
+      assert.deepEqual(JSON.parse(opts.body), { yaml: 'version: "1.0"' });
+      return { ok: true, status: 200, json: async () => ({ source: 'import athena_bt as bt\n', lines: 1 }) };
+    },
+    yaml: 'version: "1.0"',
+  });
+  assert.deepEqual(ok, { ok: true, data: { source: 'import athena_bt as bt\n', lines: 1 } });
+
+  const bad = await backtestBridge.fetchCodegen({
+    backendBase: 'http://x',
+    fetchImpl: async () => ({
+      ok: false, status: 422, json: async () => ({ detail: 'yaml은 비어 있지 않은 문자열이어야 한다' }),
+    }),
+    yaml: '  ',
+  });
+  assert.deepEqual(bad, { ok: false, status: 422, error: 'yaml은 비어 있지 않은 문자열이어야 한다' });
 });

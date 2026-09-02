@@ -2625,9 +2625,16 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(backtestError(res, '캐시 상태를 불러오지 못했습니다'));
     return res.data;
   },
-  flow: async (body) => {
-    const res = await window.athena.invoke('athena:backtest-flow', body);
-    if (!res || !res.ok) throw new Error(backtestError(res, '코드 흐름을 읽지 못했습니다'));
+  // 흐름 지도(2026-09-03) — 설계의 첫 표면이다. 폼이든 코드든 같은 라우트로 간다.
+  map: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-map', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '흐름 지도를 만들지 못했습니다'));
+    return res.data;
+  },
+  // 지도 뒤의 코드를 만든다 — 사람이 [코드 열기]를 눌렀을 때만 부른다(저장은 하지 않는다).
+  codegen: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-codegen', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '지도 뒤의 코드를 만들지 못했습니다'));
     return res.data;
   },
   diagnose: async (body) => {

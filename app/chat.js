@@ -3103,7 +3103,7 @@ function renderGuardConfirmCard({ current, proposed } = {}, triggerText) {
 // 구독은 이 파일 하나뿐이다(canvas.js에서 같은 채널을 또 들으면 액션이 두 번
 // 적용된다). 캔버스 API는 canvas.js가 window.AthenaBacktestCanvas로 올려둔다.
 const BACKTEST_CHANGE_TITLES = {
-  spec_draft: '설정 반영',
+  spec_draft: '지도 반영',
   code_draft: '코드 반영',
   file_draft: '파일 반영',
   navigate: '탭 이동',
@@ -3140,6 +3140,13 @@ function renderBacktestChangeCard(receipt) {
     ? '반영됨'
     : (receipt.canApply ? '적용 대기' : '반영 안 됨');
   head.appendChild(statePill);
+  // 지도가 몇 판이 됐는가(보드 14-B) — 반영 한 번이 지도 한 판이다.
+  if (receipt.version && receipt.version.from != null && receipt.version.to != null) {
+    const versionPill = document.createElement('span');
+    versionPill.className = 'routine-draft-pill';
+    versionPill.textContent = `v${receipt.version.from} → v${receipt.version.to}`;
+    head.appendChild(versionPill);
+  }
   card.appendChild(head);
 
   if (receipt.note) {
@@ -3148,6 +3155,14 @@ function renderBacktestChangeCard(receipt) {
     note.textContent = receipt.note;
     card.appendChild(note);
   }
+
+  // 어느 칸이 바뀌었는지를 값보다 먼저 적는다 — 사람이 읽는 단위는 칸이다(보드 14-B).
+  (Array.isArray(receipt.nodes) ? receipt.nodes : []).forEach((node) => {
+    const nodeEl = document.createElement('div');
+    nodeEl.className = 'backtest-change-row backtest-change-node';
+    nodeEl.textContent = `${node.numeral} ${node.title} — ${node.text}`;
+    card.appendChild(nodeEl);
+  });
 
   (Array.isArray(receipt.rows) ? receipt.rows : []).forEach((row) => {
     const rowEl = document.createElement('div');

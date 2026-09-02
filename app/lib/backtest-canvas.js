@@ -86,7 +86,24 @@ const MODE_TABS = [
   ['deploy', '배포'],
 ];
 
-const DESIGN_TABS = [['form', '폼'], ['code', '코드'], ['flow', '흐름']];
+// 지도가 첫 표면이다(사용자 확정 2026-09-03 "코드는 최후의 보루야. 대화를 하면서 코드
+// 플로우 지도를 수정해 나가는거고, 그 코드 플로우 지도 뒤에 코드가 있는거야"). 그래서
+// 순서가 지도 → 폼 → 코드이고, 코드 탭의 이름 자체가 그것이 마지막 수단임을 말한다.
+const DESIGN_TABS = [['flow', '지도'], ['form', '폼'], ['code', '코드 · 최후의 보루']];
+
+// 스펙의 필드가 지도의 어느 칸에서 읽히는가 — 대화가 무엇을 바꿨는지를 칸 번호로
+// 말하는 축이다(보드 14-B). 여기 없는 필드(name)는 어느 칸도 아니다.
+const NODE_BY_FIELD = {
+  symbols: 'target', period: 'target', adjusted: 'target',
+  fromDt: 'target', toDt: 'target', costs: 'target',
+  params: 'params',
+  indicators: 'indicators',
+  entry: 'conditions', exit: 'conditions',
+  risk: 'guard',
+};
+
+// 지도가 그리는 순서 — 대상 한 줄 다음에 ①~④다(mapmodel.NUMERALS와 같은 차례).
+const MAP_NODE_ORDER = ['target', 'params', 'indicators', 'conditions', 'guard'];
 
 // 실행경로 2분기(폼/코드). 코드가 있어야만 헤더에 뜬다.
 const RUN_PATHS = [['form', '폼'], ['code', '코드']];
@@ -209,20 +226,48 @@ function draftValueText(key, value) {
   return value === '' || value == null ? '없음' : String(value);
 }
 
-// 초안 카드 행 [라벨, 전, 후]. 파라미터만은 바뀐 이름마다 한 행이다('파라미터 fast · 20 → 10').
-function draftRows(before, after) {
-  const rows = [];
+// 초안 diff를 한 줄씩 훑는다. 파라미터만은 바뀐 이름마다 한 줄이다('파라미터 fast · 20 → 10').
+// 카드 행과 지도 칸 줄이 같은 순회를 쓰게 하는 자리다 — 둘이 갈라지면 채팅 카드가 말한
+// 변경과 지도의 '방금 바뀜'이 서로 다른 것을 가리킨다.
+function walkDraft(before, after, emit) {
   SpecModel.diffFields(before, after).forEach(({ key, label, before: a, after: b }) => {
     if (key !== 'params') {
-      rows.push([label, draftValueText(key, a), draftValueText(key, b)]);
+      emit(key, label, draftValueText(key, a), draftValueText(key, b));
       return;
     }
     Object.keys(Object.assign({}, a, b)).forEach((name) => {
       if (a[name] === b[name]) return;
-      rows.push([`${label} ${name}`, draftValueText(key, a[name]), draftValueText(key, b[name])]);
+      emit(key, `${label} ${name}`, draftValueText(key, a[name]), draftValueText(key, b[name]));
     });
   });
+}
+
+// 초안 카드 행 [라벨, 전, 후].
+function draftRows(before, after) {
+  const rows = [];
+  walkDraft(before, after, (key, label, a, b) => { rows.push([label, a, b]); });
   return rows;
+}
+
+// 같은 변경을 지도의 칸으로 옮긴 줄 — 채팅 카드가 "③ 사고·파는 순간 — 청산 조건: …"으로
+// 적는다(보드 14-B). 어느 칸도 아닌 필드(전략 이름)는 줄이 서지 않는다.
+function draftNodeRows(before, after) {
+  const rows = [];
+  walkDraft(before, after, (key, label, a, b) => {
+    const id = NODE_BY_FIELD[key];
+    if (id) rows.push({ id, text: `${label}: ${b}` });
+  });
+  return rows;
+}
+
+// 바뀐 필드 이름들 → 지도 칸 id(지도 순서, 중복 없음). 순수 함수 — node --test 대상.
+function changedNodeIds(diffKeys) {
+  const ids = [];
+  (Array.isArray(diffKeys) ? diffKeys : []).forEach((key) => {
+    const id = NODE_BY_FIELD[key];
+    if (id && ids.indexOf(id) === -1) ids.push(id);
+  });
+  return MAP_NODE_ORDER.filter((id) => ids.indexOf(id) !== -1);
 }
 
 // 코드 영수증의 "몇 줄" — 빈 편집기는 1줄이 아니라 0줄이다(getContext().code.lines와 같은 규칙).
@@ -308,7 +353,10 @@ function createBacktestCanvas(options) {
   let lastError = null;
   // 캐시 상태를 이미 물어본 대상의 열쇠 — 같은 대상에 요청을 반복하지 않는다.
   let coverageAsked = null;
-  let state = { view: 'empty', tab: 'design', designTab: 'form' };
+  // mapVersion — 지도가 몇 번 고쳐졌는가. 전략을 세울 때 1이고 대화가 반영할 때마다
+  // 오른다. 코드 서랍의 "지도 vN과 일치"가 이 숫자로 서므로 화면·영수증·컨텍스트가
+  // 같은 자리에서 읽어야 한다.
+  let state = { view: 'empty', tab: 'design', designTab: 'flow', mapVersion: 0 };
   let pollTimer = null;
   // 환경 구성 잡의 폴링은 실행·수집 폴링과 별개 타이머다 — 같은 자리를 쓰면 pip이 도는
   // 동안 실행 폴링이 끊기거나 그 반대가 된다(둘은 서로를 모른다).
@@ -322,6 +370,9 @@ function createBacktestCanvas(options) {
   // 지금 프로젝트의 .py 목록 — 화면에는 안 쓰고 다음 턴 컨텍스트에만 실린다. 모델이
   // 폴더 안을 모르면 없는 경로를 지어내 propose_file을 낸다.
   let projectFiles = [];
+  // 폼 경로에서 [코드 열기]가 만든 코드 — 같은 폼이면 다시 만들지 않는다(§7.3: 생성은
+  // 저장이 아니다. 이 캐시는 화면 것이고 백엔드에는 아무것도 남지 않는다).
+  let codegenCache = null;
 
   function setState(patch) {
     state = Object.assign({}, state, patch);
@@ -363,7 +414,9 @@ function createBacktestCanvas(options) {
     if (rid !== loadRequestId) return;
     presets = Array.isArray(list) ? list : [];
     if (presets.length && !spec) spec = SpecModel.presetToSpec(presets[0]);
-    setState({ view: 'design', tab: 'design' });
+    // 전략이 서면 지도가 첫 화면이다 — 사람이 먼저 보는 것은 폼 칸이 아니라 흐름이다.
+    setState({ view: 'design', tab: 'design', designTab: 'flow', mapVersion: spec ? 1 : 0 });
+    if (spec) void loadMap();
     // 등록부는 부수 정보다 — 못 읽었다고 프리셋 화면까지 실패로 만들지 않는다.
     await loadUserStrategies();
   }
@@ -427,7 +480,10 @@ function createBacktestCanvas(options) {
     // 프리셋인데 도는 것은 파이썬인 상태가 남는다.
     if (userStrategyId) runPath = 'form';
     userStrategyId = null;
-    setState({ formErrors: [] });
+    // 새 전략은 새 지도다 — 앞 전략에서 세던 버전을 이어 세면 "지도 v7"이 무엇을 센
+    // 숫자인지 아무도 모르게 된다.
+    setState({ formErrors: [], designTab: 'flow', mapVersion: 1 });
+    void loadMap();
   }
 
   // 내 전략을 고르는 것은 프리셋을 고르는 것과 같은 동작이어야 한다 — 다른 점은 신호를
@@ -452,12 +508,14 @@ function createBacktestCanvas(options) {
     );
     userStrategyId = entry.id;
     runPath = 'code';
-    setState({ formErrors: [], codeErrors: [] });
+    setState({ formErrors: [], codeErrors: [], designTab: 'flow', mapVersion: 1 });
     const opened = await ide.openAt(entry.project_id, entry.path);
     // 못 열었으면 이유는 IDE가 자기 자리에 적었다 — 폼에도 한 줄 남긴다. 폼만 보고 있는
     // 사람에게는 코드 탭의 문장이 보이지 않는다.
     if (!opened) setState({ formErrors: [`${entry.path}를 열지 못했습니다 — 코드 탭을 보세요`] });
     else render();
+    // 파일을 연 뒤에 지도를 만든다 — 지도의 원문이 그 파일이다.
+    void loadMap();
   }
 
   function currentYaml() {
@@ -872,20 +930,44 @@ function createBacktestCanvas(options) {
     return (active && active.text) || codeSource;
   }
 
+  // 지도가 무엇을 두고 그려지는가 — 폼이면 지금 폼, 코드면 지금 보고 있는 코드다.
+  // 두 경로가 같은 라우트로 가는 것이 지도가 첫 표면인 이유다(mapmodel.py 머리말).
+  function mapRequest() {
+    const body = { version: state.mapVersion };
+    const source = currentSource();
+    if ((runPath === 'code' || activeProjectFile()) && source) body.source = source;
+    else if (spec) body.yaml = currentYaml();
+    else return null;
+    // 칸 오른쪽의 사실은 지도가 계산한 값이 아니라 그 실행이 실제로 만든 값이다.
+    if (state.runId) body.run_id = state.runId;
+    const error = runErrorForMap();
+    if (error) body.error = error;
+    return body;
+  }
+
+  // 실행이 멈췄으면 그 사실을 칸에 붙인다(보드 12) — 붙일 칸을 못 찾으면 백엔드가 붙이지
+  // 않고 문구만 돌려준다. 줄 번호는 코드 경로에서만 뜻이 있어 있을 때만 싣는다.
+  function runErrorForMap() {
+    if (!lastError || !state.diagnosis || !state.diagnosis.title) return null;
+    const out = { message: state.diagnosis.title };
+    if (state.diagnosis.line != null) out.lineno = state.diagnosis.line;
+    return out;
+  }
+
   // 지도는 백엔드 왕복이라 즉시 뜨지 않는다. 그 사이를 빈 화면으로 두면 사용자는 기능이
   // 죽은 줄 안다(사용자 지시 2026-09-02 "로딩 표시") — 그래서 진행 중임을 그린다.
   // 실패도 화면 전체를 오류로 바꾸지 않고 그 자리에 적는다: 지도를 못 그린 것이지
   // 백테스트가 망가진 것이 아니다.
-  async function loadFlow() {
-    const source = currentSource();
-    if (!deps.flow || !source) {
-      setState({ flow: null, flowLoading: false, flowError: null });
+  async function loadMap() {
+    const body = deps.map ? mapRequest() : null;
+    if (!body) {
+      setState({ map: null, mapLoading: false, mapError: null });
       return;
     }
-    setState({ flowLoading: true, flowError: null });
-    try { setState({ flow: await deps.flow({ source }), flowLoading: false }); }
+    setState({ mapLoading: true, mapError: null });
+    try { setState({ map: await deps.map(body), mapLoading: false }); }
     catch (err) {
-      setState({ flowLoading: false, flowError: String((err && err.message) || err) });
+      setState({ mapLoading: false, mapError: String((err && err.message) || err) });
     }
   }
 
@@ -1036,6 +1118,9 @@ function createBacktestCanvas(options) {
       applied: false,
       note: null,
       rows: [],
+      // 같은 변경을 지도의 칸으로 옮긴 줄과, 그 반영으로 지도가 몇 판이 됐는가(보드 14-B).
+      nodes: [],
+      version: null,
       errors: [],
       suggest_run: false,
       suggest_validate: false,
@@ -1049,15 +1134,37 @@ function createBacktestCanvas(options) {
   }
 
   // 채팅·프로브가 getContext()로 읽는 요약 — 영수증 전체를 싣지 않는다(컨텍스트가 두 배가 된다).
-  function remember(receipt) {
+  // nodes는 방금 바뀐 칸의 id다: 지도의 '방금 바뀜'과 다음 턴 컨텍스트가 같은 값을 쓴다.
+  function remember(receipt, nodes) {
     lastChange = {
       id: receipt.id,
       kind: receipt.kind,
       applied: receipt.applied,
       rows: receipt.rows,
+      nodes: Array.isArray(nodes) ? nodes : [],
       errors: receipt.errors,
     };
     return receipt;
+  }
+
+  // 영수증의 칸 줄 — 번호·제목은 마지막으로 받아온 지도가 준 것만 쓴다. 화면이 칸 이름을
+  // 지어내면 채팅 카드가 말하는 칸과 지도의 칸이 갈라진다.
+  function receiptNodes(nodeRows) {
+    const known = (state.map && state.map.nodes) || [];
+    const out = [];
+    known.forEach((node) => {
+      const texts = nodeRows.filter((row) => row.id === node.id).map((row) => row.text);
+      if (texts.length) {
+        out.push({ numeral: node.numeral, title: node.title, text: texts.join(' · ') });
+      }
+    });
+    return out;
+  }
+
+  // 반영 한 번이 지도 한 판이다 — 되돌리기도 한 판이다(돌아간 지도도 새 지도다).
+  function bumpMapVersion() {
+    const from = state.mapVersion || 0;
+    return { from, to: from + 1 };
   }
 
   function busyReceipt(kind, note) {
@@ -1103,28 +1210,39 @@ function createBacktestCanvas(options) {
     const suggestRun = envelope.suggest_run === true;
     if (isBusyView()) return busyReceipt('spec_draft', note);
 
+    const base = spec || SpecModel.createSpec(null);
     const merged = mergePatch(patch);
     const blockers = mergeBlockers(patch, merged);
-    const rows = merged ? specRows(spec || SpecModel.createSpec(null), merged) : [];
+    const rows = merged ? specRows(base, merged) : [];
     if (blockers.length) {
       return remember(makeReceipt('spec_draft', {
         note, rows, errors: blockers, suggest_run: suggestRun,
       }));
     }
 
+    // 무엇이 지도의 어느 칸에서 바뀌는가 — 카드도 지도도 이 한 번의 diff에서 나온다.
+    const nodeRows = draftNodeRows(base, merged);
+    const changed = changedNodeIds(SpecModel.diffFields(base, merged).map((f) => f.key));
+    const nodes = receiptNodes(nodeRows);
+    const version = bumpMapVersion();
+
     // 검증 오류가 있어도 반영한다 — 오류는 폼 오류 줄과 영수증 errors("실행 전에 채울 것")로
     // 남고, 모델은 다음 턴 컨텍스트의 pending에서 같은 목록을 읽어 마저 채운다.
     const pending = SpecModel.validate(merged);
     const before = snapshot();
     spec = merged;
+    // 반영된 결과를 보는 자리는 지도다 — 대화가 고치는 것이 폼 칸이 아니라 흐름이라는
+    // 규칙이 여기서 화면으로 지켜진다.
     setState({
-      draft: null, formErrors: pending, view: 'design', tab: 'design', designTab: 'form',
+      draft: null, formErrors: pending, view: 'design', tab: 'design', designTab: 'flow',
+      mapVersion: version.to,
     });
     const receipt = remember(makeReceipt('spec_draft', {
-      applied: true, note, rows, errors: pending, suggest_run: suggestRun,
+      applied: true, note, rows, nodes, version, errors: pending, suggest_run: suggestRun,
       tab: state.tab, designTab: state.designTab, canUndo: true,
-    }));
+    }), changed);
     pushUndo(receipt.id, 'spec_draft', before);
+    void loadMap();
     return receipt;
   }
 
@@ -1136,17 +1254,24 @@ function createBacktestCanvas(options) {
 
     const before = snapshot();
     const row = codeRow(codeSource, source);
+    const version = bumpMapVersion();
     codeSource = source;
     // 코드가 들어왔는데 실행경로가 폼이면 사람이 [실행]을 눌러도 그 코드가 돌지 않는다.
     runPath = 'code';
-    setState({ codeErrors: [], view: 'design', tab: 'design', designTab: 'code' });
+    setState({
+      codeErrors: [], view: 'design', tab: 'design', designTab: 'code',
+      mapVersion: version.to,
+    });
     const receipt = remember(makeReceipt('code_draft', {
-      applied: true, note, rows: [row],
+      applied: true, note, rows: [row], version,
       suggest_run: envelope.suggest_run === true,
       suggest_validate: envelope.suggest_validate === true,
       tab: state.tab, designTab: state.designTab, canUndo: true,
     }));
     pushUndo(receipt.id, 'code_draft', before);
+    // 코드가 바뀌면 그 코드로 다시 읽은 지도가 진실이다 — 앞 지도를 두면 서랍의
+    // "지도와 일치"가 거짓말이 된다.
+    void loadMap();
     return receipt;
   }
 
@@ -1175,9 +1300,13 @@ function createBacktestCanvas(options) {
 
     const before = await readProjectText(project.id, path);
     const draft = { id: null, project_id: project.id, path, source, note, before };
-    setState({ fileDraft: draft, view: 'design', tab: 'design', designTab: 'code' });
+    const version = bumpMapVersion();
+    setState({
+      fileDraft: draft, view: 'design', tab: 'design', designTab: 'code',
+      mapVersion: version.to,
+    });
     const receipt = remember(makeReceipt('file_draft', {
-      note, rows: [fileRow(path, before, source)], suggest_run: suggestRun,
+      note, rows: [fileRow(path, before, source)], version, suggest_run: suggestRun,
       canApply: true, tab: state.tab, designTab: state.designTab,
     }));
     draft.id = receipt.id;
@@ -1258,7 +1387,7 @@ function createBacktestCanvas(options) {
     else if (tab === 'deploy') void loadDeployments();
     else {
       setState({ view: tab === 'result' && state.result ? 'result' : 'design', tab });
-      if (designTab === 'flow') void loadFlow();
+      if (designTab === 'flow') void loadMap();
     }
     return remember(makeReceipt('navigate', {
       applied: true, note: envelopeNote(payload),
@@ -1307,12 +1436,16 @@ function createBacktestCanvas(options) {
       view: before.tab === 'result' && state.result ? 'result' : 'design',
       tab: before.tab,
       designTab: before.designTab,
+      // 되돌린 지도도 새 지도다 — 버전을 되돌리면 서랍의 "지도 vN과 일치"가 이미 사라진
+      // 코드를 가리킨다.
+      mapVersion: (state.mapVersion || 0) + 1,
       formErrors: [],
       // 검증 오류는 되돌리기로 사라진 코드의 것이다 — 남기면 코드 탭이 지금 편집기에
       // 없는 줄을 가리키고, getContext().code.errors도 복원된 원문과 어긋난다.
       codeErrors: [],
       draft: null,
     });
+    void loadMap();
     return { ok: true, restored: { rows } };
   }
 
@@ -1352,6 +1485,9 @@ function createBacktestCanvas(options) {
       // 실행 전에 채워야 할 것(SpecModel.validate) — 모델이 다음 턴에 마저 채운다.
       pending: spec ? SpecModel.validate(spec) : [],
       presets: presets.map((p) => ({ id: p.id, name: p.name })),
+      // 지도(보드 11~14) — 대화가 다루는 칸의 목록이다. 모델은 이 칸 번호와 사람 말로
+      // 답하고, 코드 줄 번호는 말하지 않는다(코드는 최후의 보루다).
+      map: mapContext(),
       code: {
         source: code.slice(0, CONTEXT_CODE_LIMIT),
         truncated: code.length > CONTEXT_CODE_LIMIT,
@@ -1386,6 +1522,26 @@ function createBacktestCanvas(options) {
       coverage: currentCoverage(),
       lastChange,
       project: projectContext(),
+    };
+  }
+
+  // 마지막으로 받아온 지도만 싣는다 — 화면이 칸을 지어내면 모델이 없는 칸을 고치려 든다.
+  // 아직 지도를 못 받았으면 칸은 빈 목록이고, 버전은 그래도 지금 값이다.
+  function mapContext() {
+    const nodes = (state.map && Array.isArray(state.map.nodes)) ? state.map.nodes : [];
+    return {
+      version: state.mapVersion || 0,
+      nodes: nodes.map((node) => ({
+        id: node.id,
+        numeral: node.numeral,
+        title: node.title,
+        lines: (node.lines || []).map((line) => {
+          const role = Explain.ROLE_LABELS[line.role];
+          return role ? `${role}: ${line.text}` : line.text;
+        }),
+        status: node.status,
+        note: node.note || null,
+      })),
     };
   }
 
@@ -1489,6 +1645,14 @@ function createBacktestCanvas(options) {
         if (spec) setState({ view: 'design', tab: 'design', designTab: 'form', message: null });
         else void loadPresets();
       }));
+      // 오류에서 지도로 가는 길(보드 12) — 무엇이 멈췄는지는 줄 번호가 아니라 칸 위에서
+      // 읽힌다. 전략이 있어야 그릴 지도가 있다.
+      if (spec || codeSource.trim()) {
+        panel.appendChild(button('backtest-error-map', '지도에서 보기', () => {
+          setState({ view: 'design', tab: 'design', designTab: 'flow', message: null });
+          void loadMap();
+        }));
+      }
       container.appendChild(panel);
       return;
     }
@@ -1566,7 +1730,7 @@ function createBacktestCanvas(options) {
       const isOn = state.designTab === key;
       const tab = button(`backtest-subtab${isOn ? ' is-on' : ''}`, label, () => {
         setState({ designTab: key });
-        if (key === 'flow') void loadFlow();
+        if (key === 'flow') void loadMap();
       });
       tab.setAttribute('aria-pressed', String(isOn));
       subtabs.appendChild(tab);
@@ -1933,6 +2097,14 @@ function createBacktestCanvas(options) {
 
   function renderCodeTab() {
     const wrap = el('div', 'backtest-code-tab');
+    // 지도에서 열고 들어왔으면 그 사실을 먼저 말한다(보드 14-E) — 여기서 손으로 고치면
+    // 지도가 진실이라는 규칙이 깨지는 순간이 시작된다.
+    if (state.codeFromMap) {
+      wrap.appendChild(el(
+        'div', 'backtest-code-frommap',
+        '여기서 고치면 지도와 어긋날 수 있습니다 — 웬만하면 대화로',
+      ));
+    }
     // 프로젝트 IDE는 자기 루트 노드를 계속 들고 있다 — 여기서는 붙이기만 한다.
     const ide = ensureProjectIde();
     if (ide) wrap.appendChild(ide.element);
@@ -2087,37 +2259,107 @@ function createBacktestCanvas(options) {
     return bounds;
   }
 
-  // ── 보드 08 · 코드 플로우 지도 ────────────────────────────────────────────
+  // ── 보드 11~14 · 흐름 지도(첫 표면) ───────────────────────────────────────
+  //
+  // 이 탭이 백테스트의 얼굴이다. 폼도 코드도 여기서 파생된다 — 폼은 이 지도의 입력칸이고,
+  // 코드는 아래 서랍 한 줄이다(사용자 확정 2026-09-03).
 
   function renderFlowTab() {
     const wrap = el('div', 'backtest-flow-tab');
-    if (!currentSource()) {
+    if (!spec && !currentSource()) {
       wrap.appendChild(el(
         'div', 'backtest-card-empty',
-        '코드 탭에서 전략을 쓰면 흐름 지도가 여기 그려집니다',
+        '프리셋을 고르거나 코드를 쓰면 흐름 지도가 여기 그려집니다',
       ));
       return wrap;
     }
-    const head = el('div', 'backtest-card-head');
-    head.appendChild(el('div', 'backtest-card-title', '이 코드는 이렇게 흐릅니다'));
-    head.appendChild(el('div', 'backtest-card-note', '칸을 누르면 코드 탭에서 그 줄이 켜집니다'));
-    wrap.appendChild(head);
     // 만드는 중이라는 사실을 그린다 — 빈 자리는 "기능이 죽었다"로 읽힌다.
-    if (state.flowLoading) {
+    if (state.mapLoading) {
       const loading = el('div', 'backtest-flow-loading');
       loading.appendChild(el('span', 'backtest-flow-spinner', ''));
       loading.appendChild(el('span', 'backtest-flow-loading-text', '흐름 지도를 만드는 중…'));
       wrap.appendChild(loading);
     }
-    if (state.flowError) {
-      wrap.appendChild(el('div', 'backtest-flow-error', state.flowError));
+    if (state.mapError) {
+      wrap.appendChild(el('div', 'backtest-flow-error', state.mapError));
+    }
+    // 만들지도 못했고 만드는 중도 아니면 왜 비었는지 적는다 — 지도가 첫 표면이라
+    // 이 자리가 비면 사용자는 백테스트 전체가 비었다고 읽는다.
+    if (!state.map && !state.mapLoading && !state.mapError) {
+      wrap.appendChild(el(
+        'div', 'backtest-card-empty',
+        deps.map ? '흐름 지도를 아직 만들지 못했습니다' : '이 화면에는 흐름 지도 연결이 없습니다',
+      ));
     }
     const map = el('div', 'backtest-flow-map');
-    Explain.renderFlowMap(map, state.flow, {
-      onSelect: (range) => { setState({ flowRange: range, designTab: 'code' }); },
-    });
+    if (state.map) {
+      Explain.renderFlowMap(map, state.map, {
+        onSelect: selectMapNode,
+        changedIds: new Set((lastChange && lastChange.nodes) || []),
+        // 오른쪽 사실이 어느 실행의 것인지 — 없으면 그 문장 자체를 적지 않는다.
+        lastRunLabel: state.runId ? String(state.runId).slice(0, 8) : null,
+        drawer: {
+          fileLabel: codeFileLabel(),
+          matchesMap: !!(state.map.code && state.map.code.matches_map),
+          aheadOfMap: runPath === 'code' && !!spec,
+          onOpenCode: () => { void openCodeFromMap(); },
+          onBackToMap: backToMap,
+        },
+      });
+    }
     wrap.appendChild(map);
+    // 실행 전에 채울 것은 지도에서도 보여야 한다 — 대화가 폼을 채우고 사람은 지도를 본다.
+    wrap.appendChild(renderFormErrors());
+    // 멈춘 실행의 진단은 지도 아래에 붙는다(보드 12) — 고칠 자리가 그 칸이기 때문이다.
+    // lastError를 같이 보는 이유: 진단은 마지막 실패의 것이고, 그 뒤 실행이 성공하면
+    // 이미 지나간 진단이다(성공이 lastError를 지운다).
+    if (state.diagnosis && lastError) wrap.appendChild(renderDiagnosisPanel());
     return wrap;
+  }
+
+  // 칸을 누르면 그 칸을 다루는 자리로 간다 — 코드 경로의 칸에는 실제 줄이 있어 편집기가
+  // 그 줄을 켜고, 폼 경로의 칸은 아직 코드가 없으므로 그 값을 고치는 폼으로 간다.
+  function selectMapNode(node) {
+    const range = Explain.lineRange(node);
+    if (range) setState({ flowRange: range, designTab: 'code' });
+    else setState({ designTab: 'form' });
+  }
+
+  // 서랍에 적히는 이름 — 파일이면 그 경로, 단일 편집기면 strategy.py, 폼 경로에서는
+  // 아직 파일이 아니라 지도에서 만들어지는 코드다.
+  function codeFileLabel() {
+    const active = activeProjectFile();
+    if (active) return active.path;
+    if (codeSource.trim()) return 'strategy.py';
+    return '생성됨';
+  }
+
+  // [코드 열기](보드 14-E) — 폼 경로에서는 지도 뒤의 코드가 아직 없다. 그때만 백엔드에
+  // 한 번 만들어 편집기에 얹는다(같은 폼이면 다시 만들지 않는다). **실행경로는 건드리지
+  // 않는다** — 코드를 열어봤다는 이유로 도는 것이 바뀌면 사람이 모르는 사이에 코드가 돈다.
+  async function openCodeFromMap() {
+    if (runPath === 'code' || activeProjectFile() || !spec || !deps.codegen) {
+      setState({ designTab: 'code', codeFromMap: true });
+      return;
+    }
+    const yaml = currentYaml();
+    if (!codegenCache || codegenCache.yaml !== yaml) {
+      let res;
+      try { res = await deps.codegen({ yaml }); }
+      catch (err) { setState({ mapError: String((err && err.message) || err) }); return; }
+      codegenCache = { yaml, source: String((res && res.source) || '') };
+    }
+    codeSource = codegenCache.source;
+    setState({ designTab: 'code', codeFromMap: true, mapError: null });
+  }
+
+  // [지도로 되돌리기](보드 14-E) — 지도가 진실이므로 앞선 코드 초안을 버리고 폼 경로로
+  // 돌아간다. 코드를 남겨두면 "지도로 돌아왔다"고 말하면서 실행은 계속 그 코드가 돈다.
+  function backToMap() {
+    runPath = 'form';
+    codeSource = '';
+    setState({ designTab: 'flow', codeFromMap: false, codeErrors: [] });
+    void loadMap();
   }
 
   // ── 보드 04 · 데이터 수집 승인 ────────────────────────────────────────────
@@ -2185,9 +2427,21 @@ function createBacktestCanvas(options) {
 
   // ── 보드 09 · 오류 진단 ───────────────────────────────────────────────────
 
+  // 오류가 붙은 칸이 있으면 진단 제목이 그 번호로 시작한다(보드 12) — "23번째 줄에서
+  // KeyError"는 무엇을 고칠지 말하지 않지만 "② 가격을 지표로 바꿉니다"는 말한다.
+  function diagnosisWithNode() {
+    if (!state.diagnosis) return state.diagnosis;
+    const nodes = (state.map && state.map.nodes) || [];
+    const hit = nodes.find((node) => node.status === 'error');
+    if (!hit) return state.diagnosis;
+    return Object.assign({}, state.diagnosis, {
+      title: `${hit.numeral} ${hit.title} — ${state.diagnosis.title || ''}`.trim(),
+    });
+  }
+
   function renderDiagnosisPanel() {
     const wrap = el('div', 'backtest-diagnosis');
-    Explain.renderDiagnosis(wrap, state.diagnosis, {
+    Explain.renderDiagnosis(wrap, diagnosisWithNode(), {
       onApply: (source, alsoRun) => { void applyFix(source, alsoRun); },
       onDiscard: () => setState({ view: 'design', tab: 'design', designTab: 'code' }),
     });
@@ -2654,6 +2908,7 @@ const __exports = {
   metricTileSub,
   coverageRatio,
   heatIntensity,
+  changedNodeIds,
   METRIC_TILES,
   MODE_TABS,
   DESIGN_TABS,

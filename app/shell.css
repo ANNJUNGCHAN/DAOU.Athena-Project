@@ -1366,6 +1366,147 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-2xs);
 }
 
+/* 흐름 지도가 설계의 첫 표면이 된 뒤(보드 11~14, 2026-09-03) 더해진 것들.
+   위 .backtest-flow-*를 그대로 쓰고, 여기서는 지도에만 있는 것 넷을 세운다:
+   머리줄·대상 한 줄·상태 고리·코드 서랍. */
+.backtest-map-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.backtest-map-head-body { flex: 1 1 auto; min-width: 0; }
+.backtest-map-head-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.backtest-map-head-sub {
+  margin-top: 2px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+/* 지도 판수 — 대화가 몇 번 고쳤는가. 코드 서랍의 "지도 vN과 일치"와 같은 숫자다. */
+.backtest-map-version {
+  flex: 0 0 auto;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-map-target {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--color-k-panel3);
+}
+.backtest-map-target-text {
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+/* 방금 바뀐 칸 — 대화 한 번이 어디를 건드렸는지를 눈으로 잇는 알약(보드 14-B). */
+.backtest-map-changed {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(238 19 123 / 12%);
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-flow-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* 상태가 ok가 아닐 때만 뜨는 사유 한 줄 — 늘 뜨는 줄은 아무도 읽지 않는다. */
+.backtest-flow-note {
+  margin-top: 2px;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+/* 상태 고리 3종. 빨강은 멈춘 칸, 주황은 의심스러운 칸, 점선은 모르는 칸이다 —
+   모름을 회색으로 뭉개면 사람은 그 칸을 믿어버린다. */
+.backtest-flow-node.is-error {
+  border-color: var(--color-up);
+  background: rgb(217 43 43 / 6%);
+}
+.backtest-flow-node.is-error .backtest-flow-note { color: var(--color-up); }
+.backtest-flow-node.is-suspect {
+  border-color: var(--color-warn);
+  background: rgb(255 152 56 / 8%);
+}
+.backtest-flow-node.is-suspect .backtest-flow-note { color: #A85C10; }
+.backtest-flow-node.is-unknown {
+  border: 1px dashed var(--color-k-ghost);
+  background: transparent;
+}
+/* 코드 서랍(보드 14-E) — 지도 뒤에 무엇이 있는지 한 줄. 여는 버튼은 여기 하나뿐이다. */
+.backtest-map-drawer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--color-k-line);
+}
+.backtest-map-drawer-text {
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-map-drawer-badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(255 152 56 / 14%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-map-drawer-note {
+  flex: 1 1 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-map-open-code,
+.backtest-map-back,
+.backtest-error-map {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.backtest-error-map { margin: 14px 0 0 8px; }
+/* 지도에서 코드로 들어온 사람에게 먼저 말한다 — 여기서 손대면 지도가 진실이라는
+   규칙이 깨지는 순간이 시작된다(보드 14-E). */
+.backtest-code-frommap {
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgb(255 152 56 / 10%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+
 /* 수집 승인 보강(보드 04) — 커버리지 막대와 세 갈래 버튼. */
 .backtest-approval-badge {
   padding: 2px 8px;
