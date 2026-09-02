@@ -239,6 +239,15 @@ function createGraphModeController(deps) {
     // 안 주면 필터가 없는 것처럼 전체를 그린다 — 다른 선택 주입과 같은 계약이다.
     filters,                  // graph-filters 모듈 (선택)
     getFilters,               // () => {windowDays, minDegree} (선택)
+    // 군집 지도의 라이브 렌더러(2026-09-02, live-map.js) — 힘 시뮬레이션을 계속
+    // 돌리는 두 번째 렌더러다. 안 주면 지금까지처럼 정적 SVG만 그린다(다른 선택
+    // 주입과 같은 계약). 둘 다 있으면 setLive()가 고른다.
+    //
+    // 인스턴스가 아니라 **팩토리**를 받는다 — 라이브 뷰의 노드 클릭은 정적 뷰와
+    // 똑같이 이 파일 안의 handleNodeClick으로 들어가야 같은 공통 패널이 열리는데,
+    // 그 함수는 여기 안에 있다. 밖에서 만들어 넘기면 그 배선을 호출자가 흉내 내야 하고
+    // 두 뷰의 선택 동작이 갈라진다.
+    createLiveMap,            // ({container, onSelect}) => liveMap (선택)
   } = deps;
 
   let state = store.createInitialState();
@@ -251,6 +260,35 @@ function createGraphModeController(deps) {
   // 브레인 상태를 아직 모르는 부팅 초반엔 "못 씀"으로 가정한다 — setAvailable(true)가
   // 오기 전에 그래프 모드로 들어오면 renderUnavailable()의 정직한 안내를 보여준다.
   let available = false;
+  // 라이브 렌더러를 쓰는 중인가(2026-09-02). 기본은 꺼짐 — 지금까지의 결정적
+  // 배치가 계속 기본값이고, 라이브는 헤더 토글로 켠다.
+  let liveEnabled = false;
+  let liveMap = null; // 처음 켤 때 만든다 — 안 쓰면 vis-network를 건드리지도 않는다.
+
+  // 라이브 뷰의 노드 선택을 정적 뷰와 같은 경로로 넣는다. 군집 번호는 패널 부제
+  // ("군집 N · 연결 M")가 쓰는 값이라 마지막 응답에서 찾아 넘긴다.
+  function handleLiveSelect(entityId) {
+    if (!entityId) {
+      state = store.clearSelection(state);
+      renderSelection();
+      return;
+    }
+    const nodes = (lastPayload && Array.isArray(lastPayload.nodes)) ? lastPayload.nodes : [];
+    const node = nodes.find((n) => String(n.entity_id) === String(entityId));
+    handleNodeClick(entityId, node ? String(node.cluster) : null);
+  }
+
+  function ensureLiveMap() {
+    if (liveMap || typeof createLiveMap !== 'function' || !elements.graphBody) return liveMap;
+    liveMap = createLiveMap({ container: elements.graphBody, onSelect: handleLiveSelect });
+    return liveMap;
+  }
+
+  function liveActive() {
+    if (!liveEnabled) return false;
+    const map = ensureLiveMap();
+    return Boolean(map && map.available());
+  }
 
   // 보드 12d/US-007 — 답변⇄그래프⇄에이전트⇄플러그인⇄백테스트 다섯 표면의 가시성은
   // 전부 이 함수 하나가 소유한다(5중 배타 — 리프 1.2.2 사이드바 모드 네비). 부팅 시
@@ -1007,6 +1045,9 @@ function createGraphModeController(deps) {
   // 만들지 않는다는 이 파일의 원래 계약을 지킨다.
   function renderSelection() {
     highlightSelectedRow();
+    // 라이브 뷰에는 .graph-node DOM이 없다(캔버스에 그린다) — 강조를 network에
+    // 직접 건다. 아래 이른 반환들보다 앞이어야 수집·노출로 갔다 와도 안 어긋난다.
+    if (liveActive()) liveMap.selectEntity(state.selectedEntityId);
     const panel = elements.panel;
     if (!panel) return;
     // 수집·노출(보드 05)은 노드가 아니라 설정을 보는 화면이다 — 그 옆에 노드
@@ -1063,8 +1104,19 @@ function createGraphModeController(deps) {
       && !placed.nodes.some((node) => node.entity_id === state.selectedEntityId)) {
       state = store.clearSelection(state);
     }
-    renderStage(placed);
-    wireNodeClicks();
+    // 라이브 뷰는 좌표를 스스로 정한다 — placed는 헤더 메타("엔티티 N · 관계 E ·
+    // 군집 C")를 위해 계속 계산하지만 그리기에는 쓰지 않는다. renderStage와
+    // wireNodeClicks(SVG 클릭 위임)도 건너뛴다: 그릴 SVG가 없고, 노드 선택은
+    // live-map.js의 onSelect가 같은 selectEntity로 넘긴다.
+    if (liveActive()) {
+      while (elements.graphBody && elements.graphBody.firstChild) {
+        elements.graphBody.removeChild(elements.graphBody.firstChild);
+      }
+      liveMap.render(payload);
+    } else {
+      renderStage(placed);
+      wireNodeClicks();
+    }
     renderSelection();
     renderGraphHeader();
     lastDrawnRevision = state.revision;
@@ -1113,6 +1165,20 @@ function createGraphModeController(deps) {
       return undefined;
     },
     applyVisibility,
+    // 정적(결정적 배치) ⇄ 라이브(힘 시뮬레이션) 렌더러 전환(2026-09-02).
+    // 두 렌더러가 같은 #graphBody를 쓰므로 끄는 쪽을 반드시 먼저 정리한다 —
+    // 안 그러면 캔버스와 SVG가 겹쳐 남는다.
+    async setLive(nextLive) {
+      const next = Boolean(nextLive);
+      if (next === liveEnabled) return null;
+      liveEnabled = next;
+      if (!liveEnabled && liveMap) liveMap.destroy();
+      if (!store.isGraphView(state) || state.surface !== store.SURFACE_MAP) return null;
+      return draw(true);
+    },
+    isLive() {
+      return liveActive();
+    },
     // 공통 패널 공개 API — 그래프 밖(요약 표의 행 선택, 보드 07)에서도 같은 패널을
     // 열 수 있어야 한다는 게 store의 원래 계약이다("공통 패널: 어느 단계에서든
     // 노드를 고르면 같은 패널이 열린다"). 요약 표 자체는 이 디렉터리 밖(canvas.js)에

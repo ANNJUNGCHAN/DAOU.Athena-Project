@@ -240,6 +240,12 @@
                    보강 횟수는 cluster-map에 없는 값이라 걸 수 없다. -->
               <select id="graphWindowFilter" class="filter-chip is-control" aria-label="기간"></select>
               <select id="graphDegreeFilter" class="filter-chip is-control" aria-label="최소 연결 수"></select>
+              <!-- 정적(결정적 배치) ⇄ 라이브(힘 시뮬레이션) 렌더러 전환(2026-09-02).
+                   두 답을 나란히 두고 비교하기 위한 것이다 — cluster-layout.js가
+                   힘 시뮬레이션을 거부한 이유(같은 입력이면 픽셀까지 같다)가 여전히
+                   유효해서, 어느 쪽이 옳은지는 만져 보고 정한다. -->
+              <button type="button" id="graphLiveToggle" class="filter-chip is-control"
+                      aria-pressed="false" title="노드를 끌 수 있는 살아 있는 그래프로 봅니다">움직이는 그래프</button>
             </div>
           </div>
           <div id="graphMapGuide" class="graph-map-guide">
@@ -455,6 +461,13 @@
 <script src="lib/graph-mode/hidden-links.js"></script>
 <script src="lib/graph-mode/graph-filters.js"></script>
 <script src="lib/graph-mode/collection-settings.js"></script>
+<!-- 라이브 군집 지도(2026-09-02) — vis-network를 CDN이 아니라 node_modules에서
+     직접 싣는다. 이 앱은 오프라인으로 뜨므로 unpkg를 물면 인터넷 없는 자리에서
+     지도가 통째로 죽는다. lib/vendor/로 사본을 두는 길은 .gitignore의 `vendor/`에
+     걸려 새 클론에서 파일이 조용히 사라진다 — lightweight-charts가 쓰는 경로
+     방식(lib/chart-card.js의 ../node_modules/... 해석)을 그대로 따른다. -->
+<script src="node_modules/vis-network/standalone/umd/vis-network.min.js"></script>
+<script src="lib/graph-mode/live-map.js"></script>
 <script src="lib/graph-mode/controller.js"></script>
 <script src="lib/settings-cards.js"></script>
 <script src="lib/plugin-catalog.js"></script>

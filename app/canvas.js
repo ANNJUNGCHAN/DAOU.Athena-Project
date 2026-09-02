@@ -2074,6 +2074,11 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   layout: window.AthenaLib.GraphClusterLayout,
   render: window.AthenaLib.GraphRender,
   prefs: window.AthenaLib.GraphModePrefs,
+  // 라이브 군집 지도(2026-09-02) — 헤더의 "움직이는 그래프" 토글이 켤 때만
+  // 실제로 만들어진다. vis-network가 없으면(vendoring 실패) 조용히 꺼진다.
+  createLiveMap: window.AthenaLib.GraphLiveMap
+    ? window.AthenaLib.GraphLiveMap.createLiveMap
+    : undefined,
   elements: {
     summary: document.getElementById('mosaic'),
     // 가시성 전용 — graphMode.applyVisibility() 하나만 이 hidden을 건드린다.
@@ -2920,6 +2925,35 @@ wireFilterSelect('graphWindowFilter', (v) => ({ windowDays: Number(v) }));
 wireFilterSelect('summarySortFilter', (v) => ({ summarySort: v }));
 wireFilterSelect('graphDegreeFilter', (v) => ({ minDegree: Number(v) }));
 renderFilterChips();
+
+// "움직이는 그래프" 토글(2026-09-02) — 정적(결정적 배치) ⇄ 라이브(힘 시뮬레이션).
+// GraphPrefs가 아니라 localStorage 한 칸을 직접 쓴다: 이건 그래프의 *내용*을 거르는
+// 필터가 아니라 *렌더러 선택*이라, 필터 프리프에 섞으면 applyGraphFilterChange가
+// 무관한 재조회를 돌게 된다.
+const LIVE_MAP_PREF_KEY = 'athena.graphMap.live';
+(function wireLiveMapToggle() {
+  const button = document.getElementById('graphLiveToggle');
+  if (!button) return;
+  // vis-network가 없으면(vendoring 실패) 있지도 않은 기능을 약속하지 않는다.
+  if (!window.AthenaLib.GraphLiveMap || !window.vis) {
+    button.hidden = true;
+    return;
+  }
+  const paint = (on) => {
+    button.setAttribute('aria-pressed', on ? 'true' : 'false');
+    button.classList.toggle('is-narrowed', on); // 기본이 아닌 상태의 기존 시각 신호를 그대로 쓴다.
+  };
+  let live = false;
+  try { live = localStorage.getItem(LIVE_MAP_PREF_KEY) === '1'; } catch { /* 저장소 없음 */ }
+  paint(live);
+  if (live) void graphMode.setLive(true);
+  button.addEventListener('click', () => {
+    live = !live;
+    paint(live);
+    try { localStorage.setItem(LIVE_MAP_PREF_KEY, live ? '1' : '0'); } catch { /* 저장소 없음 */ }
+    void graphMode.setLive(live);
+  });
+})();
 
 // 수집·노출 서브뷰(보드 05) — 렌더는 collection-settings.js가, 저장은
 // settings-cards.js가 이미 갖고 있다. 여기서는 둘을 잇기만 한다(같은 규칙을
