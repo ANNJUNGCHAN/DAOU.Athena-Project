@@ -2071,8 +2071,7 @@ let lastSurprisingConnections = [];
 
 const graphMode = window.AthenaLib.GraphModeController.createGraphModeController({
   store: window.AthenaLib.GraphModeStore,
-  layout: window.AthenaLib.GraphClusterLayout,
-  render: window.AthenaLib.GraphRender,
+  grouping: window.AthenaLib.ClusterGrouping,
   prefs: window.AthenaLib.GraphModePrefs,
   // 라이브 군집 지도(2026-09-02) — 헤더의 "움직이는 그래프" 토글이 켤 때만
   // 실제로 만들어진다. vis-network가 없으면(vendoring 실패) 조용히 꺼진다.

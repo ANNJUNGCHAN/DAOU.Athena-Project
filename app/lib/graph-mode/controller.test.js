@@ -7,8 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const store = require('./graph-mode-store');
-const layout = require('./cluster-layout');
-const render = require('./render');
+const grouping = require('./cluster-grouping');
 const themeClusters = require('./theme-clusters');
 const prefs = require('./graph-mode-prefs');
 const {
@@ -72,8 +71,7 @@ function setup(options) {
   const liveSelections = [];
   const controller = createGraphModeController({
     store,
-    layout,
-    render,
+    grouping,
     prefs: opts.prefs === undefined ? null : opts.prefs,
     elements,
     createLiveMap: opts.noLiveMap ? undefined : () => ({
@@ -421,7 +419,7 @@ test('graphHeaderMeta·mapGuide가 없으면(선택 안 주입) 조용히 넘어
     // graphHeaderMeta·mapGuide 없음
   };
   const controller = createGraphModeController({
-    store, layout, render, prefs: null, elements,
+    store, grouping, prefs: null, elements,
     fetchClusterMap: async () => payload(7),
   });
   controller.setAvailable(true);
@@ -491,7 +489,7 @@ test('summaryTable이 없으면(선택 안 주입) 조용히 넘어간다', () =
     // summaryTable 없음
   };
   const controller = createGraphModeController({
-    store, layout, render, prefs: null, elements,
+    store, grouping, prefs: null, elements,
     fetchClusterMap: async () => payload(7),
   });
   assert.doesNotThrow(() => controller.selectEntity('e:a', { name: '반도체' }));
@@ -526,40 +524,6 @@ test('applyVisibility()는 graphBody·panel의 hidden을 건드리지 않는다(
   assert.equal(elements.panel.hidden, false, 'panel도 applyVisibility가 손대지 않는다');
 });
 
-test('draw()는 폭/높이를 elements.graphBody.clientWidth/clientHeight에서 읽는다', async () => {
-  const elements = {
-    summary: fakeNode('div'),
-    graph: fakeNode('div'),
-    graphBody: fakeNode('div'),
-    summaryTable: fakeNode('div'),
-  };
-  elements.graph.clientWidth = 999; // 가시성 전용 참조 — layoutClusterMap이 이 값을 읽으면 결함이다.
-  elements.graph.clientHeight = 999;
-  elements.graphBody.clientWidth = 321;
-  elements.graphBody.clientHeight = 654;
-  let capturedViewport = null;
-  const spyLayout = {
-    layoutClusterMap(p, viewport) {
-      capturedViewport = viewport;
-      return layout.layoutClusterMap(p, viewport);
-    },
-    // renderStage()가 스텝14부터 1단계 렌더 때마다 clusterEdges를 다시 계산한다
-    // (숨은 연관 실배선) — 이 스파이는 viewport만 살피면 되므로 진짜 구현에 위임한다.
-    aggregateClusterEdges: layout.aggregateClusterEdges,
-  };
-  const controller = createGraphModeController({
-    store,
-    layout: spyLayout,
-    render,
-    prefs: null,
-    elements,
-    fetchClusterMap: async () => payloadTwoClusters(7),
-  });
-  controller.setAvailable(true);
-  await controller.toggle();
-  assert.equal(capturedViewport.width, 321, 'graphBody.clientWidth를 읽는다');
-  assert.equal(capturedViewport.height, 654, 'graphBody.clientHeight를 읽는다');
-});
 
 // ── 스텝14: 2단계 컨텍스트 패널(관계 목록) + 스텝11·12 실배선 ─────────────────
 
@@ -1192,7 +1156,7 @@ test('agent로 전환할 때는 백엔드를 부르지 않는다(그래프 뷰�
 test('elements.agent가 없어도 setView("agent")가 터지지 않는다(옵셔널 가드)', async () => {
   const elements = { summary: fakeNode('div'), graph: fakeNode('div') };
   const controller = createGraphModeController({
-    store, layout, render, prefs: null, elements,
+    store, grouping, prefs: null, elements,
     fetchClusterMap: async () => payload(7),
   });
   await assert.doesNotReject(() => controller.setView('agent'));
