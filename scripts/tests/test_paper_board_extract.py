@@ -404,18 +404,145 @@ def test_apply_responsive_fails_closed_before_overwriting_existing_role():
         )
 
 
-def test_detect_tables_accepts_explicit_table_directives_without_g1_behavior_change():
+def test_explicit_table_directive_is_authoritative_without_breaking_legacy_callers():
     root = pbe.parse_jsx(TABLE_JSX)
     nodes = pbe.parse_tree(TABLE_TREE)
     elements = pbe.flatten(root)
     pbe.align(elements, nodes)
 
-    assert pbe.detect_tables(
+    [table] = pbe.detect_tables(
         elements,
         nodes,
         {},
         explicit_tables={"T-0": {"node_id": "T-0", "traits": ("paired-table",)}},
-    ) == pbe.detect_tables(elements, nodes, {})
+    )
+
+    assert (table["node_id"], table["header_row"]) == ("T-0", "H-0")
+    assert table["source"] == "responsive"
+    assert table["responsive_mode"] == "paired-table"
+
+    legacy_root = pbe.parse_jsx(TABLE_JSX)
+    legacy_nodes = pbe.parse_tree(TABLE_TREE)
+    legacy_elements = pbe.flatten(legacy_root)
+    pbe.align(legacy_elements, legacy_nodes)
+    [legacy] = pbe.detect_tables(legacy_elements, legacy_nodes, {})
+    assert "responsive_mode" not in legacy
+    assert legacy["source"] == "heuristic"
+
+
+def _parsed_template(board_id):
+    board_dir = pbe.TEMPLATE_ROOT / board_id
+    root = pbe.parse_jsx((board_dir / "paper.jsx").read_text(encoding="utf-8"))
+    nodes = pbe.parse_tree((board_dir / "paper.tree.txt").read_text(encoding="utf-8"))
+    elements = pbe.flatten(root)
+    pbe.align(elements, nodes)
+    return root, elements, nodes
+
+
+def test_explicit_nested_header_discovers_33wd_without_touching_33z2_or_footer():
+    baseline_root, baseline_elements, baseline_nodes = _parsed_template("13K0-2")
+    baseline_by_node = {node.node_id: element for element, node in zip(baseline_elements, baseline_nodes)}
+    baseline_tables = pbe.detect_tables(baseline_elements, baseline_nodes, {})
+    baseline_33z2 = pbe.serialize(baseline_by_node["33Z2-0"])
+    baseline_footer = pbe.serialize(baseline_by_node["33YY-0"])
+
+    root, elements, nodes = _parsed_template("13K0-2")
+    by_node = {node.node_id: element for element, node in zip(elements, nodes)}
+    tables = pbe.detect_tables(
+        elements,
+        nodes,
+        {},
+        explicit_tables={
+            "33WD-0": {"node_id": "33WD-0", "traits": ("paired-table",)}
+        },
+    )
+    by_id = {table["node_id"]: table for table in tables}
+
+    assert (by_id["33WD-0"]["header_row"], by_id["33WD-0"]["body_rows"]) == (
+        "33WI-0",
+        ["33WQ-0", "33X6-0", "33XM-0", "33Y2-0", "33YI-0"],
+    )
+    assert by_id["33WD-0"]["responsive_mode"] == "paired-table"
+    assert by_id["33Z2-0"] == baseline_tables[0]
+    assert pbe.serialize(by_node["33Z2-0"]) == baseline_33z2
+    assert pbe.serialize(by_node["33YY-0"]) == baseline_footer
+
+
+def test_explicit_table_discovery_fails_closed_on_missing_ambiguous_or_wrong_width():
+    _, elements, nodes = _parsed_template("13K0-2")
+    with pytest.raises(pbe.ExtractError, match="MISSING-0"):
+        pbe.detect_tables(
+            elements,
+            nodes,
+            {},
+            explicit_tables={
+                "MISSING-0": {"node_id": "MISSING-0", "traits": ("paired-table",)}
+            },
+        )
+
+    _, elements, nodes = _parsed_template("13K0-2")
+    by_node = {node.node_id: element for element, node in zip(elements, nodes)}
+    header_block = by_node["33WE-0"]
+    header_block.children.append(by_node["33WI-0"])
+    with pytest.raises(pbe.ExtractError, match="ambiguous"):
+        pbe.detect_tables(
+            elements,
+            nodes,
+            {},
+            explicit_tables={
+                "33WD-0": {"node_id": "33WD-0", "traits": ("paired-table",)}
+            },
+        )
+
+    _, elements, nodes = _parsed_template("13K0-2")
+    next(node for node in nodes if node.node_id == "33WI-0").width -= 1
+    with pytest.raises(pbe.ExtractError, match="width"):
+        pbe.detect_tables(
+            elements,
+            nodes,
+            {},
+            explicit_tables={
+                "33WD-0": {"node_id": "33WD-0", "traits": ("paired-table",)}
+            },
+        )
+
+    _, elements, nodes = _parsed_template("13K0-2")
+    next(node for node in nodes if node.node_id == "33WQ-0").width -= 1
+    with pytest.raises(pbe.ExtractError, match="body width"):
+        pbe.detect_tables(
+            elements,
+            nodes,
+            {},
+            explicit_tables={
+                "33WD-0": {"node_id": "33WD-0", "traits": ("paired-table",)}
+            },
+        )
+
+    _, elements, nodes = _parsed_template("13K0-2")
+    by_node = {node.node_id: element for element, node in zip(elements, nodes)}
+    by_node["33WQ-0"].children.pop()
+    with pytest.raises(pbe.ExtractError, match="body column count"):
+        pbe.detect_tables(
+            elements,
+            nodes,
+            {},
+            explicit_tables={
+                "33WD-0": {"node_id": "33WD-0", "traits": ("paired-table",)}
+            },
+        )
+
+    _, elements, nodes = _parsed_template("13K0-2")
+    by_node = {node.node_id: element for element, node in zip(elements, nodes)}
+    by_node["33WD-0"].children = by_node["33WD-0"].children[:3]
+    with pytest.raises(pbe.ExtractError, match="fewer than 3 body rows"):
+        pbe.detect_tables(
+            elements,
+            nodes,
+            {},
+            explicit_tables={
+                "33WD-0": {"node_id": "33WD-0", "traits": ("paired-table",)}
+            },
+        )
 
 
 def test_nonresponsive_13bc_extraction_remains_byte_equivalent():
@@ -749,6 +876,343 @@ def test_column_collapse_wraps_from_third_column_and_pairs_into_second():
     # 병기 사본은 그 행의 두 번째 열 셀 안에 들어간다.
     second = pbe.element_children(by_node["R1-0"])[1]
     assert [c.tag for c in second.children if isinstance(c, pbe.Element)] == ["span"]
+
+
+def test_paired_table_collapse_generates_labeled_identity_free_mirrors_for_body_only():
+    root = pbe.parse_jsx(TABLE_JSX)
+    nodes = pbe.parse_tree(TABLE_TREE)
+    elements = pbe.flatten(root)
+    pbe.align(elements, nodes)
+    tables = pbe.detect_tables(
+        elements,
+        nodes,
+        {},
+        explicit_tables={
+            "T-0": {"node_id": "T-0", "traits": ("paired-table",)}
+        },
+    )
+    by_node = {node.node_id: element for element, node in zip(elements, nodes)}
+    node_of = {id(element): node for element, node in zip(elements, nodes)}
+
+    wrapped, paired = pbe.apply_column_collapse(tables, by_node, node_of)
+    html = pbe.serialize(root)
+
+    assert (wrapped, paired) == (4, 3)
+    assert html.count('class="bs-paired" data-paired-col=') == 3
+    assert html.count('data-paired-label') == 3
+    assert html.count('data-paired-source="R1C-0"') == 1
+    assert html.count('data-node="R1C-0"') == 1
+    assert (
+        '<span class="bs-paired" data-paired-col="3">'
+        '<span class="bs-paired-label" data-paired-label>금액</span>'
+        '<span class="bs-paired-value" data-paired-source="R1C-0">1,000</span>'
+        '</span>'
+    ) in html
+    assert 'data-paired-source="H3-0"' not in html
+    assert 'data-slot-id' not in html
+    slots = _table_slots(tables, elements, nodes)
+    assert [item["table_id"] for item in pbe.build_column_bindings(tables, slots)] == ["T-0"]
+
+
+def test_paired_table_capability_remains_available_without_a_production_consumer(tmp_path):
+    source = pbe.TEMPLATE_ROOT / "13K0-2"
+    fixture = tmp_path / "13K0-2"
+    shutil.copytree(source, fixture)
+    manifest_path = fixture / "regions.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    target = next(
+        item for item in manifest["responsive"] if item["node_id"] == "33WD-0"
+    )
+    target.clear()
+    target.update({"node_id": "33WD-0", "traits": ["paired-table"]})
+    manifest_path.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
+    html, payload = pbe.extract_board(fixture)
+    table = next(table for table in payload["tables"] if table["node_id"] == "33WD-0")
+    table_html = _serialized_data_node(html, "33WD-0")
+
+    assert table["responsive_mode"] == "paired-table"
+    assert table_html.count('class="bs-paired" data-paired-col=') == 35
+    assert table_html.count("data-paired-label") == 35
+    assert table_html.count("data-paired-source=") == 35
+    assert table_html.count('data-node="33WM-0"') == 1
+    assert 'data-paired-source="33WM-0"' not in table_html
+
+
+def test_production_table_modes_use_scroll_fallback_after_interactive_cell_review():
+    expected = {
+        "2SKU-1": ("39SW-0", "결제 예정 표"),
+        "13K0-2": ("33WD-0", "거래대금 상위 순위표"),
+    }
+    for board_id, (node_id, label) in expected.items():
+        manifest = json.loads(
+            (pbe.TEMPLATE_ROOT / board_id / "regions.json").read_text(encoding="utf-8")
+        )
+        declaration = next(
+            item for item in manifest["responsive"] if item["node_id"] == node_id
+        )
+        assert declaration == {
+            "node_id": node_id,
+            "traits": ["scroll-table"],
+            "accessible_label": label,
+        }
+    paired_consumers = []
+    for regions_path in pbe.TEMPLATE_ROOT.glob("*/regions.json"):
+        manifest = json.loads(regions_path.read_text(encoding="utf-8"))
+        for item in manifest.get("responsive", []):
+            if "paired-table" in item.get("traits", []):
+                paired_consumers.append((regions_path.parent.name, item["node_id"]))
+    assert paired_consumers == []
+
+
+def test_scroll_table_bypasses_collapse_and_emits_programmatic_grid_semantics():
+    root = pbe.parse_jsx(TABLE_JSX)
+    nodes = pbe.parse_tree(TABLE_TREE)
+    elements = pbe.flatten(root)
+    pbe.align(elements, nodes)
+    declaration = {
+        "node_id": "T-0", "traits": ("scroll-table",),
+        "accessible_label": "표 세부",
+    }
+    pbe.apply_responsive(elements, nodes, [declaration])
+    tables = pbe.detect_tables(
+        elements,
+        nodes,
+        {},
+        explicit_tables={"T-0": declaration},
+    )
+    by_node = {node.node_id: element for element, node in zip(elements, nodes)}
+    node_of = {id(element): node for element, node in zip(elements, nodes)}
+
+    assert pbe.apply_column_collapse(tables, by_node, node_of) == (0, 0)
+    html = pbe.serialize(root)
+    assert 'class="bs-col"' not in html
+    assert 'class="bs-paired"' not in html
+    assert 'class="bs-r-scroll-table bs-table" role="region" tabindex="0" aria-label="표 세부"' in html
+    assert (
+        '<div class="bs-scroll-table-semantics" role="table" aria-label="표 세부" '
+        'aria-rowcount="4" aria-colcount="3">'
+    ) in html
+    assert html.count('role="row"') == 4
+    assert html.count('role="columnheader"') == 3
+    assert html.count('role="rowheader"') == 3
+    assert html.count('role="cell"') == 6
+    assert 'aria-rowindex="4"' in html
+    assert 'aria-colindex="3"' in html
+    assert 'aria-owns=' not in html
+    assert 'aria-labelledby=' not in html
+    assert 'id="bs-' not in html
+    direct = [child for child in root.children if isinstance(child, pbe.Element)]
+    assert [dict(child.attrs).get("data-node") for child in direct] == ["T1-0", None]
+    semantic = direct[1]
+    assert semantic.synthetic == "semantic"
+    assert [dict(row.attrs)["data-node"] for row in semantic.children] == [
+        "H-0", "R1-0", "R2-0", "R3-0",
+    ]
+    assert all(row.parent is semantic for row in semantic.children)
+    slots = _table_slots(tables, elements, nodes)
+    assert pbe.build_column_bindings(tables, slots) == [], (
+        "scroll-table semantics must not create a column authoring obligation"
+    )
+    header = semantic.children[0]
+    header_cells = [child for child in header.children if isinstance(child, pbe.Element)]
+    assert len(header_cells) == 3
+    assert all(dict(cell.attrs).get("class") == "bs-scroll-table-cell-semantics"
+               for cell in header_cells)
+    assert [dict(cell.attrs).get("role") for cell in header_cells] == [
+        "columnheader", "columnheader", "columnheader",
+    ]
+    assert all(cell.synthetic == "semantic" for cell in header_cells)
+    assert all(
+        not ({"data-node", "data-slot-id", "data-state-control", "data-state-board"}
+             & set(dict(cell.attrs)))
+        for cell in header_cells
+    )
+
+
+def test_2sku_scroll_table_preserves_original_action_identity_in_the_seven_column_grid():
+    board_dir = pbe.TEMPLATE_ROOT / "2SKU-1"
+    manifest = json.loads((board_dir / "regions.json").read_text(encoding="utf-8"))
+    declaration = next(item for item in manifest["responsive"] if item["node_id"] == "39SW-0")
+    assert declaration == {
+        "node_id": "39SW-0",
+        "traits": ["scroll-table"],
+        "accessible_label": "결제 예정 표",
+    }
+
+    html, payload = pbe.extract_board(board_dir)
+    table = next(table for table in payload["tables"] if table["node_id"] == "39SW-0")
+    assert (table["responsive_mode"], table["columns"], table["header_row"]) == (
+        "scroll-table", 7, "39SX-0"
+    )
+    assert 'data-paired-source="3GLA-0"' not in html
+    assert html.count('data-node="3GLA-0"') == 1
+    assert html.count('data-state-control="D+2 정산 후 계좌"') == 1
+    assert html.count('data-state-board="3MTJ-0"') == 1
+    table_html = _serialized_data_node(html, "39SW-0")
+    assert table_html.count('class="bs-scroll-table-semantics"') == 1
+    assert table_html.count('role="row"') == 4
+    assert table_html.count('role="columnheader"') == 7
+    assert table_html.count('role="rowheader"') == 3
+    assert table_html.count('role="cell"') == 18
+    assert 'aria-owns=' not in table_html
+    assert 'aria-labelledby=' not in table_html
+    assert 'class="bs-col"' not in table_html
+    assert 'class="bs-paired"' not in table_html
+    assert "39SW-0" not in {
+        item["table_id"] for item in payload["column_bindings"]
+    }
+
+
+def test_13k_scroll_table_keeps_nested_header_control_and_footer_topology():
+    board_dir = pbe.TEMPLATE_ROOT / "13K0-2"
+    manifest = json.loads((board_dir / "regions.json").read_text(encoding="utf-8"))
+    declaration = next(item for item in manifest["responsive"] if item["node_id"] == "33WD-0")
+    assert declaration == {
+        "node_id": "33WD-0",
+        "traits": ["scroll-table"],
+        "accessible_label": "거래대금 상위 순위표",
+    }
+
+    html, payload = pbe.extract_board(board_dir)
+    table = next(table for table in payload["tables"] if table["node_id"] == "33WD-0")
+    assert (table["responsive_mode"], table["columns"], table["header_row"]) == (
+        "scroll-table", 7, "33WI-0"
+    )
+    table_html = _serialized_data_node(html, "33WD-0")
+    assert table_html.count('class="bs-scroll-table-semantics"') == 1
+    assert 'aria-rowcount="6" aria-colcount="7"' in table_html
+    assert table_html.count('role="row"') == 6
+    assert table_html.count('role="columnheader"') == 7
+    assert table_html.count('role="rowheader"') == 5
+    assert table_html.count('role="cell"') == 30
+    assert table_html.count('data-node="33WM-0"') == 1
+    assert table_html.count('data-state-control="시간외 등락률"') == 1
+    assert table_html.count('data-state-board="2YNQ-0"') == 1
+    assert 'class="bs-col"' not in table_html
+    assert 'class="bs-paired"' not in table_html
+    assert 'data-paired-source=' not in table_html
+    assert 'aria-owns=' not in table_html
+    assert 'aria-labelledby=' not in table_html
+    assert "33WD-0" not in {
+        item["table_id"] for item in payload["column_bindings"]
+    }
+
+    owner = pbe.parse_jsx(table_html)
+    wrapper = next(
+        child for child in owner.children
+        if isinstance(child, pbe.Element)
+        and dict(child.attrs).get("class") == "bs-scroll-table-semantics"
+    )
+    assert [
+        dict(child.attrs).get("data-node")
+        for child in wrapper.children if isinstance(child, pbe.Element)
+    ] == ["33WE-0", "33WQ-0", "33X6-0", "33XM-0", "33Y2-0", "33YI-0"]
+    header = next(
+        element for element in pbe.flatten(wrapper)
+        if dict(element.attrs).get("data-node") == "33WI-0"
+    )
+    assert dict(header.attrs).get("role") == "row"
+    header_cells = [child for child in header.children if isinstance(child, pbe.Element)]
+    assert len(header_cells) == 7
+    control_cell = header_cells[3]
+    control_cell_attrs = dict(control_cell.attrs)
+    assert control_cell_attrs == {
+        "class": "bs-scroll-table-cell-semantics",
+        "role": "columnheader",
+        "aria-colindex": "4",
+    }
+    assert len(control_cell.children) == 1
+    control = control_cell.children[0]
+    assert isinstance(control, pbe.Element)
+    control_attrs = dict(control.attrs)
+    assert control_attrs["data-node"] == "33WM-0"
+    assert control_attrs["data-state-control"] == "시간외 등락률"
+    assert control_attrs["data-state-board"] == "2YNQ-0"
+    assert "role" not in control_attrs
+    assert "aria-colindex" not in control_attrs
+    assert any(
+        isinstance(child, pbe.Element)
+        and dict(child.attrs).get("data-node") == "33YY-0"
+        for child in owner.children
+    ), "the trailing two-cell footer stays outside the semantic table"
+
+
+def _serialized_data_node(html, node_id):
+    root = pbe.parse_jsx(html)
+    for element in pbe.flatten(root):
+        if any(name == "data-node" and value == node_id for name, value in element.attrs):
+            return pbe.serialize(element)
+    raise AssertionError(f"missing data-node {node_id}")
+
+
+@pytest.mark.parametrize(
+    (
+        "board_id",
+        "target_table",
+        "control_table",
+        "control_columns",
+        "unchanged_nodes",
+    ),
+    [
+        ("2SKU-1", "39SW-0", "3A4F-0", 5, ("3A4F-0",)),
+        ("13K0-2", "33WD-0", "33Z2-0", 6, ("33YY-0", "33Z2-0")),
+    ],
+)
+def test_scroll_table_mode_keeps_non_target_subtrees_bindings_and_slots_stable(
+    tmp_path,
+    board_id,
+    target_table,
+    control_table,
+    control_columns,
+    unchanged_nodes,
+):
+    source = pbe.TEMPLATE_ROOT / board_id
+    baseline_dir = tmp_path / board_id
+    shutil.copytree(source, baseline_dir)
+    manifest_path = baseline_dir / "regions.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    baseline_target = next(
+        item for item in manifest["responsive"] if item["node_id"] == target_table
+    )
+    baseline_target.clear()
+    baseline_target.update({"node_id": target_table, "traits": ["paired-table"]})
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False), encoding="utf-8")
+
+    baseline_html, baseline_payload = pbe.extract_board(baseline_dir)
+    opted_html, opted_payload = pbe.extract_board(source)
+    for node_id in unchanged_nodes:
+        assert _serialized_data_node(opted_html, node_id) == _serialized_data_node(
+            baseline_html, node_id
+        )
+
+    baseline_bindings = {
+        item["table_id"]: item for item in baseline_payload["column_bindings"]
+    }
+    opted_bindings = {
+        item["table_id"]: item for item in opted_payload["column_bindings"]
+    }
+    assert target_table in baseline_bindings
+    assert target_table not in opted_bindings
+    assert opted_bindings == {
+        table_id: binding
+        for table_id, binding in baseline_bindings.items()
+        if table_id != target_table
+    }
+    assert len(opted_bindings[control_table]["columns"]) == control_columns
+
+    def target_slots(payload):
+        return [
+            slot for slot in payload["slots"]
+            if (slot.get("table") or {}).get("table") == target_table
+        ]
+
+    # Responsive semantics may change table presentation, never individual slot
+    # authoring data such as mappings, alternatives, static flags, or kinds.
+    assert target_slots(opted_payload)
+    assert target_slots(opted_payload) == target_slots(baseline_payload)
 
 
 def test_column_collapse_keeps_text_leaf_and_cell_indexing_intact():

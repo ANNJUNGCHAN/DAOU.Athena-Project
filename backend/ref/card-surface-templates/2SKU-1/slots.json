@@ -7,7 +7,7 @@
     "node_id": "2SKW-1",
     "jsx_sha256": "0856e76b3cc89c969c46e88c4c823d1ac47f73905d8a6dab4126c5b155169486"
   },
-  "html_sha256": "adcd2cc17a84f632ad09ba49f14802cff01b5c1ff6bfa42cc320b49e58ce216a",
+  "html_sha256": "86c0bffc75de3591141e214e7d7b4698b298b9cf49bdf357f3cbc4bc85aa69c9",
   "width_px": 1360.0,
   "height_px": 1042.0,
   "artboard_px": [
@@ -77,7 +77,7 @@
         "39TL-0"
       ],
       "foot_rows": [],
-      "source": "heuristic",
+      "source": "responsive",
       "column_labels": [
         "결제 예정",
         "매도 정산",
@@ -86,7 +86,8 @@
         "미수 변제소요",
         "출금가능",
         "예수금 예상"
-      ]
+      ],
+      "responsive_mode": "scroll-table"
     },
     {
       "node_id": "3A4F-0",
@@ -126,9 +127,9 @@
     "layer_펼침": 0,
     "tables": 2,
     "tree_text_truncated": 0,
-    "bs_col": 44,
-    "bs_paired": 55,
-    "bs_leaf": 5,
+    "bs_col": 24,
+    "bs_paired": 33,
+    "bs_leaf": 1,
     "bs_kpi_cell": 5,
     "state_control_marks": 6
   },
@@ -369,118 +370,6 @@
     "상태"
   ],
   "column_bindings": [
-    {
-      "table_id": "39SW-0",
-      "columns": [
-        {
-          "col": 1,
-          "data_col": 0,
-          "header": "결제 예정",
-          "slot_ids": [
-            "s047",
-            "s054",
-            "s061"
-          ],
-          "mapping_id": "base:kt00008",
-          "f": "trde_dt",
-          "kor": "매매일자"
-        },
-        {
-          "col": 2,
-          "data_col": 1,
-          "header": "매도 정산",
-          "slot_ids": [
-            "s048",
-            "s055",
-            "s062"
-          ],
-          "mapping_id": "detail:kt00001:settlement_forecast",
-          "f": "d2_sel_exct_amt",
-          "kor": "d+2매도정산금"
-        },
-        {
-          "col": 3,
-          "data_col": 2,
-          "header": "매수 정산",
-          "slot_ids": [
-            "s049",
-            "s056",
-            "s063"
-          ],
-          "mapping_id": "detail:kt00001:settlement_forecast",
-          "f": "d2_buy_exct_amt",
-          "kor": "d+2매수정산금"
-        },
-        {
-          "col": 4,
-          "data_col": 3,
-          "header": "정산 합계",
-          "slot_ids": [
-            "s050",
-            "s057",
-            "s064",
-            "s065"
-          ],
-          "mapping_id": "detail:kt00001:settlement_forecast",
-          "f": "d2_slby_exct_amt",
-          "kor": "d+2매도매수정산금"
-        },
-        {
-          "col": 5,
-          "data_col": 4,
-          "header": "미수 변제소요",
-          "slot_ids": [
-            "s051",
-            "s058",
-            "s066"
-          ],
-          "mapping_id": "detail:kt00001:settlement_forecast",
-          "f": "d2_out_rep_mor",
-          "kor": "d+2미수변제소요금"
-        },
-        {
-          "col": 6,
-          "data_col": 5,
-          "header": "출금가능",
-          "slot_ids": [
-            "s052",
-            "s059",
-            "s067"
-          ],
-          "mapping_id": "detail:kt00001:settlement_forecast",
-          "f": "d2_pymn_alow_amt",
-          "kor": "d+2출금가능금액"
-        },
-        {
-          "col": 7,
-          "data_col": 6,
-          "header": "예수금 예상",
-          "slot_ids": [
-            "s053",
-            "s060",
-            "s068",
-            "s069"
-          ],
-          "mapping_id": "detail:kt00001:settlement_forecast",
-          "f": "d2_entra",
-          "kor": "d+2추정예수금",
-          "alt_mappings": [
-            {
-              "mapping_id": "detail:kt00005:cash_and_capacity",
-              "f": "entr_d2"
-            },
-            {
-              "mapping_id": "detail:kt00010:purchase_settlement",
-              "f": "d2entra"
-            },
-            {
-              "mapping_id": "detail:kt00017:d2_account_position",
-              "f": "d2_entra"
-            }
-          ]
-        }
-      ]
-    },
     {
       "table_id": "3A4F-0",
       "columns": [

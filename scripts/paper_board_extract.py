@@ -824,7 +824,7 @@ def element_children(el: Element) -> list[Element]:
             continue
         if child.synthetic in ("leaf", "text"):
             continue
-        if child.synthetic == "wrap":
+        if child.synthetic in ("wrap", "semantic"):
             out.extend(element_children(child))
             continue
         out.append(child)
@@ -988,6 +988,175 @@ def _is_header_row(row: Element) -> bool:
     return True
 
 
+def _explicit_table_shape(
+    owner: Element, node_of: dict[int, TreeNode]
+) -> tuple[Element, list[Element], list[Element]]:
+    owner_node = node_of[id(owner)]
+    rows = element_children(owner)
+    candidates: list[tuple[int, Element]] = []
+    for index, row in enumerate(rows):
+        if _is_header_row(row):
+            candidates.append((index, row))
+        for nested in element_children(row):
+            if _is_header_row(nested):
+                candidates.append((index, nested))
+    if not candidates:
+        raise ExtractError(f"explicit table {owner_node.node_id}: missing header")
+    if len(candidates) != 1:
+        raise ExtractError(f"explicit table {owner_node.node_id}: ambiguous header")
+
+    header_index, header = candidates[0]
+    header_node = node_of[id(header)]
+    if header_node.width != owner_node.width:
+        raise ExtractError(
+            f"explicit table {owner_node.node_id}: header width "
+            f"{header_node.width:g} != owner width {owner_node.width:g}"
+        )
+    columns = len(element_children(header))
+    body: list[Element] = []
+    foot: list[Element] = []
+    ended = False
+    for row in rows[header_index + 1 :]:
+        cells = element_children(row)
+        if len(cells) < 3:
+            ended = True
+            continue
+        if len(cells) != columns:
+            raise ExtractError(
+                f"explicit table {owner_node.node_id}: body column count "
+                f"{len(cells)} != header column count {columns}"
+            )
+        row_node = node_of[id(row)]
+        if row_node.width != header_node.width:
+            raise ExtractError(
+                f"explicit table {owner_node.node_id}: body width "
+                f"{row_node.width:g} != header width {header_node.width:g}"
+            )
+        if ended:
+            raise ExtractError(
+                f"explicit table {owner_node.node_id}: ambiguous body after terminal content"
+            )
+        if _is_foot_row(row):
+            foot.append(row)
+            ended = True
+        else:
+            body.append(row)
+    if len(body) < 3:
+        raise ExtractError(
+            f"explicit table {owner_node.node_id}: fewer than 3 body rows"
+        )
+    return header, body, foot
+
+
+def _mark_table(
+    owner: Element,
+    header: Element,
+    body: list[Element],
+    foot: list[Element],
+    node_of: dict[int, TreeNode],
+    roles: dict[str, str],
+    *,
+    responsive_mode: str | None = None,
+) -> dict:
+    cells = element_children(header)
+    add_class(owner, "bs-table")
+    header.attrs.append(("data-row", "head"))
+    for col, cell in enumerate(cells):
+        cell.attrs.append(("data-col", str(col)))
+    for row_index, row in enumerate(body):
+        row.attrs.append(("data-row", str(row_index)))
+        for col, cell in enumerate(element_children(row)):
+            cell.attrs.append(("data-col", str(col)))
+    for row in foot:
+        row.attrs.append(("data-row", "foot"))
+        for col, cell in enumerate(element_children(row)):
+            cell.attrs.append(("data-col", str(col)))
+
+    owner_node = node_of[id(owner)]
+    table = {
+        "node_id": owner_node.node_id,
+        "node_name": owner_node.resolved_name,
+        "columns": len(cells),
+        "header_row": node_of[id(header)].node_id,
+        "body_rows": [node_of[id(row)].node_id for row in body],
+        "foot_rows": [node_of[id(row)].node_id for row in foot],
+        "source": (
+            "responsive"
+            if responsive_mode
+            else ("regions" if roles.get(owner_node.node_id) == "table" else "heuristic")
+        ),
+        "column_labels": [direct_text(cell) for cell in cells],
+    }
+    if responsive_mode:
+        table["responsive_mode"] = responsive_mode
+    return table
+
+
+def _mark_scroll_table_semantics(
+    owner: Element,
+    header: Element,
+    body: list[Element],
+    foot: list[Element],
+    accessible_label: str,
+) -> None:
+    rows = [header, *body, *foot]
+    header_top = header
+    while header_top.parent is not owner:
+        if header_top.parent is None:
+            raise ExtractError("scroll-table header is outside the scroll owner")
+        header_top = header_top.parent
+    top_nodes = [header_top, *body, *foot]
+    if any(node.parent is not owner for node in top_nodes):
+        raise ExtractError("scroll-table body rows must be direct children of the scroll owner")
+    indexes = [owner.children.index(node) for node in top_nodes]
+    if indexes != list(range(indexes[0], indexes[0] + len(rows))):
+        raise ExtractError("scroll-table rows must be contiguous")
+
+    columns = len(element_children(header))
+    wrapper = _synthetic(
+        "div",
+        "semantic",
+        [
+            ("class", "bs-scroll-table-semantics"),
+            ("role", "table"),
+            ("aria-label", accessible_label),
+            ("aria-rowcount", len(rows)),
+            ("aria-colcount", columns),
+        ],
+        owner,
+    )
+    owner.children[indexes[0] : indexes[-1] + 1] = [wrapper]
+    wrapper.children.extend(top_nodes)
+    for node in top_nodes:
+        node.parent = wrapper
+    for row_index, row in enumerate(rows, start=1):
+        set_attr(row, "role", "row")
+        set_attr(row, "aria-rowindex", row_index)
+        for col_index, cell in enumerate(element_children(row), start=1):
+            role = "columnheader" if row is header else ("rowheader" if col_index == 1 else "cell")
+            if row is header:
+                # Header Paper nodes can also be the sole state controller (33WM).
+                # Keep that original node role-free so the runtime can give it
+                # button semantics; an identity-free real box owns table semantics.
+                semantic_cell = _synthetic(
+                    "div",
+                    "semantic",
+                    [
+                        ("class", "bs-scroll-table-cell-semantics"),
+                        ("role", role),
+                        ("aria-colindex", col_index),
+                    ],
+                    row,
+                )
+                child_index = row.children.index(cell)
+                row.children[child_index] = semantic_cell
+                semantic_cell.children.append(cell)
+                cell.parent = semantic_cell
+            else:
+                set_attr(cell, "role", role)
+                set_attr(cell, "aria-colindex", col_index)
+
+
 def detect_tables(
     elements: list[Element],
     nodes: list[TreeNode],
@@ -999,9 +1168,16 @@ def detect_tables(
     # table shapes; leaving this unused keeps existing table discovery unchanged.
     _ = explicit_tables
     node_of = {id(el): node for el, node in zip(elements, nodes)}
+    explicit = explicit_tables or {}
+    known = {node.node_id for node in nodes}
+    missing = sorted(set(explicit) - known)
+    if missing:
+        raise ExtractError(f"explicit table node not found: {', '.join(missing)}")
     marked: set[int] = set()
     tables: list[dict] = []
     for el in elements:
+        node_id = node_of[id(el)].node_id
+        declaration = explicit.get(node_id)
         ancestor = el.parent
         nested = False
         while ancestor is not None:
@@ -1010,6 +1186,34 @@ def detect_tables(
                 break
             ancestor = ancestor.parent
         if nested:
+            if declaration:
+                raise ExtractError(f"explicit table {node_id}: nested inside another table")
+            continue
+        if declaration:
+            modes = [
+                trait
+                for trait in ("paired-table", "scroll-table")
+                if trait in declaration.get("traits", ())
+            ]
+            if len(modes) != 1:
+                raise ExtractError(f"explicit table {node_id}: exactly one table mode required")
+            header, body, foot = _explicit_table_shape(el, node_of)
+            marked.add(id(el))
+            table = _mark_table(
+                el,
+                header,
+                body,
+                foot,
+                node_of,
+                roles,
+                responsive_mode=modes[0],
+            )
+            if modes[0] == "scroll-table":
+                label = str(declaration.get("accessible_label") or "").strip()
+                if not label:
+                    raise ExtractError(f"explicit table {node_id}: scroll-table label required")
+                _mark_scroll_table_semantics(el, header, body, foot, label)
+            tables.append(table)
             continue
         rows = element_children(el)
         if len(rows) < 4:
@@ -1037,32 +1241,7 @@ def detect_tables(
         foot_ids = {id(r) for r in foot}
         body = [r for r in body if id(r) not in foot_ids]
         marked.add(id(el))
-        add_class(el, "bs-table")
-        header.attrs.append(("data-row", "head"))
-        for col, cell in enumerate(cells):
-            cell.attrs.append(("data-col", str(col)))
-        for row_index, row in enumerate(body):
-            row.attrs.append(("data-row", str(row_index)))
-            for col, cell in enumerate(element_children(row)):
-                cell.attrs.append(("data-col", str(col)))
-        for row in foot:
-            row.attrs.append(("data-row", "foot"))
-            for col, cell in enumerate(element_children(row)):
-                cell.attrs.append(("data-col", str(col)))
-        tables.append(
-            {
-                "node_id": node_of[id(el)].node_id,
-                "node_name": node_of[id(el)].resolved_name,
-                "columns": cols,
-                "header_row": node_of[id(header)].node_id,
-                "body_rows": [node_of[id(r)].node_id for r in body],
-                "foot_rows": [node_of[id(r)].node_id for r in foot],
-                "source": (
-                    "regions" if roles.get(node_of[id(el)].node_id) == "table" else "heuristic"
-                ),
-                "column_labels": [direct_text(c) for c in cells],
-            }
-        )
+        tables.append(_mark_table(el, header, body, foot, node_of, roles))
     return tables
 
 
@@ -1118,6 +1297,9 @@ def apply_column_collapse(
     """
     wrapped = paired = 0
     for table in tables:
+        mode = table.get("responsive_mode")
+        if mode == "scroll-table":
+            continue
         for row_id in [
             table["header_row"],
             *table["body_rows"],
@@ -1147,6 +1329,41 @@ def apply_column_collapse(
                     text = direct_text(leaf)
                     node = node_of.get(id(leaf))
                     if not text or node is None:
+                        continue
+                    if mode == "paired-table":
+                        if row_id == table["header_row"]:
+                            continue
+                        pair = _synthetic(
+                            "span",
+                            "leaf",
+                            [
+                                ("class", "bs-paired"),
+                                ("data-paired-col", priority),
+                            ],
+                            second,
+                        )
+                        label = _synthetic(
+                            "span",
+                            "leaf",
+                            [
+                                ("class", "bs-paired-label"),
+                                ("data-paired-label", True),
+                            ],
+                            pair,
+                        )
+                        label.children.append(table["column_labels"][col])
+                        mirror = _synthetic(
+                            "span",
+                            "leaf",
+                            [
+                                ("class", "bs-paired-value"),
+                                ("data-paired-source", node.node_id),
+                            ],
+                            pair,
+                        )
+                        mirror.children.append(text)
+                        pair.children.extend((label, mirror))
+                        copies.append(pair)
                         continue
                     copy = _synthetic(
                         "span",
@@ -1713,6 +1930,8 @@ def build_column_bindings(tables: list[dict], slots: list[dict]) -> list[dict]:
     """
     out: list[dict] = []
     for table in tables:
+        if table.get("responsive_mode") == "scroll-table":
+            continue
         by_col: dict[int, list[str]] = {}
         for slot in slots:
             cell = slot.get("table")

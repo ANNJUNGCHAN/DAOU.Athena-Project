@@ -851,16 +851,23 @@ function switchStateBoard(host, boardId, envelope) {
 // `control` 문구와 정확히 같은 글자를 내는 잎을 그 조작으로 본다(스트립·내비 안에서만).
 function findStateControl(surface, control) {
   for (const node of surface.querySelectorAll('[data-state-control]')) {
-    if (node.dataset.stateControl === control) return node;
+    if (node.dataset.stateControl === control) return boardMount.stateControlActivationOwner(node);
   }
   for (const scope of surface.querySelectorAll('.bs-strip, nav, [role="tablist"]')) {
     for (const node of scope.querySelectorAll('*')) {
       if (node.childElementCount === 0 && node.textContent.trim() === control) {
-        return node.closest('button, [role="tab"]') || node;
+        return boardMount.stateControlActivationOwner(node);
       }
     }
   }
   return null;
+}
+
+const RESPONSIVE_STATE_CONTROL_OWNER = '.bs-r-flow, .bs-r-scroll, .bs-r-scroll-table';
+
+function isResponsiveStateControl(node) {
+  return !!(node && node.childElementCount === 0 && typeof node.closest === 'function'
+    && node.closest(RESPONSIVE_STATE_CONTROL_OWNER));
 }
 
 function wireStateControls(host, envelope, mounted) {
@@ -872,11 +879,15 @@ function wireStateControls(host, envelope, mounted) {
     const control = String(link.control || '').trim();
     if (!control) continue;
     const node = findStateControl(surface, control);
-    if (!node || node.__athenaStateWired) continue;
-    node.__athenaStateWired = true;
+    if (!node) continue;
+    const didWire = boardMount.wireStateControlActivation(
+      node,
+      () => switchStateBoard(host, link.board_id, envelope),
+      { keyboard: isResponsiveStateControl(node) },
+    );
+    if (!didWire) continue;
     // 표시는 CSS가 한다([data-state-board], board-surface.css) — 인라인 원문은 안 건드린다(D1).
     node.dataset.stateBoard = link.board_id;
-    node.addEventListener('click', () => switchStateBoard(host, link.board_id, envelope));
     wired += 1;
   }
   return wired;

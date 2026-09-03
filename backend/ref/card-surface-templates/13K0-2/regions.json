@@ -33,6 +33,6 @@
     { "node_id": "2WHR-0", "traits": ["atomic"] },
     { "node_id": "2WHT-0", "traits": ["atomic"] },
     { "node_id": "2WHV-0", "traits": ["atomic"] },
-    { "node_id": "33WD-0", "traits": ["paired-table"] }
+    { "node_id": "33WD-0", "traits": ["scroll-table"], "accessible_label": "거래대금 상위 순위표" }
   ]
 }
