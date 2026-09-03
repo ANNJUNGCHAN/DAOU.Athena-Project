@@ -674,6 +674,68 @@ class GraphStore:
 
         return await self._owner.run(read)
 
+    async def retract_relation(self, relation_id: str) -> RelationRow | None:
+        """사람이 화면에서 "이건 아니다"라고 지운 관계 하나를 없앤다.
+
+        **왜 별 메서드인가.** `apply_extraction`은 *한 소스가 주장하는 것 전체*를 원자적으로
+        교체하는 함수라, 다른 소스(어떤 대화)가 주장한 관계를 지우는 데는 쓸 수 없다.
+        그리고 사람의 취소는 어느 소스의 주장도 아니다 — 주장을 **무르는** 것이다.
+
+        **왜 즉시 지워도 되나(2026-09-03 사용자 확정 "내가 그래프창에 있으면 편집이라고
+        봐야지").** 그래프 쓰기가 사람의 행동에서 시작한다는 규칙은 그대로다. 모델이 이
+        경로를 부를 방법은 없다(API가 `_NOT_LLM_EXPOSED`이고 `athena_brain`에는 쓰기
+        액션이 없다 — `test_no_write_action_exists`). 수집 배치를 기다리게 하면 누른
+        직후 아무 일도 안 일어나 사람이 같은 카드를 반복해 누른다(실측).
+
+        **되살아나지 않는 이유.** 수집은 커서 방식이라(`IngestionCoordinator` — 어댑터마다
+        `fetch_after(cursor, …)`) 이미 읽은 대화를 다시 읽지 않는다. 다만 전체 재구성
+        (`reset_projection` + `reset_cursors`)을 하면 그 대화를 처음부터 다시 읽으므로
+        같은 관계가 돌아온다. 그때는 사람이 다시 지워야 한다 — 취소를 영구 기록으로
+        남기는 것은 별 이야기이고, 지금은 그 사실을 이 주석으로만 못박는다.
+
+        지운 관계를 돌려주고(없으면 None) `EDGE_REMOVED`를 이력에 남긴다 — "왜 이 관계가
+        사라졌지"를 나중에 답할 수 있어야 한다(`GraphEventOp` docstring과 같은 이유).
+        """
+        if not 1 <= len(relation_id) <= 128:
+            raise ValueError("relation id is out of bounds")
+
+        def write() -> RelationRow | None:
+            connection = self._require()
+            with atomic(connection, _GRAPH_WRITE):
+                row = connection.execute(
+                    "SELECT id, kind, source_entity_id, target_entity_id, confidence, tier,"
+                    " rationale, source_id, observed_at FROM relations WHERE id = ?",
+                    (relation_id,),
+                ).fetchone()
+                if row is None:
+                    return None
+                removed = RelationRow(
+                    id=str(row["id"]),
+                    kind=str(row["kind"]),
+                    source_entity_id=str(row["source_entity_id"]),
+                    target_entity_id=str(row["target_entity_id"]),
+                    confidence=str(row["confidence"]),
+                    tier=str(row["tier"]),
+                    rationale=row["rationale"],
+                    source_id=str(row["source_id"]),
+                    observed_at=str(row["observed_at"]),
+                )
+                revision = self._bump_revision(connection)
+                connection.execute("DELETE FROM relations WHERE id = ?", (relation_id,))
+                self._record_event(
+                    connection,
+                    revision=revision,
+                    op=GraphEventOp.EDGE_REMOVED,
+                    subject_id=removed.source_entity_id,
+                    object_id=removed.target_entity_id,
+                    relation=removed.kind,
+                    confidence_before=removed.confidence,
+                    source_id=removed.source_id,
+                )
+                return removed
+
+        return await self._owner.run(write)
+
     async def merge_entities(self, winner_id: str, loser_id: str) -> None:
         """진 엔티티를 승자에 접고, 그 관계를 승자로 옮긴다.
 

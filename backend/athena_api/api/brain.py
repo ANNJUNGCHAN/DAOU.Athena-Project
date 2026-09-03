@@ -371,6 +371,74 @@ async def retry_startup_brain_ingestion(
         )
 
 
+class RelationRetractRequest(BaseModel):
+    """사람이 화면에서 지운 관계 하나."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    relation_id: str = Field(min_length=1, max_length=128)
+
+
+class RelationRetractResponse(BaseModel):
+    """무엇을 지웠는지 그대로 돌려준다 — 화면이 "무엇이 사라졌다"를 말할 수 있어야 한다."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    removed: bool
+    revision: int
+    source_entity_id: str | None = None
+    target_entity_id: str | None = None
+    kind: str | None = None
+
+
+@router.post(
+    "/relations/retractions",
+    summary="관계 하나를 사람이 직접 지운다",
+    operation_id="retract_brain_relation",
+    response_model=RelationRetractResponse,
+    openapi_extra={
+        # 모델에게 노출하지 않는다. 그래프 쓰기가 사람의 행동에서 시작한다는 규칙은
+        # 그대로다 — 이 입구는 사람이 카드를 누른 결과로만 불린다. athena_brain에는
+        # 여전히 쓰기 액션이 없다(test_no_write_action_exists).
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "write",
+    },
+)
+async def retract_brain_relation(
+    payload: RelationRetractRequest,
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> RelationRetractResponse:
+    """확정 카드의 '적용'이 부르는 입구(2026-09-03 사용자 확정).
+
+    예전에는 카드가 답변 문장을 채팅으로만 보냈고, 그래프 반영은 다음 수집 배치가
+    했다. 그래서 누른 직후 아무 일도 안 일어나 사람이 같은 카드를 반복해 눌렀다.
+    수집(대화를 캐는 일)과 편집(주인이 화면에서 고치는 일)은 다른 일이고, 편집은
+    즉시 반영되어야 한다.
+    """
+    require_local_bearer(request, authorization)
+    store = _require_store(request)
+    removed = await store.retract_relation(payload.relation_id)
+    revision = await store.graph_revision()
+    if removed is None:
+        # 이미 없는 관계를 지우라고 한 것 — 오류가 아니다(사람이 두 번 눌렀거나
+        # 그사이 dedup이 합쳤을 수 있다). 아무것도 안 지웠다는 사실만 정직하게 말한다.
+        logger.info("brain relation retract miss relation_id=%s", payload.relation_id)
+        return RelationRetractResponse(removed=False, revision=revision)
+    logger.info(
+        "brain relation retract ok relation=%s tier=%s",
+        removed.kind,
+        removed.tier,
+    )
+    return RelationRetractResponse(
+        removed=True,
+        revision=revision,
+        source_entity_id=removed.source_entity_id,
+        target_entity_id=removed.target_entity_id,
+        kind=removed.kind,
+    )
+
+
 @router.post(
     "/ingestion/jobs",
     summary="브레인 수집 수동 실행",

@@ -770,3 +770,41 @@ async def test_entity_detail_bounds_are_clamped_not_trusted(store: GraphStore) -
         assert detail is not None
         assert len(detail.relations) == 1
         assert detail.events
+
+
+# ── 사람의 직접 취소(2026-09-03) ──────────────────────────────────────────────
+
+
+async def test_retract_relation_removes_it_and_logs_edge_removed(store: GraphStore) -> None:
+    """사람이 화면에서 지운 관계는 즉시 사라지고 이력에 남는다.
+
+    `apply_extraction`으로는 이것을 못 한다 — 그 함수는 *한 소스가 주장하는 것 전체*를
+    교체하므로, 어떤 대화가 주장한 관계를 사람이 무르는 일은 표현할 수 없다.
+    """
+    await store.upsert_source(source("s1"))
+    samsung = entity(EntityKind.SECURITY, "삼성전자")
+    await store.apply_extraction(
+        "s1", "fp", (PROFILE, samsung), (relation("interested_in", PROFILE, samsung, "s1"),)
+    )
+    [row] = await store.relations()
+    before_revision = await store.graph_revision()
+
+    removed = await store.retract_relation(row.id)
+
+    assert removed is not None
+    assert removed.kind == row.kind
+    assert removed.source_entity_id == row.source_entity_id
+    assert (await store.summary()).relations == 0
+    assert await store.graph_revision() > before_revision, "리비전이 올라야 화면이 다시 읽는다"
+    ops = [e.op for e in await store.events()]
+    assert ops.count(GraphEventOp.EDGE_REMOVED) == 1, "왜 사라졌는지 나중에 답할 수 있어야 한다"
+
+
+async def test_retract_relation_on_a_missing_id_is_not_an_error(store: GraphStore) -> None:
+    """이미 없는 것을 지우라고 하는 것은 오류가 아니다 — 두 번 눌렀을 수 있다."""
+    assert await store.retract_relation("relation:does-not-exist") is None
+
+
+async def test_retract_relation_rejects_an_out_of_bounds_id(store: GraphStore) -> None:
+    with pytest.raises(ValueError):
+        await store.retract_relation("")
