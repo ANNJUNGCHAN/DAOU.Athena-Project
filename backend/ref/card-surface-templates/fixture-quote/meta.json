@@ -1,0 +1,11 @@
+{
+  "board_id": "fixture-quote",
+  "name": "현재시세 · 픽스처",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 720,
+  "fixture": true,
+  "fixture_reason": "레인 A의 Paper 원문 추출(96장)이 도착하기 전, 빌드 스크립트·마운트·반응형 규칙을 고정하기 위한 1장. 실추출물이 들어오면 이 디렉터리는 삭제한다.",
+  "state": { "kind": "default", "parent_board": null, "control": null },
+  "operation_refs": ["base:ka10015"]
+}

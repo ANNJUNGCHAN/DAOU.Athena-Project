@@ -1,0 +1,11 @@
+{
+  "root": "1WOJ-1",
+  "regions": [
+    { "node_id": "1WSC-1", "name": "Frame (title · 조회시각)", "role": "header", "depth": 2 },
+    { "node_id": "1WS3-1", "name": "Frame (순매수·5거래일·코스피·통합시장 칩)", "role": "strip", "depth": 2 },
+    { "node_id": "1WP0-1", "name": "Frame", "role": "workspace", "depth": 2 },
+    { "node_id": "1WRQ-1", "name": "통합 순위 요약", "role": "rail", "depth": 3 },
+    { "node_id": "1WSN-1", "name": "목록 · 펼침 검증", "role": "primary", "depth": 3 },
+    { "node_id": "1WXX-1", "name": "목록 footer · 펼침", "role": "footer", "depth": 2 }
+  ]
+}

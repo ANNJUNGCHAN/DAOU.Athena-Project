@@ -1,0 +1,11 @@
+{
+  "root": "3LGE-0",
+  "regions": [
+    { "node_id": "3LQV-0", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "3LQA-0", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3LGI-0", "name": "Account Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3LGF-0", "name": "Account Status Footer", "role": "footer", "depth": 1 },
+    { "node_id": "3LVJ-0", "name": "거래내역 상세 본문", "role": "primary", "depth": 2 },
+    { "node_id": "3MMF-0", "name": "거래 상세 레일", "role": "rail", "depth": 2 }
+  ]
+}

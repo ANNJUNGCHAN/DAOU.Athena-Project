@@ -1,0 +1,938 @@
+{
+ "board_id": "2RWK-1",
+ "card_id": "CC-05",
+ "name": "CC-05 / R03-T4 · 수급 — 신용·대차",
+ "operation_refs": [
+  "base:ka10013",
+  "base:ka10014",
+  "base:ka10068",
+  "base:ka10069",
+  "base:ka20068",
+  "base:ka90008",
+  "base:ka90013"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10013",
+   "f": "crd_trde_trend",
+   "kor": "신용매매동향",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "신용·대차 일별 표(신용잔고율 열) 목록",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "일별 표 '일자' 열 08/29~08/25",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2YS8-0",
+   "where": "순위 표 '현재가' 열 150,850",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2YS8-0",
+   "where": "등락률 열의 ± 부호와 상승/하락색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2YS8-0",
+   "where": "종목 카드 '+1,850 · +1.24%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "board": "2YS8-0",
+   "where": "표 신설 '거래량' 열(1위 1,420만주 · 2.14조)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "new",
+   "kor": "신규",
+   "layer": "직접",
+   "board": "2YS8-0",
+   "where": "표 신설 '신규 / 상환' 셀 1번째 줄 '신규 42만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "rpya",
+   "kor": "상환",
+   "layer": "병기",
+   "board": "2YS8-0",
+   "where": "표 '신규 / 상환' 셀 2번째 줄 '상환 31만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "remn",
+   "kor": "잔고",
+   "layer": "직접",
+   "board": "2YS8-0",
+   "where": "표 '융자 잔고' 열 주수(1위 279만주, 아래 4,208억 병기)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "amt",
+   "kor": "금액",
+   "layer": null,
+   "board": "2YS8-0",
+   "where": "순위 표 '융자잔고' 열 4,208억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "pre",
+   "kor": "대비",
+   "layer": "병기",
+   "board": "2YS8-0",
+   "where": "표 '신용비율' 셀 2번째 줄 '전일 +0.4%p'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "shr_rt",
+   "kor": "공여율",
+   "layer": "직접",
+   "board": "2YS8-0",
+   "where": "표 신설 '공여율' 열(1위 2.14%)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "remn_rt",
+   "kor": "잔고율",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "KPI '신용잔고율 0.86%' 및 일별 표 신용잔고율 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "shrts_trnsn",
+   "kor": "공매도추이",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "일별 표 공매도량·공매도 비중 열 목록",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "일별 표 '일자' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "close_pric",
+   "kor": "종가",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 '종가' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "'등락' 열의 ± 부호와 상승/하락색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "종목 카드 '+1,850'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 '등락' 열 +1.24%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "board": "2RWK-1",
+   "where": "일별 표 신설 '거래량' 열(08/29 1,422만주 · 2.12조)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "shrts_qty",
+   "kor": "공매도량",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "일별 표 '공매도량' 열 486,210주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "ovr_shrts_qty",
+   "kor": "누적공매도량",
+   "layer": "병기",
+   "board": "2RWK-1",
+   "where": "공매도량 셀 2번째 줄 '누적 2,418만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "trde_wght",
+   "kor": "매매비중",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "KPI '공매도 비중 3.42%' 및 일별 표 공매도 비중 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "shrts_trde_prica",
+   "kor": "공매도거래대금",
+   "layer": "병기",
+   "board": "2RWK-1",
+   "where": "공매도량 셀 2번째 줄 '734억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "shrts_avg_pric",
+   "kor": "공매도평균가",
+   "layer": "직접",
+   "board": "2RWK-1",
+   "where": "일별 표 신설 '공매도 평균가' 열(08/29 150,980)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_trnsn",
+   "kor": "대차거래추이",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "신용·대차 일별 표 '대차잔고' 열 목록",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "일별 표 '일자' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_cntrcnt",
+   "kor": "대차거래체결주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '대차 체결 1,842만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_rpy",
+   "kor": "대차거래상환주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '대차 상환 1,214만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_irds",
+   "kor": "대차거래증감",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 상위 표 '증감' 열 +82만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "rmnd",
+   "kor": "잔고주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "KPI '대차잔고 1,284만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "remn_amt",
+   "kor": "잔고금액",
+   "layer": "병기",
+   "board": "2RWK-1",
+   "where": "일별 표 대차잔고 셀 2번째 줄 금액(08/29 1.94조)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_cntrcnt_sum",
+   "kor": "대차거래체결주수합",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 요약 '체결 1,842만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_rpy_sum",
+   "kor": "대차거래상환주수합",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 요약 '상환 1,214만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "rmnd_sum",
+   "kor": "잔고주수합",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '시장 대차잔고 6.42억주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "remn_amt_sum",
+   "kor": "잔고금액합",
+   "layer": "직접",
+   "board": "2ZBB-0",
+   "where": "레일 '대차 요약' 행 '상위 종목 잔고금액 합 84.2조'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_cntrcnt_rt",
+   "kor": "대차거래체결주수비율",
+   "layer": "병기",
+   "board": "2ZBB-0",
+   "where": "표 '대차 체결' 셀 2번째 줄 비율(1위 7.5%)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_rpy_rt",
+   "kor": "대차거래상환주수비율",
+   "layer": "병기",
+   "board": "2ZBB-0",
+   "where": "표 '대차 상환' 셀 2번째 줄 비율(1위 1.1%)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "rmnd_rt",
+   "kor": "잔고주수비율",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 상위 표 '잔고비중' 열 2.1%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "remn_amt_rt",
+   "kor": "잔고금액비율",
+   "layer": "병기",
+   "board": "2ZBB-0",
+   "where": "표 '잔고 비중' 셀 2번째 줄 '금액 2.3%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_upper_10stk",
+   "kor": "대차거래상위10종목",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 상위 순위 표 목록",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "표 '종목' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "종목 카드 '005930 · KOSPI'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_cntrcnt",
+   "kor": "대차거래체결주수",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "표 '체결' 열 96만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_rpy",
+   "kor": "대차거래상환주수",
+   "layer": "직접",
+   "board": "2ZBB-0",
+   "where": "표 신설 '대차 상환' 열(1위 14만주)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "rmnd",
+   "kor": "잔고주수",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "표 '대차잔고' 열 1,284만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "remn_amt",
+   "kor": "잔고금액",
+   "layer": "병기",
+   "board": "2ZBB-0",
+   "where": "표 '잔고' 셀 2번째 줄 금액(1위 1.94조)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_trnsn",
+   "kor": "대차거래추이",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "신용·대차 일별 표 '대차잔고' 열 목록",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "일별 표 '일자' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_cntrcnt",
+   "kor": "대차거래체결주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '대차 체결 1,842만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_rpy",
+   "kor": "대차거래상환주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '대차 상환 1,214만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_irds",
+   "kor": "대차거래증감",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 상위 표 '증감' 열 +82만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "rmnd",
+   "kor": "잔고주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "KPI '대차잔고 1,284만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "remn_amt",
+   "kor": "잔고금액",
+   "layer": "병기",
+   "board": "2RWK-1",
+   "where": "레일 '시장 대차잔고 6.42억주' 2번째 줄 '96.8조'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "stk_tm_prm_trde_trnsn",
+   "kor": "종목시간별프로그램매매추이",
+   "layer": null,
+   "board": "2ROJ-1",
+   "where": "프로그램 시간대별 표 목록",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "tm",
+   "kor": "시간",
+   "layer": null,
+   "board": "2ROJ-1",
+   "where": "시간대별 표 '시간대' 열 09:15~09:40",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "순위 표 '현재가' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "등락률 열의 ± 부호와 상승/하락색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "종목 카드 '+1,850'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "순위 표 '등락률' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "KPI 밴드 5칸 보조줄 '거래량 1,420만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_sell_amt",
+   "kor": "프로그램매도금액",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매도 열 2,968억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_buy_amt",
+   "kor": "프로그램매수금액",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매수 열 4,810억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_netprps_amt",
+   "kor": "프로그램순매수금액",
+   "layer": null,
+   "board": "2ROJ-1",
+   "where": "시간대별 표 '합계' 열 +298억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_netprps_amt_irds",
+   "kor": "프로그램순매수금액증감",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 증감 열 +298억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_sell_qty",
+   "kor": "프로그램매도수량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매도 셀 2번째 줄 196.9만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_buy_qty",
+   "kor": "프로그램매수수량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매수 셀 2번째 줄 319.0만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_netprps_qty",
+   "kor": "프로그램순매수수량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 순매수 셀 2번째 줄 122.1만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_netprps_qty_irds",
+   "kor": "프로그램순매수수량증감",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 증감 셀 2번째 줄 +19.8만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "base_pric_tm",
+   "kor": "기준가시간",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "시간대별 표 꼬리 상태 표기 '기준가 09:00:00'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "dbrt_trde_rpy_sum",
+   "kor": "대차거래상환주수합",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '대차 상환 1,214만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "remn_rcvord_sum",
+   "kor": "잔고수주합",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '시장 대차잔고 6.42억주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": null,
+   "board": "1WOB-1",
+   "where": "필터 칩 '통합시장'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "stk_daly_prm_trde_trnsn",
+   "kor": "종목일별프로그램매매추이",
+   "layer": null,
+   "board": "2ROJ-1",
+   "where": "'프로그램 일자별 추이' 카드 목록",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2ROJ-1",
+   "where": "'프로그램 일자별 추이' 09-01 등 일자",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "순위 표 '현재가' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "등락률 열의 ± 부호와 상승/하락색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "종목 카드 '+1,850'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "순위 표 '등락률' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "KPI 밴드 5칸 보조줄 '거래량 1,420만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_sell_amt",
+   "kor": "프로그램매도금액",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매도 열 2,968억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_buy_amt",
+   "kor": "프로그램매수금액",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매수 열 4,810억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_netprps_amt",
+   "kor": "프로그램순매수금액",
+   "layer": null,
+   "board": "2ROJ-1",
+   "where": "일자별 추이 '09-01 +1,842억'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_netprps_amt_irds",
+   "kor": "프로그램순매수금액증감",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 증감 열 +298억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_sell_qty",
+   "kor": "프로그램매도수량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매도 셀 2번째 줄 196.9만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_buy_qty",
+   "kor": "프로그램매수수량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매수 셀 2번째 줄 319.0만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_netprps_qty",
+   "kor": "프로그램순매수수량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 순매수 셀 2번째 줄 122.1만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_netprps_qty_irds",
+   "kor": "프로그램순매수수량증감",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 증감 셀 2번째 줄 +19.8만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "base_pric_tm",
+   "kor": "기준가시간",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "시간대별 표 꼬리 상태 표기 '기준가 09:00:00'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "dbrt_trde_rpy_sum",
+   "kor": "대차거래상환주수합",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '대차 상환 1,214만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "remn_rcvord_sum",
+   "kor": "잔고수주합",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '시장 대차잔고 6.42억주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": null,
+   "board": "1WOB-1",
+   "where": "필터 칩 '통합시장'",
+   "attributed_here": false,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 28
+}

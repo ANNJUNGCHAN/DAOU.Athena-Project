@@ -1826,6 +1826,172 @@
     return card;
   }
 
+  // ---------- Paper H-1 카드미니 96장(360×420) ----------
+  // surface_contract.kiumi가 있으면 canvas_type의 일반 축약 규칙보다 이 카드별
+  // 고정 선택을 우선한다. 선택은 질문과 무관하고 값만 현재 응답의 slot_values에서
+  // 읽는다. Paper의 예시 문자열은 buildKiumiPlan이 의도적으로 무시한다.
+  function orbKiumiSurfaceContract(envelope) {
+    return envelope && (envelope.surface_contract || envelope.surfaceContract);
+  }
+
+  function orbKiumiShell(plan, envelope) {
+    const card = document.createElement('div');
+    card.className = 'orb-kiumi-card';
+    card.dataset.kiumiGrammar = plan.grammar;
+    card.dataset.boardId = plan.boardId;
+
+    const head = document.createElement('div');
+    head.className = 'orb-kiumi-head';
+    const title = document.createElement('div');
+    title.className = 'orb-kiumi-title';
+    title.textContent = plan.title;
+    head.appendChild(title);
+
+    const caption = envelope && envelope.caption != null ? String(envelope.caption).trim() : '';
+    if (caption && caption !== plan.title) {
+      const meta = document.createElement('div');
+      meta.className = 'orb-kiumi-meta';
+      meta.textContent = caption;
+      head.appendChild(meta);
+    }
+    card.appendChild(head);
+    return card;
+  }
+
+  function orbKiumiValue(element) {
+    const value = document.createElement('div');
+    value.className = element.tone
+      ? `orb-kiumi-value is-${element.tone}`
+      : 'orb-kiumi-value';
+    if (element.missing) value.classList.add('is-missing');
+    value.textContent = element.text;
+    return value;
+  }
+
+  function orbKiumiRow(element) {
+    const row = document.createElement('div');
+    row.className = 'orb-kiumi-row';
+    const label = document.createElement('div');
+    label.className = 'orb-kiumi-label';
+    label.textContent = element.label;
+    row.append(label, orbKiumiValue(element));
+    return row;
+  }
+
+  function appendOrbKiumiChart(body, plan, envelope) {
+    const headline = document.createElement('div');
+    headline.className = 'orb-kiumi-chart-headline';
+    for (const element of plan.elements) {
+      const item = document.createElement('div');
+      item.className = `orb-kiumi-chart-value is-${element.role}`;
+      const label = document.createElement('span');
+      label.className = 'orb-kiumi-label';
+      label.textContent = element.label;
+      item.append(label, orbKiumiValue(element));
+      headline.appendChild(item);
+    }
+    body.appendChild(headline);
+
+    // 선은 응답에 실제 캔들이 두 개 이상 있을 때만 그린다. 고정 슬롯 선택과
+    // 별개로, 없는 시계열을 Paper 모양 때문에 만들어내지 않는다.
+    const chart = envelope && envelope.data && envelope.data.chart;
+    const candles = chart && Array.isArray(chart.candles) ? chart.candles : [];
+    const closes = candles.map((c) => c && c.close).filter((v) => Number.isFinite(v));
+    if (closes.length < 2) return;
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${ORB_CHART_WIDTH_PX} ${ORB_CHART_HEIGHT_PX}`);
+    svg.setAttribute('class', 'orb-kiumi-chart');
+    const points = cardPrimitives.chartLinePoints(closes, {
+      width: ORB_CHART_WIDTH_PX,
+      height: ORB_CHART_HEIGHT_PX,
+    });
+    const path = document.createElementNS(svgNS, 'path');
+    path.setAttribute('d', points.map((point, index) => (
+      `${index === 0 ? 'M' : 'L'}${point.x.toFixed(1)} ${point.y.toFixed(1)}`
+    )).join(' '));
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', 'var(--color-k-text)');
+    path.setAttribute('stroke-width', '1.6');
+    path.setAttribute('stroke-linejoin', 'round');
+    svg.appendChild(path);
+    body.appendChild(svg);
+
+    const firstTime = candles[0] && candles[0].time;
+    const lastTime = candles[candles.length - 1] && candles[candles.length - 1].time;
+    if (firstTime != null && lastTime != null) {
+      const dates = document.createElement('div');
+      dates.className = 'orb-kiumi-chart-dates';
+      const start = document.createElement('span');
+      start.textContent = orbChartDateLabel(firstTime);
+      const end = document.createElement('span');
+      end.textContent = orbChartDateLabel(lastTime);
+      dates.append(start, end);
+      body.appendChild(dates);
+    }
+  }
+
+  function buildOrbKiumiCard(envelope) {
+    const surfaceContract = orbKiumiSurfaceContract(envelope);
+    const plan = orbMiniCard.buildKiumiPlan(surfaceContract);
+    if (!plan) return null;
+
+    // 주문 기능은 기존 티켓의 계좌 게이트·상태기계·IPC를 그대로 사용한다.
+    if (plan.grammar === 'order_ticket') {
+      const ticket = renderOrbTicket(envelope);
+      ticket.classList.add('orb-kiumi-card', 'orb-kiumi-ticket');
+      ticket.dataset.kiumiGrammar = plan.grammar;
+      ticket.dataset.boardId = plan.boardId;
+      return ticket;
+    }
+
+    const card = orbKiumiShell(plan, envelope);
+    const body = document.createElement('div');
+    body.className = 'orb-kiumi-body';
+
+    if (plan.grammar === 'compound') {
+      const kpis = plan.elements.filter((element) => element.role === 'primary' || element.role === 'secondary');
+      const rows = plan.elements.filter((element) => !kpis.includes(element));
+      if (kpis.length) {
+        const grid = document.createElement('div');
+        grid.className = 'orb-kiumi-kpis';
+        for (const element of kpis) {
+          const cell = document.createElement('div');
+          cell.className = `orb-kiumi-kpi is-${element.role}`;
+          const label = document.createElement('div');
+          label.className = 'orb-kiumi-label';
+          label.textContent = element.label;
+          cell.append(label, orbKiumiValue(element));
+          grid.appendChild(cell);
+        }
+        body.appendChild(grid);
+      }
+      if (rows.length) {
+        const list = document.createElement('div');
+        list.className = 'orb-kiumi-list';
+        for (const element of rows) list.appendChild(orbKiumiRow(element));
+        body.appendChild(list);
+      }
+    } else if (plan.grammar === 'chart') {
+      appendOrbKiumiChart(body, plan, envelope);
+    } else {
+      const list = document.createElement('div');
+      list.className = 'orb-kiumi-list';
+      for (const element of plan.elements) list.appendChild(orbKiumiRow(element));
+      body.appendChild(list);
+    }
+
+    card.appendChild(body);
+    if (plan.foldNote) {
+      const note = document.createElement('div');
+      note.className = 'orb-kiumi-note';
+      note.textContent = plan.foldNote;
+      card.appendChild(note);
+    }
+    return card;
+  }
+
   // canvas.js의 addLiveCard와 같은 1차 게이트(성공/폴백만 카드, 나머지는 통과)를
   // 따른다 — 'pushed'는 main.js 9a 결정으로 애초에 relay되지 않는다. rejected/
   // error/unparseable은 카드 없이 기존 "전체는 대화창에서 이어집니다" 안내로
@@ -1835,6 +2001,8 @@
     if (!r || (r.status !== 'success' && r.status !== 'fallback')) return null;
     const envelope = r.envelope;
     if (!envelope || envelope.fell_back) return null;
+    const kiumiCard = buildOrbKiumiCard(envelope);
+    if (kiumiCard) return kiumiCard;
     switch (envelope.canvas_type) {
       case 'table': return buildOrbTableCard(envelope);
       case 'chart': return buildOrbChartCard(envelope);
@@ -1850,6 +2018,25 @@
       case 'stream': return buildOrbStreamCard(envelope);
       default: return null;
     }
+  }
+
+  // main의 canvas 이벤트 전송과 invoke 응답은 서로 다른 IPC 큐다. 응답이 먼저
+  // 도착해 구독을 바로 해제하면 끝부분 카드가 유실될 수 있으므로 main이 보고한
+  // 개수만큼 관찰할 때까지 짧게 큐를 비운다. 보통 1~2장은 첫 확인에서 끝난다.
+  function waitForOrbCanvasDrain(expected, received, timeoutMs = 1500) {
+    const target = Math.max(0, Number(expected) || 0);
+    if (received() >= target) return Promise.resolve();
+    return new Promise((resolve) => {
+      const deadline = performance.now() + timeoutMs;
+      const poll = () => {
+        if (received() >= target || performance.now() >= deadline) {
+          resolve();
+          return;
+        }
+        setTimeout(poll, 16);
+      };
+      poll();
+    });
   }
 
   async function submitChatQuery(rawText) {
@@ -1891,8 +2078,10 @@
     // 있다가 answer가 생기는 순간 이어붙인다.
     const pendingCanvasCards = [];
     const handledCanvasTypes = new Set();
+    let receivedCanvasResults = 0;
     const unsubCanvas = window.athena.on('athena:orb-canvas-result', (r) => {
       const rendererReceivedAt = performance.now();
+      if (r && r.envelope) receivedCanvasResults += 1;
       const el = buildOrbCanvasCard(r);
       if (!el || !r.envelope) return;
       handledCanvasTypes.add(r.envelope.canvas_type);
@@ -1970,17 +2159,21 @@
     } catch (err) {
       result = { ok: false, error: String((err && err.message) || err) };
     } finally {
-      unsubCanvas();
       unsubStep();
       unsubThinking();
       unsubDelta();
       clearThinkingPreview(); // 방어적 — 답변 조각 없이 턴이 끝나는 경로에서도 안 남는다
       thinking = false;
       resolveAmbientFace();
-      chatBusy = false;
-      syncInputLock();
-      setChatDot(null);
     }
+
+    const expectedCanvasResults = Number(result && result.canvasResultCount)
+      || ((result && result.canvasCaptions && result.canvasCaptions.length) || 0);
+    await waitForOrbCanvasDrain(expectedCanvasResults, () => receivedCanvasResults);
+    unsubCanvas();
+    chatBusy = false;
+    syncInputLock();
+    setChatDot(null);
 
     // 최종 텍스트는 응답값이 권위다(스트리밍 누적치가 아니다) — chat.js
     // runQueryLive와 같은 원칙(조각 유실·순서 어긋남에도 이 줄이 항상 이긴다).

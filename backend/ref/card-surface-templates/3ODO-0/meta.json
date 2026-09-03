@@ -1,0 +1,20 @@
+{
+  "board_id": "3ODO-0",
+  "name": "CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
+  "card_id": "CC-01",
+  "width": 1440,
+  "height": 1016,
+  "state": {
+    "kind": "expand",
+    "parent_board": "133H-2",
+    "control": null,
+    "control_text": "금현물"
+  },
+  "saved_at": "2026-09-02T10:58:00Z",
+  "operation_refs": [
+    "detail:kt50020:gold_account_summary",
+    "detail:kt50020:gold_holdings",
+    "detail:kt50032:account_identity",
+    "detail:kt50032:gold_trade_history"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "root": "3GRQ-0",
+  "regions": [
+    { "node_id": "3H27-0", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "3H1M-0", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3I7X-0", "name": "구간별 본문", "role": "workspace", "depth": 1 },
+    { "node_id": "3GRR-0", "name": "Account Status Footer", "role": "footer", "depth": 1 },
+    { "node_id": "3I7Y-0", "name": "증거금율 구간별 주문가능", "role": "other", "depth": 2 },
+    { "node_id": "3I8Q-0", "name": "구간별 재사용", "role": "primary", "depth": 3 },
+    { "node_id": "3IAO-0", "name": "보증금율 구간별", "role": "rail", "depth": 3 }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "root": "1JPV-0",
+  "regions": [
+    { "node_id": "1JPX-0", "name": "상단 제목·모드·연결", "role": "header", "depth": 1 },
+    { "node_id": "1JQ1-0", "name": "호가 모드 탭", "role": "strip", "depth": 2 },
+    { "node_id": "1JQE-0", "name": "호가 본문 3열", "role": "workspace", "depth": 1 },
+    { "node_id": "1JQF-0", "name": "최근 체결·체결강도", "role": "other", "depth": 2 },
+    { "node_id": "1JQG-0", "name": "10단 호가 래더", "role": "primary", "depth": 2 },
+    { "node_id": "1JQH-0", "name": "시장 맥락·통계", "role": "rail", "depth": 2 },
+    { "node_id": "1JZR-0", "name": "호가 하단 상태바", "role": "footer", "depth": 1 }
+  ]
+}

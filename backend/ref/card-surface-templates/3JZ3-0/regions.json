@@ -1,0 +1,12 @@
+{
+  "root": "3JZ5-0",
+  "regions": [
+    { "node_id": "3K70-0", "name": "Order Book Header", "role": "header", "depth": 1 },
+    { "node_id": "3K71-0", "name": "Frame (탭 스트립)", "role": "strip", "depth": 2 },
+    { "node_id": "3K65-0", "name": "Best Quote Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3JZF-0", "name": "Order Book Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3KFV-0", "name": "Step Detail Table", "role": "primary", "depth": 2 },
+    { "node_id": "3LSJ-0", "name": "Detail Rail", "role": "rail", "depth": 2 },
+    { "node_id": "3LUY-0", "name": "Order Book Footer", "role": "footer", "depth": 1 }
+  ]
+}

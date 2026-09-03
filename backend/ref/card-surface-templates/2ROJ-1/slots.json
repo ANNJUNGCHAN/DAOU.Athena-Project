@@ -1,0 +1,6307 @@
+{
+  "board_id": "2ROJ-1",
+  "card_id": "CC-05",
+  "name": "CC-05 / R03-T3 · 수급 — 프로그램",
+  "paper_source": {
+    "saved_at": "2026-09-02T11:20:05Z",
+    "node_id": "2ROK-1",
+    "jsx_sha256": "7127c624200a93af86f7b3aea6e0b06ebcce90f01fc9181ebf14e376cb710d5b"
+  },
+  "html_sha256": "e956666fc62235e0de5b33fd4acde5106ced57bf59bd0c2c67c3695baf4e3a0d",
+  "width_px": 1360.0,
+  "height_px": 934.0,
+  "artboard_px": [
+    1440,
+    1014
+  ],
+  "operation_refs": [
+    "base:0w",
+    "base:ka90005",
+    "base:ka90006",
+    "base:ka90007",
+    "base:ka90008",
+    "base:ka90010",
+    "base:ka90013"
+  ],
+  "state": {
+    "kind": "tab",
+    "parent_board": "2QFO-2",
+    "control": "프로그램",
+    "control_text": null
+  },
+  "regions": {
+    "2RU9-1": "header",
+    "2RUA-1": "strip",
+    "2RTM-1": "kpi",
+    "2ROQ-1": "workspace",
+    "2RQD-1": "primary",
+    "2ROR-1": "rail",
+    "2ROL-1": "footer"
+  },
+  "tables": [
+    {
+      "node_id": "33JM-0",
+      "node_name": "구분 표",
+      "columns": 6,
+      "header_row": "33JN-0",
+      "body_rows": [
+        "33JV-0",
+        "33KB-0"
+      ],
+      "foot_rows": [
+        "33KQ-0"
+      ],
+      "source": "heuristic",
+      "column_labels": [
+        "구분",
+        "매도",
+        "매수",
+        "순매수",
+        "증감",
+        "비중"
+      ]
+    }
+  ],
+  "counts": {
+    "elements": 276,
+    "text_nodes": 179,
+    "slots": 179,
+    "anchored_slots": 0,
+    "mapped_slots": 103,
+    "labels": 61,
+    "values": 118,
+    "layer_직접": 178,
+    "layer_병기": 1,
+    "layer_펼침": 0,
+    "tables": 1,
+    "tree_text_truncated": 0,
+    "bs_col": 16,
+    "bs_paired": 25,
+    "bs_leaf": 1,
+    "bs_kpi_cell": 5,
+    "state_control_marks": 0
+  },
+  "density": {
+    "table_columns": 6,
+    "rows_max": 2,
+    "kpi_cells": 5,
+    "rail_blocks": 4,
+    "rail_rows_max": 5
+  },
+  "state_controls": {
+    "marks": [],
+    "unresolved": []
+  },
+  "text_multiset": {
+    "+0.36": 1,
+    "+0.42": 1,
+    "+0.49": 1,
+    "+0.51": 1,
+    "+0.55": 1,
+    "+0.58": 1,
+    "+1,120억원": 1,
+    "+1,430억원": 1,
+    "+1,798억원": 2,
+    "+1,842억원": 1,
+    "+10.5만주": 1,
+    "+102억원": 1,
+    "+124억원": 1,
+    "+132억원": 1,
+    "+146억원": 1,
+    "+158억원": 1,
+    "+18.0만주": 1,
+    "+188억원": 1,
+    "+212억원": 1,
+    "+23.6만주": 1,
+    "+254억원": 1,
+    "+26.1만주": 1,
+    "+26억원": 1,
+    "+272억원": 1,
+    "+296억원": 1,
+    "+308억원": 1,
+    "+31.3만주": 1,
+    "+348억원": 1,
+    "+356억원": 1,
+    "+368억원": 2,
+    "+386억원": 1,
+    "+394억원": 1,
+    "+472억원": 1,
+    "+498억원": 1,
+    "+516억원": 1,
+    "+60억원": 1,
+    "+842억원": 1,
+    "+9.7만주": 1,
+    "+980억원": 1,
+    "+98억원": 1,
+    "-1,204억원": 1,
+    "-112억원": 1,
+    "-122억원": 1,
+    "-13.1만주": 1,
+    "-198억원": 1,
+    "-312억원": 1,
+    "-340억원": 1,
+    "-428억원": 1,
+    "-42억원": 1,
+    "-5.0만주": 1,
+    "-604억원": 1,
+    "-638억원": 1,
+    "-76억원": 1,
+    "-8.1만주": 1,
+    "0.86%": 1,
+    "005930 · KOSPI · 장중": 1,
+    "08-27": 1,
+    "08-28": 1,
+    "08-31": 1,
+    "09-01": 1,
+    "09-01 기준": 1,
+    "09:15": 1,
+    "09:20": 1,
+    "09:25": 1,
+    "09:30": 1,
+    "09:35": 1,
+    "09:40": 1,
+    "1,240억원": 1,
+    "1,284만주": 1,
+    "100.0%": 1,
+    "119.2만주": 1,
+    "12,480억원": 1,
+    "142.0만주": 1,
+    "199.8만주": 1,
+    "2,140억원": 1,
+    "2.14조원": 1,
+    "20.5%": 1,
+    "236.8만주": 1,
+    "24.4만주": 1,
+    "25.5만주 · 전일대비": 1,
+    "3,012억원": 1,
+    "3,570억원": 1,
+    "3,840억원": 1,
+    "3.42%": 1,
+    "319.0만주": 1,
+    "4,208억원": 1,
+    "4,810억원": 1,
+    "412.74": 1,
+    "412.86": 1,
+    "413.02": 1,
+    "413.10": 1,
+    "413.18": 1,
+    "413.24": 1,
+    "4거래일 연속 순매도": 1,
+    "57.8만주": 1,
+    "5거래일 연속 순매수 · 09:40 기준": 1,
+    "5분 집계 6구간 표시 · 증감 직전 구간 대비 · 09:40 기준": 1,
+    "79.5%": 1,
+    "8,640억원": 1,
+    "82.2만주": 1,
+    "82.7만주 · 전일대비": 1,
+    "872억원": 1,
+    "94.8만주": 1,
+    "CS증권": 1,
+    "JP모간": 1,
+    "KOSDAQ": 1,
+    "KOSPI": 1,
+    "KOSPI200": 1,
+    "· 실시간 005930": 1,
+    "개인": 1,
+    "거래대금": 1,
+    "거래량 1,420만주 · 체결강도 108.4": 1,
+    "거래원": 2,
+    "공매도 비중": 1,
+    "구분": 1,
+    "금융투자 -842억원": 1,
+    "기관": 1,
+    "대차잔고": 1,
+    "더보기": 1,
+    "매도": 1,
+    "매도 상위": 1,
+    "매도차익": 1,
+    "매수": 1,
+    "매수 상위": 1,
+    "매수 우위": 6,
+    "매수차익": 1,
+    "모건스탠리": 1,
+    "미래에셋": 1,
+    "방향": 1,
+    "베이시스": 1,
+    "비중": 1,
+    "비차익": 2,
+    "비차익 +1,430억원": 1,
+    "삼성전자 수급": 1,
+    "삼성증권": 1,
+    "수급 전체 항목 보기": 1,
+    "순매수": 1,
+    "순위": 1,
+    "시간대": 1,
+    "신용·대차": 1,
+    "신용·대차·공매도": 1,
+    "신용융자 잔고": 1,
+    "신용잔고율": 1,
+    "실시간": 1,
+    "오늘 상위 5": 1,
+    "오늘 순매수 1위": 1,
+    "외국인": 1,
+    "잔고": 1,
+    "장중 · 프로그램 차익·비차익 집계 갱신 중": 1,
+    "전일 종가 기준": 1,
+    "전일대비": 1,
+    "종목 동향": 1,
+    "증감": 1,
+    "차익": 2,
+    "차익 +1,832억원 · 비차익 +3,548억원": 1,
+    "차익 +1,948억원 · 비차익 +3,772억원": 1,
+    "차익 +2,214억원 · 비차익 +4,286억원": 1,
+    "차익 +2,582억원 · 비차익 +5,716억원": 1,
+    "차익·비차익 · 5분 단위": 1,
+    "차익잔고 · 미결제": 1,
+    "최근 4거래일 · 누적 연초 기준": 1,
+    "키움증권": 1,
+    "투자자별": 1,
+    "프로그램": 1,
+    "프로그램 매매": 1,
+    "프로그램 일자별 추이": 1,
+    "프로그램 차익": 1,
+    "합계": 2
+  },
+  "column_priority": [
+    "구분",
+    "매도",
+    "매수",
+    "순매수",
+    "증감",
+    "비중",
+    "시간대",
+    "차익",
+    "비차익",
+    "합계",
+    "KOSPI200",
+    "베이시스",
+    "방향"
+  ],
+  "column_bindings": [
+    {
+      "table_id": "33JM-0",
+      "columns": [
+        {
+          "col": 1,
+          "data_col": 0,
+          "header": "구분",
+          "slot_ids": [
+            "s036",
+            "s046",
+            "s056"
+          ],
+          "kind": "static",
+          "static_reason": "행 구분(차익·비차익·합계) 문구 — 응답 필드가 아니다"
+        },
+        {
+          "col": 2,
+          "data_col": 1,
+          "header": "매도",
+          "slot_ids": [
+            "s037",
+            "s038",
+            "s047",
+            "s048",
+            "s057",
+            "s058"
+          ],
+          "mapping_id": "base:ka90005",
+          "f": "all_sel",
+          "note": "열 전체(전체매도) 기준 — 행마다 ka90005 차익·비차익 매도, 합계 base:0w(204 금액·202 수량)",
+          "kor": "전체매도"
+        },
+        {
+          "col": 3,
+          "data_col": 2,
+          "header": "매수",
+          "slot_ids": [
+            "s039",
+            "s040",
+            "s049",
+            "s050",
+            "s059",
+            "s060"
+          ],
+          "mapping_id": "base:ka90005",
+          "f": "all_buy",
+          "note": "열 전체(전체매수) 기준 — 행마다 ka90005 차익·비차익 매수, 합계 base:0w(208 금액·206 수량)",
+          "kor": "전체매수"
+        },
+        {
+          "col": 4,
+          "data_col": 3,
+          "header": "순매수",
+          "slot_ids": [
+            "s041",
+            "s042",
+            "s051",
+            "s052",
+            "s061",
+            "s062"
+          ],
+          "mapping_id": "base:ka90005",
+          "f": "all_netprps",
+          "note": "열 전체(전체순매수) 기준 — 행마다 ka90005 차익·비차익 순매수, 합계 base:0w(212 금액·210 수량)",
+          "kor": "전체순매수"
+        },
+        {
+          "col": 5,
+          "data_col": 4,
+          "header": "증감",
+          "slot_ids": [
+            "s043",
+            "s044",
+            "s053",
+            "s054",
+            "s063",
+            "s064"
+          ],
+          "mapping_id": "base:ka90008",
+          "f": "prm_netprps_amt_irds",
+          "note": "합계 행만 필드가 있다(base:0w 213 금액·211 수량) — 차익·비차익 증감은 프로그램 응답에 없다",
+          "kor": "프로그램순매수금액증감"
+        },
+        {
+          "col": 6,
+          "data_col": 5,
+          "header": "비중",
+          "slot_ids": [
+            "s045",
+            "s055",
+            "s065"
+          ],
+          "kind": "static",
+          "static_reason": "구분별 비중 — 프로그램 응답에 비중 필드가 없다(합계에서 계산)"
+        }
+      ]
+    }
+  ],
+  "section_titles_ko": {
+    "2RU9-1": "수급 헤더",
+    "2RUA-1": "수급 화면 전환",
+    "2RTM-1": "수급 요약 밴드",
+    "2ROQ-1": "수급 작업 영역",
+    "2RQD-1": "프로그램 매매",
+    "336H-0": "시장 선택",
+    "33JM-0": "차익·비차익 구분 표",
+    "33RX-0": "시간대별 표 머리",
+    "2ROR-1": "종목 수급 레일",
+    "2RPL-1": "거래원 상위",
+    "2RP5-1": "신용·대차·공매도",
+    "3DV4-0": "프로그램 일자별 추이",
+    "3DWA-0": "차익잔고 · 미결제",
+    "2ROL-1": "수급 상태 줄"
+  },
+  "primary": {
+    "renderer": null,
+    "mount_slot": null,
+    "module": null,
+    "props_from": null
+  },
+  "slots": [
+    {
+      "slot_id": "s001",
+      "node_id": "2RUR-1",
+      "node_name": "삼성전자 수급",
+      "node_path": "0/0/0/0",
+      "paper_text": "삼성전자 수급",
+      "region": "header",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s002",
+      "node_id": "2RUP-1",
+      "node_name": "실시간",
+      "node_path": "0/0/0/1/1",
+      "paper_text": "실시간",
+      "region": "header",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s003",
+      "node_id": "2RUM-1",
+      "node_name": "005930 · KOSPI · 장중",
+      "node_path": "0/0/1",
+      "paper_text": "005930 · KOSPI · 장중",
+      "region": "header",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10052",
+      "f": "stk_cd",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:0w",
+          "f": "214",
+          "kor": "장시작예상잔여시간"
+        }
+      ],
+      "kor": "종목코드",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QFO-2 보드 몫 필드의 재표시",
+      "display_dup": true,
+      "extra_fields": [
+        {
+          "mapping_id": "base:0w",
+          "f": "215",
+          "kor": "장운영구분",
+          "sep": " · "
+        }
+      ],
+      "note": "헤더 부제의 장 상태 토큰 — 장운영구분과 개장 잔여가 한 자리를 나눠 쓴다(장중이면 잔여 없음)"
+    },
+    {
+      "slot_id": "s004",
+      "node_id": "2RUK-1",
+      "node_name": "투자자별",
+      "node_path": "0/1/0/0",
+      "paper_text": "투자자별",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s005",
+      "node_id": "2RUI-1",
+      "node_name": "거래원",
+      "node_path": "0/1/1/0",
+      "paper_text": "거래원",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s006",
+      "node_id": "2RUG-1",
+      "node_name": "프로그램",
+      "node_path": "0/1/2/0",
+      "paper_text": "프로그램",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s007",
+      "node_id": "2RUE-1",
+      "node_name": "신용·대차",
+      "node_path": "0/1/3/0",
+      "paper_text": "신용·대차",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s008",
+      "node_id": "2RUC-1",
+      "node_name": "종목 동향",
+      "node_path": "0/1/4/0",
+      "paper_text": "종목 동향",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s009",
+      "node_id": "2WFT-0",
+      "node_name": "순위",
+      "node_path": "0/1/5/0",
+      "paper_text": "순위",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s010",
+      "node_id": "2RU8-1",
+      "node_name": "오늘 순매수 1위",
+      "node_path": "1/0/0",
+      "paper_text": "오늘 순매수 1위",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "히어로 칸 제목 — 응답 필드가 아니다"
+    },
+    {
+      "slot_id": "s011",
+      "node_id": "2RU7-1",
+      "node_name": "외국인",
+      "node_path": "1/0/1/0",
+      "paper_text": "외국인",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 34.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s012",
+      "node_id": "2RU6-1",
+      "node_name": "+1,842억원",
+      "node_path": "1/0/1/1",
+      "paper_text": "+1,842억원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 34.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10059",
+      "f": "frgnr_invsr",
+      "alt_mappings": null,
+      "kor": "외국인투자자",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QFO-2 보드 몫 필드의 재표시",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s013",
+      "node_id": "2RU4-1",
+      "node_name": "5거래일 연속 순매수 · 09:40 기준",
+      "node_path": "1/0/2",
+      "paper_text": "5거래일 연속 순매수 · 09:40 기준",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "연속 순매수 일수·집계 시각 — 투자자 응답에 연속일·집계시각 필드가 없다"
+    },
+    {
+      "slot_id": "s014",
+      "node_id": "2RU2-1",
+      "node_name": "기관",
+      "node_path": "1/1/0",
+      "paper_text": "기관",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s015",
+      "node_id": "2RU1-1",
+      "node_name": "-1,204억원",
+      "node_path": "1/1/1",
+      "paper_text": "-1,204억원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 20.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10059",
+      "f": "orgn",
+      "alt_mappings": null,
+      "kor": "기관계",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QFO-2 보드 몫 필드의 재표시",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s016",
+      "node_id": "2RU0-1",
+      "node_name": "금융투자 -842억원",
+      "node_path": "1/1/2",
+      "paper_text": "금융투자 -842억원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10059",
+      "f": "fnnc_invt",
+      "alt_mappings": null,
+      "kor": "금융투자",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QFO-2 보드 몫 필드의 재표시",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s017",
+      "node_id": "2RTY-1",
+      "node_name": "개인",
+      "node_path": "1/2/0",
+      "paper_text": "개인",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s018",
+      "node_id": "2RTX-1",
+      "node_name": "-638억원",
+      "node_path": "1/2/1",
+      "paper_text": "-638억원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 20.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10059",
+      "f": "ind_invsr",
+      "alt_mappings": null,
+      "kor": "개인투자자",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QFO-2 보드 몫 필드의 재표시",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s019",
+      "node_id": "2RTW-1",
+      "node_name": "4거래일 연속 순매도",
+      "node_path": "1/2/2",
+      "paper_text": "4거래일 연속 순매도",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "연속 순매도 일수 — 투자자 응답에 연속일 필드가 없다"
+    },
+    {
+      "slot_id": "s020",
+      "node_id": "2RTU-1",
+      "node_name": "프로그램 차익",
+      "node_path": "1/3/0",
+      "paper_text": "프로그램 차익",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s021",
+      "node_id": "2RTT-1",
+      "node_name": "+368억원",
+      "node_path": "1/3/1",
+      "paper_text": "+368억원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 20.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "dfrt_trde_tdy",
+      "alt_mappings": null,
+      "kor": "차익거래당일",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s022",
+      "node_id": "2RTS-1",
+      "node_name": "비차익 +1,430억원",
+      "node_path": "1/3/2",
+      "paper_text": "비차익 +1,430억원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "ndiffpro_trde_tdy",
+      "alt_mappings": null,
+      "kor": "비차익거래당일",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s023",
+      "node_id": "2RTQ-1",
+      "node_name": "거래대금",
+      "node_path": "1/4/0",
+      "paper_text": "거래대금",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s024",
+      "node_id": "2RTP-1",
+      "node_name": "2.14조원",
+      "node_path": "1/4/1",
+      "paper_text": "2.14조원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 20.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10037",
+      "f": "trde_prica",
+      "alt_mappings": null,
+      "kor": "거래대금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QFO-2 보드 몫 필드의 재표시",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s025",
+      "node_id": "2RTO-1",
+      "node_name": "거래량 1,420만주 · 체결강도 108.4",
+      "node_path": "1/4/2",
+      "paper_text": "거래량 1,420만주 · 체결강도 108.4",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "trde_qty",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:0w",
+          "f": "13",
+          "kor": "누적거래량"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "trde_qty",
+          "kor": "거래량"
+        }
+      ],
+      "kor": "거래량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s024",
+      "collapse_group": null,
+      "expanded_board": null,
+      "note": "꼬리 체결강도 108.4는 프로그램 응답에 대응 필드가 없다",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90013",
+          "f": "trde_qty",
+          "kor": "거래량"
+        },
+        {
+          "mapping_id": "base:0w",
+          "f": "13",
+          "kor": "누적거래량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s026",
+      "node_id": "336G-0",
+      "node_name": "프로그램 매매",
+      "node_path": "2/0/0/0/0",
+      "paper_text": "프로그램 매매",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 15.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s027",
+      "node_id": "336J-0",
+      "node_name": "KOSPI",
+      "node_path": "2/0/0/0/1/0/0",
+      "paper_text": "KOSPI",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s028",
+      "node_id": "336L-0",
+      "node_name": "KOSDAQ",
+      "node_path": "2/0/0/0/1/1/0",
+      "paper_text": "KOSDAQ",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s029",
+      "node_id": "336M-0",
+      "node_name": "차익·비차익 · 5분 단위",
+      "node_path": "2/0/0/1",
+      "paper_text": "차익·비차익 · 5분 단위",
+      "region": "primary",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "집계 대상·주기 표기 — 요청 조건의 되비침이라 응답 필드가 아니다"
+    },
+    {
+      "slot_id": "s030",
+      "node_id": "33JO-0",
+      "node_name": "구분",
+      "node_path": "2/0/1/0/0",
+      "paper_text": "구분",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "head",
+        "col": 0
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s031",
+      "node_id": "33JP-0",
+      "node_name": "매도",
+      "node_path": "2/0/1/0/1",
+      "paper_text": "매도",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "head",
+        "col": 1
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s032",
+      "node_id": "33JQ-0",
+      "node_name": "매수",
+      "node_path": "2/0/1/0/2",
+      "paper_text": "매수",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "head",
+        "col": 2
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s033",
+      "node_id": "33JR-0",
+      "node_name": "순매수",
+      "node_path": "2/0/1/0/3",
+      "paper_text": "순매수",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "head",
+        "col": 3
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s034",
+      "node_id": "33JS-0",
+      "node_name": "증감",
+      "node_path": "2/0/1/0/4",
+      "paper_text": "증감",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "head",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s035",
+      "node_id": "33JT-0",
+      "node_name": "비중",
+      "node_path": "2/0/1/0/5",
+      "paper_text": "비중",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "head",
+        "col": 5
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s036",
+      "node_id": "33JW-0",
+      "node_name": "차익",
+      "node_path": "2/0/1/1/0",
+      "paper_text": "차익",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "0",
+        "col": 0
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s037",
+      "node_id": "33JY-0",
+      "node_name": "872억원",
+      "node_path": "2/0/1/1/1/0",
+      "paper_text": "872억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "0",
+        "col": 1
+      },
+      "mapping_id": "base:ka90005",
+      "f": "dfrt_trde_sel",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "dfrt_trde_sel",
+          "kor": "차익거래매도"
+        }
+      ],
+      "kor": "차익거래매도",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "dfrt_trde_sel",
+          "kor": "차익거래매도"
+        }
+      ]
+    },
+    {
+      "slot_id": "s038",
+      "node_id": "33JZ-0",
+      "node_name": "57.8만주",
+      "node_path": "2/0/1/1/1/1",
+      "paper_text": "57.8만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "0",
+        "col": 1
+      },
+      "mapping_id": "base:ka90005",
+      "f": "dfrt_trde_sell_qty",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "dfrt_trde_sell_qty",
+          "kor": "차익거래매도수량"
+        }
+      ],
+      "kor": "차익거래매도수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s037",
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "dfrt_trde_sell_qty",
+          "kor": "차익거래매도수량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s039",
+      "node_id": "33K1-0",
+      "node_name": "1,240억원",
+      "node_path": "2/0/1/1/2/0",
+      "paper_text": "1,240억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "0",
+        "col": 2
+      },
+      "mapping_id": "base:ka90005",
+      "f": "dfrt_trde_buy",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "dfrt_trde_buy",
+          "kor": "차익거래매수"
+        }
+      ],
+      "kor": "차익거래매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "dfrt_trde_buy",
+          "kor": "차익거래매수"
+        }
+      ]
+    },
+    {
+      "slot_id": "s040",
+      "node_id": "33K2-0",
+      "node_name": "82.2만주",
+      "node_path": "2/0/1/1/2/1",
+      "paper_text": "82.2만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "0",
+        "col": 2
+      },
+      "mapping_id": "base:ka90005",
+      "f": "dfrt_trde_buy_qty",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "dfrt_trde_buy_qty",
+          "kor": "차익거래매수수량"
+        }
+      ],
+      "kor": "차익거래매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s039",
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "dfrt_trde_buy_qty",
+          "kor": "차익거래매수수량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s041",
+      "node_id": "33K4-0",
+      "node_name": "+368억원",
+      "node_path": "2/0/1/1/3/0",
+      "paper_text": "+368억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "0",
+        "col": 3
+      },
+      "mapping_id": "base:ka90005",
+      "f": "dfrt_trde_netprps",
+      "alt_mappings": null,
+      "kor": "차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "dfrt_trde_netprps",
+          "kor": "차익거래순매수"
+        }
+      ]
+    },
+    {
+      "slot_id": "s042",
+      "node_id": "33K5-0",
+      "node_name": "24.4만주",
+      "node_path": "2/0/1/1/3/1",
+      "paper_text": "24.4만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "0",
+        "col": 3
+      },
+      "mapping_id": "base:ka90005",
+      "f": "dfrt_trde_netprps_qty",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "dfrt_trde_netprps_qty",
+          "kor": "차익거래순매수수량"
+        }
+      ],
+      "kor": "차익거래순매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s041",
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "dfrt_trde_netprps_qty",
+          "kor": "차익거래순매수수량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s043",
+      "node_id": "33K7-0",
+      "node_name": "-76억원",
+      "node_path": "2/0/1/1/4/0",
+      "paper_text": "-76억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "0",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "구분별 증감 — 프로그램 응답은 합계 증감(순매수금액증감)만 준다"
+    },
+    {
+      "slot_id": "s044",
+      "node_id": "33K8-0",
+      "node_name": "-5.0만주",
+      "node_path": "2/0/1/1/4/1",
+      "paper_text": "-5.0만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "0",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "shares",
+        "sign": true,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "구분별 증감 수량 — 프로그램 응답은 합계 증감만 준다"
+    },
+    {
+      "slot_id": "s045",
+      "node_id": "33K9-0",
+      "node_name": "20.5%",
+      "node_path": "2/0/1/1/5",
+      "paper_text": "20.5%",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "0",
+        "col": 5
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "구분별 비중 — 프로그램 응답에 비중 필드가 없다(합계에서 계산)"
+    },
+    {
+      "slot_id": "s046",
+      "node_id": "33KP-0",
+      "node_name": "비차익",
+      "node_path": "2/0/1/2/0",
+      "paper_text": "비차익",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "1",
+        "col": 0
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s047",
+      "node_id": "33KO-0",
+      "node_name": "2,140억원",
+      "node_path": "2/0/1/2/1/0",
+      "paper_text": "2,140억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "1",
+        "col": 1
+      },
+      "mapping_id": "base:ka90005",
+      "f": "ndiffpro_trde_sel",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "ndiffpro_trde_sel",
+          "kor": "비차익거래매도"
+        }
+      ],
+      "kor": "비차익거래매도",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "ndiffpro_trde_sel",
+          "kor": "비차익거래매도"
+        }
+      ]
+    },
+    {
+      "slot_id": "s048",
+      "node_id": "33KN-0",
+      "node_name": "142.0만주",
+      "node_path": "2/0/1/2/1/1",
+      "paper_text": "142.0만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "1",
+        "col": 1
+      },
+      "mapping_id": "base:ka90005",
+      "f": "ndiffpro_trde_sell_qty",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "ndiffpro_trde_sell_qty",
+          "kor": "비차익거래매도수량"
+        }
+      ],
+      "kor": "비차익거래매도수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s047",
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "ndiffpro_trde_sell_qty",
+          "kor": "비차익거래매도수량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s049",
+      "node_id": "33KL-0",
+      "node_name": "3,570억원",
+      "node_path": "2/0/1/2/2/0",
+      "paper_text": "3,570억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "1",
+        "col": 2
+      },
+      "mapping_id": "base:ka90005",
+      "f": "ndiffpro_trde_buy",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "ndiffpro_trde_buy",
+          "kor": "비차익거래매수"
+        }
+      ],
+      "kor": "비차익거래매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "ndiffpro_trde_buy",
+          "kor": "비차익거래매수"
+        }
+      ]
+    },
+    {
+      "slot_id": "s050",
+      "node_id": "33KK-0",
+      "node_name": "236.8만주",
+      "node_path": "2/0/1/2/2/1",
+      "paper_text": "236.8만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "1",
+        "col": 2
+      },
+      "mapping_id": "base:ka90005",
+      "f": "ndiffpro_trde_buy_qty",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "ndiffpro_trde_buy_qty",
+          "kor": "비차익거래매수수량"
+        }
+      ],
+      "kor": "비차익거래매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s049",
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "ndiffpro_trde_buy_qty",
+          "kor": "비차익거래매수수량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s051",
+      "node_id": "33KI-0",
+      "node_name": "+1,430억원",
+      "node_path": "2/0/1/2/3/0",
+      "paper_text": "+1,430억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "1",
+        "col": 3
+      },
+      "mapping_id": "base:ka90005",
+      "f": "ndiffpro_trde_netprps",
+      "alt_mappings": null,
+      "kor": "비차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "ndiffpro_trde_netprps",
+          "kor": "비차익거래순매수"
+        }
+      ]
+    },
+    {
+      "slot_id": "s052",
+      "node_id": "33KH-0",
+      "node_name": "94.8만주",
+      "node_path": "2/0/1/2/3/1",
+      "paper_text": "94.8만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "1",
+        "col": 3
+      },
+      "mapping_id": "base:ka90005",
+      "f": "ndiffpro_trde_netprps_qty",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "ndiffpro_trde_netprps_qty",
+          "kor": "비차익거래순매수수량"
+        }
+      ],
+      "kor": "비차익거래순매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s051",
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90010",
+          "f": "ndiffpro_trde_netprps_qty",
+          "kor": "비차익거래순매수수량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s053",
+      "node_id": "33KF-0",
+      "node_name": "-122억원",
+      "node_path": "2/0/1/2/4/0",
+      "paper_text": "-122억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "1",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "구분별 증감 — 프로그램 응답은 합계 증감(순매수금액증감)만 준다"
+    },
+    {
+      "slot_id": "s054",
+      "node_id": "33KE-0",
+      "node_name": "-8.1만주",
+      "node_path": "2/0/1/2/4/1",
+      "paper_text": "-8.1만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "1",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "shares",
+        "sign": true,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "구분별 증감 수량 — 프로그램 응답은 합계 증감만 준다"
+    },
+    {
+      "slot_id": "s055",
+      "node_id": "33KC-0",
+      "node_name": "79.5%",
+      "node_path": "2/0/1/2/5",
+      "paper_text": "79.5%",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "1",
+        "col": 5
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "구분별 비중 — 프로그램 응답에 비중 필드가 없다(합계에서 계산)"
+    },
+    {
+      "slot_id": "s056",
+      "node_id": "33L4-0",
+      "node_name": "합계",
+      "node_path": "2/0/1/3/0",
+      "paper_text": "합계",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "foot",
+        "col": 0
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s057",
+      "node_id": "33L3-0",
+      "node_name": "3,012억원",
+      "node_path": "2/0/1/3/1/0",
+      "paper_text": "3,012억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "foot",
+        "col": 1
+      },
+      "mapping_id": "base:0w",
+      "f": "204",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90008",
+          "f": "prm_sell_amt",
+          "kor": "프로그램매도금액"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "all_sel",
+          "kor": "전체매도"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_sell_amt",
+          "kor": "프로그램매도금액"
+        }
+      ],
+      "kor": "매도금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "all_sel",
+          "kor": "전체매도"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "all_sel",
+          "kor": "전체매도"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "prm_sell_amt",
+          "kor": "프로그램매도금액"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_sell_amt",
+          "kor": "프로그램매도금액"
+        }
+      ]
+    },
+    {
+      "slot_id": "s058",
+      "node_id": "33L2-0",
+      "node_name": "199.8만주",
+      "node_path": "2/0/1/3/1/1",
+      "paper_text": "199.8만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "foot",
+        "col": 1
+      },
+      "mapping_id": "base:0w",
+      "f": "202",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90008",
+          "f": "prm_sell_qty",
+          "kor": "프로그램매도수량"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_sell_qty",
+          "kor": "프로그램매도수량"
+        }
+      ],
+      "kor": "매도수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s057",
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90008",
+          "f": "prm_sell_qty",
+          "kor": "프로그램매도수량"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_sell_qty",
+          "kor": "프로그램매도수량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s059",
+      "node_id": "33L0-0",
+      "node_name": "4,810억원",
+      "node_path": "2/0/1/3/2/0",
+      "paper_text": "4,810억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "foot",
+        "col": 2
+      },
+      "mapping_id": "base:0w",
+      "f": "208",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90008",
+          "f": "prm_buy_amt",
+          "kor": "프로그램매수금액"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "all_buy",
+          "kor": "전체매수"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_buy_amt",
+          "kor": "프로그램매수금액"
+        }
+      ],
+      "kor": "매수금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "all_buy",
+          "kor": "전체매수"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "all_buy",
+          "kor": "전체매수"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "prm_buy_amt",
+          "kor": "프로그램매수금액"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_buy_amt",
+          "kor": "프로그램매수금액"
+        }
+      ]
+    },
+    {
+      "slot_id": "s060",
+      "node_id": "33KZ-0",
+      "node_name": "319.0만주",
+      "node_path": "2/0/1/3/2/1",
+      "paper_text": "319.0만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "foot",
+        "col": 2
+      },
+      "mapping_id": "base:0w",
+      "f": "206",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90008",
+          "f": "prm_buy_qty",
+          "kor": "프로그램매수수량"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_buy_qty",
+          "kor": "프로그램매수수량"
+        }
+      ],
+      "kor": "매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s059",
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90008",
+          "f": "prm_buy_qty",
+          "kor": "프로그램매수수량"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_buy_qty",
+          "kor": "프로그램매수수량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s061",
+      "node_id": "33KX-0",
+      "node_name": "+1,798억원",
+      "node_path": "2/0/1/3/3/0",
+      "paper_text": "+1,798억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "foot",
+        "col": 3
+      },
+      "mapping_id": "base:0w",
+      "f": "212",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt",
+          "kor": "프로그램순매수금액"
+        }
+      ],
+      "kor": "순매수금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "all_netprps",
+          "kor": "전체순매수"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt",
+          "kor": "프로그램순매수금액"
+        }
+      ]
+    },
+    {
+      "slot_id": "s062",
+      "node_id": "33KW-0",
+      "node_name": "119.2만주",
+      "node_path": "2/0/1/3/3/1",
+      "paper_text": "119.2만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "foot",
+        "col": 3
+      },
+      "mapping_id": "base:0w",
+      "f": "210",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_qty",
+          "kor": "프로그램순매수수량"
+        }
+      ],
+      "kor": "순매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s061",
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_qty",
+          "kor": "프로그램순매수수량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s063",
+      "node_id": "33KU-0",
+      "node_name": "-198억원",
+      "node_path": "2/0/1/3/4/0",
+      "paper_text": "-198억원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "foot",
+        "col": 4
+      },
+      "mapping_id": "base:0w",
+      "f": "213",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt_irds",
+          "kor": "프로그램순매수금액증감"
+        }
+      ],
+      "kor": "순매수금액증감",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90008",
+          "f": "prm_netprps_amt_irds",
+          "kor": "프로그램순매수금액증감"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt_irds",
+          "kor": "프로그램순매수금액증감"
+        }
+      ]
+    },
+    {
+      "slot_id": "s064",
+      "node_id": "33KT-0",
+      "node_name": "-13.1만주",
+      "node_path": "2/0/1/3/4/1",
+      "paper_text": "-13.1만주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "foot",
+        "col": 4
+      },
+      "mapping_id": "base:0w",
+      "f": "211",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90008",
+          "f": "prm_netprps_qty_irds",
+          "kor": "프로그램순매수수량증감"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_qty_irds",
+          "kor": "프로그램순매수수량증감"
+        }
+      ],
+      "kor": "순매수수량증감",
+      "format": {
+        "unit": "shares",
+        "sign": true,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": "s063",
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90008",
+          "f": "prm_netprps_qty_irds",
+          "kor": "프로그램순매수수량증감"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_qty_irds",
+          "kor": "프로그램순매수수량증감"
+        }
+      ]
+    },
+    {
+      "slot_id": "s065",
+      "node_id": "33KR-0",
+      "node_name": "100.0%",
+      "node_path": "2/0/1/3/5",
+      "paper_text": "100.0%",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "33JM-0",
+        "row": "foot",
+        "col": 5
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "합계 비중 100% — 프로그램 응답에 비중 필드가 없다"
+    },
+    {
+      "slot_id": "s066",
+      "node_id": "33RY-0",
+      "node_name": "시간대",
+      "node_path": "2/0/2/0",
+      "paper_text": "시간대",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s067",
+      "node_id": "33RZ-0",
+      "node_name": "차익",
+      "node_path": "2/0/2/1",
+      "paper_text": "차익",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s068",
+      "node_id": "33S0-0",
+      "node_name": "비차익",
+      "node_path": "2/0/2/2",
+      "paper_text": "비차익",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s069",
+      "node_id": "33S1-0",
+      "node_name": "합계",
+      "node_path": "2/0/2/3",
+      "paper_text": "합계",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s070",
+      "node_id": "33S2-0",
+      "node_name": "KOSPI200",
+      "node_path": "2/0/2/4",
+      "paper_text": "KOSPI200",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "표 열 머리 문구 — 응답 필드가 아니다"
+    },
+    {
+      "slot_id": "s071",
+      "node_id": "33S3-0",
+      "node_name": "베이시스",
+      "node_path": "2/0/2/5",
+      "paper_text": "베이시스",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s072",
+      "node_id": "33S4-0",
+      "node_name": "방향",
+      "node_path": "2/0/2/6",
+      "paper_text": "방향",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s073",
+      "node_id": "33SN-0",
+      "node_name": "09:15",
+      "node_path": "2/0/3/0",
+      "paper_text": "09:15",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90005",
+      "f": "cntr_tm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "kor": "체결시간",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ]
+    },
+    {
+      "slot_id": "s074",
+      "node_id": "33SO-0",
+      "node_name": "+60억원",
+      "node_path": "2/0/3/1",
+      "paper_text": "+60억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "dfrt_trde_netprps",
+      "alt_mappings": null,
+      "kor": "차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s075",
+      "node_id": "33SP-0",
+      "node_name": "+212억원",
+      "node_path": "2/0/3/2",
+      "paper_text": "+212억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "ndiffpro_trde_netprps",
+      "alt_mappings": null,
+      "kor": "비차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s076",
+      "node_id": "33SR-0",
+      "node_name": "+272억원",
+      "node_path": "2/0/3/3/0",
+      "paper_text": "+272억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_amt",
+      "alt_mappings": null,
+      "kor": "프로그램순매수금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s077",
+      "node_id": "33SS-0",
+      "node_name": "+18.0만주",
+      "node_path": "2/0/3/3/1",
+      "paper_text": "+18.0만주",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_qty",
+      "alt_mappings": null,
+      "kor": "프로그램순매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": true,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": "s076",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s078",
+      "node_id": "33ST-0",
+      "node_name": "412.86",
+      "node_path": "2/0/3/4",
+      "paper_text": "412.86",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "kospi200",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ],
+      "kor": "KOSPI200",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ]
+    },
+    {
+      "slot_id": "s079",
+      "node_id": "33SU-0",
+      "node_name": "+0.42",
+      "node_path": "2/0/3/5",
+      "paper_text": "+0.42",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "basis",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ],
+      "kor": "BASIS",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 2,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ]
+    },
+    {
+      "slot_id": "s080",
+      "node_id": "33SV-0",
+      "node_name": "매수 우위",
+      "node_path": "2/0/3/6",
+      "paper_text": "매수 우위",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s081",
+      "node_id": "33TY-0",
+      "node_name": "09:20",
+      "node_path": "2/0/4/0",
+      "paper_text": "09:20",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90005",
+      "f": "cntr_tm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "kor": "체결시간",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s082",
+      "node_id": "33TZ-0",
+      "node_name": "+124억원",
+      "node_path": "2/0/4/1",
+      "paper_text": "+124억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "dfrt_trde_netprps",
+      "alt_mappings": null,
+      "kor": "차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s083",
+      "node_id": "33U0-0",
+      "node_name": "+348억원",
+      "node_path": "2/0/4/2",
+      "paper_text": "+348억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "ndiffpro_trde_netprps",
+      "alt_mappings": null,
+      "kor": "비차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s084",
+      "node_id": "33U2-0",
+      "node_name": "+472억원",
+      "node_path": "2/0/4/3/0",
+      "paper_text": "+472억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_amt",
+      "alt_mappings": null,
+      "kor": "프로그램순매수금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s085",
+      "node_id": "33U3-0",
+      "node_name": "+31.3만주",
+      "node_path": "2/0/4/3/1",
+      "paper_text": "+31.3만주",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_qty",
+      "alt_mappings": null,
+      "kor": "프로그램순매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": true,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": "s084",
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s086",
+      "node_id": "33U4-0",
+      "node_name": "413.02",
+      "node_path": "2/0/4/4",
+      "paper_text": "413.02",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "kospi200",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ],
+      "kor": "KOSPI200",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s087",
+      "node_id": "33U5-0",
+      "node_name": "+0.51",
+      "node_path": "2/0/4/5",
+      "paper_text": "+0.51",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "basis",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ],
+      "kor": "BASIS",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 2,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s088",
+      "node_id": "33U6-0",
+      "node_name": "매수 우위",
+      "node_path": "2/0/4/6",
+      "paper_text": "매수 우위",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s089",
+      "node_id": "33U9-0",
+      "node_name": "09:25",
+      "node_path": "2/0/5/0",
+      "paper_text": "09:25",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90005",
+      "f": "cntr_tm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "kor": "체결시간",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s090",
+      "node_id": "33UA-0",
+      "node_name": "-42억원",
+      "node_path": "2/0/5/1",
+      "paper_text": "-42억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "dfrt_trde_netprps",
+      "alt_mappings": null,
+      "kor": "차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s091",
+      "node_id": "33UB-0",
+      "node_name": "+188억원",
+      "node_path": "2/0/5/2",
+      "paper_text": "+188억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "ndiffpro_trde_netprps",
+      "alt_mappings": null,
+      "kor": "비차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s092",
+      "node_id": "33UD-0",
+      "node_name": "+146억원",
+      "node_path": "2/0/5/3/0",
+      "paper_text": "+146억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_amt",
+      "alt_mappings": null,
+      "kor": "프로그램순매수금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s093",
+      "node_id": "33UE-0",
+      "node_name": "+9.7만주",
+      "node_path": "2/0/5/3/1",
+      "paper_text": "+9.7만주",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_qty",
+      "alt_mappings": null,
+      "kor": "프로그램순매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": true,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": "s092",
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s094",
+      "node_id": "33UF-0",
+      "node_name": "412.74",
+      "node_path": "2/0/5/4",
+      "paper_text": "412.74",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "kospi200",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ],
+      "kor": "KOSPI200",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s095",
+      "node_id": "33UG-0",
+      "node_name": "+0.36",
+      "node_path": "2/0/5/5",
+      "paper_text": "+0.36",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "basis",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ],
+      "kor": "BASIS",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 2,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s096",
+      "node_id": "33UH-0",
+      "node_name": "매수 우위",
+      "node_path": "2/0/5/6",
+      "paper_text": "매수 우위",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s097",
+      "node_id": "33UK-0",
+      "node_name": "09:30",
+      "node_path": "2/0/6/0",
+      "paper_text": "09:30",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90005",
+      "f": "cntr_tm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "kor": "체결시간",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s098",
+      "node_id": "33UL-0",
+      "node_name": "+98억원",
+      "node_path": "2/0/6/1",
+      "paper_text": "+98억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "dfrt_trde_netprps",
+      "alt_mappings": null,
+      "kor": "차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s099",
+      "node_id": "33UM-0",
+      "node_name": "+296억원",
+      "node_path": "2/0/6/2",
+      "paper_text": "+296억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "ndiffpro_trde_netprps",
+      "alt_mappings": null,
+      "kor": "비차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s100",
+      "node_id": "33UO-0",
+      "node_name": "+394억원",
+      "node_path": "2/0/6/3/0",
+      "paper_text": "+394억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_amt",
+      "alt_mappings": null,
+      "kor": "프로그램순매수금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s101",
+      "node_id": "33UP-0",
+      "node_name": "+26.1만주",
+      "node_path": "2/0/6/3/1",
+      "paper_text": "+26.1만주",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_qty",
+      "alt_mappings": null,
+      "kor": "프로그램순매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": true,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": "s100",
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s102",
+      "node_id": "33UQ-0",
+      "node_name": "413.10",
+      "node_path": "2/0/6/4",
+      "paper_text": "413.10",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "kospi200",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ],
+      "kor": "KOSPI200",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s103",
+      "node_id": "33UR-0",
+      "node_name": "+0.49",
+      "node_path": "2/0/6/5",
+      "paper_text": "+0.49",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "basis",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ],
+      "kor": "BASIS",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 2,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s104",
+      "node_id": "33US-0",
+      "node_name": "매수 우위",
+      "node_path": "2/0/6/6",
+      "paper_text": "매수 우위",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s105",
+      "node_id": "33UV-0",
+      "node_name": "09:35",
+      "node_path": "2/0/7/0",
+      "paper_text": "09:35",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90005",
+      "f": "cntr_tm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "kor": "체결시간",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s106",
+      "node_id": "33UW-0",
+      "node_name": "+102억원",
+      "node_path": "2/0/7/1",
+      "paper_text": "+102억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "dfrt_trde_netprps",
+      "alt_mappings": null,
+      "kor": "차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s107",
+      "node_id": "33UX-0",
+      "node_name": "+254억원",
+      "node_path": "2/0/7/2",
+      "paper_text": "+254억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "ndiffpro_trde_netprps",
+      "alt_mappings": null,
+      "kor": "비차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s108",
+      "node_id": "33UZ-0",
+      "node_name": "+356억원",
+      "node_path": "2/0/7/3/0",
+      "paper_text": "+356억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_amt",
+      "alt_mappings": null,
+      "kor": "프로그램순매수금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s109",
+      "node_id": "33V0-0",
+      "node_name": "+23.6만주",
+      "node_path": "2/0/7/3/1",
+      "paper_text": "+23.6만주",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_qty",
+      "alt_mappings": null,
+      "kor": "프로그램순매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": true,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": "s108",
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s110",
+      "node_id": "33V1-0",
+      "node_name": "413.18",
+      "node_path": "2/0/7/4",
+      "paper_text": "413.18",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "kospi200",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ],
+      "kor": "KOSPI200",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s111",
+      "node_id": "33V2-0",
+      "node_name": "+0.55",
+      "node_path": "2/0/7/5",
+      "paper_text": "+0.55",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "basis",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ],
+      "kor": "BASIS",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 2,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s112",
+      "node_id": "33V3-0",
+      "node_name": "매수 우위",
+      "node_path": "2/0/7/6",
+      "paper_text": "매수 우위",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s113",
+      "node_id": "33V6-0",
+      "node_name": "09:40",
+      "node_path": "2/0/8/0",
+      "paper_text": "09:40",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90005",
+      "f": "cntr_tm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "kor": "체결시간",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:0w",
+          "f": "20",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "tm",
+          "kor": "시간"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s114",
+      "node_id": "33V7-0",
+      "node_name": "+26억원",
+      "node_path": "2/0/8/1",
+      "paper_text": "+26억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "dfrt_trde_netprps",
+      "alt_mappings": null,
+      "kor": "차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s115",
+      "node_id": "33V8-0",
+      "node_name": "+132억원",
+      "node_path": "2/0/8/2",
+      "paper_text": "+132억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "ndiffpro_trde_netprps",
+      "alt_mappings": null,
+      "kor": "비차익거래순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s116",
+      "node_id": "33VA-0",
+      "node_name": "+158억원",
+      "node_path": "2/0/8/3/0",
+      "paper_text": "+158억원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_amt",
+      "alt_mappings": null,
+      "kor": "프로그램순매수금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s117",
+      "node_id": "33VB-0",
+      "node_name": "+10.5만주",
+      "node_path": "2/0/8/3/1",
+      "paper_text": "+10.5만주",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "prm_netprps_qty",
+      "alt_mappings": null,
+      "kor": "프로그램순매수수량",
+      "format": {
+        "unit": "shares",
+        "sign": true,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": "s116",
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s118",
+      "node_id": "33VC-0",
+      "node_name": "413.24",
+      "node_path": "2/0/8/4",
+      "paper_text": "413.24",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "kospi200",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ],
+      "kor": "KOSPI200",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "kospi200",
+          "kor": "KOSPI200"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s119",
+      "node_id": "33VD-0",
+      "node_name": "+0.58",
+      "node_path": "2/0/8/5",
+      "paper_text": "+0.58",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "basis",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ],
+      "kor": "BASIS",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 2,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 열의 다른 구간 — 시간대별 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "basis",
+          "kor": "BASIS"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "basis",
+          "kor": "BASIS"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s120",
+      "node_id": "33VE-0",
+      "node_name": "매수 우위",
+      "node_path": "2/0/8/6",
+      "paper_text": "매수 우위",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s121",
+      "node_id": "2RWG-1",
+      "node_name": "5분 집계 6구간 표시 · 증감 직전 구간 대비 · 09:40 기준",
+      "node_path": "2/0/9/0",
+      "paper_text": "5분 집계 6구간 표시 · 증감 직전 구간 대비 · 09:40 기준",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90008",
+      "f": "stk_tm_prm_trde_trnsn",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "prm_trde_trnsn",
+          "kor": "프로그램매매추이"
+        },
+        {
+          "mapping_id": "base:ka90008",
+          "f": "base_pric_tm",
+          "kor": "기준가시간"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "base_pric_tm",
+          "kor": "기준가시간"
+        }
+      ],
+      "kor": "종목시간별프로그램매매추이",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "note": "시간대별 표 목록 자체 — 상태 줄이 구간 수와 증감 기준을 말한다, 꼬리의 09:40이 기준가 시각이다",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90005",
+          "f": "prm_trde_trnsn",
+          "kor": "프로그램매매추이"
+        }
+      ],
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka90008",
+          "f": "base_pric_tm",
+          "kor": "기준가시간",
+          "sep": " · "
+        }
+      ]
+    },
+    {
+      "slot_id": "s122",
+      "node_id": "2RWI-1",
+      "node_name": "더보기",
+      "node_path": "2/0/9/1/0",
+      "paper_text": "더보기",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s123",
+      "node_id": "2RQC-1",
+      "node_name": "거래원",
+      "node_path": "2/1/0/0/0",
+      "paper_text": "거래원",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s124",
+      "node_id": "2RQB-1",
+      "node_name": "오늘 상위 5",
+      "node_path": "2/1/0/0/1",
+      "paper_text": "오늘 상위 5",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "30TY-0 보드 몫 필드의 재표시",
+      "static": true,
+      "unbound_reason": "블록 표시 범위 표기 — 응답 필드가 아니다"
+    },
+    {
+      "slot_id": "s125",
+      "node_id": "2RQ9-1",
+      "node_name": "매수 상위",
+      "node_path": "2/1/0/1/0/0",
+      "paper_text": "매수 상위",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s126",
+      "node_id": "2RQ8-1",
+      "node_name": "모건스탠리",
+      "node_path": "2/1/0/1/0/1/0",
+      "paper_text": "모건스탠리",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시"
+    },
+    {
+      "slot_id": "s127",
+      "node_id": "2RQ7-1",
+      "node_name": "+842억원",
+      "node_path": "2/1/0/1/0/1/1",
+      "paper_text": "+842억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10052",
+      "f": "acc_netprps",
+      "alt_mappings": null,
+      "kor": "누적순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s128",
+      "node_id": "2RQ5-1",
+      "node_name": "JP모간",
+      "node_path": "2/1/0/1/0/2/0",
+      "paper_text": "JP모간",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시"
+    },
+    {
+      "slot_id": "s129",
+      "node_id": "2RQ4-1",
+      "node_name": "+516억원",
+      "node_path": "2/1/0/1/0/2/1",
+      "paper_text": "+516억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10052",
+      "f": "acc_netprps",
+      "alt_mappings": null,
+      "kor": "누적순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s130",
+      "node_id": "2RQ2-1",
+      "node_name": "CS증권",
+      "node_path": "2/1/0/1/0/3/0",
+      "paper_text": "CS증권",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시"
+    },
+    {
+      "slot_id": "s131",
+      "node_id": "2RQ1-1",
+      "node_name": "+308억원",
+      "node_path": "2/1/0/1/0/3/1",
+      "paper_text": "+308억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10052",
+      "f": "acc_netprps",
+      "alt_mappings": null,
+      "kor": "누적순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s132",
+      "node_id": "2RPX-1",
+      "node_name": "매도 상위",
+      "node_path": "2/1/0/1/2/0",
+      "paper_text": "매도 상위",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s133",
+      "node_id": "2RPW-1",
+      "node_name": "키움증권",
+      "node_path": "2/1/0/1/2/1/0",
+      "paper_text": "키움증권",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시"
+    },
+    {
+      "slot_id": "s134",
+      "node_id": "2RPV-1",
+      "node_name": "-604억원",
+      "node_path": "2/1/0/1/2/1/1",
+      "paper_text": "-604억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10052",
+      "f": "acc_netprps",
+      "alt_mappings": null,
+      "kor": "누적순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s135",
+      "node_id": "2RPT-1",
+      "node_name": "미래에셋",
+      "node_path": "2/1/0/1/2/2/0",
+      "paper_text": "미래에셋",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시"
+    },
+    {
+      "slot_id": "s136",
+      "node_id": "2RPS-1",
+      "node_name": "-428억원",
+      "node_path": "2/1/0/1/2/2/1",
+      "paper_text": "-428억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10052",
+      "f": "acc_netprps",
+      "alt_mappings": null,
+      "kor": "누적순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s137",
+      "node_id": "2RPQ-1",
+      "node_name": "삼성증권",
+      "node_path": "2/1/0/1/2/3/0",
+      "paper_text": "삼성증권",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시"
+    },
+    {
+      "slot_id": "s138",
+      "node_id": "2RPP-1",
+      "node_name": "-312억원",
+      "node_path": "2/1/0/1/2/3/1",
+      "paper_text": "-312억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10052",
+      "f": "acc_netprps",
+      "alt_mappings": null,
+      "kor": "누적순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "2QM7-2 보드 몫 필드의 재표시",
+      "display_dup": true
+    },
+    {
+      "slot_id": "s139",
+      "node_id": "2RPK-1",
+      "node_name": "신용·대차·공매도",
+      "node_path": "2/1/1/0/0",
+      "paper_text": "신용·대차·공매도",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s140",
+      "node_id": "2RPJ-1",
+      "node_name": "전일 종가 기준",
+      "node_path": "2/1/1/0/1",
+      "paper_text": "전일 종가 기준",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s141",
+      "node_id": "2RPH-1",
+      "node_name": "공매도 비중",
+      "node_path": "2/1/1/1/0",
+      "paper_text": "공매도 비중",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s142",
+      "node_id": "2RPG-1",
+      "node_name": "3.42%",
+      "node_path": "2/1/1/1/1",
+      "paper_text": "3.42%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10014",
+      "f": "trde_wght",
+      "alt_mappings": null,
+      "kor": "매매비중",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s143",
+      "node_id": "2RPE-1",
+      "node_name": "대차잔고",
+      "node_path": "2/1/1/2/0",
+      "paper_text": "대차잔고",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s144",
+      "node_id": "2RPD-1",
+      "node_name": "1,284만주",
+      "node_path": "2/1/1/2/1",
+      "paper_text": "1,284만주",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10068",
+      "f": "rmnd",
+      "alt_mappings": null,
+      "kor": "잔고주수",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s145",
+      "node_id": "2RPB-1",
+      "node_name": "신용융자 잔고",
+      "node_path": "2/1/1/3/0",
+      "paper_text": "신용융자 잔고",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s146",
+      "node_id": "2RPA-1",
+      "node_name": "4,208억원",
+      "node_path": "2/1/1/3/1",
+      "paper_text": "4,208억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10013",
+      "f": "amt",
+      "alt_mappings": null,
+      "kor": "금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s147",
+      "node_id": "2RP8-1",
+      "node_name": "신용잔고율",
+      "node_path": "2/1/1/4/0",
+      "paper_text": "신용잔고율",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s148",
+      "node_id": "2RP7-1",
+      "node_name": "0.86%",
+      "node_path": "2/1/1/4/1",
+      "paper_text": "0.86%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10013",
+      "f": "remn_rt",
+      "alt_mappings": null,
+      "kor": "잔고율",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s149",
+      "node_id": "3DV6-0",
+      "node_name": "프로그램 일자별 추이",
+      "node_path": "2/1/2/0/0",
+      "paper_text": "프로그램 일자별 추이",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s150",
+      "node_id": "3DV7-0",
+      "node_name": "최근 4거래일 · 누적 연초 기준",
+      "node_path": "2/1/2/0/1",
+      "paper_text": "최근 4거래일 · 누적 연초 기준",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "prm_trde_trnsn",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "prm_trde_acc_trnsn",
+          "kor": "프로그램매매누적추이"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "stk_daly_prm_trde_trnsn",
+          "kor": "종목일별프로그램매매추이"
+        }
+      ],
+      "kor": "프로그램매매추이",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "note": "일자별 추이 카드 목록 자체 — 캡션이 표시 일수와 누적 기준을 말한다",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "prm_trde_acc_trnsn",
+          "kor": "프로그램매매누적추이"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "stk_daly_prm_trde_trnsn",
+          "kor": "종목일별프로그램매매추이"
+        }
+      ]
+    },
+    {
+      "slot_id": "s151",
+      "node_id": "3DVA-0",
+      "node_name": "09-01",
+      "node_path": "2/1/2/1/0/0",
+      "paper_text": "09-01",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90013",
+      "f": "dt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "kor": "일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ]
+    },
+    {
+      "slot_id": "s152",
+      "node_id": "3DVB-0",
+      "node_name": "+1,798억원",
+      "node_path": "2/1/2/1/0/1",
+      "paper_text": "+1,798억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "all_netprps",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "all_tdy",
+          "kor": "전체당일"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt",
+          "kor": "프로그램순매수금액"
+        }
+      ],
+      "kor": "전체순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "all_tdy",
+          "kor": "전체당일"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt",
+          "kor": "프로그램순매수금액"
+        }
+      ]
+    },
+    {
+      "slot_id": "s153",
+      "node_id": "3DVC-0",
+      "node_name": "차익 +2,582억원 · 비차익 +5,716억원",
+      "node_path": "2/1/2/1/0/2",
+      "paper_text": "차익 +2,582억원 · 비차익 +5,716억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "dfrt_trde_acc",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "ndiffpro_trde_acc",
+          "kor": "비차익거래누적"
+        }
+      ],
+      "kor": "차익거래누적",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "ndiffpro_trde_acc",
+          "kor": "비차익거래누적",
+          "sep": " · "
+        }
+      ]
+    },
+    {
+      "slot_id": "s154",
+      "node_id": "3DVE-0",
+      "node_name": "08-31",
+      "node_path": "2/1/2/1/1/0",
+      "paper_text": "08-31",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90013",
+      "f": "dt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "kor": "일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s155",
+      "node_id": "3DVF-0",
+      "node_name": "+1,120억원",
+      "node_path": "2/1/2/1/1/1",
+      "paper_text": "+1,120억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "all_netprps",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "all_tdy",
+          "kor": "전체당일"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt",
+          "kor": "프로그램순매수금액"
+        }
+      ],
+      "kor": "전체순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "all_tdy",
+          "kor": "전체당일"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt",
+          "kor": "프로그램순매수금액"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s156",
+      "node_id": "3DVG-0",
+      "node_name": "차익 +2,214억원 · 비차익 +4,286억원",
+      "node_path": "2/1/2/1/1/2",
+      "paper_text": "차익 +2,214억원 · 비차익 +4,286억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "dfrt_trde_acc",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "ndiffpro_trde_acc",
+          "kor": "비차익거래누적"
+        }
+      ],
+      "kor": "차익거래누적",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 일자별 추이 카드의 다른 행 — 응답 배열의 다음 원소",
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "ndiffpro_trde_acc",
+          "kor": "비차익거래누적",
+          "sep": " · "
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s157",
+      "node_id": "3DVI-0",
+      "node_name": "08-28",
+      "node_path": "2/1/2/1/2/0",
+      "paper_text": "08-28",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90013",
+      "f": "dt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "kor": "일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s158",
+      "node_id": "3DVJ-0",
+      "node_name": "-340억원",
+      "node_path": "2/1/2/1/2/1",
+      "paper_text": "-340억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "all_netprps",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "all_tdy",
+          "kor": "전체당일"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt",
+          "kor": "프로그램순매수금액"
+        }
+      ],
+      "kor": "전체순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 일자별 추이 카드의 다른 행 — 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "all_tdy",
+          "kor": "전체당일"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt",
+          "kor": "프로그램순매수금액"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s159",
+      "node_id": "3DVK-0",
+      "node_name": "차익 +1,832억원 · 비차익 +3,548억원",
+      "node_path": "2/1/2/1/2/2",
+      "paper_text": "차익 +1,832억원 · 비차익 +3,548억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "dfrt_trde_acc",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "ndiffpro_trde_acc",
+          "kor": "비차익거래누적"
+        }
+      ],
+      "kor": "차익거래누적",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 일자별 추이 카드의 다른 행 — 응답 배열의 다음 원소",
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "ndiffpro_trde_acc",
+          "kor": "비차익거래누적",
+          "sep": " · "
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s160",
+      "node_id": "3DVM-0",
+      "node_name": "08-27",
+      "node_path": "2/1/2/1/3/0",
+      "paper_text": "08-27",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90013",
+      "f": "dt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "kor": "일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 일자별 추이 카드의 다른 행 — 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka90010",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s161",
+      "node_id": "3DVN-0",
+      "node_name": "+980억원",
+      "node_path": "2/1/2/1/3/1",
+      "paper_text": "+980억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90010",
+      "f": "all_netprps",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "all_tdy",
+          "kor": "전체당일"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt",
+          "kor": "프로그램순매수금액"
+        }
+      ],
+      "kor": "전체순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 일자별 추이 카드의 다른 행 — 응답 배열의 다음 원소",
+      "also_from": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "all_tdy",
+          "kor": "전체당일"
+        },
+        {
+          "mapping_id": "base:ka90013",
+          "f": "prm_netprps_amt",
+          "kor": "프로그램순매수금액"
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s162",
+      "node_id": "3DVO-0",
+      "node_name": "차익 +1,948억원 · 비차익 +3,772억원",
+      "node_path": "2/1/2/1/3/2",
+      "paper_text": "차익 +1,948억원 · 비차익 +3,772억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90007",
+      "f": "dfrt_trde_acc",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "ndiffpro_trde_acc",
+          "kor": "비차익거래누적"
+        }
+      ],
+      "kor": "차익거래누적",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "dup_note": "같은 일자별 추이 카드의 다른 행 — 응답 배열의 다음 원소",
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka90007",
+          "f": "ndiffpro_trde_acc",
+          "kor": "비차익거래누적",
+          "sep": " · "
+        }
+      ],
+      "display_dup": true
+    },
+    {
+      "slot_id": "s163",
+      "node_id": "3DWC-0",
+      "node_name": "차익잔고 · 미결제",
+      "node_path": "2/1/3/0/0",
+      "paper_text": "차익잔고 · 미결제",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s164",
+      "node_id": "3DWD-0",
+      "node_name": "09-01 기준",
+      "node_path": "2/1/3/0/1",
+      "paper_text": "09-01 기준",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90006",
+      "f": "dt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka90006",
+          "f": "prm_trde_dfrt_remn_trnsn",
+          "kor": "프로그램매매차익잔고추이"
+        }
+      ],
+      "kor": "일자",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "also_from": [
+        {
+          "mapping_id": "base:ka90006",
+          "f": "prm_trde_dfrt_remn_trnsn",
+          "kor": "프로그램매매차익잔고추이"
+        }
+      ]
+    },
+    {
+      "slot_id": "s165",
+      "node_id": "3DWG-0",
+      "node_name": "매수차익",
+      "node_path": "2/1/3/1/0/0",
+      "paper_text": "매수차익",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s166",
+      "node_id": "3DWH-0",
+      "node_name": "12,480억원",
+      "node_path": "2/1/3/1/0/1",
+      "paper_text": "12,480억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90006",
+      "f": "buy_dfrt_trde_amt",
+      "alt_mappings": null,
+      "kor": "매수차익거래금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s167",
+      "node_id": "3DWJ-0",
+      "node_name": "82.7만주 · 전일대비",
+      "node_path": "2/1/3/1/0/2/0",
+      "paper_text": "82.7만주 · 전일대비",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90006",
+      "f": "buy_dfrt_trde_qty",
+      "alt_mappings": null,
+      "kor": "매수차익거래수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s168",
+      "node_id": "3DWK-0",
+      "node_name": "+386억원",
+      "node_path": "2/1/3/1/0/2/1",
+      "paper_text": "+386억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90006",
+      "f": "buy_dfrt_trde_irds_amt",
+      "alt_mappings": null,
+      "kor": "매수차익거래증감액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": "s167",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s169",
+      "node_id": "3DWM-0",
+      "node_name": "매도차익",
+      "node_path": "2/1/3/1/1/0",
+      "paper_text": "매도차익",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s170",
+      "node_id": "3DWN-0",
+      "node_name": "3,840억원",
+      "node_path": "2/1/3/1/1/1",
+      "paper_text": "3,840억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90006",
+      "f": "sel_dfrt_trde_amt",
+      "alt_mappings": null,
+      "kor": "매도차익거래금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s171",
+      "node_id": "3DWP-0",
+      "node_name": "25.5만주 · 전일대비",
+      "node_path": "2/1/3/1/1/2/0",
+      "paper_text": "25.5만주 · 전일대비",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90006",
+      "f": "sel_dfrt_trde_qty",
+      "alt_mappings": null,
+      "kor": "매도차익거래수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s172",
+      "node_id": "3DWQ-0",
+      "node_name": "-112억원",
+      "node_path": "2/1/3/1/1/2/1",
+      "paper_text": "-112억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka90006",
+      "f": "sel_dfrt_trde_irds_amt",
+      "alt_mappings": null,
+      "kor": "매도차익거래증감액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": "s171",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s173",
+      "node_id": "3DWS-0",
+      "node_name": "잔고",
+      "node_path": "2/1/3/1/2/0",
+      "paper_text": "잔고",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s174",
+      "node_id": "3DWT-0",
+      "node_name": "8,640억원",
+      "node_path": "2/1/3/1/2/1",
+      "paper_text": "8,640억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "차익잔고 순액 — ka90006은 매수·매도 차익잔고만 준다(순액 필드 없음)"
+    },
+    {
+      "slot_id": "s175",
+      "node_id": "3DWV-0",
+      "node_name": "전일대비",
+      "node_path": "2/1/3/1/2/2/0",
+      "paper_text": "전일대비",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s176",
+      "node_id": "3DWW-0",
+      "node_name": "+498억원",
+      "node_path": "2/1/3/1/2/2/1",
+      "paper_text": "+498억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "차익잔고 순액 전일대비 — 매수·매도 증감액에서 계산한 값이라 응답 필드가 아니다"
+    },
+    {
+      "slot_id": "s177",
+      "node_id": "2ROO-1",
+      "node_name": "장중 · 프로그램 차익·비차익 집계 갱신 중",
+      "node_path": "3/0/1",
+      "paper_text": "장중 · 프로그램 차익·비차익 집계 갱신 중",
+      "region": "footer",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s178",
+      "node_id": "33JK-0",
+      "node_name": "실시간 티커",
+      "node_path": "3/0/2",
+      "paper_text": "· 실시간 005930",
+      "region": "footer",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:0w",
+      "f": "216",
+      "alt_mappings": null,
+      "kor": "투자자별ticker",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s179",
+      "node_id": "2ROM-1",
+      "node_name": "수급 전체 항목 보기",
+      "node_path": "3/1",
+      "paper_text": "수급 전체 항목 보기",
+      "region": "footer",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    }
+  ],
+  "unbound_fields": [
+    {
+      "mapping_id": "base:ka90007",
+      "f": "all_acc",
+      "kor": "전체누적",
+      "unbound_reason": "일자별 추이 보조줄이 차익 누적·비차익 누적만 그리고 전체 누적을 그리는 텍스트가 없다 — 두 낱값에 흡수시키면 헌장 §2.2 집약 금지 위반이라 Paper에 자리를 새로 내야 한다"
+    }
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "수급 — 프로그램",
+    "eyebrow": "CC-05 / 2ROJ-1",
+    "source_board": "CC-05 / R03-T3 · 수급 — 프로그램",
+    "elements": [
+      {
+        "source_slot_id": "s012",
+        "label": "외국인투자자",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,842억원"
+      },
+      {
+        "source_slot_id": "s015",
+        "label": "기관계",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "-1,204억원"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "개인투자자",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "-638억원"
+      },
+      {
+        "source_slot_id": "s073",
+        "label": "체결시간",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "time",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "09:15",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s074",
+        "label": "차익거래순매수",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+60억원",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 118,
+      "shown": 5,
+      "hidden": 113,
+      "scalars": 2,
+      "rows": 0
+    },
+    "fold_note": "스칼라 2개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T3 · 수급 — 프로그램",
+      "elements": "외국인투자자 · 기관계 · 개인투자자 · 체결시간 · 차익거래순매수",
+      "grammar": "compound",
+      "folded": "스칼라 2개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
+}

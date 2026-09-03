@@ -1,0 +1,11 @@
+{
+  "root": "31OG-0",
+  "regions": [
+    { "node_id": "31TF-0", "name": "Flow Header", "role": "header", "depth": 2 },
+    { "node_id": "31SV-0", "name": "Flow Summary Strip", "role": "kpi", "depth": 2 },
+    { "node_id": "31OK-0", "name": "Flow Workspace", "role": "workspace", "depth": 2 },
+    { "node_id": "31PT-0", "name": "Investor Panel", "role": "primary", "depth": 3 },
+    { "node_id": "31OL-0", "name": "Side Panel", "role": "rail", "depth": 3 },
+    { "node_id": "31OH-0", "name": "Flow Status Footer", "role": "footer", "depth": 2 }
+  ]
+}

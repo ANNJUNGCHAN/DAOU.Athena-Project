@@ -1,0 +1,13 @@
+{
+  "board_id": "2YXS-0",
+  "name": "CC-03 / R01-T4-2 · 순위 — 상하한가",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 1120,
+  "state": {
+    "kind": "sort",
+    "parent_board": "2VDA-0",
+    "control": "상하한가"
+  },
+  "saved_at": "2026-09-02T11:10:55Z"
+}

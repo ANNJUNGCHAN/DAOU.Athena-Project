@@ -1,0 +1,14 @@
+{
+  "board_id": "3EWN-0",
+  "name": "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "expand",
+    "parent_board": "2U5L-1",
+    "control": null,
+    "control_text": "ELW 관찰"
+  },
+  "saved_at": "2026-09-02T20:27:00+09:00"
+}

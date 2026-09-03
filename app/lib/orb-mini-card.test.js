@@ -7,6 +7,63 @@ const assert = require('node:assert/strict');
 
 const mini = require('./orb-mini-card.js');
 
+test('승인된 카드미니 프레임은 360×420이다', () => {
+  assert.deepEqual(mini.CARD_SIZE, { width: 360, height: 420 });
+});
+
+test('surface_contract의 고정 슬롯으로 Paper와 같은 표시 계획을 만든다', () => {
+  const plan = mini.buildKiumiPlan({
+    board_id: '2SCE-1',
+    card_id: 'CC-01',
+    kiumi: {
+      version: 1,
+      width_px: 360,
+      height_px: 420,
+      grammar: 'compound',
+      title: '보유종목',
+      fixed: true,
+      fold_note: '스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인',
+      elements: [
+        { source_slot_id: 'price', label: '평가금액', role: 'primary', format: { unit: 'krw_ko', sign: false, precision: 0, tone: 'neutral' } },
+        { source_slot_id: 'change', label: '손익률', role: 'secondary', format: { unit: 'percent', sign: true, precision: 2, tone: 'change' } },
+      ],
+    },
+    slot_values: [
+      { slot_id: 'price', value: 124580240, format: { unit: 'krw_ko', sign: false, precision: 0, tone: 'neutral' } },
+      { slot_id: 'change', value: -1.24, format: { unit: 'percent', sign: true, precision: 2, tone: 'change' } },
+    ],
+  });
+
+  assert.equal(plan.grammar, 'compound');
+  assert.equal(plan.title, '보유종목');
+  assert.deepEqual(plan.elements.map(({ label, text, tone, role }) => ({ label, text, tone, role })), [
+    { label: '평가금액', text: '1억 2,458만', tone: null, role: 'primary' },
+    { label: '손익률', text: '-1.24%', tone: 'down', role: 'secondary' },
+  ]);
+  assert.equal(plan.foldNote, '스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인');
+});
+
+test('선택 슬롯 값이 오지 않아도 Paper 예시값을 지어내지 않는다', () => {
+  const plan = mini.buildKiumiPlan({
+    board_id: 'missing',
+    kiumi: {
+      version: 1,
+      width_px: 360,
+      height_px: 420,
+      grammar: 'facts',
+      title: '미제공 예시',
+      fixed: true,
+      elements: [
+        { source_slot_id: 'missing-value', label: '현재가', role: 'fact', format: { unit: 'krw_ko' } },
+      ],
+    },
+    slot_values: [],
+  });
+
+  assert.equal(plan.elements[0].text, '미제공');
+  assert.equal(plan.elements[0].missing, true);
+});
+
 test('보드 09 상한표는 보드에 적힌 숫자 그대로다', () => {
   assert.deepEqual(mini.LIMITS, {
     tableRows: 3,

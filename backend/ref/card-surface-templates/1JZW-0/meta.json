@@ -1,0 +1,13 @@
+{
+  "board_id": "1JZW-0",
+  "name": "A02×A04 · 호가 주문 정본 — 시장가 매수",
+  "card_id": "CC-04",
+  "width": 1440,
+  "height": 1120,
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "saved_at": "2026-09-02T11:23:13Z"
+}

@@ -1,0 +1,642 @@
+{
+ "board": "2SRV-1",
+ "fields": [
+  {
+   "mapping_id": "base:00",
+   "f": "910",
+   "kor": "체결가",
+   "layer": null,
+   "where": "오늘 실현 상세 '체결 48,360'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "911",
+   "kor": "체결량",
+   "layer": null,
+   "where": "오늘 실현 상세 '250주'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "939",
+   "kor": "당일매매세금",
+   "layer": "직접",
+   "where": "실현손익표 6열 세금 1줄 행별 -20,720"
+  },
+  {
+   "mapping_id": "base:04",
+   "f": "950",
+   "kor": "당일총매도손익",
+   "layer": null,
+   "where": "'당일 실현손익 +1,082,400'"
+  },
+  {
+   "mapping_id": "base:04",
+   "f": "8019",
+   "kor": "손익률(실현손익)",
+   "layer": null,
+   "where": "실현손익 표 '수익률' 컬럼(+9.14%)"
+  },
+  {
+   "mapping_id": "base:04",
+   "f": "990",
+   "kor": "당일실현손익(유가)",
+   "layer": null,
+   "where": "'당일 실현손익 +1,082,400'"
+  },
+  {
+   "mapping_id": "base:04",
+   "f": "991",
+   "kor": "당일실현손익율(유가)",
+   "layer": null,
+   "where": "실현손익 표 09/01 행 '수익률 +9.14%'"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "dt_stk_div_rlzt_pl",
+   "kor": "일자별종목별실현손익",
+   "layer": null,
+   "where": "실현손익 표가 배열을 행 목록으로 그림"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'매도 종목' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "cntr_qty",
+   "kor": "체결량",
+   "layer": null,
+   "where": "오늘 실현 상세 '250주'"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "buy_uv",
+   "kor": "매입단가",
+   "layer": null,
+   "where": "오늘 실현 상세 '매입 43,820'"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "where": "오늘 실현 상세 '체결 48,360'"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "tdy_sel_pl",
+   "kor": "당일매도손익",
+   "layer": null,
+   "where": "'실현손익' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "pl_rt",
+   "kor": "손익율",
+   "layer": null,
+   "where": "'수익률' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "tdy_trde_tax",
+   "kor": "당일매매세금",
+   "layer": "직접",
+   "where": "실현손익표 6열 세금 1줄 행별 값"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "loan_dt",
+   "kor": "대출일",
+   "layer": "병기",
+   "where": "실현손익표 2열 매도 종목 셀 2줄 '대출일 —'"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "crd_tp",
+   "kor": "신용구분",
+   "layer": "병기",
+   "where": "실현손익표 2열 매도 종목 셀 2줄 '현금' 칩"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "stk_cd_1",
+   "kor": "종목코드1",
+   "layer": "병기",
+   "where": "실현손익표 2열 셀 2줄 코드 mono '069500 · 035420'"
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "tdy_sel_pl_1",
+   "kor": "당일매도손익1",
+   "layer": "병기",
+   "where": "실현손익표 3열 셀 2줄 '매도손익 +1,107,000'"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "dt_stk_rlzt_pl",
+   "kor": "일자별종목별실현손익",
+   "layer": null,
+   "where": "실현손익 표가 배열을 행 목록으로 그림"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "'일자' 컬럼(09/01 등)"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "tdy_htssel_cmsn",
+   "kor": "당일hts매도수수료",
+   "layer": "병기",
+   "where": "실현손익표 5열 수수료 셀 2줄 'HTS 매도 -3,110'"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'매도 종목' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "cntr_qty",
+   "kor": "체결량",
+   "layer": null,
+   "where": "오늘 실현 상세 '250주'"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "buy_uv",
+   "kor": "매입단가",
+   "layer": null,
+   "where": "오늘 실현 상세 '매입 43,820'"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "where": "오늘 실현 상세 '체결 48,360'"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "tdy_sel_pl",
+   "kor": "당일매도손익",
+   "layer": null,
+   "where": "'실현손익' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "pl_rt",
+   "kor": "손익율",
+   "layer": null,
+   "where": "'수익률' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "tdy_trde_tax",
+   "kor": "당일매매세금",
+   "layer": "직접",
+   "where": "실현손익표 6열 세금 1줄 행별 값"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "loan_dt",
+   "kor": "대출일",
+   "layer": "병기",
+   "where": "실현손익표 2열 매도 종목 셀 2줄 '대출일 —'"
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "crd_tp",
+   "kor": "신용구분",
+   "layer": "병기",
+   "where": "실현손익표 2열 매도 종목 셀 2줄 '현금' 칩"
+  },
+  {
+   "mapping_id": "base:ka10074",
+   "f": "tot_buy_amt",
+   "kor": "총매수금액",
+   "layer": null,
+   "where": "오늘 매매일지 '매수 금액 3,842,000원'"
+  },
+  {
+   "mapping_id": "base:ka10074",
+   "f": "tot_sell_amt",
+   "kor": "총매도금액",
+   "layer": null,
+   "where": "오늘 매매일지 '매도 금액 12,946,000원'"
+  },
+  {
+   "mapping_id": "base:ka10074",
+   "f": "rlzt_pl",
+   "kor": "실현손익",
+   "layer": null,
+   "where": "'당일 실현손익 +1,082,400'"
+  },
+  {
+   "mapping_id": "base:ka10074",
+   "f": "trde_tax",
+   "kor": "매매세금",
+   "layer": "병기",
+   "where": "실현손익표 6열 세금 셀 2줄 '거래세 -5,180'"
+  },
+  {
+   "mapping_id": "base:ka10074",
+   "f": "dt_rlzt_pl",
+   "kor": "일자별실현손익",
+   "layer": null,
+   "where": "실현손익 표가 배열을 행 목록으로 그림"
+  },
+  {
+   "mapping_id": "base:ka10074",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "'일자' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10074",
+   "f": "buy_amt",
+   "kor": "매수금액",
+   "layer": null,
+   "where": "오늘 매매일지 '매수 금액'"
+  },
+  {
+   "mapping_id": "base:ka10074",
+   "f": "sell_amt",
+   "kor": "매도금액",
+   "layer": null,
+   "where": "오늘 매매일지 '매도 금액'"
+  },
+  {
+   "mapping_id": "base:ka10074",
+   "f": "tdy_sel_pl",
+   "kor": "당일매도손익",
+   "layer": null,
+   "where": "'실현손익' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10074",
+   "f": "tdy_trde_tax",
+   "kor": "당일매매세금",
+   "layer": "직접",
+   "where": "실현손익표 6열 세금 1줄 행별 값"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "where": "오늘 실현 상세 '체결 48,360'"
+  },
+  {
+   "mapping_id": "base:ka10077",
+   "f": "tdy_rlzt_pl",
+   "kor": "당일실현손익",
+   "layer": null,
+   "where": "'당일 실현손익 +1,082,400'"
+  },
+  {
+   "mapping_id": "base:ka10077",
+   "f": "tdy_rlzt_pl_dtl",
+   "kor": "당일실현손익상세",
+   "layer": null,
+   "where": "'오늘 실현 상세' 카드가 행 목록으로 그림"
+  },
+  {
+   "mapping_id": "base:ka10077",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "오늘 실현 상세 'KODEX 200'"
+  },
+  {
+   "mapping_id": "base:ka10077",
+   "f": "cntr_qty",
+   "kor": "체결량",
+   "layer": null,
+   "where": "오늘 실현 상세 '250주'"
+  },
+  {
+   "mapping_id": "base:ka10077",
+   "f": "buy_uv",
+   "kor": "매입단가",
+   "layer": null,
+   "where": "오늘 실현 상세 '매입 43,820'"
+  },
+  {
+   "mapping_id": "base:ka10077",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "where": "오늘 실현 상세 '체결 48,360'"
+  },
+  {
+   "mapping_id": "base:ka10077",
+   "f": "tdy_sel_pl",
+   "kor": "당일매도손익",
+   "layer": null,
+   "where": "오늘 실현 상세 '+1,135,000'"
+  },
+  {
+   "mapping_id": "base:ka10077",
+   "f": "pl_rt",
+   "kor": "손익율",
+   "layer": null,
+   "where": "실현손익 표 '수익률' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10077",
+   "f": "tdy_trde_cmsn",
+   "kor": "당일매매수수료",
+   "layer": null,
+   "where": "오늘 실현 상세 '매매 비용 -24,600'"
+  },
+  {
+   "mapping_id": "base:ka10077",
+   "f": "tdy_trde_tax",
+   "kor": "당일매매세금",
+   "layer": "직접",
+   "where": "실현손익표 6열 세금 1줄 행별 값"
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "tdy_sel_pl",
+   "kor": "당일매도손익",
+   "layer": null,
+   "where": "'실현손익' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tot_sell_amt",
+   "kor": "총매도금액",
+   "layer": null,
+   "where": "오늘 매매일지 '매도 금액 12,946,000원'"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tot_buy_amt",
+   "kor": "총매수금액",
+   "layer": null,
+   "where": "오늘 매매일지 '매수 금액 3,842,000원'"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tot_cmsn_tax",
+   "kor": "총수수료_세금",
+   "layer": null,
+   "where": "오늘 매매일지 '매매 비용 -24,600원'"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tot_pl_amt",
+   "kor": "총손익금액",
+   "layer": null,
+   "where": "오늘 매매일지 '순손익 +1,082,400원'"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tot_prft_rt",
+   "kor": "총수익률",
+   "layer": null,
+   "where": "실현손익 표 09/01 행 '수익률 +9.14%'"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tdy_trde_diary",
+   "kor": "당일매매일지",
+   "layer": null,
+   "where": "'오늘 매매일지' 카드"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "오늘 실현 상세 종목명"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "buy_avg_pric",
+   "kor": "매수평균가",
+   "layer": null,
+   "where": "오늘 실현 상세 '매입 43,820'"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "sel_avg_pric",
+   "kor": "매도평균가",
+   "layer": null,
+   "where": "오늘 실현 상세 '체결 48,360'"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "pl_amt",
+   "kor": "손익금액",
+   "layer": null,
+   "where": "'실현손익' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "sell_amt",
+   "kor": "매도금액",
+   "layer": null,
+   "where": "오늘 매매일지 '매도 금액'"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "buy_amt",
+   "kor": "매수금액",
+   "layer": null,
+   "where": "오늘 매매일지 '매수 금액'"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "prft_rt",
+   "kor": "수익률",
+   "layer": null,
+   "where": "'수익률' 컬럼"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "cntr_uv",
+   "kor": "체결단가",
+   "layer": null,
+   "where": "오늘 실현 상세 '체결 48,360'"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "cntr_dt",
+   "kor": "체결일",
+   "layer": null,
+   "where": "실현손익 표 '일자' 컬럼(매도 확정일)"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "tax_sum_cmsn",
+   "kor": "세금수수료합",
+   "layer": null,
+   "where": "'수수료·세금' 컬럼"
+  },
+  {
+   "mapping_id": "detail:kt00004:profit_and_loss",
+   "f": "tdy_lspft_amt",
+   "kor": "당일투자원금",
+   "layer": "병기",
+   "where": "KPI 1 '당일 실현손익' 1줄 값 +1,082,400 (2줄은 당일 투자원금 11,839,000원)"
+  },
+  {
+   "mapping_id": "detail:kt00004:profit_and_loss",
+   "f": "invt_bsamt",
+   "kor": "당월투자원금",
+   "layer": "병기",
+   "where": "KPI 2 '이번 달 누적' 2줄 '당월 원금 1억 1,975만'"
+  },
+  {
+   "mapping_id": "detail:kt00004:profit_and_loss",
+   "f": "lspft_amt",
+   "kor": "누적투자원금",
+   "layer": "병기",
+   "where": "KPI 3 '올해 누적' 1줄 값 +8,972,300 (2줄은 누적 원금 1억 1,200만)"
+  },
+  {
+   "mapping_id": "detail:kt00004:profit_and_loss",
+   "f": "tdy_lspft",
+   "kor": "당일투자손익",
+   "layer": null,
+   "where": "실현손익 상단 '당일 실현손익' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00004:profit_and_loss",
+   "f": "lspft2",
+   "kor": "당월투자손익",
+   "layer": null,
+   "where": "실현손익 상단 '이번 달 누적' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00004:profit_and_loss",
+   "f": "lspft",
+   "kor": "누적투자손익",
+   "layer": null,
+   "where": "실현손익 상단 '올해 누적' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00004:profit_and_loss",
+   "f": "tdy_lspft_rt",
+   "kor": "당일손익율",
+   "layer": null,
+   "where": "실현손익 표 당일(09/01) 행 '수익률 +9.14%' 컬럼"
+  },
+  {
+   "mapping_id": "detail:kt00004:profit_and_loss",
+   "f": "lspft_ratio",
+   "kor": "당월손익율",
+   "layer": "병기",
+   "where": "KPI 2 2줄 '+0.90%'"
+  },
+  {
+   "mapping_id": "detail:kt00004:profit_and_loss",
+   "f": "lspft_rt",
+   "kor": "누적손익율",
+   "layer": "병기",
+   "where": "KPI 3 2줄 '+8.01%'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "cntr_uv",
+   "kor": "체결단가",
+   "layer": null,
+   "where": "오늘 실현 상세 '매입 43,820 → 체결 48,360' 체결단가 표기"
+  },
+  {
+   "mapping_id": "detail:kt00010:purchase_settlement",
+   "f": "pur_amt",
+   "kor": "매입금액",
+   "layer": null,
+   "where": "오늘 매매일지 '매수 금액 3,842,000원' 행"
+  },
+  {
+   "mapping_id": "detail:kt00010:purchase_settlement",
+   "f": "cmsn",
+   "kor": "수수료",
+   "layer": null,
+   "where": "'수수료·세금 (당일) -24,600' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00016:account_manager",
+   "f": "mang_empno",
+   "kor": "관리사원번호",
+   "layer": "직접",
+   "where": "푸터 우측 '영업부 · 담당 사번 미지정'"
+  },
+  {
+   "mapping_id": "detail:kt00016:performance_summary",
+   "f": "tot_amt_fr",
+   "kor": "순자산액계_초",
+   "layer": null,
+   "where": "이달 잔고 증감 '자산 1억 1,975만' 기초값"
+  },
+  {
+   "mapping_id": "detail:kt00016:performance_summary",
+   "f": "tot_amt_to",
+   "kor": "순자산액계_말",
+   "layer": null,
+   "where": "이달 잔고 증감 '→ 1억 2,458만 (+483만)' 기말값"
+  },
+  {
+   "mapping_id": "detail:kt00016:performance_summary",
+   "f": "invt_bsamt",
+   "kor": "투자원금평잔",
+   "layer": "직접",
+   "where": "우측 레일 R1 성과 요약 '투자원금 평잔 1억 1,975만원'"
+  },
+  {
+   "mapping_id": "detail:kt00016:performance_summary",
+   "f": "evltv_prft",
+   "kor": "평가손익",
+   "layer": null,
+   "where": "성과 요약 '평가손익 (미실현) +4,240,900원' 행"
+  },
+  {
+   "mapping_id": "detail:kt00016:performance_summary",
+   "f": "tern_rt",
+   "kor": "회전율",
+   "layer": "직접",
+   "where": "우측 레일 R1 성과 요약 '회전율 14.0%'"
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "sell_amt",
+   "kor": "매도금액",
+   "layer": null,
+   "where": "오늘 매매일지 '매도 금액 12,946,000원' 행"
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "buy_amt",
+   "kor": "매수금액",
+   "layer": null,
+   "where": "오늘 매매일지 '매수 금액 3,842,000원' 행"
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "cmsn",
+   "kor": "수수료",
+   "layer": null,
+   "where": "오늘 매매일지 '매매 비용 -24,600원' 행"
+  },
+  {
+   "mapping_id": "detail:kt00018:holdings",
+   "f": "sum_cmsn",
+   "kor": "수수료합",
+   "layer": null,
+   "where": "'수수료·세금 (당일) -24,600' 타일"
+  }
+ ]
+}

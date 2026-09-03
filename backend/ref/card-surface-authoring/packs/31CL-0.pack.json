@@ -1,0 +1,182 @@
+{
+ "board_id": "31CL-0",
+ "card_id": "CC-05",
+ "name": "CC-05 / R03-T6-8 · 순위 — 동일순매매",
+ "operation_refs": [
+  "base:ka10062"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10062",
+   "f": "eql_nettrde_rank",
+   "kor": "동일순매매순위",
+   "layer": null,
+   "board": "31CL-0",
+   "where": "동일순매매 순위 표 목록",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "31CL-0",
+   "where": "종목 카드 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "rank",
+   "kor": "순위",
+   "layer": null,
+   "board": "31CL-0",
+   "where": "표 '순위' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "31CL-0",
+   "where": "표 '종목' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "31CL-0",
+   "where": "표 '현재가' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "board": "31CL-0",
+   "where": "등락률 열의 ± 부호와 상승/하락색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "31CL-0",
+   "where": "종목 카드 '+1,850'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "31CL-0",
+   "where": "표 '등락률' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": "직접",
+   "board": "31CL-0",
+   "where": "표 '거래량' 열(1위 1,420만주)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "orgn_nettrde_qty",
+   "kor": "기관순매매수량",
+   "layer": "병기",
+   "board": "31CL-0",
+   "where": "표 기관 셀 2번째 줄 수량(1위 26.9만주)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "orgn_nettrde_amt",
+   "kor": "기관순매매금액",
+   "layer": null,
+   "board": "31CL-0",
+   "where": "표 '기관' 열 +406억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "orgn_nettrde_avg_pric",
+   "kor": "기관순매매평균가",
+   "layer": "병기",
+   "board": "31CL-0",
+   "where": "표 '추정평균가' 셀 2번째 줄 '기 150,120'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "for_nettrde_qty",
+   "kor": "외인순매매수량",
+   "layer": "병기",
+   "board": "31CL-0",
+   "where": "표 외국인 셀 2번째 줄 수량(1위 53.8만주)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "for_nettrde_amt",
+   "kor": "외인순매매금액",
+   "layer": null,
+   "board": "31CL-0",
+   "where": "표 '외국인' 열 +812억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "for_nettrde_avg_pric",
+   "kor": "외인순매매평균가",
+   "layer": "직접",
+   "board": "31CL-0",
+   "where": "표 신설 '추정평균가' 열 1번째 줄 '외 150,940'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "nettrde_qty",
+   "kor": "순매매수량",
+   "layer": "병기",
+   "board": "31CL-0",
+   "where": "표 '동시 순매수' 셀 2번째 줄 수량(1위 80.7만주)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10062",
+   "f": "nettrde_amt",
+   "kor": "순매매금액",
+   "layer": null,
+   "board": "31CL-0",
+   "where": "동일 요약 '동시 매수 1위 · 삼성전자 +1,218억'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 17
+}

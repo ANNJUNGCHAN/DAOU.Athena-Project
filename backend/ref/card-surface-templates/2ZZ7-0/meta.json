@@ -1,0 +1,13 @@
+{
+  "board_id": "2ZZ7-0",
+  "name": "CC-03 / R01-T4-4 · 순위 — 가격급등락",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 1120,
+  "state": {
+    "kind": "sort",
+    "parent_board": "2VDA-0",
+    "control": "가격급등락"
+  },
+  "saved_at": "2026-09-02T11:10:55Z"
+}

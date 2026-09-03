@@ -1,0 +1,12 @@
+{
+  "root": "2RWL-1",
+  "regions": [
+    { "node_id": "2S2A-1", "name": "Flow Header", "role": "header", "depth": 1 },
+    { "node_id": "2S2B-1", "name": "Flow Tabs", "role": "strip", "depth": 2 },
+    { "node_id": "2S1N-1", "name": "Flow Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "2RWR-1", "name": "Flow Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "2RYE-1", "name": "Credit Panel", "role": "primary", "depth": 2 },
+    { "node_id": "2RWS-1", "name": "Side Panel", "role": "rail", "depth": 2 },
+    { "node_id": "2RWM-1", "name": "Flow Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

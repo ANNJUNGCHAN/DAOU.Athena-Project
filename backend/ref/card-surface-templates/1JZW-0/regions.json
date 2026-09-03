@@ -1,0 +1,12 @@
+{
+  "root": "1JZX-0",
+  "regions": [
+    { "node_id": "1K9B-0", "name": "상단 제목·모드·연결", "role": "header", "depth": 1 },
+    { "node_id": "1K9R-0", "name": "주문 입력 도크", "role": "other", "depth": 1 },
+    { "node_id": "1K02-0", "name": "호가 본문 3열", "role": "workspace", "depth": 1 },
+    { "node_id": "3Q1N-0", "name": "최근 체결·체결강도", "role": "other", "depth": 2 },
+    { "node_id": "3PL3-0", "name": "10단 호가 래더", "role": "primary", "depth": 2 },
+    { "node_id": "3PQC-0", "name": "시장 맥락·통계", "role": "rail", "depth": 2 },
+    { "node_id": "1KAJ-0", "name": "주문 하단 취소 동작", "role": "footer", "depth": 1 }
+  ]
+}

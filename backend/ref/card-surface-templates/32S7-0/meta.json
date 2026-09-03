@@ -1,0 +1,13 @@
+{
+  "board_id": "32S7-0",
+  "name": "CC-03 / R01-T7 · 차트 — 업종 지수",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "tab",
+    "parent_board": "137X-2",
+    "control": "차트"
+  },
+  "saved_at": "2026-09-02T20:05:00+09:00"
+}

@@ -1,0 +1,2290 @@
+{
+ "board_id": "137X-2",
+ "card_id": "CC-03",
+ "name": "CC-03 / R01 · 삼성전자 3개월 차트",
+ "operation_refs": [
+  "base:0g",
+  "base:ka10003",
+  "base:ka10015",
+  "base:ka10060",
+  "base:ka10064",
+  "base:ka10079",
+  "base:ka10080",
+  "base:ka10081",
+  "base:ka10082",
+  "base:ka10083",
+  "base:ka10084",
+  "base:ka10086",
+  "base:ka10094",
+  "detail:ka10001:current_trading",
+  "detail:ka10001:daily_price_band",
+  "detail:ka10001:identity_and_capital",
+  "detail:ka10001:market_scale_and_ownership",
+  "detail:ka10001:price_range",
+  "detail:ka10001:valuation"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:0g",
+   "f": "297",
+   "kor": "임의연장",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "푸터 기준·제한 상태 줄 '임의연장 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0g",
+   "f": "592",
+   "kor": "장전임의연장",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "푸터 기준·제한 상태 줄 '장전임의연장 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0g",
+   "f": "593",
+   "kor": "장후임의연장",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "푸터 기준·제한 상태 줄 '장후임의연장 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0g",
+   "f": "305",
+   "kor": "상한가",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "레일 가격 범위·기준 '상한가 · 하한가 193,700 · 104,300' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0g",
+   "f": "306",
+   "kor": "하한가",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "레일 가격 범위·기준 '상한가 · 하한가 193,700 · 104,300' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0g",
+   "f": "307",
+   "kor": "기준가",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "레일 가격 범위·기준 '기준가 149,000' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0g",
+   "f": "689",
+   "kor": "조기종료ELW발생",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "푸터 기준·제한 상태 줄 '조기종료ELW 해당 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0g",
+   "f": "594",
+   "kor": "통화단위",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "푸터 기준·제한 상태 줄 '통화단위 원(KRW)'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0g",
+   "f": "382",
+   "kor": "증거금율표시",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "푸터 기준·제한 상태 줄 '증거금율 20%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0g",
+   "f": "370",
+   "kor": "종목정보",
+   "layer": null,
+   "board": "137X-2",
+   "where": "종목 요약 헤더의 '정상 거래' 상태 표기",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "cntr_infr",
+   "kor": "체결정보",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "체결 흐름 표 · 구분 열 주값(매수체결 · 매도체결 · 기세) / node 3S74-0 · 3S78-0 · 3S7C-0 · 3S7L-0 · 3S7T-0 · 3S8D-0 · 3S8H-0 · 3S91-0 · 3S9N-0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "tm",
+   "kor": "시간",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 체결 시각 09:42:18 / 푸터 '마지막 체결 09:42:18'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 현재가 150,850원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "pre_rt",
+   "kor": "대비율",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1.24%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "pri_sel_bid_unit",
+   "kor": "우선매도호가단위",
+   "layer": "병기",
+   "board": "2R3M-1",
+   "where": "체결 흐름 표 최근행 체결가 셀 아래 '매도 150,900'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "pri_buy_bid_unit",
+   "kor": "우선매수호가단위",
+   "layer": "병기",
+   "board": "2R3M-1",
+   "where": "체결 흐름 표 최근행 체결가 셀 아래 '매수 150,850'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "cntr_trde_qty",
+   "kor": "체결거래량",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "체결 흐름 표 체결량 열 1,284(누계를 병기로 분리해 집약 해소)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "sign",
+   "kor": "sign",
+   "layer": null,
+   "board": "137X-2",
+   "where": "+ 부호와 상승색(--color-up)으로 표기",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": null,
+   "board": "137X-2",
+   "where": "거래량 1,420만주 / 차트 하단 14,213,490",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "acc_trde_prica",
+   "kor": "누적거래대금",
+   "layer": null,
+   "board": "137X-2",
+   "where": "거래대금 2.14조원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "cntr_str",
+   "kor": "체결강도",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "체결 흐름 표 · 체결강도 열(행별 118.4%~115.2%, 기세 행 해당 없음) / node 3CSP-0 · 3CSY-0 · 3CT7-0 · 3CTG-0 · 3CTP-0 · 3CTY-0 · 3CU7-0 · 3CUG-0 · 3CUP-0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10003",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": "병기",
+   "board": "2R3M-1",
+   "where": "체결 흐름 표 · 구분 열 보조줄 거래소(KRX, 09:41:57 행 NXT) / node 3S75-0 · 3S79-0 · 3S7D-0 · 3S7M-0 · 3S7U-0 · 3S8E-0 · 3S8I-0 · 3S92-0 · 3S9O-0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "daly_trde_dtl",
+   "kor": "일별거래상세",
+   "layer": null,
+   "board": "137X-2",
+   "where": "일봉 캔들 시리즈",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "137X-2",
+   "where": "일봉 차트 x축 캔들 배열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "close_pric",
+   "kor": "종가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 몸통 종가단",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 상승 적색/하락 청색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "세션별 거래 블록 꼬리 둘째 줄 '전일대비 +1,850'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "137X-2",
+   "where": "크로스헤어 라벨 '150,850 · +1.24%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "137X-2",
+   "where": "차트 하단 거래량 막대 14,213,490",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "board": "137X-2",
+   "where": "거래대금 2.14조원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "bf_mkrt_trde_qty",
+   "kor": "장전거래량",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "레일 세션별 거래 표 장전 행 거래량 42만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "bf_mkrt_trde_wght",
+   "kor": "장전거래비중",
+   "layer": "병기",
+   "board": "137X-2",
+   "where": "세션별 거래 장전 행 거래량 옆 비중 3.0%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "opmr_trde_qty",
+   "kor": "장중거래량",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "레일 세션별 거래 표 장중 행 거래량 1,368만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "opmr_trde_wght",
+   "kor": "장중거래비중",
+   "layer": "병기",
+   "board": "137X-2",
+   "where": "세션별 거래 장중 행 거래량 옆 비중 96.3%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "af_mkrt_trde_qty",
+   "kor": "장후거래량",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "레일 세션별 거래 표 장후 행 거래량 10만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "af_mkrt_trde_wght",
+   "kor": "장후거래비중",
+   "layer": "병기",
+   "board": "137X-2",
+   "where": "세션별 거래 장후 행 거래량 옆 비중 0.7%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "tot_3",
+   "kor": "합계3",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "세션별 거래 표 합계 행 1,420만주 · 2.14조원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "prid_trde_qty",
+   "kor": "기간중거래량",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "세션별 거래 블록 꼬리 '기간중 5일 5,860만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "cntr_str",
+   "kor": "체결강도",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "세션별 거래 블록 꼬리 '체결강도 108.4'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "for_poss",
+   "kor": "외인보유",
+   "layer": null,
+   "board": "137X-2",
+   "where": "종목 요약 '외국인 보유 52.41%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "for_wght",
+   "kor": "외인비중",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "세션별 거래 블록 꼬리 둘째 줄 '외인 52.41%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "for_netprps",
+   "kor": "외인순매수",
+   "layer": null,
+   "board": "137X-2",
+   "where": "오늘의 수급 외국인 +482억원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "orgn_netprps",
+   "kor": "기관순매수",
+   "layer": null,
+   "board": "137X-2",
+   "where": "오늘의 수급 기관 +196억원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "ind_netprps",
+   "kor": "개인순매수",
+   "layer": null,
+   "board": "137X-2",
+   "where": "오늘의 수급 개인 -654억원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "frgn",
+   "kor": "외국계",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "세션별 거래 블록 꼬리 둘째 줄 '외국계 +182만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "crd_remn_rt",
+   "kor": "신용잔고율",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "세션별 거래 블록 꼬리 둘째 줄 '신용잔고 0.86%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "prm",
+   "kor": "프로그램",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "세션별 거래 블록 꼬리 둘째 줄 '프로그램 +64만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "bf_mkrt_trde_prica",
+   "kor": "장전거래대금",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "세션별 거래 표 장전 행 거래대금 620억원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "bf_mkrt_trde_prica_wght",
+   "kor": "장전거래대금비중",
+   "layer": "병기",
+   "board": "137X-2",
+   "where": "세션별 거래 장전 행 거래대금 옆 비중 2.9%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "opmr_trde_prica",
+   "kor": "장중거래대금",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "세션별 거래 표 장중 행 거래대금 2조 700억원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "opmr_trde_prica_wght",
+   "kor": "장중거래대금비중",
+   "layer": "병기",
+   "board": "137X-2",
+   "where": "세션별 거래 장중 행 거래대금 옆 비중 96.7%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "af_mkrt_trde_prica",
+   "kor": "장후거래대금",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "세션별 거래 표 장후 행 거래대금 80억원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10015",
+   "f": "af_mkrt_trde_prica_wght",
+   "kor": "장후거래대금비중",
+   "layer": "병기",
+   "board": "137X-2",
+   "where": "세션별 거래 장후 행 거래대금 옆 비중 0.4%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "stk_invsr_orgn_chart",
+   "kor": "종목별투자자기관별차트",
+   "layer": null,
+   "board": "137X-2",
+   "where": "오늘의 수급 30분 누적 미니 막대 시계열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "dt",
+   "kor": "일자",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 일자별 투자자 열 머리 날짜 5열 09-01(화·당일)·08-31(월)·08-28(금)·08-27(목)·08-26(수) 직접",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 현재가 150,850원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "acc_trde_prica",
+   "kor": "누적거래대금",
+   "layer": null,
+   "board": "137X-2",
+   "where": "거래대금 2.14조원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "ind_invsr",
+   "kor": "개인투자자",
+   "layer": null,
+   "board": "137X-2",
+   "where": "오늘의 수급 개인 -654억원 / 미니 막대 '개'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "frgnr_invsr",
+   "kor": "외국인투자자",
+   "layer": null,
+   "board": "137X-2",
+   "where": "오늘의 수급 외국인 +482억원 / 미니 막대 '외'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "orgn",
+   "kor": "기관계",
+   "layer": null,
+   "board": "137X-2",
+   "where": "오늘의 수급 기관 +196억원 / 미니 막대 '기'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "fnnc_invt",
+   "kor": "금융투자",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 금융투자 행 · 5거래일 낱값 +84/+102/+96/+58/+62 · 5일 누적 +402",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "insrnc",
+   "kor": "보험",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 보험 행 · 5거래일 낱값 +12/+18/+14/+9/+7 · 5일 누적 +60",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "invtrt",
+   "kor": "투신",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 투신 행 · 5거래일 낱값 +47/+36/+42/+24/+28 · 5일 누적 +177",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "etc_fnnc",
+   "kor": "기타금융",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 기타금융 행 · 5거래일 낱값 +3/+4/+2/+1/+2 · 5일 누적 +12",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "bank",
+   "kor": "은행",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 은행 행 · 5거래일 낱값 −6/−8/−5/−3/−4 · 5일 누적 −26",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "penfnd_etc",
+   "kor": "연기금등",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 연기금등 행 · 5거래일 낱값 +58/+40/+54/+32/+31 · 5일 누적 +215",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "samo_fund",
+   "kor": "사모펀드",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 사모펀드 행 · 5거래일 낱값 −2/−6/−4/−5/−3 · 5일 누적 −20",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "natn",
+   "kor": "국가",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기타 그룹 국가 행 · 5거래일 낱값 +2/+3/+1/+2/+4 · 5일 누적 +12",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "etc_corp",
+   "kor": "기타법인",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기타 그룹 기타법인 행 · 5거래일 낱값 −9/−41/−9/−24/+58 · 5일 누적 −25",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "natfor",
+   "kor": "내외국인",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기타 그룹 내외국인 행 · 5거래일 낱값 −5/−10/−7/−8/−7 · 5일 누적 −37",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "opmr_invsr_trde_chart",
+   "kor": "장중투자자별매매차트",
+   "layer": null,
+   "board": "137X-2",
+   "where": "30분 누적 미니 막대 그룹(09:00·09:30·09:42)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "tm",
+   "kor": "시간",
+   "layer": null,
+   "board": "137X-2",
+   "where": "미니 막대 하단 09:00 / 09:30 / 09:42 라벨",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "frgnr_invsr",
+   "kor": "외국인투자자",
+   "layer": null,
+   "board": "137X-2",
+   "where": "'외' 막대 및 외국인 +482억원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "orgn",
+   "kor": "기관계",
+   "layer": null,
+   "board": "137X-2",
+   "where": "'기' 막대 및 기관 +196억원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "invtrt",
+   "kor": "투신",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 투신 행 · 09:00~09:30 +29 · 09:30~09:42(진행) +18 · 당일 누계 +47",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "insrnc",
+   "kor": "보험",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 보험 행 · 09:00~09:30 +7 · 09:30~09:42(진행) +5 · 당일 누계 +12",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "bank",
+   "kor": "은행",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 은행 행 · 09:00~09:30 −4 · 09:30~09:42(진행) −2 · 당일 누계 −6",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "penfnd_etc",
+   "kor": "연기금등",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 연기금등 행 · 09:00~09:30 +36 · 09:30~09:42(진행) +22 · 당일 누계 +58",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "etc_corp",
+   "kor": "기타법인",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 기타법인 행 · 09:00~09:30 −6 · 09:30~09:42(진행) −3 · 당일 누계 −9",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "natn",
+   "kor": "국가",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 국가 행 · 09:00~09:30 +1 · 09:30~09:42(진행) +1 · 당일 누계 +2",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10079",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10079",
+   "f": "last_tic_cnt",
+   "kor": "마지막틱갯수",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "차트 상태 푸터 '마지막 틱 30건'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10079",
+   "f": "stk_tic_chart_qry",
+   "kor": "주식틱차트조회",
+   "layer": null,
+   "board": "137X-2",
+   "where": "주기 '틱' 탭의 캔들 시리즈",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10079",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 종가 / 크로스헤어 라벨 150,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10079",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "137X-2",
+   "where": "차트 하단 거래량 막대 14,213,490",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10079",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 차트 x축 시간 배열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10079",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 몸통 시가단 / 시가 149,200",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10079",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 윗꼬리 / 고가 152,400",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10079",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 아래꼬리 / 저가 148,100",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10079",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10079",
+   "f": "pred_pre_sig",
+   "kor": "전일대비 기호",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 상승 적색/하락 청색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10080",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10080",
+   "f": "stk_min_pole_chart_qry",
+   "kor": "주식분봉차트조회",
+   "layer": null,
+   "board": "137X-2",
+   "where": "주기 '분' 탭의 캔들 시리즈",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10080",
+   "f": "cur_prc",
+   "kor": "현재가(종가)",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 종가 / 크로스헤어 라벨 150,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10080",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "137X-2",
+   "where": "차트 하단 거래량 막대 14,213,490",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10080",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 차트 x축 시간 배열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10080",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 몸통 시가단 / 시가 149,200",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10080",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 윗꼬리 / 고가 152,400",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10080",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 아래꼬리 / 저가 148,100",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10080",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10080",
+   "f": "pred_pre_sig",
+   "kor": "전일대비 기호",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 상승 적색/하락 청색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "stk_dt_pole_chart_qry",
+   "kor": "주식일봉차트조회",
+   "layer": null,
+   "board": "137X-2",
+   "where": "주기 '일' 탭의 캔들 시리즈",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 종가 / 크로스헤어 라벨 150,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "137X-2",
+   "where": "차트 하단 거래량 막대 14,213,490",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "board": "137X-2",
+   "where": "거래대금 2.14조원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 차트 x축 일자 배열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 몸통 시가단 / 시가 149,200",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 윗꼬리 / 고가 152,400",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 아래꼬리 / 저가 148,100",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 상승 적색/하락 청색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10081",
+   "f": "trde_tern_rt",
+   "kor": "거래회전율",
+   "layer": "직접",
+   "board": "137X-2",
+   "where": "차트 툴바 거래회전율 '일 0.24%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "stk_stk_pole_chart_qry",
+   "kor": "주식주봉차트조회",
+   "layer": null,
+   "board": "137X-2",
+   "where": "주기 '주' 탭의 캔들 시리즈",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 종가 / 크로스헤어 라벨 150,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "137X-2",
+   "where": "차트 하단 거래량 막대 14,213,490",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "board": "137X-2",
+   "where": "거래대금 2.14조원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 차트 x축 일자 배열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 몸통 시가단 / 시가 149,200",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 윗꼬리 / 고가 152,400",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 아래꼬리 / 저가 148,100",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 상승 적색/하락 청색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10082",
+   "f": "trde_tern_rt",
+   "kor": "거래회전율",
+   "layer": "병기",
+   "board": "137X-2",
+   "where": "차트 툴바 거래회전율 '주 1.12%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "stk_mth_pole_chart_qry",
+   "kor": "주식월봉차트조회",
+   "layer": null,
+   "board": "137X-2",
+   "where": "주기 '월' 탭의 캔들 시리즈",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 종가 / 크로스헤어 라벨 150,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "137X-2",
+   "where": "차트 하단 거래량 막대 14,213,490",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "board": "137X-2",
+   "where": "거래대금 2.14조원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 차트 x축 일자 배열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 몸통 시가단 / 시가 149,200",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 윗꼬리 / 고가 152,400",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 아래꼬리 / 저가 148,100",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 상승 적색/하락 청색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10083",
+   "f": "trde_tern_rt",
+   "kor": "거래회전율",
+   "layer": "병기",
+   "board": "137X-2",
+   "where": "차트 툴바 거래회전율 '월 4.36%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "tdy_pred_cntr",
+   "kor": "당일전일체결",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "체결 상태 줄 · 당일 · 전일 체결(1,420만주 · 1,180만주 · +20.3%) / node 3S9Q-0 · 3S9R-0 · 3S9S-0 · 3S9T-0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "tm",
+   "kor": "시간",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 체결 시각 09:42:18 / 푸터 '마지막 체결 09:42:18'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 현재가 150,850원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "pre_rt",
+   "kor": "대비율",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1.24%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "pri_sel_bid_unit",
+   "kor": "우선매도호가단위",
+   "layer": "병기",
+   "board": "2R3M-1",
+   "where": "체결 흐름 표 최근행 체결가 셀 아래 '매도 150,900'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "pri_buy_bid_unit",
+   "kor": "우선매수호가단위",
+   "layer": "병기",
+   "board": "2R3M-1",
+   "where": "체결 흐름 표 최근행 체결가 셀 아래 '매수 150,850'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "cntr_trde_qty",
+   "kor": "체결거래량",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "체결 흐름 표 체결량 열 1,284(누계를 병기로 분리해 집약 해소)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "sign",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "137X-2",
+   "where": "+ 부호와 상승색(--color-up)으로 표기",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": null,
+   "board": "137X-2",
+   "where": "거래량 1,420만주 / 차트 하단 14,213,490",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "acc_trde_prica",
+   "kor": "누적거래대금",
+   "layer": null,
+   "board": "137X-2",
+   "where": "거래대금 2.14조원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "cntr_str",
+   "kor": "체결강도",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "체결 지표 스트립 · 체결강도 일별 블록(오늘 118.4% · 어제 102.1% · 5일 · 20일 · 60일) / node 36DX-0 · 36DZ-0 · 36E0-0 · 36E1-0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10084",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": "병기",
+   "board": "2R3M-1",
+   "where": "헤더 코드 병기 줄 '005930 · KOSPI · KRX'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "daly_stkpc",
+   "kor": "일별주가",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "일별 시세 표",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "date",
+   "kor": "날짜",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "일자 컬럼 09-01·08-29·08-28",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "레일 일별 시세 표 시가 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "레일 일별 시세 표 고가 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "레일 일별 시세 표 저가 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "close_pric",
+   "kor": "종가",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "종가 컬럼 150,850·149,000·147,990",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "pred_rt",
+   "kor": "전일비",
+   "layer": "병기",
+   "board": "2R3M-1",
+   "where": "일별 시세 종가 셀 아래 전일비 병기(+1.24%)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "등락 컬럼 +1.24%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "거래량 컬럼 1,420만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "amt_mn",
+   "kor": "금액(백만)",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "09-01 거래대금 2.14조원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "crd_rt",
+   "kor": "신용비",
+   "layer": null,
+   "board": "2RBO-1",
+   "where": "수급·신용 신용비율 0.86%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "ind",
+   "kor": "개인",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "오늘의 수급 개인 -654억원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "orgn",
+   "kor": "기관",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "오늘의 수급 기관 +196억원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "for_qty",
+   "kor": "외인수량",
+   "layer": "병기",
+   "board": "137X-2",
+   "where": "레일 종목 요약 외국인 보유 52.41% 아래 '외인수량 31.3억주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "frgn",
+   "kor": "외국계",
+   "layer": "병기",
+   "board": "2R3M-1",
+   "where": "일별 시세 외국인 셀 아래 외국계 병기(+182만주)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "prm",
+   "kor": "프로그램",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "레일 일별 시세 표 프로그램 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "for_rt",
+   "kor": "외인비",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "종목 요약 외국인 보유 52.41%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "for_poss",
+   "kor": "외인보유",
+   "layer": "직접",
+   "board": "2R3M-1",
+   "where": "레일 일별 시세 표 외국인 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "for_wght",
+   "kor": "외인비중",
+   "layer": null,
+   "board": "2RBO-1",
+   "where": "수급·신용 외인소진율 65.5%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "for_netprps",
+   "kor": "외인순매수",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "오늘의 수급 외국인 +482억원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "orgn_netprps",
+   "kor": "기관순매수",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "오늘의 수급 기관 +196억원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "ind_netprps",
+   "kor": "개인순매수",
+   "layer": null,
+   "board": "2R3M-1",
+   "where": "오늘의 수급 개인 -654억원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "crd_remn_rt",
+   "kor": "신용잔고율",
+   "layer": "병기",
+   "board": "2RBO-1",
+   "where": "수급·신용 열 신용비율 0.86% 아래 '신용잔고율 0.86%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10094",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10094",
+   "f": "stk_yr_pole_chart_qry",
+   "kor": "주식년봉차트조회",
+   "layer": null,
+   "board": "137X-2",
+   "where": "주기 '년' 탭의 캔들 시리즈",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10094",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 종가 / 크로스헤어 라벨 150,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10094",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "137X-2",
+   "where": "차트 하단 거래량 막대 14,213,490",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10094",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "board": "137X-2",
+   "where": "거래대금 2.14조원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10094",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 차트 x축 일자 배열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10094",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 몸통 시가단 / 시가 149,200",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10094",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 윗꼬리 / 고가 152,400",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10094",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "캔들 아래꼬리 / 저가 148,100",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:current_trading",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 현재가 150,850원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:current_trading",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "board": "137X-2",
+   "where": "+ 부호와 상승색(--color-up)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:current_trading",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:current_trading",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1.24%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:current_trading",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "137X-2",
+   "where": "지표 스트립 거래량 1,420만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:current_trading",
+   "f": "trde_pre",
+   "kor": "거래대비",
+   "layer": "병기",
+   "board": "2RBO-1",
+   "where": "수급·신용 열 대용가 118,800 아래 '전일거래량 대비 120.3%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "시가·고가·저가 스트립 149,200",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "시가·고가·저가 스트립 152,400",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "시가·고가·저가 스트립 148,100",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "upl_pric",
+   "kor": "상한가",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "가격 이력·기준 열 '상한가 193,700' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "lst_pric",
+   "kor": "하한가",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "가격 이력·기준 열 '하한가 104,300' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "base_pric",
+   "kor": "기준가",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "가격 이력·기준 열 '기준가 149,000' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "exp_cntr_pric",
+   "kor": "예상체결가",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "가격 이력·기준 열 6행째 '예상 체결 150,900'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "exp_cntr_qty",
+   "kor": "예상체결수량",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "가격 이력·기준 열 6행째 '예상 체결 · 8,420주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:identity_and_capital",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:identity_and_capital",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 종목명 '삼성전자'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:identity_and_capital",
+   "f": "setl_mm",
+   "kor": "결산월",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "기업 개요 · 결산월 칸(12월) / node 3EU4-0 · 3EU6-0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:identity_and_capital",
+   "f": "fav",
+   "kor": "액면가",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "기업 개요 · 액면가 칸(100원) / node 3EU7-0 · 3EU9-0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:identity_and_capital",
+   "f": "cap",
+   "kor": "자본금",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "기업 개요 · 자본금 칸(5,970억원) / node 3EUA-0 · 3EUC-0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:identity_and_capital",
+   "f": "flo_stk",
+   "kor": "상장주식",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "기업 개요 · 상장주식 칸(59억 6,978만주) / node 3EUD-0 · 3EUF-0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "crd_rt",
+   "kor": "신용비율",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "수급·신용 열 '신용비율 0.86%' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "mac",
+   "kor": "시가총액",
+   "layer": null,
+   "board": "137X-2",
+   "where": "종목 요약 시가총액 900.4조",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "mac_wght",
+   "kor": "시가총액비중",
+   "layer": "병기",
+   "board": "2RBO-1",
+   "where": "종목 요약 · 시가총액 행 보조줄(코스피 비중 21.4%) / node 3F3V-0 · 3F3Z-0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "for_exh_rt",
+   "kor": "외인소진률",
+   "layer": null,
+   "board": "137X-2",
+   "where": "종목 요약 외국인 보유 52.41%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "repl_pric",
+   "kor": "대용가",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "수급·신용 열 '대용가 118,800' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "fav_unit",
+   "kor": "액면가단위",
+   "layer": "병기",
+   "board": "2RBO-1",
+   "where": "기업 개요 액면가 100원 칸 아래 '단위 원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "dstr_stk",
+   "kor": "유통주식",
+   "layer": null,
+   "board": "137X-2",
+   "where": "종목 요약 유통 주식 44.4억주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "dstr_rt",
+   "kor": "유통비율",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "수급·신용 열 6행째 '유통비율 74.4%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "oyr_hgst",
+   "kor": "연중최고",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "수급·신용 열 '연중최고 153,400' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "oyr_lwst",
+   "kor": "연중최저",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "수급·신용 열 '연중최저 112,300' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "250hgst",
+   "kor": "250최고",
+   "layer": null,
+   "board": "137X-2",
+   "where": "가격 범위 '최고 153,400'(52주=250거래일 고가)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "250lwst",
+   "kor": "250최저",
+   "layer": null,
+   "board": "137X-2",
+   "where": "가격 범위 '52주 최저 67,700'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "250hgst_pric_dt",
+   "kor": "250최고가일",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "가격 이력·기준 열 '250일 최고 153,400 · 08/21'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "250hgst_pric_pre_rt",
+   "kor": "250최고가대비율",
+   "layer": "병기",
+   "board": "2RBO-1",
+   "where": "250일 최고 행 아래 '현재가 대비 −1.66%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "250lwst_pric_dt",
+   "kor": "250최저가일",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "가격 이력·기준 열 '250일 최저 67,700 · 11/03'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "250lwst_pric_pre_rt",
+   "kor": "250최저가대비율",
+   "layer": "병기",
+   "board": "2RBO-1",
+   "where": "250일 최저 행 아래 '현재가 대비 +122.8%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:valuation",
+   "f": "per",
+   "kor": "PER",
+   "layer": null,
+   "board": "137X-2",
+   "where": "지표 스트립 PER 18.7배",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:valuation",
+   "f": "eps",
+   "kor": "EPS",
+   "layer": "병기",
+   "board": "2RBO-1",
+   "where": "가치 지표 · PER 행 보조줄(EPS 7,115원) / node 3EW6-0 · 3EWA-0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:valuation",
+   "f": "roe",
+   "kor": "ROE",
+   "layer": null,
+   "board": "137X-2",
+   "where": "지표 스트립 ROE 8.4%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:valuation",
+   "f": "pbr",
+   "kor": "PBR",
+   "layer": null,
+   "board": "137X-2",
+   "where": "지표 스트립 PBR 1.42배",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:valuation",
+   "f": "ev",
+   "kor": "EV",
+   "layer": "직접",
+   "board": "2RBO-1",
+   "where": "가치 지표 열 6행째 'EV 868.2조'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10001:valuation",
+   "f": "bps",
+   "kor": "BPS",
+   "layer": "병기",
+   "board": "2RBO-1",
+   "where": "가치 지표 · PBR 행 보조줄(BPS 57,320원) / node 3EWB-0 · 3EWF-0",
+   "attributed_here": false,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 148
+}

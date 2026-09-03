@@ -1,0 +1,411 @@
+{
+ "board": "2V71-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10008",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850 · +1.24%'"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "순위 표 '현재가' 열"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "순위 표 '현재가' 열"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10043",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10044",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10053",
+   "f": "qry_tm",
+   "kor": "조회시간",
+   "layer": null,
+   "where": "푸터 '마지막 조회 09:42:18'"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "순위 표 '현재가' 열"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10078",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "prm_netprps_upper_50",
+   "kor": "프로그램순매수상위50",
+   "layer": null,
+   "where": "프로그램 순매수 상위 50 표 목록"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "rank",
+   "kor": "순위",
+   "layer": null,
+   "where": "표 '순위' 열 1~50"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "표 '종목' 열"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "표 '현재가' 열"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "flu_sig",
+   "kor": "등락기호",
+   "layer": null,
+   "where": "등락률 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "표 '등락률' 열"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": "직접",
+   "where": "순위표 거래량 열 삼성전자 행 1,420만주"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "prm_sell_amt",
+   "kor": "프로그램매도금액",
+   "layer": "직접",
+   "where": "순위표 매도 열 삼성전자 행 2,968억"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "prm_buy_amt",
+   "kor": "프로그램매수금액",
+   "layer": "직접",
+   "where": "순위표 매수 열 삼성전자 행 4,810억"
+  },
+  {
+   "mapping_id": "base:ka90003",
+   "f": "prm_netprps_amt",
+   "kor": "프로그램순매수금액",
+   "layer": null,
+   "where": "표 '프로그램 순매수' 열 +2,140억"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "tot_1",
+   "kor": "매수체결수량합계",
+   "layer": "병기",
+   "where": "레일 '상위 50 합계' 매수 체결 행 3,884.7만주"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "tot_2",
+   "kor": "매수체결금액합계",
+   "layer": "직접",
+   "where": "레일 '상위 50 합계' 매수 체결 5.86조"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "tot_3",
+   "kor": "매도체결수량합계",
+   "layer": "병기",
+   "where": "레일 '상위 50 합계' 매도 체결 행 3,062.6만주"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "tot_4",
+   "kor": "매도체결금액합계",
+   "layer": "직접",
+   "where": "레일 '상위 50 합계' 매도 체결 4.62조"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "tot_5",
+   "kor": "순매수대금합계",
+   "layer": null,
+   "where": "KPI '상위 50 합계 +1.24조'"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "tot_6",
+   "kor": "합계6",
+   "layer": "직접",
+   "where": "레일 '상위 50 합계' 집계 종목 50종목"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "stk_prm_trde_prst",
+   "kor": "종목별프로그램매매현황",
+   "layer": null,
+   "where": "프로그램 순매수 상위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "표 '종목' 열"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "표 '현재가' 열"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "flu_sig",
+   "kor": "등락기호",
+   "layer": null,
+   "where": "등락률 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "buy_cntr_qty",
+   "kor": "매수체결수량",
+   "layer": "병기",
+   "where": "순위표 매수 셀 2번째 줄 319.0만주"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "buy_cntr_amt",
+   "kor": "매수체결금액",
+   "layer": "직접",
+   "where": "순위표 매수 열 4,810억"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "sel_cntr_qty",
+   "kor": "매도체결수량",
+   "layer": "병기",
+   "where": "순위표 매도 셀 2번째 줄 196.9만주"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "sel_cntr_amt",
+   "kor": "매도체결금액",
+   "layer": "직접",
+   "where": "순위표 매도 열 2,968억"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "netprps_prica",
+   "kor": "순매수대금",
+   "layer": null,
+   "where": "표 '프로그램 순매수' 열 +2,140억"
+  },
+  {
+   "mapping_id": "base:ka90004",
+   "f": "all_trde_rt",
+   "kor": "전체거래비율",
+   "layer": null,
+   "where": "표 '거래대금 비중' 열 18.2%"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "순위 표 '현재가' 열"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "등락률 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "순위 표 '등락률' 열"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "순위 표 '현재가' 열"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "등락률 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "순위 표 '등락률' 열"
+  },
+  {
+   "mapping_id": "detail:ka10040:broker_departures",
+   "f": "qry_tm",
+   "kor": "조회시간",
+   "layer": null,
+   "where": "푸터 '마지막 조회 09:42:18'"
+  }
+ ]
+}

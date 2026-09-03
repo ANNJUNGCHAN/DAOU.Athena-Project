@@ -1,0 +1,997 @@
+{
+ "board_id": "2QFO-2",
+ "card_id": "CC-05",
+ "name": "CC-05 / R03-T1 · 수급 — 투자자별",
+ "operation_refs": [
+  "base:0w",
+  "base:ka10037",
+  "base:ka10052",
+  "base:ka10059",
+  "base:ka10061",
+  "base:ka10066"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:0w",
+   "f": "20",
+   "kor": "체결시간",
+   "layer": null,
+   "board": "2ROJ-1",
+   "where": "프로그램 시간대별 표 '시간대' 열 09:15~09:40",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "10",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "헤더 현재가 150,850",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "25",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "헤더 '+1,850'의 + 부호와 상승색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "11",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "헤더 전일대비 +1,850",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "12",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "헤더 등락율 +1.24%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "13",
+   "kor": "누적거래량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "KPI 밴드 5칸 '거래대금 2.14조' 보조줄 '거래량 1,420만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "202",
+   "kor": "매도수량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매도 셀 2번째 줄 196.9만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "204",
+   "kor": "매도금액",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매도 열 2,968억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "206",
+   "kor": "매수수량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매수 셀 2번째 줄 319.0만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "208",
+   "kor": "매수금액",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 매수 열 4,810억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "210",
+   "kor": "순매수수량",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 순매수 셀 2번째 줄 122.1만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "211",
+   "kor": "순매수수량증감",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 증감 셀 2번째 줄 +19.8만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "212",
+   "kor": "순매수금액",
+   "layer": null,
+   "board": "2ROJ-1",
+   "where": "KPI 카드 '프로그램 합계 +1,842억' 및 합계 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "213",
+   "kor": "순매수금액증감",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "구분 표 합계 행 증감 열 +298억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "214",
+   "kor": "장시작예상잔여시간",
+   "layer": "직접",
+   "board": "2ROJ-1",
+   "where": "헤더 부제 '정규장 · 개장 잔여 해당 없음'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "215",
+   "kor": "장운영구분",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "헤더 '005930 · KOSPI · 장중' 장운영 상태 표기",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "216",
+   "kor": "투자자별ticker",
+   "layer": "병기",
+   "board": "2ROJ-1",
+   "where": "푸터 좌측 상태 줄 끝 mono '실시간 005930'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "frgn_wicket_trde_upper",
+   "kor": "외국계창구매매상위",
+   "layer": null,
+   "board": "30TY-0",
+   "where": "증권사별 상위 표(외국계 합산 칩) 목록",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "rank",
+   "kor": "순위",
+   "layer": null,
+   "board": "30TY-0",
+   "where": "표 '순위' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "30TY-0",
+   "where": "종목 카드 '005930 · KOSPI'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "30TY-0",
+   "where": "표 '종목' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "30TY-0",
+   "where": "표 '현재가' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "30TY-0",
+   "where": "등락률 열의 ± 부호와 상승/하락색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "30TY-0",
+   "where": "종목 카드 '+1,850'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "30TY-0",
+   "where": "표 '등락률' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "sel_trde_qty",
+   "kor": "매도거래량",
+   "layer": "병기",
+   "board": "30TY-0",
+   "where": "증권사별 상위 표 매도 셀 2번째 줄 수량(삼성전자 54.9만주)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "buy_trde_qty",
+   "kor": "매수거래량",
+   "layer": "병기",
+   "board": "30TY-0",
+   "where": "증권사별 상위 표 매수 셀 2번째 줄 수량(삼성전자 82.2만주)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "netprps_trde_qty",
+   "kor": "순매수거래량",
+   "layer": "병기",
+   "board": "30TY-0",
+   "where": "증권사별 상위 표 순매수 셀 2번째 줄 수량(삼성전자 +27.3만주)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "netprps_prica",
+   "kor": "순매수대금",
+   "layer": null,
+   "board": "30TY-0",
+   "where": "표 '순매수' 열 +412억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "board": "30TY-0",
+   "where": "증권사별 상위 표 거래량 열(삼성전자 1,420만주)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "KPI '거래대금 2.14조'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "trde_ori_mont_trde_qty",
+   "kor": "거래원순간거래량",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "'순간 거래량' 카드 목록",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "tm",
+   "kor": "시간",
+   "layer": "직접",
+   "board": "2QM7-2",
+   "where": "우측 레일 '순간 거래량' 행 꼬리 시각 09:41:20 · 09:41:44",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "헤더 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "헤더 '삼성전자 수급'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "trde_ori_nm",
+   "kor": "거래원명",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "순간 거래량 카드 모건스탠리·키움증권",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "tp",
+   "kor": "구분",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "순간 거래량 값의 ± 부호와 상승/하락색으로 매수·매도 구분",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "mont_trde_qty",
+   "kor": "순간거래량",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "순간 거래량 '+18,420주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "acc_netprps",
+   "kor": "누적순매수",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "거래원 순매수 순위 표 '순매수' 열 +842억",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "헤더 150,850",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "헤더 '+1,850'의 ± 부호와 상승색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "헤더 +1,850",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2QM7-2",
+   "where": "헤더 +1.24%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "stk_invsr_orgn",
+   "kor": "종목별투자자기관별",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 목록",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 '일자' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "순위 표 '현재가' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "'등락' 열의 ± 부호와 상승/하락색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "종목 카드 '+1,850'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 '등락' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": "병기",
+   "board": "2QFO-2",
+   "where": "KPI 밴드 5칸 보조줄 '거래량 1,420만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "acc_trde_prica",
+   "kor": "누적거래대금",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "KPI '거래대금 2.14조'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "ind_invsr",
+   "kor": "개인투자자",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '개인' 행 -638억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "frgnr_invsr",
+   "kor": "외국인투자자",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '외국인' 행 +1,842억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "orgn",
+   "kor": "기관계",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "KPI '기관 -1,204억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "fnnc_invt",
+   "kor": "금융투자",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '금융투자' 행 -842억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "insrnc",
+   "kor": "보험",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 보험 행(매도·매수·순매수 310억 · 214억 · -96억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "invtrt",
+   "kor": "투신",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '투신' 행 -204억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "etc_fnnc",
+   "kor": "기타금융",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 기타금융 행(매도·매수·순매수 102억 · 64억 · -38억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "bank",
+   "kor": "은행",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 은행 행(매도·매수·순매수 110억 · 86억 · -24억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "penfnd_etc",
+   "kor": "연기금등",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '연기금 등' 행 +186억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "samo_fund",
+   "kor": "사모펀드",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 사모펀드 행(매도·매수·순매수 310억 · 168억 · -142억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "natn",
+   "kor": "국가",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 국가 행(매도·매수·순매수 82억 · 38억 · -44억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "etc_corp",
+   "kor": "기타법인",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '기타법인' 행 +66억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "natfor",
+   "kor": "내외국인",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 내외국인 행(매도·매수·순매수 120억 · 54억 · -66억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "stk_invsr_orgn_tot",
+   "kor": "종목별투자자기관별합계",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "KPI 5일 누적 카드(외국인·기관·개인) 합계",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "ind_invsr",
+   "kor": "개인투자자",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "KPI '개인 5일 누적 -1,306억'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "frgnr_invsr",
+   "kor": "외국인투자자",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "KPI '외국인 5일 누적 +3,214억'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "orgn",
+   "kor": "기관계",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "KPI '기관 5일 누적 -1,842억'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "fnnc_invt",
+   "kor": "금융투자",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '금융투자' 행 -842억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "insrnc",
+   "kor": "보험",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 보험 행(매도·매수·순매수 310억 · 214억 · -96억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "invtrt",
+   "kor": "투신",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '투신' 행 -204억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "etc_fnnc",
+   "kor": "기타금융",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 기타금융 행(매도·매수·순매수 102억 · 64억 · -38억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "bank",
+   "kor": "은행",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 은행 행(매도·매수·순매수 110억 · 86억 · -24억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "penfnd_etc",
+   "kor": "연기금등",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '연기금 등' 행 +186억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "samo_fund",
+   "kor": "사모펀드",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 사모펀드 행(매도·매수·순매수 310억 · 168억 · -142억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "natn",
+   "kor": "국가",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 국가 행(매도·매수·순매수 82억 · 38억 · -44억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "etc_corp",
+   "kor": "기타법인",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '기타법인' 행 +66억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "natfor",
+   "kor": "내외국인",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 내외국인 행(매도·매수·순매수 120억 · 54억 · -66억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "opaf_invsr_trde",
+   "kor": "장중투자자별매매차트",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 투자자 순매수 표 목록(장 마감 후 확정)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "종목 카드 '005930 · KOSPI'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "헤더 '삼성전자 수급'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 '종가' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "'등락' 열의 ± 부호와 상승/하락색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "종목 카드 '+1,850'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 '등락' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "병기",
+   "board": "2QFO-2",
+   "where": "KPI 밴드 5칸 보조줄 '거래량 1,420만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "ind_invsr",
+   "kor": "개인투자자",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 '개인' 열 -638",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "frgnr_invsr",
+   "kor": "외국인투자자",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 '외국인' 열 +1,842",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "orgn",
+   "kor": "기관계",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 '기관' 열 -1,204",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "fnnc_invt",
+   "kor": "금융투자",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '금융투자' 행 -842억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "insrnc",
+   "kor": "보험",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 보험 행(매도·매수·순매수 310억 · 214억 · -96억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "invtrt",
+   "kor": "투신",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '투신' 행 -204억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "etc_fnnc",
+   "kor": "기타금융",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 기타금융 행(매도·매수·순매수 102억 · 64억 · -38억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "bank",
+   "kor": "은행",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 은행 행(매도·매수·순매수 110억 · 86억 · -24억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "penfnd_etc",
+   "kor": "연기금등",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '연기금 등' 행 +186억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "samo_fund",
+   "kor": "사모펀드",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 사모펀드 행(매도·매수·순매수 310억 · 168억 · -142억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "natn",
+   "kor": "국가",
+   "layer": "직접",
+   "board": "2QFO-2",
+   "where": "투자자표 국가 행(매도·매수·순매수 82억 · 38억 · -44억)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "etc_corp",
+   "kor": "기타법인",
+   "layer": null,
+   "board": "2QFO-2",
+   "where": "투자자별 순매수 표 '기타법인' 행 +66억",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 39
+}

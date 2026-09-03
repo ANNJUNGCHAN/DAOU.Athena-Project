@@ -1,0 +1,13 @@
+{
+  "board_id": "1WOB-1",
+  "name": "A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+  "card_id": "CC-05",
+  "width": 1440,
+  "height": 917,
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "saved_at": "2026-09-02T20:18:10+09:00"
+}

@@ -1,0 +1,222 @@
+{
+ "board": "3OIM-0",
+ "fields": [
+  {
+   "mapping_id": "base:kt50030",
+   "f": "stk_bond_tp",
+   "kor": "주식채권구분",
+   "layer": "병기",
+   "where": "미체결 주문 섹션 종목 셀 2줄 04020000 · 금현물"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": "직접",
+   "where": "미체결 주문 섹션 주문번호 열 0000512"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "io_tp_nm",
+   "kor": "주문유형구분",
+   "layer": "직접",
+   "where": "미체결 주문 섹션 주문유형구분 열 지정가"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "cnfm_qty",
+   "kor": "확인수량",
+   "layer": "병기",
+   "where": "미체결 주문 섹션 수량 셀 2줄 확인수량 0g"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "rsrv_tp",
+   "kor": "예약/반대여부",
+   "layer": "병기",
+   "where": "미체결 주문 섹션 상태 셀 2줄 예약·반대 해당 없음"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "crd_deal_tp",
+   "kor": "신용거래구분",
+   "layer": "직접",
+   "where": "미체결 주문 섹션 신용거래구분 열 현금"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "comm_ord_tp",
+   "kor": "통신구분",
+   "layer": "병기",
+   "where": "미체결 주문 섹션 신용거래구분 셀 2줄 통신구분 HTS"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "mdfy_cncl_tp",
+   "kor": "정정취소구분",
+   "layer": "병기",
+   "where": "미체결 주문 섹션 상태 셀 2줄 정정취소 해당 없음"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": "직접",
+   "where": "미체결 주문 섹션 제목 옆 칩 KRX 금시장"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "cond_uv",
+   "kor": "스톱가",
+   "layer": "병기",
+   "where": "미체결 주문 섹션 주문가 셀 2줄 스톱가 0원"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": "직접",
+   "where": "당일 체결 섹션 주문번호 열 0000508"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "crd_tp",
+   "kor": "신용구분",
+   "layer": "직접",
+   "where": "당일 체결 섹션 신용구분 열 현금"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "cnfm_qty",
+   "kor": "확인수량",
+   "layer": "병기",
+   "where": "당일 체결 섹션 체결수량 셀 2줄 확인수량 5g"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "rsrv_tp",
+   "kor": "반대여부",
+   "layer": "병기",
+   "where": "당일 체결 섹션 확인시간 셀 2줄 반대 해당 없음"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "io_tp_nm",
+   "kor": "주문구분",
+   "layer": "직접",
+   "where": "당일 체결 섹션 주문구분 열 시장가"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "loan_dt",
+   "kor": "대출일",
+   "layer": "병기",
+   "where": "당일 체결 섹션 신용구분 셀 2줄 대출일 해당 없음"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "comm_ord_tp",
+   "kor": "통신구분",
+   "layer": "병기",
+   "where": "당일 체결 섹션 확인시간 셀 2줄 HTS"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "mdfy_cncl",
+   "kor": "정정취소",
+   "layer": "병기",
+   "where": "당일 체결 섹션 확인시간 셀 2줄 정정취소 해당 없음"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "cnfm_tm",
+   "kor": "확인시간",
+   "layer": "직접",
+   "where": "당일 체결 섹션 확인시간 열 09:21:07"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": "직접",
+   "where": "당일 체결 섹션 제목 옆 칩 KRX 금시장"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "cond_uv",
+   "kor": "스톱가",
+   "layer": "병기",
+   "where": "당일 체결 섹션 체결가 셀 2줄 스톱가 0원"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "stk_bond_tp",
+   "kor": "주식채권구분",
+   "layer": "병기",
+   "where": "주문내역 섹션 종목 셀 2줄 04020000 · 금현물 3행"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": "병기",
+   "where": "주문내역 섹션 주문일 셀 2줄 0000512 · 0000508 · 0000497"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "io_tp_nm",
+   "kor": "주문유형구분",
+   "layer": "직접",
+   "where": "주문내역 섹션 주문유형구분 열 지정가 · 시장가 · 지정가"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "cnfm_qty",
+   "kor": "확인수량",
+   "layer": "병기",
+   "where": "주문내역 섹션 수량 셀 2줄 확인수량 0g · 5g · 20g"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "rsrv_tp",
+   "kor": "예약/반대여부",
+   "layer": "병기",
+   "where": "주문내역 섹션 상태 셀 2줄 예약 해당 없음 3행"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "crd_deal_tp",
+   "kor": "신용거래구분",
+   "layer": "직접",
+   "where": "주문내역 섹션 신용거래구분 열 현금 3행"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "comm_ord_tp",
+   "kor": "통신구분",
+   "layer": "병기",
+   "where": "주문내역 섹션 신용거래구분 셀 2줄 통신구분 HTS 3행"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "mdfy_cncl_tp",
+   "kor": "정정취소구분",
+   "layer": "병기",
+   "where": "주문내역 섹션 상태 셀 2줄 정정취소 해당 없음 3행"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": "직접",
+   "where": "주문내역 섹션 제목 옆 칩 KRX 금시장"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "cond_uv",
+   "kor": "스톱가",
+   "layer": "병기",
+   "where": "주문내역 섹션 주문가 셀 2줄 스톱가 0원 3행"
+  }
+ ]
+}

@@ -1,0 +1,13 @@
+{
+  "root": "2RJ9-1",
+  "regions": [
+    { "node_id": "2RNQ-1", "name": "Instrument Header", "role": "header", "depth": 1 },
+    { "node_id": "2RNR-1", "name": "Frame (탭 스트립)", "role": "strip", "depth": 2 },
+    { "node_id": "2RN6-1", "name": "Quote and Valuation Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "2RJD-1", "name": "Chart Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "2RKJ-1", "name": "Athena Chart Module Mount", "role": "primary", "depth": 2 },
+    { "node_id": "2RJE-1", "name": "Instrument Context", "role": "rail", "depth": 2 },
+    { "node_id": "3HC9-0", "name": "투자자별 매매", "role": "other", "depth": 1 },
+    { "node_id": "3HF0-0", "name": "Chart Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

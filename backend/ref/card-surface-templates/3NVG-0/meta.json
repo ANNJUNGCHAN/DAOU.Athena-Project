@@ -1,0 +1,22 @@
+{
+  "board_id": "3NVG-0",
+  "name": "CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+  "card_id": "CC-01",
+  "operation_refs": [
+    "base:kt50021",
+    "detail:kt00001:foreign_currency_deposits",
+    "detail:kt00001:special_deposits_and_credit",
+    "detail:kt00017:daily_cash_and_trading_flows",
+    "detail:kt00001:cash_and_margin",
+    "detail:kt00001:withdrawal_and_order_capacity"
+  ],
+  "width": 1440,
+  "height": 926,
+  "state": {
+    "kind": "expand",
+    "parent_board": "2SKU-1",
+    "control": null,
+    "control_text": "외화예수금"
+  },
+  "saved_at": "2026-09-02T10:58:00Z"
+}

@@ -1,0 +1,348 @@
+{
+ "board": "3K7K-0",
+ "fields": [
+  {
+   "mapping_id": "base:04",
+   "f": "958",
+   "kor": "신용이자",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 신용이자·대주 (메인 2SCE-1 신용·대출 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:04",
+   "f": "992",
+   "kor": "당일실현손익(신용)",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 레일 신용 실현·대주 (메인 2SCE-1 신용·대출 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:04",
+   "f": "993",
+   "kor": "당일실현손익율(신용)",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 레일 신용 실현·대주 (메인 2SCE-1 신용·대출 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:04",
+   "f": "959",
+   "kor": "담보대출수량",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 레일 신용 실현·대주 (메인 2SCE-1 신용·대출 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "crd_int",
+   "kor": "신용이자",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 신용이자·대주 (메인 2SCE-1 신용·대출 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "crd_loan",
+   "kor": "신용융자금",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "ls_grnt",
+   "kor": "대주담보금",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "etc_loan",
+   "kor": "기타대여금",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "ch_uncla",
+   "kor": "현금미수금",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "crd_int_npay",
+   "kor": "신용이자미납",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "etc_loana",
+   "kor": "기타대여금",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "mdstrm_usfe",
+   "kor": "중도이용료",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00005:receivables_and_margin",
+   "f": "ch_uncla",
+   "kor": "현금미수금",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00005:receivables_and_margin",
+   "f": "crd_int_npay_gold",
+   "kor": "신용이자미납금",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00005:receivables_and_margin",
+   "f": "etc_loana",
+   "kor": "기타대여금",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "entr_fr",
+   "kor": "예수금_초",
+   "layer": "직접",
+   "where": "이달 기초·기말 구성 표 예수금 행 기초 08/01 셀 30,300,000원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "entr_to",
+   "kor": "예수금_말",
+   "layer": "직접",
+   "where": "이달 기초·기말 구성 표 예수금 행 기말 09/01 셀 34,820,000원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "scrt_evlt_amt_fr",
+   "kor": "유가증권평가금액_초",
+   "layer": "직접",
+   "where": "표 유가증권평가금액 행 기초 08/01 셀 89,450,000원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "scrt_evlt_amt_to",
+   "kor": "유가증권평가금액_말",
+   "layer": "직접",
+   "where": "표 유가증권평가금액 행 기말 09/01 셀 89,760,240원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "ls_grnt_fr",
+   "kor": "대주담보금_초",
+   "layer": "직접",
+   "where": "표 대주담보금 행 기초 08/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "ls_grnt_to",
+   "kor": "대주담보금_말",
+   "layer": "직접",
+   "where": "표 대주담보금 행 기말 09/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "crd_loan_fr",
+   "kor": "신용융자금_초",
+   "layer": "직접",
+   "where": "표 신용융자금 행 기초 08/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "crd_loan_to",
+   "kor": "신용융자금_말",
+   "layer": "직접",
+   "where": "표 신용융자금 행 기말 09/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "ch_uncla_fr",
+   "kor": "현금미수금_초",
+   "layer": "직접",
+   "where": "표 현금미수금 행 기초 08/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "ch_uncla_to",
+   "kor": "현금미수금_말",
+   "layer": "직접",
+   "where": "표 현금미수금 행 기말 09/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "krw_asgna_fr",
+   "kor": "원화대용금_초",
+   "layer": "직접",
+   "where": "표 원화대용금 행 기초 08/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "krw_asgna_to",
+   "kor": "원화대용금_말",
+   "layer": "직접",
+   "where": "표 원화대용금 행 기말 09/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "ls_evlta_fr",
+   "kor": "대주평가금_초",
+   "layer": "직접",
+   "where": "표 대주평가금 행 기초 08/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "ls_evlta_to",
+   "kor": "대주평가금_말",
+   "layer": "직접",
+   "where": "표 대주평가금 행 기말 09/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "rght_evlta_fr",
+   "kor": "권리평가금_초",
+   "layer": "직접",
+   "where": "표 권리평가금 행 기초 08/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:asset_balance_change",
+   "f": "rght_evlta_to",
+   "kor": "권리평가금_말",
+   "layer": "직접",
+   "where": "표 권리평가금 행 기말 09/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:liability_balance_change",
+   "f": "loan_amt_fr",
+   "kor": "대출금_초",
+   "layer": "직접",
+   "where": "부채 그룹 대출금 행 기초 08/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:liability_balance_change",
+   "f": "loan_amt_to",
+   "kor": "대출금_말",
+   "layer": "직접",
+   "where": "부채 그룹 대출금 행 기말 09/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:liability_balance_change",
+   "f": "etc_loana_fr",
+   "kor": "기타대여금_초",
+   "layer": "직접",
+   "where": "부채 그룹 기타대여금 행 기초 08/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:liability_balance_change",
+   "f": "etc_loana_to",
+   "kor": "기타대여금_말",
+   "layer": "직접",
+   "where": "부채 그룹 기타대여금 행 기말 09/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:liability_balance_change",
+   "f": "crd_int_npay_gold_fr",
+   "kor": "신용이자미납금_초",
+   "layer": "직접",
+   "where": "부채 그룹 신용이자미납금 행 기초 08/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:liability_balance_change",
+   "f": "crd_int_npay_gold_to",
+   "kor": "신용이자미납금_말",
+   "layer": "직접",
+   "where": "부채 그룹 신용이자미납금 행 기말 09/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:liability_balance_change",
+   "f": "crd_int_fr",
+   "kor": "신용이자_초",
+   "layer": "직접",
+   "where": "부채 그룹 신용이자 행 기초 08/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:liability_balance_change",
+   "f": "crd_int_to",
+   "kor": "신용이자_말",
+   "layer": "직접",
+   "where": "부채 그룹 신용이자 행 기말 09/01 셀 0원"
+  },
+  {
+   "mapping_id": "detail:kt00016:period_flows",
+   "f": "termin_tot_inq",
+   "kor": "기간내총입고",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 기간 입출고 · 대용매도 밴드 (메인 2SRV-1 성과 요약 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00016:period_flows",
+   "f": "termin_tot_outq",
+   "kor": "기간내총출고",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 기간 입출고 · 대용매도 밴드 (메인 2SRV-1 성과 요약 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00016:period_flows",
+   "f": "futr_repl_sella",
+   "kor": "선물대용매도금액",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 기간 입출고 · 대용매도 밴드 (메인 2SRV-1 성과 요약 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00016:period_flows",
+   "f": "trst_repl_sella",
+   "kor": "위탁대용매도금액",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 기간 입출고 · 대용매도 밴드 (메인 2SRV-1 성과 요약 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "rp_evlt_amt",
+   "kor": "RP평가금액",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "bd_evlt_amt",
+   "kor": "채권평가금액",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "elsevlt_amt",
+   "kor": "ELS평가금액",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "crd_int_amt",
+   "kor": "신용이자금액",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "sel_prica_grnt_loan_int_amt_amt",
+   "kor": "매도대금담보대출이자금액",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00018:financing_summary",
+   "f": "tot_crd_ls_amt",
+   "kor": "총대주금액",
+   "layer": "펼침",
+   "where": "이달 기초·기말 구성 펼침 · 레일 신용 실현·대주 (메인 2SCE-1 신용·대출 영값 묶음 행 경유)"
+  }
+ ]
+}

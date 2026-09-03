@@ -1,0 +1,285 @@
+{
+ "board": "3063-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10058",
+   "f": "invsr_daly_trde_stk",
+   "kor": "투자자별일별매매종목",
+   "layer": null,
+   "where": "장중 투자자 상위 순위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka10058",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10058",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "표 '종목' 열"
+  },
+  {
+   "mapping_id": "base:ka10058",
+   "f": "netslmt_qty",
+   "kor": "순매도수량",
+   "layer": "병기",
+   "where": "레일 주체 표 개인 행 순매수 셀 2번째 줄 -11.9만주"
+  },
+  {
+   "mapping_id": "base:ka10058",
+   "f": "netslmt_amt",
+   "kor": "순매도금액",
+   "layer": null,
+   "where": "표 개인 열 '-180억' 등 순매도 금액"
+  },
+  {
+   "mapping_id": "base:ka10058",
+   "f": "prsm_avg_pric",
+   "kor": "추정평균가",
+   "layer": "직접",
+   "where": "레일 '장중 요약' 추정평균가 150,240"
+  },
+  {
+   "mapping_id": "base:ka10058",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "표 '현재가' 열"
+  },
+  {
+   "mapping_id": "base:ka10058",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "등락률 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10058",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10058",
+   "f": "avg_pric_pre",
+   "kor": "평균가대비",
+   "layer": "병기",
+   "where": "레일 추정평균가 행 2번째 줄 '평균가 대비 +610'"
+  },
+  {
+   "mapping_id": "base:ka10058",
+   "f": "pre_rt",
+   "kor": "대비율",
+   "layer": "병기",
+   "where": "레일 추정평균가 행 2번째 줄 '+0.41%'"
+  },
+  {
+   "mapping_id": "base:ka10058",
+   "f": "dt_trde_qty",
+   "kor": "기간거래량",
+   "layer": "직접",
+   "where": "레일 '장중 요약' 기간 거래량 4,280만주"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "opmr_invsr_trde",
+   "kor": "장중투자자별매매",
+   "layer": null,
+   "where": "장중 투자자 상위 순위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "표 '종목' 열"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "표 '현재가' 열"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "등락률 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "표 '등락률' 열"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": "직접",
+   "where": "표 신설 '거래량' 열(1위 1,420만주)"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "netprps_amt",
+   "kor": "순매수금액",
+   "layer": null,
+   "where": "표 외국인·기관·개인·합계 열 금액"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "prev_netprps_amt",
+   "kor": "이전순매수금액",
+   "layer": "직접",
+   "where": "레일 주체 표 '직전 09:00' 행 순매수 +656억"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "buy_amt",
+   "kor": "매수금액",
+   "layer": "직접",
+   "where": "레일 선택 종목 주체 표 '매수' 열(외국인 1,240억)"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "netprps_amt_irds",
+   "kor": "순매수금액증감",
+   "layer": "병기",
+   "where": "표 외국인·기관·개인 셀 2번째 줄 증감(1위 외국인 ▲+86억)"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "buy_amt_irds",
+   "kor": "매수금액증감",
+   "layer": "직접",
+   "where": "레일 주체 표 '증감' 행 매수 셀 '▲+150억'"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "sell_amt",
+   "kor": "매도금액",
+   "layer": "직접",
+   "where": "레일 선택 종목 주체 표 '매도' 열(외국인 498억)"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "sell_amt_irds",
+   "kor": "매도금액증감",
+   "layer": "직접",
+   "where": "레일 주체 표 '증감' 행 매도 셀 '▼-104억'"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "netprps_qty",
+   "kor": "순매수수량",
+   "layer": "병기",
+   "where": "표 합계 셀 2번째 줄 60.4만주 · 레일 순매수 셀 2번째 줄"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "prev_pot_netprps_qty",
+   "kor": "이전시점순매수수량",
+   "layer": "병기",
+   "where": "레일 '직전 09:00' 행 순매수 셀 2번째 줄 43.5만주"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "netprps_irds",
+   "kor": "순매수증감",
+   "layer": "직접",
+   "where": "레일 주체 표 '증감' 행 순매수 셀 '▲+254억 · ▲+16.9만주'"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "buy_qty",
+   "kor": "매수수량",
+   "layer": "병기",
+   "where": "레일 주체 표 매수 셀 2번째 줄 수량(외국인 82.2만주)"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "buy_qty_irds",
+   "kor": "매수수량증감",
+   "layer": "병기",
+   "where": "레일 '증감' 행 매수 셀 2번째 줄 '▲+10.0만주'"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "sell_qty",
+   "kor": "매도수량",
+   "layer": "병기",
+   "where": "레일 주체 표 매도 셀 2번째 줄 수량(외국인 33.0만주)"
+  },
+  {
+   "mapping_id": "base:ka10063",
+   "f": "sell_qty_irds",
+   "kor": "매도수량증감",
+   "layer": "병기",
+   "where": "레일 '증감' 행 매도 셀 2번째 줄 '▼-6.9만주'"
+  },
+  {
+   "mapping_id": "base:ka10065",
+   "f": "opmr_invsr_trde_upper",
+   "kor": "장중투자자별매매상위",
+   "layer": null,
+   "where": "장중 투자자 상위 순위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka10065",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10065",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "표 '종목' 열"
+  },
+  {
+   "mapping_id": "base:ka10065",
+   "f": "sel_qty",
+   "kor": "매도금액/매도량",
+   "layer": "직접",
+   "where": "레일 주체 표 '매도' 열 금액 498억 + 2번째 줄 33.0만주"
+  },
+  {
+   "mapping_id": "base:ka10065",
+   "f": "buy_qty",
+   "kor": "매수금액/매수량",
+   "layer": "직접",
+   "where": "레일 주체 표 '매수' 열 금액 1,240억 + 2번째 줄 82.2만주"
+  },
+  {
+   "mapping_id": "base:ka10065",
+   "f": "netslmt",
+   "kor": "순매수/순매도",
+   "layer": null,
+   "where": "표 외국인·기관·개인·합계 열"
+  }
+ ]
+}

@@ -1,0 +1,978 @@
+{
+ "board": "2RJ7-1",
+ "fields": [
+  {
+   "mapping_id": "base:0I",
+   "f": "10",
+   "kor": "현재가",
+   "layer": null,
+   "where": "국제 금 환산 · 환산 167,750원/g"
+  },
+  {
+   "mapping_id": "base:0I",
+   "f": "25",
+   "kor": "전일대비기호",
+   "layer": "병기",
+   "where": "국제 금 환산 온스 행 병기 기호 '▲'"
+  },
+  {
+   "mapping_id": "base:0I",
+   "f": "11",
+   "kor": "전일대비",
+   "layer": "병기",
+   "where": "국제 금 환산 온스 행 병기 '+18.40'"
+  },
+  {
+   "mapping_id": "base:0I",
+   "f": "12",
+   "kor": "등락율",
+   "layer": "병기",
+   "where": "국제 금 환산 온스 행 병기 '+0.49%'"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "gold_cntr",
+   "kor": "금현물체결추이",
+   "layer": null,
+   "where": "체결 추이 표"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "where": "체결가 컬럼 168,420·168,410"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "pred_pre",
+   "kor": "전일 대비",
+   "layer": null,
+   "where": "전일대비 +1,240"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "등락률 +0.74%"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "trde_qty",
+   "kor": "누적 거래량",
+   "layer": null,
+   "where": "거래량 184.2kg"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "acc_trde_prica",
+   "kor": "누적 거래대금",
+   "layer": null,
+   "where": "거래대금 310억원"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "cntr_trde_qty",
+   "kor": "거래량(체결량)",
+   "layer": null,
+   "where": "체결 추이 수량 컬럼 42g·18g·96g"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "체결 추이 시각 컬럼 09:42:18"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "체결가 상승/하락색과 + 부호"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "pri_sel_bid_unit",
+   "kor": "매도호가",
+   "layer": "병기",
+   "where": "체결 추이 표 꼬리 '매도호가 168,430'"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "pri_buy_bid_unit",
+   "kor": "매수호가",
+   "layer": "병기",
+   "where": "체결 추이 표 꼬리 '매수호가 168,420'"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "trde_pre",
+   "kor": "전일 거래량 대비 비율",
+   "layer": "병기",
+   "where": "체결 추이 표 꼬리 '전일 거래량 대비 118.4%'"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "trde_tern_rt",
+   "kor": "전일 거래량 대비 순간 거래량 비율",
+   "layer": "병기",
+   "where": "체결 추이 표 꼬리 '순간 비율 0.02%'"
+  },
+  {
+   "mapping_id": "base:ka50010",
+   "f": "cntr_str",
+   "kor": "체결강도",
+   "layer": "직접",
+   "where": "체결 추이 제목 우측 상태 '체결강도 104.6'"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "gold_daly_trnsn",
+   "kor": "금현물일별추이",
+   "layer": null,
+   "where": "일봉 캔들차트와 최근 일봉 목록"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "cur_prc",
+   "kor": "종가",
+   "layer": null,
+   "where": "캔들 종가 몸통 · 전일 종가 167,180"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "pred_pre",
+   "kor": "전일 대비",
+   "layer": null,
+   "where": "전일대비 +1,240"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "최근 일봉 +0.42%·-0.18%·+1.05%"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "trde_qty",
+   "kor": "누적 거래량",
+   "layer": null,
+   "where": "차트 하단 거래량 막대 184,230g"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "acc_trde_prica",
+   "kor": "누적 거래대금(백만)",
+   "layer": null,
+   "where": "거래대금 310억원"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가 167,300 · 캔들 몸통"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "고가 168,600 · 캔들 윗꼬리"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "저가 166,900 · 캔들 아랫꼬리"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "최근 일봉 08/29·08/28·08/27"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "캔들 적/청 색과 등락률 부호"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "orgn_netprps",
+   "kor": "기관 순매수 수량",
+   "layer": null,
+   "where": "투자자별 기관 -64kg"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "for_netprps",
+   "kor": "외국인 순매수 수량",
+   "layer": null,
+   "where": "투자자별 외국인 +12kg"
+  },
+  {
+   "mapping_id": "base:ka50012",
+   "f": "ind_netprps",
+   "kor": "순매매량(개인)",
+   "layer": null,
+   "where": "투자자별 개인 +182kg"
+  },
+  {
+   "mapping_id": "base:ka50087",
+   "f": "gold_expt_exec",
+   "kor": "금현물예상체결",
+   "layer": null,
+   "where": "장전 예상 블록"
+  },
+  {
+   "mapping_id": "base:ka50087",
+   "f": "exp_cntr_pric",
+   "kor": "예상 체결가",
+   "layer": null,
+   "where": "예상 체결가 167,300원"
+  },
+  {
+   "mapping_id": "base:ka50087",
+   "f": "exp_pred_pre",
+   "kor": "예상 체결가 전일대비",
+   "layer": "병기",
+   "where": "장전 예상 예상 체결가 병기 '+120'"
+  },
+  {
+   "mapping_id": "base:ka50087",
+   "f": "exp_flu_rt",
+   "kor": "예상 체결가 등락율",
+   "layer": "병기",
+   "where": "장전 예상 예상 체결가 병기 '+0.07%'"
+  },
+  {
+   "mapping_id": "base:ka50087",
+   "f": "exp_acc_trde_qty",
+   "kor": "예상 체결 수량(누적)",
+   "layer": "직접",
+   "where": "장전 예상 '예상 누적 수량 84g' 행"
+  },
+  {
+   "mapping_id": "base:ka50087",
+   "f": "exp_cntr_trde_qty",
+   "kor": "예상 체결 수량",
+   "layer": null,
+   "where": "예상 수량 84g"
+  },
+  {
+   "mapping_id": "base:ka50087",
+   "f": "exp_tm",
+   "kor": "예상 체결 시간",
+   "layer": "병기",
+   "where": "예상 누적 수량 행 병기 '예상 체결 시간 08:59:58'"
+  },
+  {
+   "mapping_id": "base:ka50087",
+   "f": "exp_pre_sig",
+   "kor": "예상 체결가 전일대비기호",
+   "layer": "병기",
+   "where": "장전 예상 예상 체결가 병기 기호 '▲'"
+  },
+  {
+   "mapping_id": "base:ka50087",
+   "f": "stex_tp",
+   "kor": "거래소 구분",
+   "layer": null,
+   "where": "시장구분 KRX · 금현물 정규장"
+  },
+  {
+   "mapping_id": "base:ka50100",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "+ 부호와 상승색"
+  },
+  {
+   "mapping_id": "base:ka50100",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "전일대비 +1,240"
+  },
+  {
+   "mapping_id": "base:ka50100",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "등락률 +0.74%"
+  },
+  {
+   "mapping_id": "base:ka50100",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 184.2kg"
+  },
+  {
+   "mapping_id": "base:ka50100",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가 167,300"
+  },
+  {
+   "mapping_id": "base:ka50100",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "고가 168,600"
+  },
+  {
+   "mapping_id": "base:ka50100",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "저가 166,900"
+  },
+  {
+   "mapping_id": "base:ka50100",
+   "f": "pred_rt",
+   "kor": "전일비",
+   "layer": "병기",
+   "where": "KPI 전일대비 칸 병기 '전일비 100.74%'"
+  },
+  {
+   "mapping_id": "base:ka50100",
+   "f": "upl_pric",
+   "kor": "상한가",
+   "layer": "직접",
+   "where": "가격 범위 블록 가격제한 행 '상한 183,890'"
+  },
+  {
+   "mapping_id": "base:ka50100",
+   "f": "lst_pric",
+   "kor": "하한가",
+   "layer": "직접",
+   "where": "가격 범위 블록 가격제한 행 '하한 150,460'"
+  },
+  {
+   "mapping_id": "base:ka50100",
+   "f": "pred_close_pric",
+   "kor": "전일종가",
+   "layer": null,
+   "where": "종목 요약 전일 종가 167,180"
+  },
+  {
+   "mapping_id": "base:ka50079",
+   "f": "gds_tic_chart_qry",
+   "kor": "금현물틱차트조회",
+   "layer": "직접",
+   "where": "차트 툴바 주기 세그먼트 '틱' 칩 — 틱 시리즈 조회 단위의 자리"
+  },
+  {
+   "mapping_id": "base:ka50079",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "헤더 대표가 168,420원 · 차트 크로스헤어 라벨 168,420 · 캔들 종가 바디(rect)"
+  },
+  {
+   "mapping_id": "base:ka50079",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "헤더 +1,240 · +0.74% · 전일대비 KPI 값 +1,240"
+  },
+  {
+   "mapping_id": "base:ka50079",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "차트 하단 거래량 막대(rect 19본) · 거래량 KPI 184.2kg"
+  },
+  {
+   "mapping_id": "base:ka50079",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 첫째 값 167,300 · 캔들 바디(rect) 시가단"
+  },
+  {
+   "mapping_id": "base:ka50079",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 둘째 값 168,600 · 캔들 윗꼬리(line) 상단"
+  },
+  {
+   "mapping_id": "base:ka50079",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 셋째 값 166,900 · 캔들 아랫꼬리(line) 하단"
+  },
+  {
+   "mapping_id": "base:ka50079",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "체결 추이 시각 열 09:42:18/09:42:05/09:41:52 · 헤더 09:42:18 · 푸터 마지막 체결 09:42:18"
+  },
+  {
+   "mapping_id": "base:ka50079",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "최근 일봉 블록 날짜 08/29 · 08/28 · 08/27"
+  },
+  {
+   "mapping_id": "base:ka50079",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": "직접",
+   "where": "차트 헤더 배지 '▲ 168,420 · +0.74%' 기호"
+  },
+  {
+   "mapping_id": "base:ka50080",
+   "f": "gds_min_chart_qry",
+   "kor": "금현물분봉차트조회",
+   "layer": "직접",
+   "where": "차트 툴바 주기 세그먼트 '분' 칩(현재 활성) — 분봉 시리즈 조회 단위의 자리"
+  },
+  {
+   "mapping_id": "base:ka50080",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "헤더 대표가 168,420원 · 차트 크로스헤어 라벨 168,420 · 캔들 종가 바디(rect)"
+  },
+  {
+   "mapping_id": "base:ka50080",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "헤더 +1,240 · +0.74% · 전일대비 KPI 값 +1,240"
+  },
+  {
+   "mapping_id": "base:ka50080",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": null,
+   "where": "거래량 KPI 184.2kg · 차트 거래량 크로스헤어 라벨 184,230g"
+  },
+  {
+   "mapping_id": "base:ka50080",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "차트 하단 거래량 막대(rect 19본) · 거래량 KPI 184.2kg"
+  },
+  {
+   "mapping_id": "base:ka50080",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 첫째 값 167,300 · 캔들 바디(rect) 시가단"
+  },
+  {
+   "mapping_id": "base:ka50080",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 둘째 값 168,600 · 캔들 윗꼬리(line) 상단"
+  },
+  {
+   "mapping_id": "base:ka50080",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 셋째 값 166,900 · 캔들 아랫꼬리(line) 하단"
+  },
+  {
+   "mapping_id": "base:ka50080",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "체결 추이 시각 열 09:42:18/09:42:05/09:41:52 · 헤더 09:42:18 · 푸터 마지막 체결 09:42:18"
+  },
+  {
+   "mapping_id": "base:ka50080",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "최근 일봉 블록 날짜 08/29 · 08/28 · 08/27"
+  },
+  {
+   "mapping_id": "base:ka50080",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": "직접",
+   "where": "차트 헤더 배지 '▲ 168,420 · +0.74%' 기호"
+  },
+  {
+   "mapping_id": "base:ka50081",
+   "f": "gds_day_chart_qry",
+   "kor": "금현물일봉차트조회",
+   "layer": "직접",
+   "where": "차트 툴바 주기 세그먼트 '일' 칩 — 일봉 시리즈 조회 단위의 자리"
+  },
+  {
+   "mapping_id": "base:ka50081",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "헤더 대표가 168,420원 · 차트 크로스헤어 라벨 168,420 · 캔들 종가 바디(rect)"
+  },
+  {
+   "mapping_id": "base:ka50081",
+   "f": "acc_trde_qty",
+   "kor": "누적 거래량",
+   "layer": null,
+   "where": "거래량 KPI 184.2kg · 차트 거래량 크로스헤어 라벨 184,230g"
+  },
+  {
+   "mapping_id": "base:ka50081",
+   "f": "acc_trde_prica",
+   "kor": "누적 거래대금",
+   "layer": null,
+   "where": "거래대금 KPI 310억원 · 가격 범위 블록 거래대금 310억"
+  },
+  {
+   "mapping_id": "base:ka50081",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 첫째 값 167,300 · 캔들 바디(rect) 시가단"
+  },
+  {
+   "mapping_id": "base:ka50081",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 둘째 값 168,600 · 캔들 윗꼬리(line) 상단"
+  },
+  {
+   "mapping_id": "base:ka50081",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 셋째 값 166,900 · 캔들 아랫꼬리(line) 하단"
+  },
+  {
+   "mapping_id": "base:ka50081",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "최근 일봉 블록 날짜 08/29 · 08/28 · 08/27"
+  },
+  {
+   "mapping_id": "base:ka50081",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": "직접",
+   "where": "차트 헤더 배지 '▲ 168,420 · +0.74%' 기호"
+  },
+  {
+   "mapping_id": "base:ka50082",
+   "f": "gds_week_chart_qry",
+   "kor": "금현물일봉차트조회",
+   "layer": "직접",
+   "where": "차트 툴바 주기 세그먼트 '주' 칩 — 주봉 시리즈 조회 단위의 자리"
+  },
+  {
+   "mapping_id": "base:ka50082",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "헤더 대표가 168,420원 · 차트 크로스헤어 라벨 168,420 · 캔들 종가 바디(rect)"
+  },
+  {
+   "mapping_id": "base:ka50082",
+   "f": "acc_trde_qty",
+   "kor": "누적 거래량",
+   "layer": null,
+   "where": "거래량 KPI 184.2kg · 차트 거래량 크로스헤어 라벨 184,230g"
+  },
+  {
+   "mapping_id": "base:ka50082",
+   "f": "acc_trde_prica",
+   "kor": "누적 거래대금",
+   "layer": null,
+   "where": "거래대금 KPI 310억원 · 가격 범위 블록 거래대금 310억"
+  },
+  {
+   "mapping_id": "base:ka50082",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 첫째 값 167,300 · 캔들 바디(rect) 시가단"
+  },
+  {
+   "mapping_id": "base:ka50082",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 둘째 값 168,600 · 캔들 윗꼬리(line) 상단"
+  },
+  {
+   "mapping_id": "base:ka50082",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 셋째 값 166,900 · 캔들 아랫꼬리(line) 하단"
+  },
+  {
+   "mapping_id": "base:ka50082",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "최근 일봉 블록 날짜 08/29 · 08/28 · 08/27"
+  },
+  {
+   "mapping_id": "base:ka50083",
+   "f": "gds_month_chart_qry",
+   "kor": "금현물일봉차트조회",
+   "layer": "직접",
+   "where": "차트 툴바 주기 세그먼트 '월' 칩 — 월봉 시리즈 조회 단위의 자리"
+  },
+  {
+   "mapping_id": "base:ka50083",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "헤더 대표가 168,420원 · 차트 크로스헤어 라벨 168,420 · 캔들 종가 바디(rect)"
+  },
+  {
+   "mapping_id": "base:ka50083",
+   "f": "acc_trde_qty",
+   "kor": "누적 거래량",
+   "layer": null,
+   "where": "거래량 KPI 184.2kg · 차트 거래량 크로스헤어 라벨 184,230g"
+  },
+  {
+   "mapping_id": "base:ka50083",
+   "f": "acc_trde_prica",
+   "kor": "누적 거래대금",
+   "layer": null,
+   "where": "거래대금 KPI 310억원 · 가격 범위 블록 거래대금 310억"
+  },
+  {
+   "mapping_id": "base:ka50083",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 첫째 값 167,300 · 캔들 바디(rect) 시가단"
+  },
+  {
+   "mapping_id": "base:ka50083",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 둘째 값 168,600 · 캔들 윗꼬리(line) 상단"
+  },
+  {
+   "mapping_id": "base:ka50083",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 셋째 값 166,900 · 캔들 아랫꼬리(line) 하단"
+  },
+  {
+   "mapping_id": "base:ka50083",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "최근 일봉 블록 날짜 08/29 · 08/28 · 08/27"
+  },
+  {
+   "mapping_id": "base:ka50091",
+   "f": "gds_tic_chart_qry",
+   "kor": "금현물일봉차트조회",
+   "layer": "직접",
+   "where": "차트 툴바 범위 세그먼트 '당일' 칩 × 주기 '틱' 조합 — 당일 틱 시리즈의 자리"
+  },
+  {
+   "mapping_id": "base:ka50091",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "where": "체결 추이 표 체결가 열 168,420/168,410/168,420 · 차트 크로스헤어 라벨 168,420"
+  },
+  {
+   "mapping_id": "base:ka50091",
+   "f": "pred_pre",
+   "kor": "전일 대비(원)",
+   "layer": null,
+   "where": "헤더 +1,240 · +0.74% · 전일대비 KPI 값 +1,240"
+  },
+  {
+   "mapping_id": "base:ka50091",
+   "f": "trde_qty",
+   "kor": "거래량(체결량)",
+   "layer": null,
+   "where": "차트 하단 거래량 막대(rect 19본) · 체결 추이 수량 열 42g/18g/96g"
+  },
+  {
+   "mapping_id": "base:ka50091",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 첫째 값 167,300 · 캔들 바디(rect) 시가단"
+  },
+  {
+   "mapping_id": "base:ka50091",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 둘째 값 168,600 · 캔들 윗꼬리(line) 상단"
+  },
+  {
+   "mapping_id": "base:ka50091",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 셋째 값 166,900 · 캔들 아랫꼬리(line) 하단"
+  },
+  {
+   "mapping_id": "base:ka50091",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "체결 추이 시각 열 09:42:18/09:42:05/09:41:52 · 헤더 09:42:18 · 푸터 마지막 체결 09:42:18"
+  },
+  {
+   "mapping_id": "base:ka50091",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "최근 일봉 블록 날짜 08/29 · 08/28 · 08/27"
+  },
+  {
+   "mapping_id": "base:ka50091",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": "직접",
+   "where": "차트 헤더 배지 '▲ 168,420 · +0.74%' 기호"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "gds_min_chart_qry",
+   "kor": "금현물일봉차트조회",
+   "layer": "직접",
+   "where": "차트 툴바 범위 세그먼트 '당일' 칩(활성) × 주기 '분'(활성) 조합 — 당일 분봉 시리즈의 자리 · 구간 09:00~09:42"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "where": "체결 추이 표 체결가 열 168,420/168,410/168,420 · 차트 크로스헤어 라벨 168,420"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "pred_pre",
+   "kor": "전일 대비(원)",
+   "layer": null,
+   "where": "헤더 +1,240 · +0.74% · 전일대비 KPI 값 +1,240"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "acc_trde_qty",
+   "kor": "누적 거래량",
+   "layer": null,
+   "where": "거래량 KPI 184.2kg · 차트 거래량 크로스헤어 라벨 184,230g"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "acc_trde_prica",
+   "kor": "누적 거래대금",
+   "layer": null,
+   "where": "거래대금 KPI 310억원 · 가격 범위 블록 거래대금 310억"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "trde_qty",
+   "kor": "거래량(체결량)",
+   "layer": null,
+   "where": "차트 하단 거래량 막대(rect 19본) · 체결 추이 수량 열 42g/18g/96g"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 첫째 값 167,300 · 캔들 바디(rect) 시가단"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 둘째 값 168,600 · 캔들 윗꼬리(line) 상단"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 KPI 셋째 값 166,900 · 캔들 아랫꼬리(line) 하단"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "체결 추이 시각 열 09:42:18/09:42:05/09:41:52 · 헤더 09:42:18 · 푸터 마지막 체결 09:42:18"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "최근 일봉 블록 날짜 08/29 · 08/28 · 08/27"
+  },
+  {
+   "mapping_id": "base:ka50092",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": "직접",
+   "where": "차트 헤더 배지 '▲ 168,420 · +0.74%' 기호"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "inve_trad_stat",
+   "kor": "금현물투자자현황",
+   "layer": "직접",
+   "where": "본문 하단 '투자자별 매매 · 08-31 확정' 8열 × 3행 표 자체가 응답 배열 컨테이너의 자리"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "all_dfrt_trst_sell_qty",
+   "kor": "투자자별 매도 수량(천)",
+   "layer": "직접",
+   "where": "투자자별 매매 표 '매도 수량' 열 1줄 — 개인 51.8kg · 기관 82.4kg · 외국인 21.4kg(합 155.6kg)"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "sell_qty_irds",
+   "kor": "투자자별 매도 수량 증감(천)",
+   "layer": "병기",
+   "where": "투자자별 매매 표 '매도 수량' 열 2줄 — +4.2kg · +9.1kg · −2.8kg"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "all_dfrt_trst_sell_amt",
+   "kor": "투자자별 매도 금액(억)",
+   "layer": "직접",
+   "where": "투자자별 매매 표 '매도 금액' 열 1줄 — 86.5억원 · 137.9억원 · 35.8억원"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "sell_amt_irds",
+   "kor": "투자자별 매도 금액 증감(억)",
+   "layer": "병기",
+   "where": "투자자별 매매 표 '매도 금액' 열 2줄 — +7.0억원 · +15.2억원 · −4.7억원"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "all_dfrt_trst_buy_qty",
+   "kor": "투자자별 매수 수량(천)",
+   "layer": "직접",
+   "where": "투자자별 매매 표 '매수 수량' 열 1줄 — 103.8kg · 18.4kg · 33.4kg(합 155.6kg)"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "buy_qty_irds",
+   "kor": "투자자별 매수 수량 증감(천)",
+   "layer": "병기",
+   "where": "투자자별 매매 표 '매수 수량' 열 2줄 — +18.6kg · −6.3kg · −1.8kg"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "all_dfrt_trst_buy_amt",
+   "kor": "투자자별 매수 금액(억)",
+   "layer": "직접",
+   "where": "투자자별 매매 표 '매수 금액' 열 1줄 — 173.8억원 · 30.7억원 · 56.0억원"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "buy_amt_irds",
+   "kor": "투자자별 매수 금액 증감(억)",
+   "layer": "병기",
+   "where": "투자자별 매매 표 '매수 금액' 열 2줄 — +31.1억원 · −10.5억원 · −3.0억원"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "all_dfrt_trst_netprps_qty",
+   "kor": "투자자별 순매수 수량(천)",
+   "layer": null,
+   "where": "투자자별(전일) 블록 값 개인 +182kg · 기관 -64kg · 외국인 +12kg"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "netprps_qty_irds",
+   "kor": "투자자별 순매수 수량 증감(천)",
+   "layer": "직접",
+   "where": "투자자별 매매 표 '순매수 증감' 열 1줄(수량) — +14.4kg · −15.4kg · +1.0kg(합 0)"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "all_dfrt_trst_netprps_amt",
+   "kor": "투자자별 순매수 금액(억)",
+   "layer": "병기",
+   "where": "투자자별 매매 표 '순매수 수량·금액' 열 2줄(금액) — +87.3억원 · −107.2억원 · +20.2억원"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "netprps_amt_irds",
+   "kor": "투자자별 순매수 금액 증감(억)",
+   "layer": "병기",
+   "where": "투자자별 매매 표 '순매수 증감' 열 2줄(금액) — +24.1억원 · −25.7억원 · +1.7억원"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "sell_uv",
+   "kor": "투자자별 매도 단가",
+   "layer": "직접",
+   "where": "투자자별 매매 표 '단가 매도·매수' 열 1줄(매도 단가) — 167,050 · 167,310 · 167,120"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "buy_uv",
+   "kor": "투자자별 매수 단가",
+   "layer": "병기",
+   "where": "투자자별 매매 표 '단가 매도·매수' 열 2줄(매수 단가) — 167,420 · 166,980 · 167,540"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "stk_nm",
+   "kor": "투자자 구분명",
+   "layer": null,
+   "where": "투자자별(전일) 블록 행 라벨 개인 · 기관 · 외국인"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "acc_netprps_amt",
+   "kor": "누적 순매수 금액(억)",
+   "layer": "직접",
+   "where": "투자자별 매매 표 아래 푸터 값 줄 '누적 순매수 08-26~08-31' 금액 — +688억원 · −264억원 · −424억원(합 0)"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "acc_netprps_qty",
+   "kor": "누적 순매수 수량(천)",
+   "layer": "직접",
+   "where": "투자자별 매매 표 아래 푸터 값 줄 '누적 순매수 08-26~08-31' 수량 — +412kg · −158kg · −254kg(합 0)"
+  },
+  {
+   "mapping_id": "base:ka52301",
+   "f": "stk_cd",
+   "kor": "투자자 코드",
+   "layer": "병기",
+   "where": "투자자별 매매 표 '투자자' 열 2줄 코드 — 개인 8000 · 기관 1000 · 외국인 9000"
+  }
+ ]
+}

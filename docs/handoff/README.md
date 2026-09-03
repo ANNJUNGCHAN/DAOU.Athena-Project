@@ -29,6 +29,18 @@
 > **프로덕션 브로커 연결은 설계상 불가능**하고(도메인 하드락), 검증된 것은
 > *mock 브로커 + live 시장 데이터*다.
 
+> 🟢 **2026-09-03 키우미 카드미니 — 360×420 런타임 구현·전수 검증 완료.**
+> 다른 컴퓨터는 원격 브랜치 `codex/kiumi-mini-cards-runtime`을 받으면 된다.
+> 구현 계약, 검증 수치, 이어받기 명령은
+> [2026-09-03-kiumi-mini-cards-runtime.md](./2026-09-03-kiumi-mini-cards-runtime.md)에 있다.
+> 옛 [360×640 계획 인계](./2026-09-03-kiumi-mini-cards-handoff.md)와
+> [KIUMI_PROMPT.md](./KIUMI_PROMPT.md)는 역사 기록이며 다시 실행하지 않는다.
+
+> 🟠 **2026-09-03 카드 표면 Paper→코드 — W3 Tasks 1–8·canonical 재생성 완료, coverage 3,382/3,532(95.8%). nonvisual gate는 통과했지만 5보드 반응형 가독성 때문에 시각 gate FAIL; explicit responsive/glyph gate 설계와 composite schema 승인 대기.**
+> 이어받는 절차·수치·남은 일·사용자 확정 결정은 [2026-09-03-card-surface-paper-to-code.md](./2026-09-03-card-surface-paper-to-code.md)에 있다.
+> 이 트랙은 **`feat/card-surface-paper-to-code`**에 지속 커밋·푸시한다. 위 인계 문서가 들어 있는 최신 origin 커밋을 체크포인트로 삼는다.
+> 붙여 넣을 블록은 [CARD_SURFACE_PROMPT.md](./CARD_SURFACE_PROMPT.md).
+
 ---
 
 ## 1. 저장소 상태 (2026-09-03 21:40 KST 확인)
@@ -127,6 +139,8 @@ git config core.hooksPath scripts/hooks
 ```bash
 cd backend && uv run pytest -q -p no:randomly
 ```
+
+**백엔드 테스트는 `node`가 PATH에 있는 셸에서 돌린다(fnm)** — `evaluate_selector_ablations.py`가 `node`를 부르므로, fnm 환경에서는 `fnm env`(또는 multishell 경로를 PATH 앞에 붙여) 먼저 통과시킨다.
 
 0건 수집되면 `rtk proxy uv run pytest -q -p no:randomly`로 우회한다.
 

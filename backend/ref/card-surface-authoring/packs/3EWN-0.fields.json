@@ -1,0 +1,117 @@
+{
+ "board": "3EWN-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10095",
+   "f": "prty",
+   "kor": "패리티",
+   "layer": "펼침",
+   "where": "ELW 조건 블록 우열 2번째 · 패리티 100.6%"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "gear",
+   "kor": "기어링",
+   "layer": "펼침",
+   "where": "ELW 조건 블록 좌열 3번째 · 기어링 7.9"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "pl_qutr",
+   "kor": "손익분기",
+   "layer": "펼침",
+   "where": "ELW 조건 블록 우열 3번째 · 손익분기율 +12.1%"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "cap_support",
+   "kor": "자본지지",
+   "layer": "펼침",
+   "where": "ELW 위험·미결제 블록 이론가·미결제 열 3행 · 자본지지점 150,000원"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "elwexec_pric",
+   "kor": "ELW행사가",
+   "layer": "펼침",
+   "where": "ELW 조건 블록 좌열 1번째 · 행사가 150,000원"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "cnvt_rt",
+   "kor": "전환비율",
+   "layer": "펼침",
+   "where": "ELW 조건 블록 우열 1번째 · 전환비율 0.065"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "elwexpr_dt",
+   "kor": "ELW만기일",
+   "layer": "펼침",
+   "where": "ELW 조건 블록 좌열 2번째 · 만기일 2026.09.18"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "cntr_engg",
+   "kor": "미결제약정",
+   "layer": "펼침",
+   "where": "ELW 위험·미결제 블록 이론가·미결제 열 4행 · 미결제약정 358만주"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "cntr_pred_pre",
+   "kor": "미결제전일대비",
+   "layer": "펼침",
+   "where": "ELW 위험·미결제 블록 이론가·미결제 열 5행 · 전일대비 +18.4만주(미결제약정 바로 아래, up 색)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "theory_pric",
+   "kor": "이론가",
+   "layer": "펼침",
+   "where": "ELW 위험·미결제 블록 이론가·미결제 열 1행 · 이론가 1,210원"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "innr_vltl",
+   "kor": "내재변동성",
+   "layer": "펼침",
+   "where": "ELW 위험·미결제 블록 이론가·미결제 열 2행 · 내재변동성 26.8%"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "delta",
+   "kor": "델타",
+   "layer": "펼침",
+   "where": "ELW 위험·미결제 블록 민감도 지표 열 1행 · 델타 0.54"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "gam",
+   "kor": "감마",
+   "layer": "펼침",
+   "where": "ELW 위험·미결제 블록 민감도 지표 열 2행 · 감마 0.018"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "theta",
+   "kor": "쎄타",
+   "layer": "펼침",
+   "where": "ELW 위험·미결제 블록 민감도 지표 열 3행 · 쎄타 -1.9(down 색)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "vega",
+   "kor": "베가",
+   "layer": "펼침",
+   "where": "ELW 위험·미결제 블록 민감도 지표 열 4행 · 베가 0.22"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "law",
+   "kor": "로",
+   "layer": "펼침",
+   "where": "ELW 위험·미결제 블록 민감도 지표 열 5행 · 로 0.07"
+  }
+ ]
+}

@@ -1,0 +1,384 @@
+Frame "Instrument Card Surface" (2RJ9-1) 1360×1040
+  Frame "Instrument Header" (2RNQ-1) 1358×106
+    Frame "Frame" (2RO4-1) 343×69
+      Frame "Frame" (2RO9-1) 343×34
+        Text "금 99.99K" (2ROD-1) 123×34 "금 99.99K"
+        Text "04020000 · KRX 금시장" (2ROC-1) 144×16 "04020000 · KRX 금시장"
+        Frame "Frame" (2ROA-1) 56×28
+          Text "실시간" (2ROB-1) 36×16 "실시간"
+      Frame "Frame" (2RO5-1) 343×28
+        Text "168,420원" (2RO8-1) 115×28 "168,420원"
+        Text "+1,240 · +0.74%" (2RO7-1) 117×16 "+1,240 · +0.74%"
+        Text "09:42:18" (2RO6-1) 45×16 "09:42:18"
+    Frame "Frame" (2RNR-1) 474×40
+      Frame "Frame" (2RO2-1) 80×36
+        Text "현재시세" (2RO3-1) 52×16 "현재시세"
+      Frame "Frame" (2RO0-1) 54×36
+        Text "차트" (2RO1-1) 26×16 "차트"
+      Frame "Frame" (2RNY-1) 80×36
+        Text "기업정보" (2RNZ-1) 52×16 "기업정보"
+      Frame "Frame" (2RNW-1) 49×36
+        Text "ETF" (2RNX-1) 21×16 "ETF"
+      Frame "Frame" (2RNU-1) 54×36
+        Text "ELW" (2RNV-1) 26×16 "ELW"
+      Frame "Frame" (2RNS-1) 67×36
+        Text "금현물" (2RNT-1) 39×16 "금현물"
+      Frame "Frame" (2WFJ-0) 54×40
+        Text "순위" (2WFK-0) 26×16 "순위"
+  Frame "Quote and Valuation Strip" (2RN6-1) 1358×116
+    Frame "Frame" (2RNN-1) 718×92
+      Text "시가 · 고가 · 저가" (2RNP-1) 661×16 "시가 · 고가 · 저가"
+      Text "167,300 · 168,600 · …" (2RNO-1) 661×22 "167,300 · 168,600 · 166,900"
+    Frame "Frame" (2RNJ-1) 190×92
+      Text "거래량" (2RNM-1) 141×16 "거래량"
+      Text "185.4kg" (2RNL-1) 141×30 "185.4kg"
+      Text "raw · base:ka50081 · $.gds_day_chart_qry[].acc_trde_prica" (2RNK-1) 141×16 "거래대금 310억원"
+    Frame "Frame" (2RNF-1) 150×92
+      Text "전일대비" (2RNI-1) 105×16 "전일대비"
+      Text "+1,240" (2RNH-1) 105×30 "+1,240"
+      Text "등락률 +0.74%" (2RNG-1) 105×16 "등락률 +0.74%"
+      Text "전일비" (39KT-0) 105×14 "전일비 100.74%"
+    Frame "Frame" (2RNB-1) 150×92
+      Text "거래단위" (2RNE-1) 105×16 "거래단위"
+      Text "1g" (2RND-1) 105×30 "1g"
+      Text "호가단위 10원" (2RNC-1) 105×16 "호가단위 10원"
+    Frame "Frame" (2RN7-1) 150×92
+      Text "시장구분" (2RNA-1) 106×16 "시장구분"
+      Text "KRX" (2RN9-1) 106×30 "KRX"
+      Text "금현물 · 정규장" (2RN8-1) 106×16 "금현물 · 정규장"
+  Frame "Chart Workspace" (2RJD-1) 1358×558
+    Frame "Athena Chart Module Mount" (2RKJ-1) 820×558
+      Frame "Chart Toolbar" (2RMM-1) 763×46
+        Frame "조회 단위 세그먼트" (3H9Y-0) 522×31
+          Frame "주기" (3H9Z-0) 236×31
+            Text "주기" (3HA0-0) 24×15 "주기"
+            Frame "Frame" (3HA1-0) 204×31
+              Frame "틱" (3HA2-0) 38×25
+                Text "틱" (3HA3-0) 12×15 "틱"
+              Frame "분" (3HA4-0) 38×25
+                Text "분" (3HA5-0) 12×15 "분"
+              Frame "일" (3HA6-0) 38×25
+                Text "일" (3HA7-0) 12×15 "일"
+              Frame "주" (3HA8-0) 38×25
+                Text "주" (3HA9-0) 12×15 "주"
+              Frame "월" (3HAA-0) 38×25
+                Text "월" (3HAB-0) 12×15 "월"
+          Frame "범위" (3HAC-0) 140×31
+            Text "범위" (3HAD-0) 24×15 "범위"
+            Frame "Frame" (3HAE-0) 108×31
+              Frame "당일" (3HAF-0) 50×25
+                Text "당일" (3HAG-0) 24×15 "당일"
+              Frame "기간" (3HAH-0) 50×25
+                Text "기간" (3HAI-0) 24×15 "기간"
+          Frame "적용 구간" (3HAJ-0) 110×15
+            Text "구간" (3HAK-0) 24×15 "구간"
+            Text "09:00~09:42" (3HAL-0) 80×15 "09:00~09:42"
+        Frame "Frame" (2RMN-1) 201×16
+          Text "시세·거래량" (2RMR-1) 63×16 "시세·거래량"
+          Text "지표" (2RMQ-1) 24×16 "지표"
+          Text "그리기" (2RMP-1) 36×16 "그리기"
+          Text "초기화" (2RMO-1) 36×16 "초기화"
+      Frame "Existing Athena Chart Module" (2RKK-1) 763×420
+        SVG "Athena Chart Preview" (3SYH-0) 763×420
+          SVGVisualElement "Line" (3SYI-0) 721×0
+          SVGVisualElement "Line" (3SYJ-0) 721×0
+          SVGVisualElement "Line" (3SYK-0) 721×0
+          SVGVisualElement "Line" (3SYL-0) 721×0
+          SVGVisualElement "Line" (3SYM-0) 721×0
+          SVGVisualElement "Line" (3SYN-0) 721×0
+          SVGVisualElement "Line" (3SYO-0) 0×55
+          SVGVisualElement "Rect" (3SYP-0) 11×25
+          SVGVisualElement "Rect" (3SYQ-0) 11×12
+          SVGVisualElement "Line" (3SYR-0) 0×47
+          SVGVisualElement "Rect" (3SYS-0) 11×15
+          SVGVisualElement "Rect" (3SYT-0) 11×15
+          SVGVisualElement "Line" (3SYU-0) 0×28
+          SVGVisualElement "Rect" (3SYV-0) 11×13
+          SVGVisualElement "Rect" (3SYW-0) 11×10
+          SVGVisualElement "Line" (3SYX-0) 0×49
+          SVGVisualElement "Rect" (3SYY-0) 11×30
+          SVGVisualElement "Rect" (3SYZ-0) 11×19
+          SVGVisualElement "Line" (3SZ0-0) 0×38
+          SVGVisualElement "Rect" (3SZ1-0) 11×15
+          SVGVisualElement "Rect" (3SZ2-0) 11×14
+          SVGVisualElement "Line" (3SZ3-0) 0×47
+          SVGVisualElement "Rect" (3SZ4-0) 11×30
+          SVGVisualElement "Rect" (3SZ5-0) 11×21
+          SVGVisualElement "Line" (3SZ6-0) 0×34
+          SVGVisualElement "Rect" (3SZ7-0) 11×11
+          SVGVisualElement "Rect" (3SZ8-0) 11×25
+          SVGVisualElement "Line" (3SZ9-0) 0×36
+          SVGVisualElement "Rect" (3SZA-0) 11×19
+          SVGVisualElement "Rect" (3SZB-0) 11×16
+          SVGVisualElement "Line" (3SZC-0) 0×40
+          SVGVisualElement "Rect" (3SZD-0) 11×30
+          SVGVisualElement "Rect" (3SZE-0) 11×23
+          SVGVisualElement "Line" (3SZF-0) 0×38
+          SVGVisualElement "Rect" (3SZG-0) 11×11
+          SVGVisualElement "Rect" (3SZH-0) 11×27
+          SVGVisualElement "Line" (3SZI-0) 0×34
+          SVGVisualElement "Rect" (3SZJ-0) 11×8
+          SVGVisualElement "Rect" (3SZK-0) 11×18
+          SVGVisualElement "Line" (3SZL-0) 0×40
+          SVGVisualElement "Rect" (3SZM-0) 11×28
+          SVGVisualElement "Rect" (3SZN-0) 11×31
+          SVGVisualElement "Line" (3SZO-0) 0×38
+          SVGVisualElement "Rect" (3SZP-0) 11×8
+          SVGVisualElement "Rect" (3SZQ-0) 11×20
+          SVGVisualElement "Line" (3SZR-0) 0×45
+          SVGVisualElement "Rect" (3SZS-0) 11×32
+          SVGVisualElement "Rect" (3SZT-0) 11×33
+          SVGVisualElement "Line" (3SZU-0) 0×36
+          SVGVisualElement "Rect" (3SZV-0) 11×11
+          SVGVisualElement "Rect" (3SZW-0) 11×27
+          SVGVisualElement "Line" (3SZX-0) 0×36
+          SVGVisualElement "Rect" (3SZY-0) 11×6
+          SVGVisualElement "Rect" (3SZZ-0) 11×23
+          SVGVisualElement "Line" (3T00-0) 0×42
+          SVGVisualElement "Rect" (3T01-0) 11×30
+          SVGVisualElement "Rect" (3T02-0) 11×36
+          SVGVisualElement "Line" (3T03-0) 0×34
+          SVGVisualElement "Rect" (3T04-0) 11×8
+          SVGVisualElement "Rect" (3T05-0) 11×30
+          SVGVisualElement "Line" (3T06-0) 0×40
+          SVGVisualElement "Rect" (3T07-0) 11×15
+          SVGVisualElement "Rect" (3T08-0) 11×40
+          SVGVisualElement "Line" (3T09-0) 0×40
+          SVGVisualElement "Rect" (3T0A-0) 11×15
+          SVGVisualElement "Rect" (3T0B-0) 11×37
+          SVGVisualElement "Line" (3T0C-0) 0×288
+          SVGVisualElement "Circle" (3T0D-0) 6×6
+          SVGVisualElement "거래량" (3T0E-0) 43×13
+        Frame "Frame" (2ROE-1) 148×30
+          Text "▲ 168,420 · +0.74%" (2ROF-1) 135×16 "▲ 168,420 · +0.74%"
+        Frame "Frame" (2ROG-1) 121×14
+          Text "185.4kg" (2ROH-1) 121×14 "185.4kg"
+    Frame "Instrument Context" (2RJE-1) 538×558
+      Frame "Chart Context Actions" (2RJF-1) 490×44
+        Frame "Frame" (2RJI-1) 241×44
+          Text "알림 설정" (2RJJ-1) 57×16 "알림 설정"
+        Frame "Frame" (2RJG-1) 239×44
+          Text "호가 열기" (2RJH-1) 57×16 "호가 열기"
+      Frame "Rail Column A" (33DR-0) 237×420
+        Frame "Market Profile" (2RK6-1) 237×183
+          Frame "Frame" (2RKG-1) 237×20
+            Text "종목 요약" (2RKI-1) 70×20 "종목 요약"
+            Text "정상 거래" (2RKH-1) 53×16 "정상 거래"
+          Frame "Frame" (2RKD-1) 237×36
+            Text "전일 종가" (2RKF-1) 53×16 "전일 종가"
+            Text "167,180" (2RKE-1) 51×16 "167,180"
+          Frame "Frame" (2RKA-1) 237×36
+            Text "실물 인출" (2RKC-1) 53×16 "실물 인출"
+            Text "가능" (2RKB-1) 24×16 "가능"
+          Frame "Frame" (2RK7-1) 237×36
+            Text "상장 시장" (2RK9-1) 53×16 "상장 시장"
+            Text "KRX 금시장" (2RK8-1) 65×16 "KRX 금시장"
+        Frame "Range and Liquidity" (2RJV-1) 237×225
+          Text "가격 범위 · 최근 일봉" (2RK5-1) 237×20 "가격 범위 · 최근 일봉"
+          Frame "Frame" (2RK2-1) 237×16
+            Text "52주 최저 128,540" (2RK4-1) 100×16 "52주 최저 128,540"
+            Text "최고 172,850" (2RK3-1) 71×16 "최고 172,850"
+          Frame "Frame" (2RJZ-1) 237×8
+            Rectangle "Rectangle" (2RK1-1) 213×8
+            Rectangle "Rectangle" (2RK0-1) 16×16
+          Frame "Frame" (2RJW-1) 237×16
+            Text "거래대금" (2RJY-1) 48×16 "거래대금"
+            Text "310억" (2RJX-1) 34×16 "310억"
+          Frame "가격제한" (39LZ-0) 237×17
+            Text "가격제한" (39M0-0) 48×16 "가격제한"
+            Frame "Frame" (39M1-0) 168×16
+              Text "하한" (39M2-0) 22×16 "하한"
+              Text "150,460" (39M3-0) 51×16 "150,460"
+              Text "· 상한" (39M4-0) 29×16 "· 상한"
+              Text "183,890" (39M5-0) 51×16 "183,890"
+          Frame "최근 일봉" (3SU7-0) 237×89
+            Frame "Frame" (3SU8-0) 237×22
+              Text "08-31" (3SU9-0) 32×16 "08-31"
+              Text "+0.42%" (3SUA-0) 44×16 "+0.42%"
+            Frame "Frame" (3SUB-0) 237×22
+              Text "08-28" (3SUC-0) 32×16 "08-28"
+              Text "−0.18%" (3SUD-0) 44×16 "−0.18%"
+            Frame "Frame" (3SUE-0) 237×22
+              Text "08-27" (3SUF-0) 32×16 "08-27"
+              Text "+1.05%" (3SUG-0) 44×16 "+1.05%"
+      Frame "Rail Column B" (33DS-0) 237×401
+        Frame "국제 금 환산" (33DU-0) 237×111
+          Text "Title" (33DV-0) 237×20 "국제 금 환산"
+          Frame "Rows" (33DW-0) 237×74
+            Frame "온스" (39QF-0) 237×34
+              Text "온스" (39QG-0) 24×16 "온스"
+              Frame "Frame" (39QH-0) 117×31
+                Text "$3,751.30" (39QI-0) 65×16 "$3,751.30"
+                Text "▲ +18.40 · +0.49%" (39QJ-0) 117×14 "▲ +18.40 · +0.49%"
+            Frame "Frame" (33E0-0) 237×20
+              Text "환산" (33E1-0) 24×16 "환산"
+              Text "167,750원/g" (33E2-0) 77×16 "167,750원/g"
+            Frame "Frame" (33E3-0) 237×20
+              Text "국내 대비" (33E4-0) 53×16 "국내 대비"
+              Text "+0.4%" (33E5-0) 36×16 "+0.4%"
+        Frame "체결 추이" (33E7-0) 237×162
+          Frame "Title Row" (3A99-0) 237×20
+            Text "체결 추이" (3A9A-0) 70×20 "체결 추이"
+            Frame "Frame" (3A9B-0) 92×14
+              Text "체결강도" (3A9C-0) 44×14 "체결강도"
+              Text "104.6%" (3A9D-0) 44×14 "104.6%"
+          Frame "Column Head" (3A9F-0) 237×20
+            Text "시각" (3A9G-0) 58×14 "시각"
+            Text "체결가" (3A9H-0) 56×14 "체결가"
+            Text "전일대비" (3A9I-0) 52×14 "전일대비"
+            Text "체결량" (3A9J-0) 40×14 "체결량"
+            Text "구분" (3A9K-0) 31×14 "구분"
+          Frame "Rows" (3AE5-0) 237×101
+            Frame "09:42:18" (3AE6-0) 237×22
+              Text "09:42:18" (3AE7-0) 58×15 "09:42:18"
+              Text "168,420" (3AE8-0) 56×15 "168,420"
+              Text "+1,240" (3AE9-0) 52×15 "+1,240"
+              Text "42g" (3AEA-0) 40×15 "42g"
+              Text "매수" (3AEB-0) 31×15 "매수"
+            Frame "09:42:05" (3AEC-0) 237×22
+              Text "09:42:05" (3AED-0) 58×15 "09:42:05"
+              Text "168,410" (3AEE-0) 56×15 "168,410"
+              Text "+1,230" (3AEF-0) 52×15 "+1,230"
+              Text "18g" (3AEG-0) 40×15 "18g"
+              Text "매도" (3AEH-0) 31×15 "매도"
+            Frame "09:41:52" (3AEI-0) 237×22
+              Text "09:41:52" (3AEJ-0) 58×15 "09:41:52"
+              Text "168,420" (3AEK-0) 56×15 "168,420"
+              Text "+1,240" (3AEL-0) 52×15 "+1,240"
+              Text "96g" (3AEM-0) 40×15 "96g"
+              Text "매수" (3AEN-0) 31×15 "매수"
+            Frame "호가" (3AEO-0) 237×20
+              Frame "Frame" (3AEP-0) 99×15
+                Text "매도호가" (3AEQ-0) 44×14 "매도호가"
+                Text "168,430" (3AER-0) 51×15 "168,430"
+              Frame "Frame" (3AES-0) 99×15
+                Text "매수호가" (3AET-0) 44×14 "매수호가"
+                Text "168,420" (3AEU-0) 51×15 "168,420"
+            Frame "거래량 상태" (3AEV-0) 237×15
+              Frame "Frame" (3AEW-0) 133×15
+                Text "전일 거래량 대비" (3AEX-0) 85×14 "전일 거래량 대비"
+                Text "119.2%" (3AEY-0) 44×15 "119.2%"
+              Frame "Frame" (3AEZ-0) 88×15
+                Text "순간 비율" (3AF0-0) 48×14 "순간 비율"
+                Text "0.02%" (3AF1-0) 36×15 "0.02%"
+        Frame "장전 예상" (33ER-0) 237×112
+          Frame "Title Row" (39ZO-0) 237×20
+            Text "장전 예상" (39ZP-0) 70×20 "장전 예상"
+            Text "08:50 기준" (39ZQ-0) 62×14 "08:50 기준"
+          Frame "Rows" (3A3V-0) 237×75
+            Frame "예상 체결가" (3A3W-0) 237×38
+              Text "예상 체결가" (3A3X-0) 65×16 "예상 체결가"
+              Frame "Frame" (3A3Y-0) 104×31
+                Text "167,300원" (3A3Z-0) 63×16 "167,300원"
+                Text "▲ +120 · +0.07%" (3A40-0) 104×14 "▲ +120 · +0.07%"
+            Frame "예상 수량" (3A41-0) 237×37
+              Text "예상 누적 수량" (3A42-0) 81×16 "예상 누적 수량"
+              Frame "Frame" (3A43-0) 131×31
+                Text "84g" (3A44-0) 22×16 "84g"
+                Frame "Frame" (3A45-0) 131×14
+                  Text "예상 체결 시간" (3A46-0) 74×14 "예상 체결 시간"
+                  Text "08:59:58" (3A47-0) 53×14 "08:59:58"
+  Frame "투자자별 매매" (3HC9-0) 1358×196
+    Frame "블록 제목" (3HCA-0) 1302×22
+      Text "투자자별 매매" (3HCB-0) 96×20 "투자자별 매매"
+      Frame "Frame" (3HCC-0) 250×15
+        Text "08-31" (3HCD-0) 33×14 "08-31"
+        Text "확정" (3HCE-0) 22×14 "확정"
+        Text "전일 거래량" (3HFY-0) 59×14 "전일 거래량"
+        Text "155.6kg · 260억원" (3HFZ-0) 118×15 "155.6kg · 260억원"
+    Frame "열 머리" (3HCF-0) 1302×20
+      Text "투자자" (3HCG-0) 150×14 "투자자"
+      Text "매도 수량" (3HCH-0) 155×14 "매도 수량"
+      Text "매도 금액" (3HCI-0) 155×14 "매도 금액"
+      Text "매수 수량" (3HCJ-0) 155×14 "매수 수량"
+      Text "매수 금액" (3HCK-0) 155×14 "매수 금액"
+      Text "단가 매도·매수" (3HCL-0) 165×14 "단가 매도·매수"
+      Text "순매수 수량·금액" (3HCM-0) 185×14 "순매수 수량·금액"
+      Text "순매수 증감" (3HCN-0) 184×14 "순매수 증감"
+    Frame "개인" (3HCO-0) 1302×34
+      Frame "Frame" (3HCP-0) 150×16
+        Text "개인" (3HCQ-0) 150×16 "개인"
+        Text "8000" (3ZED-0) 150×13 "8000"
+      Frame "Frame" (3HCS-0) 155×30
+        Text "51.8kg" (3HCT-0) 47×16 "51.8kg"
+        Text "+4.2kg" (3HCU-0) 40×13 "+4.2kg"
+      Frame "Frame" (3HCV-0) 155×30
+        Text "86.5억원" (3HCW-0) 58×16 "86.5억원"
+        Text "+7.0억원" (3HCX-0) 49×13 "+7.0억원"
+      Frame "Frame" (3HCY-0) 155×30
+        Text "103.8kg" (3HCZ-0) 55×16 "103.8kg"
+        Text "+18.6kg" (3HD0-0) 47×13 "+18.6kg"
+      Frame "Frame" (3HD1-0) 155×30
+        Text "173.8억원" (3HD2-0) 65×16 "173.8억원"
+        Text "+31.1억원" (3HD3-0) 55×13 "+31.1억원"
+      Frame "Frame" (3HD4-0) 165×30
+        Text "167,050" (3HD5-0) 55×16 "167,050"
+        Text "167,420" (3HD6-0) 47×13 "167,420"
+      Frame "Frame" (3HD7-0) 185×30
+        Text "+52.0kg" (3HD8-0) 55×16 "+52.0kg"
+        Text "+87.3억원" (3HD9-0) 55×13 "+87.3억원"
+      Frame "Frame" (3HDA-0) 184×30
+        Text "+14.4kg" (3HDB-0) 55×16 "+14.4kg"
+        Text "+24.1억원" (3HDC-0) 55×13 "+24.1억원"
+    Frame "기관" (3HDD-0) 1302×34
+      Frame "Frame" (3HDE-0) 150×16
+        Text "기관" (3HDF-0) 150×16 "기관"
+        Text "1000" (3ZEF-0) 150×13 "1000"
+      Frame "Frame" (3HDH-0) 155×30
+        Text "82.4kg" (3HDI-0) 47×16 "82.4kg"
+        Text "+9.1kg" (3HDJ-0) 40×13 "+9.1kg"
+      Frame "Frame" (3HDK-0) 155×30
+        Text "137.9억원" (3HDL-0) 65×16 "137.9억원"
+        Text "+15.2억원" (3HDM-0) 55×13 "+15.2억원"
+      Frame "Frame" (3HDN-0) 155×30
+        Text "18.4kg" (3HDO-0) 47×16 "18.4kg"
+        Text "−6.3kg" (3HDP-0) 40×13 "−6.3kg"
+      Frame "Frame" (3HDQ-0) 155×30
+        Text "30.7억원" (3HDR-0) 58×16 "30.7억원"
+        Text "−10.5억원" (3HDS-0) 55×13 "−10.5억원"
+      Frame "Frame" (3HDT-0) 165×30
+        Text "167,310" (3HDU-0) 55×16 "167,310"
+        Text "166,980" (3HDV-0) 47×13 "166,980"
+      Frame "Frame" (3HDW-0) 185×30
+        Text "−64.0kg" (3HDX-0) 55×16 "−64.0kg"
+        Text "−107.2억원" (3HDY-0) 62×13 "−107.2억원"
+      Frame "Frame" (3HDZ-0) 184×30
+        Text "−15.4kg" (3HE0-0) 55×16 "−15.4kg"
+        Text "−25.7억원" (3HE1-0) 55×13 "−25.7억원"
+    Frame "외국인" (3HE2-0) 1302×34
+      Frame "Frame" (3HE3-0) 150×16
+        Text "외국인" (3HE4-0) 150×16 "외국인"
+        Text "9000" (3ZEH-0) 150×13 "9000"
+      Frame "Frame" (3HE6-0) 155×30
+        Text "21.4kg" (3HE7-0) 47×16 "21.4kg"
+        Text "−2.8kg" (3HE8-0) 40×13 "−2.8kg"
+      Frame "Frame" (3HE9-0) 155×30
+        Text "35.8억원" (3HEA-0) 58×16 "35.8억원"
+        Text "−4.7억원" (3HEB-0) 49×13 "−4.7억원"
+      Frame "Frame" (3HEC-0) 155×30
+        Text "33.4kg" (3HED-0) 47×16 "33.4kg"
+        Text "−1.8kg" (3HEE-0) 40×13 "−1.8kg"
+      Frame "Frame" (3HEF-0) 155×30
+        Text "56.0억원" (3HEG-0) 58×16 "56.0억원"
+        Text "−3.0억원" (3HEH-0) 49×13 "−3.0억원"
+      Frame "Frame" (3HEI-0) 165×30
+        Text "167,120" (3HEJ-0) 55×16 "167,120"
+        Text "167,540" (3HEK-0) 47×13 "167,540"
+      Frame "Frame" (3HEL-0) 185×30
+        Text "+12.0kg" (3HEM-0) 55×16 "+12.0kg"
+        Text "+20.2억원" (3HEN-0) 55×13 "+20.2억원"
+      Frame "Frame" (3HEO-0) 184×30
+        Text "+1.0kg" (3HEP-0) 47×16 "+1.0kg"
+        Text "+1.7억원" (3HEQ-0) 49×13 "+1.7억원"
+    Frame "누적 순매수" (3HER-0) 1302×26
+      Text "누적 순매수" (3HES-0) 59×14 "누적 순매수"
+      Text "08-26~08-31" (3HET-0) 73×14 "08-26~08-31"
+      Text "개인" (3HEU-0) 22×14 "개인"
+      Text "+412kg · +688억원" (3HEV-0) 118×15 "+412kg · +688억원"
+      Text "기관" (3HEW-0) 22×14 "기관"
+      Text "−158kg · −264억원" (3HEX-0) 118×15 "−158kg · −264억원"
+      Text "외국인" (3HEY-0) 33×14 "외국인"
+      Text "−254kg · −424억원" (3HEZ-0) 118×15 "−254kg · −424억원"
+  Frame "Chart Status Footer" (3HF0-0) 1358×64
+    Text "● 금현물 차트 실시간 갱신 중" (3HF1-0) 166×15 "● 금현물 차트 실시간 갱신 중"
+    Text "분봉 · 당일 · 거래량 · 마지막 …" (3HF2-0) 231×15 "분봉 · 당일 · 거래량 · 마지막 체결 09:42:18"

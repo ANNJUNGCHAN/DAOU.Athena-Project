@@ -9,7 +9,7 @@ const {
   specializedClassNames, copySpecializedDatasets,
   matchesRealtimeTick, requireRealtimeSuccess, verifiedOperationRefsFor,
   rememberPanelSession, panelSessionFor, forgetPanelSession,
-  detachForDestroy, findReusableRoot, buttonLabel, workflowStateLabel,
+  detachForDestroy, findReusableRoot, buttonLabel, workflowStateLabel, isBoardSurface,
 } = require('./integrated-card-surface');
 
 test('canonical taxonomy has exactly six root surfaces', () => {
@@ -32,6 +32,13 @@ test('view instance identity wins while legacy card and target fallback remains 
   }), 'view:chart:005930');
 });
 
+test('board surface roots are recognized by the card root mark alone', () => {
+  assert.equal(isBoardSurface({ dataset: { boardSurface: 'true' } }), true);
+  assert.equal(isBoardSurface({ dataset: { boardSurface: 'false' } }), false);
+  assert.equal(isBoardSurface({ dataset: { cardId: 'CC-01' } }), false);
+  assert.equal(isBoardSurface(null), false);
+});
+
 test('kind mismatch and legacy card ids fail closed', () => {
   assert.equal(integratedDefinition({ card_id: 'ACCOUNT', card_kind: 'account' }), null);
   assert.equal(integratedDefinition({ card_id: 'CC-04', card_kind: 'flow' }), null);
@@ -39,6 +46,19 @@ test('kind mismatch and legacy card ids fail closed', () => {
 
 test('mode and section form an internal panel key, never another card id', () => {
   assert.equal(panelKeyFor({ mode: 'quote', section: 'overview', capability: 'quote', operation_ref: 'base:ka10001' }), 'quote:overview:quote:base:ka10001');
+});
+
+test('ranking mode keeps one panel while its axis operations rotate', () => {
+  const highLow = panelKeyFor({ mode: 'ranking', section: 'ranked-results', capability: 'stock-info', operation_ref: 'base:ka10016' });
+  const limits = panelKeyFor({ mode: 'ranking', section: 'ranked-results', capability: 'stock-info', operation_ref: 'base:ka10017' });
+  assert.equal(highLow, 'ranking:ranked-results');
+  assert.equal(highLow, limits);
+  // CC-05 순위 탭은 4개 capability(program-trading·credit-lending-short·…)를
+  // 한 탭에서 받는다 — capability도 키에서 제외된다.
+  const program = panelKeyFor({ mode: 'ranking', section: 'ranked-results', capability: 'program-trading', operation_ref: 'base:ka90003' });
+  const credit = panelKeyFor({ mode: 'ranking', section: 'ranked-results', capability: 'credit-lending-short', operation_ref: 'base:kt20016' });
+  assert.equal(program, credit);
+  assert.equal(buttonLabel({ mode: 'ranking', section: 'ranked-results' }), '순위');
 });
 
 test('internal fundamentals taxonomy is presented as an investor-facing Korean tab label', () => {

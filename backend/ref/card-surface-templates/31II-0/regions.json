@@ -1,0 +1,11 @@
+{
+  "root": "31IK-0",
+  "regions": [
+    { "node_id": "31NP-0", "name": "Instrument Header", "role": "header", "depth": 1 },
+    { "node_id": "31N5-0", "name": "Quote and Valuation Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "31IO-0", "name": "Chart Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "31IL-0", "name": "Chart Status Footer", "role": "footer", "depth": 1 },
+    { "node_id": "31K1-0", "name": "Quote Detail Mount", "role": "primary", "depth": 2 },
+    { "node_id": "3OV3-0", "name": "Rail", "role": "rail", "depth": 2 }
+  ]
+}

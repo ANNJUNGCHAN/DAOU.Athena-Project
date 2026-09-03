@@ -1,0 +1,13 @@
+{
+  "board_id": "2TET-1",
+  "name": "CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+  "card_id": "CC-02",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "tab",
+    "parent_board": "135M-2",
+    "control": "취소"
+  },
+  "saved_at": "2026-09-02T10:49:21Z"
+}

@@ -60,6 +60,7 @@ class RoutingCase(NamedTuple):
     intent: DiscoveryIntent = DiscoveryIntent.AUTO
     arguments: dict[str, Any] = {}
     preferred_ref: str | None = None
+    expected_mode: str | None = None
 
 
 CASES: tuple[RoutingCase, ...] = (
@@ -405,6 +406,42 @@ CASES: tuple[RoutingCase, ...] = (
         "gold-market",
         arguments={"stk_cd": "04"},
     ),
+    # ranking mode (CC-03 · CC-05 순위 탭 — OPERATION_PRESENTATION_OVERRIDES) ----
+    RoutingCase(
+        "가격 급등락 종목 보여줘",
+        "base:ka10019",
+        "CC-03",
+        "discovery-value",
+        arguments={
+            "mrkt_tp": "000",
+            "flu_tp": "1",
+            "tm_tp": "1",
+            "tm": "1",
+            "trde_qty_tp": "0000",
+            "stk_cnd": "0",
+            "crd_cnd": "0",
+            "pric_cnd": "0",
+            "updown_incls": "1",
+            "stex_tp": "1",
+        },
+        expected_mode="ranking",
+    ),
+    RoutingCase(
+        "ELW 잔량 순위 보여줘",
+        "base:ka30010",
+        "CC-03",
+        "elw-product",
+        arguments={"sort_tp": "1", "rght_tp": "000", "trde_end_skip": "0"},
+        expected_mode="ranking",
+    ),
+    RoutingCase(
+        "대차거래 상위 10 종목 보여줘",
+        "base:ka10069",
+        "CC-05",
+        "why-move-flow",
+        arguments={"strt_dt": "20260825", "mrkt_tp": "000"},
+        expected_mode="ranking",
+    ),
 )
 
 
@@ -455,3 +492,10 @@ def test_representative_question_routes_to_expected_card_and_recipe(
         f"view recipe {case.expected_recipe_id!r} but actually used "
         f"{actual_recipe_id!r}"
     )
+    if case.expected_mode is not None:
+        actual_mode = resolve_canvas_card(actual_ref).mode
+        assert actual_mode == case.expected_mode, (
+            f"question {case.question!r} (operation {actual_ref}) was expected to "
+            f"open card mode {case.expected_mode!r} but actually opened "
+            f"{actual_mode!r}"
+        )

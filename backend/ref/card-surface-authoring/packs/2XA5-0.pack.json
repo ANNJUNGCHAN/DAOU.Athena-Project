@@ -1,0 +1,132 @@
+{
+ "board_id": "2XA5-0",
+ "card_id": "CC-03",
+ "name": "CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+ "operation_refs": [
+  "base:ka30009"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka30009",
+   "f": "elwflu_rt_rank",
+   "kor": "ELW등락율순위",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "시장 순위 표(등락률 순)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "rank",
+   "kor": "순위",
+   "layer": "직접",
+   "board": "2XA5-0",
+   "where": "표 1열 '순위' 신설 (1~8, 등락률 큰 순)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "board": "2XA5-0",
+   "where": "종목 셀 2줄 mono 10px '58H215 · KB증권 9C21회차' 등 8행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "종목 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "현재가 컬럼 312·87·1,120",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "등락률 부호와 상승·하락색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "2XA5-0",
+   "where": "현재가 셀 2줄 '▲ +45 / ▲ +25 / ▼ −10' 원 단위 전일대비",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "등락률 컬럼 +32.8%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "sel_req",
+   "kor": "매도잔량",
+   "layer": "직접",
+   "board": "2XA5-0",
+   "where": "'매도 · 매수 잔량' 스택 셀 1줄 '매도 330만' 등 8행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "buy_req",
+   "kor": "매수잔량",
+   "layer": "병기",
+   "board": "2XA5-0",
+   "where": "매도·매수 잔량 스택 셀 2줄 '매수 510만' 등 8행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "거래량 컬럼 842만주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": "병기",
+   "board": "2XA5-0",
+   "where": "거래량 셀 2줄 '25.7억원' 등 8행",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 6
+}

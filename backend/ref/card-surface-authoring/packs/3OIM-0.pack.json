@@ -1,0 +1,704 @@
+{
+ "board_id": "3OIM-0",
+ "card_id": "CC-01",
+ "name": "CC-01 / R10-B-X2 · 금현물 주문·체결",
+ "operation_refs": [
+  "base:kt50030",
+  "base:kt50031",
+  "base:kt50075"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:kt50030",
+   "f": "acnt_ord_cntr_prst",
+   "kor": "계좌별주문체결현황",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'오늘 주문 · 체결 2건 · 1건'(증명 위임)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "stk_bond_tp",
+   "kor": "주식채권구분",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "미체결 주문 섹션 종목 셀 2줄 04020000 · 금현물",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "미체결 주문 섹션 주문번호 열 0000512",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "stk_cd",
+   "kor": "상품코드",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목코드 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "trde_tp",
+   "kor": "매매구분",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "'시장가' 표기",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "io_tp_nm",
+   "kor": "주문유형구분",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "미체결 주문 섹션 주문유형구분 열 지정가",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "ord_qty",
+   "kor": "주문수량",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "금현물 '매수수량 5주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "ord_uv",
+   "kor": "주문단가",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "미체결 '금 99.99K 5g 매수 168,000원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "cnfm_qty",
+   "kor": "확인수량",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "미체결 주문 섹션 수량 셀 2줄 확인수량 0g",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "data_send_end_tp",
+   "kor": "접수구분",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "'상태' 컬럼 '접수 · 미체결'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "mrkt_deal_tp",
+   "kor": "시장구분",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'KRX 금시장'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "rsrv_tp",
+   "kor": "예약/반대여부",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "미체결 주문 섹션 상태 셀 2줄 예약·반대 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "orig_ord_no",
+   "kor": "원주문번호",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "미체결 패널 '원주문 0021846'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'금 99.99K 5g'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "dcd_tp_nm",
+   "kor": "결제구분",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'결제 기준 D+2' 배지",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "crd_deal_tp",
+   "kor": "신용거래구분",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "미체결 주문 섹션 신용거래구분 열 현금",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "cntr_qty",
+   "kor": "체결수량",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "거래 원본 '매수수량 5주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "cntr_uv",
+   "kor": "체결단가",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "체결 완료 행 체결가",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "ord_remnq",
+   "kor": "미체결수량",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'미체결 1건' / 2SYW-1 '미체결 잔량'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "comm_ord_tp",
+   "kor": "통신구분",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "미체결 주문 섹션 신용거래구분 셀 2줄 통신구분 HTS",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "mdfy_cncl_tp",
+   "kor": "정정취소구분",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "미체결 주문 섹션 상태 셀 2줄 정정취소 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "미체결 주문 섹션 제목 옆 칩 KRX 금시장",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "cond_uv",
+   "kor": "스톱가",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "미체결 주문 섹션 주문가 셀 2줄 스톱가 0원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "acnt_ord_cntr_prps_dtl",
+   "kor": "계좌별주문체결내역상세",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "금현물 '거래 원본' 행 목록(증명 위임)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "당일 체결 섹션 주문번호 열 0000508",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "stk_cd",
+   "kor": "종목번호",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목코드 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "trde_tp",
+   "kor": "매매구분",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "'시장가' 표기",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "crd_tp",
+   "kor": "신용구분",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "당일 체결 섹션 신용구분 열 현금",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ord_qty",
+   "kor": "주문수량",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'매수수량 5주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ord_uv",
+   "kor": "주문단가",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'매수 168,000원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "cnfm_qty",
+   "kor": "확인수량",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "당일 체결 섹션 체결수량 셀 2줄 확인수량 5g",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "acpt_tp",
+   "kor": "접수구분",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "'상태' 컬럼 '접수 · 미체결'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "rsrv_tp",
+   "kor": "반대여부",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "당일 체결 섹션 확인시간 셀 2줄 반대 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ord_tm",
+   "kor": "주문시간",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "'시간' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ori_ord",
+   "kor": "원주문",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "미체결 패널 '원주문 0021846'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'금 99.99K 5g'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "io_tp_nm",
+   "kor": "주문구분",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "당일 체결 섹션 주문구분 열 시장가",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "loan_dt",
+   "kor": "대출일",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "당일 체결 섹션 신용구분 셀 2줄 대출일 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "cntr_qty",
+   "kor": "체결수량",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "거래 원본 '매수수량 5주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "cntr_uv",
+   "kor": "체결단가",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "체결 완료 행 체결가",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ord_remnq",
+   "kor": "주문잔량",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "미체결 패널 '미체결 잔량 10주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "comm_ord_tp",
+   "kor": "통신구분",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "당일 체결 섹션 확인시간 셀 2줄 HTS",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "mdfy_cncl",
+   "kor": "정정취소",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "당일 체결 섹션 확인시간 셀 2줄 정정취소 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "cnfm_tm",
+   "kor": "확인시간",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "당일 체결 섹션 확인시간 열 09:21:07",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "당일 체결 섹션 제목 옆 칩 KRX 금시장",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "cond_uv",
+   "kor": "스톱가",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "당일 체결 섹션 체결가 셀 2줄 스톱가 0원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "acnt_ord_oso_prst",
+   "kor": "계좌별주문미체결현황",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'미체결 1건 — 금 99.99K 5g 매수 168,000원'(증명 위임)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "stk_bond_tp",
+   "kor": "주식채권구분",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "주문내역 섹션 종목 셀 2줄 04020000 · 금현물 3행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "주문내역 섹션 주문일 셀 2줄 0000512 · 0000508 · 0000497",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "stk_cd",
+   "kor": "상품코드",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목코드 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "trde_tp",
+   "kor": "매매구분",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "'시장가' 표기",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "io_tp_nm",
+   "kor": "주문유형구분",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "주문내역 섹션 주문유형구분 열 지정가 · 시장가 · 지정가",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "ord_qty",
+   "kor": "주문수량",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "'수량' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "ord_uv",
+   "kor": "주문단가",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'매수 168,000원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "cnfm_qty",
+   "kor": "확인수량",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "주문내역 섹션 수량 셀 2줄 확인수량 0g · 5g · 20g",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "data_send_end_tp",
+   "kor": "접수구분",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "'상태' 컬럼 '접수 · 미체결'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "mrkt_deal_tp",
+   "kor": "시장구분",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'KRX 금시장'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "rsrv_tp",
+   "kor": "예약/반대여부",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "주문내역 섹션 상태 셀 2줄 예약 해당 없음 3행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "orig_ord_no",
+   "kor": "원주문번호",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "미체결 패널 '원주문 0021846'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'금 99.99K 5g'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "dcd_tp_nm",
+   "kor": "결제구분",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'결제 기준 D+2' 배지",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "crd_deal_tp",
+   "kor": "신용거래구분",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "주문내역 섹션 신용거래구분 열 현금 3행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "cntr_qty",
+   "kor": "체결수량",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "거래 원본 '매수수량 5주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "cntr_uv",
+   "kor": "체결단가",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "체결 완료 행 체결가",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "ord_remnq",
+   "kor": "미체결수량",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'미체결 1건'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "comm_ord_tp",
+   "kor": "통신구분",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "주문내역 섹션 신용거래구분 셀 2줄 통신구분 HTS 3행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "mdfy_cncl_tp",
+   "kor": "정정취소구분",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "주문내역 섹션 상태 셀 2줄 정정취소 해당 없음 3행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": "직접",
+   "board": "3OIM-0",
+   "where": "주문내역 섹션 제목 옆 칩 KRX 금시장",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "cond_uv",
+   "kor": "스톱가",
+   "layer": "병기",
+   "board": "3OIM-0",
+   "where": "주문내역 섹션 주문가 셀 2줄 스톱가 0원 3행",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 31
+}

@@ -1,0 +1,13 @@
+{
+  "board_id": "2TRW-1",
+  "name": "CC-04 / R02-T4 · 호가 — 정규장 5단",
+  "card_id": "CC-04",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "tab",
+    "parent_board": "13BC-2",
+    "control": "정규장 · 5단"
+  },
+  "saved_at": "2026-09-02T11:20:31Z"
+}

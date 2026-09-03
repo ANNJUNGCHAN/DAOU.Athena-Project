@@ -174,7 +174,15 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # confirmations·manual, 2026-09-03) — 화면의 카드·패널이 부르는 쓰기라 전부
     # x-athena-llm-exposed=False다(위 검사에 함께 잡힌다). 이 핀은 그 작업들에서
     # 갱신되지 않아 이미 빨간 상태였고, 여기서 실측값으로 맞춘다.
-    assert len(operation_ids) == 404
+    # 405 = 404 + 내부 보드 하이드레이션 endpoint 1개(internal_canvas_board_hydrate,
+    # codex/kiumi-mini-cards-runtime 병합 2026-09-03) — Paper 보드 1장의 read op들을
+    # 한 번에 읽어 표면 슬롯을 채운다(D2 보드 단위 fetch-set). realtime binding
+    # contract와 같은 신뢰 경계(bearer, LLM 비노출)다.
+    # 408 = 405 + 루틴 3개(feat/agent-dual-control 병합 2026-09-03): 단건 조회
+    # GET /api/v1/routines/{id} · 수정 POST /api/v1/routines/{id}/update · 감시 소스
+    # 카탈로그 GET /api/v1/routines/source-catalog. 코드 알람 트랙의 wip 스냅샷에
+    # 들어온 것으로 그쪽 핀은 갱신되지 않았고, 병합 시 실측(404→408, 소실 0)으로 맞춘다.
+    assert len(operation_ids) == 408
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids

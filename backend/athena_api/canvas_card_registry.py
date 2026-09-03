@@ -80,6 +80,46 @@ CAPABILITY_PRESENTATION = MappingProxyType(
     }
 )
 
+# Ranking/list operations render inside their owning card's shared "ranking"
+# mode (Paper 카드 페이지 R01-T4~T6 · R03-T6).  Ownership, card selection, and
+# per-capability operation counts stay untouched — this only changes the
+# default mode/section plan data derived for these operations.
+OPERATION_PRESENTATION_OVERRIDES = MappingProxyType(
+    {
+        # stock-info → CC-03 순위 (주식 신호·순위)
+        "base:ka10016": ("ranking", "ranked-results"),
+        "base:ka10017": ("ranking", "ranked-results"),
+        "base:ka10018": ("ranking", "ranked-results"),
+        "base:ka10019": ("ranking", "ranked-results"),
+        "base:ka10024": ("ranking", "ranked-results"),
+        "base:ka10025": ("ranking", "ranked-results"),
+        "base:ka10026": ("ranking", "ranked-results"),
+        "base:ka10028": ("ranking", "ranked-results"),
+        "base:ka10054": ("ranking", "ranked-results"),
+        "base:ka10055": ("ranking", "ranked-results"),
+        # etf → CC-03 순위 (ETF 전체시세·기간 수익률)
+        "base:ka40001": ("ranking", "ranked-results"),
+        "base:ka40004": ("ranking", "ranked-results"),
+        # elw → CC-03 순위 (ELW 순위)
+        "base:ka30001": ("ranking", "ranked-results"),
+        "base:ka30002": ("ranking", "ranked-results"),
+        "base:ka30005": ("ranking", "ranked-results"),
+        "base:ka30009": ("ranking", "ranked-results"),
+        "base:ka30010": ("ranking", "ranked-results"),
+        "base:ka30011": ("ranking", "ranked-results"),
+        # flow → CC-05 순위 (수급 순위)
+        "base:ka90003": ("ranking", "ranked-results"),
+        "base:ka10033": ("ranking", "ranked-results"),
+        "base:ka10069": ("ranking", "ranked-results"),
+        "base:ka10036": ("ranking", "ranked-results"),
+        "base:ka10065": ("ranking", "ranked-results"),
+        "base:ka90009": ("ranking", "ranked-results"),
+        "base:ka10039": ("ranking", "ranked-results"),
+        "base:ka10062": ("ranking", "ranked-results"),
+        "base:kt20016": ("ranking", "ranked-results"),
+    }
+)
+
 
 class CanvasCardRegistryError(ValueError):
     """Raised when card ownership or resolution violates the canonical ledger."""
@@ -263,7 +303,9 @@ class CanvasCardRegistry:
                     f"not {capability_id!r}"
                 )
 
-        default_mode, default_section = CAPABILITY_PRESENTATION[capability_id]
+        default_mode, default_section = OPERATION_PRESENTATION_OVERRIDES.get(
+            operation_or_capability_id, CAPABILITY_PRESENTATION[capability_id]
+        )
         return ResolvedCanvasCard(
             card=card,
             capability_id=capability_id,

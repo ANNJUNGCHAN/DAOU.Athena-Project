@@ -1,0 +1,124 @@
+{
+ "board_id": "2TAG-1",
+ "card_id": "CC-02",
+ "name": "CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+ "operation_refs": [
+  "base:kt10002",
+  "base:kt10008",
+  "base:kt50002"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:kt10002",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 주문번호 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10002",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 원주문번호 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10002",
+   "f": "mdfy_qty",
+   "kor": "정정수량",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 정정수량 10주 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10002",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 국내거래소구분 KRX 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10008",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 주문번호 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10008",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 원주문번호 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10008",
+   "f": "mdfy_qty",
+   "kor": "정정수량",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 정정수량 10주 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10008",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 국내거래소구분 KRX 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50002",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "board": "2TNJ-1",
+   "where": "주문 접수 정보 · 주문번호 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50002",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 원주문번호 행(금현물 탭 공용)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50002",
+   "f": "mdfy_qty",
+   "kor": "정정수량",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 정정수량 행(금현물 탭 공용)",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 10
+}

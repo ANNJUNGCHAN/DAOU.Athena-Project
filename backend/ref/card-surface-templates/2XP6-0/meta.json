@@ -1,0 +1,13 @@
+{
+  "board_id": "2XP6-0",
+  "name": "CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 980,
+  "state": {
+    "kind": "sort",
+    "parent_board": "13K0-2",
+    "control": "예상체결 등락률"
+  },
+  "saved_at": "2026-09-02T11:26:22Z"
+}

@@ -1,0 +1,75 @@
+{
+ "board": "2TAG-1",
+ "fields": [
+  {
+   "mapping_id": "base:kt10002",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "where": "주문 접수 정보 · 주문번호 행"
+  },
+  {
+   "mapping_id": "base:kt10002",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "where": "주문 접수 정보 · 원주문번호 행"
+  },
+  {
+   "mapping_id": "base:kt10002",
+   "f": "mdfy_qty",
+   "kor": "정정수량",
+   "layer": null,
+   "where": "주문 접수 정보 · 정정수량 10주 행"
+  },
+  {
+   "mapping_id": "base:kt10002",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": null,
+   "where": "주문 접수 정보 · 국내거래소구분 KRX 행"
+  },
+  {
+   "mapping_id": "base:kt10008",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "where": "주문 접수 정보 · 주문번호 행"
+  },
+  {
+   "mapping_id": "base:kt10008",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "where": "주문 접수 정보 · 원주문번호 행"
+  },
+  {
+   "mapping_id": "base:kt10008",
+   "f": "mdfy_qty",
+   "kor": "정정수량",
+   "layer": null,
+   "where": "주문 접수 정보 · 정정수량 10주 행"
+  },
+  {
+   "mapping_id": "base:kt10008",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": null,
+   "where": "주문 접수 정보 · 국내거래소구분 KRX 행"
+  },
+  {
+   "mapping_id": "base:kt50002",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "where": "주문 접수 정보 · 원주문번호 행(금현물 탭 공용)"
+  },
+  {
+   "mapping_id": "base:kt50002",
+   "f": "mdfy_qty",
+   "kor": "정정수량",
+   "layer": null,
+   "where": "주문 접수 정보 · 정정수량 행(금현물 탭 공용)"
+  }
+ ]
+}

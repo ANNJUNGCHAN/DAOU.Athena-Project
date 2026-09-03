@@ -1,0 +1,110 @@
+{
+ "board": "1WOB-1",
+ "fields": [
+  {
+   "mapping_id": "base:0F",
+   "f": "337",
+   "kor": "거래소구분",
+   "layer": null,
+   "where": "필터 칩 '통합시장' 및 헤더 'KOSPI' 표기"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "for_dt_trde_upper",
+   "kor": "외인기간별매매상위",
+   "layer": null,
+   "where": "외국인 기간별 매매 상위 목록 표"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "rank",
+   "kor": "순위",
+   "layer": null,
+   "where": "표 '순위' 열 01~20"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "표 '종목' 열 삼성전자 등"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "sel_bid",
+   "kor": "매도호가",
+   "layer": "직접",
+   "where": "목록 표 신설 '매도호가' 열(1행 150,900)"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "buy_bid",
+   "kor": "매수호가",
+   "layer": "직접",
+   "where": "목록 표 신설 '매수호가' 열(1행 150,800)"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "where": "목록 표 신설 '거래량' 열(1행 1,420만주 · 2.14조)"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "netprps_qty",
+   "kor": "순매수량",
+   "layer": null,
+   "where": "표 '누적 순매수' 열 +2,416억원"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "for_cont_nettrde_upper",
+   "kor": "외인연속순매매상위",
+   "layer": null,
+   "where": "외국인 기간별 매매 상위 목록 표(연속일 열)"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "표 '종목' 열"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "tot",
+   "kor": "합계",
+   "layer": null,
+   "where": "'상위 합계 +1.82조원' 및 누적 순매수 열"
+  },
+  {
+   "mapping_id": "base:ka10053",
+   "f": "qry_dt",
+   "kor": "조회일자",
+   "layer": null,
+   "where": "'조회 · 2026.08.31 09:42'"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": null,
+   "where": "필터 칩 '통합시장'"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": null,
+   "where": "필터 칩 '통합시장'"
+  },
+  {
+   "mapping_id": "detail:ka10040:broker_departures",
+   "f": "qry_dt",
+   "kor": "조회일자",
+   "layer": null,
+   "where": "'조회 · 2026.08.31 09:42'"
+  }
+ ]
+}

@@ -1,0 +1,1070 @@
+{
+ "board_id": "15N5-2",
+ "card_id": "CC-03",
+ "name": "CC-03 / R07 · KODEX 200 ETF",
+ "operation_refs": [
+  "base:0G",
+  "base:ka40001",
+  "base:ka40002",
+  "base:ka40003",
+  "base:ka40006",
+  "base:ka40007",
+  "base:ka40008",
+  "base:ka40009",
+  "base:ka40010"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:0G",
+   "f": "36",
+   "kor": "NAV",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "실시간 NAV 48,318",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "37",
+   "kor": "NAV전일대비",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "KPI 실시간 NAV 칸 병기 '전일대비 ▲ +398'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "38",
+   "kor": "NAV등락율",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "KPI 실시간 NAV 칸 병기 '+0.83%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "39",
+   "kor": "추적오차율",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "20일 추적오차 0.11%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "20",
+   "kor": "체결시간",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "체결·일자별 시각 09:42:18",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "10",
+   "kor": "현재가",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "현재가 48,360",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "11",
+   "kor": "전일대비",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "헤더 48,360 아래 대비 줄 '▲ +410 · +0.86%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "12",
+   "kor": "등락율",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "등락률 +0.86%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "13",
+   "kor": "누적거래량",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "KPI 거래대금 칸 2번째 줄 '누적 거래량 382만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "25",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "+0.86% 상승색과 + 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "667",
+   "kor": "ELW기어링비율",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "기어링 7.9",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "668",
+   "kor": "ELW손익분기율",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "손익분기율 +12.1%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "669",
+   "kor": "ELW자본지지점",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "자본지지점 150,000원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "265",
+   "kor": "NAV/지수괴리율",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "'가격과 NAV' 차트 캡션 우측 상태 'NAV/지수 괴리율 +0.09%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "266",
+   "kor": "NAV/ETF괴리율",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "괴리 +0.09% (2VIN-0 괴리율 컬럼)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40001",
+   "f": "etfprft_rt_lst",
+   "kor": "ETF수익율",
+   "layer": null,
+   "board": "2WZK-0",
+   "where": "기간 수익률 표(1주·1달·3달·1년)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40001",
+   "f": "etfprft_rt",
+   "kor": "ETF수익률",
+   "layer": null,
+   "board": "2WZK-0",
+   "where": "1주 +5.8% · 1달 +18.4% · 3달 +42.1% · 1년 +76.5%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40001",
+   "f": "cntr_prft_rt",
+   "kor": "체결수익률",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "시세 4칸 KPI 스트립 2번째 칸 '체결 수익률 +0.84%' — 전일 종가 47,957 · 체결 기준 +403 병기",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40001",
+   "f": "for_netprps_qty",
+   "kor": "외인순매수수량",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "구성 비중 패널 외국인 순매수 행 병기 '59.2만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40001",
+   "f": "orgn_netprps_qty",
+   "kor": "기관순매수수량",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "구성 비중 패널 기관 순매수 행 병기 '19.4만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "KODEX 200 ETF",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "etfobjt_idex_nm",
+   "kor": "ETF대상지수명",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "코스피200 추종 · 시가총액형",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "wonju_pric",
+   "kor": "원주가격",
+   "layer": "병기",
+   "board": "2WZK-0",
+   "where": "1위 종목 기간 수익률 카드 과세 행 병기 '원주가격 해당 없음'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "etftxon_type",
+   "kor": "ETF과세유형",
+   "layer": "직접",
+   "board": "2WZK-0",
+   "where": "1위 종목 기간 수익률 카드 과세 행 'ETF 배당소득세 15.4%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "etntxon_type",
+   "kor": "ETN과세유형",
+   "layer": "병기",
+   "board": "2WZK-0",
+   "where": "1위 종목 기간 수익률 카드 과세 행 병기 'ETN 해당 없음'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "etfdaly_trnsn",
+   "kor": "ETF일별추이",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "'일자별 추이' 표 3행(09-01/08-29/08-28)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "cntr_dt",
+   "kor": "체결일자",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "일자별 추이 표 일자 열 '09-01·08-29·08-28'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "체결·일자별 전일 합계 47,950",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "일자별 추이 종가 셀 병기 기호 '▲/▼'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "일자별 추이 종가 셀 병기 '+410/+340/-180'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "pre_rt",
+   "kor": "대비율",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "일자별 추이 종가 셀 병기 '+0.86%/+0.71%/-0.38%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "전일 합계 84.2만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "nav",
+   "kor": "NAV",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "실시간 NAV 48,318 · 시간대별 흐름 NAV 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "acc_trde_prica",
+   "kor": "누적거래대금",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "거래대금 1,846억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "navidex_dispty_rt",
+   "kor": "NAV/지수괴리율",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "일자별 추이 'NAV 괴리율' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "navetfdispty_rt",
+   "kor": "NAV/ETF괴리율",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "괴리 +0.09%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "trace_eor_rt",
+   "kor": "추적오차율",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "20일 추적오차 0.11%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "trace_cur_prc",
+   "kor": "추적현재가",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "일자별 추이 '추적현재가' 열 448.62/444.84/441.70",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "trace_pred_pre",
+   "kor": "추적전일대비",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "추적현재가 셀 병기 '+3.78/+3.14/-1.68'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40003",
+   "f": "trace_pre_sig",
+   "kor": "추적대비기호",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "추적현재가 셀 병기 기호 '▲/▼'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "KODEX 200",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "etfobjt_idex_nm",
+   "kor": "ETF대상지수명",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "코스피200 추종 · 시가총액형",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "wonju_pric",
+   "kor": "원주가격",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "ETF 기준·구성 과세 행 병기 '원주가격 해당 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "etftxon_type",
+   "kor": "ETF과세유형",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "ETF 기준·구성 과세 행 '배당소득세 15.4%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "etntxon_type",
+   "kor": "ETN과세유형",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "ETF 기준·구성 과세 행 병기 'ETN 해당 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "etftisl_trnsn",
+   "kor": "ETF시간대별추이",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "시간대별 흐름 표",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "tm",
+   "kor": "시간",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "시각 컬럼 09:00·09:30·09:42",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "close_pric",
+   "kor": "종가",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "가격 컬럼 48,050·48,210·48,360",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 가격 셀 병기 기호 '▲'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 가격 셀 병기 '+100/+260/+410'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 가격 셀 병기 '+0.21%/+0.54%/+0.86%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 '거래량' 열 62만주/214만주/382만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "nav",
+   "kor": "NAV",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "NAV 컬럼 48,022·48,178·48,318",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "거래량 셀 병기 '298억/1,032억/1,846억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "navidex",
+   "kor": "NAV지수",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 'NAV' 열 48,022/48,178/48,318",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "navetf",
+   "kor": "괴리율",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "NAV 셀 병기 '괴리 +0.06%/+0.07%/+0.09%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "trace",
+   "kor": "추적오차율",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 표 '대상지수 대비율' 열 둘째 줄 '추적오차 0.09/0.11/0.13%' (11px k-dim mono)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "trace_idex",
+   "kor": "추적지수",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 '추적지수' 열 445.75/447.20/448.62",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "trace_idex_pred_pre",
+   "kor": "추적지수전일대비",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "추적지수 셀 병기 '+0.91/+2.36/+3.78'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40006",
+   "f": "trace_idex_pred_pre_sig",
+   "kor": "추적지수전일대비기호",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "추적지수 셀 병기 기호 '▲'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "stk_cls",
+   "kor": "종목분류",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "헤더 부제 '069500 · 국내 시장대표 · 코스피200(K200) 추종'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "KODEX 200",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "etfobjt_idex_nm",
+   "kor": "ETF대상지수명",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "코스피200 추종 · 시가총액형",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "etfobjt_idex_cd",
+   "kor": "ETF대상지수코드",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 제목 우측 상태 '대상지수 코스피200 K200'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "objt_idex_pre_rt",
+   "kor": "대상지수대비율",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 '대상지수 대비율' 열 +0.01%p",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "wonju_pric",
+   "kor": "원주가격",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "ETF 기준·구성 과세 행 병기 '원주가격 해당 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "etftisl_cntr_array",
+   "kor": "ETF시간대별체결배열",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "체결·일자별 표",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "시각 컬럼 09:42:18·09:42:02",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "체결가 컬럼 48,360·48,350",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "헤더 값 아래 대비 줄 기호 '▲'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "헤더 값 아래 대비 줄 '+410'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "수량 컬럼 1,240주·880주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40007",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "헤더 우측 상태 'KRX · 장중 기준'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "체결·일자별 시각 09:42:18",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "체결가 48,360",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "헤더 값 아래 대비 줄 기호 '▲'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "헤더 값 아래 대비 줄 '+410'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "수량 1,240주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "etfnetprps_qty_array",
+   "kor": "ETF순매수수량배열",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 외국인·기관 셀 병기 수량(8.7/34.8/59.2만주, 1.7/8.7/19.4만주)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "dt",
+   "kor": "일자",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "일자별 추이 표 일자 열 '09-01·08-29·08-28'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "cur_prc_n",
+   "kor": "현재가n",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "전일 합계 47,950",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "pre_sig_n",
+   "kor": "대비기호n",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 가격 셀 행별 기호 '▲'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "pred_pre_n",
+   "kor": "전일대비n",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 가격 셀 행별 '+100/+260/+410'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "전일 합계 84.2만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "for_netprps_qty",
+   "kor": "외인순매수수량",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "구성 비중 패널 외국인 순매수 행 병기 '59.2만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40008",
+   "f": "orgn_netprps_qty",
+   "kor": "기관순매수수량",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "구성 비중 패널 기관 순매수 행 병기 '19.4만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "etfnavarray",
+   "kor": "ETFNAV배열",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "시간대별 흐름 NAV 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "nav",
+   "kor": "NAV",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "NAV 컬럼 48,022·48,178·48,318",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "navpred_pre",
+   "kor": "NAV전일대비",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "KPI 실시간 NAV 칸 병기 '전일대비 ▲ +398'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "navflu_rt",
+   "kor": "NAV등락율",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "KPI 실시간 NAV 칸 병기 '+0.83%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "trace_eor_rt",
+   "kor": "추적오차율",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "20일 추적오차 0.11%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "dispty_rt",
+   "kor": "괴리율",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "괴리 +0.09%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "stkcnt",
+   "kor": "주식수",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "ETF 기준·구성 '주식수 1억 2,400만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "base_pric",
+   "kor": "기준가",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "ETF 기준·구성 '기준가 47,950'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "for_rmnd_qty",
+   "kor": "외인보유수량",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "주식수 행 병기 '외인보유 1,840만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "repl_pric",
+   "kor": "대용가",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "기준가 행 병기 '대용가 38,360'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "conv_pric",
+   "kor": "환산가격",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "기준가 행 병기 '환산가격 48,318'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "drstk",
+   "kor": "DR/주",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "과세 행 병기 'DR/주 해당 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40009",
+   "f": "wonju_pric",
+   "kor": "원주가격",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "과세 행 병기 '원주가격 해당 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40010",
+   "f": "etftisl_trnsn",
+   "kor": "ETF시간대별추이",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "시간대별 흐름 표",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40010",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "가격 컬럼 48,050·48,210·48,360",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40010",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 가격 셀 병기 기호 '▲'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40010",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 가격 셀 병기 '+100/+260/+410'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40010",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "시간대별 흐름 '거래량' 열 62만주/214만주/382만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40010",
+   "f": "for_netprps",
+   "kor": "외인순매수",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "외국인 컬럼 +42억·+168억·+286억",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 97
+}

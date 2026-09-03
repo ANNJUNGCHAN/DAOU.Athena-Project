@@ -1,0 +1,2221 @@
+{
+ "board_id": "2QRP-1",
+ "card_id": "CC-04",
+ "name": "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+ "operation_refs": [
+  "base:0D",
+  "base:0E",
+  "detail:ka10007:session",
+  "detail:ka10087:aggregate_totals",
+  "detail:ka10087:buy_bid_prices",
+  "detail:ka10087:buy_bid_quantities",
+  "detail:ka10087:sell_bid_prices",
+  "detail:ka10087:sell_bid_quantities",
+  "detail:ka10087:snapshot_time",
+  "detail:ka10087:trading_summary"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:0D",
+   "f": "21",
+   "kor": "호가시간",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "상단 요약 · '총 잔량 81,160주 · 09:42:21' 갱신 시각",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "41",
+   "kor": "매도호가1",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 1행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "61",
+   "kor": "매도호가수량1",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 1행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "81",
+   "kor": "매도호가직전대비1",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 1단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "51",
+   "kor": "매수호가1",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 1행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "71",
+   "kor": "매수호가수량1",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 1행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "91",
+   "kor": "매수호가직전대비1",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 1단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "42",
+   "kor": "매도호가2",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 2행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "62",
+   "kor": "매도호가수량2",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 2행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "82",
+   "kor": "매도호가직전대비2",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 2단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "52",
+   "kor": "매수호가2",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 2행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "72",
+   "kor": "매수호가수량2",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 2행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "92",
+   "kor": "매수호가직전대비2",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 2단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "43",
+   "kor": "매도호가3",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 3행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "63",
+   "kor": "매도호가수량3",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 3행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "83",
+   "kor": "매도호가직전대비3",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 3단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "53",
+   "kor": "매수호가3",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 3행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "73",
+   "kor": "매수호가수량3",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 3행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "93",
+   "kor": "매수호가직전대비3",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 3단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "44",
+   "kor": "매도호가4",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 4행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "64",
+   "kor": "매도호가수량4",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 4행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "84",
+   "kor": "매도호가직전대비4",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 4단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "54",
+   "kor": "매수호가4",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 4행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "74",
+   "kor": "매수호가수량4",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 4행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "94",
+   "kor": "매수호가직전대비4",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 4단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "45",
+   "kor": "매도호가5",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 5행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "65",
+   "kor": "매도호가수량5",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 5행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "85",
+   "kor": "매도호가직전대비5",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 5단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "55",
+   "kor": "매수호가5",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 5행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "75",
+   "kor": "매수호가수량5",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 5행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "95",
+   "kor": "매수호가직전대비5",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 5단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "46",
+   "kor": "매도호가6",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 6행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "66",
+   "kor": "매도호가수량6",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 6행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "86",
+   "kor": "매도호가직전대비6",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 6단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "56",
+   "kor": "매수호가6",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 6행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "76",
+   "kor": "매수호가수량6",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 6행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "96",
+   "kor": "매수호가직전대비6",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 6단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "47",
+   "kor": "매도호가7",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 7행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "67",
+   "kor": "매도호가수량7",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 7행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "87",
+   "kor": "매도호가직전대비7",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 7단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "57",
+   "kor": "매수호가7",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 7행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "77",
+   "kor": "매수호가수량7",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 7행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "97",
+   "kor": "매수호가직전대비7",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 7단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "48",
+   "kor": "매도호가8",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 8행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "68",
+   "kor": "매도호가수량8",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 8행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "88",
+   "kor": "매도호가직전대비8",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 8단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "58",
+   "kor": "매수호가8",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 8행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "78",
+   "kor": "매수호가수량8",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 8행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "98",
+   "kor": "매수호가직전대비8",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 8단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "49",
+   "kor": "매도호가9",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 9행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "69",
+   "kor": "매도호가수량9",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 9행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "89",
+   "kor": "매도호가직전대비9",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 9단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "59",
+   "kor": "매수호가9",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 9행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "79",
+   "kor": "매수호가수량9",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 9행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "99",
+   "kor": "매수호가직전대비9",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 9단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "50",
+   "kor": "매도호가10",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 10행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "70",
+   "kor": "매도호가수량10",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매도 10행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "60",
+   "kor": "매수호가10",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 10행 호가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "90",
+   "kor": "매도호가직전대비10",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 10단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "80",
+   "kor": "매수호가수량10",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "10단 호가 사다리 · 매수 10행 잔량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "100",
+   "kor": "매수호가직전대비10",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 10단 행 · 직전대비 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "121",
+   "kor": "매도호가총잔량",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "호가 잔량 패널 · '매도 38,160주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "122",
+   "kor": "매도호가총잔량직전대비",
+   "layer": "병기",
+   "board": "13BC-2",
+   "where": "레일 '호가 잔량' 블록 · 매도 38,160주 셀 둘째 줄 '직전대비 +2,140'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "125",
+   "kor": "매수호가총잔량",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "호가 잔량 패널 · '매수 43,000주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "126",
+   "kor": "매수호가총잔량직전대비",
+   "layer": "병기",
+   "board": "13BC-2",
+   "where": "레일 '호가 잔량' 블록 · 매수 43,000주 셀 둘째 줄 '직전대비 −1,380'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "23",
+   "kor": "예상체결가",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "중앙 밴드 · '예상 체결가 150,900'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "24",
+   "kor": "예상체결수량",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "중앙 밴드 · '예상 체결수량 8,420주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "128",
+   "kor": "순매수잔량",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '잔량 균형' 블록 1행 · 순매수 잔량 +4,840주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "129",
+   "kor": "매수비율",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "상단 요약 · '매수비율 53.0%' + 게이지",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "138",
+   "kor": "순매도잔량",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '잔량 균형' 블록 2행 · 순매도 잔량 −4,840주",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "139",
+   "kor": "매도비율",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '잔량 균형' 블록 3행 · 매도비율 47.0%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "200",
+   "kor": "예상체결가전일종가대비",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "예상 체결가 밴드 · '▲ 50'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "201",
+   "kor": "예상체결가전일종가대비등락율",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "예상 체결가 밴드 · '+0.03%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "238",
+   "kor": "예상체결가전일종가대비기호",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "예상 체결가 밴드 · ▲ 기호와 상승색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "291",
+   "kor": "예상체결가",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "중앙 밴드 · '예상 체결가 150,900'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "292",
+   "kor": "예상체결량",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "중앙 밴드 · '예상 체결수량 8,420주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "293",
+   "kor": "예상체결가전일대비기호",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "예상 체결가 밴드 · ▲ 기호와 상승색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "294",
+   "kor": "예상체결가전일대비",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "예상 체결가 밴드 · '▲ 50'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "295",
+   "kor": "예상체결가전일대비등락율",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "예상 체결가 밴드 · '+0.03%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "621",
+   "kor": "LP매도호가수량1",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 1단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "631",
+   "kor": "LP매수호가수량1",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 1단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "622",
+   "kor": "LP매도호가수량2",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 2단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "632",
+   "kor": "LP매수호가수량2",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 2단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "623",
+   "kor": "LP매도호가수량3",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 3단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "633",
+   "kor": "LP매수호가수량3",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 3단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "624",
+   "kor": "LP매도호가수량4",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 4단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "634",
+   "kor": "LP매수호가수량4",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 4단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "625",
+   "kor": "LP매도호가수량5",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 5단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "635",
+   "kor": "LP매수호가수량5",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 5단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "626",
+   "kor": "LP매도호가수량6",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 6단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "636",
+   "kor": "LP매수호가수량6",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 6단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "627",
+   "kor": "LP매도호가수량7",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 7단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "637",
+   "kor": "LP매수호가수량7",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 7단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "628",
+   "kor": "LP매도호가수량8",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 8단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "638",
+   "kor": "LP매수호가수량8",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 8단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "629",
+   "kor": "LP매도호가수량9",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 9단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "639",
+   "kor": "LP매수호가수량9",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 9단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "630",
+   "kor": "LP매도호가수량10",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 10단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "640",
+   "kor": "LP매수호가수량10",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 10단 행 · LP 잔량 열 0",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "13",
+   "kor": "누적거래량",
+   "layer": null,
+   "board": "1JPU-0",
+   "where": "오늘 시세 · '거래량 237만 5,785주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "299",
+   "kor": "전일거래량대비예상체결율",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '잔량 균형' 블록 5행 · 전일 거래량 대비 예상체결 해당 없음",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "215",
+   "kor": "장운영구분",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "헤더 세션 탭 '정규장' 활성 칩",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "216",
+   "kor": "투자자별ticker",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "푸터 좌측 · '투자자 집계 005930' 종목코드(mono)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6044",
+   "kor": "KRX 매도호가잔량1",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 1단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6045",
+   "kor": "KRX 매도호가잔량2",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 2단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6046",
+   "kor": "KRX 매도호가잔량3",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 3단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6047",
+   "kor": "KRX 매도호가잔량4",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 4단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6048",
+   "kor": "KRX 매도호가잔량5",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 5단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6049",
+   "kor": "KRX 매도호가잔량6",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 6단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6050",
+   "kor": "KRX 매도호가잔량7",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 7단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6051",
+   "kor": "KRX 매도호가잔량8",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 8단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6052",
+   "kor": "KRX 매도호가잔량9",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 9단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6053",
+   "kor": "KRX 매도호가잔량10",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 10단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6054",
+   "kor": "KRX 매수호가잔량1",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 1단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6055",
+   "kor": "KRX 매수호가잔량2",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 2단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6056",
+   "kor": "KRX 매수호가잔량3",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 3단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6057",
+   "kor": "KRX 매수호가잔량4",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 4단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6058",
+   "kor": "KRX 매수호가잔량5",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 5단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6059",
+   "kor": "KRX 매수호가잔량6",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 6단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6060",
+   "kor": "KRX 매수호가잔량7",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 7단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6061",
+   "kor": "KRX 매수호가잔량8",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 8단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6062",
+   "kor": "KRX 매수호가잔량9",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 9단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6063",
+   "kor": "KRX 매수호가잔량10",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 10단 행 · KRX 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6064",
+   "kor": "KRX 매도호가총잔량",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "거래소별 잔량 · 'KRX 매도 86,420'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6065",
+   "kor": "KRX 매수호가총잔량",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "거래소별 잔량 · 'KRX 매수 61,340'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6066",
+   "kor": "NXT 매도호가잔량1",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 1단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6067",
+   "kor": "NXT 매도호가잔량2",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 2단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6068",
+   "kor": "NXT 매도호가잔량3",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 3단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6069",
+   "kor": "NXT 매도호가잔량4",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 4단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6070",
+   "kor": "NXT 매도호가잔량5",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 5단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6071",
+   "kor": "NXT 매도호가잔량6",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 6단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6072",
+   "kor": "NXT 매도호가잔량7",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 7단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6073",
+   "kor": "NXT 매도호가잔량8",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 8단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6074",
+   "kor": "NXT 매도호가잔량9",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 9단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6075",
+   "kor": "NXT 매도호가잔량10",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매도 10단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6076",
+   "kor": "NXT 매수호가잔량1",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 1단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6077",
+   "kor": "NXT 매수호가잔량2",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 2단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6078",
+   "kor": "NXT 매수호가잔량3",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 3단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6079",
+   "kor": "NXT 매수호가잔량4",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 4단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6080",
+   "kor": "NXT 매수호가잔량5",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 5단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6081",
+   "kor": "NXT 매수호가잔량6",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 6단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6082",
+   "kor": "NXT 매수호가잔량7",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 7단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6083",
+   "kor": "NXT 매수호가잔량8",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 8단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6084",
+   "kor": "NXT 매수호가잔량9",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 9단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6085",
+   "kor": "NXT 매수호가잔량10",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "좌측 단계별 낱값 표 · 매수 10단 행 · NXT 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6086",
+   "kor": "NXT 매도호가총잔량",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "거래소별 잔량 · 'NXT 매도 27,400'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6087",
+   "kor": "NXT 매수호가총잔량",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "거래소별 잔량 · 'NXT 매수 18,420'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6100",
+   "kor": "KRX 중간가 매도 총잔량 증감",
+   "layer": "병기",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · KRX 행 매도 총잔량 셀 둘째 줄 '직전대비 +640'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6101",
+   "kor": "KRX 중간가 매도 총잔량",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · KRX 행 매도 총잔량 12,480",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6102",
+   "kor": "KRX 중간가",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · KRX 행 중간가 150,845",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6103",
+   "kor": "KRX 중간가 매수 총잔량",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · KRX 행 매수 총잔량 14,220",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6104",
+   "kor": "KRX 중간가 매수 총잔량 증감",
+   "layer": "병기",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · KRX 행 매수 총잔량 셀 둘째 줄 '직전대비 −320'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6105",
+   "kor": "NXT중간가 매도 총잔량 증감",
+   "layer": "병기",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · NXT 행 매도 총잔량 셀 둘째 줄 '직전대비 +180'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6106",
+   "kor": "NXT중간가 매도 총잔량",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · NXT 행 매도 총잔량 5,340",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6107",
+   "kor": "NXT중간가",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · NXT 행 중간가 150,840",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6108",
+   "kor": "NXT중간가 매수 총잔량",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · NXT 행 매수 총잔량 6,110",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6109",
+   "kor": "NXT중간가 매수 총잔량 증감",
+   "layer": "병기",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · NXT 행 매수 총잔량 셀 둘째 줄 '직전대비 −140'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6110",
+   "kor": "KRX중간가대비",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · KRX 행 대비 1,845",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6111",
+   "kor": "KRX중간가대비 기호",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · KRX 행 대비 셀 앞 ▲ 글리프",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6112",
+   "kor": "KRX중간가대비등락율",
+   "layer": "병기",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · KRX 행 대비 셀 둘째 줄 +1.24%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6113",
+   "kor": "NXT중간가대비",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · NXT 행 대비 1,840",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6114",
+   "kor": "NXT중간가대비 기호",
+   "layer": "직접",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · NXT 행 대비 셀 앞 ▲ 글리프",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6115",
+   "kor": "NXT중간가대비등락율",
+   "layer": "병기",
+   "board": "3JZ3-0",
+   "where": "레일 '중간가' 표 · NXT 행 대비 셀 둘째 줄 +1.23%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0E",
+   "f": "21",
+   "kor": "호가시간",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "헤더 요약 · '16:12:41' 기준 시각",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0E",
+   "f": "131",
+   "kor": "시간외매도호가총잔량",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "상단 요약 · '시간외 대기 매도 13,820'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0E",
+   "f": "132",
+   "kor": "시간외매도호가총잔량직전대비",
+   "layer": "병기",
+   "board": "2QRP-1",
+   "where": "우측 레일 '구간별 호가 잔량' 시간외 연속 행 병기 줄 '직전대비 +1,240' — 실시간 op가 같은 셀을 갱신",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0E",
+   "f": "135",
+   "kor": "시간외매수호가총잔량",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "상단 요약 · '시간외 대기 매수 9,760'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0E",
+   "f": "136",
+   "kor": "시간외매수호가총잔량직전대비",
+   "layer": "병기",
+   "board": "2QRP-1",
+   "where": "우측 레일 '구간별 호가 잔량' 시간외 연속 행 병기 줄 '-860' — 실시간 op가 같은 셀을 갱신",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "board": "1JPU-0",
+   "where": "오늘 시세 · '시가 149,700원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "board": "1JPU-0",
+   "where": "오늘 시세 · '고가 151,300원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "board": "1JPU-0",
+   "where": "오늘 시세 · '저가 148,600원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "cntr_qty",
+   "kor": "체결량",
+   "layer": null,
+   "board": "1JPU-0",
+   "where": "최근 체결 · '체결량' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "board": "1JPU-0",
+   "where": "오늘 시세 · '거래량 237만 5,785주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 정보 · '누적 거래대금 41.1억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "exp_cntr_pric",
+   "kor": "예상체결가",
+   "layer": null,
+   "board": "1JPU-0",
+   "where": "중앙 밴드 · '예상 체결가 150,850원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "exp_cntr_qty",
+   "kor": "예상체결량",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "중앙 밴드 · '예상 체결수량 8,420주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "exp_sel_pri_bid",
+   "kor": "예상매도우선호가",
+   "layer": "병기",
+   "board": "1JPU-0",
+   "where": "사다리 하단 '예상 체결가 150,850원' 스택 셀 둘째 줄 '매도 150,850원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "exp_buy_pri_bid",
+   "kor": "예상매수우선호가",
+   "layer": "병기",
+   "board": "1JPU-0",
+   "where": "사다리 하단 '예상 체결가 150,850원' 스택 셀 둘째 줄 '· 매수 150,840원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "trde_strt_dt",
+   "kor": "거래시작일",
+   "layer": "직접",
+   "board": "1JPU-0",
+   "where": "레일 '시장 정보' 블록 신설 행 '거래시작일 1975-06-11'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "exec_pric",
+   "kor": "행사가격",
+   "layer": "직접",
+   "board": "1JPU-0",
+   "where": "레일 '시장 정보' 블록 신설 행 '행사가격 해당 없음'(k-faint 메타 표기)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "hgst_pric",
+   "kor": "최고가",
+   "layer": null,
+   "board": "1JPU-0",
+   "where": "시장 정보 · '52주 범위 105,600 — 196,100' 상단값 / '52주 최고'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "lwst_pric",
+   "kor": "최저가",
+   "layer": null,
+   "board": "1JPU-0",
+   "where": "시장 정보 · '52주 범위 105,600 — 196,100' 하단값 / '52주 최저'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "hgst_pric_dt",
+   "kor": "최고가일",
+   "layer": "병기",
+   "board": "1JPU-0",
+   "where": "레일 52주 게이지 '52주 최고' 라벨 아래 10px 병기 '2026-01-09'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10007:session",
+   "f": "lwst_pric_dt",
+   "kor": "최저가일",
+   "layer": "병기",
+   "board": "1JPU-0",
+   "where": "레일 52주 게이지 '52주 최저' 라벨 아래 10px 병기 '2026-04-18'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:aggregate_totals",
+   "f": "ovt_sigpric_sel_bid_tot_req",
+   "kor": "시간외단일가_매도호가총잔량",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "사다리 하단 · '매도 잔량 113,820'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:aggregate_totals",
+   "f": "ovt_sigpric_buy_bid_tot_req",
+   "kor": "시간외단일가_매수호가총잔량",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "사다리 하단 · '매수 잔량 79,760'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:aggregate_totals",
+   "f": "sel_bid_tot_req_jub_pre",
+   "kor": "매도호가총잔량직전대비",
+   "layer": "병기",
+   "board": "2QRP-1",
+   "where": "우측 레일 '구간별 호가 잔량' 정규장 행 병기 줄 '직전대비 +2,140 / -1,380' 좌측 값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:aggregate_totals",
+   "f": "sel_bid_tot_req",
+   "kor": "매도호가총잔량",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "호가 잔량 패널 · '매도 38,160주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:aggregate_totals",
+   "f": "buy_bid_tot_req",
+   "kor": "매수호가총잔량",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "호가 잔량 패널 · '매수 43,000주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:aggregate_totals",
+   "f": "buy_bid_tot_req_jub_pre",
+   "kor": "매수호가총잔량직전대비",
+   "layer": "병기",
+   "board": "2QRP-1",
+   "where": "우측 레일 '구간별 호가 잔량' 정규장 행 병기 줄 '직전대비 +2,140 / -1,380' 우측 값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:aggregate_totals",
+   "f": "ovt_sel_bid_tot_req_jub_pre",
+   "kor": "시간외매도호가총잔량직전대비",
+   "layer": "병기",
+   "board": "2QRP-1",
+   "where": "우측 레일 '구간별 호가 잔량' 시간외 연속 행 병기 줄 '직전대비 +1,240 / -860' 좌측 값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:aggregate_totals",
+   "f": "ovt_sel_bid_tot_req",
+   "kor": "시간외매도호가총잔량",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "상단 요약 · '시간외 대기 매도 13,820'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:aggregate_totals",
+   "f": "ovt_buy_bid_tot_req",
+   "kor": "시간외매수호가총잔량",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "상단 요약 · '시간외 대기 매수 9,760'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:aggregate_totals",
+   "f": "ovt_buy_bid_tot_req_jub_pre",
+   "kor": "시간외매수호가총잔량직전대비",
+   "layer": "병기",
+   "board": "2QRP-1",
+   "where": "우측 레일 '구간별 호가 잔량' 시간외 연속 행 병기 줄 '직전대비 +1,240 / -860' 우측 값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_prices",
+   "f": "ovt_sigpric_buy_bid_1",
+   "kor": "시간외단일가_매수호가1",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매수 1행 호가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_prices",
+   "f": "ovt_sigpric_buy_bid_2",
+   "kor": "시간외단일가_매수호가2",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매수 2행 호가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_prices",
+   "f": "ovt_sigpric_buy_bid_3",
+   "kor": "시간외단일가_매수호가3",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매수 3행 호가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_prices",
+   "f": "ovt_sigpric_buy_bid_4",
+   "kor": "시간외단일가_매수호가4",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매수 4행 호가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_prices",
+   "f": "ovt_sigpric_buy_bid_5",
+   "kor": "시간외단일가_매수호가5",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매수 5행 호가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_quantities",
+   "f": "ovt_sigpric_buy_bid_qty_1",
+   "kor": "시간외단일가_매수호가수량1",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매수 1행 잔량 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_quantities",
+   "f": "ovt_sigpric_buy_bid_qty_2",
+   "kor": "시간외단일가_매수호가수량2",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매수 2행 잔량 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_quantities",
+   "f": "ovt_sigpric_buy_bid_qty_3",
+   "kor": "시간외단일가_매수호가수량3",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매수 3행 잔량 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_quantities",
+   "f": "ovt_sigpric_buy_bid_qty_4",
+   "kor": "시간외단일가_매수호가수량4",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매수 4행 잔량 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_quantities",
+   "f": "ovt_sigpric_buy_bid_qty_5",
+   "kor": "시간외단일가_매수호가수량5",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매수 5행 잔량 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_prices",
+   "f": "ovt_sigpric_sel_bid_5",
+   "kor": "시간외단일가_매도호가5",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매도 5행 호가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_prices",
+   "f": "ovt_sigpric_sel_bid_4",
+   "kor": "시간외단일가_매도호가4",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매도 4행 호가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_prices",
+   "f": "ovt_sigpric_sel_bid_3",
+   "kor": "시간외단일가_매도호가3",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매도 3행 호가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_prices",
+   "f": "ovt_sigpric_sel_bid_2",
+   "kor": "시간외단일가_매도호가2",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매도 2행 호가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_prices",
+   "f": "ovt_sigpric_sel_bid_1",
+   "kor": "시간외단일가_매도호가1",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매도 1행 호가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_quantities",
+   "f": "ovt_sigpric_sel_bid_qty_5",
+   "kor": "시간외단일가_매도호가수량5",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매도 5행 잔량 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_quantities",
+   "f": "ovt_sigpric_sel_bid_qty_4",
+   "kor": "시간외단일가_매도호가수량4",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매도 4행 잔량 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_quantities",
+   "f": "ovt_sigpric_sel_bid_qty_3",
+   "kor": "시간외단일가_매도호가수량3",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매도 3행 잔량 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_quantities",
+   "f": "ovt_sigpric_sel_bid_qty_2",
+   "kor": "시간외단일가_매도호가수량2",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매도 2행 잔량 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_quantities",
+   "f": "ovt_sigpric_sel_bid_qty_1",
+   "kor": "시간외단일가_매도호가수량1",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 5단 사다리 · 매도 1행 잔량 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:snapshot_time",
+   "f": "bid_req_base_tm",
+   "kor": "호가잔량기준시간",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "헤더 요약 · '16:12:41' 기준 시각",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:trading_summary",
+   "f": "ovt_sigpric_cur_prc",
+   "kor": "시간외단일가_현재가",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "헤더 · '시간외 현재가 150,900'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:trading_summary",
+   "f": "ovt_sigpric_pred_pre_sig",
+   "kor": "시간외단일가_전일대비기호",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "예상 체결가 밴드 ▲ 기호와 상승색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:trading_summary",
+   "f": "ovt_sigpric_pred_pre",
+   "kor": "시간외단일가_전일대비",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "헤더 · '+50' (정규장 종가 대비)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:trading_summary",
+   "f": "ovt_sigpric_flu_rt",
+   "kor": "시간외단일가_등락률",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "헤더 · '+0.03%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:trading_summary",
+   "f": "ovt_sigpric_acc_trde_qty",
+   "kor": "시간외단일가_누적거래량",
+   "layer": null,
+   "board": "2QRP-1",
+   "where": "시간외 정보 · '누적 거래량 27,240주'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 51
+}

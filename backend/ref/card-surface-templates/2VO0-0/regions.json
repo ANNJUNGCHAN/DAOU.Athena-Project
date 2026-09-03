@@ -1,0 +1,11 @@
+{
+  "root": "2VO2-0",
+  "regions": [
+    {"node_id": "2VSP-0", "name": "Instrument Header", "role": "header", "depth": 1},
+    {"node_id": "2VS5-0", "name": "Quote and Valuation Strip", "role": "kpi", "depth": 1},
+    {"node_id": "2VO6-0", "name": "Chart Workspace", "role": "workspace", "depth": 1},
+    {"node_id": "2VO3-0", "name": "Chart Status Footer", "role": "footer", "depth": 1},
+    {"node_id": "2VPC-0", "name": "Quote Detail Mount", "role": "primary", "depth": 2},
+    {"node_id": "2VO7-0", "name": "Instrument Context", "role": "rail", "depth": 2}
+  ]
+}

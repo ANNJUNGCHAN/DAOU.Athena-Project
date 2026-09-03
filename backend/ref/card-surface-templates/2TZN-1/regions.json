@@ -1,0 +1,11 @@
+{
+  "root": "2TZP-1",
+  "regions": [
+    {"node_id": "2U2W-1", "name": "Header and Capability Navigation", "role": "header", "depth": 1},
+    {"node_id": "2U2F-1", "name": "Ranking Query Controls", "role": "strip", "depth": 1},
+    {"node_id": "2TZT-1", "name": "Ranking Workspace", "role": "workspace", "depth": 1},
+    {"node_id": "2TZQ-1", "name": "User Status Footer", "role": "footer", "depth": 1},
+    {"node_id": "2U3G-1", "name": "Frame (업종표 · 지수 흐름)", "role": "primary", "depth": 2},
+    {"node_id": "2U4R-1", "name": "Frame (선택 업종 상세)", "role": "rail", "depth": 2}
+  ]
+}

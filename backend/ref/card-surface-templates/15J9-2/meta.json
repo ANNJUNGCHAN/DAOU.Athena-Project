@@ -1,0 +1,13 @@
+{
+  "board_id": "15J9-2",
+  "name": "CC-06 / R05 · 반도체 업종·AI 테마",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 832,
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "saved_at": "2026-09-02T00:00:00+09:00"
+}

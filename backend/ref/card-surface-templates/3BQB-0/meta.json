@@ -1,0 +1,17 @@
+{
+  "board_id": "3BQB-0",
+  "name": "CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 892,
+  "state": {
+    "kind": "expand",
+    "parent_board": "2TZN-1",
+    "control": null
+  },
+  "saved_at": "2026-09-02T00:00:00+09:00",
+  "operation_refs": [
+    "base:0J",
+    "base:ka10101"
+  ]
+}

@@ -67,8 +67,14 @@ function requireRealtimeSuccess(state) {
 }
 
 function panelKeyFor(envelope) {
-  return [envelope.mode, envelope.section, envelope.capability, envelope.operation_ref || envelope.operationRef]
-    .map(clean).filter(Boolean).join(':') || 'primary';
+  // 순위 모드는 축(TR) 전환이 탭 안에서 일어난다 — operation_ref나 capability를
+  // 키에 넣으면 축·수급 갈래마다 탭이 생겨 "1탭 · 다축" 계약(Paper R01-T4~T6 ·
+  // R03-T6)이 깨진다. 카드 root가 다르므로 카드 간 충돌은 없다.
+  const parts = clean(envelope.mode) === 'ranking'
+    ? [envelope.mode, envelope.section]
+    : [envelope.mode, envelope.section, envelope.capability,
+       envelope.operation_ref || envelope.operationRef];
+  return parts.map(clean).filter(Boolean).join(':') || 'primary';
 }
 
 function verifiedOperationRefsFor(envelope) {
@@ -169,6 +175,7 @@ function copySpecializedDatasets(root, renderedCard) {
 }
 
 function buttonLabel(envelope) {
+  if (clean(envelope && envelope.mode) === 'ranking') return '순위';
   const contract = envelope && (envelope.presentation_contract || envelope.presentationContract) || {};
   const recipe = envelope && (envelope.view_recipe || envelope.viewRecipe) || {};
   const sectionKey = clean(envelope && envelope.section);
@@ -227,18 +234,28 @@ function activatePanel(root, panelKey) {
   });
 }
 
+// 보드 표면 카드 = Paper 보드 그 자체. 보드가 자기 헤더(제목·기준 시각)·스트립·
+// 푸터를 이미 갖고 있으므로 통합 카드 크롬(카드 머리·패널 탭 칩)을 그 위에 겹쳐
+// 그리지 않는다 — 겹치면 같은 제목이 탭 스트립·카드 머리·보드 헤더에 세 번 뜬다.
+// 표시는 canvas.js가 카드 root에 찍는다(renderBoardSurfaceCard).
+function isBoardSurface(node) {
+  return Boolean(node && node.dataset && node.dataset.boardSurface === 'true');
+}
+
 function ensureScaffold(root, definition) {
   const oldBody = root.querySelector(':scope > .card-body');
   if (oldBody && !oldBody.classList.contains('integrated-card-content')) {
     const initialNodes = Array.from(oldBody.childNodes);
     oldBody.replaceChildren();
     oldBody.className = 'card-body integrated-card-content';
-    const tabs = document.createElement('div');
-    tabs.className = 'integrated-card-tabs';
-    tabs.setAttribute('role', 'tablist');
+    if (!isBoardSurface(root)) {
+      const tabs = document.createElement('div');
+      tabs.className = 'integrated-card-tabs';
+      tabs.setAttribute('role', 'tablist');
+      oldBody.appendChild(tabs);
+    }
     const panels = document.createElement('div');
     panels.className = 'integrated-card-panels';
-    oldBody.appendChild(tabs);
     oldBody.appendChild(panels);
     oldBody.__initialPrimaryNodes = initialNodes;
   }
@@ -301,14 +318,17 @@ function mountOrUpdate({ envelope, renderedCard, existingCard }) {
     panel.className = 'integrated-card-panel';
     stampPanelKey(panel, panelKey);
     panels.appendChild(panel);
-    const tab = document.createElement('button');
-    tab.type = 'button';
-    tab.className = 'integrated-card-tab';
-    stampPanelKey(tab, panelKey);
-    tab.setAttribute('role', 'tab');
-    tab.textContent = buttonLabel(envelope);
-    tab.addEventListener('click', () => activatePanel(root, panelKey));
-    tabs.appendChild(tab);
+    // 보드 표면 카드에는 탭 스트립 자체가 없다(ensureScaffold) — 칩도 안 만든다.
+    if (tabs) {
+      const tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = 'integrated-card-tab';
+      stampPanelKey(tab, panelKey);
+      tab.setAttribute('role', 'tab');
+      tab.textContent = buttonLabel(envelope);
+      tab.addEventListener('click', () => activatePanel(root, panelKey));
+      tabs.appendChild(tab);
+    }
   }
   const nodes = content.__initialPrimaryNodes || incomingNodes;
   delete content.__initialPrimaryNodes;
@@ -323,7 +343,7 @@ const api = {
   specializedClassNames, copySpecializedDatasets, refreshExisting,
   matchesRealtimeTick, requireRealtimeSuccess, verifiedOperationRefsFor,
   rememberPanelSession, panelSessionFor, forgetPanelSession, clearPanelSessions,
-  detachForDestroy, findReusableRoot, buttonLabel, workflowStateLabel,
+  detachForDestroy, findReusableRoot, buttonLabel, workflowStateLabel, isBoardSurface,
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 else {
