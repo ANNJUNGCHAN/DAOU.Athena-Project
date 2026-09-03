@@ -1,0 +1,28 @@
+{
+  "captured_at": "2026-09-03",
+  "worktree": "C:/Projects/DAOU.Athena-plugin",
+  "branch": "feat/plugin-mode-doctrine",
+  "base_commit": "f880d79",
+  "app_test_unit": {
+    "command": "cd app && npm run test:unit (fnm node v22.14.0)",
+    "tests": 1946,
+    "pass": 1946,
+    "fail": 0,
+    "output": ".omc/state/baseline-app-test-unit.txt"
+  },
+  "backend_pytest": {
+    "command": "cd backend && uv run pytest -q (node on PATH)",
+    "passed": 2638,
+    "skipped": 5,
+    "failed": 0,
+    "duration_s": 1419,
+    "output": ".omc/state/baseline-backend-pytest-tail.txt",
+    "note": "node가 PATH에 없으면 test_selector_autonomous_eval.py 등이 실패한다 — fnm 경로를 PATH에 넣고 실행"
+  },
+  "node": {
+    "fnm": "C:/Users/ajc22/AppData/Local/Microsoft/WinGet/Packages/Schniz.fnm_Microsoft.Winget.Source_8wekyb3d8bbwe/fnm.exe",
+    "install_dir": "C:/Users/ajc22/AppData/Roaming/fnm/node-versions/v22.14.0/installation",
+    "version": "v22.14.0",
+    "powershell": "& $fnm env --use-on-cd --shell power-shell | Out-String | Invoke-Expression"
+  }
+}

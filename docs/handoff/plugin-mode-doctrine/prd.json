@@ -1,0 +1,133 @@
+{
+  "task": "플러그인 모드 '모드가 대화의 경계' 기조 정렬 — Paper 플러그인 페이지 재설계 + 실앱(렌더러·메인·게이트웨이) 적용. 계획 .omc/plans/athena-plugin-doctrine-consensus.md(반복 7, Critic APPROVE)를 §0 실행 규율대로 워크트리 C:/Projects/DAOU.Athena-plugin 브랜치 feat/plugin-mode-doctrine에서 구현한다.",
+  "plan": ".omc/plans/athena-plugin-doctrine-consensus.md",
+  "spec": ".omc/specs/deep-interview-athena-plugin-doctrine.md",
+  "baseline": ".omc/state/baseline.json",
+  "created": "2026-09-03T08:05",
+  "handoff": "docs/handoff/2026-09-03-plugin-mode-doctrine.md — 2026-09-03 08:3x 사용자 지시로 Phase A까지 마감, Phase B(US-003)부터 다른 세션이 이어받는다",
+  "stories": [
+    {
+      "id": "US-000",
+      "title": "§0 실행 규율 — 워크트리·설치·baseline",
+      "passes": true,
+      "evidence": "git worktree list: DAOU.Athena-plugin f880d79 [feat/plugin-mode-doctrine]; app node_modules+electron OK; backend .venv OK; baseline.json app 1946/1946, backend 2638 passed/5 skipped",
+      "acceptanceCriteria": [
+        "워크트리와 브랜치가 존재한다",
+        "app/node_modules/electron/dist 존재",
+        "backend/.venv 존재",
+        "baseline 3종이 .omc/state/에 있다",
+        "계획·명세가 워크트리 .omc/에 복사돼 있다"
+      ]
+    },
+    {
+      "id": "US-001",
+      "title": "W1 게이트웨이 제안 툴 athena_plugin (백엔드)",
+      "passes": true,
+      "evidence": "verifier PASS 2026-09-03 08:2x — uv run pytest tests/mcp/test_plugin_tools.py tests/mcp/test_server.py tests/mcp/test_consent.py -q → 137 passed; uv run pytest tests/mcp -q → 427 passed; ruff 통과; plugin_tools.py에 registry/consent 쓰기 0건, reload 1회, source=model 강제, 게이트 4종+스니펫 규칙 검증. 비차단 지적: dispatch sync, 픽스처 재생성만(JS 계약 테스트가 읽어 봉인), 항목별 reason 미전달, _CATALOG_IDS 수동 복제",
+      "acceptanceCriteria": [
+        "backend/athena_mcp/plugin_tools.py: PLUGIN_TOOL='athena_plugin', _ALLOWED_ACTIONS 6종(install·allow_tools·revoke_tools·set_enabled·remove·stage_snippet), _INPUT_SCHEMA {actions:[{action,target,features?,enabled?,snippet?}], reason} (required actions, minItems 1), dispatch(arguments, registry, consent_store)",
+        "dispatch는 registry.reload() 1회 + consent_store.snapshot()으로 current를 만들고 봉투에 revision을 찍으며 source='model'을 강제한다",
+        "별칭 게이트: _BLOCKED_ALIASES(kiwoom·brain 계열) 거부; install→카탈로그 5종 멤버십; allow_tools/revoke_tools/set_enabled/remove→레지스트리 멤버십; stage_snippet→스니펫 파싱 후 전 별칭 차단 검사, 파싱 불가·별칭 0·2개 이상 거부, 봉투 target=null",
+        "server.py: dispatch 분기(backtest 다음) + _audit_log('plugin') 기록 + builtin_tool_defs 등록(backtest 뒤) + import",
+        "backend/tests/mcp/test_plugin_tools.py: enum 6종 고정, enum 밖 차단, 제안 후 임시 mcp_servers.json·consent.json 불변(ATHENA_MCP_REGISTRY_PATH), PM-1 parametrize + brain 스니펫 차단, 등록 회귀 가드, revision reload 후 스탬프, 픽스처 JSON backend/tests/fixtures/plugin-proposal/*.json ({envelope, tool_input})",
+        "backend/tests/mcp/test_server.py 확장(list_tools 노출·감사 1줄·소비자 파일 불변) + test_consent 감사 4필드 1건",
+        "(cd backend && uv run pytest tests/mcp -q) 전부 통과"
+      ]
+    },
+    {
+      "id": "US-002",
+      "title": "W0-1·W0-2·W3-1 렌더러 순수 모듈 — 어댑터·봉투 빌더·shell.html 등록",
+      "passes": true,
+      "evidence": "verifier PASS 2026-09-03 08:2x — node --test lib/plugin-mode-adapter.test.js lib/plugin-proposal.test.js → 38/38 (2회 연속); npm run test:unit → 1984/1984 (+38, 신규 실패 0); 태그 shell.html:461-462(plugin-catalog.js 460 뒤, canvas.js 476·chat.js 477 앞); 옛 문구 0건; 내부어 0건. 후속 주의: buildProposal(spec, reason, revision, source) 객체 시그니처, resultTurnCopy → {lines, chip}, plugin-proposal.js는 IIFE 시점에 PluginCatalog 요구",
+      "acceptanceCriteria": [
+        "app/lib/plugin-mode-adapter.js: currentMode() = canvasRegion.dataset.mode (undefined는 플러그인 아님), window.AthenaLib.PluginModeAdapter 이중 내보내기",
+        "app/lib/plugin-proposal.js: buildProposal/validateProposal/isProposalStale/cardCopy/resultTurnCopy/outOfModeCopy/proposalSignature, source 필수, revision 키 필수(null 허용), actions 배열, window.AthenaLib.PluginProposal",
+        "app/shell.html 스크립트 블록에 두 모듈 태그가 lib/plugin-canvas.js 인접·canvas.js·chat.js보다 앞",
+        "app/lib/plugin-mode-adapter.test.js: currentMode + shell.html 태그 존재·순서 단언",
+        "app/lib/plugin-proposal.test.js: A3⑴·A9·stale·결과 턴 4종·모드 밖 문구·백엔드 픽스처 계약 테스트(없으면 실패)",
+        "(cd app && node --test lib/plugin-mode-adapter.test.js lib/plugin-proposal.test.js) 통과"
+      ]
+    },
+    {
+      "id": "US-003",
+      "title": "W2 메인 프로세스 — revision·plugin-batch·제안 레지스트리·IPC·승인 실행",
+      "passes": false,
+      "acceptanceCriteria": [
+        "app/lib/main/mcp-cli.js list()가 { servers, revision } 반환",
+        "app/lib/main/mcp-runtime-coordinator.js MUTATION_KINDS에 'plugin-batch' + 테스트",
+        "app/lib/main/plugin-proposal-registry.js(순수): 1회용 소비 맵, 실행 순서, pending 맵, 별칭 게이트 4종, executor 8종 주입, probe는 apply 밖, install 서브사슬 보상, consume(envelope) 원자 등록·소비 (+test: 중복 거부·호출 순서·차단 별칭 executor 0회·pending 왕복·main.js 비의존)",
+        "app/lib/main/plugin-proposal-forward.js(+test): tool_result에서 athena_plugin 제안 추출(step.input.actions[] enum), 비-propose 무시, 픽스처 tool_input 판정",
+        "app/main.js: maybeForwardPluginProposal → shellWin.send('athena:plugin-proposed') (pending 등록 없음), tracker 훅, ipcMain.handle approve/reject/pending + ipcMain.on('athena:plugin-noted'), approve 순서 게이트→원자 소비→revision 대조→providerRuntimeEnabled 분기(직접 | runMcpMutation('plugin-batch') 1회)→probe, 액션별 감사 1줄, stageSnippet은 mcpCli 직접, reject는 CLI 0회",
+        "app/preload.js: ON athena:plugin-proposed, SEND athena:plugin-noted, INVOKE athena:plugin-approve/reject/pending + 테스트",
+        "(cd app && node --test lib/main/*.test.js) 통과"
+      ]
+    },
+    {
+      "id": "US-004",
+      "title": "W3-2·W3-3·W3-4·W3-6·W0-3 렌더러 — 승인 카드·직접 IPC 제거·구독·결과 턴·모드 헤더",
+      "passes": false,
+      "acceptanceCriteria": [
+        "app/lib/plugin-canvas.js: 승인 카드(출처 라벨 아테나 제안/내 요청), 3상태(만료됨=승인 비활성+다시 제안받기), setProposals(list,{revision}), GUI 진입 6종→deps.onPropose, 낙관적 토글·롤백 제거, getState/setData 권한 초안 보존+PM-4 발산, 버튼 키보드·32px, window.athena 0건",
+        "app/lib/plugin-canvas.test.js: 기존 23건 + 신규(onPropose·6종 미호출, 토글 즉시 변경 없음, 3상태, stale 비활성, 초안·발산, 접근성, 모드 게이트 음성, 부활 방지)",
+        "app/canvas.js: onPropose 재배선 6종, revision 보관→buildProposal, 모듈 스코프 athena:plugin-proposed 구독+모드 게이트(폐기 시 plugin-noted 미전송), setProposals 후 send plugin-noted, AthenaPluginCanvas setView 래퍼 복원(plugin-pending), CustomEvent athena:plugin-result",
+        "app/chat.js: 턴 스코프 제안 턴 렌더(.routine-draft-pill), 모듈 스코프 athena:plugin-result→_mountTurn 결과 턴 4종, 모드 밖 한 줄 '플러그인 모드에서 다시 요청합니다'(서명 1회), 옛 문구 0건",
+        "W3-6: shell.html #chatModeHead span 비움 + controller.js 모드별 문구 주입 + 가시성 graphView||pluginView",
+        "app/lib/plugin-proposal-boundary.test.js: canvas.js 6종 본문 직접 실행 호출 없음·onPropose, chat.js athena:plugin-result가 모듈 스코프 _mountTurn",
+        "(cd app && npm run test:unit) baseline 대비 신규 실패 0"
+      ]
+    },
+    {
+      "id": "US-005",
+      "title": "W4 Paper 플러그인 페이지 — 6장 정정 + 07·08·09 신설 + PDF",
+      "passes": true,
+      "evidence": "verifier PASS 2026-09-03 08:2x (읽기 전용 검증) — B-2 9장(07 3ZJD-0 · 08 3ZLW-0 · 09 3ZNO-0, 각 1680×986 at (4000,1140)/(6000,1140)/(0,2280)); 정확 문구 35종 find_nodes 확인; 03 옛 문구 4종 0건; 내부어 0건; 9장 모두 픽셀 높이(986/900/972/983/986/830/986/986/986); PDF C:/Users/ajc22/Downloads/Combined (27).pdf 3,671,179B 사용자 발송 완료. 사용자 검수 승인은 외부 의존(미회신). 편차: 05 카드 제목을 '웹 문서 읽기 설치'로 재구성(원래 모달은 '한국 주식 시세 설치'), 06은 1680×830으로 확장 — W5-3 파리티 문서에 기록 필요",
+      "acceptanceCriteria": [
+        "B-2 6장 id·치수 대조(FT6-0·15J-0·CU0-0·CVY-0·2NW8-2·2NXS-2)",
+        "01: '권한 초안'·'승인 카드로 확정합니다'·'채팅: 시세 조회만 허용'",
+        "02: '채팅에서 등록을 제안해도 같은 승인 카드로 들어옵니다'",
+        "03: 옛 문구 4종 0건, '플러그인 모드 창입니다'/'설치 · 권한 · 플러그인', '아테나 · 플러그인 대화'/'설치와 권한을 여기서 정합니다'",
+        "04: '승인 후 반영됩니다'·'승인 후 지웁니다'",
+        "05: 1680×986 셸 안 560px 카드, '웹 문서 읽기 설치', 필드 순서, '아테나 제안', '허브의 설치 버튼도 이 카드로 들어옵니다'",
+        "06: 6칸(제안 대기·거부됨 '그대로 뒀습니다'), 픽셀 치수 명시",
+        "07 (4000,1140) 5열 제안 턴+승인 카드 정확 문구",
+        "08 (6000,1140) 5열 결과 턴(모드 밖 폐기 '플러그인 모드에서 다시 요청합니다')",
+        "09 (0,2280) 3열 + '앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다'",
+        "게이트: 내부어 0, fit-content 0, finish_working_on_nodes",
+        "9장 PDF 내보내기 → 사용자 발송(검수 안건 ⑴⑵⑶⑸ 병기) — 사용자 승인은 외부 의존"
+      ]
+    },
+    {
+      "id": "US-006",
+      "title": "W3-5 CSS — 승인 카드·3상태(Paper 픽셀 대조, 토큰만)",
+      "passes": false,
+      "acceptanceCriteria": [
+        "app/styles/plugin-canvas.css: 승인 카드·3상태·출처 라벨·발산 알림 스타일, tokens.css 변수만, 신규 hex 0",
+        "hex grep 신규 히트 0",
+        "채팅 제안 턴은 chat.css 기존 클래스 재사용"
+      ]
+    },
+    {
+      "id": "US-007",
+      "title": "W5-1·W5-2·W5-3 검증 하네스·파리티 문서",
+      "passes": false,
+      "acceptanceCriteria": [
+        "app/verify-plugins.js: 5동작 사슬 ⑴~⑸ 단언, 리포트 failures===0 (네트워크 필요)",
+        "app/verify.js 플러그인 블록: 폐기 7·유지 7·경계 1·신설 8",
+        "(cd app && node verify-graph-mode.js) 통과",
+        "PAPER_APP_PARITY.md 플러그인 섹션 9행 전부 적용, 9/9, 06 치수(1680×830)·09 근거"
+      ]
+    },
+    {
+      "id": "US-008",
+      "title": "§7 최종 게이트 + 커밋",
+      "passes": false,
+      "acceptanceCriteria": [
+        "(cd app && npm run test:unit) 2회 연속 baseline 대비 신규 실패 0, # pass ≥ 1946",
+        "(cd backend && uv run pytest -q) 신규 FAILED/ERROR 0, passed ≥ 2638",
+        "§7-5 hex, §7-6a/6b 경계 테스트, §7-7 문구 게이트, §7-7b 옛 문구 0/새 문구 ≥1",
+        "브랜치에 명시 git add <path> 커밋(한국어 type(scope) + Co-Authored-By), 금지 git 명령 미사용",
+        "progress.txt 기록"
+      ]
+    }
+  ]
+}
