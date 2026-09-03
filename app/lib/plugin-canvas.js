@@ -949,7 +949,6 @@ function createPluginCanvas(options) {
 
   const SHEET_SUBTITLES = {
     add: () => 'Claude 설정 형식의 스니펫을 붙여넣습니다',
-    install: () => '설치할 플러그인과 요청 권한을 확인하고 한 번에 하나씩 승인합니다',
     remove: () => '등록과 승인 기록을 함께 지웁니다',
   };
 
@@ -994,7 +993,8 @@ function createPluginCanvas(options) {
     const title = el('h2', 'plugin-canvas-sheet-title', SHEET_TITLES[sheet.kind](sheet));
     title.setAttribute('id', titleId);
     header.appendChild(title);
-    header.appendChild(el('div', 'plugin-canvas-sheet-subtitle', SHEET_SUBTITLES[sheet.kind](sheet)));
+    const subtitle = SHEET_SUBTITLES[sheet.kind];
+    if (subtitle) header.appendChild(el('div', 'plugin-canvas-sheet-subtitle', subtitle(sheet)));
     dialog.appendChild(header);
     dialog.appendChild(SHEET_BODIES[sheet.kind](sheet));
     overlay.appendChild(dialog);
@@ -1101,6 +1101,7 @@ function createPluginCanvas(options) {
     if (!proposals.length) return null;
     const list = el('section', 'plugin-canvas-proposals');
     proposals.forEach((entry) => list.appendChild(proposalCard(entry)));
+    list.appendChild(el('p', 'plugin-canvas-proposals-note', '앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다'));
     return list;
   }
 
