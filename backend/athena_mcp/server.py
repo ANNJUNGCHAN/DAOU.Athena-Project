@@ -765,7 +765,7 @@ def _builtin_tool_defs() -> list[types.Tool]:
         # 것과 같은 이유).
         *selector_tools.builtin_tool_defs(),
         # 루틴 제안·조회 툴(능동 에이전트 P3) — 같은 "우리가 관리하는 툴"
-        # 범주. draft/list만 — 상태 변경은 사람 전용(routine_tools.py 참고).
+        # 범주. draft/list/propose만 — 상태 변경은 사람 전용(routine_tools.py 참고).
         *routine_tools.builtin_tool_defs(),
         # 투자의 뇌 조회 툴 — 읽기 전용 5액션. 쓰기 액션이 없는 것이 설계다
         # (brain_tools.py 참고): 모델이 그래프에 직접 쓸 수 있으면 대화 티어가

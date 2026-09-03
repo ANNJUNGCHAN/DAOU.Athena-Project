@@ -13,6 +13,11 @@
 > 렌더러 순수 모듈 · Paper 9장)까지 커밋됐고 US-003(메인 프로세스)부터 남았다. 계획·명세·PRD·baseline은
 > [plugin-mode-doctrine/](./plugin-mode-doctrine/)에 회수돼 있다.
 
+> 🟠 **2026-09-03 에이전트 모드 "두 입구, 한 게이트" 트랙이 브랜치 `feat/agent-dual-control`에서 시작됐다.**
+> 원격 브랜치만으로 이어받을 수 있다 — 진입점·복원 절차·붙여넣을 프롬프트는
+> [2026-09-03-agent-dual-control-handoff.md](./2026-09-03-agent-dual-control-handoff.md) →
+> [agent-dual-control/RALPH_PROMPT.md](./agent-dual-control/RALPH_PROMPT.md). 이 브랜치는 2026-09-03 main에 병합됐다.
+
 > 🟣 **2026-09-03 백테스트 시각 설계 ↔ 코드 왕복이 들어갔다.** 지도 탭이 편집 가능한 그래프가 되고
 > 코드는 지도에서 생성된다. 계약·검증법·남은 P4는
 > [2026-09-03-visual-strategy-roundtrip.md](./2026-09-03-visual-strategy-roundtrip.md)에 있다.

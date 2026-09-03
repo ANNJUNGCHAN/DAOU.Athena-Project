@@ -81,6 +81,11 @@ class TriggerEngine:
     def _state(self, routine_id: str) -> TriggerState:
         return self._states.setdefault(routine_id, TriggerState())
 
+    def reset_state(self, routine_id: str) -> None:
+        """조건이 바뀐 루틴의 누적 상태를 버린다 — 옛 조건의 연속 틱·쿨다운이
+        새 조건으로 새면 사용자가 안 건 적 없는 이력으로 발화가 억제된다."""
+        self._states.pop(routine_id, None)
+
     def evaluate(
         self,
         spec: RoutineSpec,
