@@ -73,7 +73,7 @@ function clusterCardTitle(cluster) {
   return { text: '이름 없는 군집', estimated: false };
 }
 
-function renderClusterCard(cluster, warnUnnamed) {
+function renderClusterCard(cluster, warnUnnamed, badgeEstimated) {
   const card = el('div', warnUnnamed ? 'theme-cluster-card is-unnamed-warn' : 'theme-cluster-card');
 
   const title = el('div', 'theme-cluster-title');
@@ -81,7 +81,8 @@ function renderClusterCard(cluster, warnUnnamed) {
   const nameEl = el('span', heading.estimated ? 'theme-cluster-name is-estimated' : 'theme-cluster-name');
   nameEl.textContent = heading.text;
   title.appendChild(nameEl);
-  if (heading.estimated) {
+  // 배지는 섞여 있을 때만 — 전부 추정이면 섹션 헤더가 한 번 말한다(renderThemeClusters).
+  if (heading.estimated && badgeEstimated) {
     const badge = el('span', 'theme-cluster-unnamed-badge');
     badge.textContent = '추정';
     title.appendChild(badge);
@@ -133,11 +134,26 @@ function renderThemeClusters(container, clusters, options) {
 
   const opts = options || {};
   const limit = Number.isInteger(opts.limit) ? opts.limit : 3; // 보드 06/07 — 카드 3개
-  const shown = list.slice(0, limit);
+  // 큰 군집 순으로 자른다(2026-09-03). groupByCluster는 **군집 id 순**으로 정렬하므로
+  // (cluster-grouping.js — `a[0] - b[0]`) 예전에는 slice(0,3)이 "내부 id가 낮은 3개"를
+  // 뽑았다. 화면은 "7개 중 3개"라고 쓰는데 그 3개가 아무 기준도 아니었다 —
+  // 숨은 연관이 가나다순으로 뽑히던 것과 같은 계열의 결함이다(analysis.py 참고).
+  // id는 동점일 때의 결정적 tie-break로만 남긴다.
+  const ranked = [...list].sort((a, b) => (
+    (b.size || 0) - (a.size || 0) || (a.cluster || 0) - (b.cluster || 0)
+  ));
+  const shown = ranked.slice(0, limit);
   const totalCount = Number.isFinite(opts.totalCount) ? opts.totalCount : list.length;
 
   const namedCount = shown.filter((c) => c.name).length;
   const warnUnnamed = shouldWarnUnnamed(namedCount, shown.length);
+  // '추정' 배지는 **섞여 있을 때만** 붙인다(2026-09-03 사용자 지적 "굳이 추정이라는
+  // 배지가 항상 붙어있을 필요가 있는지는 모르겠어"). 이름 파이프라인이 없어(§0 발견1)
+  // name은 늘 null이고, 그래서 거의 모든 카드가 추정이었다 — 전부에 붙는 배지는
+  // 아무것도 구분하지 못하면서 이름 옆자리를 먹는다. 바로 위 shouldWarnUnnamed와
+  // 같은 임계 규칙이다(0이거나 전부면 예외 표시를 쓰지 않는다).
+  const estimatedCount = shown.filter((c) => clusterCardTitle(c).estimated).length;
+  const badgeEstimated = estimatedCount > 0 && estimatedCount < shown.length;
 
   const wrap = el('div', 'theme-clusters');
   const head = el('div', 'theme-clusters-head');
@@ -145,13 +161,23 @@ function renderThemeClusters(container, clusters, options) {
   title.textContent = '테마 군집';
   head.appendChild(title);
   const subtitle = el('span', 'theme-clusters-subtitle');
-  subtitle.textContent = `${totalCount}개 중 ${shown.length}개`;
+  // 무엇을 골랐는지 밝힌다 — "7개 중 3개"만으로는 그 3개가 어떻게 뽑힌 것인지
+  // 알 수 없다(그리고 예전에는 실제로 아무 기준도 아니었다, 위 ranked 주석).
+  subtitle.textContent = totalCount > shown.length
+    ? `${totalCount}개 중 가장 큰 ${shown.length}개`
+    : `${shown.length}개`;
   head.appendChild(subtitle);
+  // 전부 추정이면 배지를 카드마다 붙이는 대신 여기서 한 번 말한다(위 badgeEstimated).
+  if (estimatedCount === shown.length && shown.length > 0) {
+    const estimatedNote = el('span', 'theme-clusters-subtitle');
+    estimatedNote.textContent = '이름은 추정';
+    head.appendChild(estimatedNote);
+  }
   wrap.appendChild(head);
 
   const cardRow = el('div', 'theme-cluster-cards');
   for (const cluster of shown) {
-    cardRow.appendChild(renderClusterCard(cluster, warnUnnamed && !cluster.name));
+    cardRow.appendChild(renderClusterCard(cluster, warnUnnamed && !cluster.name, badgeEstimated));
   }
   wrap.appendChild(cardRow);
 
