@@ -3373,10 +3373,26 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
   // 드릴인 "설정" 탭의 "채팅에서 고치기 ↗"(Paper 보드 03) — 동선 규칙②가
   // 말하는 그 경로다. 시트를 열지 않고 채팅 입력에 문장을 심는다(＋새 작업·
   // 제안 "추가"와 같은 seedChatInput 버스 — 편집 진입로를 새로 만들지 않는다).
-  onEditInChat: (title) => {
-    if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
-      window.AthenaShell.seedChatInput(`"${title}" 루틴을 고치고 싶어요 — `);
+  // 코드 알람(Step 7)은 두 번째 인자를 붙여 부른다 — 어떤 칸에 대해 무엇을 묻는지가
+  // 문장에 들어가야 채팅이 그 칸부터 다시 검사할 수 있다(보드 11). 인자가 하나면
+  // 옛 배선(드릴인 설정)의 문장을 글자 그대로 쓴다 — 기존 대조 프로브가 그 문장을 잰다.
+  onEditInChat: (titleOrId, opts) => {
+    if (!(window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function')) return;
+    if (!opts) {
+      window.AthenaShell.seedChatInput(`"${titleOrId}" 루틴을 고치고 싶어요 — `);
+      return;
     }
+    const name = opts.title || titleOrId;
+    const node = opts.nodeTitle || opts.node || '';
+    if (opts.kind === 'odd' && node) {
+      window.AthenaShell.seedChatInput(`"${name}" 알람의 「${node}」 칸이 이상해 — `);
+      return;
+    }
+    if (opts.kind === 'ask' && node) {
+      window.AthenaShell.seedChatInput(`"${name}" 알람의 「${node}」 칸은 뭐야? `);
+      return;
+    }
+    window.AthenaShell.seedChatInput(`"${name}" 알람을 말로 고치고 싶어 — `);
   },
   // 10단계 — 실행 이력 드릴인. 6단계 GET /{id}/runs를 사람 클릭 전용 채널로.
   fetchRuns: async (id) => {
@@ -3404,6 +3420,36 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
   // 카드가 부른다(chat.js, 43 원칙 — 편집은 채팅 경로로만).
   fetchNudgeGuard: async () => {
     const res = await window.athena.invoke('athena:nudge-guard-get');
+    return (res && res.ok && res.data) ? res.data : null;
+  },
+  // Step 7 — 코드 알람 상세. 목록에 없는 값(감시 블록·오늘 확인·노드 칸)은 상세
+  // 라우트에만 있다(chat.js watchBlockOf와 같은 채널·같은 이유).
+  fetchDetail: async (id) => {
+    const res = await window.athena.invoke('athena:routine-detail', { id });
+    return (res && res.ok && res.data) ? res.data : null;
+  },
+  // Step 7 — 상세의 「취소」. 일시중지·재개와 같은 자리의 사람 클릭 전용 채널.
+  cancelRoutine: async (id) => {
+    const res = await window.athena.invoke('athena:routine-cancel', { id });
+    if (!res || !res.ok) throw new Error((res && res.error) || '취소 실패');
+    return res.data;
+  },
+  // Step 7 — 초안 상세의 「검사」. 채팅 초안 카드의 검사 칩과 같은 본문·같은
+  // 통로다(chat.js runWatchCheck) — 두 화면이 다른 것을 재면 안 된다.
+  runWatchCheck: async (item) => {
+    const raw = (item && item.raw) || {};
+    const watch = (item && item.watch) || raw.watch;
+    if (!watch || !watch.project_id || !watch.path) return null;
+    const body = {
+      project_id: watch.project_id,
+      path: watch.path,
+      symbol: raw.symbol,
+      params: watch.params || {},
+      lookback_days: watch.lookback_days || 30,
+      cooldown_s: raw.cooldown_s,
+      routine_id: item.id,
+    };
+    const res = await window.athena.invoke('athena:routine-watch-check', { body });
     return (res && res.ok && res.data) ? res.data : null;
   },
   // 11단계 — "그래프 모드에서 근거 보기 →". 사이드바 모드 네비와 같은 두 걸음
