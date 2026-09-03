@@ -8,6 +8,9 @@ const MUTATION_KINDS = new Set([
   'disallow',
   'remove',
   'secret-update',
+  // 플러그인 승인 카드 한 장이 담은 동작들을 한 묶음으로 돌린다 — 기존 7종 중
+  // 어느 것도 재사용하지 않는다(감사·로그가 묶음을 단일 동작으로 오독한다).
+  'plugin-batch',
 ]);
 
 function safeMessage(error) {
