@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -310,17 +311,24 @@ def test_writes_the_cross_language_contract_fixture(action, state):
     tool_input = TOOL_INPUTS[action]
     envelope = _envelope(plugin_tools.dispatch(tool_input, state.registry, state.consent))
 
+    # 결정적 픽스처 — `proposal_id`는 실행마다 새 nonce라 그대로 쓰면 테스트를 돌릴 때마다
+    # 작업 트리가 더러워진다. 액션 이름에서 유도한 32자 hex로 고정해 봉투 *모양*이 바뀔
+    # 때만 파일이 바뀌게 하고, 내용이 같으면 다시 쓰지 않는다(mtime도 그대로).
+    envelope = dict(envelope)
+    envelope["proposal_id"] = hashlib.md5(f"fixture-{action}".encode("utf-8")).hexdigest()
+
     FIXTURE_DIR.mkdir(parents=True, exist_ok=True)
     target = FIXTURE_DIR / f"{action}.json"
-    target.write_text(
+    payload = (
         json.dumps(
             {"tool_input": tool_input, "envelope": envelope},
             ensure_ascii=False,
             indent=2,
         )
-        + "\n",
-        encoding="utf-8",
+        + "\n"
     )
+    if not target.exists() or target.read_text(encoding="utf-8") != payload:
+        target.write_text(payload, encoding="utf-8")
 
     written = json.loads(target.read_text(encoding="utf-8"))
     assert written["tool_input"]["actions"][0]["action"] == action
