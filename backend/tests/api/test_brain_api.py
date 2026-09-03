@@ -1786,6 +1786,59 @@ def test_relation_retraction_is_not_exposed_to_the_model() -> None:
     assert operation["x-athena-side-effect"] == "write"
 
 
+def test_relation_retraction_accepts_the_triple_when_the_screen_has_no_id(
+    entity_timeline_client: TestClient,
+) -> None:
+    """패널의 관계 목록은 relation_id를 모른다 — (출발·도착·관계) 삼중으로 지목한다.
+
+    id는 그 셋의 결정적 해시이므로 백엔드가 계산한다(렌더러에서 해시를 다시
+    구현하면 두 벌이 되고, 어긋나는 순간 취소가 조용히 실패한다).
+    """
+    from athena_api.brain import INVESTOR_PROFILE_ENTITY_ID, EntityKind, entity_id
+
+    body = entity_timeline_client.post(
+        RETRACT_PATH,
+        headers=_headers(),
+        json={
+            "subject_id": INVESTOR_PROFILE_ENTITY_ID,
+            "object_id": entity_id(EntityKind.SECURITY, "삼성전자"),
+            "kind": "owns",
+        },
+    ).json()
+    assert body["removed"] is True
+
+    # 같은 삼중을 또 지우면 miss — 오류가 아니라 removed=False가 정직한 답이다.
+    again = entity_timeline_client.post(
+        RETRACT_PATH,
+        headers=_headers(),
+        json={
+            "subject_id": INVESTOR_PROFILE_ENTITY_ID,
+            "object_id": entity_id(EntityKind.SECURITY, "삼성전자"),
+            "kind": "owns",
+        },
+    ).json()
+    assert again["removed"] is False
+
+
+def test_relation_retraction_rejects_a_payload_that_points_at_nothing(
+    entity_timeline_client: TestClient,
+) -> None:
+    """relation_id도 삼중도 없으면 무엇을 지울지 모른다 — 422로 끊는다."""
+    assert (
+        entity_timeline_client.post(RETRACT_PATH, headers=_headers(), json={}).status_code
+        == 422
+    )
+    # 삼중이 반쪽이면(관계 종류가 빠짐) 그것도 지목이 아니다.
+    assert (
+        entity_timeline_client.post(
+            RETRACT_PATH,
+            headers=_headers(),
+            json={"subject_id": "entity:a", "object_id": "entity:b"},
+        ).status_code
+        == 422
+    )
+
+
 def test_relation_confirmation_requires_bearer_header() -> None:
     with _disabled_client() as client:
         response = client.post(CONFIRM_PATH, json={"relation_id": "relation:x"})

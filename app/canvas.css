@@ -694,6 +694,19 @@ html, body { background: transparent; }
 /* 아직 콘텐츠 스펙이 없는 탭(이력) — 눌리는 것처럼 보이면 고장으로 읽힌다
  * (2026-09-03 실사용 "이력은 클릭해도 안열린다"). 없는 기능을 활성처럼 두지
  * 않는다(P3). 색을 한 단계 더 낮추고 커서로도 못 누른다고 말한다. */
+/* 관계 목록의 삭제 손잡이(Paper 보드 04 실측, 2026-09-03) — 11px · hint 톤 ·
+ * 고정폭 24px 슬롯. 반복 행의 오른쪽 끝이 한 레인을 이뤄야 훑을 수 있다(빈
+ * 행에서도 자리가 흔들리지 않게 flex-shrink:0). 색은 처음 ghost(30%)로 그렸다가
+ * hint(45%)로 올렸다 — 11px에 30%는 "한눈에 읽힌다"를 못 지킨다. 파괴적 동작이라
+ * 브랜드 마젠타는 쓰지 않는다: 이 패널의 마젠타는 이미 "숨은" 점 하나다. */
+.panel-relation-delete {
+  appearance: none; border: none; background: none; cursor: pointer;
+  flex-shrink: 0; width: 24px; padding: 0; text-align: right;
+  font-family: var(--font-body); font-size: var(--text-xs);
+  color: var(--color-k-hint); white-space: nowrap;
+}
+.panel-relation-delete:hover { color: var(--color-k-text); }
+
 .panel-tab.is-disabled {
   color: var(--color-k-ghost);
   cursor: default;
