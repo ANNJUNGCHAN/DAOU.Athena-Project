@@ -270,7 +270,11 @@ function renderConfirmBanner(container, hintCount, onCtaClick) {
   title.textContent = `확인이 필요한 것 ${hintCount}건`;
   container.appendChild(title);
   const body = el('span', 'confirm-banner-body');
-  body.textContent = '체결과 대화가 어긋나는 성향이 있습니다 — 답하시면 그대로 그래프가 갱신됩니다';
+  // 반영 시점을 정직하게 적는다(2026-09-03 실사용). 답변은 채팅으로 나가고, 그래프는
+  // **다음 수집 배치 때** 그 답을 추출해 갱신한다(lifespan.py IngestionCoordinator) —
+  // 즉시가 아니다. "그대로 갱신됩니다"라고 쓰면 누른 직후 숫자가 안 줄어드는 것을
+  // 고장으로 읽고 같은 답을 반복하게 된다(실제로 그렇게 됐다).
+  body.textContent = '체결과 대화가 어긋나는 성향이 있습니다 — 답하시면 다음 수집 때 그래프에 반영됩니다';
   container.appendChild(body);
   const cta = el('button', 'confirm-banner-cta');
   cta.setAttribute('type', 'button');
