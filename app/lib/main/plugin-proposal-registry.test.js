@@ -212,3 +212,67 @@ test('대기 목록은 등록 → 조회 → 승인으로 사라진다', () => {
   assert.deepEqual(registry.pending(), { proposals: [], revision: 7 });
   assert.equal(registry.note(proposal), false);
 });
+
+// --- 승인 한 번의 순서(decide) ------------------------------------------------
+// main.js도 verify-plugins.js도 이 함수 하나만 부른다 — 순서는 소스 스캔이 아니라
+// 실제 호출 기록으로 잠근다.
+
+test('decide: 게이트 → 소비 → 실행 → 연결 확인 순서로 부르고 실행을 조정자로 감싼다', async () => {
+  const { calls, registry } = spy();
+  const order = [];
+  const proposal = envelope([{ action: 'set_enabled', target: 'fetch', enabled: true }]);
+  const decided = await registry.decide(proposal, {
+    revisionNow: 7,
+    runMutation: async (run) => { order.push('mutation:before'); const out = await run(); order.push('mutation:after'); return out; },
+  });
+  assert.equal(decided.kind, 'success');
+  assert.deepEqual(order, ['mutation:before', 'mutation:after']);
+  const names = calls.map((row) => row[0]);
+  // list는 게이트가 부른 것이다 — approve(실행)보다 앞이고, probe는 조정자 밖에서 마지막이다.
+  assert.ok(names.indexOf('list') < names.indexOf('approve'), '게이트가 실행보다 뒤에 있다');
+  assert.equal(names[names.length - 1], 'probe');
+  assert.deepEqual(decided.probes, [{ alias: 'fetch', ok: true, toolCount: 2, error: null, detail: null }]);
+  // 두 번째 승인은 소비에서 막힌다.
+  assert.equal((await registry.decide(proposal, { revisionNow: 7 })).reason, '이미 처리한 요청입니다');
+});
+
+test('decide: 게이트에서 막히면 실행기를 한 번도 부르지 않고 소비도 하지 않는다', async () => {
+  const { calls, registry } = spy();
+  const proposal = envelope([{ action: 'remove', target: 'kiwoom' }]);
+  const decided = await registry.decide(proposal, { revisionNow: 7 });
+  assert.equal(decided.kind, 'failed');
+  assert.equal(decided.reason, '아테나 기본 기능이라 여기서 다룰 수 없습니다');
+  assert.deepEqual(decided.results, []);
+  assert.deepEqual(calls, [], '차단 별칭은 목록 조회조차 하지 않는다');
+  // 소비되지 않았으므로 같은 봉투가 다시 게이트까지 간다.
+  assert.equal((await registry.decide(proposal, { revisionNow: 7 })).reason, '아테나 기본 기능이라 여기서 다룰 수 없습니다');
+});
+
+// 만료는 실행하지 않지만 소비는 되돌리지 않는다 — 다시 보내도 같은 자리에서 막힌다.
+test('decide: 판번호가 어긋나면 실행 없이 만료이고 소비는 되돌리지 않는다', async () => {
+  const { calls, registry } = spy();
+  const proposal = envelope([{ action: 'remove', target: 'fetch' }]);
+  const decided = await registry.decide(proposal, { revisionNow: 9 });
+  assert.equal(decided.kind, 'stale');
+  assert.equal(decided.reason, '목록이 바뀌어 다시 확인이 필요합니다');
+  assert.ok(!calls.some((row) => row[0] === 'remove'), '만료인데 실행이 돌았다');
+  assert.equal((await registry.decide(proposal, { revisionNow: 7 })).reason, '이미 처리한 요청입니다');
+});
+
+test('decide: 실행이 실패하면 소비를 되돌려 같은 봉투를 다시 보낼 수 있다', async () => {
+  const { registry } = spy(['fetch'], { async remove() { return { ok: false, error: 'cli: boom' }; } });
+  const proposal = envelope([{ action: 'remove', target: 'fetch' }]);
+  const decided = await registry.decide(proposal, { revisionNow: 7 });
+  assert.equal(decided.kind, 'failed');
+  assert.equal(decided.reason, '삭제하지 못했습니다');
+  assert.equal(decided.results[0].detail, 'cli: boom');
+  assert.equal(decided.mutationError, null);
+  assert.equal((await registry.decide(proposal, { revisionNow: 7 })).reason, '삭제하지 못했습니다');
+});
+
+// 판번호를 모르는 봉투(GUI 경로)는 만료 판정을 건너뛴다.
+test('decide: revision이 null이면 만료로 몰지 않는다', async () => {
+  const { registry } = spy();
+  const proposal = { ...envelope([{ action: 'remove', target: 'fetch' }]), revision: null };
+  assert.equal((await registry.decide(proposal, { revisionNow: 9 })).kind, 'success');
+});

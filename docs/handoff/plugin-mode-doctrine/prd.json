@@ -135,7 +135,7 @@
     {
       "id": "US-008",
       "title": "§7 최종 게이트 + 커밋",
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "(cd app && npm run test:unit) 2회 연속 baseline 대비 신규 실패 0, # pass ≥ 1946",
         "(cd backend && uv run pytest -q) 신규 FAILED/ERROR 0, passed ≥ 2638",

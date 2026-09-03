@@ -11,6 +11,9 @@
 
 const TOOL_NAME = 'athena_plugin';
 
+// 아테나 게이트웨이가 붙이는 접두. 이 둘 말고는 받지 않는다.
+const GATEWAY_NAME = `mcp__athena__${TOOL_NAME}`;
+
 const ACTIONS = Object.freeze([
   'install', 'allow_tools', 'revoke_tools', 'set_enabled', 'remove', 'stage_snippet',
 ]);
@@ -20,10 +23,12 @@ function hasAllowedActions(list) {
     && list.every((entry) => entry && typeof entry === 'object' && ACTIONS.includes(entry.action));
 }
 
-// MCP 툴 이름은 mcp__<server>__<tool>로도 오므로 마지막 조각만 본다(형제 함수와 같다).
+// 이름은 정확히 대조한다 — 마지막 `__` 조각만 보면 제3의 등록 서버가 낸
+// `<별칭>__athena_plugin`이 아테나 제안으로 통과한다(그 봉투는 우리 게이트를
+// 거치지 않았으므로 승인 카드로 올려서는 안 된다).
 function isPluginProposalCall(step) {
-  const base = String((step && step.name) || '').split('__').pop();
-  if (base !== TOOL_NAME) return false;
+  const name = String((step && step.name) || '');
+  if (name !== TOOL_NAME && name !== GATEWAY_NAME) return false;
   return hasAllowedActions(step && step.input && step.input.actions);
 }
 
@@ -35,8 +40,11 @@ function extractProposal(step, text) {
   try { envelope = JSON.parse(text); } catch { return null; }
   if (!envelope || typeof envelope !== 'object') return null;
   if (typeof envelope.proposal_id !== 'string' || !envelope.proposal_id) return null;
+  // 모델 경로의 봉투는 백엔드가 source='model'을 찍는다 — 다른 값이면 우리가
+  // 만든 봉투가 아니다(GUI 봉투는 렌더러 안에서만 돌고 이 경로로 오지 않는다).
+  if (envelope.source !== 'model') return null;
   if (!hasAllowedActions(envelope.actions)) return null;
   return envelope;
 }
 
-module.exports = { TOOL_NAME, ACTIONS, isPluginProposalCall, extractProposal };
+module.exports = { isPluginProposalCall, extractProposal };

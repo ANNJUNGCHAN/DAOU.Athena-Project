@@ -30,14 +30,10 @@ const INVOKE_CHANNELS = new Set([
   'athena:auth-token-status',
   'athena:auth-token-refresh',
   'athena:auth-token-revoke',
+  // 플러그인은 읽기 채널만 렌더러에 연다 — 변이는 athena:plugin-approve 하나로
+  // 모인다(lib/plugin-proposal-boundary.test.js가 이 경계를 잰다).
   'athena:mcp-list',
-  'athena:mcp-stage-snippet',
-  'athena:mcp-register',
-  'athena:mcp-approve',
-  'athena:mcp-revoke',
   'athena:mcp-probe',
-  'athena:mcp-allow-tool',
-  'athena:mcp-remove',
   'athena:mcp-audit',
   // 플러그인 승인 카드 — 실행은 사람이 이 둘 중 하나를 부를 때만 일어난다.
   'athena:plugin-approve',

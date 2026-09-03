@@ -25,9 +25,17 @@ test('백엔드 픽스처 6종의 호출 입력을 모두 제안으로 판정한
   }
 });
 
-test('mcp__ 접두가 붙은 이름도 마지막 조각으로 판정한다', () => {
+test('아테나 게이트웨이 접두가 붙은 이름만 함께 받는다', () => {
   const { data } = fixtures()[0];
   assert.equal(forward.isPluginProposalCall({ name: 'mcp__athena__athena_plugin', input: data.tool_input }), true);
+});
+
+// 제3의 등록 서버가 같은 꼬리표를 달아도 아테나 제안이 되지 않는다.
+test('별칭 접두가 붙은 남의 툴은 거부한다', () => {
+  const { data } = fixtures()[0];
+  for (const name of ['evil__athena_plugin', 'mcp__evil__athena_plugin', 'x__mcp__athena__athena_plugin']) {
+    assert.equal(forward.isPluginProposalCall({ name, input: data.tool_input }), false, name);
+  }
 });
 
 test('다른 툴과 enum 밖 액션은 무시한다', () => {
@@ -46,4 +54,13 @@ test('봉투 모양이 어긋난 결과는 버린다', () => {
   assert.equal(forward.extractProposal(step, JSON.stringify({ actions: data.envelope.actions })), null);
   assert.equal(forward.extractProposal(step, JSON.stringify({ proposal_id: 'x', actions: [] })), null);
   assert.equal(forward.extractProposal(step, JSON.stringify({ proposal_id: 'x', actions: [{ action: 'call_tool' }] })), null);
+});
+
+// GUI 봉투는 렌더러 안에서만 돈다 — 모델 경로로 온 gui 봉투는 우리 것이 아니다.
+test('source가 model이 아닌 봉투는 버린다', () => {
+  const { data } = fixtures()[0];
+  const step = { name: 'athena_plugin', input: data.tool_input };
+  for (const source of ['gui', '', undefined]) {
+    assert.equal(forward.extractProposal(step, JSON.stringify({ ...data.envelope, source })), null, String(source));
+  }
 });

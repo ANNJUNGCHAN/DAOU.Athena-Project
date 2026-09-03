@@ -13,7 +13,7 @@ const path = require('node:path');
 const {
   ACTIONS, buildProposal, buildBatchProposal, validateProposal, isProposalStale,
   cardCopy, resultTurnCopy, resultTurnModel, probeToolCount,
-  outOfModeCopy, createOutOfModeNotifier, proposalSignature,
+  outOfModeCopy, createOutOfModeNotifier,
 } = require('./plugin-proposal');
 
 const INSTALL = { action: 'install', target: 'fetch', features: ['fetch — 지정한 URL의 본문'] };
@@ -193,10 +193,22 @@ test('resultTurnCopy: 거부는 한 줄이다', () => {
   assert.equal(resultTurnCopy('rejected', {}).chip, null);
 });
 
-test('resultTurnCopy: 실패는 사유 한 줄과 다시 시도 칩이다', () => {
-  const failed = resultTurnCopy('failed', { reason: '실행 파일을 찾지 못했습니다' });
-  assert.deepEqual(failed.lines, ['연결 실패 — 실행 파일을 찾지 못했습니다']);
-  assert.equal(failed.chip, '다시 시도');
+test('resultTurnCopy: 실패는 사유 한 줄이고, 실행이 돌았을 때만 다시 시도가 붙는다', () => {
+  const ran = resultTurnCopy('failed', { reason: '실행 파일을 찾지 못했습니다', results: [{ ok: false }] });
+  assert.deepEqual(ran.lines, ['실행 파일을 찾지 못했습니다']);
+  assert.equal(ran.chip, '다시 시도');
+  // 사유가 없으면 사실만 말한다.
+  assert.deepEqual(resultTurnCopy('failed', { results: [{ ok: false }] }).lines, ['처리하지 못했습니다']);
+});
+
+// 게이트 거부는 연결을 시도한 적이 없다 — "연결 실패"는 일어나지 않은 일이고,
+// 다시 보내도 같은 자리에서 막히므로 다시 시도 칩도 내지 않는다.
+test('resultTurnCopy: 게이트 거부에 연결 실패를 씌우지 않고 칩도 없다', () => {
+  for (const reason of ['이미 설치돼 있습니다', '아테나 기본 기능이라 여기서 다룰 수 없습니다', '이미 처리한 요청입니다']) {
+    const gated = resultTurnCopy('failed', { reason, results: [] });
+    assert.deepEqual(gated.lines, [reason]);
+    assert.equal(gated.chip, null, reason);
+  }
 });
 
 test('resultTurnCopy: 만료는 한 줄이고 칩이 없다 — 실패로 그리지 않는다', () => {
@@ -253,7 +265,7 @@ test('resultTurnModel: 성공에만 재시작 줄이 붙고 런타임을 따른�
 test('resultTurnModel: 실패에만 다시 시도 칩이 있고 detail은 읽지 않는다', () => {
   const failed = resultTurnModel('failed', { reason: '실행 파일을 찾지 못했습니다', results: [{ detail: 'ENOENT spawn npx' }] });
   assert.equal(failed.chip, '다시 시도');
-  assert.deepEqual(failed.lines, ['연결 실패 — 실행 파일을 찾지 못했습니다']);
+  assert.deepEqual(failed.lines, ['실행 파일을 찾지 못했습니다']);
   assert.ok(!failed.lines.join(' ').includes('ENOENT'), 'CLI 원문이 화면에 샜다');
   assert.equal(resultTurnModel('stale', { reason: '목록이 바뀌어 다시 확인이 필요합니다' }).chip, null);
 });
@@ -276,26 +288,15 @@ test('createOutOfModeNotifier: 한 턴에 한 번만 알리고 턴이 바뀌면 
   assert.equal(notifier.shouldAnnounce(same), true, '턴이 바뀌면 다시 알린다');
 });
 
-// --- 서명(중복 알림 방지) --------------------------------------------------------
-
-test('proposalSignature: 같은 동작·대상이면 같은 서명이다', () => {
-  const a = buildProposal(INSTALL, '이유 A', 1, 'model');
-  const b = buildProposal(INSTALL, '이유 B', 9, 'gui');
-  assert.equal(proposalSignature(a), proposalSignature(b));
-});
-
-test('proposalSignature: 대상이 다르면 서명이 다르다', () => {
-  const a = buildProposal({ action: 'remove', target: 'fetch' }, '이유', 1, 'model');
-  const b = buildProposal({ action: 'remove', target: 'time' }, '이유', 1, 'model');
-  assert.notEqual(proposalSignature(a), proposalSignature(b));
-});
-
-test('proposalSignature: 스니펫은 대상이 없으므로 내용으로 구분한다', () => {
+// 스니펫은 대상이 없다 — 같은 내용만 같은 것으로 본다.
+test('createOutOfModeNotifier: 스니펫은 내용으로 구분한다', () => {
+  const notifier = createOutOfModeNotifier();
   const one = buildProposal({ action: 'stage_snippet', target: null, snippet: '{"a":1}' }, '이유', 1, 'gui');
   const same = buildProposal({ action: 'stage_snippet', target: null, snippet: '{"a":1}' }, '이유', 1, 'gui');
   const other = buildProposal({ action: 'stage_snippet', target: null, snippet: '{"b":2}' }, '이유', 1, 'gui');
-  assert.equal(proposalSignature(one), proposalSignature(same));
-  assert.notEqual(proposalSignature(one), proposalSignature(other));
+  assert.equal(notifier.shouldAnnounce(one), true);
+  assert.equal(notifier.shouldAnnounce(same), false, '같은 내용은 한 번만 알린다');
+  assert.equal(notifier.shouldAnnounce(other), true, '다른 내용은 따로 알린다');
 });
 
 // --- 교차 언어 계약 -------------------------------------------------------------

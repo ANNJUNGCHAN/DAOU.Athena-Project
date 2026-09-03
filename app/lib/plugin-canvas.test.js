@@ -694,7 +694,7 @@ test('실패한 카드는 사유 한 줄을 쓴다', async () => {
   await flush();
 
   assert.deepEqual(texts(container, 'agent-mode'), ['실패']);
-  assert.deepEqual(texts(container, 'plugin-canvas-proposal-line'), ['연결 실패 — 명령을 찾지 못했습니다']);
+  assert.deepEqual(texts(container, 'plugin-canvas-proposal-line'), ['명령을 찾지 못했습니다']);
 });
 
 test('판번호가 어긋난 카드는 만료됨이고 승인이 비활성이며 다시 제안받기를 준다', async () => {

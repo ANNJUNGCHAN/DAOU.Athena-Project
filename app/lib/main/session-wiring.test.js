@@ -100,24 +100,23 @@ test('preload가 플러그인 제안 채널을 연다', () => {
   assert.match(on, /'athena:plugin-proposed'/);
 });
 
-// 승인 순서가 뒤집히면 게이트를 통과하지 않은 봉투가 실행되거나(게이트 뒤로),
-// 낡은 목록 위에서 실행되거나(판번호 뒤로), 펜스 안에서 서버가 뜬다(연결 확인 앞으로).
-test('플러그인 승인은 게이트 → 소비 → 판번호 → 묶음 실행 → 연결 확인 순서다', () => {
+// 승인 순서는 레지스트리의 decide가 소유한다(그 순서는 실제 호출로
+// plugin-proposal-registry.test.js가 잠근다). main이 지킬 몫은 두 가지다 —
+// 순서를 여기서 다시 적지 않는 것, 그리고 판번호를 한 번만 읽어 넘기는 것.
+test('플러그인 승인은 레지스트리 decide 한 번에 판번호와 조정자를 넘긴다', () => {
   const approve = slice('async function handlePluginApprove', 'function handlePluginReject');
-  let at = -1;
-  for (const marker of [
-    'pluginProposalRegistry.gate(',
-    'pluginProposalRegistry.consume(',
-    'mcpCli.list().revision',
-    "runMcpMutation('plugin-batch'",
-    'pluginProposalRegistry.probe(',
-  ]) {
-    const next = approve.indexOf(marker);
-    assert.ok(next > at, marker);
-    at = next;
-  }
+  assert.equal((approve.match(/pluginProposalRegistry\.decide\(/g) || []).length, 1);
+  assert.match(approve, /revisionNow: revision/);
   // 묶음은 정확히 한 번만 조정자를 탄다 — 동작마다 부르면 재기동이 그만큼 반복된다.
   assert.equal((approve.match(/runMcpMutation\(/g) || []).length, 1);
+  assert.match(approve, /runMutation: providerRuntimeEnabled \? \(\(run\) => runMcpMutation\('plugin-batch', run\)\) : null/);
+  // 순서를 main이 다시 적으면 검증 스크립트와 갈라진다.
+  for (const dead of ['pluginProposalRegistry.gate(', 'pluginProposalRegistry.consume(', 'pluginProposalRegistry.probe(', 'pluginProposalRegistry.release(']) {
+    assert.ok(!approve.includes(dead), `${dead}가 main에 남아 있다`);
+  }
+  // 판번호는 한 번만 읽어 게이트 실패 반환에도 그대로 싣는다(pluginResult가 다시 읽지 않는다).
+  assert.equal((approve.match(/mcpCli\.list\(\)/g) || []).length, 1);
+  assert.match(approve, /revision,/);
 });
 
 test('플러그인 거부는 아무 CLI도 부르지 않는다', () => {

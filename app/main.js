@@ -4762,13 +4762,9 @@ async function handleMcpRemove(e, { alias } = {}) {
 }
 
 ipcMain.handle('athena:mcp-list', handleMcpList);
-ipcMain.handle('athena:mcp-stage-snippet', handleMcpStageSnippet);
-ipcMain.handle('athena:mcp-register', handleMcpRegister);
-ipcMain.handle('athena:mcp-approve', handleMcpApprove);
-ipcMain.handle('athena:mcp-revoke', handleMcpRevoke);
 ipcMain.handle('athena:mcp-probe', handleMcpProbe);
-ipcMain.handle('athena:mcp-allow-tool', handleMcpAllowTool);
-ipcMain.handle('athena:mcp-remove', handleMcpRemove);
+// 변이 여섯은 IPC로 열지 않는다 — 렌더러 호출자가 없고, 실행의 유일한 문은
+// athena:plugin-approve다. 위 함수들은 verify-settings.js가 직접 부른다.
 // 감사 로그는 읽기 전용이라 실행 조정자를 거치지 않는다.
 ipcMain.handle('athena:mcp-audit', () => mcpCli.auditLog());
 
@@ -4812,39 +4808,27 @@ function pluginResult(kind, reason, extra = {}) {
   };
 }
 
-// 순서는 ⑴게이트 → ⑵원자 소비 → ⑶판번호 대조 → ⑷실행 → ⑸연결 확인이다.
+// 순서(게이트 → 소비 → 판번호 → 실행 → 연결 확인)는 레지스트리의 decide가
+// 소유한다 — verify-plugins.js도 같은 함수를 부른다. 여기는 포장과 로그만 한다.
 // handleMcp*를 재사용하지 않는다 — 그 함수들은 IPC 이벤트 인자를 받는 모양이고,
 // 런타임이 켜진 빌드에서는 자기들이 다시 runMcpMutation을 불러 교착한다.
 async function handlePluginApprove(e, envelope) {
-  const gated = pluginProposalRegistry.gate(envelope);
-  if (!gated.ok) return pluginResult('failed', gated.error);
-  const claimed = pluginProposalRegistry.consume(envelope);
-  if (!claimed.ok) return pluginResult('failed', claimed.error);
+  // 판번호는 한 번만 읽는다 — 게이트에서 막힌 반환도 이 값을 그대로 싣는다.
   const revision = mcpCli.list().revision;
-  // 봉투가 판번호를 모르면(null) 만료 판정을 건너뛴다 — 모르는 것을 낡았다고 말하지 않는다.
-  if (envelope.revision !== null && envelope.revision !== undefined && envelope.revision !== revision) {
-    return pluginResult('stale', '목록이 바뀌어 다시 확인이 필요합니다', { revision });
-  }
-  const apply = () => pluginProposalRegistry.apply(envelope);
-  const applied = providerRuntimeEnabled
-    ? await runMcpMutation('plugin-batch', apply)
-    : await apply();
-  const results = Array.isArray(applied.results) ? applied.results : [];
-  for (const row of results) {
+  const decided = await pluginProposalRegistry.decide(envelope, {
+    revisionNow: revision,
+    runMutation: providerRuntimeEnabled ? ((run) => runMcpMutation('plugin-batch', run)) : null,
+  });
+  for (const row of decided.results) {
     const outcome = row.ok ? '완료' : `실패: ${row.error}${row.detail ? ` (${row.detail})` : ''}`;
     mdlog(`플러그인 승인 ${row.action} ${row.target || ''} — ${outcome}`);
   }
-  // probe는 실행 시퀀스 밖이다 — apply 안에서 upstream 서버를 띄우면 펜스가 오염된다.
-  const probes = await pluginProposalRegistry.probe(applied.probeAliases || []);
-  // 조정자가 낸 문장은 영문 내부 메시지라 화면에 내지 않는다 — 로그에만 남긴다.
-  if (applied.ok !== true) mdlog(`플러그인 승인 반영 실패 — ${applied.error || '사유 없음'}`);
-  const failed = results.find((row) => !row.ok) || null;
-  const reason = failed
-    ? failed.error
-    : (applied.ok === true ? null : '설정을 바꿨지만 대화에 반영하지 못했습니다');
-  // 실패했으면 소비를 되돌린다 — 그래야 결과 턴의 다시 시도가 같은 봉투로 동작한다.
-  if (reason) pluginProposalRegistry.release(envelope);
-  return pluginResult(reason ? 'failed' : 'success', reason, { results, probes });
+  if (decided.mutationError) mdlog(`플러그인 승인 반영 실패 — ${decided.mutationError}`);
+  return pluginResult(decided.kind, decided.reason, {
+    results: decided.results,
+    probes: decided.probes,
+    revision,
+  });
 }
 
 // 거부는 어떤 CLI도 부르지 않는다 — 소비 표시와 대기 목록 제거뿐이다.
