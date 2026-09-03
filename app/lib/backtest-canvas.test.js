@@ -2708,6 +2708,40 @@ test('프리셋을 세우면 지도 탭이 from-spec 그래프로 편집기를 �
   assert.equal(ctx.map.hashes.graph_hash, 'gh-1');
 });
 
+test('폭이 900px 아래로 내려가면 편집기에 is-narrow가 붙는다 — 판단은 부르는 쪽 몫', async () => {
+  // shell.css의 계약: <900px은 부르는 쪽이 판단해 narrow:true로 넘긴다. 쇼케이스 프로브
+  // 실측(2026-09-03)에서 이 배선이 없어 860px 창에서도 서랍 UI가 서지 않았다.
+  const observers = [];
+  const prevRO = globalThis.ResizeObserver;
+  globalThis.ResizeObserver = class {
+    constructor(cb) { this.cb = cb; observers.push(this); }
+    observe(target) { this.target = target; }
+  };
+  try {
+    const made = await mountVisual();
+    const host = findByClass(made.container, 'backtest-visual-host')[0];
+    const obs = observers.find((o) => o.target === host);
+    assert.ok(obs, '편집기 host를 관측해야 한다');
+    const vis = () => findByClass(made.container, 'backtest-vis')[0];
+
+    host.getBoundingClientRect = () => ({ width: 860 });
+    obs.cb();
+    assert.match(vis().className, /is-narrow/, '900px 아래면 좁은 모드');
+
+    host.getBoundingClientRect = () => ({ width: 1200 });
+    obs.cb();
+    assert.doesNotMatch(vis().className, /is-narrow/, '다시 넓어지면 풀린다');
+
+    // hidden(모드 이탈)의 0폭은 상태를 뒤집는 근거가 아니다.
+    host.getBoundingClientRect = () => ({ width: 0 });
+    obs.cb();
+    assert.doesNotMatch(vis().className, /is-narrow/);
+  } finally {
+    if (prevRO === undefined) delete globalThis.ResizeObserver;
+    else globalThis.ResizeObserver = prevRO;
+  }
+});
+
 test('검증이 실패하면 실행 버튼이 잠기고 라벨이 [오류 검토]가 된다', async () => {
   const made = await mountVisual({
     visualValidate: async () => ({

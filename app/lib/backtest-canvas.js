@@ -123,6 +123,10 @@ const RUN_PATHS = [['form', '폼'], ['code', '코드']];
 // 시각 편집기의 서버 왕복 간격 — 매 키입력마다 검증을 보내면 서버가 타자를 따라 뛴다.
 const VISUAL_DEBOUNCE_MS = 400;
 
+// 좁은 폭 판단은 부르는 쪽 몫이다(shell.css .backtest-vis.is-narrow 주석: <900px).
+// 창 폭이 아니라 편집기가 실제로 받은 폭을 잰다 — 사이드바·서랍이 폭을 나눠 가질 수 있다.
+const VISUAL_NARROW_PX = 900;
+
 // 헤더의 상태 점 문구(US-007). 'unvalidated'는 여기 없다 — 아직 아무것도 묻지 않은 것은
 // 상태가 아니라 상태 없음이고, 없는 상태에 점을 찍으면 화면이 사실을 지어낸다.
 const VISUAL_STATUS_TEXT = {
@@ -4349,6 +4353,21 @@ function createBacktestCanvas(options) {
       // "생성될 StrategySpec 보기"는 폼 탭이다 — 같은 값을 두 곳에서 그리지 않는다.
       onShowSpec: () => { setState({ designTab: 'form' }); },
     });
+    // 좁은 폭 배선 — 편집기는 setNarrow API만 갖고(자기 폭을 모른다), 여기서 잰다.
+    // 관측 첫 회도 콜백이 오므로(브라우저 계약) 초기 폭도 이 길로 들어온다.
+    if (typeof ResizeObserver !== 'undefined') {
+      let lastNarrow = null;
+      const host = visualHost;
+      const editor = visualEditor;
+      new ResizeObserver(() => {
+        const width = host.getBoundingClientRect().width;
+        if (width <= 0) return; // hidden(모드 이탈) — 0폭으로 서랍 상태를 뒤집지 않는다
+        const narrow = width < VISUAL_NARROW_PX;
+        if (narrow === lastNarrow) return;
+        lastNarrow = narrow;
+        editor.setNarrow(narrow);
+      }).observe(host);
+    }
     return visualEditor;
   }
 
