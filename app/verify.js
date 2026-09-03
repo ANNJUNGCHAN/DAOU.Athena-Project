@@ -2386,7 +2386,7 @@ app.whenReady().then(async () => {
     && projectMenu.expanded === 'true'
     && projectMenu.visible === true
     && projectMenu.role === 'menu'
-    && projectMenu.firstAction === '고정'
+    && projectMenu.firstAction === '최상단 고정'
     && projectMenu.actionsOpacity === 1
     && projectMenu.display !== 'none'
     && projectMenu.rect.width > 0
@@ -5697,7 +5697,7 @@ app.whenReady().then(async () => {
         'agent-canvas-11: "지금 읽히는 성향" 스트립이 실제 relation_kind를 합친다',
         proactiveProbe.stripValue === '단기 회전 · 응집 상승',
       );
-      assertOk('agent-canvas-11: 스트립 부제가 신호 건수다', proactiveProbe.stripSub === '신호 2건');
+      assertOk('agent-canvas-11: 스트립 부제가 신호 건수·신선도다', /^신호 2 · /.test(proactiveProbe.stripSub));
       assertOk('agent-canvas-11: 제안 카드 2장이 뜬다', proactiveProbe.cardCount === 2);
       assertOk(
         'agent-canvas-11: 칩이 "루틴으로"·"보류"다',
