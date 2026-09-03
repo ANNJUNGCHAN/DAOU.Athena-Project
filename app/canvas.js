@@ -2347,6 +2347,8 @@ const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
   onRejectProposal: (envelope) => pluginDecide('athena:plugin-reject', envelope),
   // 만료 카드를 지우는 것은 거부가 아니다 — 대기 목록에서만 빼고 채팅에는 알리지 않는다.
   onDismissProposal: (envelope) => { void pluginForgetProposal(envelope); },
+  // 감사 로그는 읽기만 한다 — 실행 경로가 아니라서 승인 카드를 거치지 않는다.
+  onAuditLog: () => pluginAuditLog(),
 });
 pluginCanvas.mount();
 
@@ -2360,6 +2362,16 @@ window.AthenaPluginCanvas = {
     void pluginRestorePending();
   },
 };
+
+// 감사 로그 조회. 실패 원문은 IPC 내부 문구라 화면에 올리지 않는다 — 사람이
+// 읽을 한 줄로 바꿔 던지고, 카드가 그 줄과 '다시 확인'을 함께 보여준다.
+async function pluginAuditLog() {
+  try {
+    return await window.athena.invoke('athena:mcp-audit');
+  } catch {
+    throw new Error('등록 목록을 확인하지 못했습니다');
+  }
+}
 
 function buildGuiProposal(spec, reason) {
   return Array.isArray(spec)

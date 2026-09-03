@@ -16,6 +16,7 @@ const path = require('node:path');
 const appDir = path.join(__dirname, '..');
 const canvasSource = fs.readFileSync(path.join(appDir, 'canvas.js'), 'utf8');
 const chatSource = fs.readFileSync(path.join(appDir, 'chat.js'), 'utf8');
+const settingsSource = fs.readFileSync(path.join(appDir, 'lib', 'settings-cards.js'), 'utf8');
 
 // 플러그인 6동작을 실제로 일으키는 채널들. probe·list는 읽기라 여기 없다.
 const MUTATION_CHANNELS = [
@@ -30,6 +31,15 @@ const MUTATION_CHANNELS = [
 test('canvas.js는 플러그인 변이 채널을 직접 부르지 않는다 — 실행은 승인 하나뿐이다', () => {
   const offenders = MUTATION_CHANNELS.filter((channel) => canvasSource.includes(`'${channel}'`));
   assert.deepEqual(offenders, [], '변이는 athena:plugin-approve를 통해 메인이 실행한다');
+});
+
+// 설정에는 플러그인 표면 자체가 없다(2026-09-03 — 플러그인 모드 관리 뷰가 흡수).
+// 카드가 돌아오면 변이 채널도 같이 돌아온다 — 소스에서 두 가지를 함께 막는다.
+test('settings-cards.js에는 플러그인 카드도 변이 채널도 없다', () => {
+  const offenders = MUTATION_CHANNELS.filter((channel) => settingsSource.includes(`'${channel}'`));
+  assert.deepEqual(offenders, [], '설정은 플러그인을 바꾸지 않는다');
+  assert.ok(!settingsSource.includes("'athena:mcp-list'"), '설정 nav에 플러그인 항목이 남아 있다');
+  assert.ok(!settingsSource.includes('renderMcp'), '설정에 플러그인 카드가 남아 있다');
 });
 
 test('GUI 진입 6종은 onPropose로 합류한다', () => {

@@ -4769,6 +4769,8 @@ ipcMain.handle('athena:mcp-revoke', handleMcpRevoke);
 ipcMain.handle('athena:mcp-probe', handleMcpProbe);
 ipcMain.handle('athena:mcp-allow-tool', handleMcpAllowTool);
 ipcMain.handle('athena:mcp-remove', handleMcpRemove);
+// 감사 로그는 읽기 전용이라 실행 조정자를 거치지 않는다.
+ipcMain.handle('athena:mcp-audit', () => mcpCli.auditLog());
 
 // ---------------------------------------------------------------------------
 // 플러그인 승인 — 실행은 사람이 카드를 누른 이 경로에서만 일어난다.
