@@ -237,6 +237,17 @@ test('renderConfirmBanner — 개수가 있으면 그리고 hidden을 푼다', (
   assert.deepEqual(clicks, ['cta']);
 });
 
+// 배너 CTA는 건수를 넘긴다(2026-09-02) — 받는 쪽이 "확인이 필요한 것 N건"을 그대로
+// 질문에 써야 채팅과 배너가 같은 숫자를 말한다. 인자가 없던 옛 판에서는 canvas.js가
+// 입력창에 포커스만 주고 끝났다(버튼을 눌러도 아무 일이 없다는 제보의 원인).
+test('renderConfirmBanner — CTA 클릭이 건수를 함께 넘긴다', () => {
+  const container = fakeNode('div');
+  const args = [];
+  renderConfirmBanner(container, 3, (n) => args.push(n));
+  container.querySelector('.confirm-banner-cta').dispatchEvent({ type: 'click' });
+  assert.deepEqual(args, [3]);
+});
+
 test('renderConfirmBanner — 0/null/undefined면 배너를 숨긴다("0건"은 모순)', () => {
   for (const hintCount of [0, null, undefined, NaN]) {
     const container = fakeNode('div');

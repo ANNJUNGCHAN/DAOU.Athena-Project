@@ -275,7 +275,9 @@ function renderConfirmBanner(container, hintCount, onCtaClick) {
   const cta = el('button', 'confirm-banner-cta');
   cta.setAttribute('type', 'button');
   cta.textContent = '채팅에서 답하기';
-  if (typeof onCtaClick === 'function') cta.addEventListener('click', onCtaClick);
+  // 건수를 함께 넘긴다(2026-09-02) — 받는 쪽이 "확인이 필요한 것 N건"을 그대로
+  // 질문에 쓸 수 있어야 채팅과 배너가 같은 숫자를 말한다.
+  if (typeof onCtaClick === 'function') cta.addEventListener('click', () => onCtaClick(hintCount));
   container.appendChild(cta);
   return container;
 }

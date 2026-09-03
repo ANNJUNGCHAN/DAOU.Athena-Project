@@ -732,7 +732,7 @@ async function main() {
     await mainMod.createWindows();
     const { shellWin } = mainMod.getWins();
     assert(shellWin && !shellWin.isDestroyed(), 'production shell window was not created');
-    mainMod.revealShell({ focus: true });
+    mainMod.revealShell({ focus: true, force: true });
 
     // The harness owns startup orchestration, so expose the already-loaded real
     // shell without synthesizing a second renderer or bypassing its DOM handlers.

@@ -116,6 +116,17 @@ function fetchFlow({ backendBase, fetchImpl, ...body }) {
   return backtestHttp('POST', '/api/v1/backtest/flow', body, { backendBase, fetchImpl });
 }
 
+// 흐름 지도(2026-09-03) — 폼(yaml)이든 코드(source)든 같은 지도 한 장으로 온다.
+// 이 층은 무엇을 보낼지 고르지 않는다(캔버스가 경로를 안다) — 몸체를 그대로 넘긴다.
+function fetchMap({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/map', body, { backendBase, fetchImpl });
+}
+
+// 지도 뒤에 놓을 코드를 만든다. 저장하지 않는다 — 소스를 돌려줄 뿐이다(§7.3).
+function fetchCodegen({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/codegen', body, { backendBase, fetchImpl });
+}
+
 function diagnoseBacktest({ backendBase, fetchImpl, ...body }) {
   return backtestHttp('POST', '/api/v1/backtest/diagnose', body, { backendBase, fetchImpl });
 }
@@ -150,6 +161,19 @@ function addVersion({ backendBase, fetchImpl, strategy_id, ...body }) {
   );
 }
 
+// 버전 하나를 bundle까지 펼쳐 읽는다(GET .../versions/{version_id}, 2026-09-03 백엔드
+// e52c101). 목록 라우트는 소스만 준다 — 지난 시각 버전을 **다시 열어** 그래프를 보려면
+// graph·spec_yaml·source_map·hashes·compiler_version이 있어야 하고, 없으면 화면은 예전
+// 그래프를 새로 추정할 수밖에 없다(그것은 재현이 아니라 창작이다).
+function fetchVersionDetail({ backendBase, fetchImpl, strategy_id, version_id }) {
+  return backtestHttp(
+    'GET',
+    `/api/v1/backtest/strategies/${encodeURIComponent(strategy_id)}`
+    + `/versions/${encodeURIComponent(version_id)}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
 function activateVersion({ backendBase, fetchImpl, strategy_id, ...body }) {
   return backtestHttp(
     'POST', `/api/v1/backtest/strategies/${encodeURIComponent(strategy_id)}/activate`,
@@ -162,6 +186,90 @@ function fetchVersionDiff({ backendBase, fetchImpl, strategy_id, base, head }) {
   return backtestHttp(
     'GET', `/api/v1/backtest/strategies/${encodeURIComponent(strategy_id)}/diff?${query}`,
     undefined, { backendBase, fetchImpl },
+  );
+}
+
+// ── 2026-09-03 시각 설계 ↔ 코드 왕복 ─────────────────────────────────────────
+// backtest-visual-code-roundtrip-implementation-evaluation.md의 요청 표면이다.
+// 이 층은 아무것도 판정하지 않는다 — patch 가능성, optimistic concurrency,
+// "저장해도 활성화·실행은 안 한다"는 경계는 전부 서버가 진다(§"사용자 적용 이후
+// 서버 처리"). 렌더러는 사람이 누른 것을 그대로 실어 보낼 뿐이다.
+
+function fetchVisualRegistry({ backendBase, fetchImpl }) {
+  return backtestHttp(
+    'GET', '/api/v1/backtest/visual/registry', undefined, { backendBase, fetchImpl },
+  );
+}
+
+function validateVisual({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/visual/validate', body, { backendBase, fetchImpl });
+}
+
+function compileVisual({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/visual/compile', body, { backendBase, fetchImpl });
+}
+
+// 한 번에 질문 하나(§"한 번에 질문 하나") — 무엇을 물을지는 서버가 고른다.
+function visualQuestion({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/visual/question', body, { backendBase, fetchImpl });
+}
+
+// 비활성 patch preview(§"비활성 patch preview") — 만들기만 한다. 화면의 활성
+// graph도, 저장된 버전도, 실행 설정도 이 호출로는 바뀌지 않는다.
+function visualPatch({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/visual/patch', body, { backendBase, fetchImpl });
+}
+
+function visualFromSpec({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/visual/from-spec', body, { backendBase, fetchImpl });
+}
+
+// 저장은 기존 버전 라우트 그대로다 — visual 전용 저장 경로를 새로 만들지 않는다.
+// 그 라우트는 일반 버전 생성 API이고(§"사용자 적용 이후 서버 처리"), is_active=false는
+// 서버가 강제한다. 이름만 나눠 두는 이유는 몸체가 다르기 때문이다 — 여기 오는
+// 몸체에는 사람이 누른 apply_receipt가 실린다.
+function saveVisualVersion(args) {
+  return addVersion(args);
+}
+
+// -- 2026-09-02 사용자 전략 등록부 -- 내 폴더의 .py 하나를 프리셋과 같은 자리에 세운다.
+// 등록은 소스를 복사하지 않는다({project_id, 상대경로, 이름}만 남는다) -- 그래서 이
+// 층에도 소스가 흐르지 않고, 실행은 늘 그때의 파일을 다시 읽는다(백엔드 D2).
+
+function fetchUserStrategies({ backendBase, fetchImpl }) {
+  return backtestHttp(
+    'GET', '/api/v1/backtest/user-strategies', undefined, { backendBase, fetchImpl },
+  );
+}
+
+function registerUserStrategy({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp(
+    'POST', '/api/v1/backtest/user-strategies', body, { backendBase, fetchImpl },
+  );
+}
+
+function unregisterUserStrategy({ backendBase, fetchImpl, strategy_id }) {
+  return backtestHttp(
+    'DELETE', `/api/v1/backtest/user-strategies/${encodeURIComponent(strategy_id)}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+// -- 2026-09-02 프로젝트 가상환경 -- 폴더 안의 .venv 하나가 "내 전략이 도는 환경"이다.
+// POST는 202 + {job_id}이고 진행은 기존 잡 라우트(athena:backtest-status)가 보여준다 --
+// 여기서 폴링용 라우트를 새로 만들지 않는 이유다(잡 표면은 하나뿐이어야 한다).
+
+function fetchProjectEnv({ backendBase, fetchImpl, project_id }) {
+  return backtestHttp(
+    'GET', `/api/v1/projects/${encodeURIComponent(project_id)}/env`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+function createProjectEnv({ backendBase, fetchImpl, project_id, ...body }) {
+  return backtestHttp(
+    'POST', `/api/v1/projects/${encodeURIComponent(project_id)}/env`,
+    body, { backendBase, fetchImpl },
   );
 }
 
@@ -194,6 +302,76 @@ function evaluateDeployment({ backendBase, fetchImpl, deployment_id, ...body }) 
   );
 }
 
+// -- 2026-09-02 프로젝트 파일 API -- 코드 탭이 "내 컴퓨터의 폴더 하나"를 여는 자리 -------
+// 위와 같은 봉투 계약을 그대로 따른다(athena_api/api/projects.py). 이 층은 경로를
+// 검사하지 않는다 -- 프로젝트 밖 탈출·비 .py 거절은 백엔드가 400/415로 판정하고,
+// 여기서 한 번 더 흉내내면 두 판정이 갈라지는 날 화면만 거짓말한다.
+
+function listProjects({ backendBase, fetchImpl }) {
+  return backtestHttp('GET', '/api/v1/projects', undefined, { backendBase, fetchImpl });
+}
+
+function createProject({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/projects', body, { backendBase, fetchImpl });
+}
+
+function openProject({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/projects/open', body, { backendBase, fetchImpl });
+}
+
+// 등록 해제 — 백엔드 등록부에서만 지운다(폴더·파일은 그대로, projects.py DELETE 계약).
+// 사이드바의 '프로젝트 제거'(보드 37)가 부른다.
+function unregisterProject({ backendBase, fetchImpl, project_id }) {
+  return backtestHttp(
+    'DELETE', `/api/v1/projects/${encodeURIComponent(project_id)}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+function fetchProjectTree({ backendBase, fetchImpl, project_id }) {
+  return backtestHttp(
+    'GET', `/api/v1/projects/${encodeURIComponent(project_id)}/tree`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+function readProjectFile({ backendBase, fetchImpl, project_id, path }) {
+  const query = new URLSearchParams({ path: String(path) });
+  return backtestHttp(
+    'GET', `/api/v1/projects/${encodeURIComponent(project_id)}/file?${query}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+function writeProjectFile({ backendBase, fetchImpl, project_id, ...body }) {
+  return backtestHttp(
+    'PUT', `/api/v1/projects/${encodeURIComponent(project_id)}/file`,
+    body, { backendBase, fetchImpl },
+  );
+}
+
+function createProjectFile({ backendBase, fetchImpl, project_id, ...body }) {
+  return backtestHttp(
+    'POST', `/api/v1/projects/${encodeURIComponent(project_id)}/file`,
+    body, { backendBase, fetchImpl },
+  );
+}
+
+function renameProjectFile({ backendBase, fetchImpl, project_id, ...body }) {
+  return backtestHttp(
+    'POST', `/api/v1/projects/${encodeURIComponent(project_id)}/rename`,
+    body, { backendBase, fetchImpl },
+  );
+}
+
+function deleteProjectFile({ backendBase, fetchImpl, project_id, path }) {
+  const query = new URLSearchParams({ path: String(path) });
+  return backtestHttp(
+    'DELETE', `/api/v1/projects/${encodeURIComponent(project_id)}/file?${query}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
 module.exports = {
   backtestHttp,
   fetchPresets,
@@ -207,18 +385,43 @@ module.exports = {
   validateBacktest,
   fetchCoverage,
   fetchFlow,
+  fetchMap,
+  fetchCodegen,
   diagnoseBacktest,
   optimizeBacktest,
   optimizePlan,
   fetchStrategies,
   createStrategy,
   fetchVersions,
+  fetchVersionDetail,
   addVersion,
   activateVersion,
   fetchVersionDiff,
+  fetchVisualRegistry,
+  validateVisual,
+  compileVisual,
+  visualQuestion,
+  visualPatch,
+  visualFromSpec,
+  saveVisualVersion,
   fetchDeployments,
   createDeployment,
   stopDeployment,
   fetchSignals,
   evaluateDeployment,
+  fetchUserStrategies,
+  registerUserStrategy,
+  unregisterUserStrategy,
+  fetchProjectEnv,
+  createProjectEnv,
+  listProjects,
+  createProject,
+  openProject,
+  unregisterProject,
+  fetchProjectTree,
+  readProjectFile,
+  writeProjectFile,
+  createProjectFile,
+  renameProjectFile,
+  deleteProjectFile,
 };

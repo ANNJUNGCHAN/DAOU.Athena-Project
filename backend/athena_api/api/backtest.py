@@ -16,24 +16,39 @@ import difflib
 import hashlib
 import json
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
 import pandas as pd
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
+from pydantic import ValidationError
 
+from athena_api.backtest import codegen as codegen_mod
 from athena_api.backtest import deploy as deploy_mod
 from athena_api.backtest import diagnose as diagnose_mod
 from athena_api.backtest import flow as flow_mod
 from athena_api.backtest import indicators as indicators_mod
+from athena_api.backtest import mapmodel as mapmodel_mod
 from athena_api.backtest import optimize as optimize_mod
 from athena_api.backtest import presets as presets_mod
+from athena_api.backtest import user_strategies as user_strategies_mod
+from athena_api.backtest import visual_schema as visual_mod
+from athena_api.backtest import youtube as youtube_mod
 from athena_api.backtest.data import compute_plan, kiwoom_fetch_page
-from athena_api.backtest.runner import BacktestRunner
-from athena_api.backtest.schema import from_kis_yaml
-from athena_api.backtest.store import BacktestStore, Candle, Coverage
+from athena_api.backtest.runner import BacktestRunner, _align_signals, _run_code_signals
+from athena_api.backtest.sandbox.guard import BLOCKED_TOP_LEVEL_IMPORTS
+from athena_api.backtest.schema import StrategySpec, from_kis_yaml
+from athena_api.backtest.store import (
+    BacktestStore,
+    Candle,
+    Coverage,
+    StrategyVersion,
+    VersionBundle,
+)
 from athena_api.dependencies import KiwoomClientDep
+from athena_api.projects.store import venv_packages, venv_python
 
 router = APIRouter(prefix="/api/v1/backtest", tags=["backtest"])
 
@@ -109,14 +124,33 @@ def _candles_to_frame(candles: tuple[Candle, ...]) -> pd.DataFrame:
     )
 
 
-def _metrics_view(metrics_json: str | None) -> tuple[dict[str, Any] | None, list[str]]:
+def _metrics_view(
+    metrics_json: str | None,
+) -> tuple[dict[str, Any] | None, list[str], list[float]]:
     """저장된 metrics_json에서 사람이 읽는 지표와 정직 표기 flags를 분리한다(engine.py
-    §6.4 "가정" 섹션, runner.py가 costs_flag를 여기 얹어 저장했다)."""
+    §6.4 "가정" 섹션, runner.py가 costs_flag를 여기 얹어 저장했다).
+
+    매수보유 곡선(benchmark)도 같이 떼낸다 — 지표 타일이 읽는 값이 아니라 자산곡선이
+    쓰는 봉 수만큼의 배열이라, 목록 라우트가 실행 수만큼 그걸 실어 나르지 않게 한다."""
     if not metrics_json:
-        return None, []
+        return None, [], []
     payload = json.loads(metrics_json)
     flags = payload.pop("flags", [])
-    return payload, flags
+    benchmark = payload.pop("benchmark", [])
+    return payload, flags, benchmark
+
+
+def _yaml_error_detail(exc: Exception) -> str:
+    """전략 yaml 파싱 실패를 사람이 읽는 한 문장으로 옮긴다.
+
+    pydantic 원본 덤프는 "N validation errors for StrategySpec"과 errors.pydantic.dev
+    링크까지 통째로 실려 온다 — 앱 오류 패널이 그 문장을 그대로 보여줘 사용자가 어느
+    칸을 고쳐야 하는지 알 수 없었다(2026-09-02 실측). 어긋난 필드 이름만 남긴다.
+    """
+    if not isinstance(exc, ValidationError):
+        return f"전략 yaml을 읽지 못했다: {exc}"
+    fields = list(dict.fromkeys(".".join(str(x) for x in err["loc"]) for err in exc.errors()))
+    return f"전략 yaml을 읽지 못했다 — 확인이 필요한 항목: {', '.join(fields)}"
 
 
 # ── 조회 전용 ─────────────────────────────────────────────────────────────────
@@ -254,13 +288,9 @@ async def get_job(request: Request, job_id: str) -> dict[str, Any]:
     job = runner.get(job_id)
     if job is None:
         raise HTTPException(status_code=404, detail="잡이 존재하지 않는다")
-    progress = None
-    if job.progress is not None:
-        progress = {
-            "page": job.progress.page,
-            "rows": job.progress.rows,
-            "oldest_dt": job.progress.oldest_dt,
-        }
+    # 진행의 모양은 잡 종류마다 다르다(백필 page/rows, 환경 구성 step/line) — 각 진행
+    # 객체가 자기 직렬화를 갖고 여기서는 그것을 그대로 싣는다(runner.py `to_dict`).
+    progress = job.progress.to_dict() if job.progress is not None else None
     return {
         "job_id": job.id,
         "kind": job.kind,
@@ -283,11 +313,25 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
     params = body.get("params")
     if params is not None and not isinstance(params, dict):
         raise HTTPException(status_code=422, detail="params는 객체여야 한다")
+    # 코드 경로(§6.2). `yaml`은 여전히 필수다 — data(종목·기간)·costs·risk는 코드가 아니라
+    # 폼이 쥔다. 코드가 대신하는 것은 signals 생성 한 곳뿐이다.
+    source = body.get("source")
+    if source is not None and not isinstance(source, str):
+        raise HTTPException(status_code=422, detail="source는 문자열이어야 한다")
+    code_source = source if source and source.strip() else None
+    # 어느 프로젝트의 코드인가 — 있으면 그 폴더의 가상환경으로 돈다. yaml 경로는 이 값을
+    # 쓰지 않는다(폼 전략에는 사용자 환경이라는 개념이 없다).
+    project_id = body.get("project_id")
+    if project_id is not None and not isinstance(project_id, str):
+        raise HTTPException(status_code=422, detail="project_id는 문자열이어야 한다")
 
+    # 코드 경로에서는 폼의 진입/청산 조건이 읽히지 않는다 — 그 칸이 비었다고 실행을
+    # 막으면 쓰지도 않는 규칙이 코드 전략을 가둔다(2026-09-02 실측). 완화는 조건 개수
+    # 하나뿐이고, data·costs·risk·params는 폼 경로와 똑같이 검증된다.
     try:
-        spec = from_kis_yaml(yaml_text)
-    except Exception as exc:  # noqa: BLE001 — 사용자 입력 검증 결과를 그대로 옮긴다
-        raise HTTPException(status_code=422, detail=str(exc)) from None
+        spec = from_kis_yaml(yaml_text, require_conditions=code_source is None)
+    except Exception as exc:  # noqa: BLE001 — 사용자 입력 검증 실패를 422로 옮긴다
+        raise HTTPException(status_code=422, detail=_yaml_error_detail(exc)) from None
 
     if spec.data is None:
         raise HTTPException(
@@ -334,26 +378,70 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
         else None
     )
 
+    # 프로젝트 가상환경으로 실행한다 — 사용자가 자기 폴더에 깐 패키지를 코드가 실제로
+    # 쓸 수 있어야 "내 전략"이 성립한다. 가상환경이 아직 없으면 막지 않고 기본
+    # 인터프리터로 돈다(pandas/numpy만 쓰는 코드는 그대로 돌아간다).
+    #
+    # 행을 만들기 **전에** 푼다 — 없는 프로젝트로 들어온 요청이 404로 끝날 때, 뒤에서
+    # 풀면 status="running" 실행 행이 이미 남아 있고 아무도 그걸 거두지 않는다(store에
+    # 묵은 실행을 쓸어내는 길이 없다). 이력에 영원히 도는 행이 생긴다.
+    python_exe: str | None = None
+    allowed_imports: list[str] | None = None
+    if code_source and project_id:
+        project_root = _project_root(project_id)
+        if project_root is None:
+            raise HTTPException(status_code=404, detail=f"프로젝트가 존재하지 않는다: {project_id}")
+        interpreter = venv_python(project_root)
+        if interpreter is not None:
+            python_exe = str(interpreter)
+            # 차단목록은 자식(guard.py)이 다시 적용한다 — 여기서 빼는 것은 "애초에 보내지
+            # 않는다"는 두 번째 그물이지 유일한 그물이 아니다.
+            allowed_imports = sorted(
+                set(venv_packages(project_root)) - BLOCKED_TOP_LEVEL_IMPORTS
+            )
+
     now = datetime.now(UTC)
-    # POST /runs는 {yaml, params}만 받는다 — 저장된 전략 CRUD(§6.6의 strategies 라우트군)는
+    # POST /runs는 {yaml, params, source}만 받는다 — 저장된 전략 CRUD(§6.6의 strategies 라우트군)는
     # 이 스코프 밖이다. 그래도 bt_run.strategy_version_id는 FK(NOT NULL)라 매 실행마다
     # 익명 전략+버전 한 쌍을 즉석에서 만든다 — 재현성의 축(store.py 문서)은 지킨다.
     strategy_id = str(uuid4())
     version_id = str(uuid4())
-    await store.create_strategy(strategy_id, spec.metadata.name, "yaml", created_at=now)
+    # 재현성의 축은 저장된 소스다 — 코드 경로면 실제로 돌린 파이썬을 버전으로 남긴다.
+    # yaml만 남기면 나중에 그 실행을 다시 만들 수 없다(store.py 계약).
+    kind = "python" if code_source else "yaml"
+    await store.create_strategy(strategy_id, spec.metadata.name, kind, created_at=now)
     await store.add_version(
-        version_id, strategy_id, 1, yaml_text, origin="form", created_at=now, active=True,
+        version_id, strategy_id, 1, code_source or yaml_text,
+        origin="human" if code_source else "form", created_at=now, active=True,
     )
 
     run_id = str(uuid4())
     params_json = json.dumps(params or {}, ensure_ascii=False)
-    spec_hash = hashlib.sha256(f"{yaml_text}\n{params_json}".encode()).hexdigest()
+    hash_input = (
+        f"{yaml_text}\n{code_source}\n{params_json}"
+        if code_source
+        else f"{yaml_text}\n{params_json}"
+    )
+    spec_hash = hashlib.sha256(hash_input.encode()).hexdigest()
     await store.create_run(
         run_id, version_id, params_json=params_json, spec_hash=spec_hash,
         status="running", started_at=now,
     )
-    runner.start_run(run_id, spec=spec, df=df, overrides=params, extra_flags=partial_flag)
-    return JSONResponse(status_code=202, content={"run_id": run_id, "partial": partial_flag})
+    runner.start_run(
+        run_id, spec=spec, df=df, overrides=params, extra_flags=partial_flag, source=code_source,
+        python_exe=python_exe, allowed_imports=allowed_imports,
+    )
+    # strategy_id·version_id를 같이 돌려준다 — 파일을 한 번 돌린 뒤 곧바로 배포로 넘어가려면
+    # 화면이 "방금 그 실행이 어느 전략 버전이었는가"를 알아야 한다(추측하면 다른 행을 배포한다).
+    return JSONResponse(
+        status_code=202,
+        content={
+            "run_id": run_id,
+            "partial": partial_flag,
+            "strategy_id": strategy_id,
+            "version_id": version_id,
+        },
+    )
 
 
 @router.get("/runs")
@@ -362,7 +450,7 @@ async def list_runs(request: Request) -> dict[str, Any]:
     rows = await store.runs()
     items = []
     for r in rows:
-        metrics, _flags = _metrics_view(r.metrics_json)
+        metrics, _flags, _benchmark = _metrics_view(r.metrics_json)
         items.append(
             {
                 "run_id": r.id,
@@ -382,12 +470,14 @@ async def get_run(request: Request, run_id: str) -> dict[str, Any]:
     if row is None:
         raise HTTPException(status_code=404, detail="실행이 존재하지 않는다")
     equity = await store.equity(run_id)
-    metrics, flags = _metrics_view(row.metrics_json)
+    metrics, flags, benchmark = _metrics_view(row.metrics_json)
     return {
         "run_id": row.id,
         "status": row.status,
         "metrics": metrics,
         "equity": [{"dt": p.dt, "equity": p.equity, "drawdown": p.drawdown} for p in equity],
+        # 자산곡선의 두 번째 선 — equity와 같은 길이·같은 봉이다(보드 03 "전략 vs 매수보유").
+        "benchmark": benchmark,
         "stdout": row.stdout or "",
         "flags": flags,
         "error": row.error,
@@ -444,6 +534,63 @@ async def flow_route(body: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(source, str) or not source.strip():
         raise HTTPException(status_code=422, detail="source는 비어 있지 않은 문자열이어야 한다")
     return flow_mod.to_payload(flow_mod.build_flow(source))
+
+
+@router.post("/map")
+async def map_route(request: Request, body: dict[str, Any]) -> dict[str, Any]:
+    """흐름 지도 — 폼(`yaml`)이든 코드(`source`)든 같은 지도 한 장으로 옮긴다(보드 11~14).
+    실행하지 않는다: 폼은 스펙을 읽고, 코드는 `ast`로만 읽는다.
+
+    `run_id`가 있으면 그 실행이 남긴 값으로 칸 오른쪽의 "사실"을 채운다 — 지도가 숫자를
+    다시 계산하지 않는 이유는 그 순간 사실이 추정이 되기 때문이다(mapmodel.py 머리말).
+    """
+    yaml_text = body.get("yaml")
+    source = body.get("source")
+    has_yaml = isinstance(yaml_text, str) and bool(yaml_text.strip())
+    has_source = isinstance(source, str) and bool(source.strip())
+    if has_yaml == has_source:
+        raise HTTPException(
+            status_code=422, detail="yaml(폼)이나 source(코드) 중 하나만 줘야 한다"
+        )
+    spec: StrategySpec | None = None
+    if has_yaml:
+        try:
+            spec = from_kis_yaml(str(yaml_text))
+        except Exception as exc:  # noqa: BLE001 — 사용자 입력 검증 실패를 422로 옮긴다
+            raise HTTPException(status_code=422, detail=_yaml_error_detail(exc)) from None
+
+    result: dict[str, Any] | None = None
+    run_id = body.get("run_id")
+    if isinstance(run_id, str) and run_id:
+        row = await _store(request).run(run_id)
+        if row is None:
+            raise HTTPException(status_code=404, detail="실행이 존재하지 않는다")
+        result, _flags, _benchmark = _metrics_view(row.metrics_json)
+
+    error = body.get("error") if isinstance(body.get("error"), dict) else None
+    version = body.get("version") if isinstance(body.get("version"), int) else None
+    return mapmodel_mod.build_map(
+        spec=spec,
+        source=str(source) if has_source else None,
+        result=result,
+        error=error,
+        version=version,
+    )
+
+
+@router.post("/codegen")
+async def codegen_route(body: dict[str, Any]) -> dict[str, Any]:
+    """지도(폼 yaml) 뒤에 놓을 전략 코드를 만든다. **저장하지 않는다** — 소스를 돌려줄
+    뿐이고, 버전으로 남기는 것은 사람이 누른 뒤 버전 라우트가 한다(§7.3, /diagnose와 같다)."""
+    yaml_text = body.get("yaml")
+    if not isinstance(yaml_text, str) or not yaml_text.strip():
+        raise HTTPException(status_code=422, detail="yaml은 비어 있지 않은 문자열이어야 한다")
+    try:
+        spec = from_kis_yaml(yaml_text)
+    except Exception as exc:  # noqa: BLE001 — 사용자 입력 검증 실패를 422로 옮긴다
+        raise HTTPException(status_code=422, detail=_yaml_error_detail(exc)) from None
+    source = codegen_mod.spec_to_python(spec)
+    return {"source": source, "lines": len(source.splitlines())}
 
 
 @router.post("/diagnose")
@@ -525,6 +672,256 @@ async def list_versions_route(request: Request, strategy_id: str) -> dict[str, A
     }
 
 
+@router.get("/strategies/{strategy_id}/versions/{version_id}")
+async def get_version_route(
+    request: Request, strategy_id: str, version_id: str
+) -> dict[str, Any]:
+    """버전 하나를 bundle까지 펼쳐 돌려준다.
+
+    목록 라우트는 소스만 준다 — 지난 시각 버전을 **다시 열어** 그래프를 보려면 graph와
+    source map, 그리고 그때의 compiler version이 있어야 한다(재현성). 없으면 화면은
+    "예전 그래프"를 새로 추정할 수밖에 없고, 그건 재현이 아니라 창작이다.
+    """
+    store = _store(request)
+    if await store.strategy(strategy_id) is None:
+        raise HTTPException(status_code=404, detail="전략이 존재하지 않는다")
+    version = await store.version(version_id)
+    if version is None or version.strategy_id != strategy_id:
+        raise HTTPException(status_code=404, detail="그 전략에 속한 버전이 아니다")
+    bundle = version.bundle
+    return {
+        "id": version.id,
+        "version": version.version,
+        "source": version.source,
+        "note": version.note,
+        "origin": version.origin,
+        "created_at": version.created_at,
+        "active": version.active,
+        # `is_active`는 §8 receipt가 쓰는 이름이고 `active`는 기존 목록 라우트가 쓰는
+        # 이름이다 — 같은 값이다. 호출자가 둘 중 무엇을 읽어도 같은 답을 보게 둔다.
+        "is_active": version.active,
+        "graph": None if bundle is None else json.loads(bundle.graph_json),
+        "spec_yaml": None if bundle is None else bundle.spec_yaml,
+        "source_map": None if bundle is None else json.loads(bundle.source_map_json),
+        "hashes": None if bundle is None else json.loads(bundle.hashes_json),
+        "compiler_version": None if bundle is None else bundle.compiler_version,
+        "apply_receipt": (
+            None
+            if bundle is None or bundle.apply_receipt_json is None
+            else json.loads(bundle.apply_receipt_json)
+        ),
+    }
+
+
+# ── 시각 버전 저장 (visual · code_only) ──────────────────────────────────────
+
+# 사람이 patch를 검토하고 눌렀다는 증거. 하나라도 없으면 "그냥 versions API를 불렀다"와
+# 구분되지 않으므로 저장하지 않는다(연구 문서 §사용자 적용 이후 서버 처리).
+_RECEIPT_FIELDS = (
+    "base_version_id",
+    "base_graph_hash",
+    "base_artifact_hash",
+    "patch_id",
+    "patch_hash",
+    "applied_at",
+)
+
+
+def _apply_receipt(body: dict[str, Any]) -> dict[str, str]:
+    raw = body.get("apply_receipt")
+    if not isinstance(raw, dict):
+        raise HTTPException(
+            status_code=422, detail="origin=visual은 apply_receipt가 필요하다(사람의 적용 증거)"
+        )
+    missing = [
+        field
+        for field in _RECEIPT_FIELDS
+        if not isinstance(raw.get(field), str) or not str(raw[field]).strip()
+    ]
+    if missing:
+        raise HTTPException(
+            status_code=422, detail=f"apply_receipt 필수 필드가 없다: {', '.join(missing)}"
+        )
+    return {field: str(raw[field]) for field in _RECEIPT_FIELDS}
+
+
+def _visual_bundle(
+    body: dict[str, Any], source: str, receipt: dict[str, str]
+) -> VersionBundle:
+    """bundle을 검사하고 hash를 **다시 계산**한다 — 클라이언트가 보낸 hash를 믿지 않는다.
+
+    hash를 그대로 저장하면 그래프와 코드가 어긋난 bundle도 "일치한다"고 서명해 준다.
+    재유도한 값과 다르면 저장하지 않는다.
+    """
+    raw = body.get("bundle")
+    if not isinstance(raw, dict):
+        raise HTTPException(status_code=422, detail="origin=visual은 bundle 객체가 필요하다")
+    graph_doc = raw.get("graph")
+    spec_doc = raw.get("spec")
+    spec_yaml = raw.get("spec_yaml")
+    source_map = raw.get("source_map")
+    claimed_compiler = raw.get("compiler_version")
+    claimed = raw.get("hashes")
+    if not isinstance(graph_doc, dict):
+        raise HTTPException(status_code=422, detail="bundle.graph는 객체여야 한다")
+    if not isinstance(spec_doc, dict):
+        raise HTTPException(
+            status_code=422, detail="bundle.spec(정규화 스펙)이 필요하다 — /visual/compile의 spec"
+        )
+    if not isinstance(spec_yaml, str) or not spec_yaml.strip():
+        raise HTTPException(status_code=422, detail="bundle.spec_yaml은 비어 있지 않아야 한다")
+    if not isinstance(source_map, dict):
+        raise HTTPException(status_code=422, detail="bundle.source_map은 객체여야 한다")
+    if not isinstance(claimed, dict):
+        raise HTTPException(status_code=422, detail="bundle.hashes는 객체여야 한다")
+    # compiler version은 생략할 수 있다(서버 것을 쓴다). JSON `null`도 생략과 같게 본다 —
+    # 아직 컴파일 결과가 없는 화면은 그 칸을 null로 직렬화하는 것이 자연스럽고, 거기서
+    # 422를 내면 "안 보내면 되는데 null로 보내서 막히는" 함정이 된다(us011 프로브 실측).
+    # 값을 실제로 보냈다면 서버와 같아야 한다 — 다른 컴파일러가 냈다고 적힌 코드를 이 서버의
+    # hash로 검증해 저장하면 그 표기가 거짓이 된다.
+    compiler_version = (
+        visual_mod.COMPILER_VERSION if claimed_compiler is None else claimed_compiler
+    )
+    if compiler_version != visual_mod.COMPILER_VERSION:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                f"compiler_version이 서버와 다르다: {compiler_version}"
+                f" (서버 {visual_mod.COMPILER_VERSION}) — 다시 컴파일해야 한다"
+            ),
+        )
+    # **파싱한 모델**로 hash를 낸다. 클라이언트가 보낸 원본 dict을 그대로 해시하면 JSON
+    # 왕복만으로 값이 달라진다 — 자바스크립트는 8.0을 8로만 쓸 수 있어서 같은 그래프가
+    # 브라우저를 거치는 순간 다른 hash가 된다(us011 프로브 실측). 모델을 거치면 8과 8.0이
+    # 같은 float으로 정규화돼 그 갈래가 사라진다.
+    try:
+        graph = visual_mod.VisualStrategyGraph.model_validate(graph_doc)
+    except ValidationError as exc:
+        raise HTTPException(
+            status_code=422,
+            detail=f"bundle.graph를 그래프 v1으로 읽을 수 없다: {exc.error_count()}건",
+        ) from None
+    try:
+        spec = StrategySpec.model_validate(spec_doc)
+    except ValidationError as exc:
+        raise HTTPException(
+            status_code=422, detail=f"bundle.spec을 스펙으로 읽을 수 없다: {exc.error_count()}건"
+        ) from None
+    # hash 규칙의 주인은 `visual_schema` 하나다 — /visual/compile이 낸 hash와 저장이
+    # 재유도한 hash가 같은 함수에서 나와야 한다(다르면 자기 출력을 자기가 거부한다).
+    derived = {
+        "graph_hash": visual_mod.graph_hash(graph),
+        "spec_hash": visual_mod.spec_hash(spec),
+        "artifact_hash": visual_mod.source_hash(source),
+    }
+    mismatched = sorted(name for name, value in derived.items() if claimed.get(name) != value)
+    if mismatched:
+        raise HTTPException(
+            status_code=422,
+            detail=f"bundle hash가 본문에서 다시 계산한 값과 다르다: {', '.join(mismatched)}",
+        )
+    return VersionBundle(
+        # 저장도 파싱한 모델을 다시 낸 것으로 한다 — 되읽은 그래프가 저장된 graph_hash를
+        # 그대로 재현해야 "이 코드는 이 그래프에서 나왔다"가 증명 가능하다. `ui`는 남긴다
+        # (해시 대상이 아닐 뿐, 캔버스를 다시 여는 데는 필요하다).
+        graph_json=json.dumps(
+            graph.model_dump(by_alias=True, mode="json"), ensure_ascii=False, sort_keys=True
+        ),
+        spec_yaml=spec_yaml,
+        source_map_json=json.dumps(source_map, ensure_ascii=False, sort_keys=True),
+        hashes_json=json.dumps(derived, ensure_ascii=False, sort_keys=True),
+        compiler_version=compiler_version,
+        apply_receipt_json=json.dumps(receipt, ensure_ascii=False, sort_keys=True),
+    )
+
+
+def _check_base_is_fresh(
+    existing: tuple[StrategyVersion, ...], receipt: dict[str, str]
+) -> None:
+    """optimistic concurrency — patch가 본 base가 아직 이 전략의 머리인지 확인한다.
+
+    409를 내는 이유는 요청이 잘못돼서(422)가 아니라 **그 사이 세상이 바뀌어서**다.
+    화면은 다시 읽어 patch를 새로 만들어야 하며, 그 구분이 사용자에게 보여야 한다.
+    """
+    if not existing:
+        raise HTTPException(status_code=409, detail="base로 삼을 버전이 없다")
+    head = max(existing, key=lambda v: v.version)
+    if receipt["base_version_id"] != head.id:
+        raise HTTPException(
+            status_code=409,
+            detail="base 버전이 최신이 아니다 — 최신 버전을 다시 읽고 patch를 만들어야 한다",
+        )
+    if receipt["base_artifact_hash"] != visual_mod.source_hash(head.source):
+        raise HTTPException(status_code=409, detail="base 코드가 그 사이 바뀌었다")
+    # 그래프 없는 base(사람이 손으로 쓴 첫 버전) 위에 첫 시각 버전을 만드는 길은 막지
+    # 않는다 — 대조할 저장된 그래프가 없을 뿐, 코드 hash는 위에서 이미 대조했다.
+    if head.bundle is not None:
+        stored = json.loads(head.bundle.hashes_json)
+        if receipt["base_graph_hash"] != stored.get("graph_hash"):
+            raise HTTPException(status_code=409, detail="base 그래프가 그 사이 바뀌었다")
+
+
+async def _add_inactive_version(
+    store: BacktestStore,
+    strategy_id: str,
+    body: dict[str, Any],
+    *,
+    source: str,
+    origin: str,
+    existing: tuple[StrategyVersion, ...],
+) -> dict[str, Any]:
+    """`visual`·`code_only` 버전을 **항상 비활성으로** 저장한다.
+
+    저장이 곧 활성화가 아니다 — 활성화는 `/activate`의 사람 클릭이고, 실행은 `/runs`다.
+    클라이언트가 `active: true`를 보내면 조용히 무시하지 않고 거부한다: 무시하면 화면은
+    켜졌다고 믿고 서버는 껐다고 믿는 상태가 남는다.
+    """
+    if body.get("active") is not None and bool(body.get("active")):
+        raise HTTPException(
+            status_code=422,
+            detail=f"origin={origin} 버전은 활성으로 저장할 수 없다 — 활성화는 /activate 전용이다",
+        )
+    receipt: dict[str, str] | None = None
+    bundle: VersionBundle | None = None
+    if origin == "visual":
+        receipt = _apply_receipt(body)
+        _check_base_is_fresh(existing, receipt)
+        bundle = _visual_bundle(body, source, receipt)
+    elif body.get("bundle") is not None:
+        # code-only 분기는 "코드가 그래프로 표현되지 않는다"는 뜻이다 — 여기에 그래프를
+        # 같이 저장하면 동기화됐다고 표시하는 것과 같다(연구 문서 §표현 불가능한 코드 수정).
+        raise HTTPException(
+            status_code=422, detail="origin=code_only 버전은 bundle을 가질 수 없다"
+        )
+    before = await store.active_version_id(strategy_id)
+    next_version = max((v.version for v in existing), default=0) + 1
+    version_id = str(uuid4())
+    await store.add_version(
+        version_id, strategy_id, next_version, source,
+        note=body.get("note"), origin=origin,
+        created_at=datetime.now(UTC), active=False, bundle=bundle,
+    )
+    after = await store.active_version_id(strategy_id)
+    if after != before:
+        # 저장층이 같은 불변식을 이미 지키지만, 뚫렸다면 조용히 200을 돌려주면 안 된다.
+        raise HTTPException(status_code=500, detail="저장 중 활성 버전이 바뀌었다")
+    # 응답은 저장된 값을 **다시 읽어** 만든다 — 보낸 값을 되돌려주면 receipt가 아니다.
+    saved = await store.version(version_id)
+    if saved is None:  # pragma: no cover - 같은 트랜잭션에서 방금 쓴 행이다
+        raise HTTPException(status_code=500, detail="저장된 버전을 다시 읽지 못했다")
+    return {
+        "version_id": saved.id,
+        "version": saved.version,
+        "active": saved.active,
+        "is_active": saved.active,
+        "origin": saved.origin,
+        "active_version_id": after,
+        "hashes": None if saved.bundle is None else json.loads(saved.bundle.hashes_json),
+        "compiler_version": None if saved.bundle is None else saved.bundle.compiler_version,
+        "apply_receipt": receipt,
+    }
+
+
 @router.post("/strategies/{strategy_id}/versions")
 async def add_version_route(
     request: Request, strategy_id: str, body: dict[str, Any]
@@ -533,7 +930,8 @@ async def add_version_route(
 
     `origin`이 `llm_draft`면 **활성화하지 않는다** — 모델이 코드를 바꿔놓고 사람은 옛 코드가
     도는 줄 아는 경로를 원천 차단한다(§7.3). `human`은 즉시 활성이다(사람의 편집은 사람의
-    클릭이다). 이 분기가 이 라우트의 존재 이유다.
+    클릭이다). 이 분기가 이 라우트의 존재 이유다. `visual`·`code_only`는 세 번째 갈래로,
+    저장은 하되 절대 켜지 않는다 — 그 갈래는 `_add_inactive_version()`이 맡는다.
     """
     store = _store(request)
     if await store.strategy(strategy_id) is None:
@@ -542,9 +940,15 @@ async def add_version_route(
     origin = body.get("origin", "human")
     if not isinstance(source, str) or not source.strip():
         raise HTTPException(status_code=422, detail="source는 비어 있지 않은 문자열이어야 한다")
-    if origin not in ("human", "form", "llm_draft"):
-        raise HTTPException(status_code=422, detail="origin은 human|form|llm_draft여야 한다")
+    if origin not in ("human", "form", "llm_draft", "visual", "code_only"):
+        raise HTTPException(
+            status_code=422, detail="origin은 human|form|llm_draft|visual|code_only여야 한다"
+        )
     existing = await store.versions(strategy_id)
+    if origin in ("visual", "code_only"):
+        return await _add_inactive_version(
+            store, strategy_id, body, source=source, origin=origin, existing=existing
+        )
     next_version = max((v.version for v in existing), default=0) + 1
     version_id = str(uuid4())
     await store.add_version(
@@ -865,12 +1269,18 @@ async def evaluate_deployment_route(
     version = await store.version(row.strategy_version_id)
     if version is None:
         raise HTTPException(status_code=404, detail="배포에 묶인 전략 버전을 찾을 수 없다")
+    # 배포에 묶인 소스가 폼(yaml)인지 코드(python)인지는 전략의 kind가 쥔다. 코드 전략을
+    # yaml로 읽으려 들면 파싱 오류 422로 끝나 — 만들 수는 있는데 영원히 판정할 수 없는
+    # 배포가 남는다(2026-09-02 실측). 그 막다른 길을 여기서 없앤다.
+    strategy = await store.strategy(version.strategy_id)
+    spec: StrategySpec | None = None
     try:
         spec = from_kis_yaml(version.source)
     except Exception as exc:  # noqa: BLE001 — 저장된 소스가 yaml이 아닐 수 있다
-        raise HTTPException(
-            status_code=422, detail=f"배포에 묶인 버전을 스펙으로 읽지 못했다: {exc}"
-        ) from None
+        if strategy is None or strategy.kind != "python":
+            raise HTTPException(
+                status_code=422, detail=f"배포에 묶인 버전을 스펙으로 읽지 못했다: {exc}"
+            ) from None
 
     candles = await store.candles(row.stk_cd, row.period, row.adjusted)
     if not candles:
@@ -890,9 +1300,24 @@ async def evaluate_deployment_route(
         limits=deploy_mod.Limits(**limits_raw),
         status=row.status,  # type: ignore[arg-type]
     )
+    signals = None
+    if spec is None:
+        # 코드 전략의 신호는 실행 라우트와 **같은 샌드박스**가 만든다(§6.2) — 여기서 두 번째
+        # 신호 생성 경로를 만들면 배포가 낸 신호와 백테스트가 낸 신호가 갈라진다.
+        # 파라미터 우선순위도 그쪽과 같다: 코드 PARAMS 기본값 < 배포에 저장된 params.
+        outcome = await _run_code_signals(version.source, df, deployment.params or None)
+        if not outcome["ok"]:
+            err = outcome["error"]
+            # 사용자 코드가 터진 사실을 yaml 파싱 오류로 바꿔 말하지 않는다.
+            raise HTTPException(
+                status_code=422, detail=f"{err['type']}: {err['message']}"
+            )
+        signals = _align_signals(outcome["signals_df"], df.index)
+
     today = str(body.get("today") or deploy_mod.today_str())
     decision = deploy_mod.evaluate_latest(
         spec, df, deployment,
+        signals=signals,
         today=today,
         holding=bool(body.get("holding", False)),
         orders_today=int(body.get("orders_today", 0)),
@@ -925,6 +1350,136 @@ async def evaluate_deployment_route(
         "basis": decision.basis,
         "blocked_reason": decision.blocked_reason,
     }
+
+
+# ── 유튜브 브리프 · 사용자 전략 등록부 (결정 D5 · D2·D3) ──────────────────────
+
+
+@router.post("/youtube/brief")
+async def youtube_brief_route(body: dict[str, Any]) -> dict[str, Any]:
+    """영상 주소 하나로 자막(없으면 설명)을 평문 브리프로 돌려준다(결정 D5).
+
+    **여기서 나온 text는 데이터다, 지시가 아니다** — 모델에게 줄 자료일 뿐이라
+    실행 경로로는 가지 않는다(youtube.py 모듈 주석).
+    """
+    url = body.get("url")
+    if not isinstance(url, str) or not url.strip():
+        raise HTTPException(status_code=422, detail="url은 비어 있지 않은 문자열이어야 한다")
+    try:
+        return await youtube_mod.fetch_brief(url)
+    except youtube_mod.BriefError as exc:
+        raise HTTPException(status_code=exc.status, detail=exc.message) from None
+
+
+def _user_strategies(request: Request) -> user_strategies_mod.UserStrategyRegistry:
+    """등록부는 sqlite 옆에 JSON 한 장으로 산다 — 파일이 진실이라(D2) 스키마를 늘릴
+    이유가 없다. 서브시스템 비활성 gate는 `_store`와 같은 규율을 쓴다."""
+    _store(request)
+    path = request.app.state.settings.backtest_db_path.parent / "user-strategies.json"
+    registry = user_strategies_mod.UserStrategyRegistry(path)
+    registry.load()
+    return registry
+
+
+def _project_root(project_id: str) -> Path | None:
+    """프로젝트 폴더 해석은 `athena_api/projects`가 소유한다 — 아직 없을 수 있어서 함수
+    안에서 늦게 import하고, 없으면 503으로 말한다(조용히 빈 결과를 주지 않는다).
+
+    등록되지 않은 프로젝트(KeyError)는 None이다 — 목록은 그걸 exists=false로 보여주고,
+    등록은 404로 거절한다.
+    """
+    try:
+        from athena_api.projects.store import resolve_project_path
+    except ImportError as exc:
+        raise HTTPException(status_code=503, detail="프로젝트 저장소가 아직 없다") from exc
+    try:
+        return Path(resolve_project_path(project_id))
+    except KeyError:
+        return None
+
+
+@router.post("/user-strategies")
+async def register_user_strategy_route(request: Request, body: dict[str, Any]) -> dict[str, Any]:
+    """내 폴더의 .py 하나를 프리셋처럼 고를 수 있게 등록한다(결정 D2·D3).
+
+    소스를 복사하지 않는다 — {project_id, 상대경로}만 남긴다. 파일이 진실이라, 등록한
+    뒤 파일을 고치면 다음 실행이 고친 파일을 읽는다.
+    """
+    registry = _user_strategies(request)
+    project_id = body.get("project_id")
+    raw_path = body.get("path")
+    name = body.get("name")
+    if not isinstance(project_id, str) or not project_id.strip():
+        raise HTTPException(status_code=422, detail="project_id는 비어 있지 않은 문자열이어야 한다")
+    if not isinstance(raw_path, str) or not raw_path.strip():
+        raise HTTPException(status_code=422, detail="path는 비어 있지 않은 문자열이어야 한다")
+    if not isinstance(name, str) or not name.strip():
+        raise HTTPException(status_code=422, detail="name은 비어 있지 않은 문자열이어야 한다")
+    root = _project_root(project_id)
+    if root is None:
+        raise HTTPException(status_code=404, detail=f"프로젝트가 존재하지 않는다: {project_id}")
+    try:
+        rel = user_strategies_mod.relative_python_path(root, raw_path)
+    except user_strategies_mod.UserStrategyError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+    target = root / rel
+    if not target.is_file():
+        raise HTTPException(status_code=422, detail=f"파일이 없다: {rel}")
+    try:
+        source = target.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        raise HTTPException(status_code=422, detail=f"파일을 UTF-8로 읽지 못했다: {rel}") from None
+    # 계약 검사는 POST /validate(kind=python)를 그대로 부른다 — 같은 규칙을 두 번 적어
+    # 두면 언젠가 두 곳이 서로 다른 말을 한다.
+    verdict = await validate_route({"kind": "python", "source": source})
+    if not verdict["ok"]:
+        raise HTTPException(status_code=422, detail=verdict["errors"][0]["message"])
+    entry = registry.add(
+        name=name.strip(),
+        project_id=project_id,
+        path=rel,
+        created_at=datetime.now(UTC).isoformat(),
+    )
+    return entry.to_dict()
+
+
+@router.get("/user-strategies")
+async def list_user_strategies_route(request: Request) -> dict[str, Any]:
+    """`exists`도 `params`도 저장된 값이 아니라 지금 디스크를 본 결과다 — 파일이
+    진실이라(D2) 등록부가 파일을 대신 말하면 안 된다. `params`는 프리셋과 같은 모양의
+    슬라이더를 그리라고 `PARAMS` 기본값을 읽어 주는 것이다."""
+    registry = _user_strategies(request)
+    items: list[dict[str, Any]] = []
+    for entry in registry.list_all():
+        root = _project_root(entry.project_id)
+        target = None if root is None else root / entry.path
+        exists = target is not None and target.is_file()
+        params: dict[str, Any] = {}
+        if exists and target is not None:
+            try:
+                params = dict(flow_mod.params_defaults(target.read_text(encoding="utf-8")))
+            except (OSError, UnicodeDecodeError):
+                params = {}
+        items.append(
+            {
+                "id": entry.id,
+                "name": entry.name,
+                "project_id": entry.project_id,
+                "path": entry.path,
+                "exists": exists,
+                "params": params,
+            }
+        )
+    return {"strategies": items}
+
+
+@router.delete("/user-strategies/{strategy_id}")
+async def unregister_user_strategy_route(request: Request, strategy_id: str) -> dict[str, Any]:
+    """등록만 지운다 — 파일은 사용자 폴더의 것이라 우리가 지울 물건이 아니다(D2)."""
+    registry = _user_strategies(request)
+    if not registry.remove(strategy_id):
+        raise HTTPException(status_code=404, detail="등록된 전략이 아니다")
+    return {"ok": True, "note": "등록만 지웠다 — 파일은 그대로다"}
 
 
 __all__ = ["router"]

@@ -1,5 +1,5 @@
 const MODULE_LOAD_AT = Date.now();
-const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, Notification, nativeTheme, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, Notification, nativeTheme, dialog, shell } = require('electron');
 const { performance } = require('node:perf_hooks');
 const path = require('path');
 const fs = require('fs');
@@ -25,6 +25,8 @@ const { runClaudeQuery } = require('./lib/main/claude-runner');
 const streamJsonParser = require('./lib/main/stream-json-parser');
 const { ensureMcpConfig, createMcpRuntimeSnapshot, canonicalHash } = require('./lib/main/mcp-config');
 const { buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt } = require('./lib/main/live-prompt');
+// 백테스트 설계 턴 접두의 오늘 날짜(YYYYMMDD) — 렌더러와 같은 함수를 쓴다(UMD 각주라 main에서도 안전).
+const { todayYyyymmdd } = require('./lib/backtest-spec');
 // 상주 채팅 세션(2026-08-30 속도 작업) — 매 턴 claude -p 콜드 스폰의 고정비를
 // 세션당 1회로 바꾼다(모듈 상단 주석 참고). 기본 경로는 이쪽이다.
 const { createClaudeChatSession } = require('./lib/main/claude-chat-session');
@@ -92,6 +94,8 @@ const {
   shouldBroadcastConversationGraph,
 } = require('./lib/main/conversation-graph-refresh');
 const conversations = require('./lib/main/conversations');
+const { createSessionStore } = require('./lib/main/session-store');
+const { createSessionBridge } = require('./lib/main/session-bridge');
 const crypto = require('crypto');
 
 // 프로바이더 런타임 스위치 — ATHENA_PERSISTENT_CHAT은 이미 상주 채팅 세션
@@ -257,8 +261,23 @@ function startOrbCursorPoll() {
 // 생겼으니 캔버스를 연다"의 자리를 대신한다 — 캔버스는 늘 떠 있으므로 열 것이
 // 없고, 남는 의미는 **창을 앞으로**뿐이다. focus:false는 REST 직결 경로가 쓴다
 // (3초 예산 안에서 사용자 포커스를 뺏지 않고 표면만 드러낸다).
-function revealShell({ focus = true } = {}) {
+function revealShell({ focus = true, force = false } = {}) {
   if (!shellWin || shellWin.isDestroyed()) return;
+  // 부팅 handoff 전에는 사용자 표면이 bootWin이다(2026-09-02 실측: 두 번째 실행·알림
+  // 클릭·캔버스 피드 등이 이 함수를 타면 부팅 창이 남은 채 셸 창이 하나 더 떴다).
+  // 셸은 attemptShellHandoff()만 연다 — 여기서는 부팅 창만 앞으로 가져온다.
+  // force는 부팅 없이 셸을 바로 쓰는 검증 스크립트(ATHENA_NO_AUTOSTART) 전용이다.
+  if (bootWin && !bootWin.isDestroyed()) {
+    if (!force) {
+      mdlog(`revealShell 보류 — 부팅 handoff 전 (focus=${focus})`);
+      if (focus) { bootWin.focus(); bootWin.moveTop(); }
+      return;
+    }
+    // 런처는 handoff를 안 거치므로 부팅 창을 여기서 걷는다 — 남겨 두면 셸 아래에
+    // 깔려 있다가 셸을 닫거나 숨기는 순간 다시 드러난다(2026-09-02 실측).
+    bootWin.destroy();
+    bootWin = null;
+  }
   if (shellWin.isMinimized()) shellWin.restore();
   if (!shellWin.isVisible()) {
     if (focus) shellWin.show(); else shellWin.showInactive();
@@ -870,6 +889,7 @@ const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownC
     selectorClaudePool.stop(new Error('Athena 앱 종료'));
     if (liveChatSession) liveChatSession.stop(new Error('Athena 앱 종료'));
     conversations.flushSync(); // 예약만 된 사이드바 상태를 마저 저장한다
+    if (sessionBridge) sessionBridge.flushSync(); // 대기 중인 세션 디바운스·저널을 마저 쓴다
   },
   releaseAll: async () => {
     const shutdownRuntime = providerRuntimeController;
@@ -1308,17 +1328,29 @@ ipcMain.handle('athena:backtest-plan', async (_e, body = {}) => {
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 ipcMain.handle('athena:backtest-run', async (_e, body = {}) => {
-  try { return await backtestBridge.runBacktest({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body }); }
+  try {
+    const res = await backtestBridge.runBacktest({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body });
+    attachSessionJob(res, 'run_id', 'backtest.run');
+    return res;
+  }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 // 백필 잡 상태(수집 승인 카드가 진행률을 폴링한다).
 ipcMain.handle('athena:backtest-status', async (_e, { job_id } = {}) => {
-  try { return await backtestBridge.fetchJobStatus({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, job_id }); }
+  try {
+    const res = await backtestBridge.fetchJobStatus({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, job_id });
+    syncSessionJob(job_id, res);
+    return res;
+  }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 // 실행 상태+지표+자산곡선+stdout — running 상태가 1초 간격으로 이 채널을 폴링한다.
 ipcMain.handle('athena:backtest-result', async (_e, { run_id } = {}) => {
-  try { return await backtestBridge.fetchRunResult({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, run_id }); }
+  try {
+    const res = await backtestBridge.fetchRunResult({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, run_id });
+    syncSessionJob(run_id, res);
+    return res;
+  }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 ipcMain.handle('athena:backtest-trades', async (_e, { run_id } = {}) => {
@@ -1332,7 +1364,11 @@ ipcMain.handle('athena:backtest-runs', async () => {
 // 사람 클릭 전용 경로(계획서 §7.6/§9와 같은 원칙) — 쿼터를 태우는 백필은 모델 툴에 없다.
 // 캔버스의 [수집하고 실행] 버튼 클릭에서만 이 IPC를 부른다.
 ipcMain.handle('athena:backtest-backfill', async (_e, body = {}) => {
-  try { return await backtestBridge.backfillBacktest({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body }); }
+  try {
+    const res = await backtestBridge.backfillBacktest({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body });
+    attachSessionJob(res, 'job_id', 'backtest.backfill');
+    return res;
+  }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 
@@ -1344,6 +1380,20 @@ const BACKTEST_EXTRA_CHANNELS = {
   'athena:backtest-validate': backtestBridge.validateBacktest,
   'athena:backtest-coverage': backtestBridge.fetchCoverage,
   'athena:backtest-flow': backtestBridge.fetchFlow,
+  // 흐름 지도(2026-09-03) — 설계의 첫 표면. 폼(yaml)이든 코드(source)든 같은 라우트다.
+  'athena:backtest-map': backtestBridge.fetchMap,
+  // 지도 뒤의 코드 생성 — 저장하지 않는다(소스만 돌려준다, §7.3).
+  'athena:backtest-codegen': backtestBridge.fetchCodegen,
+  // 시각 설계 ↔ 코드 왕복(2026-09-03) — 대화형 오류 수정 계약의 요청 표면이다.
+  // visual-save는 기존 버전 라우트로 간다(새 저장 경로 없음). 저장해도 활성화·실행은
+  // 일어나지 않는다 — 그 경계는 백엔드가 지고, 여기서는 프록시만 한다.
+  'athena:backtest-visual-registry': backtestBridge.fetchVisualRegistry,
+  'athena:backtest-visual-validate': backtestBridge.validateVisual,
+  'athena:backtest-visual-compile': backtestBridge.compileVisual,
+  'athena:backtest-visual-question': backtestBridge.visualQuestion,
+  'athena:backtest-visual-patch': backtestBridge.visualPatch,
+  'athena:backtest-visual-from-spec': backtestBridge.visualFromSpec,
+  'athena:backtest-visual-save': backtestBridge.saveVisualVersion,
   'athena:backtest-diagnose': backtestBridge.diagnoseBacktest,
   'athena:backtest-optimize': backtestBridge.optimizeBacktest,
   'athena:backtest-optimize-plan': backtestBridge.optimizePlan,
@@ -1353,11 +1403,19 @@ const BACKTEST_EXTRA_CHANNELS = {
   'athena:backtest-version-add': backtestBridge.addVersion,
   'athena:backtest-activate': backtestBridge.activateVersion,
   'athena:backtest-version-diff': backtestBridge.fetchVersionDiff,
+  // 버전 하나의 묶음(그래프·소스맵·해시) — 이력에서 지난 시각 버전을 그대로 다시 연다(US-010).
+  'athena:backtest-version-detail': backtestBridge.fetchVersionDetail,
   'athena:backtest-deployments': backtestBridge.fetchDeployments,
   'athena:backtest-deployment-create': backtestBridge.createDeployment,
   'athena:backtest-deployment-stop': backtestBridge.stopDeployment,
   'athena:backtest-signals': backtestBridge.fetchSignals,
   'athena:backtest-evaluate': backtestBridge.evaluateDeployment,
+  // 2026-09-02 사용자 전략 등록부 — 등록·해제는 사람이 누르는 버튼이다(모델의 MCP
+  // 툴에는 register_strategy만 있고 해제는 없다). 소스는 지나가지 않는다 — 등록부에
+  // 남는 것은 {project_id, 상대경로, 이름}뿐이고 실행은 늘 그때의 파일을 다시 읽는다.
+  'athena:backtest-user-strategies': backtestBridge.fetchUserStrategies,
+  'athena:backtest-user-strategy-register': backtestBridge.registerUserStrategy,
+  'athena:backtest-user-strategy-unregister': backtestBridge.unregisterUserStrategy,
 };
 Object.keys(BACKTEST_EXTRA_CHANNELS).forEach((channel) => {
   const call = BACKTEST_EXTRA_CHANNELS[channel];
@@ -1365,6 +1423,97 @@ Object.keys(BACKTEST_EXTRA_CHANNELS).forEach((channel) => {
     try { return await call({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body }); }
     catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
   });
+});
+
+// 프로젝트 파일 API(2026-09-02) — 코드 탭이 "내 컴퓨터의 폴더 하나"를 여는 자리다.
+// 위 백테스트 채널과 같은 프록시 규칙을 쓴다 — 경로 검사는 백엔드가 진다(400/415).
+const PROJECT_CHANNELS = {
+  'athena:project-list': backtestBridge.listProjects,
+  'athena:project-create': backtestBridge.createProject,
+  'athena:project-open': backtestBridge.openProject,
+  'athena:project-tree': backtestBridge.fetchProjectTree,
+  'athena:project-file-read': backtestBridge.readProjectFile,
+  'athena:project-file-write': backtestBridge.writeProjectFile,
+  'athena:project-file-create': backtestBridge.createProjectFile,
+  'athena:project-file-rename': backtestBridge.renameProjectFile,
+  'athena:project-file-delete': backtestBridge.deleteProjectFile,
+  // 가상환경(2026-09-02) — 만드는 것은 돈도 할당량도 지나지 않는 준비 작업이라
+  // 대화가 몰아도 되는 경로다. 진행은 202가 준 job_id를 athena:backtest-status로 본다.
+  'athena:project-env-get': backtestBridge.fetchProjectEnv,
+  'athena:project-env-create': backtestBridge.createProjectEnv,
+};
+Object.keys(PROJECT_CHANNELS).forEach((channel) => {
+  const call = PROJECT_CHANNELS[channel];
+  ipcMain.handle(channel, async (_e, body = {}) => {
+    try { return await call({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body }); }
+    catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+  });
+});
+
+// 폴더는 사람이 고른다 — 렌더러가 경로를 지어내 여는 길은 없다(handlePickFiles와 같은 원칙).
+ipcMain.handle('athena:project-open-dialog', async () => {
+  try {
+    const res = await dialog.showOpenDialog(shellWin, { properties: ['openDirectory'] });
+
+// 사이드바 프로젝트(36·37번 보드) — 프로젝트는 폴더 하나다. 폴더는 대화상자로 사람이
+// 고르고, 백엔드 레지스트리가 등록하며(같은 폴더 두 번 등록은 백엔드가 409로 막는다),
+// 사이드바 레코드는 백엔드 id로 이어진다. 두 목록이 다른 id를 들면 같은 폴더가 두 얼굴이 된다.
+ipcMain.handle('athena:project-add', async () => {
+  let picked = null;
+  try {
+    const res = await dialog.showOpenDialog(shellWin, { properties: ['openDirectory'] });
+    picked = res.canceled ? null : ((res.filePaths || [])[0] || null);
+  } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+  if (!picked) return { ok: true, canceled: true };
+  const taken = conversations.list().projects.find((row) => row.path
+    && path.resolve(row.path).toLowerCase() === path.resolve(picked).toLowerCase());
+  if (taken) return { ok: false, reason: 'folder_taken', project: taken, path: picked };
+  let registered = null;
+  try {
+    const opened = await backtestBridge.openProject({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, path: picked });
+    registered = opened && opened.ok && opened.data && opened.data.project ? opened.data.project : null;
+    if (!registered && opened && !opened.ok) mdlog(`프로젝트 백엔드 등록 실패 — ${String(opened.error || '')}`);
+  } catch (e) { mdlog(`프로젝트 백엔드 등록 실패 — ${String((e && e.message) || e)}`); }
+  // 백엔드가 없어도 폴더는 폴더다 — 사이드바 레코드는 만들고, id는 백엔드 것이 있으면 그것을 쓴다.
+  const added = conversations.addProject({
+    id: registered ? registered.id : undefined,
+    path: registered ? registered.path : picked,
+    label: registered ? registered.name : path.basename(picked),
+  });
+  return { ...added, path: picked, backendRegistered: Boolean(registered) };
+});
+ipcMain.handle('athena:project-pin', (_e, { id, pinned } = {}) => conversations.setProjectPinned(id, Boolean(pinned)));
+ipcMain.handle('athena:project-reveal', async (_e, { id } = {}) => {
+  const project = conversations.projectById(id);
+  if (!project || !project.path) return { ok: false, reason: 'no_path' };
+  const error = await shell.openPath(project.path);
+  return error ? { ok: false, error } : { ok: true, path: project.path };
+});
+// 제거는 폴더 삭제다(37번 보드) — 휴지통을 거치지 않는 영구 삭제라 이름을 그대로 다시
+// 쳐야 한다. 이름이 다르면 아무것도 지우지 않는다. 폴더가 없어도 레코드는 지운다.
+ipcMain.handle('athena:project-remove', async (_e, { id, confirmName } = {}) => {
+  const project = conversations.projectById(id);
+  if (!project) return { ok: false, reason: 'unknown_project' };
+  if (typeof confirmName !== 'string' || confirmName.trim() !== project.label) return { ok: false, reason: 'name_mismatch' };
+  if (project.path) {
+    try { await fs.promises.rm(project.path, { recursive: true, force: true }); }
+    catch (e) { return { ok: false, reason: 'rm_failed', error: String((e && e.message) || e) }; }
+  }
+  if (typeof backtestBridge.unregisterProject === 'function') {
+    try { await backtestBridge.unregisterProject({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, project_id: id }); }
+    catch (e) { mdlog(`프로젝트 백엔드 등록 해제 실패 — ${String((e && e.message) || e)}`); }
+  }
+  const removed = conversations.removeProject(id);
+  if (removed && removed.ok && removed.removed) {
+    const bridge = getSessionBridge();
+    // 세션 본문도 함께 지운다 — 목록에서만 빼고 본문을 남기면 "지우는 주체는 사용자"가 거짓이 된다.
+    if (bridge && bridge.store) for (const conversationId of removed.removed.conversationIds) bridge.store.deleteSession(conversationId);
+  }
+  return removed;
+});
+    const picked = (res.filePaths || [])[0] || null;
+    return { ok: true, data: { canceled: res.canceled || !picked, path: picked } };
+  } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
@@ -2165,6 +2314,131 @@ function maybeForwardNudgeGuardProposal(step, resultBlock) {
   }
 }
 
+const GRAPH_VIEW_TOOL_NAME = 'athena_graph_view';
+
+// 그래프 채팅 액션(2026-09-03) — athena_graph_view의 HTTP 무호출 액션 다섯
+// (graph_view_tools.py의 navigate·select·filter·fit·propose_edit)을 셸 렌더러의
+// 그래프 캔버스로 흘려보낸다. 위 백테스트 함수와 **같은 자리·같은 방식**이다:
+// 도구가 delivered:"canvas" 봉투를 돌려주고, 여기서 그것만 골라 렌더러로 보낸다.
+//
+// 백테스트와 달리 전부 결과(tool_result)에서 읽는다 — 이 도구는 백엔드를 타지 않아
+// 결과가 곧 입력의 정규화판이고, 봉투를 만드는 검증이 이미 백엔드에서 끝났다.
+//
+// propose_edit도 여기로 온다. **그것이 그래프를 고치지 않는다**: 렌더러가 확정 카드를
+// 띄우고, 사람이 누르면 사람의 답변 문장이 평소의 채팅→추출 경로를 탄다
+// (lib/graph-mode/graph-edit-proposal.js 참고). 모델에게는 카드를 누를 길이 없다.
+// orbWin에는 안 보낸다 — 백테스트 액션과 같은 이유(채팅 전용 사람 액션)다.
+function maybeForwardGraphChatAction(step, resultBlock) {
+  if (resultBlock.is_error === true) return;
+  const base = String(step.name || '').split('__').pop();
+  if (base !== GRAPH_VIEW_TOOL_NAME) return;
+  const text = extractToolResultText(resultBlock.content);
+  if (!text) return;
+  let payload;
+  try { payload = JSON.parse(text); } catch { return; }
+  if (!payload || typeof payload !== "object") return;
+  if (payload.delivered !== 'canvas') return;
+  let message = null;
+  if (payload.kind === 'navigate' && typeof payload.surface === 'string') {
+    message = { kind: 'navigate', surface: payload.surface };
+  } else if (payload.kind === 'select' && typeof payload.entity_id === 'string') {
+    message = { kind: 'select', entityId: payload.entity_id };
+  } else if (payload.kind === 'filter' && payload.patch && typeof payload.patch === 'object') {
+    message = { kind: 'filter', patch: payload.patch };
+  } else if (payload.kind === 'fit') {
+    message = { kind: 'fit' };
+  } else if (payload.kind === 'edit_proposal') {
+    message = {
+      kind: 'edit_proposal',
+      op: payload.op,
+      subject: payload.subject == null ? null : payload.subject,
+      object: payload.object,
+      relation: payload.relation,
+      reason: payload.reason == null ? null : payload.reason,
+    };
+  }
+  if (!message) return;
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:graph-chat-action', message);
+  }
+}
+
+const BACKTEST_TOOL_NAME = 'athena_backtest';
+
+// 백테스트 채팅 액션 카드 — athena_backtest의 카드 액션 일곱(backtest_tools.py의
+// propose_spec·propose_code·propose_file·navigate·propose_optimize와 시각 설계 왕복의
+// visual_question·visual_patch)을 셸 렌더러의 백테스트
+// 캔버스로 흘려보낸다. 캔버스는 채팅이 몰지만 폼·편집기에 실제로 들어가는 것은
+// 사용자가 카드의 [적용]을 누른 뒤이고, 실행·검증·탐색 시작은 따로 눌러야 시작된다.
+// orbWin에는 안 보낸다 — 말걸기 가드 카드와 같은 이유(채팅 전용 사람 액션)다.
+// propose_code만 결과가 아니라 호출 입력(step.input.propose_code)에서 읽는다 —
+// strategy_id가 있으면 결과는 버전 저장 응답이라 초안 본문(source)이 안 실린다.
+// 시각 설계 2종(visual_question·visual_patch)만 백엔드를 부른다(/visual/question·
+// /visual/patch) — 그래도 저장·활성화·실행은 없다. 막는 오류가 없으면 봉투의
+// delivered가 null이라 빈 카드도 뜨지 않는다(backtest_tools.py _canvas_envelope).
+// 봉투는 {kind, payload} 모양 그대로 넘긴다 — 카드가 읽는 모양으로 바꾸는 일은
+// 캔버스의 onChatAction이 한다(chat.js 구독 → canvas.onChatAction → 카드 렌더).
+function maybeForwardBacktestChatAction(step, resultBlock) {
+  if (resultBlock.is_error === true) return;
+  const base = String(step.name || '').split('__').pop();
+  if (base !== BACKTEST_TOOL_NAME) return;
+  if (!step.input) return;
+  const action = step.input.action;
+  let message = null;
+  if (action === 'propose_code') {
+    const input = step.input.propose_code;
+    if (!input || typeof input !== 'object') return;
+    const source = input.source;
+    if (typeof source !== 'string' || !source.trim()) return;
+    message = {
+      kind: 'code_draft', source, note: input.note == null ? null : input.note,
+      suggest_run: input.suggest_run === true, suggest_validate: input.suggest_validate === true,
+    };
+  } else if (action === 'propose_file') {
+    // 새 파일은 백엔드에 없으므로 결과가 아니라 호출 입력에서 읽는다(propose_code와 같은 이유).
+    // 캔버스는 이걸로 지금 파일과의 diff만 세운다 — 디스크에 쓰는 건 사람이 [적용]을 누른 뒤다.
+    const input = step.input.propose_file;
+    if (!input || typeof input !== 'object') return;
+    const source = input.source;
+    const filePath = input.path;
+    if (typeof source !== 'string' || !source.trim()) return;
+    if (typeof filePath !== 'string' || !filePath.trim()) return;
+    message = {
+      kind: 'file_draft', project_id: input.project_id, path: filePath, source,
+      note: input.note == null ? null : input.note,
+      suggest_run: input.suggest_run === true,
+    };
+  } else if (action === 'propose_spec' || action === 'navigate' || action === 'propose_optimize'
+    || action === 'visual_question' || action === 'visual_patch') {
+    const text = extractToolResultText(resultBlock.content);
+    if (!text) return;
+    let payload;
+    try { payload = JSON.parse(text); } catch { return; }
+    if (!payload || typeof payload !== 'object' || payload.delivered !== 'canvas') return;
+    const note = payload.note == null ? null : payload.note;
+    if (action === 'propose_spec') {
+      const patch = payload.patch;
+      if (!patch || typeof patch !== 'object' || Array.isArray(patch)) return;
+      message = { kind: 'spec_draft', patch, note, suggest_run: payload.suggest_run === true };
+    } else if (action === 'navigate' && payload.kind === 'navigate') {
+      message = {
+        kind: 'navigate', tab: payload.tab,
+        designTab: payload.designTab == null ? null : payload.designTab,
+      };
+    } else if (action === 'propose_optimize' && payload.kind === 'optimize_request') {
+      message = { kind: 'optimize_request', method: payload.method, note };
+    } else if (action === 'visual_question' && payload.kind === 'visual_question') {
+      message = { kind: 'visual_question', payload: payload.payload };
+    } else if (action === 'visual_patch' && payload.kind === 'visual_patch') {
+      message = { kind: 'visual_patch', payload: payload.payload };
+    }
+  }
+  if (!message) return;
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:backtest-chat-action', message);
+  }
+}
+
 // tool_result.content는 문자열 또는 블록 배열로 온다 — athena_mcp/result.py의
 // success()는 항상 [{type:'text', text: JSON 문자열}] 블록 배열을 준다(문자열
 // 케이스는 방어용, stream-json-parser.js의 normalizeToolResultContent와 같은 이유).
@@ -2190,9 +2464,9 @@ function extractToolResultText(content) {
 //       완료 쪽(tool_result)은 steps에 애초에 없어 자동으로 조용히 무시된다.
 // sendFn(선택)으로 송신 채널을 바꿀 수 있다 — 브리핑 턴(R1)이 라벨 변환·중복
 // 방어는 그대로 쓰되 athena:briefing-tool-step으로만 내보내기 위한 주입 지점.
-// forwardNudgeGuard(선택) — 말걸기 가드 확인 카드는 채팅 전용 사람 액션이라
-// 사용자 턴에서만 전달한다. 브리핑 턴(자동 실행)이 이 카드를 띄우면 사용자
-// 승인 흐름이 자동 턴에서 새어나오는 셈이라 끈다.
+// forwardNudgeGuard(선택) — 말걸기 가드 확인 카드·백테스트 채팅 액션 카드는 채팅
+// 전용 사람 액션이라 사용자 턴에서만 전달한다. 브리핑 턴(자동 실행)이 이 카드를
+// 띄우면 사용자 승인 흐름이 자동 턴에서 새어나오는 셈이라 끈다.
 function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = true } = {}) {
   const steps = new Map(); // tool_use_id -> { label, startedAt, name, input, elapsedMs? }
   return function trackToolStep(event) {
@@ -2227,7 +2501,11 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
             const elapsedMs = Date.now() - step.startedAt;
             step.elapsedMs = elapsedMs; // 재-tool_result(있을 리 없지만) 방어
             sendFn({ id: block.tool_use_id, label: step.label, done: true, elapsedMs, error: !!block.is_error });
-            if (forwardNudgeGuard) maybeForwardNudgeGuardProposal(step, block);
+            if (forwardNudgeGuard) {
+              maybeForwardNudgeGuardProposal(step, block);
+              maybeForwardBacktestChatAction(step, block);
+              maybeForwardGraphChatAction(step, block);
+            }
           }
         }
       }
@@ -2293,6 +2571,123 @@ let liveSessionId = null;
 // assistant 턴은 아래 활성 id 하나를 함께 쓰고, Paper 54의 새 대화 IPC에서만
 // 다음 id로 원자적으로 교체한다.
 let historyActiveConversationId = crypto.randomUUID();
+
+// 세션 저장(35~43번 보드) — 저장 타이밍은 session-bridge가, 저장소는 session-store가
+// 소유한다. 스토어를 못 열면(디스크·권한) null로 두고 턴은 그대로 간다 — 사이드바
+// 메타데이터처럼 세션 저장도 대화 성공의 필요조건은 아니되, 실패는 mdlog에 남긴다.
+let sessionBridge = null;
+function getSessionBridge() {
+  if (sessionBridge !== null) return sessionBridge || null;
+  try {
+    const dbPath = process.env.ATHENA_SESSIONS_DB_PATH
+      || path.join(app.getPath('userData'), 'athena-sessions.sqlite3');
+    sessionBridge = createSessionBridge({
+      store: createSessionStore({ dbPath }),
+      log: (scope, error) => mdlog(`${scope} — ${String((error && error.message) || error)}`),
+      onRunState: ({ sessionId, runState }) => sendSessionRunState(sessionId, runState),
+    });
+  } catch (error) {
+    mdlog(`세션 스토어 열기 실패 — ${String((error && error.message) || error)}`);
+    sessionBridge = false;
+  }
+  return sessionBridge || null;
+}
+
+// ---------- 실행 상태(39번 보드) ----------
+// 세션의 대표 실행 상태가 바뀌면 사이드바로 흘린다 — 행의 스피너·점, 모드 옆 스피너.
+function sendSessionRunState(id, runState) {
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:session-run-state', { id, runState });
+}
+
+// 백테스트 채널 응답에 실행 id가 있으면 지금 기록 대상 대화의 실행으로 붙인다. 렌더러가
+// 어느 대화인지 말하지 않는다 — main의 기록 대상이 곧 그 실행의 주인이다.
+function attachSessionJob(res, idKey, kind) {
+  const id = res && res.ok && res.data && res.data[idKey];
+  if (!id) return;
+  const bridge = getSessionBridge();
+  const sessionId = historyConversationId();
+  if (!bridge || !sessionId) return;
+  ensureSessionRecord(bridge, sessionId);
+  bridge.attachJob({ sessionId, job: { id: String(id), kind, status: 'running' } });
+}
+
+// 폴링 응답의 status로 실행 레코드를 갱신한다(heartbeat 포함). 모르는 id는 그냥 지나간다.
+function syncSessionJob(id, res) {
+  if (!id || !res || !res.ok || !res.data || typeof res.data.status !== 'string') return;
+  const bridge = getSessionBridge();
+  if (!bridge) return;
+  const patch = { status: res.data.status, heartbeatAt: new Date().toISOString() };
+  if (res.data.error) patch.error = String(res.data.error);
+  if (res.data.progress !== undefined) patch.progress = res.data.progress;
+  bridge.updateJob({ jobId: String(id), patch });
+}
+
+// 부팅 때 지난 프로세스가 남긴 running 실행을 정리한다. 답변 턴은 그 프로세스와 함께
+// 죽었으니 바로 interrupted, 백테스트는 백엔드가 따로 살아 있으니 물어보고 맞춘다
+// (Orca의 warm reattach). 백엔드가 아직 안 떴으면 15초 간격으로 세 번 더 묻고 포기한다.
+async function reconcileSessionJobs(attempt = 0) {
+  const bridge = getSessionBridge();
+  if (!bridge) return;
+  let running;
+  try { running = bridge.store.listJobsByStatus('running'); } catch { return; }
+  let unreachable = false;
+  for (const job of running) {
+    if (job.kind === 'chat.turn') { bridge.updateJob({ jobId: job.id, patch: { status: 'interrupted' } }); continue; }
+    const opts = { backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch };
+    const res = job.kind === 'backtest.backfill'
+      ? await backtestBridge.fetchJobStatus({ ...opts, job_id: job.id }).catch(() => null)
+      : await backtestBridge.fetchRunResult({ ...opts, run_id: job.id }).catch(() => null);
+    if (res && res.ok) { syncSessionJob(job.id, res); continue; }
+    if (res && res.status === 404) { bridge.updateJob({ jobId: job.id, patch: { status: 'interrupted' } }); continue; }
+    unreachable = true;
+  }
+  if (!unreachable) return;
+  if (attempt < 3) { setTimeout(() => { reconcileSessionJobs(attempt + 1).catch(() => {}); }, 15_000); return; }
+  try { bridge.store.reconcileStaleJobs({ staleMs: 0 }); } catch { /* 다음 부팅에 다시 */ }
+}
+
+// 사용자 메시지를 세션에 즉시 적는다(명세 4절). 실패하면 턴을 시작하지 않는다 —
+// 조용한 유실 금지. 브리지가 없으면(스토어 열기 실패) 그냥 지나간다.
+function beginSessionTurn(conversationId, text, userMessageId) {
+  const bridge = getSessionBridge();
+  if (!bridge) return null;
+  const listed = conversations.list();
+  const record = listed.conversations.find((row) => row.id === conversationId) || null;
+  try {
+    bridge.ensureSession({
+      id: conversationId,
+      mode: record ? record.mode : listed.activeMode,
+      projectId: record ? record.projectId : listed.currentProjectId,
+      title: text,
+    });
+    bridge.recordUserMessage({ sessionId: conversationId, messageId: userMessageId || crypto.randomUUID(), text });
+  } catch (error) {
+    mdlog(`세션 저장 실패 — 턴을 시작하지 않는다: ${String((error && error.message) || error)}`);
+    return '대화를 세션에 저장하지 못해 질문을 보내지 않았습니다.';
+  }
+  return null;
+}
+
+// 카드·워크스페이스·뷰포트 보고는 첫 턴 전에도 온다(카드가 먼저 도착하는 대화). 세션
+// 행이 없으면 스토어가 조용히 버리므로, 보고를 적기 전에 이력 레코드로 세션을 만들어 둔다.
+function ensureSessionRecord(sessionId) {
+  const bridge = getSessionBridge();
+  if (!bridge || !sessionId) return null;
+  const listed = conversations.list();
+  const record = listed.conversations.find((row) => row.id === sessionId) || null;
+  try {
+    bridge.ensureSession({
+      id: sessionId,
+      mode: record ? record.mode : listed.activeMode,
+      projectId: record ? record.projectId : listed.currentProjectId,
+      title: record ? record.title : '',
+    });
+  } catch (error) {
+    mdlog(`세션 행 만들기 실패 — ${String((error && error.message) || error)}`);
+    return null;
+  }
+  return bridge;
+}
 
 // 디스크 목록은 제목/프로젝트 메타데이터만 보존하고 Claude 세션/메시지 본문은
 // 복원하지 않는다. 따라서 앱 시작 때 이전 activeId를 다시 기록 대상으로 쓰지
@@ -2766,7 +3161,16 @@ const providerConversationRotationQueue = createConversationRotationQueue({
     liveSessionId = null;
     historyActiveConversationId = conversationId;
   },
-  beginConversation: ({ id, projectId }) => conversations.begin({ id, projectId }),
+  beginConversation: ({ id, projectId, mode }) => conversations.begin({ id, projectId, mode }),
+  // 이력 행을 눌러 기존 대화로 돌아갈 때(41번 보드). publishConversationId가 커서를
+  // 비운 뒤에 불리므로, 그 대화에 적어 둔 Claude 커서를 여기서 다시 잇는다 —
+  // 다음 턴이 --resume으로 문맥까지 이어 붙는다. 커서가 없으면 백지에서 시작한다.
+  selectConversation: ({ id }) => {
+    const state = conversations.setActive(id);
+    const record = state.conversations.find((row) => row.id === id) || null;
+    liveSessionId = record && record.resumeSessionId ? record.resumeSessionId : null;
+    return state;
+  },
   rotateProvider: (reason, metadata) => providerRuntimeEnabled
     ? rotatePersistentProviderInner(reason, {
       verifierCorrelationId: metadata.verifierCorrelationId,
@@ -3006,6 +3410,8 @@ async function runLiveQuery(query, expand, origin = 'shell', turnConversationId 
     };
   }
   touchConversationEntry(query, turnConversationId);
+  const sessionTurnError = beginSessionTurn(turnConversationId, query, historyReceipt && historyReceipt.messageId);
+  if (sessionTurnError) return { ok: false, source: 'local', error: sessionTurnError };
   liveQueryBusyDepth += 1;
   if (liveQueryBusyDepth === 1) broadcastLiveQueryBusy(true);
   liveSubmitContexts.set(turnConversationId, submit);
@@ -3021,6 +3427,9 @@ async function runLiveQuery(query, expand, origin = 'shell', turnConversationId 
 // origin — 'shell'(기본, 커맨드바) | 'orb'(오브 대화 모드). onCanvasResult가
 // 오브 기원 엔벌로프만 orbWin에도 추가 relay하는 데 쓴다(board-33③④ 선행).
 async function runLiveQueryInner(query, expand, origin, turnConversationId) {
+  // 답변은 시작 전에 자리표시자(done:false)로 먼저 적는다 — 첫 토큰 전에 죽어도 질문은 남는다.
+  const sessionAssistantId = crypto.randomUUID();
+  { const bridge = getSessionBridge(); if (bridge) bridge.beginAssistant({ sessionId: turnConversationId, messageId: sessionAssistantId }); }
   const queryStartedAt = performance.now();
   const submit = liveSubmitContexts.get(turnConversationId) || {};
   // Selector 단일 dispatch도 새 질의가 선점한다. fetch 구현이 abort를 늦게
@@ -3029,7 +3438,12 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     activeSelectorFastRun.abort(new Error('새 질의가 이전 Selector fast path를 대체했다'));
     activeSelectorFastRun = null;
   }
-  const chartFollowup = chartFollowupTracker.answer(query);
+  // 모드 전용 채팅(백테스트·그래프)은 모델 앞의 빠른 경로 4종(차트 후속·단순 차트·
+  // REST 직결·Selector)을 전부 건너뛴다 — 넷 다 모델을 안 부르고 카드를 밀어, 모드 규율과
+  // 턴 프리픽스(live-prompt.js)가 무력화된다. 그래프 모드는 이유가 하나 더 있다: 그 모드의
+  // 모든 질문은 그래프 질문이라(사용자 확정) 시세 경로가 가로채면 접두가 실릴 기회조차 없다.
+  const backtestMode = submit.canvasMode === 'backtest' || submit.canvasMode === 'graph';
+  const chartFollowup = backtestMode ? null : chartFollowupTracker.answer(query);
   if (chartFollowup) {
     historySink.saveChatMessage(
       { conversationId: turnConversationId, text: chartFollowup.answerText, role: 'assistant' },
@@ -3048,7 +3462,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   chartFollowupTracker.invalidateForQuery(query);
 
-  const simpleChartRoute = await simpleChartFastPath.runSimpleChartFastPath({
+  const simpleChartRoute = backtestMode ? { handled: false } : await simpleChartFastPath.runSimpleChartFastPath({
     query,
     index: stockEntityIndex,
     ensureReady: (timeoutMs) => stockEntityIndexReadiness.ensureReady(timeoutMs),
@@ -3077,7 +3491,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   // 정형 질의 모델 우회 확장(2026-08-26 속도 레버) — 순서는 의미 없다(각자
   // 닫힌 문법이라 서로 안 겹친다, rest-dataset-runner.js 테스트로 고정).
-  const directDataset = restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
+  const directDataset = backtestMode ? null : restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
   }) || restDatasetRunner.buildChartDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
@@ -3109,7 +3523,9 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const selectorController = new AbortController();
   activeSelectorFastRun = selectorController;
   try {
-    const selectorResult = await selectorFastPath.runSelectorFastPath({
+    const selectorResult = backtestMode
+      ? { handled: false, reason: '백테스트 모드 — 모델 경로로 넘긴다' }
+      : await selectorFastPath.runSelectorFastPath({
       question: query,
       backendBase: BACKEND_HTTP_BASE,
       intent: orderDraft ? orderDraft.intent : 'auto',
@@ -3226,7 +3642,10 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
 
   // 빠른 경로 — 캐시된 판정이 있으면 claude -p를 스폰하지 않는다. 카드는
   // 백엔드가 사이드 채널로 밀고(캔버스 먼저), 답변은 결정론 템플릿이다.
-  const cachedJudgment = liveQueryCache.get(query);
+  // 백테스트 설계 모드는 리플레이를 건너뛴다 — 리플레이는 모델을 안 부르고 카드를 밀며
+  // 정형 답을 돌려주므로, "카드를 올리지 않는다"는 모드 규율과 설계 대화가 함께 깨진다
+  // (캐시 키는 원문 query 그대로 둔다).
+  const cachedJudgment = backtestMode ? null : liveQueryCache.get(query);
   if (cachedJudgment) {
     const replay = await fastPath.runCachedReplay({
       judgment: cachedJudgment,
@@ -3280,12 +3699,29 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 판정 캡처(시맨틱 캐시 재료) — tool_use_id로 resolve 결과 토큰과 render 입력
   // 토큰을 상관시킨다. 마지막 입력끼리 우연히 결합하지 않는다.
   const replayTurnCapture = new ReplayTurnCapture();
-  const trackToolStep = createToolStepTracker();
+  // 툴 단계는 이벤트라 저장하고, 텍스트 청크는 저널만 한다(명세 4절).
+  const trackToolStep = createToolStepTracker((step) => {
+    sendLiveToolStep(step);
+    const bridge = getSessionBridge();
+    if (bridge) bridge.recordToolStep({ sessionId: turnConversationId, messageId: sessionAssistantId, step });
+  });
   const trackSubagent = createSubagentTracker();
   const resumeSessionId = liveSessionId;
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 claude CLI 기본값을 쓴다.
   const { model, effort } = modelPrefs.get().claude;
+  // 턴 텍스트는 한 번만 만든다 — chat.js가 제출에 실은 canvasMode·backtestContext를
+  // 그대로 넘기면 백테스트 설계 모드에서만 접두가 붙고(live-prompt.js
+  // buildBacktestModePrefix), 그 외 모드는 문자열 호출과 바이트 동일하다. 캐시 키
+  // (liveQueryCache)는 원문 query 그대로다.
+  const liveTurnInput = {
+    userText: query,
+    canvasMode: submit.canvasMode,
+    backtestContext: submit.backtestContext,
+    graphContext: submit.graphContext,
+    today: todayYyyymmdd(),
+  };
+  const turnPrompt = buildLiveTurnPrompt(liveTurnInput);
   if (providerRuntimeEnabled && currentProviderSelection.disabled) {
     return {
       ...currentProviderSelection.disabled,
@@ -3317,7 +3753,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
           clientSubmitId,
           conversationId: turnConversationId,
           origin,
-          userText: buildLiveTurnPrompt({ userText: query }),
+          userText: turnPrompt,
         },
         expectedRendererId,
         rendererSubmittedAt,
@@ -3348,7 +3784,11 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
     onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); trackSubagent(ev); },
-    onTextDelta: sendLiveTextDelta,
+    onTextDelta: (text, metadata) => {
+      sendLiveTextDelta(text, metadata);
+      const bridge = getSessionBridge();
+      if (bridge) bridge.journalDelta({ sessionId: turnConversationId, messageId: sessionAssistantId, text });
+    },
     onCanvasResult: (r) => {
       const label = r.envelope && (r.envelope.card_title || r.envelope.caption);
       // 실시간 트리거 판정(P1, 2026-08-27) — card_title==='시세' 하나만 보던 옛
@@ -3397,8 +3837,8 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   let result;
   if (persistentChatEnabled()) {
     result = await getLiveChatSession().run({
-      // 규칙은 세션 system prompt로 이미 갔다 — 턴에는 질문만 보낸다.
-      prompt: buildLiveTurnPrompt(query),
+      // 규칙은 세션 system prompt로 이미 갔다 — 턴에는 질문(+백테스트 설계 접두)만 보낸다.
+      prompt: turnPrompt,
       model,
       effort,
       resumeSessionId,
@@ -3408,7 +3848,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     const legacyQueryOperation = runClaudeQuery({
       // 날것 질문을 그대로 넘기면 모델이 조회만 하고 캔버스를 건너뛸 수 있다 —
       // 렌더 지시·스키마 힌트로 감싼다(lib/main/live-prompt.js의 실측 근거 참조).
-      prompt: buildLivePrompt(query),
+      prompt: buildLivePrompt(liveTurnInput),
       cwd: dir,
       configFile,
       resumeSessionId,
@@ -3439,6 +3879,8 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   if (historyConversationId() === turnConversationId
       && result.ok && result.finalResult && result.finalResult.session_id) {
     liveSessionId = result.finalResult.session_id;
+    // 커서는 대화마다 따로 남긴다 — 이력 행을 다시 눌렀을 때 이 값으로 문맥을 잇는다.
+    try { conversations.setResumeCursor({ id: turnConversationId, resumeSessionId: liveSessionId }); } catch { /* 커서 기록 실패는 턴 성공의 필요조건이 아니다 */ }
   } else if (historyConversationId() === turnConversationId
       && !result.ok && resumeSessionId && !result.aborted && !result.timedOut) {
     // 재개 실패 — 세션 파일이 사라졌거나 CLI가 재개를 거부했을 수 있다. 다음
@@ -3453,6 +3895,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       // runLiveQuery로 되돌아가면 사용자 메시지 저장이 한 번 더 돌아 이력이
       // 중복된다 — Inner로 직접 재진입한다. submit은 바깥 runLiveQuery의
       // finally가 아직 안 돌아 liveSubmitContexts에 그대로 살아 있다.
+      { const bridge = getSessionBridge(); if (bridge) bridge.finishAssistant({ sessionId: turnConversationId, messageId: sessionAssistantId, interrupted: true, error: result.error || 'session_retry' }); }
       return runLiveQueryInner(query, expand, origin, turnConversationId);
     }
   }
@@ -3475,6 +3918,19 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const answerText = result.finalResult && typeof result.finalResult.result === 'string'
     ? result.finalResult.result
     : null;
+  {
+    const bridge = getSessionBridge();
+    if (bridge) {
+      bridge.finishAssistant({
+        sessionId: turnConversationId,
+        messageId: sessionAssistantId,
+        text: answerText === null ? undefined : answerText,
+        usage: result.finalResult && result.finalResult.usage ? result.finalResult.usage : null,
+        error: result.ok ? null : String(result.error || ''),
+        interrupted: !result.ok,
+      });
+    }
+  }
 
   // 응답 산출 직후 role:assistant 1건 — null이면 스킵(계획 §2(a)). 여기도
   // fire-and-forget — 반환을 막지 않는다.
@@ -3593,6 +4049,12 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
     clientSubmitId: payload.clientSubmitId,
     rendererSubmittedAt: payload.rendererSubmittedAt,
     expectedRendererId: e.sender.id,
+    // 백테스트 설계 모드 턴 접두 재료(chat.js가 실어 보낸다) — 평범한 데이터만 넘긴다.
+    canvasMode: typeof payload.canvasMode === 'string' ? payload.canvasMode : null,
+    backtestContext: payload.backtestContext && typeof payload.backtestContext === 'object'
+      ? payload.backtestContext : null,
+    graphContext: payload.graphContext && typeof payload.graphContext === 'object'
+      ? payload.graphContext : null,
   });
 });
 
@@ -4082,27 +4544,127 @@ function handleAuthTokenRevoke(e, { id } = {}) {
 }
 
 // 이력 사이드바(리프 1.2.2) — athena:conversations-list -> { activeId, conversations }
-ipcMain.handle('athena:conversations-list', () => conversations.list());
-// 디스크 이력은 제목/프로젝트 메타데이터뿐이라 메시지와 Claude 세션을 복원할 수
-// 없다. 과거 행 클릭은 현재 실행 경계를 바꾸지 않는 조회 전용이다. 복원 배선이
-// 생기기 전까지 선택만 바꿔 새 메시지를 과거 제목 아래에 쓰면 안 된다.
-ipcMain.handle('athena:conversations-set-active', (e, { id } = {}) => {
-  const state = conversations.list();
+ipcMain.handle('athena:conversations-list', () => {
+  const listed = conversations.list();
+  const bridge = getSessionBridge();
+  const states = bridge ? bridge.runStates() : {};
   return {
-    ...state,
-    activeId: historyActiveConversationId,
-    requestedId: typeof id === 'string' ? id : null,
-    restorable: false,
+    ...listed,
+    conversations: listed.conversations.map((row) => ({ ...row, runState: states[row.id] || null })),
   };
+});
+// 세션 스냅샷(메시지·카드·워크스페이스·뷰포트) — 이력 행을 다시 눌렀을 때 화면을
+// 되살리는 원본. 스토어에 없으면 null이고, 렌더러는 브레인 이력 조회로 폴백한다.
+ipcMain.handle('athena:session-load', (_e, payload = {}) => {
+  const id = payload && typeof payload.id === 'string' ? payload.id : '';
+  const bridge = getSessionBridge();
+  if (!id || !bridge) return null;
+  return bridge.load(id);
+});
+// 렌더러가 보고하는 작업 환경(캔버스 카드 스택·모드 워크스페이스·뷰포트). 렌더러 DOM은
+// 투영이고 쓰기 주체는 main이다 — 브리지가 디바운스해 스토어에 적는다.
+// 렌더러는 세션 id를 모른다 — 기록 대상의 진실은 main의 historyConversationId()다.
+ipcMain.on('athena:session-cards', (_e, payload = {}) => {
+  const bridge = ensureSessionRecord(historyConversationId());
+  if (bridge && payload) bridge.saveCards({ sessionId: historyConversationId(), cards: payload.cards });
+});
+// 렌더러는 바뀐 조각(patch)만 보낸다 — 모드마다 다른 컨트롤러가 자기 조각만 알기 때문이다.
+// 병합과 kind(=그 대화의 모드) 도장은 여기서 한다. 통째로 온 workspace도 받는다(옛 계약).
+const sessionWorkspaceCache = new Map();
+ipcMain.on('athena:session-workspace', (_e, payload = {}) => {
+  const sessionId = historyConversationId();
+  const bridge = ensureSessionRecord(sessionId);
+  if (!bridge || !payload) return;
+  let base = sessionWorkspaceCache.get(sessionId);
+  if (!base) {
+    const stored = bridge.load(sessionId);
+    base = stored && stored.workspace && typeof stored.workspace === 'object' ? stored.workspace : {};
+  }
+  const patch = payload.patch && typeof payload.patch === 'object' ? payload.patch
+    : (payload.workspace && typeof payload.workspace === 'object' ? payload.workspace : {});
+  const listed = conversations.list();
+  const record = listed.conversations.find((row) => row.id === sessionId) || null;
+  const merged = { ...base, ...patch, kind: record ? record.mode : listed.activeMode };
+  sessionWorkspaceCache.set(sessionId, merged);
+  bridge.saveWorkspace({ sessionId, workspace: merged });
+});
+ipcMain.on('athena:session-viewport', (_e, payload = {}) => {
+  const bridge = ensureSessionRecord(historyConversationId());
+  if (bridge && payload) bridge.saveViewport({ sessionId: historyConversationId(), viewport: payload.viewport });
+});
+// 복원 — 저장된 카드 봉투를 같은 페인트 채널로 다시 흘린다(별도 렌더러 없음, 42번 보드).
+// 렌더러가 캔버스를 비운 뒤에 부르므로 순서가 어긋나지 않는다. 다시 그려진 카드는
+// 렌더러가 다시 보고하고, 같은 스택이 그대로 저장된다.
+ipcMain.handle('athena:session-replay-cards', (_e, payload = {}) => {
+  const id = payload && typeof payload.id === 'string' ? payload.id : '';
+  const bridge = getSessionBridge();
+  if (!id || !bridge || !shellWin || shellWin.isDestroyed()) return { replayed: 0 };
+  const snapshot = bridge.load(id);
+  const cards = snapshot && Array.isArray(snapshot.canvasCards) ? snapshot.canvasCards : [];
+  let replayed = 0;
+  for (const card of cards) {
+    if (!card || !card.envelope) continue;
+    if (card.channel === 'fixture') {
+      shellWin.webContents.send('athena:add-canvas', { type: card.envelope.type || card.kind, sessionCardId: card.cardId });
+    } else {
+      shellWin.webContents.send('athena:add-canvas-live', { status: 'success', envelope: card.envelope, sessionCardId: card.cardId });
+    }
+    replayed += 1;
+  }
+  return { replayed };
+});
+// 과거 대화 열기(2026-09-02 사용자 지적 "대화 이력을 누르면 그 대화로 이동해야 한다").
+//
+// 기존 athena:brain-history-query를 재사용할 수 없다 — 그쪽은 (a) 대화가 현재 것으로
+// 고정돼 있고 (b) 결과를 캔버스 카드(테이블 엔벨로프)로 밀어 넣는다. 여기는 채팅
+// 화면에 과거 대화를 펼치는 것이라 목적이 다르다.
+//
+// **읽기 전용이다.** 메시지는 브레인 이력 DB에 conversation_id와 함께 남아 있어
+// 되읽을 수 있지만, Claude 세션은 복원하지 않는다 — 이어서 말할 수 있는 척하면
+// 새 메시지가 과거 제목 아래 섞인다(아래 conversations-set-active 주석과 같은 이유).
+ipcMain.handle('athena:conversation-messages', async (_e, payload = {}) => {
+  const id = payload && typeof payload.conversationId === 'string' ? payload.conversationId : '';
+  if (!id) return { ok: false, error: '대화 id가 없다' };
+  const asked = payload && Number(payload.limit);
+  const limit = Number.isFinite(asked) ? Math.max(1, Math.min(500, Math.trunc(asked))) : 200;
+  const result = await fetchBrainJson('/api/v1/brain/chats', {
+    params: { conversation_id: id, limit },
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  const messages = ((result.body && result.body.messages) || []).map((m) => ({
+    role: m.role, text: m.text, occurredAt: m.occurred_at,
+  }));
+  return { ok: true, conversationId: id, isCurrent: id === historyConversationId(), messages };
+});
+// 이력 행을 누르면 그 대화로 실제로 돌아간다(41번 보드 "다시 누르면 그대로").
+// 기록 대상 id와 Claude 커서(--resume)가 함께 바뀌므로, 새 대화 만들기와 같은
+// 직렬화 큐(switchTo) 안에서만 바꾼다 — 진행 중 턴을 먼저 끊고, 프로바이더를
+// 돌린 뒤, 고른 id를 발행한다. 큐 밖에서 historyActiveConversationId를 만지면
+// 새 메시지가 엉뚱한 제목 아래 섞인다(main-conversation-boundary.test.js).
+ipcMain.handle('athena:conversations-set-active', async (e, { id, verifierCorrelationId } = {}) => {
+  const requestedId = typeof id === 'string' && id.trim() ? id.trim() : null;
+  const listed = conversations.list();
+  const known = requestedId && listed.conversations.some((row) => row.id === requestedId);
+  if (!known) {
+    return { ...listed, activeId: historyActiveConversationId, requestedId, restorable: false };
+  }
+  if (requestedId === historyActiveConversationId) {
+    return { ...listed, activeId: historyActiveConversationId, requestedId, restorable: true, isCurrent: true };
+  }
+  if (verifierCorrelationId !== undefined) {
+    providerVerifierTelemetry.authorizeRotation(verifierCorrelationId);
+  }
+  const state = await providerConversationRotationQueue.switchTo({ id: requestedId, verifierCorrelationId });
+  return { ...state, requestedId, restorable: true, isCurrent: false, resumed: Boolean(liveSessionId) };
 });
 // Paper 54: 빈 대화는 첫 입력 전에는 목록에 만들지 않는다. 캔버스 mode는
 // renderer가 그대로 보존하고, main은 새 기록 id와 프로젝트 소속만 원자적으로
 // 바꾼다.
-ipcMain.handle('athena:conversations-new', async (e, { projectId, verifierCorrelationId } = {}) => {
+ipcMain.handle('athena:conversations-new', async (e, { projectId, mode, verifierCorrelationId } = {}) => {
   if (verifierCorrelationId !== undefined) {
     providerVerifierTelemetry.authorizeRotation(verifierCorrelationId);
   }
-  return providerConversationRotationQueue.begin({ projectId, verifierCorrelationId });
+  return providerConversationRotationQueue.begin({ projectId, mode, verifierCorrelationId });
 });
 
 ipcMain.handle('athena:account-list', handleAccountList);
@@ -4696,6 +5258,7 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
       mdlog(`대화 이력 SQLite 준비 실패 — ${String((error && error.message) || error)}`);
     }
     const createWindowsPromise = createWindows();
+    reconcileSessionJobs().catch((error) => mdlog(`실행 정리 실패 — ${String((error && error.message) || error)}`));
     if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') startBootReadinessForVerify();
     else void startLiveBoot(createWindowsPromise);
   });
@@ -4734,6 +5297,8 @@ module.exports = {
   // 불변 단언용 게터. 프로덕션 경로는 아무도 부르지 않는다.
   setBriefingClaudeRunnerForVerify,
   getLiveSessionId: () => liveSessionId,
+  getSessionBridge,
+  reconcileSessionJobs,
   getBriefingBusyDepth: () => briefingBusyDepth,
   // 셸 창을 앞으로 — verify.js가 트레이 복귀·카드 푸시 경로를 검증할 때 쓴다.
   revealShell,

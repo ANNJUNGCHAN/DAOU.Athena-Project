@@ -134,29 +134,47 @@ function referenceNames(spec) {
   return aliases.concat(['open', 'high', 'low', 'close', 'volume']);
 }
 
-function validate(spec) {
+// 조건이 참조하는 이름이 아는 이름인가. 다중 출력 지표(DONCHIAN → dc_upper·dc_lower·
+// dc_mid, BBANDS → bb_upper…)는 `별칭_출력` 열을 낸다 — 백엔드 compile.py가 그렇게
+// 붙이고 프리셋(52주 신고가 돌파)도 그 이름을 쓴다. 화면은 출력 목록을 모르므로
+// "아는 별칭_무엇"이면 통과시키고 정확한 판정은 백엔드(422)에 맡긴다(2026-09-02 실측:
+// 이 규칙이 없어 52주 신고가 돌파가 폼에서 영영 실행되지 않았다).
+function isKnownName(name, spec) {
+  if (typeof name !== 'string') return false;
+  if (referenceNames(spec).indexOf(name) !== -1) return true;
+  return spec.indicators.some((i) => i.alias && name.startsWith(`${i.alias}_`));
+}
+
+// options.conditions === false 면 진입·청산 조건 검사를 건너뛴다 — 코드 경로(runPath
+// 'code')는 신호를 파이썬이 만들므로 폼의 조건은 실행과 무관하다.
+function validate(spec, options) {
+  const checkConditions = !(options && options.conditions === false);
   const errors = [];
   if (!spec.symbols.length) errors.push('종목을 하나 이상 고르세요');
+  // 백엔드 POST /runs는 종목 1개만 받는다(§2 실행당 대상 지정) — 실행 후 422로 알기 전에
+  // 폼과 채팅이 먼저 알아야 한다(2026-09-02 실측: 채팅이 종목 둘을 넣어 실행이 거부됐다).
+  if (spec.symbols.length > 1) errors.push('실행은 종목 1개만 지원합니다 — 하나만 남기세요');
   if (spec.symbols.some((s) => !isValidStkCd(s))) errors.push('종목코드는 6자리 숫자여야 합니다');
   if (!isValidYyyymmdd(spec.fromDt) || !isValidYyyymmdd(spec.toDt)) {
     errors.push('시작일·종료일은 YYYYMMDD 형식이어야 합니다');
   } else if (String(spec.fromDt) > String(spec.toDt)) {
     errors.push('종료일은 시작일보다 빠를 수 없습니다');
   }
-  if (!spec.entry.conditions.length) errors.push('진입 조건이 하나도 없습니다');
-  if (!spec.exit.conditions.length) errors.push('청산 조건이 하나도 없습니다');
-  const known = referenceNames(spec);
-  ['entry', 'exit'].forEach((side) => {
-    spec[side].conditions.forEach((c) => {
-      if (known.indexOf(c.indicator) === -1) {
-        errors.push(`${c.indicator}는 정의되지 않은 이름입니다`);
-      }
-      // compare_to는 숫자이거나 아는 이름이어야 한다 — 오타를 실행 전에 잡는다.
-      if (typeof c.compare_to === 'string' && known.indexOf(c.compare_to) === -1) {
-        errors.push(`${c.compare_to}는 정의되지 않은 이름입니다`);
-      }
+  if (checkConditions) {
+    if (!spec.entry.conditions.length) errors.push('진입 조건이 하나도 없습니다');
+    if (!spec.exit.conditions.length) errors.push('청산 조건이 하나도 없습니다');
+    ['entry', 'exit'].forEach((side) => {
+      spec[side].conditions.forEach((c) => {
+        if (!isKnownName(c.indicator, spec)) {
+          errors.push(`${c.indicator}는 정의되지 않은 이름입니다`);
+        }
+        // compare_to는 숫자이거나 아는 이름이어야 한다 — 오타를 실행 전에 잡는다.
+        if (typeof c.compare_to === 'string' && !isKnownName(c.compare_to, spec)) {
+          errors.push(`${c.compare_to}는 정의되지 않은 이름입니다`);
+        }
+      });
     });
-  });
+  }
   [['stop_loss', '손절'], ['take_profit', '익절']].forEach(([key, label]) => {
     const toggle = spec.risk[key];
     if (toggle && toggle.enabled && !(Number(toggle.percent) > 0)) {
@@ -164,6 +182,119 @@ function validate(spec) {
     }
   });
   return errors;
+}
+
+// ---------- 초안(채팅 제안) ----------
+
+// 채팅이 propose_spec으로 낸 patch를 스펙에 얹는다. 실행·저장은 하지 않고 **새 스펙만**
+// 돌려준다 — 사람이 카드의 [적용]을 누르기 전까지 폼은 그대로다. 'preset' 키는 여기서
+// 다루지 않는다: 프리셋 목록은 캔버스가 들고 있으므로 템플릿 전환은 캔버스 몫이다.
+// 잘못된 값은 조용히 떨어뜨린다 — 남은 문제는 validate()가 사람에게 알린다.
+function applyPatch(spec, patch) {
+  if (!patch || typeof patch !== 'object' || Array.isArray(patch)) return spec;
+  let next = spec;
+  if (Array.isArray(patch.symbols)) {
+    const symbols = [];
+    patch.symbols.forEach((s) => {
+      const code = String(s == null ? '' : s).trim();
+      if (isValidStkCd(code) && symbols.indexOf(code) === -1) symbols.push(code);
+    });
+    next = Object.assign({}, next, { symbols });
+  }
+  if (PERIODS.some(([id]) => id === patch.period)) {
+    next = Object.assign({}, next, { period: patch.period });
+  }
+  if (typeof patch.adjusted === 'boolean') next = Object.assign({}, next, { adjusted: patch.adjusted });
+  if (typeof patch.fromDt === 'string') next = Object.assign({}, next, { fromDt: patch.fromDt });
+  if (typeof patch.toDt === 'string') next = Object.assign({}, next, { toDt: patch.toDt });
+  if (patch.params && typeof patch.params === 'object') {
+    Object.keys(patch.params).forEach((name) => {
+      next = setParam(next, name, patch.params[name]);
+    });
+  }
+  if (Array.isArray(patch.indicators)) {
+    const indicators = patch.indicators
+      .filter((i) => i && typeof i.id === 'string' && typeof i.alias === 'string')
+      .map((i) => ({
+        id: i.id,
+        alias: i.alias,
+        params: i.params && typeof i.params === 'object' ? JSON.parse(JSON.stringify(i.params)) : {},
+      }));
+    next = Object.assign({}, next, { indicators });
+  }
+  ['entry', 'exit'].forEach((side) => {
+    const group = patch[side];
+    if (!group || typeof group !== 'object' || !Array.isArray(group.conditions)) return;
+    const logic = group.logic === 'AND' || group.logic === 'OR' ? group.logic : next[side].logic;
+    const conditions = group.conditions
+      .filter((c) => c
+        && typeof c.indicator === 'string'
+        && OPERATORS.some(([id]) => id === c.operator)
+        && (typeof c.compare_to === 'string' || typeof c.compare_to === 'number'))
+      .map((c) => ({
+        indicator: c.indicator,
+        operator: c.operator,
+        // 스키마가 compare_to를 문자열로도 받으므로 숫자 문자열('30')은 폼의 조건 추가와
+        // 같은 규칙으로 숫자로 바꾼다 — 안 그러면 validate가 이름 참조로 보고 초안을 막는다.
+        compare_to: typeof c.compare_to === 'string' && /^-?\d+(\.\d+)?$/.test(c.compare_to)
+          ? Number(c.compare_to)
+          : c.compare_to,
+      }));
+    next = Object.assign({}, next, { [side]: { logic, conditions } });
+  });
+  if (patch.risk && typeof patch.risk === 'object') {
+    const risk = JSON.parse(JSON.stringify(next.risk));
+    ['stop_loss', 'take_profit'].forEach((key) => {
+      const toggle = patch.risk[key];
+      if (!toggle || typeof toggle !== 'object') return;
+      risk[key] = Object.assign({}, risk[key]);
+      if (typeof toggle.enabled === 'boolean') risk[key].enabled = toggle.enabled;
+      if (Number.isFinite(toggle.percent)) risk[key].percent = toggle.percent;
+    });
+    next = Object.assign({}, next, { risk });
+  }
+  if (patch.costs && typeof patch.costs === 'object') {
+    const costs = Object.assign({}, next.costs);
+    ['fee_bps', 'tax_bps', 'slippage_bps'].forEach((key) => {
+      if (Number.isFinite(patch.costs[key])) costs[key] = patch.costs[key];
+    });
+    next = Object.assign({}, next, { costs });
+  }
+  return next;
+}
+
+// 초안 카드가 "전 → 후"를 그릴 순서와 라벨. 폼 위에서 아래로 읽히는 순서와 같다.
+const DIFF_FIELDS = [
+  ['name', '전략'],
+  ['symbols', '종목'],
+  ['period', '주기'],
+  ['adjusted', '수정주가'],
+  ['fromDt', '시작일'],
+  ['toDt', '종료일'],
+  ['params', '파라미터'],
+  ['indicators', '지표'],
+  ['entry', '진입 조건'],
+  ['exit', '청산 조건'],
+  ['risk', '리스크'],
+  ['costs', '비용'],
+];
+
+function paramDefaults(params) {
+  const out = {};
+  Object.keys(params || {}).forEach((name) => { out[name] = params[name].default; });
+  return out;
+}
+
+// 두 스펙에서 달라진 필드만 DIFF_FIELDS 순서로 돌려준다. before/after는 가공하지 않은
+// 값이다(표시는 캔버스가 한다). params만은 default 값만 비교한다 — min/max/step은
+// 프리셋이 정한 범위라 초안이 바꾸지 않고, 그걸 차이로 보이면 사람이 헷갈린다.
+function diffFields(before, after) {
+  return DIFF_FIELDS.reduce((acc, [key, label]) => {
+    const a = key === 'params' ? paramDefaults(before.params) : before[key];
+    const b = key === 'params' ? paramDefaults(after.params) : after[key];
+    if (JSON.stringify(a) !== JSON.stringify(b)) acc.push({ key, label, before: a, after: b });
+    return acc;
+  }, []);
 }
 
 // ---------- 직렬화 ----------
@@ -202,6 +333,12 @@ function serializeIndicators(indicators) {
 }
 
 function serializeGroup(name, group) {
+  // 조건이 없으면 `conditions:`(값 없음)는 yaml에서 리스트가 아니라 **널**이다 —
+  // 백엔드가 "리스트여야 한다"로 거절해, 신호를 파이썬이 만드는 코드 실행까지 막혔다
+  // (2026-09-02 전수 프로브 E16 실측). 빈 목록은 빈 목록으로 적는다.
+  if (!group.conditions.length) {
+    return [`  ${name}:`, `    logic: ${group.logic}`, '    conditions: []'].join('\n');
+  }
   const lines = [`  ${name}:`, `    logic: ${group.logic}`, '    conditions:'];
   group.conditions.forEach((c) => {
     const compare = typeof c.compare_to === 'number' ? c.compare_to : c.compare_to;
@@ -347,6 +484,8 @@ const __exports = {
   setLogic,
   referenceNames,
   validate,
+  applyPatch,
+  diffFields,
   toYaml,
   parsePresetYaml,
   presetToSpec,

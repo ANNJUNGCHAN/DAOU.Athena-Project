@@ -192,6 +192,122 @@ async function main() {
     deploy,
   );
 
+  // ---------- (9) 채팅 액션이 폼에 **바로** 반영되고, 채팅에 변경 내역이 남는다 ----------
+  // 5단계 계약: 캔버스 초안 카드는 없어졌다. 액션이 오면 폼이 즉시 바뀌고, 무엇이 바뀌었는지와
+  // [되돌리기]는 채팅 카드에 남는다. 여기서는 그 두 쪽이 같은 한 번의 send로 함께 움직이는지를 본다.
+  const fastBefore = await js(shellWin, `(() => {
+    document.querySelectorAll('#backtestCanvas .backtest-tab')[0].click();
+    const s = document.querySelector('#backtestCanvas .backtest-param-slider[aria-label="fast 값"]');
+    return s ? s.value : null;
+  })()`);
+  shellWin.webContents.send('athena:backtest-chat-action', {
+    kind: 'spec_draft', patch: { params: { fast: 10 } }, note: '테스트', suggest_run: false,
+  });
+  const chatApplied = await until(shellWin, `(() => {
+    const s = document.querySelector('#backtestCanvas .backtest-param-slider[aria-label="fast 값"]');
+    const cards = document.querySelectorAll('#history .backtest-change');
+    if (!s || !cards.length) return null;
+    if (s.value !== '10') return null;
+    const card = cards[cards.length - 1];
+    return {
+      fast: s.value,
+      head: card.textContent.includes('설정 반영'),
+      applied: card.textContent.includes('반영됨'),
+      rows: Array.from(card.querySelectorAll('.backtest-change-row')).map((r) => r.textContent),
+    };
+  })()`, 10000);
+  record(
+    '09-채팅 설정 액션이 폼에 바로 반영되고 채팅에 변경 내역이 남는다',
+    !!chatApplied && chatApplied.fast === '10' && chatApplied.head === true
+      && chatApplied.applied === true && chatApplied.rows.some((t) => t.includes('fast')),
+    { fastBefore, card: chatApplied },
+  );
+
+  // ---------- (10) 그 카드의 [되돌리기]가 실제로 폼을 되돌린다 ----------
+  const undoClicked = await js(shellWin, `(() => {
+    const cards = document.querySelectorAll('#history .backtest-change');
+    if (!cards.length) return { ok: false, reason: 'no-card' };
+    const card = cards[cards.length - 1];
+    const btn = Array.from(card.querySelectorAll('button')).find((b) => b.textContent === '되돌리기');
+    if (!btn) return { ok: false, reason: 'no-undo-button' };
+    btn.click();
+    return { ok: true };
+  })()`);
+  const undone = await until(shellWin, `(() => {
+    const s = document.querySelector('#backtestCanvas .backtest-param-slider[aria-label="fast 값"]');
+    const cards = document.querySelectorAll('#history .backtest-change');
+    if (!s || !cards.length) return null;
+    const card = cards[cards.length - 1];
+    if (!card.textContent.includes('되돌렸습니다')) return null;
+    return { fast: s.value };
+  })()`, 10000);
+  record(
+    '10-[되돌리기]로 원래 값으로 돌아간다',
+    undoClicked.ok === true && !!undone && undone.fast === fastBefore,
+    { undoClicked, undone, fastBefore },
+  );
+
+  // ---------- (11) 코드 액션이 편집기에 바로 들어가고, 카드의 [검증]이 백엔드를 부른다 ----------
+  shellWin.webContents.send('athena:backtest-chat-action', {
+    kind: 'code_draft',
+    source: 'PARAMS = {}\n\ndef signals(df, p):\n    return df.assign(entry=False, exit=False)[["entry", "exit"]]\n',
+    note: '코드',
+    suggest_run: false,
+    suggest_validate: true,
+  });
+  const codeApplied = await until(shellWin, `(() => {
+    const root = document.getElementById('backtestCanvas');
+    const sub = root.querySelector('.backtest-subtab.is-on');
+    const ta = root.querySelector('.backtest-code-host .backtest-code-textarea');
+    const cards = document.querySelectorAll('#history .backtest-change');
+    if (!sub || !ta || !cards.length) return null;
+    if (!ta.value.includes('def signals')) return null;
+    const card = cards[cards.length - 1];
+    const validate = Array.from(card.querySelectorAll('button')).find((b) => b.textContent === '검증');
+    if (!validate) return null;
+    return {
+      subtab: sub.textContent,
+      head: card.textContent.includes('코드 반영'),
+      code: ta.value.slice(0, 40),
+    };
+  })()`, 10000);
+  record(
+    '11-코드 액션이 편집기에 바로 들어간다',
+    !!codeApplied && codeApplied.subtab === '코드' && codeApplied.head === true,
+    codeApplied,
+  );
+
+  await js(shellWin, `(() => {
+    const cards = document.querySelectorAll('#history .backtest-change');
+    const card = cards[cards.length - 1];
+    const btn = Array.from(card.querySelectorAll('button')).find((b) => b.textContent === '검증');
+    if (btn) btn.click();
+    return !!btn;
+  })()`);
+  const validated = await until(shellWin, `(() => {
+    const cards = document.querySelectorAll('#history .backtest-change');
+    if (!cards.length) return null;
+    const card = cards[cards.length - 1];
+    const text = card.textContent || '';
+    if (text.includes('검증 통과')) return { pass: true, text: '검증 통과' };
+    if (text.includes('검증 실패')) {
+      const errs = Array.from(card.querySelectorAll('.backtest-change-error')).map((e) => e.textContent);
+      return { pass: false, errors: errs };
+    }
+    return null;
+  })()`, 30000);
+  record('11b-카드의 [검증]이 백엔드 검증을 돌린다', !!validated && validated.pass === true, validated);
+
+  // ---------- (12) 화면 전환 액션 ----------
+  shellWin.webContents.send('athena:backtest-chat-action', {
+    kind: 'navigate', tab: 'history', designTab: null,
+  });
+  const navigated = await until(shellWin, `(() => {
+    const on = document.querySelector('#backtestCanvas .backtest-tab.is-on');
+    return on && on.textContent === '이력' ? { tab: on.textContent } : null;
+  })()`, 15000);
+  record('12-채팅 화면 전환 액션이 이력 탭을 연다', !!navigated, navigated);
+
   const okAll = report.steps.every((s) => s.ok);
   fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
   fs.writeFileSync(

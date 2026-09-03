@@ -154,7 +154,20 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # strategies/{id}/activate·strategies/{id}/diff·optimize/plan·optimize·
     # deployments(GET/POST)·deployments/{id}/signals·deployments/{id}/evaluate.
     # DELETE /deployments/{id}는 위 DELETE /runs/{id}와 같은 이유로 카운트에 없다.
-    assert len(operation_ids) == 376
+    # 389 = 376 + 13. 백테스트·프로젝트 작업(345c891 "전략을 내 컴퓨터의 폴더에서
+    # 파이썬 파일로 다룬다" · 70ae90a "어느 출처든 글로 받고…")이 늘린 것이다:
+    # /api/v1/projects 계열(목록·생성·열기·tree·file GET/POST·rename·env GET/POST)과
+    # 백테스트의 youtube/brief·source/brief·user-strategies GET/POST. 이 핀은 그
+    # 작업에서 갱신되지 않아 이미 빨간 상태였고, 여기서 실측값으로 맞춘다.
+    # 390 = 389 + get_brain_entity_detail 1개(2026-09-03) — 채팅이 "이 노드
+    # 설명해줘"에 답할 수 있게 노드 하나의 관계·이력·대화 원문 발췌를 주는 조회.
+    # 393 = 390 + 3. 핀을 갱신하지 않고 들어온 셋이다: 흐름 지도(map)와 코드
+    # 생성(codegen) 2개(aab199f), 저장된 시각 묶음을 되읽는
+    # GET /strategies/{id}/versions/{id} 1개(e52c101). 여기서 실측값으로 맞춘다.
+    # 399 = 393 + 시각 설계 라우트 6개(/api/v1/backtest/visual의 registry·validate·
+    # compile·question·patch·from-spec) — 그래프를 검증·컴파일하고 질문·수정안을
+    # 계산할 뿐 저장·실행·활성화하지 않는다(별도 파일 api/backtest_visual.py).
+    assert len(operation_ids) == 399
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
@@ -165,6 +178,7 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
         "get_brain_graph_diff",
         "get_brain_cluster_map",
         "get_brain_entity_timeline",
+        "get_brain_entity_detail",
         "retry_startup_brain_ingestion",
         "enqueue_brain_ingestion",
         "get_brain_ingestion_job",

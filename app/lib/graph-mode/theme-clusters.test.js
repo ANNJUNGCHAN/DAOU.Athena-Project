@@ -4,13 +4,12 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const clusterLayout = require('./cluster-layout');
 const { groupThemeClusters, shouldWarnUnnamed, renderThemeClusters } = require('./theme-clusters');
 const { fakeNode, installFakeDocument, uninstallFakeDocument } = require('./fake-dom');
 
 test.beforeEach(() => {
   installFakeDocument();
-  global.window = { AthenaLib: { GraphClusterLayout: clusterLayout } };
+  global.window = { AthenaLib: { ClusterGrouping: require('./cluster-grouping') } };
 });
 
 test.afterEach(() => {
@@ -29,15 +28,18 @@ function payload(overrides) {
   };
 }
 
-// ── groupThemeClusters — cluster-layout.js의 groupByCluster와 일치하는지 ────
+// ── groupThemeClusters — cluster-grouping.js의 projectPayload와 일치하는지 ────
+// (옛 cluster-layout.groupByCluster 자리다 — 정적 렌더러를 지우며 좌표와 무관한
+//  그룹화만 cluster-grouping.js로 살아남았다. 검사의 뜻은 그대로다: 두 그룹화가 어긋나면
+//  요약 뷰의 테마 군집 수와 지도 헤더의 군집 수가 서로 다른 말을 한다.)
 
-test('groupThemeClusters — 군집별 size가 groupByCluster와 일치한다', () => {
-  const groups = clusterLayout.groupByCluster(payload().nodes);
+test('groupThemeClusters — 군집별 size가 projectPayload와 일치한다', () => {
+  const groups = require('./cluster-grouping').projectPayload(payload()).clusters;
   const clusters = groupThemeClusters(payload());
   assert.equal(clusters.length, groups.length);
   for (let i = 0; i < groups.length; i += 1) {
     assert.equal(clusters[i].cluster, groups[i].cluster);
-    assert.equal(clusters[i].size, groups[i].members.length);
+    assert.equal(clusters[i].size, groups[i].size);
   }
 });
 
