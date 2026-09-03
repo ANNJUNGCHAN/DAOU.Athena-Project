@@ -2059,6 +2059,7 @@ app.whenReady().then(async () => {
   // 승인 결과는 canvas.js가 CustomEvent로 넘기고 chat.js가 그린다. 여기서는 그
   // 계약 지점에 실제 승인 반환 모양을 넣어 문장을 잰다(C-10 회귀 고정).
   const pluginResultTurn = await shellWin.webContents.executeJavaScript(`(() => {
+    // ipc-channels:allow-dead — 렌더러 CustomEvent이지 IPC 채널이 아니다
     window.dispatchEvent(new CustomEvent('athena:plugin-result', { detail: {
       kind: 'success',
       envelope: null,
