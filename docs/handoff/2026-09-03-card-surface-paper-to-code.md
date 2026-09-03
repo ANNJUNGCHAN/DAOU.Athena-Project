@@ -10,7 +10,7 @@
 
 - **하는 일.** Paper 디자인 파일의 카드 페이지 보드 96장을 **그대로**(픽셀 동일) Electron 앱의 대화 캔버스에 띄운다. 캔버스는 브라우저처럼 **탭 스트립 + 카드 1장 뷰포트**, 카드는 컨테이너 폭 5단(XL/L/M/S/XS) 반응형, 값·문구는 어느 단계에서도 불변.
 - **어디까지 왔나.** Paper 쪽은 끝났다(키움 REST 299 op · 카드 표면 가시 필드 3,532 전부 표현). 코드 쪽은 추출 96/96 · 백엔드 로더가 96장 전부 로드(제외 0) · 봉투 `surface_contract` · 프론트 탭/마운트/반응형 CSS · 보드 카드의 통합 카드 크롬 제거까지 붙었다. 슬롯 저작(보드 텍스트 자리 ↔ API 필드)은 로더 기준 **3,382/3,532 occurrence = 95.8%**다. semantic authority 후보 3,534개 중 예비 `base:04` FID `924`·`951`만 카드 표면 visible universe에서 제외한다.
-- **정확한 중단점.** 웨이브 3 정비 4레인(A5/B4/C5/D3)과 저작 Tasks 1–8은 모두 실행·리뷰·수정됐다. 현재 미도달 150, validator 59건(`b15 e44`)/27장, 보드 없는 op 2이며, 남은 항목은 거짓 alt로 닫지 않은 exact-leaf/composite/aspect/join/realtime blocker다. `extra_fields` end-to-end 합성은 현재 스키마로 lossless하지 않아 `STOP_NO_CHANGES`이며 사용자 설계 승인 대기다. 적응형 가독성 **G1–G4는 완료·푸시**(G4 커밋 `d612cb5`). **G5 육안 Paper 승인은 FAIL**로 확정·보존된 뒤 G5a(결함 수정+검출기 확장, in_progress)와 G5b(육안 재승인, pending)로 대체됐다. G5a 코드 — 13K0-2·2R3M-1 반응형 주석, 2QFO-2 금액+단위 atomic, 2R3M-1 `3CRW-0` paired-table, glyph/legacy-pair 검출기 확장 — 는 이 체크포인트에 들어 있으나 **Electron 정본 캡처·육안 대조는 아직 돌리지 않았다.** 다음 일은 Electron 캡처 → 시각 비교 → G5b다(§6).
+- **정확한 중단점.** 웨이브 3 정비 4레인(A5/B4/C5/D3)과 저작 Tasks 1–8은 모두 실행·리뷰·수정됐다. 현재 미도달 150, validator 59건(`b15 e44`)/27장, 보드 없는 op 2이며, 남은 항목은 거짓 alt로 닫지 않은 exact-leaf/composite/aspect/join/realtime blocker다. `extra_fields` end-to-end 합성은 현재 스키마로 lossless하지 않아 `STOP_NO_CHANGES`이며 사용자 설계 승인 대기다. 적응형 가독성 **G1–G4는 완료·푸시**(G4 커밋 `d612cb5`). **G5 육안 Paper 승인은 FAIL**로 확정·보존된 뒤 G5a(결함 수정+검출기 확장, in_progress)와 G5b(육안 재승인, pending)로 대체됐다. G5a 코드 — 13K0-2·2R3M-1 반응형 주석, 2QFO-2 금액+단위 atomic, 2R3M-1 `3CRW-0` paired-table, glyph/legacy-pair 검출기 확장, probe 스코핑(undeclared value-atomic 스킵 · 비-opt-in `.bs-table`/primary 예탁 캡션 자동토큰 제외 · strip/header·금액 토큰만 auto-atomic) — 은 **진단+정본 Electron 캡처까지 초록**이다(2026-09-04 07:47/07:49 KST, 36측정 atomic/overlap/paired 0, overflow 0, 13BC-2 대조군 유지). **G5b 육안 Paper 재승인은 아직 pending**이다(§6).
 - **커밋.** 2026-09-03부터 브랜치 `feat/card-surface-paper-to-code`에 지속 커밋·푸시한다(사용자 지시). `main`은 origin보다 60커밋 뒤라 직접 올리지 않는다.
 
 ---
@@ -68,7 +68,7 @@
 
 ---
 
-## 4. 수치 (G4 정본 2026-09-04 Electron 재검증 · G5a는 비-Electron WIP)
+## 4. 수치 (G5a 정본 2026-09-04 07:49 KST Electron · 진단 07:47 KST)
 
 | 항목 | 값 |
 |---|---|
@@ -82,8 +82,8 @@
 | 밀도 | 하드 위반 0 · 소프트 경고 22(레일 행 7~11) · 재표시 경고 127 · 중복 바인딩 0 |
 | 상태 컨트롤 미해소 | **0** — account/gold/watch/orderbook의 canonical child meta → parent marker → runtime click 경로 검증 |
 | C5 반응형 자동 검증 | 실보드 6장 × 4단계 PNG **24장** + 보드별 XL 1,360px·M 851px 기하 프로브 **12회**, P5·단계 간 텍스트 상등, surface overflow 최대 0px, L/M/S/XS 세로 내용 넘침·형제 box 겹침 0. XL 원문 `2R3M-1/36Q0-0`의 2px 세로 넘침 1건은 기록·제외. 캡처 폴더는 정본 24장만 남았다(과거 표본 `15P5-2`·`2QX1-1`·`3DZ1-0` 각 4장 = 12장은 검증기가 정리하고 sha256과 함께 증거 폴더로 격리). `capture_hygiene`이 24 파일·24 해시·24 치수를 정본 실행에서 검증한다 |
-| 가독성 하드 게이트 | `assertReadability(..., {enforce: true})`가 24 캡처 + 12 probe = **36 측정** 전부에서 `atomic_wrap_nodes`·`text_overlap_nodes`·`paired_semantics_violations` 0을 요구하며 통과한다. **그러나 같은 캡처의 육안 전수는 여전히 FAIL이다** — 13K0-2(480·640·960)와 2R3M-1(480·960)에 읽을 수 없는 지점이 남았다. 게이트가 못 잡는 이유가 구조적이다: `atomic_wrap_nodes`는 **선언된** atomic 소유자만 측정하고, `paired_semantics_violations`는 `[data-paired-source]` 미러만 훑는데 96장 전수 실측 결과 생산 미러는 **0개**다(`bs-paired` 68장 · `bs-paired-label` 0장 · `bs-r-scroll-table` 2장). 즉 `paired_semantics_total 0`은 "접힌 열이 읽을 수 있다"가 아니라 **"검사 대상이 없다"**는 뜻이다. 상세·확정된 수정 노드는 §6 1번 |
-| 테스트 | **G4 정본(2026-09-04, Electron까지):** scripts 264 · app 2,101 · backend 카드표면 158 · backend 전수 2,762 pass / 1 fail / 5 skip. 유일한 실패는 문서화된 기존 RED `tests/api/test_task_canvas_envelope.py::test_view_identity_canonicalizes_signed_scope_task_target_query_and_account`. **G5a 이 체크포인트(비-Electron):** scripts **265 pass**(실측), glyph/parity 파일 54/54 pass. 전체 app 단위는 G4 2,101 + 신규 4건이며 Codex 세션 마지막 실측은 **2,105** — 이 문서 갱신 시점에는 전체 app 스위트를 다시 돌리지 않았다(pre-push가 돈다). backend 카드표면 158은 이번 WIP가 해당 테스트를 건드리지 않아 G4 기준선. **정본 Electron 캡처는 G5a 이후 미실행** — G4의 36측정 0을 G5a 초록으로 쓰지 말 것 |
+| 가독성 하드 게이트 | **G5a 정본(2026-09-04 07:49 KST):** `assertReadability(..., {enforce: true})`가 24 캡처 + 12 probe = **36 측정** 전부에서 `atomic_wrap_total`·`text_overlap_total`·`paired_semantics_total` **0**, `max_overflow_x` **0**. 진단(07:47 KST, `ATHENA_VERIFY_BOARD_IDS` 6장)도 동일 0. 선언 atomic/flow/paired-table(13K0-2·2R3M-1·2QFO-2) + compact auto-token(strip/header·금액) + opt-in legacy_pair가 함께 동작한다. 비-opt-in `.bs-table`·primary 예탁 캡션은 자동토큰에서 제외해 2SKU-1/13BC-2 거짓양성을 막는다. **G5b 육안 Paper 재승인은 미실행** — 자동 0을 육안 PASS로 쓰지 말 것 |
+| 테스트 | **G5a(2026-09-04):** `board-parity`+`board-glyph-geometry` **54/54 pass**(실측). 진단 Electron exit 0 · 정본 Electron exit 0(36측정 0). 전체 app/scripts/backend 스위트는 이 세션에서 전수 재실행하지 않았고 pre-push 훅이 확인한다. G4 기준선: scripts 264·app 2,101·backend 카드표면 158·backend 전수 2,762 pass / 1 fail(문서화 RED envelope) / 5 skip |
 
 ---
 
@@ -114,7 +114,7 @@
 
 ## 6. 남은 일 (순서대로) — 🔒 = 사람·외부 의존
 
-1. **G5a 가독성 결함 수정(코드 체크포인트 — Electron/육안 미완).** G5 육안 전수는 FAIL로 확정·보존한다. 계획 M5 3단계에 따라 M2/M3로 되돌린 것이 G5a다. 전역 `nowrap`·`overflow:hidden`·zoom·보드 id CSS·글자 축소·내용 삭제로 숨기지 않는다. **이 체크포인트에 들어간 코드:** 13K0-2는 `2WGY-0`/`2WHL-0` flow와 `2WHJ-0`/`2WHK-0`/`2WHY-0`/`2WI0-0`/`2WI2-0` atomic; 2R3M-1은 `2R8O-1` flow, `2R8S-1`/`358O-0`/`358Q-0` atomic, 표 `3CRW-0` `paired-table`(라벨 미러 54); 2QFO-2는 금액 셀 부모 `3751-0`/`376G-0`/`3789-0` flow와 잎 `375E-0`/`376R-0`/`378K-0` atomic. 검출기는 `compactAtomicTokenSpans`(선언 밖 한글·금액 토큰 2줄 분해)와 `hasInlineAmbiguity`+`legacy_pair`(opt-in `.bs-r-paired-table .bs-paired`만 — 13BC-2 대조군을 전역 `.bs-paired` 스캔으로 RED 만들지 않음). CSS는 `.bs-r-paired-table [data-bs-value-atomic="true"]` nowrap. **남은 G5a:** 정본 Electron 캡처 1회 → 시각 비교(대상 3결함 해소·13BC-2 무변경) → G5b. 아래 노드 목록은 G5 실패 근거로 그대로 둔다.
+1. **G5a 가독성 결함 수정 — Electron 자동 게이트 완료 · G5b 육안 대기.** G5 육안 전수 FAIL은 역사로 보존한다. 전역 `nowrap`·`overflow:hidden`·zoom·보드 id CSS·글자 축소·내용 삭제로 숨기지 않는다. **들어간 코드:** 13K0-2 `2WGY-0`/`2WHL-0` flow + trailing atomic; 2R3M-1 `2R8O-1` flow + atomics + `3CRW-0` paired-table; 2QFO-2 금액 flow/atomic; `compactAtomicTokenSpans`+`legacy_pair`(opt-in paired-table만); probe 스코핑(explicit `.bs-r-atomic`만 surface fallback, 비-opt-in `.bs-table` 및 non-chrome/non-money auto-token 제외). **실측(2026-09-04):** 진단 07:47 KST exit 0 · 정본 07:49 KST exit 0 · 6보드×(4 step+2 probe)=36측정 전부 atomic/overlap/paired 0 · overflow 0 · 13BC-2 findings 0. **남은 것 = G5b** Paper 육안 재승인(대상 3결함 해소 확인). 아래 노드 목록은 G5 실패 근거로 그대로 둔다.
 
    **결함 A — 미선언 한국어 컨트롤·제목의 글자 단위 분해.** 13K0-2 480에서 `실/시/간`·`1 0 0/개/결`, 640에서 `정규/장`·`시간외 단/일가`; 2R3M-1 480에서 `삼성전/자`·`정규/장`·`실시/간`. 원인은 atomic nowrap이 `:is(.bs-r-flow, .bs-r-scroll)` 소유자 아래로만 걸리는데(`app/styles/board-surface.css:193`) 해당 노드들이 선언된 스크롤 소유자의 **뒤따르는 형제**라는 것이다.
    - 13K0-2: 정렬 행 `2WGY-0` → `flow`, 후행 `2WHJ-0`(실시간 갱신)·`2WHK-0`(100개 결과) → `atomic`. 필터 행 `2WHL-0` → `flow`, 후행 `2WHY-0`(세션)·`2WI0-0`(정규장)·`2WI2-0`(시간외 단일가) → `atomic`. `2WHW-0`은 이미 선언된 `2WHV-0` 아래라 불필요
@@ -124,7 +124,7 @@
 
    **결함 C — 접힌 열이 라벨 없이 붙는 텍스트 충돌.** 2R3M-1 `체결 흐름`에서 `150,850매수체결KRX118.1%`, 헤더 `체결가구분체결강도`. 표 루트 `3CRW-0`, 헤더 행 `3CS8-0`, 6열 10행. 살아남는 셀 `3CSA-0`(체결가)에 4열 `3CSD-0`(구분)·5열 `3CSE-0`(체결강도)이 무라벨 `.bs-paired` 사본으로 붙는다. `3CRW-0`을 `paired-table`로 선언하면 추출기 `_collapse`가 `.bs-paired-label` + `.bs-paired-value[data-paired-source]` 경로를 탄다(선언이 없으면 무라벨 경로). CSS도 `.bs-r-paired-table [data-bs-value-atomic="true"]` nowrap이 필요하다(현재는 `[data-paired-source]`만).
 
-2. **게이트 확장(G5a 코드 착수 — Electron 미검증).** 선언 밖 compact 한글/금액 토큰과 opt-in paired-table의 무라벨 같은줄 충돌을 검출기에 넣었고, 이 경로는 기존 `enforce: true`에 연결돼 있다. 전역 `.bs-paired` 스캔은 하지 않는다(13BC-2 `bs-paired` 58·라벨 0을 공허 RED로 만들지 않기 위함). **정본 Electron 캡처가 이 확장의 첫 실측**이다. 캡처 결과에서 13BC-2 findings=0을 확인하기 전에는 G5a를 닫지 않는다. 아래 항목은 여전히 유효한 제약이다.
+2. **게이트 확장 — G5a Electron 실측 완료.** compact auto-token(strip/header·금액)과 opt-in paired-table legacy_pair가 `enforce: true`에 연결돼 있다. 전역 `.bs-paired` 스캔은 하지 않는다. **정본·진단 모두 13BC-2 findings=0**을 확인했다. 아래 항목은 여전히 유효한 제약이다.
    - `atomic_wrap_nodes`를 선언 소유자 밖 텍스트 잎까지 확대: 공백 없는 단일 토큰이 2줄 이상으로 그려지면 결함. 긴 토큰(URL 등) 오탐 방지용 길이 상한 필요
    - `paired_semantics_violations`에 "보이는 `.bs-paired`에 `.bs-paired-label` 형제 없음"을 추가
    - **켜기 전 필수 측정**: `13BC-2`는 무변경 대조군인데 `bs-paired` 58건·라벨 0건이다. 위 규칙을 켜면 대조군이 RED가 될 수 있다. 4폭에서 그 사본들이 실제로 보이는지 측정으로 확인하고, 눈으로 본 상단 영역만으로 단정하지 않는다
@@ -200,6 +200,7 @@ eval "$(fnm env)"; export PYTHONIOENCODING=utf-8
 ---
 
 ## 11. 갱신 이력
+- 2026-09-04 07:5x KST — G5a 마감(코드+Electron). probe 스코핑으로 2SKU-1 예탁/표 거짓양성 제거, 진단(07:47 KST)과 정본(07:49 KST) Electron 캡처 exit 0·36측정 atomic/overlap/paired 0·overflow 0·13BC-2 대조군 유지. glyph/parity 54/54. G5b 육안 Paper 재승인 pending. 동시 세션의 2SKU atomic 확대·scroll-table cell `min-width:max-content` 시도는 되돌림(overflow/atomic 거짓실패).
 
 - 2026-09-03 09:5x — 최초 작성(W2-C 게이트 수치). 저작 팩·워크플로 스크립트·진행 로그를 저장소로 복사. `validate_board_slots.py` 팩 경로 저장소 상대화 + 팩 폴더 부재 시 즉시 실패.
 - 2026-09-03 10:3x — 구현 계획 밀도 줄 정정. 청크 드리프트 검사는 빌더 `--check`로 이미 존재(§7 등록). 브랜치는 키우미 대화가 먼저 만들어 origin에 올렸고, 이 대화의 스냅샷 e267c32가 그 위에 얹힘(푸시는 C5 레인의 일시 RED 1건이 풀리면).

@@ -214,6 +214,14 @@ test('glyph readability probe keeps raw geometry evidence and hard-enforces ever
   );
   assert.doesNotMatch(verify, /assertReadability\([^\n]+\{ enforce: false \}\)/);
   assert.match(verify, /canonical:\s*CANONICAL_CAPTURE_RUN/);
+  assert.match(verify, /explicitAtomic/);
+  assert.match(verify, /explicitAtomic \? surface : null/);
+  assert.match(verify, /if \(!responsiveOwner\) continue;/);
+  assert.match(verify, /element\.closest\('\.bs-table'\)/);
+  assert.match(verify, /bs-r-scroll-table/);
+  assert.match(verify, /bs-r-paired-table/);
+  assert.match(verify, /\.bs-strip, \.bs-header/);
+  assert.match(verify, /inChrome/);
 });
 
 test('paired semantic probe scopes legacy ambiguity to opted-in paired tables', () => {
