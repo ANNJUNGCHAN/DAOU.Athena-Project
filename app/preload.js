@@ -38,6 +38,7 @@ const INVOKE_CHANNELS = new Set([
   'athena:mcp-probe',
   'athena:mcp-allow-tool',
   'athena:mcp-remove',
+  'athena:mcp-audit',
   // 플러그인 승인 카드 — 실행은 사람이 이 둘 중 하나를 부를 때만 일어난다.
   'athena:plugin-approve',
   'athena:plugin-reject',

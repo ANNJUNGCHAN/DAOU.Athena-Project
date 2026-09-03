@@ -385,6 +385,109 @@ test('마켓플레이스 토글은 호스트가 성공을 돌려준 뒤에 움�
   assert.deepEqual(texts(container2, 'plugin-canvas-manage-error'), ['설정을 저장하지 못했습니다']);
 });
 
+test('관리 화면의 감사 로그는 시각·플러그인·기능·성공 여부만 보여준다', async () => {
+  const container = fakeNode('div');
+  const at = new Date(2026, 8, 3, 14, 5);
+  const canvas = createPluginCanvas({
+    container,
+    initialView: 'manage',
+    onAuditLog: () => ({ entries: [
+      { ts: at.toISOString(), alias: 'fetch', tool: 'fetch_url', success: true },
+      { ts: at.toISOString(), alias: 'time', tool: 'convert_time', success: false },
+    ] }),
+  });
+  canvas.mount();
+  assert.deepEqual(texts(container, 'plugin-canvas-empty'), ['실행 기록을 읽는 중입니다']);
+
+  await flush();
+  assert.deepEqual(
+    findByClass(container, 'plugin-canvas-audit-head')[0].children.map((cell) => cell.textContent),
+    ['시각', '별칭', '도구', '결과'],
+  );
+  const rows = findByClass(container, 'plugin-canvas-audit-row');
+  assert.equal(rows.length, 2);
+  assert.deepEqual(texts(rows[0], 'plugin-canvas-audit-time'), ['2026-09-03 14:05']);
+  assert.deepEqual(texts(rows[0], 'plugin-canvas-audit-plugin'), ['fetch']);
+  assert.deepEqual(texts(rows[0], 'plugin-canvas-audit-feature'), ['fetch_url']);
+  assert.deepEqual(texts(container, 'plugin-canvas-audit-result'), ['성공', '실패']);
+  assert.equal(findByClass(container, 'is-failure').length, 1);
+  // 인자 본문은 애초에 기록되지 않는다 — 행에는 네 칸뿐이다.
+  assert.equal(rows[0].children.length, 4);
+});
+
+test('감사 로그를 읽지 못하면 이유와 다시 확인을 남기고, 누르면 다시 읽는다', async () => {
+  const container = fakeNode('div');
+  let attempt = 0;
+  const canvas = createPluginCanvas({
+    container,
+    initialView: 'manage',
+    onAuditLog: () => {
+      attempt += 1;
+      if (attempt === 1) return Promise.reject(new Error('등록 목록을 확인하지 못했습니다'));
+      return { entries: [{ ts: '2026-09-03T05:00:00+00:00', alias: 'fetch', tool: 'fetch_url', success: true }] };
+    },
+  });
+  canvas.mount();
+  await flush();
+  assert.deepEqual(
+    texts(container, 'plugin-canvas-error-text'),
+    ['실행 기록을 읽지 못했습니다 — 등록 목록을 확인하지 못했습니다'],
+  );
+  assert.equal(findByClass(container, 'plugin-canvas-audit-row').length, 0);
+
+  await buttonWithClass(container, 'is-retry').dispatchEvent({ type: 'click' });
+  await flush();
+  assert.equal(attempt, 2);
+  assert.equal(findByClass(container, 'plugin-canvas-error-text').length, 0);
+  assert.equal(findByClass(container, 'plugin-canvas-audit-row').length, 1);
+});
+
+test('감사 로그 조회는 한 번에 하나만 나가고 관리 뷰로 다시 들어오면 새로 읽는다', async () => {
+  const container = fakeNode('div');
+  let calls = 0;
+  const canvas = createPluginCanvas({
+    container,
+    initialView: 'manage',
+    onAuditLog: () => { calls += 1; return { entries: [] }; },
+  });
+  canvas.mount();
+  // 읽는 중에 관리 뷰가 다시 그려져도 조회가 겹치지 않는다.
+  canvas.setView('hub');
+  canvas.setView('manage');
+  await flush();
+  assert.equal(calls, 1, '진행 중인 읽기에 업혀 탄다');
+
+  canvas.setView('hub');
+  canvas.setView('manage');
+  await flush();
+  assert.equal(calls, 2, '읽기가 끝난 뒤 재진입하면 다시 읽는다');
+  assert.deepEqual(texts(container, 'plugin-canvas-empty'), ['실행 기록이 없습니다']);
+});
+
+test('관리 화면의 직접 등록은 허브와 같은 서버 추가 시트를 재사용한다', async () => {
+  const proposed = [];
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({
+    container,
+    initialView: 'manage',
+    onPropose: (spec) => proposed.push(spec),
+  });
+  canvas.mount();
+  await buttonWithClass(container, 'is-add').dispatchEvent({ type: 'click' });
+  assert.equal(findByClass(container, 'plugin-canvas-add-sheet').length, 1);
+
+  const field = findByClass(container, 'plugin-canvas-snippet-input')[0];
+  field.value = '{"mcpServers":{"x":{"command":"npx"}}}';
+  await field.dispatchEvent({ type: 'input', target: field });
+  await buttonWithClass(container, 'is-sheet-confirm').dispatchEvent({ type: 'click' });
+
+  assert.deepEqual(proposed, [{
+    action: 'stage_snippet',
+    target: null,
+    snippet: '{"mcpServers":{"x":{"command":"npx"}}}',
+  }]);
+});
+
 test('관리 행은 스위치·삭제 옆에 승인이 확정 지점임을 적는다', () => {
   const container = fakeNode('div');
   const canvas = createPluginCanvas({ container, initialView: 'manage', onPropose: () => {} });

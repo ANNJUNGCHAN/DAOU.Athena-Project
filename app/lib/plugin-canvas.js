@@ -178,6 +178,13 @@ function createPluginCanvas(options) {
   const handled = new Set();
   // 저장 전 권한 토글은 사람이 만든 값이다 — 모드를 나갔다 와도 버리지 않는다.
   let permissionDraft = null; // { pluginId, base: {name:bool}, draft: {name:bool} }
+  // 감사 로그는 호스트가 읽어다 준다. null = 아직 못 읽음(읽는 중 문구를 띄운다).
+  let auditEntries = null;
+  let auditError = false;
+  let auditReason = '';
+  let auditLoading = false;
+  // 화면에 붙어 있는 최신 목록 노드. 재렌더로 갈아끼워지므로 함수 인자로 들고 다니지 않는다.
+  let auditList = null;
 
   function matches(row) {
     const needle = search.trim().toLocaleLowerCase('ko-KR');
@@ -368,6 +375,108 @@ function createPluginCanvas(options) {
     return el('div', 'plugin-canvas-empty', text);
   }
 
+  // --- 감사 로그(읽기 전용) ---------------------------------------------------
+  // 실행된 기능만 시각·플러그인·기능·성공 여부 네 칸으로 남는다. 인자와 응답
+  // 본문은 애초에 기록되지 않으므로 여기서도 보여줄 것이 없다.
+  function auditTime(value) {
+    const at = new Date(value);
+    if (Number.isNaN(at.getTime())) return String(value || '');
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${at.getFullYear()}-${pad(at.getMonth() + 1)}-${pad(at.getDate())} ${pad(at.getHours())}:${pad(at.getMinutes())}`;
+  }
+
+  function auditRow(entry) {
+    const row = el('div', 'plugin-canvas-audit-row');
+    row.setAttribute('data-audit-plugin', entry.alias || '');
+    row.appendChild(el('div', 'plugin-canvas-audit-time', auditTime(entry.ts)));
+    row.appendChild(el('div', 'plugin-canvas-audit-plugin', entry.alias || ''));
+    row.appendChild(el('div', 'plugin-canvas-audit-feature', entry.tool || ''));
+    row.appendChild(el(
+      'div',
+      `plugin-canvas-audit-result ${entry.success ? 'is-success' : 'is-failure'}`,
+      entry.success ? '성공' : '실패',
+    ));
+    return row;
+  }
+
+  function paintAudit() {
+    const list = auditList;
+    if (!list) return;
+    clear(list);
+    if (auditError) {
+      // 못 읽었다는 사실을 빈 목록으로 위장하지 않는다 — 이유와 재시도를 남긴다.
+      const banner = el('div', 'plugin-canvas-error-banner');
+      banner.setAttribute('role', 'alert');
+      banner.appendChild(el(
+        'span',
+        'plugin-canvas-error-text',
+        auditReason ? `실행 기록을 읽지 못했습니다 — ${auditReason}` : '실행 기록을 읽지 못했습니다',
+      ));
+      banner.appendChild(actionButton('다시 확인', 'is-retry', () => {
+        auditError = false;
+        auditReason = '';
+        auditEntries = null;
+        paintAudit();
+        loadAudit();
+      }));
+      list.appendChild(banner);
+      return;
+    }
+    if (auditEntries === null) {
+      list.appendChild(emptyMessage('실행 기록을 읽는 중입니다'));
+      return;
+    }
+    if (!auditEntries.length) {
+      list.appendChild(emptyMessage('실행 기록이 없습니다'));
+      return;
+    }
+    // 열 머리는 Paper 02와 같은 순서다 — 각 셀에 따로 이름을 붙이지 않는다.
+    const head = el('div', 'plugin-canvas-audit-head');
+    ['시각', '별칭', '도구', '결과'].forEach((label) => head.appendChild(el('div', null, label)));
+    list.appendChild(head);
+    auditEntries.forEach((entry) => list.appendChild(auditRow(entry)));
+  }
+
+  // 조회는 한 번에 하나만 난다 — 관리 뷰가 다시 그려도 진행 중인 읽기에 업혀 탄다.
+  function loadAudit() {
+    if (auditLoading || auditEntries !== null || auditError) return;
+    if (typeof deps.onAuditLog !== 'function') {
+      auditEntries = [];
+      paintAudit();
+      return;
+    }
+    auditLoading = true;
+    Promise.resolve()
+      .then(() => deps.onAuditLog())
+      .then((result) => {
+        const rows = (result && Array.isArray(result.entries)) ? result.entries : (Array.isArray(result) ? result : []);
+        auditEntries = rows.map((entry) => ({
+          ts: entry.ts,
+          alias: entry.alias,
+          tool: entry.tool,
+          success: !!entry.success,
+        }));
+      })
+      .catch((err) => {
+        auditError = true;
+        auditReason = String((err && err.message) || err || '').trim();
+      })
+      .then(() => {
+        auditLoading = false;
+        paintAudit();
+      });
+  }
+
+  function renderAudit() {
+    const section = el('section', 'plugin-canvas-audit');
+    section.appendChild(el('h2', 'plugin-canvas-section-title', '감사 로그'));
+    auditList = el('div', 'plugin-canvas-audit-list');
+    section.appendChild(auditList);
+    paintAudit();
+    loadAudit();
+    return section;
+  }
+
   function renderHubLists() {
     if (!hubLists) return;
     const installedRows = installed.filter(matches);
@@ -533,6 +642,9 @@ function createPluginCanvas(options) {
     countLabels.forEach(([label, value, className]) => {
       header.appendChild(el('span', `plugin-canvas-count ${className}`.trim(), `${label} ${value}`));
     });
+    // 직접 등록은 허브의 '+ 서버 추가'와 같은 시트다 — 붙여넣은 설정은 제안이
+    // 되고, 실행은 승인 카드 하나뿐이다.
+    header.appendChild(actionButton('직접 등록', 'is-add', openAddSheet));
     panel.appendChild(header);
     panel.appendChild(el(
       'p',
@@ -552,6 +664,7 @@ function createPluginCanvas(options) {
       'plugin-canvas-marketplace-note',
       '+ 마켓플레이스 추가 — GitHub·Git URL·로컬 폴더. 등록만으로는 아무것도 실행되지 않습니다 — 설치·활성은 항목별 승인 시트를 거칩니다.',
     ));
+    panel.appendChild(renderAudit());
     return panel;
   }
 
@@ -1028,6 +1141,13 @@ function createPluginCanvas(options) {
     keepDraft();
     view = normalized;
     activeSheet = null;
+    // 관리 뷰로 들어올 때마다 기록을 다시 읽는다 — 그 사이 실행된 것이 빠지면
+    // "안 돌았다"로 읽힌다. 진행 중인 읽기가 있으면 loadAudit이 알아서 비킨다.
+    if (normalized === 'manage' && !auditLoading) {
+      auditEntries = null;
+      auditError = false;
+      auditReason = '';
+    }
     render();
   }
 

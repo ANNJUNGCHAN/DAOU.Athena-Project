@@ -120,7 +120,7 @@
     {
       "id": "US-009",
       "title": "설정의 플러그인 탭을 플러그인 모드로 흡수 (사용자 지시 2026-09-03 — 명세 '설정 02 카드 유지'·계획 확정 9·R8을 대체)",
-      "passes": false,
+      "passes": true,
       "order": "US-004 뒤, US-006·US-007 앞",
       "acceptanceCriteria": [
         "app/lib/settings-cards.js: 설정 오버레이의 플러그인 카드(스니펫 직접 등록 시트·감사 로그·직접 삭제 경로 athena:mcp-remove)와 설정 nav의 '플러그인' 항목을 제거한다. 설정에는 플러그인 관련 표면이 남지 않는다(grep '플러그인' in settings-cards.js → 카드·nav 0건; 안내 한 줄 '플러그인은 플러그인 모드에서 관리합니다'는 허용)",

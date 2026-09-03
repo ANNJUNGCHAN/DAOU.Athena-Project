@@ -1550,13 +1550,12 @@ function openSettings() {
   $app.hidden = true;
   $settings.hidden = false;
   // Paper 43쪽(2026-08-18 확정) — 좌 사이드바(화면·계좌·MCP 서버·모델) + 우 패널.
-  // 세 카드를 동시에 쌓아 보여주던 이전 판(renderScreen/renderAccounts/renderMcp를
+  // 세 카드를 동시에 쌓아 보여주던 이전 판(renderScreen/renderAccounts를
   // 나란히 호출)을 대체한다. 패널 렌더 함수 자체는 그대로 재사용 — nav가 어떤 걸
   // 부를지만 고른다.
   const SETTINGS_PANELS = {
     screen: settingsCards.renderScreen,
     accounts: settingsCards.renderAccounts,
-    mcp: settingsCards.renderMcp,
     model: settingsCards.renderModel,
     history: settingsCards.renderHistory,
   };

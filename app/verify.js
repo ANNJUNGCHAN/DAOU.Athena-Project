@@ -2002,6 +2002,10 @@ app.whenReady().then(async () => {
     counts: Array.from(document.querySelectorAll('.plugin-canvas-count')).map((node) => node.textContent),
     toggles: Array.from(document.querySelectorAll('.plugin-canvas-toggle')).map((node) => node.getAttribute('aria-checked')),
     marketplaceNote: document.querySelector('.plugin-canvas-marketplace-note')?.textContent || '',
+    // 설정에서 옮겨온 두 표면(2026-09-03) — 직접 등록 진입과 감사 로그 구역.
+    directRegisterLabel: document.querySelector('.plugin-canvas-manage .plugin-canvas-action.is-add')?.textContent || '',
+    auditTitle: document.querySelector('.plugin-canvas-audit .plugin-canvas-section-title')?.textContent || '',
+    auditListCount: document.querySelectorAll('.plugin-canvas-audit .plugin-canvas-audit-list').length,
   }))()`);
   await shot(shellWin, '03g-plugin-manage.png');
 
@@ -2119,6 +2123,12 @@ app.whenReady().then(async () => {
     && JSON.stringify(pluginManage.counts) === JSON.stringify(['플러그인 0', '기능 0', '마켓플레이스 1'])
     && JSON.stringify(pluginManage.toggles) === JSON.stringify(['true'])
     && /등록만으로는 아무것도 실행되지 않습니다/.test(pluginManage.marketplaceNote));
+  // 설정 플러그인 탭이 흡수된 자리(2026-09-03) — 직접 등록 진입과 감사 로그가
+  // 관리 뷰에 있다. 감사 로그는 검증 프로필이라 비어 있어도 구역 자체는 뜬다.
+  assertOk('pluginMode: 관리 뷰가 직접 등록 진입과 감사 로그 구역을 가진다',
+    pluginManage.directRegisterLabel === '직접 등록'
+    && pluginManage.auditTitle === '감사 로그'
+    && pluginManage.auditListCount === 1);
   assertOk('pluginMode: Paper 01 permission is a non-blocking detail view with 설치됨/기능/허용/상태 badges',
     pluginPermission.dialogCount === 0
     && pluginPermission.overlayCount === 0
@@ -2449,12 +2459,6 @@ app.whenReady().then(async () => {
     "document.querySelectorAll('#settingsGrid .card.accounts').length"
   );
 
-  const navClickMcp = await shellWin.webContents.executeJavaScript(clickNavItemScript('플러그인'));
-  await wait(1000); // mcp-list는 Python CLI 콜드 스폰이라 실측 ~850ms 걸린다(verify-settings.js 주석 참고)
-  const mcpPanelCardCount = await shellWin.webContents.executeJavaScript(
-    "document.querySelectorAll('#settingsGrid .card.mcp').length"
-  );
-
   const navClickModel = await shellWin.webContents.executeJavaScript(clickNavItemScript('모델'));
   await wait(500);
   const modelPanelProbe = await shellWin.webContents.executeJavaScript(`
@@ -2486,7 +2490,7 @@ app.whenReady().then(async () => {
   // 이 단언은 그대로 유효하다 — 오히려 한 문서 안이라 섞일 위험이 커져 더 중요해졌다.
   const canvasProbe = await shellWin.webContents.executeJavaScript(`
     (() => ({
-      settingsCardsOnCanvas: document.querySelectorAll('#grid .card.accounts, #grid .card.mcp, #grid .card.model, #grid .card.screen').length,
+      settingsCardsOnCanvas: document.querySelectorAll('#grid .card.accounts, #grid .card.model, #grid .card.screen').length,
     }))()
   `);
   const chatBoundsWhileOpen = shellWin.getBounds();
@@ -2515,15 +2519,14 @@ app.whenReady().then(async () => {
     // 셸 창이 설정 모드로 바뀐다
     renderedInChatWindow: chatProbe.settingsVisible === true && chatProbe.url === 'shell.html',
     chatModeSteppedAside: chatProbe.appHidden === true,
-    // 사이드바 nav — 존재 + 항목 5개(화면·계좌·플러그인·모델·성향・이력, 채팅→그래프
-    // 파이프라인 단계 5로 늘었다 — .omc/plans/plan-chat-graph-pipeline.md §2(e)) +
-    // 기본 선택은 '화면'
+    // 사이드바 nav — 존재 + 항목 4개(화면·계좌·모델·그래프. 플러그인 항목은
+    // 2026-09-03 플러그인 모드 관리 뷰로 옮겨가 여기서 사라졌다) + 기본 선택은 '화면'
     navExists: navProbe.navExists === true,
-    navHasFiveItems: navProbe.navItemCount === 5,
+    navHasFourItems: navProbe.navItemCount === 4,
+    navHasNoPluginItem: navProbe.navLabels.includes('플러그인') === false,
     defaultPanelIsScreen: navProbe.screenCardCount === 1,
     // nav에서 각 항목을 고르면 그 카드 하나만 뜬다
     accountsPanelOnNavSelect: accountsPanelCardCount === 1,
-    mcpPanelOnNavSelect: mcpPanelCardCount === 1,
     modelPanelOnNavSelect: modelPanelProbe.modelCardCount === 1,
     // 모델 패널 — Claude 계정 행(활성 계정이 최소 1개, cli-accounts.js가 이 머신의
     // ~/.claude/.credentials.json을 실측 감지) + 모델 칩이 실제로 그려진다
@@ -2543,7 +2546,7 @@ app.whenReady().then(async () => {
     escReturnsToChat: chatAfterClose.appVisible === true && chatAfterClose.settingsHidden === true,
     gridEmptiedOnClose: chatAfterClose.gridEmptied === true,
   };
-  report.settingsNavClicks = { navClickAccounts, navClickMcp, navClickModel, navLabels: navProbe.navLabels };
+  report.settingsNavClicks = { navClickAccounts, navClickModel, navLabels: navProbe.navLabels };
   console.log('[verify] 검증7(설정 모드):', JSON.stringify(report.settingsSurface));
   console.log('[verify] 검증7 nav 클릭 로그:', JSON.stringify(report.settingsNavClicks));
   // settingsSurface는 전부 참이 기대값인 불리언들이다(noTrIdLeak/noBearerLeak
@@ -2554,7 +2557,6 @@ app.whenReady().then(async () => {
   // nav 클릭 자체가 대상을 못 찾은 실패(NOT FOUND)를 놓치지 않는다 — 문자열이라
   // 위 일괄 단언 루프 밖에서 따로 확인한다.
   assertOk('settingsSurface.navClickAccountsFound', navClickAccounts === 'clicked');
-  assertOk('settingsSurface.navClickMcpFound', navClickMcp === 'clicked');
   assertOk('settingsSurface.navClickModelFound', navClickModel === 'clicked');
 
   const winCountBeforeCmd = BrowserWindow.getAllWindows().length;
