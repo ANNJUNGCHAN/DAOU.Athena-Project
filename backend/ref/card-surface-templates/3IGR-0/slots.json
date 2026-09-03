@@ -1675,12 +1675,7 @@
       "table": null,
       "mapping_id": "detail:kt00013:substitute_resources",
       "f": "use_pos_repl_fin",
-      "alt_mappings": [
-        {
-          "mapping_id": "detail:kt00011:account_funding",
-          "f": "repl_amt"
-        }
-      ],
+      "alt_mappings": null,
       "kor": "사용가능대용최종",
       "format": {
         "unit": "krw_ko",
@@ -2931,10 +2926,6 @@
       "mapping_id": "detail:kt00001:cash_and_margin",
       "f": "uncl_stk_amt",
       "alt_mappings": [
-        {
-          "mapping_id": "detail:kt00011:account_funding",
-          "f": "uncla"
-        },
         {
           "mapping_id": "detail:kt00005:cash_and_capacity",
           "f": "uncl_stk_amt"

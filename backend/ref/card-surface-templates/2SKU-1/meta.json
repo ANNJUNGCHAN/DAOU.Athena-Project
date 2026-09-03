@@ -25,6 +25,7 @@
     "detail:kt00005:receivables_and_margin",
     "detail:kt00010:cash_and_withdrawal_capacity",
     "detail:kt00010:purchase_settlement",
+    "detail:kt00011:account_funding",
     "detail:kt00011:margin_rates",
     "detail:kt00012:account_and_receivable_capacity",
     "detail:kt00012:guarantee_rate",
