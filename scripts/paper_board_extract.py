@@ -1269,8 +1269,9 @@ def mark_state_controls(
 ) -> tuple[list[dict], list[dict]]:
     """자식 상태 보드의 컨트롤 문구를 이 보드의 잎에 맞춰 표식을 찍는다.
 
-    탭·정렬은 잎 문구를, 펼침은 `▸` 잎을 감싼 블록 문구를 본다. 한 잎은 컨트롤
-    하나만 받는다 — 같은 문구를 쓰는 자식 보드들은 한 잎을 나눠 쓴다.
+    탭·정렬은 잎 문구를, 펼침은 `▸` 잎을 감싼 블록 문구를 본다. 펼침 잎이 전혀
+    없는 보드에서는 손지정 `control_text`만 일반 잎에 맞춘다. 한 잎은 컨트롤 하나만
+    받는다 — 같은 문구를 쓰는 자식 보드들은 한 잎을 나눠 쓴다.
 
     `control_text`(손지정)를 적은 자식은 그 문구로 맞추고 잎을 먼저 가져간다.
     """
@@ -1280,6 +1281,11 @@ def mark_state_controls(
         key = (child["kind"], child["control"], child.get("control_text"))
         groups.setdefault(key, []).append(child["board_id"])
 
+    expand_leaf_indices = {
+        index
+        for index, el in enumerate(leaves)
+        if any(mark in direct_text(el) for mark in EXPAND_MARKS)
+    }
     scored: dict[tuple[str, str, str | None], list[tuple[int, int, int]]] = {}
     for key in groups:
         kind, control, control_text = key
@@ -1287,9 +1293,16 @@ def mark_state_controls(
         hits: list[tuple[int, int, int]] = []
         for index, el in enumerate(leaves):
             if kind == "expand":
-                if not any(mark in direct_text(el) for mark in EXPAND_MARKS):
+                if expand_leaf_indices:
+                    if index not in expand_leaf_indices:
+                        continue
+                    tier, distance = expand_tier(el, region_of, wanted)
+                elif control_text:
+                    tier, distance = control_tier(direct_text(el), wanted), 1
+                    if nearest_region(el, region_of) in ("strip", "header"):
+                        distance = 0
+                else:
                     continue
-                tier, distance = expand_tier(el, region_of, wanted)
             else:
                 tier, distance = control_tier(direct_text(el), wanted), 1
                 if nearest_region(el, region_of) in ("strip", "header"):
