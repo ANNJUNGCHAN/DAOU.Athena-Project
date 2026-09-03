@@ -384,12 +384,11 @@ async def dispatch(
             }
         )
     if action == "propose_watch_code":
+        saved = payload if isinstance(payload, dict) else {}
         return _success(
             {
-                "path": payload.get("path") if isinstance(payload, dict) else None,
-                "code_hash": (
-                    payload.get("code_hash") if isinstance(payload, dict) else None
-                ),
+                "path": saved.get("path"),
+                "code_hash": saved.get("code_hash"),
                 "notice": "저장됨 — 검사 전",
             }
         )
