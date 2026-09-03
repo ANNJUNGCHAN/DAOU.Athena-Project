@@ -12,6 +12,12 @@ const {
   resolveLeaseBindings,
 } = require('./lib/main/integrated-card-realtime');
 const { visualRowCounts } = require('./lib/board-layout-geometry');
+const {
+  DEFAULT_READABILITY_BOARD_IDS,
+  collectGlyphFindings,
+  assertReadability,
+  waitForStableLayout,
+} = require('./lib/board-glyph-geometry');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -732,23 +738,32 @@ async function activateBoardTab(win, instanceId) {
 // 창 리사이즈가 비동기라 아직 옛 폭에서 잰 값이 섞이고(실측: 같은 단계가
 // 실행마다 377/537px로 흔들렸다), 컨테이너 쿼리는 그 폭으로 다시 돈다.
 async function settleBoardLayout(win, instanceId) {
-  return win.webContents.executeJavaScript(`new Promise((resolve) => {
+  return win.webContents.executeJavaScript(`(async () => {
+    const waitForStableLayout = ${waitForStableLayout.toString()};
     const root = document.querySelector(
       '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
     const surface = root && root.querySelector('.board-surface');
-    let last = -1;
-    let stable = 0;
-    let frames = 0;
-    const tick = () => {
-      const now = surface ? Math.round(surface.getBoundingClientRect().width) : 0;
-      stable = now === last ? stable + 1 : 0;
-      last = now;
-      frames += 1;
-      if (stable >= 4 || frames > 180) return resolve(now);
-      requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  })`);
+    if (!surface) throw new Error('board surface is unavailable during layout settle');
+    return waitForStableLayout({
+      fontsReady: document.fonts && document.fonts.ready,
+      readSignature: () => {
+        const rect = surface.getBoundingClientRect();
+        return [
+          rect.left, rect.top, rect.width, rect.height,
+          surface.scrollWidth, surface.scrollHeight,
+        ].map(Math.round).join(':');
+      },
+      requestFrame: requestAnimationFrame,
+      cancelFrame: cancelAnimationFrame,
+      setTimer: setTimeout,
+      clearTimer: clearTimeout,
+      now: performance.now.bind(performance),
+      deadlineMs: 3000,
+      timerMs: 50,
+      maxSamples: 180,
+      requiredStableSamples: 4,
+    });
+  })()`);
 }
 
 // 한 단계의 측정.
@@ -761,8 +776,9 @@ async function settleBoardLayout(win, instanceId) {
 // 병기 줄(.bs-paired) 자체는 값의 1차 표현이 아니라 접힘의 착지점이라 도달 판정에서
 // 뺀다 — XL에서 숨어 있는 것이 정상이다. 영값 묶음(H1)으로 접힌 레일 행도 열이
 // 없어 도달 0이지만, 그 0이 네 단계 모두 같으므로 상등 검사가 그대로 성립한다.
-const boardStepProbe = (instanceId) => `(() => {
+const boardStepProbe = (instanceId) => `(async () => {
   const countVisualRows = ${visualRowCounts.toString()};
+  const collectGlyphFindings = ${collectGlyphFindings.toString()};
   const root = document.querySelector(
     '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
   if (!root) return { error: 'board card not found' };
@@ -883,6 +899,117 @@ const boardStepProbe = (instanceId) => `(() => {
     }
   }
 
+  const anonymousGlyphIds = new WeakMap();
+  let anonymousGlyphId = 0;
+  const elementIdentity = (element) => {
+    if (element.dataset && (element.dataset.node || element.dataset.slotId)) {
+      return element.dataset.node || element.dataset.slotId;
+    }
+    if (!anonymousGlyphIds.has(element)) anonymousGlyphIds.set(element, 'glyph-' + anonymousGlyphId++);
+    return anonymousGlyphIds.get(element);
+  };
+  const responsiveSelector = '.bs-r-flow, .bs-r-scroll, .bs-r-paired-table, .bs-r-scroll-table';
+  const responsiveOwnerFor = (element) => element.closest(responsiveSelector);
+  const renderedItemFor = (owner, element) => {
+    let item = getComputedStyle(element).display === 'contents' ? null : element;
+    for (let parent = element.parentElement; parent && parent !== owner; parent = parent.parentElement) {
+      if (getComputedStyle(parent).display !== 'contents') item = parent;
+    }
+    return item || owner;
+  };
+  const textFragments = (element) => {
+    if (!shown(element)) return [];
+    const fragments = [];
+    const textWalker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    for (let text = textWalker.nextNode(); text; text = textWalker.nextNode()) {
+      if (!text.nodeValue.trim()) continue;
+      const range = document.createRange();
+      range.selectNode(text);
+      for (const rect of range.getClientRects()) {
+        if (rect.width > 0 && rect.height > 0) {
+          fragments.push({ left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom });
+        }
+      }
+    }
+    return fragments;
+  };
+  const textNodeFragments = (text) => {
+    const range = document.createRange();
+    range.selectNode(text);
+    return [...range.getClientRects()].filter((rect) => rect.width > 0 && rect.height > 0)
+      .map((rect) => ({ left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom }));
+  };
+  const ancestorsFor = (element, until) => {
+    const ancestorOwners = [];
+    for (let parent = element.parentElement; parent && parent !== until; parent = parent.parentElement) {
+      ancestorOwners.push(elementIdentity(parent));
+    }
+    return ancestorOwners;
+  };
+  const glyphCandidates = [];
+  for (const responsiveOwner of surface.querySelectorAll(responsiveSelector)) {
+    const textWalker = document.createTreeWalker(responsiveOwner, NodeFilter.SHOW_TEXT);
+    for (let text = textWalker.nextNode(); text; text = textWalker.nextNode()) {
+      if (!text.nodeValue.trim() || !text.parentElement || responsiveOwnerFor(text.parentElement) !== responsiveOwner) continue;
+      const element = text.parentElement;
+      const fragments = textNodeFragments(text);
+      if (!fragments.length) continue;
+      const item = renderedItemFor(responsiveOwner, element);
+      const semanticOwner = element.closest('[data-node], [data-slot-id]') || element;
+      glyphCandidates.push({
+        node: elementIdentity(semanticOwner),
+        name: semanticOwner.dataset.name || '',
+        owner: elementIdentity(element),
+        owner_name: element.dataset.name || semanticOwner.dataset.name || '',
+        text: text.nodeValue.trim(),
+        layout_owner: elementIdentity(responsiveOwner),
+        layout_item: elementIdentity(item),
+        ancestors: ancestorsFor(element, responsiveOwner),
+        atomic: false,
+        hidden: !shown(element),
+        fragments,
+      });
+    }
+  }
+  for (const element of surface.querySelectorAll('.bs-r-atomic, [data-bs-value-atomic="true"]')) {
+    const responsiveOwner = responsiveOwnerFor(element);
+    if (!responsiveOwner) continue;
+    const item = renderedItemFor(responsiveOwner, element);
+    const owner = elementIdentity(element);
+    glyphCandidates.push({
+      node: owner,
+      name: element.dataset.name || '',
+      owner,
+      owner_name: element.dataset.name || '',
+      text: element.textContent.trim(),
+      layout_owner: elementIdentity(responsiveOwner),
+      layout_item: elementIdentity(item),
+      ancestors: ancestorsFor(element, responsiveOwner),
+      atomic: true,
+      overlap: false,
+      hidden: !shown(element),
+      fragments: textFragments(element),
+    });
+  }
+  const pairedRecords = [];
+  for (const mirror of surface.querySelectorAll('.bs-r-paired-table .bs-paired, [data-paired-source]')) {
+    const source = mirror.dataset.pairedSource || '';
+    const sourceElement = [...surface.querySelectorAll('[data-node], [data-slot-id]')]
+      .find((element) => element.dataset.node === source || element.dataset.slotId === source);
+    const parent = mirror.parentElement;
+    const label = parent && parent.querySelector('[data-paired-label]');
+    pairedRecords.push({
+      source,
+      source_found: Boolean(sourceElement),
+      source_text: sourceElement ? sourceElement.textContent.trim() : '',
+      mirror_text: mirror.textContent.trim(),
+      mirror_has_identity: Boolean(mirror.dataset.node || mirror.dataset.slotId),
+      label_found: Boolean(label && label.textContent.trim()),
+      hidden: !shown(mirror),
+    });
+  }
+  const glyph = collectGlyphFindings(glyphCandidates, pairedRecords, { cap: 20, tolerance: 1 });
+
   return {
     dom_text: [...domText.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1)),
     slot_multiset: slots.sort(),
@@ -897,6 +1024,12 @@ const boardStepProbe = (instanceId) => `(() => {
     kpi_max_columns: kpiMaxColumns,
     vertical_overflow_nodes: verticalOverflowNodes.slice(0, 20),
     vertical_overlap_nodes: verticalOverlapNodes.slice(0, 20),
+    atomic_wrap_nodes: glyph.atomic_wrap_nodes.items,
+    atomic_wrap_total: glyph.atomic_wrap_nodes.total,
+    text_overlap_nodes: glyph.text_overlap_nodes.items,
+    text_overlap_total: glyph.text_overlap_nodes.total,
+    paired_semantics_violations: glyph.paired_semantics_violations.items,
+    paired_semantics_total: glyph.paired_semantics_violations.total,
     container_width: Math.round(surface.getBoundingClientRect().width),
     // 보드가 자기 칸보다 넓으면 가로 스크롤이 생긴다 — 계획 §2는 세로 스크롤만
     // 허용한다. 아래 검증 단계가 1px 초과를 하드 실패시키며 여기에는 원시값을 남긴다.
@@ -1038,9 +1171,7 @@ async function exerciseBoardRealtime(win, manager, surface) {
 // 원문 그대로인 실보드에서 한다. 값은 slots.json의 `paper_text` — 그 보드가
 // Paper에서 실제로 이고 있던 글자다. 마운트 계약(어느 노드에 어떤 슬롯이
 // 앉는가)은 색인이 갖고 있으므로 봉투는 board_id·card_id·값만 나른다.
-const DEFAULT_REAL_BOARDS = Object.freeze([
-  '2SKU-1', '2R3M-1', '13BC-2', '2QFO-2', '13K0-2', '135M-2',
-]);
+const DEFAULT_REAL_BOARDS = DEFAULT_READABILITY_BOARD_IDS;
 const REAL_BOARD_TEMPLATE_ROOT = path.join(BACKEND, 'ref', 'card-surface-templates');
 const REAL_BOARDS = Object.freeze(
   (process.env.ATHENA_VERIFY_BOARD_IDS || DEFAULT_REAL_BOARDS.join(','))
@@ -1109,6 +1240,7 @@ async function captureBoardSteps(win, surface) {
       if (probe.error) throw new Error(`board ${surface.boardId} ${preset.name}: ${probe.error}`);
       // 스트립 자체의 overflow-x:auto는 허용하지만 표면 넘침·수직 겹침은 실패다.
       assertSurfaceGeometry(surface.boardId, preset, probe);
+      assertReadability(surface.boardId, preset, probe, { enforce: false });
       const image = await win.webContents.capturePage(probe.card_rect);
       const png = image.toPNG();
       const file = `board-${surface.boardId}-${preset.width}x${preset.height}.png`;
@@ -1129,6 +1261,12 @@ async function captureBoardSteps(win, surface) {
         kpi_max_columns: probe.kpi_max_columns,
         vertical_overflow_nodes: probe.vertical_overflow_nodes,
         vertical_overlap_nodes: probe.vertical_overlap_nodes,
+        atomic_wrap_nodes: probe.atomic_wrap_nodes,
+        atomic_wrap_total: probe.atomic_wrap_total,
+        text_overlap_nodes: probe.text_overlap_nodes,
+        text_overlap_total: probe.text_overlap_total,
+        paired_semantics_violations: probe.paired_semantics_violations,
+        paired_semantics_total: probe.paired_semantics_total,
         slot_count: probe.slot_multiset.length,
         visible_slot_count: probe.visible_slot_count,
         reachable_slot_count: probe.reachable_slot_count,
@@ -1153,6 +1291,7 @@ async function captureBoardSteps(win, surface) {
       }
       assertSurfaceGeometry(surface.boardId, preset, probe);
       assertBreakpointContract(surface.boardId, preset, probe);
+      assertReadability(surface.boardId, preset, probe, { enforce: false });
       breakpointProbes.push({
         preset: preset.name,
         window: { width: preset.width, height: preset.height },
@@ -1168,6 +1307,12 @@ async function captureBoardSteps(win, surface) {
         kpi_max_columns: probe.kpi_max_columns,
         vertical_overflow_nodes: probe.vertical_overflow_nodes,
         vertical_overlap_nodes: probe.vertical_overlap_nodes,
+        atomic_wrap_nodes: probe.atomic_wrap_nodes,
+        atomic_wrap_total: probe.atomic_wrap_total,
+        text_overlap_nodes: probe.text_overlap_nodes,
+        text_overlap_total: probe.text_overlap_total,
+        paired_semantics_violations: probe.paired_semantics_violations,
+        paired_semantics_total: probe.paired_semantics_total,
         slot_count: probe.slot_multiset.length,
         visible_slot_count: probe.visible_slot_count,
         reachable_slot_count: probe.reachable_slot_count,

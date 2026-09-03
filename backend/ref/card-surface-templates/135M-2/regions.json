@@ -7,5 +7,20 @@
     { "node_id": "14ZT-2", "name": "Order Entry", "role": "primary", "depth": 2 },
     { "node_id": "14ZU-2", "name": "Order Preview", "role": "other", "depth": 2 },
     { "node_id": "14ZV-2", "name": "Fees and Execution", "role": "rail", "depth": 2 }
+  ],
+  "responsive": [
+    { "node_id": "14YQ-2", "traits": ["scroll"], "accessible_label": "주문 유형 및 동작" },
+    { "node_id": "14YR-2", "traits": ["atomic"] },
+    { "node_id": "14YT-2", "traits": ["atomic"] },
+    { "node_id": "14YV-2", "traits": ["atomic"] },
+    { "node_id": "14YY-2", "traits": ["atomic"] },
+    { "node_id": "14Z0-2", "traits": ["atomic"] },
+    { "node_id": "14Z2-2", "traits": ["atomic"] },
+    { "node_id": "14Z4-2", "traits": ["atomic"] },
+    { "node_id": "14Z7-2", "traits": ["scroll"], "accessible_label": "주문 진행 단계" },
+    { "node_id": "14ZB-2", "traits": ["atomic"] },
+    { "node_id": "14ZG-2", "traits": ["atomic"] },
+    { "node_id": "14ZL-2", "traits": ["atomic"] },
+    { "node_id": "14ZQ-2", "traits": ["atomic"] }
   ]
 }
