@@ -9,7 +9,7 @@
 > 소유 세션이 계속 push 중이라 지우지 않았다(`docs/handoff/README.md` §1). 붙여넣기 전에
 > **§1의 브랜치 규칙과 §6-5 완료 게이트("브랜치는 main 하나뿐, 워크트리 0개")를 현재 상황에 맞게 고쳐라** —
 > 안 고치면 살아 있는 남의 브랜치를 지우려 든다. 지울 때는 하나씩, 삭제 직전 fetch + `merge-base --is-ancestor`로 게이트.
-> §4-A 기준선은 README §1(2,696 / 4 게이트 / 3,572)로 갱신하고, `verify:integrated-cards`의 M 프로브 실패는
+> §4-A 기준선은 README §1(app 2,696 / 게이트 4 / backend 3,619)로 갱신하고, `verify:integrated-cards`의 M 프로브 실패는
 > card-surface 트랙의 알려진 미완이니 그 항목만 별도 판단할 것.
 
 ---
