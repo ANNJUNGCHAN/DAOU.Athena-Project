@@ -1047,7 +1047,11 @@ async function runQueryLive(text) {
     // 통째로 가져가 입력창을 밀어냈다(같은 행을 나눠 쓴다 — chat.css .input-row).
     const base = calling
       ? (cardCount > 0 ? `카드 ${cardCount}개 렌더됨` : '답변 중…')
-      : '판단 중 — 어떤 TR을 부를지 고르는 중';
+      // "TR"은 키움 시세 요청의 이름이다 — 그래프·백테스트 모드에서는 부를 TR이
+      // 없는데도 이 문구가 떴다(2026-09-03 실사용 제보). 그래프 접두는 시세 경로를
+      // 닫아 두는데(live-prompt.js) 진행 문구만 그것을 몰랐다. 모드와 무관하게
+      // 참인 말로 바꾼다 — 무엇을 고르는 중인지는 TOOL_STEP_LABELS가 곧 말해 준다.
+      : '판단 중 — 어떤 도구를 쓸지 고르는 중';
     setLocked(true, base, elapsedText());
   };
   // 100ms 간격 — 표기는 소수 1자리(29.3s)인데 1초 간격으로 갱신하면 소수 자리가
@@ -1647,6 +1651,11 @@ window.AthenaShell.registerSeedChatInput((text) => {
   $input.value = text != null ? String(text) : '';
   autoGrowInput();
   $input.focus();
+  // 캐럿을 문장 끝에 둔다(2026-09-03 사용자 지적 "심긴 뒤 무엇을 해야 하는지 안
+  // 알려준다"). focus()만 하면 캐럿이 맨 앞에 서서 심긴 문장이 "이미 보낸 말"처럼
+  // 읽혔다 — 끝에서 깜빡이는 캐럿이 "고쳐서 Enter"라는 뜻을 스스로 말한다.
+  // 이 문장을 보내지 않는다는 계약은 그대로다(canvas.js seedGraphChat 주석).
+  try { $input.setSelectionRange($input.value.length, $input.value.length); } catch { /* textarea가 아니면 그만 */ }
 });
 
 // ---------- @ 플러그인 멘션 ----------

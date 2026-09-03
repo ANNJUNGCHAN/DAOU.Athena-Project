@@ -2201,18 +2201,27 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   // 공통 패널 CTA(2026-09-02) — 배너 CTA와 같은 이유로 실제 질문을 심는다.
   // 문구는 패널의 리드인과 같은 축이다: 숨은 연관이면 "왜 이어졌나", 체결·잔고와
   // 대화가 어긋나면 "어느 쪽이 실제인가".
+  //
+  // 문장은 짧고 사람 말이어야 한다(2026-09-03 사용자 지적 "문장이 너무 길고
+  // 기계적이다"). 두 가지를 걷어냈다:
+  //   ① 모델 지시문 꼬리("사실과 추론을 구분해서", "근거가 약하면 그렇다고 말해줘").
+  //      사람이 자기 입으로 그렇게 쓰지 않는다. 그리고 그 지시는 이미 그래프 접두가
+  //      하고 있다(live-prompt.js) — 여기서 또 쓰면 두 벌이다.
+  //   ② 주격 조사. target은 `"삼성화재"`처럼 따옴표로 싸여 있어서 `${target}이`가
+  //      **"삼성화재"이**로 렌더됐다(받침 판정이 닿는 마지막 글자가 따옴표다).
+  //      이름 뒤에 줄표를 두면 조사가 아예 필요 없고 채팅 말투로도 자연스럽다.
   onPanelCta: (ask) => {
     const name = ask && ask.name ? String(ask.name) : null;
     const target = name ? `"${name}"` : '지금 고른 것';
     if (ask && ask.kind === 'hidden') {
-      seedGraphChat(`${target}이 왜 다른 군집과 이어졌는지 설명해줘. 근거가 약하면 그렇다고 말해줘.`);
+      seedGraphChat(`${target} — 왜 다른 군집과 이어졌어?`);
       return;
     }
     if (ask && ask.kind === 'conflict') {
-      seedGraphChat(`${target}은 체결·잔고와 대화가 어긋나는데, 어느 쪽이 실제에 가까운지 물어봐줘.`);
+      seedGraphChat(`${target} — 체결과 대화가 왜 다르게 나와?`);
       return;
     }
-    seedGraphChat(`${target}에 대해 그래프가 무엇을 알고 있는지 알려줘. 사실과 추론을 구분해서.`);
+    seedGraphChat(`${target} — 그래프가 뭘 알고 있어?`);
   },
   // 스텝14 — 스텝11(숨은 연관 군집 쌍)·13(숨은 연관 엔티티 쌍)의 실배선. 위
   // lastSurprisingConnections 캐시를 그대로 읽는다(이중 fetch 없음).
@@ -3144,10 +3153,11 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
     }
     // 카드를 못 열었으면(답변 중 · 물을 것이 0건 · 조회 실패) 빈손으로 두지 않고
     // 옛 경로로 내려간다 — 문장을 심어 사람이 직접 묻게 한다.
+    // 위 패널 CTA와 같은 규칙 — 짧게, 지시문 꼬리 없이(2026-09-03).
     const count = Number.isFinite(hintCount) && hintCount > 0 ? hintCount : null;
     seedGraphChat(count
-      ? `확인이 필요한 것 ${count}건이 뭐야? 각각 어느 쪽이 실제에 가까운지 하나씩 물어봐줘.`
-      : '확인이 필요한 것이 뭐야? 어느 쪽이 실제에 가까운지 물어봐줘.');
+      ? `확인이 필요한 ${count}건, 하나씩 물어봐줘.`
+      : '확인이 필요한 게 뭐야?');
   },
 });
 
