@@ -16,7 +16,7 @@
 |---|---|
 | [plugin-mode-doctrine/plan.md](./plugin-mode-doctrine/plan.md) | 합의 계획 반복 7 — §0 실행 규율 · §2 RALPLAN-DR(원칙·선택지·프리모템·테스트 계획) · §3 수락 기준 · §4 W0~W5 구현 단계 · §5 인터페이스 계약 · §6 위험 · §7 검증 명령 · §8 확정 결정 10 · §9 ADR |
 | [plugin-mode-doctrine/spec.md](./plugin-mode-doctrine/spec.md) | deep-interview 명세(모호도 18%) — 사용자가 승인한 수락 기준 ①②③ 원문 |
-| [plugin-mode-doctrine/prd.json](./plugin-mode-doctrine/prd.json) | ralph PRD 8스토리 — 통과 4 · 남음 4(US-003·004·006·007·008 중 008 포함 5) |
+| [plugin-mode-doctrine/prd.json](./plugin-mode-doctrine/prd.json) | ralph PRD **9스토리** — 통과 4(US-000·001·002·005) · 남음 5(US-003·004·009·006·007·008 순) |
 | [plugin-mode-doctrine/baseline.json](./plugin-mode-doctrine/baseline.json) | 테스트 baseline(main f880d79): app 1946/1946 · backend 2638 passed/5 skipped · node 경로 |
 | [plugin-mode-doctrine/progress.txt](./plugin-mode-doctrine/progress.txt) | ralph 진행 기록(학습 포함) |
 | [plugin-mode-doctrine/reviews-iter5.json](./plugin-mode-doctrine/reviews-iter5.json) | 합의 5차 Architect/Critic 원문(참고) |
@@ -34,7 +34,7 @@
 
 **같은 컴퓨터에서 이어받기.** 워크트리에 `app/node_modules`(electron 포함)·`backend/.venv`·`core.hooksPath`가 이미 있다. Claude Code를 `C:\Projects\DAOU.Athena-plugin`에서 열고 §10 프롬프트를 붙여넣는다. `.omc/`도 그대로 있다(계획·명세·PRD·baseline).
 
-**다른 컴퓨터에서 이어받기.**
+**다른 컴퓨터에서 이어받기.** 전제: git · **Node 22+** · **uv** · Python 3.12 · 네트워크(npm·uv·`verify:plugins`의 npx/uvx 다운로드). Paper(디자인 도구)는 남은 코드 작업에 필요 없고, 검수 문구 반영 때만 필요하다 — Paper 파일은 `https://app.paper.design/file/01M0VGPX92K1TER4ZV9PWGQJJZ` 페이지 **B-2(플러그인)**, Paper MCP 연결이 있어야 편집할 수 있다. **보내는 컴퓨터에서 먼저 `git push -u origin feat/plugin-mode-doctrine`** — 아직 push되지 않았다.
 
 ```bash
 git clone https://github.com/ANNJUNGCHAN/DAOU.Athena.git && cd DAOU.Athena
@@ -60,9 +60,9 @@ cp docs/handoff/plugin-mode-doctrine/progress.txt .omc/progress.txt
 
 | 스토리 | 산출물 | 증거 |
 |---|---|---|
-| **US-001** 게이트웨이 제안 툴 | `backend/athena_mcp/plugin_tools.py`(`athena_plugin`, 6액션 enum, `dispatch(arguments, registry, consent_store)`, `registry.reload()` 1회, `source="model"` 강제, 별칭 게이트 4종 + 스니펫 파싱 규칙), `server.py` 배선(dispatch 분기·감사·등록), `tests/mcp/test_plugin_tools.py`(16함수/41케이스), `test_server.py` +2, `test_consent.py` +1, `tests/fixtures/plugin-proposal/*.json` 6종 | `uv run pytest tests/mcp -q` → **427 passed**; ruff 통과; 두 소비자 파일 쓰기 0건 |
+| **US-001** 게이트웨이 제안 툴 | `backend/athena_mcp/plugin_tools.py`(`athena_plugin`, 6액션 enum, `dispatch(arguments, registry, consent_store)`, `registry.reload()` 1회, `source="model"` 강제, 별칭 게이트 4종 + 스니펫 파싱 규칙), `server.py` 배선(dispatch 분기·감사·등록), `tests/mcp/test_plugin_tools.py`(14함수/50케이스), `test_server.py` +2, `test_consent.py` +1, `tests/fixtures/plugin-proposal/*.json` 6종 | `uv run pytest tests/mcp -q` → **427 passed**(약 2분); ruff 통과; 두 소비자 파일 쓰기 0건 |
 | **US-002** 렌더러 순수 모듈 | `app/lib/plugin-mode-adapter.js`(H2 `currentMode()`), `app/lib/plugin-proposal.js`(빌더·검증기·stale·문구), 테스트 2파일(38건), `app/shell.html` 태그 2줄 | `npm run test:unit` → **1984/1984**(+38, 신규 실패 0); 교차 언어 계약 테스트가 백엔드 픽스처 6종을 읽어 통과 |
-| **US-005** Paper 플러그인 페이지 | B-2 페이지 9장: 01~06 정정 + **07 `3ZJD-0` · 08 `3ZLW-0` · 09 `3ZNO-0`** 신설(각 1680×986, (4000,1140)/(6000,1140)/(0,2280)) | 정확 문구 35종 `find_nodes` 확인 · 03 옛 문구 0건 · 내부어 0건 · fit-content 0 · PDF `C:\Users\USER\Downloads\Combined (27).pdf`(3.67MB) **사용자 발송 완료, 검수 회신 대기** |
+| **US-005** Paper 플러그인 페이지 | B-2 페이지 9장: 01~06 정정 + **07 `3ZJD-0` · 08 `3ZLW-0` · 09 `3ZNO-0`** 신설(각 1680×986, (4000,1140)/(6000,1140)/(0,2280)) | 정확 문구 35종 `find_nodes` 확인 · 03 옛 문구 0건 · 내부어 0건 · fit-content 0 · PDF `C:\Users\USER\Downloads\Combined (27).pdf`(3.67MB, 저장소 밖 — 채팅으로도 발송됨) **사용자 발송 완료, 검수 회신 대기**. 수락 기준 ①은 계획 §7-1대로 **검수 승인 전까지 미완**이다 — PRD의 `passes:true`는 디자인 작업 완료를 뜻한다 |
 
 ---
 
@@ -78,6 +78,7 @@ cp docs/handoff/plugin-mode-doctrine/progress.txt .omc/progress.txt
 |---|---|---|---|
 | **B** | **US-003** 메인 프로세스 — `mcp-cli.js list()`에 `revision`, `mcp-runtime-coordinator.js`에 `'plugin-batch'`, `lib/main/plugin-proposal-registry.js`(순수: 1회용 소비 맵·실행 순서·pending 맵·별칭 게이트 4종·executor 8종 주입·probe는 apply 밖·install 서브사슬 보상·`consume(envelope)`), `lib/main/plugin-proposal-forward.js`(tool_result 판정), `main.js`(`maybeForwardPluginProposal`·tracker 훅·`athena:plugin-approve/reject/pending` handle·`athena:plugin-noted` on·`providerRuntimeEnabled` 분기·액션별 감사·`stageSnippet` 직접), `preload.js` 채널 5종 | §4 W2 표 전체, §6 R3 결정, §2.4 PM-1·PM-2·PM-3, §8 확정 8·10 | US-001·002 완료(○) |
 | **C** | **US-004** 렌더러 — `plugin-canvas.js`(승인 카드·3상태·`setProposals`·GUI 6종→`onPropose`·낙관적 토글 제거·권한 초안 보존+발산·접근성), `canvas.js`(재배선·revision 보관·모듈 스코프 구독+모드 게이트·`plugin-noted`·`setView` 래퍼 복원·`athena:plugin-result` CustomEvent), `chat.js`(제안 턴·결과 턴 4종 `_mountTurn`·모드 밖 한 줄), **W3-6** `shell.html` `#chatModeHead` + `controller.js` 모드별 문구(사용자 승인된 예외), `plugin-proposal-boundary.test.js` | §4 W0-3·W3-2·W3-3·W3-4·W3-6, §3.2 A3·A4·A5·A10 | US-003 |
+| **C+** | **US-009** 설정의 플러그인 탭을 플러그인 모드로 흡수(**사용자 지시 2026-09-03**, 명세 "설정 02 카드 유지"·계획 확정 9·R8을 **대체**) — `settings-cards.js` 플러그인 카드·nav 항목·직접 삭제 경로 제거, 감사 로그 섹션을 `plugin-canvas.js` 관리 뷰로, 직접 등록은 허브 `+ 서버 추가` 시트 재사용; Paper B-2 02 보드를 관리 뷰 셸로 재구성, 화면 13 nav 항목 제거·31 보드 폐기 각주; 파리티·감사 문서 갱신 | `prd.json` US-009 수락 기준(정본) | US-004 |
 | **D** | **US-006** CSS(`plugin-canvas.css`, 토큰만, Paper 픽셀 대조) ∥ **US-007** 하네스(`verify-plugins.js` 5동작 사슬 ⑴~⑸, `verify.js` 플러그인 블록 개정 폐기 7·유지 7·경계 1·신설 8, `verify-graph-mode.js`, `PAPER_APP_PARITY.md` 9행) | §4 W3-5·W5-1·W5-2·W5-3 | US-004 (CSS는 Paper 확정 후 — 이미 확정) |
 | **E** | **US-008** §7 게이트 전부(test:unit 2회·backend 전수 1회·hex·경계 테스트·문구 게이트·옛 문구 0) + 명시 `git add` 커밋 | §7, §0 | 전부 |
 | 외부 | **W5-4 PDF 검수** — 사용자 회신 대기. 안건 4건(§7 참조) | §4 W5-4 | 사용자 |
@@ -93,11 +94,11 @@ cp docs/handoff/plugin-mode-doctrine/progress.txt .omc/progress.txt
 3. **`plugin-proposal.js`는 IIFE 시점에 `window.AthenaLib.PluginCatalog`를 구조분해한다** — `shell.html`에서 `lib/plugin-catalog.js` 태그가 앞에 있어야 한다(현재 460 → 461·462 → canvas.js 476 → chat.js 477). 순서 봉인 단언은 canvas.js/chat.js 기준만 있으므로 US-004에서 `plugin-catalog.js` 기준 `indexOf` 단언 1줄을 `plugin-mode-adapter.test.js`에 추가하는 것을 권한다.
 4. **백엔드 `dispatch`는 sync다**(형제 4종은 async). `registry.reload()`의 락 경합이 이벤트 루프를 잠깐 막을 수 있다. 문제가 보이면 `async def` + `asyncio.to_thread(reload)`.
 5. **`_CATALOG_IDS`는 `app/lib/plugin-catalog.js`의 수동 복제**(fetch·time·sequential-thinking·memory·korea-stock). 카탈로그가 늘면 백엔드도 늘려야 한다. 동기화 테스트는 없다.
-6. **픽스처는 재생성만 한다.** `test_plugin_tools.py`의 픽스처 테스트가 매 실행 `backend/tests/fixtures/plugin-proposal/*.json`을 덮어쓴다 — 봉투 스키마 드리프트는 **JS 쪽 계약 테스트**(`plugin-proposal.test.js`)가 잡는다.
+6. **픽스처는 재생성만 한다.** `test_plugin_tools.py`의 픽스처 테스트가 `backend/tests/fixtures/plugin-proposal/*.json`을 쓴다 — 봉투 스키마 드리프트는 **JS 쪽 계약 테스트**(`plugin-proposal.test.js`)가 잡는다. `proposal_id`는 액션 이름에서 유도한 고정 hex이고 내용이 같으면 다시 쓰지 않으므로(인계 직전 수정) 테스트를 돌려도 작업 트리가 더러워지지 않는다. 그래도 `git status`에 이 6파일이 `M`으로 뜨면 봉투 모양이 바뀐 것이다 — 그때는 JS 계약 테스트와 함께 커밋한다.
 7. **Paper 05번 카드 제목.** 원래 모달 제목은 `한국 주식 시세 설치`였으나 계획 W4 표·W5-2 유지 단언대로 **`웹 문서 읽기 설치`**로 재구성했다(`uvx mcp-server-fetch`, `권한 1개 요청`). `한국 주식 시세를 설치할까요`는 07번 보드 1열에 있다.
 8. **Paper 06번 아트보드는 1680×830**(6칸 3행×2열). W5-3 파리티 문서에 이 치수를 기록해야 한다. 05번은 fit-content(높이 0)였던 것을 1680×986으로 고정했다.
 9. **`create_artboard`는 `left`/`top`을 무시한다** — 신설 후 `update_styles`로 재배치했다. 빈 스크린샷은 뷰포트 미마운트이지 렌더 오류가 아니다(get_jsx/find_nodes로 확인).
-10. **워크트리 행 번호 오프셋.** 계획의 `파일:행`은 본 저장소 작업 트리 기준이다. 워크트리에서는 `app/canvas.js` −311, `app/main.js` −21, `app/shell.html` −2, `app/preload.js` −2. **심볼로 재탐색**한다.
+10. **워크트리 행 번호 오프셋.** 계획의 `파일:행`은 본 저장소 작업 트리 기준이다. 워크트리에서는 `app/canvas.js` −311, `app/main.js` −21, `app/preload.js` −2, `app/shell.html`은 구역에 따라 다르다(`#chatModeHead` 구역 −2, 스크립트 블록은 Phase A 태그 삽입 후 −9). 다른 컴퓨터의 클론은 워크트리와 같다. **행 번호를 믿지 말고 심볼로 재탐색**한다.
 
 ---
 
@@ -109,6 +110,7 @@ cp docs/handoff/plugin-mode-doctrine/progress.txt .omc/progress.txt
 | 흐름 | 채팅이 제안, 캔버스가 승인. GUI 변경 버튼 유지(같은 게이트 합류). 제어 동작 5종(도구 **호출**은 범위 밖). 제안 주체는 모델(built-in 툴, `_ALLOWED_ACTIONS` 선례) |
 | 그래프 헤더 예외 | **승인** — `#chatModeHead`를 모드별 문구를 가지는 공용 헤더로 일반화. 그래프 문구·동작은 회귀 단언 3종(A10)으로 고정. `#pluginChatHead` 폴백은 채택하지 않음 |
 | 브랜치 | 별도 워크트리 `C:\Projects\DAOU.Athena-plugin` |
+| **설정 플러그인 탭 폐지** (2026-09-03 추가 지시) | 설정 오버레이의 플러그인 탭(스니펫 등록·감사 로그·직접 삭제)을 **플러그인 모드로 흡수**한다. 명세의 "설정 02 카드 유지", 계획 §8 확정 9의 "설정 카드는 그대로", §6 R8은 이 결정으로 **대체**된다. 구현은 US-009(prd.json) — 화면 페이지에서는 13(설정 nav)·31(설정 플러그인) 두 보드만 만진다 |
 | 실행 | 합의 정제 → ralph 실행(승인됨). 금지 git 명령: stash·reset·checkout --·restore·clean·add -A·commit -a |
 | 검수 안건(PDF와 함께 발송, **회신 대기**) | ⑴ 09번 경계 문구 `앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다` 유지 여부 ⑵ GUI 경로는 채팅 제안 턴을 만들지 않음(카드로만 합류) ⑶ 05번 부제 `…한 번에 하나씩 승인합니다` 폐기(묶음 승인) ⑸ 모드 밖 폐기 문구 `플러그인 모드에서 다시 요청합니다` |
 
@@ -128,7 +130,8 @@ cp docs/handoff/plugin-mode-doctrine/progress.txt .omc/progress.txt
 ```bash
 export PATH="/c/Users/USER/AppData/Roaming/fnm/node-versions/v22.14.0/installation:$PATH"
 ( cd app && npm run test:unit )                    # baseline 1946 대비 신규 not ok 0, 2회 연속
-( cd backend && uv run pytest tests/mcp -q )      # W1~W2 반복 중 좁힌 실행(수 초)
+( cd backend && uv run pytest tests/mcp/test_plugin_tools.py tests/mcp/test_server.py -q )   # W1~W2 반복 중 좁힌 실행(약 30초)
+( cd backend && uv run pytest tests/mcp -q )      # 게이트웨이 전체(약 2분, 427)
 ( cd backend && uv run pytest -q )                # W5 마지막에 1회(약 24분), passed ≥ 2638
 ( cd app && npm run verify:plugins )              # 네트워크 필요(npx/uvx 다운로드)
 ( cd app && npm run verify )                      # Electron 필요, verify.js 플러그인 블록

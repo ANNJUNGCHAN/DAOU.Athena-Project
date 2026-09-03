@@ -44,7 +44,7 @@ ralph — 플러그인 모드 기조 정렬 트랙을 이어받아 끝까지 구
 [정본 — 이 순서로 먼저 읽는다]
 1. docs/handoff/2026-09-03-plugin-mode-doctrine.md — 특히 §6(계획 문면과 다른 편차 10건)과 §7(사용자 결정, 되묻지 않는다)
 2. .omc/plans/athena-plugin-doctrine-consensus.md — 합의 계획 반복 7(Critic APPROVE). §0 실행 규율, §4 W2~W5, §6 R3 결정, §7 검증 명령, §8 확정 결정 10개가 유일한 지침이다
-3. .omc/prd.json — 스토리별 수락 기준(정본). US-000·001·002·005는 passes:true(커밋 55c3333). 남은 것은 US-003 → US-004 → US-006 ∥ US-007 → US-008
+3. .omc/prd.json — 스토리별 수락 기준(정본). US-000·001·002·005는 passes:true(커밋 55c3333). 남은 것은 US-003 → US-004 → US-009 → US-006 ∥ US-007 → US-008
 4. .omc/specs/deep-interview-athena-plugin-doctrine.md — 사용자가 승인한 수락 기준 ①②③ 원문
 
 [현재 상태] 백엔드 제안 툴 athena_plugin(backend/athena_mcp/plugin_tools.py, 427/427), 렌더러 순수 모듈 app/lib/plugin-mode-adapter.js·plugin-proposal.js(+테스트 38건), shell.html 태그 등록, Paper 플러그인 페이지 9장(디자인 파일)은 완료. 앱의 메인 프로세스·플러그인 캔버스·채팅·CSS·검증 하네스·파리티 문서는 미착수.
@@ -52,6 +52,7 @@ ralph — 플러그인 모드 기조 정렬 트랙을 이어받아 끝까지 구
 [진행 순서와 산출물]
 - US-003 (계획 §4 W2): app/lib/main/mcp-cli.js list()에 revision 추가 · mcp-runtime-coordinator.js MUTATION_KINDS에 'plugin-batch' · 신규 lib/main/plugin-proposal-registry.js(순수: 1회용 소비 맵·pending 맵·별칭 게이트 4종·executor 8종 주입·probe는 apply 밖·install 서브사슬 보상·consume(envelope)) · 신규 lib/main/plugin-proposal-forward.js(tool_result 판정) · app/main.js(maybeForwardPluginProposal → shellWin.send('athena:plugin-proposed'), ipcMain.handle athena:plugin-approve/reject/pending, ipcMain.on('athena:plugin-noted'), providerRuntimeEnabled 분기, 액션별 감사, stageSnippet은 mcpCli 직접) · app/preload.js 채널 5종. 테스트: node --test lib/main/*.test.js
 - US-004 (§4 W0-3·W3-2·W3-3·W3-4·W3-6): app/lib/plugin-canvas.js(승인 카드·3상태·setProposals·GUI 6종→deps.onPropose·낙관적 토글 제거·권한 초안 보존+발산·접근성) · app/canvas.js(재배선·revision 보관·모듈 스코프 구독+모드 게이트·plugin-noted·setView 래퍼 복원·CustomEvent athena:plugin-result) · app/chat.js(제안 턴·결과 턴 4종 _mountTurn·모드 밖 한 줄) · shell.html #chatModeHead + lib/graph-mode/controller.js 모드별 문구(사용자 승인된 예외) · 신규 lib/plugin-proposal-boundary.test.js
+- US-009 (사용자 추가 지시 2026-09-03, prd.json 수락 기준이 정본): 설정 오버레이의 플러그인 탭(스니펫 등록·감사 로그·직접 삭제)을 플러그인 모드로 흡수한다 — settings-cards.js 플러그인 카드·nav 항목 제거, 감사 로그 섹션은 plugin-canvas.js 관리 뷰로, 직접 등록은 허브 '+ 서버 추가' 시트 재사용, verify-settings-cards.js 개정, Paper B-2 02 보드를 관리 뷰 셸로(화면 13 nav 항목 제거·31 보드 폐기 각주만), 파리티·감사 문서 갱신. 명세 "설정 02 카드 유지"·계획 확정 9·R8은 이 스토리가 대체한다.
 - US-006 (§4 W3-5) ∥ US-007 (§4 W5-1·W5-2·W5-3): plugin-canvas.css(토큰만) · verify-plugins.js 5동작 사슬 · verify.js 플러그인 블록 개정(폐기 7·유지 7·경계 1·신설 8) · verify-graph-mode.js · PAPER_APP_PARITY.md 9행(06 보드 1680×830 기록)
 - US-008 (§7 전부): test:unit 2회 연속(신규 실패 0) · backend 전수 1회(passed ≥ 2638, 약 24분, node PATH 필요) · hex·경계·문구 게이트 · 커밋
 
