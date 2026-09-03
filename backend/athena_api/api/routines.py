@@ -291,8 +291,10 @@ async def save_watch_code_route(request: Request, body: dict[str, Any]) -> dict[
     선언 위치가 계약이다 — `/{routine_id}`보다 **앞**에 있어야 'watch'가 루틴 id로
     잡히지 않는다(`/source-catalog`과 같은 이유).
 
-    백테스트 표·등록부에는 아무 행도 만들지 않는다(R5·R9). 활성·일시중지 알람이
-    가리키는 파일은 409로 막는다(R10) — 이 문구는 화면이 그대로 보여주지 않는다.
+    백테스트 표·등록부에는 아무 행도 만들지 않는다(R5·R9). 켜져 있는 알람이
+    가리키는 파일만 409로 막는다(R10) — 일시중지 알람의 파일은 고쳐 쓸 수 있고,
+    그때는 해시가 어긋나 다시 검사를 받아야 재개된다. 이 문구는 화면이 그대로
+    보여주지 않는다.
     """
     from athena_api.watch.store_code import CodeLocked, save_watch_code
 
@@ -431,11 +433,18 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
     }
     if routine_id and result.ok:
         # 검사에 통과한 그 코드로 확정을 열어 준다 — can_activate가 해시를 대조한다.
+        # 켜져 있는 알람의 해시는 여기서 갈아 끼우지 않는다 — 그러면 돌고 있는 알람의
+        # 코드가 사람 확정 없이 바뀐다. 초안·일시중지만 다시 심는다.
         spec = runtime.store.get(routine_id)
         if spec is not None and spec.watch is not None:
-            # WatchSpec은 frozen이라 갈아 끼운다(검증을 거친 값의 불변성 유지).
-            spec.watch = replace(spec.watch, version_hash=result.code_hash)
-            runtime.store.upsert(spec)
+            if spec.status in ("draft", "paused"):
+                # WatchSpec은 frozen이라 갈아 끼운다(검증을 거친 값의 불변성 유지).
+                spec.watch = replace(spec.watch, version_hash=result.code_hash)
+                runtime.store.upsert(spec)
+            else:
+                payload["warnings"].append(
+                    "켜져 있는 알람 — 해시는 그대로 두었음 · 고치려면 먼저 일시중지"
+                )
     return payload
 
 

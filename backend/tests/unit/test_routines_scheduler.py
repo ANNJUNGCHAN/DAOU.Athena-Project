@@ -860,6 +860,7 @@ def _code_spec(
     cooldown_s=1800,
     status="active",
     lookback_days=30,
+    poll_interval_s=60,
 ):
     spec = validate_draft(
         {
@@ -871,7 +872,7 @@ def _code_spec(
                 "project_id": "p1",
                 "path": path,
                 "version_hash": version_hash,
-                "poll_interval_s": 60,
+                "poll_interval_s": poll_interval_s,
                 "lookback_days": lookback_days,
             },
         }
@@ -963,6 +964,76 @@ def test_market_hours_boundaries():
     assert in_code_market_hours(datetime(2026, 8, 24, 15, 30, tzinfo=_KST))
     assert not in_code_market_hours(datetime(2026, 8, 24, 15, 31, tzinfo=_KST))
     assert not in_code_market_hours(datetime(2026, 8, 23, 10, 0, tzinfo=_KST))  # 일요일
+
+
+def test_market_hours_window_is_configurable():
+    """시연용으로 창을 넓히고 요일 잠금을 풀 수 있다 — 기본값은 그대로다."""
+    sunday_evening = datetime(2026, 8, 23, 20, 0, tzinfo=_KST)
+    assert not in_code_market_hours(sunday_evening)
+    assert in_code_market_hours(
+        sunday_evening,
+        open_hhmm="00:00",
+        close_hhmm="23:59",
+        weekdays_only=False,
+    )
+    # 요일 잠금만 풀면 저녁 8시는 여전히 창 밖이다.
+    assert not in_code_market_hours(sunday_evening, weekdays_only=False)
+
+
+async def test_code_loop_runs_on_a_sunday_when_the_window_is_opened(tmp_path, monkeypatch):
+    """시연 설정이 열리면 일요일 저녁에도 한 주기가 돈다 — 기본값에서는 막힌다."""
+    _, digest = _watch_project(tmp_path, monkeypatch)
+    runner = _StubRunner(observed=False)
+    candles = _CountingStore(_bars())
+    sched, store, ledger, _ = _code_scheduler(
+        tmp_path,
+        runner=runner,
+        candle_store=candles,
+        now=datetime(2026, 8, 23, 20, 0, tzinfo=_KST),
+    )
+    _code_spec(store, digest)
+
+    await sched.run_code_once()
+    assert candles.calls == []  # 기본 창 — 일요일 저녁은 돌지 않는다
+    assert ledger.read_all() == []
+
+    sched.code_market_open = "00:00"
+    sched.code_market_close = "23:59"
+    sched.code_market_weekdays_only = False
+    await sched.run_code_once()
+
+    assert candles.calls == ["005930"]
+
+
+async def test_code_loop_honors_each_alarms_poll_interval(tmp_path, monkeypatch):
+    """전역 tick은 60초 그대로, 알람은 제 확인 주기가 찰 때만 본다."""
+    _, digest = _watch_project(tmp_path, monkeypatch)
+    runner = _StubRunner(observed=False)
+    sched, store, ledger, _ = _code_scheduler(
+        tmp_path, runner=runner, candle_store=_CountingStore(_bars())
+    )
+    clock = {"t": 0.0}
+    sched.monotonic = lambda: clock["t"]
+    fast = _code_spec(store, digest, poll_interval_s=60)
+    slow = _code_spec(store, digest, poll_interval_s=300)
+
+    seen: list[tuple[float, str]] = []
+    original = sched._run_one_code_watch
+
+    async def spy(spec, df, run, runtime):
+        seen.append((clock["t"], spec.id))
+        await original(spec, df, run, runtime)
+
+    sched._run_one_code_watch = spy
+
+    for tick in range(6):  # 0·60·120·180·240·300초
+        clock["t"] = tick * 60.0
+        await sched.run_code_once()
+
+    assert [t for t, rid in seen if rid == fast.id] == [0.0, 60.0, 120.0, 180.0, 240.0, 300.0]
+    assert [t for t, rid in seen if rid == slow.id] == [0.0, 300.0]
+    # 아직 볼 때가 아닌 주기는 원장에 사유를 남기지 않는다 — 못 본 게 아니다.
+    assert [r["routine_id"] for r in ledger.read_all() if r["verdict"] == "suppressed"] == []
 
 
 async def test_code_loop_records_stale_frame_as_suppressed(tmp_path, monkeypatch):

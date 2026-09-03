@@ -2860,6 +2860,22 @@ function historyConversationId() {
   return historyActiveConversationId;
 }
 
+// 에이전트 모드 코드 알람의 프로젝트(2026-09-03) — 감시 코드가 착지할 폴더 하나다.
+// id는 백엔드 프로젝트 레지스트리의 id다(athena:project-add가 등록 결과 id로 사이드바
+// 레코드를 만든다). 현재 대화의 프로젝트를 먼저 쓰고, 없으면 목록의 첫 프로젝트로
+// 내려앉는다(conversations.js normalizeState가 이미 같은 폴백을 쓴다). 폴더 경로가 없는
+// 기본 레코드는 레지스트리에 없는 것이라 프로젝트가 없는 것으로 본다 — 그때 접두가
+// 「프로젝트 없음」을 실어 모델이 지어내지 않고 사용자에게 묻는다.
+function activeAgentProject() {
+  try {
+    const listed = conversations.list();
+    const rows = (listed && Array.isArray(listed.projects) ? listed.projects : [])
+      .filter((row) => row && row.path);
+    const current = rows.find((row) => row.id === (listed && listed.currentProjectId)) || rows[0] || null;
+    return current ? { id: String(current.id), name: String(current.label || current.id) } : null;
+  } catch { return null; }
+}
+
 function activeRestAccountId() {
   try {
     const listed = accounts.list();
@@ -3886,6 +3902,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     canvasMode: submit.canvasMode,
     backtestContext: submit.backtestContext,
     graphContext: submit.graphContext,
+    agentContext: { project: activeAgentProject() },
     today: todayYyyymmdd(),
   };
   const turnPrompt = buildLiveTurnPrompt(liveTurnInput);

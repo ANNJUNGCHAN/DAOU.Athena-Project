@@ -110,6 +110,9 @@ const LIVE_RULES_TEXT = [
     '누르기 전에는 어떤 감시도 실재하지 않는다 — 승인 전에 등록됐다·예약됐다고',
     '확인하지 마라. 루틴을 제안할 때는 감시 방식(실시간 WS인지 주기 확인인지)과',
     '지연 한계를 함께 말한다.',
+    // 코드 알람(2026-09-03) — 초안을 띄운 것과 감시가 도는 것은 다른 사건이다.
+    '어떤 알람도 네가 켤 수 없다 — "켜졌다·감시 중이다·돌고 있다"고 말하지 마라. 확정은',
+    '사람이 카드를 누를 때만 일어난다.',
     // 감시 방식 이분법 고지(2026-08-19 사용자 지시 — 실행계획 §8): 감시류 요청을
     // 거절할 때도 데이터 전송의 실체를 정확히 알려준다. 기능을 약속하는 문장 금지.
     '감시 요청에 답할 때는 데이터 전송의 실체를 함께 알려준다 — 실시간으로 흐르는',
@@ -618,6 +621,35 @@ function buildGraphModePrefix(context, today) {
   ].join('\n');
 }
 
+// 에이전트 모드 접두(코드 알람, 2026-09-03) — 캔버스가 에이전트 모드일 때만 붙는다.
+// 왜 필요한가: 고정 source 목록(price.*·volume.prev_day_ratio·trade.strength·vi·
+// schedule)으로는 "거래량이 최근 3일 평균의 1.5배" 같은 규칙을 적을 수 없는데, 모델은
+// 가장 가까운 고정 source로 바꿔 적어 엉뚱한 알람을 만들었다. 계획 R9대로 감시 코드가
+// 착지하는 경로는 이 모드 하나뿐이라, propose_watch_code 계약과 프로젝트 id를 여기서 준다.
+//
+// 순수 함수 — today는 호출자(app/main.js)가 넘기고 여기서 Date를 쓰지 않는다.
+// context는 {project:{id,name}} 하나뿐이고, 키가 없으면 '프로젝트 없음'으로 내려앉는다.
+function buildAgentModePrefix(context, today) {
+  const ctx = context && typeof context === 'object' ? context : null;
+  const project = ctx && ctx.project && typeof ctx.project === 'object' ? ctx.project : null;
+  const projectId = project && typeof project.id === 'string' ? project.id : '';
+  const projectName = project && typeof project.name === 'string' && project.name
+    ? project.name
+    : '이름 없음';
+  const projectLine = projectId
+    ? `프로젝트: ${projectName} (${projectId})`
+    : '프로젝트 없음 — 코드 알람은 프로젝트를 먼저 만든 뒤';
+  return [
+    `[모드: 에이전트] 오늘: ${today ? String(today) : '미상'}`,
+    projectLine,
+    '코드 알람 — 사용자가 원하는 감시 규칙이 고정 source(price.current·price.change_rate·trade.strength·volume.prev_day_ratio·vi.triggered·schedule.daily)로 적히지 않으면(예: 거래량이 최근 N일 평균의 배수, 지표 교차, 두 값의 비율) 가장 가까운 고정 source로 바꿔 적지 마라 — 그건 다른 알람이다. 아래 네 걸음을 밟는다.',
+    '① athena_routine action=propose_watch_code 로 감시 함수 파일을 쓴다: project_id는 위 프로젝트 id, path는 "watch/<영문 이름>.py", labels는 함수명 → 한국어 제목. source(파이썬 원문)에는 최상위 PARAMS = {...} 리터럴, 최상위 NODE_LABELS = {함수명: "한국어 제목"} 리터럴(signals를 포함한 최상위 함수 전부), 판단 하나에 함수 하나인 최상위 도우미 함수 2~5개(제목은 「일봉 불러오기」·「거래량 평균」·「배수 비교」·「알림」처럼 한국어), 그리고 def signals(df, p)가 있어야 한다. signals는 df.assign(entry=..., exit=False)[["entry","exit"]]를 돌려주고 entry가 울릴지 여부다. df는 open/high/low/close/volume 열을 가진 날짜 오름차순 일봉이고, 쓸 수 있는 것은 pandas·numpy·math·statistics·datetime·athena_bt(지표는 import athena_bt as bt — sma·ema·rsi·atr·bbands 등)뿐이다.',
+    '② 돌려받은 code_hash로 이어서 action=draft 를 부른다: symbol(6자리), condition은 {source:"code.watch", op:"==", value:true}, cooldown_s·expires_days·note(한국어 상태 한 줄), watch는 {project_id, path, version_hash: code_hash, params, poll_interval_s:60, lookback_days:30}.',
+    '③ 초안 카드에 「검사」 칩이 뜬다는 것과, 사람이 「이 알람 승인」을 눌러야 감시가 돈다는 것을 한 줄로 알린다 — 등록됐다·켜졌다고 말하지 마라.',
+    '④ 사용자가 칸이 이상하다고 하면(「이상해요」·「고칠 게 있어」·「…칸이 이상해」) 같은 path로 propose_watch_code를 다시 불러 파일을 새로 쓰고 다시 초안·검사로 간다. 알람이 켜진 상태면 파일을 덮어쓸 수 없으니, 먼저 잠시 멈춰 달라고 말한 뒤 고친다.',
+  ].join('\n');
+}
+
 // 상주 세션의 턴 페이로드 — 질문만. 레거시와 같은 '사용자 질문:' 프레이밍을
 // 유지해 규칙 문구("아래 사용자 질문에 답하라")가 두 경로 모두에서 성립한다.
 // 프로바이더 런타임은 { userText } 객체로 부르므로(app/main.js) 문자열과 객체를
@@ -636,6 +668,10 @@ function buildLiveTurnPrompt(input) {
   if (isObject && input.canvasMode === 'graph') {
     return `${buildGraphModePrefix(input.graphContext, input.today)}\n\n${body}`;
   }
+  // 에이전트 모드(2026-09-03) — 코드 알람이 착지하는 유일한 모드다(계획 R9).
+  if (isObject && input.canvasMode === 'agent') {
+    return `${buildAgentModePrefix(input.agentContext, input.today)}\n\n${body}`;
+  }
   return body;
 }
 
@@ -647,6 +683,7 @@ function buildLivePrompt(query) {
 }
 
 module.exports = {
+  buildAgentModePrefix,
   buildBacktestModePrefix,
   buildGraphModePrefix,
   buildLivePrompt,

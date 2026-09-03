@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import time
 from collections.abc import Awaitable, Callable
 from contextlib import suppress
 from dataclasses import dataclass, field, replace
@@ -27,8 +28,11 @@ _KST = timezone(timedelta(hours=9))
 
 NotifyFn = Callable[[dict[str, Any]], Awaitable[None]]
 
-# 장중 = KST 평일 09:00–15:30. 휴장일 달력은 저장소에 없어 요일만 본다 —
+# 장중 = KST 평일 09:00–15:30이 기본값. 휴장일 달력은 저장소에 없어 요일만 본다 —
 # 휴장일은 "마지막 완성 일봉이 직전 평일보다 오래됨"으로 데이터 층이 잡는다.
+# 시연에서는 설정(routines_code_market_*)으로 창을 넓히거나 요일 잠금을 풀 수 있다.
+CODE_MARKET_OPEN = "09:00"
+CODE_MARKET_CLOSE = "15:30"
 CODE_MARKET_OPEN_MINUTE = 9 * 60
 CODE_MARKET_CLOSE_MINUTE = 15 * 60 + 30
 # 실행 시 파일이 바뀌었거나 사라졌을 때의 복구 안내(B-21).
@@ -36,12 +40,29 @@ CODE_HASH_MISMATCH_REASON = "감시 코드가 바뀌거나 사라짐 — 다시 
 CODE_RUN_FAILED_REASON = "감시 함수 실행 실패"
 
 
-def in_code_market_hours(now: datetime) -> bool:
-    """이 시각에 코드 감시가 돌아야 하는가 — KST 평일 09:00~15:30."""
-    if now.isoweekday() > 5:
+def _hhmm_minutes(hhmm: str, fallback: int) -> int:
+    """"HH:MM" → 자정부터의 분. 형식이 깨졌으면 기본 창으로 돌아간다."""
+    try:
+        hh, mm = hhmm.split(":")
+        return int(hh) * 60 + int(mm)
+    except (AttributeError, ValueError):
+        return fallback
+
+
+def in_code_market_hours(
+    now: datetime,
+    *,
+    open_hhmm: str = CODE_MARKET_OPEN,
+    close_hhmm: str = CODE_MARKET_CLOSE,
+    weekdays_only: bool = True,
+) -> bool:
+    """이 시각에 코드 감시가 돌아야 하는가 — 기본은 KST 평일 09:00~15:30."""
+    if weekdays_only and now.isoweekday() > 5:
         return False
     minutes = now.hour * 60 + now.minute
-    return CODE_MARKET_OPEN_MINUTE <= minutes <= CODE_MARKET_CLOSE_MINUTE
+    start = _hhmm_minutes(open_hhmm, CODE_MARKET_OPEN_MINUTE)
+    end = _hhmm_minutes(close_hhmm, CODE_MARKET_CLOSE_MINUTE)
+    return start <= minutes <= end
 
 
 # REAL 필드 → 소스 카탈로그 매핑. 근거: generated/models.py 실측
@@ -137,6 +158,12 @@ class RoutineScheduler:
     watch_runtime: Any | None = None
     code_poll_interval_s: float = 60.0
     code_rest_calls_per_cycle: int = 20
+    # 장중 창 — 시연에서 넓힐 수 있게 설정에서 받는다(기본은 오늘과 같다).
+    code_market_open: str = CODE_MARKET_OPEN
+    code_market_close: str = CODE_MARKET_CLOSE
+    code_market_weekdays_only: bool = True
+    # 알람별 확인 주기를 재는 단조 시계 — 테스트가 갈아 끼운다(now_kst와 같은 자리).
+    monotonic: Callable[[], float] = time.monotonic
     last_error: str | None = None
     _tasks: list[asyncio.Task[None]] = field(default_factory=list)
     _stopping: bool = False
@@ -148,6 +175,9 @@ class RoutineScheduler:
     # 그래서 재기동 직후 같은 날 한 번 더 발화할 수 있다 — 버그가 아니라 허용된
     # 기존 한계다(계획 문서 Rev.3 "실행 시 참고" 참고).
     _last_fired_date: dict[str, date] = field(default_factory=dict)
+    # routine_id → 마지막으로 본 단조 시각. 루프의 전역 tick(code_poll_interval_s)은
+    # 그대로 두고, 알람마다 제 poll_interval_s가 찰 때만 본다(프로세스 로컬).
+    _code_last_checked: dict[str, float] = field(default_factory=dict)
 
     async def start(self) -> None:
         self._stopping = False
@@ -380,12 +410,19 @@ class RoutineScheduler:
         if runner is None or store is None:
             return
         now = self.now_kst()
-        if not in_code_market_hours(now):
+        if not in_code_market_hours(
+            now,
+            open_hhmm=self.code_market_open,
+            close_hhmm=self.code_market_close,
+            weekdays_only=self.code_market_weekdays_only,
+        ):
             return
         specs = [
             s
             for s in self.store.list_active()
-            if s.mode == "code-watch" and s.watch is not None
+            if s.mode == "code-watch"
+            and s.watch is not None
+            and self._code_due(s.id, s.watch.poll_interval_s)
         ]
         if not specs:
             return
@@ -413,6 +450,18 @@ class RoutineScheduler:
                 continue
             for spec in group:
                 await self._run_one_code_watch(spec, frame.df, runner, runtime)
+
+    def _code_due(self, routine_id: str, poll_interval_s: float) -> bool:
+        """이 알람의 확인 주기가 찼는가 — 안 찼으면 이번 tick은 통째로 건너뛴다.
+
+        건너뛴 주기는 원장에 남기지 않는다 — 못 본 게 아니라 아직 볼 때가 아니다.
+        """
+        now = self.monotonic()
+        last = self._code_last_checked.get(routine_id)
+        if last is not None and now - last < poll_interval_s:
+            return False
+        self._code_last_checked[routine_id] = now
+        return True
 
     def _record_code_skip(
         self, spec: RoutineSpec, reason: str, *, duration_ms: float | None = None
