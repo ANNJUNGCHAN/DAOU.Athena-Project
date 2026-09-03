@@ -750,7 +750,12 @@ function createGraphModeController(deps) {
     return 'panel-dot-soft';
   }
 
-  const PANEL_TIER_LABELS = { deterministic: '체결·잔고', conversational: '대화' };
+  // manual — 사람이 화면에서 직접 고친 것(2026-09-03). 체결도 대화도 아니라 별 라벨이
+// 필요하다: 체결이라고 쓰면 체결한 적 없는 것을 체결이라 말하는 것이고, 대화라고
+// 쓰면 모델이 추론한 것처럼 읽힌다.
+const PANEL_TIER_LABELS = {
+  deterministic: '체결·잔고', conversational: '대화', manual: '직접 수정',
+};
 
   // §10-4 최근 변화(보드 15 §2.5, WP-G) — 2단계 렌더의 채움 단계. 응답 시점의
   // 실제 DOM에서 섹션을 다시 찾는다(선점해 둔 closure 노드는 같은 엔티티

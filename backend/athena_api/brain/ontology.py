@@ -115,6 +115,9 @@ class SourceKind(StrEnum):
 
     CHAT_MESSAGE = "chat_message"
     CONVERSATION = "conversation"
+    # 사람이 그래프 화면에서 직접 고친 것(2026-09-03). 추출 대상이 아니다 —
+    # 이 소스에는 캘 텍스트가 없고, 이미 결론만 들어 있다.
+    MANUAL_EDIT = "manual_edit"
     TRADE = "trade"
     HOLDING = "holding"
 
@@ -144,6 +147,12 @@ class SourceTier(StrEnum):
 
     DETERMINISTIC = "deterministic"
     CONVERSATIONAL = "conversational"
+    # 사람이 화면에서 직접 고친 것(2026-09-03 사용자 확정 "내가 그래프창에 있으면
+    # 편집이라고 봐야지"). 대화 추론보다 세다 — 주인이 명시적으로 말한 것이라
+    # 다음 대화 추출이 덮으면 안 된다(store._apply_one_relation이 그것을 막는다).
+    # 체결·잔고와는 서로 덮지 않는다: 둘 다 근거가 분명하고, 어긋나면 그 대조를
+    # 화면이 보여 주는 것이 이 그래프의 원래 목적이다.
+    MANUAL = "manual"
 
 
 class GraphEventOp(StrEnum):

@@ -2371,6 +2371,10 @@ function maybeForwardGraphChatAction(step, resultBlock) {
       // 있으면 카드가 '적용'에서 바로 지운다(2026-09-03). 없으면 카드가 예전
       // 경로(답변 문장 제출 → 수집 때 반영)를 그대로 쓴다.
       relationId: payload.relation_id == null ? null : payload.relation_id,
+      // 추가·수정의 즉시 반영 재료 — 두 끝의 entity id. 이름으로 쓰지 않는 이유는
+      // 백엔드 입구 주석과 같다: 오타가 새 노드가 된다.
+      subjectId: payload.subject_id == null ? null : payload.subject_id,
+      objectId: payload.object_id == null ? null : payload.object_id,
       reason: payload.reason == null ? null : payload.reason,
     };
   }
@@ -4214,6 +4218,32 @@ ipcMain.handle('athena:brain-surprising-connections', async (_e, { limit } = {})
 // 다른 일이다. 모델은 이 채널에 닿지 않는다 — 렌더러의 카드만 부른다.
 // 되물을 것들 카드의 '맞다' — 불확실을 사실로 올린다. 취소와 같은 이유로 즉시
 // 반영한다: 답해도 "확인이 필요한 것 N건"이 줄지 않으면 같은 카드가 무한히 되묻는다.
+// 사람의 직접 추가·수정(2026-09-03) — 확정 카드의 op=add|change가 부른다.
+// 지우기·확인과 달리 관계를 새로 쓴다. 티어는 MANUAL이라 다음 대화 추출이 덮지 못한다.
+ipcMain.handle('athena:brain-manual-relation', async (_e, payload = {}) => {
+  const subjectId = typeof payload.subjectId === 'string' ? payload.subjectId.trim() : '';
+  const objectId = typeof payload.objectId === 'string' ? payload.objectId.trim() : '';
+  const kind = typeof payload.kind === 'string' ? payload.kind.trim() : '';
+  if (!subjectId || !objectId || !kind) return { ok: false, error: '두 끝 id와 관계 이름이 필요하다' };
+  const result = await fetchBrainJson('/api/v1/brain/relations/manual', {
+    method: 'POST',
+    payload: {
+      subject_id: subjectId,
+      object_id: objectId,
+      kind,
+      rationale: typeof payload.rationale === 'string' ? payload.rationale : null,
+    },
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  if (result.body && result.body.written && shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:brain-graph-updated', {
+      revision: result.body.revision,
+      trigger: 'human-manual-edit',
+    });
+  }
+  return { ok: true, ...result.body };
+});
+
 ipcMain.handle('athena:brain-confirm-relation', async (_e, { relationId } = {}) => {
   const id = typeof relationId === 'string' ? relationId.trim() : '';
   if (!id) return { ok: false, error: 'relationId가 없다' };

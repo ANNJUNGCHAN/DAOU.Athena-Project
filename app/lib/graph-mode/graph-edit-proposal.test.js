@@ -181,3 +181,22 @@ test('normalizeProposal — relationId가 없거나 비면 null이다(예전 경
   const blank = normalizeProposal({ op: 'remove', object: 'x', relation: 'y', relationId: '   ' });
   assert.equal(blank.relationId, null, '공백만 있는 id를 진짜 id로 쓰면 취소가 조용히 실패한다');
 });
+
+// 추가·수정의 즉시 반영(2026-09-03) — 두 끝 id가 다 와야 쓴다. 이름으로 쓰면 오타가
+// 새 노드가 되므로 화면이 이름으로 쓰지 않는다.
+test('normalizeProposal — subjectId·objectId를 싣는다', () => {
+  const item = normalizeProposal({
+    op: 'add', object: '반도체', relation: 'belongs_to',
+    subjectId: 'entity:a', objectId: 'entity:b',
+  });
+  assert.equal(item.subjectId, 'entity:a');
+  assert.equal(item.objectId, 'entity:b');
+});
+
+test('normalizeProposal — id가 하나만 오면 그것만 남고 다른 쪽은 null이다', () => {
+  const item = normalizeProposal({
+    op: 'add', object: '반도체', relation: 'belongs_to', objectId: 'entity:b',
+  });
+  assert.equal(item.subjectId, null, '한쪽만 있으면 카드가 즉시 반영을 안 쓴다');
+  assert.equal(item.objectId, 'entity:b');
+});
