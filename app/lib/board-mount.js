@@ -105,6 +105,8 @@ function mountPlan(contract, values) {
       text: formatted.text,
       tone: formatted.tone,
       missing: formatted.missing,
+      valueAtomic: slot.static !== true && slot.kind !== 'label'
+        && slot.kind !== 'static' && isValueSlot(slot),
       pairedWith: slot.paired_with || null,
       expandedBoard: slot.expanded_board || null,
     });
@@ -196,6 +198,8 @@ function applyPlan(root, plan, options = {}) {
     if (color) el.style.color = color;
     if (el.dataset) {
       el.dataset.slotId = assignment.slotId;
+      if (assignment.valueAtomic) el.dataset.bsValueAtomic = 'true';
+      else delete el.dataset.bsValueAtomic;
       if (assignment.missing) el.dataset.missing = 'true';
       else delete el.dataset.missing;
     }

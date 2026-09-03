@@ -86,6 +86,19 @@ SVG_CAMEL_KEEP = frozenset(
 
 ROLE_TOKEN = re.compile(r"^[a-z][a-z0-9-]*$")
 
+RESPONSIVE_TRAIT_ORDER = (
+    "atomic",
+    "flow",
+    "scroll",
+    "paired-table",
+    "scroll-table",
+)
+RESPONSIVE_TRAITS = frozenset(RESPONSIVE_TRAIT_ORDER)
+RESPONSIVE_LAYOUT_TRAITS = frozenset(
+    ("flow", "scroll", "paired-table", "scroll-table")
+)
+RESPONSIVE_SCROLL_TRAITS = frozenset(("scroll", "scroll-table"))
+
 ATTR_RENAME = {"className": "class", "htmlFor": "for"}
 
 # 값이 아니라 라벨임을 뒤집는 문자(숫자·부호·단위·날짜·시각 흔적).
@@ -107,6 +120,27 @@ class ExtractError(RuntimeError):
     """추출 실패(fail-closed)."""
 
 
+def _reject_duplicate_json_keys(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    value: dict[str, object] = {}
+    for key, item in pairs:
+        if key in value:
+            raise ExtractError(f"regions.json duplicate raw JSON key: {key!r}")
+        value[key] = item
+    return value
+
+
+def load_regions_json(path: Path) -> dict[str, object]:
+    try:
+        data = json.loads(
+            path.read_text(encoding="utf-8"), object_pairs_hook=_reject_duplicate_json_keys
+        )
+    except json.JSONDecodeError as exc:
+        raise ExtractError(f"regions.json is not valid JSON: {exc}") from exc
+    if not isinstance(data, dict):
+        raise ExtractError("regions.json root must be an object")
+    return data
+
+
 def load_regions(path: Path) -> tuple[dict[str, str], str | None]:
     """regions.json을 node_id→role 표로 읽는다.
 
@@ -115,7 +149,7 @@ def load_regions(path: Path) -> tuple[dict[str, str], str | None]:
     """
     if not path.exists():
         return {}, None
-    data = json.loads(path.read_text(encoding="utf-8"))
+    data = load_regions_json(path)
     if isinstance(data.get("roles"), dict):
         return dict(data["roles"]), data.get("root")
     roles: dict[str, str] = {}
@@ -128,6 +162,57 @@ def load_regions(path: Path) -> tuple[dict[str, str], str | None]:
             raise ExtractError(f"regions.json에 {node_id} role이 중복된다")
         roles[node_id] = role
     return roles, data.get("root")
+
+
+def load_responsive(path: Path, known_node_ids: set[str]) -> list[dict]:
+    """Read optional responsive traits without changing load_regions' public contract."""
+    if not path.exists():
+        return []
+    data = load_regions_json(path)
+    raw_entries = data.get("responsive", [])
+    if raw_entries is None or not isinstance(raw_entries, list):
+        raise ExtractError("regions.json responsive must be an array")
+
+    entries: list[dict] = []
+    seen_nodes: set[str] = set()
+    for raw in raw_entries:
+        if not isinstance(raw, dict):
+            raise ExtractError(f"responsive entry must be an object: {raw!r}")
+        node_id = raw.get("node_id")
+        if not isinstance(node_id, str) or not node_id:
+            raise ExtractError(f"responsive entry is missing node_id: {raw!r}")
+        if node_id in seen_nodes:
+            raise ExtractError(f"responsive node is duplicated: {node_id}")
+        if node_id not in known_node_ids:
+            raise ExtractError(f"responsive node does not exist: {node_id}")
+        raw_traits = raw.get("traits")
+        if not isinstance(raw_traits, list) or not raw_traits:
+            raise ExtractError(f"responsive traits must be a nonempty array: {node_id}")
+        if any(not isinstance(trait, str) or not trait for trait in raw_traits):
+            raise ExtractError(f"responsive traits must be nonempty strings: {node_id}")
+        if any(trait not in RESPONSIVE_TRAITS for trait in raw_traits):
+            raise ExtractError(f"responsive traits are not allowlisted: {node_id}")
+        if len(set(raw_traits)) != len(raw_traits):
+            raise ExtractError(f"responsive traits are duplicated: {node_id}")
+        traits = tuple(trait for trait in RESPONSIVE_TRAIT_ORDER if trait in raw_traits)
+        if len(set(traits) & RESPONSIVE_LAYOUT_TRAITS) > 1:
+            raise ExtractError(f"responsive has multiple layout traits: {node_id}")
+        accessible_label = raw.get("accessible_label")
+        if accessible_label is not None and (
+            not isinstance(accessible_label, str) or not accessible_label.strip()
+        ):
+            raise ExtractError(f"responsive accessible_label must be nonempty: {node_id}")
+        if set(traits) & RESPONSIVE_SCROLL_TRAITS and not accessible_label:
+            raise ExtractError(f"responsive scroll requires accessible_label: {node_id}")
+        entries.append(
+            {
+                "node_id": node_id,
+                "traits": traits,
+                "accessible_label": accessible_label,
+            }
+        )
+        seen_nodes.add(node_id)
+    return entries
 
 
 _LEDGER_ROWS: list[dict] | None = None
@@ -668,6 +753,42 @@ def add_class(el: Element, value: str) -> None:
     el.attrs.append(("class", value))
 
 
+def set_attr(el: Element, name: str, value: object) -> None:
+    for idx, (current_name, _) in enumerate(el.attrs):
+        if current_name == name:
+            el.attrs[idx] = (name, value)
+            return
+    el.attrs.append((name, value))
+
+
+def apply_responsive(
+    elements: list[Element], nodes: list[TreeNode], declarations: list[dict]
+) -> None:
+    """Emit deterministic responsive metadata without changing structural roles."""
+    by_id = {node.node_id: el for el, node in zip(elements, nodes)}
+    for declaration in declarations:
+        node_id = declaration["node_id"]
+        element = by_id[node_id]
+        traits = tuple(
+            trait for trait in RESPONSIVE_TRAIT_ORDER if trait in declaration["traits"]
+        )
+        is_scroll = bool(set(traits) & RESPONSIVE_SCROLL_TRAITS)
+        if is_scroll:
+            existing_role = next(
+                (value for name, value in element.attrs if name == "role"), None
+            )
+            if existing_role is not None and existing_role != "region":
+                raise ExtractError(
+                    f"responsive scroll cannot overwrite existing role: {node_id}"
+                )
+        for trait in traits:
+            add_class(element, f"bs-r-{trait}")
+        if is_scroll:
+            set_attr(element, "role", "region")
+            set_attr(element, "tabindex", "0")
+            set_attr(element, "aria-label", declaration["accessible_label"])
+
+
 def apply_regions(
     elements: list[Element], nodes: list[TreeNode], roles: dict[str, str]
 ) -> dict[str, str]:
@@ -868,9 +989,15 @@ def _is_header_row(row: Element) -> bool:
 
 
 def detect_tables(
-    elements: list[Element], nodes: list[TreeNode], roles: dict[str, str]
+    elements: list[Element],
+    nodes: list[TreeNode],
+    roles: dict[str, str],
+    explicit_tables: dict[str, dict] | None = None,
 ) -> list[dict]:
     """반복 행 구조(라벨 헤더 행 + 같은 폭 형제 행 3개 이상)를 표로 본다."""
+    # G1 only carries the authoritative directive forward. G3 resolves explicit
+    # table shapes; leaving this unused keeps existing table discovery unchanged.
+    _ = explicit_tables
     node_of = {id(el): node for el, node in zip(elements, nodes)}
     marked: set[int] = set()
     tables: list[dict] = []
@@ -1710,7 +1837,8 @@ def extract_board(
     jsx_src = (board_dir / "paper.jsx").read_text(encoding="utf-8")
     tree_src = (board_dir / "paper.tree.txt").read_text(encoding="utf-8")
     meta = json.loads((board_dir / "meta.json").read_text(encoding="utf-8"))
-    roles, declared_root = load_regions(board_dir / "regions.json")
+    regions_path = board_dir / "regions.json"
+    roles, declared_root = load_regions(regions_path)
     if meta.get("board_id") != board_id:
         raise ExtractError(
             f"meta.json board_id({meta.get('board_id')!r})가 디렉터리 이름과 다르다"
@@ -1728,8 +1856,15 @@ def extract_board(
     align(elements, nodes)
     if declared_root and declared_root != nodes[0].node_id:
         elements, nodes, root = slice_subtree(elements, nodes, declared_root)
+    responsive = load_responsive(regions_path, {node.node_id for node in nodes})
     assigned = apply_regions(elements, nodes, roles)
-    tables = detect_tables(elements, nodes, roles)
+    apply_responsive(elements, nodes, responsive)
+    explicit_tables = {
+        declaration["node_id"]: declaration
+        for declaration in responsive
+        if set(declaration["traits"]) & {"paired-table", "scroll-table"}
+    }
+    tables = detect_tables(elements, nodes, roles, explicit_tables)
     cell_of = table_position(elements, tables)
 
     node_of = {id(el): node for el, node in zip(elements, nodes)}

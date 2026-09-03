@@ -8,5 +8,11 @@
     { "node_id": "2R4Y-1", "name": "Quote Detail Mount", "role": "primary", "depth": 2 },
     { "node_id": "36MN-0", "name": "Instrument Context", "role": "rail", "depth": 2 },
     { "node_id": "2R3P-1", "name": "Chart Status Footer", "role": "footer", "depth": 1 }
+  ],
+  "responsive": [
+    { "node_id": "2R8T-1", "traits": ["flow"] },
+    { "node_id": "2R8W-1", "traits": ["flow"] },
+    { "node_id": "2R8X-1", "traits": ["atomic"] },
+    { "node_id": "2R90-1", "traits": ["flow"] }
   ]
 }
