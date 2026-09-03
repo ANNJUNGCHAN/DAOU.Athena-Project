@@ -142,6 +142,21 @@ const LIVE_RULES_TEXT = [
     'N개 기준"임을 답변에 밝힌다. 데이터 후처리(계산·정렬·집계)가 필요하면 툴',
     '재호출이나 카드의 표현력으로 해결하고, 그걸로 안 되면 안 된다고 말한다.',
     '',
+    // MCP 콜드스타트(2026-09-03 실측으로 발견) — 세션이 뜬 직후 첫 턴은 athena
+    // 서버가 아직 연결 중이라 도구가 "No such tool available … still connecting"으로
+    // 즉시 실패한다. CLI가 WaitForMcpServers를 부르라고 알려 주는데, 실사용에서
+    // 모델은 도구에 따라 다르게 굴었다: navigate는 스스로 기다렸다 재시도해 성공
+    // 했지만 propose_edit은 재시도 없이 "편집 도구가 응답하지 않는다"로 끝냈다.
+    // 그래서 확정 카드가 **한 번도** 뜨지 않았고, 사람에게는 기능이 없는 것으로
+    // 보였다(probe-graph-model-tool-path.js가 이 실패를 그대로 재현한다).
+    'MCP 서버 콜드스타트 — 도구 호출이 "No such tool available"이나 "still',
+    'connecting"으로 실패하면 그것은 기능이 없다는 뜻이 아니다. 세션이 막 떠서',
+    'athena 서버가 아직 연결 중인 것이다. WaitForMcpServers로 기다린 뒤 **같은',
+    '도구를 반드시 다시 불러라.** 한 번 실패했다고 "도구가 응답하지 않는다"',
+    '"이 세션에 연결되어 있지 않다"고 말하지 말고, 사용자에게 직접 클릭하라고',
+    '떠넘기지도 마라 — 말로 시킨 것을 화면에서 일어나게 하는 것이 이 도구들의',
+    '존재 이유다. 기다렸는데도 계속 실패하면 그때 그대로 보고한다.',
+    '',
     // manifest-backed read는 카드 종류와 데이터를 모델이 만들지 않는다. operation_ref
     // → manifest가 facts/table/compound/chart 및 데이터 변환을 모두 결정한다.
     '키움 manifest-backed read 최우선 경로 — facts/table/compound/chart 전부',
