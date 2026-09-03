@@ -732,9 +732,14 @@
       "font_size_px": 24.0,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:kt50030",
+      "mapping_id": "base:kt50031",
       "f": "cntr_qty",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt50030",
+          "f": "cntr_qty"
+        }
+      ],
       "kor": "체결수량",
       "format": {
         "unit": "text",
@@ -744,7 +749,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "display_dup": true
     },
     {
       "slot_id": "s020",
@@ -1344,9 +1350,9 @@
       "alt_mappings": null,
       "kor": "종목명",
       "format": {
-        "unit": "date",
+        "unit": "text",
         "sign": false,
-        "precision": 2,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": null,
@@ -1719,9 +1725,9 @@
       "alt_mappings": null,
       "kor": "종목명",
       "format": {
-        "unit": "date",
+        "unit": "text",
         "sign": false,
-        "precision": 2,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": null,
@@ -2116,9 +2122,9 @@
       "alt_mappings": null,
       "kor": "종목명",
       "format": {
-        "unit": "date",
+        "unit": "text",
         "sign": false,
-        "precision": 2,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": null,
@@ -3287,12 +3293,7 @@
       "table": null,
       "mapping_id": "base:kt50031",
       "f": "mdfy_cncl",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:kt50031",
-          "f": "rsrv_tp"
-        }
-      ],
+      "alt_mappings": null,
       "kor": "정정취소",
       "format": null,
       "paired_with": null,
@@ -3364,7 +3365,7 @@
     }
   ],
   "unbound_reason": {
-    "base:kt50031|rsrv_tp": "'정정취소 · 반대' 행은 Paper 설계상 잎이 하나('해당 없음')다 — s117에 정정취소(mdfy_cncl)를 주 바인딩으로, 반대여부를 alt_mappings로 붙여 둘 다 그 자리에 닿게 했다.",
+    "base:kt50031|rsrv_tp": "'정정취소 · 반대' 행은 Paper 설계상 잎이 하나('해당 없음')뿐이며 정정취소와 반대여부는 서로 다른 의미라 alt_mappings로 합치지 않는다 — 이름 있는 별도 반대여부 값 자리가 필요하다.",
     "slot:s087·s089·s091": "체결금액·수수료·정산금액은 kt50030·kt50031·kt50075 어디에도 없는 파생 합계(체결수량 × 체결단가, 그 합)라 static으로 둔다 — 응답 필드가 생기면 바인딩한다."
   }
 }

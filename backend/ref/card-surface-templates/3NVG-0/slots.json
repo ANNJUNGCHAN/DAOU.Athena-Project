@@ -2377,14 +2377,6 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "extra_fields": [
-        {
-          "mapping_id": "base:kt50021",
-          "f": "chck_ina_amt",
-          "kor": "수표입금액",
-          "sep": null
-        }
-      ],
       "display_dup": false
     },
     {
