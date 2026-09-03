@@ -7,7 +7,8 @@
   "state": {
     "kind": "expand",
     "parent_board": "133H-2",
-    "control": null
+    "control": null,
+    "control_text": "금현물"
   },
   "saved_at": "2026-09-02T10:58:00Z",
   "operation_refs": [

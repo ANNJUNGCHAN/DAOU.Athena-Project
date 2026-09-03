@@ -1312,6 +1312,54 @@ def test_control_text_matches_the_leaf_the_name_cannot_reach():
     assert 'data-state-control="현금 흐름"' in pbe.serialize(root)
 
 
+def test_expand_control_text_falls_back_to_plain_leaf_when_no_expand_glyph_exists():
+    root = pbe.parse_jsx("(<div><div>금현물</div></div>)")
+    elements = pbe.flatten(root)
+    leaf = next(el for el in elements if pbe.direct_text(el) == "금현물")
+    node_of = {id(leaf): pbe.TreeNode(1, "Text", "금현물", "G-0", 60, 12, "금현물")}
+    region_of = {id(root): "strip"}
+
+    marks, unresolved = pbe.mark_state_controls(
+        elements,
+        node_of,
+        region_of,
+        [
+            {
+                "board_id": "3ODO-0",
+                "kind": "expand",
+                "control": "금현물 잔고·거래내역",
+                "control_text": "금현물",
+            }
+        ],
+    )
+
+    assert unresolved == []
+    assert marks[0]["node_id"] == "G-0"
+    assert marks[0]["how"] == "hand"
+    assert 'data-state-control="금현물 잔고·거래내역"' in pbe.serialize(root)
+
+
+def test_expand_control_text_keeps_expand_glyph_when_one_exists():
+    root, elements, node_of, region_of = _state_board()
+    marks, unresolved = pbe.mark_state_controls(
+        elements,
+        node_of,
+        region_of,
+        [
+            {
+                "board_id": "H-0",
+                "kind": "expand",
+                "control": "현금 흐름",
+                "control_text": "0원 6항목",
+            }
+        ],
+    )
+
+    assert unresolved == []
+    assert marks[0]["node_id"] == "S2D-0"
+    assert marks[0]["how"] == "hand"
+
+
 def test_control_text_takes_the_leaf_before_a_name_match():
     root, elements, node_of, region_of = _state_board()
     marks, unresolved = pbe.mark_state_controls(

@@ -7,7 +7,7 @@
     "node_id": "14TE-2",
     "jsx_sha256": "05f7ae39e1285aebaa2cc80a9a9512adc0e6a34da23a04f79ff466b21d74c487"
   },
-  "html_sha256": "225ecb2da06b3e305c13e0342db91ea5a252b58013695980267848dfb1428ee7",
+  "html_sha256": "39c5525f3d66646aed081e42feaca56f5ed5564a8cdb42290639e5fef124c974",
   "width_px": 1360.0,
   "height_px": 952.0,
   "artboard_px": [
@@ -55,7 +55,7 @@
     "text_nodes": 166,
     "slots": 166,
     "anchored_slots": 19,
-    "mapped_slots": 16,
+    "mapped_slots": 130,
     "labels": 52,
     "values": 114,
     "layer_직접": 166,
@@ -67,7 +67,7 @@
     "bs_paired": 0,
     "bs_leaf": 0,
     "bs_kpi_cell": 5,
-    "state_control_marks": 4
+    "state_control_marks": 5
   },
   "density": {
     "table_columns": 0,
@@ -78,6 +78,15 @@
   },
   "state_controls": {
     "marks": [
+      {
+        "control": "금현물 잔고·거래내역",
+        "kind": "expand",
+        "boards": [
+          "3ODO-0"
+        ],
+        "node_id": "14U1-2",
+        "how": "hand"
+      },
       {
         "control": "보유종목",
         "kind": "tab",
@@ -115,14 +124,7 @@
         "how": "exact"
       }
     ],
-    "unresolved": [
-      {
-        "board_id": "3ODO-0",
-        "kind": "expand",
-        "control": "금현물 잔고·거래내역",
-        "reason": "후보 없음"
-      }
-    ]
+    "unresolved": []
   },
   "text_multiset": {
     "+1,082,400원": 1,

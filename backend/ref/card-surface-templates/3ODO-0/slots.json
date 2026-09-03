@@ -24,7 +24,7 @@
     "kind": "expand",
     "parent_board": "133H-2",
     "control": "금현물 잔고·거래내역",
-    "control_text": null
+    "control_text": "금현물"
   },
   "regions": {
     "3OHW-0": "header",
@@ -63,7 +63,7 @@
     "text_nodes": 136,
     "slots": 136,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 71,
     "labels": 73,
     "values": 63,
     "layer_직접": 0,
