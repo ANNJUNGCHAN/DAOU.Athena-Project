@@ -71,8 +71,16 @@ test('axis strip renders one disabled active chip and clickable siblings', () =>
   assert.equal(active.length, 1);
   assert.equal(active[0].disabled, true);
   assert.equal(active[0].listeners.length, 0);
-  const inactive = chips.find((chip) => chip.title === 'base:kt20016');
+  // operationRef는 어떤 속성에도 실리지 않는다 — title·aria·data-* 전부 제품 UI 원시
+  // 식별자 누출로 잡힌다(verify-semantic-workspaces, 2026-09-04 elw-product 실측). 칩은
+  // 한국어 라벨로만 찾고, 어느 칩도 ref를 노출하지 않는지 함께 잠근다.
+  const target = allItems().find((item) => item.operationRef === 'base:kt20016');
+  const inactive = chips.find((chip) => chip.textContent === target.label);
   inactive.listeners[0].handler();
   assert.deepEqual(selected, ['base:kt20016']);
+  for (const chip of chips) {
+    assert.equal(chip.title, '');
+    assert.doesNotMatch(JSON.stringify(chip.attributes), /(?:base|detail):[a-z0-9]/);
+  }
   assert.equal(strip.className, 'ranking-axis-strip');
 });
