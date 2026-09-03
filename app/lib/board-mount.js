@@ -326,6 +326,38 @@ function applyRealtimeSlots(surface, contract, values, slotIds, options = {}) {
   return { touched: plan.touched, plan, ...report };
 }
 
+// 상태 보드 링크의 pointer/keyboard 경로를 한 콜백으로 묶는다. 실제 button이나
+// 기존 tab/button role은 브라우저·소유 위젯의 키보드 동작을 그대로 써야 하므로
+// 추가 keydown을 달지 않는다. Paper에서 온 plain text leaf만 명시적으로 요청받았을
+// 때 button 의미를 보강한다.
+function stateControlActivationOwner(node) {
+  if (!node || typeof node.closest !== 'function') return node || null;
+  return node.closest('button, [role="button"], [role="tab"]') || node;
+}
+
+function wireStateControlActivation(node, activate, options = {}) {
+  if (!node || typeof node.addEventListener !== 'function' || typeof activate !== 'function') return false;
+  if (node.__athenaStateWired) return false;
+
+  const tagName = String(node.tagName || '').toLowerCase();
+  const role = typeof node.getAttribute === 'function'
+    ? String(node.getAttribute('role') || '').toLowerCase()
+    : '';
+  const nativeSemantics = tagName === 'button' || role === 'button' || role === 'tab';
+  if (options.keyboard && !nativeSemantics && !role && typeof node.setAttribute === 'function') {
+    node.setAttribute('role', 'button');
+    node.setAttribute('tabindex', '0');
+    node.addEventListener('keydown', (event) => {
+      if (!event || event.repeat || (event.key !== 'Enter' && event.key !== ' ')) return;
+      if (typeof event.preventDefault === 'function') event.preventDefault();
+      activate();
+    });
+  }
+  node.addEventListener('click', () => activate());
+  node.__athenaStateWired = true;
+  return true;
+}
+
 // ---------- 반응형 훅 (인라인 원문 ↔ 컨테이너 쿼리) ----------
 //
 // 추출 원문은 영역 노드마다 인라인 `width`/`flex-*`를 갖는다(실측: 27장 전부).
@@ -493,6 +525,7 @@ const __exports = {
   nodeIndex, elementChildCount, setHidden, applyPlan,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot, mountBoard, mountBoardAsync,
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
+  stateControlActivationOwner, wireStateControlActivation,
 };
 
 if (typeof module !== 'undefined' && module.exports) {

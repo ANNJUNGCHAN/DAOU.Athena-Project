@@ -6,6 +6,7 @@ const {
   collapsePlan, mountPlan, pairedGroups, nodeIndex, applyPlan, setHidden, isValueSlot,
   hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES,
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
+  stateControlActivationOwner, wireStateControlActivation,
 } = require('./board-mount');
 
 // jsdom 없이 검증한다 — ranking-axis.test.js와 같은 관행(DOM 스텁 주입).
@@ -78,6 +79,110 @@ function fixtureValues(overrides = {}) {
     ...overrides,
   };
 }
+
+function stateControlStub({ tag = 'div', role = null, tabindex = null } = {}) {
+  const attributes = new Map();
+  if (role !== null) attributes.set('role', role);
+  if (tabindex !== null) attributes.set('tabindex', tabindex);
+  return {
+    tagName: tag.toUpperCase(),
+    listeners: [],
+    getAttribute(name) { return attributes.has(name) ? attributes.get(name) : null; },
+    setAttribute(name, value) { attributes.set(name, String(value)); },
+    addEventListener(type, fn) { this.listeners.push({ type, fn }); },
+    dispatch(type, event = {}) {
+      for (const listener of this.listeners.filter((entry) => entry.type === type)) listener.fn(event);
+    },
+  };
+}
+
+test('responsive plain state control activates exactly once for click, Enter, and Space', () => {
+  assert.equal(typeof wireStateControlActivation, 'function');
+  const node = stateControlStub();
+  const activations = [];
+  assert.equal(wireStateControlActivation(node, () => activations.push('activate'), { keyboard: true }), true);
+
+  assert.equal(node.getAttribute('role'), 'button');
+  assert.equal(node.getAttribute('tabindex'), '0');
+  node.dispatch('click');
+  node.dispatch('keydown', { key: 'Enter', preventDefault() { activations.push('prevent-enter'); } });
+  node.dispatch('keydown', { key: ' ', preventDefault() { activations.push('prevent-space'); } });
+  node.dispatch('keydown', { key: 'Enter', repeat: true, preventDefault() { activations.push('repeat'); } });
+  node.dispatch('keydown', { key: 'ArrowRight', preventDefault() { activations.push('arrow'); } });
+
+  assert.deepEqual(activations,
+    ['activate', 'prevent-enter', 'activate', 'prevent-space', 'activate']);
+  assert.equal(wireStateControlActivation(node, () => activations.push('duplicate'), { keyboard: true }), false);
+  node.dispatch('click');
+  assert.equal(activations.at(-1), 'activate', 'rewiring must not install a second activation path');
+});
+
+test('native button and tab state controls keep their existing semantics', () => {
+  for (const fixture of [
+    { tag: 'button', role: null, tabindex: null },
+    { tag: 'div', role: 'tab', tabindex: '-1' },
+  ]) {
+    const node = stateControlStub(fixture);
+    let activations = 0;
+    assert.equal(wireStateControlActivation(node, () => { activations += 1; }, { keyboard: true }), true);
+    assert.equal(node.getAttribute('role'), fixture.role);
+    assert.equal(node.getAttribute('tabindex'), fixture.tabindex);
+    node.dispatch('keydown', { key: 'Enter', preventDefault() { throw new Error('native semantics were replaced'); } });
+    node.dispatch('keydown', { key: ' ', preventDefault() { throw new Error('native semantics were replaced'); } });
+    assert.equal(activations, 0, 'native keyboard handling must not be duplicated');
+    node.dispatch('click');
+    assert.equal(activations, 1);
+  }
+});
+
+test('a marked descendant routes state activation to its native button or tab owner', () => {
+  assert.equal(typeof stateControlActivationOwner, 'function');
+  for (const owner of [
+    stateControlStub({ tag: 'button' }),
+    stateControlStub({ tag: 'div', role: 'tab', tabindex: '-1' }),
+  ]) {
+    const markedLeaf = stateControlStub();
+    markedLeaf.closest = (selector) => {
+      assert.equal(selector, 'button, [role="button"], [role="tab"]');
+      return owner;
+    };
+    assert.equal(stateControlActivationOwner(markedLeaf), owner);
+  }
+  const plainLeaf = stateControlStub();
+  plainLeaf.closest = () => null;
+  assert.equal(stateControlActivationOwner(plainLeaf), plainLeaf);
+});
+
+test('a marked descendant never creates nested button semantics inside a role=button owner', () => {
+  const owner = stateControlStub({ tag: 'div', role: 'button', tabindex: '-1' });
+  const markedLeaf = stateControlStub();
+  markedLeaf.closest = (selector) => (
+    selector === 'button, [role="button"], [role="tab"]' ? owner : null
+  );
+
+  const activationOwner = stateControlActivationOwner(markedLeaf);
+  assert.equal(activationOwner, owner);
+  let activations = 0;
+  assert.equal(wireStateControlActivation(activationOwner, () => { activations += 1; }, { keyboard: true }), true);
+  assert.equal(owner.getAttribute('role'), 'button');
+  assert.equal(owner.getAttribute('tabindex'), '-1');
+  assert.equal(markedLeaf.getAttribute('role'), null);
+  assert.equal(markedLeaf.getAttribute('tabindex'), null);
+  assert.equal(wireStateControlActivation(activationOwner, () => { activations += 10; }, { keyboard: true }), false);
+  owner.dispatch('click');
+  assert.equal(activations, 1);
+});
+
+test('plain controls outside responsive groups keep pointer-only legacy behavior', () => {
+  const node = stateControlStub();
+  let activations = 0;
+  assert.equal(wireStateControlActivation(node, () => { activations += 1; }, { keyboard: false }), true);
+  assert.equal(node.getAttribute('role'), null);
+  assert.equal(node.getAttribute('tabindex'), null);
+  node.dispatch('keydown', { key: 'Enter' });
+  node.dispatch('click');
+  assert.equal(activations, 1);
+});
 
 function fixtureRoot() {
   const row = (item, labelNode, valueNode) => el(

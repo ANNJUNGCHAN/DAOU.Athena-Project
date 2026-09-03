@@ -385,6 +385,44 @@ test('loadBoard는 필요한 카드 청크 하나만 실어 Promise로 해석한
 
 // ---------- 반응형: 인라인 폭 hoist 후 컨테이너 쿼리가 이긴다 ----------
 
+test('semantic flow and atomic behavior starts below XL and remains owner-scoped', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+  const xl = css.slice(0, css.indexOf('@container board'));
+  const l = /@container board \(max-width: 1279px\)\s*\{([\s\S]*?)\n\}/.exec(css)[1];
+
+  assert.doesNotMatch(xl, /bs-r-(?:flow|scroll)[^{]*\{[^}]*?(?:white-space|flex-wrap|overflow-x)/,
+    'XL must retain Paper layout');
+  assert.match(l, /\.bs-r-flow\s*\{\s*flex-wrap:\s*wrap;/);
+  assert.match(l, /\.bs-r-flow\s*>\s*\*\s*\{\s*flex-shrink:\s*0;/);
+  assert.match(l,
+    /:is\(\.bs-r-flow, \.bs-r-scroll\)\s+:is\(\.bs-r-atomic, \[data-bs-value-atomic="true"\]\)\s*\{[^}]*white-space:\s*nowrap;[^}]*overflow-wrap:\s*normal;/);
+  assert.doesNotMatch(l, /bs-r-paired-table|bs-r-scroll-table/,
+    'table trait behavior belongs to G3');
+});
+
+test('semantic scroll behavior is bounded, nonshrinking, and visibly focusable from M down', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+  const m = /@container board \(max-width: 959px\)\s*\{([\s\S]*?)\n\}/.exec(css)[1];
+
+  assert.match(m, /\.bs-r-scroll\s*\{[^}]*min-width:\s*0;[^}]*max-width:\s*100%;[^}]*overflow-x:\s*auto;/);
+  assert.match(m, /\.bs-r-scroll\s*>\s*\*\s*\{[^}]*flex-shrink:\s*0;[^}]*min-width:\s*max-content;/);
+  assert.match(css, /\.bs-r-scroll:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--color-k-text\);[^}]*outline-offset:\s*-2px;/);
+  assert.match(css,
+    /:is\(\.bs-r-flow, \.bs-r-scroll\)\s+\[data-state-board\]\[role="button"\]:focus-visible\s*\{[^}]*outline:/);
+  assert.doesNotMatch(css,
+    /(?:^|\n)\[data-state-board\]\[role="button"\]:focus-visible/,
+    'outside-group state controls must not inherit the responsive focus contract');
+});
+
+test('responsive behavior CSS never names a board or Paper node', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.doesNotMatch(css, /(?:2SKU-1|2R3M-1|13BC-2|2QFO-2|13K0-2|135M-2)/);
+  assert.doesNotMatch(css, /\[data-node(?:=|\])/);
+});
+
 test('마운트 시 인라인 폭이 커스텀 속성으로 내려가고 나머지 원문은 그대로다', () => {
   const tree = parse(HTML);
   const surface = tree.querySelector('.board-surface');
