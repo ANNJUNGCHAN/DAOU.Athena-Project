@@ -298,7 +298,7 @@ test('같은 함수가 두 흐름에 쓰이면 두 번째 카드가 재사용 �
   assert.ok(textOf(both[1]).indexOf('재사용') !== -1);
   assert.ok(both[1].getAttribute('aria-label').indexOf('재사용') !== -1);
   // 고스트에는 손잡이를 달지 않는다 — 같은 함수의 [코드 보기]가 둘이면 어느 쪽인지 모른다.
-  assert.equal(byClass(both[0], 'backtest-tnodes-act').length, 2);
+  assert.equal(byClass(both[0], 'backtest-tnodes-act').length, 1);
   assert.equal(byClass(both[1], 'backtest-tnodes-act').length, 0);
 });
 
@@ -322,14 +322,20 @@ test('레일에서 고른 노드도 같은 선택이다 — 같은 콜백이 한
   assert.deepEqual(calls.select, ['should_enter']);
 });
 
-test('카드의 두 버튼은 코드와 질문으로 갈라진다 — 이 창은 직접 고치지 않는다', () => {
+test('카드 버튼은 [코드 보기] 하나 — 물어보기는 카드 클릭 자체다("이상해요" 버튼 없음)', () => {
   const { root, calls } = mount();
   const card = cardsOf(root, 'exit')[1];
+  assert.equal(byClass(card, 'is-ask').length, 0);
+  assert.equal(byClass(card, 'backtest-tnodes-act').length, 1);
   click(byClass(card, 'is-code')[0]);
-  click(byClass(card, 'is-ask')[0]);
   assert.deepEqual(calls.openCode, ['should_exit']);
+  // 코드 버튼은 카드 클릭으로 번지지 않는다 — 참조가 같이 들어가면 안 된다.
+  assert.deepEqual(calls.explainNode, []);
+  click(card);
+  assert.deepEqual(calls.select, ['should_exit']);
   assert.deepEqual(calls.explainNode, ['should_exit']);
-  assert.equal(byClass(card, 'is-ask')[0].textContent, '이상해요, 물어볼게요');
+  // 클릭이 초점을 카드로 되가져오지 않는다 — 입력창이 @참조를 받고 이어서 타자한다.
+  assert.notEqual(global.document.activeElement, card);
 });
 
 test('캔버스 아래 [이 기법 전체를 설명해줘]는 인자 없이 부른다', () => {

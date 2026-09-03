@@ -27,10 +27,12 @@
 //   M 출처→전략→등록→배포(바깥 자료 → 내 폴더의 파이썬 → 프리셋 자리 → 실전)
 //   N 흐름 지도가 첫 표면(보드 11~14 — 대화로 지도를 고치고, 코드는 그 뒤에 있다)
 //   O 시각 설계 왕복(보드 11→12→13→14 — 지도가 편집 표면, 오류는 질문 하나로, 적용은 비활성 버전 하나)
+//   P 새 기법 만들기(보드 20·21 — 코드창·명령창·노드·흐름 창)
+//   Q 기법 폴더 한 바퀴(보드 19~23 — 폴더·자동 수락·단계 카드·자동 백테스트·승인)
 //
-// 만드는 것은 되돌린다: 배포는 전부 중지하고, M이 만든 등록·프로젝트는 등록에서 뺀다.
-// 전략·버전·실행 행은 백엔드에 삭제 API가 없어(store에 delete가 없다) 남고, M이 만든
-// 폴더와 .py는 사용자 디스크의 물건이라 일부러 남긴다 — 보고서에 그 사실을 남긴다.
+// 만드는 것은 되돌린다: 배포는 전부 중지하고, M·P·Q가 만든 등록·프로젝트는 등록에서 뺀다.
+// 전략·버전·실행 행은 백엔드에 삭제 API가 없어(store에 delete가 없다) 남고, 그 세 섹션이
+// 만든 폴더와 .py는 사용자 디스크의 물건이라 일부러 남긴다 — 보고서에 그 사실을 남긴다.
 
 const { app } = require('electron');
 const path = require('path');
@@ -61,6 +63,8 @@ const ALL_SECTIONS = [
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
   // 새 기법 만들기(보드 20·21, 2026-09-03) — 코드창·명령창·노드·흐름 창.
   'P',
+  // 기법 폴더 한 바퀴(보드 19~23, 2026-09-03) — 폴더·자동 수락·단계 카드·자동 백테스트·승인.
+  'Q',
 ];
 const WANTED = new Set(
   (process.env.ATHENA_PROBE_SECTIONS || ALL_SECTIONS.join(','))
@@ -4347,14 +4351,25 @@ async function main() {
 
     await goDesignForm(shellWin);
     await click(shellWin, `${R}.backtest-technique-new`);
-    await wait(600);
+    // 폴더가 서는 데 왕복이 넷 든다(만들기 · 파일 둘 · 열기). 그 전에 재면 코드 탭이 아직
+    // 어느 쪽도 아닌 중간 화면이라 편집기를 0개로 센다(2026-09-03 실측).
+    const pMade = await until(shellWin, `(() => {
+      const t = window.AthenaBacktestCanvas.getContext().technique;
+      return t && t.projectId ? { projectId: t.projectId } : null;
+    })()`, WAIT_VALIDATE);
+    // 이 섹션도 폴더를 만든다 — 안 적어두면 프로브가 켠 등록이 그대로 남는다.
+    if (pMade && pMade.projectId) created.projectIds.push(pMade.projectId);
+    await wait(400);
     const started = await js(shellWin, `(() => {
       const root = document.getElementById('backtestCanvas');
       const band = root.querySelector('.backtest-technique-band');
       return {
         subtabs: Array.from(root.querySelectorAll('.backtest-subtab')).map((t) => t.textContent),
         on: (root.querySelector('.backtest-subtab.is-on') || {}).textContent || null,
-        editors: root.querySelectorAll('.backtest-code-host').length,
+        // 폴더가 서면 IDE가 코드 탭을 쥐고, 못 서면 지금까지의 단일 버퍼다 — 어느 쪽이든
+        // 코드를 치는 자리는 하나여야 한다.
+        editors: root.querySelectorAll('.backtest-code-host, .project-ide-editor .backtest-code-textarea').length,
+        project: ${JSON.stringify(pMade ? 'made' : 'none')},
         band: band ? band.textContent : null,
         terminal: root.querySelectorAll('.backtest-terminal').length,
         progress: (root.querySelector('.backtest-technique-progress') || {}).textContent || null,
@@ -4424,29 +4439,36 @@ async function main() {
       };
     });
 
-    // 노드를 눌러 설명을 부른다 — 캔버스가 아니라 대화가 답한다.
+    // 노드를 눌러도 **메시지는 나가지 않는다**(사용자 확정, 2026-09-03) — 입력창에 그
+    // 함수의 참조가 꽂힐 뿐이고, 무엇을 물을지는 사람이 이어서 쓴다.
     const asked = routesLive
       ? await (async () => {
-        await js(shellWin, `(() => { window.__probeTechniqueChat.length = 0; return true; })()`);
+        await js(shellWin, `(() => {
+          window.__probeTechniqueChat.length = 0;
+          const box = document.getElementById('input');
+          if (box) box.value = '';
+          return true;
+        })()`);
+        const turnsBefore = await countOf(shellWin, '#history .turn-q');
         await click(shellWin, `${R}.backtest-tnodes-card`);
-        await wait(300);
-        await click(shellWin, `${R}.backtest-tnodes-card .backtest-tnodes-act.is-ask`);
         await wait(600);
-        return js(shellWin, `(() => ({
+        const seen = await js(shellWin, `(() => ({
           submitted: (window.__probeTechniqueChat || []).slice(),
-          turns: Array.from(document.querySelectorAll('#history .turn-q')).map((n) => n.textContent),
+          input: (document.getElementById('input') || {}).value || '',
+          turns: document.querySelectorAll('#history .turn-q').length,
           selected: window.AthenaBacktestCanvas.getContext().technique.selectedNode,
         }))()`);
+        return Object.assign({ turnsBefore }, seen);
       })()
       : null;
-    await step('P05', '노드를 누르면 노드 …를 설명해줘가 사용자 메시지로 나간다', () => {
+    await step('P05', '노드를 눌러도 메시지는 안 나가고 입력창에 @참조가 꽂힌다', () => {
       if (!routesLive) return { skip: routeSkip };
-      const sent = (asked && asked.submitted) || [];
-      const turns = (asked && asked.turns) || [];
+      // 카드 클릭 한 번 = 참조 한 번(onSelect는 선택만 적는다). 나간 문장은 0이어야 한다.
+      const ref = asked && asked.selected ? `@${asked.selected} ` : null;
       return {
-        ok: sent.length >= 1 && /^노드 .+\(\)를 설명해줘$/.test(sent[sent.length - 1])
-              && turns.some((t) => t === sent[sent.length - 1]),
-        data: { submitted: sent, lastTurn: turns[turns.length - 1], selected: asked && asked.selected },
+        ok: !!ref && asked.submitted.length === 0 && asked.input === ref
+              && asked.turns === asked.turnsBefore,
+        data: asked,
       };
     });
 
@@ -4497,9 +4519,10 @@ async function main() {
 
     const tech = await js(shellWin, `window.AthenaBacktestCanvas.getContext().technique`);
     const techKeys = tech ? Object.keys(tech) : [];
-    await step('P08', 'getContext().technique 계약 키 8개', () => ({
+    await step('P08', 'getContext().technique 계약 키 13개', () => ({
       ok: JSON.stringify(techKeys) === JSON.stringify([
-            'checks', 'passed', 'stats', 'nodes', 'flows', 'granularity', 'selectedNode', 'lastCheckAt',
+            'projectId', 'name', 'path', 'checks', 'passed', 'stats', 'nodes', 'flows', 'granularity',
+            'selectedNode', 'lastCheckAt', 'steps', 'autoRun',
           ]),
       data: { keys: techKeys },
     }));
@@ -4510,6 +4533,481 @@ async function main() {
     await wait(300);
     await ensureRunnableForm(shellWin, FROM, TO);
   });
+
+  // ==================================================================
+  // Q 기법 폴더 한 바퀴 — 폴더·자동 수락·단계 카드·자동 백테스트·승인 (보드 19~23)
+  // ==================================================================
+  //
+  // 사용자 확정 구도: 기법 하나 = 폴더 하나 = 대화 하나. [+ 새 기법 만들기]를 누르면 앱이
+  // 폴더를 만들고 strategy.py·tests/test_strategy.py 뼈대를 쓴다. 그 폴더 안에서는 AI의
+  // 편집·검사·백테스트를 묻지 않고 그냥 한다(자동 수락) — 사람이 누르는 것은 [이 기법
+  // 승인]과 실매매 적용뿐이고, AI가 한 일은 전부 대화에 단계 카드로 쌓인다.
+  //
+  // P가 화면 표면(코드창·띠·명령창·질문 카드)을 잰다면 Q는 **디스크와 백엔드**를 잰다:
+  // 폴더가 정말 생겼는가(GET /projects), 파일이 정말 그 내용인가(GET file), 실행 이력이
+  // 정말 하나 늘었는가(GET runs), 등록부에 정말 올랐는가(GET user-strategies). 화면이
+  // 그렇게 말한다는 것만으로는 통과시키지 않는다.
+  if (on('Q')) await section('Q', async () => {
+    await ensureRunnableForm(shellWin, FROM, TO);
+
+    // 대화가 정한 규칙을 AI가 코드로 옮긴 모양. 원칙 3(계산 하나에 함수 하나)을 지켜
+    // 함수가 넷이라 노드도 넷이 나온다 — 노드가 함수 단위라는 계약이 여기서 눈에 보인다.
+    const techniqueSource = [
+      'PARAMS = {',
+      '    "lookback": {"default": 20, "min": 5, "max": 120, "step": 1, "type": "int"},',
+      '}',
+      '',
+      '',
+      'def compute_sma(df, lookback):',
+      '    """종가 이동평균 — 추세의 기준선."""',
+      '    return df["close"].rolling(int(lookback)).mean()',
+      '',
+      '',
+      'def should_enter(df, ma):',
+      '    """종가가 기준선 위에 있으면 산다."""',
+      '    return df["close"] > ma',
+      '',
+      '',
+      'def should_exit(df, ma):',
+      '    """종가가 기준선 아래로 내려가면 판다."""',
+      '    return df["close"] < ma',
+      '',
+      '',
+      'def signals(df, p):',
+      '    """진입·청산 두 열을 봉 수만큼 돌려준다."""',
+      '    ma = compute_sma(df, p["lookback"])',
+      '    df["entry"] = should_enter(df, ma)',
+      '    df["exit"] = should_exit(df, ma)',
+      '    return df[["entry", "exit"]]',
+      '',
+    ].join('\n');
+
+    const fileUrl = (id, p) => `/api/v1/projects/${encodeURIComponent(id)}/file?path=${encodeURIComponent(p)}`;
+    const runsCount = async () => {
+      const env = await invoke(shellWin, 'athena:backtest-runs');
+      return env && env.ok && env.data ? (env.data.runs || []).length : null;
+    };
+    // 단계 카드는 P도 남긴다(같은 대화 창이다) — 이 섹션이 쌓은 것만 세려고 시작점을 적어 둔다.
+    const stepCardsBefore = await countOf(shellWin, '#history .backtest-step-card');
+    const screenListBefore = await countOf(shellWin, `${R}.backtest-user-strategy-item`);
+    const registryBefore = await backendJson('GET', '/api/v1/backtest/user-strategies');
+    const registeredBefore = ((registryBefore.body || {}).strategies || []).length;
+    const projectsBefore = await backendJson('GET', '/api/v1/projects');
+    const idsBefore = ((projectsBefore.body || {}).projects || []).map((p) => p.id);
+    const runsBefore = await runsCount();
+
+    // 나간 문장과 입력창에 꽂힌 참조를 따로 잡는다 — 이 화면의 규칙이 "카드는 쌓이되
+    // 메시지는 사람만 보낸다"라, 둘을 한 통에 담으면 그 규칙을 잴 수 없다.
+    await js(shellWin, `(() => {
+      if (!window.__probeQ) {
+        window.__probeQ = { submitted: [] };
+        document.addEventListener('athena:chat-submit', (e) => {
+          window.__probeQ.submitted.push(String((e && e.detail && e.detail.text) || ''));
+        });
+      }
+      window.__probeQ.submitted.length = 0;
+      const box = document.getElementById('input');
+      if (box) box.value = '';
+      return true;
+    })()`);
+
+    await goDesignForm(shellWin);
+    await click(shellWin, `${R}.backtest-technique-new`);
+    // 폴더가 서는 데 왕복이 넷 든다(만들기 · 파일 둘 · 열기). 그 전에 재면 아직 아무것도
+    // 안 만들어진 중간 화면을 판정하게 된다.
+    const made = await until(shellWin, `(() => {
+      const t = window.AthenaBacktestCanvas.getContext().technique;
+      return t && t.projectId ? { projectId: t.projectId, path: t.path } : null;
+    })()`, WAIT_VALIDATE);
+    const projectId = made ? made.projectId : null;
+    if (projectId) created.projectIds.push(projectId);
+
+    const projectsAfter = await backendJson('GET', '/api/v1/projects');
+    const rowsAfter = (projectsAfter.body || {}).projects || [];
+    const mine = rowsAfter.find((p) => p.id === projectId) || null;
+    const seedStrategy = projectId
+      ? await backendJson('GET', fileUrl(projectId, 'strategy.py')) : { status: 0, body: null };
+    const seedTest = projectId
+      ? await backendJson('GET', fileUrl(projectId, 'tests/test_strategy.py')) : { status: 0, body: null };
+    // 폴더를 못 만들면 화면은 경고 카드로 그 사실을 말한다 — 그 문장이 실패의 진짜 이유다.
+    const folderCard = await js(shellWin, `(() => {
+      const cards = Array.from(document.querySelectorAll('#history .backtest-step-card.is-icon-file'));
+      const last = cards[cards.length - 1];
+      if (!last) return { cards: 0, title: null, meta: null, tone: null };
+      return {
+        cards: cards.length,
+        title: (last.querySelector('.backtest-step-title') || {}).textContent,
+        meta: (last.querySelector('.backtest-step-meta') || {}).textContent || null,
+        tone: last.classList.contains('is-warn') ? 'warn' : (last.classList.contains('is-fail') ? 'fail' : 'ok'),
+      };
+    })()`);
+    await step('Q01', '[+ 새 기법 만들기]가 폴더 하나와 뼈대 두 파일을 실제로 만든다', () => ({
+      ok: !!projectId && !!mine && /^새-기법-\d{6}-\d{4}(-[23])?$/.test(String(mine.name))
+            && mine.kind === 'managed' && idsBefore.indexOf(projectId) === -1
+            && rowsAfter.length === idsBefore.length + 1
+            && seedStrategy.status === 200
+            && /원칙 3 — 계산은 함수 하나에/.test(String((seedStrategy.body || {}).text))
+            && seedTest.status === 200
+            && /def test_signals_returns_entry_exit/.test(String((seedTest.body || {}).text))
+            && folderCard.tone === 'ok'
+            && folderCard.title === `폴더 만듦 · ${mine.name}`
+            && folderCard.meta === 'strategy.py · tests/test_strategy.py',
+      data: {
+        projectId, name: mine && mine.name, path: mine && mine.path,
+        projects: { before: idsBefore.length, after: rowsAfter.length },
+        strategy: { status: seedStrategy.status, size: (seedStrategy.body || {}).size },
+        test: { status: seedTest.status, size: (seedTest.body || {}).size },
+        card: folderCard,
+      },
+    }));
+    if (!projectId) {
+      throw new Error(`폴더를 못 만들어 Q02 이후를 돌리지 않았다: ${safeJson(folderCard)}`);
+    }
+
+    const stood = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const band = root.querySelector('.backtest-technique-band');
+      return {
+        subtabs: Array.from(root.querySelectorAll('.backtest-subtab')).map((t) => t.textContent),
+        on: (root.querySelector('.backtest-subtab.is-on') || {}).textContent || null,
+        tree: root.querySelectorAll('.project-ide-tree').length,
+        files: Array.from(root.querySelectorAll('.project-ide-file')).map((f) => f.textContent),
+        dirs: Array.from(root.querySelectorAll('.project-ide-dir')).map((f) => f.textContent),
+        editors: root.querySelectorAll('.project-ide-editor .backtest-code-textarea').length,
+        headPath: (root.querySelector('.project-ide-head-path') || {}).textContent || null,
+        band: band ? band.textContent : null,
+        terminal: root.querySelectorAll('.backtest-terminal').length,
+        progress: (root.querySelector('.backtest-technique-progress') || {}).textContent || null,
+        submitted: window.__probeQ.submitted.slice(),
+      };
+    })()`);
+    await step('Q02', '코드 탭이 파일 트리·편집기·명령창·띠로 서고 대화가 첫 문장으로 시작된다', () => ({
+      ok: JSON.stringify(stood.subtabs) === JSON.stringify(['코드', '노드·흐름'])
+            && stood.on === '코드' && stood.tree === 1 && stood.editors === 1
+            && stood.headPath === 'strategy.py'
+            && stood.files.indexOf('strategy.py') !== -1
+            && stood.files.indexOf('test_strategy.py') !== -1
+            && stood.dirs.some((d) => /tests$/.test(String(d)))
+            && stood.terminal === 1
+            && /AI가 제어하는 중/.test(String(stood.band))
+            && /검사 0\/5/.test(String(stood.progress))
+            && stood.submitted.length === 1
+            && stood.submitted[0] === '새 기법을 만들고 싶어요. 어떤 전략인지 하나씩 물어봐 주세요.',
+      data: stood,
+    }));
+
+    // --- 자동 수락 --- AI가 낸 파일 초안은 [적용]을 기다리지 않는다. 이 폴더는 이 대화가
+    // 만든 것이라, 묻는 자리 대신 "무엇이 몇 줄 바뀌었는지"가 카드로 남는다.
+    const editsBefore = await countOf(shellWin, '#history .backtest-step-card.is-icon-edit');
+    sendChat(shellWin, {
+      kind: 'file_draft', project_id: projectId, path: 'strategy.py',
+      source: techniqueSource, note: '대화에서 정한 규칙을 코드로 옮겼습니다',
+    });
+    const editCard = await until(shellWin, `(() => {
+      const cards = Array.from(document.querySelectorAll('#history .backtest-step-card.is-icon-edit'));
+      if (cards.length <= ${editsBefore}) return null;
+      const last = cards[cards.length - 1];
+      const changes = Array.from(document.querySelectorAll('#history .backtest-change'));
+      const receipt = changes[changes.length - 1];
+      return {
+        title: (last.querySelector('.backtest-step-title') || {}).textContent,
+        meta: (last.querySelector('.backtest-step-meta') || {}).textContent || null,
+        action: (last.querySelector('.backtest-step-action') || {}).textContent || null,
+        clickable: last.classList.contains('is-clickable'),
+        receiptButtons: receipt
+          ? Array.from(receipt.querySelectorAll('button')).map((b) => (b.textContent || '').trim())
+          : null,
+      };
+    })()`, WAIT_UI);
+    const onDisk = await backendJson('GET', fileUrl(projectId, 'strategy.py'));
+    const buffer = await js(shellWin, `(() => {
+      const ta = document.querySelector('${R}.project-ide-editor .backtest-code-textarea');
+      const c = window.AthenaBacktestCanvas.getContext();
+      return {
+        chars: ta ? ta.value.length : 0,
+        hasExitFn: !!ta && ta.value.indexOf('def should_exit') !== -1,
+        dirty: c.project ? c.project.dirty : null,
+      };
+    })()`);
+    await step('Q03', 'AI가 낸 파일은 묻지 않고 디스크에 쓰이고, 그 사실이 단계 카드로 남는다', () => ({
+      ok: !!editCard && /^strategy\.py 수정 \+\d+ −\d+$/.test(String(editCard.title))
+            && editCard.action === 'diff 보기' && editCard.clickable === true
+            && editCard.meta === '대화에서 정한 규칙을 코드로 옮겼습니다'
+            && Array.isArray(editCard.receiptButtons)
+            && editCard.receiptButtons.indexOf('적용') === -1
+            && editCard.receiptButtons.indexOf('되돌리기') === -1
+            && onDisk.status === 200 && (onDisk.body || {}).text === techniqueSource
+            && buffer.hasExitFn === true && buffer.dirty === false,
+      data: { card: editCard, disk: { status: onDisk.status, size: (onDisk.body || {}).size }, buffer },
+    }));
+
+    const checked = await until(shellWin, `(() => {
+      const t = window.AthenaBacktestCanvas.getContext().technique;
+      return t && t.passed === true && t.checks.length ? t : null;
+    })()`, WAIT_VALIDATE);
+    const checkCard = await js(shellWin, `(() => {
+      const cards = Array.from(document.querySelectorAll('#history .backtest-step-card.is-icon-check'));
+      const last = cards[cards.length - 1];
+      if (!last) return null;
+      return {
+        title: (last.querySelector('.backtest-step-title') || {}).textContent,
+        action: (last.querySelector('.backtest-step-action') || {}).textContent || null,
+        tone: last.classList.contains('is-warn') ? 'warn' : (last.classList.contains('is-fail') ? 'fail' : 'ok'),
+        glyph: (last.querySelector('.backtest-step-icon') || {}).textContent,
+      };
+    })()`);
+    await step('Q04', '검사가 저절로 돌고 통과 한 줄이 카드로 선다', () => {
+      const ids = checked && Array.isArray(checked.checks) ? checked.checks.map((c) => c.id) : [];
+      const blocks = checked ? checked.checks.filter((c) => c.severity !== 'warn') : [];
+      return {
+        ok: !!checked && ids.length === 7 && blocks.length === 5
+              && blocks.every((c) => c.ok === true) && checked.passed === true
+              && !!checked.stats && Number(checked.stats.rows) > 0
+              && !!checkCard && checkCard.title === '검사 5/5 통과'
+              && checkCard.tone === 'ok' && checkCard.action === '출력 보기'
+              && checkCard.glyph === '✓',
+        data: { checks: ids, stats: checked && checked.stats, card: checkCard },
+      };
+    });
+
+    const nodesOpen = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (c.designTab !== 'nodes' || !c.technique.nodes.length) return null;
+      return {
+        designTab: c.designTab,
+        granularity: c.technique.granularity,
+        nodes: c.technique.nodes.map((n) => n.id),
+        flows: c.technique.flows,
+        host: root.querySelectorAll('.backtest-technique-nodes-host').length,
+        cards: root.querySelectorAll('.backtest-tnodes-card').length,
+      };
+    })()`, WAIT_VALIDATE);
+    const nodeCard = await js(shellWin, `(() => {
+      const cards = Array.from(document.querySelectorAll('#history .backtest-step-card.is-icon-nodes'));
+      const last = cards[cards.length - 1];
+      return last ? {
+        title: (last.querySelector('.backtest-step-title') || {}).textContent,
+        action: (last.querySelector('.backtest-step-action') || {}).textContent || null,
+      } : null;
+    })()`);
+    await step('Q05', '통과하면 노드·흐름 창이 저절로 열린다 — 노드는 이 파일의 함수 넷이다', () => ({
+      ok: !!nodesOpen && nodesOpen.granularity === 'function' && nodesOpen.host === 1
+            && JSON.stringify(nodesOpen.nodes)
+              === JSON.stringify(['compute_sma', 'should_enter', 'should_exit', 'signals'])
+            && JSON.stringify(nodesOpen.flows && nodesOpen.flows.entry)
+              === JSON.stringify(['compute_sma', 'should_enter'])
+            && JSON.stringify(nodesOpen.flows && nodesOpen.flows.exit)
+              === JSON.stringify(['compute_sma', 'should_exit'])
+            && !!nodeCard && nodeCard.title === '노드 다시 그림 · 0 → 4'
+            && nodeCard.action === '노드 보기',
+      data: { view: nodesOpen, card: nodeCard },
+    }));
+
+    // --- 자동 백테스트 --- 사람에게 [실행]을 누르라고 하지 않는다. 그러면서도 방금 열린
+    // 노드 창을 뺏지 않는다(결과는 담아만 두고 카드의 [결과 보기]가 그 탭을 연다).
+    const ran = await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      const t = c.technique;
+      if (!t.autoRun || t.autoRun.status !== 'done') return null;
+      return { autoRun: t.autoRun, designTab: c.designTab, view: c.view };
+    })()`, WAIT_RUN);
+    const runsAfter = await runsCount();
+    const runCard = await js(shellWin, `(() => {
+      const cards = Array.from(document.querySelectorAll('#history .backtest-step-card.is-icon-run'));
+      const last = cards[cards.length - 1];
+      return last ? {
+        title: (last.querySelector('.backtest-step-title') || {}).textContent,
+        meta: (last.querySelector('.backtest-step-meta') || {}).textContent || null,
+        action: (last.querySelector('.backtest-step-action') || {}).textContent || null,
+      } : null;
+    })()`);
+    // 카드의 [결과 보기]가 여는 자리 — 지표 타일이 실제로 서야 "결과가 있다"는 말이 참이다.
+    await js(shellWin, `(() => {
+      const cards = Array.from(document.querySelectorAll('#history .backtest-step-card.is-icon-run'));
+      const last = cards[cards.length - 1];
+      const btn = last ? last.querySelector('.backtest-step-action') : null;
+      if (!btn) return false;
+      btn.click();
+      return true;
+    })()`);
+    const tiles = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const list = Array.from(root.querySelectorAll('.backtest-metric-tile'));
+      if (!list.length) return null;
+      return {
+        labels: list.map((t) => (t.querySelector('.backtest-metric-label') || {}).textContent),
+        values: list.map((t) => (t.querySelector('.backtest-metric-value') || {}).textContent),
+        tab: window.AthenaBacktestCanvas.getContext().tab,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('Q06', '노드까지 받으면 백테스트도 저절로 돌고, 카드가 그 결과 탭을 연다', () => ({
+      ok: !!ran && ran.autoRun.status === 'done' && !!ran.autoRun.metrics
+            && Number.isFinite(Number(ran.autoRun.metrics.total_return))
+            && ran.designTab === 'nodes' && ran.view === 'design'
+            && runsBefore != null && runsAfter === runsBefore + 1
+            && !!runCard && /^백테스트 #.{1,8} 실행 · 총수익률 /.test(String(runCard.title))
+            && runCard.action === '결과 보기'
+            && !!tiles && tiles.tab === 'result' && tiles.labels.length === 6
+            && tiles.values.every((v) => v && v !== '—'),
+      data: {
+        autoRun: ran && ran.autoRun,
+        screen: ran && { designTab: ran.designTab, view: ran.view },
+        runs: { before: runsBefore, after: runsAfter },
+        card: runCard, tiles: tiles && { labels: tiles.labels, values: tiles.values },
+      },
+    }));
+
+    // 결과 탭에서 노드 창으로 되돌아온다 — 초안의 하위 탭은 [코드][노드·흐름] 둘뿐이다.
+    await goTab(shellWin, 0);
+    await wait(250);
+    await goSubtab(shellWin, 1);
+    await wait(300);
+
+    await js(shellWin, `(() => {
+      window.__probeQ.submitted.length = 0;
+      const box = document.getElementById('input');
+      if (box) box.value = '';
+      return true;
+    })()`);
+    const turnsBefore = await countOf(shellWin, '#history .turn-q');
+    await click(shellWin, `${R}.backtest-tnodes-card`);
+    await wait(400);
+    const inserted = await js(shellWin, `(() => {
+      const box = document.getElementById('input');
+      return {
+        value: box ? box.value : null,
+        // 포커스가 어디로 갔는지도 적는다 — 계약(chat.js)은 입력창에 준다고 말하는데
+        // 노드 창이 곧바로 카드로 되찾아 간다. 판정에는 넣지 않는다(사용자 확정 문장은
+        // '참조가 들어간다'까지다) — 대신 그 사실이 리포트에 그대로 남게 한다.
+        focusInput: !!box && document.activeElement === box,
+        focusOn: (document.activeElement && document.activeElement.className) || null,
+        submitted: window.__probeQ.submitted.slice(),
+        turns: document.querySelectorAll('#history .turn-q').length,
+        selected: window.AthenaBacktestCanvas.getContext().technique.selectedNode,
+      };
+    })()`);
+    await step('Q07', '노드를 누르면 메시지가 안 나가고 입력창에 @참조만 꽂힌다', () => ({
+      ok: !!inserted && !!inserted.selected
+            && ['compute_sma', 'should_enter', 'should_exit', 'signals']
+              .indexOf(inserted.selected) !== -1
+            && inserted.value === `@${inserted.selected} `
+            && inserted.submitted.length === 0
+            && inserted.turns === turnsBefore,
+      data: {
+        inserted,
+        turnsBefore,
+        known_gap: inserted && inserted.focusInput === false
+          ? '입력창이 포커스를 못 받는다 — 카드 click 핸들러가 select() 뒤에 focusEl(card)로 되찾아 간다(backtest-technique-nodes.js:484). [설명] 버튼 경로는 되찾지 않아 입력창이 포커스를 유지한다.'
+          : null,
+      },
+    }));
+
+    // --- 카드가 여는 자리 --- [diff 보기]는 코드 탭 위에 그 변경을 세운다. 카드가 말한
+    // "+N −M"과 패널이 세는 숫자가 같아야 한 변경에 두 셈이 생기지 않는다.
+    await js(shellWin, `(() => {
+      const cards = Array.from(document.querySelectorAll('#history .backtest-step-card.is-icon-edit'));
+      const last = cards[cards.length - 1];
+      const btn = last ? last.querySelector('.backtest-step-action') : null;
+      if (!btn) return false;
+      btn.click();
+      return true;
+    })()`);
+    const diffPanel = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const panel = root.querySelector('.backtest-technique-diff');
+      if (!panel) return null;
+      return {
+        path: (panel.querySelector('.backtest-diag-section-title') || {}).textContent,
+        stat: (panel.querySelector('.backtest-diag-fix-stat') || {}).textContent,
+        added: panel.querySelectorAll('.backtest-diff-row.is-add').length,
+        removed: panel.querySelectorAll('.backtest-diff-row.is-del').length,
+        close: panel.querySelectorAll('.backtest-technique-diff-close').length,
+        designTab: window.AthenaBacktestCanvas.getContext().designTab,
+      };
+    })()`, WAIT_UI);
+    const cardStat = String((editCard && editCard.title) || '').replace('strategy.py 수정 ', '');
+    await click(shellWin, `${R}.backtest-technique-diff-close`);
+    await wait(250);
+    const diffClosed = await countOf(shellWin, `${R}.backtest-technique-diff`);
+    await step('Q08', '단계 카드의 [diff 보기]가 코드 탭 위에 그 변경을 세운다', () => ({
+      ok: !!diffPanel && diffPanel.designTab === 'code' && diffPanel.path === 'strategy.py'
+            && diffPanel.stat === cardStat && diffPanel.added > 0 && diffPanel.removed > 0
+            && diffPanel.close === 1 && diffClosed === 0,
+      data: { panel: diffPanel, cardStat, closed: diffClosed },
+    }));
+
+    // --- 승인 --- 폴더 안에서 사람이 누르는 유일한 버튼(실매매 적용은 배포 화면의 것이다).
+    const approveBefore = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const btn = root.querySelector('.backtest-technique-approve');
+      return { button: !!btn, label: btn ? btn.textContent : null };
+    })()`);
+    await click(shellWin, `${R}.backtest-technique-approve`);
+    const approved = await until(shellWin, `(() => {
+      const cards = Array.from(document.querySelectorAll('#history .backtest-step-card.is-icon-check'));
+      const last = cards[cards.length - 1];
+      const title = last ? (last.querySelector('.backtest-step-title') || {}).textContent : null;
+      if (!title || String(title).indexOf('기법 목록에 추가됨') !== 0) return null;
+      return { title, draft: window.AthenaBacktestCanvas.getContext().techniqueDraft };
+    })()`, WAIT_VALIDATE);
+    const registry = await backendJson('GET', '/api/v1/backtest/user-strategies');
+    const registered = (registry.body || {}).strategies || [];
+    const entry = registered.find((s) => s.project_id === projectId) || null;
+    if (entry && entry.id) created.userStrategyIds.push(entry.id);
+    // 초안이 끝났으니 하위 탭은 다시 넷이다 — 목록은 폼(두 번째)에 있다.
+    await goSubtab(shellWin, 1);
+    await wait(400);
+    const listNow = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      return {
+        items: root.querySelectorAll('.backtest-user-strategy-item').length,
+        names: Array.from(root.querySelectorAll('.backtest-user-strategy-name')).map((n) => n.textContent),
+        paths: Array.from(root.querySelectorAll('.backtest-user-strategy-path')).map((n) => n.textContent),
+      };
+    })()`);
+    await step('Q09', '[이 기법 승인]이 등록부에 올리고 목록 카드가 하나 는다', () => ({
+      ok: approveBefore.button === true && approveBefore.label === '이 기법 승인'
+            && !!approved && approved.title === '기법 목록에 추가됨 · 새 기법'
+            && approved.draft === false
+            && !!entry && entry.path === 'strategy.py' && entry.name === '새 기법'
+            && entry.exists === true
+            && registered.length === registeredBefore + 1
+            && listNow.items === registeredBefore + 1
+            && listNow.names.indexOf('새 기법') !== -1,
+      data: {
+        approveBefore, card: approved, entry,
+        registry: { before: registeredBefore, after: registered.length },
+        list: { screenBefore: screenListBefore, now: listNow },
+      },
+    }));
+
+    // --- 영수증 --- AI가 한 일이 대화에 순서대로 남았는가. 이것이 "묻지 않고 한다"의
+    // 대가다 — 묻지 않은 만큼 전부 보여야 한다.
+    const ledger = await js(shellWin, `(() => {
+      const cards = Array.from(document.querySelectorAll('#history .backtest-step-card'))
+        .slice(${stepCardsBefore});
+      return cards.map((c) => ({
+        icon: (Array.from(c.classList).find((k) => k.indexOf('is-icon-') === 0) || '').slice(8),
+        tone: (Array.from(c.classList).find((k) => /^is-(ok|warn|fail)$/.test(k)) || '').slice(3),
+        glyph: (c.querySelector('.backtest-step-icon') || {}).textContent,
+        title: (c.querySelector('.backtest-step-title') || {}).textContent,
+      }));
+    })()`);
+    await step('Q10', 'AI가 한 일이 대화에 순서대로 쌓인다 — 폴더·수정·검사·노드·실행·승인', () => ({
+      ok: Array.isArray(ledger) && ledger.length === 6
+            && JSON.stringify(ledger.map((c) => c.icon))
+              === JSON.stringify(['file', 'edit', 'check', 'nodes', 'run', 'check'])
+            && ledger.every((c) => c.tone === 'ok')
+            && JSON.stringify(ledger.map((c) => c.glyph))
+              === JSON.stringify(['▤', '✎', '✓', '◈', '▶', '✓']),
+      data: { cards: ledger },
+    }));
+
+    // 다음 섹션이 초안 화면을 물려받지 않게 폼을 되돌린다(승인으로 초안은 이미 끝났다).
+    await ensureRunnableForm(shellWin, FROM, TO);
+  });
+
   // 리포트 쓰기와 종료는 whenReady의 finally가 한 번만 한다 — 여기서는 돌아가기만 한다.
 }
 
@@ -4561,7 +5059,7 @@ async function finish() {
       data: cleanup,
     }));
   }
-  // M이 남긴 등록·프로젝트도 되돌린다 — M14가 돌았으면 여기 남는 것은 없다.
+  // M·P·Q가 남긴 등록·프로젝트도 되돌린다 — M14가 돌았으면 M의 몫은 여기 남지 않는다.
   const swept = { strategies: [], projects: [], failed: [] };
   for (let i = 0; i < created.userStrategyIds.length; i += 1) {
     const id = created.userStrategyIds[i];
@@ -4586,7 +5084,7 @@ async function finish() {
     }
   }
   if (swept.strategies.length || swept.projects.length || swept.failed.length) {
-    await step('Z03', 'M이 남긴 등록·프로젝트를 되돌렸다(파일은 그대로 둔다)', () => ({
+    await step('Z03', 'M·P·Q가 남긴 등록·프로젝트를 되돌렸다(파일은 그대로 둔다)', () => ({
       ok: swept.failed.length === 0,
       data: swept,
     }));

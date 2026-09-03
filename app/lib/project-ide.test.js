@@ -385,6 +385,34 @@ test('탭을 옮겨도 저장 안 한 버퍼가 살아 있다', async () => {
   assert.equal(findByClass(made.root, 'backtest-code-textarea')[0].value, '# 고치는 중\n');
 });
 
+// 밖에서 쓴 파일(채팅이 낸 코드를 캔버스가 자동 수락한 자리)을 열린 버퍼에 되비친다 —
+// 안 되비치면 디스크와 화면이 갈라져, 도는 코드와 보이는 코드가 달라진다.
+test('adoptExternalWrite: 열린 버퍼를 디스크의 새 내용으로 맞춘다', async () => {
+  const made = makeIde();
+  await mountWithProject(made);
+  await click(findByClass(made.root, 'project-ide-file').find((f) => f.textContent === 'strategy.py'));
+  await flush();
+  assert.equal(made.ide.adoptExternalWrite('strategy.py', '# AI가 쓴 코드\n'), true);
+  assert.equal(made.ide.activeText(), '# AI가 쓴 코드\n');
+  assert.equal(made.ide.isDirty(), false, '디스크와 같아졌으니 더럽지 않다');
+  assert.equal(findByClass(made.root, 'backtest-code-textarea')[0].value, '# AI가 쓴 코드\n');
+  // 안 연 파일은 되비칠 버퍼가 없다 — 조용히 false다.
+  assert.equal(made.ide.adoptExternalWrite('없는파일.py', 'x'), false);
+});
+
+test('adoptExternalWrite: 저장 안 한 편집은 덮지 않는다 — 사람이 친 것이 이긴다', async () => {
+  const made = makeIde();
+  await mountWithProject(made);
+  await click(findByClass(made.root, 'project-ide-file').find((f) => f.textContent === 'strategy.py'));
+  await flush();
+  const area = findByClass(made.root, 'backtest-code-textarea')[0];
+  area.value = '# 내가 치던 중\n';
+  await area.dispatchEvent({ type: 'input' });
+  assert.equal(made.ide.adoptExternalWrite('strategy.py', '# AI가 쓴 코드\n'), false);
+  assert.equal(made.ide.activeText(), '# 내가 치던 중\n');
+  assert.equal(made.ide.isDirty(), true);
+});
+
 test('더러운 탭을 닫으면 인라인으로 되묻고, 버리면 그때 닫힌다(모달 없음)', async () => {
   const made = makeIde();
   await mountWithProject(made);

@@ -1,0 +1,107 @@
+/* 새 기법 만들기 — 단계 카드와 참조 칩 (보드 20·22, 2026-09-03)
+ *
+ * 기법 폴더 안에서 AI가 하는 일(파일 수정·검사·노드 다시 그리기·백테스트)은 묻지 않고
+ * 자동으로 된다. 그래서 이 카드에는 승인 버튼이 없다 — 사람이 누르는 것은 [이 기법 승인]과
+ * 실매매 적용뿐이다. 대신 한 일이 한 줄씩 쌓이고, 누르면 가운데 창이 그 자리를 연다.
+ * 승인 카드(routine-approval)처럼 무겁게 그리지 않는 이유: 이건 결정이 아니라 영수증이다.
+ *
+ * 색은 새로 만들지 않는다 — 실패 #C03445 · 경고 var(--color-warn)는 검사 줄
+ * (.backtest-technique-check)이 이미 쓰는 그 값이다. 같은 실패가 화면마다 다른 색이면
+ * 사람이 색을 매번 새로 배워야 한다. */
+
+.backtest-step-card {
+  /* .turn-agent가 세로인 것을 여기서만 가로로 눕힌다 — 단계는 한 줄이다. */
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--radius-md);
+  background: rgb(255 255 255 / 70%);
+  border: 1px solid var(--color-k-line-soft);
+}
+
+/* 연속된 단계는 한 묶음으로 읽힌다 — .history의 gap 10px을 이 사이에서만 4px로 줄인다
+   (gap 자체를 건드리면 다른 턴 사이가 같이 좁아진다). */
+.turn.backtest-step-turn + .turn.backtest-step-turn { margin-top: -6px; }
+
+/* 아이콘 슬롯 — 폭이 고정이라 여러 줄이 쌓여도 제목의 왼쪽 끝이 흔들리지 않는다. */
+.backtest-step-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  line-height: 1;
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+}
+.backtest-step-card.is-icon-file .backtest-step-icon { color: var(--color-info); background: rgb(77 159 255 / 12%); }
+.backtest-step-card.is-icon-check .backtest-step-icon { color: #2F7D20; background: rgb(95 206 63 / 14%); }
+.backtest-step-card.is-icon-nodes .backtest-step-icon { color: var(--color-navy); background: rgb(155 159 230 / 18%); }
+.backtest-step-card.is-icon-run .backtest-step-icon { color: var(--color-brand); background: rgb(238 19 123 / 10%); }
+.backtest-step-card.is-icon-edit .backtest-step-icon { color: var(--color-k-dim); background: var(--color-k-panel3); }
+
+/* 실패·경고는 아이콘 색을 덮는다(같은 특정도, 뒤에 선 규칙이 이긴다) — 글리프는 그대로
+   두어 무엇을 하던 단계였는지가 지워지지 않게 한다. */
+.backtest-step-card.is-warn .backtest-step-icon { color: #81501E; background: #F6E7D6; }
+.backtest-step-card.is-fail .backtest-step-icon { color: #FFFFFF; background: #C03445; }
+.backtest-step-card.is-warn { border-color: rgb(255 152 56 / 45%); }
+.backtest-step-card.is-fail { border-color: rgb(192 52 69 / 45%); }
+
+.backtest-step-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.backtest-step-title {
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  font-weight: 600;
+  color: var(--color-k-text);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+/* 메타는 회색 한 줄이다 — 넘치면 줄을 늘리지 말고 잘라낸다(카드 높이가 들쭉날쭉하면
+   묶음으로 안 읽힌다). */
+.backtest-step-meta {
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  color: var(--color-k-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.backtest-step-action {
+  flex-shrink: 0;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* 줄 전체가 과녁이다 — 키보드로 닿는 컨트롤은 버튼 하나뿐이라 카드에 role을 덧씌우지
+   않는다(버튼 안에 버튼이 되는 것을 피한다). */
+.backtest-step-card.is-clickable { cursor: pointer; }
+.backtest-step-card.is-clickable:hover {
+  background: rgb(255 255 255 / 92%);
+  border-color: var(--color-k-line);
+}
+
+/* 보낸 말풍선 안의 참조 칩(@should_exit · @진입 흐름) — 입력창은 평문 textarea라 칩이
+   될 수 없다. 사람이 노드를 눌러 넣은 참조가 무엇이었는지는 보낸 뒤에 남으면 된다.
+   한글 알약은 nowrap이 없으면 글자 단위로 세로로 쪼개진다(2026-09-02 실측). */
+.chat-ref-chip {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgb(238 19 123 / 10%);
+  color: var(--color-brand);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}

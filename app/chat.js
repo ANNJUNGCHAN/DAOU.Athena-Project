@@ -961,6 +961,29 @@ function renderFailureBubble(aLine, errorText) {
   aLine.appendChild(card);
 }
 
+// 보낸 말풍선의 '@참조'는 칩으로 그린다(보드 22) — 입력창은 평문 textarea라 치는 동안에는
+// 칩이 될 수 없고, 사람이 노드를 눌러 넣은 참조가 무엇이었는지는 보낸 뒤에 남으면 된다.
+// innerHTML은 쓰지 않는다: 원문을 잘라 span에 textContent로 넣으므로 무엇이 와도 태그가
+// 되지 않는다(이 파일의 innerHTML 0건 규칙 그대로). 흐름 참조 둘은 이름에 공백이 있어
+// (@진입 흐름·@청산 흐름) 낱말 규칙만으로는 반쪽만 칩이 된다 — 그래서 먼저 걸러낸다.
+function paintUserBubbleText(el, text) {
+  const value = String(text == null ? '' : text);
+  const re = /@(?:진입 흐름|청산 흐름|[A-Za-z0-9_가-힣][A-Za-z0-9_가-힣-]*)/g;
+  el.textContent = '';
+  let last = 0;
+  let m = re.exec(value);
+  while (m) {
+    if (m.index > last) el.appendChild(document.createTextNode(value.slice(last, m.index)));
+    const chip = document.createElement('span');
+    chip.className = 'chat-ref-chip';
+    chip.textContent = m[0];
+    el.appendChild(chip);
+    last = m.index + m[0].length;
+    m = re.exec(value);
+  }
+  if (last < value.length) el.appendChild(document.createTextNode(value.slice(last)));
+}
+
 async function runQueryLive(text) {
   const myToken = ++abortToken;
   let clientSubmitId = null;
@@ -982,7 +1005,7 @@ async function runQueryLive(text) {
   qLine.className = 'turn';
   const qText = document.createElement('div');
   qText.className = 'turn-q';
-  qText.textContent = text;
+  paintUserBubbleText(qText, text);
   qLine.appendChild(qText);
   $history.appendChild(qLine);
   scrollHistoryToBottom(true); // 새 질문은 무조건 바닥으로 — 위에서 읽던 중이어도 새 턴이 우선이다
@@ -3735,6 +3758,82 @@ function renderBacktestTechniqueCard(receipt) {
   _mountTurn(line, card);
 }
 
+// ---------- 단계 카드 (보드 20·22, 2026-09-03) ----------
+// 기법 폴더 안에서 AI가 하는 일(파일 수정·검사·노드 다시 그리기·백테스트)은 묻지 않고
+// 자동으로 된다 — 그래서 이 카드에는 승인 버튼이 없다. 사람이 누르는 것은 [이 기법 승인]과
+// 실매매 적용뿐이다. 대신 한 일이 여기 한 줄씩 쌓이고, 누르면 가운데 창이 그 자리를 연다:
+// 파일을 고쳤으면 diff, 검사를 돌렸으면 터미널 출력, 노드를 다시 그렸으면 노드 창,
+// 백테스트를 돌렸으면 결과. 카드가 스스로 여는 것은 하나도 없다 — 여는 일은 전부 캔버스의
+// openStep이 한다(typeof 가드: 캔버스가 아직 안 떠 있으면 아무 일도 일어나지 않는다).
+const BACKTEST_STEP_KIND = 'technique_step';
+
+// 글리프는 다섯 갈래뿐이다 — 모르는 icon이 오면 edit으로 떨어뜨린다(빈 칸을 그리지
+// 않는다: 슬롯이 비면 제목의 왼쪽 끝이 줄마다 어긋난다).
+const BACKTEST_STEP_ICONS = {
+  file: '▤',
+  check: '✓',
+  nodes: '◈',
+  run: '▶',
+  edit: '✎',
+};
+
+// 실패 여부는 서버가 정한다(step.tone === 'warn' | 'fail'). 카드가 제목 문구를 읽어
+// 실패를 추측하지 않는다 — 화면이 원문보다 앞서 말하면 거짓말이 된다. 옛 영수증이
+// tone 대신 ok:false만 실을 수 있어 그것도 실패로 읽는다.
+function backtestStepTone(step) {
+  const tone = String((step && step.tone) || '');
+  if (tone === 'fail' || tone === 'warn') return tone;
+  if (step && step.ok === false) return 'fail';
+  return 'ok';
+}
+
+function renderBacktestStepCard(receipt) {
+  const step = (receipt && receipt.step) || {};
+  const icon = Object.prototype.hasOwnProperty.call(BACKTEST_STEP_ICONS, step.icon) ? String(step.icon) : 'edit';
+  const line = document.createElement('div');
+  line.className = 'turn backtest-step-turn';
+  const card = document.createElement('div');
+  card.className = `turn-agent backtest-step-card is-icon-${icon} is-${backtestStepTone(step)}`;
+
+  const glyph = document.createElement('span');
+  glyph.className = 'backtest-step-icon';
+  glyph.setAttribute('aria-hidden', 'true');
+  glyph.textContent = BACKTEST_STEP_ICONS[icon];
+  card.appendChild(glyph);
+
+  const text = document.createElement('div');
+  text.className = 'backtest-step-text';
+  const title = document.createElement('div');
+  title.className = 'backtest-step-title';
+  title.textContent = step.title_ko || '';
+  text.appendChild(title);
+  if (step.meta_ko) {
+    const meta = document.createElement('div');
+    meta.className = 'backtest-step-meta';
+    meta.textContent = step.meta_ko;
+    text.appendChild(meta);
+  }
+  card.appendChild(text);
+
+  const action = step.action;
+  if (action && action.label_ko) {
+    const open = () => {
+      const api = window.AthenaBacktestCanvas;
+      if (!api || typeof api.openStep !== 'function') return;
+      api.openStep(action);
+    };
+    const btn = _btn(action.label_ko, 'routine-btn backtest-step-action');
+    btn.addEventListener('click', (e) => { e.stopPropagation(); open(); });
+    card.appendChild(btn);
+    // 줄 전체가 과녁이다(보드 22). 다만 키보드로 닿는 컨트롤은 위 버튼 하나로 남긴다 —
+    // 카드에 role="button"을 덧씌우면 버튼 안에 버튼이 되어 읽는 순서가 두 겹이 된다.
+    card.classList.add('is-clickable');
+    card.addEventListener('click', open);
+  }
+
+  _mountTurn(line, card);
+}
+
 function renderBacktestChangeCard(receipt) {
   if (!receipt || typeof receipt !== 'object') return;
   // 시각 설계 4종은 머리 태그와 상태 문구가 다르다 — 질문 카드에 "반영 안 됨"을 적으면
@@ -3743,6 +3842,9 @@ function renderBacktestChangeCard(receipt) {
   // 새 기법 만들기 2종도 머리 태그와 버튼이 다르다 — 검사 카드에는 누를 것이 없고,
   // 질문 카드의 버튼은 적용이 아니라 **대답을 보내는** 자리다.
   if (BACKTEST_TECHNIQUE_KINDS.has(receipt.kind)) { renderBacktestTechniqueCard(receipt); return; }
+  // 단계 카드는 머리 태그도 승인 버튼도 없다 — 질문·검사 카드와 한 함수에 섞으면
+  // "누를 것이 있는 카드"와 "그냥 기록"이 같은 모양이 된다.
+  if (receipt.kind === BACKTEST_STEP_KIND) { renderBacktestStepCard(receipt); return; }
 
 
   const line = document.createElement('div');
@@ -3990,6 +4092,25 @@ document.addEventListener('athena:chat-submit', (event) => {
   const text = String((event && event.detail && event.detail.text) || '').trim();
   if (!text) return;
   dispatchUserQuery(text);
+});
+
+// 노드를 눌러도 말은 나가지 않는다(보드 22) — 참조만 입력창에 들어가고, 무엇을 물을지는
+// 사람이 이어서 쓴다. 위 chat-submit과 짝이지만 정반대다: 저쪽은 보내고 이쪽은 넣기만 한다.
+// 선택 영역이 있으면 그것을 대신하고, 앞 글자가 공백이 아니면 공백 하나를 앞에 붙인다
+// (@전체가 앞말에 붙어 "청산흐름@전체"가 되면 참조로 읽히지 않는다).
+document.addEventListener('athena:chat-insert', (event) => {
+  const text = String((event && event.detail && event.detail.text) || '');
+  if (!text || !$input) return;
+  const value = $input.value;
+  const start = $input.selectionStart == null ? value.length : $input.selectionStart;
+  const end = $input.selectionEnd == null ? start : $input.selectionEnd;
+  const head = value.slice(0, start);
+  const chunk = `${head && !/\s$/.test(head) ? ' ' : ''}${text}`;
+  $input.value = `${head}${chunk}${value.slice(end)}`;
+  autoGrowInput();
+  const caret = start + chunk.length;
+  $input.setSelectionRange(caret, caret);
+  $input.focus();
 });
 
 // ---------- 주문 확인 모드 — #order (P4, 2026-08-19) ----------

@@ -423,6 +423,21 @@ function buildBacktestModePrefix(context, today) {
   const selectedNode = selectedId
     ? (techniqueNodes.filter((n) => obj(n) && n.id === selectedId)[0] || null)
     : null;
+  // 기법 폴더(사용자 구도 2026-09-03) — 기법 하나 = 폴더 하나 = 대화 하나다. projectId가
+  // 실려 오면 코드는 그 폴더의 strategy.py이고, 편집·검사·백테스트는 사람에게 묻지 않고
+  // 자동으로 반영된다(자동 수락). 값이 없으면 폴더 이전의 단일 편집기 세계라 propose_code로
+  // 쓴다 — 두 세계의 문장을 섞으면 모델이 폴더 밖에 파일을 만들거나, 이미 디스크에 쓰인
+  // 코드를 두고 "적용을 눌러 달라"고 말한다.
+  const techniqueProjectId = (technique && typeof technique.projectId === 'string' && technique.projectId)
+    ? technique.projectId
+    : '';
+  const techniquePath = (technique && typeof technique.path === 'string' && technique.path)
+    || 'strategy.py';
+  const writeTool = techniqueProjectId ? 'propose_file' : 'propose_code';
+  // 자동 백테스트 — 검사를 통과하면 앱이 이어서 돌린다. 모델은 부르지 않고 결과만 읽는다.
+  // 상태를 그대로 적는 이유: 아직 끝나지 않았을 때 수치가 없으니 지어내지 않게 하려는 것이다.
+  const autoRun = obj(technique && technique.autoRun);
+  const autoRunStatusKo = { queued: '대기 중', running: '도는 중', done: '끝남', error: '오류' };
   const flowLine = (key, ko) => {
     const seq = flows && Array.isArray(flows[key]) ? flows[key] : [];
     return seq.length ? `흐름 ${ko}: ${seq.join(' → ')}` : '';
@@ -431,6 +446,9 @@ function buildBacktestModePrefix(context, today) {
   const techniqueBlock = techniqueDraft
     ? [
       `새 기법 만들기 — 이 화면은 기법 초안이다. 이름: ${techniqueName}`,
+      techniqueProjectId
+        ? `기법 폴더: project_id=${techniqueProjectId} · 파일 ${techniquePath} — 이 폴더 안 편집은 자동으로 반영된다`
+        : '',
       techniqueChecks.length
         ? `검사: ${okChecks}/${blockingChecks.length}${technique.passed ? ' — 모두 통과' : ' — 아직 통과하지 못했다'}`
           + (warnHits.length ? ` · 경고 ${warnHits.length}건 — 통과를 막지는 않는다` : '')
@@ -442,6 +460,11 @@ function buildBacktestModePrefix(context, today) {
       .concat([
         stats
           ? `시험 실행: 워밍업 ${stats.warmup_bars}봉 · entry ${stats.entry} · exit ${stats.exit} · ${stats.rows}행`
+          : '',
+        autoRun
+          ? `자동 백테스트: #${autoRun.runId == null ? '모름' : String(autoRun.runId)}`
+            + ` · ${autoRunStatusKo[autoRun.status] || label(autoRun.status)}`
+            + (obj(autoRun.metrics) ? ` · 지표 ${JSON.stringify(autoRun.metrics)}` : ' · 아직 수치 없음')
           : '',
         techniqueNodes.length
           ? `노드(${granularityKo[technique.granularity] || '모름'} 단위) — 이 기법의 함수들:`
@@ -465,7 +488,9 @@ function buildBacktestModePrefix(context, today) {
   const techniqueRules = techniqueDraft ? [
     '- **여기는 새 기법 초안이다 — 코드창은 네가 제어한다.** 위의 지도 칸 규칙 대신 이 규칙을 따른다: 노드는 이 기법 파이썬의 함수 한 단위라, 사용자에게 함수 이름과 줄 범위로 말해도 된다.',
     '- **알고리즘은 질문 카드로 하나씩 정한다.** athena_backtest action=technique_question 으로 한 턴에 질문 하나만 던진다 — choices는 2~4개이고 그중 하나에 recommended와 why_ko(권장하는 이유)를 붙인다. 네가 대신 고르지 마라; 사용자가 카드에서 고르면 그 답이 채팅으로 온다.',
-    '- **답이 오면 propose_code로 코드를 바로 쓴다.** 편집기에 즉시 들어가므로 "적용했다"가 아니라 "썼다"고 말한다. 코드는 전체(PARAMS 딕셔너리 + def signals(df, p))를 보낸다.',
+    techniqueProjectId
+      ? `- **답이 오면 propose_file로 코드를 바로 쓴다.** project_id=${techniqueProjectId} · path=${techniquePath} · 그 파일 **전체**(PARAMS 딕셔너리 + def signals(df, p))를 보낸다. 기법 폴더 안에서는 위의 "사람이 적용을 눌러야 쓰인다"가 서지 않는다 — 편집은 묻지 않고 자동으로 반영되고, 채팅에는 [되돌리기]가 아니라 단계 카드가 쌓인다. 그래도 "적용했다"가 아니라 "썼다"고 말한다.`
+      : '- **답이 오면 propose_code로 코드를 바로 쓴다.** 편집기에 즉시 들어가므로 "적용했다"가 아니라 "썼다"고 말한다. 코드는 전체(PARAMS 딕셔너리 + def signals(df, p))를 보낸다.',
     '- **코드를 쓸 때 원칙 10개를 그대로 지킨다**(원본: docs/technique-code-rules.md — 이 열 줄과 자동 검사가 같은 문장을 쓴다).',
     '  1. 계약: 최상위 PARAMS(리터럴 dict — 이름 → {default,min,max,step,type})와 signals(df, p)가 있고, entry·exit 두 bool 열을 돌려준다. 쓸 수 있는 것은 athena_bt(as bt)·pandas·numpy뿐이다.',
     '  2. 노드 단위 = 최상위 함수 하나 = 판단 하나. signals()는 조립(호출 순서)만 하고 계산은 함수로 뺀다 — 지표 compute_*, 진입 should_enter, 청산 should_exit, 필요 시 손절·익절 stop_*/take_*, 비중 position_size.',
@@ -478,11 +503,18 @@ function buildBacktestModePrefix(context, today) {
     '  9. 부작용 없음: 파일·네트워크·print 남발 금지(샌드박스가 막는다).',
     '  10. 완성 기준은 자동 검사 통과: 문법·계약·시험 실행 3개가 통과하고 룩어헤드·워밍업 검사가 통과하며 매직 넘버·구조 경고가 0이다.',
     '- **노드 단위는 최상위 함수 하나 — 이름이 역할을 정하고 docstring 첫 줄이 노드 설명이 된다.** enter·entry·buy면 진입, exit·sell·stop·close면 청산, size·position·qty면 비중, 어느 낱말도 없이 수치 시리즈를 돌려주면 지표다. signals() 하나에 다 몰아넣으면 노드가 하나뿐이라 4단계 폴백으로 접힌다 — 그건 그림이 아니다.',
-    '- **검사는 앱이 자동으로 돌린다.** 코드를 쓸 때마다 문법·계약·짧은 구간 시험 실행 결과가 아래 "검사"에 실려 온다 — 실패가 있으면 사용자에게 묻지 말고 원인을 고쳐 propose_code로 다시 쓴다(직접 확인이 필요하면 action=technique_check).',
+    `- **검사는 앱이 자동으로 돌린다.** 코드를 쓸 때마다 문법·계약·짧은 구간 시험 실행 결과가 아래 "검사"에 실려 온다 — 실패가 있으면 사용자에게 묻지 말고 원인을 고쳐 ${writeTool}로 다시 쓴다(직접 확인이 필요하면 action=technique_check).`,
     '- **차단과 경고를 가려서 고친다.** 아래 검사 줄에 "(고쳐야 함)"이 붙은 것은 차단이라 통과할 때까지 고쳐 다시 쓴다(문법·계약·시험 실행·룩어헤드·워밍업). "(고치면 좋음)"이 붙은 것은 경고라 통과를 막지 않지만(매직 넘버·구조) 다음에 코드를 쓸 때 함께 고치고, 경고 때문에 통과한 코드를 되돌리지 않는다.',
     '- **검사를 모두 통과하면 노드·흐름 창이 자동으로 열린다** — 열렸다는 사실을 사용자에게 한 줄로 알린다.',
+    techniqueProjectId
+      ? '- **백테스트도 앱이 자동으로 돈다 — run·backfill을 부르지 말고 suggest_run도 붙이지 마라.** 검사를 모두 통과하면 앱이 이어서 돌린다(대상이 없으면 캐시된 005930 일봉 전 구간으로 돈다). 아래 "자동 백테스트"에 결과가 오면 그 수치만 사람 말 두세 문장으로 요약한다(수익률 · 최대 낙폭 · 거래 수 순서). 상태가 아직 끝나지 않았으면 돌고 있다고만 말하고 숫자를 지어내지 않는다.'
+      : '',
     '- **노드·흐름·기법 전체를 설명해달라고 하면 그 함수의 줄 범위 코드를 근거로 사람 말로 설명한다.** 아래에 노드가 없으면 action=technique_nodes로 지금 코드의 노드·흐름을 받아 온다. 설명의 마지막 줄은 "이상한 점이 있으면 말해 주세요 — 코드를 고쳐 노드를 다시 그립니다".',
-    '- **이상하다는 말이 나오면 propose_code로 고친다** — 코드를 고치면 검사와 노드가 다시 그려진다(코드 ↔ 노드 ↔ 백테스트를 오간다). 백테스트 실행은 그대로 사람이 [실행]을 누르고, 이 기법을 목록에 넣는 승인도 사람이 누른다.',
+    `- **사용자 메시지에 @가 붙은 참조가 오면 그 대상의 줄 범위를 근거로 답한다.** @함수명은 아래 노드 목록에서 그 이름을 찾아 줄 범위(예: 26–33줄) 코드를 읽고 답하고, @진입 흐름·@청산 흐름은 그 흐름의 함수를 순서대로, @전체는 노드 전부를 훑는다. 이름이 목록에 없으면 지어내지 말고 없다고 말한다(필요하면 action=technique_nodes로 지금 노드를 다시 받는다). 고쳐 달라는 말이면 ${writeTool}로 고친 뒤 노드가 다시 그려졌다고 한 줄로 알린다.`,
+    '- **승인은 사람이 누르는 [이 기법 승인] 버튼이다.** 등록·활성화·배포를 네가 부르지 마라 — 위의 register_strategy 규칙은 기법 초안에 서지 않는다. "목록에 넣었다·등록했다·배포했다"고 말하지 말고, 다 됐으면 [이 기법 승인]을 누르면 목록에 들어간다고 안내한다. 실매매 적용도 사람이 누른다.',
+    techniqueProjectId
+      ? '- **이상하다는 말이 나오면 propose_file로 고친다** — 코드를 고치면 검사·노드·백테스트가 자동으로 다시 돈다(코드 ↔ 노드 ↔ 백테스트를 오간다). 사람이 누르는 것은 [이 기법 승인]과 실매매 적용뿐이다.'
+      : '- **이상하다는 말이 나오면 propose_code로 고친다** — 코드를 고치면 검사와 노드가 다시 그려진다(코드 ↔ 노드 ↔ 백테스트를 오간다). 백테스트 실행은 그대로 사람이 [실행]을 누르고, 이 기법을 목록에 넣는 승인도 사람이 누른다.',
   ] : [];
 
   return [
