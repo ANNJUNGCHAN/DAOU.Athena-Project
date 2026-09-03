@@ -1,0 +1,30 @@
+{
+  "captured_at": "2026-09-03",
+  "worktree": "C:/Projects/DAOU.Athena/.claude/worktrees/settings-plugin-tab-absorption-6d550f",
+  "branch": "feat/plugin-mode-doctrine",
+  "base_commit": "ce3b2a9 (origin/main 298747e 병합 후)",
+  "app_test_unit": {
+    "command": "cd app && npm run test:unit (fnm node v22.14.0)",
+    "tests": 2329,
+    "pass": 2329,
+    "fail": 0,
+    "output": ".omc/state/baseline-app-test-unit.txt",
+    "note": "main 병합 후 재수집(2026-09-03). 이전 1946/1984는 병합 전 값. electron 미설치면 27건이 MODULE_NOT_FOUND로 실패 — npm install 후 node node_modules/electron/install.js"
+  },
+  "backend_pytest": {
+    "command": "cd backend && uv run pytest -q (node on PATH)",
+    "passed": 2638,
+    "skipped": 5,
+    "failed": 0,
+    "duration_s": 1419,
+    "output": ".omc/state/baseline-backend-pytest-tail.txt",
+    "note": "node가 PATH에 없으면 test_selector_autonomous_eval.py 등이 실패한다 — fnm 경로를 PATH에 넣고 실행 | main 병합 후 플러그인 트랙 3파일(test_plugin_tools·test_consent·test_server) 137/137 재확인(2026-09-03). 전수는 재수집하지 않음."
+  },
+  "node": {
+    "fnm": "C:/Users/USER/AppData/Local/Microsoft/WinGet/Packages/Schniz.fnm_Microsoft.Winget.Source_8wekyb3d8bbwe/fnm.exe",
+    "install_dir": "C:/Users/USER/AppData/Roaming/fnm/node-versions/v22.14.0/installation",
+    "version": "v22.14.0",
+    "powershell": "& $fnm env --use-on-cd --shell power-shell | Out-String | Invoke-Expression"
+  },
+  "resynced_at": "2026-09-03"
+}

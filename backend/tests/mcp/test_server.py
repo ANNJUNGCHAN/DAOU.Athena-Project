@@ -13,7 +13,7 @@ import httpx
 import pytest
 from mcp import types
 
-from athena_mcp import quirks
+from athena_mcp import plugin_tools, quirks
 from athena_mcp.aggregator import ToolAggregator
 from athena_mcp.client import ResponseTooLargeError, ServerCrashedError
 from athena_mcp.consent import ConsentStore
@@ -1059,3 +1059,53 @@ def test_render_canvas_canvas_type_deprecated_for_plan_token_path_only():
     # data 안내문 계약(위 테스트)이 render_canvas 쪽 canvas_type 변경으로
     # 깨지지 않았는지도 함께 고정한다 — 두 프로퍼티는 서로 독립이다.
     assert render_prop["description"] != save_prop["description"]
+
+
+# ---------------------------------------------------------------------------
+# athena_plugin — 제안 툴 왕복(W1-2)
+# ---------------------------------------------------------------------------
+
+
+async def test_list_tools_exposes_the_plugin_proposal_tool_without_consent(tmp_path):
+    """빌트인이라 승인 기록이 하나도 없어도 노출된다(plugin_tools.py의 경고 절)."""
+    gw = _bare_gateway(tmp_path)
+    server = build_mcp_server(gw)
+    handler = server.request_handlers[types.ListToolsRequest]
+
+    result = await handler(types.ListToolsRequest(method="tools/list"))
+    names = {t.name for t in result.root.tools}
+
+    assert plugin_tools.PLUGIN_TOOL in names
+
+
+async def test_plugin_proposal_audits_one_line_and_leaves_consumer_files_untouched(make_gateway):
+    async def handler(request):  # 제안 툴은 백엔드로 나가지 않는다
+        raise AssertionError("제안 툴이 백엔드 루프백을 호출했다")
+
+    gw = make_gateway(handler)
+    gw.registry.add("fetch", command="uvx", args=["mcp-server-fetch"], env={})
+    gw.consent_store.request_consent("fetch", "uvx", ["mcp-server-fetch"], {})
+    gw.consent_store.approve("fetch", approved_tools={"fetch"})
+
+    def snap():
+        return (
+            gw.registry.path.read_bytes(),
+            gw.registry.path.stat().st_mtime_ns,
+            gw.consent_store.path.read_bytes(),
+            gw.consent_store.path.stat().st_mtime_ns,
+        )
+
+    before = snap()
+    result = await gw.dispatch_call(
+        plugin_tools.PLUGIN_TOOL,
+        {"actions": [{"action": "set_enabled", "target": "fetch", "enabled": False}]},
+    )
+    assert result.isError is False
+    assert json.loads(result.content[0].text)["source"] == "model"
+    assert snap() == before  # 제안만으로는 두 소비자 파일이 안 변한다
+
+    entries = gw._audit_log("plugin").read_all()  # noqa: SLF001
+    assert len(entries) == 1
+    assert entries[0]["alias"] == "plugin"
+    assert entries[0]["tool"] == plugin_tools.PLUGIN_TOOL
+    assert entries[0]["success"] is True

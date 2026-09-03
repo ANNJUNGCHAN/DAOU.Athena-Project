@@ -113,11 +113,10 @@ async function main() {
     }
   });
 
-  // ---------- (3) 설정 오버레이 — 5개 탭 ----------
+  // ---------- (3) 설정 오버레이 — 4개 탭 ----------
   const NAV_LABELS = [
     ['화면', '03a-settings-screen.png'],
     ['계좌', '03b-settings-accounts.png'],
-    ['플러그인', '03c-settings-mcp.png'],
     ['모델', '03d-settings-model.png'],
     ['그래프', '03e-settings-graph.png'],
   ];
@@ -149,7 +148,7 @@ async function main() {
         btn.click();
         return 'clicked';
       })()`);
-      await wait(label === '플러그인' ? 1200 : 600); // mcp-list는 콜드 스폰이라 더 기다린다(probe-chart-card.js/verify.js 관례)
+      await wait(600);
       await shot(shellWin, file, clicked);
       if (clicked !== 'clicked') {
         results.push({ name: `03-nav-${label}`, ok: false, file: null, note: `nav 항목을 못 찾음: ${clicked}` });

@@ -1260,6 +1260,21 @@ async function runQueryLive(text) {
   };
   const unsubscribeNudgeGuardProposed = window.athena.on('athena:nudge-guard-proposed', onNudgeGuardProposed);
 
+  // 모델이 낸 플러그인 제안은 이 턴의 산물이다 — 채팅에는 제안 턴 한 장만
+  // 남는다. 캔버스 카드는 canvas.js의 모듈 스코프 구독이 그리고(턴이 끝나도
+  // 카드는 남아야 한다), GUI 버튼 경로는 채팅 턴을 만들지 않는다.
+  const onPluginProposed = (envelope) => {
+    if (myToken !== abortToken) return;
+    // 모드 밖이면 캔버스가 봉투를 폐기한다 — 그때 채팅에 남는 것은 폐기를
+    // 알리는 한 줄뿐이고, 제안 턴은 만들지 않는다(없는 카드를 가리키게 된다).
+    if (pluginModeLib.currentMode() !== 'plugin') return;
+    renderPluginProposalTurn(envelope);
+  };
+  const unsubscribePluginProposed = window.athena.on('athena:plugin-proposed', onPluginProposed);
+  // 폐기 한 줄의 중복 억제는 이 턴 안에서만이다 — 세션 내내 눌러 두면 다음
+  // 턴에 같은 요청을 다시 해도 아무 말도 하지 않는다.
+  pluginOutOfMode.reset();
+
   // 추론 미리보기(2026-08-26) — 답변 텍스트가 나오기 전 긴 침묵 구간을 채운다.
   // 미리보기 전용이다: 옅은 색·작은 글씨로 뚜렷이 구분하고, 답변 첫 조각이
   // 오거나 턴이 끝나면 즉시 지운다 — 턴 기록에는 절대 안 남는다.
@@ -1364,6 +1379,7 @@ async function runQueryLive(text) {
     unsubscribeLiveToolStep();
     unsubscribeLiveSubagentStep();
     unsubscribeNudgeGuardProposed();
+    unsubscribePluginProposed();
     unsubscribeLiveThinkingDelta();
     unsubscribeLiveTextDelta();
     releaseLadder.dispose(); // 유예 타이머 누수 방지 — 방출 자체는 아래 authoritative overwrite의 몫.
@@ -1568,13 +1584,12 @@ function openSettings() {
   $app.hidden = true;
   $settings.hidden = false;
   // Paper 43쪽(2026-08-18 확정) — 좌 사이드바(화면·계좌·MCP 서버·모델) + 우 패널.
-  // 세 카드를 동시에 쌓아 보여주던 이전 판(renderScreen/renderAccounts/renderMcp를
+  // 세 카드를 동시에 쌓아 보여주던 이전 판(renderScreen/renderAccounts를
   // 나란히 호출)을 대체한다. 패널 렌더 함수 자체는 그대로 재사용 — nav가 어떤 걸
   // 부를지만 고른다.
   const SETTINGS_PANELS = {
     screen: settingsCards.renderScreen,
     accounts: settingsCards.renderAccounts,
-    mcp: settingsCards.renderMcp,
     model: settingsCards.renderModel,
     history: settingsCards.renderHistory,
   };
@@ -3326,6 +3341,78 @@ function renderGuardConfirmCard({ current, proposed } = {}, triggerText) {
 
   _mountTurn(line, card);
 }
+
+// ---------- 플러그인 제안 턴 · 결과 턴 (US-004) ----------
+// 채팅이 제안하고 캔버스가 승인한다. 이 파일은 승인 카드를 만들지 않는다 —
+// 카드는 canvas.js가 그리고, 여기에는 무엇을 제안했는지와 승인 뒤 무엇이
+// 일어났는지만 대화 기록으로 남는다. 시각 언어는 라우틴 초안 알약을 그대로
+// 재사용한다(새 언어를 만들지 않는다).
+const pluginProposalLib = window.AthenaLib.PluginProposal;
+const pluginModeLib = window.AthenaLib.PluginModeAdapter;
+
+function pluginTurnCard(pills, bodyLines, chipRow) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent plugin-turn';
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  pills.forEach((text, index) => {
+    const pill = document.createElement('span');
+    pill.className = index === 0 ? 'routine-draft-pill is-filled' : 'routine-draft-pill';
+    pill.textContent = text;
+    head.appendChild(pill);
+  });
+  card.appendChild(head);
+  bodyLines.forEach((text) => {
+    const body = document.createElement('div');
+    body.className = 'agent-body';
+    body.textContent = text;
+    card.appendChild(body);
+  });
+  if (chipRow) card.appendChild(chipRow);
+  _mountTurn(line, card);
+}
+
+// 모델이 낸 제안만 채팅 턴이 된다 — 허브 버튼이 낸 것은 카드로만 합류한다.
+function renderPluginProposalTurn(envelope) {
+  if (!envelope || envelope.source !== 'model') return;
+  const copy = pluginProposalLib.cardCopy(envelope);
+  pluginTurnCard(['플러그인', '제안'], [copy.title, copy.reasonLine].filter(Boolean), null);
+}
+
+// 승인 클릭은 살아 있는 LLM 턴 **밖**에서 일어난다 — 턴 스코프 클로저는 이미
+// 죽어 있으므로 결과 턴은 모듈 스코프의 이 구독이 마운트한다.
+window.addEventListener('athena:plugin-result', (event) => {
+  const detail = (event && event.detail) || {};
+  const result = detail.result || {};
+  // 문장 조립(도구 수 합산·재시작 줄)은 순수 모듈이 한다 — 여기는 그리기만.
+  const copy = pluginProposalLib.resultTurnModel(detail.kind, result);
+  if (!copy.lines.length) return;
+  let chipRow = null;
+  if (copy.chip) {
+    chipRow = document.createElement('div');
+    chipRow.className = 'routine-approval-actions';
+    const retry = _btn(copy.chip, 'agent-proactive-chip');
+    // 실패한 봉투는 대기 목록으로 되돌려져 있다 — 같은 봉투를 그대로 다시 보낸다.
+    retry.addEventListener('click', () => {
+      retry.disabled = true;
+      if (typeof pluginDecide === 'function') void pluginDecide('athena:plugin-approve', detail.envelope);
+    });
+    chipRow.appendChild(retry);
+  }
+  pluginTurnCard(['플러그인', '결과'], copy.lines, chipRow);
+});
+
+// 모드 밖에서 온 제안은 폐기됐다 — 캔버스에는 카드가 없다. 같은 제안이 한 턴에
+// 여러 번 와도 한 번만 알린다(서명 1회 — 턴이 바뀌면 다시 알린다).
+const pluginOutOfMode = pluginProposalLib.createOutOfModeNotifier();
+window.addEventListener('athena:plugin-out-of-mode', (event) => {
+  const envelope = (event && event.detail && event.detail.envelope) || null;
+  if (!envelope) return;
+  if (!pluginOutOfMode.shouldAnnounce(envelope)) return;
+  pluginTurnCard(['플러그인'], [pluginProposalLib.outOfModeCopy()], null);
+});
 
 // ---------- 백테스트 변경 내역 카드 (5단계, 2026-09-02) ----------
 // 채팅이 athena_backtest로 낸 액션 4종(설정·코드·화면 전환·최적화 제안)은 이제

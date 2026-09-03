@@ -333,6 +333,19 @@ def test_audit_log_records_only_ts_alias_tool_success(tmp_path):
     assert entries[1]["success"] is False
 
 
+def test_plugin_audit_log_records_only_the_same_four_fields(tmp_path):
+    """플러그인 제안 감사도 같은 4필드다 — 무엇을 제안했는지(대상·기능·스니펫)는
+    로그에 닿지 않는다. 실측 경로는 `~/.athena/audit/plugin.jsonl`."""
+    log = consent.AuditLog(tmp_path / "plugin.jsonl")
+    log.record("plugin", "athena_plugin", success=True)
+
+    (entry,) = log.read_all()
+    assert set(entry.keys()) == {"ts", "alias", "tool", "success"}
+    assert entry["alias"] == "plugin"
+    assert entry["tool"] == "athena_plugin"
+    assert entry["success"] is True
+
+
 def test_audit_log_never_contains_argument_or_response_bodies(tmp_path):
     """계좌 정보 등 민감 데이터가 흐를 수 있으므로 로그 파일 원문에 그런 값이
     등장하지 않는지 직접 확인한다."""

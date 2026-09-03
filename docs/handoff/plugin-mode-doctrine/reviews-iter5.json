@@ -1,0 +1,121 @@
+{
+  "architect": {
+    "verdict": "APPROVE_WITH_CHANGES",
+    "summary": "반복 1 선결 5건(revision 배선 · stage-snippet IPC 비호출 · 모드 게이트 · ADR B 기각사유 ⑵ 교체 · 메인 봉투 소유 종합안)은 전부 해소됐고, 독립 검증이 지적한 인용 7건은 모두 §10.3 교정 이력표의 '옛 값' 기록일 뿐 본문에는 없다(grep 확인). 워크트리·baseline·핵심 코드 인용 30여 건을 파일로 재실측했고 전부 일치한다. 다만 반복 5가 새로 넣은 pending 등록 배선이 W0의 '모드 밖 폐기' 결정과 충돌해 폐기한 제안이 모드 진입 시 부활하고, 복원 훅과 승인 후 채팅 결과 턴의 거처가 어느 W 단계에도 없다. 여기에 문서 자기모순 2건(§1 '승인된 예외' ↔ W5-4 ⑷ / §6 R3 묶음 근거 ↔ 자기 실측)을 더해 5건은 위치와 수정문이 모두 명확한 소규모 편집이므로 APPROVE_WITH_CHANGES로 판정한다. W0 어댑터는 거의 최소이고(H4 선언만 남은 잉여 1건), 인프라 트랙 없이 오늘 셸에서 출하한다는 점은 명시돼 있으며 근거 3건이 실측으로 성립한다. 프리모템 5건과 8층 테스트 계획은 적정하되, 결함 ①의 사각지대를 재는 단언 1건이 비어 있다.",
+    "required_changes": [
+      {
+        "id": "RC-1",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §4 W2-1(344행) · W3-4 ⑴(358행) · §2.5 단위(앱·렌더)(144행) · §8 확정 10(573행)",
+        "change": "pending 등록 시점을 `athena:plugin-noted` 하나로 일원화한다. W2-1에서 '푸시 직전에 그 봉투를 pluginProposalRegistry의 pending 맵에 등록한다(모델 경로의 유일한 등록 시점)'를 삭제하고, 모델 경로도 렌더러의 모드 게이트를 통과한 뒤 canvas.js가 카드를 그리고 나서 보내는 `athena:plugin-noted`로만 등록되게 한다(확정 10의 '모델 경로는 push 직전' 문장도 같이 교체). §2.5 단위(앱·렌더)에 회귀 단언 1건을 추가한다 — '모드 밖에서 폐기된 모델 제안은 이후 athena:plugin-pending 조회에 나타나지 않는다'.",
+        "why": "현행 배선에서는 모델 제안이 렌더러 모드 게이트 이전에 이미 메인 pending에 들어가므로, W3-4 ⑴의 '폐기·plugin-noted 미전송'이 GUI 경로만 막는다. 그 결과 W3-4 ⑷의 모드 진입 복원이 폐기된 카드를 부활시켜 08번 보드 5열의 '캔버스에 아무 카드도 없다'와 W5-4 ⑸ 확정 문구 '플러그인 모드에서 다시 요청합니다'가 동시에 거짓이 된다(§2.1 원칙 4 위반). 확정 10이 승인 인자를 봉투 전체로 정했으므로 pending은 복원 전용이고, 등록을 늦춰도 승인 정확성 손실이 0이다."
+      },
+      {
+        "id": "RC-2",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §4 W3-4 ⑷(358행) · W3-3 파일 칸(357행)",
+        "change": "복원 호출의 거처를 `app/canvas.js:2537`(`window.AthenaPluginCanvas = pluginCanvas`)에서 setView를 감싸 `athena:plugin-pending` invoke를 잇는 것으로 못박는다. `lib/sidebar.js`는 수정하지 않고, `plugin-canvas.js`는 IPC 무지를 유지한다는 한 줄을 함께 적는다.",
+        "why": "현행 W3-4 ⑷는 '사이드바가 진입마다 부르는 setView(\\'hub\\') 뒤'라고만 적는데 `app/lib/sidebar.js`는 어느 W 단계의 파일 목록에도 없다. 실측상 `sidebar.js:54-62`의 onSelect는 `AthenaPluginCanvas.setView('hub')`만 부르고 refresh 훅이 없으며(backtest는 :63-67에서 refresh를 부르지만 plugin은 아니다), `canvas.js`의 pluginRefresh()도 진입마다 돌지 않는다(:2781 1회 + 변이 후에만). 자율 실행자는 목록 밖 파일을 만지거나 훅을 발명하게 된다."
+      },
+      {
+        "id": "RC-3",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §4 W3-4 ⑵⑶(358행)",
+        "change": "승인 후 채팅 결과 턴의 마운트 경로를 지목한다 — `app/chat.js:2162-2169`의 모듈 스코프 `_mountTurn`(선례 `renderAgentTurn`)을 결과 턴 경로로 쓰고, canvas.js→chat.js 전달은 기존 렌더러 내부 CustomEvent 선례(`app/canvas.js:2595 athena:plugins-changed`)를 복제한다고 한 줄 적는다. ⑵의 '카드 내 span.agent-mode'는 캔버스 카드 상태 표시로, 08번 보드의 채팅 결과 턴 3줄은 이 새 경로로 각각 명시 분리한다.",
+        "why": "수락 기준 ②('app/chat.js 플러그인 모드: … 승인/거부/실패/재시작 결과 턴 렌더')와 ①-08 보드는 채팅 결과 턴을 요구하는데, W3-4 ⑵는 결과를 카드 안에 적고 ⑶은 chat.js의 몫을 한 줄로 좁힌다. 승인 클릭은 살아 있는 LLM 턴 밖에서 일어나므로 계획이 형판으로 삼은 턴 스코프 경로(`chat.js:1184-1188`)로는 마운트가 불가능하다. 기전(모듈 스코프 _mountTurn, 렌더러 내부 CustomEvent)은 이미 코드에 있으나 계획이 지목하지 않아, 실행자가 결과 턴을 통째로 빠뜨리거나 새 채널을 발명한다."
+      },
+      {
+        "id": "RC-4",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §1 명시적 비목표 문단(26행)",
+        "change": "'제약 \"타 모드 불간섭\"의 유일한 승인된 예외(O-9)'를 '승인 상정 예외 — W5-4 ⑷에서 사용자 판단을 받는다'로 바꾸고, ⑷가 거부됐을 때의 폴백 한 줄을 추가한다(가시성 조건을 `graphView` 단독으로 되돌리고 ①-03의 채팅 헤더 요구를 Paper 보드 표현만으로 축소한다).",
+        "why": "§1은 '승인된 예외'라 쓰고 W5-4 ⑷는 '아직 사용자 승인 기록이 없다'고 써 자기모순이다. ralph는 합의 직후 착수하므로 §1만 읽고 승인된 것으로 간주해 그래프 모드 표면(`shell.html:296-299`·`controller.js:302`)을 만지게 된다. 거부 시 폴백도 없어 W5-4에서 되돌릴 방법이 계획에 없다."
+      },
+      {
+        "id": "RC-5",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §6 R3 결정 첫 불릿 '묶음'(462행)",
+        "change": "'오늘 구조로는 설치 승인 → 재시작 → 허용 승인 → 재시작으로 대화가 두 번 끊긴다'를 빌드별로 갈라 적는다 — 재기동 합치기 이득은 런타임을 켠 빌드(ATHENA_PROVIDER_RUNTIME)에만 적용되고, 기본 빌드의 묶음 근거는 '사람이 한 번 읽고 한 번 누른다'(UX)뿐이며 그때 재기동은 `canvas.js:2591 restartRequired` 플래그로만 표현된다고 명시한다.",
+        "why": "같은 절의 R-1 실측(`app/main.js:100-101 PROVIDER_RUNTIME_DEFAULT=false` + 핸들러 5종이 `:4172`·`:4177`·`:4182`·`:4193`·`:4198`에서 전부 조기 반환 = runMcpMutation 호출자 0)이 그 재기동이 기본 빌드에 존재하지 않음을 증명한다. 계획 최대 부피(plugin-batch kind · 묶음 실패 계약 · providerRuntimeEnabled 분기 · W2-5 · 검수 통과 문구 폐기)를 지탱하는 근거가 자기 실측으로 반증돼 있으면, 실행 중 이 부피를 재검토하는 판단 근거가 왜곡된다."
+      }
+    ],
+    "optional_improvements": [
+      "W0 어댑터를 H2(currentMode) 1훅으로 더 줄인다. H4의 실제 구현은 W0-3의 `app/lib/plugin-canvas.js`(getState/setData 확장)에 있으므로, 어댑터가 H4를 '선언'만 지는 것은 반복 5가 H6을 뺀 논거(O-A1: 선언만 있고 구현이 없는 훅은 CLAUDE.md §2의 사변적 표면)와 같은 상황이다. §5 표에는 H4를 계약으로 남긴다.",
+      "W3-4 ⑶ 'chat.js의 몫은 한 줄 결과 턴 하나뿐이다'의 범위를 문면에 명시한다('모드 밖에서는'). 현재 ⑴('chat.js의 턴 스코프 구독은 채팅 제안 턴 렌더에만 쓴다')과 문면상 충돌해 보인다.",
+      "§7에 `npm run verify:plugins`가 npx/uvx 다운로드로 네트워크를 요구한다는 한 줄을 추가한다(§7-2 주석에는 있으나 판정 절차에는 없다). 오프라인 실패를 코드 결함으로 오판하지 않게 한다.",
+      "RC-1의 부활 방지 단언을 W5-2 신설 ⑺(기본 빌드 결과 턴이 '반영됐습니다'를 주장하지 않는다) 옆에 함께 배치해 '정직성 회귀' 커버리지를 한 자리에 묶는다.",
+      "§10.3 인용 이력표(616행)에 남은 옛 값 6종(`main.js:2508-2524` · `controller.js:271-305` · `mcp-cli.js:139-151` · `plugin-canvas.js:203-234` · `:598-600` · `registry.py:178-185`)이 매 반복 검토자에게 오탐을 유발한다. 이력표를 '옛 값(본문에 없음)'으로 한 줄 표기해 두면 다음 반복의 검증 비용이 준다."
+    ],
+    "principle_violations": [
+      "타 모드 불간섭 — 심각도 중. W3-6이 그래프 모드 표면(`app/shell.html:296-299` 하드코딩 문구 2줄 · `app/lib/graph-mode/controller.js:302` 가시성 조건)을 실제로 수정한다. 예외 선언 + A10 3종 회귀 단언 + `app/verify-graph-mode.js`(:222·:238·:599·:602 실측 확인)로 방어되나, §1이 '승인된 예외'라 쓰고 W5-4 ⑷가 '승인 기록 없음'이라 써 실행자가 승인된 것으로 오독한다(RC-4로 해소).",
+      "화면은 정직하다(§2.1 원칙 4) — 심각도 중. 결함 ①(pending 등록 비대칭)이 남으면 모드 밖에서 '폐기했다'고 알린 제안이 모드 진입 시 카드로 부활해, W5-4 ⑸로 승인받으려는 확정 문구 '플러그인 모드에서 다시 요청합니다'가 거짓 약속이 된다. RC-1로 소멸한다.",
+      "사람 클릭 전용 실행 — 위반 없음. 게이트웨이 툴에 실행 액션이 0이고(§8 확정 2의 6종은 전부 제안), 실제 변이는 승인 카드 클릭이 부르는 `ipcMain` 핸들러뿐이다. 메인 별칭 게이트(RC-3 결정, `lib/main/plugin-proposal-registry.js` 소유)가 봉투 자기 신고를 재검증한다.",
+      "제안 불변 — 위반 없음. 제안 툴은 `registry.reload()`(registry.py:258-262)와 `consent_store.snapshot()`만 부르는 읽기 전용이고, A2가 '쓰기 0회'를 소비자 두 파일(`~/.athena/mcp_servers.json`·`consent.json`)로 정밀화하며 락 파일 `.mcp_servers.json.lock`(registry.py:233·:259-261) 생성을 정직하게 예외 처리했다.",
+      "사람 클릭에 LLM 재스폰 없음 — 위반 없음. 축 2에서 C1(렌더러 동기 봉투 합성)을 채택해 GUI 클릭 지연 0ms를 유지하고, 확정 10의 '사전 등록 왕복 없음'이 그 근거를 보존한다(`chat.js:2489-2490` 선례 부합).",
+      "문구 3원칙 — 위반 없음. §7-7 내부용어 grep + §7-7b 폐기 문구 고정 게이트 + W5-4 PDF 검수 5안건으로 이중 방어하고, 마찰이 있는 문구(09번 하단 경계문 '앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다')는 스스로 안건 ⑴로 상정해 사용자 판단에 넘긴다.",
+      "Kiwoom/brain 비플러그인 — 위반 없음. 백엔드 `_BLOCKED_ALIASES` + 액션별 멤버십 게이트, `stage_snippet`의 파싱 후 전 별칭 차단(C-7), 메인 승인 게이트 재검증(RC-3), 렌더러 UX용 선반영의 4중 구조이고 각각에 테스트가 붙어 있다.",
+      "워크트리 격리/브랜치 규율 — 위반 없음. 실측 확인: `git worktree list`가 `C:/Projects/DAOU.Athena-plugin f880d79 [feat/plugin-mode-doctrine]`를 보고하고 baseline 3종(app 1946/1946/fail 0 · backend 2638 passed/5 skipped/1419s)이 워크트리 `.omc/state/`에 존재하며 `.omc/plans/`만 비어 있다 — §0-0·§0-4 기술과 정확히 일치한다. §0 전 명령이 멱등이고 파괴적 git 명령(stash/reset/checkout --/restore/clean, add -A)을 예외 없이 금지한다."
+    ]
+  },
+  "critic": {
+    "gates": {
+      "principle_option_consistency": "FAIL",
+      "alternative_exploration": "PASS",
+      "risk_mitigation_clarity": "PASS",
+      "testable_criteria": "FAIL",
+      "verification_steps": "PASS",
+      "deliberate_premortem_and_tests": "PASS",
+      "ralph_executability": "FAIL"
+    },
+    "summary": "아키텍트의 선결 5건은 파일 실측으로 전부 재확인했다(sidebar.js onSelect가 plugin에는 setView('hub')만 부르고 refresh 훅이 없다 · canvas.js:2781 pluginRefresh가 1회 + 변이 후에만 돈다 · chat.js:2162 _mountTurn은 모듈 스코프이고 :1184-1188 구독은 턴 클로저 안이다 · main.js:100 PROVIDER_RUNTIME_DEFAULT=false와 :4171-4200 조기 반환 5종 · shell.html:296-299 하드코딩). 그 위에 두 검토자가 놓친 결함 2건을 새로 찾았다. ⑴ 신규 렌더러 모듈 2개(lib/plugin-proposal.js·lib/plugin-mode-adapter.js)를 shell.html의 <script src> 목록(:394-486)에 등록하는 단계가 어느 W에도 없고 window.AthenaLib 이름도 정해지지 않았다 — canvas.js:1-8이 모듈 최상단에서 window.AthenaLib.*를 구조분해하므로 누락·순서 오류는 플러그인 모드가 아니라 렌더러 전체를 첫 페인트에서 죽인다. ⑵ A3의 측정 방법이 구조적으로 성립하지 않는다 — `node --test lib/plugin-canvas.test.js`로는 canvas.js의 배선 속성을 잴 수 없고(canvas.js는 require 불가한 최상위 스크립트), 그 결과 명세 ②의 \"직접 IPC 호출 제거\"가 조용히 미검증으로 남는다. 저장소에 정확한 선례가 있다(lib/raw-ui-boundary.test.js:9-30이 canvas.js 소스를 읽어 경계를 단언한다). 대안 탐색(A·B·C1·C2·D·E)과 위험 완화, 프리모템 5건·8층 테스트 계획, §0 워크트리 규율은 그대로 통과한다. 결함 7건 모두 위치와 수정문이 명확한 소규모 편집이며 핵심 접근(A+D+C1)은 명세와 어긋나지 않으므로 REVISE다.",
+    "verdict": "REVISE",
+    "required_changes": [
+      {
+        "id": "RC-1",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §4 W2-1(344행) · W2-2(345행) · W2-4(348행) · W3-4 ⑴(358행) · §2.5 단위(앱·렌더)(144행) · §8 확정 10(573행)",
+        "change": "pending 등록 시점을 `athena:plugin-noted` 하나로 일원화한다. ⑴ W2-1에서 '푸시 직전에 그 봉투를 pluginProposalRegistry의 pending 맵에 등록한다(모델 경로의 유일한 등록 시점)'를 삭제하고, 모델 경로도 렌더러 모드 게이트를 통과한 뒤 canvas.js가 카드를 그리고 나서 보내는 `athena:plugin-noted`로만 등록되게 한다. ⑵ 확정 10의 '모델 경로는 `maybeForwardPluginProposal`이 push 직전에' 문장을 같이 교체한다. ⑶ **W2-2와 W2-4의 `athena:plugin-noted` 설명 'GUI 경로의 pending 등록 전용'을 '두 경로 공통의 pending 등록'으로 함께 고친다** — 이 두 줄을 남겨 두면 RC-1 적용 후 계획이 다시 자기모순이다. ⑷ §2.5 단위(앱·렌더)에 회귀 단언 1건을 추가한다 — '모드 밖에서 폐기된 모델 제안은 이후 `athena:plugin-pending` 조회에 나타나지 않는다'.",
+        "why": "현행 배선에서는 모델 제안이 렌더러 모드 게이트 이전에 이미 메인 pending에 들어가므로 W3-4 ⑴의 '폐기·plugin-noted 미전송'이 GUI 경로만 막는다. 그러면 W3-4 ⑷의 모드 진입 복원이 폐기된 카드를 부활시켜, 08번 보드 5열의 '캔버스에 아무 카드도 없다'(405행)와 W5-4 ⑸로 승인받으려는 확정 문구 '플러그인 모드에서 다시 요청합니다'가 동시에 거짓이 된다(§2.1 원칙 4 위반). 확정 10이 승인 인자를 봉투 전체로 정했으므로 pending은 복원 전용이고, 등록을 늦춰도 승인 정확성 손실이 0이다."
+      },
+      {
+        "id": "RC-2",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §4 W3-4 ⑷(358행) · W3-3 파일 칸(357행)",
+        "change": "복원 호출의 거처를 `app/canvas.js`의 `window.AthenaPluginCanvas = pluginCanvas`(작업 트리 :2537, 워크트리는 심볼로 재탐색) 지점에서 노출 객체의 `setView`를 감싸 `athena:plugin-pending` invoke를 잇는 것으로 못박는다. `app/lib/sidebar.js`는 수정하지 않고 `app/lib/plugin-canvas.js`는 IPC 무지를 유지한다는 한 줄을 함께 적는다.",
+        "why": "현행 W3-4 ⑷는 '사이드바가 진입마다 부르는 `setView('hub')` 뒤'라고만 적는데 `app/lib/sidebar.js`가 어느 W 단계의 파일 목록에도 없다. 실측: `sidebar.js`의 onSelect는 `view === 'plugin'`에서 `window.AthenaPluginCanvas.setView('hub')`만 부르고 refresh 훅이 없으며(바로 아래 `view === 'backtest'` 가지는 `AthenaBacktestCanvas.refresh()`를 부른다), `canvas.js`의 `pluginRefresh()`도 진입마다 돌지 않는다(`void pluginRefresh()` 1회 :2781 + 변이 후에만). 자율 실행자는 목록 밖 파일을 만지거나 훅을 발명하고, 최악의 경우 복원이 아예 안 걸려 ①-09의 '제안 대기 카드가 창 복원 시 그대로'가 거짓이 된다."
+      },
+      {
+        "id": "RC-3",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §4 W3-4 ⑵⑶(358행) · §2.5 단위(앱·렌더) 또는 신설 행(144행)",
+        "change": "승인 후 채팅 결과 턴의 마운트 경로를 지목한다 — `app/chat.js:2162-2169`의 **모듈 스코프** `_mountTurn`(선례 `renderAgentTurn` :2169)을 결과 턴 경로로 쓰고, canvas.js→chat.js 전달은 이미 있는 렌더러 내부 CustomEvent 선례(`app/canvas.js:2595` `athena:plugins-changed` dispatchEvent)를 복제한다고 한 줄 적는다. W3-4 ⑵의 '카드 내 `span.agent-mode`'는 **캔버스 카드 상태 표시**로 한정하고, 08번 보드가 요구하는 채팅 결과 턴(성공 3줄 · 거부 1줄 · 실패+재시도 · 재시작)은 이 새 경로로 명시 분리한다. W3-4 ⑶의 '`chat.js`의 몫은 한 줄 결과 턴 하나뿐이다'는 '**모드 밖에서는** 한 줄뿐'으로 범위를 좁혀 다시 쓴다.",
+        "why": "명세 승계 ②(§3.1, 173행)가 '`app/chat.js` 플러그인 모드: … 승인/거부/실패/재시작 **결과 턴 렌더**'를 요구하고 ①-08 보드 전체가 결과 턴 보드인데, 현행 W3-4는 결과를 카드 안에 적고(⑵) chat.js의 몫을 한 줄로 못박아(⑶) 모드 안 결과 턴의 거처가 어느 W 단계에도 없다. 게다가 승인 클릭은 살아 있는 LLM 턴 밖에서 일어나므로 계획이 형판으로 삼은 턴 스코프 경로(`chat.js:1184-1188`, `myToken !== abortToken` 가드)로는 원리적으로 마운트가 불가능하다. 기전은 이미 코드에 있으나(모듈 스코프 `_mountTurn`, 렌더러 내부 CustomEvent) 계획이 지목하지 않아 ralph는 결과 턴을 통째로 빠뜨리거나 새 IPC 채널을 발명한다."
+      },
+      {
+        "id": "RC-4",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §1 명시적 비목표 문단(26행)",
+        "change": "'제약 \"타 모드 불간섭\"의 **유일한 승인된 예외**(O-9)'를 '**승인 상정** 예외 — W5-4 ⑷에서 사용자 판단을 받는다'로 바꾸고, ⑷가 거부됐을 때의 폴백 한 줄을 추가한다(가시성 조건을 `graphView` 단독으로 되돌리고, ①-03의 채팅 헤더 요구를 Paper 보드 표현만으로 축소한다).",
+        "why": "§1은 '승인된 예외'라 쓰고 W5-4 ⑷(428행)는 '아직 사용자 승인 기록이 없다'고 써 자기모순이다. ralph는 합의 직후 착수하므로 §1만 읽고 승인된 것으로 간주해 그래프 모드 표면(`app/shell.html:296-299` 하드코딩 2줄 · `app/lib/graph-mode/controller.js:302` `elements.chatHead.hidden = !graphView`)을 만진다. 거부 시 폴백이 없어 W5-4에서 되돌릴 방법이 계획에 없다(롤백 경로 부재)."
+      },
+      {
+        "id": "RC-5",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §6 R3 결정 첫 불릿 '묶음'(462행)",
+        "change": "'오늘 구조로는 설치 승인 → 재시작 → 허용 승인 → 재시작으로 대화가 두 번 끊긴다'를 빌드별로 갈라 적는다 — 재기동 합치기 이득은 런타임을 켠 빌드(`ATHENA_PROVIDER_RUNTIME`)에만 적용되고, 기본 빌드의 묶음 근거는 '사람이 한 번 읽고 한 번 누른다'(UX)뿐이며 그때 재기동은 `canvas.js:2591 restartRequired` 플래그로만 표현된다고 명시한다.",
+        "why": "같은 절의 실측(463행: `app/main.js:100 PROVIDER_RUNTIME_DEFAULT = false` + `handleMcpRegister/Approve/Revoke/AllowTool/Remove`가 전부 `if (!providerRuntimeEnabled) return mcpCli.*`로 조기 반환 = `runMcpMutation` 호출자 0)이 그 재기동이 기본 빌드에 존재하지 않음을 증명한다. 계획 최대 부피(`plugin-batch` kind · 묶음 실패 계약 2종 · `providerRuntimeEnabled` 분기 · W2-5 · 이미 검수 통과한 subtitle 폐기)를 지탱하는 근거가 자기 실측으로 반증돼 있으면, 실행 중 이 부피를 재검토할 판단 근거가 왜곡된다."
+      },
+      {
+        "id": "RC-6",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §4 W0-1(306행) · W3-1(355행), 그리고 W3-6의 파일 칸(359행)",
+        "change": "신규 렌더러 모듈 2개의 **로드 등록 단계**를 명시한다: ⑴ `app/shell.html`의 스크립트 블록(작업 트리 :394-486, 워크트리 −2)에 `<script src=\"lib/plugin-mode-adapter.js\">`와 `<script src=\"lib/plugin-proposal.js\">`를 **`canvas.js`(:485)·`chat.js`(:486)보다 앞**에, `lib/plugin-canvas.js`(:472) 인접 자리에 추가한다. ⑵ 두 모듈의 노출 이름을 확정한다 — `window.AthenaLib.PluginProposal` · `window.AthenaLib.PluginModeAdapter`, 이중 내보내기 형판은 `app/lib/guard-confirm.js` 말미(`module.exports` 아니면 `window.AthenaLib.X`)와 `app/lib/plugin-catalog.js`를 그대로 따른다. ⑶ W3-6의 파일 칸에 `app/shell.html`이 이미 있으므로, 이 편집이 같은 파일의 별개 구역임을 한 줄로 구분한다.",
+        "why": "저장소의 렌더러 모듈은 예외 없이 `shell.html`의 명시 `<script src>`로 로드된다(`lib/plugin-canvas.js:472` · `lib/guard-confirm.js:455` 등 90여 줄). 계획이 만드는 `app/lib/plugin-proposal.js`(W3-1)와 `app/lib/plugin-mode-adapter.js`(W0-1)는 어느 W 단계의 파일 목록에도 `shell.html` 등록이 없고 노출 이름도 정해지지 않았다. `node --test`는 파일을 직접 require하므로 단위 테스트는 전부 통과하고, 결함은 `npm run verify`/실앱 기동에서야 드러난다. 더 나쁜 것은 순서다 — `app/canvas.js:1-8`이 모듈 최상단에서 `window.AthenaLib.*`를 구조분해하므로 태그 누락이나 `canvas.js` 뒤 배치는 플러그인 모드가 아니라 **렌더러 전체를 첫 페인트에서 죽인다**. ralph는 질문할 수 없고, 이름 규약을 스스로 고르면 `canvas.js`·`chat.js`의 참조와 어긋난다."
+      },
+      {
+        "id": "RC-7",
+        "location": ".omc/plans/athena-plugin-doctrine-consensus.md — §3.2 A3 행(193행) · §7-6(527-533행)",
+        "change": "A3의 측정 방법을 실행 가능한 형태로 교체한다 — `canvas.js`의 배선은 **소스 텍스트 단언**으로 잰다: 신규 `app/lib/plugin-proposal-boundary.test.js`(또는 기존 `lib/plugin-canvas.test.js` 확장)가 `fs.readFileSync(path.join(__dirname, '..', 'canvas.js'))`로 소스를 읽어 ⑴ `createPluginCanvas`에 넘기는 GUI 진입 6종(`onApproveInstall`·`onTogglePlugin`·`onRemovePlugin`·`onSavePermissions`·`onStageSnippet`·`onApproveServer`)의 본문에 `pluginInstallCatalogEntry`·`pluginSetEnabled`·`pluginRemove`·`pluginSaveTools`·`pluginStageSnippet`·`pluginApproveStaged` 호출이 없고 ⑵ 전부 `onPropose`로 간다를 단언한다. 형판은 `app/lib/raw-ui-boundary.test.js:9-30`(같은 방식으로 `canvas.js` 소스를 읽어 경계를 잰다). 별개로 `lib/plugin-canvas.test.js`는 '스파이 deps에서 클릭이 `deps.onPropose`를 부르고 6종 콜백을 부르지 않는다'만 잰다고 분리해 적고, §7-6의 주석도 이 두 단언으로 나눠 다시 쓴다.",
+        "why": "현행 A3은 '`canvas.js` 단위 단언'이라 쓰고 §7-6은 그 판정 명령을 `( cd app && node --test lib/plugin-canvas.test.js )`로 지정한다. 그러나 `canvas.js`는 `window.AthenaLib.Sanitize`를 최상단에서 구조분해하고 즉시 실행되는 최상위 스크립트라 node에서 require할 수 없고, `app/package.json:10`의 글롭(`lib/*.test.js lib/main/*.test.js lib/graph-mode/*.test.js`)에도 `canvas.js` 테스트가 없다. 즉 지정된 명령은 plugin-canvas.js의 행동만 잴 뿐 canvas.js가 `onPropose: () => pluginInstallCatalogEntry(...)`로 배선돼도 그대로 통과한다 — 명세 ②의 '직접 IPC 호출 제거'가 **조용히 미검증**으로 남는다. A3은 반복 2에서 죽은 grep 게이트를 대체하려 도입된 항목인데 대체물도 같은 자리에서 다시 죽어 있다. 저장소에 정확한 선례가 있으므로 수정 비용은 한 문단이다."
+      }
+    ],
+    "optional_improvements": [
+      "§2.4 제목이 '프리모템 — **4가지** 구체적 실패 시나리오'(103행)인데 반복 5에서 PM-5(132행)를 넣어 실제로는 5건이다. 제목을 '5가지'로 고친다(deliberate 게이트 심사자가 매 반복 재계수하게 만드는 잡음).",
+      "W2-2(345행)가 SEND 채널의 앵커를 주지 않는다 — ON 앵커 `preload.js:249`와 INVOKE 앵커 `:36`만 있고 `athena:plugin-noted`가 들어갈 자리는 **`preload.js:130`의 `SEND_CHANNELS`**다(브릿지 검사는 `:279`). 세 집합이 별개 화이트리스트이므로 앵커 한 줄을 추가하면 잘못된 집합에 넣을 여지가 사라진다.",
+      "§7의 판정 블록이 `diff <(grep …) <(grep …)`(517-518행)과 `/tmp/…` 리다이렉트를 쓰는데, §0-0b(218행)는 '아래 블록은 Bash 도구에서 돈다(POSIX `sh`)'라고 선언한다. 프로세스 치환은 bash 전용이다 — §7 머리에 '§7은 bash로 돈다(프로세스 치환 사용)'를 한 줄 덧붙이거나 임시 파일 2개로 풀어 쓴다.",
+      "W0 어댑터를 H2(`currentMode`) 1훅으로 더 줄인다. H4의 실제 구현은 W0-3의 `app/lib/plugin-canvas.js`(getState/setData 확장)에 있으므로, 어댑터가 H4를 '선언'만 지는 것은 반복 5가 H6을 뺀 논거(O-A1: 선언만 있고 구현이 없는 훅은 CLAUDE.md §2의 사변적 표면)와 같은 상황이다. §5 표에는 H4를 계약으로 남긴다.",
+      "RC-1의 부활 방지 단언을 W5-2 신설 ⑺(기본 빌드 결과 턴이 '반영됐습니다'를 주장하지 않는다) 옆에 함께 배치해 '정직성 회귀' 커버리지를 한 자리에 묶는다.",
+      "§7-2 판정 절차에 `npm run verify:plugins`가 npx/uvx 다운로드로 **네트워크를 요구**한다는 한 줄을 옮겨 적는다(현재는 §7 주석 498행에만 있다). 오프라인 실패를 코드 결함으로 오판하지 않게 한다.",
+      "§10.3 인용 이력표(616행)에 남은 옛 값 6종(`main.js:2508-2524` · `controller.js:271-305` · `mcp-cli.js:139-151` · `plugin-canvas.js:203-234` · `:598-600` · `registry.py:178-185`)이 매 반복 독립 검증에서 오탐 7건을 만든다. 각 항목에 '(옛 값 — 본문에 없음)'을 한 줄 표기하면 다음 반복의 검증 비용이 준다."
+    ]
+  }
+}
