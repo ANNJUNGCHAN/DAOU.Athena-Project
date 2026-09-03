@@ -20,9 +20,9 @@
 > 정본은 `.omc/`(git 무시)라서 추적 사본을 [kiumi/](./kiumi/)에 두었다.
 > 다른 컴퓨터에서 바로 이어받으려면 [KIUMI_PROMPT.md](./KIUMI_PROMPT.md)의 블록 A(터미널)·블록 B(Claude Code 첫 메시지)를 순서대로 붙여 넣는다.
 
-> 🟢 **2026-09-03 카드 표면 Paper→코드 — Paper 96장 표현 100% 완료, 코드 슬롯 저작 ≈95.6%, 웨이브 3 실행 중.**
+> 🟢 **2026-09-03 카드 표면 Paper→코드 — Paper 96장 표현 100% 완료, 코드 슬롯 저작 ≈95.6%. W3 정비 완료, 저작 8레인·게이트는 Claude 한도 초과로 중단.**
 > 이어받는 절차·수치·남은 일·사용자 확정 결정은 [2026-09-03-card-surface-paper-to-code.md](./2026-09-03-card-surface-paper-to-code.md)에 있다.
-> 이 트랙의 WIP 스냅샷은 **2026-09-03 `feat/card-surface-paper-to-code`(3e97022)로 푸시됐다**(웨이브 3 진행 중 상태 그대로, 완결 커밋 아님). 그 뒤의 변경은 다시 커밋해야 한다.
+> 이 트랙은 **`feat/card-surface-paper-to-code`**에 지속 커밋·푸시한다. 위 인계 문서가 들어 있는 최신 origin 커밋을 체크포인트로 삼는다.
 > 붙여 넣을 블록은 [CARD_SURFACE_PROMPT.md](./CARD_SURFACE_PROMPT.md).
 
 ---

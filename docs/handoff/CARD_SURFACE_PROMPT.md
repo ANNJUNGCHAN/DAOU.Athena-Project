@@ -5,7 +5,7 @@
 **전제조건 3가지** — 하나라도 없으면 그 자리에서 멈추고 사용자에게 말한다.
 1. 브랜치 `feat/card-surface-paper-to-code`가 origin에 있어야 한다(원본 PC가 지속 푸시한다). 확인: `git ls-remote --heads origin feat/card-surface-paper-to-code`
 2. 모든 명령은 **Git Bash**에서 돌린다. PowerShell 아님.
-3. Paper 대조·검수 PDF 단계는 **Paper MCP 연결 + 팀 접근 권한**이 필요하다(정본 §8). 없으면 그 단계만 원본 계정 보유자에게 넘긴다 — 나머지는 진행 가능.
+3. Paper 대조·검수 PDF 단계는 **로그인된 Paper Desktop(computer-use) 또는 Paper MCP + 팀 접근 권한**이 필요하다(정본 §8). 둘 다 없으면 그 단계만 원본 계정 보유자에게 넘긴다 — 나머지는 진행 가능.
 
 ## 블록 A — 터미널 (새 컴퓨터 1회, Git Bash)
 
@@ -57,13 +57,13 @@ cd app && npm run test:unit
 - 인계 문서를 항상 최신으로 유지하고(§4 수치·§11 이력), 마일스톤마다 feat/card-surface-paper-to-code 브랜치에 커밋·푸시한다(사용자 지시). pre-push 훅이 막으면 --no-verify 대신 초록을 만든다.
 - Paper 호출은 항상 fileId 01M0VGPX92K1TER4ZV9PWGQJJZ 를 명시한다(비슷한 이름의 duplicate 파일이 있다).
 
-그다음 §6 "남은 일"을 위에서부터 진행해라. 웨이브 3이 끝나지 않았으면 §5 완료 신호로 어느 레인이 남았는지 판정하고 그 단계만 다시 돌린다(docs/handoff/card-surface/workflows/card-surface-w3-*.js 의 상수 ROOT·PY·NODE·PACK 을 이 PC에 맞게 고쳐 쓴다; 레인 프롬프트의 API 이름은 현재 코드와 대조한다). 각 게이트가 끝나면 실보드 6장 × 4단계 캡처를 Paper와 나란히 놓고 보고하고, 문서 §11에 갱신 이력 한 줄을 남기고 커밋·푸시해라.
+현재 정확한 중단점은 W3 정비 A5/B4/C5/D3 완료, 3차 저작 8레인은 탐색 후 한도 오류·순변경 0, 게이트는 tool call 0이다. §6을 위에서부터 진행하되 정비 4레인은 다시 돌리지 마라. docs/handoff/card-surface/workflows/card-surface-w3-wf_622eeae9-f84.js의 저작 레인 프롬프트를 현재 API와 대조해 실행한 다음 게이트를 돌린다(다른 PC에서는 ROOT·PY 수정). 각 게이트가 끝나면 실보드 6장 × 4단계 캡처와 XL/M 기하 프로브를 확인해 surface overflow와 L/M/S/XS 세로 넘침/겹침 0 및 XL/M 레이아웃 계약을 단언하고, Paper와 나란히 보고한 뒤 문서 §4·§11을 갱신하고 커밋·푸시해라.
 ```
 
-## 블록 C — 원본 대화(같은 PC)에서 웨이브 3만 이어 돌릴 때
+## 블록 C — 원본 Claude 대화에서 한도 초기화 후 재개할 때
 
 ```
 Workflow({ scriptPath: "C:\\Users\\USER\\.claude\\projects\\C--Projects-DAOU-Athena\\dff811ca-b4d0-4ed4-9c90-07bce304dc1a\\workflows\\scripts\\card-surface-w3-wf_622eeae9-f84.js", resumeFromRunId: "wf_622eeae9-f84" })
 ```
 
-완료 레인은 캐시로 즉시 돌아온다. 결과가 비어 있으면 같은 세션 폴더의 `subagents/workflows/wf_622eeae9-f84/journal.jsonl`을 먼저 읽는다.
+주의: 워크플로 최상위 `status: completed`는 잘못된 요약이다. `C:\Users\USER\.claude\projects\C--Projects-DAOU-Athena\dff811ca-b4d0-4ed4-9c90-07bce304dc1a\workflows\wf_622eeae9-f84.json`의 `workflowProgress`가 정본이며, 정비 4레인만 완료되고 저작 8레인과 게이트는 오류다. 재개 전 이 상태를 확인하고, 결과가 비면 같은 세션 폴더의 `subagents/workflows/wf_622eeae9-f84/journal.jsonl`을 읽는다.

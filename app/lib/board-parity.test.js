@@ -571,9 +571,48 @@ test('KPI 칸은 M 이하에서만 3칸/2칸/1칸 흐름으로 바뀐다', () =>
   const steps = [...css.matchAll(/@container board \(max-width: (\d+)px\)\s*\{([\s\S]*?)\n\}/g)]
     .map(([, width, body]) => [Number(width), (/\.bs-kpi-cell\s*\{([^}]*)\}/.exec(body) || [, ''])[1]]);
   const flow = new Map(steps);
-  assert.equal(flow.get(1279).trim(), '', 'L에서는 KPI 칸 폭이 Paper 원문 그대로여야 한다');
+  // L에서 KPI 칸 폭은 Paper 원문 그대로다 — 모든 칸을 바꾸지 않는다. 값이 있는
+  // 탄력 칸만 별도 표식을 받아 160px 바닥을 갖는다. 빈 spacer나 고정 칸까지
+  // 160px로 만들면 6~8칸 시세 스트립이 L 컨테이너보다 넓어진다.
+  assert.equal(flow.get(1279).trim(), '');
+  const lBody = [...css.matchAll(/@container board \(max-width: 1279px\)\s*\{([\s\S]*?)\n\}/g)][0][1];
+  assert.match(lBody, /\[data-bs-hoisted\]\s*\{[\s\S]*?min-width: 0;/,
+    'flex item의 min-content 바닥을 놓지 않으면 XS에서 surface overflow가 난다');
+  assert.match(lBody,
+    /\[data-bs-inset-x="true"\]\s*\{\s*right: var\(--bs-inset-x\);\s*width: auto;\s*\}/,
+    'absolute 하단 액션은 left+고정폭 대신 양쪽 inset으로 좁아져야 한다');
+  assert.match(lBody,
+    /\.bs-kpi-cell\[data-bs-kpi-elastic="true"\]\s*\{\s*min-width: 160px;\s*\}/);
+  assert.doesNotMatch(flow.get(1279), /(?:^|[^-])width: (?!var\()|flex-basis|flex-grow/);
   assert.match(flow.get(959), /width: auto/);
   assert.match(flow.get(959), /flex-basis: calc\(33\.3333% - 24px\)/);
   assert.match(flow.get(719), /flex-basis: calc\(50% - 24px\)/);
   assert.match(flow.get(479), /flex-basis: 100%/);
+});
+
+test('실보드 검증은 strip 내부 스크롤과 달리 surface 가로 넘침을 실패시킨다', () => {
+  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  assert.match(verify, /if \(probe\.overflow_x > 1\)/);
+  assert.match(verify, /surface overflow/);
+});
+
+test('실보드 검증은 24개 사용자 캡처와 별도로 XL·M 컨테이너를 기하 프로브한다', () => {
+  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  assert.match(verify, /BOARD_BREAKPOINT_PROBE_PRESETS/);
+  assert.match(verify, /name: 'XL 프로브'[\s\S]*minContainer: 1280[\s\S]*maxContainer: 1440/);
+  assert.match(verify, /name: 'M 프로브'[\s\S]*minContainer: 720[\s\S]*maxContainer: 959/);
+  assert.match(verify, /breakpoint_probes/);
+  assert.match(verify, /function assertBreakpointContract/);
+  assert.match(verify, /expectedFolded/);
+  assert.match(verify, /primary_rect/);
+  assert.match(verify, /rail_rect/);
+  assert.match(verify, /kpi_max_columns/);
+  assert.match(verify, /vertical_overflow_nodes/);
+  assert.match(verify, /vertical_overlap_nodes/);
+});
+
+test('실보드 검증의 선택 필터는 빈 집합과 중복 보드를 거부한다', () => {
+  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  assert.match(verify, /if \(!REAL_BOARDS\.length\)/);
+  assert.match(verify, /new Set\(REAL_BOARDS\)\.size !== REAL_BOARDS\.length/);
 });

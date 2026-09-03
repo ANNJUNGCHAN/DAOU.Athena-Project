@@ -326,7 +326,7 @@ function applyRealtimeSlots(surface, contract, values, slotIds, options = {}) {
 //
 // 추출 원문은 영역 노드마다 인라인 `width`/`flex-*`를 갖는다(실측: 27장 전부).
 // 인라인 선언은 어떤 CSS 규칙보다 세므로, 이걸 그대로 두면 컨테이너 쿼리가
-// 레일 폭 하나 못 바꾼다. `!important`로 이기는 대신(계획 §3 금지) **딱 네 속성만**
+// 레일 폭 하나 못 바꾼다. `!important`로 이기는 대신(계획 §3 금지) **딱 다섯 속성만**
 // 같은 요소의 커스텀 속성으로 옮긴다. XL base 규칙이 그 값을 그대로 되돌려
 // 계산값이 Paper와 같고, L 이하 컨테이너 규칙만 자유롭게 덮어쓴다.
 // 색·패딩·글꼴·테두리·display는 손대지 않는다 — Paper의 레이아웃 모델은 그대로다.
@@ -335,16 +335,49 @@ function applyRealtimeSlots(surface, contract, values, slotIds, options = {}) {
 const RESPONSIVE_REGIONS = Object.freeze([
   'bs-workspace', 'bs-primary', 'bs-rail', 'bs-kpi', 'bs-kpi-cell', 'bs-table', 'bs-strip',
 ]);
+// `height`도 함께 걷어낸다. 폭이 줄면 글자가 줄바꿈으로 내려가는데(한국어 원문은
+// `overflow-wrap: anywhere`), Paper 원문은 영역마다 인라인 고정 높이를 싣는다
+// (실측 2SKU-1 헤더 106px · KPI 줄 116px, 그리고 표 행마다). 폭만 걷어내면 좁은
+// 창에서 늘어난 내용이 고정 높이 상자를 뚫고 나와 아래 영역과 **겹쳐** 읽힌다.
+// 되돌리기 규칙이 XL에서 같은 값을 돌려주고, L 이하에서만 최소 높이로 바뀐다.
 const HOISTED_PROPERTIES = Object.freeze([
   ['width', '--bs-width'],
+  ['height', '--bs-height'],
   ['flex-basis', '--bs-flex-basis'],
   ['flex-grow', '--bs-flex-grow'],
   ['flex-shrink', '--bs-flex-shrink'],
 ]);
 
+function markElasticKpiValue(el) {
+  if (!el || !el.dataset || !el.style) return;
+  const classes = String(el.className || '').split(/\s+/);
+  if (!classes.includes('bs-kpi-cell')) return;
+  if (el.style.getPropertyValue('flex-basis').trim() !== '0%') return;
+  if (el.style.getPropertyValue('flex-grow').trim() !== '1') return;
+  // 시세 스트립의 빈 spacer도 같은 flex 값을 쓴다. 그 칸에 최소 폭을 주면
+  // 6~8칸 보드가 L 컨테이너보다 넓어지므로 실제 값이 있는 탄력 칸만 표시한다.
+  if (!String(el.textContent || '').trim()) return;
+  el.dataset.bsKpiElastic = 'true';
+}
+
+function markInsetAbsoluteBox(el) {
+  if (!el || !el.dataset || !el.style) return;
+  if (el.dataset.name !== 'Chart Context Actions') return;
+  if (el.style.getPropertyValue('position').trim() !== 'absolute') return;
+  const left = el.style.getPropertyValue('left').trim();
+  if (!left || !el.style.getPropertyValue('width').trim()) return;
+  if (el.style.getPropertyValue('right').trim()) return;
+  // Paper의 하단 액션처럼 left+고정폭인 absolute 상자는 좁은 단계에서만 같은
+  // inset을 right에도 써야 부모 패딩 상자 안으로 줄어든다. XL의 left/width는 보존한다.
+  el.style.setProperty('--bs-inset-x', left);
+  el.dataset.bsInsetX = 'true';
+}
+
 function hoistLayout(el) {
   if (!el || !el.style || typeof el.style.setProperty !== 'function') return false;
   if (el.dataset && el.dataset.bsHoisted === 'true') return false;
+  markElasticKpiValue(el);
+  markInsetAbsoluteBox(el);
   for (const [property, token] of HOISTED_PROPERTIES) {
     const value = el.style.getPropertyValue(property);
     if (!value) continue;
@@ -364,10 +397,11 @@ function hoistLayout(el) {
 //
 // 그래서 인라인 선언을 **실제로 들고 있는** 노드만 추가로 걷어낸다. 아무것도 안
 // 옮긴 노드에는 표시를 남기지 않는다 — 표시가 곧 되돌리기 규칙의 적용 범위다
-// (board-surface.css `[data-bs-hoisted]`가 네 속성을 그대로 되돌린다).
+// (board-surface.css `[data-bs-hoisted]`가 다섯 속성을 그대로 되돌린다).
 function hoistRigidBox(el) {
   if (!el || !el.style || typeof el.style.setProperty !== 'function') return false;
   if (el.dataset && el.dataset.bsHoisted === 'true') return false;
+  markInsetAbsoluteBox(el);
   let moved = false;
   for (const [property, token] of HOISTED_PROPERTIES) {
     const value = el.style.getPropertyValue(property);

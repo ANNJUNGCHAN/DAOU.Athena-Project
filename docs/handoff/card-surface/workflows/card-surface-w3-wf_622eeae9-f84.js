@@ -9,9 +9,9 @@ export const meta = {
 }
 const ROOT = 'C:\\Projects\\DAOU.Athena'
 const TPL = ROOT + '\\backend\\ref\\card-surface-templates'
-const PACK = ROOT + '\backend\ref\card-surface-authoring\packs' // 원래는 세션 스크래치 경로. ATHENA_PACK_DIR 와 같은 값.
+const PACK = ROOT + '\\backend\\ref\\card-surface-authoring\\packs' // 원래는 세션 스크래치 경로. ATHENA_PACK_DIR 와 같은 값.
 const CHARTER = ROOT + '\\docs\\ui\\paper-card-surface-charter.md'
-const NODE = 'export PATH="/c/Users/USER/AppData/Local/fnm_multishells/9988_1786672622598:$PATH"'
+const NODE = 'command -v node >/dev/null && command -v npm >/dev/null'
 const PY = ROOT + '\\backend\\.venv\\Scripts\\python.exe'
 
 const A5 = `너는 A5 — 추출기 밀도 계수 정정(${ROOT}\\scripts\\paper_board_extract.py, validate_board_slots.py, tests). 실측: 호가 보드(13BC-2·2TRW-1·2QX1-1·15P5-2)의 rail_blocks가 13으로 세어지는데 Paper 레일 블록은 2~5개다 — 계수 휴리스틱이 하위 프레임을 블록으로 센다. 정정: 레일 블록 = bs-rail 직계 자식 중 제목(font-strong 13px 텍스트)을 가진 프레임만, KPI 셀 = bs-kpi 직계 자식(bs-kpi-cell)만, rows_max = 표 본문 행(data-row가 head/foot이 아닌 것; 합계·소계 행은 data-row="foot"로 표기하고 제외). density를 slots.json에 다시 쓰고(재추출), 96장 실측 분포를 보고. 2QFO-2 등 CC-05 탭 보드는 부모가 없는 레일 주인(CC-05에는 default 루트 보드가 없음) — meta.state.parent_board가 자기 자신이면 null로, kind는 tab 유지하되 "rail_owner": true 표기. 상태 컨트롤 미해소 9건은 저작 몫으로 남김. pytest(${PY} -m pytest scripts/tests -q) 통과. 보고(원시 데이터).`
@@ -27,7 +27,7 @@ const B4 = `너는 B4 — 로더 격리·규칙 정합(backend/athena_api/card_s
 const C5 = `너는 C5 — 보드 카드 크롬 제거·실보드 캡처(app/canvas.js, app/lib/integrated-card-surface.js, app/styles/*.css, app/verify-integrated-cards.js, tests). ${NODE}; cd ${ROOT}/app && npm run test:unit(기준 2,033).
 1) 보드 표면 카드(surface_contract 있는 카드)는 Paper 보드가 헤더·스트립·푸터를 이미 갖고 있으므로 기존 통합 카드 크롬을 그리지 않는다: .card-head(카드 제목·기준 시각·×는 탭 스트립으로 이동), 패널 탭 칩("요약" 등), 하단 "전체 원본 필드 ▸"(헌장 신념 8 금지 UI) 전부 숨김/미생성. 카드 = 보드 그 자체. 비보드 카드는 기존 유지. raw-ui-boundary 테스트 정합.
 2) 폭 hoist 실측: 실보드(2SKU-1 등)에서 컨테이너 1152px일 때 overflow_x 0이 되게 — bs-* 영역 인라인 width 외에 표 열 폭·KPI 셀·헤더 폭도 hoist 대상인지 실측 후 보강(zoom 금지).
-3) verify-integrated-cards: 픽스처 보드 대신 실보드 6장(2SKU-1, 2R3M-1, 13BC-2, 2QFO-2, 13K0-2, 135M-2)을 slots.json의 paper_text를 값으로 마운트해 4단계(1920×1080·960×1080·640×540·480×420) 캡처 + P5 텍스트 다중집합 검사. 캡처 파일명 board-<id>-<w>x<h>.png. 백엔드 레지스트리 격리 전이면 프론트 픽스처 경로로 surface_contract를 직접 구성해도 됨(값 = paper_text).
+3) verify-integrated-cards: 픽스처 보드 대신 실보드 6장(2SKU-1, 2R3M-1, 13BC-2, 2QFO-2, 13K0-2, 135M-2)을 slots.json의 paper_text를 값으로 마운트해 4단계(1920×1080·960×1080·640×540·480×420) 캡처 + XL/M 컨테이너 기하 프로브 + P5 텍스트 다중집합 + surface overflow 0 + L/M/S/XS 세로 넘침/겹침 0 + XL/M 접힘·KPI·primary/rail 배치 계약 검사. 캡처 파일명 board-<id>-<w>x<h>.png. 백엔드 레지스트리 격리 전이면 프론트 픽스처 경로로 surface_contract를 직접 구성해도 됨(값 = paper_text).
 보고(원시 데이터): 파일·테스트·캡처 경로·overflow 수치.`
 
 const D3 = `너는 D3 — 커버리지 정본화(scripts/card_surface_coverage.py, surface_dashboard.py). 현재 스크립트가 alt_mappings·indexed·행 반복 면제를 모르고 67.8%·중복 1,156을 내는데 로더 strict는 미도달 155 occurrence(≈95.6%)다. 정정: 바인딩 판정을 백엔드 로더에 위임 — sys.path에 backend를 넣고 athena_api.card_surface_templates.load_registry(strict=False)(현재 시그니처; isolate 인자는 없다)와 registry.coverage()를 사용해 카드별·층별 바인딩률, 미도달 occurrence 목록(kor 병기), 보드 없는 op, 제외 보드·사유, 밀도 하드/소프트를 MD로. 17F8-2 재귀속 경고는 "미도달 occurrence 중 원장 귀속이 17F8-2인 것"으로 정확화. 대시보드 섹션 동일 갱신. 실행: PYTHONIOENCODING=utf-8 python scripts/card_surface_coverage.py. 보고(원시 데이터).`
@@ -55,5 +55,5 @@ const authored = await parallel(LANES.map(l => () => agent(`너는 3차 슬롯 �
 규칙: 다른 레인 보드 편집 금지, --no-index. 종료 조건: 담당 보드 validate 문제 0 + 로더 coverage에서 담당 보드 op의 미도달 0. 보고(원시 데이터): 전→후 수치, 남은 사유.`, { label: `author3:${l.label}`, phase: '3차 저작' })))
 
 phase('게이트')
-const gate = await agent(`너는 웨이브 3 게이트다. ① cd ${ROOT} && ${PY} scripts/paper_board_extract.py(전수, index 갱신) → 96/96·--check ② cd ${ROOT}\\backend && ${NODE} && uv run python -c "from athena_api.card_surface_templates import get_registry; r=get_registry(); print(len(r.boards), getattr(r,'excluded_boards',None)); c=r.coverage(); print({k:(v if not isinstance(v,list) else len(v)) for k,v in c.items()})" — 정식 경로(get_registry)로 로드 보드 수·제외 보드·커버리지 ③ ${PY} scripts/validate_board_slots.py 전 보드 합계 ④ PYTHONIOENCODING=utf-8 python scripts/card_surface_coverage.py ⑤ python scripts/build_board_registry.py && ${NODE}; cd ${ROOT}/app && npm run test:unit ⑥ cd ${ROOT}\\backend && uv run pytest tests -q(전수; 기준 WIP RED 1건 외 신규 실패 0) ⑦ cd ${ROOT}/app && npm run verify:integrated-cards → 실보드 6장 × 4단계 캡처 경로와 overflow 수치, P5 결과. 소규모 결함은 고치고 보고(원시 데이터): 로드 보드 수/제외, 커버리지(카드별), 잔여 목록, 테스트 수치, 캡처 경로.`, { label: 'gate:w3' })
+const gate = await agent(`너는 웨이브 3 게이트다. ① cd ${ROOT} && ${PY} scripts/paper_board_extract.py(전수, index 갱신) → 96/96·--check ② cd ${ROOT}\\backend && ${NODE} && uv run python -c "from athena_api.card_surface_templates import get_registry; r=get_registry(); print(len(r.boards), getattr(r,'excluded_boards',None)); c=r.coverage(); print({k:(v if not isinstance(v,list) else len(v)) for k,v in c.items()})" — 정식 경로(get_registry)로 로드 보드 수·제외 보드·커버리지 ③ ${PY} scripts/validate_board_slots.py 전 보드 합계 ④ PYTHONIOENCODING=utf-8 python scripts/card_surface_coverage.py ⑤ python scripts/build_board_registry.py && ${NODE}; cd ${ROOT}/app && npm run test:unit ⑥ cd ${ROOT}\\backend && uv run pytest tests -q(전수; 기준 WIP RED 1건 외 신규 실패 0) ⑦ cd ${ROOT}/app && npm run verify:integrated-cards → 실보드 6장 × 4단계 캡처 24장, XL/M 기하 프로브 12회, surface overflow 0, L/M/S/XS 세로 넘침/겹침 0, XL/M 접힘·KPI·primary/rail 배치 계약, P5 결과. 소규모 결함은 고치고 보고(원시 데이터): 로드 보드 수/제외, 커버리지(카드별), 잔여 목록, 테스트 수치, 캡처 경로.`, { label: 'gate:w3' })
 return { a5, b4, c5, d3, authored: authored.length, gate }
