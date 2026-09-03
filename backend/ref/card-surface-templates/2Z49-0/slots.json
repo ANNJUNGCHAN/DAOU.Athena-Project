@@ -87,7 +87,7 @@
     "text_nodes": 189,
     "slots": 189,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 121,
     "labels": 71,
     "values": 118,
     "layer_직접": 155,
@@ -4017,8 +4017,8 @@
         "row": "0",
         "col": 2
       },
-      "mapping_id": "base:ka30002",
-      "f": "flu_rt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": null,
       "format": {
@@ -4030,9 +4030,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "현재가 — ka30002 응답 필드가 아니다(원장 귀속은 CC-03 현재시세·ELW 상세 보드)",
-      "display_dup": true,
-      "dup_note": "창구 요약 표 등락률 재표시 — 본자리는 순매매 표(3AXF-0) 등락률 열"
+      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다"
     },
     {
       "slot_id": "s125",
@@ -4302,8 +4300,8 @@
         "row": "1",
         "col": 2
       },
-      "mapping_id": "base:ka30002",
-      "f": "flu_rt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": null,
       "format": {
@@ -4315,9 +4313,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "현재가 — ka30002 응답 필드가 아니다(원장 귀속은 CC-03 현재시세·ELW 상세 보드)",
-      "display_dup": true,
-      "dup_note": "창구 요약 표 등락률 재표시 — 본자리는 순매매 표(3AXF-0) 등락률 열"
+      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다"
     },
     {
       "slot_id": "s134",
@@ -4587,8 +4583,8 @@
         "row": "2",
         "col": 2
       },
-      "mapping_id": "base:ka30002",
-      "f": "flu_rt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": null,
       "format": {
@@ -4600,9 +4596,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "현재가 — ka30002 응답 필드가 아니다(원장 귀속은 CC-03 현재시세·ELW 상세 보드)",
-      "display_dup": true,
-      "dup_note": "창구 요약 표 등락률 재표시 — 본자리는 순매매 표(3AXF-0) 등락률 열"
+      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다"
     },
     {
       "slot_id": "s143",
@@ -4872,8 +4866,8 @@
         "row": "3",
         "col": 2
       },
-      "mapping_id": "base:ka30002",
-      "f": "flu_rt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": null,
       "format": {
@@ -4885,9 +4879,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "현재가 — ka30002 응답 필드가 아니다(원장 귀속은 CC-03 현재시세·ELW 상세 보드)",
-      "display_dup": true,
-      "dup_note": "창구 요약 표 등락률 재표시 — 본자리는 순매매 표(3AXF-0) 등락률 열"
+      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다"
     },
     {
       "slot_id": "s152",
@@ -5157,8 +5149,8 @@
         "row": "4",
         "col": 2
       },
-      "mapping_id": "base:ka30002",
-      "f": "flu_rt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": null,
       "format": {
@@ -5170,9 +5162,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "현재가 — ka30002 응답 필드가 아니다(원장 귀속은 CC-03 현재시세·ELW 상세 보드)",
-      "display_dup": true,
-      "dup_note": "창구 요약 표 등락률 재표시 — 본자리는 순매매 표(3AXF-0) 등락률 열"
+      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다"
     },
     {
       "slot_id": "s161",

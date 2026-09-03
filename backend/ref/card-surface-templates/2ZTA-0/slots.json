@@ -70,7 +70,7 @@
     "text_nodes": 189,
     "slots": 189,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 118,
     "labels": 67,
     "values": 122,
     "layer_직접": 189,
@@ -5244,14 +5244,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "note": "표에 '잔여 한도' 열이 없어 레일 선택 종목 행에 그린다",
-      "also_from": [
-        {
-          "mapping_id": "base:ka10034",
-          "f": "gain_pos_stkcnt",
-          "kor": "취득가능주식수"
-        }
-      ]
+      "note": "표에 '잔여 한도' 열이 없어 레일 선택 종목 행에 그린다"
     },
     {
       "slot_id": "s166",
@@ -5845,7 +5838,7 @@
     }
   ],
   "authoring_notes": {
-    "같은 값 두 응답": "거래량·취득가능주식수·한도소진율은 이 보드 4개 응답 중 둘 이상이 같은 값을 준다. 자리는 하나뿐이라 대표 op를 슬롯 mapping으로 두고 나머지는 also_from으로 적었다.",
+    "같은 이름 필드의 행 맥락": "ka10008 거래량은 단일 종목의 일별 이력이고 ka10036 거래량은 종목 순위 행이므로 같은 주 단위여도 대체 바인딩할 수 없다. ka10034 취득가능주식수도 선택 종목을 식별하는 keyed join 없이 ka10036 레일 값과 합치지 않는다.",
     "등락률": "현재가 셀 2번째 줄 '+3,985 · +2.05%'의 둘째 값 등락률은 이 보드 4개 응답에 필드가 없다 — 전일대비·현재가에서 파생한 표기다.",
     "layer": "paper.jsx가 font-size를 var(--text-*)로만 적어 추출기가 px를 못 읽는다 — estimate_layer가 모든 슬롯을 '직접'으로 판정한다. 병기 층은 paired_with로만 남는다."
   },
@@ -5854,19 +5847,19 @@
       "mapping_id": "base:ka10008",
       "f": "trde_qty",
       "kor": "거래량",
-      "unbound_reason": "거래량 한 자리를 ka10036·ka10008이 공유한다 — 슬롯 주 mapping은 표 소관 ka10036이고 이 필드는 표 '거래량' 열 also_from으로 선언했다"
+      "unbound_reason": "단일 종목 일별 이력 값이다. ka10036 종목 순위 표의 같은 행으로 결합할 keyed join과 행 전환 계약이 없어 거래량 열의 alt로 사용할 수 없다"
     },
     {
       "mapping_id": "base:ka10034",
       "f": "gain_pos_stkcnt",
       "kor": "취득가능주식수",
-      "unbound_reason": "'잔여 한도' 자리가 레일 선택 종목 행 하나뿐이다 — 슬롯 주 mapping은 표 소관 ka10036이고 이 필드는 s165 also_from으로 선언했다"
+      "unbound_reason": "ka10034 순위 배열의 종목을 레일 선택 종목에 연결할 keyed join·row index가 없어 ka10036 선택 종목 값과 같은 잎에서 정확히 선택할 수 없다"
     },
     {
       "mapping_id": "base:ka10036",
       "f": "pred_pre_sig",
       "kor": "전일대비기호",
-      "unbound_reason": "± 부호와 상승·하락 색으로만 그려진다 — 독립 텍스트 노드가 없어 현재가 셀 2번째 줄 extra_fields로 선언했다"
+      "unbound_reason": "± 부호와 상승·하락 색으로만 그려지고 독립 텍스트 노드가 없다. extra_fields는 저작 메모일 뿐 런타임 resolver가 합성 렌더하지 않으므로 정확히 선택할 수 없다"
     }
   ]
 }

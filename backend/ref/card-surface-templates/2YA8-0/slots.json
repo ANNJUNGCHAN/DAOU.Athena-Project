@@ -37,7 +37,7 @@
     "text_nodes": 161,
     "slots": 161,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 86,
     "labels": 70,
     "values": 91,
     "layer_직접": 144,
@@ -1276,14 +1276,15 @@
       "alt_mappings": null,
       "kor": "기준량",
       "format": {
-        "unit": "krw_ko",
+        "unit": "shares",
         "sign": false,
-        "precision": 2,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": "s046",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "note": "기준량 → 현재 잔량",
       "extra_fields": [
         {
@@ -1576,14 +1577,15 @@
       "alt_mappings": null,
       "kor": "기준량",
       "format": {
-        "unit": "krw_ko",
+        "unit": "shares",
         "sign": false,
-        "precision": 1,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": "s057",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 1,
       "note": "기준량 → 현재 잔량",
       "extra_fields": [
         {
@@ -1591,8 +1593,7 @@
           "f": "now",
           "sep": " → "
         }
-      ],
-      "display_dup": true
+      ]
     },
     {
       "slot_id": "s059",
@@ -1879,14 +1880,15 @@
       "alt_mappings": null,
       "kor": "기준량",
       "format": {
-        "unit": "krw_ko",
+        "unit": "shares",
         "sign": false,
-        "precision": 1,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": "s068",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 2,
       "note": "기준량 → 현재 잔량",
       "extra_fields": [
         {
@@ -1894,8 +1896,7 @@
           "f": "now",
           "sep": " → "
         }
-      ],
-      "display_dup": true
+      ]
     },
     {
       "slot_id": "s070",
@@ -2182,14 +2183,15 @@
       "alt_mappings": null,
       "kor": "기준량",
       "format": {
-        "unit": "krw_ko",
+        "unit": "shares",
         "sign": false,
-        "precision": 1,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": "s079",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 3,
       "note": "기준량 → 현재 잔량",
       "extra_fields": [
         {
@@ -2197,8 +2199,7 @@
           "f": "now",
           "sep": " → "
         }
-      ],
-      "display_dup": true
+      ]
     },
     {
       "slot_id": "s081",
@@ -2485,14 +2486,15 @@
       "alt_mappings": null,
       "kor": "기준량",
       "format": {
-        "unit": "krw_ko",
+        "unit": "shares",
         "sign": false,
-        "precision": 1,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": "s090",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 4,
       "note": "기준량 → 현재 잔량",
       "extra_fields": [
         {
@@ -2500,8 +2502,7 @@
           "f": "now",
           "sep": " → "
         }
-      ],
-      "display_dup": true
+      ]
     },
     {
       "slot_id": "s092",

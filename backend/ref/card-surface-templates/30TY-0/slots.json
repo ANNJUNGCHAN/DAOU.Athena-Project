@@ -70,9 +70,9 @@
     "text_nodes": 208,
     "slots": 208,
     "anchored_slots": 0,
-    "mapped_slots": 0,
-    "labels": 64,
-    "values": 144,
+    "mapped_slots": 130,
+    "labels": 66,
+    "values": 142,
     "layer_직접": 208,
     "layer_병기": 0,
     "layer_펼침": 0,
@@ -634,13 +634,13 @@
       "node_path": "0/0/1",
       "paper_text": "시장 전체 · 상위 50종목",
       "region": "header",
-      "kind": "value",
+      "kind": "label",
       "layer": "직접",
       "font_size_px": null,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka10039",
-      "f": "sec_trde_upper",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": "증권사별매매상위",
       "format": {
@@ -652,7 +652,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": false
+      "unbound_reason": "목록 요약 — 화면 머리의 고정 범위 문구이며 sec_trde_upper 배열 자체를 표시하는 스칼라 잎이 아니다"
     },
     {
       "slot_id": "s004",
@@ -855,8 +855,8 @@
       "font_size_px": 24.0,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka10039",
-      "f": "netprps_amt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": "순매수금액",
       "format": {
@@ -868,7 +868,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": false
+      "unbound_reason": "순매수금액 — 화면 상단 KPI 집계값이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다"
     },
     {
       "slot_id": "s014",
@@ -1934,12 +1934,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "buy_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "buy_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -1950,7 +1945,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": false
+      "row_index": 0
     },
     {
       "slot_id": "s055",
@@ -2014,12 +2009,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "sell_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "sel_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -2030,7 +2020,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": false
+      "row_index": 0
     },
     {
       "slot_id": "s057",
@@ -2491,12 +2481,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "buy_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "buy_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -2507,7 +2492,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 1
     },
     {
       "slot_id": "s069",
@@ -2571,12 +2556,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "sell_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "sel_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -2587,7 +2567,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 1
     },
     {
       "slot_id": "s071",
@@ -3048,12 +3028,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "buy_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "buy_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -3064,7 +3039,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 2
     },
     {
       "slot_id": "s083",
@@ -3128,12 +3103,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "sell_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "sel_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -3144,7 +3114,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 2
     },
     {
       "slot_id": "s085",
@@ -3605,12 +3575,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "buy_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "buy_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -3621,7 +3586,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 3
     },
     {
       "slot_id": "s097",
@@ -3685,12 +3650,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "sell_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "sel_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -3701,7 +3661,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 3
     },
     {
       "slot_id": "s099",
@@ -4162,12 +4122,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "buy_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "buy_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -4178,7 +4133,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 4
     },
     {
       "slot_id": "s111",
@@ -4242,12 +4197,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "sell_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "sel_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -4258,7 +4208,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 4
     },
     {
       "slot_id": "s113",
@@ -4719,12 +4669,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "buy_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "buy_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -4735,7 +4680,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 5
     },
     {
       "slot_id": "s125",
@@ -4799,12 +4744,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "sell_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "sel_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -4815,7 +4755,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 5
     },
     {
       "slot_id": "s127",
@@ -5012,8 +4952,8 @@
       "font_size_px": null,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka10039",
-      "f": "netprps_amt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": "순매수금액",
       "format": {
@@ -5025,7 +4965,7 @@
       "paired_with": "s131",
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "unbound_reason": "순매수금액 — 7~48위 숨은 종목 합계이며 지원되는 합산 표현식이 없어 정확히 바인딩할 수 없다"
     },
     {
       "slot_id": "s133",
@@ -5366,12 +5306,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "buy_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "buy_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -5382,7 +5317,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 6
     },
     {
       "slot_id": "s142",
@@ -5446,12 +5381,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "sell_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "sel_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -5462,7 +5392,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 6
     },
     {
       "slot_id": "s144",
@@ -5923,12 +5853,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "buy_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "buy_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -5939,7 +5864,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 7
     },
     {
       "slot_id": "s156",
@@ -6003,12 +5928,7 @@
       },
       "mapping_id": "base:ka10039",
       "f": "sell_amt",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10039",
-          "f": "sel_trde_qty"
-        }
-      ],
+      "alt_mappings": null,
       "kor": null,
       "format": {
         "unit": "krw_ko",
@@ -6019,7 +5939,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 7
     },
     {
       "slot_id": "s158",
@@ -6203,13 +6123,13 @@
       "node_path": "2/0/2/1/0/0",
       "paper_text": "20개 더 보기",
       "region": "primary",
-      "kind": "value",
+      "kind": "label",
       "layer": "직접",
       "font_size_px": null,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka10039",
-      "f": "sec_trde_upper",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": "증권사별매매상위",
       "format": {
@@ -6221,7 +6141,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "unbound_reason": "더 보기 — 고정 컨트롤 문구이며 응답 배열 자체를 표시하는 값 슬롯이 아니다"
     },
     {
       "slot_id": "s164",
@@ -6352,8 +6272,8 @@
       "font_size_px": null,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka10039",
-      "f": "buy_amt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": "매수금액",
       "format": {
@@ -6365,7 +6285,7 @@
       "paired_with": "s168",
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "unbound_reason": "매수금액 — 선택 증권사 합계이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다"
     },
     {
       "slot_id": "s170",
@@ -6427,8 +6347,8 @@
       "font_size_px": null,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka10039",
-      "f": "sell_amt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": "매도금액",
       "format": {
@@ -6440,7 +6360,7 @@
       "paired_with": "s171",
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "unbound_reason": "매도금액 — 선택 증권사 합계이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다"
     },
     {
       "slot_id": "s173",
@@ -6502,8 +6422,8 @@
       "font_size_px": null,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka10039",
-      "f": "netprps_amt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": "순매수금액",
       "format": {
@@ -6515,7 +6435,7 @@
       "paired_with": "s174",
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "unbound_reason": "순매수금액 — 선택 증권사 합계이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다"
     },
     {
       "slot_id": "s176",
@@ -6762,7 +6682,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": false
+      "row_index": 0
     },
     {
       "slot_id": "s185",
@@ -6778,12 +6698,7 @@
       "table": null,
       "mapping_id": "base:ka10078",
       "f": "netprps_qty",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10078",
-          "f": "pre_sig"
-        }
-      ],
+      "alt_mappings": null,
       "kor": "순매수수량",
       "format": {
         "unit": "shares",
@@ -6794,6 +6709,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "extra_fields": [
         {
           "mapping_id": "base:ka10078",
@@ -6802,8 +6718,7 @@
           "sep": null,
           "note": "± 부호와 상승·하락 색"
         }
-      ],
-      "display_dup": false
+      ]
     },
     {
       "slot_id": "s186",
@@ -6817,8 +6732,8 @@
       "font_size_px": null,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka10039",
-      "f": "netprps_amt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": "순매수금액",
       "format": {
@@ -6830,7 +6745,7 @@
       "paired_with": "s185",
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "unbound_reason": "순매수금액 — 일별 금액값이지만 ka10078은 일별 수량만 제공하고 ka10039은 다른 종목별 축이므로 정확한 잎이 없다"
     },
     {
       "slot_id": "s187",
@@ -6857,7 +6772,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 1
     },
     {
       "slot_id": "s188",
@@ -6873,12 +6788,7 @@
       "table": null,
       "mapping_id": "base:ka10078",
       "f": "netprps_qty",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10078",
-          "f": "pre_sig"
-        }
-      ],
+      "alt_mappings": null,
       "kor": "순매수수량",
       "format": {
         "unit": "shares",
@@ -6889,6 +6799,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 1,
       "extra_fields": [
         {
           "mapping_id": "base:ka10078",
@@ -6897,8 +6808,7 @@
           "sep": null,
           "note": "± 부호와 상승·하락 색"
         }
-      ],
-      "display_dup": true
+      ]
     },
     {
       "slot_id": "s189",
@@ -6912,8 +6822,8 @@
       "font_size_px": null,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka10039",
-      "f": "netprps_amt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": "순매수금액",
       "format": {
@@ -6925,7 +6835,7 @@
       "paired_with": "s188",
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "unbound_reason": "순매수금액 — 일별 금액값이지만 ka10078은 일별 수량만 제공하고 ka10039은 다른 종목별 축이므로 정확한 잎이 없다"
     },
     {
       "slot_id": "s190",
@@ -6952,7 +6862,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 2
     },
     {
       "slot_id": "s191",
@@ -6968,12 +6878,7 @@
       "table": null,
       "mapping_id": "base:ka10078",
       "f": "netprps_qty",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka10078",
-          "f": "pre_sig"
-        }
-      ],
+      "alt_mappings": null,
       "kor": "순매수수량",
       "format": {
         "unit": "shares",
@@ -6984,6 +6889,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 2,
       "extra_fields": [
         {
           "mapping_id": "base:ka10078",
@@ -6992,8 +6898,7 @@
           "sep": null,
           "note": "± 부호와 상승·하락 색"
         }
-      ],
-      "display_dup": true
+      ]
     },
     {
       "slot_id": "s192",
@@ -7007,8 +6912,8 @@
       "font_size_px": null,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka10039",
-      "f": "netprps_amt",
+      "mapping_id": null,
+      "f": null,
       "alt_mappings": null,
       "kor": "순매수금액",
       "format": {
@@ -7020,7 +6925,7 @@
       "paired_with": "s191",
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "unbound_reason": "순매수금액 — 일별 금액값이지만 ka10078은 일별 수량만 제공하고 ka10039은 다른 종목별 축이므로 정확한 잎이 없다"
     },
     {
       "slot_id": "s193",
@@ -7098,7 +7003,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": false
+      "row_index": 0
     },
     {
       "slot_id": "s196",
@@ -7125,7 +7030,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 0
     },
     {
       "slot_id": "s197",
@@ -7147,7 +7052,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 1
     },
     {
       "slot_id": "s198",
@@ -7174,7 +7079,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 1
     },
     {
       "slot_id": "s199",
@@ -7196,7 +7101,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 2
     },
     {
       "slot_id": "s200",
@@ -7223,7 +7128,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 2
     },
     {
       "slot_id": "s201",
@@ -7245,7 +7150,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 3
     },
     {
       "slot_id": "s202",
@@ -7272,7 +7177,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 3
     },
     {
       "slot_id": "s203",
@@ -7294,7 +7199,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 4
     },
     {
       "slot_id": "s204",
@@ -7321,7 +7226,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 4
     },
     {
       "slot_id": "s205",
@@ -7343,7 +7248,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 5
     },
     {
       "slot_id": "s206",
@@ -7370,7 +7275,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true
+      "row_index": 5
     },
     {
       "slot_id": "s207",
@@ -7422,5 +7327,12 @@
       "unbound_reason": "집계 시점·조회 시각 — 응답에 일자·시각 필드가 없다(고정 문구)"
     }
   ],
-  "unbound_fields": []
+  "unbound_fields": [
+    {
+      "mapping_id": "base:ka10039",
+      "f": "sec_trde_upper",
+      "kor": "증권사별매매상위",
+      "unbound_reason": "배열 컨테이너 필드이며 Paper에는 배열 자체를 표시하는 값 잎이 없다. 화면 머리 범위 문구와 더 보기 컨트롤은 고정 레이블이다"
+    }
+  ]
 }

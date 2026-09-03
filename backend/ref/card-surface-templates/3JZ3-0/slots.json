@@ -81,7 +81,7 @@
     "text_nodes": 238,
     "slots": 238,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 170,
     "labels": 65,
     "values": 173,
     "layer_직접": 0,
@@ -907,6 +907,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "base:0C",
@@ -946,6 +947,7 @@
       "paired_with": "s013",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -994,6 +996,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "base:0C",
@@ -1033,6 +1036,7 @@
       "paired_with": "s016",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -1081,6 +1085,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -1416,6 +1421,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:sell_bid_prices",
@@ -1459,6 +1465,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -1489,7 +1496,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s034",
@@ -1519,7 +1527,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s035",
@@ -1549,7 +1558,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s036",
@@ -1574,7 +1584,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s037",
@@ -1637,6 +1648,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:sell_bid_prices",
@@ -1680,6 +1692,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -1710,7 +1723,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s041",
@@ -1740,7 +1754,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s042",
@@ -1770,7 +1785,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s043",
@@ -1795,7 +1811,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s044",
@@ -1858,6 +1875,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:sell_bid_prices",
@@ -1901,6 +1919,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -1931,7 +1950,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s048",
@@ -1961,7 +1981,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s049",
@@ -1991,7 +2012,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s050",
@@ -2016,7 +2038,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s051",
@@ -2079,6 +2102,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:sell_bid_prices",
@@ -2122,6 +2146,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -2152,7 +2177,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s055",
@@ -2182,7 +2208,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s056",
@@ -2212,7 +2239,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s057",
@@ -2237,7 +2265,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s058",
@@ -2300,6 +2329,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:sell_bid_prices",
@@ -2343,6 +2373,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -2373,7 +2404,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s062",
@@ -2403,7 +2435,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s063",
@@ -2433,7 +2466,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s064",
@@ -2458,7 +2492,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s065",
@@ -2521,6 +2556,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:sell_bid_prices",
@@ -2564,6 +2600,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -2594,7 +2631,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s069",
@@ -2624,7 +2662,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s070",
@@ -2654,7 +2693,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s071",
@@ -2679,7 +2719,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s072",
@@ -2742,6 +2783,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:sell_bid_prices",
@@ -2785,6 +2827,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -2815,7 +2858,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s076",
@@ -2845,7 +2889,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s077",
@@ -2875,7 +2920,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s078",
@@ -2900,7 +2946,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s079",
@@ -2963,6 +3010,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:sell_bid_prices",
@@ -3006,6 +3054,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -3036,7 +3085,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s083",
@@ -3066,7 +3116,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s084",
@@ -3096,7 +3147,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s085",
@@ -3121,7 +3173,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s086",
@@ -3184,6 +3237,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:sell_bid_prices",
@@ -3227,6 +3281,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -3257,7 +3312,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s090",
@@ -3287,7 +3343,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s091",
@@ -3317,7 +3374,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s092",
@@ -3342,7 +3400,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s093",
@@ -3405,6 +3464,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:sell_bid_prices",
@@ -3448,6 +3508,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -3478,7 +3539,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s097",
@@ -3508,7 +3570,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s098",
@@ -3538,7 +3601,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s099",
@@ -3563,7 +3627,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s100",
@@ -3621,6 +3686,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -3652,6 +3718,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -3683,6 +3750,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -3714,6 +3782,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -3983,6 +4052,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:buy_bid_prices",
@@ -4026,6 +4096,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -4056,7 +4127,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s116",
@@ -4086,7 +4158,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s117",
@@ -4116,7 +4189,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s118",
@@ -4141,7 +4215,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s119",
@@ -4204,6 +4279,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:buy_bid_prices",
@@ -4247,6 +4323,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -4277,7 +4354,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s123",
@@ -4307,7 +4385,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s124",
@@ -4337,7 +4416,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s125",
@@ -4362,7 +4442,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s126",
@@ -4425,6 +4506,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:buy_bid_prices",
@@ -4468,6 +4550,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -4498,7 +4581,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s130",
@@ -4528,7 +4612,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s131",
@@ -4558,7 +4643,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s132",
@@ -4583,7 +4669,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s133",
@@ -4646,6 +4733,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:buy_bid_prices",
@@ -4689,6 +4777,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -4719,7 +4808,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s137",
@@ -4749,7 +4839,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s138",
@@ -4779,7 +4870,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s139",
@@ -4804,7 +4896,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s140",
@@ -4867,6 +4960,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:buy_bid_prices",
@@ -4910,6 +5004,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -4940,7 +5035,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s144",
@@ -4970,7 +5066,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s145",
@@ -5000,7 +5097,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s146",
@@ -5025,7 +5123,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s147",
@@ -5088,6 +5187,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:buy_bid_prices",
@@ -5131,6 +5231,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -5161,7 +5262,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s151",
@@ -5191,7 +5293,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s152",
@@ -5221,7 +5324,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s153",
@@ -5246,7 +5350,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s154",
@@ -5309,6 +5414,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:buy_bid_prices",
@@ -5352,6 +5458,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -5382,7 +5489,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s158",
@@ -5412,7 +5520,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s159",
@@ -5442,7 +5551,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s160",
@@ -5467,7 +5577,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s161",
@@ -5530,6 +5641,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:buy_bid_prices",
@@ -5573,6 +5685,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -5603,7 +5716,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s165",
@@ -5633,7 +5747,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s166",
@@ -5663,7 +5778,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s167",
@@ -5688,7 +5804,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s168",
@@ -5751,6 +5868,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:buy_bid_prices",
@@ -5794,6 +5912,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -5824,7 +5943,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s172",
@@ -5854,7 +5974,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s173",
@@ -5884,7 +6005,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s174",
@@ -5909,7 +6031,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s175",
@@ -5972,6 +6095,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "detail:ka10004:buy_bid_prices",
@@ -6015,6 +6139,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -6045,7 +6170,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s179",
@@ -6075,7 +6201,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s180",
@@ -6105,7 +6232,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s181",
@@ -6130,7 +6258,8 @@
       "format": null,
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s182",
@@ -6188,6 +6317,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -6219,6 +6349,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -6250,6 +6381,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -6281,6 +6413,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -6419,6 +6552,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -6494,6 +6628,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -6638,7 +6773,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s202",
@@ -6685,7 +6821,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s204",
@@ -6732,7 +6869,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s206",
@@ -6780,6 +6918,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -6995,7 +7134,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s218",
@@ -7011,13 +7151,7 @@
       "table": null,
       "mapping_id": "base:0D",
       "f": "6110",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:0D",
-          "f": "6111",
-          "kor": "KRX중간가대비 기호"
-        }
-      ],
+      "alt_mappings": null,
       "kor": "KRX중간가대비",
       "format": {
         "unit": "text",
@@ -7028,6 +7162,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "extra_fields": [
         {
           "mapping_id": "base:0D",
@@ -7061,7 +7196,8 @@
       },
       "paired_with": "s218",
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s220",
@@ -7088,6 +7224,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "base:0D",
@@ -7147,6 +7284,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "base:0D",
@@ -7226,7 +7364,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s226",
@@ -7242,13 +7381,7 @@
       "table": null,
       "mapping_id": "base:0D",
       "f": "6113",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:0D",
-          "f": "6114",
-          "kor": "NXT중간가대비 기호"
-        }
-      ],
+      "alt_mappings": null,
       "kor": "NXT중간가대비",
       "format": {
         "unit": "text",
@@ -7259,6 +7392,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "extra_fields": [
         {
           "mapping_id": "base:0D",
@@ -7292,7 +7426,8 @@
       },
       "paired_with": "s226",
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s228",
@@ -7319,6 +7454,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "base:0D",
@@ -7378,6 +7514,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "base:0D",

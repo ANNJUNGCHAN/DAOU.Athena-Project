@@ -393,6 +393,26 @@ def test_row_repeat_down_one_table_column_is_not_a_duplicate(tmp_path):
     assert _check(tmp_path, {"slots": rows + [kpi]})["dup"] == ["base:kt00001|9201 ×4"]
 
 
+def test_non_table_row_indices_distinguish_rows_but_not_restatements(tmp_path):
+    """되풀이 블록의 서로 다른 배열 행만 중복 표기에서 제외한다."""
+    twice = {"mapping_id": "base:kt00001", "f": "9201", "node_path": "0"}
+    rows = [_slot(f"r{row}", row_index=row, **twice) for row in range(3)]
+    assert _check(tmp_path, {"slots": rows})["dup"] == []
+
+    same_row = _slot("r0-again", row_index=0, **twice)
+    assert _check(tmp_path, {"slots": rows + [same_row]})["dup"] == [
+        "base:kt00001|9201 ×4"
+    ]
+
+    missing_row = _slot("without-row", **twice)
+    assert _check(tmp_path, {"slots": rows + [missing_row]})["dup"] == [
+        "base:kt00001|9201 ×4"
+    ]
+
+    restatement = _slot("row-echo", display_dup=True, **twice)
+    assert _check(tmp_path, {"slots": rows + [restatement]})["dup"] == []
+
+
 def test_two_leaves_in_one_cell_still_need_display_dup(tmp_path):
     twice = {"mapping_id": "base:kt00001", "f": "9201"}
     cell = {"table": "T-0", "row": "0", "col": 2}

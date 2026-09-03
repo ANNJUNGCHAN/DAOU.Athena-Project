@@ -110,7 +110,7 @@
     "text_nodes": 225,
     "slots": 225,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 147,
     "labels": 84,
     "values": 141,
     "layer_직접": 187,
@@ -6266,7 +6266,12 @@
       },
       "mapping_id": "base:ka10048",
       "f": "dt",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka30003",
+          "f": "dt"
+        }
+      ],
       "kor": null,
       "format": {
         "unit": "date",
@@ -6705,7 +6710,12 @@
       },
       "mapping_id": "base:ka10048",
       "f": "dt",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka30003",
+          "f": "dt"
+        }
+      ],
       "kor": null,
       "format": {
         "unit": "date",
@@ -7135,7 +7145,12 @@
       },
       "mapping_id": "base:ka10048",
       "f": "dt",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka30003",
+          "f": "dt"
+        }
+      ],
       "kor": null,
       "format": {
         "unit": "date",
@@ -7565,7 +7580,12 @@
       },
       "mapping_id": "base:ka10048",
       "f": "dt",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka30003",
+          "f": "dt"
+        }
+      ],
       "kor": null,
       "format": {
         "unit": "date",
@@ -8065,7 +8085,6 @@
     "detail:ka30012:payoff_conditions|clsprd_end_elwocr": "s162(조기종료 기준 해당 없음) — 같은 값이 한 슬롯에 겹쳐 그려진다 — extra_fields로 co-bind 선언",
     "base:ka30003|elwlpposs_daly_trnsn": "s165(일별 지표 표 컨테이너) — 같은 값이 한 슬롯에 겹쳐 그려진다 — extra_fields로 co-bind 선언",
     "base:ka10050|elwsnst_ix_array": "일별·시간별 전환 칩이 이 보드에 없다 — 컨테이너는 s165에 co-bind",
-    "base:ka30003|dt": "일별 지표 일자 열 — ka10048 dt와 같은 값(열 mapping은 ka10048)",
     "base:ka30003|flu_rt": "일별 지표 종가 2줄 등락률 — 한 텍스트 안 둘째 값(셀 mapping은 pred_pre)",
     "base:ka30003|pre_tp": "일별 지표 종가 2줄 부호 — 한 텍스트 안 부호(셀 mapping은 pred_pre)"
   },

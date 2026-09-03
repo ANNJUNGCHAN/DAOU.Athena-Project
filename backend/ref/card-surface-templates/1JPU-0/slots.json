@@ -7,7 +7,7 @@
     "node_id": "1JPV-0",
     "jsx_sha256": "a24b0761ad9e86a44c36c19696855ed29c34da15db812373f5cb1589b44a9cc7"
   },
-  "html_sha256": "4fd5447bdd31c78898d57fbf038ca89e69125de29dc699819ca2c0d40f77d0c9",
+  "html_sha256": "fbf52e7f71f36a64151fc8f33cc0f87ff9151547ba94fb6994f192ab1d68c64e",
   "width_px": 1360.0,
   "height_px": 880.0,
   "artboard_px": [
@@ -120,7 +120,7 @@
     "text_nodes": 263,
     "slots": 263,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 213,
     "labels": 63,
     "values": 200,
     "layer_직접": 262,
@@ -149,7 +149,7 @@
         "boards": [
           "3N4O-0"
         ],
-        "node_id": "3MTD-0",
+        "node_id": "3MTC-0",
         "how": "hand"
       }
     ],
@@ -4839,6 +4839,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -4917,6 +4918,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5011,6 +5013,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5089,6 +5092,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5183,6 +5187,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5261,6 +5266,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5355,6 +5361,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5433,6 +5440,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5527,6 +5535,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5605,6 +5614,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5699,6 +5709,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5777,6 +5788,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5871,6 +5883,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5949,6 +5962,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -6043,6 +6057,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -6121,6 +6136,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -6215,6 +6231,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -6293,6 +6310,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -6388,6 +6406,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -6466,6 +6485,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -6716,6 +6736,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -6761,6 +6782,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -6889,6 +6911,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -6934,6 +6957,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7061,6 +7085,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7106,6 +7131,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7233,6 +7259,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7278,6 +7305,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7405,6 +7433,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7450,6 +7479,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7577,6 +7607,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7622,6 +7653,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7749,6 +7781,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7794,6 +7827,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7921,6 +7955,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -7966,6 +8001,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -8093,6 +8129,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -8138,6 +8175,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -8265,6 +8303,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -8310,6 +8349,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {

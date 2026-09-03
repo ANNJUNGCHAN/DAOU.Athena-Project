@@ -21,6 +21,7 @@ from athena_api.card_surface_contract import (
     resolve_section_titles_ko,
 )
 from athena_api.card_surface_templates import (
+    TEMPLATE_ROOT,
     SurfaceUniverse,
     load_registry,
     visible_occurrence_ids,
@@ -365,3 +366,62 @@ def test_a_row_the_payload_never_sent_stays_unbound(registry) -> None:
 
     assert _by_slot(contract)["t1_stk_nm_r0"]["value"] == "삼성전자"
     assert "t1_stk_nm_r1" in contract["unbound_slots"]
+
+
+def test_same_response_composite_part_is_not_an_alternate_surface_value() -> None:
+    """동시 응답의 둘째 part는 첫째 part를 대체해 전체 leaf를 차지하지 않는다."""
+
+    registry = load_registry(TEMPLATE_ROOT, strict=False)
+    sell_total = "base:0E|$.data[].131|1"
+    buy_total = "base:0E|$.data[].135|1"
+
+    full_response = build_board_surface_contract(
+        "13BC-2",
+        {sell_total: ["SELL"], buy_total: ["BUY"]},
+        registry,
+        ("base:0E",),
+    )
+    assert _by_slot(full_response)["s024"]["occurrence_id"] == sell_total
+
+    buy_only = build_board_surface_contract(
+        "13BC-2", {buy_total: ["BUY"]}, registry, ("base:0E",)
+    )
+    assert "s024" in buy_only["unbound_slots"]
+    assert "s024" not in _by_slot(buy_only)
+
+    detail_totals = (
+        (
+            "detail:ka10004:after_hours_totals",
+            "detail:ka10004:after_hours_totals|$.ovt_sel_req|1",
+            "detail:ka10004:after_hours_totals|$.ovt_buy_req|1",
+        ),
+        (
+            "detail:ka10087:aggregate_totals",
+            "detail:ka10087:aggregate_totals|$.ovt_sel_bid_tot_req|1",
+            "detail:ka10087:aggregate_totals|$.ovt_buy_bid_tot_req|1",
+        ),
+    )
+    for mapping_id, detail_sell_total, detail_buy_total in detail_totals:
+        full_detail = build_board_surface_contract(
+            "13BC-2",
+            {detail_sell_total: "SELL", detail_buy_total: "BUY"},
+            registry,
+            (mapping_id,),
+        )
+        assert _by_slot(full_detail)["s024"]["occurrence_id"] == detail_sell_total
+        assert _by_slot(full_detail)["s024"]["value"] == "SELL"
+
+        buy_only_detail = build_board_surface_contract(
+            "13BC-2", {detail_buy_total: "BUY"}, registry, (mapping_id,)
+        )
+        assert "s024" in buy_only_detail["unbound_slots"]
+        assert "s024" not in _by_slot(buy_only_detail)
+
+    # 135 자체는 2TRW의 별도 원자 leaf가 정당하게 cover한다. 여기서 막아야 하는 것은
+    # 13BC의 한 composite leaf를 135 단독 값이 통째로 대체하는 동작뿐이다.
+    buy_atomic = build_board_surface_contract(
+        "2TRW-1", {buy_total: ["BUY"]}, registry, ("base:0E",)
+    )
+    assert _by_slot(buy_atomic)["s075"]["occurrence_id"] == buy_total
+    assert _by_slot(buy_atomic)["s075"]["value"] == "BUY"
+    assert buy_total not in registry.coverage()["uncovered_occurrences"]

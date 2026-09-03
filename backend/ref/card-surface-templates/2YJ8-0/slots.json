@@ -37,7 +37,7 @@
     "text_nodes": 160,
     "slots": 160,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 101,
     "labels": 69,
     "values": 91,
     "layer_직접": 143,
@@ -1252,7 +1252,7 @@
       "alt_mappings": null,
       "kor": "이전거래량",
       "format": {
-        "unit": "krw_ko",
+        "unit": "shares",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -1260,6 +1260,7 @@
       "paired_with": "s045",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "note": "이전 거래량 → 현재 거래량",
       "extra_fields": [
         {
@@ -1553,14 +1554,15 @@
       "alt_mappings": null,
       "kor": "이전거래량",
       "format": {
-        "unit": "krw_ko",
+        "unit": "shares",
         "sign": false,
-        "precision": 1,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": "s056",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 1,
       "note": "이전 거래량 → 현재 거래량",
       "extra_fields": [
         {
@@ -1568,8 +1570,7 @@
           "f": "now_trde_qty",
           "sep": " → "
         }
-      ],
-      "display_dup": true
+      ]
     },
     {
       "slot_id": "s058",
@@ -1856,14 +1857,15 @@
       "alt_mappings": null,
       "kor": "이전거래량",
       "format": {
-        "unit": "krw_ko",
+        "unit": "shares",
         "sign": false,
-        "precision": 1,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": "s067",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 2,
       "note": "이전 거래량 → 현재 거래량",
       "extra_fields": [
         {
@@ -1871,8 +1873,7 @@
           "f": "now_trde_qty",
           "sep": " → "
         }
-      ],
-      "display_dup": true
+      ]
     },
     {
       "slot_id": "s069",
@@ -2159,14 +2160,15 @@
       "alt_mappings": null,
       "kor": "이전거래량",
       "format": {
-        "unit": "krw_ko",
+        "unit": "shares",
         "sign": false,
-        "precision": 1,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": "s078",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 3,
       "note": "이전 거래량 → 현재 거래량",
       "extra_fields": [
         {
@@ -2174,8 +2176,7 @@
           "f": "now_trde_qty",
           "sep": " → "
         }
-      ],
-      "display_dup": true
+      ]
     },
     {
       "slot_id": "s080",
@@ -2462,14 +2463,15 @@
       "alt_mappings": null,
       "kor": "이전거래량",
       "format": {
-        "unit": "krw_ko",
+        "unit": "shares",
         "sign": false,
-        "precision": 1,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": "s089",
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 4,
       "note": "이전 거래량 → 현재 거래량",
       "extra_fields": [
         {
@@ -2477,8 +2479,7 @@
           "f": "now_trde_qty",
           "sep": " → "
         }
-      ],
-      "display_dup": true
+      ]
     },
     {
       "slot_id": "s091",

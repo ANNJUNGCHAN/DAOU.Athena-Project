@@ -40,7 +40,7 @@
     "text_nodes": 190,
     "slots": 190,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 117,
     "labels": 42,
     "values": 148,
     "layer_직접": 0,
@@ -687,6 +687,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -890,6 +891,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -1093,6 +1095,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -1296,6 +1299,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -1499,6 +1503,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -1702,6 +1707,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -1910,6 +1916,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -2118,6 +2125,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -2326,6 +2334,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -2534,6 +2543,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -3060,6 +3070,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -3268,6 +3279,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -3476,6 +3488,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -3684,6 +3697,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -3892,6 +3906,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -4100,6 +4115,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -4303,6 +4319,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -4506,6 +4523,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -4709,6 +4727,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -4912,6 +4931,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true,
       "extra_fields": [
         {
@@ -5447,6 +5467,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {

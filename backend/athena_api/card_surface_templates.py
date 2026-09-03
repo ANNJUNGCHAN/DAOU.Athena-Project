@@ -1219,6 +1219,14 @@ def resolve_occurrence_id(
     return candidates[0].wire_occurrence_id
 
 
+_CARD_SURFACE_NON_VISIBLE_RESERVE_OCCURRENCES = frozenset(
+    {
+        "base:04|$.data[].924|1",
+        "base:04|$.data[].951|1",
+    }
+)
+
+
 @lru_cache(maxsize=1)
 def default_universe() -> SurfaceUniverse:
     """제품 표면이 덮어야 할 전집합 — 원장이 아니라 canonical 레지스트리에서 온다."""
@@ -1232,6 +1240,8 @@ def default_universe() -> SurfaceUniverse:
         contract.wire_occurrence_id
         for contract in contracts
         if contract.field_class in {"semantic", "unresolved", "derived"}
+        and contract.wire_occurrence_id
+        not in _CARD_SURFACE_NON_VISIBLE_RESERVE_OCCURRENCES
     )
     return SurfaceUniverse(
         operation_refs=frozenset(contract.mapping_id for contract in contracts),

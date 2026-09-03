@@ -21,7 +21,7 @@
     "kind": "expand",
     "parent_board": "2U5L-1",
     "control": "ELW 행 펼침",
-    "control_text": null
+    "control_text": "ELW 관찰"
   },
   "regions": {
     "3F2D-0": "header",
@@ -58,7 +58,7 @@
     "text_nodes": 128,
     "slots": 128,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 57,
     "labels": 60,
     "values": 68,
     "layer_직접": 0,

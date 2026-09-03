@@ -1065,6 +1065,46 @@ def test_merge_authored_keeps_hand_written_fields():
     assert column["mapping_id"] == "base:x"
 
 
+def test_merge_authored_recounts_mapped_slots_after_restoring_bindings():
+    previous = {
+        "slots": [
+            {"node_id": "A-0", "mapping_id": "base:x", "f": "amount"},
+            {"node_id": "B-0", "mapping_id": None},
+        ]
+    }
+    payload = {
+        "counts": {"mapped_slots": 0},
+        "slots": [
+            {"node_id": "A-0", "mapping_id": None},
+            {"node_id": "B-0", "mapping_id": None},
+        ],
+        "column_bindings": [],
+    }
+
+    merged = pbe.merge_authored(previous, payload)
+
+    assert merged["slots"][0]["mapping_id"] == "base:x"
+    assert merged["counts"]["mapped_slots"] == 1
+
+
+def test_merge_authored_keeps_an_explicit_slot_kind_override():
+    previous = {"slots": [{"node_id": "A-0", "kind": "label"}]}
+    payload = {
+        "counts": {"mapped_slots": 0, "labels": 0, "values": 2},
+        "slots": [
+            {"node_id": "A-0", "kind": "value", "mapping_id": None},
+            {"node_id": "B-0", "kind": "value", "mapping_id": None},
+        ],
+        "column_bindings": [],
+    }
+
+    merged = pbe.merge_authored(previous, payload)
+
+    assert merged["slots"][0]["kind"] == "label"
+    assert merged["counts"]["labels"] == 1
+    assert merged["counts"]["values"] == 1
+
+
 # --------------------------------------------------------------------------- #
 # 6. 실제 보드 전수 (원문이 저장된 보드만)
 # --------------------------------------------------------------------------- #
@@ -1339,7 +1379,7 @@ def test_expand_control_text_falls_back_to_plain_leaf_when_no_expand_glyph_exist
     assert 'data-state-control="금현물 잔고·거래내역"' in pbe.serialize(root)
 
 
-def test_expand_control_text_keeps_expand_glyph_when_one_exists():
+def test_expand_control_text_prefers_its_exact_plain_leaf_over_expand_glyphs():
     root, elements, node_of, region_of = _state_board()
     marks, unresolved = pbe.mark_state_controls(
         elements,
@@ -1351,6 +1391,27 @@ def test_expand_control_text_keeps_expand_glyph_when_one_exists():
                 "kind": "expand",
                 "control": "현금 흐름",
                 "control_text": "0원 6항목",
+            }
+        ],
+    )
+
+    assert unresolved == []
+    assert marks[0]["node_id"] == "S2C-0"
+    assert marks[0]["how"] == "hand"
+
+
+def test_expand_control_text_keeps_glyph_when_no_plain_leaf_matches_exactly():
+    root, elements, node_of, region_of = _state_board()
+    marks, unresolved = pbe.mark_state_controls(
+        elements,
+        node_of,
+        region_of,
+        [
+            {
+                "board_id": "H-0",
+                "kind": "expand",
+                "control": "현금 묶음",
+                "control_text": "0원 6항목 상세",
             }
         ],
     )

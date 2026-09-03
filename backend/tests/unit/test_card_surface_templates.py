@@ -22,8 +22,10 @@ from athena_api.card_surface_templates import (
     SOFT_DENSITY_BUDGET,
     CardSurfaceTemplateError,
     SurfaceUniverse,
+    default_universe,
     load_registry,
     resolve_occurrence_id,
+    visible_contracts,
     visible_occurrence_ids,
 )
 
@@ -43,6 +45,32 @@ def universe() -> SurfaceUniverse:
         operation_refs=frozenset(FIXTURE_OPERATIONS),
         visible_occurrence_ids=visible_occurrence_ids(FIXTURE_OPERATIONS),
     )
+
+
+def test_default_universe_excludes_only_the_named_base_04_reserve_slots() -> None:
+    reserve_contracts = {
+        contract.alias: contract
+        for contract in visible_contracts("base:04")
+        if contract.alias in {"924", "951"}
+    }
+    unrelated_opaque_contract = next(
+        contract
+        for contract in visible_contracts("base:1h")
+        if contract.alias == "1279"
+    )
+
+    assert set(reserve_contracts) == {"924", "951"}
+    assert {contract.field_class for contract in reserve_contracts.values()} == {
+        "unresolved"
+    }
+
+    universe = default_universe()
+    assert not (
+        {contract.wire_occurrence_id for contract in reserve_contracts.values()}
+        & universe.visible_occurrence_ids
+    )
+    assert unrelated_opaque_contract.wire_occurrence_id in universe.visible_occurrence_ids
+    assert len(universe.visible_occurrence_ids) == 3532
 
 
 def _copy(tmp_path: Path) -> Path:
@@ -1178,3 +1206,186 @@ def test_an_authored_control_text_wins_over_the_derived_one(tmp_path, universe) 
 
     assert board.state.control == "tab|시간외 단일가"
     assert board.state.control_text == "시간외"
+
+
+def test_30ty_non_equivalent_same_operation_alts_fail_closed() -> None:
+    """금액·수량·부호가 같은 응답에 있어도 서로의 대체 표시는 아니다."""
+
+    from athena_api.card_surface_contract import (
+        bind_surface_values,
+        build_board_surface_contract,
+    )
+    from athena_api.card_surface_templates import TEMPLATE_ROOT
+
+    buy_slots = ["s054", "s068", "s082", "s096", "s110", "s124", "s141", "s155"]
+    sell_slots = ["s056", "s070", "s084", "s098", "s112", "s126", "s143", "s157"]
+    sign_slots = ["s185", "s188", "s191"]
+    target_slots = buy_slots + sell_slots + sign_slots
+    registry = load_registry(TEMPLATE_ROOT, strict=False)
+
+    wrong_only = {
+        **bind_surface_values(
+            "base:ka10039",
+            {
+                "sec_trde_upper": [
+                    {
+                        "buy_trde_qty": f"BUY_QTY_{index}",
+                        "sel_trde_qty": f"SELL_QTY_{index}",
+                    }
+                    for index in range(8)
+                ]
+            },
+        ),
+        **bind_surface_values(
+            "base:ka10078",
+            {
+                "sec_stk_trde_trend": [
+                    {"pre_sig": f"SIGN_{index}"} for index in range(3)
+                ]
+            },
+        ),
+    }
+    wrong_contract = build_board_surface_contract("30TY-0", wrong_only, registry)
+    wrong_values = {
+        entry["slot_id"]: entry["value"]
+        for entry in wrong_contract["slot_values"]
+        if entry["slot_id"] in target_slots
+    }
+    assert wrong_values == {}
+    assert set(target_slots).issubset(wrong_contract["unbound_slots"])
+
+    primary = {
+        **bind_surface_values(
+            "base:ka10039",
+            {
+                "sec_trde_upper": [
+                    {"buy_amt": f"BUY_AMT_{index}", "sell_amt": f"SELL_AMT_{index}"}
+                    for index in range(8)
+                ]
+            },
+        ),
+        **bind_surface_values(
+            "base:ka10078",
+            {
+                "sec_stk_trde_trend": [
+                    {"netprps_qty": f"NET_QTY_{index}"} for index in range(3)
+                ]
+            },
+        ),
+    }
+    primary_contract = build_board_surface_contract("30TY-0", primary, registry)
+    primary_values = {
+        entry["slot_id"]: entry["value"]
+        for entry in primary_contract["slot_values"]
+    }
+    assert [primary_values[slot_id] for slot_id in buy_slots] == [
+        f"BUY_AMT_{index}" for index in range(8)
+    ]
+    assert [primary_values[slot_id] for slot_id in sell_slots] == [
+        f"SELL_AMT_{index}" for index in range(8)
+    ]
+    assert [primary_values[slot_id] for slot_id in sign_slots] == [
+        f"NET_QTY_{index}" for index in range(3)
+    ]
+
+
+def test_15p5_date_alternate_preserves_rows_and_falls_back_per_row() -> None:
+    """날짜 대체 배열이 짧으면 없는 행만 주 source로 돌아가고 행 관찰도 보존한다."""
+
+    from athena_api.card_surface_contract import (
+        bind_surface_values,
+        build_board_surface_contract,
+        observation_id_for,
+    )
+    from athena_api.card_surface_templates import TEMPLATE_ROOT
+
+    registry = load_registry(TEMPLATE_ROOT, strict=False)
+
+    slot_ids = ["s174", "s187", "s200", "s213"]
+    primary_occurrence = "base:ka10048|$.elwdaly_snst_ix[].dt|1"
+    alternate_occurrence = "base:ka30003|$.elwlpposs_daly_trnsn[].dt|1"
+
+    primary = bind_surface_values(
+        "base:ka10048",
+        {"elwdaly_snst_ix": [{"dt": value} for value in ["P0", "P1", "P2", "P3"]]},
+    )
+    alternate = bind_surface_values(
+        "base:ka30003",
+        {"elwlpposs_daly_trnsn": [{"dt": value} for value in ["A0", "A1", "A2", "A3"]]},
+    )
+    short_alternate = bind_surface_values(
+        "base:ka30003",
+        {"elwlpposs_daly_trnsn": [{"dt": "A0"}, {"dt": "A1"}]},
+    )
+
+    def entries(bound, active_operations):
+        contract = build_board_surface_contract("15P5-2", bound, registry, active_operations)
+        return contract, {
+            entry["slot_id"]: entry
+            for entry in contract["slot_values"]
+            if entry["slot_id"] in slot_ids
+        }
+
+    _, primary_rows = entries(primary, ("base:ka10048",))
+    assert [
+        (
+            primary_rows[slot_id]["value"],
+            primary_rows[slot_id]["occurrence_id"],
+            primary_rows[slot_id]["row_index"],
+            primary_rows[slot_id]["observation_id"],
+        )
+        for slot_id in slot_ids
+    ] == [
+        ("P0", primary_occurrence, 0, observation_id_for(primary_occurrence, 0)),
+        ("P1", primary_occurrence, 1, observation_id_for(primary_occurrence, 1)),
+        ("P2", primary_occurrence, 2, observation_id_for(primary_occurrence, 2)),
+        ("P3", primary_occurrence, 3, observation_id_for(primary_occurrence, 3)),
+    ]
+
+    _, alternate_rows = entries(alternate, ("base:ka30003",))
+    assert [
+        (
+            alternate_rows[slot_id]["value"],
+            alternate_rows[slot_id]["occurrence_id"],
+            alternate_rows[slot_id]["row_index"],
+            alternate_rows[slot_id]["observation_id"],
+        )
+        for slot_id in slot_ids
+    ] == [
+        ("A0", alternate_occurrence, 0, observation_id_for(alternate_occurrence, 0)),
+        ("A1", alternate_occurrence, 1, observation_id_for(alternate_occurrence, 1)),
+        ("A2", alternate_occurrence, 2, observation_id_for(alternate_occurrence, 2)),
+        ("A3", alternate_occurrence, 3, observation_id_for(alternate_occurrence, 3)),
+    ]
+
+    short_contract, short_rows = entries(short_alternate, ("base:ka30003",))
+    assert [
+        (
+            short_rows[slot_id]["value"],
+            short_rows[slot_id]["occurrence_id"],
+            short_rows[slot_id]["row_index"],
+            short_rows[slot_id]["observation_id"],
+        )
+        for slot_id in slot_ids[:2]
+    ] == [
+        ("A0", alternate_occurrence, 0, observation_id_for(alternate_occurrence, 0)),
+        ("A1", alternate_occurrence, 1, observation_id_for(alternate_occurrence, 1)),
+    ]
+    assert set(slot_ids[2:]).issubset(short_contract["unbound_slots"])
+    assert set(slot_ids[2:]).isdisjoint(short_rows)
+
+    _, mixed_rows = entries({**primary, **short_alternate}, ("base:ka30003", "base:ka10048"))
+    assert [
+        (
+            mixed_rows[slot_id]["value"],
+            mixed_rows[slot_id]["occurrence_id"],
+            mixed_rows[slot_id]["row_index"],
+            mixed_rows[slot_id]["observation_id"],
+        )
+        for slot_id in slot_ids
+    ] == [
+        ("A0", alternate_occurrence, 0, observation_id_for(alternate_occurrence, 0)),
+        ("A1", alternate_occurrence, 1, observation_id_for(alternate_occurrence, 1)),
+        ("P2", primary_occurrence, 2, observation_id_for(primary_occurrence, 2)),
+        ("P3", primary_occurrence, 3, observation_id_for(primary_occurrence, 3)),
+    ]

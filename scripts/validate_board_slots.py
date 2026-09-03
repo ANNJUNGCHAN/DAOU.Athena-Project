@@ -10,7 +10,8 @@
       전부 `static: true`거나 셀 단위로 바인딩됐으면 넘어간다
   e 팩(`<board>.pack.json`)이 이 보드 몫이라 적은 필드가 다 바인딩됐는가
   f 같은 `(mapping_id, f)`를 `display_dup` 없이 두 번 이상 그렸는가
-    — 같은 표·같은 열의 행 반복은 중복이 아니다(헤더 KPI 재표시는 `display_dup`)
+    — 같은 표·같은 열 또는 같은 비표 블록의 서로 다른 `row_index` 행은 중복이 아니다
+      (헤더 KPI 같은 실제 재표시는 `display_dup`)
   g `collapse_group.rollup_slot`·`expanded_board`가 실재하는가
 
 바인딩으로 세는 자리 셋
@@ -115,15 +116,23 @@ def indexed_field(indexed: dict, row: int) -> str:
 
 
 def is_column_repeat(group_slots: list[dict]) -> bool:
-    """같은 표·같은 열의 행 반복인가 — 그렇다면 중복 표기가 아니다."""
-    places = set()
-    for slot in group_slots:
-        cell = slot.get("table")
-        if not cell:
-            return False
-        places.add((cell["table"], cell["col"], cell["row"]))
-    columns = {(table, col) for table, col, _ in places}
-    return len(columns) == 1 and len(places) == len(group_slots)
+    """표시된 재표시를 뺀 주 슬롯들이 한 되풀이 블록의 서로 다른 행인가."""
+    row_slots = [slot for slot in group_slots if not slot.get("display_dup")]
+    if len(row_slots) < 2:
+        return False
+    cells = [slot.get("table") for slot in row_slots]
+    if all(cells):
+        places = {(cell["table"], cell["col"], cell["row"]) for cell in cells}
+        columns = {(table, col) for table, col, _ in places}
+        return len(columns) == 1 and len(places) == len(row_slots)
+    if any(cells):
+        return False
+
+    row_indices = [slot.get("row_index") for slot in row_slots]
+    if any(not isinstance(row, int) or isinstance(row, bool) or row < 0 for row in row_indices):
+        return False
+    regions = {slot.get("region") for slot in row_slots}
+    return len(regions) == 1 and len(set(row_indices)) == len(row_slots)
 
 
 def indexed_fields(column: dict, slots_by_id: dict[str, dict]) -> list[str]:
