@@ -55,10 +55,10 @@
 ## 5. 다른 환경에서 이어받는 절차
 
 ```bash
-# 1) 저장소 clone 후 브랜치 worktree로 (메인 체크아웃은 건드리지 않는다)
+# 1) 저장소 clone 후 원격 브랜치를 worktree로 (메인 체크아웃은 건드리지 않는다)
+git clone <repo-url> DAOU.Athena && cd DAOU.Athena
 git fetch origin
-git worktree add .claude/worktrees/agent-dual-control feat/agent-dual-control   # 원격에 브랜치가 있을 때
-#   없으면: 이 브랜치를 먼저 push한 컴퓨터에서 `git push -u origin feat/agent-dual-control`
+git worktree add --track -b feat/agent-dual-control .claude/worktrees/agent-dual-control origin/feat/agent-dual-control
 
 # 2) .omc/ 복원 (gitignore) — 저장소 사본을 되돌려 놓는다
 WT=.claude/worktrees/agent-dual-control
@@ -100,4 +100,4 @@ cd $WT/backend && uv sync --extra dev
 | 베이스라인 TAP | `<worktree>/.omc/baseline-npm-test.tap` | ✗ (요약은 anchors-note.md) |
 | 메인 체크아웃 인터뷰 상태 | `C:/Projects/DAOU.Athena/.omc/state/deep-interview-state.json` | ✗ |
 
-원격 push는 이 세션이 하지 않았다 — 다른 컴퓨터로 넘기려면 `git push -u origin feat/agent-dual-control`.
+원격: `origin/feat/agent-dual-control` (2026-09-03 push). 다른 컴퓨터는 §5 절차로 원격 브랜치만으로 이어받는다. 병렬 플러그인 트랙 스펙 사본도 `agent-dual-control/deep-interview-athena-plugin-doctrine.md`에 참고용으로 실었다(어휘 정합 — 이 트랙의 편집 대상이 아니다).

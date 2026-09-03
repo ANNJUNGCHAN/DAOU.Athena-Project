@@ -7,6 +7,11 @@
 > **바로 이어서 돌리려면** [RALPH_PROMPT.md](./RALPH_PROMPT.md)를 열어 블록을 통째로 복사해
 > Claude Code에 붙여넣는다. 이 문서(§2~§6)를 실행 가능한 루프로 옮겨둔 것이다.
 
+> 🟠 **2026-09-03 에이전트 모드 "두 입구, 한 게이트" 트랙이 브랜치 `feat/agent-dual-control`에서 시작됐다.**
+> 원격 브랜치만으로 이어받을 수 있다 — 진입점·복원 절차·붙여넣을 프롬프트는
+> [2026-09-03-agent-dual-control-handoff.md](./2026-09-03-agent-dual-control-handoff.md) →
+> [agent-dual-control/RALPH_PROMPT.md](./agent-dual-control/RALPH_PROMPT.md). 이 브랜치는 main에 병합하지 않는다(worktree 전용).
+
 > 🟣 **2026-09-03 백테스트 시각 설계 ↔ 코드 왕복이 들어갔다.** 지도 탭이 편집 가능한 그래프가 되고
 > 코드는 지도에서 생성된다. 계약·검증법·남은 P4는
 > [2026-09-03-visual-strategy-roundtrip.md](./2026-09-03-visual-strategy-roundtrip.md)에 있다.
