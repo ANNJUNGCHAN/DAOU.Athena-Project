@@ -30,11 +30,11 @@
 | 브랜치 | **`feat/plugin-mode-doctrine`** (main `f880d79`에서 분기) |
 | 워크트리(이 컴퓨터) | **`C:\Projects\DAOU.Athena-plugin`** — 본 저장소 `C:\Projects\DAOU.Athena`의 형제. 본 저장소는 카드 트랙 미커밋 변경 1,784줄과 다른 세션이 쓰고 있으니 **거기서 작업하지 않는다** |
 | 최신 커밋 | `55c3333 feat(plugin): 게이트웨이 제안 툴과 렌더러 순수 모듈로 플러그인 모드 기조 정렬을 시작한다` (+ 이 인계 문서 커밋) |
-| 원격 | **아직 push하지 않았다.** 다른 컴퓨터로 가려면 먼저 `git push -u origin feat/plugin-mode-doctrine` |
+| 원격 | **push 완료(2026-09-03)** — `origin/feat/plugin-mode-doctrine`. 다른 컴퓨터는 clone 후 `git switch feat/plugin-mode-doctrine`만 하면 된다. 이후 이 컴퓨터에서 더 커밋하면 다시 push한다 |
 
 **같은 컴퓨터에서 이어받기.** 워크트리에 `app/node_modules`(electron 포함)·`backend/.venv`·`core.hooksPath`가 이미 있다. Claude Code를 `C:\Projects\DAOU.Athena-plugin`에서 열고 §10 프롬프트를 붙여넣는다. `.omc/`도 그대로 있다(계획·명세·PRD·baseline).
 
-**다른 컴퓨터에서 이어받기.** 전제: git · **Node 22+** · **uv** · Python 3.12 · 네트워크(npm·uv·`verify:plugins`의 npx/uvx 다운로드). Paper(디자인 도구)는 남은 코드 작업에 필요 없고, 검수 문구 반영 때만 필요하다 — Paper 파일은 `https://app.paper.design/file/01M0VGPX92K1TER4ZV9PWGQJJZ` 페이지 **B-2(플러그인)**, Paper MCP 연결이 있어야 편집할 수 있다. **보내는 컴퓨터에서 먼저 `git push -u origin feat/plugin-mode-doctrine`** — 아직 push되지 않았다.
+**다른 컴퓨터에서 이어받기.** 전제: git · **Node 22+** · **uv** · Python 3.12 · 네트워크(npm·uv·`verify:plugins`의 npx/uvx 다운로드). Paper(디자인 도구)는 남은 코드 작업에 필요 없고, 검수 문구 반영 때만 필요하다 — Paper 파일은 `https://app.paper.design/file/01M0VGPX92K1TER4ZV9PWGQJJZ` 페이지 **B-2(플러그인)**, Paper MCP 연결이 있어야 편집할 수 있다. 브랜치는 이미 `origin/feat/plugin-mode-doctrine`에 있다(pre-push 훅: 게이트 4종 + app 단위 통과).
 
 ```bash
 git clone https://github.com/ANNJUNGCHAN/DAOU.Athena.git && cd DAOU.Athena
@@ -160,7 +160,7 @@ W5-4 PDF 검수(사용자 회신)는 외부 의존이다 — 회신이 없으면
 | # | 항목 | 다음 행동 |
 |---|---|---|
 | 1 | **PDF 검수 회신 없음** (안건 4건) | 사용자가 회신하면 문구를 Paper·앱에 반영(문구는 계획 W4·W5-4에 정확히 있음). 거부되는 문구가 있으면 그 문자열만 교체 |
-| 2 | 브랜치 미push | 다른 컴퓨터로 가려면 `git push -u origin feat/plugin-mode-doctrine` (사용자 판단) |
+| 2 | 브랜치는 push됨 — 단 **main에는 병합되지 않았다** | 트랙이 끝나면 PR(`https://github.com/ANNJUNGCHAN/DAOU.Athena/pull/new/feat/plugin-mode-doctrine`)로 main에 합친다. 에이전트 트랙(`feat/agent-dual-control`)과 `shell.html`·`chat.js`·`controller.js` 충돌 후보 |
 | 3 | `verify:plugins`는 네트워크 필요 | 오프라인 실패는 코드 결함으로 계상하지 않는다(계획 §7) |
 | 4 | R7 플레이키 테스트 정체 미확정 | `test:unit` 2회 연속 통과로 흡수 |
 | 5 | backend `dispatch` sync·카탈로그 수동 복제·픽스처 재생성(§6 4~6) | 비차단. 문제 시 §6의 권고대로 |
