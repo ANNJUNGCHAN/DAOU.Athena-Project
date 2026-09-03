@@ -105,6 +105,43 @@ const SNAPSHOT = `(() => {
   };
 })()`;
 
+// 확정 카드가 실제로 떴는가. 모델이 propose_edit에 relation_id를 안 실으면 카드는
+// 조용히 예전 경로(문장 제출)로 떨어지므로, 카드 존재 자체가 판정 기준이다.
+const EDIT_CARD = `(() => {
+  const host = document.getElementById('graphEditProposalCard');
+  return {
+    shown: !!host && host.hidden !== true && !!host.firstChild,
+    text: host ? host.textContent.trim().slice(0, 140) : '',
+  };
+})()`;
+
+// 확정 카드의 '적용'을 누른다. 라벨로 찾는다 — 카드가 만드는 버튼 순서에 기대면
+// 나중에 버튼이 하나 늘 때 조용히 다른 것을 누른다.
+const CLICK_APPLY = `(() => {
+  const host = document.getElementById('graphEditProposalCard');
+  if (!host) return { clicked: false, reason: '카드가 없다' };
+  const btn = Array.from(host.querySelectorAll('button'))
+    .find((b) => (b.textContent || '').includes('적용'));
+  if (!btn) return { clicked: false, reason: '적용 버튼이 없다' };
+  btn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  return { clicked: true };
+})()`;
+
+// 그래프의 관계 수 — 삭제가 실제로 일어났는지 재는 유일한 정직한 기준이다
+// (모델의 말도, 카드가 닫힌 것도 근거가 아니다).
+async function countEdges(backendUrl, token) {
+  try {
+    const res = await fetch(backendUrl + '/api/v1/brain/analysis/cluster-map', {
+      headers: { Authorization: 'Bearer ' + token },
+    });
+    if (!res.ok) return null;
+    const body = await res.json();
+    return Array.isArray(body.edges) ? body.edges.length : null;
+  } catch {
+    return null;
+  }
+}
+
 async function runTurn(wc, text) {
   await wc.executeJavaScript(submitJs(text));
   const started = Date.now();
@@ -231,6 +268,31 @@ async function main() {
       check: () => true,
       why: '도구 단계가 떠야 한다 — 모델이 지어내면 이 단계가 없다',
     },
+    {
+      // F-19 후속(2026-09-03) — 카드가 '적용'에서 바로 지우려면 모델이 propose_edit에
+      // relation_id를 실어야 한다. 스키마와 회복 안내는 넣었지만 모델이 실제로 매번
+      // 싣는지는 실측해야 안다. 안 실으면 카드는 조용히 예전 경로로 떨어진다.
+      name: '삭제 제안이 relation_id를 싣는다(propose_edit)',
+      text: '삼성화재의 소속 연결을 지워줘',
+      expectLabel: '그래프 화면 제어',
+      check: () => true,
+      why: '확정 카드가 뜨고 그 카드가 relationId를 안다',
+      after: async () => {
+        const card = await wc.executeJavaScript(EDIT_CARD);
+        if (!card.shown) return { pass: false, detail: { card, why: '카드가 안 떴다' } };
+        // 진짜 판정은 여기다: 누르면 그래프에서 **바로** 줄어야 한다. 카드가 뜨는
+        // 것까지는 relation_id가 없어도 되지만, 즉시 삭제는 그것이 있어야 된다.
+        const edgesBefore = await countEdges(backendUrl, bearerToken);
+        const clicked = await wc.executeJavaScript(CLICK_APPLY);
+        await wait(2500);
+        const edgesAfter = await countEdges(backendUrl, bearerToken);
+        return {
+          pass: clicked.clicked === true && edgesAfter !== null && edgesBefore !== null
+            && edgesAfter < edgesBefore,
+          detail: { clicked, edgesBefore, edgesAfter, card: card.text },
+        };
+      },
+    },
   ];
 
   for (const sc of scenarios) {
@@ -256,6 +318,8 @@ async function main() {
     if (sc.after) {
       const extra = await sc.after();
       checks.push([`${sc.why}(실값)`, extra.pass, extra.detail]);
+      // 통과해도 실값을 남긴다 — "줄었다"는 판정만 있고 숫자가 없으면 증거가 못 된다.
+      log(`         실값: ${JSON.stringify(extra.detail)}`);
     }
 
     for (const [name, ok, detail] of checks) {

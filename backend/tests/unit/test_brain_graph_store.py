@@ -808,3 +808,61 @@ async def test_retract_relation_on_a_missing_id_is_not_an_error(store: GraphStor
 async def test_retract_relation_rejects_an_out_of_bounds_id(store: GraphStore) -> None:
     with pytest.raises(ValueError):
         await store.retract_relation("")
+
+
+async def test_set_relation_confidence_promotes_and_logs_edge_changed(store: GraphStore) -> None:
+    """되물을 것들 카드의 '맞다' — 사람이 확인하면 더 이상 불확실이 아니다."""
+    await store.upsert_source(source("s1"))
+    samsung = entity(EntityKind.SECURITY, "삼성전자")
+    await store.apply_extraction(
+        "s1",
+        "fp",
+        (PROFILE, samsung),
+        (
+            relation(
+                "interested_in", PROFILE, samsung, "s1", confidence=Confidence.AMBIGUOUS
+            ),
+        ),
+    )
+    [row] = await store.relations()
+    assert row.confidence == Confidence.AMBIGUOUS.value
+
+    updated = await store.set_relation_confidence(row.id, Confidence.EXTRACTED)
+
+    assert updated is not None
+    assert updated.confidence == Confidence.EXTRACTED.value
+    [after] = await store.relations()
+    assert after.confidence == Confidence.EXTRACTED.value
+    changed = [e for e in await store.events() if e.op is GraphEventOp.EDGE_CHANGED]
+    assert len(changed) == 1
+    assert changed[-1].confidence_before is Confidence.AMBIGUOUS
+    assert changed[-1].confidence_after is Confidence.EXTRACTED
+
+
+async def test_set_relation_confidence_is_idempotent(store: GraphStore) -> None:
+    """같은 답을 두 번 눌러도 이력이 부풀지 않는다."""
+    await store.upsert_source(source("s1"))
+    samsung = entity(EntityKind.SECURITY, "삼성전자")
+    await store.apply_extraction(
+        "s1",
+        "fp",
+        (PROFILE, samsung),
+        (
+            relation(
+                "interested_in", PROFILE, samsung, "s1", confidence=Confidence.AMBIGUOUS
+            ),
+        ),
+    )
+    [row] = await store.relations()
+    await store.set_relation_confidence(row.id, Confidence.EXTRACTED)
+    revision_after_first = await store.graph_revision()
+
+    await store.set_relation_confidence(row.id, Confidence.EXTRACTED)
+
+    assert await store.graph_revision() == revision_after_first, "값이 같으면 리비전도 안 올린다"
+    changed = [e for e in await store.events() if e.op is GraphEventOp.EDGE_CHANGED]
+    assert len(changed) == 1
+
+
+async def test_set_relation_confidence_on_a_missing_id_is_not_an_error(store: GraphStore) -> None:
+    assert await store.set_relation_confidence("relation:nope", Confidence.EXTRACTED) is None

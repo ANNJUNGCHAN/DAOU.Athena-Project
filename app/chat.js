@@ -1672,7 +1672,7 @@ window.AthenaShell.registerSeedChatInput((text) => {
 //
 // 답이 그래프로 돌아가는 경로는 사람의 채팅뿐이다(brain_tools.py: 모델은 그래프에
 // 쓸 수 없다). 그래서 선택지는 답변 **문장**이 되어 dispatchUserQuery로 제출된다.
-let brainQuestions = null; // { items, index, answers } — 열려 있는 동안만
+let brainQuestions = null; // { items, index, decisions } — 열려 있는 동안만
 
 function brainQuestionsLib() {
   return window.AthenaLib && window.AthenaLib.BrainQuestions;
@@ -1686,23 +1686,64 @@ function closeBrainQuestions() {
   host.hidden = true;
 }
 
-// 모은 답을 한 문장으로 보내고 카드를 닫는다. 건너뛴 것은 아무것도 안 보낸다 —
-// 침묵을 부정으로 굳히지 않는다.
-function submitBrainAnswers() {
-  const sentences = brainQuestions ? brainQuestions.answers.filter(Boolean) : [];
+// 답을 **그래프에 바로 반영하고** 카드를 닫는다(2026-09-03 사용자 확정).
+//
+// 예전에는 모은 답을 한 문장으로 채팅에 보냈고 반영은 다음 수집 배치가 했다.
+// 그래서 세 건을 다 답해도 "확인이 필요한 것 3건"이 그대로였고 모델은 같은 카드를
+// 다시 띄웠다 — 사람은 무한히 답했다(실측). 수집(대화를 캐는 일)과 편집(주인이
+// 화면에서 확인하는 일)은 다른 일이다.
+//
+// 문장을 보내지 않는 것이 중요하다: 보내면 모델이 새 요청으로 읽어 카드를 또 띄운다.
+// 결과는 채팅 흐름에 한 줄로 적는다 — 무엇이 처리됐는지 사람이 알아야 한다.
+async function applyBrainAnswers() {
+  const decided = brainQuestions ? brainQuestions.decisions.slice() : [];
   closeBrainQuestions();
-  if (!sentences.length) return;
-  dispatchUserQuery(sentences.join('\n'));
+  if (!decided.length) return;
+  let confirmed = 0;
+  let removed = 0;
+  const failures = [];
+  for (const decision of decided) {
+    const channel = decision.choice === 'yes'
+      ? 'athena:brain-confirm-relation'
+      : 'athena:brain-retract-relation';
+    let res = null;
+    try {
+      res = await window.athena.invoke(channel, { relationId: decision.relationId });
+    } catch (err) {
+      failures.push(decision.label + ': ' + String((err && err.message) || err));
+      continue;
+    }
+    if (!res || !res.ok) {
+      failures.push(decision.label + ': ' + ((res && res.error) || '알 수 없는 이유'));
+      continue;
+    }
+    if (decision.choice === 'yes') confirmed += 1; else removed += 1;
+  }
+  const parts = [];
+  if (confirmed) parts.push(confirmed + '건을 확실한 것으로 기록했습니다');
+  if (removed) parts.push(removed + '건을 지웠습니다');
+  if (parts.length) appendSystemLine(parts.join(' · ') + '.');
+  // 실패를 조용히 넘기지 않는다 — 사람은 처리됐다고 믿고 화면을 떠난다(§0 정직성).
+  for (const failure of failures) appendSystemLine('반영하지 못했습니다 — ' + failure);
 }
 
 function answerBrainQuestion(choice) {
   const lib = brainQuestionsLib();
   if (!brainQuestions || !lib) return;
   const item = brainQuestions.items[brainQuestions.index];
-  brainQuestions.answers.push(lib.answerSentence(item, choice));
+  // 건너뛰기는 아무것도 안 남긴다 — 침묵을 부정으로 굳히지 않는다.
+  if (choice !== 'skip' && item && item.relationId) {
+    brainQuestions.decisions.push({
+      relationId: item.relationId,
+      choice,
+      label: (item.subjectImplicit || !item.subject)
+        ? "\"" + item.object + "\" · '" + item.relationText + "'"
+        : "\"" + item.subject + "\" → \"" + item.object + "\" · '" + item.relationText + "'",
+    });
+  }
   brainQuestions.index += 1;
   if (brainQuestions.index >= brainQuestions.items.length) {
-    submitBrainAnswers();
+    void applyBrainAnswers();
     return;
   }
   renderBrainQuestionCard();
@@ -1789,7 +1830,9 @@ window.AthenaShell.registerOpenBrainQuestions(async () => {
   const controller = window.AthenaLib && window.AthenaLib.GraphModeController;
   const items = lib.normalizeQuestions(res, controller && controller.RELATION_LABELS);
   if (!items.length) return false;
-  brainQuestions = { items, index: 0, answers: [] };
+  // decisions — 답한 것을 바로 반영하려면 relationId와 선택이 필요하다.
+  // 예전 answers(문장 배열)는 채팅으로 보낼 용도였고 지금은 보내지 않는다.
+  brainQuestions = { items, index: 0, decisions: [] };
   renderBrainQuestionCard();
   return true;
 });
@@ -1904,11 +1947,18 @@ function renderGraphEditProposalCard() {
   const note = document.createElement('div');
   note.className = 'question-card-note';
   // 아직 아무것도 안 바뀌었다는 사실을 화면이 말한다 — 모델의 notice와 같은 내용이다.
-  // 반영 시점을 정직하게 적는다(2026-09-03 실사용) — 누른 직후가 아니라 다음 수집
-  // 배치 때 추출되어 갱신된다(lifespan.py IngestionCoordinator). 앞 문구는 "그 답이
-  // 그래프를 갱신합니다"라 즉시로 읽혔고, 숫자가 안 줄어드니 같은 카드를 계속 누르는
-  // 무한 루프처럼 느껴졌다(실제 제보).
-  note.textContent = '아직 그래프는 그대로입니다. 누르면 그 답이 채팅으로 보내지고, 다음 수집 때 그래프에 반영됩니다.';
+  // 문구는 **실제로 걸릴 경로**를 말한다(2026-09-03). 두 경로가 있다:
+  //   · relationId가 있으면(op=remove) 누른 순간 그래프에서 바로 사라진다.
+  //   · 없으면(추가·수정, 또는 모델이 id를 안 실은 경우) 답변 문장이 채팅으로 나가고
+  //     반영은 다음 수집 배치가 한다.
+  // 앞 판은 둘을 구분하지 않아, 즉시 지워지는데도 "다음 수집 때"라고 말했다 —
+  // 그 전 판은 반대로 "그 답이 그래프를 갱신합니다"라 즉시로 읽혔고, 숫자가 안
+  // 줄어드니 같은 카드를 계속 누르는 무한 루프처럼 느껴졌다(실제 제보). 어느 쪽이든
+  // 화면이 사실과 다르면 사람은 고장으로 읽는다.
+  const immediate = graphEditProposal.op === 'remove' && !!graphEditProposal.relationId;
+  note.textContent = immediate
+    ? '아직 그래프는 그대로입니다. 누르면 바로 지워집니다.'
+    : '아직 그래프는 그대로입니다. 누르면 그 답이 채팅으로 보내지고, 다음 수집 때 그래프에 반영됩니다.';
   host.appendChild(note);
 
   const actions = document.createElement('div');

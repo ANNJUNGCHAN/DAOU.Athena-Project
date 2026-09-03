@@ -29,7 +29,7 @@ from athena_api.brain import (
     surprising_connections,
     utc_now,
 )
-from athena_api.brain.ontology import MAX_RAW_CHAT_TEXT_CHARS
+from athena_api.brain.ontology import MAX_RAW_CHAT_TEXT_CHARS, Confidence
 from athena_api.brain.projection import cluster_cohesion, cluster_representative_labels
 from athena_api.errors import BrainNotReadyError
 from athena_api.lifespan import BrainRuntime, _teardown_brain
@@ -369,6 +369,58 @@ async def retry_startup_brain_ingestion(
             job_id=retry_job.id,
             status=retry_job.status,
         )
+
+
+class RelationConfirmRequest(BaseModel):
+    """되물을 것들 카드의 '맞다' — 사람이 확인한 관계."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    relation_id: str = Field(min_length=1, max_length=128)
+
+
+class RelationConfirmResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    changed: bool
+    revision: int
+    confidence: str | None = None
+
+
+@router.post(
+    "/relations/confirmations",
+    summary="관계 하나를 사람이 확인한다(불확실 → 사실)",
+    operation_id="confirm_brain_relation",
+    response_model=RelationConfirmResponse,
+    openapi_extra={
+        # 취소 입구와 같은 이유로 모델에게 노출하지 않는다 — 부르는 것은 사람이 누른
+        # 카드뿐이다. athena_brain에는 여전히 쓰기 액션이 없다.
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "write",
+    },
+)
+async def confirm_brain_relation(
+    payload: RelationConfirmRequest,
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> RelationConfirmResponse:
+    """되물을 것들 카드의 '맞다'가 부르는 입구(2026-09-03 사용자 확정).
+
+    카드가 묻는 것은 AMBIGUOUS 관계다. 사람이 '맞다'를 누르면 그것은 더 이상
+    불확실이 아니다 — 주인이 확인했다. 예전에는 답변 문장이 채팅으로 나가고 다음
+    수집 배치가 반영했는데, 그래서 답해도 "확인이 필요한 것 N건"이 줄지 않아
+    같은 카드가 무한히 되물었다(실측).
+    """
+    require_local_bearer(request, authorization)
+    store = _require_store(request)
+    updated = await store.set_relation_confidence(payload.relation_id, Confidence.EXTRACTED)
+    revision = await store.graph_revision()
+    if updated is None:
+        logger.info("brain relation confirm miss relation_id=%s", payload.relation_id)
+        return RelationConfirmResponse(changed=False, revision=revision)
+    return RelationConfirmResponse(
+        changed=True, revision=revision, confidence=updated.confidence
+    )
 
 
 class RelationRetractRequest(BaseModel):
