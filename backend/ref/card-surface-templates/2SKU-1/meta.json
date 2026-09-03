@@ -29,6 +29,7 @@
     "detail:kt00012:account_and_receivable_capacity",
     "detail:kt00012:guarantee_rate",
     "detail:kt00013:cash_resources",
+    "detail:kt00013:d2_funding_capacity",
     "detail:kt00013:substitute_resources",
     "detail:kt00016:period_flows",
     "detail:kt00017:d2_account_position",

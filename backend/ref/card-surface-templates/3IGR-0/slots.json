@@ -23,8 +23,10 @@
     "detail:kt00004:cash_and_assets",
     "detail:kt00004:position_valuation",
     "detail:kt00005:cash_and_capacity",
+    "detail:kt00011:account_funding",
     "detail:kt00013:cash_resources",
     "detail:kt00013:credit_and_lending_collateral",
+    "detail:kt00013:d2_funding_capacity",
     "detail:kt00013:previous_day_reuse",
     "detail:kt00013:repayment_losses",
     "detail:kt00013:substitute_resources",
@@ -71,8 +73,8 @@
     "slots": 139,
     "anchored_slots": 9,
     "mapped_slots": 8,
-    "labels": 80,
-    "values": 59,
+    "labels": 81,
+    "values": 58,
     "layer_직접": 0,
     "layer_병기": 0,
     "layer_펼침": 139,
@@ -676,7 +678,12 @@
       "table": null,
       "mapping_id": "detail:kt00001:settlement_forecast",
       "f": "d2_pymn_alow_amt",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00013:d2_funding_capacity",
+          "f": "d2ch_ord_alow_amt"
+        }
+      ],
       "kor": "d+2출금가능금액",
       "format": {
         "unit": "krw_ko",
@@ -1003,7 +1010,7 @@
       "node_path": "2/0/0/0/1",
       "paper_text": "09/01 09:42 기준",
       "region": "primary",
-      "kind": "value",
+      "kind": "label",
       "layer": "펼침",
       "font_size_px": 11.0,
       "anchor": null,
@@ -1517,7 +1524,12 @@
       "table": null,
       "mapping_id": "detail:kt00013:cash_resources",
       "f": "ch_amt",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00011:account_funding",
+          "f": "entr"
+        }
+      ],
       "kor": "현금금액",
       "format": {
         "unit": "krw_ko",
@@ -1569,7 +1581,12 @@
       "table": null,
       "mapping_id": "detail:kt00013:cash_resources",
       "f": "use_pos_ch_fin",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00011:account_funding",
+          "f": "ord_alowa"
+        }
+      ],
       "kor": "사용가능현금최종",
       "format": {
         "unit": "krw_ko",
@@ -1658,7 +1675,12 @@
       "table": null,
       "mapping_id": "detail:kt00013:substitute_resources",
       "f": "use_pos_repl_fin",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00011:account_funding",
+          "f": "repl_amt"
+        }
+      ],
       "kor": "사용가능대용최종",
       "format": {
         "unit": "krw_ko",
@@ -1867,7 +1889,12 @@
       "table": null,
       "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
       "f": "ch_ord_alow_repla",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00011:account_funding",
+          "f": "ord_pos_repl"
+        }
+      ],
       "kor": "현금주문가능대용금",
       "format": {
         "unit": "krw_ko",
@@ -2635,7 +2662,12 @@
       "table": null,
       "mapping_id": "detail:kt00001:substitute_collateral",
       "f": "rght_repl_amt",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00005:cash_and_capacity",
+          "f": "rght_repl_amt"
+        }
+      ],
       "kor": "권리대용금",
       "format": {
         "unit": "krw_ko",
@@ -2898,7 +2930,16 @@
       "table": null,
       "mapping_id": "detail:kt00001:cash_and_margin",
       "f": "uncl_stk_amt",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00011:account_funding",
+          "f": "uncla"
+        },
+        {
+          "mapping_id": "detail:kt00005:cash_and_capacity",
+          "f": "uncl_stk_amt"
+        }
+      ],
       "kor": "미수확보금",
       "format": {
         "unit": "krw_ko",

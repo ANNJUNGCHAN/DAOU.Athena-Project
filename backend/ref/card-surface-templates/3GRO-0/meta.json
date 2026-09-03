@@ -19,11 +19,13 @@
     "detail:kt00004:cash_and_assets",
     "detail:kt00004:position_valuation",
     "detail:kt00005:cash_and_capacity",
+    "detail:kt00005:margin_order_capacity",
     "detail:kt00010:cash_and_withdrawal_capacity",
     "detail:kt00010:margin_order_capacity",
     "detail:kt00011:margin_capacity_20_to_50",
     "detail:kt00011:margin_capacity_60_to_cash_only",
     "detail:kt00012:account_and_receivable_capacity",
-    "detail:kt00012:guarantee_order_capacity"
+    "detail:kt00012:guarantee_order_capacity",
+    "detail:kt00013:margin_order_capacity"
   ]
 }
