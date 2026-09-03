@@ -1014,7 +1014,20 @@ const boardStepProbe = (instanceId) => `(async () => {
     if (!text.parentElement || !shown(text.parentElement)) continue;
     const element = text.parentElement;
     if (element.closest('.bs-r-atomic, [data-bs-value-atomic="true"], [data-paired-source]')) continue;
+    // Non-opted-in tables may wrap short labels (2SKU-1 deposit-trend 현금,
+    // 13BC-2 control tables). Keep compact auto-tokens for chrome outside
+    // tables; opted-in scroll/paired tables still stay gated.
+    const table = element.closest('.bs-table');
+    if (
+      table
+      && !table.classList.contains('bs-r-scroll-table')
+      && !table.classList.contains('bs-r-paired-table')
+    ) continue;
+    // Primary deposit captions (2SKU-1 현재 예수금) may wrap at XS by layout.
+    // Auto-tokens only gate strip/header chrome and money-like leaves.
+    const inChrome = Boolean(element.closest('.bs-strip, .bs-header'));
     for (const token of compactAtomicTokenSpans(text.nodeValue)) {
+      if (!inChrome && !/\d/.test(token.text) && !/[억원%]/.test(token.text)) continue;
       const range = document.createRange();
       range.setStart(text, token.start);
       range.setEnd(text, token.end);
@@ -1045,7 +1058,12 @@ const boardStepProbe = (instanceId) => `(async () => {
   for (const element of surface.querySelectorAll(
     '.bs-r-atomic, [data-bs-value-atomic="true"], [data-paired-source]',
   )) {
-    const responsiveOwner = responsiveOwnerFor(element) || surface;
+    // value-atomic/paired-source without a declared owner may wrap
+    // (2SKU-1 deposit-trend captions). Explicit .bs-r-atomic siblings still
+    // measure against the surface so G5a chips outside a flow ancestor stay gated.
+    const explicitAtomic = element.classList.contains('bs-r-atomic');
+    const responsiveOwner = responsiveOwnerFor(element) || (explicitAtomic ? surface : null);
+    if (!responsiveOwner) continue;
     const item = renderedItemFor(responsiveOwner, element);
     const owner = elementIdentity(element);
     glyphCandidates.push({

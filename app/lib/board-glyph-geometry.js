@@ -476,7 +476,26 @@ function assertReadability(boardId, preset, probe, { enforce = false } = {}) {
     ...reports.filter(([, totalName]) => probe && probe[totalName] > 0).map(([itemsName]) => itemsName),
   ];
   if (enforce && failures.length) {
-    throw new Error(`board ${boardId} ${preset.name}: readability ${failures.join(', ')}`);
+    const details = {};
+    for (const [itemsName] of reports) {
+      if (!failures.includes(itemsName) || !probe || !Array.isArray(probe[itemsName])) continue;
+      details[itemsName] = probe[itemsName].slice(0, 8).map((item) => ({
+        node: item.node,
+        name: item.name,
+        text: item.text,
+        owner: item.owner,
+        owner_name: item.owner_name,
+        layout_owner: item.layout_owner,
+        line_count: item.line_count,
+        source: item.source,
+        violation: item.violation,
+        first_text: item.first_text,
+        second_text: item.second_text,
+      }));
+    }
+    throw new Error(
+      `board ${boardId} ${preset.name}: readability ${failures.join(', ')} ${JSON.stringify(details)}`,
+    );
   }
   return { enforced: Boolean(enforce), failures };
 }
