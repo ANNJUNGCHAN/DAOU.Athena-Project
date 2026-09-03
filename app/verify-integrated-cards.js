@@ -17,13 +17,26 @@ const {
   DEFAULT_READABILITY_BOARD_IDS,
   collectGlyphFindings,
   assertReadability,
+  assertReadabilityManifest,
+  assertReadabilityMatrix,
   waitForStableLayout,
 } = require('./lib/board-glyph-geometry');
+const {
+  KNOWN_STALE_BOARD_CAPTURE_NAMES,
+  assertBoardCaptureArtifacts,
+  ensureCaptureOutputDirectory,
+  expectedBoardCaptureNames,
+  pruneUnexpectedBoardCaptures,
+  resolveBoardSelection,
+} = require('./lib/integrated-card-capture-hygiene');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
 const BACKEND = path.join(ROOT, 'backend');
 const CAPTURE_DIR = path.join(APP, 'captures', 'integrated-cards');
+const BOARD_SELECTION_OVERRIDE = process.env.ATHENA_VERIFY_BOARD_IDS;
+const CANONICAL_CAPTURE_RUN = BOARD_SELECTION_OVERRIDE === undefined;
+const CAPTURE_OUTPUT_DIR = ensureCaptureOutputDirectory(CAPTURE_DIR, CANONICAL_CAPTURE_RUN);
 
 // 백엔드 의존성(fastapi·pydantic 등)은 backend/.venv에만 있다. PATH의 맨 python으로
 // 부르면 ModuleNotFoundError로 죽는다 — mcp-config.js의 PYTHON_EXE와 같은 경로를 쓴다.
@@ -31,8 +44,7 @@ const VENV_PYTHON = path.join(BACKEND, '.venv', 'Scripts', 'python.exe');
 const FIXTURE_PYTHON = process.env.ATHENA_FIXTURE_PYTHON
   || (fs.existsSync(VENV_PYTHON) ? VENV_PYTHON : 'python');
 
-fs.mkdirSync(CAPTURE_DIR, { recursive: true });
-app.setPath('userData', path.join(CAPTURE_DIR, '.electron-user-data'));
+app.setPath('userData', path.join(CAPTURE_OUTPUT_DIR, '.electron-user-data'));
 app.disableHardwareAcceleration();
 
 function loadBundle() {
@@ -1311,9 +1323,10 @@ async function exerciseBoardRealtime(win, manager, surface) {
 // 앉는가)은 색인이 갖고 있으므로 봉투는 board_id·card_id·값만 나른다.
 const DEFAULT_REAL_BOARDS = DEFAULT_READABILITY_BOARD_IDS;
 const REAL_BOARD_TEMPLATE_ROOT = path.join(BACKEND, 'ref', 'card-surface-templates');
-const REAL_BOARDS = Object.freeze(
-  (process.env.ATHENA_VERIFY_BOARD_IDS || DEFAULT_REAL_BOARDS.join(','))
-    .split(',').map((boardId) => boardId.trim()).filter(Boolean),
+const BOARD_SELECTION = resolveBoardSelection(BOARD_SELECTION_OVERRIDE, DEFAULT_REAL_BOARDS);
+const REAL_BOARDS = Object.freeze(BOARD_SELECTION.boardIds);
+const EXPECTED_CANONICAL_BOARD_CAPTURES = Object.freeze(
+  expectedBoardCaptureNames(DEFAULT_REAL_BOARDS, BOARD_WINDOW_PRESETS),
 );
 
 function validateRealBoards() {
@@ -1331,9 +1344,11 @@ function validateRealBoards() {
 }
 
 function loadRealBoardContract(boardId, ordinal) {
-  const slots = JSON.parse(fs.readFileSync(
-    path.join(BACKEND, 'ref', 'card-surface-templates', boardId, 'slots.json'), 'utf8',
-  ));
+  const templateDirectory = path.join(BACKEND, 'ref', 'card-surface-templates', boardId);
+  const slots = JSON.parse(fs.readFileSync(path.join(templateDirectory, 'slots.json'), 'utf8'));
+  const regions = JSON.parse(fs.readFileSync(path.join(templateDirectory, 'regions.json'), 'utf8'));
+  const boardHtml = fs.readFileSync(path.join(templateDirectory, 'board.html'), 'utf8');
+  assertReadabilityManifest(regions, boardHtml);
   const slotValues = {};
   for (const slot of slots.slots) {
     if (typeof slot.paper_text === 'string' && slot.paper_text !== '') {
@@ -1378,11 +1393,11 @@ async function captureBoardSteps(win, surface) {
       if (probe.error) throw new Error(`board ${surface.boardId} ${preset.name}: ${probe.error}`);
       // 스트립 자체의 overflow-x:auto는 허용하지만 표면 넘침·수직 겹침은 실패다.
       assertSurfaceGeometry(surface.boardId, preset, probe);
-      assertReadability(surface.boardId, preset, probe, { enforce: false });
+      assertReadability(surface.boardId, preset, probe, { enforce: true });
       const image = await win.webContents.capturePage(probe.card_rect);
       const png = image.toPNG();
       const file = `board-${surface.boardId}-${preset.width}x${preset.height}.png`;
-      fs.writeFileSync(path.join(CAPTURE_DIR, file), png);
+      fs.writeFileSync(path.join(CAPTURE_OUTPUT_DIR, file), png);
       steps.push({
         preset: preset.name,
         window: { width: preset.width, height: preset.height },
@@ -1430,7 +1445,7 @@ async function captureBoardSteps(win, surface) {
       }
       assertSurfaceGeometry(surface.boardId, preset, probe);
       assertBreakpointContract(surface.boardId, preset, probe);
-      assertReadability(surface.boardId, preset, probe, { enforce: false });
+      assertReadability(surface.boardId, preset, probe, { enforce: true });
       breakpointProbes.push({
         preset: preset.name,
         window: { width: preset.width, height: preset.height },
@@ -1734,7 +1749,7 @@ async function captureShellCard(win, card) {
     const png = image.toPNG();
     const variant = detailOpen ? 'detail' : 'summary';
     const file = `${card.card_id}-${variant}.png`;
-    fs.writeFileSync(path.join(CAPTURE_DIR, file), png);
+    fs.writeFileSync(path.join(CAPTURE_OUTPUT_DIR, file), png);
     screenshots.push({
       variant, file, sha256: sha256(png), dimensions: image.getSize(), captureState,
     });
@@ -1785,7 +1800,7 @@ async function inspect(win, cardId, detailOpen, expectedFields, expectedOperatio
   const png = image.toPNG();
   const variant = detailOpen ? 'detail' : 'summary';
   const fileName = `${cardId}-${variant}.png`;
-  fs.writeFileSync(path.join(CAPTURE_DIR, fileName), png);
+  fs.writeFileSync(path.join(CAPTURE_OUTPUT_DIR, fileName), png);
   return {
     variant,
     file: fileName,
@@ -1797,6 +1812,14 @@ async function inspect(win, cardId, detailOpen, expectedFields, expectedOperatio
 
 async function main() {
   validateRealBoards();
+  const prunedBoardCaptures = CANONICAL_CAPTURE_RUN
+    ? pruneUnexpectedBoardCaptures({
+      captureDir: CAPTURE_OUTPUT_DIR,
+      canonicalCaptureDir: CAPTURE_DIR,
+      expectedNames: EXPECTED_CANONICAL_BOARD_CAPTURES,
+      allowedStaleNames: KNOWN_STALE_BOARD_CAPTURE_NAMES,
+    })
+    : [];
   const bundle = loadBundle();
   const semanticContracts = loadProductionSemanticContracts();
   if (
@@ -1809,7 +1832,6 @@ async function main() {
   }
 
   await app.whenReady();
-  fs.mkdirSync(CAPTURE_DIR, { recursive: true });
   const shellIpcRecords = [];
   const win = new BrowserWindow({
     width: 1800,
@@ -1869,6 +1891,15 @@ async function main() {
       fixture_only: true,
       external_calls_allowed: false,
       blocked_external_requests: 0,
+      readability_gate: {
+        enforced: true,
+        canonical: CANONICAL_CAPTURE_RUN,
+        board_ids: [...REAL_BOARDS],
+      },
+      capture_hygiene: {
+        canonical: CANONICAL_CAPTURE_RUN,
+        pruned_before_run: prunedBoardCaptures,
+      },
       totals: {
         cards: bundle.cards.length,
         operations: bundle.operation_count,
@@ -2038,6 +2069,23 @@ async function main() {
     report.actual_shell_board_responsive = await captureBoardResponsive(
       win, semanticContracts, shellRealtimeManager,
     );
+    if (CANONICAL_CAPTURE_RUN) {
+      const boards = report.actual_shell_board_responsive.boards;
+      Object.assign(report.readability_gate, assertReadabilityMatrix(boards, {
+        expectedBoardIds: DEFAULT_REAL_BOARDS,
+        stepPresets: BOARD_WINDOW_PRESETS,
+        breakpointPresets: BOARD_BREAKPOINT_PROBE_PRESETS,
+      }));
+      const reportBoardCaptureRecords = boards.flatMap(
+        (board) => board.steps,
+      );
+      Object.assign(report.capture_hygiene, assertBoardCaptureArtifacts({
+        captureDir: CAPTURE_OUTPUT_DIR,
+        canonicalCaptureDir: CAPTURE_DIR,
+        expectedNames: EXPECTED_CANONICAL_BOARD_CAPTURES,
+        records: reportBoardCaptureRecords,
+      }));
+    }
 
     await win.webContents.executeJavaScript('window.AthenaShell.clearCanvases()');
     const mountedLeaseIds = [...new Set(shellIpcRecords
@@ -2072,7 +2120,7 @@ async function main() {
     report.shell_ipc_trace = shellIpcRecords.filter((item) =>
       item.channel.startsWith('athena:integrated-card-realtime'));
     report.blocked_external_requests = blockedExternalRequests;
-    const reportPath = path.join(CAPTURE_DIR, 'VERIFY-INTEGRATED-CARDS.json');
+    const reportPath = path.join(CAPTURE_OUTPUT_DIR, 'VERIFY-INTEGRATED-CARDS.json');
     fs.writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`);
     console.log(JSON.stringify({ reportPath, ...report.totals }, null, 2));
   } finally {
