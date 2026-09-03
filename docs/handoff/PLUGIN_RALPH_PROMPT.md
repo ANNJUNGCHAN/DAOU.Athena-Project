@@ -2,10 +2,12 @@
 
 아래 순서대로 한다. ①은 **보내는 컴퓨터**, ②③은 **받는 컴퓨터**에서 한다.
 
-## ① 보내는 컴퓨터 (한 번)
+## ① 보내는 컴퓨터 (한 번) — **완료됨(2026-09-03)**
+
+브랜치는 이미 `origin/feat/plugin-mode-doctrine`에 있다. 보내는 컴퓨터에서 더 커밋했다면 다시 push한다:
 
 ```bash
-cd C:/Projects/DAOU.Athena-plugin && git push -u origin feat/plugin-mode-doctrine
+cd C:/Projects/DAOU.Athena-plugin && git push origin feat/plugin-mode-doctrine
 ```
 
 ## ② 받는 컴퓨터 — 터미널 준비 (Claude Code 열기 전)
@@ -39,7 +41,7 @@ cd app && npm run test:unit 2>&1 | tail -n 8
 ````
 ralph — 플러그인 모드 기조 정렬 트랙을 이어받아 끝까지 구현한다.
 
-[저장소·브랜치] cwd는 저장소 루트이고 브랜치는 feat/plugin-mode-doctrine(HEAD 6e4eb03 이상)이다. main으로 전환하거나 main에 커밋하지 않는다.
+[저장소·브랜치] cwd는 저장소 루트이고 브랜치는 feat/plugin-mode-doctrine(HEAD 69b54e0 이상, origin에서 받은 것)이다. main으로 전환하거나 main에 커밋하지 않는다.
 
 [정본 — 이 순서로 먼저 읽는다]
 1. docs/handoff/2026-09-03-plugin-mode-doctrine.md — 특히 §6(계획 문면과 다른 편차 10건)과 §7(사용자 결정, 되묻지 않는다)
