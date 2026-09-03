@@ -82,6 +82,19 @@
 .bs-primary { min-width: 0; }
 .bs-rail { min-width: 0; }
 
+/* scroll owner는 추출기가 role/이름/tabindex를 책임진다. outline은 박스 크기를
+ * 바꾸지 않으므로 XL Paper geometry를 유지하면서 키보드 위치를 드러낸다. */
+.bs-r-scroll:focus-visible {
+  outline: 2px solid var(--color-k-text);
+  outline-offset: -2px;
+}
+
+/* canvas가 responsive group 안의 plain Paper leaf에만 role=button을 보강한다. */
+:is(.bs-r-flow, .bs-r-scroll) [data-state-board][role="button"]:focus-visible {
+  outline: 2px solid var(--color-k-text);
+  outline-offset: 2px;
+}
+
 /* 숫자 줄바꿈은 여기서 손대지 않는다 — 실측 결과. Paper 원문은 보드 루트에
  * `overflow-wrap: anywhere`를 실어 한 글자에서도 줄을 바꾼다. 보드가 Paper 폭보다
  * 좁아지면 "150,850"이 "150,85 / 0"으로 끊긴다(실측 2R3M-1 컨테이너 1171px).
@@ -133,6 +146,15 @@
    * 줄 전체가 나눠 진다(다른 칸은 이미 shrink가 풀려 있다). */
   .bs-kpi-cell[data-bs-kpi-elastic="true"] { min-width: 160px; }
 
+  /* 의미 단위가 먼저 다음 줄로 이동하고, 단위 안의 글자는 쪼개지지 않는다.
+   * 값 표시는 responsive owner 밖에서도 쓰이므로 반드시 owner 아래로 한정한다. */
+  .bs-r-flow { flex-wrap: wrap; }
+  .bs-r-flow > * { flex-shrink: 0; }
+  :is(.bs-r-flow, .bs-r-scroll) :is(.bs-r-atomic, [data-bs-value-atomic="true"]) {
+    white-space: nowrap;
+    overflow-wrap: normal;
+  }
+
   /* Paper 원문은 primary에 고정 폭과 `flex-shrink: 0`을 함께 싣는다(실보드 6장
    * 전수 실측 — 900·820·880·880·824·420px). 레일만 360px로 줄이면 primary가
    * 그대로 서 있어 합이 컨테이너를 넘는다(실측 overflow_x 89~148px). L부터는
@@ -164,6 +186,8 @@
   .bs-kpi { flex-wrap: wrap; }
   .bs-kpi-cell { width: auto; flex-basis: calc(33.3333% - 24px); flex-grow: 1; }
   .bs-strip { overflow-x: auto; }
+  .bs-r-scroll { min-width: 0; max-width: 100%; overflow-x: auto; }
+  .bs-r-scroll > * { flex-shrink: 0; min-width: max-content; }
   /* 스트립은 좁아지면 가로로 스크롤한다(바로 위). 칩까지 같이 줄어들면 스크롤할
    * 것이 없어지고 글자만 한 자씩 세로로 눕는다 — 한국어 원문이 `overflow-wrap:
    * anywhere`라 자동 최소 크기가 한 글자다(실측 컨테이너 377px에서 칩 7개 전부). */
