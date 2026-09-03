@@ -98,6 +98,18 @@ def _read_text_if_exists(path: Path) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
 
 
+def _with_node_io(jobdir: Path, result: dict[str, Any]) -> dict[str, Any]:
+    """자식이 계측 산출물을 남겼으면 결과에 실어준다.
+
+    `trace_names` 없이 돌면 파일 자체가 없고 결과 dict도 예전과 같다 — 키가 생기지 않는다.
+    오류·타임아웃 경로에서도 같은 통로를 쓴다(부분 기록도 화면에 붙어야 한다).
+    """
+    path = jobdir / "node_io.json"
+    if path.exists():
+        result["node_io"] = json.loads(path.read_text(encoding="utf-8"))
+    return result
+
+
 def run_strategy(
     jobdir: Path,
     strategy_source: str,
@@ -108,6 +120,7 @@ def run_strategy(
     stdout_cap_bytes: int = DEFAULT_STDOUT_CAP_BYTES,
     python_exe: str | None = None,
     allowed_imports: Sequence[str] | None = None,
+    trace_names: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     """전략 코드를 별도 프로세스에서 돌리고 결과를 회수한다 (§7.2 다이어그램).
 
@@ -119,7 +132,12 @@ def run_strategy(
     허용목록을 넓힌다. **차단목록은 자식이 다시 적용한다**(guard.py) — 넓히는 쪽 값이
     이 프로세스에서 오더라도 os·subprocess 같은 이름이 열리지는 않는다.
 
-    반환: `{ok, signals_df, stdout, error, elapsed}`.
+    `trace_names`는 계측할 최상위 함수 이름들이다(선택). 주면 spec.json에 실려 자식이
+    그 이름의 함수만 기록 래퍼로 갈아 끼우고 `node_io.json`을 남긴다 — 주지 않으면
+    spec.json에 키 자체가 생기지 않고 자식 동작도 예전과 같다.
+
+    반환: `{ok, signals_df, stdout, error, elapsed}` (+ 자식이 `node_io.json`을 남겼으면
+    `node_io`).
     - `ok=True`  → `signals_df`에 결과, `error`는 None.
     - `ok=False` → `signals_df`는 None, `error`에 `{type, message, traceback}`.
     타임아웃이면 프로세스(트리)를 강제 종료하고 `error.type == "TimeoutError"`로 보고한다.
@@ -128,6 +146,8 @@ def run_strategy(
     spec_payload: dict[str, Any] = {"params": params, "stdout_cap_bytes": stdout_cap_bytes}
     if allowed_imports is not None:
         spec_payload["allowed_imports"] = list(allowed_imports)
+    if trace_names:
+        spec_payload["trace_names"] = list(trace_names)
     (jobdir / "spec.json").write_text(
         json.dumps(spec_payload, ensure_ascii=False), encoding="utf-8"
     )
@@ -169,24 +189,30 @@ def run_strategy(
             "message": f"{timeout}초 안에 끝나지 않아 강제 종료됨",
             "traceback": "",
         }
-        return {
-            "ok": False,
-            "signals_df": None,
-            "stdout": stdout_text,
-            "error": error,
-            "elapsed": elapsed,
-        }
+        return _with_node_io(
+            jobdir,
+            {
+                "ok": False,
+                "signals_df": None,
+                "stdout": stdout_text,
+                "error": error,
+                "elapsed": elapsed,
+            },
+        )
 
     error_path = jobdir / "error.json"
     if error_path.exists():
         error = json.loads(error_path.read_text(encoding="utf-8"))
-        return {
-            "ok": False,
-            "signals_df": None,
-            "stdout": stdout_text,
-            "error": error,
-            "elapsed": elapsed,
-        }
+        return _with_node_io(
+            jobdir,
+            {
+                "ok": False,
+                "signals_df": None,
+                "stdout": stdout_text,
+                "error": error,
+                "elapsed": elapsed,
+            },
+        )
 
     signals_path = jobdir / "signals.csv"
     if not signals_path.exists():
@@ -196,19 +222,25 @@ def run_strategy(
             "message": f"signals.csv도 error.json도 없이 종료됨(returncode={proc.returncode})",
             "traceback": detail,
         }
-        return {
-            "ok": False,
-            "signals_df": None,
-            "stdout": stdout_text,
-            "error": error,
-            "elapsed": elapsed,
-        }
+        return _with_node_io(
+            jobdir,
+            {
+                "ok": False,
+                "signals_df": None,
+                "stdout": stdout_text,
+                "error": error,
+                "elapsed": elapsed,
+            },
+        )
 
     signals_df = pd.read_csv(signals_path, index_col=0, parse_dates=True)
-    return {
-        "ok": True,
-        "signals_df": signals_df,
-        "stdout": stdout_text,
-        "error": None,
-        "elapsed": elapsed,
-    }
+    return _with_node_io(
+        jobdir,
+        {
+            "ok": True,
+            "signals_df": signals_df,
+            "stdout": stdout_text,
+            "error": None,
+            "elapsed": elapsed,
+        },
+    )

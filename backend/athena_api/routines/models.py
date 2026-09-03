@@ -16,8 +16,8 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from typing import Any, Literal
 
-Transport = Literal["ws", "periodic", "clock"]
-Mode = Literal["realtime-ws", "periodic", "scheduled"]
+Transport = Literal["ws", "periodic", "clock", "code"]
+Mode = Literal["realtime-ws", "periodic", "scheduled", "code-watch"]
 
 _NUM_OPS = ("<", "<=", ">", ">=")
 _EQ_OPS = ("==",)
@@ -48,6 +48,10 @@ SOURCES: dict[str, SourceSpec] = {
     ),
     "vi.triggered": SourceSpec("ws", "bool", _EQ_OPS, "VI 발동"),
     "schedule.daily": SourceSpec("clock", "string", _AT_OPS, "예약 시각(요일 지정)"),
+    # 코드 감시 — 관측값은 감시 함수의 마지막 행 판정(bool) 하나뿐이다.
+    # 조건에는 코드가 들어가지 않는다: 코드는 프로젝트 폴더의 파일이고
+    # 스펙은 WatchSpec으로 그 파일을 가리키기만 한다(R5).
+    "code.watch": SourceSpec("code", "bool", _EQ_OPS, "코드 감시"),
 }
 
 # 저장된 구버전 루틴을 읽고 사용자에게 상태를 설명하기 위한 전용 카탈로그다.
@@ -95,6 +99,7 @@ _TRANSPORT_TO_MODE: dict[Transport, Mode] = {
     "ws": "realtime-ws",
     "periodic": "periodic",
     "clock": "scheduled",
+    "code": "code-watch",
 }
 
 
@@ -138,6 +143,47 @@ def parse_schedule_value(value: str) -> tuple[frozenset[int] | None, str] | None
     return days, hhmm
 
 
+@dataclass(frozen=True)
+class WatchSpec:
+    """코드 감시 알람이 가리키는 감시 함수 파일 한 건.
+
+    코드 원문은 여기 없다 — 프로젝트 폴더 안 `watch/<이름>.py`가 원본이고,
+    이 스펙은 경로와 검사 시점의 내용 해시만 쥔다(R5). `version_hash`가
+    달라지면 검사 뒤 코드가 바뀐 것이므로 활성화가 막힌다.
+    """
+
+    project_id: str
+    path: str  # 프로젝트 상대 POSIX 경로 — 'watch/'로 시작하는 .py
+    version_hash: str  # 검사 통과 시점 파일 바이트의 sha256
+    params: dict[str, Any] = field(default_factory=dict)
+    poll_interval_s: int = 60
+    lookback_days: int = 30
+    last_fired_at: str | None = None  # ISO8601 — 재시작 쿨다운 복원용(B-20)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "project_id": self.project_id,
+            "path": self.path,
+            "version_hash": self.version_hash,
+            "params": dict(self.params),
+            "poll_interval_s": self.poll_interval_s,
+            "lookback_days": self.lookback_days,
+            "last_fired_at": self.last_fired_at,
+        }
+
+    @classmethod
+    def from_dict(cls, raw: dict[str, Any]) -> WatchSpec:
+        return cls(
+            project_id=raw["project_id"],
+            path=raw["path"],
+            version_hash=raw["version_hash"],
+            params=dict(raw.get("params") or {}),
+            poll_interval_s=int(raw.get("poll_interval_s", 60)),
+            lookback_days=int(raw.get("lookback_days", 30)),
+            last_fired_at=raw.get("last_fired_at"),
+        )
+
+
 def _utcnow() -> datetime:
     return datetime.now(UTC)
 
@@ -160,6 +206,8 @@ class RoutineSpec:
     # 검증은 rules.validate_draft()가 담당한다(app/lib/main/model-prefs.js와 동기화).
     briefing_model: str | None = None
     briefing_effort: str | None = None
+    # 코드 감시(code.watch) 전용 — 그 밖의 소스에서는 항상 None이다.
+    watch: WatchSpec | None = None
 
     @property
     def mode(self) -> Mode:
@@ -171,6 +219,7 @@ class RoutineSpec:
             "realtime-ws": "실시간 (WS) — 틱 즉시",
             "periodic": "주기 확인 — 최대 폴링 주기만큼 지연",
             "scheduled": "예약 — 지정 요일·시각",
+            "code-watch": "코드 감시 — 확인 주기마다 감시 함수 실행",
         }[self.mode]
         exp = " [실값 미확인 필드]" if spec.experimental else ""
         return (
@@ -179,7 +228,7 @@ class RoutineSpec:
         )
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        data: dict[str, Any] = {
             "id": self.id,
             "symbol": self.symbol,
             "condition": self.condition.to_dict(),
@@ -194,6 +243,9 @@ class RoutineSpec:
             "briefing_model": self.briefing_model,
             "briefing_effort": self.briefing_effort,
         }
+        if self.watch is not None:
+            data["watch"] = self.watch.to_dict()
+        return data
 
     @classmethod
     def from_dict(cls, raw: dict[str, Any]) -> RoutineSpec:
@@ -219,6 +271,9 @@ class RoutineSpec:
             # 옛 jsonl에는 키 자체가 없다 — .get()으로 하위호환.
             briefing_model=raw.get("briefing_model"),
             briefing_effort=raw.get("briefing_effort"),
+            watch=(
+                WatchSpec.from_dict(raw["watch"]) if raw.get("watch") else None
+            ),
         )
 
     def is_expired(self, now: datetime | None = None) -> bool:
@@ -226,5 +281,10 @@ class RoutineSpec:
 
 
 MAX_EXPIRY = timedelta(days=30)
+# 코드 감시 확인 주기 하한은 쿨다운 하한과 같다 — 더 자주 봐야 쿨다운이 삼킨다.
+WATCH_MIN_POLL_S = 60
+WATCH_MAX_POLL_S = 600
+WATCH_MIN_LOOKBACK_DAYS = 7
+WATCH_MAX_LOOKBACK_DAYS = 90
 MIN_COOLDOWN_S = 60
 MAX_COOLDOWN_S = 86_400

@@ -1,0 +1,13 @@
+ + pytest-xdist==3.8.0
+ + respx==0.23.1
+ + ruff==0.16.3
+FAILED tests/unit/test_selector_autonomous_eval.py::test_semantic_gate_cannot_pass_with_a_hidden_critical_failure
+FAILED tests/unit/test_selector_autonomous_eval.py::test_correct_retrieval_top1_cannot_hide_policy_abstention
+FAILED tests/unit/test_selector_autonomous_eval.py::test_sealed_partition_does_not_depend_on_public_anchor_case_ids
+FAILED tests/unit/test_selector_autonomous_eval.py::test_autonomous_expansion_full_evaluation_gate_covers_every_case
+FAILED tests/unit/test_selector_autonomous_eval.py::test_sealed_cli_writes_manifest_before_evaluation_failure
+FAILED tests/unit/test_selector_autonomous_eval.py::test_all_critical_semantic_groups_are_green
+FAILED tests/unit/test_selector_autonomous_eval.py::test_ablation_runtime_restores_baseline_deterministically
+32 failed, 3137 passed, 6 skipped, 1 warning in 851.14s (0:14:11)
+
+[exited with code 0]
