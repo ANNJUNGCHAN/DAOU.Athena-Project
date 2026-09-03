@@ -12,6 +12,10 @@
 > 렌더러 순수 모듈 · Paper 9장)까지 커밋됐고 US-003(메인 프로세스)부터 남았다. 계획·명세·PRD·baseline은
 > [plugin-mode-doctrine/](./plugin-mode-doctrine/)에 회수돼 있다.
 
+> 🟣 **2026-09-03 백테스트 시각 설계 ↔ 코드 왕복이 들어갔다.** 지도 탭이 편집 가능한 그래프가 되고
+> 코드는 지도에서 생성된다. 계약·검증법·남은 P4는
+> [2026-09-03-visual-strategy-roundtrip.md](./2026-09-03-visual-strategy-roundtrip.md)에 있다.
+
 > 🔴 **2026-09-01 정규장에 실 키움(모의투자) 연결을 처음으로 검증했다.**
 > 결과·provenance 분류·새로 찾은 결함은
 > [2026-09-01-live-market-verification.md](./2026-09-01-live-market-verification.md)에 있다.

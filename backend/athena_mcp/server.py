@@ -35,6 +35,7 @@ from athena_mcp import (
     backtest_tools,
     brain_tools,
     canvas_data,
+    graph_view_tools,
     nudge_guard_tools,
     plugin_tools,
     quirks,
@@ -397,6 +398,14 @@ class AthenaGateway:
             result = await brain_tools.dispatch(arguments, self.selector_http_client)
             self._audit_log("brain").record(
                 "brain", brain_tools.BRAIN_TOOL, success=not result.isError
+            )
+            return result
+        if name == graph_view_tools.GRAPH_VIEW_TOOL:
+            # 같은 빌트인 우선순위. **http_client를 넘기지 않는다** — 이 도구는
+            # 백엔드를 타지 않고 렌더러로 갈 봉투만 만든다(graph_view_tools.py 참고).
+            result = await graph_view_tools.dispatch(arguments)
+            self._audit_log("graph-view").record(
+                "graph-view", graph_view_tools.GRAPH_VIEW_TOOL, success=not result.isError
             )
             return result
         if name == nudge_guard_tools.NUDGE_GUARD_TOOL:
@@ -762,6 +771,11 @@ def _builtin_tool_defs() -> list[types.Tool]:
         # (brain_tools.py 참고): 모델이 그래프에 직접 쓸 수 있으면 대화 티어가
         # 자기 주장을 결정적 사실처럼 밀어 넣는 길이 생긴다.
         *brain_tools.builtin_tool_defs(),
+        # 그래프 화면 제어 툴(2026-09-03) — 백엔드를 타지 않고 렌더러로 갈 봉투만
+        # 만든다. brain_tools의 "읽기 전용" 계약을 흐리지 않으려고 별 도구로 뒀다:
+        # 그래프에 쓰지 않는 것과 화면을 바꾸지 않는 것은 다른 이야기다.
+        # propose_edit도 쓰기가 아니다 — 확정 카드를 띄우고 사람이 누른다.
+        *graph_view_tools.builtin_tool_defs(),
         # 말걸기 가드 설정 제안·조회 툴(F4) — routine_tools와 같은 범주.
         # propose/get만 — 저장은 사람 전용(nudge_guard_tools.py 참고).
         *nudge_guard_tools.builtin_tool_defs(),

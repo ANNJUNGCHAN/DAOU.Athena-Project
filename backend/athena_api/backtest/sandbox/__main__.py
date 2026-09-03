@@ -1,14 +1,15 @@
 """샌드박스 자식 진입점 — 별도 프로세스에서만 실행된다 (§7.2).
 
-진입: `python -I -B -m athena_api.backtest.sandbox <jobdir>`. host.py가 이 명령으로만
-띄운다 — 사람이 직접 부를 일이 없다.
+진입: `python -s -P -B -m athena_api.backtest.sandbox <jobdir>`. host.py가 이 명령으로만
+띄운다 — 사람이 직접 부를 일이 없다(플래그를 고른 이유는 host.py `_CHILD_FLAGS`).
 
 책임은 signals 생성까지다. 체결·비용·성과 계산·DB 쓰기는 전부 부모(engine.py)의 몫이고,
 이 프로세스는 DB 핸들도 자격증명도 받지 않는다 — 전략 코드가 성과 수치를 직접 쓸 방법이
 구조적으로 없다.
 
-프로토콜: jobdir에서 spec.json(파라미터 값 + stdout 상한) · bars.csv(OHLCV) · strategy.py
-(사용자 코드)를 읽고, jobdir에 signals.csv(성공) 또는 error.json(실패)과 stdout.txt를 쓴다.
+프로토콜: jobdir에서 spec.json(파라미터 값 + stdout 상한 + 선택적 allowed_imports) ·
+bars.csv(OHLCV) · strategy.py(사용자 코드)를 읽고, jobdir에 signals.csv(성공) 또는
+error.json(실패)과 stdout.txt를 쓴다.
 """
 
 from __future__ import annotations
@@ -47,6 +48,31 @@ def _write_stdout(jobdir: Path, text: str, cap_bytes: int) -> None:
     (jobdir / "stdout.txt").write_text(text, encoding="utf-8")
 
 
+
+def _coerce_signals(result: object) -> object:
+    """(entry, exit) 튜플·리스트나 {"entry":…, "exit":…} dict도 DataFrame으로 받아준다.
+
+    모델이 짠 전략 코드가 시리즈 둘을 튜플로 돌려주는 일이 잦다(2026-09-02 실채팅 시나리오
+    실측 — 그 한 번의 계약 위반이 오류→진단 경로로 빠졌다). 계약 문서는 DataFrame 그대로지만,
+    뜻이 분명한 모양은 여기서 흡수한다. 그 밖의 값은 그대로 돌려보내 기존 TypeError가 난다.
+    """
+    if isinstance(result, pd.DataFrame):
+        return result
+    if (
+        isinstance(result, (tuple, list))
+        and len(result) == 2
+        and all(isinstance(s, pd.Series) for s in result)
+    ):
+        return pd.DataFrame({"entry": result[0], "exit": result[1]})
+    if (
+        isinstance(result, dict)
+        and {"entry", "exit"} <= set(result)
+        and all(isinstance(result[k], pd.Series) for k in ("entry", "exit"))
+    ):
+        return pd.DataFrame({"entry": result["entry"], "exit": result["exit"]})
+    return result
+
+
 def main(argv: list[str]) -> int:
     if len(argv) != 2:
         print("usage: python -m athena_api.backtest.sandbox <jobdir>", file=sys.stderr)
@@ -72,7 +98,9 @@ def main(argv: list[str]) -> int:
         source = strategy_path.read_text(encoding="utf-8")
 
         strategy_globals: dict = {"__name__": "__athena_strategy__"}
-        guard.install(strategy_globals, jobdir)
+        # 프로젝트 가상환경으로 돌 때 host가 그 환경의 패키지 이름을 실어 보낸다. 넓히는
+        # 값이지만 guard의 차단목록이 그 위에 다시 적용된다 — os·subprocess는 여기로 못 들어온다.
+        guard.install(strategy_globals, jobdir, allowed_imports=spec.get("allowed_imports"))
 
         code = compile(source, str(strategy_path), "exec")
         exec(code, strategy_globals)  # noqa: S102 — 이 프로세스의 존재 이유 자체가 이 실행이다.
@@ -81,7 +109,7 @@ def main(argv: list[str]) -> int:
         if not callable(signals_fn):
             raise ValueError("전략 코드에 signals(df, p) 함수가 없다")
 
-        result = signals_fn(bars, params)
+        result = _coerce_signals(signals_fn(bars, params))
         if not isinstance(result, pd.DataFrame):
             raise TypeError("signals()는 DataFrame을 반환해야 한다")
         missing = {"entry", "exit"} - set(result.columns)

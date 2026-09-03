@@ -4,7 +4,7 @@
 // 테마 군집 섹션(보드 06 §8 / 07 §8-2). cluster-map 페이로드({nodes, cluster_cohesion})를
 // 군집별로 집계해 카드로 그린다. 기존 3개 모듈(store/layout/render)이 다루지
 // 않는 새 데이터(군집별 집계·이름)라 새 leaf 모듈로 둔다(원칙1) — 다만 집계
-// 로직 자체는 cluster-layout.js의 groupByCluster를 그대로 호출해 재사용한다,
+// 로직 자체는 cluster-grouping.js의 groupByCluster를 그대로 호출해 재사용한다,
 // 복붙하지 않는다.
 //
 // **이름 없는 군집(§0 발견1).** 군집에 이름을 붙이는 파이프라인이 백엔드
@@ -40,7 +40,7 @@ function shouldWarnUnnamed(namedCount, totalCount) {
 function groupThemeClusters(payload) {
   const nodes = Array.isArray(payload && payload.nodes) ? payload.nodes : [];
   if (nodes.length === 0) return [];
-  const groups = window.AthenaLib.GraphClusterLayout.groupByCluster(nodes);
+  const groups = window.AthenaLib.ClusterGrouping.groupByCluster(nodes);
   const cohesionByCluster = (payload && payload.cluster_cohesion) || null;
   const representativeByCluster = (payload && payload.cluster_representative_labels) || null;
   const aiLabelByCluster = (payload && payload.cluster_ai_labels) || null;
@@ -52,7 +52,7 @@ function groupThemeClusters(payload) {
       name: null, // §0 발견1 — 이름 파이프라인이 없다, 지어내지 않는다.
       cohesion: cohesionByCluster ? cohesionByCluster[group.cluster] : undefined,
       // 제목 사다리의 마지막 실단서 — 지도와 같은 값을 쓴다(위 representativeName).
-      representative: window.AthenaLib.GraphClusterLayout.representativeName(group.members)
+      representative: window.AthenaLib.ClusterGrouping.representativeName(group.members)
         || (representativeByCluster ? representativeByCluster[group.cluster] : undefined),
       // WP-F — LLM이 지은 **추정 이름**. name을 대체하지 않는다(아직 의미적으로
       // 100% 신뢰 가능한 이름이 아니다, G-F7) — "이름 없음" 배지·namedCount

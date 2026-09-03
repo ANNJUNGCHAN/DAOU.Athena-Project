@@ -32,12 +32,13 @@ def _payload(result) -> Any:
 # ── 툴 정의 ─────────────────────────────────────────────────────────────────
 
 
-def test_exactly_one_tool_with_five_read_only_actions() -> None:
+def test_exactly_one_tool_with_six_read_only_actions() -> None:
     defs = brain_tools.builtin_tool_defs()
     assert [tool.name for tool in defs] == ["athena_brain"]
     actions = defs[0].inputSchema["properties"]["action"]["enum"]
-    assert actions == ["profile", "god_nodes", "surprising", "questions", "diff"]
-    assert len(actions) == 5
+    # entity가 2026-09-03에 늘었다 — 노드 하나를 짚어 설명하는 읽기다.
+    assert actions == ["profile", "god_nodes", "surprising", "questions", "diff", "entity"]
+    assert len(actions) == 6
 
 
 def test_no_write_action_exists() -> None:
@@ -259,3 +260,105 @@ def test_default_http_client_omits_bearer_when_unconfigured(monkeypatch) -> None
         assert "Authorization" not in client.headers
     finally:
         del client
+
+
+# ── action=entity (2026-09-03, "이 노드 설명해줘") ───────────────────────────────
+
+
+async def test_entity_action_hits_the_detail_endpoint_with_the_name() -> None:
+    seen: list[tuple[str, dict[str, str]]] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append((request.url.path, dict(request.url.params)))
+        return httpx.Response(200, json={"resolved": True})
+
+    async with _client(handler) as client:
+        result = await brain_tools.dispatch(
+            {"action": "entity", "entity": "한미반도체", "limit": 20}, client
+        )
+
+    assert not result.isError
+    assert seen == [
+        ("/api/v1/brain/analysis/entity-detail", {"entity": "한미반도체", "limit": "20"})
+    ]
+
+
+async def test_entity_action_forwards_an_entity_id_unchanged() -> None:
+    """화면이 고른 노드는 id로 온다 — 이름으로 되돌리려 하면 안 된다."""
+    seen: dict[str, str] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.update(dict(request.url.params))
+        return httpx.Response(200, json={})
+
+    async with _client(handler) as client:
+        await brain_tools.dispatch({"action": "entity", "entity": "entity:abc123"}, client)
+
+    assert seen == {"entity": "entity:abc123"}
+
+
+@pytest.mark.parametrize("bad", [None, "", "   ", 7, True, [], {"name": "x"}])
+async def test_entity_action_without_a_usable_entity_is_blocked_before_the_backend(
+    bad: Any,
+) -> None:
+    """무엇을 설명할지 모르는 채로 백엔드를 부르면 422가 오고 모델은 이유를 모른다."""
+    called = False
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal called
+        called = True
+        return httpx.Response(200, json={})
+
+    async with _client(handler) as client:
+        arguments: dict[str, Any] = {"action": "entity"}
+        if bad is not None:
+            arguments["entity"] = bad
+        result = await brain_tools.dispatch(arguments, client)
+
+    assert result.isError
+    assert not called
+
+
+async def test_entity_is_not_forwarded_to_actions_that_do_not_take_it() -> None:
+    seen: dict[str, str] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.update(dict(request.url.params))
+        return httpx.Response(200, json={})
+
+    async with _client(handler) as client:
+        await brain_tools.dispatch(
+            {"action": "god_nodes", "entity": "한미반도체", "limit": 3}, client
+        )
+
+    assert seen == {"limit": "3"}
+
+
+async def test_booleans_are_not_smuggled_in_as_integers() -> None:
+    """파이썬에서 isinstance(True, int)는 참이다 — limit=True가 limit=1로 통하면 안 된다."""
+    seen: dict[str, str] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.update(dict(request.url.params))
+        return httpx.Response(200, json={})
+
+    async with _client(handler) as client:
+        await brain_tools.dispatch({"action": "god_nodes", "limit": True}, client)
+
+    assert seen == {}
+
+
+def test_the_description_tells_the_model_to_quote_the_source_excerpt() -> None:
+    """근거를 인용하라고 적지 않으면 모델이 rationale 요약만 되풀이한다."""
+    description = brain_tools.builtin_tool_defs()[0].description
+    assert "source.text" in description
+    assert "truncated" in description
+
+
+def test_the_new_action_is_still_a_read() -> None:
+    """entity가 늘어도 쓰기 부재 계약은 그대로다."""
+    for forbidden in ("write", "upsert", "merge", "delete", "reset", "ingest", "set"):
+        assert forbidden not in brain_tools._ALLOWED_ACTIONS
+        assert forbidden not in brain_tools._ROUTES
+    for path, _ in brain_tools._ROUTES.values():
+        assert "analysis" in path or "profile-summary" in path

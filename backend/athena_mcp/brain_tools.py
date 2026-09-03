@@ -8,7 +8,7 @@
 생긴다. 쓰기는 두 경로뿐이고 둘 다 사람의 행동에서 시작한다 — 채팅(`POST /brain/chat`
 → 추출)과 체결·잔고(계좌 피드 → 결정적 투영기). 이 부재는 테스트가 고정한다.
 
-노출하는 다섯:
+노출하는 여섯:
 
 | action | 답하는 질문 |
 |---|---|
@@ -17,9 +17,17 @@
 | `surprising` | 내가 못 본 연결은 어디인가 |
 | `questions` | 무엇을 되물어야 하는가 (불확실하다고 기록된 것) |
 | `diff` | 그 사이 무엇이 바뀌었나 |
+| `entity` | **이 노드는 왜 이렇게 기록됐나** (관계·근거·보강·이력·대화 원문 발췌) |
+
+`entity`가 2026-09-03에 늘었다. 그전까지 이 도구로는 "전체가 어떻게 생겼나"만 물을 수
+있었고 노드 하나를 짚어 설명할 수 없었다 — 화면의 공통 패널은 같은 질문에 답하는데
+모델에는 그 자료가 없어서, "이 노드 설명해줘"에 모델이 화면에 보이는 이름만 되풀이했다.
+관계마다 `source.text`(그 기록을 만든 원문 발췌)가 실려 오는 것이 이 액션의 요점이다:
+`rationale`은 추출기의 한 줄 요약이라 그것만으로는 요약의 요약을 말하게 된다.
 
 `cluster_map`은 일부러 뺐다. 그건 캔버스가 그리는 좌표 데이터고, 노드 수천 개를
-모델 컨텍스트에 쏟아 넣는 것은 답이 아니라 비용이다.
+모델 컨텍스트에 쏟아 넣는 것은 답이 아니라 비용이다. `entity`는 그 반대 방향이다 —
+노드 하나에 대해서만 깊게 준다.
 """
 
 from __future__ import annotations
@@ -47,6 +55,7 @@ _ALLOWED_ACTIONS: tuple[str, ...] = (
     "surprising",
     "questions",
     "diff",
+    "entity",
 )
 
 # 액션 → (경로, 허용 질의 인자)
@@ -56,7 +65,29 @@ _ROUTES: dict[str, tuple[str, tuple[str, ...]]] = {
     "surprising": ("/api/v1/brain/analysis/surprising-connections", ("limit",)),
     "questions": ("/api/v1/brain/analysis/suggested-questions", ("limit",)),
     "diff": ("/api/v1/brain/analysis/diff", ("from_revision",)),
+    "entity": ("/api/v1/brain/analysis/entity-detail", ("entity", "limit")),
 }
+
+# 인자별 기대 타입(2026-09-03). 이전에는 전부 정수라 `isinstance(v, int)` 한 줄이면
+# 됐는데 `entity`가 문자열이라 갈라야 한다. 키별로 못박는 이유는 느슨하게 "정수 또는
+# 문자열"로 두면 `limit="전부"` 같은 값이 그대로 백엔드에 실려 422가 되기 때문이다.
+# bool을 따로 막는 것도 같은 이유다 — 파이썬에서 `isinstance(True, int)`는 참이라
+# `limit=True`가 `limit=1`로 조용히 통한다.
+_PARAM_TYPES: dict[str, type] = {
+    "window_days": int,
+    "limit": int,
+    "from_revision": int,
+    "entity": str,
+}
+
+
+def _forwardable(key: str, value: Any) -> bool:
+    expected = _PARAM_TYPES.get(key)
+    if expected is None:
+        return False
+    if expected is int:
+        return isinstance(value, int) and not isinstance(value, bool)
+    return isinstance(value, expected) and bool(value.strip())
 
 _TIMEOUT_SECONDS = 15.0
 
@@ -72,7 +103,9 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "체결·잔고에서 왔는지 말해준다), "
                 "god_nodes = 중심 노드, surprising = 군집 경계를 넘는 연결, "
                 "questions = 불확실하다고 기록돼 되물을 만한 것, "
-                "diff = 특정 리비전 이후의 변화. 전부 읽기 전용이다 — "
+                "diff = 특정 리비전 이후의 변화, "
+                "entity = 노드 하나의 관계·근거·보강 횟수·변경 이력과 "
+                "그 기록을 만든 **대화 원문 발췌**. 전부 읽기 전용이다 — "
                 "그래프에 쓰는 액션은 존재하지 않는다."
             ),
         },
@@ -85,6 +118,15 @@ _INPUT_SCHEMA: dict[str, Any] = {
             "type": "integer",
             "description": "action=diff일 때 이 리비전 **이후**의 변화만.",
         },
+        "entity": {
+            "type": "string",
+            "description": (
+                "action=entity일 때 설명할 노드. 화면이 고른 노드가 있으면 그 "
+                "entity_id를, 사람이 이름으로 물었으면 그 이름을 그대로 넣는다. "
+                "이름이 여럿에 걸리면 resolved=false와 candidates가 오므로 "
+                "하나를 골라 단정하지 말고 어느 것인지 되물어라."
+            ),
+        },
     },
 }
 
@@ -94,7 +136,10 @@ _DESCRIPTION = (
     "profile 결과의 `tier`가 'deterministic'이면 체결·잔고에서 유도된 사실이고 "
     "'conversational'이면 대화에서 추론된 것이다 — 둘이 어긋나면 그 자체가 신호이니 "
     "사실인 것처럼 뭉뚱그리지 마라. `confidence`가 'AMBIGUOUS'인 항목은 확정된 성향이 "
-    "아니라 되물어야 할 것이다."
+    "아니라 되물어야 할 것이다. "
+    "노드 하나를 설명해 달라는 요청에는 action='entity'를 먼저 불러라 — 관계마다 "
+    "`source.text`(그 기록을 만든 대화·체결 원문 발췌)가 실려 오므로 근거를 인용할 수 "
+    "있다. `source.truncated`가 true면 잘린 발췌이니 전문인 것처럼 인용하지 마라."
 )
 
 
@@ -137,8 +182,13 @@ async def dispatch(
     params = {
         key: arguments[key]
         for key in allowed
-        if key in arguments and isinstance(arguments[key], int)
+        if key in arguments and _forwardable(key, arguments[key])
     }
+    if action == "entity" and "entity" not in params:
+        # 무엇을 설명할지 모르는 채로 백엔드를 부르면 422가 온다 — 여기서 말해 준다.
+        return _blocked(
+            "action='entity'는 entity(노드 이름 또는 entity_id 문자열)가 필요하다."
+        )
 
     try:
         response = await http_client.get(path, params=params, timeout=_TIMEOUT_SECONDS)

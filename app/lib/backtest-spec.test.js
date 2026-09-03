@@ -202,6 +202,152 @@ test('제대로 채운 스펙은 오류가 없다', () => {
   assert.deepEqual(spec.validate(ready()), []);
 });
 
+// ── 초안 적용(applyPatch) ────────────────────────────────────────────────────
+
+test('초안의 종목은 목록을 통째로 바꾼다 — 중복·형식 오류는 떨어뜨린다', () => {
+  const s = spec.applyPatch(ready(), { symbols: ['000660', '000660', '오류', '035420'] });
+  assert.deepEqual(s.symbols, ['000660', '035420']);
+});
+
+test('초안의 주기는 day/week/month만 받는다', () => {
+  const s = ready();
+  assert.equal(spec.applyPatch(s, { period: 'hour' }).period, 'day');
+  assert.equal(spec.applyPatch(s, { period: 'week' }).period, 'week');
+});
+
+test('초안의 파라미터는 setParam을 거친다 — 범위 밖은 잘리고 모르는 이름은 무시된다', () => {
+  const s = spec.applyPatch(ready(), { params: { fast: 999, nope: 3 } });
+  assert.equal(s.params.fast.default, 60);
+  assert.equal(s.params.fast.max, 60);
+  assert.equal(s.params.nope, undefined);
+});
+
+test('초안의 지표는 목록을 통째로 바꾼다 — id·alias 없는 항목은 떨어뜨리고 params는 {}가 기본', () => {
+  const s = spec.applyPatch(ready(), {
+    indicators: [{ id: 'RSI', alias: 'rsi', params: { period: 14 } }, { id: 'EMA' }, { id: 'ATR', alias: 'atr' }],
+  });
+  assert.deepEqual(s.indicators, [
+    { id: 'RSI', alias: 'rsi', params: { period: 14 } },
+    { id: 'ATR', alias: 'atr', params: {} },
+  ]);
+});
+
+test('초안의 진입 조건은 그룹을 통째로 바꾼다 — 잘못된 조건은 떨어뜨리고 logic이 이상하면 기존 것을 지킨다', () => {
+  const s = spec.applyPatch(ready(), {
+    entry: {
+      logic: 'XOR',
+      conditions: [
+        { indicator: 'close', operator: 'greater_than', compare_to: 70 },
+        { indicator: 'close', operator: 'above', compare_to: 70 },
+        { indicator: 'close', operator: 'less_than', compare_to: { x: 1 } },
+        { operator: 'less_than', compare_to: 10 },
+      ],
+    },
+  });
+  assert.equal(s.entry.logic, 'AND');
+  assert.deepEqual(s.entry.conditions, [
+    { indicator: 'close', operator: 'greater_than', compare_to: 70 },
+  ]);
+  // 청산은 건드리지 않았으니 그대로다
+  assert.deepEqual(s.exit, ready().exit);
+});
+
+test('초안의 리스크는 키 단위로 깊게 합친다 — 건드리지 않은 토글은 그대로다', () => {
+  const s = spec.applyPatch(ready(), { risk: { take_profit: { enabled: true } } });
+  assert.deepEqual(s.risk.take_profit, { enabled: true, percent: 20 });
+  assert.deepEqual(s.risk.stop_loss, { enabled: true, percent: 8 });
+  assert.deepEqual(s.risk.position, { sizing: 'all_in' });
+});
+
+test('초안의 비용은 준 키만 합친다 — 숫자가 아니면 무시한다', () => {
+  const s = spec.applyPatch(ready(), { costs: { fee_bps: 3, tax_bps: 'x' } });
+  assert.deepEqual(s.costs, { fee_bps: 3, tax_bps: 18.0, slippage_bps: 5.0 });
+});
+
+test('초안의 compare_to가 숫자 문자열이면 숫자로 바꾼다 — 이름으로 오인돼 막히지 않게', () => {
+  const s = spec.applyPatch(ready(), {
+    entry: { logic: 'AND', conditions: [{ indicator: 'close', operator: 'less_than', compare_to: '30' }] },
+    exit: { logic: 'AND', conditions: [{ indicator: 'close', operator: 'greater_than', compare_to: 'ma_fast' }] },
+  });
+  assert.deepEqual(s.entry.conditions, [{ indicator: 'close', operator: 'less_than', compare_to: 30 }]);
+  assert.equal(s.exit.conditions[0].compare_to, 'ma_fast');
+  assert.deepEqual(spec.validate(s), []);
+});
+
+test('preset 키는 applyPatch가 무시한다 — 프리셋 선택은 캔버스 몫이다', () => {
+  const s = spec.applyPatch(ready(), { preset: 'other', fromDt: '20200101' });
+  assert.equal(s.presetId, 'sma_crossover');
+  assert.equal(s.name, 'SMA 골든크로스');
+  assert.equal(s.fromDt, '20200101');
+});
+
+test('patch가 null이거나 객체가 아니면 같은 스펙을 돌려준다', () => {
+  const s = ready();
+  assert.equal(spec.applyPatch(s, null), s);
+  assert.equal(spec.applyPatch(s, 'x'), s);
+});
+
+test('applyPatch는 원본을 바꾸지 않는다(불변)', () => {
+  const s = ready();
+  spec.applyPatch(s, {
+    symbols: ['000660'], params: { fast: 10 }, risk: { stop_loss: { enabled: false } }, costs: { fee_bps: 3 },
+  });
+  assert.deepEqual(s.symbols, ['005930']);
+  assert.equal(s.params.fast.default, 20);
+  assert.equal(s.risk.stop_loss.enabled, true);
+  assert.equal(s.costs.fee_bps, 1.5);
+});
+
+// ── 초안 차이(diffFields) ────────────────────────────────────────────────────
+
+test('diffFields는 patch 순서가 아니라 고정 순서·한글 라벨로 달라진 필드만 낸다', () => {
+  const before = ready();
+  const after = spec.applyPatch(before, {
+    costs: { fee_bps: 3 }, symbols: ['000660'], period: 'week', params: { fast: 10 },
+  });
+  const diff = spec.diffFields(before, after);
+  assert.deepEqual(diff.map((d) => [d.key, d.label]), [
+    ['symbols', '종목'], ['period', '주기'], ['params', '파라미터'], ['costs', '비용'],
+  ]);
+  assert.deepEqual(diff[0], { key: 'symbols', label: '종목', before: ['005930'], after: ['000660'] });
+});
+
+test('diffFields는 열두 필드를 모두 고정 순서로 낸다', () => {
+  const before = ready();
+  const after = Object.assign(spec.applyPatch(before, {
+    symbols: ['000660'], period: 'week', adjusted: false, fromDt: '20200101', toDt: '20201231',
+    params: { fast: 10 },
+    indicators: [{ id: 'RSI', alias: 'rsi', params: { period: 14 } }],
+    entry: { logic: 'OR', conditions: [{ indicator: 'rsi', operator: 'less_than', compare_to: 30 }] },
+    exit: { logic: 'AND', conditions: [{ indicator: 'rsi', operator: 'greater_than', compare_to: 70 }] },
+    risk: { take_profit: { enabled: true } },
+    costs: { fee_bps: 3 },
+  }), { name: '다른 전략' });
+  assert.deepEqual(spec.diffFields(before, after).map((d) => [d.key, d.label]), [
+    ['name', '전략'], ['symbols', '종목'], ['period', '주기'], ['adjusted', '수정주가'],
+    ['fromDt', '시작일'], ['toDt', '종료일'], ['params', '파라미터'], ['indicators', '지표'],
+    ['entry', '진입 조건'], ['exit', '청산 조건'], ['risk', '리스크'], ['costs', '비용'],
+  ]);
+});
+
+test('diffFields의 파라미터는 default 값만 비교하고 이름→값 객체로 낸다', () => {
+  const before = ready();
+  const diff = spec.diffFields(before, spec.setParam(before, 'slow', 100));
+  assert.deepEqual(diff, [{
+    key: 'params', label: '파라미터', before: { fast: 20, slow: 60 }, after: { fast: 20, slow: 100 },
+  }]);
+  // 범위(min/max)만 다른 것은 차이로 치지 않는다
+  const rangeOnly = JSON.parse(JSON.stringify(before));
+  rangeOnly.params.fast.max = 100;
+  assert.deepEqual(spec.diffFields(before, rangeOnly), []);
+});
+
+test('diffFields는 같은 스펙이면 빈 배열이다', () => {
+  const s = ready();
+  assert.deepEqual(spec.diffFields(s, s), []);
+  assert.deepEqual(spec.diffFields(s, JSON.parse(JSON.stringify(s))), []);
+});
+
 // ── 직렬화 ──────────────────────────────────────────────────────────────────
 
 test('yaml에 data·costs 블록이 항상 들어간다(프리셋 원문과의 차이)', () => {
@@ -253,4 +399,53 @@ test('왕복: 프리셋 → 스펙 → yaml → 다시 스펙이 같은 전략�
 
 test('오늘 날짜는 YYYYMMDD 8자리다', () => {
   assert.equal(spec.todayYyyymmdd(new Date(2026, 8, 1)), '20260901');
+});
+
+// ---------- 검증: 다중 출력 지표 · 코드 경로 ----------
+
+test('validate: 다중 출력 지표의 별칭_출력 이름은 아는 이름이다 — 52주 신고가 돌파(DONCHIAN)', () => {
+  const s = Object.assign(spec.createSpec(null), {
+    symbols: ['005930'], fromDt: '20240101', toDt: '20240630',
+    indicators: [{ id: 'DONCHIAN', alias: 'dc', params: { period: 240 } }],
+    entry: { logic: 'AND', conditions: [{ indicator: 'close', operator: 'greater_equal', compare_to: 'dc_upper' }] },
+    exit: { logic: 'AND', conditions: [{ indicator: 'close', operator: 'less_equal', compare_to: 'dc_lower' }] },
+  });
+  assert.deepEqual(spec.validate(s), []);
+  // 모르는 별칭은 여전히 잡는다.
+  s.exit.conditions[0].compare_to = 'bb_lower';
+  assert.deepEqual(spec.validate(s), ['bb_lower는 정의되지 않은 이름입니다']);
+});
+
+test('validate: conditions=false면 진입·청산 조건 검사를 건너뛰고 대상·기간만 본다', () => {
+  const s = Object.assign(spec.createSpec(null), {
+    symbols: [], fromDt: '20240101', toDt: '20240630',
+    entry: { logic: 'AND', conditions: [] },
+    exit: { logic: 'OR', conditions: [{ indicator: 'nope', operator: 'less_than', compare_to: 1 }] },
+  });
+  assert.deepEqual(spec.validate(s, { conditions: false }), ['종목을 하나 이상 고르세요']);
+  assert.equal(spec.validate(s).length, 3);   // 기본은 조건까지 본다(종목·빈 진입·모르는 이름)
+});
+
+test('validate: 종목이 둘 이상이면 실행 전에 알린다 — 백엔드 /runs는 1종목만 받는다', () => {
+  const s = Object.assign(spec.createSpec(null), {
+    symbols: ['005930', '000660'], fromDt: '20240101', toDt: '20240630',
+    entry: { logic: 'AND', conditions: [{ indicator: 'close', operator: 'greater_than', compare_to: 1 }] },
+    exit: { logic: 'OR', conditions: [{ indicator: 'close', operator: 'less_than', compare_to: 1 }] },
+  });
+  assert.deepEqual(spec.validate(s), ['실행은 종목 1개만 지원합니다 — 하나만 남기세요']);
+});
+
+test('toYaml: 조건이 없으면 빈 목록으로 적는다 — `conditions:`는 널이라 백엔드가 거절한다', () => {
+  const s = Object.assign(spec.createSpec(null), {
+    symbols: ['005930'], fromDt: '20240401', toDt: '20260801',
+    entry: { logic: 'AND', conditions: [] },
+    exit: { logic: 'OR', conditions: [] },
+  });
+  const y = spec.toYaml(s);
+  assert.match(y, /entry:\n\s+logic: AND\n\s+conditions: \[\]/);
+  assert.match(y, /exit:\n\s+logic: OR\n\s+conditions: \[\]/);
+  assert.ok(!/conditions:\s*\n\s*(exit|risk):/.test(y), '값 없는 conditions: 줄이 남으면 안 된다');
+  // 조건이 있으면 예전 그대로 목록 항목으로 적는다.
+  const withCond = spec.addCondition(s, 'entry', { indicator: 'close', operator: 'greater_than', compare_to: 1 });
+  assert.match(spec.toYaml(withCond), /conditions:\n\s+- \{indicator: close,/);
 });

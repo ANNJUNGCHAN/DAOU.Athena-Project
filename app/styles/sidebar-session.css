@@ -1,0 +1,200 @@
+/* 사이드바 — 세션 이력(Paper 35~43번 보드). shell.css는 다른 세션이 잡고 있어
+ * 이력 머리(모드 수·실행 스피너)·행 실행 점·프로젝트 추가·펜 모드 선택·폴더 삭제
+ * 확인·고정 표시는 여기서 입힌다. 색은 tokens.css의 값만 쓴다. */
+
+/* ---- 모드 옆 대화 수 — 이름에 딸린 숫자(배지 아님) ---- */
+.sidebar-mode-count {
+  margin-left: 4px;
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 1;
+}
+.sidebar-mode-item.is-active .sidebar-mode-count { color: inherit; opacity: 0.7; }
+
+/* ---- 실행 중 = 스피너(사용자 확정 "스피너로 통일") ---- */
+@keyframes sidebar-run-spin { to { transform: rotate(360deg); } }
+
+.sidebar-mode-item.has-running::after {
+  content: '';
+  width: 9px;
+  height: 9px;
+  margin-left: auto;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgb(16 19 26 / 15%);
+  border-top-color: #1ea446;
+  animation: sidebar-run-spin 0.9s linear infinite;
+}
+
+/* ---- 행의 점 하나로 읽는 네 가지 상태(39번 보드) ---- */
+.sidebar-item-run {
+  width: 6px;
+  height: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+.sidebar-item-run.sidebar-item-run-running {
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid rgb(16 19 26 / 15%);
+  border-top-color: #1ea446;
+  background: transparent;
+  animation: sidebar-run-spin 0.9s linear infinite;
+}
+.sidebar-item-run.sidebar-item-run-waiting { background: var(--color-warn); }
+.sidebar-item-run.sidebar-item-run-done { background: #c4c9d2; }
+.sidebar-item-run.sidebar-item-run-failed { background: #c03445; }
+/* 현재 대화 점(초록)과 실행 점이 같이 있으면 실행 점이 오른쪽 끝, 현재 점은 그 앞. */
+.sidebar-item .sidebar-item-run + .sidebar-item-dot { margin-left: 4px; }
+
+/* ---- 이력 머리 — "실행 중 3 · 대기 1" 알약(39번 보드 좌상단) ---- */
+.sidebar-run-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 20px;
+  margin: 0 8px 6px;
+  padding: 0 8px;
+  border-radius: var(--radius-full);
+  background: rgb(30 164 70 / 10%);
+  color: #1e7d3a;
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+.sidebar-run-summary::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid rgb(30 164 70 / 25%);
+  border-top-color: #1ea446;
+  animation: sidebar-run-spin 0.9s linear infinite;
+}
+.sidebar-run-summary.is-waiting-only {
+  background: rgb(255 152 56 / 12%);
+  color: #b25c12;
+}
+.sidebar-run-summary.is-waiting-only::before {
+  border: 0;
+  background: var(--color-warn);
+  animation: none;
+}
+
+/* ---- 프로젝트 = 폴더 하나(36번 보드) — "폴더 추가"는 캡션 오른쪽의 작은 글자 버튼 ---- */
+.sidebar-section-label.is-project-caption {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+.sidebar-project-add {
+  margin-left: auto;
+  height: 18px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-k-faint);
+  font: inherit;
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.sidebar-project-add:hover,
+.sidebar-project-add:focus-visible { color: #10131a; background: rgb(16 19 26 / 6%); }
+
+/* 고정된 프로젝트는 이름이 굵고 앞에 작은 핀. */
+.sidebar-project.is-pinned .sidebar-project-main { font-family: var(--font-strong); }
+.sidebar-project.is-pinned .sidebar-project-main::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: var(--color-k-faint);
+  flex-shrink: 0;
+}
+
+/* ---- 펜 → 새 대화의 모드 고르기(37번 보드) ---- */
+.sidebar-mode-picker {
+  margin: 2px 4px 6px;
+  padding: 4px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-md);
+  background: #fff;
+  box-shadow: 0 6px 18px rgb(16 19 26 / 8%);
+}
+.sidebar-mode-picker-item {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  width: 100%;
+  height: 28px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: #10131a;
+  font: inherit;
+  font-size: var(--text-xs);
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.sidebar-mode-picker-item:hover,
+.sidebar-mode-picker-item:focus-visible { background: rgb(16 19 26 / 6%); }
+.sidebar-mode-picker-label { font-family: var(--font-strong); flex-shrink: 0; }
+.sidebar-mode-picker-hint { color: var(--color-k-faint); font-size: var(--text-2xs); overflow: hidden; text-overflow: ellipsis; }
+
+/* ---- 폴더 삭제 확인(38번 보드) — 이름을 그대로 쳐야 지워진다 ---- */
+.sidebar-project-remove {
+  margin: 2px 4px 6px;
+  padding: 8px;
+  border: 1px solid rgb(192 52 69 / 30%);
+  border-radius: var(--radius-md);
+  background: rgb(192 52 69 / 5%);
+  font-size: var(--text-xs);
+  word-break: keep-all;
+}
+.sidebar-project-remove-copy { margin: 0 0 4px; color: #10131a; line-height: 1.4; }
+.sidebar-project-remove-path {
+  margin: 0 0 6px;
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sidebar-project-remove-input {
+  width: 100%;
+  height: 26px;
+  margin-bottom: 4px;
+  padding: 0 8px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font: inherit;
+  font-size: var(--text-xs);
+  box-sizing: border-box;
+}
+.sidebar-project-remove-input:focus { outline: none; border-color: #c03445; }
+.sidebar-project-remove-hint { margin: 0 0 6px; color: #c03445; font-size: var(--text-2xs); line-height: 1.4; }
+.sidebar-project-remove-cancel,
+.sidebar-project-remove-confirm {
+  height: 24px;
+  padding: 0 10px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: #10131a;
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.sidebar-project-remove-cancel { margin-right: 4px; }
+.sidebar-project-remove-confirm.is-danger { border-color: #c03445; background: #c03445; color: #fff; }
+.sidebar-project-remove-confirm:disabled { opacity: 0.45; cursor: default; }

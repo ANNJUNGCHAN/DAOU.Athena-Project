@@ -135,6 +135,86 @@ function collapseUnchanged(rows, context) {
   return out;
 }
 
+// ---------- 노드 ↔ 코드 연결(보드 13) ----------
+
+// 코드 한 줄의 높이(px). shell.css의 .backtest-code-line·.backtest-code-pre와 같은 값이어야
+// 스크롤 위치와 인라인 표식이 진짜 그 줄에 얹힌다.
+const LINE_HEIGHT = 18;
+// .backtest-code-pre의 padding-top. 표식을 첫 줄에 맞추는 데 쓴다.
+const CODE_PAD_TOP = 10;
+
+// 보드 13의 고정 문구 — 화면·테스트·캔버스가 같은 상수를 본다.
+const PREVIEW_BANNER_TEXT = '미실행 오류 미리보기 — 이 코드는 실행·저장 대상이 아닙니다';
+const STALE_NOTICE_TEXT = '현재 오류의 정확한 코드 위치를 만들 수 없습니다 — 다시 검증하거나 코드 전용으로 검토하세요';
+const LINK_TEXT = '노드 ↔ 코드 줄 범위';
+const UNLINK_TEXT = '그래프로 표현할 수 없는 수정은 적용 전에 코드 전용 전환을 물습니다';
+const NOTICE_MS = 6000;
+
+// span은 {start:{line,column}, end:{line,column}, message}. line은 1부터, column은 0부터다
+// — 파이썬 AST의 lineno/col_offset 규약 그대로이고, 서버 source map이 그 값을 그대로 싣는다.
+function normalizeSpan(span) {
+  const start = span && span.start;
+  if (!start || !Number.isFinite(Number(start.line))) return null;
+  const end = span.end || start;
+  const startLine = Math.max(1, Math.floor(Number(start.line)));
+  const endLine = Number.isFinite(Number(end.line))
+    ? Math.max(startLine, Math.floor(Number(end.line)))
+    : startLine;
+  const col = (v) => (Number.isFinite(Number(v)) ? Math.max(0, Math.floor(Number(v))) : null);
+  return {
+    startLine,
+    endLine,
+    startColumn: col(start.column),
+    endColumn: col(end.column),
+    message: span.message == null ? null : String(span.message),
+  };
+}
+
+// sha256 hex. 렌더러에서는 Web Crypto(SubtleCrypto.digest — 그래서 비동기다)를 쓰고,
+// 그것이 없는 node 테스트·구형 런타임에서만 node:crypto로 내려간다. 둘 다 같은 sha256이라
+// 서버가 계산한 artifact_hash와 그대로 대조된다. 어느 쪽도 없으면 던진다 — 임시 해시를
+// 지어내면 낡은 map이 유효한 척 통과하고, 그 순간 사람은 엉뚱한 줄을 원인으로 읽는다.
+async function hashSource(text) {
+  const source = String(text == null ? '' : text);
+  const webcrypto = typeof globalThis === 'undefined' ? null : globalThis.crypto;
+  if (webcrypto && webcrypto.subtle && typeof TextEncoder === 'function') {
+    const digest = await webcrypto.subtle.digest('SHA-256', new TextEncoder().encode(source));
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+  if (typeof require === 'function') {
+    return require('node:crypto').createHash('sha256').update(source, 'utf8').digest('hex');
+  }
+  throw new Error('sha256을 계산할 수 없습니다');
+}
+
+// 서버가 준 source map 묶음이 지금 편집기에 있는 코드에서 나온 것인지 본다. authoritative는
+// artifact_hash, preview는 preview_hash와 대조한다. 어긋나면 비슷한 줄을 추정하지 않는다 —
+// 추정한 줄은 사람에게 "여기가 원인"이라고 거짓말한다(평가서 §오류 노드 더블클릭 4항).
+async function spanIsValid(sourceMapBundle, currentSource) {
+  const bundle = sourceMapBundle || null;
+  if (!bundle) return { ok: false, reason_ko: '노드·코드 연결 정보가 없습니다' };
+  const preview = bundle.kind === 'preview';
+  const expected = preview ? bundle.preview_hash : bundle.artifact_hash;
+  if (!expected) {
+    return {
+      ok: false,
+      reason_ko: preview ? '미리보기 해시가 없습니다' : '실행 산출물 해시가 없습니다',
+    };
+  }
+  let actual = null;
+  try {
+    actual = await hashSource(currentSource);
+  } catch {
+    return { ok: false, reason_ko: '코드 해시를 계산할 수 없습니다' };
+  }
+  if (actual !== String(expected)) {
+    return { ok: false, reason_ko: '코드가 바뀌어 노드·코드 연결이 낡았습니다' };
+  }
+  return { ok: true, reason_ko: null };
+}
+
 // ---------- DOM ----------
 
 function el(tag, className, text) {
@@ -173,12 +253,45 @@ function renderGutter(gutter, source, highlightRange) {
 function createCodeEditor(options) {
   const opts = options || {};
   const container = opts.container;
-  if (!container) return { setValue() {}, getValue() { return ''; }, highlightLines() {} };
+  if (!container) {
+    return {
+      setValue() {}, getValue() { return ''; }, highlightLines() {},
+      openSpan() { return false; },
+      setPreviewOnly() {}, isPreviewOnly() { return false; }, showNotice() {},
+      setFileMeta() {}, setLinkStatus() {},
+    };
+  }
+
+  const root = el('div', 'backtest-code-root');
+  // 이 편집기에는 옆 패널이 없다 — 보드 13의 "전략 파일" 패널은 편집기 위 한 줄 띠로 접는다.
+  const meta = el('div', 'backtest-code-filemeta');
+  meta.hidden = true;
+  const ribbon = el('div', 'backtest-code-ribbon');
+  ribbon.hidden = true;
+  const ribbonLabel = el('span', 'backtest-code-ribbon-label');
+  const ribbonLoc = el('span', 'backtest-code-ribbon-loc');
+  const ribbonCode = el('span', 'backtest-code-ribbon-code');
+  ribbonCode.hidden = true;
+  const ribbonKind = el('span', 'backtest-code-ribbon-kind');
+  const ribbonBack = el('button', 'backtest-code-ribbon-back', '시각 설계에서 보기');
+  ribbon.appendChild(ribbonLabel);
+  ribbon.appendChild(ribbonLoc);
+  ribbon.appendChild(ribbonCode);
+  ribbon.appendChild(ribbonKind);
+  ribbon.appendChild(ribbonBack);
+  const banner = el('div', 'backtest-code-preview-banner');
+  banner.hidden = true;
+  const notice = el('div', 'backtest-code-notice');
+  notice.hidden = true;
+  const status = el('div', 'backtest-code-linkstatus');
+  status.hidden = true;
 
   const wrap = el('div', 'backtest-code-editor');
   const gutter = el('div', 'backtest-code-gutter');
   const stack = el('div', 'backtest-code-stack');
   const pre = el('pre', 'backtest-code-pre');
+  const marker = el('div', 'backtest-code-marker');
+  marker.hidden = true;
   const textarea = document.createElement('textarea');
   textarea.className = 'backtest-code-textarea';
   textarea.spellcheck = false;
@@ -187,16 +300,47 @@ function createCodeEditor(options) {
 
   stack.appendChild(pre);
   stack.appendChild(textarea);
+  stack.appendChild(marker);
   wrap.appendChild(gutter);
   wrap.appendChild(stack);
-  container.appendChild(wrap);
+  root.appendChild(meta);
+  root.appendChild(ribbon);
+  root.appendChild(banner);
+  root.appendChild(notice);
+  root.appendChild(wrap);
+  root.appendChild(status);
+  container.appendChild(root);
 
   let value = String(opts.value || '');
   let range = null;
+  let markerLine = null;
+  let previewOnly = false;
+  let linkedNodeId = null;
+  let metaName = '';
+  let noticeTimer = null;
+
+  // 표식은 stack 안에 절대 배치되므로 스크롤을 따라가지 않는다 — scrollTop을 빼서 직접
+  // 붙인다. style 프로퍼티 대신 setAttribute를 쓰는 건 테스트의 DOM 스텁 때문이다.
+  function placeMarker() {
+    if (markerLine == null) { marker.hidden = true; return; }
+    marker.hidden = false;
+    const top = CODE_PAD_TOP + (markerLine - 1) * LINE_HEIGHT - (textarea.scrollTop || 0);
+    marker.setAttribute('style', `top:${top}px`);
+  }
 
   function paint() {
     renderHighlight(pre, value);
     renderGutter(gutter, value, range);
+    placeMarker();
+  }
+
+  // line은 1부터, column은 0부터. 줄·열을 textarea가 아는 문자 오프셋으로 바꾼다.
+  function offsetOf(line, column) {
+    const lines = value.split('\n');
+    const index = Math.min(Math.max(1, line), lines.length) - 1;
+    let offset = 0;
+    for (let i = 0; i < index; i += 1) offset += lines[i].length + 1;
+    return offset + Math.min(column, lines[index].length);
   }
 
   textarea.value = value;
@@ -213,6 +357,12 @@ function createCodeEditor(options) {
     pre.scrollTop = textarea.scrollTop;
     pre.scrollLeft = textarea.scrollLeft;
     gutter.scrollTop = textarea.scrollTop;
+    placeMarker();
+  });
+
+  // 리본의 [시각 설계에서 보기]는 열고 들어온 그 node_id로 되돌아간다.
+  ribbonBack.addEventListener('click', () => {
+    if (opts.onBackToNode && linkedNodeId != null) opts.onBackToNode(linkedNodeId);
   });
 
   // Tab이 포커스를 옮기면 파이썬 편집기로 쓸 수 없다 — 4칸 들여쓰기로 가로챈다.
@@ -240,6 +390,114 @@ function createCodeEditor(options) {
     highlightLines(first, last) {
       range = first == null ? null : { first, last: last == null ? first : last };
       paint();
+    },
+
+    // 보드 13 · 오류 노드에서 코드로. 캔버스가 spanIsValid()로 map을 검증한 뒤에만 부른다 —
+    // 여기서는 다시 검증하지 않고, 준 범위를 그대로 연다.
+    openSpan(span, meta_) {
+      const info = normalizeSpan(span);
+      if (!info) return false;
+      const m = meta_ || {};
+      const preview = m.kind === 'preview';
+      const node = m.node || {};
+
+      range = { first: info.startLine, last: info.endLine };
+      markerLine = info.message ? info.startLine : null;
+      marker.textContent = info.message ? `! ${info.startLine}  ${info.message}` : '';
+
+      // 열은 있으면 그 열까지, 없으면 줄 전체를 잡는다.
+      const from = offsetOf(info.startLine, info.startColumn == null ? 0 : info.startColumn);
+      const to = offsetOf(info.endLine, info.endColumn == null ? Infinity : info.endColumn);
+      if (typeof textarea.setSelectionRange === 'function') {
+        textarea.setSelectionRange(from, Math.max(from, to));
+      } else if ('selectionStart' in textarea) {
+        textarea.selectionStart = from;
+        textarea.selectionEnd = Math.max(from, to);
+      }
+
+      // 켠 줄이 화면 맨 위에 딱 붙으면 앞뒤 맥락이 안 보인다 — 두 줄 위부터 보인다.
+      const top = Math.max(0, (info.startLine - 3) * LINE_HEIGHT);
+      textarea.scrollTop = top;
+      pre.scrollTop = top;
+      gutter.scrollTop = top;
+      paint();
+      if (typeof textarea.focus === 'function') textarea.focus();
+
+      linkedNodeId = node.id == null ? null : node.id;
+      ribbonLabel.textContent = `연결된 노드 · ${node.label || node.id || '알 수 없는 노드'}`;
+      ribbonLoc.textContent = `${m.file || metaName || 'strategy.py'}:${info.startLine}`;
+      ribbonCode.textContent = m.code ? String(m.code) : '';
+      ribbonCode.hidden = !m.code;
+      ribbonKind.textContent = preview ? '미실행 미리보기' : '연결됨';
+      ribbonKind.className = `backtest-code-ribbon-kind${preview ? ' is-preview' : ''}`;
+      ribbonBack.hidden = !opts.onBackToNode || linkedNodeId == null;
+      ribbon.hidden = false;
+      notice.hidden = true;
+      return true;
+    },
+
+    // 미실행 preview 코드는 읽기 전용이다 — 실행·저장 대상으로 고를 수 없어야 한다.
+    setPreviewOnly(on, info) {
+      previewOnly = !!on;
+      textarea.readOnly = previewOnly ? true : !!opts.readOnly;
+      const reason = info && info.reason_ko ? String(info.reason_ko) : '';
+      banner.textContent = previewOnly
+        ? (reason ? `${PREVIEW_BANNER_TEXT} · ${reason}` : PREVIEW_BANNER_TEXT)
+        : '';
+      banner.hidden = !previewOnly;
+      wrap.className = `backtest-code-editor${previewOnly ? ' is-preview-only' : ''}`;
+    },
+    isPreviewOnly() { return previewOnly; },
+
+    // map이 낡아 줄을 못 여는 순간의 한 줄 알림. 잠깐 떴다 사라진다.
+    showNotice(text) {
+      notice.textContent = String(text == null ? '' : text);
+      notice.hidden = !notice.textContent;
+      if (noticeTimer) clearTimeout(noticeTimer);
+      noticeTimer = setTimeout(() => {
+        notice.textContent = '';
+        notice.hidden = true;
+        noticeTimer = null;
+      }, NOTICE_MS);
+      if (noticeTimer && typeof noticeTimer.unref === 'function') noticeTimer.unref();
+    },
+
+    // 보드 13의 "전략 파일 · 그래프에서 생성됨 · 연결된 구성 · 그래프 호환 모드".
+    setFileMeta(info) {
+      while (meta.firstChild) meta.removeChild(meta.firstChild);
+      if (!info) { meta.hidden = true; metaName = ''; return; }
+      metaName = info.name ? String(info.name) : '';
+      meta.appendChild(el('span', 'backtest-code-filemeta-title', '전략 파일'));
+      if (metaName) meta.appendChild(el('span', 'backtest-code-filemeta-name', metaName));
+      if (info.generatedFromGraph) {
+        meta.appendChild(el('span', 'backtest-code-filemeta-origin', '그래프에서 생성됨'));
+      }
+      const linked = info.linked || {};
+      const parts = [
+        ['데이터', linked.data],
+        ['지표', linked.indicators],
+        ['진입·청산', linked.entryExit],
+      ].filter((pair) => pair[1]);
+      if (parts.length) {
+        meta.appendChild(el('span', 'backtest-code-filemeta-linked', '연결된 구성'));
+        parts.forEach((pair) => {
+          meta.appendChild(el('span', 'backtest-code-filemeta-chip', `${pair[0]} · ${pair[1]}`));
+        });
+      }
+      if (info.compatMode) {
+        meta.appendChild(el('span', 'backtest-code-filemeta-compat', '그래프 호환 모드'));
+      }
+      meta.hidden = false;
+    },
+
+    // 맨 아래 한 줄 — 지금 노드와 코드가 이어져 있는지, 아니면 무엇을 되묻게 되는지.
+    setLinkStatus(info) {
+      if (!info) { status.textContent = ''; status.hidden = true; return; }
+      const linked = !!info.linked;
+      const text = info.text_ko ? String(info.text_ko) : (linked ? LINK_TEXT : UNLINK_TEXT);
+      status.textContent = linked ? `● 노드·코드 연결됨 · ${text}` : text;
+      status.className = `backtest-code-linkstatus${linked ? ' is-linked' : ''}`;
+      status.hidden = false;
     },
   };
 }
@@ -277,6 +535,10 @@ const __exports = {
   collapseUnchanged,
   createCodeEditor,
   renderDiff,
+  hashSource,
+  spanIsValid,
+  PREVIEW_BANNER_TEXT,
+  STALE_NOTICE_TEXT,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.

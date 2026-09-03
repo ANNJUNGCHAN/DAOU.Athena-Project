@@ -141,6 +141,10 @@ class Settings(BaseSettings):
     backtest_db_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "backtest.sqlite3"
     )
+    # 프로젝트 = 내 컴퓨터의 폴더 하나(코드 탭 IDE 계약 D1). 관리형 프로젝트가 이 아래
+    # 만들어지고, 사용자가 디스크 아무 데나 열어둔 외부 폴더는 경로만 등록된다. import
+    # 시점에 만들지 않는다 — 처음 프로젝트를 만들거나 열 때 생긴다(projects/store.py).
+    projects_root: Path = Field(default_factory=lambda: Path.home() / ".athena" / "projects")
     # Explicit argv for the local structured-extraction command (e.g. a local claude CLI
     # invocation). Empty delegates to the explicit Claude opt-in below; with both unset,
     # IngestionCoordinator still projects raw SourceRecords but derives no graph facts.
