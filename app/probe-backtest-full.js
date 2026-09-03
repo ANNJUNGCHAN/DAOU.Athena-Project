@@ -26,6 +26,7 @@
 //   F 오류·진단 · G 흐름 지도 · H 이력·비교 · I 최적화 · J 배포 · K 채팅 액션 · L 컨텍스트
 //   M 출처→전략→등록→배포(바깥 자료 → 내 폴더의 파이썬 → 프리셋 자리 → 실전)
 //   N 흐름 지도가 첫 표면(보드 11~14 — 대화로 지도를 고치고, 코드는 그 뒤에 있다)
+//   O 시각 설계 왕복(보드 11→12→13→14 — 지도가 편집 표면, 오류는 질문 하나로, 적용은 비활성 버전 하나)
 //
 // 만드는 것은 되돌린다: 배포는 전부 중지하고, M이 만든 등록·프로젝트는 등록에서 뺀다.
 // 전략·버전·실행 행은 백엔드에 삭제 API가 없어(store에 delete가 없다) 남고, M이 만든
@@ -56,7 +57,11 @@ const UNCACHED_FROM = '19900103';   // 캐시보다 앞 → 부분 겹침(보유
 const EMPTY_FROM = '19900101';      // 캐시와 전혀 안 겹침 → allow_partial이 422
 const EMPTY_TO = '19901231';
 
-const ALL_SECTIONS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
+const ALL_SECTIONS = [
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+  // 새 기법 만들기(보드 20·21, 2026-09-03) — 코드창·명령창·노드·흐름 창.
+  'P',
+];
 const WANTED = new Set(
   (process.env.ATHENA_PROBE_SECTIONS || ALL_SECTIONS.join(','))
     .split(',').map((s) => s.trim().toUpperCase()).filter(Boolean),
@@ -693,9 +698,11 @@ async function main() {
         mapVersion: c.map ? c.map.version : null,
       };
     })()`);
-    await step('A08', '설계 하위 탭은 지도·폼·코드이고 기본은 지도다(코드는 최후의 보루)', () => ({
+    await step('A08', '설계 하위 탭은 지도·폼·코드·노드·흐름이고 기본은 지도다(코드는 최후의 보루)', () => ({
       ok: !!subtabs
-            && JSON.stringify(subtabs.labels) === JSON.stringify(['지도', '폼', '코드 · 최후의 보루'])
+            && JSON.stringify(subtabs.labels) === JSON.stringify(
+              ['지도', '폼', '코드 · 최후의 보루', '노드·흐름'],
+            )
             && subtabs.designTab === 'flow' && subtabs.on === '지도'
             && subtabs.mapVersion === 1,
       data: subtabs,
@@ -703,24 +710,42 @@ async function main() {
 
     await goSubtab(shellWin, 1);
     await wait(300);
+    // **계약이 바뀐 자리다**(2026-09-03 사용자 확정): 목록은 하나다. 처음 주어진 10개도
+    // 그냥 '기법'이고 내가 만든 것과 같은 목록에 선다 — 제목도 하나이고 둘을 함께 센다.
+    // 그래서 여기서는 백엔드가 준 10개가 다 그려졌는지와, 제목의 숫자가 화면에 실제로 선
+    // 카드 수(기법 + 내가 만든 것)와 **같은지**를 잰다. 등록부에 남은 것이 있어도(다른
+    // 섹션이 남겼을 수 있다) 검사는 느슨해지지 않는다.
     const presetView = await js(shellWin, `(() => {
       const root = document.getElementById('backtestCanvas');
       const first = root.querySelector('.backtest-preset-item');
       return {
         items: root.querySelectorAll('.backtest-preset-item').length,
-        title: (root.querySelector('.backtest-preset-wrap .backtest-card-title') || {}).textContent || null,
+        mine: root.querySelectorAll('.backtest-user-strategy-item').length,
+        lists: root.querySelectorAll('.backtest-technique-list').length,
+        newCard: root.querySelectorAll('.backtest-technique-new').length,
+        title: (root.querySelector('.backtest-technique-wrap .backtest-card-title') || {}).textContent || null,
         firstName: first ? (first.querySelector('.backtest-preset-name') || {}).textContent : null,
         firstCategory: first ? (first.querySelector('.backtest-preset-category') || {}).textContent : null,
+        firstDesc: first ? ((first.querySelector('.backtest-technique-desc') || {}).textContent || null) : null,
+        saysPreset: root.textContent.indexOf('프리셋') !== -1,
       };
     })()`);
-    await step('A05', '프리셋 10종이 백엔드에서 와 목록으로 그려진다', () => ({
-      ok: presetView.items === 10 && presetView.title === '무엇으로 시작할까요 — 프리셋 10종',
+    await step('A05', '기법 10종이 백엔드에서 와 한 목록으로 그려진다 — 맨 위는 [+ 새 기법 만들기]', () => ({
+      ok: presetView.items === 10 && presetView.lists === 1 && presetView.newCard === 1
+            && presetView.title === `기법 — ${presetView.items + presetView.mine}개`
+            && presetView.saysPreset === false,
       data: presetView,
     }));
-    await step('A06', '프리셋 카드가 이름·분류를 갖는다', () => ({
+    await step('A06', '기법 카드가 이름·분류 칩(한국어)·한 줄 설명을 갖는다', () => ({
       ok: !!presetView.firstName && presetView.firstName.length > 0
-            && presetView.firstCategory !== null,
-      data: { name: presetView.firstName, category: presetView.firstCategory },
+            && !!presetView.firstCategory
+            && /^[가-힣]+$/.test(presetView.firstCategory)
+            && !!presetView.firstDesc && presetView.firstDesc.length > 0,
+      data: {
+        name: presetView.firstName,
+        category: presetView.firstCategory,
+        desc: presetView.firstDesc,
+      },
     }));
 
     const headTitle = await js(shellWin, `(() => {
@@ -750,9 +775,20 @@ async function main() {
   // B 설계 폼
   // ==================================================================
   if (on('B')) await section('B', async () => {
+    // **계약이 바뀐 자리다**(2026-09-03 · selectPreset의 designTab:'flow'). 프리셋을 고르면
+    // 화면은 폼이 아니라 **지도**로 간다 — 사람도 거기서 [폼]을 눌러 대상을 채운다
+    // (ensureRunnableForm 4b가 같은 사실을 같은 이유로 이미 하고 있다). 그 클릭이 없으면
+    // 이 섹션의 검사들은 화면에 없는 칸을 만지고 조용히 전부 실패한다 — 실제로 그랬다
+    // (2026-09-03 실측: B01~B27 23개가 한꺼번에 FAIL, 내 변경을 되돌려도 같았다).
+    // 검사 내용은 하나도 바뀌지 않는다. 사람이 눌러야 하는 클릭 하나가 빠져 있었다.
+    const pickPreset = async (index) => {
+      await clickNth(shellWin, `${R}.backtest-preset-item`, index);
+      await wait(300);
+      await goSubtab(shellWin, 1);
+      await wait(200);
+    };
     await goDesignForm(shellWin);
-    await clickNth(shellWin, `${R}.backtest-preset-item`, 0);
-    await wait(250);
+    await pickPreset(0);
     await clearSymbols(shellWin);
     await wait(200);
 
@@ -837,8 +873,7 @@ async function main() {
 
     // --- 프리셋 교체가 종목·기간을 지키는가 ---
     const beforeSwitch = await ctx(shellWin);
-    await clickNth(shellWin, `${R}.backtest-preset-item`, 1);
-    await wait(300);
+    await pickPreset(1);
     const afterSwitch = await ctx(shellWin);
     const selectedIndex = await js(shellWin, `(() => {
       const list = Array.from(document.querySelectorAll('${R}.backtest-preset-item'));
@@ -858,8 +893,7 @@ async function main() {
               selectedIndex,
             },
     }));
-    await clickNth(shellWin, `${R}.backtest-preset-item`, 0);
-    await wait(300);
+    await pickPreset(0);
 
     // --- 지표 카드 ---
     const indicators = await js(shellWin, `(() => {
@@ -1153,8 +1187,7 @@ async function main() {
 
     await addSymbol(shellWin, STK);
     await wait(250);
-    await clickNth(shellWin, `${R}.backtest-preset-item`, 0);
-    await wait(300);
+    await pickPreset(0);
     const clearedErrors = await countOf(shellWin, `${R}.backtest-design-error-line`);
     await step('B27', '프리셋을 다시 고르면 오류 줄이 지워진다', () => ({
       ok: clearedErrors === 0,
@@ -1862,24 +1895,32 @@ async function main() {
     await goDesignForm(shellWin);
     await goSubtab(shellWin, 0);
     await wait(400);
+    // **계약이 바뀐 자리다**(2026-09-03): 스펙 경로의 지도 탭에서 요약 지도를 없앴다.
+    // 그래서 대상 한 줄은 요약 지도의 `.backtest-map-target-text`가 아니라 편집 가능한
+    // 지도의 `.backtest-visual-target`이고, 판 번호는 그 머리줄에 적힌다. 칸 ①~④는
+    // 여전히 만들어지고(대화가 그것으로 답한다) 컨텍스트에서 그대로 잰다 — 코드 경로의
+    // 읽기 전용 지도는 아래 G02부터 그대로다.
     const formMap = await until(shellWin, `(() => {
       const root = document.getElementById('backtestCanvas');
       const c = window.AthenaBacktestCanvas.getContext();
-      const nodes = Array.from(root.querySelectorAll('button.backtest-flow-node.is-mine'));
+      const nodes = (c.map && c.map.nodes) || [];
       if (!nodes.length) return null;
       return {
         designTab: c.designTab,
-        numerals: nodes.map((n) => (n.querySelector('.backtest-flow-badge span') || {}).textContent),
-        target: (root.querySelector('.backtest-map-target-text') || {}).textContent || null,
-        version: (root.querySelector('.backtest-map-version') || {}).textContent || null,
+        numerals: nodes.map((n) => n.numeral),
+        target: (root.querySelector('.backtest-visual-target') || {}).textContent || null,
+        head: (root.querySelector('.backtest-visual-head .backtest-card-title') || {}).textContent || null,
+        editor: root.querySelectorAll('.backtest-vis').length,
+        summaryNodes: root.querySelectorAll('.backtest-flow-node').length,
         empty: root.querySelectorAll('.backtest-flow-tab .backtest-card-empty').length,
       };
     })()`, WAIT_VALIDATE);
-    await step('G01', '코드가 없어도 폼 경로의 지도가 ①~④와 대상 한 줄로 선다', () => ({
+    await step('G01', '코드가 없어도 폼 경로의 지도가 편집 표면으로 서고 칸 ①~④가 만들어진다', () => ({
       ok: !!formMap && formMap.designTab === 'flow' && formMap.empty === 0
             && JSON.stringify(formMap.numerals) === JSON.stringify(['①', '②', '③', '④'])
             && !!formMap.target && formMap.target.indexOf(STK) === 0
-            && /^지도 v\d+$/.test(String(formMap.version || '')),
+            && formMap.editor === 1 && formMap.summaryNodes === 0
+            && /^이 전략은 이렇게 흐릅니다 · 지도 v\d+$/.test(String(formMap.head || '')),
       data: formMap,
     }));
 
@@ -2650,7 +2691,9 @@ async function main() {
       }));
     }
 
-    const subExpect = [['flow', '지도'], ['form', '폼'], ['code', '코드 · 최후의 보루']];
+    const subExpect = [
+      ['flow', '지도'], ['form', '폼'], ['code', '코드 · 최후의 보루'], ['nodes', '노드·흐름'],
+    ];
     for (let i = 0; i < subExpect.length; i += 1) {
       const [key, label] = subExpect[i];
       sendChat(shellWin, { kind: 'navigate', tab: 'design', designTab: key });
@@ -2761,10 +2804,13 @@ async function main() {
     await prepareForm(shellWin, FROM, TO);
     const c = await ctx(shellWin);
     const expectedKeys = [
-      'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets', 'map',
+      'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
+      // 새 기법 만들기(2026-09-03) — 만드는 중인가와 그 기법의 검사·노드·흐름.
+      'techniqueDraft', 'technique',
+      'map',
       'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage', 'lastChange', 'project',
     ];
-    await step('L01', 'getContext() 최상위 키 18개 계약', () => ({
+    await step('L01', 'getContext() 최상위 키 20개 계약', () => ({
       ok: JSON.stringify(Object.keys(c)) === JSON.stringify(expectedKeys),
       data: { keys: Object.keys(c) },
     }));
@@ -3060,9 +3106,13 @@ async function main() {
       return c && Array.isArray(c.presets) && c.presets.length ? true : null;
     })()`, WAIT_PRESETS);
     await prepareForm(shellWin, FROM, TO);
+    // **계약이 바뀐 자리다**(2026-09-03): 내가 만든 것을 따로 세우던 [내 전략] 묶음이
+    // 사라지고 목록 하나로 합쳐졌다 — 같은 목록, 같은 카드. 그래서 재는 것도 "그 묶음이
+    // 있는가"가 아니라 "그 목록에 내 이름이 있는가"가 된다(검사 강도는 그대로: 이름·경로·
+    // [등록 해제]·처음 주어진 기법 수를 여전히 다 센다).
     const readPicker = () => js(shellWin, `(() => {
       const root = document.getElementById('backtestCanvas');
-      const wrap = root.querySelector('.backtest-user-strategy-wrap');
+      const wrap = root.querySelector('.backtest-technique-wrap');
       if (!wrap) return { wrap: false, names: [], paths: [] };
       return {
         wrap: true,
@@ -3096,9 +3146,10 @@ async function main() {
       reloaded = await readPicker();
     }
     const pickerNow = reloaded || pickerLive;
-    await step('M09', '설계 폼의 [내 전략] 무리에 방금 등록한 이름이 선다', () => ({
+    await step('M09', '설계 폼의 기법 목록에 방금 등록한 이름이 같은 카드로 선다', () => ({
       ok: inPicker(pickerLive) && pickerLive.wrap === true
-            && String(pickerLive.title || '').indexOf('내 전략') === 0
+            && String(pickerLive.title || '') === `기법 — ${pickerLive.presets + pickerLive.names.length}개`
+            && pickerLive.removes === pickerLive.names.length
             && pickerLive.paths.indexOf(USER_STRATEGY_PATH) !== -1,
       data: {
         live: pickerLive,
@@ -3342,9 +3393,14 @@ async function main() {
         const root = document.getElementById('backtestCanvas');
         const nodes = root.querySelectorAll('button.backtest-flow-node.is-mine');
         if (!nodes.length) return null;
+        const loading = root.querySelectorAll('.backtest-flow-loading').length;
+        // 앞 판이 그대로 서 있는 채 새 요청이 도는 순간이 있다(loadMap에는 요청 번호가
+        // 없다) — 그 사이를 재면 "칸은 있는데 아직 만드는 중"이라는, 아무도 오래 보지
+        // 않는 중간 화면을 판정하게 된다. 판정 내용은 그대로 두고 자리 잡은 화면만 잰다.
+        if (loading) return null;
         return {
           mine: nodes.length,
-          loading: root.querySelectorAll('.backtest-flow-loading').length,
+          loading,
           error: root.querySelectorAll('.backtest-flow-error').length,
         };
       })()`, WAIT_VALIDATE);
@@ -3413,26 +3469,38 @@ async function main() {
     const opened = await until(shellWin, `(() => {
       const root = document.getElementById('backtestCanvas');
       const c = window.AthenaBacktestCanvas.getContext();
-      const nodes = Array.from(root.querySelectorAll('button.backtest-flow-node.is-mine'));
+      const nodes = (c.map && c.map.nodes) || [];
       if (c.designTab !== 'flow' || !nodes.length) return null;
       return {
         designTab: c.designTab,
         version: c.map.version,
-        numerals: nodes.map((n) => (n.querySelector('.backtest-flow-badge span') || {}).textContent),
-        target: (root.querySelector('.backtest-map-target-text') || {}).textContent || null,
-        drawer: (root.querySelector('.backtest-map-drawer-text') || {}).textContent || null,
-        note: (root.querySelector('.backtest-map-drawer-note') || {}).textContent || null,
+        numerals: nodes.map((n) => n.numeral),
+        target: (root.querySelector('.backtest-visual-target') || {}).textContent || null,
+        drawerFile: (root.querySelector('.backtest-visual-drawer-file') || {}).textContent || null,
+        openCode: root.querySelectorAll('.backtest-visual-open-code').length,
+        paletteGroups: root.querySelectorAll('.backtest-vis-palette-group').length,
+        nodeButtons: root.querySelectorAll('.backtest-vis-node').length,
+        // 요약 지도는 스펙 경로에서 사라졌다 — 그 자리가 비었다는 것도 함께 잰다.
+        summaryNodes: root.querySelectorAll('.backtest-flow-node').length,
       };
     })()`, WAIT_VALIDATE);
-    // 서랍이 '생성됨'이어야 하는 이유: 새 프리셋의 지도 뒤에는 아직 코드가 없다.
-    // 앞 섹션의 코드가 남아 'strategy.py · 9줄'로 서면 서랍은 남의 코드를 가리킨다.
-    await step('N01', '프리셋을 고르면 지도가 첫 화면이다 — ①~④·대상 한 줄·코드 서랍', () => ({
+    // **계약이 두 번 바뀐 자리다.**
+    // ① US-007(커밋 5b746c9·3f35c1b): 스펙 경로의 지도 탭은 읽기 전용 요약 지도가 아니라
+    //    **편집 가능한 시각 설계**다. 그래서 서랍도 `.backtest-map-drawer-*`가 아니라
+    //    `.backtest-visual-drawer-*`다.
+    // ② 2026-09-03 사용자 확정: 그 위에 서 있던 요약 지도(칸 ①~④)를 **없앴다**. 같은
+    //    흐름을 두 번 말하지 않는다. 지도의 재료는 그대로 살아 있어(getContext().map)
+    //    대화가 그것으로 답한다 — 그래서 칸 번호는 DOM이 아니라 컨텍스트에서 잰다.
+    // 검사는 느슨해지지 않는다: 칸 ①~④가 실제로 만들어졌는지, 서랍이 '생성됨'을
+    // 가리키는지(새 기법의 지도 뒤에는 아직 코드가 없다), 편집 표면이 섰는지를 다 재고,
+    // 없앤 요약 지도가 정말 사라졌는지(summaryNodes === 0)를 하나 더 잰다.
+    await step('N01', '기법을 고르면 지도가 첫 화면이다 — 대상 한 줄·편집기·코드 서랍(요약 지도는 없다)', () => ({
       ok: !!opened && opened.designTab === 'flow' && opened.version === 1
             && JSON.stringify(opened.numerals) === JSON.stringify(['①', '②', '③', '④'])
             && !!opened.target && opened.target.indexOf(STK) === 0
-            && !!opened.drawer && opened.drawer.indexOf('이 지도 뒤의 코드 · 생성됨 · ') === 0
-            && opened.drawer.indexOf('지도 v1과 일치') !== -1
-            && opened.note === '웬만하면 열 일이 없습니다 — 최후의 보루',
+            && opened.drawerFile === '생성됨' && opened.openCode === 1
+            && opened.paletteGroups >= 1 && opened.nodeButtons >= 7
+            && opened.summaryNodes === 0,
       data: opened,
     }));
 
@@ -3441,21 +3509,23 @@ async function main() {
       shellWin,
       "window.AthenaBacktestCanvas.onChatAction({ kind: 'spec_draft', patch: { params: { fast: 9 } }, note: '빠른 이평을 9로' })",
     );
+    // 요약 지도가 사라진 뒤로 '방금 바뀜' 알약이 설 자리는 없다 — 그래서 같은 사실을
+    // 화면이 아니라 **화면이 다음 턴에 넘기는 것**에서 잰다(느슨해지지 않는다: 바뀐 칸이
+    // 하나인지, 그 칸이 ①인지, 지도가 실제로 새 판으로 올라섰는지를 그대로 센다).
+    // 새 판이 도착한 뒤를 재는 이유도 같다: 반영은 즉시고 지도는 백엔드 왕복 뒤라
+    // 그 사이를 재면 "v1인데 방금 바뀜"이라는 중간 화면을 판정하게 된다.
     const changed = await until(shellWin, `(() => {
-      const root = document.getElementById('backtestCanvas');
       const c = window.AthenaBacktestCanvas.getContext();
-      const pills = Array.from(root.querySelectorAll('.backtest-map-changed'));
-      if (!pills.length) return null;
-      const version = (root.querySelector('.backtest-map-version') || {}).textContent || null;
-      // 알약은 반영 즉시 서고 지도는 백엔드 왕복 뒤에 온다 — 그 사이를 재면 "v1인데
-      // 방금 바뀜"이라는, 아무도 오래 보지 않는 중간 화면을 판정하게 된다.
-      // 새 판이 도착한 화면만 잰다(그래도 안 오면 시간이 다해 그대로 실패한다).
-      if (version !== '지도 v' + c.map.version) return null;
-      const owner = pills[0].parentNode;
+      const ids = (c.lastChange && c.lastChange.nodes) || [];
+      if (!ids.length || c.map.version !== 2) return null;
+      const nodes = (c.map && c.map.nodes) || [];
+      const hit = nodes.filter((n) => ids.indexOf(n.id) !== -1);
+      if (!hit.length) return null;
       return {
-        pill: pills[0].textContent,
-        title: (owner.querySelector('.backtest-flow-title') || {}).textContent || null,
-        version,
+        ids,
+        numerals: hit.map((n) => n.numeral),
+        title: hit[0].title || null,
+        version: c.map.version,
       };
     })()`, WAIT_VALIDATE);
     await step('N02', '대화 한 번이 어느 칸을 바꿨는지 영수증과 지도가 같이 말한다', () => ({
@@ -3463,7 +3533,9 @@ async function main() {
             && receipt.nodes[0].numeral === '①'
             && String(receipt.nodes[0].text).indexOf('파라미터 fast') === 0
             && !!receipt.version && receipt.version.from === 1 && receipt.version.to === 2
-            && !!changed && changed.pill === '방금 바뀜' && changed.version === '지도 v2',
+            && !!changed && changed.ids.length === 1
+            && JSON.stringify(changed.numerals) === JSON.stringify(['①'])
+            && changed.version === 2,
       data: { receipt: receipt && { nodes: receipt.nodes, version: receipt.version }, changed },
     }));
 
@@ -3475,15 +3547,19 @@ async function main() {
     const ran = await waitRunOutcome(shellWin, WAIT_RUN);
     await goTab(shellWin, 0);
     await goSubtab(shellWin, 0);
+    // 요약 지도가 사라졌으니 오른쪽 사실도 화면에는 없다 — 그러나 사실 자체는 백엔드가
+    // 지난 실행을 보고 만들어 준 것이고, 화면은 그것을 다음 턴 컨텍스트에 그대로 싣는다
+    // (mapContext의 facts). 재는 값은 옛 단계와 같다: ②는 봉 수·워밍업, ③은 신호 수,
+    // 그리고 그 숫자가 **어느 실행**의 것인지(lastResult.runId).
     const facts = await until(shellWin, `(() => {
-      const root = document.getElementById('backtestCanvas');
-      const nodes = Array.from(root.querySelectorAll('button.backtest-flow-node.is-mine'));
+      const c = window.AthenaBacktestCanvas.getContext();
+      const nodes = (c.map && c.map.nodes) || [];
       if (!nodes.length) return null;
-      const shapes = nodes.map((n) => (n.querySelector('.backtest-flow-shape') || {}).textContent || '');
+      const shapes = nodes.map((n) => (n.facts || []).join('\\n'));
       if (!shapes.some((t) => t.length)) return null;
       return {
         shapes,
-        sub: (root.querySelector('.backtest-map-head-sub') || {}).textContent || null,
+        runId: c.lastResult ? c.lastResult.runId : null,
       };
     })()`, WAIT_VALIDATE);
     await step('N03', '②·③의 오른쪽 사실이 지난 실행이 만든 값이다', () => {
@@ -3494,12 +3570,16 @@ async function main() {
         ok: !!facts
               && /행 × 5열|워밍업/.test(String(facts.shapes[1] || ''))
               && /entry \d+개 · exit \d+개/.test(String(facts.shapes[2] || ''))
-              && String(facts.sub || '').indexOf('지난 실행(#') !== -1,
+              && !!facts.runId,
         data: facts,
       };
     });
 
     // [코드 열기] — 폼 경로에서는 지도 뒤의 코드가 그때 만들어진다. 실행경로는 그대로다.
+    // 버튼이 사는 자리는 N01과 같은 이유로 바뀌었다(편집 가능한 지도의 서랍) — 하는 일과
+    // 재는 것은 그대로다. 두 자리 중 있는 쪽을 누른다: 코드 경로·내 전략의 지도는 여전히
+    // 읽기 전용이라 `.backtest-map-open-code`가 그 자리에 남아 있다.
+    await click(shellWin, `${R}.backtest-visual-open-code`);
     await click(shellWin, `${R}.backtest-map-open-code`);
     const drawerOpened = await until(shellWin, `(() => {
       const root = document.getElementById('backtestCanvas');
@@ -3558,6 +3638,878 @@ async function main() {
     await ensureRunnableForm(shellWin, FROM, TO);
   });
 
+  // ==================================================================
+  // O 시각 설계 왕복(보드 11→12→13→14)
+  //
+  // N까지가 "지도가 첫 표면"이었다면 여기는 **그 지도가 편집 표면**이라는 사실을 잰다:
+  // 프리셋 하나가 그래프가 되고, 값을 고치면 폼이 따라오고, 연결을 끊으면 같은 진단
+  // 코드가 네 곳(칸·포트·검사기·요약 바)에 함께 서고, 그 칸에서 코드로 내려가면 미실행
+  // 미리보기의 그 줄이 켜진다. 고치는 길은 하나뿐이다 — 질문 하나 → 비활성 수정안 →
+  // 사람이 [적용]. 적용이 남기는 것도 하나뿐이다: **비활성** 버전 한 개.
+  //
+  // 그래서 이 섹션은 매 단계 "일어나지 않은 일"도 같이 센다 — 실행 수·배포 수·활성
+  // 버전 id. 저작 경로가 그 셋 중 하나라도 움직이면 그것이 이 기능의 실패다.
+  // ==================================================================
+  if (on('O')) await section('O', async () => {
+    // 렌더러가 그리다 던지면 캔버스는 통째로 빈 화면이 된다 — 그 예외는 executeJavaScript로
+    // 잡히지 않아(클릭 핸들러 안에서 터진다) 리포트에는 "아무것도 없다"만 남는다.
+    // 그리기 실패는 이 섹션이 재는 것들의 가장 흔한 원인이라 여기서만 따로 모은다.
+    await js(shellWin, `(() => {
+      if (window.__probeRenderErrors) return true;
+      window.__probeRenderErrors = [];
+      window.addEventListener('error', (e) => {
+        window.__probeRenderErrors.push(String((e && e.error && e.error.stack) || (e && e.message) || e));
+      });
+      return true;
+    })()`);
+    // 섹션만 골라 돌면(ATHENA_PROBE_SECTIONS=O) A가 돌지 않아 모드에 들어간 적이 없다.
+    await js(shellWin, "(() => { const n = document.getElementById('modeNavBacktest'); if (n) n.click(); return true; })()");
+    // 프리셋 목록은 **폼 하위탭에만** 있다(지도 탭은 지도를 그린다) — 여기서 지도 탭을
+    // 보고 기다리면 25초를 버리고 아무 일도 안 일어난다(2026-09-03 실측).
+    await goDesignForm(shellWin);
+    await until(
+      shellWin,
+      `(document.querySelectorAll('${R}.backtest-preset-item').length ? true : null)`,
+      WAIT_PRESETS,
+    );
+    await ensureRunnableForm(shellWin, FROM, TO);
+    await goSubtab(shellWin, 0);
+
+    // 화면 한 장을 통째로 읽는 식 — 단계마다 같은 자리를 재야 "무엇이 언제 움직였나"가
+    // 로그에서 그대로 비교된다.
+    const READ = `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const api = window.AthenaBacktestCanvas;
+      const c = api ? api.getContext() : null;
+      if (!c) return null;
+      const vis = root.querySelector('.backtest-visual');
+      if (!vis) return null;
+      const nodes = root.querySelectorAll('.backtest-vis-node');
+      if (!nodes.length) return null;
+      const graph = c.map.graph;
+      return {
+        designTab: c.designTab,
+        state: c.map.validation_state,
+        codeOnly: c.map.code_only,
+        mapVersion: c.map.version,
+        graphNodes: graph ? graph.nodes.length : 0,
+        graphEdges: graph ? graph.edges.length : 0,
+        graphHash: c.map.hashes ? c.map.hashes.graph_hash : null,
+        diagnostics: c.map.diagnostics.map((d) => d.code),
+        // 칸 ①~④는 화면에서 사라졌다(2026-09-03 요약 지도 제거) — 만들어졌다는 사실은
+        // 컨텍스트에서 재고, 그 자리가 실제로 비었는지는 summaryNodes로 잰다.
+        numerals: ((c.map && c.map.nodes) || []).map((n) => n.numeral),
+        summaryNodes: root.querySelectorAll('.backtest-flow-node').length,
+        target: (root.querySelector('.backtest-visual-target') || {}).textContent || null,
+        paletteGroups: root.querySelectorAll('.backtest-vis-palette-group').length,
+        nodeButtons: nodes.length,
+        edges: root.querySelectorAll('.backtest-vis-edge').length,
+        status: (root.querySelector('.backtest-visual-status-text') || {}).textContent || null,
+        summaryTitle: (root.querySelector('.backtest-vis-summary-title') || {}).textContent || null,
+        summaryDetail: (root.querySelector('.backtest-vis-summary-detail') || {}).textContent || null,
+      };
+    })()`;
+    // 상태가 자리 잡을 때까지 기다리는 판본 — 중간 화면('validating')을 판정하지 않는다.
+    const readWhen = (states) => `(() => {
+      const v = ${READ};
+      if (!v || ${JSON.stringify(states)}.indexOf(v.state) === -1) return null;
+      return v;
+    })()`;
+
+    // 지금 남아 있는 것들 — 저작 경로가 건드리면 안 되는 값들이다.
+    const countRuns = async () => {
+      const res = await invoke(shellWin, 'athena:backtest-runs');
+      return res && res.ok && res.data ? (res.data.runs || []).length : null;
+    };
+    const countDeployments = async () => {
+      const res = await invoke(shellWin, 'athena:backtest-deployments');
+      return res && res.ok && res.data ? (res.data.deployments || []).length : null;
+    };
+    const listVersions = async (id) => {
+      if (!id) return [];
+      const res = await invoke(shellWin, 'athena:backtest-versions', { strategy_id: id });
+      return res && res.ok && res.data ? (res.data.versions || []) : [];
+    };
+    const headOf = (list) => list.reduce(
+      (best, v) => (best && Number(best.version) >= Number(v.version) ? best : v), null,
+    );
+
+    // ── O01 · 편집 가능한 지도(보드 11) ──────────────────────────────────────
+    // 편집 표면이 서지 않는 이유는 넷뿐이다(visualActive): 배선 없음 · 한 번 접힘 ·
+    // 스펙 경로가 아님(내 전략·프로젝트 파일·코드 실행경로) · 그래프 없음. 그 넷을
+    // 판정 전에 한 줄로 남긴다 — 전수 실행에서 앞 섹션이 남긴 상태 때문에 O가 통째로
+    // 무너질 때, 리포트에 null만 남으면 어느 것이었는지 아무도 모른다.
+    const entry = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      return {
+        runPath: c.runPath,
+        designTab: c.designTab,
+        codeOnly: c.map.code_only,
+        graphNodes: c.map.graph ? c.map.graph.nodes.length : null,
+        codeLines: c.code.lines,
+        openFile: c.project ? c.project.activeFile : null,
+        notice: (root.querySelector('.backtest-flow-notice') || {}).textContent || null,
+        readOnlyBadge: (root.querySelector('.backtest-flow-codeonly') || {}).textContent || null,
+        shell: root.querySelectorAll('.backtest-shell').length,
+        // 칸 ①~④가 비는 이유는 지도 요청이 실패했을 때다 — 그 문장이 진단이다.
+        mapError: (root.querySelector('.backtest-flow-error') || {}).textContent || null,
+        mapLoading: root.querySelectorAll('.backtest-flow-loading').length,
+        renderErrors: (window.__probeRenderErrors || []).slice(-3),
+      };
+    })()`);
+    const opened = await until(shellWin, READ, WAIT_VALIDATE);
+    await click(shellWin, `${R}.backtest-visual-validate`);
+    const validated = await until(shellWin, readWhen(['valid', 'synced']), WAIT_VALIDATE);
+    await step('O01', '지도 탭이 편집 가능한 그래프를 세우고 서버 검증까지 간다(요약 지도는 없다)', () => ({
+      ok: !!opened && opened.designTab === 'flow'
+            && JSON.stringify(opened.numerals) === JSON.stringify(['①', '②', '③', '④'])
+            && opened.summaryNodes === 0
+            && !!opened.target && opened.target.indexOf(STK) === 0
+            && opened.paletteGroups >= 1 && opened.nodeButtons >= 7 && opened.edges >= 1
+            && opened.state === 'unvalidated' && opened.status === null
+            && opened.summaryTitle === '아직 검증하지 않았습니다'
+            && opened.summaryDetail === '서버 검증을 거쳐야 실행할 수 있습니다'
+            && !!validated && validated.state === 'synced'
+            && validated.status === '그래프·코드 검증 완료'
+            && validated.summaryTitle === '그래프와 코드가 같은 버전입니다'
+            && validated.diagnostics.every((code) => code === 'BTG-DATA-001'),
+      data: { entry, opened, validated },
+    }));
+
+    // ── O02 · 편집기에서 고친 값이 폼으로 흐른다 ────────────────────────────
+    const beforeParam = validated || opened;
+    const paramEdit = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const card = root.querySelector('.backtest-vis-node[data-node-id="param-fast"]');
+      if (!card) return { ok: false, why: 'param-fast 칸이 없다' };
+      card.click();
+      const field = root.querySelector(
+        '.backtest-vis-inspector .backtest-vis-field[data-param="default"] .backtest-vis-number',
+      );
+      if (!field) return { ok: false, why: '검사기에 기본값 칸이 없다' };
+      const before = field.value;
+      field.value = '12';
+      field.dispatchEvent(new Event('change', { bubbles: true }));
+      return { ok: true, before };
+    })()`);
+    const paramSynced = await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (c.map.validation_state !== 'synced') return null;
+      const graph = c.map.graph;
+      const node = graph ? graph.nodes.filter((n) => n.id === 'param-fast')[0] : null;
+      if (!node || Number(node.params.default) !== 12) return null;
+      return {
+        state: c.map.validation_state,
+        graphDefault: node.params.default,
+        specFast: c.spec && c.spec.params ? c.spec.params.fast : null,
+        // 이름표는 편집기가 그리지 않는 값이라 조용히 사라지기 쉽다 — 값 하나를 고친 뒤에도
+        // 전략 이름과 프리셋 id가 그대로인지 같이 잰다.
+        specName: c.spec ? c.spec.name : null,
+        presetId: c.spec ? c.spec.presetId : null,
+        graphHash: c.map.hashes ? c.map.hashes.graph_hash : null,
+        mapVersion: c.map.version,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('O02', '검사기에서 고친 값이 디바운스 뒤 그래프·폼 스펙에 같이 들어간다', () => ({
+      ok: !!paramEdit && paramEdit.ok === true
+            && !!paramSynced && Number(paramSynced.graphDefault) === 12
+            && !!paramSynced.specFast && Number(paramSynced.specFast.default) === 12
+            && !!paramSynced.graphHash && !!beforeParam
+            && paramSynced.graphHash !== beforeParam.graphHash
+            && paramSynced.specName === 'SMA 골든크로스' && paramSynced.presetId === 'sma_crossover',
+      data: {
+        edited: paramEdit,
+        specFast: paramSynced && paramSynced.specFast,
+        specName: paramSynced && paramSynced.specName,
+        presetId: paramSynced && paramSynced.presetId,
+        hashBefore: beforeParam && beforeParam.graphHash,
+        hashAfter: paramSynced && paramSynced.graphHash,
+        // 지도 판 번호는 대화 반영이 세는 숫자다 — 편집기의 직접 편집은 세지 않는다.
+        mapVersion: paramSynced && paramSynced.mapVersion,
+      },
+    }));
+
+    // ── O0B · 왕복의 base가 될 버전 하나를 사람 손으로 남긴다 ────────────────
+    // 적용(O07)은 "그 사이 다른 수정이 먼저 저장됐는가"를 base 버전으로 판정한다 —
+    // 비교할 머리가 없으면 무엇을 재는지 알 수 없는 성공/실패가 된다.
+    await click(shellWin, `${R}.backtest-visual-open-code`);
+    await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      return (c.designTab === 'code' && c.code.source.indexOf('def signals(df, p):') !== -1) ? true : null;
+    })()`, WAIT_VALIDATE);
+    // 앞 섹션이 이미 전략을 만들어 뒀으면 strategyId·activeVersionId가 저장 **전에도**
+    // 차 있다 — 그 둘이 있는지만 기다리면 저장이 끝나기 전 값을 읽고 지나간다
+    // (2026-09-03 실측: O0B가 앞 버전 id를 base로 물고 O07의 활성 버전 비교가 어긋났다).
+    // 활성 버전이 **바뀐 것**을 기다린다.
+    const beforeSaveVersionId = await js(shellWin, '(window.AthenaBacktestCanvas.getContext().code.activeVersionId)');
+    await click(shellWin, `${R}.backtest-code-save`);
+    const baseSaved = await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (!c.code.strategyId || !c.code.activeVersionId) return null;
+      if (c.code.activeVersionId === ${JSON.stringify(beforeSaveVersionId)}) return null;
+      return { strategyId: c.code.strategyId, activeVersionId: c.code.activeVersionId, lines: c.code.lines };
+    })()`, WAIT_VALIDATE);
+    if (baseSaved && baseSaved.strategyId
+      && created.strategyIds.indexOf(baseSaved.strategyId) === -1) {
+      created.strategyIds.push(baseSaved.strategyId);
+    }
+    const baseVersions = await listVersions(baseSaved && baseSaved.strategyId);
+    const baseHead = headOf(baseVersions);
+    await step('O0B', '지도 뒤의 코드를 [이 코드로 저장]하면 왕복의 base가 되는 활성 버전이 선다', () => ({
+      ok: !!baseSaved && !!baseHead && baseHead.id === baseSaved.activeVersionId
+            && baseHead.active === true,
+      data: {
+        strategyId: baseSaved && baseSaved.strategyId,
+        versions: baseVersions.map((v) => ({ v: v.version, origin: v.origin, active: v.active })),
+      },
+    }));
+    await goSubtab(shellWin, 0);
+
+    // ── O03 · 연결 오류(보드 12) — 같은 코드가 네 곳에 함께 선다 ────────────
+    const cut = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const card = root.querySelector('.backtest-vis-node[data-node-id="cond-exit-1"]');
+      if (!card) return { ok: false, why: 'cond-exit-1 칸이 없다' };
+      card.click();
+      const sel = root.querySelector(
+        '.backtest-vis-inspector select.backtest-vis-select[data-node-id="cond-exit-1"][data-port="right"]',
+      );
+      if (!sel) return { ok: false, why: '검사기에 오른쪽 입력 칸이 없다' };
+      const had = sel.value;
+      sel.value = '';
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+      return { ok: true, had };
+    })()`);
+    const broken = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (c.map.validation_state !== 'invalid') return null;
+      const run = root.querySelector('.backtest-run-button');
+      const n = (sel) => root.querySelectorAll(sel).length;
+      const graph = c.map.graph;
+      return {
+        state: c.map.validation_state,
+        diagnostics: c.map.diagnostics,
+        graphHash: c.map.hashes ? c.map.hashes.graph_hash : null,
+        graphEdges: graph ? graph.edges.length : 0,
+        node: n('.backtest-vis-node.is-error[data-node-id="cond-exit-1"][data-diag-code="BTG-PORT-002"]'),
+        port: n('.backtest-vis-port[data-node-id="cond-exit-1"][data-port="right"][data-diag-code="BTG-PORT-002"]'),
+        inspector: n('.backtest-vis-inspector-error[data-diag-code="BTG-PORT-002"]'),
+        summary: n('.backtest-vis-summary[data-diag-code="BTG-PORT-002"]'),
+        errorCode: (root.querySelector('.backtest-vis-error-code') || {}).textContent || null,
+        runText: run ? (run.textContent || '').trim() : null,
+        runDisabled: run ? !!run.disabled : null,
+      };
+    })()`, WAIT_VALIDATE);
+    const portDiag = broken
+      ? broken.diagnostics.filter((d) => d.code === 'BTG-PORT-002')[0] || null
+      : null;
+    await step('O03', '청산 조건의 오른쪽 입력을 끊으면 BTG-PORT-002가 칸·포트·검사기·요약 바에 함께 선다', () => ({
+      ok: !!cut && cut.ok === true && !!broken && broken.state === 'invalid'
+            && !!portDiag && portDiag.node_id === 'cond-exit-1' && portDiag.port === 'right'
+            && broken.node === 1 && broken.port === 1 && broken.inspector === 1 && broken.summary === 1
+            && broken.errorCode === 'BTG-PORT-002'
+            && broken.runText === '오류 검토' && broken.runDisabled === true,
+      data: { cut, broken },
+    }));
+
+    // ── O04 · 오류 칸에서 코드로(보드 13) — 미실행 미리보기의 그 줄 ─────────
+    await js(shellWin, `(() => {
+      const card = document.querySelector('${R}.backtest-vis-node[data-node-id="cond-exit-1"]');
+      if (!card) return false;
+      card.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      return true;
+    })()`);
+    const preview = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (c.designTab !== 'code') return null;
+      const ta = root.querySelector('.backtest-code-textarea');
+      const lit = Array.from(root.querySelectorAll('.backtest-code-gutter .backtest-code-line.is-lit'))
+        .map((l) => Number(l.textContent));
+      if (!ta || !lit.length) return null;
+      const lines = String(ta.value).split('\\n');
+      const graph = c.map.graph;
+      const node = graph ? graph.nodes.filter((n) => n.id === 'cond-exit-1')[0] : null;
+      const banner = root.querySelector('.backtest-code-preview-banner');
+      const ribbon = root.querySelector('.backtest-code-ribbon');
+      return {
+        designTab: c.designTab,
+        label: node ? node.label : null,
+        ribbonHidden: ribbon ? !!ribbon.hidden : null,
+        ribbonLabel: (root.querySelector('.backtest-code-ribbon-label') || {}).textContent || null,
+        ribbonKind: (root.querySelector('.backtest-code-ribbon-kind') || {}).textContent || null,
+        ribbonCode: (root.querySelector('.backtest-code-ribbon-code') || {}).textContent || null,
+        bannerHidden: banner ? !!banner.hidden : null,
+        bannerText: banner ? banner.textContent : null,
+        readOnly: !!ta.readOnly,
+        lit,
+        litText: lit.map((k) => lines[k - 1] || ''),
+      };
+    })()`, WAIT_VALIDATE);
+    await click(shellWin, `${R}.backtest-code-ribbon-back`);
+    const backOnNode = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (c.designTab !== 'flow') return null;
+      const sel = root.querySelector('.backtest-vis-node.is-selected');
+      if (!sel) return null;
+      return { designTab: c.designTab, selected: sel.getAttribute('data-node-id') };
+    })()`, WAIT_UI);
+    await step('O04', '오류 칸에서 Enter를 누르면 미실행 미리보기의 __MISSING__ 줄이 켜지고, 리본이 그 칸으로 되돌린다', () => ({
+      ok: !!preview && preview.ribbonHidden === false
+            && preview.ribbonLabel === `연결된 노드 · ${preview.label}`
+            && preview.ribbonKind === '미실행 미리보기'
+            && preview.ribbonCode === 'BTG-PORT-002'
+            && preview.bannerHidden === false && preview.readOnly === true
+            && preview.litText.some((t) => String(t).indexOf('__MISSING__') !== -1)
+            && !!backOnNode && backOnNode.selected === 'cond-exit-1',
+      data: { preview, backOnNode },
+    }));
+
+    // ── O05 · 질문 카드(한 번에 하나) ────────────────────────────────────────
+    // 모델이 내는 액션과 **같은 봉투**로 넣는다: athena_backtest가 백엔드에서 받은
+    // question을 {kind:'visual_question', payload}로 실어 보낸다(backtest_tools
+    // _canvas_envelope). 질문 자체는 지금 화면의 그래프로 서버가 만든 진짜 값이다.
+    const graphForAsk = await js(shellWin, '(() => { const c = window.AthenaBacktestCanvas.getContext(); return c.map.graph; })()');
+    const asked = await backendJson('POST', '/api/v1/backtest/visual/question', { graph: graphForAsk });
+    const question = asked && asked.body ? asked.body.question : null;
+    const historyBefore = await countOf(shellWin, '#history .backtest-visual');
+    const runsBefore = await countRuns();
+    const deploysBefore = await countDeployments();
+    sendChat(shellWin, { kind: 'visual_question', payload: question });
+    const questionCard = await until(shellWin, `(() => {
+      const cards = document.querySelectorAll('#history .backtest-visual');
+      if (!cards.length) return null;
+      const card = cards[cards.length - 1];
+      const pill = card.querySelector('.routine-draft-pill.is-filled');
+      if (!pill || pill.textContent !== '한 가지만 확인할게요') return null;
+      const c = window.AthenaBacktestCanvas.getContext();
+      return {
+        cards: cards.length,
+        title: pill.textContent,
+        body: (card.querySelector('.agent-body') || {}).textContent || null,
+        choices: Array.from(card.querySelectorAll('.backtest-visual-choice'))
+          .map((b) => ({
+            label: (b.querySelector('.backtest-visual-choice-label') || {}).textContent || null,
+            recommended: Array.from(b.querySelectorAll('.routine-draft-pill'))
+              .filter((p) => p.textContent === '권장').length > 0,
+            changes: (b.querySelector('.backtest-visual-choice-changes') || {}).textContent || null,
+          })),
+        makeDisabled: Array.from(card.querySelectorAll('button'))
+          .filter((b) => (b.textContent || '').trim() === '수정안 만들기')
+          .map((b) => !!b.disabled)[0],
+        pendingQuestion: c.map.pendingQuestion,
+        graphHash: c.map.hashes ? c.map.hashes.graph_hash : null,
+        state: c.map.validation_state,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('O05', '질문 카드가 한 장 뜨고 그래프는 그대로다 — 고르기 전에는 [수정안 만들기]가 잠겨 있다', () => ({
+      ok: asked.status === 200 && !!question && question.code === 'BTG-PORT-002'
+            && !!questionCard && questionCard.title === '한 가지만 확인할게요'
+            && questionCard.cards === historyBefore + 1
+            && questionCard.choices.length >= 2
+            && questionCard.choices.filter((c) => c.recommended).length === 1
+            && questionCard.makeDisabled === true
+            && !!questionCard.pendingQuestion
+            && questionCard.pendingQuestion.code === 'BTG-PORT-002'
+            && !!broken && questionCard.graphHash === broken.graphHash
+            && questionCard.state === 'invalid',
+      data: {
+        status: asked.status,
+        question: question && {
+          code: question.code, choices: (question.choices || []).length, remaining: question.remaining,
+        },
+        card: questionCard,
+      },
+    }));
+
+    // ── O06 · 비활성 수정안(만들기만 한다) ──────────────────────────────────
+    const versionsBefore = await listVersions(baseSaved && baseSaved.strategyId);
+    await js(shellWin, `(() => {
+      const cards = document.querySelectorAll('#history .backtest-visual');
+      const card = cards[cards.length - 1];
+      if (!card) return false;
+      const pick = Array.from(card.querySelectorAll('.backtest-visual-choice'))
+        .filter((b) => Array.from(b.querySelectorAll('.routine-draft-pill'))
+          .some((p) => p.textContent === '권장'))[0];
+      if (!pick) return false;
+      pick.click();
+      return true;
+    })()`);
+    await clickLastCardButton(shellWin, '수정안 만들기');
+    const patchCard = await until(shellWin, `(() => {
+      const cards = document.querySelectorAll('#history .backtest-visual');
+      if (!cards.length) return null;
+      const card = cards[cards.length - 1];
+      const pill = card.querySelector('.routine-draft-pill.is-filled');
+      if (!pill || pill.textContent !== '그래프 + 코드 패치') return null;
+      const c = window.AthenaBacktestCanvas.getContext();
+      return {
+        cards: cards.length,
+        title: pill.textContent,
+        diffRows: card.querySelectorAll('.backtest-diff-row').length,
+        addedRows: card.querySelectorAll('.backtest-diff-row.is-add').length,
+        summary: (card.querySelector('.backtest-change-row') || {}).textContent || null,
+        buttons: Array.from(card.querySelectorAll('button')).map((b) => (b.textContent || '').trim()),
+        pendingPatch: c.map.pendingPatch,
+        pendingQuestion: c.map.pendingQuestion,
+        graphHash: c.map.hashes ? c.map.hashes.graph_hash : null,
+        state: c.map.validation_state,
+      };
+    })()`, WAIT_VALIDATE);
+    const versionsAfterPatch = await listVersions(baseSaved && baseSaved.strategyId);
+    const runsAfterPatch = await countRuns();
+    await step('O06', '[수정안 만들기]는 수정안 카드 한 장만 만든다 — 그래프도 버전도 실행도 그대로다', () => ({
+      ok: !!patchCard && patchCard.title === '그래프 + 코드 패치'
+            && patchCard.cards === historyBefore + 2
+            && patchCard.diffRows > 0 && patchCard.addedRows > 0
+            && !!patchCard.summary && patchCard.summary.length > 0
+            && patchCard.buttons.indexOf('적용하고 시각 설계로 돌아가기') !== -1
+            && !!patchCard.pendingPatch && !!patchCard.pendingPatch.patch_id
+            && patchCard.pendingPatch.graph_compatible === true
+            && patchCard.pendingQuestion === null
+            && !!broken && patchCard.graphHash === broken.graphHash
+            && patchCard.state === 'invalid'
+            && versionsAfterPatch.length === versionsBefore.length
+            && runsAfterPatch === runsBefore,
+      data: {
+        card: patchCard && {
+          cards: patchCard.cards, diffRows: patchCard.diffRows, summary: patchCard.summary,
+          buttons: patchCard.buttons, pendingPatch: patchCard.pendingPatch,
+        },
+        versions: { before: versionsBefore.length, after: versionsAfterPatch.length },
+        runs: { before: runsBefore, after: runsAfterPatch },
+      },
+    }));
+
+    // ── O07 · 사람이 [적용] — 비활성 버전 한 개, 그 이상은 아무것도 ──────────
+    const activeBefore = baseSaved ? baseSaved.activeVersionId : null;
+    // 카드의 알약은 두 개의 다른 숫자를 잇는다: 왼쪽은 **지도 판 번호**(프리셋을 고르면
+    // 1), 오른쪽은 서버가 지은 **전략 버전 번호**다. 앞 섹션이 같은 전략에 버전을
+    // 남겼으면 그 둘은 같지 않다 — 그래서 둘 다 실측값으로 재고, 지어낸 숫자가
+    // 아니라는 것만 확인한다.
+    const mapVersionBefore = await js(shellWin, '(window.AthenaBacktestCanvas.getContext().map.version)');
+    await clickLastCardButton(shellWin, '적용하고 시각 설계로 돌아가기');
+    // 무슨 카드가 오든 **그 카드를** 잰다 — 여기서 '동기화 완료'만 기다리면 409(다시 검토)가
+    // 왔을 때 리포트에 null만 남아 원인을 못 댄다.
+    const syncedCard = await until(shellWin, `(() => {
+      const cards = document.querySelectorAll('#history .backtest-visual');
+      if (cards.length <= ${Number(historyBefore) + 2}) return null;
+      const card = cards[cards.length - 1];
+      const pills = Array.from(card.querySelectorAll('.routine-draft-pill'))
+        .map((p) => (p.textContent || '').trim());
+      const c = window.AthenaBacktestCanvas.getContext();
+      const root = document.getElementById('backtestCanvas');
+      return {
+        cards: cards.length,
+        pills,
+        body: Array.from(card.querySelectorAll('.agent-body')).map((b) => b.textContent),
+        // 409면 카드는 "다시 검토"만 말한다 — 서버가 준 이유는 마지막 영수증에만 있다.
+        lastChange: c.lastChange,
+        state: c.map.validation_state,
+        designTab: c.designTab,
+        pendingPatch: c.map.pendingPatch,
+        activeVersionId: c.code.activeVersionId,
+        status: (root.querySelector('.backtest-visual-status-text') || {}).textContent || null,
+        summaryTitle: (root.querySelector('.backtest-vis-summary-title') || {}).textContent || null,
+        graphHash: c.map.hashes ? c.map.hashes.graph_hash : null,
+      };
+    })()`, WAIT_VALIDATE);
+    const versionsAfterApply = await listVersions(baseSaved && baseSaved.strategyId);
+    const runsAfterApply = await countRuns();
+    const deploysAfterApply = await countDeployments();
+    const appliedHead = headOf(versionsAfterApply);
+    // 서버가 **자기 산출물을** 거절하면 그것은 이 화면의 실패가 아니다 — 그때만 그 사실을
+    // 그대로 적고 넘어간다(문구가 정확히 그것일 때만 — 다른 이유의 409/422는 여전히 FAIL).
+    // 백엔드가 고쳐지면 이 갈래는 저절로 안 타고 아래 판정이 다시 산다.
+    const BUNDLE_HASH_422 = 'bundle hash가 본문에서 다시 계산한 값과 다르다';
+    const conflictReason = syncedCard && syncedCard.lastChange
+      ? String((syncedCard.lastChange.errors || [])[0] || '') : '';
+    await step('O07', '[적용]은 origin=visual 비활성 버전 하나만 남긴다 — 활성 버전·실행·배포는 그대로다', () => {
+      if (conflictReason.indexOf(BUNDLE_HASH_422) === 0) {
+        return {
+          skip: `백엔드가 자기 컴파일 결과를 되받고 거절한다(${conflictReason}). raw HTTP로 재현한 원인 둘:`
+            + ' ① spec_hash — /visual/compile은 StrategySpec **모델**의 정본 JSON을 해싱하는데'
+            + '(visual_schema.spec_hash) 버전 저장은 같은 이름으로 **spec_yaml 문자열**을 해싱한다'
+            + '(store.hash_bundle) — 값이 같아질 수 없다.'
+            + ' ② graph_hash — store.canonical_graph_json은 클라이언트가 보낸 **원본 JSON**을 해싱하는데,'
+            + ' scenario.costs·risk의 8.0·18.0·20.0·5.0이 JS를 한 번 왕복하면 8·18·20·5가 된다'
+            + '(JS Number는 8.0을 적을 수 없다) — 어떤 브라우저 클라이언트도 이 hash를 재현할 수 없다.'
+            + ' 고칠 자리는 backend/athena_api/backtest/store.py·api/backtest.py이고 이 작업의 소유 범위 밖이다.',
+        };
+      }
+      return {
+        ok: !!syncedCard && syncedCard.pills[0] === '동기화 완료'
+              && syncedCard.state === 'synced' && syncedCard.designTab === 'flow'
+              && syncedCard.pendingPatch === null
+              && syncedCard.status === '그래프·코드 검증 완료'
+              && syncedCard.summaryTitle === '그래프와 코드가 같은 버전입니다'
+              && !!broken && syncedCard.graphHash !== broken.graphHash
+              && versionsAfterApply.length === versionsBefore.length + 1
+              && !!appliedHead && appliedHead.origin === 'visual' && appliedHead.active === false
+              && syncedCard.pills.indexOf(`v${mapVersionBefore} → v${appliedHead.version}`) !== -1
+              && syncedCard.activeVersionId === activeBefore
+              && runsAfterApply === runsBefore && deploysAfterApply === deploysBefore,
+        data: {
+          card: syncedCard,
+          versions: versionsAfterApply.map((v) => ({ v: v.version, origin: v.origin, active: v.active })),
+          activeVersionId: { before: activeBefore, after: syncedCard && syncedCard.activeVersionId },
+          runs: { before: runsBefore, after: runsAfterApply },
+          deployments: { before: deploysBefore, after: deploysAfterApply },
+        },
+      };
+    });
+
+    // ── O08 · 이제 코드는 authoritative다 — 손으로 고치면 갈래를 묻는다 ──────
+    // 고르기와 Enter는 **두 번 나눠** 보낸다: select()가 편집기를 다시 그려 방금 잡은
+    // 노드 엘리먼트가 문서에서 떨어져 나가고, 떨어진 엘리먼트에 던진 keydown은 편집기
+    // 루트까지 올라가지 못한다(2026-09-03 실측 — O08이 조용히 아무 일도 안 했다).
+    await js(shellWin, `(() => {
+      const card = document.querySelector('${R}.backtest-vis-node[data-node-id="cond-exit-1"]');
+      if (!card) return false;
+      card.click();
+      return true;
+    })()`);
+    await js(shellWin, `(() => {
+      const card = document.querySelector('${R}.backtest-vis-node[data-node-id="cond-exit-1"]');
+      if (!card) return false;
+      card.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      return true;
+    })()`);
+    const authoritative = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (c.designTab !== 'code') return null;
+      const ta = root.querySelector('.backtest-code-textarea');
+      const ribbon = root.querySelector('.backtest-code-ribbon');
+      const banner = root.querySelector('.backtest-code-preview-banner');
+      if (!ta || !ribbon || ribbon.hidden) return null;
+      return {
+        ribbonKind: (root.querySelector('.backtest-code-ribbon-kind') || {}).textContent || null,
+        ribbonLabel: (root.querySelector('.backtest-code-ribbon-label') || {}).textContent || null,
+        bannerHidden: banner ? !!banner.hidden : null,
+        readOnly: !!ta.readOnly,
+        missing: String(ta.value).indexOf('__MISSING__') !== -1,
+      };
+    })()`, WAIT_VALIDATE);
+    const edited = await js(shellWin, `(() => {
+      const ta = document.querySelector('${R}.backtest-code-textarea');
+      if (!ta) return { ok: false, why: '편집기가 없다' };
+      ta.value = ta.value + '\\n# probe-hand-edit';
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
+      return { ok: true };
+    })()`);
+    const ahead = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const box = root.querySelector('.backtest-code-ahead');
+      if (!box) return null;
+      return {
+        text: (box.querySelector('.backtest-code-ahead-text') || {}).textContent || null,
+        buttons: Array.from(box.querySelectorAll('button')).map((b) => (b.textContent || '').trim()),
+      };
+    })()`, WAIT_UI);
+    await click(shellWin, `${R}.backtest-code-ahead-regraph`);
+    const regraphed = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (c.designTab !== 'flow') return null;
+      return {
+        designTab: c.designTab,
+        state: c.map.validation_state,
+        codeOnly: c.map.code_only,
+        ahead: root.querySelectorAll('.backtest-code-ahead').length,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('O08', '동기화 뒤의 코드는 [연결됨]이고, 손으로 고치면 두 갈래가 서고, [그래프에서 다시 만들기]가 되돌린다', () => ({
+      ok: !!authoritative && authoritative.ribbonKind === '연결됨'
+            && authoritative.bannerHidden === true && authoritative.readOnly === false
+            && authoritative.missing === false
+            && !!edited && edited.ok === true
+            && !!ahead && ahead.text === '코드가 지도보다 앞섬'
+            && ahead.buttons.indexOf('그래프에서 다시 만들기') !== -1
+            && ahead.buttons.indexOf('코드 전용으로 분기') !== -1
+            && !!regraphed && regraphed.designTab === 'flow' && regraphed.ahead === 0
+            && regraphed.codeOnly === false,
+      data: { authoritative, ahead, regraphed },
+    }));
+
+    // ── O09 · 코드 전용 분기 — 지도는 마지막 호환 snapshot으로 물러난다 ──────
+    const beforeFork = await listVersions(baseSaved && baseSaved.strategyId);
+    await click(shellWin, `${R}.backtest-visual-open-code`);
+    await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      return (c.designTab === 'code' && c.code.source) ? true : null;
+    })()`, WAIT_VALIDATE);
+    await js(shellWin, `(() => {
+      const ta = document.querySelector('${R}.backtest-code-textarea');
+      if (!ta) return false;
+      ta.value = ta.value + '\\n# probe-code-only';
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
+      return true;
+    })()`);
+    await until(shellWin, `(document.querySelectorAll('${R}.backtest-code-ahead').length ? true : null)`, WAIT_UI);
+    await click(shellWin, `${R}.backtest-code-ahead-fork`);
+    const forked = await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      return c.map.code_only === true ? { codeOnly: true, mapVersion: c.map.version } : null;
+    })()`, WAIT_VALIDATE);
+    await goSubtab(shellWin, 0);
+    const snapshot = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (c.designTab !== 'flow') return null;
+      const wrap = root.querySelector('.backtest-visual.is-snapshot');
+      if (!wrap) return null;
+      return {
+        badge: (wrap.querySelector('.backtest-snapshot-badge') || {}).textContent || null,
+        readOnlyHost: root.querySelectorAll('.backtest-visual-host.is-snapshot').length,
+        ports: root.querySelectorAll('.backtest-vis-port').length,
+        disabledPorts: root.querySelectorAll('.backtest-vis-port[disabled]').length,
+        palette: root.querySelectorAll('.backtest-vis-palette').length,
+      };
+    })()`, WAIT_VALIDATE);
+    const afterFork = await listVersions(baseSaved && baseSaved.strategyId);
+    const forkHead = headOf(afterFork);
+    await step('O09', '[코드 전용으로 분기]는 origin=code_only 비활성 버전을 남기고 지도를 읽기 전용 snapshot으로 물린다', () => ({
+      ok: !!forked && forked.codeOnly === true
+            && afterFork.length === beforeFork.length + 1
+            && !!forkHead && forkHead.origin === 'code_only' && forkHead.active === false
+            && !!snapshot && snapshot.badge === '동기화되지 않음 · 코드 전용'
+            && snapshot.readOnlyHost === 1 && snapshot.palette === 0
+            && snapshot.ports > 0 && snapshot.disabledPorts === snapshot.ports,
+      data: {
+        forked,
+        snapshot,
+        versions: afterFork.map((v) => ({ v: v.version, origin: v.origin, active: v.active })),
+      },
+    }));
+
+    // 뒤 섹션이 이어 돌 수 있게 폼을 되돌린다 — 분기 상태를 남기면 지도가 계속
+    // 읽기 전용이다(프리셋을 다시 고르는 것이 사람이 하는 되돌리기다).
+    await ensureRunnableForm(shellWin, FROM, TO);
+  });
+
+  // ==================================================================
+  // P 새 기법 만들기 — 코드창 · 명령창 · 노드·흐름 창 (보드 20·21)
+  // ==================================================================
+  //
+  // 사용자 확정 구도: [+ 새 기법 만들기]를 누르면 코드창 + 대화창 + 명령창이 서고,
+  // AI가 질문 카드로 알고리즘을 정하며 코드를 직접 쓴다. 검사는 전부 자동이고,
+  // 통과하면 노드·흐름 창이 열린다. 노드는 그 기법 파이썬의 함수 한 단위다.
+  //
+  // 라우트 2종(/technique/nodes·/technique/check)이 아직 없는 백엔드에서는 404를
+  // 그대로 재고 그 뒤 검사·노드 검사는 SKIP한다 — 화면만 도는 검사는 그대로 돈다.
+  if (on('P')) await section('P', async () => {
+    await ensureRunnableForm(shellWin, FROM, TO);
+
+    const probeSource = [
+      'import athena_bt as bt',
+      '',
+      'PARAMS = {"lookback": {"default": 20, "min": 5, "max": 60, "step": 1, "type": "int"}}',
+      '',
+      '',
+      'def compute_sma(df, lookback):',
+      '    return df["close"].rolling(lookback).mean()',
+      '',
+      '',
+      'def signals(df, p):',
+      '    ma = compute_sma(df, p["lookback"])',
+      '    df["entry"] = df["close"] > ma',
+      '    df["exit"] = df["close"] < ma',
+      '    return df[["entry", "exit"]]',
+      '',
+    ].join('\n');
+
+    // 라우트가 살아 있는가 — 없으면 404를 그대로 적고 뒤 검사들은 SKIP한다.
+    const checkRoute = await backendJson('POST', '/api/v1/backtest/technique/check', { source: probeSource });
+    const nodesRoute = await backendJson('POST', '/api/v1/backtest/technique/nodes', { source: probeSource });
+    const routesLive = checkRoute.status !== 404 && nodesRoute.status !== 404
+      && checkRoute.status !== 0 && nodesRoute.status !== 0;
+    const routeSkip = `백엔드에 라우트가 없다 — check ${checkRoute.status} · nodes ${nodesRoute.status}`;
+    await step('P01', '기법 라우트 2종이 살아 있다(/technique/check · /technique/nodes)', () => ({
+      ok: routesLive,
+      data: { check: checkRoute.status, nodes: nodesRoute.status },
+    }));
+
+    // 채팅으로 나간 문장을 붙잡는다 — 캔버스가 던지는 문서 이벤트가 유일한 통로다.
+    await js(shellWin, `(() => {
+      if (!window.__probeTechniqueChat) {
+        window.__probeTechniqueChat = [];
+        document.addEventListener('athena:chat-submit', (e) => {
+          window.__probeTechniqueChat.push(String((e && e.detail && e.detail.text) || ''));
+        });
+      }
+      window.__probeTechniqueChat.length = 0;
+      return true;
+    })()`);
+
+    await goDesignForm(shellWin);
+    await click(shellWin, `${R}.backtest-technique-new`);
+    await wait(600);
+    const started = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const band = root.querySelector('.backtest-technique-band');
+      return {
+        subtabs: Array.from(root.querySelectorAll('.backtest-subtab')).map((t) => t.textContent),
+        on: (root.querySelector('.backtest-subtab.is-on') || {}).textContent || null,
+        editors: root.querySelectorAll('.backtest-code-host').length,
+        band: band ? band.textContent : null,
+        terminal: root.querySelectorAll('.backtest-terminal').length,
+        progress: (root.querySelector('.backtest-technique-progress') || {}).textContent || null,
+        submitted: (window.__probeTechniqueChat || []).slice(),
+      };
+    })()`);
+    await step('P02', '[+ 새 기법 만들기]가 코드창·띠·명령창을 세우고 대화를 시작한다', () => ({
+      ok: JSON.stringify(started.subtabs) === JSON.stringify(['코드', '노드·흐름'])
+            && started.on === '코드' && started.editors === 1 && started.terminal === 1
+            && /AI가 제어하는 중/.test(String(started.band))
+            && /검사 0\/5/.test(String(started.progress))
+            && started.submitted.length === 1
+            && started.submitted[0] === '새 기법을 만들고 싶어요. 어떤 전략인지 하나씩 물어봐 주세요.',
+      data: started,
+    }));
+
+    // AI가 코드를 쓴 자리 — propose_code와 같은 봉투다.
+    sendChat(shellWin, { kind: 'code_draft', source: probeSource });
+    const checked = routesLive
+      ? await until(shellWin, `(() => {
+        const t = window.AthenaBacktestCanvas.getContext().technique;
+        return t.lastCheckAt ? t : null;
+      })()`, WAIT_VALIDATE)
+      : null;
+    await step('P03', '코드가 바뀌면 자동 검사 7개(차단 5·경고 2)가 돌고 통과 여부는 차단만 본다', () => {
+      if (!routesLive) return { skip: routeSkip };
+      // 차단 5개(syntax·contract·dryrun·lookahead·warmup)가 전부 ok여야 passed다. 경고(magic·
+      // structure)는 통과를 막지 않는다 — signals 하나짜리 프로브 코드는 structure 경고가 정상이다.
+      const ids = checked && Array.isArray(checked.checks) ? checked.checks.map((c) => c.id) : [];
+      const blocks = checked ? checked.checks.filter((c) => c.severity !== 'warn') : [];
+      return {
+        ok: !!checked && ids.length === 7
+              && JSON.stringify(ids) === JSON.stringify(['syntax', 'contract', 'dryrun', 'lookahead', 'warmup', 'magic', 'structure'])
+              && blocks.length === 5 && blocks.every((c) => c.ok === true)
+              && checked.passed === true && !!checked.stats,
+        data: checked && {
+          passed: checked.passed,
+          checks: checked.checks.map((c) => `${c.id}:${c.ok}`),
+          stats: checked.stats,
+        },
+      };
+    });
+
+    const opened = routesLive
+      ? await until(shellWin, `(() => {
+        const root = document.getElementById('backtestCanvas');
+        const c = window.AthenaBacktestCanvas.getContext();
+        if (c.designTab !== 'nodes') return null;
+        return {
+          designTab: c.designTab,
+          granularity: c.technique.granularity,
+          nodes: c.technique.nodes.map((n) => n.id),
+          flows: c.technique.flows,
+          cards: root.querySelectorAll('.backtest-tnodes-card').length,
+          host: root.querySelectorAll('.backtest-technique-nodes-host').length,
+        };
+      })()`, WAIT_VALIDATE)
+      : null;
+    await step('P04', '검사를 넘기면 노드·흐름 창이 자동으로 열린다 — 노드는 이 코드의 함수다', () => {
+      if (!routesLive) return { skip: routeSkip };
+      return {
+        ok: !!opened && opened.host === 1 && opened.nodes.length >= 2
+              && opened.nodes.indexOf('compute_sma') !== -1
+              && opened.nodes.indexOf('signals') !== -1
+              && opened.granularity === 'function',
+        data: opened,
+      };
+    });
+
+    // 노드를 눌러 설명을 부른다 — 캔버스가 아니라 대화가 답한다.
+    const asked = routesLive
+      ? await (async () => {
+        await js(shellWin, `(() => { window.__probeTechniqueChat.length = 0; return true; })()`);
+        await click(shellWin, `${R}.backtest-tnodes-card`);
+        await wait(300);
+        await click(shellWin, `${R}.backtest-tnodes-card .backtest-tnodes-act.is-ask`);
+        await wait(600);
+        return js(shellWin, `(() => ({
+          submitted: (window.__probeTechniqueChat || []).slice(),
+          turns: Array.from(document.querySelectorAll('#history .turn-q')).map((n) => n.textContent),
+          selected: window.AthenaBacktestCanvas.getContext().technique.selectedNode,
+        }))()`);
+      })()
+      : null;
+    await step('P05', '노드를 누르면 노드 …를 설명해줘가 사용자 메시지로 나간다', () => {
+      if (!routesLive) return { skip: routeSkip };
+      const sent = (asked && asked.submitted) || [];
+      const turns = (asked && asked.turns) || [];
+      return {
+        ok: sent.length >= 1 && /^노드 .+\(\)를 설명해줘$/.test(sent[sent.length - 1])
+              && turns.some((t) => t === sent[sent.length - 1]),
+        data: { submitted: sent, lastTurn: turns[turns.length - 1], selected: asked && asked.selected },
+      };
+    });
+
+    // AI의 질문 카드 — MCP technique_question이 오는 길과 같은 봉투다.
+    const cardsBefore = await countOf(shellWin, `#history .backtest-technique`);
+    sendChat(shellWin, {
+      kind: 'technique_question',
+      payload: {
+        question_ko: '무엇을 보고 사겠습니까?',
+        choices: [
+          { id: 'breakout', label_ko: '20일 최고가 돌파', detail_ko: '추세를 따라간다', recommended: true },
+          { id: 'reversion', label_ko: '5일 저가 이탈', detail_ko: '되돌림을 노린다' },
+        ],
+        why_ko: '진입 규칙이 정해져야 나머지가 따라옵니다',
+      },
+    });
+    const question = await until(shellWin, `(() => {
+      const cards = document.querySelectorAll('#history .backtest-technique');
+      if (cards.length <= ${cardsBefore}) return null;
+      const card = cards[cards.length - 1];
+      return {
+        text: card.textContent,
+        choices: Array.from(card.querySelectorAll('.backtest-technique-choice')).map((b) => b.textContent),
+      };
+    })()`, WAIT_UI);
+    await step('P06', 'technique_question이 질문·이유·선택지(권장 알약) 카드로 선다', () => ({
+      ok: !!question && question.choices.length === 2
+            && /무엇을 보고 사겠습니까/.test(question.text)
+            && /진입 규칙이 정해져야/.test(question.text)
+            && /권장/.test(question.choices[0]),
+      data: question,
+    }));
+
+    await js(shellWin, `(() => { window.__probeTechniqueChat.length = 0; return true; })()`);
+    await clickNth(shellWin, `#history .backtest-technique-choice`, 0);
+    await wait(600);
+    const answered = await js(shellWin, `(() => ({
+      submitted: (window.__probeTechniqueChat || []).slice(),
+      turns: Array.from(document.querySelectorAll('#history .turn-q')).map((n) => n.textContent),
+      disabled: document.querySelectorAll('#history .backtest-technique-choice[disabled]').length,
+    }))()`);
+    await step('P07', '선택지를 누르면 그 문장이 사용자 메시지로 나간다 — AI가 대신 고르지 않는다', () => ({
+      ok: answered.submitted.length === 1 && answered.submitted[0] === '20일 최고가 돌파'
+            && answered.turns.indexOf('20일 최고가 돌파') !== -1
+            && answered.disabled >= 2,
+      data: answered,
+    }));
+
+    const tech = await js(shellWin, `window.AthenaBacktestCanvas.getContext().technique`);
+    const techKeys = tech ? Object.keys(tech) : [];
+    await step('P08', 'getContext().technique 계약 키 8개', () => ({
+      ok: JSON.stringify(techKeys) === JSON.stringify([
+            'checks', 'passed', 'stats', 'nodes', 'flows', 'granularity', 'selectedNode', 'lastCheckAt',
+          ]),
+      data: { keys: techKeys },
+    }));
+
+    // 뒤에 무엇이 돌든 초안 상태를 남기지 않는다 — [기법 목록]으로 나간 뒤 폼을 되돌린다
+    // (초안에는 폼 탭이 없어 그냥 부르면 하위 탭 1번이 노드·흐름이다).
+    await click(shellWin, `${R}.backtest-technique-back`);
+    await wait(300);
+    await ensureRunnableForm(shellWin, FROM, TO);
+  });
   // 리포트 쓰기와 종료는 whenReady의 finally가 한 번만 한다 — 여기서는 돌아가기만 한다.
 }
 

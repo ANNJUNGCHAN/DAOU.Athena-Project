@@ -415,3 +415,40 @@ test('버전 상세 404(그 전략에 속한 버전이 아니다)도 같은 봉�
   });
   assert.deepEqual(res, { ok: false, status: 404, error: '그 전략에 속한 버전이 아니다' });
 });
+
+// ── 새 기법 만들기(보드 20·21, 2026-09-03) ──────────────────────────────────
+
+test('기법 노드·검사 2종: 메서드·경로·몸체가 계약 그대로다', async () => {
+  const calls = [];
+  const fetchImpl = async (url, opts) => {
+    calls.push([opts.method, url, opts.body ? JSON.parse(opts.body) : null]);
+    return { ok: true, status: 200, json: async () => ({ nodes: [], error: null }) };
+  };
+  const SRC = 'def signals(df, p):\n    return df\n';
+  const nodes = await backtestBridge.fetchTechniqueNodes({
+    backendBase: 'http://x', fetchImpl, source: SRC,
+  });
+  await backtestBridge.fetchTechniqueCheck({
+    backendBase: 'http://x', fetchImpl, source: SRC, symbol: '005930', period: 'D',
+    from: '20240101', to: '20240630',
+  });
+  assert.deepEqual(calls, [
+    ['POST', 'http://x/api/v1/backtest/technique/nodes', { source: SRC }],
+    ['POST', 'http://x/api/v1/backtest/technique/check', {
+      source: SRC, symbol: '005930', period: 'D', from: '20240101', to: '20240630',
+    }],
+  ]);
+  assert.deepEqual(nodes, { ok: true, data: { nodes: [], error: null } });
+});
+
+test('기법 검사 422(계약을 못 지킨 코드)도 같은 봉투다 — 한국어 사유를 그대로 싣는다', async () => {
+  const res = await backtestBridge.fetchTechniqueCheck({
+    backendBase: 'http://x',
+    fetchImpl: async () => ({
+      ok: false, status: 422,
+      json: async () => ({ detail: 'signals(df, p)를 찾지 못했습니다' }),
+    }),
+    source: 'x = 1',
+  });
+  assert.deepEqual(res, { ok: false, status: 422, error: 'signals(df, p)를 찾지 못했습니다' });
+});
