@@ -2279,11 +2279,20 @@ function sendLiveToolStep(step) {
   if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-tool-step', step);
 }
 
+// 라벨이 없는 도구는 전부 '처리 중'으로 떨어진다(아래 toolStepLabel) — 그래서
+// 그래프 모드에서 athena_brain이 실패했을 때 화면이 "처리 중 실패"라고만 말하고
+// **무슨 도구가** 실패했는지는 못 말했다(2026-09-03 실사용 제보). 게이트웨이가
+// 노출하는 도구는 provider-runtime-bootstrap.js의 목록 + 그래프·백테스트 도구다.
 const TOOL_STEP_LABELS = {
   athena_search: '검색',
   athena_describe: '스키마 확인',
   athena_resolve: '판단 중',
   athena_call: '조회',
+  athena_brain: '성향 그래프 조회',
+  athena_graph_view: '그래프 화면 제어',
+  athena_backtest: '백테스트',
+  athena_routine: '작업·알람',
+  athena_nudge_guard: '말걸기 가드',
 };
 
 function toolStepLabel(name) {
