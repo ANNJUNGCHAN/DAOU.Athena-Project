@@ -2343,8 +2343,8 @@ const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
   // GUI 진입 6종(설치·허용·철회·켜기끄기·삭제·직접 등록)이 전부 여기로 합류한다.
   // 버튼은 봉투를 만들 뿐이고, athena:mcp-*를 부르는 실행은 승인 하나뿐이다.
   onPropose: (spec, reason) => { mountPluginProposal(buildGuiProposal(spec, reason)); },
-  onApproveProposal: (envelope) => pluginDecide('athena:plugin-approve', envelope),
-  onRejectProposal: (envelope) => pluginDecide('athena:plugin-reject', envelope),
+  onApproveProposal: (envelope) => pluginDecide('athena:plugin-approve', envelope, { fromCard: true }),
+  onRejectProposal: (envelope) => pluginDecide('athena:plugin-reject', envelope, { fromCard: true }),
   // 만료 카드를 지우는 것은 거부가 아니다 — 대기 목록에서만 빼고 채팅에는 알리지 않는다.
   onDismissProposal: (envelope) => { void pluginForgetProposal(envelope); },
   // 감사 로그는 읽기만 한다 — 실행 경로가 아니라서 승인 카드를 거치지 않는다.
@@ -2388,6 +2388,8 @@ function mountPluginProposal(envelope) {
     window.dispatchEvent(new CustomEvent('athena:plugin-out-of-mode', { detail: { envelope } }));
     return false;
   }
+  // 같은 번호가 다시 오면 앞의 카드(처리된 것일 수 있다)를 빼고 새 봉투로 건다.
+  dropPluginProposal(envelope);
   pluginProposals.push(envelope);
   pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });
   // 대기 등록은 카드를 그린 뒤의 단방향 통보 하나뿐이다(응답을 기다리지 않는다).
@@ -2404,6 +2406,15 @@ function dropPluginProposal(envelope) {
   if (index >= 0) pluginProposals.splice(index, 1);
 }
 
+// 같은 봉투의 사본으로 갈아 끼운다 — plugin-canvas는 봉투가 바뀌면 그 카드의
+// 처리 결과를 지우고 다시 대기로 그린다.
+function pluginRearmProposal(envelope) {
+  const index = pluginProposals.findIndex((row) => row.proposal_id === envelope.proposal_id);
+  if (index < 0) return;
+  pluginProposals[index] = { ...envelope };
+  pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });
+}
+
 async function pluginForgetProposal(envelope) {
   dropPluginProposal(envelope);
   try {
@@ -2415,7 +2426,13 @@ async function pluginForgetProposal(envelope) {
 
 // 사람의 클릭 하나가 유일한 실행 지점이다. 결과는 카드(반환값)와 채팅(이벤트)
 // 두 곳으로 간다 — 채널을 새로 만들지 않고 같은 자리의 CustomEvent를 쓴다.
-async function pluginDecide(channel, envelope) {
+// 처리된 카드는 남는다 — 승인됨·실패·거부됨을 사람이 읽을 자리다. 목록에서 빼는
+// 것은 모드 재진입(pluginRestorePending)·재등록·`다시 제안받기` 세 지점뿐이다.
+async function pluginDecide(channel, envelope, options) {
+  // 채팅 결과 턴의 `다시 시도`는 카드 밖에서 같은 봉투를 다시 보낸다 — 실패로
+  // 굳은 카드를 사본으로 갈아 끼워 대기 상태로 되돌린다(카드 버튼 경로는 카드가
+  // 스스로 처리 중·결과를 그리므로 건드리지 않는다).
+  if (!(options && options.fromCard)) pluginRearmProposal(envelope);
   let result;
   try {
     result = await window.athena.invoke(channel, envelope);
@@ -2423,7 +2440,6 @@ async function pluginDecide(channel, envelope) {
     result = { ok: false, kind: 'failed', reason: String((err && err.message) || err) };
   }
   const kind = (result && result.kind) || 'failed';
-  dropPluginProposal(envelope);
   if (result && typeof result.revision === 'number') pluginRevision = result.revision;
   if (kind === 'success') {
     pluginRegistryChangedThisSession = true;
@@ -2445,6 +2461,7 @@ async function pluginRestorePending() {
     return;
   }
   if (pending && typeof pending.revision === 'number') pluginRevision = pending.revision;
+  // 처리된 카드는 여기서 사라진다 — 메인의 미해결 목록에 없기 때문이다.
   pluginProposals.length = 0;
   pluginProposals.push(...((pending && Array.isArray(pending.proposals)) ? pending.proposals : []));
   pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });

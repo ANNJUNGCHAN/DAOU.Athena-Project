@@ -93,10 +93,25 @@ test('chat.js의 폐기 알림 억제는 턴마다 초기화된다', () => {
   assert.match(chatSource, /^ {2}pluginOutOfMode\.reset\(\);$/m);
 });
 
+// 응답 즉시 봉투를 빼면 plugin-canvas가 세우는 승인됨·실패·거부됨이 실앱에서
+// 한 번도 그려지지 않는다 — 카드는 남고, 빼는 일은 복원·재등록·폐기가 맡는다.
+test('canvas.js는 승인·거부 응답 뒤에도 봉투를 목록에 남긴다', () => {
+  const decide = canvasSource.slice(canvasSource.indexOf('async function pluginDecide('));
+  const body = decide.slice(0, decide.indexOf('\n}'));
+  assert.ok(!body.includes('dropPluginProposal('), '응답 즉시 빼면 처리된 카드가 화면에 안 남는다');
+  assert.match(body, /pluginCanvas\.setProposals\(/);
+});
+
+test('canvas.js는 같은 번호가 다시 등록되면 앞의 카드를 뺀다', () => {
+  const mount = canvasSource.slice(canvasSource.indexOf('function mountPluginProposal('));
+  const body = mount.slice(0, mount.indexOf('\n}'));
+  assert.match(body, /dropPluginProposal\(envelope\);/);
+});
+
 test('canvas.js는 판번호가 움직일 때 남은 카드의 만료 판정을 갱신한다', () => {
   const calls = canvasSource.match(/pluginCanvas\.setProposals\(/g) || [];
-  // 제안 등록 · 복원 · 승인 직후 · 목록 갱신 네 지점.
-  assert.ok(calls.length >= 4, `setProposals 호출이 ${calls.length}건뿐이다`);
+  // 제안 등록 · 복원 · 승인 직후 · 목록 갱신 · 다시 시도 다섯 지점.
+  assert.ok(calls.length >= 5, `setProposals 호출이 ${calls.length}건뿐이다`);
   const refresh = canvasSource.slice(canvasSource.indexOf('async function pluginRefresh('));
   assert.match(refresh.slice(0, refresh.indexOf('\n}')), /pluginCanvas\.setProposals\(/);
 });

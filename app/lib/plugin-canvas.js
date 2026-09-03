@@ -20,7 +20,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 const PluginProposal = typeof module !== 'undefined' && module.exports
   ? require('./plugin-proposal')
   : window.AthenaLib.PluginProposal;
-const { cardCopy, isProposalStale } = PluginProposal;
+const { cardCopy, isProposalStale, resultTurnCopy, probeToolCount } = PluginProposal;
 
 // 처리된 카드의 상태 문구. 실패 사유 원문(detail)은 절대 카드에 싣지 않는다.
 const PROPOSAL_STATUS = Object.freeze({
@@ -174,7 +174,8 @@ function createPluginCanvas(options) {
   // 승인·거부 의도만 돌려준다.
   let proposals = [];
   let proposalRevision = null;
-  // 이미 승인·거부·폐기한 제안은 복원으로 되살아나지 않는다(부활 방지).
+  // 사람이 치운 제안은 복원으로 되살아나지 않는다(부활 방지). 승인·거부는 여기
+  // 담지 않는다 — 그 카드는 결과를 보여주며 자리를 지킨다.
   const handled = new Set();
   // 저장 전 권한 토글은 사람이 만든 값이다 — 모드를 나갔다 와도 버리지 않는다.
   let permissionDraft = null; // { pluginId, base: {name:bool}, draft: {name:bool} }
@@ -1009,6 +1010,16 @@ function createPluginCanvas(options) {
     return 'pending';
   }
 
+  // 처리된 카드의 본문은 제안 문구가 아니라 결과 문구다 — 채팅 결과 턴과 같은
+  // 순수 모듈의 문장을 쓴다(거부는 `그대로 뒀습니다` 한 줄).
+  function doneLines(entry) {
+    const result = entry.result || {};
+    return resultTurnCopy(entry.done, {
+      toolCount: probeToolCount(result.probes),
+      reason: result.reason,
+    }).lines;
+  }
+
   function proposalStatusText(entry, state) {
     if (state === 'done') return PROPOSAL_STATUS[entry.done] || '처리됨';
     if (state === 'stale') return '만료됨';
@@ -1029,7 +1040,9 @@ function createPluginCanvas(options) {
     entry.busy = false;
     // 경로가 연결되지 않았거나 던졌으면 성공이라고 말하지 않는다.
     entry.done = (result && result.kind) || (decision === 'approve' ? 'failed' : 'rejected');
-    handled.add(entry.envelope.proposal_id);
+    entry.result = result;
+    // 처리된 카드는 화면에 남는다 — 사람이 결과를 읽을 자리다. 목록에서 빼는 것은
+    // 호스트의 몫이고(모드 재진입·재등록), 여기서는 `다시 제안받기`만 지운다.
     render();
   }
 
@@ -1063,8 +1076,9 @@ function createPluginCanvas(options) {
     head.appendChild(status);
     card.appendChild(head);
 
-    copy.lines.forEach((line) => card.appendChild(el('div', 'plugin-canvas-proposal-line', line)));
-    if (copy.reasonLine) card.appendChild(el('div', 'plugin-canvas-proposal-reason', copy.reasonLine));
+    const body = state === 'done' ? doneLines(entry) : copy.lines;
+    body.forEach((line) => card.appendChild(el('div', 'plugin-canvas-proposal-line', line)));
+    if (state !== 'done' && copy.reasonLine) card.appendChild(el('div', 'plugin-canvas-proposal-reason', copy.reasonLine));
     card.appendChild(el('div', 'plugin-canvas-proposal-note', '허브의 설치 버튼도 이 카드로 들어옵니다'));
 
     const actions = el('div', 'plugin-canvas-proposal-actions');
@@ -1206,7 +1220,14 @@ function createPluginCanvas(options) {
     const previous = new Map(proposals.map((entry) => [entry.envelope.proposal_id, entry]));
     proposals = (Array.isArray(list) ? list : [])
       .filter((envelope) => envelope && envelope.proposal_id && !handled.has(envelope.proposal_id))
-      .map((envelope) => previous.get(envelope.proposal_id) || { envelope, busy: false, done: null });
+      // 같은 봉투를 그대로 다시 넣으면 카드 상태를 지키고, 같은 번호로 **새 봉투**가
+      // 오면(재등록·복원) 처리 결과를 지우고 대기 카드로 돌린다.
+      .map((envelope) => {
+        const prior = previous.get(envelope.proposal_id);
+        return (prior && prior.envelope === envelope)
+          ? prior
+          : { envelope, busy: false, done: null, result: null };
+      });
     render();
   }
 
