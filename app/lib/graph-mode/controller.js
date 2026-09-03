@@ -269,7 +269,10 @@ function createGraphModeController(deps) {
     fetchEntityTimeline,      // async (entityId) => events[] (선택) — entity-timeline 원본.
     // 보드 05 수집·노출 서브뷰 진입 훅(선택) — 이 파일은 그 카드를 직접 그리지
     // 않는다(collection-settings.js 소관). 언제 다시 그려야 하는지만 알린다.
-    onEnterSettings,          // () => void (선택)
+    onEnterSettings,
+    // 관계 목록의 삭제 손잡이(2026-09-03) — 이 모듈은 부르기만 하고 쓰기는
+    // 호출자가 한다(순수 렌더 계약). 안 주면 손잡이를 안 그린다.
+    onRelationDelete,          // () => void (선택)
     // 헤더 필터 칩(보드 03/04 "최근 90일 · 연결 N개 이상")의 실적용(선택).
     // 안 주면 필터가 없는 것처럼 전체를 그린다 — 다른 선택 주입과 같은 계약이다.
     filters,                  // graph-filters 모듈 (선택)
@@ -586,6 +589,11 @@ function createGraphModeController(deps) {
       rows.push({
         otherId,
         otherName: (other && other.name) || otherId,
+        // 방향을 여기서 실어 둔다(2026-09-03) — 선택 노드가 도착(target)일 수도
+        // 있다. 렌더 시점에 "선택 노드 = 출발"로 지어내면 해시가 뒤집혀 취소가
+        // 조용히 miss가 난다(백엔드 relation_id는 방향을 구분한다).
+        subjectId: detail.source,
+        objectId: detail.target,
         // 관계 라벨은 첫 kind를 한글로 — RELATION_LABELS는 타임라인 문구와 공유한다.
         relationLabel: kinds.length > 0 ? (RELATION_LABELS[kinds[0]] || kinds[0]) : '관계',
         kinds,
@@ -927,6 +935,33 @@ const PANEL_TIER_LABELS = {
           count.textContent = String(rel.reinforcement);
         }
         row.appendChild(count);
+        // 삭제 손잡이(Paper 보드 04, 2026-09-03) — 화면에서 바로 고치는 입구다.
+        // 여기서 그래프에 직접 쓰지 않는다: 이 모듈은 순수 렌더이고, 쓰기는 주입받은
+        // onRelationDelete가 한다(canvas.js가 IPC로 잇는다). 계약을 뒤집지 않는다.
+        //
+        // relation_id는 화면이 모른다 — cluster-map의 edge_details가 (출발·도착·관계)만
+        // 준다. id는 그 셋의 결정적 해시이므로 백엔드가 계산한다(brain.py 취소 입구).
+        // 방향은 행이 만들어질 때 실려 온다(rel.subjectId/objectId — 선택 노드가
+        // 도착일 수도 있다). 숨은 연관 행은 확정된 관계가 아니라 분석이 띄운
+        // 표면이라 손잡이를 안 붙인다 — 엉뚱한 것을 지우는 것보다 못 지우는 게 낫다.
+        if (typeof onRelationDelete === 'function' && rel.subjectId && rel.objectId
+            && !rel.isHidden && rel.kinds.length > 0) {
+          const del = elp('button', 'panel-relation-delete');
+          del.setAttribute('type', 'button');
+          del.textContent = '삭제';
+          del.setAttribute('aria-label', `${rel.otherName} · ${rel.relationLabel} 연결 삭제`);
+          del.addEventListener('click', (event) => {
+            // 행 클릭(노드 선택)까지 번지면 지우면서 다른 노드로 넘어간다.
+            if (event && typeof event.stopPropagation === 'function') event.stopPropagation();
+            onRelationDelete({
+              subjectId: rel.subjectId,
+              objectId: rel.objectId,
+              kind: rel.kinds[0],
+              label: `${rel.otherName} · ${rel.relationLabel}`,
+            });
+          });
+          row.appendChild(del);
+        }
         relations.appendChild(row);
       }
       panel.appendChild(relations);

@@ -8,10 +8,10 @@ import shutil
 import signal
 from datetime import datetime
 from pathlib import Path
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Self
 
 from fastapi import APIRouter, BackgroundTasks, Header, HTTPException, Request
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from athena_api.brain import (
     ChatHistoryRecord,
@@ -25,6 +25,7 @@ from athena_api.brain import (
     god_nodes,
     graph_diff,
     labeling,
+    relation_id,
     suggest_questions,
     surprising_connections,
     utc_now,
@@ -498,11 +499,29 @@ async def confirm_brain_relation(
 
 
 class RelationRetractRequest(BaseModel):
-    """사람이 화면에서 지운 관계 하나."""
+    """사람이 화면에서 지운 관계 하나.
+
+    두 가지 방법으로 지목할 수 있다. 확정 카드는 `relation_id`를 안다(모델이
+    athena_brain에서 받아 실어 준다). 반면 패널의 관계 목록은 그 id를 모르고
+    (출발·도착·관계)만 안다(cluster-map의 edge_details가 그 셋만 준다) — id는 그
+    셋의 결정적 해시이므로 여기서 계산한다. 렌더러에서 해시를 다시 구현하면
+    두 벌이 되고, 어긋나는 순간 취소가 조용히 실패한다.
+    """
 
     model_config = ConfigDict(extra="forbid")
 
-    relation_id: str = Field(min_length=1, max_length=128)
+    relation_id: str | None = Field(default=None, min_length=1, max_length=128)
+    subject_id: str | None = Field(default=None, min_length=1, max_length=128)
+    object_id: str | None = Field(default=None, min_length=1, max_length=128)
+    kind: str | None = Field(default=None, min_length=1, max_length=128)
+
+    @model_validator(mode="after")
+    def require_one_way_to_point(self) -> Self:
+        if self.relation_id:
+            return self
+        if self.subject_id and self.object_id and self.kind:
+            return self
+        raise ValueError("relation_id 또는 (subject_id, object_id, kind)가 필요하다")
 
 
 class RelationRetractResponse(BaseModel):
@@ -544,12 +563,15 @@ async def retract_brain_relation(
     """
     require_local_bearer(request, authorization)
     store = _require_store(request)
-    removed = await store.retract_relation(payload.relation_id)
+    target = payload.relation_id or relation_id(
+        payload.kind or "", payload.subject_id or "", payload.object_id or ""
+    )
+    removed = await store.retract_relation(target)
     revision = await store.graph_revision()
     if removed is None:
         # 이미 없는 관계를 지우라고 한 것 — 오류가 아니다(사람이 두 번 눌렀거나
         # 그사이 dedup이 합쳤을 수 있다). 아무것도 안 지웠다는 사실만 정직하게 말한다.
-        logger.info("brain relation retract miss relation_id=%s", payload.relation_id)
+        logger.info("brain relation retract miss relation_id=%s", target)
         return RelationRetractResponse(removed=False, revision=revision)
     logger.info(
         "brain relation retract ok relation=%s tier=%s",

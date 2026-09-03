@@ -2242,6 +2242,29 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   },
   // 보드 05 수집·노출 — 탭에 들어올 때마다 다시 그린다(설정 오버레이가 같은
   // 저장소를 보는 두 번째 입구라, 거기서 바꾸고 돌아왔을 수 있다).
+  // 패널 관계 목록의 삭제 손잡이(Paper 보드 04, 2026-09-03) — 화면에서 바로 고치는
+  // 입구다. 확정 카드와 **같은 백엔드 입구**를 쓴다(athena:brain-retract-relation):
+  // 두 화면이 다른 경로로 지우면 한쪽만 이력을 남기거나 한쪽만 리비전을 올리는
+  // 어긋남이 생긴다. 여기서는 relation_id를 모르므로 (출발·도착·관계) 삼중을 넘기고
+  // 백엔드가 id를 계산한다(그 해시를 렌더러에서 다시 구현하면 두 벌이 된다).
+  onRelationDelete: async (target) => {
+    let res = null;
+    try {
+      res = await window.athena.invoke('athena:brain-retract-relation', {
+        subjectId: target.subjectId,
+        objectId: target.objectId,
+        kind: target.kind,
+      });
+    } catch (err) {
+      console.warn('[graph-mode] 관계 삭제 실패', err);
+      return;
+    }
+    // 실패를 조용히 넘기지 않는다 — 사람은 지웠다고 믿고 화면을 떠난다(§0 정직성).
+    // 성공하면 main이 athena:brain-graph-updated를 쏘아 화면 전체가 다시 읽힌다.
+    if (!res || !res.ok || res.removed === false) {
+      console.warn('[graph-mode] 관계 삭제 반영 안 됨', res);
+    }
+  },
   onEnterSettings: () => renderGraphCollectionSettings(),
   // 헤더 필터 칩(보드 03/04) — 기간·최소 연결 수를 배치 전에 건다.
   filters: window.AthenaLib.GraphFilters,

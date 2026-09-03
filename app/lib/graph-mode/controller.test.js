@@ -92,6 +92,7 @@ function setup(options) {
     getProfileSummaryEntries: opts.getProfileSummaryEntries,
     fetchEntityTimeline: opts.fetchEntityTimeline,
     onEnterSettings: opts.onEnterSettings,
+    onRelationDelete: opts.onRelationDelete,
     filters: opts.filters,
     getFilters: opts.getFilters,
   });
@@ -745,6 +746,64 @@ test('관계 목록 — edge_details가 있으면 통상 관계까지 전부 나
   assert.deepEqual(labels, ['관심', '소속', '숨은']);
   const descs = rows.map((r) => r.querySelectorAll('.panel-relation-desc')[0].textContent);
   assert.deepEqual(descs, ['SK하이닉스', '반도체 대형주', '고배당주']);
+});
+
+test('삭제 손잡이 — 구조 관계 행에만 붙고, 클릭하면 방향 그대로 (출발·도착·관계)를 넘긴다(보드 04)', async () => {
+  const connections = [{
+    source_entity_id: 'e:a', source_name: '한미반도체', target_entity_id: 'e:d', target_name: '고배당주',
+    kinds: ['relates_to'], source_cluster: 0, target_cluster: 1, surprise_score: 0.9,
+  }];
+  const entries = [
+    { entity_id: 'e:a', entity_name: '한미반도체', entity_kind: 'security', relation_kind: 'interested_in',
+      rationale: 'HBM 장비 질문 4회', reinforcement: 4, confidence: 'INFERRED', tier: 'conversational' },
+  ];
+  const deleted = [];
+  const { controller, elements } = setup({
+    payload: payloadWithDetails, withPanel: true,
+    getSurprisingConnections: () => connections,
+    getProfileSummaryEntries: () => entries,
+    onRelationDelete: (target) => { deleted.push(target); },
+  });
+  await controller.toggle();
+  selectNodeInPanel(controller, 'e:a');
+  const rows = elements.panel.querySelectorAll('.panel-relation-row');
+  const handles = rows.map((r) => r.querySelectorAll('.panel-relation-delete').length);
+  // 성향 관계(프로필발)와 숨은 연관에는 손잡이가 없다 — 구조 관계 둘에만 붙는다.
+  assert.deepEqual(handles, [0, 1, 1, 0], '관심(프로필)·숨은 행은 못 지운다');
+  const btn = rows[1].querySelectorAll('.panel-relation-delete')[0];
+  let stopped = 0;
+  btn.dispatchEvent({ type: 'click', stopPropagation: () => { stopped += 1; } });
+  assert.equal(stopped, 1, '행 클릭(노드 선택)으로 번지지 않는다');
+  assert.deepEqual(deleted, [{
+    subjectId: 'e:a', objectId: 'e:b', kind: 'interested_in', label: 'SK하이닉스 · 관심',
+  }]);
+});
+
+test('삭제 손잡이 — 선택 노드가 도착이어도 방향을 지어내지 않는다(해시가 뒤집히면 조용히 miss)', async () => {
+  const deleted = [];
+  const { controller, elements } = setup({
+    payload: payloadWithDetails, withPanel: true,
+    onRelationDelete: (target) => { deleted.push(target); },
+  });
+  await controller.toggle();
+  // e:c(반도체 대형주)를 고른다 — 이 노드로 오는 간선은 e:a → e:c(belongs_to)라
+  // 선택 노드가 도착이다. subjectId는 그래도 e:a여야 한다.
+  selectNodeInPanel(controller, 'e:c');
+  const btn = elements.panel.querySelectorAll('.panel-relation-delete')[0];
+  assert.ok(btn, '구조 관계 행에 손잡이가 있다');
+  btn.dispatchEvent({ type: 'click', stopPropagation: () => {} });
+  assert.equal(deleted.length, 1);
+  assert.equal(deleted[0].subjectId, 'e:a');
+  assert.equal(deleted[0].objectId, 'e:c');
+  assert.equal(deleted[0].kind, 'belongs_to');
+});
+
+test('삭제 손잡이 — onRelationDelete를 안 주면 아예 그리지 않는다(다른 선택 주입과 같은 계약)', async () => {
+  const { controller, elements } = setup({ payload: payloadWithDetails, withPanel: true });
+  await controller.toggle();
+  selectNodeInPanel(controller, 'e:a');
+  assert.ok(elements.panel.querySelectorAll('.panel-relation-row').length > 0, '관계 목록 자체는 있다');
+  assert.equal(elements.panel.querySelectorAll('.panel-relation-delete').length, 0);
 });
 
 test('선택 헤더 부제 — 그래프 노드는 "군집 · 연결 N · 두 군집을 잇는 유일한 노드"(보드 04)', async () => {

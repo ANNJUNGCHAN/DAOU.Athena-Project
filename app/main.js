@@ -4261,12 +4261,22 @@ ipcMain.handle('athena:brain-confirm-relation', async (_e, { relationId } = {}) 
   return { ok: true, ...result.body };
 });
 
-ipcMain.handle('athena:brain-retract-relation', async (_e, { relationId } = {}) => {
+ipcMain.handle('athena:brain-retract-relation', async (_e, { relationId, subjectId, objectId, kind } = {}) => {
+  // 두 가지 지목을 받는다(2026-09-03): 확정 카드는 relation_id를 알고, 패널의 관계
+  // 목록은 (출발·도착·관계) 삼중만 안다(cluster-map의 edge_details가 그 셋만 준다).
+  // id 해시는 백엔드 한 벌만 둔다 — 여기서 다시 구현하면 어긋나는 순간 조용히 실패한다.
   const id = typeof relationId === 'string' ? relationId.trim() : '';
-  if (!id) return { ok: false, error: 'relationId가 없다' };
+  const subject = typeof subjectId === 'string' ? subjectId.trim() : '';
+  const object = typeof objectId === 'string' ? objectId.trim() : '';
+  const relKind = typeof kind === 'string' ? kind.trim() : '';
+  if (!id && !(subject && object && relKind)) {
+    return { ok: false, error: 'relationId 또는 (subjectId, objectId, kind)가 없다' };
+  }
   const result = await fetchBrainJson('/api/v1/brain/relations/retractions', {
     method: 'POST',
-    payload: { relation_id: id },
+    payload: id
+      ? { relation_id: id }
+      : { subject_id: subject, object_id: object, kind: relKind },
   });
   if (!result.ok) return { ok: false, error: result.error };
   // 지웠으면 화면을 바로 다시 읽게 한다 — 이 이벤트는 이미 canvas.js가 구독해
