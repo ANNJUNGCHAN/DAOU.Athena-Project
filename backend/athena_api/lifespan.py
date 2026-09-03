@@ -2,7 +2,7 @@
 
 import asyncio
 import logging
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Mapping
 from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass, field
 
@@ -21,11 +21,16 @@ from athena_api.brain import (
     GraphProjector,
     GraphStore,
     HistoryStore,
+    HoldingSnapshotIngestor,
     IngestionCoordinator,
     JobTrigger,
     LocalCommandStructuredLlm,
+    PartialHoldingsError,
+    TradeBackfill,
+    utc_now,
 )
 from athena_api.brain.db import SqliteOwner
+from athena_api.brain_sources import KiwoomExecutionSource, KiwoomHoldingSource
 from athena_api.config import KiwoomAccount, Settings, get_settings
 from athena_api.dependencies import build_selector_service
 from athena_api.errors import KiwoomAuthError
@@ -69,20 +74,81 @@ class BrainRuntime:
     ingestion_last_error: str | None = None
     extraction_enabled: bool = False
     hourly_task: asyncio.Task[None] | None = None
+    # WP-H(2026-09-03) — 기동 직후 한 번 도는 체결 백필 + 잔고 스냅숏. 참조를 들고
+    # 있어야 GC에 안 걷히고(hourly_task와 같은 관례), teardown이 취소할 수 있다.
+    producer_task: asyncio.Task[None] | None = None
     startup_ingestion_job_id: str | None = None
     startup_ingestion_lock: asyncio.Lock = field(default_factory=asyncio.Lock, repr=False)
 
 
-async def _hourly_ingest_loop(coordinator: IngestionCoordinator, interval_seconds: float) -> None:
+async def _produce_trade_and_holding_facts(
+    backfill: TradeBackfill | None, holdings: HoldingSnapshotIngestor | None
+) -> None:
+    """체결·잔고를 이력에 적재한다(WP-H). 실패는 다음 주기가 다시 시도하므로 삼킨다.
+
+    체결이 먼저다 — 백필 커서는 단조 증가라 실패한 날부터 다시 하고, 잔고 실패가
+    체결을 막을 이유가 없다(서로 다른 사실이다). 취소만 그대로 통과시킨다:
+    teardown이 이 코루틴을 품은 태스크를 cancel-and-await한다.
+    """
+    if backfill is not None:
+        try:
+            await backfill.run()
+        except asyncio.CancelledError:
+            raise
+        except Exception as exc:
+            # 형만 남긴다 — 상류 메시지에 경로·자격증명 조각이 실릴 수 있다
+            # (_hourly_ingest_loop의 로그 관례 그대로).
+            logger.warning("brain trade backfill failed type=%s", type(exc).__name__)
+    if holdings is not None:
+        try:
+            await holdings.ingest()
+        except asyncio.CancelledError:
+            raise
+        except PartialHoldingsError:
+            # 계좌 일부만 조회된 주기 — 반쪽을 적재하면 실패한 계좌의 보유가
+            # "매도"로 보인다(holdings.py). 이번 주기를 통째로 건너뛴다.
+            logger.warning("brain holding snapshot skipped: partial account failure")
+        except Exception as exc:
+            logger.warning("brain holding snapshot failed type=%s", type(exc).__name__)
+
+
+async def _startup_produce(
+    backfill: TradeBackfill,
+    holdings: HoldingSnapshotIngestor,
+    coordinator: IngestionCoordinator,
+) -> None:
+    """기동 직후 한 번(WP-H) — 첫 백필은 영업일 수십 개 × 초당 1회 rate limit이라
+    분 단위로 걸린다. 기동을 막지 않고 뒤에서 돌고, 끝나면 잡 하나를 넣어 새 사실이
+    한 시간을 기다리지 않고 투영되게 한다(STARTUP 잡은 이 적재보다 먼저 돌았다)."""
+    await _produce_trade_and_holding_facts(backfill, holdings)
+    try:
+        await coordinator.enqueue(JobTrigger.MANUAL)
+    except asyncio.CancelledError:
+        raise
+    except Exception as exc:
+        logger.warning("brain produce enqueue failed type=%s", type(exc).__name__)
+
+
+async def _hourly_ingest_loop(
+    coordinator: IngestionCoordinator,
+    interval_seconds: float,
+    *,
+    backfill: TradeBackfill | None = None,
+    holdings: HoldingSnapshotIngestor | None = None,
+) -> None:
     """Self-enqueue JobTrigger.HOURLY on a fixed period (ADR §9 gate G005).
 
     Manual runs still use the pre-existing enqueue(JobTrigger.MANUAL) path unaffected by
     this. Cancellation must propagate: _teardown_brain cancels and awaits this task
     before stopping the coordinator, so CancelledError here is the ordinary shutdown
     path, not a failure to swallow.
+
+    체결·잔고 생산자(WP-H)가 결선돼 있으면 **잡을 넣기 전에** 적재한다 — 그래야
+    바로 이어지는 잡이 방금 생긴 사실을 투영한다. 안 돼 있으면(None) 예전과 같다.
     """
     while True:
         await asyncio.sleep(interval_seconds)
+        await _produce_trade_and_holding_facts(backfill, holdings)
         try:
             await coordinator.enqueue(JobTrigger.HOURLY)
         except asyncio.CancelledError:
@@ -141,7 +207,10 @@ def _publish_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
 
 
 async def _open_brain(
-    settings: Settings, *, hourly_interval_seconds: float | None = None
+    settings: Settings,
+    *,
+    kiwoom_clients: Mapping[str, KiwoomClient] | None = None,
+    hourly_interval_seconds: float | None = None,
 ) -> BrainRuntime:
     """Best-effort brain startup: a missing native runtime degrades, lock contention does not.
 
@@ -164,9 +233,11 @@ async def _open_brain(
     채팅은 `POST /api/v1/brain/chat`이 `HistoryStore.upsert_chat`으로 넣는다 — 앱 안에
     실제 생산자가 있다. (이 자리에 "there is no source adapter wired into the app yet"
     이라고 적혀 있었는데, 그 라우트가 생긴 뒤로 거짓이었다. leaf 7에서 바로잡는다.)
-    체결·잔고는 아직 앱 안에 생산자가 없다 — 키움 체결 피드를 잇는 것은 별도 작업이고,
-    그때까지는 `HistoryStore.upsert_completed_trade`/`upsert_holding`을 부르는 곳이
-    테스트뿐이다.
+    체결·잔고는 ``kiwoom_clients``가 오면 이 함수가 생산자를 결선한다(WP-H, 2026-09-03) —
+    기동 직후 한 번(백필 + 잔고 스냅숏, `producer_task`) 돌고 이후 시간당 주기 앞에서
+    돈다. 브레인이 키움을 직접 알지 않는다는 방향(holdings.py)은 그대로다: 여기서
+    `brain_sources`의 구현체를 프로토콜 자리에 꽂을 뿐이다. 안 오면(시세 자격증명이
+    없는 기동) 생산자 없이 예전과 같다.
 
     Every `except Exception` above is a deliberate demotion to a degraded runtime; none of
     them catch cancellation (`CancelledError` is a `BaseException`), and startup being
@@ -237,6 +308,28 @@ async def _open_brain(
             brain.ingestion_ready = True
             brain.extraction_enabled = source_projector is not None
             brain.startup_ingestion_job_id = startup_job.id
+            # WP-H — 체결·잔고 생산자. 이 결선이 생기기 전에는 upsert_completed_trade/
+            # upsert_holding을 부르는 곳이 테스트뿐이었다(위 docstring).
+            backfill: TradeBackfill | None = None
+            holdings_ingestor: HoldingSnapshotIngestor | None = None
+            if kiwoom_clients:
+                aliases = tuple(kiwoom_clients)
+                backfill = TradeBackfill(
+                    history,
+                    KiwoomExecutionSource(kiwoom_clients),
+                    aliases=aliases,
+                    clock=utc_now,
+                )
+                holdings_ingestor = HoldingSnapshotIngestor(
+                    history,
+                    KiwoomHoldingSource(kiwoom_clients),
+                    aliases=aliases,
+                    clock=utc_now,
+                )
+                brain.producer_task = asyncio.create_task(
+                    _startup_produce(backfill, holdings_ingestor, coordinator),
+                    name="athena-brain-produce-startup",
+                )
             interval_seconds = (
                 hourly_interval_seconds
                 if hourly_interval_seconds is not None
@@ -244,11 +337,20 @@ async def _open_brain(
             )
             if settings.brain_ingest_schedule_owner == "backend":
                 brain.hourly_task = asyncio.create_task(
-                    _hourly_ingest_loop(coordinator, interval_seconds),
+                    _hourly_ingest_loop(
+                        coordinator,
+                        interval_seconds,
+                        backfill=backfill,
+                        holdings=holdings_ingestor,
+                    ),
                     name="athena-brain-hourly-ingest",
                 )
         return brain
     except BaseException:
+        if brain.producer_task is not None:
+            brain.producer_task.cancel()
+            with suppress(BaseException):
+                await brain.producer_task
         if brain.hourly_task is not None:
             brain.hourly_task.cancel()
             with suppress(BaseException):
@@ -327,6 +429,16 @@ async def _teardown_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
         # begins rejecting new enqueue() calls (ADR §4.2 step 3) -- otherwise a tick that
         # fires mid-teardown races enqueue()'s own shutdown check. Symmetric with how the
         # timer is only started once the coordinator itself is up in _open_brain.
+        # 생산자도 coordinator.enqueue()를 부른다 — 타이머와 같은 이유로 stop() 전에
+        # 멈춘다(WP-H).
+        if brain.producer_task is not None:
+            brain.producer_task.cancel()
+            try:
+                await brain.producer_task
+            except asyncio.CancelledError:
+                pass
+            except BaseException as exc:
+                primary_error = exc
         if brain.hourly_task is not None:
             brain.hourly_task.cancel()
             try:
@@ -561,7 +673,16 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                             type(exc).__name__,
                         )
             if runtime_settings.brain_enabled:
-                brain = await _open_brain(runtime_settings)
+                # 준비된 계좌의 data_client만 넘긴다 — 토큰 발급에 실패한 계좌로
+                # 생산하면 매 주기 인증 오류만 쌓인다. 하나도 없으면 생산자 없이 선다.
+                brain = await _open_brain(
+                    runtime_settings,
+                    kiwoom_clients={
+                        alias: runtime.data_client
+                        for alias, runtime in runtimes.items()
+                        if runtime.ready
+                    },
+                )
                 _publish_brain(app, brain)
             if runtime_settings.routines_enabled:
                 default_rt = runtimes.get(
