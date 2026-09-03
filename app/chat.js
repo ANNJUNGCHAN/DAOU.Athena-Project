@@ -3137,6 +3137,137 @@ async function refreshRoutineDrafts() {
   }
 }
 
+// ---------- 코드 알람 검사 카드(Step 6, Paper 보드 10/446V-1) ----------
+// 초안 카드의 「검사」 칩과 그 결과 카드. 문구 계산은 lib/watch-check-card.js가
+// 전담하고(순수 함수 — 테스트가 문구를 못박는다) 여기는 통로와 DOM 조립만
+// 맡는다. 승인은 초안 카드와 같은 athena:routine-confirm 경로 하나뿐이다 —
+// 사람 클릭 전용(§7-6).
+const watchCheckCardLib = window.AthenaLib.WatchCheckCard;
+
+// 목록 뷰에 watch 블록이 없을 수 있다 — 없으면 상세를 1회 더 불러 채운다.
+async function watchBlockOf(r) {
+  if (r.watch) return r.watch;
+  try {
+    const res = await window.athena.invoke('athena:routine-detail', { id: r.id });
+    const w = res && res.ok && res.data && res.data.watch;
+    if (w) r.watch = w;
+    return w || null;
+  } catch { return null; }
+}
+
+// 확인 주기(분) — 백엔드가 초로 준다. 모르면 보드 10의 기본값 1분.
+function watchPollMinutes(r) {
+  const sec = Number((r.watch && r.watch.poll_interval_s) || 0);
+  return Number.isFinite(sec) && sec >= 60 ? Math.round(sec / 60) : 1;
+}
+
+// 검사 1회 — 응답 본문을 그대로 돌려준다(문구는 checkCardModel이 만든다).
+// 통로 자체가 실패하면 카드가 실패로 그려지도록 ok:false 모양으로 감싼다.
+async function runWatchCheck(r) {
+  const watch = await watchBlockOf(r);
+  if (!watch || !watch.project_id || !watch.path) return null;
+  const body = {
+    project_id: watch.project_id,
+    path: watch.path,
+    symbol: r.symbol,
+    params: watch.params || {},
+    lookback_days: watch.lookback_days || 30,
+    cooldown_s: r.cooldown_s,
+    routine_id: r.id,
+  };
+  let res;
+  try { res = await window.athena.invoke('athena:routine-watch-check', { body }); }
+  catch { return { ok: false, reason: '검사 통로가 막혀 있음' }; }
+  if (res && res.ok && res.data) return res.data;
+  return { ok: false, reason: (res && res.error) || '검사 통로가 막혀 있음' };
+}
+
+function renderWatchCheckCard(r, check) {
+  const model = watchCheckCardLib.checkCardModel(check, r);
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent routine-approval';
+
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  model.tags.forEach((tag, i) => {
+    const pill = document.createElement('span');
+    // 뒤쪽 배지가 판정이다 — 실패면 초안 pill과 같은 강조를 쓴다.
+    pill.className = i > 0 && model.failed ? 'routine-draft-pill is-draft' : 'routine-draft-pill';
+    pill.textContent = tag;
+    head.appendChild(pill);
+  });
+  card.appendChild(head);
+
+  const title = document.createElement('div');
+  title.className = 'routine-draft-title';
+  title.textContent = model.title;
+  card.appendChild(title);
+
+  if (model.subtitle) {
+    const sub = document.createElement('div');
+    sub.className = 'agent-body';
+    sub.textContent = model.subtitle;
+    card.appendChild(sub);
+  }
+
+  if (model.reason) {
+    const why = document.createElement('div');
+    why.className = 'agent-source';
+    why.textContent = model.reason;
+    card.appendChild(why);
+  }
+
+  // A-10 — 오늘 봉은 아직 안 끝났다는 고지. 검사 카드에서 빠질 수 없다.
+  const counted = document.createElement('div');
+  counted.className = 'agent-source';
+  counted.textContent = model.countedUntil;
+  card.appendChild(counted);
+
+  if (r.activation_blocker) {
+    const blocker = document.createElement('div');
+    blocker.className = 'agent-source';
+    blocker.textContent = `지금은 켤 수 없음: ${r.activation_blocker}`;
+    card.appendChild(blocker);
+  }
+
+  const row = document.createElement('div');
+  row.className = 'routine-approval-actions';
+  const status = document.createElement('span');
+  status.className = 'agent-mode';
+  const buttons = [];
+  for (const chip of model.chips) {
+    const btn = _btn(chip.label, chip.action === 'confirm' ? 'routine-btn routine-btn-approve' : 'routine-btn');
+    btn.disabled = !chip.enabled || (chip.action === 'confirm' && !!r.activation_blocker);
+    if (chip.action === 'confirm') {
+      btn.addEventListener('click', async () => {
+        for (const b of buttons) b.disabled = true;
+        const res = await window.athena.invoke('athena:routine-confirm', { id: r.id });
+        if (res && res.ok) {
+          status.textContent = '켬 — 장중에 이 함수를 돌려 봄';
+        } else {
+          status.textContent = `켜기 실패: ${(res && res.error) || '알 수 없는 오류'}`;
+          for (const b of buttons) b.disabled = false;
+          btn.disabled = !!r.activation_blocker;
+        }
+      });
+    } else {
+      btn.addEventListener('click', () => {
+        $input.value = draftFixSeedText(r);
+        autoGrowInput();
+        $input.focus();
+      });
+    }
+    buttons.push(btn);
+    row.appendChild(btn);
+  }
+  row.appendChild(status);
+  card.appendChild(row);
+
+  _mountTurn(line, card);
+}
+
 function approvalModeLine(r) {
   const modeText = routineTurnLib.describeMode(r.mode);
   // describeMode()와 짝을 이루는 3분기(3단계, 사실11②) — periodic만 따로
@@ -3146,6 +3277,9 @@ function approvalModeLine(r) {
     : r.mode === 'scheduled' ? ' — 지정 요일·시각'
     : ' — 틱 즉시';
   const exp = r.experimental_source ? ' · [실값 미확인 필드]' : '';
+  // 코드 알람(Step 6, 보드 10 「장중 1분마다」) — 확인 주기는 초안의 watch
+  // 블록이 정한다. describeMode의 기본 문구 대신 실제 주기를 적는다.
+  if (r.mode === 'code-watch') return `방식 코드 감시 — 장중 ${watchPollMinutes(r)}분마다${exp}`;
   return `방식 ${modeText}${suffix}${exp}`;
 }
 
@@ -3216,13 +3350,31 @@ function renderApprovalCard(r) {
   const status = document.createElement('span');
   status.className = 'agent-mode';
 
-  // 미리보기 실행 — 백엔드에 대응 엔드포인트가 없다(재검증 확인, 실행 계획
-  // 어디에도 dry-run 개념이 없음). 기능 없는 버튼을 활성으로 두지 않는다(P3).
-  const preview = _btn('미리보기 실행', 'routine-btn');
-  preview.disabled = true;
-  preview.title = '미리보기 실행은 아직 지원하지 않습니다';
+  // 이 자리는 코드 알람에서 「검사」다(A-7) — 지난 30일 완성 봉으로 몇 번
+  // 울렸을지 세어 본다. 다른 모드는 여전히 대응 경로가 없어 비활성이다.
+  const isCodeWatch = r.mode === 'code-watch';
+  const preview = _btn(isCodeWatch ? '검사' : '미리보기 실행', 'routine-btn');
+  if (isCodeWatch) {
+    preview.title = '지난 30일 완성 봉으로 몇 번 울렸을지 세어 봄';
+    preview.addEventListener('click', async () => {
+      preview.disabled = true;
+      status.textContent = '검사 중 — 지난 30일 다시 돌려 봄';
+      const check = await runWatchCheck(r);
+      preview.disabled = false;
+      if (!check) {
+        status.textContent = '감시 코드 자리를 못 찾음 — 대화로 다시 만들기';
+        return;
+      }
+      status.textContent = '';
+      renderWatchCheckCard(r, check);
+    });
+  } else {
+    preview.disabled = true;
+    preview.title = '미리보기 실행은 아직 안 됨';
+  }
 
-  const activate = _btn('바로 활성화', 'routine-btn routine-btn-approve');
+  // R8 — 코드 알람의 확정 문구는 「이 알람 승인」이다(보드 10 승인 패널).
+  const activate = _btn(isCodeWatch ? '이 알람 승인' : '바로 활성화', 'routine-btn routine-btn-approve');
   activate.disabled = !!r.activation_blocker;
   activate.addEventListener('click', async () => {
     activate.disabled = true;

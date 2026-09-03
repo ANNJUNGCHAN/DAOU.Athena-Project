@@ -71,12 +71,13 @@
   {
    "id": "CA-006",
    "title": "Step 6 — 대화",
-   "passes": false,
+   "passes": true,
    "acceptanceCriteria": [
     "A-6~A-10 통과 (routine-turn.js describeMode + routine-turn.test.js 확장, approvalModeLine, 「검사」 칩 활성 + title R6, 검사 결과 카드 + 「어제까지로 세었음 · 오늘은 진행 중」, R8 칩)",
     "main.js·preload.js 검사·착지 통로 (EOL 보존, diff는 추가만)",
     "V6: cd app && npm test failed==0 && passed>=2295"
-   ]
+   ],
+   "completedAt": "2026-09-04"
   },
   {
    "id": "CA-007",

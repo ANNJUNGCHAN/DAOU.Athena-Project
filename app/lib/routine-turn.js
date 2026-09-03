@@ -8,6 +8,9 @@
 function describeMode(mode) {
   if (mode === 'realtime-ws') return '실시간 (WS)';
   if (mode === 'scheduled') return '예약 실행';
+  // 코드 알람(Step 6) — 틱이 아니라 장중에 감시 함수를 돌려 본다. 이 분기가
+  // 없으면 '주기 확인'으로 떨어져 실제 동작과 다른 말이 붙는다.
+  if (mode === 'code-watch') return '코드 감시 — 장중 1분마다 확인';
   return '주기 확인';
 }
 
