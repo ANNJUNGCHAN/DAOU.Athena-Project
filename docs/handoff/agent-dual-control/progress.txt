@@ -29,3 +29,9 @@
 - Step 6-A 완료(US-005): executor 2개 병렬(backend / app). 검증 — 대상 pytest 105 passed(test_routine_tools 26 · update 19 · detail 5 · nudge_guard · unit routines_api), npm test 2295/2295. 정정 2건: 409/422 detail을 상태 표기형으로("취소된 작업 — 수정 불가", "종목 — 변경 불가 · 취소 후 새로 만들기", "조건 소스 — 변경 불가 · 취소 후 새로 만들기"), propose 결과·IPC payload에 view dict 통과 추가.
 - IPC 핸들러 인자 모양: 기존 관례대로 단일 객체 — routine-update {id, body} · routine-draft {body} · routine-detail {id} · routine-source-catalog 인자 없음. Step 7b 배선은 이 모양을 쓴다. athena:routine-proposed payload = {control, routineId, current, proposed, rationale, view, notice}.
 - 신규 테스트 경로: backend/tests/api/test_routines_update.py · test_routines_detail.py (기존 REST 스위트는 tests/unit/test_routines_api.py).
+- 커밋 4d90564 push 완료(pre-push 통과). Step 5 🛑: A-2 8장 PDF → C:/Users/ajc22/Downloads/athena-agent-A2-01-08-2026-09-03.pdf (4.4MB). 활성 페이지 8-1 복귀 + finish_working_on_nodes. 사용자 PDF 승인 + U-1~U-6 답 대기 중. 답 전에는 6-B 이후 진행 금지.
+
+## 2026-09-03 방향 전환 (사용자 결정)
+- Step 5 검수에서 사용자가 U-1/U-5/U-6 대신 새 방향 제시: 알람은 자유 편집 폼이 아니라 "코드 알람"(AI가 감시 함수 코드를 짜고 → 샌드박스 검사(간단 백테스트) → 노드로 시각화 → 승인 → 루틴 등록). 그래프 연계는 배치성으로 나중에 사용자가 별도 지시.
+- 결정: 코드 알람 우선. 기존 athena-agent-doctrine-plan의 Step 6-B~9는 보류(폐기 아님 — 07·08 제안/결과 턴, 6-A 백엔드·IPC는 재사용 후보). ralph 루프 종료.
+- 다음: 코드 알람 설계(백테스트 파이프라인 재사용 지점 조사 → 설계 문서 → Paper 보드 계획 → 사용자 확인).
