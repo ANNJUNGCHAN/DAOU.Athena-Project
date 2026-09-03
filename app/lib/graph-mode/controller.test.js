@@ -353,10 +353,31 @@ test('티어 대조 카드 — tier를 한글로, confidence를 배지로, ratio
   assert.equal(body.textContent, '체결 4건 · 평균 71,200원');
 });
 
-test('티어 대조 카드 — rationale/tier/confidence가 전부 없으면(그래프 노드 선택) 카드를 안 그린다', () => {
+test('티어 대조 카드 — 근거가 없으면 조용히 빠지지 않고 없다고 말한다', () => {
+  // 예전에는 절이 통째로 사라졌다. 그러면 같은 노드인데 표에서 고르면 근거가 있고
+  // 지도에서 고르면 없는 것처럼 보여 사용자가 고장으로 읽었다(2026-09-03 실사용:
+  // "티어 대조 카드 자체가 없다"). 관계 목록은 그대로 나오므로 "관계는 있고 성향
+  // 기록은 없다"가 정확한 사실이고, 그것을 적는다.
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
-  controller.selectEntity('e:x', { name: '이름만' }); // 그래프 노드 선택 경로와 같은 얕은 데이터
-  assert.equal(elements.panel.querySelector('.panel-tier-card'), null);
+  controller.selectEntity('e:x', { name: '이름만', source: 'node' }); // 그래프 노드 선택 경로
+  const card = elements.panel.querySelector('.panel-tier-card');
+  assert.ok(card, '자리를 비우지 않는다');
+  assert.match(card.textContent, /성향 기록이 없습니다/);
+  // 출처 라벨('출처 불명')이나 없는 신뢰도를 지어내지 않는다 — 문장 하나뿐이다.
+  assert.equal(elements.panel.querySelector('.panel-tier-label'), null);
+});
+
+test('패널 탭 — 이력은 비활성이고 왜인지 말한다(콘텐츠 스펙이 아직 없다)', () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
+  controller.selectEntity('e:x', { name: '이름만', source: 'node' });
+  const tabs = elements.panel.querySelectorAll('.panel-tab');
+  assert.equal(tabs.length, 2, '탭은 성향·이력 2종이다');
+  assert.ok(String(tabs[0].attrs.class).includes('is-active'), '성향이 활성이다');
+  // 예전에는 눌리는 것처럼 생긴 채로 아무 일도 안 했다(2026-09-03 실사용 제보).
+  assert.equal(tabs[1].textContent, '이력');
+  assert.ok(String(tabs[1].attrs.class).includes('is-disabled'));
+  assert.equal(tabs[1].attrs['aria-disabled'], 'true');
+  assert.ok(tabs[1].attrs.title, '왜 못 누르는지 말한다');
 });
 
 test('CTA "채팅에서 답하기" 클릭 시 onPanelCta가 불린다', () => {
@@ -759,7 +780,8 @@ test('왜 숨은 연관인가 — 세 절이 전부 실데이터에서 나온다
   assert.match(body, /주변부\(2\)에서 허브\(3\)로/, 'e:d 차수 2, e:a 차수 3');
   assert.match(body, /직접 말한 적 없음/, 'confidence가 INFERRED다');
   const score = elements.panel.querySelector('.panel-reason-score').textContent;
-  assert.equal(score, '상대 8.5 — 이 그래프에서 가장 높음');
+  // 숫자가 아니라 순위를 말한다 — min-max 정규화라 1등은 항상 10.0이었다(2026-09-03).
+  assert.equal(score, '이 그래프에서 가장 놀라운 연결입니다');
 });
 
 test('왜 숨은 연관인가 — 숨은 연관이 없는 노드에는 블록도 CTA 리드인도 없다(§0 정책)', async () => {
@@ -849,9 +871,12 @@ test('hiddenLinkReasonClauses — 근거가 없는 절은 아예 빠진다(§0 �
     []);
 });
 
-test('relativeScoreText — [0,1] 정규화 점수를 Paper의 0~10 스케일로 옮기되 "상대"를 남긴다', () => {
-  assert.equal(relativeScoreText(0.85), '상대 8.5');
-  assert.equal(relativeScoreText(1), '상대 10.0');
+test('relativeScoreText — 숫자를 적지 않는다(정규화라 1등은 항상 만점이었다)', () => {
+  // surprise_score는 목록 안 min-max 정규화라 1등은 언제나 1.0이고, 전부 동점이면
+  // 전부 1.0이다(analysis.py). 그래서 '상대 10.0'이 나란히 찍혔다 — 라벨은 '상대'인데
+  // 순위 정보가 0이고 10.0은 절대 점수처럼 읽혔다. 점수 크기는 문구로 옮기지 않는다.
+  assert.equal(relativeScoreText(0.85), '이 그래프에서 놀라운 연결에 듭니다');
+  assert.equal(relativeScoreText(1), '이 그래프에서 놀라운 연결에 듭니다');
   assert.equal(relativeScoreText(undefined), '', '없는 점수를 지어내지 않는다');
   // 0은 "이 목록에서 가장 덜 놀랍다"는 뜻이라 숨은 연관의 근거가 못 된다.
   assert.equal(relativeScoreText(0), '');
@@ -936,6 +961,19 @@ test('buildTimelineRows — edge_changed: 상승만 "…로 승격"(G-G4), 하�
   assert.equal(rows[0].count, 1);
   assert.equal(rows[1].text, '관심 관계 신뢰도 변경');
   assert.equal(rows[1].count, 3);
+});
+
+// 조사 회귀(2026-09-03 화면 실측) — '사실'·'불확실'은 ㄹ 받침이라 '로'가 맞아서
+// 오래 안 드러났는데, '추론'(ㄴ 받침)에서 "추론로 승격"이 찍혔다.
+test('buildTimelineRows — 승격 문구의 조사가 받침을 따른다(추론으로 · 사실로)', () => {
+  const base = { at: '2026-08-19T12:00:00Z', op: 'edge_changed', relation: 'interested_in' };
+  const rows = buildTimelineRows([
+    { ...base, confidence_before: 'AMBIGUOUS', confidence_after: 'INFERRED' },
+    { ...base, at: '2026-08-20T12:00:00Z', confidence_before: 'INFERRED', confidence_after: 'EXTRACTED' },
+  ]);
+  const texts = rows.map((r) => r.text);
+  assert.ok(texts.includes('관심 관계 불확실 → 추론으로 승격'), texts.join(' | '));
+  assert.ok(texts.includes('관심 관계 추론 → 사실로 승격'), texts.join(' | '));
 });
 
 test('buildTimelineRows — 같은 날 같은 문구가 잇달으면 접고, 사이에 다른 사건이 끼면 안 접는다', () => {

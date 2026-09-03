@@ -107,6 +107,19 @@ const PANEL_KIND_LABELS = {
 // 하강·동일·한쪽 미상은 전부 방어적 중립 "신뢰도 변경"으로 통일한다.
 const CONFIDENCE_RANK = { AMBIGUOUS: 0, INFERRED: 1, EXTRACTED: 2 };
 
+// 조사 '로/으로' — 받침이 없거나 ㄹ 받침이면 '로', 그 외에는 '으로'다.
+// 라벨이 '사실'·'불확실'(ㄹ 받침)일 때는 맞았는데 '추론'(ㄴ 받침)에서 "추론로 승격"이
+// 나왔다(2026-09-03 화면 실측). 한글 음절의 종성 인덱스는 (코드 − 0xAC00) % 28이고
+// 0이면 받침 없음, 8이면 ㄹ이다(brain-questions.js hasJongseong과 같은 계산이지만
+// 그 함수는 받침 유무만 보므로 ㄹ 예외를 알 수 없어 여기서 따로 판정한다).
+function roParticle(word) {
+  const last = String(word || '').slice(-1);
+  const code = last.charCodeAt(0);
+  if (!Number.isFinite(code) || code < 0xac00 || code > 0xd7a3) return '로'; // 한글이 아니면 그대로
+  const jongseong = (code - 0xac00) % 28;
+  return (jongseong === 0 || jongseong === 8) ? '로' : '으로';
+}
+
 // GraphEventOp별 문구 조립(G-G6 초안 그대로 채택 — Paper 대응 사례가 없는 op는
 // GraphEventOp 주석 의미로 직역). entity_added의 대화 제목 인용구는 backend에
 // 대응 필드가 없어 조립하지 않는다(G-G3, §0 정직성 원칙).
@@ -126,7 +139,7 @@ function timelineEventText(event) {
       if (before && after && CONFIDENCE_RANK[after] > CONFIDENCE_RANK[before]) {
         const beforeLabel = PANEL_CONFIDENCE_LABELS[before] || before;
         const afterLabel = PANEL_CONFIDENCE_LABELS[after] || after;
-        return `${prefix}${beforeLabel} → ${afterLabel}로 승격`;
+        return `${prefix}${beforeLabel} → ${afterLabel}${roParticle(afterLabel)} 승격`;
       }
       return `${prefix}신뢰도 변경`;
     }
@@ -213,15 +226,19 @@ function topSurprising(connections, limit) {
     .slice(0, cap);
 }
 
-// 상대 점수 표기(보드 01/02/04 "8.5") — backend의 surprise_score는 이 목록 안에서
-// min-max 정규화된 [0,1]이라 절대 점수가 아니다. Paper의 0~10 스케일에 맞추되
-// "상대"를 앞에 붙여 그 한계를 문구로 남긴다.
+// 놀라움 표기 — 숫자를 적지 않는다(2026-09-03).
+//
+// 예전에는 Paper의 0~10 스케일(보드 01/02/04 "8.5")에 맞춰 `상대 ${score*10}`을
+// 적었다. 그런데 backend의 surprise_score는 min-max 정규화라 1등은 **언제나** 1.0이고
+// 교차 다리가 전부 동점이면 전부 1.0이다(analysis.py — hi == lo면 모두 1.0). 그래서
+// 화면에 "상대 10.0"이 찍혔다: 라벨은 '상대'인데 순위 정보가 0이고, 10.0은 §0이
+// 금지한 절대 점수처럼 읽힌다. 목록 쪽은 자리 순위("1순위")로 바꿨고(hidden-links.js)
+// 여기는 노드 하나를 보는 자리라 순위 숫자가 뜻이 없다 — isTop만 말한다.
+//
+// 0은 "이 목록 안에서 가장 덜 놀랍다"는 뜻이라 여전히 아무 말도 하지 않는다.
 function relativeScoreText(score) {
-  // 0은 "이 목록 안에서 가장 덜 놀랍다"는 뜻이다 — 숨은 연관이라고 부르면서
-  // 0.0을 붙이면 화면이 스스로를 반박한다. 그 경우엔 아예 적지 않고 근거 절만
-  // 남긴다(§0 정책: 정보가 없는 숫자를 쓰지 않는다).
   if (!Number.isFinite(score) || score <= 0) return '';
-  return `상대 ${(score * 10).toFixed(1)}`;
+  return '이 그래프에서 놀라운 연결에 듭니다';
 }
 
 function createGraphModeController(deps) {
@@ -780,8 +797,15 @@ function createGraphModeController(deps) {
     traitTab.setAttribute('type', 'button');
     traitTab.textContent = '성향';
     tabs.appendChild(traitTab);
-    const historyTab = elp('button', 'panel-tab');
+    // 이력 탭은 아직 콘텐츠 스펙이 없다(위 주석 §10-1). 예전에는 눌리는 것처럼
+    // 생긴 채로 아무 일도 안 해서 고장으로 읽혔다(2026-09-03 실사용: "이력은
+    // 클릭해도 안열린다"). 없는 기능을 활성처럼 두지 않는다(P3) — 비활성으로
+    // 표시하고 왜인지 말한다. 아래 §10-4 "최근 변화"가 지금은 그 역할을 한다.
+    const historyTab = elp('button', 'panel-tab is-disabled');
     historyTab.setAttribute('type', 'button');
+    historyTab.setAttribute('disabled', '');
+    historyTab.setAttribute('aria-disabled', 'true');
+    historyTab.setAttribute('title', '아직 없습니다 — 최근 변화는 아래에 있습니다');
     historyTab.textContent = '이력';
     tabs.appendChild(historyTab);
     tabs.appendChild(elp('span', 'panel-tabs-spacer'));
@@ -824,6 +848,21 @@ function createGraphModeController(deps) {
       : ((data.rationale || data.tier || data.confidence) ? [data] : []);
     const distinctTiers = new Set(sources.map((s) => s.tier).filter(Boolean));
     const conflicting = sources.length > 1 && distinctTiers.size > 1;
+    // 근거가 하나도 없으면 그 사실을 말한다(2026-09-03 실사용: "티어 대조 카드
+    // 자체가 없다"). 지도에서 고른 노드는 성향 신호 표에 같은 entity가 없을 때
+    // profileEntry가 비고(selectNode 주석), 그러면 이 절이 통째로 사라져 사용자는
+    // 고장으로 읽는다 — 같은 노드인데 표에서 고르면 근거가 있고 지도에서 고르면
+    // 없는 것처럼 보인다. 아래 관계 목록은 그대로 나오므로 "관계는 있고 성향
+    // 기록은 없다"가 정확한 사실이고, 그것을 적는다(§0 정직성).
+    if (sources.length === 0) {
+      const note = elp('div', 'panel-tier-card');
+      const noteBody = elp('div', 'panel-tier-body');
+      noteBody.textContent = data.source === 'node'
+        ? '이 노드에는 성향 기록이 없습니다 — 아래 관계만 그래프에 있습니다.'
+        : '근거 문장이 아직 없습니다.';
+      note.appendChild(noteBody);
+      panel.appendChild(note);
+    }
     if (conflicting) {
       const title = elp('div', 'panel-tier-contrast-title');
       title.textContent = '두 출처가 다르게 말합니다';
@@ -903,7 +942,10 @@ function createGraphModeController(deps) {
       }
       if (reason.scoreText) {
         const score = elp('div', 'panel-reason-score');
-        score.textContent = reason.isTop ? `${reason.scoreText} — 이 그래프에서 가장 높음` : reason.scoreText;
+        // 1등이면 그렇게 말하고, 아니면 "든다"까지만 말한다 — 둘 다 숫자가 없다.
+        score.textContent = reason.isTop
+          ? '이 그래프에서 가장 놀라운 연결입니다'
+          : reason.scoreText;
         block.appendChild(score);
       }
       panel.appendChild(block);
