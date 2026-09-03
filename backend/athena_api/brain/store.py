@@ -674,6 +674,80 @@ class GraphStore:
 
         return await self._owner.run(read)
 
+    async def set_relation_confidence(
+        self, relation_id: str, confidence: Confidence
+    ) -> RelationRow | None:
+        """사람이 "이건 맞다"고 확인한 관계의 확정성을 올린다(2026-09-03).
+
+        되물을 것들 카드가 쓰는 경로다. 카드가 묻는 것은 AMBIGUOUS 관계이고, 사람이
+        '맞다'를 누르면 그것은 더 이상 불확실이 아니다 — 주인이 확인했다.
+
+        `retract_relation`과 같은 이유로 `apply_extraction`을 쓸 수 없다: 그 함수는 한
+        소스가 주장하는 것 전체를 교체하므로, 어떤 대화가 남긴 관계의 확정성만 사람이
+        올리는 일은 담을 수 없다.
+
+        이전 값과 같으면 아무것도 하지 않는다(리비전도 안 올린다) — 같은 답을 두 번
+        눌러도 이력이 부풀지 않아야 한다(`apply_extraction`의 "identical reapply records
+        no event"와 같은 규범).
+        """
+        if not 1 <= len(relation_id) <= 128:
+            raise ValueError("relation id is out of bounds")
+
+        def write() -> RelationRow | None:
+            connection = self._require()
+            with atomic(connection, _GRAPH_WRITE):
+                row = connection.execute(
+                    "SELECT id, kind, source_entity_id, target_entity_id, confidence, tier,"
+                    " rationale, source_id, observed_at FROM relations WHERE id = ?",
+                    (relation_id,),
+                ).fetchone()
+                if row is None:
+                    return None
+                before = str(row["confidence"])
+                if before == confidence.value:
+                    return RelationRow(
+                        id=str(row["id"]),
+                        kind=str(row["kind"]),
+                        source_entity_id=str(row["source_entity_id"]),
+                        target_entity_id=str(row["target_entity_id"]),
+                        confidence=before,
+                        tier=str(row["tier"]),
+                        rationale=row["rationale"],
+                        source_id=str(row["source_id"]),
+                        observed_at=str(row["observed_at"]),
+                    )
+                revision = self._bump_revision(connection)
+                # relations에는 revision 칸이 없다(위 DDL) — 리비전은 그래프 전체의
+                # 값이고 graph_events가 그것을 들고 간다.
+                connection.execute(
+                    "UPDATE relations SET confidence = ? WHERE id = ?",
+                    (confidence.value, relation_id),
+                )
+                self._record_event(
+                    connection,
+                    revision=revision,
+                    op=GraphEventOp.EDGE_CHANGED,
+                    subject_id=str(row["source_entity_id"]),
+                    object_id=str(row["target_entity_id"]),
+                    relation=str(row["kind"]),
+                    confidence_before=before,
+                    confidence_after=confidence.value,
+                    source_id=str(row["source_id"]),
+                )
+                return RelationRow(
+                    id=str(row["id"]),
+                    kind=str(row["kind"]),
+                    source_entity_id=str(row["source_entity_id"]),
+                    target_entity_id=str(row["target_entity_id"]),
+                    confidence=confidence.value,
+                    tier=str(row["tier"]),
+                    rationale=row["rationale"],
+                    source_id=str(row["source_id"]),
+                    observed_at=str(row["observed_at"]),
+                )
+
+        return await self._owner.run(write)
+
     async def retract_relation(self, relation_id: str) -> RelationRow | None:
         """사람이 화면에서 "이건 아니다"라고 지운 관계 하나를 없앤다.
 

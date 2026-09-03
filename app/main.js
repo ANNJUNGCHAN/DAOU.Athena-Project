@@ -4212,6 +4212,25 @@ ipcMain.handle('athena:brain-surprising-connections', async (_e, { limit } = {})
 // 사람의 직접 취소(2026-09-03) — 확정 카드의 '적용'이 부른다. 수집을 기다리지
 // 않고 바로 지운다: 수집(대화를 캐는 일)과 편집(주인이 화면에서 고치는 일)은
 // 다른 일이다. 모델은 이 채널에 닿지 않는다 — 렌더러의 카드만 부른다.
+// 되물을 것들 카드의 '맞다' — 불확실을 사실로 올린다. 취소와 같은 이유로 즉시
+// 반영한다: 답해도 "확인이 필요한 것 N건"이 줄지 않으면 같은 카드가 무한히 되묻는다.
+ipcMain.handle('athena:brain-confirm-relation', async (_e, { relationId } = {}) => {
+  const id = typeof relationId === 'string' ? relationId.trim() : '';
+  if (!id) return { ok: false, error: 'relationId가 없다' };
+  const result = await fetchBrainJson('/api/v1/brain/relations/confirmations', {
+    method: 'POST',
+    payload: { relation_id: id },
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  if (result.body && result.body.changed && shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:brain-graph-updated', {
+      revision: result.body.revision,
+      trigger: 'human-confirmation',
+    });
+  }
+  return { ok: true, ...result.body };
+});
+
 ipcMain.handle('athena:brain-retract-relation', async (_e, { relationId } = {}) => {
   const id = typeof relationId === 'string' ? relationId.trim() : '';
   if (!id) return { ok: false, error: 'relationId가 없다' };

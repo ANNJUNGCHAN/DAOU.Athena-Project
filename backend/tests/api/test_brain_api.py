@@ -26,6 +26,7 @@ PROFILE_SUMMARY_PATH = "/api/v1/brain/profile-summary"
 RESET_PATH = "/api/v1/brain/reset-and-restart"
 ENTITY_TIMELINE_PATH = "/api/v1/brain/analysis/entity-timeline"
 RETRACT_PATH = "/api/v1/brain/relations/retractions"
+CONFIRM_PATH = "/api/v1/brain/relations/confirmations"
 SECRET_MARKER = "지난주에 삼성전자 100주를 매수하고 싶다는 비밀스러운 계획"
 
 
@@ -1780,5 +1781,20 @@ def test_relation_retraction_is_not_exposed_to_the_model() -> None:
     with _disabled_client() as client:
         schema = client.get("/openapi.json").json()
     operation = schema["paths"]["/api/v1/brain/relations/retractions"]["post"]
+    assert operation["x-athena-llm-exposed"] is False
+    assert operation["x-athena-side-effect"] == "write"
+
+
+def test_relation_confirmation_requires_bearer_header() -> None:
+    with _disabled_client() as client:
+        response = client.post(CONFIRM_PATH, json={"relation_id": "relation:x"})
+    assert response.status_code == 422
+
+
+def test_relation_confirmation_is_not_exposed_to_the_model() -> None:
+    """확인도 쓰기다 — 취소 입구와 같은 규칙을 따른다."""
+    with _disabled_client() as client:
+        schema = client.get("/openapi.json").json()
+    operation = schema["paths"]["/api/v1/brain/relations/confirmations"]["post"]
     assert operation["x-athena-llm-exposed"] is False
     assert operation["x-athena-side-effect"] == "write"

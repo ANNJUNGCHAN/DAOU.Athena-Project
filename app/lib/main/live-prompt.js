@@ -563,7 +563,13 @@ function buildGraphModePrefix(context, today) {
     '- 더 깊은 조회가 필요하면 athena_brain을 쓴다: action=profile(성향 신호 전체, window_days·limit) · god_nodes(투자의 중심) · surprising(못 본 연결) · questions(되물어야 하는 것 = 불확실하다고 기록된 관계) · diff(from_revision 이후 무엇이 바뀌었나) · entity(노드 하나의 관계·근거·보강 횟수·변경 이력 + 그 기록을 만든 대화·체결 **원문 발췌**).',
     '- **"이 노드 설명해줘" 류에는 athena_brain action=entity를 먼저 부른다.** 화면에 보이는 이름만 되풀이하지 말고, 관계마다 실려 오는 source.text(원문 발췌)를 근거로 인용한다. entity 인자에는 선택된 노드가 있으면 그 entity_id를, 사람이 이름으로 물었으면 그 이름을 넣는다. resolved=false와 candidates가 오면 하나를 골라 단정하지 말고 어느 것인지 되묻는다. source.truncated가 true면 잘린 발췌이니 전문인 것처럼 인용하지 않는다.',
     '- 화면을 옮기라는 요청(다른 탭·특정 노드·필터·전체 맞춤)에는 athena_graph_view를 부른다: action=navigate(surface=summary|map|settings) · select(entity=entity_id) · filter(window_days 30|90|180|365, min_degree 0|2|3|5, summary_sort reinforcement|recent) · fit. 말로만 답하고 화면을 그대로 두면 사용자는 반영됐는지 알 수 없다. select에는 이름이 아니라 id가 필요하니 모르면 entity 조회로 먼저 확인한다.',
-    '- **그래프를 고치는 것은 제안까지만이다.** athena_graph_view action=propose_edit(edit={op:add|change|remove, subject?, object, relation, reason})으로 확정 카드를 띄우면 사람이 누르고, 그 답이 추출 경로로 그래프를 갱신한다. 너에게는 그래프에 쓰는 도구가 없다 — "고쳤다·지웠다·추가했다"고 말하지 말고 "이렇게 고칠지 물었다"고 말한다.',
+    '- **그래프를 고치는 것은 제안까지만이다.** athena_graph_view action=propose_edit(edit={op:add|change|remove, subject?, object, relation, relation_id?, reason})으로 확정 카드를 띄우면 사람이 누르고, 누른 결과가 그래프를 고친다. 너에게는 그래프에 쓰는 도구가 없다 — "고쳤다·지웠다·추가했다"고 말하지 말고 "이렇게 고칠지 물었다"고 말한다.',
+    // 아래 두 줄은 2026-09-03 실측으로 넣었다. 같은 요청("삼성화재의 소속 연결을
+    // 지워줘")에 모델이 그때그때 다르게 굴었다 — 한 번은 카드를 둘 다 띄웠고, 한 번은
+    // "어느 쪽을 지울지 알려주세요"라고 산문으로 되물어 도구를 아예 안 불렀다.
+    // 사용자에게는 "될 때도 있고 안 될 때도 있는" 기능이 된다(제보 "계속 물어봐").
+    '- 지우라·고치라·추가하라는 요청에는 **반드시 propose_edit을 부른다.** 후보가 여러 개면 되묻지 말고 **각각 카드를 하나씩 띄운다** — 사람이 고를 자리는 카드이고, 카드가 곧 그 질문이다. "어느 쪽을 지울까요?"라고 산문으로 되묻는 것은 같은 질문을 두 번 하는 것이다.',
+    '- op=remove일 때는 relation_id를 반드시 함께 싣는다(athena_brain action=entity가 관계마다 relation_id로 준다). 그것이 있으면 사람이 카드를 누른 순간 그래프에서 바로 사라지고, 없으면 반영이 다음 수집까지 밀려 사람은 아무 일도 안 일어난 것으로 본다.',
     '- athena_brain이 "노출이 꺼져 있다"고 503을 주면 지어내지 말고 그 사실을 말한다 — 수집·노출 탭의 모델 전달 토글이 꺼진 것이다.',
     '- **아래 컨텍스트와 athena_brain이 준 값만 말한다.** 없는 것은 없다고 말한다. 성향·관계·수치를 추측해 채우지 마라.',
     '- **사실과 추론을 섞지 마라.** 신호마다 tier(체결·잔고 = 행동 = 사실 / 대화 = 말 = 추론)와 confidence(EXTRACTED=사실 · INFERRED=추론 · AMBIGUOUS=불확실)가 있다. 말과 행동이 어긋나는 신호는 어긋난다는 사실 자체가 답이다 — 한쪽을 골라 단정하지 마라.',
