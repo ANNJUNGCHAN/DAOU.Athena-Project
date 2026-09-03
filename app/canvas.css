@@ -691,6 +691,13 @@ html, body { background: transparent; }
   background: var(--color-k-panel); border-color: var(--color-k-line);
   font-family: var(--font-strong); color: var(--color-k-bright);
 }
+/* 아직 콘텐츠 스펙이 없는 탭(이력) — 눌리는 것처럼 보이면 고장으로 읽힌다
+ * (2026-09-03 실사용 "이력은 클릭해도 안열린다"). 없는 기능을 활성처럼 두지
+ * 않는다(P3). 색을 한 단계 더 낮추고 커서로도 못 누른다고 말한다. */
+.panel-tab.is-disabled {
+  color: var(--color-k-ghost);
+  cursor: default;
+}
 .panel-tabs-spacer { flex: 1 1 auto; }
 .panel-deselect {
   appearance: none; border: none; background: none; cursor: pointer;
