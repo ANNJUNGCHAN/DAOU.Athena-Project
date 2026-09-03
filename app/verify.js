@@ -2019,12 +2019,21 @@ app.whenReady().then(async () => {
   })()`);
   await shot(shellWin, '03f3-plugin-proposal-card.png');
 
-  // 경계 1 — 거부하면 카드가 **제거된다**(모달이 닫히는 것이 아니다). 거부는
+  // 경계 1 — 거부해도 카드는 **그 자리에 남아** 거부됨으로 굳는다(Paper 06). 거부는
   // 어떤 CLI도 부르지 않으므로(main.js handlePluginReject) 네트워크가 필요 없다.
   await shellWin.webContents.executeJavaScript(`document.querySelector('#pluginCanvas .plugin-canvas-proposal .is-proposal-reject').click()`);
   await wait(220);
-  pluginProposalCard.removedAfterReject = await shellWin.webContents.executeJavaScript(
-    `document.querySelectorAll('#pluginCanvas .plugin-canvas-proposal').length === 0`);
+  const pluginProposalDone = await shellWin.webContents.executeJavaScript(`(() => {
+    const cards = document.querySelectorAll('#pluginCanvas .plugin-canvas-proposal');
+    const card = cards[0] || null;
+    return {
+      count: cards.length,
+      state: card?.getAttribute('data-proposal-state') || '',
+      status: card?.querySelector('[role="status"]')?.textContent || '',
+      lines: Array.from(card?.querySelectorAll('.plugin-canvas-proposal-line') || []).map((n) => n.textContent),
+      approveDisabled: card?.querySelector('.is-proposal-approve')?.disabled === true,
+    };
+  })()`);
 
   // 출처 라벨 2종 · 3상태(신설 ⑶⑷). 호스트 계약인 setProposals로 봉투를 넣는다 —
   // 만료는 봉투 판번호와 현재 판번호가 어긋난 상태이므로 이 경로로만 만들 수 있다.
@@ -2045,32 +2054,6 @@ app.whenReady().then(async () => {
     };
   })()`);
   await shot(shellWin, '03f4-plugin-proposal-states.png');
-
-  // 세 번째 상태(거부됨)는 호스트에 붙은 캔버스에서는 관측할 수 없다 — canvas.js가
-  // 응답을 받는 즉시 봉투를 목록에서 빼기 때문이다(위 removedAfterReject가 그것을
-  // 잰다). 모듈이 그 상태를 그리는지는 같은 모듈의 분리 인스턴스로 잰다.
-  const pluginProposalDone = await shellWin.webContents.executeJavaScript(`(async () => {
-    const host = document.createElement('div');
-    document.body.appendChild(host);
-    const canvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
-      container: host, installed: [], recommended: [], marketplaces: [],
-      onRejectProposal: () => ({ ok: true, kind: 'rejected', revision: 3 }),
-    });
-    canvas.mount();
-    const envelope = window.AthenaLib.PluginProposal.buildProposal(
-      { action: 'remove', target: 'korea-stock' }, '지울까요', 3, 'model');
-    canvas.setProposals([envelope], { revision: 3 });
-    host.querySelector('.plugin-canvas-proposal .is-proposal-reject').click();
-    await new Promise((resolve) => setTimeout(resolve, 60));
-    const card = host.querySelector('.plugin-canvas-proposal');
-    const out = {
-      state: card?.getAttribute('data-proposal-state') || '',
-      status: card?.querySelector('[role="status"]')?.textContent || '',
-      approveDisabled: card?.querySelector('.is-proposal-approve')?.disabled === true,
-    };
-    host.remove();
-    return out;
-  })()`);
 
   // 신설 ⑺ — 기본 빌드(런타임 꺼짐)의 결과 턴은 "반영됐다"고 말하지 않는다.
   // 승인 결과는 canvas.js가 CustomEvent로 넘기고 chat.js가 그린다. 여기서는 그
@@ -2242,9 +2225,14 @@ app.whenReady().then(async () => {
     && pluginProposalCard.approve.w >= 32 && pluginProposalCard.approve.h >= 32
     && pluginProposalCard.reject.w >= 32 && pluginProposalCard.reject.h >= 32,
     { approve: pluginProposalCard.approve, reject: pluginProposalCard.reject });
-  // 경계 1 — 거부하면 카드가 제거된다(모달이 닫히는 것이 아니다).
-  assertOk('pluginMode: 거부하면 승인 카드가 화면에서 제거된다',
-    pluginProposalCard.removedAfterReject === true);
+  // 경계 1 — 거부해도 카드는 #pluginCanvas 안에 남고 거부됨으로 굳는다.
+  assertOk('pluginMode: 거부한 카드는 화면에 남아 거부됨 상태로 굳는다',
+    pluginProposalDone.count === 1
+    && pluginProposalDone.state === 'done'
+    && pluginProposalDone.status === '거부됨'
+    && JSON.stringify(pluginProposalDone.lines) === JSON.stringify(['그대로 뒀습니다'])
+    && pluginProposalDone.approveDisabled === true,
+    pluginProposalDone);
   // 신설 ⑶⑷ — 출처 라벨 2종 · 제안 대기/만료됨/거부됨 3상태.
   assertOk('pluginMode: 출처 라벨이 아테나 제안·내 요청 두 값이다',
     pluginProposalStates.count === 2
@@ -2255,11 +2243,6 @@ app.whenReady().then(async () => {
     && JSON.stringify(pluginProposalStates.approveDisabled) === JSON.stringify([false, true])
     && pluginProposalStates.againLabels[0] === null
     && pluginProposalStates.againLabels[1] === '다시 제안받기');
-  assertOk('pluginMode: 거부한 카드는 거부됨 상태로 굳는다',
-    pluginProposalDone.state === 'done'
-    && pluginProposalDone.status === '거부됨'
-    && pluginProposalDone.approveDisabled === true,
-    pluginProposalDone);
   // 신설 ⑺ — 기본 빌드에서 승인 결과 턴은 "반영됐습니다"를 주장하지 않는다(C-10).
   assertOk('pluginMode: 기본 빌드의 승인 결과 턴은 다음 실행부터 반영된다고 말한다',
     JSON.stringify(pluginResultTurn.pills) === JSON.stringify(['플러그인', '결과'])

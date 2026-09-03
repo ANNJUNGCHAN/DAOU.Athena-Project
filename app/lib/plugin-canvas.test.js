@@ -663,6 +663,38 @@ test('거부는 카드를 잠그고 승인 경로를 부르지 않는다', async
 
   assert.deepEqual(calls, [['reject', 'p-1']]);
   assert.deepEqual(texts(container, 'agent-mode'), ['거부됨']);
+  // 카드는 남는다 — 응답 즉시 지우면 사람이 처리 결과를 못 본다.
+  assert.equal(findByClass(container, 'plugin-canvas-proposal').length, 1);
+  assert.deepEqual(texts(container, 'plugin-canvas-proposal-line'), ['그대로 뒀습니다']);
+});
+
+test('처리된 카드는 제안 문구 대신 결과 문구를 쓴다', async () => {
+  const { container, canvas } = mountedCanvas({
+    onApproveProposal: () => Promise.resolve({
+      kind: 'success', probes: [{ alias: 'fetch', ok: true, toolCount: 1 }],
+    }),
+  });
+  canvas.setProposals([envelope()], { revision: 7 });
+  await buttonWithClass(container, 'is-proposal-approve').dispatchEvent({ type: 'click' });
+  await flush();
+
+  assert.deepEqual(texts(container, 'plugin-canvas-proposal-line'), [
+    '등록했습니다', '연결을 확인했습니다', '기능 1개를 찾았습니다',
+  ]);
+  // 실패 사유는 한 줄로만 나온다 — 제안 이유 줄은 결과 카드에 남기지 않는다.
+  assert.deepEqual(texts(container, 'plugin-canvas-proposal-reason'), []);
+});
+
+test('실패한 카드는 사유 한 줄을 쓴다', async () => {
+  const { container, canvas } = mountedCanvas({
+    onApproveProposal: () => Promise.resolve({ kind: 'failed', reason: '명령을 찾지 못했습니다' }),
+  });
+  canvas.setProposals([envelope()], { revision: 7 });
+  await buttonWithClass(container, 'is-proposal-approve').dispatchEvent({ type: 'click' });
+  await flush();
+
+  assert.deepEqual(texts(container, 'agent-mode'), ['실패']);
+  assert.deepEqual(texts(container, 'plugin-canvas-proposal-line'), ['연결 실패 — 명령을 찾지 못했습니다']);
 });
 
 test('판번호가 어긋난 카드는 만료됨이고 승인이 비활성이며 다시 제안받기를 준다', async () => {
@@ -708,17 +740,44 @@ test('판번호를 모르는 봉투는 만료로 몰지 않는다', () => {
   assert.equal(findByClass(container, 'plugin-canvas-proposal')[0].getAttribute('data-proposal-state'), 'pending');
 });
 
-test('이미 처리한 제안은 복원으로 되살아나지 않는다', async () => {
+test('사람이 치운 제안은 복원으로 되살아나지 않는다', async () => {
+  const { container, canvas } = mountedCanvas({ onDismissProposal: () => {} });
+  canvas.setProposals([envelope()], { revision: 9 });
+  await buttonWithClass(container, 'is-proposal-again').dispatchEvent({ type: 'click' });
+
+  canvas.setProposals([envelope()], { revision: 9 });
+  assert.equal(findByClass(container, 'plugin-canvas-proposal').length, 0, '치운 카드는 다시 그려지지 않는다');
+  assert.deepEqual(canvas.getState().proposals, []);
+});
+
+test('같은 봉투를 그대로 다시 넣으면 처리된 카드가 그대로 남는다', async () => {
   const { container, canvas } = mountedCanvas({
     onRejectProposal: () => ({ kind: 'rejected' }),
   });
-  canvas.setProposals([envelope()], { revision: 7 });
+  const envelopes = [envelope()];
+  canvas.setProposals(envelopes, { revision: 7 });
   await buttonWithClass(container, 'is-proposal-reject').dispatchEvent({ type: 'click' });
   await flush();
 
+  canvas.setProposals(envelopes, { revision: 7 });
+  assert.deepEqual(canvas.getState().proposals, [{ id: 'p-1', state: 'done', kind: 'rejected' }]);
+  assert.deepEqual(texts(container, 'agent-mode'), ['거부됨']);
+});
+
+test('실패한 카드는 같은 번호가 다시 등록되면 대기로 돌아간다', async () => {
+  const { container, canvas } = mountedCanvas({
+    onApproveProposal: () => Promise.resolve({ kind: 'failed', reason: '명령을 찾지 못했습니다' }),
+  });
   canvas.setProposals([envelope()], { revision: 7 });
-  assert.equal(findByClass(container, 'plugin-canvas-proposal').length, 0, '거부한 카드는 다시 그려지지 않는다');
-  assert.deepEqual(canvas.getState().proposals, []);
+  await buttonWithClass(container, 'is-proposal-approve').dispatchEvent({ type: 'click' });
+  await flush();
+  assert.deepEqual(texts(container, 'agent-mode'), ['실패']);
+
+  // 호스트가 같은 번호로 새 봉투를 넣는다(채팅의 다시 시도·모델 재제안).
+  canvas.setProposals([envelope()], { revision: 7 });
+  assert.deepEqual(canvas.getState().proposals, [{ id: 'p-1', state: 'pending', kind: null }]);
+  assert.deepEqual(texts(container, 'agent-mode'), ['제안 대기']);
+  assert.notEqual(buttonWithClass(container, 'is-proposal-approve').disabled, true);
 });
 
 test('승인 카드의 버튼은 전부 키보드로 닿는 실제 버튼이다', () => {
