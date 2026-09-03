@@ -85,6 +85,12 @@ _ALLOWED_ACTIONS: tuple[str, ...] = (
     "visual_question",
     "visual_patch",
     "visual_from_spec",
+    # 기법 저작 3종. technique_nodes·technique_check는 코드를 읽고 검사할 뿐 저장하지
+    # 않고(시험 실행도 signals만 돌리고 실행 이력을 만들지 않는다), technique_question은
+    # HTTP를 타지 않고 캔버스로만 간다 — 고르는 것은 사람이다.
+    "technique_nodes",
+    "technique_check",
+    "technique_question",
 )
 
 # 시각 라우트로 넘길 때 쓰는 경로 — action 이름과 endpoint를 한 자리에서 묶는다.
@@ -96,12 +102,18 @@ _VISUAL_PATHS: dict[str, str] = {
     "visual_from_spec": "/api/v1/backtest/visual/from-spec",
 }
 
+# 기법 저작 라우트 — 위 표와 같은 이유로 action 이름과 endpoint를 한 자리에 묶는다.
+_TECHNIQUE_PATHS: dict[str, str] = {
+    "technique_nodes": "/api/v1/backtest/technique/nodes",
+    "technique_check": "/api/v1/backtest/technique/check",
+}
+
 # action=run이 백엔드로 넘길 수 있는 키 — 스키마 `run`에 적힌 둘뿐이다. `source`(코드
 # 실행)와 `allow_partial`(캐시 부족 우회)은 사람 클릭 전용이라 여기서 걸러낸다.
 _RUN_FORWARDED_KEYS: frozenset[str] = frozenset({"yaml", "params"})
 
 _NAVIGATE_TABS: tuple[str, ...] = ("design", "result", "history", "optimize", "deploy")
-_NAVIGATE_DESIGN_TABS: tuple[str, ...] = ("form", "code", "flow")
+_NAVIGATE_DESIGN_TABS: tuple[str, ...] = ("form", "code", "flow", "nodes")
 _OPTIMIZE_METHODS: tuple[str, ...] = ("grid", "random")
 
 _TIMEOUT_SECONDS = 15.0
@@ -171,6 +183,16 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "diff)을 만들어 채팅에 수정안 카드로 띄운다. 그래프도 버전도 바뀌지 않는다 — "
                 "사람이 diff를 보고 직접 적용해야 바뀌므로 고쳤다고 말하지 마라. "
                 "visual_from_spec = 폼/프리셋 yaml을 편집 가능한 그래프로 되돌린다. "
+                "technique_nodes = 지금 기법 코드를 읽어 **그 코드의 함수**를 노드로, "
+                "entry/exit를 만드는 호출 사슬을 흐름으로 돌려준다(실행하지 않는다). "
+                "노드는 기법마다 다르다 — 미리 정해진 노드 종류는 없다. "
+                "technique_check = 문법·금지 import → signals(df, p) 계약 → 짧은 구간 시험 "
+                "실행 → 룩어헤드 → 워밍업(이 다섯은 차단) + 매직 넘버·구조(경고)를 순서대로 "
+                "돌린다. 저장하지도, 실행 이력을 만들지도 않는다 — 차단 다섯이 통과해야 "
+                "노드·흐름 창이 열린다. "
+                "technique_question = 알고리즘을 정하는 질문 **하나**를 선택지와 함께 채팅 "
+                "카드로 띄운다 — 한 번에 여러 결정을 묶어 묻지 말고, 네가 대신 고르지 마라. "
+                "사용자가 고른 답이 채팅으로 돌아온 뒤에 코드를 쓴다. "
                 "실행·탐색 시작·수집·저장·활성화·배포는 전부 사람이 카드 버튼을 누른다. "
                 "backfill(대량 백필)·activate(전략 버전 활성화)·deploy(실전 배포)는 이 툴에 "
                 "없다 — 쿼터를 태우거나 돈이 나가는 경로라 사용자가 앱에서 직접 한다."
@@ -614,6 +636,56 @@ _INPUT_SCHEMA: dict[str, Any] = {
             "required": ["yaml"],
             "properties": {"yaml": {"type": "string"}},
         },
+        "technique_nodes": {
+            "type": "object",
+            "description": (
+                "action=technique_nodes일 때의 입력 — 노드로 나눌 기법 파이썬. 생략하면 "
+                "앱이 지금 편집기에 있는 코드를 실어 보낸다."
+            ),
+            "properties": {"source": {"type": "string"}},
+        },
+        "technique_check": {
+            "type": "object",
+            "description": (
+                "action=technique_check일 때의 입력 — 검사할 기법 파이썬과(선택) 시험 실행 "
+                "대상. 대상이 없으면 시험 실행만 '봉 캐시 없음'으로 남는다."
+            ),
+            "properties": {
+                "source": {"type": "string"},
+                "symbol": {"type": "string", "description": "6자리 종목코드"},
+                "period": {"type": "string", "enum": ["day", "week", "month"]},
+                "from": {"type": "string", "description": "YYYYMMDD"},
+                "to": {"type": "string", "description": "YYYYMMDD"},
+            },
+        },
+        "technique_question": {
+            "type": "object",
+            "description": (
+                "action=technique_question일 때의 입력 — 질문 하나와 선택지들. "
+                "recommended는 하나에만 붙인다."
+            ),
+            "required": ["question_ko", "choices"],
+            "properties": {
+                "question_ko": {"type": "string"},
+                "why_ko": {
+                    "type": "string",
+                    "description": "왜 지금 이걸 묻는지 — 사용자가 고를 근거",
+                },
+                "choices": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": ["id", "label_ko"],
+                        "properties": {
+                            "id": {"type": "string"},
+                            "label_ko": {"type": "string"},
+                            "detail_ko": {"type": "string"},
+                            "recommended": {"type": "boolean"},
+                        },
+                    },
+                },
+            },
+        },
     },
 }
 
@@ -636,6 +708,10 @@ _DESCRIPTION = (
     "시각 설계(visual_*)는 노드 그래프를 검증(visual_validate)·컴파일(visual_compile)하고, "
     "막힌 오류 하나만 질문(visual_question)한 뒤 **비활성 수정안**(visual_patch)을 만든다 — "
     "여섯 다 저장도 실행도 하지 않으므로 patch를 만들었다고 그래프가 바뀐 것처럼 말하지 마라. "
+    "기법 저작(technique_*)은 새 기법 하나를 만드는 자리다 — technique_question으로 한 번에 "
+    "하나씩 물어 알고리즘을 정하고, 코드를 쓴 뒤 technique_check로 문법·계약·짧은 시험 실행을 "
+    "돌리고, 통과하면 technique_nodes로 그 코드의 함수를 노드·흐름으로 보여준다. 셋 다 "
+    "저장하지 않고 실행 이력도 만들지 않는다. 노드는 기법마다 다르다 — 범용 팔레트가 없다. "
     "실행·탐색 시작·수집·저장·"
     "활성화·배포는 전부 사람이 카드 버튼을 누른다. 대량 백필(backfill)·전략 버전 "
     "활성화(activate)·실전 배포(deploy)는 이 툴로 할 수 없다 — 셋 다 사람 클릭 전용이다."
@@ -768,6 +844,64 @@ async def dispatch(
     has_strategy_id = isinstance(strategy_id, str) and bool(strategy_id)
     if action == "read_code" and not has_strategy_id:
         return _blocked(f"action={action!r}는 strategy_id(문자열)가 필요하다.")
+
+    if action in _TECHNIQUE_PATHS:
+        # 소스는 앱이 실어 보낸다(지금 편집기에 있는 코드) — 비어 있으면 그 배선이 끊긴
+        # 것이므로 백엔드를 두드리지 않고 여기서 끝낸다.
+        technique_input = arguments.get(action)
+        technique_input = technique_input if isinstance(technique_input, dict) else {}
+        source = technique_input.get("source")
+        if not isinstance(source, str) or not source.strip():
+            return _blocked(
+                f"action={action!r}는 source(문자열)가 필요하다 — 지금 편집기에 있는 코드를 "
+                "앱이 실어 보낸다. 코드가 아직 없으면 먼저 코드를 써라."
+            )
+
+    if action == "technique_question":
+        # HTTP를 타지 않는다 — 질문은 계산할 것이 없고, 고르는 것은 사람이다.
+        # visual_question과 같은 `delivered=canvas` 봉투라 main.js가 그대로 카드로 넘긴다.
+        question_input = arguments.get("technique_question")
+        question_input = question_input if isinstance(question_input, dict) else {}
+        question = question_input.get("question_ko")
+        if not isinstance(question, str) or not question.strip():
+            return _blocked("technique_question에는 question_ko(문자열)가 필요하다.")
+        raw_choices = question_input.get("choices")
+        if not isinstance(raw_choices, list) or not raw_choices:
+            return _blocked("technique_question에는 choices(배열)가 하나 이상 필요하다.")
+        choices: list[dict[str, Any]] = []
+        for item in raw_choices:
+            if not isinstance(item, dict):
+                return _blocked("choices의 각 항목은 {id, label_ko} 객체여야 한다.")
+            choice_id, label = item.get("id"), item.get("label_ko")
+            if not isinstance(choice_id, str) or not choice_id.strip():
+                return _blocked("choices의 각 항목에는 id(문자열)가 필요하다.")
+            if not isinstance(label, str) or not label.strip():
+                return _blocked("choices의 각 항목에는 label_ko(문자열)가 필요하다.")
+            detail = item.get("detail_ko")
+            choices.append(
+                {
+                    "id": choice_id,
+                    "label_ko": label,
+                    "detail_ko": detail if isinstance(detail, str) else None,
+                    "recommended": item.get("recommended") is True,
+                }
+            )
+        why = question_input.get("why_ko")
+        return _success(
+            {
+                "delivered": "canvas",
+                "kind": "technique_question",
+                "payload": {
+                    "question_ko": question,
+                    "choices": choices,
+                    "why_ko": why if isinstance(why, str) else None,
+                },
+                "message": (
+                    "질문 카드를 띄웠다. 사용자가 고르면 그 답이 채팅으로 온다. "
+                    "네가 대신 고르지 마라."
+                ),
+            }
+        )
 
     if action == "propose_code" and not has_strategy_id:
         # 저장할 전략이 아직 없는 경우 — 백엔드를 타지 않고 캔버스 편집기로 바로 간다.
@@ -1013,6 +1147,12 @@ async def dispatch(
         elif action == "visual_registry":
             response = await http_client.get(
                 "/api/v1/backtest/visual/registry", timeout=_TIMEOUT_SECONDS
+            )
+        elif action in _TECHNIQUE_PATHS:
+            response = await http_client.post(
+                _TECHNIQUE_PATHS[action],
+                json=arguments.get(action) or {},
+                timeout=_TIMEOUT_SECONDS,
             )
         elif action in _VISUAL_PATHS:
             response = await http_client.post(
