@@ -103,6 +103,14 @@
    * 전수 실측 — 900·820·880·880·824·420px). 레일만 360px로 줄이면 primary가
    * 그대로 서 있어 합이 컨테이너를 넘는다(실측 overflow_x 89~148px). L부터는
    * primary가 남은 폭을 받는 쪽이다 — 레일이 고정, primary가 유동. */
+  /* KPI 줄에는 남는 폭을 통째로 받는 탄력 칸이 있다(Paper 원문 `flex-basis: 0%`).
+   * 보드가 Paper 폭(1360px)보다 좁아지면 그 칸 하나가 부족분을 다 뒤집어써서
+   * 글자가 한 자씩 세로로 눕는다 — 실측 2SKU-1 "현금 비중 28.0%" 칸이 컨테이너
+   * 1169px에서 265px → 74px. 한국어는 `overflow-wrap: anywhere`(Paper 원문)로
+   * 한 글자까지 쪼개져서 자동 최소 크기가 칸을 못 지킨다. 바닥을 주면 부족분을
+   * 줄 전체가 나눠 진다(다른 칸은 이미 shrink가 풀려 있다). */
+  .bs-kpi-cell { min-width: 160px; }
+
   .bs-primary { width: auto; flex-basis: 0%; flex-grow: 1; flex-shrink: 1; }
   /* 레일은 360px가 목표 폭이지 상한이 아니다 — 안쪽 블록이 더 줄 수 없으면
    * (실측 2R3M-1 레일 min-content 384px) 360px에 가두는 순간 그만큼이 그대로

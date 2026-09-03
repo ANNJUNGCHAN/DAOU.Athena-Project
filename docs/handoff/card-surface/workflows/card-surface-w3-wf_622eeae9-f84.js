@@ -9,7 +9,7 @@ export const meta = {
 }
 const ROOT = 'C:\\Projects\\DAOU.Athena'
 const TPL = ROOT + '\\backend\\ref\\card-surface-templates'
-const PACK = 'C:\\Users\\ajc22\\AppData\\Local\\Temp\\claude\\C--Projects-DAOU-Athena\\dff811ca-b4d0-4ed4-9c90-07bce304dc1a\\scratchpad\\authoring'
+const PACK = ROOT + '\backend\ref\card-surface-authoring\packs' // 원래는 세션 스크래치 경로. ATHENA_PACK_DIR 와 같은 값.
 const CHARTER = ROOT + '\\docs\\ui\\paper-card-surface-charter.md'
 const NODE = 'export PATH="/c/Users/ajc22/AppData/Local/fnm_multishells/9988_1786672622598:$PATH"'
 const PY = ROOT + '\\backend\\.venv\\Scripts\\python.exe'
@@ -30,7 +30,7 @@ const C5 = `너는 C5 — 보드 카드 크롬 제거·실보드 캡처(app/canv
 3) verify-integrated-cards: 픽스처 보드 대신 실보드 6장(2SKU-1, 2R3M-1, 13BC-2, 2QFO-2, 13K0-2, 135M-2)을 slots.json의 paper_text를 값으로 마운트해 4단계(1920×1080·960×1080·640×540·480×420) 캡처 + P5 텍스트 다중집합 검사. 캡처 파일명 board-<id>-<w>x<h>.png. 백엔드 레지스트리 격리 전이면 프론트 픽스처 경로로 surface_contract를 직접 구성해도 됨(값 = paper_text).
 보고(원시 데이터): 파일·테스트·캡처 경로·overflow 수치.`
 
-const D3 = `너는 D3 — 커버리지 정본화(scripts/card_surface_coverage.py, surface_dashboard.py). 현재 스크립트가 alt_mappings·indexed·행 반복 면제를 모르고 67.8%·중복 1,156을 내는데 로더 strict는 미도달 155 occurrence(≈95.6%)다. 정정: 바인딩 판정을 백엔드 로더에 위임 — sys.path에 backend를 넣고 athena_api.card_surface_templates.load_registry(strict=False, isolate=True)(B4가 만드는 API; 없으면 validate 우회 로드)와 registry.coverage()를 사용해 카드별·층별 바인딩률, 미도달 occurrence 목록(kor 병기), 보드 없는 op, 제외 보드·사유, 밀도 하드/소프트를 MD로. 17F8-2 재귀속 경고는 "미도달 occurrence 중 원장 귀속이 17F8-2인 것"으로 정확화. 대시보드 섹션 동일 갱신. 실행: PYTHONIOENCODING=utf-8 python scripts/card_surface_coverage.py. 보고(원시 데이터).`
+const D3 = `너는 D3 — 커버리지 정본화(scripts/card_surface_coverage.py, surface_dashboard.py). 현재 스크립트가 alt_mappings·indexed·행 반복 면제를 모르고 67.8%·중복 1,156을 내는데 로더 strict는 미도달 155 occurrence(≈95.6%)다. 정정: 바인딩 판정을 백엔드 로더에 위임 — sys.path에 backend를 넣고 athena_api.card_surface_templates.load_registry(strict=False)(현재 시그니처; isolate 인자는 없다)와 registry.coverage()를 사용해 카드별·층별 바인딩률, 미도달 occurrence 목록(kor 병기), 보드 없는 op, 제외 보드·사유, 밀도 하드/소프트를 MD로. 17F8-2 재귀속 경고는 "미도달 occurrence 중 원장 귀속이 17F8-2인 것"으로 정확화. 대시보드 섹션 동일 갱신. 실행: PYTHONIOENCODING=utf-8 python scripts/card_surface_coverage.py. 보고(원시 데이터).`
 
 phase('정비')
 const [a5, b4, c5, d3] = await parallel([
@@ -49,7 +49,7 @@ const LANES = [
   { label: 'orderbook', boards: ['13BC-2','1JPU-0','1JZW-0','3JZ3-0','3N4O-0','2TRW-1','2QX1-1'], focus: 'base:00·base:0D 등 실시간 occurrence 미도달 목록(로더 coverage의 uncovered 중 CC-04 몫)을 사다리·낱값 표의 indexed 열로 바인딩, 3JZ3-0·3N4O-0 control_text' },
   { label: 'uncovered-sweep', boards: [], focus: 'B4 registry.coverage().uncovered_occurrences 전체를 카드별로 분류해 어느 보드 어느 슬롯에 붙일지 결정하고, 위 레인 소유 밖 보드(CC-02 6장·CC-03 잔여·CC-06 잔여)의 것을 직접 바인딩. 소유 겹침 방지: 위 7레인 보드는 편집 금지, 그 보드 몫은 보고에 넘김' },
 ]
-const authored = await parallel(LANES.map(l => () => agent(`너는 3차 슬롯 저작 레인 "${l.label}"(보드: ${l.boards.join(', ') || '소유 밖 잔여'})이다. 목표: 로더 strict 미도달 occurrence 0·보드 없는 op 0·진짜 중복 0·상태 컨트롤 0. Read: ${CHARTER} §2.2·§4, 보드별 ${TPL}\\<board>\\slots.json·meta.json, ${PACK}\\<board>.pack.json. 도구: ${PY} ${ROOT}\\scripts\\validate_board_slots.py <board> · ${PY} ${ROOT}\\scripts\\paper_board_extract.py <board> --apply-columns --no-index · 로더 커버리지: cd ${ROOT}\\backend && ${NODE} && uv run python -c "from athena_api.card_surface_templates import load_registry; r=load_registry(strict=False, isolate=True); c=r.coverage(); print(len(c['uncovered_occurrences'])); print([o for o in c['uncovered_occurrences'] if o.startswith(('base:','detail:'))][:60])"(API 이름이 다르면 모듈을 Read해 맞춰라).
+const authored = await parallel(LANES.map(l => () => agent(`너는 3차 슬롯 저작 레인 "${l.label}"(보드: ${l.boards.join(', ') || '소유 밖 잔여'})이다. 목표: 로더 strict 미도달 occurrence 0·보드 없는 op 0·진짜 중복 0·상태 컨트롤 0. Read: ${CHARTER} §2.2·§4, 보드별 ${TPL}\\<board>\\slots.json·meta.json, ${PACK}\\<board>.pack.json. 도구: ${PY} ${ROOT}\\scripts\\validate_board_slots.py <board> · ${PY} ${ROOT}\\scripts\\paper_board_extract.py <board> --apply-columns --no-index · 로더 커버리지: cd ${ROOT}\\backend && ${NODE} && uv run python -c "from athena_api.card_surface_templates import load_registry; r=load_registry(strict=False); c=r.coverage(); print(len(c['uncovered_occurrences'])); print([o for o in c['uncovered_occurrences'] if o.startswith(('base:','detail:'))][:60])"(API 이름이 다르면 모듈을 Read해 맞춰라).
 슬롯 표현력: alt_mappings(같은 자리 여러 op)·indexed(열 f_pattern {i})·extra_fields(한 텍스트 두 값)·paired_with(병기)·display_dup(재표시)·collapse_group(영값 묶음)·kind static/label/derived·meta.state.control_text(부모 화면의 실제 문구).
 초점: ${l.focus}
 규칙: 다른 레인 보드 편집 금지, --no-index. 종료 조건: 담당 보드 validate 문제 0 + 로더 coverage에서 담당 보드 op의 미도달 0. 보고(원시 데이터): 전→후 수치, 남은 사유.`, { label: `author3:${l.label}`, phase: '3차 저작' })))
