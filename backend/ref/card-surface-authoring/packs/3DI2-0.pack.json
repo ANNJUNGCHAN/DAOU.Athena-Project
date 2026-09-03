@@ -1,0 +1,293 @@
+{
+ "board_id": "3DI2-0",
+ "card_id": "CC-03",
+ "name": "CC-03 / R01-X · 투자자 12주체",
+ "operation_refs": [
+  "base:ka10060",
+  "base:ka10064"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10060",
+   "f": "stk_invsr_orgn_chart",
+   "kor": "종목별투자자기관별차트",
+   "layer": null,
+   "board": "137X-2",
+   "where": "오늘의 수급 30분 누적 미니 막대 시계열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "dt",
+   "kor": "일자",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 일자별 투자자 열 머리 날짜 5열 09-01(화·당일)·08-31(월)·08-28(금)·08-27(목)·08-26(수) 직접",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 현재가 150,850원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "137X-2",
+   "where": "헤더 +1,850",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "acc_trde_prica",
+   "kor": "누적거래대금",
+   "layer": null,
+   "board": "137X-2",
+   "where": "거래대금 2.14조원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "ind_invsr",
+   "kor": "개인투자자",
+   "layer": null,
+   "board": "137X-2",
+   "where": "오늘의 수급 개인 -654억원 / 미니 막대 '개'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "frgnr_invsr",
+   "kor": "외국인투자자",
+   "layer": null,
+   "board": "137X-2",
+   "where": "오늘의 수급 외국인 +482억원 / 미니 막대 '외'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "orgn",
+   "kor": "기관계",
+   "layer": null,
+   "board": "137X-2",
+   "where": "오늘의 수급 기관 +196억원 / 미니 막대 '기'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "fnnc_invt",
+   "kor": "금융투자",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 금융투자 행 · 5거래일 낱값 +84/+102/+96/+58/+62 · 5일 누적 +402",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "insrnc",
+   "kor": "보험",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 보험 행 · 5거래일 낱값 +12/+18/+14/+9/+7 · 5일 누적 +60",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "invtrt",
+   "kor": "투신",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 투신 행 · 5거래일 낱값 +47/+36/+42/+24/+28 · 5일 누적 +177",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "etc_fnnc",
+   "kor": "기타금융",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 기타금융 행 · 5거래일 낱값 +3/+4/+2/+1/+2 · 5일 누적 +12",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "bank",
+   "kor": "은행",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 은행 행 · 5거래일 낱값 −6/−8/−5/−3/−4 · 5일 누적 −26",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "penfnd_etc",
+   "kor": "연기금등",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 연기금등 행 · 5거래일 낱값 +58/+40/+54/+32/+31 · 5일 누적 +215",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "samo_fund",
+   "kor": "사모펀드",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기관 그룹 사모펀드 행 · 5거래일 낱값 −2/−6/−4/−5/−3 · 5일 누적 −20",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "natn",
+   "kor": "국가",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기타 그룹 국가 행 · 5거래일 낱값 +2/+3/+1/+2/+4 · 5일 누적 +12",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "etc_corp",
+   "kor": "기타법인",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기타 그룹 기타법인 행 · 5거래일 낱값 −9/−41/−9/−24/+58 · 5일 누적 −25",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10060",
+   "f": "natfor",
+   "kor": "내외국인",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ① 기타 그룹 내외국인 행 · 5거래일 낱값 −5/−10/−7/−8/−7 · 5일 누적 −37",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "opmr_invsr_trde_chart",
+   "kor": "장중투자자별매매차트",
+   "layer": null,
+   "board": "137X-2",
+   "where": "30분 누적 미니 막대 그룹(09:00·09:30·09:42)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "tm",
+   "kor": "시간",
+   "layer": null,
+   "board": "137X-2",
+   "where": "미니 막대 하단 09:00 / 09:30 / 09:42 라벨",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "frgnr_invsr",
+   "kor": "외국인투자자",
+   "layer": null,
+   "board": "137X-2",
+   "where": "'외' 막대 및 외국인 +482억원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "orgn",
+   "kor": "기관계",
+   "layer": null,
+   "board": "137X-2",
+   "where": "'기' 막대 및 기관 +196억원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "invtrt",
+   "kor": "투신",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 투신 행 · 09:00~09:30 +29 · 09:30~09:42(진행) +18 · 당일 누계 +47",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "insrnc",
+   "kor": "보험",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 보험 행 · 09:00~09:30 +7 · 09:30~09:42(진행) +5 · 당일 누계 +12",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "bank",
+   "kor": "은행",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 은행 행 · 09:00~09:30 −4 · 09:30~09:42(진행) −2 · 당일 누계 −6",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "penfnd_etc",
+   "kor": "연기금등",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 연기금등 행 · 09:00~09:30 +36 · 09:30~09:42(진행) +22 · 당일 누계 +58",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "etc_corp",
+   "kor": "기타법인",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 기타법인 행 · 09:00~09:30 −6 · 09:30~09:42(진행) −3 · 당일 누계 −9",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10064",
+   "f": "natn",
+   "kor": "국가",
+   "layer": "펼침",
+   "board": "3DI2-0",
+   "where": "섹션 ② 장중 시간대 국가 행 · 09:00~09:30 +1 · 09:30~09:42(진행) +1 · 당일 누계 +2",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 17
+}

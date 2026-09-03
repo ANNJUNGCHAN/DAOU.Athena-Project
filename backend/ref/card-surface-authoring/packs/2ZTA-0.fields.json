@@ -1,0 +1,138 @@
+{
+ "board": "2ZTA-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10008",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "where": "표 신설 '거래량' 열(1위 1,420만주)"
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "chg_qty",
+   "kor": "변동수량",
+   "layer": "병기",
+   "where": "표 '외국인 보유' 셀 2번째 줄 '변동 +1,320만주'"
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "frgnr_limit",
+   "kor": "외국인한도",
+   "layer": "직접",
+   "where": "표 신설 '한도' 열(1위 35,022만주)"
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "frgnr_limit_irds",
+   "kor": "외국인한도증감",
+   "layer": "병기",
+   "where": "표 '한도' 셀 2번째 줄 '증감 미제공'(결측 표기)"
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "gain_pos_stkcnt",
+   "kor": "취득가능주식수",
+   "layer": null,
+   "where": "순위 표 '잔여 한도' 열 15,280만주"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "limit_exh_rt",
+   "kor": "한도소진율",
+   "layer": null,
+   "where": "순위 표 '소진율' 열 56.4%"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "for_limit_exh_rt_incrs_upper",
+   "kor": "외인한도소진율증가상위",
+   "layer": null,
+   "where": "한도소진율 증가 순위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "rank",
+   "kor": "순위",
+   "layer": null,
+   "where": "표 '순위' 열"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "표 '종목' 열"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "표 '현재가' 열"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "where": "표 신설 '거래량' 열(1위 1,420만주 · 2.14조)"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "poss_stkcnt",
+   "kor": "보유주식수",
+   "layer": null,
+   "where": "표 '외국인 보유' 열 19,742만주"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "gain_pos_stkcnt",
+   "kor": "취득가능주식수",
+   "layer": null,
+   "where": "표 '잔여 한도' 열 15,280만주"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "base_limit_exh_rt",
+   "kor": "기준한도소진율",
+   "layer": "병기",
+   "where": "표 '소진율' 셀 2번째 줄 '기준 52.6%'"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "limit_exh_rt",
+   "kor": "한도소진율",
+   "layer": null,
+   "where": "표 '소진율' 열 56.4%"
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "exh_rt_incrs",
+   "kor": "소진율증가",
+   "layer": null,
+   "where": "표 '전일 대비' 열 +3.8%p"
+  }
+ ]
+}

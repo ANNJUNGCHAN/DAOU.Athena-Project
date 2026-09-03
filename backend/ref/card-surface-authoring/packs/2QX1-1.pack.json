@@ -1,0 +1,172 @@
+{
+ "board_id": "2QX1-1",
+ "card_id": "CC-04",
+ "name": "CC-04 / R02-T3 · 호가 — KRX 금현물",
+ "operation_refs": [
+  "base:ka50101"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka50101",
+   "f": "gold_bid",
+   "kor": "금현물호가",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "5단 호가 사다리 자체가 금현물 호가 배열의 렌더",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "헤더 '현재가 109,750' 및 실시간 체결 체결가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "pred_pre",
+   "kor": "전일 대비(원)",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "헤더 '+850' / 중앙 밴드 '▲ 850'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "헤더 '+0.78%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "trde_qty",
+   "kor": "누적 거래량",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "상단 카드 '누적 거래량 348kg'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "acc_trde_prica",
+   "kor": "누적 거래대금",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "상단 카드 '거래대금 382.4억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "cntr_trde_qty",
+   "kor": "거래량(체결량)",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "실시간 체결 · '수량(g)' 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "tm",
+   "kor": "체결시간",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "헤더 '14:31:08 기준' / 체결 시간 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "중앙 밴드 ▲ 기호와 상승색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "pri_sel_bid_unit",
+   "kor": "매도호가",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "상단 카드 '최우선 매도호가 109,800' 및 매도 사다리 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "pri_buy_bid_unit",
+   "kor": "매수호가",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "상단 카드 '최우선 매수호가 109,700' 및 매수 사다리 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "trde_pre",
+   "kor": "전일 거래량 대비 비율",
+   "layer": "직접",
+   "board": "2QX1-1",
+   "where": "상단 KPI 밴드 5번째 칸 '전일 거래량 대비' 주값 118.4%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "trde_tern_rt",
+   "kor": "전일 거래량 대비 순간 거래량 비율",
+   "layer": "병기",
+   "board": "2QX1-1",
+   "where": "상단 KPI 밴드 5번째 칸 병기 줄 '거래회전율 2.7%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "cntr_str",
+   "kor": "체결강도",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "실시간 체결 패널 · '체결강도 112.6'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "lpmmcm_nm_1",
+   "kor": "K.O 접근도",
+   "layer": "직접",
+   "board": "2QX1-1",
+   "where": "우측 레일 '금현물 정보' 6행 'LP 회원사 · 해당 없음' — 금현물 LP 부재를 결측 표기로",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka50101",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": null,
+   "board": "2QX1-1",
+   "where": "헤더 'KRX 금시장' / 금현물 정보 패널",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 16
+}

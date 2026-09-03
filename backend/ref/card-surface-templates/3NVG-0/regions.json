@@ -1,0 +1,11 @@
+{
+  "root": "3NVI-0",
+  "regions": [
+    { "node_id": "3O5Z-0", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "3O5E-0", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3NVM-0", "name": "Account Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3P9I-0", "name": "통화별 예수금 본문", "role": "primary", "depth": 2 },
+    { "node_id": "3PD2-0", "name": "특수예수금 레일", "role": "rail", "depth": 2 },
+    { "node_id": "3NVJ-0", "name": "Account Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

@@ -1,0 +1,233 @@
+{
+ "board_id": "2UHM-1",
+ "card_id": "CC-06",
+ "name": "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+ "operation_refs": [
+  "base:0s",
+  "base:1h"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:0s",
+   "f": "215",
+   "kor": "장운영구분",
+   "layer": null,
+   "board": "2UHM-1",
+   "where": "상단 카드 '장 운영 / 정규장 진행', 헤더 배지 장중·장전·시간외",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0s",
+   "f": "20",
+   "kor": "체결시간",
+   "layer": null,
+   "board": "2UHM-1",
+   "where": "헤더 배지 '장중 · 09:42', 하단 '마지막 반영 09:42:18'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0s",
+   "f": "214",
+   "kor": "장시작예상잔여시간",
+   "layer": "병기",
+   "board": "2UHM-1",
+   "where": "KPI '장 운영' 칸 보조줄 '장 시작 09:00 · 잔여 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "9001",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "15R0-2",
+   "where": "VI 행 종목코드 042700/080220/247540",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "302",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2UHM-1",
+   "where": "VI 테이블 '종목' 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "13",
+   "kor": "누적거래량",
+   "layer": "직접",
+   "board": "2UHM-1",
+   "where": "VI 표 신설 '거래량' 열 주값 412만주·186만주·318만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "14",
+   "kor": "누적거래대금",
+   "layer": "병기",
+   "board": "2UHM-1",
+   "where": "VI 표 '거래량' 셀 보조줄 '1,840억·2,390억·272억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "9068",
+   "kor": "VI발동구분",
+   "layer": null,
+   "board": "15R0-2",
+   "where": "'유형' 컬럼 정적 VI/동적 VI, 2UHM-1 '정적 상승/동적 상승'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "9008",
+   "kor": "KOSPI,KOSDAQ,전체구분",
+   "layer": "병기",
+   "board": "2UHM-1",
+   "where": "VI 표 '종목' 셀 보조줄 시장 칩 KOSPI·KOSPI·KOSDAQ",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "9075",
+   "kor": "장전구분",
+   "layer": "병기",
+   "board": "2UHM-1",
+   "where": "VI 표 '구분' 셀 보조줄 '장중'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1221",
+   "kor": "VI발동가격",
+   "layer": null,
+   "board": "2UHM-1",
+   "where": "'발동가' 컬럼 48,750, 15R0-2 발동가 128,650원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1223",
+   "kor": "매매체결처리시각",
+   "layer": null,
+   "board": "2UHM-1",
+   "where": "'발동 시간' 컬럼 11:42:08",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1224",
+   "kor": "VI해제시각",
+   "layer": null,
+   "board": "2UHM-1",
+   "where": "'10:20:44 해제', 우패널 '해제 예정 11:44:08'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1225",
+   "kor": "VI적용구분",
+   "layer": null,
+   "board": "2UHM-1",
+   "where": "'상태' 컬럼 발동 중 / 해제",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1236",
+   "kor": "기준가격 정적",
+   "layer": null,
+   "board": "15R0-2",
+   "where": "발동 상세 '기준가 118,900원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1237",
+   "kor": "기준가격 동적",
+   "layer": "직접",
+   "board": "2UHM-1",
+   "where": "VI 표 신설 '기준가' 열 주값 44,240·118,900·9,030",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1238",
+   "kor": "괴리율 정적",
+   "layer": null,
+   "board": "2UHM-1",
+   "where": "우패널 '발동가 · 기준가 대비 48,750 · +10.2%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1239",
+   "kor": "괴리율 동적",
+   "layer": "병기",
+   "board": "2UHM-1",
+   "where": "VI 표 '기준가' 셀 보조줄 '괴리 +10.2%·+8.20%·−10.1%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1489",
+   "kor": "VI발동가 등락율",
+   "layer": "병기",
+   "board": "2UHM-1",
+   "where": "VI 표 '발동가' 셀 보조줄 '+10.2%·+8.20%·−10.1%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1490",
+   "kor": "VI발동횟수",
+   "layer": "병기",
+   "board": "2UHM-1",
+   "where": "VI 표 '구분' 셀 보조줄 '장중 · 오늘 1회'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "9069",
+   "kor": "발동방향구분",
+   "layer": null,
+   "board": "2UHM-1",
+   "where": "'구분' 컬럼 정적 상승/정적 하락, 15R0-2 '하락 발동'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1279",
+   "kor": "Extra Item",
+   "layer": "직접",
+   "board": "15R0-2",
+   "where": "'발동 상세' 블록 4번째 칸 '추가 정보 / 미제공'(k-faint, 결측 정직 표기)",
+   "attributed_here": false,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 18
+}

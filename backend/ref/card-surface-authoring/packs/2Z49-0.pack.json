@@ -1,0 +1,102 @@
+{
+ "board_id": "2Z49-0",
+ "card_id": "CC-03",
+ "name": "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+ "operation_refs": [
+  "base:ka30002"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka30002",
+   "f": "trde_ori_elwnettrde_upper",
+   "kor": "거래원별ELW순매매상위",
+   "layer": "직접",
+   "board": "2Z49-0",
+   "where": "거래원별 순매매 표 6행이 배열 원소 전량(창구·종목·주가등락·매도·매수·순매매·비중)을 행으로 렌더, 푸터 '전체 42개 창구 · 상위 6개 표시'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30002",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "board": "2Z49-0",
+   "where": "종목 셀 2줄 mono 10px 종목코드 '58H215' 등 6행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30002",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": "직접",
+   "board": "2Z49-0",
+   "where": "'종목 · 코드' 열 신설 — ELW 종목명(삼성전자 콜 등) 6행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30002",
+   "f": "stkpc_flu",
+   "kor": "주가등락",
+   "layer": "직접",
+   "board": "2Z49-0",
+   "where": "'주가등락 · 등락률' 열 1줄 '▲ +45' 등 6행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30002",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": "병기",
+   "board": "2Z49-0",
+   "where": "주가등락 셀 2줄 '+12.16%' 등 6행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30002",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "병기",
+   "board": "2Z49-0",
+   "where": "순매매 셀 2줄 '총 830만주' — 매도+매수 합계를 창구 총거래량으로 명시",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30002",
+   "f": "netprps",
+   "kor": "순매수",
+   "layer": null,
+   "board": "2Z49-0",
+   "where": "순매매 열 +210만/-140만/+90만/+60만/-40만/+30만 · 상단 매수1위 +210만 · 매도1위 -140만 · 사이드 패널 +210만",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30002",
+   "f": "buy_trde_qty",
+   "kor": "매수거래량",
+   "layer": null,
+   "board": "2Z49-0",
+   "where": "매수 열 520만/380만/410만/290만/210만/180만 · 사이드 패널 '매수 520만'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30002",
+   "f": "sel_trde_qty",
+   "kor": "매도거래량",
+   "layer": null,
+   "board": "2Z49-0",
+   "where": "매도 열 310만/520만/320만/230만/250만/150만 · 사이드 패널 '매도 310만'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 9
+}

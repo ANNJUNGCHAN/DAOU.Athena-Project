@@ -1,0 +1,1356 @@
+{
+ "board": "2QM7-2",
+ "fields": [
+  {
+   "mapping_id": "base:0F",
+   "f": "141",
+   "kor": "매도거래원1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매도 상위 1행 거래원명"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "161",
+   "kor": "매도거래원수량1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 1행 매도 열 금액"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "166",
+   "kor": "매도거래원별증감1",
+   "layer": "직접",
+   "where": "표 8행 증감 ▼ -9,860주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "146",
+   "kor": "매도거래원코드1",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 8행 키움증권 01"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "271",
+   "kor": "매도거래원색깔1",
+   "layer": null,
+   "where": "매도 상위 1행 값이 상승/하락색(text-up·text-down)으로 표기"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "151",
+   "kor": "매수거래원1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매수 상위 1행 거래원명"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "171",
+   "kor": "매수거래원수량1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 1행 매수 열 금액"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "176",
+   "kor": "매수거래원별증감1",
+   "layer": "직접",
+   "where": "표 1행 증감 ▲ +18,420주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "156",
+   "kor": "매수거래원코드1",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 1행 모건스탠리 16"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "281",
+   "kor": "매수거래원색깔1",
+   "layer": null,
+   "where": "매수 상위 1행 값이 상승/하락색(text-up·text-down)으로 표기"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "142",
+   "kor": "매도거래원2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매도 상위 2행 거래원명"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "162",
+   "kor": "매도거래원수량2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 2행 매도 열 금액"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "167",
+   "kor": "매도거래원별증감2",
+   "layer": "직접",
+   "where": "표 7행 증감 ▼ -6,410주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "147",
+   "kor": "매도거래원코드2",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 7행 미래에셋 06"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "272",
+   "kor": "매도거래원색깔2",
+   "layer": null,
+   "where": "매도 상위 2행 값이 상승/하락색(text-up·text-down)으로 표기"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "152",
+   "kor": "매수거래원2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매수 상위 2행 거래원명"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "172",
+   "kor": "매수거래원수량2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 2행 매수 열 금액"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "177",
+   "kor": "매수거래원별증감2",
+   "layer": "직접",
+   "where": "표 8행 증감 ▼ -9,860주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "157",
+   "kor": "매수거래원코드2",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 8행 키움증권 01"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "282",
+   "kor": "매수거래원색깔2",
+   "layer": null,
+   "where": "매수 상위 2행 값이 상승/하락색(text-up·text-down)으로 표기"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "143",
+   "kor": "매도거래원3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매도 상위 3행 거래원명"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "163",
+   "kor": "매도거래원수량3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 3행 매도 열 금액"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "168",
+   "kor": "매도거래원별증감3",
+   "layer": "직접",
+   "where": "표 6행 증감 ▼ -3,240주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "148",
+   "kor": "매도거래원코드3",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 6행 삼성증권 02"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "273",
+   "kor": "매도거래원색깔3",
+   "layer": null,
+   "where": "매도 상위 3행 값이 상승/하락색(text-up·text-down)으로 표기"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "153",
+   "kor": "매수거래원3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매수 상위 3행 거래원명"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "173",
+   "kor": "매수거래원수량3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 3행 매수 열 금액"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "178",
+   "kor": "매수거래원별증감3",
+   "layer": "직접",
+   "where": "표 2행 증감 ▲ +9,240주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "158",
+   "kor": "매수거래원코드3",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 2행 JP모간 36"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "283",
+   "kor": "매수거래원색깔3",
+   "layer": null,
+   "where": "매수 상위 3행 값이 상승/하락색(text-up·text-down)으로 표기"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "144",
+   "kor": "매도거래원4",
+   "layer": "직접",
+   "where": "표 1행 창구명 모건스탠리(매도 4위)"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "164",
+   "kor": "매도거래원수량4",
+   "layer": "병기",
+   "where": "표 1행 매도 셀 2번째 줄 42.7만주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "169",
+   "kor": "매도거래원별증감4",
+   "layer": "직접",
+   "where": "표 1행 증감 ▲ +18,420주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "149",
+   "kor": "매도거래원코드4",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 1행 모건스탠리 16"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "274",
+   "kor": "매도거래원색깔4",
+   "layer": "직접",
+   "where": "표 1행 증감 셀 방향 표기 ▲ 상승색(모건스탠리)"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "154",
+   "kor": "매수거래원4",
+   "layer": "직접",
+   "where": "표 7행 창구명 미래에셋(매수 4위)"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "174",
+   "kor": "매수거래원수량4",
+   "layer": "병기",
+   "where": "표 7행 매수 셀 2번째 줄 57.1만주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "179",
+   "kor": "매수거래원별증감4",
+   "layer": "직접",
+   "where": "표 7행 증감 ▼ -6,410주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "159",
+   "kor": "매수거래원코드4",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 7행 미래에셋 06"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "284",
+   "kor": "매수거래원색깔4",
+   "layer": "직접",
+   "where": "표 7행 증감 셀 방향 표기 ▼ 하락색(미래에셋)"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "145",
+   "kor": "매도거래원5",
+   "layer": "직접",
+   "where": "표 5행 창구명 한국투자증권(매도 5위)"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "165",
+   "kor": "매도거래원수량5",
+   "layer": "병기",
+   "where": "표 5행 매도 셀 2번째 줄 29.8만주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "170",
+   "kor": "매도거래원별증감5",
+   "layer": "직접",
+   "where": "표 5행 증감 ▼ -980주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "150",
+   "kor": "매도거래원코드5",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 5행 한국투자증권 03"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "275",
+   "kor": "매도거래원색깔5",
+   "layer": "직접",
+   "where": "표 5행 증감 셀 방향 표기 ▼ 하락색(한국투자증권)"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "155",
+   "kor": "매수거래원5",
+   "layer": "직접",
+   "where": "표 6행 창구명 삼성증권(매수 5위)"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "175",
+   "kor": "매수거래원수량5",
+   "layer": "병기",
+   "where": "표 6행 매수 셀 2번째 줄 46.7만주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "180",
+   "kor": "매수거래원별증감5",
+   "layer": "직접",
+   "where": "표 6행 증감 ▼ -3,240주"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "160",
+   "kor": "매수거래원코드5",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 6행 삼성증권 02"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "285",
+   "kor": "매수거래원색깔5",
+   "layer": "직접",
+   "where": "표 6행 증감 셀 방향 표기 ▼ 하락색(삼성증권)"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "261",
+   "kor": "외국계매도추정합",
+   "layer": "직접",
+   "where": "우측 레일 '외국계 추정' 매도 추정 2,516억 (KPI 2번 칸 보조줄 병기)"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "262",
+   "kor": "외국계매도추정합변동",
+   "layer": "병기",
+   "where": "우측 레일 '외국계 추정' 매도 추정 행 ▼ -94억"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "263",
+   "kor": "외국계매수추정합",
+   "layer": "직접",
+   "where": "우측 레일 '외국계 추정' 매수 추정 4,182억 (KPI 2번 칸 보조줄 병기)"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "264",
+   "kor": "외국계매수추정합변동",
+   "layer": "병기",
+   "where": "우측 레일 '외국계 추정' 매수 추정 행 ▲ +212억"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "267",
+   "kor": "외국계순매수추정합",
+   "layer": null,
+   "where": "상단 KPI '외국계 순매수 +1,666억'"
+  },
+  {
+   "mapping_id": "base:0F",
+   "f": "268",
+   "kor": "외국계순매수변동",
+   "layer": "병기",
+   "where": "우측 레일 '외국계 추정' 순매수 행 ▲ +306억"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "10",
+   "kor": "현재가",
+   "layer": null,
+   "where": "헤더 현재가 150,850"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "25",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "헤더 '+1,850'의 + 부호와 상승색"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "11",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "헤더 전일대비 +1,850"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "12",
+   "kor": "등락율",
+   "layer": null,
+   "where": "헤더 등락율 +1.24%"
+  },
+  {
+   "mapping_id": "base:ka10038",
+   "f": "stk_sec_rank",
+   "kor": "종목별증권사순위",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka10038",
+   "f": "rank",
+   "kor": "순위",
+   "layer": null,
+   "where": "표 '순위' 열 01·02·03·06·07·08"
+  },
+  {
+   "mapping_id": "base:ka10038",
+   "f": "mmcm_nm",
+   "kor": "회원사명",
+   "layer": null,
+   "where": "표 '거래원' 열 모건스탠리·JP모간 등"
+  },
+  {
+   "mapping_id": "base:ka10038",
+   "f": "buy_qty",
+   "kor": "매수수량",
+   "layer": "병기",
+   "where": "표 1행 매수 셀 2번째 줄 98.5만주"
+  },
+  {
+   "mapping_id": "base:ka10038",
+   "f": "sell_qty",
+   "kor": "매도수량",
+   "layer": "병기",
+   "where": "표 1행 매도 셀 2번째 줄 42.7만주"
+  },
+  {
+   "mapping_id": "base:ka10038",
+   "f": "acc_netprps_qty",
+   "kor": "누적순매수수량",
+   "layer": "병기",
+   "where": "표 1행 순매수 셀 2번째 줄 +55.8만주"
+  },
+  {
+   "mapping_id": "base:ka10042",
+   "f": "netprps_trde_ori_rank",
+   "kor": "순매수거래원순위",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka10042",
+   "f": "rank",
+   "kor": "순위",
+   "layer": null,
+   "where": "표 '순위' 열 01~08"
+  },
+  {
+   "mapping_id": "base:ka10042",
+   "f": "mmcm_cd",
+   "kor": "회원사코드",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 회원사 코드 병기 8행(16·36·17·05·03·02·06·01)"
+  },
+  {
+   "mapping_id": "base:ka10042",
+   "f": "mmcm_nm",
+   "kor": "회원사명",
+   "layer": null,
+   "where": "표 '거래원' 열 회원사명"
+  },
+  {
+   "mapping_id": "base:ka10043",
+   "f": "trde_ori_prps_anly",
+   "kor": "거래원매물대분석",
+   "layer": null,
+   "where": "'거래원 매물대' 가격대별 막대 목록"
+  },
+  {
+   "mapping_id": "base:ka10043",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 순매수 추이 표 '일자' 열"
+  },
+  {
+   "mapping_id": "base:ka10043",
+   "f": "close_pric",
+   "kor": "종가",
+   "layer": null,
+   "where": "일별 순매수 추이 '종가 150,850'"
+  },
+  {
+   "mapping_id": "base:ka10043",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "종가 옆 '+1.24%'의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10043",
+   "f": "sel_qty",
+   "kor": "매도량",
+   "layer": "직접",
+   "where": "우측 레일 '거래원 매물대' 가격대별 매도 41,200/32,200/46,200/28,200주"
+  },
+  {
+   "mapping_id": "base:ka10043",
+   "f": "buy_qty",
+   "kor": "매수량",
+   "layer": "직접",
+   "where": "우측 레일 '거래원 매물대' 가격대별 매수 82,400/64,300/23,100/14,100주"
+  },
+  {
+   "mapping_id": "base:ka10043",
+   "f": "netprps_qty",
+   "kor": "순매수수량",
+   "layer": "병기",
+   "where": "표 순매수 셀 2번째 줄 창구별 순매수 수량(1행 +55.8만주)"
+  },
+  {
+   "mapping_id": "base:ka10043",
+   "f": "trde_qty_sum",
+   "kor": "거래량합",
+   "layer": "직접",
+   "where": "우측 레일 '거래원 매물대' 블록 헤더 '거래량합 1,420만주'"
+  },
+  {
+   "mapping_id": "base:ka10043",
+   "f": "trde_wght",
+   "kor": "거래비중",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 '비중' 막대"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "trde_ori_mont_trde_qty",
+   "kor": "거래원순간거래량",
+   "layer": null,
+   "where": "'순간 거래량' 카드 목록"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "tm",
+   "kor": "시간",
+   "layer": "직접",
+   "where": "우측 레일 '순간 거래량' 행 꼬리 시각 09:41:20 · 09:41:44"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "헤더 '삼성전자 수급'"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "trde_ori_nm",
+   "kor": "거래원명",
+   "layer": null,
+   "where": "순간 거래량 카드 모건스탠리·키움증권"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "tp",
+   "kor": "구분",
+   "layer": null,
+   "where": "순간 거래량 값의 ± 부호와 상승/하락색으로 매수·매도 구분"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "mont_trde_qty",
+   "kor": "순간거래량",
+   "layer": null,
+   "where": "순간 거래량 '+18,420주'"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "acc_netprps",
+   "kor": "누적순매수",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 '순매수' 열 +842억"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "헤더 150,850"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "헤더 '+1,850'의 ± 부호와 상승색"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "헤더 +1,850"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "헤더 +1.24%"
+  },
+  {
+   "mapping_id": "base:ka10053",
+   "f": "tdy_upper_scesn_ori",
+   "kor": "당일상위이탈원",
+   "layer": null,
+   "where": "'상위 이탈원' 카드 목록"
+  },
+  {
+   "mapping_id": "base:ka10053",
+   "f": "sel_scesn_tm",
+   "kor": "매도이탈시간",
+   "layer": "병기",
+   "where": "우측 레일 '상위 이탈원' 다이와 행 2번째 줄 '매도 이탈 09:18'"
+  },
+  {
+   "mapping_id": "base:ka10053",
+   "f": "sell_qty",
+   "kor": "매도수량",
+   "layer": "병기",
+   "where": "우측 레일 '상위 이탈원' 다이와 행 2번째 줄 '42,180주'"
+  },
+  {
+   "mapping_id": "base:ka10053",
+   "f": "sel_upper_scesn_ori",
+   "kor": "매도상위이탈원",
+   "layer": null,
+   "where": "상위 이탈원 '다이와 4위→9위', '노무라 5위→10위'"
+  },
+  {
+   "mapping_id": "base:ka10053",
+   "f": "buy_scesn_tm",
+   "kor": "매수이탈시간",
+   "layer": "병기",
+   "where": "우측 레일 '상위 이탈원' 노무라 행 2번째 줄 '매수 이탈 09:26'"
+  },
+  {
+   "mapping_id": "base:ka10053",
+   "f": "buy_qty",
+   "kor": "매수수량",
+   "layer": "병기",
+   "where": "우측 레일 '상위 이탈원' 노무라 행 2번째 줄 '28,640주'"
+  },
+  {
+   "mapping_id": "base:ka10053",
+   "f": "buy_upper_scesn_ori",
+   "kor": "매수상위이탈원",
+   "layer": "직접",
+   "where": "우측 레일 '상위 이탈원' 노무라 행(매수 상위 이탈원) 5위 → 10위"
+  },
+  {
+   "mapping_id": "base:ka10078",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "일별 순매수 추이 '종가 150,850'"
+  },
+  {
+   "mapping_id": "base:ka10078",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "일별 순매수 추이 '150,850 +1.24%'"
+  },
+  {
+   "mapping_id": "base:ka10078",
+   "f": "buy_qty",
+   "kor": "매수수량",
+   "layer": "병기",
+   "where": "표 1행 매수 셀 2번째 줄 98.5만주"
+  },
+  {
+   "mapping_id": "base:ka10078",
+   "f": "sell_qty",
+   "kor": "매도수량",
+   "layer": "병기",
+   "where": "표 1행 매도 셀 2번째 줄 42.7만주"
+  },
+  {
+   "mapping_id": "detail:ka10002:market_snapshot",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "헤더 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "detail:ka10002:market_snapshot",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "헤더 '삼성전자 수급'"
+  },
+  {
+   "mapping_id": "detail:ka10002:market_snapshot",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "헤더 현재가 150,850"
+  },
+  {
+   "mapping_id": "detail:ka10002:market_snapshot",
+   "f": "flu_smbol",
+   "kor": "등락부호",
+   "layer": null,
+   "where": "헤더 '+1,850'의 + 부호와 상승색"
+  },
+  {
+   "mapping_id": "detail:ka10002:market_snapshot",
+   "f": "base_pric",
+   "kor": "기준가",
+   "layer": "직접",
+   "where": "헤더 부제 '005930 · KOSPI · 기준가 149,000 · 20분 지연 집계'"
+  },
+  {
+   "mapping_id": "detail:ka10002:market_snapshot",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "헤더 전일대비 +1,850"
+  },
+  {
+   "mapping_id": "detail:ka10002:market_snapshot",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "헤더 등락율 +1.24%"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_ori_nm_1",
+   "kor": "매도거래원명1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매도 상위 1행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_ori_1",
+   "kor": "매도거래원1",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 8행 키움증권 01"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_qty_1",
+   "kor": "매도거래량1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 1행 '매도' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_ori_nm_2",
+   "kor": "매도거래원명2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매도 상위 2행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_ori_2",
+   "kor": "매도거래원2",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 7행 미래에셋 06"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_qty_2",
+   "kor": "매도거래량2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 2행 '매도' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_ori_nm_3",
+   "kor": "매도거래원명3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매도 상위 3행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_ori_3",
+   "kor": "매도거래원3",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 6행 삼성증권 02"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_qty_3",
+   "kor": "매도거래량3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 3행 '매도' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_ori_nm_4",
+   "kor": "매도거래원명4",
+   "layer": "직접",
+   "where": "표 1행 창구명 모건스탠리(매도 4위)"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_ori_4",
+   "kor": "매도거래원4",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 1행 모건스탠리 16"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_qty_4",
+   "kor": "매도거래량4",
+   "layer": "병기",
+   "where": "표 1행 매도 셀 2번째 줄 42.7만주"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_ori_nm_5",
+   "kor": "매도거래원명5",
+   "layer": "직접",
+   "where": "표 5행 창구명 한국투자증권(매도 5위)"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_ori_5",
+   "kor": "매도거래원5",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 5행 한국투자증권 03"
+  },
+  {
+   "mapping_id": "detail:ka10002:sell_brokers",
+   "f": "sel_trde_qty_5",
+   "kor": "매도거래량5",
+   "layer": "병기",
+   "where": "표 5행 매도 셀 2번째 줄 29.8만주"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_ori_nm_1",
+   "kor": "매수거래원명1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매수 상위 1행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_ori_1",
+   "kor": "매수거래원1",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 1행 모건스탠리 16"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_qty_1",
+   "kor": "매수거래량1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 1행 '매수' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_ori_nm_2",
+   "kor": "매수거래원명2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매수 상위 2행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_ori_2",
+   "kor": "매수거래원2",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 8행 키움증권 01"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_qty_2",
+   "kor": "매수거래량2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 2행 '매수' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_ori_nm_3",
+   "kor": "매수거래원명3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매수 상위 3행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_ori_3",
+   "kor": "매수거래원3",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 2행 JP모간 36"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_qty_3",
+   "kor": "매수거래량3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 3행 '매수' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_ori_nm_4",
+   "kor": "매수거래원명4",
+   "layer": "직접",
+   "where": "표 7행 창구명 미래에셋(매수 4위)"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_ori_4",
+   "kor": "매수거래원4",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 7행 미래에셋 06"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_qty_4",
+   "kor": "매수거래량4",
+   "layer": "병기",
+   "where": "표 7행 매수 셀 2번째 줄 57.1만주"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_ori_nm_5",
+   "kor": "매수거래원명5",
+   "layer": "직접",
+   "where": "표 6행 창구명 삼성증권(매수 5위)"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_ori_5",
+   "kor": "매수거래원5",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 6행 삼성증권 02"
+  },
+  {
+   "mapping_id": "detail:ka10002:buy_brokers",
+   "f": "buy_trde_qty_5",
+   "kor": "매수거래량5",
+   "layer": "병기",
+   "where": "표 6행 매수 셀 2번째 줄 46.7만주"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_irds_1",
+   "kor": "매도거래원별증감1",
+   "layer": "직접",
+   "where": "표 8행 증감 ▼ -9,860주"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_qty_1",
+   "kor": "매도거래원수량1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 1행 '매도' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_1",
+   "kor": "매도거래원1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매도 상위 1행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_cd_1",
+   "kor": "매도거래원코드1",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 8행 키움증권 01"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_irds_2",
+   "kor": "매도거래원별증감2",
+   "layer": "직접",
+   "where": "표 7행 증감 ▼ -6,410주"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_qty_2",
+   "kor": "매도거래원수량2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 2행 '매도' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_2",
+   "kor": "매도거래원2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매도 상위 2행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_cd_2",
+   "kor": "매도거래원코드2",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 7행 미래에셋 06"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_irds_3",
+   "kor": "매도거래원별증감3",
+   "layer": "직접",
+   "where": "표 6행 증감 ▼ -3,240주"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_qty_3",
+   "kor": "매도거래원수량3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 3행 '매도' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_3",
+   "kor": "매도거래원3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매도 상위 3행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_cd_3",
+   "kor": "매도거래원코드3",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 6행 삼성증권 02"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_irds_4",
+   "kor": "매도거래원별증감4",
+   "layer": "직접",
+   "where": "표 1행 증감 ▲ +18,420주"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_qty_4",
+   "kor": "매도거래원수량4",
+   "layer": "병기",
+   "where": "표 1행 매도 셀 2번째 줄 42.7만주"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_4",
+   "kor": "매도거래원4",
+   "layer": "직접",
+   "where": "표 1행 창구명 모건스탠리(매도 4위)"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_cd_4",
+   "kor": "매도거래원코드4",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 1행 모건스탠리 16"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_irds_5",
+   "kor": "매도거래원별증감5",
+   "layer": "직접",
+   "where": "표 5행 증감 ▼ -980주"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_qty_5",
+   "kor": "매도거래원수량5",
+   "layer": "병기",
+   "where": "표 5행 매도 셀 2번째 줄 29.8만주"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_5",
+   "kor": "매도거래원5",
+   "layer": "직접",
+   "where": "표 5행 창구명 한국투자증권(매도 5위)"
+  },
+  {
+   "mapping_id": "detail:ka10040:sell_brokers",
+   "f": "sel_trde_ori_cd_5",
+   "kor": "매도거래원코드5",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 5행 한국투자증권 03"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_1",
+   "kor": "매수거래원1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매수 상위 1행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_cd_1",
+   "kor": "매수거래원코드1",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 1행 모건스탠리 16"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_qty_1",
+   "kor": "매수거래원수량1",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 1행 '매수' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_irds_1",
+   "kor": "매수거래원별증감1",
+   "layer": "직접",
+   "where": "표 1행 증감 ▲ +18,420주"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_2",
+   "kor": "매수거래원2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매수 상위 2행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_cd_2",
+   "kor": "매수거래원코드2",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 8행 키움증권 01"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_qty_2",
+   "kor": "매수거래원수량2",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 2행 '매수' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_irds_2",
+   "kor": "매수거래원별증감2",
+   "layer": "직접",
+   "where": "표 8행 증감 ▼ -9,860주"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_3",
+   "kor": "매수거래원3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 매수 상위 3행 거래원명"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_cd_3",
+   "kor": "매수거래원코드3",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 2행 JP모간 36"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_qty_3",
+   "kor": "매수거래원수량3",
+   "layer": null,
+   "where": "거래원 순매수 순위 표 3행 '매수' 열 금액"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_irds_3",
+   "kor": "매수거래원별증감3",
+   "layer": "직접",
+   "where": "표 2행 증감 ▲ +9,240주"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_4",
+   "kor": "매수거래원4",
+   "layer": "직접",
+   "where": "표 7행 창구명 미래에셋(매수 4위)"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_cd_4",
+   "kor": "매수거래원코드4",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 7행 미래에셋 06"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_qty_4",
+   "kor": "매수거래원수량4",
+   "layer": "병기",
+   "where": "표 7행 매수 셀 2번째 줄 57.1만주"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_irds_4",
+   "kor": "매수거래원별증감4",
+   "layer": "직접",
+   "where": "표 7행 증감 ▼ -6,410주"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_5",
+   "kor": "매수거래원5",
+   "layer": "직접",
+   "where": "표 6행 창구명 삼성증권(매수 5위)"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_cd_5",
+   "kor": "매수거래원코드5",
+   "layer": "병기",
+   "where": "거래원 순매수 순위 표 창구 셀 코드 병기 — 6행 삼성증권 02"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_qty_5",
+   "kor": "매수거래원수량5",
+   "layer": "병기",
+   "where": "표 6행 매수 셀 2번째 줄 46.7만주"
+  },
+  {
+   "mapping_id": "detail:ka10040:buy_brokers",
+   "f": "buy_trde_ori_irds_5",
+   "kor": "매수거래원별증감5",
+   "layer": "직접",
+   "where": "표 6행 증감 ▼ -3,240주"
+  },
+  {
+   "mapping_id": "detail:ka10040:foreign_broker_estimates",
+   "f": "frgn_sel_prsm_sum_chang",
+   "kor": "외국계매도추정합변동",
+   "layer": "병기",
+   "where": "우측 레일 '외국계 추정' 매도 추정 행 ▼ -94억"
+  },
+  {
+   "mapping_id": "detail:ka10040:foreign_broker_estimates",
+   "f": "frgn_sel_prsm_sum",
+   "kor": "외국계매도추정합",
+   "layer": "직접",
+   "where": "우측 레일 '외국계 추정' 매도 추정 2,516억"
+  },
+  {
+   "mapping_id": "detail:ka10040:foreign_broker_estimates",
+   "f": "frgn_buy_prsm_sum",
+   "kor": "외국계매수추정합",
+   "layer": "직접",
+   "where": "우측 레일 '외국계 추정' 매수 추정 4,182억"
+  },
+  {
+   "mapping_id": "detail:ka10040:foreign_broker_estimates",
+   "f": "frgn_buy_prsm_sum_chang",
+   "kor": "외국계매수추정합변동",
+   "layer": "병기",
+   "where": "우측 레일 '외국계 추정' 매수 추정 행 ▲ +212억"
+  },
+  {
+   "mapping_id": "detail:ka10040:broker_departures",
+   "f": "tdy_main_trde_ori",
+   "kor": "당일주요거래원",
+   "layer": null,
+   "where": "'상위 이탈원' 카드 목록"
+  },
+  {
+   "mapping_id": "detail:ka10040:broker_departures",
+   "f": "sel_scesn_tm",
+   "kor": "매도이탈시간",
+   "layer": "병기",
+   "where": "우측 레일 '상위 이탈원' 다이와 행 2번째 줄 '매도 이탈 09:18'"
+  },
+  {
+   "mapping_id": "detail:ka10040:broker_departures",
+   "f": "sell_qty",
+   "kor": "매도수량",
+   "layer": "병기",
+   "where": "우측 레일 '상위 이탈원' 다이와 행 2번째 줄 '42,180주'"
+  },
+  {
+   "mapping_id": "detail:ka10040:broker_departures",
+   "f": "sel_upper_scesn_ori",
+   "kor": "매도상위이탈원",
+   "layer": null,
+   "where": "상위 이탈원 '다이와 4위→9위', '노무라 5위→10위'"
+  },
+  {
+   "mapping_id": "detail:ka10040:broker_departures",
+   "f": "buy_scesn_tm",
+   "kor": "매수이탈시간",
+   "layer": "병기",
+   "where": "우측 레일 '상위 이탈원' 노무라 행 2번째 줄 '매수 이탈 09:26'"
+  },
+  {
+   "mapping_id": "detail:ka10040:broker_departures",
+   "f": "buy_qty",
+   "kor": "매수수량",
+   "layer": "병기",
+   "where": "우측 레일 '상위 이탈원' 노무라 행 2번째 줄 '28,640주'"
+  },
+  {
+   "mapping_id": "detail:ka10040:broker_departures",
+   "f": "buy_upper_scesn_ori",
+   "kor": "매수상위이탈원",
+   "layer": "직접",
+   "where": "우측 레일 '상위 이탈원' 노무라 행(매수 상위 이탈원) 5위 → 10위"
+  },
+  {
+   "mapping_id": "base:ka10102",
+   "f": "list",
+   "kor": "회원사코드리스트",
+   "layer": "직접",
+   "where": "거래원 표 창구 행(회원사 목록이 행으로 렌더)"
+  },
+  {
+   "mapping_id": "base:ka10102",
+   "f": "code",
+   "kor": "코드",
+   "layer": "병기",
+   "where": "창구 셀 둘째 줄 코드(예: 키움증권 01)"
+  },
+  {
+   "mapping_id": "base:ka10102",
+   "f": "name",
+   "kor": "업종명",
+   "layer": "직접",
+   "where": "창구 셀 첫째 줄 회원사명"
+  },
+  {
+   "mapping_id": "base:ka10102",
+   "f": "gb",
+   "kor": "구분",
+   "layer": "병기",
+   "where": "창구 셀 둘째 줄 외국계 칩(국내는 칩 없음)"
+  }
+ ]
+}

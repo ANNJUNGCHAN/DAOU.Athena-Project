@@ -1,0 +1,206 @@
+Frame "CC-04 / R02-T2 · 호가 — 시간외 단일가" (2QRP-1) 1440×1014
+  Frame "Hoga Card Surface" (2QRQ-1) 1360×934
+    Frame "Hoga Header" (2QRR-1) 1358×101
+      Frame "Frame" (2QRS-1) 350×56
+        Frame "Frame" (2QRT-1) 350×34
+          Text "삼성전자 통합 호가" (2QRU-1) 239×34 "삼성전자 통합 호가"
+          Frame "Frame" (2QRV-1) 101×22
+            Rectangle "Rectangle" (2QRW-1) 6×6
+            Text "시간외 단일가" (2QRX-1) 70×14 "시간외 단일가"
+        Text "005930 · 16:00~18:00" (2QRY-1) 350×16 "005930 · 16:00~18:00"
+      Frame "Frame" (2QRZ-1) 343×42
+        Frame "정규장" (32HG-0) 67×36
+          Text "정규장" (32HH-0) 39×16 "정규장"
+        Frame "시간외" (32HI-0) 67×36
+          Text "시간외" (32HJ-0) 39×16 "시간외"
+        Frame "금현물" (32HK-0) 67×36
+          Text "금현물" (32HL-0) 39×16 "금현물"
+        Frame "Divider" (32HM-0) 1×24
+        Frame "5단" (32HN-0) 47×36
+          Text "5단" (32HO-0) 21×16 "5단"
+        Frame "10단" (32HP-0) 54×36
+          Text "10단" (32HQ-0) 28×16 "10단"
+    Frame "Hoga Summary Strip" (2QSD-1) 1358×125
+      Frame "Frame" (2QSE-1) 280×84
+        Text "시간외 현재가" (2QSF-1) 246×16 "시간외 현재가"
+        Frame "Frame" (2QSG-1) 246×42
+          Text "150,900" (2QSH-1) 136×42 "150,900"
+          Text "+50 · +0.03%" (2QSI-1) 101×18 "+50 · +0.03%"
+        Text "정규장 종가 150,850 대비 · …" (2QSJ-1) 246×16 "정규장 종가 150,850 대비 · 16:12:41"
+      Frame "Frame" (2QSK-1) 149×84
+        Text "최우선 매도호가" (2QSL-1) 96×16 "최우선 매도호가"
+        Text "150,950" (2QSM-1) 96×24 "150,950"
+        Text "잔량 24,050주" (2QSN-1) 96×16 "잔량 24,050주"
+      Frame "Frame" (2QSO-1) 149×84
+        Text "최우선 매수호가" (2QSP-1) 96×16 "최우선 매수호가"
+        Text "150,850" (2QSQ-1) 96×24 "150,850"
+        Text "잔량 15,760주" (2QSR-1) 96×16 "잔량 15,760주"
+      Frame "Frame" (2QSS-1) 720×84
+        Frame "Frame" (2QST-1) 667×18
+          Text "매수비율" (2QSU-1) 52×18 "매수비율"
+          Text "41.2%" (2QSV-1) 42×18 "41.2%"
+        Frame "Frame" (2QSW-1) 667×8
+          Rectangle "Rectangle" (2QSX-1) 392×8
+          Rectangle "Rectangle" (2QSY-1) 275×8
+        Text "총 잔량 193,580주 · 다음 체…" (2QSZ-1) 667×16 "총 잔량 193,580주 · 다음 체결 16:20"
+    Frame "Hoga Workspace" (2QT0-1) 1358×649
+      Frame "Ladder Panel" (2QT1-1) 880×649
+        Frame "Ladder Head" (2QT9-1) 820×33
+          Text "호가" (2QTB-1) 130×16 "호가"
+          Text "등락" (2QTC-1) 110×16 "등락"
+          Text "잔량" (2QTD-1) 120×16 "잔량"
+          Frame "Frame" (2QTE-1) 432×16
+            Text "잔량 분포" (2QTF-1) 53×16 "잔량 분포"
+        Frame "Ask Rows" (2QTG-1) 820×190
+          Frame "Frame" (2QTH-1) 820×38
+            Text "151,150" (2QTJ-1) 130×18 "151,150"
+            Text "+300" (2QTK-1) 110×16 "+300"
+            Text "17,940" (2QTL-1) 120×16 "17,940"
+            Frame "Frame" (2QTM-1) 432×14
+              Rectangle "Rectangle" (2QTN-1) 291×14
+          Frame "Frame" (2QTO-1) 820×38
+            Text "151,100" (2QTQ-1) 130×18 "151,100"
+            Text "+250" (2QTR-1) 110×16 "+250"
+            Text "21,340" (2QTS-1) 120×16 "21,340"
+            Frame "Frame" (2QTT-1) 432×14
+              Rectangle "Rectangle" (2QTU-1) 345×14
+          Frame "Frame" (2QTV-1) 820×38
+            Text "151,050" (2QTX-1) 130×18 "151,050"
+            Text "+200" (2QTY-1) 110×16 "+200"
+            Text "24,880" (2QTZ-1) 120×16 "24,880"
+            Frame "Frame" (2QU0-1) 432×14
+              Rectangle "Rectangle" (2QU1-1) 404×14
+          Frame "Frame" (2QU2-1) 820×38
+            Text "151,000" (2QU4-1) 130×18 "151,000"
+            Text "+150" (2QU5-1) 110×16 "+150"
+            Text "25,610" (2QU6-1) 120×16 "25,610"
+            Frame "Frame" (2QU7-1) 432×14
+              Rectangle "Rectangle" (2QU8-1) 416×14
+          Frame "Frame" (2QU9-1) 820×38
+            Text "150,950" (2QUB-1) 130×18 "150,950"
+            Text "+100" (2QUC-1) 110×16 "+100"
+            Text "24,050" (2QUD-1) 120×16 "24,050"
+            Frame "Frame" (2QUE-1) 432×14
+              Rectangle "Rectangle" (2QUF-1) 391×14
+        Frame "Current Price Row" (2QUG-1) 820×50
+          Frame "Frame" (2QUH-1) 281×24
+            Text "예상 체결가" (2QUI-1) 70×16 "예상 체결가"
+            Text "150,900" (2QUJ-1) 84×24 "150,900"
+            Text "▲ 50 · +0.03%" (2QUK-1) 107×16 "▲ 50 · +0.03%"
+          Text "예상 체결수량 8,420주 · 다음 …" (2QUL-1) 219×16 "예상 체결수량 8,420주 · 다음 체결 16:20"
+        Frame "Bid Rows" (2QUM-1) 820×190
+          Frame "Frame" (2QUN-1) 820×38
+            Text "150,850" (2QUP-1) 130×18 "150,850"
+            Text "0" (2QUQ-1) 110×16 "0"
+            Text "15,760" (2QUR-1) 120×16 "15,760"
+            Frame "Frame" (2QUS-1) 432×14
+              Rectangle "Rectangle" (2QUT-1) 258×14
+          Frame "Frame" (2QUU-1) 820×38
+            Text "150,800" (2QUW-1) 130×18 "150,800"
+            Text "−50" (2QUX-1) 110×16 "−50"
+            Text "16,940" (2QUY-1) 120×16 "16,940"
+            Frame "Frame" (2QUZ-1) 432×14
+              Rectangle "Rectangle" (2QV0-1) 275×14
+          Frame "Frame" (2QV1-1) 820×38
+            Text "150,750" (2QV3-1) 130×18 "150,750"
+            Text "−100" (2QV4-1) 110×16 "−100"
+            Text "15,280" (2QV5-1) 120×16 "15,280"
+            Frame "Frame" (2QV6-1) 432×14
+              Rectangle "Rectangle" (2QV7-1) 250×14
+          Frame "Frame" (2QV8-1) 820×38
+            Text "150,700" (2QVA-1) 130×18 "150,700"
+            Text "−150" (2QVB-1) 110×16 "−150"
+            Text "16,120" (2QVC-1) 120×16 "16,120"
+            Frame "Frame" (2QVD-1) 432×14
+              Rectangle "Rectangle" (2QVE-1) 262×14
+          Frame "Frame" (2QVF-1) 820×38
+            Text "150,650" (2QVH-1) 130×18 "150,650"
+            Text "−200" (2QVI-1) 110×16 "−200"
+            Text "15,660" (2QVJ-1) 120×16 "15,660"
+            Frame "Frame" (2QVK-1) 432×14
+              Rectangle "Rectangle" (2QVL-1) 254×14
+        Frame "Ladder Totals" (2QVM-1) 820×41
+          Text "매도 잔량 113,820" (2QVN-1) 123×16 "매도 잔량 113,820"
+          Text "총 193,580주" (2QVO-1) 71×16 "총 193,580주"
+          Text "매수 잔량 79,760" (2QVP-1) 115×16 "매수 잔량 79,760"
+        Frame "Depth Queue Band" (3IOM-0) 820×108
+          Frame "Band Head" (3ION-0) 792×18
+            Text "구간별 호가 잔량" (3IOO-0) 116×18 "구간별 호가 잔량"
+            Text "매도 / 매수" (3IOP-0) 62×16 "매도 / 매수"
+          Frame "Band Cells" (3IOX-0) 792×61
+            Frame "Cell 정규장" (3IOY-0) 257×61
+              Frame "Frame" (3IOZ-0) 237×16
+                Text "정규장" (3IP0-0) 39×16 "정규장"
+                Rectangle "Rectangle" (3IP1-0) 32×16
+              Text "38,160 / 43,000" (3IP2-0) 237×18 "38,160 / 43,000"
+              Frame "Frame" (3IP3-0) 237×17
+                Text "직전대비" (3IP4-0) 48×16 "직전대비"
+                Text "+2,140" (3IP5-0) 44×16 "+2,140"
+                Text "/" (3IP6-0) 8×16 "/"
+                Text "−1,380" (3IP7-0) 44×16 "−1,380"
+            Frame "Cell 시간외 단일가" (3IQC-0) 278×61
+              Frame "Frame" (3IQD-0) 237×16
+                Text "시간외 단일가" (3IQE-0) 83×16 "시간외 단일가"
+                Frame "Expand Hit" (3IQF-0) 32×16
+                  Text "▸" (3IQG-0) 10×16 "▸"
+              Text "113,820 / 79,760" (3IQH-0) 237×18 "113,820 / 79,760"
+              Frame "Frame" (3IQI-0) 237×17
+                Text "직전대비" (3IQJ-0) 48×16 "직전대비"
+                Text "+1,240" (3IQK-0) 44×16 "+1,240"
+                Text "/" (3IQL-0) 8×16 "/"
+                Text "−860" (3IQM-0) 29×16 "−860"
+            Frame "Cell NXT 애프터마켓" (3IW5-0) 258×61
+              Frame "Frame" (3IW6-0) 237×16
+                Text "NXT 애프터마켓" (3IW7-0) 95×16 "NXT 애프터마켓"
+                Rectangle "Rectangle" (3IW8-0) 32×16
+              Text "46,180 / 31,520" (3IW9-0) 237×18 "46,180 / 31,520"
+              Frame "Frame" (3IWA-0) 237×16
+                Text "직전대비" (3IWB-0) 48×16 "직전대비"
+                Text "미제공" (3IWC-0) 36×16 "미제공"
+      Frame "Side Panel" (2QT2-1) 478×649
+        Frame "Session Block" (2QVR-1) 421×94
+          Frame "Frame" (2QVS-1) 421×18
+            Text "단일가 체결" (2QVT-1) 81×18 "단일가 체결"
+            Text "10분 주기" (2QVU-1) 54×16 "10분 주기"
+          Frame "Frame" (2QVV-1) 421×24
+            Text "16:10" (2QVW-1) 74×16 "16:10"
+            Text "150,900" (2QVX-1) 261×16 "150,900"
+            Text "8,420주" (2QVY-1) 86×16 "8,420주"
+          Frame "Frame" (2QVZ-1) 421×24
+            Text "16:00" (2QW0-1) 74×16 "16:00"
+            Text "150,880" (2QW1-1) 261×16 "150,880"
+            Text "12,640주" (2QW2-1) 86×16 "12,640주"
+        Frame "Session Info Block" (2QW7-1) 421×205
+          Frame "Frame" (2QW8-1) 421×18
+            Text "시간외 정보" (2QW9-1) 81×18 "시간외 정보"
+            Text "16:00~18:00" (2QWA-1) 67×18 "16:00~18:00"
+          Frame "Frame" (2QWB-1) 421×18
+            Text "누적 거래량" (2QWC-1) 70×16 "누적 거래량"
+            Text "21,060주" (2QWD-1) 65×18 "21,060주"
+          Frame "Frame" (2QWE-1) 421×18
+            Text "누적 거래대금" (2QWF-1) 83×16 "누적 거래대금"
+            Text "31.8억" (2QWG-1) 48×18 "31.8억"
+          Frame "Frame" (2QWH-1) 421×18
+            Text "가격 제한" (2QWI-1) 57×16 "가격 제한"
+            Text "±10%" (2QWJ-1) 34×18 "±10%"
+          Frame "Frame" (2QWK-1) 421×18
+            Text "정규장 종가" (2QWL-1) 70×16 "정규장 종가"
+            Text "150,850" (2QWM-1) 59×18 "150,850"
+        Frame "Cross Market Block" (33Q3-0) 421×162
+          Frame "Frame" (33Q4-0) 421×18
+            Text "거래소별 잔량" (33Q5-0) 96×18 "거래소별 잔량"
+            Text "시간외 단일가" (33Q6-0) 77×16 "시간외 단일가"
+          Frame "Frame" (33Q7-0) 421×17
+            Text "KRX 매도 / 매수" (33Q8-0) 95×16 "KRX 매도 / 매수"
+            Text "86,420 / 61,340" (33Q9-0) 117×16 "86,420 / 61,340"
+          Frame "Frame" (33QA-0) 421×17
+            Text "NXT 매도 / 매수" (33QB-0) 96×16 "NXT 매도 / 매수"
+            Text "27,400 / 18,420" (33QC-0) 117×16 "27,400 / 18,420"
+          Frame "Frame" (33QD-0) 421×17
+            Text "LP 매도 / 매수" (33QE-0) 85×16 "LP 매도 / 매수"
+            Text "0 / 0" (33QF-0) 39×16 "0 / 0"
+    Frame "Hoga Status Footer" (2QT3-1) 1358×57
+      Frame "Frame" (2QT4-1) 167×16
+        Rectangle "Rectangle" (2QT5-1) 6×6
+        Text "시간외 단일가 · 10분 주기" (2QT6-1) 153×16 "시간외 단일가 · 10분 주기"
+      Text "상한 165,900 · 하한 135,…" (2QT7-1) 267×16 "상한 165,900 · 하한 135,800 · 기준가 150,850"

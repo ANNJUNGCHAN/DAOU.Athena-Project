@@ -1,0 +1,12 @@
+{
+  "root": "3TCQ-0",
+  "regions": [
+    { "node_id": "3TK0-0", "name": "Instrument Header", "role": "header", "depth": 1 },
+    { "node_id": "3TK1-0", "name": "Frame (현재시세·차트·기업정보·ETF·ELW·금현물·순위 탭)", "role": "strip", "depth": 2 },
+    { "node_id": "3TJG-0", "name": "Quote and Valuation Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3TCU-0", "name": "Chart Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3TDU-0", "name": "Quote Detail Mount", "role": "primary", "depth": 2 },
+    { "node_id": "3TCV-0", "name": "Rail", "role": "rail", "depth": 2 },
+    { "node_id": "3TCR-0", "name": "Chart Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

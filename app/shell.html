@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="styles/settings-cards.css" />
 <link rel="stylesheet" href="styles/card-kinds.css" />
 <link rel="stylesheet" href="styles/integrated-cards.css" />
+<link rel="stylesheet" href="styles/canvas-tabs.css" />
+<link rel="stylesheet" href="styles/board-surface.css" />
 <link rel="stylesheet" href="styles/plugin-canvas.css" />
 <link rel="stylesheet" href="shell.css" />
 <link rel="stylesheet" href="styles/sidebar-session.css" />
@@ -435,6 +437,15 @@
 <script src="lib/semantic-detail-sheet.js"></script>
 <script src="lib/semantic-workspace.js"></script>
 <script src="lib/integrated-card-surface.js"></script>
+<script src="lib/ranking-axis.js"></script>
+<!-- 보드 색인만 동기로 싣는다(수 KB). 원문 HTML은 카드별 청크
+     lib/board-templates.<card_id>.generated.js에 있고, board-template-registry가
+     마운트 직전에 필요한 하나만 script 주입으로 가져온다. -->
+<script src="lib/board-templates.index.generated.js"></script>
+<script src="lib/board-template-registry.js"></script>
+<script src="lib/board-format.js"></script>
+<script src="lib/board-mount.js"></script>
+<script src="lib/canvas-tabs.js"></script>
 <script src="lib/paper-card-routing.js"></script>
 <script src="lib/card-kind-종목발굴.js"></script>
 <script src="lib/card-kind-시세.js"></script>

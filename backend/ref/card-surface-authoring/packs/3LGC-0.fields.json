@@ -1,0 +1,285 @@
+{
+ "board": "3LGC-0",
+ "fields": [
+  {
+   "mapping_id": "base:00",
+   "f": "919",
+   "kor": "거부사유",
+   "layer": "펼침",
+   "where": "거래 상세 펼침 · 레일 ② 거래 성격 (메인 2SYW-1 주문 상태·경로 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "923",
+   "kor": "대출일",
+   "layer": "펼침",
+   "where": "거래 상세 펼침 · 레일 ② 거래 성격 (메인 2SYW-1 주문 상태·경로 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "rsrv_tp",
+   "kor": "반대여부",
+   "layer": "펼침",
+   "where": "거래 상세 펼침 · 레일 ② 거래 성격 (메인 2SYW-1 주문 상태·경로 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "loan_dt",
+   "kor": "대출일",
+   "layer": "펼침",
+   "where": "거래 상세 펼침 · 레일 ② 거래 성격 (메인 2SYW-1 주문 상태·경로 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "mdfy_cncl",
+   "kor": "정정취소",
+   "layer": "펼침",
+   "where": "거래 상세 펼침 · 레일 ② 거래 성격 (메인 2SYW-1 주문 상태·경로 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_no",
+   "kor": "거래번호",
+   "layer": "펼침",
+   "where": "레일 ① 거래 식별 1행 좌 · 거래번호 0000000142"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "crd_deal_tp_nm",
+   "kor": "신용거래구분명",
+   "layer": "펼침",
+   "where": "레일 ② 거래 성격 2행 우 · 신용거래 구분 현금"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "loan_amt_rpya",
+   "kor": "대출금상환",
+   "layer": "펼침",
+   "where": "레일 ④ 정산·세금·잔고 2행 우 · 대출금상환 0원"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_trde_amt",
+   "kor": "거래금액(외)",
+   "layer": "펼침",
+   "where": "레일 ⑤ 외화 정산 1행 좌 · 거래금액 0달러"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_exct_amt",
+   "kor": "정산금액(외)",
+   "layer": "펼침",
+   "where": "레일 ⑤ 외화 정산 1행 우 · 정산금액 0달러"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_ocr_tp",
+   "kor": "거래종류구분",
+   "layer": "펼침",
+   "where": "레일 ② 거래 성격 1행 좌 · 거래 종류 매도 결제"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_agri_tax",
+   "kor": "거래및농특세",
+   "layer": "펼침",
+   "where": "레일 ④ 정산·세금·잔고 강조 행 · 거래세·농특세 -20,720원"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "rpy_diffa",
+   "kor": "상환차금",
+   "layer": "펼침",
+   "where": "레일 ④ 정산·세금·잔고 3행 좌 · 상환차금 0원"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_trde_tax",
+   "kor": "거래세(외)",
+   "layer": "펼침",
+   "where": "레일 ⑤ 외화 정산 2행 좌 · 거래세 0달러"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "dly_sum",
+   "kor": "연체합",
+   "layer": "펼침",
+   "where": "레일 ④ 정산·세금·잔고 4행 좌 · 연체합 0원"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "mdia_tp_nm",
+   "kor": "매체구분명",
+   "layer": "펼침",
+   "where": "레일 ① 거래 식별 4행 좌 · 거래 매체 HTS"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "orig_deal_no",
+   "kor": "원거래번호",
+   "layer": "펼침",
+   "where": "레일 ① 거래 식별 1행 우 · 원거래번호 해당 없음"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_cmsn",
+   "kor": "수수료(외)",
+   "layer": "펼침",
+   "where": "레일 ⑤ 외화 정산 2행 우 · 수수료 0달러"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_dly_sum",
+   "kor": "연체합(외)",
+   "layer": "펼침",
+   "where": "레일 ⑤ 외화 정산 3행 좌 · 연체합 0달러"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "vlbl_nowrm",
+   "kor": "유가금잔",
+   "layer": "직접",
+   "where": "좌 이달 거래 표 5열 '유가금잔' 9행 + 레일 ④ 마감 행 89,760,240원"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "proc_tm",
+   "kor": "처리시간",
+   "layer": "펼침",
+   "where": "레일 ① 거래 식별 2행 우 · 처리시간 09:41:52"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "isin_cd",
+   "kor": "ISIN코드",
+   "layer": "펼침",
+   "where": "레일 ③ 종목·시장 2행 좌 · ISIN코드 KR7069500007"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "stex_cd",
+   "kor": "거래소코드",
+   "layer": "병기",
+   "where": "레일 ③ 종목·시장 2행 우 · 거래소 KRX · 코드 1 둘째 값"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "stex_nm",
+   "kor": "거래소명",
+   "layer": "펼침",
+   "where": "레일 ③ 종목·시장 2행 우 · 거래소 KRX"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "incm_resi_tax",
+   "kor": "소득/주민세",
+   "layer": "펼침",
+   "where": "레일 ④ 정산·세금·잔고 2행 좌 · 소득세·주민세 0원"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "loan_dt",
+   "kor": "대출일",
+   "layer": "펼침",
+   "where": "레일 ② 거래 성격 3행 좌 · 대출일 해당 없음"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "rpym_sum",
+   "kor": "변제합",
+   "layer": "펼침",
+   "where": "레일 ④ 정산·세금·잔고 3행 우 · 변제합 0원"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "rcpy_no",
+   "kor": "출납번호",
+   "layer": "펼침",
+   "where": "레일 ① 거래 식별 2행 좌 · 출납번호 0000318"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "prcsr",
+   "kor": "처리자",
+   "layer": "펼침",
+   "where": "레일 ① 거래 식별 3행 좌 · 처리자 시스템"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "proc_brch",
+   "kor": "처리점",
+   "layer": "펼침",
+   "where": "레일 ① 거래 식별 3행 우 · 처리점 영업부"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_stle",
+   "kor": "매매형태",
+   "layer": "펼침",
+   "where": "레일 ② 거래 성격 2행 좌 · 매매 형태 보통"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "txon_base_pric",
+   "kor": "과세기준가",
+   "layer": "펼침",
+   "where": "레일 ③ 종목·시장 3행 좌 · 과세기준가 0원"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "frgn_pay_txam",
+   "kor": "외국납부세액(외)",
+   "layer": "펼침",
+   "where": "레일 ⑤ 외화 정산 4행 우 · 외국납부세액 0달러"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_uncl_ocr",
+   "kor": "미수(외)",
+   "layer": "펼침",
+   "where": "레일 ⑤ 외화 정산 3행 우 · 미수 0달러"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "rpym_sum_fr",
+   "kor": "변제합(외)",
+   "layer": "펼침",
+   "where": "레일 ⑤ 외화 정산 4행 좌 · 변제합 0달러"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "rcpmnyer",
+   "kor": "입금자",
+   "layer": "펼침",
+   "where": "레일 ① 거래 식별 4행 우 · 입금자 해당 없음(08/26 이체 행 병기 예금주 본인)"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_prtc_tp",
+   "kor": "거래내역구분",
+   "layer": "펼침",
+   "where": "레일 ② 거래 성격 1행 우 · 내역 구분 위탁"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "rsrv_oppo",
+   "kor": "예약/반대",
+   "layer": "펼침",
+   "where": "거래 상세 펼침 · 레일 ② 거래 성격 (메인 2SYW-1 주문 상태·경로 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "crd_deal_tp",
+   "kor": "신용거래구분",
+   "layer": "펼침",
+   "where": "거래 상세 펼침 · 레일 ② 거래 성격 (메인 2SYW-1 주문 상태·경로 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "mdfy_cncl_tp",
+   "kor": "정정/취소구분",
+   "layer": "펼침",
+   "where": "거래 상세 펼침 · 레일 ② 거래 성격 (메인 2SYW-1 주문 상태·경로 영값 묶음 행 경유)"
+  }
+ ]
+}

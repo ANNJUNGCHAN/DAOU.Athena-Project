@@ -1,0 +1,13 @@
+{
+  "board_id": "3JT4-0",
+  "name": "CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+  "card_id": "CC-04",
+  "width": 1440,
+  "height": 1014,
+  "state": {
+    "kind": "expand",
+    "parent_board": "2QRP-1",
+    "control": null
+  },
+  "saved_at": "2026-09-02T11:23:13Z"
+}

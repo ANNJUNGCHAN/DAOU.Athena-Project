@@ -1,0 +1,349 @@
+{
+  "board_id": "2SKU-1",
+  "card_id": "CC-01",
+  "name": "CC-01 · 2SKU-1 축약(픽스처)",
+  "paper_source": {
+    "file": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+    "page": "5-1",
+    "jsx_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "html_sha256": "945ce7fbd913ce41b207396eadfba9bc588f419c68ccb39f25c4d3ab2cb72e76",
+  "width_px": 1360.0,
+  "height_px": 720.0,
+  "operation_refs": [
+    "base:ka10085",
+    "base:kt00003"
+  ],
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "density": {
+    "table_columns": 7,
+    "kpi_cells": 2,
+    "rail_blocks": 0,
+    "rail_rows_max": 0,
+    "rows_max": 6
+  },
+  "primary": {
+    "renderer": null,
+    "mount_slot": null,
+    "module": null,
+    "props_from": null
+  },
+  "column_priority": [
+    "col_dt",
+    "col_stk_cd",
+    "col_stk_nm",
+    "col_cur_prc",
+    "col_pur_pric",
+    "col_pur_amt",
+    "col_rmnd_qty"
+  ],
+  "section_titles_ko": {
+    "account-summary": "계좌 요약",
+    "positions-and-performance": "보유 종목",
+    "settlement-and-risk": "정산·위험"
+  },
+  "slots": [
+    {
+      "slot_id": "s001",
+      "node_id": "F001",
+      "node_name": "내 계좌",
+      "node_path": "0/0",
+      "paper_text": "내 계좌",
+      "region": "bs-header",
+      "kind": "label",
+      "layer": "직접",
+      "anchor": null,
+      "mapping_id": null,
+      "f": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "kpi_acnt_prft_rt",
+      "node_id": "F002",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/1/0",
+      "paper_text": "+3.21%",
+      "region": "bs-kpi",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "acnt_prft_rt"
+      },
+      "mapping_id": "base:ka10085",
+      "f": "acnt_prft_rt",
+      "kor": "계좌수익률",
+      "format": {
+        "unit": "퍼센트",
+        "sign": "signed",
+        "precision": 2,
+        "tone": "delta"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "kpi_prsm_dpst_aset_amt",
+      "node_id": "F003",
+      "node_name": "mapping|base:kt00003",
+      "node_path": "0/1/1",
+      "paper_text": "12,340,000원",
+      "region": "bs-kpi",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "kt00003",
+        "section": "body",
+        "field": "prsm_dpst_aset_amt"
+      },
+      "mapping_id": "base:kt00003",
+      "f": "prsm_dpst_aset_amt",
+      "kor": "추정예탁자산",
+      "format": {
+        "unit": "원",
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "col_dt",
+      "node_id": "T000",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/2/0/0",
+      "paper_text": "일자",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "dt"
+      },
+      "mapping_id": "base:ka10085",
+      "f": "dt",
+      "kor": "일자",
+      "format": {
+        "unit": null,
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "col_stk_cd",
+      "node_id": "T001",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/2/0/1",
+      "paper_text": "종목코드",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "stk_cd"
+      },
+      "mapping_id": "base:ka10085",
+      "f": "stk_cd",
+      "kor": "종목코드",
+      "format": {
+        "unit": null,
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "col_stk_nm",
+      "node_id": "T002",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/2/0/2",
+      "paper_text": "종목명",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "stk_nm"
+      },
+      "mapping_id": "base:ka10085",
+      "f": "stk_nm",
+      "kor": "종목명",
+      "format": {
+        "unit": null,
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "col_cur_prc",
+      "node_id": "T003",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/2/0/3",
+      "paper_text": "현재가",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "cur_prc"
+      },
+      "mapping_id": "base:ka10085",
+      "f": "cur_prc",
+      "kor": "현재가",
+      "format": {
+        "unit": "원",
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": "2SKU-1-X1"
+    },
+    {
+      "slot_id": "col_pur_pric",
+      "node_id": "T004",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/2/0/4",
+      "paper_text": "매입가",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "pur_pric"
+      },
+      "mapping_id": "base:ka10085",
+      "f": "pur_pric",
+      "kor": "매입가",
+      "format": {
+        "unit": "원",
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "col_pur_amt",
+      "node_id": "T005",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/2/0/5",
+      "paper_text": "매입금액",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "pur_amt"
+      },
+      "mapping_id": "base:ka10085",
+      "f": "pur_amt",
+      "kor": "매입금액",
+      "format": {
+        "unit": "원",
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "col_rmnd_qty",
+      "node_id": "T006",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/2/0/6",
+      "paper_text": "보유수량",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "rmnd_qty"
+      },
+      "mapping_id": "base:ka10085",
+      "f": "rmnd_qty",
+      "kor": "보유수량",
+      "format": {
+        "unit": "주",
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "col_cur_prc_paired",
+      "node_id": "T003b",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/2/0/3/1",
+      "paper_text": "현재가",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "병기",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "cur_prc"
+      },
+      "mapping_id": "base:ka10085",
+      "f": "cur_prc",
+      "kor": "현재가",
+      "format": {
+        "unit": "원",
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "col_cur_prc",
+      "collapse_group": null,
+      "expanded_board": null
+    }
+  ]
+}

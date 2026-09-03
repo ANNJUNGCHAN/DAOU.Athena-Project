@@ -1,0 +1,281 @@
+Frame "CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체" (3TOM-0) 1440×1010
+  Frame "Instrument Root · 현재시세" (3TON-0) 1440×1010
+    Frame "Instrument Card Surface" (3TOO-0) 1360×930
+      Frame "Instrument Header" (3TW5-0) 1358×86
+        Frame "Frame" (3TWL-0) 475×69
+          Frame "Frame" (3TWQ-0) 475×34
+            Text "ELW 순위" (3TWU-0) 120×34 "ELW 순위"
+            Text "전 창구 · 순매매 순" (3TWT-0) 120×16 "전 창구 · 순매매 순"
+            Frame "Frame" (3TWR-0) 89×28
+              Text "조회 스냅샷" (3TWS-0) 65×16 "조회 스냅샷"
+          Frame "Frame" (3TWM-0) 475×28
+            Text "상장 ELW 3,482 종목" (3TWP-0) 234×28 "상장 ELW 3,482 종목"
+            Text "콜 2,146 · 풋 1,336" (3TWO-0) 143×16 "콜 2,146 · 풋 1,336"
+            Text "09:42:18 조회" (3TWN-0) 74×16 "09:42:18 조회"
+        Frame "Frame" (3TW6-0) 474×40
+          Frame "Frame" (3TWJ-0) 80×40
+            Text "현재시세" (3TWK-0) 52×16 "현재시세"
+          Frame "Frame" (3TWH-0) 54×40
+            Text "차트" (3TWI-0) 26×16 "차트"
+          Frame "Frame" (3TWF-0) 80×40
+            Text "기업정보" (3TWG-0) 52×16 "기업정보"
+          Frame "Frame" (3TWD-0) 49×40
+            Text "ETF" (3TWE-0) 21×16 "ETF"
+          Frame "Frame" (3TWB-0) 54×40
+            Text "ELW" (3TWC-0) 26×16 "ELW"
+          Frame "Frame" (3TW9-0) 67×40
+            Text "금현물" (3TWA-0) 39×16 "금현물"
+          Frame "Frame" (3TW7-0) 54×40
+            Text "순위" (3TW8-0) 26×16 "순위"
+      Frame "Quote and Valuation Strip" (3TVL-0) 1358×92
+        Frame "Frame" (3TW2-0) 718×78
+          Text "정렬 기준" (3TW4-0) 661×16 "정렬 기준"
+          Text "순매매 큰 창구순" (3TW3-0) 661×22 "순매매 큰 창구순"
+        Frame "Frame" (3TVY-0) 190×78
+          Text "매수 1위" (3TW1-0) 141×16 "매수 1위"
+          Text "+210만" (3TW0-0) 141×30 "+210만"
+          Text "키움증권" (3TVZ-0) 141×16 "키움증권"
+        Frame "Frame" (3TVU-0) 150×78
+          Text "매도 1위" (3TVX-0) 105×16 "매도 1위"
+          Text "−90만" (3TVW-0) 105×30 "−90만"
+          Text "NH투자증권" (3TVV-0) 105×16 "NH투자증권"
+        Frame "Frame" (3TVQ-0) 150×78
+          Text "외국계 합계" (3TVT-0) 105×16 "외국계 합계"
+          Text "+40만" (3TVS-0) 105×30 "+40만"
+          Text "장중 누적" (3TVR-0) 105×16 "장중 누적"
+        Frame "Frame" (3TVM-0) 150×78
+          Text "집계 범위" (3TVP-0) 106×16 "집계 범위"
+          Text "10창구" (3TVO-0) 106×30 "10창구"
+          Text "상위 10창구 집계" (3TVN-0) 106×16 "상위 10창구 집계"
+      Frame "Chart Workspace" (3TOS-0) 1358×712
+        Frame "Quote Detail Mount" (3TQ1-0) 1000×712
+          Frame "Frame" (3TUY-0) 943×40
+            Frame "Frame" (3TV8-0) 477×30
+              Frame "Frame" (3TVJ-0) 50×30
+                Text "잔량" (3TVK-0) 24×16 "잔량"
+              Frame "Frame" (3TVH-0) 62×30
+                Text "등락률" (3TVI-0) 36×16 "등락률"
+              Frame "Frame" (3TVF-0) 62×30
+                Text "근접률" (3TVG-0) 36×16 "근접률"
+              Frame "Frame" (3TVD-0) 86×30
+                Text "가격급등락" (3TVE-0) 60×16 "가격급등락"
+              Frame "Frame" (3TVB-0) 113×28
+                Text "거래원별 순매매" (3TVC-0) 89×16 "거래원별 순매매"
+              Frame "Frame" (3TV9-0) 74×30
+                Text "조건검색" (3TVA-0) 48×16 "조건검색"
+            Frame "Frame" (3TV0-0) 179×28
+              Text "범위" (3TV7-0) 22×16 "범위"
+              Frame "Frame" (3TV5-0) 48×28
+                Text "주식" (3TV6-0) 24×16 "주식"
+              Frame "Frame" (3TV3-0) 43×28
+                Text "ETF" (3TV4-0) 19×16 "ETF"
+              Frame "Frame" (3TV1-0) 48×28
+                Text "ELW" (3TV2-0) 24×16 "ELW"
+            Text "목록 상태" (3TUZ-0) 161×15 "전체 10창구 · 10창구 표시"
+          Frame "거래원별 순매매 표" (3TS6-0) 943×380
+            Frame "헤더" (3TUP-0) 907×32
+              Text "순위" (3TUX-0) 44×14 "순위"
+              Text "창구" (3TUW-0) 150×14 "창구"
+              Text "종목 · 코드" (3TUV-0) 225×14 "종목 · 코드"
+              Text "주가등락 · 등락률" (3TUU-0) 110×14 "주가등락 · 등락률"
+              Text "매도" (3TUT-0) 96×14 "매도"
+              Text "매수" (3TUS-0) 96×14 "매수"
+              Text "순매매 · 총거래량" (3TUR-0) 110×14 "순매매 · 총거래량"
+              Text "비중" (3TUQ-0) 76×14 "비중"
+            Frame "행 1 · 키움증권" (3TUA-0) 907×58
+              Text "1" (3TUO-0) 44×16 "1"
+              Text "키움증권" (3TUN-0) 150×16 "키움증권"
+              Frame "Frame" (3TUK-0) 225×30
+                Text "삼성전자 콜" (3TUM-0) 225×16 "삼성전자 콜"
+                Text "58H219" (3TUL-0) 225×14 "58H219"
+              Frame "Frame" (3TUH-0) 110×30
+                Text "▲ +45" (3TUJ-0) 41×16 "▲ +45"
+                Text "+12.16%" (3TUI-0) 47×14 "+12.16%"
+              Text "310만" (3TUG-0) 96×16 "310만"
+              Text "520만" (3TUF-0) 96×16 "520만"
+              Frame "Frame" (3TUC-0) 110×32
+                Text "+210만주" (3TUE-0) 66×18 "+210만주"
+                Text "총 830만주" (3TUD-0) 60×14 "총 830만주"
+              Text "18.4%" (3TUB-0) 76×16 "18.4%"
+            Frame "행 2 · 미래에셋증권" (3TTV-0) 907×58
+              Text "2" (3TU9-0) 44×16 "2"
+              Text "미래에셋증권" (3TU8-0) 150×16 "미래에셋증권"
+              Frame "Frame" (3TU5-0) 225×30
+                Text "SK하이닉스 콜" (3TU7-0) 225×16 "SK하이닉스 콜"
+                Text "58J377" (3TU6-0) 225×14 "58J377"
+              Frame "Frame" (3TU2-0) 110×30
+                Text "▲ +25" (3TU4-0) 41×16 "▲ +25"
+                Text "+9.62%" (3TU3-0) 40×14 "+9.62%"
+              Text "260만" (3TU1-0) 96×16 "260만"
+              Text "420만" (3TU0-0) 96×16 "420만"
+              Frame "Frame" (3TTX-0) 110×32
+                Text "+160만주" (3TTZ-0) 66×18 "+160만주"
+                Text "총 680만주" (3TTY-0) 60×14 "총 680만주"
+              Text "15.1%" (3TTW-0) 76×16 "15.1%"
+            Frame "행 3 · KB증권" (3TTG-0) 907×58
+              Text "3" (3TTU-0) 44×16 "3"
+              Text "KB증권" (3TTT-0) 150×16 "KB증권"
+              Frame "Frame" (3TTQ-0) 225×30
+                Text "현대차 콜" (3TTS-0) 225×16 "현대차 콜"
+                Text "58M204" (3TTR-0) 225×14 "58M204"
+              Frame "Frame" (3TTN-0) 110×30
+                Text "▲ +25" (3TTP-0) 41×16 "▲ +25"
+                Text "+5.05%" (3TTO-0) 40×14 "+5.05%"
+              Text "240만" (3TTM-0) 96×16 "240만"
+              Text "350만" (3TTL-0) 96×16 "350만"
+              Frame "Frame" (3TTI-0) 110×32
+                Text "+110만주" (3TTK-0) 66×18 "+110만주"
+                Text "총 590만주" (3TTJ-0) 60×14 "총 590만주"
+              Text "13.1%" (3TTH-0) 76×16 "13.1%"
+            Frame "행 4 · 한국투자증권" (3TT1-0) 907×58
+              Text "4" (3TTF-0) 44×16 "4"
+              Text "한국투자증권" (3TTE-0) 150×16 "한국투자증권"
+              Frame "Frame" (3TTB-0) 225×30
+                Text "KOSPI200 콜" (3TTD-0) 225×16 "KOSPI200 콜"
+                Text "58P630" (3TTC-0) 225×14 "58P630"
+              Frame "Frame" (3TT8-0) 110×30
+                Text "▲ +10" (3TTA-0) 41×16 "▲ +10"
+                Text "+3.39%" (3TT9-0) 40×14 "+3.39%"
+              Text "230만" (3TT7-0) 96×16 "230만"
+              Text "300만" (3TT6-0) 96×16 "300만"
+              Frame "Frame" (3TT3-0) 110×32
+                Text "+70만주" (3TT5-0) 58×18 "+70만주"
+                Text "총 530만주" (3TT4-0) 60×14 "총 530만주"
+              Text "11.7%" (3TT2-0) 76×16 "11.7%"
+            Frame "행 5 · 메릴린치" (3TWV-0) 907×58
+              Text "5" (3TX9-0) 44×16 "5"
+              Text "메릴린치" (3TX8-0) 150×16 "메릴린치"
+              Frame "Frame" (3TX5-0) 225×30
+                Text "이수페타시스 콜" (3TX7-0) 225×16 "이수페타시스 콜"
+                Text "59V603" (3TX6-0) 225×14 "59V603"
+              Frame "Frame" (3TX2-0) 110×30
+                Text "▲ +131" (3TX4-0) 48×16 "▲ +131"
+                Text "+10.83%" (3TX3-0) 47×14 "+10.83%"
+              Text "145만" (3TX1-0) 96×16 "145만"
+              Text "185만" (3TX0-0) 96×16 "185만"
+              Frame "Frame" (3TWX-0) 110×32
+                Text "+40만주" (3TWZ-0) 58×18 "+40만주"
+                Text "총 330만주" (3TWY-0) 60×14 "총 330만주"
+              Text "7.3%" (3TWW-0) 76×16 "7.3%"
+            Frame "행 6 · 삼성증권" (3TXA-0) 907×58
+              Text "6" (3TXO-0) 44×16 "6"
+              Text "삼성증권" (3TXN-0) 150×16 "삼성증권"
+              Frame "Frame" (3TXK-0) 225×30
+                Text "한미반도체 콜" (3TXM-0) 225×16 "한미반도체 콜"
+                Text "59G608" (3TXL-0) 225×14 "59G608"
+              Frame "Frame" (3TXH-0) 110×30
+                Text "▲ +4" (3TXJ-0) 34×16 "▲ +4"
+                Text "+8.33%" (3TXI-0) 40×14 "+8.33%"
+              Text "131만" (3TXG-0) 96×16 "131만"
+              Text "149만" (3TXF-0) 96×16 "149만"
+              Frame "Frame" (3TXC-0) 110×32
+                Text "+18만주" (3TXE-0) 58×18 "+18만주"
+                Text "총 280만주" (3TXD-0) 60×14 "총 280만주"
+              Text "6.2%" (3TXB-0) 76×16 "6.2%"
+            Frame "행 7 · 신한투자증권" (3TSM-0) 907×58
+              Text "7" (3TT0-0) 44×16 "7"
+              Text "신한투자증권" (3TSZ-0) 150×16 "신한투자증권"
+              Frame "Frame" (3TSW-0) 225×30
+                Text "삼성전자 풋" (3TSY-0) 225×16 "삼성전자 풋"
+                Text "58L118" (3TSX-0) 225×14 "58L118"
+              Frame "Frame" (3TST-0) 110×30
+                Text "▼ −10" (3TSV-0) 41×16 "▼ −10"
+                Text "−6.45%" (3TSU-0) 40×14 "−6.45%"
+              Text "260만" (3TSS-0) 96×16 "260만"
+              Text "190만" (3TSR-0) 96×16 "190만"
+              Frame "Frame" (3TSO-0) 110×32
+                Text "−70만주" (3TSQ-0) 55×18 "−70만주"
+                Text "총 450만주" (3TSP-0) 60×14 "총 450만주"
+              Text "10.0%" (3TSN-0) 76×16 "10.0%"
+            Frame "행 8 · 하나증권" (3TXP-0) 907×58
+              Text "8" (3TY3-0) 44×16 "8"
+              Text "하나증권" (3TY2-0) 150×16 "하나증권"
+              Frame "Frame" (3TXZ-0) 225×30
+                Text "현대차 풋" (3TY1-0) 225×16 "현대차 풋"
+                Text "59Q264" (3TY0-0) 225×14 "59Q264"
+              Frame "Frame" (3TXW-0) 110×30
+                Text "▼ −2" (3TXY-0) 34×16 "▼ −2"
+                Text "−7.14%" (3TXX-0) 40×14 "−7.14%"
+              Text "160만" (3TXV-0) 96×16 "160만"
+              Text "80만" (3TXU-0) 96×16 "80만"
+              Frame "Frame" (3TXR-0) 110×32
+                Text "−80만주" (3TXT-0) 55×18 "−80만주"
+                Text "총 240만주" (3TXS-0) 60×14 "총 240만주"
+              Text "5.3%" (3TXQ-0) 76×16 "5.3%"
+            Frame "행 9 · 대신증권" (3TY4-0) 907×58
+              Text "9" (3TYI-0) 44×16 "9"
+              Text "대신증권" (3TYH-0) 150×16 "대신증권"
+              Frame "Frame" (3TYE-0) 225×30
+                Text "NAVER 풋" (3TYG-0) 225×16 "NAVER 풋"
+                Text "59S391" (3TYF-0) 225×14 "59S391"
+              Frame "Frame" (3TYB-0) 110×30
+                Text "▼ −1" (3TYD-0) 34×16 "▼ −1"
+                Text "−6.25%" (3TYC-0) 40×14 "−6.25%"
+              Text "148만" (3TYA-0) 96×16 "148만"
+              Text "63만" (3TY9-0) 96×16 "63만"
+              Frame "Frame" (3TY6-0) 110×32
+                Text "−85만주" (3TY8-0) 55×18 "−85만주"
+                Text "총 211만주" (3TY7-0) 60×14 "총 211만주"
+              Text "4.7%" (3TY5-0) 76×16 "4.7%"
+            Frame "행 10 · NH투자증권" (3TS7-0) 907×58
+              Text "10" (3TSL-0) 44×16 "10"
+              Text "NH투자증권" (3TSK-0) 150×16 "NH투자증권"
+              Frame "Frame" (3TSH-0) 225×30
+                Text "KOSPI200 풋" (3TSJ-0) 225×16 "KOSPI200 풋"
+                Text "58K902" (3TSI-0) 225×14 "58K902"
+              Frame "Frame" (3TSE-0) 110×30
+                Text "▼ −18" (3TSG-0) 41×16 "▼ −18"
+                Text "−8.65%" (3TSF-0) 40×14 "−8.65%"
+              Text "230만" (3TSD-0) 96×16 "230만"
+              Text "140만" (3TSC-0) 96×16 "140만"
+              Frame "Frame" (3TS9-0) 110×32
+                Text "−90만주" (3TSB-0) 55×18 "−90만주"
+                Text "총 370만주" (3TSA-0) 60×14 "총 370만주"
+              Text "8.2%" (3TS8-0) 76×16 "8.2%"
+        Frame "Instrument Context" (3TOT-0) 360×712
+          Frame "Selected Warrant" (3TP8-0) 312×261
+            Frame "Frame" (3TPV-0) 312×34
+              Frame "Frame" (3TPY-0) 128×34
+                Text "키움증권" (3TQ0-0) 128×16 "키움증권"
+                Text "순매매 1위 · 전체 창구" (3TPZ-0) 128×13 "순매매 1위 · 전체 창구"
+              Frame "Frame" (3TPW-0) 36×22
+                Text "1위" (3TPX-0) 18×12 "1위"
+            Frame "Frame" (3TPS-0) 312×45
+              Text "+210만" (3TPU-0) 312×24 "+210만"
+              Text "매수 520만 · 매도 310만" (3TPT-0) 312×15 "매수 520만 · 매도 310만"
+            Rectangle "Rectangle" (3TPR-0) 312×1
+            Frame "Frame" (3TPE-0) 312×107
+              Frame "Frame" (3TPO-0) 312×17
+                Text "매수" (3TPQ-0) 24×16 "매수"
+                Text "520만" (3TPP-0) 34×16 "520만"
+              Frame "Frame" (3TPL-0) 312×17
+                Text "매도" (3TPN-0) 24×16 "매도"
+                Text "310만" (3TPM-0) 34×16 "310만"
+              Frame "Frame" (3TPI-0) 312×17
+                Text "비중" (3TPK-0) 24×16 "비중"
+                Text "18.4%" (3TPJ-0) 36×16 "18.4%"
+              Frame "Frame" (3TPF-0) 312×17
+                Text "거래대금" (3TPH-0) 48×16 "거래대금"
+                Text "124억원" (3TPG-0) 46×16 "124억원"
+            Frame "Frame" (3TP9-0) 312×34
+              Frame "Frame" (3TPC-0) 151×34
+                Text "창구 상세 열기" (3TPD-0) 81×14 "창구 상세 열기"
+              Frame "Frame" (3TPA-0) 153×34
+                Text "차트 열기" (3TPB-0) 53×14 "차트 열기"
+          Frame "Open Interest Spread" (3TOU-0) 312×152
+            Text "창구 요약" (3TP7-0) 312×16 "창구 요약"
+            Text "매수 우위 6 · 매도 우위 4" (3TP6-0) 312×15 "매수 우위 6 · 매도 우위 4"
+            Frame "Frame" (3TP3-0) 312×8
+              Rectangle "Rectangle" (3TP5-0) 164×8
+              Rectangle "Rectangle" (3TP4-0) 108×8
+            Text "매수 우위 60% · 매도 우위 40…" (3TP2-0) 312×13 "매수 우위 60% · 매도 우위 40%"
+            Rectangle "Rectangle" (3TP1-0) 312×1
+            Frame "Frame" (3TOY-0) 312×17
+              Text "외국계 순매매" (3TP0-0) 77×16 "외국계 순매매"
+              Text "+40만" (3TOZ-0) 34×16 "+40만"
+            Frame "Frame" (3TOV-0) 312×17
+              Text "기관 순매매" (3TOX-0) 65×16 "기관 순매매"
+              Text "−20만" (3TOW-0) 34×16 "−20만"
+      Frame "Chart Status Footer" (3TOP-0) 1358×40
+        Text "조회 스냅샷" (3TOR-0) 65×16 "조회 스냅샷"
+        Text "마지막 조회 09:42:18" (3TOQ-0) 114×16 "마지막 조회 09:42:18"

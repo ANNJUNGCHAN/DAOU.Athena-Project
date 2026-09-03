@@ -1,0 +1,14 @@
+{
+  "board_id": "3N4O-0",
+  "name": "A04-X · 호가 정본 — 단계별 낱값",
+  "card_id": "CC-04",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "expand",
+    "parent_board": "1JPU-0",
+    "control": null,
+    "control_text": "매도·매수 총잔량"
+  },
+  "saved_at": "2026-09-02T11:23:13Z"
+}

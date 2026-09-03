@@ -1,0 +1,14 @@
+{
+  "board_id": "2QFO-2",
+  "name": "CC-05 / R03-T1 · 수급 — 투자자별",
+  "card_id": "CC-05",
+  "width": 1440,
+  "height": 1109,
+  "state": {
+    "kind": "tab",
+    "parent_board": "2QFO-2",
+    "control": "투자자별",
+    "control_text": "투자자별"
+  },
+  "saved_at": "2026-09-02T11:20:05Z"
+}

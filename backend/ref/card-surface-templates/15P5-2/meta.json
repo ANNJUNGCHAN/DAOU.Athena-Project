@@ -1,0 +1,13 @@
+{
+  "board_id": "15P5-2",
+  "name": "CC-03 / R08 · ELW 위험·만기",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 1120,
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "saved_at": "2026-09-02T11:10:24Z"
+}

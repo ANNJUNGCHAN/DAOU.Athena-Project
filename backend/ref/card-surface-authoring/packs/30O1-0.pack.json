@@ -1,0 +1,132 @@
+{
+ "board_id": "30O1-0",
+ "card_id": "CC-03",
+ "name": "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+ "operation_refs": [
+  "base:ka10025"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10025",
+   "f": "prps_cnctr",
+   "kor": "매물대집중",
+   "layer": null,
+   "board": "30O1-0",
+   "where": "매물대집중 순위 표 본체",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10025",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "board": "30O1-0",
+   "where": "표 '종목' 셀 둘째 줄 코드 '042700'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10025",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "30O1-0",
+   "where": "종목 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10025",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "30O1-0",
+   "where": "현재가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10025",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "30O1-0",
+   "where": "등락률의 ± 부호와 상승/하락 색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10025",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "30O1-0",
+   "where": "표 '현재가' 셀 둘째 줄 '+7,900 · +4.18%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10025",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "board": "30O1-0",
+   "where": "등락률 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10025",
+   "f": "now_trde_qty",
+   "kor": "현재거래량",
+   "layer": "직접",
+   "board": "30O1-0",
+   "where": "표 '현재 거래량' 셀 첫째 줄 '320만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10025",
+   "f": "pric_strt",
+   "kor": "가격대시작",
+   "layer": "직접",
+   "board": "30O1-0",
+   "where": "표 '집중 가격대' 열 시작값 '195,000 ~ 197,000'의 195,000",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10025",
+   "f": "pric_end",
+   "kor": "가격대끝",
+   "layer": "직접",
+   "board": "30O1-0",
+   "where": "표 '집중 가격대' 열 끝값 '195,000 ~ 197,000'의 197,000",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10025",
+   "f": "prps_qty",
+   "kor": "매물량",
+   "layer": "직접",
+   "board": "30O1-0",
+   "where": "표 '매물량 · 비중' 셀 첫째 줄 '418만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10025",
+   "f": "prps_rt",
+   "kor": "매물비",
+   "layer": null,
+   "board": "30O1-0",
+   "where": "집중 비중 컬럼 18.4% + 가격대 분포 막대",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 12
+}

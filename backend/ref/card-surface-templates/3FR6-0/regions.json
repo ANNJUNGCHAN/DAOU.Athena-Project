@@ -1,0 +1,12 @@
+{
+  "root": "3FR8-0",
+  "regions": [
+    { "node_id": "3G0Z-0", "name": "Instrument Header", "role": "header", "depth": 1 },
+    { "node_id": "3G10-0", "name": "Frame", "role": "strip", "depth": 2 },
+    { "node_id": "3G0E-0", "name": "Quote and Valuation Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3FRC-0", "name": "Chart Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3FW7-0", "name": "Quote Detail Mount", "role": "primary", "depth": 2 },
+    { "node_id": "3FRD-0", "name": "Instrument Context", "role": "rail", "depth": 2 },
+    { "node_id": "3FR9-0", "name": "Chart Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

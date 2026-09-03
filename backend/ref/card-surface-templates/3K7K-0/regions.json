@@ -1,0 +1,12 @@
+{
+  "root": "3K7M-0",
+  "regions": [
+    { "node_id": "3KF9-0", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "3L1A-0", "name": "Header Right", "role": "strip", "depth": 2 },
+    { "node_id": "3KEO-0", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3K7S-0", "name": "Account Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3L4J-0", "name": "Balance Change Column", "role": "primary", "depth": 2 },
+    { "node_id": "3LRH-0", "name": "Change Rail", "role": "rail", "depth": 2 },
+    { "node_id": "3K7N-0", "name": "Account Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

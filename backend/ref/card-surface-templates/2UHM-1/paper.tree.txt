@@ -1,0 +1,213 @@
+Frame "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동" (2UHM-1) 1440×960
+  Frame "Discovery Root · 시장·VI" (2UHN-1) 1440×960
+    Frame "Explorer Card Surface" (2UHO-1) 1360×880
+      Frame "Header and Capability Navigation" (2UKV-1) 1358×112
+        Frame "Frame" (2UL9-1) 205×62
+          Frame "Frame" (2ULB-1) 205×34
+            Text "시장 · VI" (2ULE-1) 108×34 "시장 · VI"
+            Frame "Frame" (2ULC-1) 85×28
+              Text "장중 · 09:42" (2ULD-1) 65×16 "장중 · 09:42"
+          Text "KRX·NXT · 정규장" (2ULA-1) 205×20 "KRX·NXT · 정규장"
+        Frame "Frame" (2UKW-1) 421×36
+          Frame "Frame" (2UL7-1) 54×36
+            Text "업종" (2UL8-1) 26×16 "업종"
+          Frame "Frame" (2UL5-1) 80×36
+            Text "종목찾기" (2UL6-1) 52×16 "종목찾기"
+          Frame "Frame" (2UL3-1) 54×36
+            Text "관심" (2UL4-1) 26×16 "관심"
+          Frame "Frame" (2UL1-1) 54×36
+            Text "테마" (2UL2-1) 26×16 "테마"
+          Frame "Frame" (2UKZ-1) 69×36
+            Text "시장·VI" (2UL0-1) 41×16 "시장·VI"
+          Frame "Frame" (2UKX-1) 80×36
+            Text "조건검색" (2UKY-1) 52×16 "조건검색"
+      Frame "Ranking Query Controls" (2UKE-1) 1358×92
+        Frame "Frame" (2UKI-1) 527×38
+          Frame "Frame" (2UKT-1) 32×16
+            Text "상태" (2UKU-1) 26×16 "상태"
+          Frame "Frame" (2UKR-1) 67×36
+            Text "정규장" (2UKS-1) 39×16 "정규장"
+          Frame "Frame" (2UKP-1) 91×38
+            Text "KRX · NXT" (2UKQ-1) 61×16 "KRX · NXT"
+          Frame "Frame" (2UKN-1) 73×38
+            Text "VI 포함" (2UKO-1) 43×16 "VI 포함"
+          Frame "Frame" (2UKL-1) 112×38
+            Text "발동 순" (2UKM-1) 44×16 "발동 순"
+          Frame "Frame" (2UKJ-1) 112×38
+            Text "오늘" (2UKK-1) 26×16 "오늘"
+        Frame "Frame" (2UKF-1) 145×16
+          Text "● 실시간 갱신" (2UKH-1) 88×16 "● 실시간 갱신"
+          Text "VI 3건" (2UKG-1) 41×16 "VI 3건"
+      Frame "Ranking Workspace" (2UHS-1) 1358×612
+        Frame "Frame" (2ULF-1) 880×612
+          Frame "KPI 밴드" (357F-0) 823×103
+            Frame "Frame" (357G-0) 194×84
+              Text "KOSPI" (357H-0) 170×16 "KOSPI"
+              Text "2,684.21" (357I-0) 170×22 "2,684.21"
+              Text "+29.73 · +1.12%" (357J-0) 170×16 "+29.73 · +1.12%"
+            Frame "Frame" (357K-0) 194×84
+              Text "KOSDAQ" (357L-0) 170×16 "KOSDAQ"
+              Text "842.15" (357M-0) 170×22 "842.15"
+              Text "+7.01 · +0.84%" (357N-0) 170×16 "+7.01 · +0.84%"
+            Frame "Frame" (357O-0) 194×84
+              Text "장 운영" (357P-0) 170×16 "장 운영"
+              Text "정규장 진행" (357Q-0) 170×22 "정규장 진행"
+              Text "장 시작 09:00 · 잔여 없음" (357R-0) 170×16 "장 시작 09:00 · 잔여 없음"
+            Frame "Frame" (357S-0) 194×84
+              Text "오늘 VI 발동" (357T-0) 170×16 "오늘 VI 발동"
+              Text "3건" (357U-0) 170×22 "3건"
+              Text "발동 중 2 · 해제 1" (357V-0) 170×16 "발동 중 2 · 해제 1"
+          Frame "VI 표 헤더" (359Q-0) 823×38
+            Text "발동 시간" (359R-0) 104×16 "발동 시간"
+            Text "종목" (359S-0) 146×16 "종목"
+            Text "구분" (359T-0) 138×16 "구분"
+            Text "발동가" (359U-0) 110×16 "발동가"
+            Text "기준가" (359V-0) 110×16 "기준가"
+            Text "거래량" (359W-0) 110×16 "거래량"
+            Text "상태" (359X-0) 105×16 "상태"
+          Frame "VI 행 · 이수페타시스" (359Y-0) 823×56
+            Frame "Frame" (359Z-0) 104×32
+              Text "09:41:08" (35A0-0) 104×16 "09:41:08"
+              Text "해제 09:43:08" (35A1-0) 104×14 "해제 09:43:08"
+            Frame "Frame" (35A2-0) 146×37
+              Text "이수페타시스" (35A3-0) 146×16 "이수페타시스"
+              Frame "Frame" (35A4-0) 146×18
+                Text "007660" (35A5-0) 36×14 "007660"
+                Frame "Frame" (35A6-0) 44×18
+                  Text "KOSPI" (35A7-0) 30×14 "KOSPI"
+            Frame "Frame" (35A8-0) 138×32
+              Text "동적 상승" (35A9-0) 56×16 "동적 상승"
+              Text "동적 ±3% · 오늘 1회" (35AA-0) 125×14 "동적 ±3% · 오늘 1회"
+            Frame "Frame" (35AB-0) 110×32
+              Text "64,500" (35AC-0) 44×16 "64,500"
+              Text "+29.90%" (35AD-0) 51×14 "+29.90%"
+            Frame "Frame" (35AE-0) 110×32
+              Text "62,600" (35AF-0) 44×16 "62,600"
+              Text "괴리 +3.04%" (35AG-0) 75×14 "괴리 +3.04%"
+            Frame "Frame" (35AH-0) 110×32
+              Text "312만주" (35AI-0) 46×16 "312만주"
+              Text "1,720억" (35AJ-0) 48×14 "1,720억"
+            Frame "Frame" (35AK-0) 105×32
+              Text "발동 중" (35AL-0) 44×16 "발동 중"
+              Text "50초 남음" (35AM-0) 58×14 "50초 남음"
+          Frame "VI 행 · 대성첨단" (35AN-0) 823×56
+            Frame "Frame" (35AO-0) 104×32
+              Text "09:40:44" (35AP-0) 104×16 "09:40:44"
+              Text "해제 09:42:44" (35AQ-0) 104×14 "해제 09:42:44"
+            Frame "Frame" (35AR-0) 146×37
+              Text "대성첨단" (35AS-0) 146×16 "대성첨단"
+              Frame "Frame" (35AT-0) 146×18
+                Text "396300" (35AU-0) 36×14 "396300"
+                Frame "Frame" (35AV-0) 50×18
+                  Text "KOSDAQ" (35AW-0) 36×14 "KOSDAQ"
+            Frame "Frame" (35AX-0) 138×32
+              Text "정적 상승" (35AY-0) 56×16 "정적 상승"
+              Text "정적 ±10% · 오늘 1회" (35AZ-0) 132×14 "정적 ±10% · 오늘 1회"
+            Frame "Frame" (35B0-0) 110×32
+              Text "20,500" (35B1-0) 44×16 "20,500"
+              Text "+10.22%" (35B2-0) 51×14 "+10.22%"
+            Frame "Frame" (35B3-0) 110×32
+              Text "18,600" (35B4-0) 44×16 "18,600"
+              Text "괴리 +10.22%" (35B5-0) 82×14 "괴리 +10.22%"
+            Frame "Frame" (35B6-0) 110×32
+              Text "486만주" (35B7-0) 46×16 "486만주"
+              Text "992억" (35B8-0) 34×14 "992억"
+            Frame "Frame" (35B9-0) 105×32
+              Text "발동 중" (35BA-0) 44×16 "발동 중"
+              Text "26초 남음" (35BB-0) 58×14 "26초 남음"
+          Frame "VI 행 · 테마파워" (35BC-0) 823×56
+            Frame "Frame" (35BD-0) 104×32
+              Text "09:04:12" (35BE-0) 104×16 "09:04:12"
+              Text "해제 09:06:12" (35BF-0) 104×14 "해제 09:06:12"
+            Frame "Frame" (35BG-0) 146×37
+              Text "테마파워" (35BH-0) 146×16 "테마파워"
+              Frame "Frame" (35BI-0) 146×18
+                Text "217500" (35BJ-0) 36×14 "217500"
+                Frame "Frame" (35BK-0) 50×18
+                  Text "KOSDAQ" (35BL-0) 36×14 "KOSDAQ"
+            Frame "Frame" (35BM-0) 138×32
+              Text "정적 하락" (35BN-0) 56×16 "정적 하락"
+              Text "정적 ±10% · 오늘 1회" (35BO-0) 132×14 "정적 ±10% · 오늘 1회"
+            Frame "Frame" (35BP-0) 110×32
+              Text "8,120" (35BQ-0) 36×16 "8,120"
+              Text "-10.1%" (35BR-0) 44×14 "-10.1%"
+            Frame "Frame" (35BS-0) 110×32
+              Text "9,030" (35BT-0) 36×16 "9,030"
+              Text "괴리 -10.1%" (35BU-0) 75×14 "괴리 -10.1%"
+            Frame "Frame" (35BV-0) 110×32
+              Text "318만주" (35BW-0) 46×16 "318만주"
+              Text "272억" (35BX-0) 34×14 "272억"
+            Frame "Frame" (35BY-0) 105×32
+              Text "해제" (35BZ-0) 24×16 "해제"
+              Text "09:06:12" (35C0-0) 58×14 "09:06:12"
+          Frame "Frame" (2UMH-1) 823×28
+            Text "오늘 3건 전체 표시 · 해제 1건" (2UMI-1) 154×14 "오늘 3건 전체 표시 · 해제 1건"
+          Frame "장 운영 상태" (3FB3-0) 823×231
+            Frame "Frame" (3FB4-0) 823×34
+              Text "장 운영 상태" (3FB5-0) 75×16 "장 운영 상태"
+              Text "09:42 기준" (3FB6-0) 62×16 "09:42 기준"
+            Frame "운영 구간" (3FB7-0) 823×175
+              Frame "08:30" (3FB9-0) 139×79
+                Rectangle "Rectangle" (3FBA-0) 127×3
+                Text "08:30" (3FBB-0) 127×16 "08:30"
+                Text "장전 시간외" (3FBC-0) 127×16 "장전 시간외"
+                Text "지남" (3FBD-0) 127×14 "지남"
+              Frame "09:00" (3FBE-0) 139×79
+                Rectangle "Rectangle" (3FBF-0) 127×3
+                Text "09:00" (3FBG-0) 127×16 "09:00"
+                Text "정규장 개시" (3FBH-0) 127×16 "정규장 개시"
+                Text "지남" (3FBI-0) 127×14 "지남"
+              Frame "09:42 현재" (3FBJ-0) 139×79
+                Rectangle "Rectangle" (3FBK-0) 127×3
+                Text "09:42" (3FBL-0) 127×16 "09:42"
+                Text "현재" (3FBM-0) 127×16 "현재"
+                Text "진행 중" (3FBN-0) 127×14 "진행 중"
+              Frame "15:20" (3FBP-0) 139×79
+                Rectangle "Rectangle" (3FBQ-0) 127×3
+                Text "15:20" (3FBR-0) 127×16 "15:20"
+                Text "종가 단일가" (3FBS-0) 127×16 "종가 단일가"
+                Text "예정" (3FBT-0) 127×14 "예정"
+              Frame "15:30" (3FBU-0) 139×79
+                Rectangle "Rectangle" (3FBV-0) 127×3
+                Text "15:30" (3FBW-0) 127×16 "15:30"
+                Text "장 마감" (3FBX-0) 127×16 "장 마감"
+                Text "예정" (3FBY-0) 127×14 "예정"
+              Frame "16:00" (3FBZ-0) 127×79
+                Rectangle "Rectangle" (3FC0-0) 127×3
+                Text "16:00" (3FC1-0) 127×16 "16:00"
+                Text "시간외 단일가" (3FC2-0) 127×16 "시간외 단일가"
+                Text "예정" (3FC3-0) 127×14 "예정"
+        Frame "Frame" (2UMK-1) 478×612
+          Frame "Frame" (2UML-1) 426×22
+            Text "이수페타시스 — 발동 중" (2UMM-1) 167×22 "이수페타시스 — 발동 중"
+            Text "단일가 진행" (2UMN-1) 56×14 "단일가 진행"
+          Frame "Frame" (2UMO-1) 426×66
+            Text "발동 구분" (2UMP-1) 51×14 "발동 구분"
+            Text "동적 VI · 상승" (2UMQ-1) 99×16 "동적 VI · 상승"
+          Frame "Frame" (2UMR-1) 426×66
+            Text "발동가 · 기준가 대비" (2UMS-1) 115×14 "발동가 · 기준가 대비"
+            Text "64,500 · +3.04%" (2UMT-1) 117×16 "64,500 · +3.04%"
+          Frame "Frame" (2UMU-1) 426×66
+            Text "해제 예정" (2UMV-1) 51×14 "해제 예정"
+            Text "09:43:08" (2UMW-1) 63×16 "09:43:08"
+          Frame "다른 발동 종목" (3FP8-0) 426×192
+            Frame "Frame" (3FP9-0) 426×42
+              Text "다른 발동 종목" (3FPA-0) 88×16 "다른 발동 종목"
+            Frame "Frame" (3FPB-0) 426×68
+              Frame "Frame" (3FPC-0) 90×33
+                Text "대성첨단" (3FPD-0) 90×16 "대성첨단"
+                Text "396300 · 발동 중" (3FPE-0) 90×14 "396300 · 발동 중"
+              Text "20,500 · +10.22%" (3FPF-0) 125×16 "20,500 · +10.22%"
+            Frame "Frame" (3FPG-0) 426×68
+              Frame "Frame" (3FPH-0) 128×33
+                Text "테마파워" (3FPI-0) 128×16 "테마파워"
+                Text "217500 · 09:06:12 해제" (3FPJ-0) 128×14 "217500 · 09:06:12 해제"
+              Text "8,120 · -10.1%" (3FPK-0) 110×16 "8,120 · -10.1%"
+          Frame "VI 동작" (3FQK-0) 426×42
+            Frame "Frame" (3FQL-0) 209×42
+              Text "차트 열기" (3FQM-0) 53×16 "차트 열기"
+            Frame "Frame" (3FQN-0) 207×42
+              Text "호가 열기" (3FQO-0) 53×16 "호가 열기"
+      Frame "User Status Footer" (2UHP-1) 1358×64
+        Text "● 시장 상태·VI 실시간 갱신 중" (2UHR-1) 167×16 "● 시장 상태·VI 실시간 갱신 중"
+        Text "마지막 반영" (32J8-0) 114×16 "마지막 반영 09:42:18"

@@ -1,0 +1,150 @@
+Frame "CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소" (2TET-1) 1440×960
+  Frame "Order Root · 취소 검토" (2TEU-1) 1440×960
+    Frame "Order Card Surface" (2TEV-1) 1360×880
+      Frame "Order Header" (2TIJ-1) 1358×106
+        Frame "Frame" (2TJ0-1) 327×57
+          Frame "Frame" (2TJ2-1) 327×34
+            Text "삼성전자 주문 취소" (2TJ5-1) 244×34 "삼성전자 주문 취소"
+            Frame "Frame" (2TJ3-1) 73×28
+              Text "검토 필요" (2TJ4-1) 53×16 "검토 필요"
+          Text "005930 · 키움증권 01 · 원…" (2TJ1-1) 327×16 "005930 · 키움증권 01 · 원주문 150,500원 · 미체결 10주"
+        Frame "Frame" (2TIK-1) 434×36
+          Frame "Frame" (2TIY-1) 54×36
+            Text "현금" (2TIZ-1) 26×16 "현금"
+          Frame "Frame" (2TIW-1) 54×36
+            Text "신용" (2TIX-1) 26×16 "신용"
+          Frame "Frame" (2TIU-1) 67×36
+            Text "금현물" (2TIV-1) 39×16 "금현물"
+          Rectangle "Rectangle" (2TIT-1) 1×22
+          Frame "Frame" (2TIR-1) 54×36
+            Text "매수" (2TIS-1) 26×16 "매수"
+          Frame "Frame" (2TIP-1) 54×36
+            Text "매도" (2TIQ-1) 26×16 "매도"
+          Frame "Frame" (2TIN-1) 54×36
+            Text "정정" (2TIO-1) 26×16 "정정"
+          Frame "Frame" (2TIL-1) 54×36
+            Text "취소" (2TIM-1) 26×16 "취소"
+      Frame "Order Progress" (2THZ-1) 1358×84
+        Frame "Frame" (2TIE-1) 361×28
+          Frame "Frame" (2TIH-1) 28×28
+            Text "1" (2TII-1) 8×16 "1"
+          Text "주문 작성" (2TIG-1) 57×16 "주문 작성"
+          Rectangle "Rectangle" (2TIF-1) 252×1
+        Frame "Frame" (2TI9-1) 361×28
+          Frame "Frame" (2TIC-1) 28×28
+            Text "2" (2TID-1) 8×16 "2"
+          Text "주문 조건 검토" (2TIB-1) 88×16 "주문 조건 검토"
+          Rectangle "Rectangle" (2TIA-1) 221×1
+        Frame "Frame" (2TI4-1) 361×28
+          Frame "Frame" (2TI7-1) 28×28
+            Text "3" (2TI8-1) 8×16 "3"
+          Text "사용자 확인" (2TI6-1) 70×16 "사용자 확인"
+          Rectangle "Rectangle" (2TI5-1) 239×1
+        Frame "Frame" (2TI0-1) 220×28
+          Frame "Frame" (2TI2-1) 28×28
+            Text "4" (2TI3-1) 8×16 "4"
+          Text "접수·체결" (2TI1-1) 55×16 "접수·체결"
+      Frame "Order Workspace" (2TF1-1) 1358×626
+        Frame "Order Entry" (2TH1-1) 420×626
+          Frame "Order Form" (2THI-1) 363×312
+            Frame "Frame" (2THW-1) 363×38
+              Text "주문 입력" (2THY-1) 79×22 "주문 입력"
+              Text "현재가 150,850원" (2THX-1) 95×16 "현재가 150,850원"
+            Frame "Frame" (2THT-1) 363×64
+              Text "주문 유형" (2THV-1) 57×16 "주문 유형"
+              Text "전량 취소" (2THU-1) 61×18 "전량 취소"
+            Frame "Frame" (2THP-1) 363×82
+              Text "수량" (2THS-1) 26×16 "수량"
+              Frame "Frame" (2THQ-1) 190×46
+                Text "10주" (2THR-1) 40×22 "10주"
+            Frame "Frame" (2THM-1) 363×64
+              Text "가격" (2THO-1) 26×16 "가격"
+              Text "해당 없음" (2THN-1) 57×16 "해당 없음"
+            Frame "Frame" (2THJ-1) 363×64
+              Text "계좌" (2THL-1) 26×16 "계좌"
+              Text "키움증권 01" (2THK-1) 71×16 "키움증권 01"
+          Frame "Order Quick Quantity" (2TH2-1) 363×118
+            Frame "Frame" (2TH9-1) 363×36
+              Frame "Frame" (2THG-1) 85×36
+                Text "10%" (2THH-1) 24×16 "10%"
+              Frame "Frame" (2THE-1) 85×36
+                Text "25%" (2THF-1) 24×16 "25%"
+              Frame "Frame" (2THC-1) 85×36
+                Text "50%" (2THD-1) 24×16 "50%"
+              Frame "Frame" (2THA-1) 85×36
+                Text "최대" (2THB-1) 24×16 "최대"
+            Frame "Frame" (2TH6-1) 363×16
+              Text "주문가능금액" (2TH8-1) 78×16 "주문가능금액"
+              Text "raw · base:kt00001 · $.ord_alow_amt" (2TH7-1) 91×16 "31,240,000원"
+            Frame "Frame" (2TH3-1) 363×16
+              Text "현재 매수 1호가" (2TH5-1) 95×16 "현재 매수 1호가"
+              Text "150,840원" (2TH4-1) 68×16 "150,840원"
+        Frame "Order Preview" (2TG5-1) 520×626
+          Frame "Preview Heading" (2TGY-1) 463×52
+            Text "취소 전 최종 확인" (2TH0-1) 403×24 "취소 전 최종 확인"
+          Frame "Order Hero" (2TGT-1) 463×131
+            Text "삼성전자 · 주문 취소" (2TGX-1) 403×18 "삼성전자 · 주문 취소"
+            Frame "Frame" (2TGU-1) 403×40
+              Text "10주" (2TGW-1) 72×40 "10주"
+              Text "응답 대기" (2TGV-1) 69×22 "응답 대기"
+          Frame "Order Details" (2TGG-1) 463×205
+            Frame "Frame" (2TGQ-1) 403×49
+              Text "주문 방향" (2TGS-1) 61×20 "주문 방향"
+              Text "매수 취소" (2TGR-1) 61×20 "매수 취소"
+            Frame "Frame" (2TGN-1) 403×49
+              Text "취소 수량" (2TGP-1) 61×20 "취소 수량"
+              Text "10주 전량" (2TGO-1) 63×20 "10주 전량"
+            Frame "Frame" (2TGK-1) 403×49
+              Text "현재 매수 1호가" (2TGM-1) 102×20 "현재 매수 1호가"
+              Text "150,840원" (2TGL-1) 73×20 "150,840원"
+            Frame "Frame" (2TGH-1) 403×48
+              Text "계좌" (2TGJ-1) 28×20 "계좌"
+              Text "키움증권 01" (2TGI-1) 77×20 "키움증권 01"
+          Frame "Order Safety Notice" (2TGB-1) 459×73
+            Rectangle "Rectangle" (2TGF-1) 8×8
+            Frame "Frame" (2TGC-1) 305×41
+              Text "아직 취소되지 않았습니다" (2TGE-1) 305×20 "아직 취소되지 않았습니다"
+              Text "아래 취소 확인을 누른 뒤 한 번 더…" (2TGD-1) 305×18 "아래 취소 확인을 누른 뒤 한 번 더 확인해야 접수됩니다."
+          Frame "Order Actions" (2TG6-1) 459×44
+            Frame "Frame" (2TG9-1) 120×44
+              Text "수정" (2TGA-1) 28×18 "수정"
+            Frame "Frame" (2TG7-1) 329×44
+              Text "취소 확인" (2TG8-1) 61×18 "취소 확인"
+        Frame "Fees and Execution" (2TF2-1) 420×626
+          Frame "Cost Heading" (2TG2-1) 368×66
+            Text "주문 접수 정보" (2TG4-1) 312×24 "주문 접수 정보"
+          Frame "Cost Breakdown" (2TFM-1) 368×206
+            Frame "Frame" (2TFZ-1) 312×37
+              Text "주문번호" (2TG1-1) 52×20 "주문번호"
+              Text "raw · base:kt10003 · $.ord_no" (2TG0-1) 8×20 "—"
+            Frame "Frame" (2TFT-1) 312×37
+              Text "취소수량" (2TFV-1) 52×20 "취소수량"
+              Text "request · base:kt10003 · $.cncl_qty" (2TFU-1) 28×20 "10주"
+            Frame "Frame" (2TFQ-1) 312×37
+              Text "원주문번호" (2TFS-1) 65×20 "원주문번호"
+              Text "request · base:kt10003 · $.orig_ord_no" (2TFR-1) 51×20 "0021847"
+            Frame "Frame" (2TFN-1) 312×36
+              Text "종목코드" (2TFP-1) 52×20 "종목코드"
+              Text "request · base:kt10003 · $.stk_cd" (2TFO-1) 47×20 "005930"
+            Frame "Frame" (2WGG-0) 312×37
+              Text "국내거래소구분" (2WGH-0) 91×20 "국내거래소구분"
+              Text "KRX" (2WGI-0) 24×20 "KRX"
+          Frame "Execution Status" (2TF3-1) 368×201
+            Frame "Frame" (2TFJ-1) 312×22
+              Text "이 주문의 진행 상태" (2TFL-1) 136×22 "이 주문의 진행 상태"
+              Text "검토 중" (2TFK-1) 41×18 "검토 중"
+            Frame "Frame" (2TFD-1) 312×37
+              Frame "Frame" (2TFH-1) 22×22
+                Text "1" (2TFI-1) 8×16 "1"
+              Frame "Frame" (2TFE-1) 150×37
+                Text "조건 입력 완료" (2TFG-1) 150×18 "조건 입력 완료"
+                Text "전량 취소 · 원주문 0021847" (2TFF-1) 150×17 "전량 취소 · 원주문 0021847"
+            Frame "Frame" (2TF7-1) 312×37
+              Frame "Frame" (2TFB-1) 22×22
+                Text "2" (2TFC-1) 8×16 "2"
+              Frame "Frame" (2TF8-1) 120×37
+                Text "응답 필드 대기" (2TFA-1) 120×18 "응답 필드 대기"
+                Text "주문번호 · 거래소구분" (2TF9-1) 120×17 "주문번호 · 거래소구분"
+            Frame "Frame" (2TF4-1) 312×22
+              Rectangle "Rectangle" (2TF6-1) 22×22
+              Text "사용자 확인 후 접수" (2TF5-1) 118×22 "사용자 확인 후 접수"

@@ -1,0 +1,142 @@
+{
+ "board_id": "2XKO-0",
+ "card_id": "CC-06",
+ "name": "CC-06 / R04-S4 · 종목찾기 — 등락률",
+ "operation_refs": [
+  "base:ka10027"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10027",
+   "f": "pred_pre_flu_rt_upper",
+   "kor": "전일대비등락률상위",
+   "layer": null,
+   "board": "2XKO-0",
+   "where": "'등락률 상위' 순위 테이블",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "stk_cls",
+   "kor": "종목분류",
+   "layer": "병기",
+   "board": "2XKO-0",
+   "where": "순위표 종목 셀 코드 옆 종목분류 칩 '보통주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2XKO-0",
+   "where": "'종목' 컬럼 하단 007660",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2XKO-0",
+   "where": "'종목' 컬럼 이수페타시스",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2XKO-0",
+   "where": "'현재가' 컬럼 64,500",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2XKO-0",
+   "where": "등락률 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2XKO-0",
+   "where": "우패널 '+14,850 · +29.9%'의 +14,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "board": "2XKO-0",
+   "where": "'등락률' 컬럼 +29.9%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "sel_req",
+   "kor": "매도잔량",
+   "layer": "직접",
+   "board": "2XKO-0",
+   "where": "순위표 '잔량 매도·매수' 열 주값 '매도 8.2만'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "buy_req",
+   "kor": "매수잔량",
+   "layer": "병기",
+   "board": "2XKO-0",
+   "where": "'잔량 매도·매수' 셀 둘째 줄 '매수 11.4만'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "now_trde_qty",
+   "kor": "현재거래량",
+   "layer": "직접",
+   "board": "2XKO-0",
+   "where": "순위표 거래량 열 주값 1,420만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "cntr_str",
+   "kor": "체결강도",
+   "layer": null,
+   "board": "2XKO-0",
+   "where": "'체결강도' 컬럼 108.4%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10027",
+   "f": "cnt",
+   "kor": "횟수",
+   "layer": null,
+   "board": "2XKO-0",
+   "where": "'등락률 · 연속일' 컬럼의 '· 2일'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 13
+}

@@ -1,0 +1,11 @@
+{
+  "root": "3G3C-0",
+  "regions": [
+    { "node_id": "3G3D-0", "name": "Header", "role": "header", "depth": 1 },
+    { "node_id": "3G43-0", "name": "KPI", "role": "kpi", "depth": 1 },
+    { "node_id": "3G4N-0", "name": "Body", "role": "workspace", "depth": 1 },
+    { "node_id": "3G4O-0", "name": "List", "role": "primary", "depth": 2 },
+    { "node_id": "3G4P-0", "name": "Chips", "role": "strip", "depth": 3 },
+    { "node_id": "3GI0-0", "name": "Rail", "role": "rail", "depth": 2 }
+  ]
+}

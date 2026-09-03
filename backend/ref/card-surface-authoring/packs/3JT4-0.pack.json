@@ -1,0 +1,113 @@
+{
+ "board_id": "3JT4-0",
+ "card_id": "CC-04",
+ "name": "CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+ "operation_refs": [
+  "detail:ka10087:buy_bid_changes",
+  "detail:ka10087:sell_bid_changes"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "detail:ka10087:buy_bid_changes",
+   "f": "ovt_sigpric_buy_bid_jub_pre_1",
+   "kor": "시간외단일가_매수호가직전대비1",
+   "layer": "직접",
+   "board": "3JT4-0",
+   "where": "좌측 낱값 표 매수 5단 그룹 1단 행 '직전대비' 열 '−380' (호가 150,850 · 잔량 15,760)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_changes",
+   "f": "ovt_sigpric_buy_bid_jub_pre_2",
+   "kor": "시간외단일가_매수호가직전대비2",
+   "layer": "직접",
+   "board": "3JT4-0",
+   "where": "좌측 낱값 표 매수 5단 그룹 2단 행 '직전대비' 열 '−210' (호가 150,800 · 잔량 16,940)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_changes",
+   "f": "ovt_sigpric_buy_bid_jub_pre_3",
+   "kor": "시간외단일가_매수호가직전대비3",
+   "layer": "직접",
+   "board": "3JT4-0",
+   "where": "좌측 낱값 표 매수 5단 그룹 3단 행 '직전대비' 열 '−140' (호가 150,750 · 잔량 15,280)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_changes",
+   "f": "ovt_sigpric_buy_bid_jub_pre_4",
+   "kor": "시간외단일가_매수호가직전대비4",
+   "layer": "직접",
+   "board": "3JT4-0",
+   "where": "좌측 낱값 표 매수 5단 그룹 4단 행 '직전대비' 열 '−90' (호가 150,700 · 잔량 16,120)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:buy_bid_changes",
+   "f": "ovt_sigpric_buy_bid_jub_pre_5",
+   "kor": "시간외단일가_매수호가직전대비5",
+   "layer": "직접",
+   "board": "3JT4-0",
+   "where": "좌측 낱값 표 매수 5단 그룹 5단 행 '직전대비' 열 '−40' (호가 150,650 · 잔량 15,660)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_changes",
+   "f": "ovt_sigpric_sel_bid_jub_pre_5",
+   "kor": "시간외단일가_매도호가직전대비5",
+   "layer": "직접",
+   "board": "3JT4-0",
+   "where": "좌측 낱값 표 매도 5단 그룹 5단 행 '직전대비' 열 '+70' (호가 151,150 · 잔량 17,940)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_changes",
+   "f": "ovt_sigpric_sel_bid_jub_pre_4",
+   "kor": "시간외단일가_매도호가직전대비4",
+   "layer": "직접",
+   "board": "3JT4-0",
+   "where": "좌측 낱값 표 매도 5단 그룹 4단 행 '직전대비' 열 '+130' (호가 151,100 · 잔량 21,340)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_changes",
+   "f": "ovt_sigpric_sel_bid_jub_pre_3",
+   "kor": "시간외단일가_매도호가직전대비3",
+   "layer": "직접",
+   "board": "3JT4-0",
+   "where": "좌측 낱값 표 매도 5단 그룹 3단 행 '직전대비' 열 '+180' (호가 151,050 · 잔량 24,880)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_changes",
+   "f": "ovt_sigpric_sel_bid_jub_pre_2",
+   "kor": "시간외단일가_매도호가직전대비2",
+   "layer": "직접",
+   "board": "3JT4-0",
+   "where": "좌측 낱값 표 매도 5단 그룹 2단 행 '직전대비' 열 '+340' (호가 151,000 · 잔량 25,610)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10087:sell_bid_changes",
+   "f": "ovt_sigpric_sel_bid_jub_pre_1",
+   "kor": "시간외단일가_매도호가직전대비1",
+   "layer": "직접",
+   "board": "3JT4-0",
+   "where": "좌측 낱값 표 매도 5단 그룹 1단 행 '직전대비' 열 '+520' (호가 150,950 · 잔량 24,050)",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 10
+}

@@ -1,0 +1,12 @@
+{
+  "root": "2QX2-1",
+  "regions": [
+    { "node_id": "2QX3-1", "name": "Gold Header", "role": "header", "depth": 1 },
+    { "node_id": "2QXB-1", "name": "Frame (세션·단수 토글)", "role": "strip", "depth": 2 },
+    { "node_id": "2QXI-1", "name": "Gold Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "2QY9-1", "name": "Gold Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "2QYA-1", "name": "Gold Ladder", "role": "primary", "depth": 2 },
+    { "node_id": "2QYB-1", "name": "Gold Side", "role": "rail", "depth": 2 },
+    { "node_id": "2QYC-1", "name": "Gold Footer", "role": "footer", "depth": 1 }
+  ]
+}

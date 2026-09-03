@@ -1,0 +1,54 @@
+{
+ "board": "3FR6-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10006",
+   "f": "date",
+   "kor": "날짜",
+   "layer": "펼침",
+   "where": "일자별 시세 밴드 · 일자 열(09-01 · 08-31 · 08-28) / node 3SPH-0 · 3SQ0-0 · 3SQA-0"
+  },
+  {
+   "mapping_id": "base:ka10006",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": "펼침",
+   "where": "일자별 시세 밴드 · 시가 열 / node 3SPI-0 · 3SPZ-0 · 3SQ9-0"
+  },
+  {
+   "mapping_id": "base:ka10006",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": "펼침",
+   "where": "일자별 시세 밴드 · 고가 열 / node 3SPJ-0 · 3SPY-0 · 3SQ8-0"
+  },
+  {
+   "mapping_id": "base:ka10006",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": "펼침",
+   "where": "일자별 시세 밴드 · 저가 열 / node 3SPK-0 · 3SPX-0 · 3SQ7-0"
+  },
+  {
+   "mapping_id": "base:ka10006",
+   "f": "pre",
+   "kor": "대비",
+   "layer": "펼침",
+   "where": "일자별 시세 밴드 · 종가 셀 둘째 줄 병기(+1,850 · +1.24%) / node 3SPN-0 · 3SPV-0 · 3SQ5-0"
+  },
+  {
+   "mapping_id": "base:ka10006",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "펼침",
+   "where": "일자별 시세 밴드 · 거래량 열 / node 3SPO-0 · 3SPT-0 · 3SQ3-0"
+  },
+  {
+   "mapping_id": "base:ka10006",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": "펼침",
+   "where": "일자별 시세 밴드 · 거래대금 열 / node 3SPP-0 · 3SPS-0 · 3SQ2-0"
+  }
+ ]
+}

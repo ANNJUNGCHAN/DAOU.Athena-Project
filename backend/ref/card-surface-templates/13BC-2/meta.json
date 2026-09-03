@@ -1,0 +1,13 @@
+{
+  "board_id": "13BC-2",
+  "name": "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+  "card_id": "CC-04",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "saved_at": "2026-09-02T11:18:02Z"
+}

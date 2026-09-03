@@ -1,0 +1,270 @@
+Frame "CC-04 / R02-T4 · 호가 — 정규장 5단" (2TRW-1) 1440×960
+  Frame "Order Book Root · 정규장 5단" (2TRX-1) 1440×960
+    Frame "Order Book Surface" (2TRY-1) 1360×880
+      Frame "Order Book Header" (2TZ3-1) 1360×106
+        Frame "Frame" (2TZG-1) 314×57
+          Frame "Frame" (2TZI-1) 314×34
+            Text "삼성전자 통합 호가" (2TZM-1) 235×34 "삼성전자 통합 호가"
+            Frame "Frame" (2TZJ-1) 67×28
+              Rectangle "Rectangle" (2TZL-1) 7×7
+              Text "실시간" (2TZK-1) 36×16 "실시간"
+          Text "005930 · KOSPI · 정규장" (2TZH-1) 314×18 "005930 · KOSPI · 정규장"
+        Frame "Frame" (2TZ4-1) 343×36
+          Frame "Frame" (2TZE-1) 67×36
+            Text "정규장" (2TZF-1) 39×16 "정규장"
+          Frame "Frame" (2TZC-1) 67×36
+            Text "시간외" (2TZD-1) 39×16 "시간외"
+          Frame "Frame" (2TZA-1) 67×36
+            Text "금현물" (2TZB-1) 39×16 "금현물"
+          Rectangle "Rectangle" (2TZ9-1) 1×24
+          Frame "Frame" (2TZ7-1) 47×36
+            Text "5단" (2TZ8-1) 21×16 "5단"
+          Frame "Frame" (2TZ5-1) 54×36
+            Text "10단" (2TZ6-1) 28×16 "10단"
+      Frame "Best Quote Strip" (2TYF-1) 1360×116
+        Frame "KPI 현재가" (3JYY-0) 310×115
+          Text "현재가" (3JYZ-0) 254×18 "현재가"
+          Text "150,850" (3JZ0-0) 254×34 "150,850"
+          Text "+1,850원 · +1.24%" (3JZ1-0) 254×18 "+1,850원 · +1.24%"
+        Frame "Frame" (2TYT-1) 280×115
+          Text "최우선 매도호가" (2TYX-1) 223×18 "최우선 매도호가"
+          Frame "Frame" (2TYU-1) 223×30
+            Text "150,850" (2TYW-1) 101×30 "150,850"
+            Text "3,420주" (2TYV-1) 52×16 "3,420주"
+        Frame "Frame" (2TYO-1) 280×115
+          Text "최우선 매수호가" (2TYS-1) 223×18 "최우선 매수호가"
+          Frame "Frame" (2TYP-1) 223×30
+            Text "150,840" (2TYR-1) 101×30 "150,840"
+            Text "4,180주" (2TYQ-1) 52×16 "4,180주"
+        Frame "Frame" (2TYG-1) 490×115
+          Frame "Frame" (2TYL-1) 433×18
+            Text "매수비율" (2TYN-1) 48×18 "매수비율"
+            Text "53.0%" (2TYM-1) 36×18 "53.0%"
+          Frame "Frame" (2TYI-1) 433×8
+            Rectangle "Rectangle" (2TYK-1) 204×8
+            Rectangle "Rectangle" (2TYJ-1) 229×8
+          Text "10단 총잔량 81,160주 · 09…" (2TYH-1) 433×17 "10단 총잔량 81,160주 · 09:42:21"
+          Frame "Frame" (2WMW-0) 433×14
+            Text "호가 건수" (2WMX-0) 48×14 "호가 건수"
+            Text "매도 336 · 매수 324" (2WMY-0) 117×14 "매도 336 · 매수 324"
+          Frame "Frame" (2WMZ-0) 433×14
+            Text "시간외 대기" (2WN0-0) 59×14 "시간외 대기"
+            Text "매도 13,820 · 매수 9,760" (2WN1-0) 150×14 "매도 13,820 · 매수 9,760"
+      Frame "Order Book Workspace" (2TS7-1) 1360×594
+        Frame "Five Step Ladder" (2TU5-1) 880×594
+          Frame "Ladder Column Header" (2TY8-1) 879×42
+            Text "호가" (2TYD-1) 150×18 "호가"
+            Text "등락" (2TYC-1) 120×18 "등락"
+            Text "잔량" (2TYB-1) 160×18 "잔량"
+            Frame "Frame" (2TY9-1) 401×18
+              Text "잔량 분포" (2TYA-1) 373×18 "잔량 분포"
+          Frame "매도 5" (2TX2-1) 879×23
+            Text "150,890" (2TX7-1) 150×17 "150,890"
+            Text "+40" (2TX6-1) 120×17 "+40"
+            Text "2,940" (2TX5-1) 160×17 "2,940"
+            Frame "Frame" (2TX3-1) 401×7
+              Rectangle "Rectangle" (2TX4-1) 168×7
+          Frame "매도 4" (2TWV-1) 879×23
+            Text "150,880" (2TX0-1) 150×17 "150,880"
+            Text "+30" (2TWZ-1) 120×17 "+30"
+            Text "3,610" (2TWY-1) 160×17 "3,610"
+            Frame "Frame" (2TWW-1) 401×7
+              Rectangle "Rectangle" (2TWX-1) 205×7
+          Frame "매도 3" (2TWO-1) 879×23
+            Text "150,870" (2TWT-1) 150×17 "150,870"
+            Text "+20" (2TWS-1) 120×17 "+20"
+            Text "6,280" (2TWR-1) 160×17 "6,280"
+            Frame "Frame" (2TWP-1) 401×7
+              Rectangle "Rectangle" (2TWQ-1) 358×7
+          Frame "매도 2" (2TWH-1) 879×23
+            Text "150,860" (2TWM-1) 150×17 "150,860"
+            Text "+10" (2TWL-1) 120×17 "+10"
+            Text "4,770" (2TWK-1) 160×17 "4,770"
+            Frame "Frame" (2TWI-1) 401×7
+              Rectangle "Rectangle" (2TWJ-1) 272×7
+          Frame "매도 1" (2TWA-1) 879×23
+            Text "150,850" (2TWF-1) 150×17 "150,850"
+            Text "0" (2TWE-1) 120×17 "0"
+            Text "3,420" (2TWD-1) 160×17 "3,420"
+            Frame "Frame" (2TWB-1) 401×7
+              Rectangle "Rectangle" (2TWC-1) 194×7
+          Frame "Current Price Divider" (2TW4-1) 879×52
+            Frame "Frame" (2TW6-1) 268×28
+              Text "현재가" (2TW9-1) 39×16 "현재가"
+              Text "150,850" (2TW8-1) 89×28 "150,850"
+              Text "▲ 1,850 · +1.24%" (2TW7-1) 120×16 "▲ 1,850 · +1.24%"
+            Text "체결강도 112.6" (2TW5-1) 92×18 "체결강도 112.6"
+          Frame "매수 1" (2TVX-1) 879×23
+            Text "150,840" (2TW2-1) 150×17 "150,840"
+            Text "−10" (2TW1-1) 120×17 "−10"
+            Text "4,180" (2TW0-1) 160×17 "4,180"
+            Frame "Frame" (2TVY-1) 401×7
+              Rectangle "Rectangle" (2TVZ-1) 239×7
+          Frame "매수 2" (2TVQ-1) 879×23
+            Text "150,830" (2TVV-1) 150×17 "150,830"
+            Text "−20" (2TVU-1) 120×17 "−20"
+            Text "5,760" (2TVT-1) 160×17 "5,760"
+            Frame "Frame" (2TVR-1) 401×7
+              Rectangle "Rectangle" (2TVS-1) 328×7
+          Frame "매수 3" (2TVJ-1) 879×23
+            Text "150,820" (2TVO-1) 150×17 "150,820"
+            Text "−30" (2TVN-1) 120×17 "−30"
+            Text "3,230" (2TVM-1) 160×17 "3,230"
+            Frame "Frame" (2TVK-1) 401×7
+              Rectangle "Rectangle" (2TVL-1) 183×7
+          Frame "매수 4" (2TVC-1) 879×23
+            Text "150,810" (2TVH-1) 150×17 "150,810"
+            Text "−40" (2TVG-1) 120×17 "−40"
+            Text "6,540" (2TVF-1) 160×17 "6,540"
+            Frame "Frame" (2TVD-1) 401×7
+              Rectangle "Rectangle" (2TVE-1) 373×7
+          Frame "매수 5" (2TV5-1) 879×23
+            Text "150,800" (2TVA-1) 150×17 "150,800"
+            Text "−50" (2TV9-1) 120×17 "−50"
+            Text "4,920" (2TV8-1) 160×17 "4,920"
+            Frame "Frame" (2TV6-1) 401×7
+              Rectangle "Rectangle" (2TV7-1) 280×7
+          Frame "Ladder Totals Band" (33L5-0) 879×253
+            Frame "호가 총괄" (33L6-0) 831×20
+              Text "호가 총괄" (33L7-0) 61×20 "호가 총괄"
+              Text "매수비율 53.0%" (33L8-0) 99×18 "매수비율 53.0%"
+            Frame "매도 합" (33L9-0) 831×34
+              Text "매도 총잔량" (33LA-0) 150×17 "매도 총잔량"
+              Frame "매도 합 값" (33LB-0) 160×34
+                Text "38,160" (33LC-0) 47×17 "38,160"
+                Text "직전대비 +2,140" (33LD-0) 99×16 "직전대비 +2,140"
+              Frame "Frame" (33LE-0) 521×14
+                Rectangle "Rectangle" (33LF-0) 232×10
+            Frame "매수 합" (33LG-0) 831×34
+              Text "매수 총잔량" (33LH-0) 150×17 "매수 총잔량"
+              Frame "매수 합 값" (33LI-0) 160×34
+                Text "43,000" (33LJ-0) 47×17 "43,000"
+                Text "직전대비 −1,380" (33LK-0) 99×16 "직전대비 −1,380"
+              Frame "Frame" (33LL-0) 521×14
+                Rectangle "Rectangle" (33LM-0) 261×10
+            Frame "시간외 매도 대기" (33LN-0) 831×34
+              Text "시간외 매도 대기" (33LO-0) 150×17 "시간외 매도 대기"
+              Frame "시간외 매도 대기 값" (33LP-0) 160×34
+                Text "13,820" (33LQ-0) 47×17 "13,820"
+                Text "직전대비 +640" (33LR-0) 84×16 "직전대비 +640"
+              Rectangle "Rectangle" (33LS-0) 521×0
+            Frame "시간외 매수 대기" (33LT-0) 831×34
+              Text "시간외 매수 대기" (33LU-0) 150×17 "시간외 매수 대기"
+              Frame "시간외 매수 대기 값" (33LV-0) 160×34
+                Text "9,760" (33LW-0) 39×17 "9,760"
+                Text "직전대비 −210" (33LX-0) 84×16 "직전대비 −210"
+              Rectangle "Rectangle" (33LY-0) 521×0
+        Frame "Trade Flow Panel" (2TS8-1) 480×594
+          Frame "Trade Panel Header" (2TU0-1) 480×58
+            Text "실시간 체결" (2TU4-1) 86×22 "실시간 체결"
+            Frame "Frame" (2TU1-1) 95×18
+              Text "체결" (2TU3-1) 24×18 "체결"
+              Text "잔량 추이" (2TU2-1) 53×18 "잔량 추이"
+          Frame "Trade Strength Summary" (3JJC-0) 480×74
+            Frame "Frame" (3JJD-0) 72×51
+              Text "체결강도" (3JJE-0) 72×18 "체결강도"
+              Text "112.6" (3JJF-0) 72×30 "112.6"
+            Frame "Frame" (3JJG-0) 110×42
+              Text "최근 1분" (3JJH-0) 47×18 "최근 1분"
+              Text "매수 +18,420주" (3JJI-0) 110×20 "매수 +18,420주"
+          Frame "Trade Column Header" (3JJK-0) 480×30
+            Text "시각" (3JJL-0) 70×16 "시각"
+            Text "체결가" (3JJM-0) 92×16 "체결가"
+            Text "전일대비" (3JJN-0) 82×16 "전일대비"
+            Text "체결량" (3JJO-0) 74×16 "체결량"
+            Text "구분" (3JJP-0) 54×16 "구분"
+            Text "체결강도" (3JJQ-0) 60×16 "체결강도"
+          Frame "Frame" (3JQP-0) 480×32
+            Text "09:42:21" (3JQQ-0) 70×18 "09:42:21"
+            Text "150,850" (3JQR-0) 92×18 "150,850"
+            Text "+1,850" (3JQS-0) 82×18 "+1,850"
+            Text "420" (3JQT-0) 74×18 "420"
+            Frame "Frame" (3JQU-0) 54×18
+              Frame "Frame" (3JQV-0) 38×18
+                Text "매수" (3JQW-0) 24×16 "매수"
+            Text "112.6" (3JQX-0) 60×18 "112.6"
+          Frame "Frame" (3JQY-0) 480×32
+            Text "09:42:20" (3JQZ-0) 70×18 "09:42:20"
+            Text "150,840" (3JR0-0) 92×18 "150,840"
+            Text "+1,840" (3JR1-0) 82×18 "+1,840"
+            Text "85" (3JR2-0) 74×18 "85"
+            Frame "Frame" (3JR3-0) 54×18
+              Frame "Frame" (3JR4-0) 38×18
+                Text "매도" (3JR5-0) 24×16 "매도"
+            Text "112.5" (3JR6-0) 60×18 "112.5"
+          Frame "Frame" (3JR7-0) 480×32
+            Text "09:42:19" (3JR8-0) 70×18 "09:42:19"
+            Text "150,850" (3JR9-0) 92×18 "150,850"
+            Text "+1,850" (3JRA-0) 82×18 "+1,850"
+            Text "1,120" (3JRB-0) 74×18 "1,120"
+            Frame "Frame" (3JRC-0) 54×18
+              Frame "Frame" (3JRD-0) 38×18
+                Text "매수" (3JRE-0) 24×16 "매수"
+            Text "112.5" (3JRF-0) 60×18 "112.5"
+          Frame "Frame" (3JRG-0) 480×32
+            Text "09:42:18" (3JRH-0) 70×18 "09:42:18"
+            Text "150,850" (3JRI-0) 92×18 "150,850"
+            Text "+1,850" (3JRJ-0) 82×18 "+1,850"
+            Text "340" (3JRK-0) 74×18 "340"
+            Frame "Frame" (3JRL-0) 54×18
+              Frame "Frame" (3JRM-0) 38×18
+                Text "매수" (3JRN-0) 24×16 "매수"
+            Text "112.4" (3JRO-0) 60×18 "112.4"
+          Frame "Frame" (3JRP-0) 480×32
+            Text "09:42:17" (3JRQ-0) 70×18 "09:42:17"
+            Text "150,840" (3JRR-0) 92×18 "150,840"
+            Text "+1,840" (3JRS-0) 82×18 "+1,840"
+            Text "210" (3JRT-0) 74×18 "210"
+            Frame "Frame" (3JRU-0) 54×18
+              Frame "Frame" (3JRV-0) 38×18
+                Text "매도" (3JRW-0) 24×16 "매도"
+            Text "112.4" (3JRX-0) 60×18 "112.4"
+          Frame "Frame" (3JRY-0) 480×32
+            Text "09:42:16" (3JRZ-0) 70×18 "09:42:16"
+            Text "150,850" (3JS0-0) 92×18 "150,850"
+            Text "+1,850" (3JS1-0) 82×18 "+1,850"
+            Text "760" (3JS2-0) 74×18 "760"
+            Frame "Frame" (3JS3-0) 54×18
+              Frame "Frame" (3JS4-0) 38×18
+                Text "매수" (3JS5-0) 24×16 "매수"
+            Text "112.3" (3JS6-0) 60×18 "112.3"
+          Frame "Frame" (3JS7-0) 480×32
+            Text "09:42:15" (3JS8-0) 70×18 "09:42:15"
+            Text "150,840" (3JS9-0) 92×18 "150,840"
+            Text "+1,840" (3JSA-0) 82×18 "+1,840"
+            Text "130" (3JSB-0) 74×18 "130"
+            Frame "Frame" (3JSC-0) 54×18
+              Frame "Frame" (3JSD-0) 38×18
+                Text "매도" (3JSE-0) 24×16 "매도"
+            Text "112.3" (3JSF-0) 60×18 "112.3"
+          Frame "Frame" (3JSG-0) 480×32
+            Text "09:42:14" (3JSH-0) 70×18 "09:42:14"
+            Text "150,850" (3JSI-0) 92×18 "150,850"
+            Text "+1,850" (3JSJ-0) 82×18 "+1,850"
+            Text "540" (3JSK-0) 74×18 "540"
+            Frame "Frame" (3JSL-0) 54×18
+              Frame "Frame" (3JSM-0) 38×18
+                Text "매수" (3JSN-0) 24×16 "매수"
+            Text "112.2" (3JSO-0) 60×18 "112.2"
+          Frame "Frame" (3JSP-0) 480×24
+            Text "8 / 20건 · 최신순" (3JSQ-0) 104×14 "8 / 20건 · 최신순"
+          Frame "호가 잔량" (3JSS-0) 480×152
+            Frame "Frame" (3JST-0) 432×22
+              Text "호가 잔량" (3JSU-0) 66×22 "호가 잔량"
+              Text "실시간" (3JSV-0) 39×16 "실시간"
+            Frame "Frame" (3JSW-0) 432×10
+              Rectangle "Rectangle" (3JSX-0) 203×10
+              Rectangle "Rectangle" (3JSY-0) 229×10
+            Frame "Frame" (3JSZ-0) 432×18
+              Text "매도 38,160주" (3JT0-0) 83×18 "매도 38,160주"
+              Text "매수 43,000주" (3JT1-0) 83×18 "매수 43,000주"
+            Text "최우선 매도 150,850원 · 매수 150,840원" (3JT2-0) 432×18 "최우선 매도 150,850원 · 매수 150,840원"
+      Frame "Order Book Footer" (2TRZ-1) 1360×64
+        Frame "Frame" (2TS4-1) 143×20
+          Rectangle "Rectangle" (2TS6-1) 7×7
+          Text "장중 실시간 · 갱신 중" (2TS5-1) 126×20 "장중 실시간 · 갱신 중"
+        Frame "Frame" (2TS0-1) 405×18
+          Text "상한 193,700" (2TS3-1) 71×18 "상한 193,700"
+          Text "하한 104,300" (2TS2-1) 71×18 "하한 104,300"
+          Text "기준가 149,000" (2TS1-1) 83×18 "기준가 149,000"
+          Text "LP 매도 0 · 매수 0" (2WN5-0) 120×18 "LP 매도 0 · 매수 0"

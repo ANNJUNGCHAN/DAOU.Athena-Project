@@ -1,0 +1,222 @@
+{
+ "board": "3ODO-0",
+ "fields": [
+  {
+   "mapping_id": "detail:kt50020:gold_account_summary",
+   "f": "net_entr",
+   "kor": "추정예수금",
+   "layer": "직접",
+   "where": "계좌 요약 밴드 1행 1칸 추정예수금 4,820,000원"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_account_summary",
+   "f": "net_amt",
+   "kor": "예탁자산평가액",
+   "layer": "직접",
+   "where": "계좌 요약 밴드 1행 2칸 예탁자산평가액 20,870,000원"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_account_summary",
+   "f": "tot_book_amt2",
+   "kor": "총매입금액",
+   "layer": "직접",
+   "where": "계좌 요약 밴드 1행 3칸 총매입금액 15,312,000원"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_account_summary",
+   "f": "tot_dep_amt",
+   "kor": "추정예탁자산",
+   "layer": "직접",
+   "where": "계좌 요약 밴드 1행 4칸 추정예탁자산 20,870,000원"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_account_summary",
+   "f": "paym_alowa",
+   "kor": "출금가능금액",
+   "layer": "직접",
+   "where": "계좌 요약 밴드 2행 1칸 출금가능금액 4,820,000원"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_account_summary",
+   "f": "pl_amt",
+   "kor": "실현손익",
+   "layer": "직접",
+   "where": "계좌 요약 밴드 2행 2칸 실현손익 0원"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "where": "잔고 표 종목 셀 2줄 04020000"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": "직접",
+   "where": "잔고 표 종목 열 1줄 금 99.99K 1g"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "est_lspft",
+   "kor": "손익금액",
+   "layer": "직접",
+   "where": "잔고 표 손익금액 열 +738,000원 · 헤더 KPI 2칸 동일값"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "book_amt2",
+   "kor": "매입금액",
+   "layer": "직접",
+   "where": "잔고 표 매입금액 열 15,312,000원"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "pl_prch_prc",
+   "kor": "손익분기매입가",
+   "layer": "병기",
+   "where": "잔고 표 평균매입가 셀 2줄 손익분기 122,990"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "qty",
+   "kor": "결제잔고",
+   "layer": "병기",
+   "where": "잔고 표 보유수량 셀 2줄 결제 120g"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "sell_qty",
+   "kor": "매도수량",
+   "layer": "직접",
+   "where": "잔고 표 매도수량 열 0g"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "deal_no",
+   "kor": "거래번호",
+   "layer": "직접",
+   "where": "레일 거래 식별 블록 거래번호 행 0000000031"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "rmrk_nm",
+   "kor": "적요명",
+   "layer": "직접",
+   "where": "거래내역 표 적요명 열 금현물 매수 3행"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "exct_amt",
+   "kor": "정산금액",
+   "layer": "직접",
+   "where": "거래내역 표 정산금액 열 643,284원"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "dly_sum",
+   "kor": "연체합",
+   "layer": "직접",
+   "where": "레일 미수·변제 블록 연체합 행 0원"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "entra_remn",
+   "kor": "예수금잔고",
+   "layer": "직접",
+   "where": "거래내역 표 예수금잔고 열 4,820,000 · 5,463,284 · 7,958,264원"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "mdia_nm",
+   "kor": "메체구분명",
+   "layer": "병기",
+   "where": "거래내역 표 처리 셀 2줄 HTS · 레일 거래 식별 매체구분 행"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "orig_deal_no",
+   "kor": "원거래번호",
+   "layer": "직접",
+   "where": "레일 거래 식별 블록 원거래번호 행 해당 없음"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": "직접",
+   "where": "레일 종목·정산 블록 종목명 행 금 99.99K 1g"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "uv_exrt",
+   "kor": "거래단가",
+   "layer": "병기",
+   "where": "거래내역 표 수량·거래단가 셀 2줄 128,400원/g"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "uncl_ocr",
+   "kor": "미수(원/g)",
+   "layer": "직접",
+   "where": "레일 미수·변제 블록 미수 행 0원/g"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "rpym_sum",
+   "kor": "변제합",
+   "layer": "직접",
+   "where": "레일 미수·변제 블록 변제합 행 0원"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "proc_time",
+   "kor": "처리시간",
+   "layer": "직접",
+   "where": "거래내역 표 처리 열 09:21:07"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "rcpy_no",
+   "kor": "출납번호",
+   "layer": "직접",
+   "where": "레일 거래 식별 블록 출납번호 행 0000117"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "직접",
+   "where": "레일 종목·정산 블록 종목코드 행 04020000"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "tax_tot_amt",
+   "kor": "소득/주민세",
+   "layer": "직접",
+   "where": "레일 종목·정산 블록 소득·주민세 행 0원"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "cntr_dt",
+   "kor": "체결일",
+   "layer": "직접",
+   "where": "거래내역 표 체결일 열 09/01 · 08/31 · 08/26"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "proc_brch_nm",
+   "kor": "처리점",
+   "layer": "직접",
+   "where": "레일 거래 식별 블록 처리자·처리점 행 영업부 뒷값"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "prcsr",
+   "kor": "처리자",
+   "layer": "직접",
+   "where": "레일 거래 식별 블록 처리자·처리점 행 시스템 앞값"
+  }
+ ]
+}

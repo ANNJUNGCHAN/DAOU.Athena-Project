@@ -1,0 +1,654 @@
+{
+  "board_id": "fixture-quote",
+  "card_id": "CC-03",
+  "width_px": 1440,
+  "height_px": 720,
+  "operation_refs": [
+    "base:ka10015"
+  ],
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "density": {
+    "table_columns": 8,
+    "kpi_cells": 6,
+    "rail_blocks": 1,
+    "rail_rows_max": 5,
+    "rows_max": 1
+  },
+  "column_priority": [
+    "일자",
+    "종가",
+    "거래량",
+    "시가",
+    "고가",
+    "저가",
+    "거래대금",
+    "외국인"
+  ],
+  "section_titles_ko": {
+    "bs-primary": "일별 시세",
+    "bs-rail": "증거금·담보"
+  },
+  "slots": [
+    {
+      "slot_id": "header.name",
+      "node": "header.name",
+      "layer": "직접",
+      "region": "bs-header",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "삼성전자"
+    },
+    {
+      "slot_id": "header.code",
+      "node": "header.code",
+      "layer": "병기",
+      "region": "bs-header",
+      "format": {
+        "kind": "text"
+      },
+      "paired_with": "header.name",
+      "paper_text": "005930"
+    },
+    {
+      "slot_id": "header.price",
+      "node": "header.price",
+      "layer": "직접",
+      "region": "bs-header",
+      "format": {
+        "kind": "number"
+      },
+      "paper_text": "150,850"
+    },
+    {
+      "slot_id": "header.change",
+      "node": "header.change",
+      "layer": "병기",
+      "region": "bs-header",
+      "format": {
+        "kind": "number",
+        "sign": true,
+        "tone": "signed"
+      },
+      "paired_with": "header.price",
+      "paper_text": "+1,850"
+    },
+    {
+      "slot_id": "header.change_rate",
+      "node": "header.change_rate",
+      "layer": "병기",
+      "region": "bs-header",
+      "format": {
+        "kind": "percent",
+        "sign": true,
+        "precision": 2,
+        "tone": "signed"
+      },
+      "paired_with": "header.price",
+      "paper_text": "+1.24%"
+    },
+    {
+      "slot_id": "header.session",
+      "node": "header.session",
+      "layer": "직접",
+      "region": "bs-header",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "장중"
+    },
+    {
+      "slot_id": "header.stamp",
+      "node": "header.stamp",
+      "layer": "직접",
+      "region": "bs-header",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "15:12:04"
+    },
+    {
+      "slot_id": "strip.tab1",
+      "node": "strip.tab1",
+      "layer": "직접",
+      "region": "bs-strip",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "현재시세"
+    },
+    {
+      "slot_id": "strip.tab2",
+      "node": "strip.tab2",
+      "layer": "직접",
+      "region": "bs-strip",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "일별"
+    },
+    {
+      "slot_id": "strip.tab3",
+      "node": "strip.tab3",
+      "layer": "직접",
+      "region": "bs-strip",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "투자자"
+    },
+    {
+      "slot_id": "strip.tab4",
+      "node": "strip.tab4",
+      "layer": "직접",
+      "region": "bs-strip",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "거래원"
+    },
+    {
+      "slot_id": "strip.tab5",
+      "node": "strip.tab5",
+      "layer": "직접",
+      "region": "bs-strip",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "공시"
+    },
+    {
+      "slot_id": "kpi.1.label",
+      "node": "kpi.1.label",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "시가총액"
+    },
+    {
+      "slot_id": "kpi.1.value",
+      "node": "kpi.1.value",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "korean"
+      },
+      "paper_text": "900조 1,240억"
+    },
+    {
+      "slot_id": "kpi.2.label",
+      "node": "kpi.2.label",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "거래량"
+    },
+    {
+      "slot_id": "kpi.2.value",
+      "node": "kpi.2.value",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "korean"
+      },
+      "paper_text": "1,284만"
+    },
+    {
+      "slot_id": "kpi.3.label",
+      "node": "kpi.3.label",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "거래대금"
+    },
+    {
+      "slot_id": "kpi.3.value",
+      "node": "kpi.3.value",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "korean"
+      },
+      "paper_text": "1조 9,340억"
+    },
+    {
+      "slot_id": "kpi.4.label",
+      "node": "kpi.4.label",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "PER"
+    },
+    {
+      "slot_id": "kpi.4.value",
+      "node": "kpi.4.value",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "number",
+        "precision": 2
+      },
+      "paper_text": "14.20"
+    },
+    {
+      "slot_id": "kpi.5.label",
+      "node": "kpi.5.label",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "PBR"
+    },
+    {
+      "slot_id": "kpi.5.value",
+      "node": "kpi.5.value",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "number",
+        "precision": 2
+      },
+      "paper_text": "1.38"
+    },
+    {
+      "slot_id": "kpi.6.label",
+      "node": "kpi.6.label",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "체결강도"
+    },
+    {
+      "slot_id": "kpi.6.value",
+      "node": "kpi.6.value",
+      "layer": "직접",
+      "region": "bs-kpi",
+      "format": {
+        "kind": "number",
+        "precision": 2
+      },
+      "paper_text": "112.40"
+    },
+    {
+      "slot_id": "th.date",
+      "node": "th.date",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "일자"
+    },
+    {
+      "slot_id": "th.close",
+      "node": "th.close",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "종가"
+    },
+    {
+      "slot_id": "th.volume",
+      "node": "th.volume",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "거래량"
+    },
+    {
+      "slot_id": "th.open",
+      "node": "th.open",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "시가"
+    },
+    {
+      "slot_id": "th.high",
+      "node": "th.high",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "고가"
+    },
+    {
+      "slot_id": "th.low",
+      "node": "th.low",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "저가"
+    },
+    {
+      "slot_id": "th.value",
+      "node": "th.value",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "거래대금"
+    },
+    {
+      "slot_id": "th.foreign",
+      "node": "th.foreign",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "외국인"
+    },
+    {
+      "slot_id": "r1.date",
+      "node": "r1.date",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "date"
+      },
+      "paper_text": "2026-09-02"
+    },
+    {
+      "slot_id": "r1.close",
+      "node": "r1.close",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "number"
+      },
+      "paper_text": "150,850"
+    },
+    {
+      "slot_id": "r1.volume",
+      "node": "r1.volume",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "number"
+      },
+      "paper_text": "12,840,120"
+    },
+    {
+      "slot_id": "r1.open",
+      "node": "r1.open",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "number"
+      },
+      "paper_text": "149,900"
+    },
+    {
+      "slot_id": "r1.high",
+      "node": "r1.high",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "number"
+      },
+      "paper_text": "152,000"
+    },
+    {
+      "slot_id": "r1.low",
+      "node": "r1.low",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "number"
+      },
+      "paper_text": "149,500"
+    },
+    {
+      "slot_id": "r1.value",
+      "node": "r1.value",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "korean"
+      },
+      "paper_text": "1조 9,340억"
+    },
+    {
+      "slot_id": "r1.foreign",
+      "node": "r1.foreign",
+      "layer": "직접",
+      "region": "bs-table",
+      "format": {
+        "kind": "number",
+        "sign": true,
+        "tone": "signed"
+      },
+      "paper_text": "+182,400"
+    },
+    {
+      "slot_id": "r1.open_paired",
+      "node": "r1.open_paired",
+      "layer": "병기",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paired_with": "r1.open",
+      "paper_text": "시 149,900"
+    },
+    {
+      "slot_id": "r1.hl_paired",
+      "node": "r1.hl_paired",
+      "layer": "병기",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paired_with": "r1.high",
+      "paper_text": "고 152,000 · 저 149,500"
+    },
+    {
+      "slot_id": "r1.value_paired",
+      "node": "r1.value_paired",
+      "layer": "병기",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paired_with": "r1.value",
+      "paper_text": "1조 9,340억"
+    },
+    {
+      "slot_id": "r1.foreign_paired",
+      "node": "r1.foreign_paired",
+      "layer": "병기",
+      "region": "bs-table",
+      "format": {
+        "kind": "text"
+      },
+      "paired_with": "r1.foreign",
+      "paper_text": "외국인 +182,400"
+    },
+    {
+      "slot_id": "rail.1.title",
+      "node": "rail.1.title",
+      "layer": "직접",
+      "region": "bs-rail",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "증거금·담보"
+    },
+    {
+      "slot_id": "rail.1.r1.label",
+      "node": "rail.1.r1.label",
+      "layer": "직접",
+      "region": "bs-rail",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "주문가능금액"
+    },
+    {
+      "slot_id": "rail.1.r1.value",
+      "node": "rail.1.r1.value",
+      "layer": "직접",
+      "region": "bs-rail",
+      "format": {
+        "kind": "korean"
+      },
+      "paper_text": "4,182만 6,300"
+    },
+    {
+      "slot_id": "rail.1.r2.label",
+      "node": "rail.1.r2.label",
+      "layer": "직접",
+      "region": "bs-rail",
+      "format": {
+        "kind": "text"
+      },
+      "collapse_group": {
+        "group_id": "rail.1.zero",
+        "item": "rail.1.r2",
+        "rollup_slot": "rail.1.rollup",
+        "rule": "H1",
+        "label": "신용융자"
+      },
+      "paper_text": "신용융자"
+    },
+    {
+      "slot_id": "rail.1.r2.value",
+      "node": "rail.1.r2.value",
+      "layer": "직접",
+      "region": "bs-rail",
+      "format": {
+        "kind": "number"
+      },
+      "collapse_group": {
+        "group_id": "rail.1.zero",
+        "item": "rail.1.r2",
+        "rollup_slot": "rail.1.rollup",
+        "rule": "H1"
+      },
+      "paper_text": "0"
+    },
+    {
+      "slot_id": "rail.1.r3.label",
+      "node": "rail.1.r3.label",
+      "layer": "직접",
+      "region": "bs-rail",
+      "format": {
+        "kind": "text"
+      },
+      "collapse_group": {
+        "group_id": "rail.1.zero",
+        "item": "rail.1.r3",
+        "rollup_slot": "rail.1.rollup",
+        "rule": "H1",
+        "label": "현금미수"
+      },
+      "paper_text": "현금미수"
+    },
+    {
+      "slot_id": "rail.1.r3.value",
+      "node": "rail.1.r3.value",
+      "layer": "직접",
+      "region": "bs-rail",
+      "format": {
+        "kind": "number"
+      },
+      "collapse_group": {
+        "group_id": "rail.1.zero",
+        "item": "rail.1.r3",
+        "rollup_slot": "rail.1.rollup",
+        "rule": "H1"
+      },
+      "paper_text": "0"
+    },
+    {
+      "slot_id": "rail.1.r4.label",
+      "node": "rail.1.r4.label",
+      "layer": "직접",
+      "region": "bs-rail",
+      "format": {
+        "kind": "text"
+      },
+      "collapse_group": {
+        "group_id": "rail.1.zero",
+        "item": "rail.1.r4",
+        "rollup_slot": "rail.1.rollup",
+        "rule": "H1",
+        "label": "대출"
+      },
+      "paper_text": "대출"
+    },
+    {
+      "slot_id": "rail.1.r4.value",
+      "node": "rail.1.r4.value",
+      "layer": "직접",
+      "region": "bs-rail",
+      "format": {
+        "kind": "number"
+      },
+      "collapse_group": {
+        "group_id": "rail.1.zero",
+        "item": "rail.1.r4",
+        "rollup_slot": "rail.1.rollup",
+        "rule": "H1"
+      },
+      "paper_text": "0"
+    },
+    {
+      "slot_id": "rail.1.rollup",
+      "node": "rail.1.rollup",
+      "layer": "펼침",
+      "region": "bs-rail",
+      "format": {
+        "kind": "rollup"
+      },
+      "expanded_board": "3UTA-0",
+      "paper_text": "신용융자·현금미수·대출 — 0원 3항목 ▸"
+    },
+    {
+      "slot_id": "footer.state",
+      "node": "footer.state",
+      "layer": "직접",
+      "region": "bs-footer",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "실시간 연결됨"
+    },
+    {
+      "slot_id": "footer.source",
+      "node": "footer.source",
+      "layer": "직접",
+      "region": "bs-footer",
+      "format": {
+        "kind": "text"
+      },
+      "paper_text": "KRX"
+    }
+  ]
+}

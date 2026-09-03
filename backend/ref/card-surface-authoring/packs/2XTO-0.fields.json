@@ -1,0 +1,82 @@
+{
+ "board": "2XTO-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10020",
+   "f": "bid_req_upper",
+   "kor": "호가잔량상위",
+   "layer": null,
+   "where": "'호가잔량 상위' 순위 테이블"
+  },
+  {
+   "mapping_id": "base:ka10020",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "'종목' 컬럼 하단 005930"
+  },
+  {
+   "mapping_id": "base:ka10020",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'종목' 컬럼 삼성전자"
+  },
+  {
+   "mapping_id": "base:ka10020",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "'현재가' 컬럼 150,850"
+  },
+  {
+   "mapping_id": "base:ka10020",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률 색/± 부호"
+  },
+  {
+   "mapping_id": "base:ka10020",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "우패널 '+1,850 · +1.24%'의 +1,850"
+  },
+  {
+   "mapping_id": "base:ka10020",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "where": "순위표 거래량 열 주값 1,420만주"
+  },
+  {
+   "mapping_id": "base:ka10020",
+   "f": "tot_sel_req",
+   "kor": "총매도잔량",
+   "layer": "병기",
+   "where": "'총잔량' 셀 둘째 줄 '매도 8.2만'"
+  },
+  {
+   "mapping_id": "base:ka10020",
+   "f": "tot_buy_req",
+   "kor": "총매수잔량",
+   "layer": null,
+   "where": "'매수잔량(만주)' 컬럼 412.8"
+  },
+  {
+   "mapping_id": "base:ka10020",
+   "f": "netprps_req",
+   "kor": "순매수잔량",
+   "layer": "직접",
+   "where": "'순매수 잔량' 열 주값 '+3.2만'"
+  },
+  {
+   "mapping_id": "base:ka10020",
+   "f": "buy_rt",
+   "kor": "매수비율",
+   "layer": "병기",
+   "where": "'순매수 잔량' 셀 둘째 줄 '매수비율 58.2%'"
+  }
+ ]
+}

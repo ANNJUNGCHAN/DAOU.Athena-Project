@@ -1,0 +1,14 @@
+{
+  "board_id": "3JZ3-0",
+  "name": "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+  "card_id": "CC-04",
+  "width": 1440,
+  "height": 1014,
+  "state": {
+    "kind": "expand",
+    "parent_board": "13BC-2",
+    "control": null,
+    "control_text": "호가 잔량"
+  },
+  "saved_at": "2026-09-02T11:18:02Z"
+}

@@ -1,0 +1,102 @@
+{
+ "board_id": "31UD-0",
+ "card_id": "CC-03",
+ "name": "CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+ "operation_refs": [
+  "base:ka10055"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10055",
+   "f": "tdy_pred_cntr_qty",
+   "kor": "당일전일체결량",
+   "layer": null,
+   "board": "31UD-0",
+   "where": "당일·전일 체결량 순위 표 본체",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10055",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": "직접",
+   "board": "31UD-0",
+   "where": "표 '체결시간' 열 값 '09:42:11'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10055",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "board": "31UD-0",
+   "where": "현재가 컬럼 197,400(최종 체결가)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10055",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "31UD-0",
+   "where": "등락률의 ± 부호와 상승/하락 색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10055",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "31UD-0",
+   "where": "표 '현재가' 셀 둘째 줄 '+7,900 · +4.18%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10055",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "31UD-0",
+   "where": "등락률 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10055",
+   "f": "cntr_qty",
+   "kor": "체결량",
+   "layer": "직접",
+   "board": "31UD-0",
+   "where": "표 '당일 체결량' 셀 첫째 줄 '510만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10055",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": null,
+   "board": "31UD-0",
+   "where": "당일 체결량 컬럼 510만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10055",
+   "f": "acc_trde_prica",
+   "kor": "누적거래대금",
+   "layer": "직접",
+   "board": "31UD-0",
+   "where": "표 '누적거래대금' 열 값 '1조 67억'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 9
+}

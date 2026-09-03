@@ -1,0 +1,12 @@
+{
+  "root": "2RBQ-1",
+  "regions": [
+    { "node_id": "2RG7-1", "name": "Instrument Header", "role": "header", "depth": 1 },
+    { "node_id": "2RG8-1", "name": "Frame (탭 스트립)", "role": "strip", "depth": 2 },
+    { "node_id": "2RFN-1", "name": "Quote and Valuation Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "2RBU-1", "name": "Chart Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "2RD0-1", "name": "Corp Info Mount", "role": "primary", "depth": 2 },
+    { "node_id": "2RBV-1", "name": "Instrument Context", "role": "rail", "depth": 2 },
+    { "node_id": "2RBR-1", "name": "Chart Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

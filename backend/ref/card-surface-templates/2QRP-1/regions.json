@@ -1,0 +1,11 @@
+{
+  "root": "2QRQ-1",
+  "regions": [
+    { "node_id": "2QRR-1", "name": "Hoga Header", "role": "header", "depth": 1 },
+    { "node_id": "2QSD-1", "name": "Hoga Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "2QT0-1", "name": "Hoga Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "2QT1-1", "name": "Ladder Panel", "role": "primary", "depth": 2 },
+    { "node_id": "2QT2-1", "name": "Side Panel", "role": "rail", "depth": 2 },
+    { "node_id": "2QT3-1", "name": "Hoga Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

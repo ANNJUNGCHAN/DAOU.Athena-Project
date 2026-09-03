@@ -1,0 +1,712 @@
+{
+ "board": "3JZ3-0",
+ "fields": [
+  {
+   "mapping_id": "base:0D",
+   "f": "81",
+   "kor": "매도호가직전대비1",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 1단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "91",
+   "kor": "매수호가직전대비1",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 1단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "82",
+   "kor": "매도호가직전대비2",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 2단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "92",
+   "kor": "매수호가직전대비2",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 2단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "83",
+   "kor": "매도호가직전대비3",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 3단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "93",
+   "kor": "매수호가직전대비3",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 3단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "84",
+   "kor": "매도호가직전대비4",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 4단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "94",
+   "kor": "매수호가직전대비4",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 4단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "85",
+   "kor": "매도호가직전대비5",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 5단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "95",
+   "kor": "매수호가직전대비5",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 5단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "86",
+   "kor": "매도호가직전대비6",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 6단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "96",
+   "kor": "매수호가직전대비6",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 6단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "87",
+   "kor": "매도호가직전대비7",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 7단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "97",
+   "kor": "매수호가직전대비7",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 7단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "88",
+   "kor": "매도호가직전대비8",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 8단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "98",
+   "kor": "매수호가직전대비8",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 8단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "89",
+   "kor": "매도호가직전대비9",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 9단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "99",
+   "kor": "매수호가직전대비9",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 9단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "90",
+   "kor": "매도호가직전대비10",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 10단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "100",
+   "kor": "매수호가직전대비10",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 10단 행 · 직전대비 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "128",
+   "kor": "순매수잔량",
+   "layer": "직접",
+   "where": "레일 '잔량 균형' 블록 1행 · 순매수 잔량 +4,840주"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "138",
+   "kor": "순매도잔량",
+   "layer": "직접",
+   "where": "레일 '잔량 균형' 블록 2행 · 순매도 잔량 −4,840주"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "139",
+   "kor": "매도비율",
+   "layer": "직접",
+   "where": "레일 '잔량 균형' 블록 3행 · 매도비율 47.0%"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "621",
+   "kor": "LP매도호가수량1",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 1단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "631",
+   "kor": "LP매수호가수량1",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 1단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "622",
+   "kor": "LP매도호가수량2",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 2단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "632",
+   "kor": "LP매수호가수량2",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 2단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "623",
+   "kor": "LP매도호가수량3",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 3단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "633",
+   "kor": "LP매수호가수량3",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 3단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "624",
+   "kor": "LP매도호가수량4",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 4단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "634",
+   "kor": "LP매수호가수량4",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 4단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "625",
+   "kor": "LP매도호가수량5",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 5단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "635",
+   "kor": "LP매수호가수량5",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 5단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "626",
+   "kor": "LP매도호가수량6",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 6단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "636",
+   "kor": "LP매수호가수량6",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 6단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "627",
+   "kor": "LP매도호가수량7",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 7단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "637",
+   "kor": "LP매수호가수량7",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 7단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "628",
+   "kor": "LP매도호가수량8",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 8단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "638",
+   "kor": "LP매수호가수량8",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 8단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "629",
+   "kor": "LP매도호가수량9",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 9단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "639",
+   "kor": "LP매수호가수량9",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 9단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "630",
+   "kor": "LP매도호가수량10",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 10단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "640",
+   "kor": "LP매수호가수량10",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 10단 행 · LP 잔량 열 0"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "299",
+   "kor": "전일거래량대비예상체결율",
+   "layer": "직접",
+   "where": "레일 '잔량 균형' 블록 5행 · 전일 거래량 대비 예상체결 해당 없음"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "216",
+   "kor": "투자자별ticker",
+   "layer": "직접",
+   "where": "푸터 좌측 · '투자자 집계 005930' 종목코드(mono)"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6044",
+   "kor": "KRX 매도호가잔량1",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 1단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6045",
+   "kor": "KRX 매도호가잔량2",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 2단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6046",
+   "kor": "KRX 매도호가잔량3",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 3단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6047",
+   "kor": "KRX 매도호가잔량4",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 4단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6048",
+   "kor": "KRX 매도호가잔량5",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 5단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6049",
+   "kor": "KRX 매도호가잔량6",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 6단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6050",
+   "kor": "KRX 매도호가잔량7",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 7단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6051",
+   "kor": "KRX 매도호가잔량8",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 8단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6052",
+   "kor": "KRX 매도호가잔량9",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 9단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6053",
+   "kor": "KRX 매도호가잔량10",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 10단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6054",
+   "kor": "KRX 매수호가잔량1",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 1단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6055",
+   "kor": "KRX 매수호가잔량2",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 2단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6056",
+   "kor": "KRX 매수호가잔량3",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 3단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6057",
+   "kor": "KRX 매수호가잔량4",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 4단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6058",
+   "kor": "KRX 매수호가잔량5",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 5단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6059",
+   "kor": "KRX 매수호가잔량6",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 6단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6060",
+   "kor": "KRX 매수호가잔량7",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 7단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6061",
+   "kor": "KRX 매수호가잔량8",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 8단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6062",
+   "kor": "KRX 매수호가잔량9",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 9단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6063",
+   "kor": "KRX 매수호가잔량10",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 10단 행 · KRX 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6066",
+   "kor": "NXT 매도호가잔량1",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 1단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6067",
+   "kor": "NXT 매도호가잔량2",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 2단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6068",
+   "kor": "NXT 매도호가잔량3",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 3단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6069",
+   "kor": "NXT 매도호가잔량4",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 4단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6070",
+   "kor": "NXT 매도호가잔량5",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 5단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6071",
+   "kor": "NXT 매도호가잔량6",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 6단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6072",
+   "kor": "NXT 매도호가잔량7",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 7단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6073",
+   "kor": "NXT 매도호가잔량8",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 8단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6074",
+   "kor": "NXT 매도호가잔량9",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 9단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6075",
+   "kor": "NXT 매도호가잔량10",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매도 10단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6076",
+   "kor": "NXT 매수호가잔량1",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 1단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6077",
+   "kor": "NXT 매수호가잔량2",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 2단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6078",
+   "kor": "NXT 매수호가잔량3",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 3단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6079",
+   "kor": "NXT 매수호가잔량4",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 4단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6080",
+   "kor": "NXT 매수호가잔량5",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 5단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6081",
+   "kor": "NXT 매수호가잔량6",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 6단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6082",
+   "kor": "NXT 매수호가잔량7",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 7단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6083",
+   "kor": "NXT 매수호가잔량8",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 8단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6084",
+   "kor": "NXT 매수호가잔량9",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 9단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6085",
+   "kor": "NXT 매수호가잔량10",
+   "layer": "직접",
+   "where": "좌측 단계별 낱값 표 · 매수 10단 행 · NXT 열"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6100",
+   "kor": "KRX 중간가 매도 총잔량 증감",
+   "layer": "병기",
+   "where": "레일 '중간가' 표 · KRX 행 매도 총잔량 셀 둘째 줄 '직전대비 +640'"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6101",
+   "kor": "KRX 중간가 매도 총잔량",
+   "layer": "직접",
+   "where": "레일 '중간가' 표 · KRX 행 매도 총잔량 12,480"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6102",
+   "kor": "KRX 중간가",
+   "layer": "직접",
+   "where": "레일 '중간가' 표 · KRX 행 중간가 150,845"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6103",
+   "kor": "KRX 중간가 매수 총잔량",
+   "layer": "직접",
+   "where": "레일 '중간가' 표 · KRX 행 매수 총잔량 14,220"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6104",
+   "kor": "KRX 중간가 매수 총잔량 증감",
+   "layer": "병기",
+   "where": "레일 '중간가' 표 · KRX 행 매수 총잔량 셀 둘째 줄 '직전대비 −320'"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6105",
+   "kor": "NXT중간가 매도 총잔량 증감",
+   "layer": "병기",
+   "where": "레일 '중간가' 표 · NXT 행 매도 총잔량 셀 둘째 줄 '직전대비 +180'"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6106",
+   "kor": "NXT중간가 매도 총잔량",
+   "layer": "직접",
+   "where": "레일 '중간가' 표 · NXT 행 매도 총잔량 5,340"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6107",
+   "kor": "NXT중간가",
+   "layer": "직접",
+   "where": "레일 '중간가' 표 · NXT 행 중간가 150,840"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6108",
+   "kor": "NXT중간가 매수 총잔량",
+   "layer": "직접",
+   "where": "레일 '중간가' 표 · NXT 행 매수 총잔량 6,110"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6109",
+   "kor": "NXT중간가 매수 총잔량 증감",
+   "layer": "병기",
+   "where": "레일 '중간가' 표 · NXT 행 매수 총잔량 셀 둘째 줄 '직전대비 −140'"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6110",
+   "kor": "KRX중간가대비",
+   "layer": "직접",
+   "where": "레일 '중간가' 표 · KRX 행 대비 1,845"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6111",
+   "kor": "KRX중간가대비 기호",
+   "layer": "직접",
+   "where": "레일 '중간가' 표 · KRX 행 대비 셀 앞 ▲ 글리프"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6112",
+   "kor": "KRX중간가대비등락율",
+   "layer": "병기",
+   "where": "레일 '중간가' 표 · KRX 행 대비 셀 둘째 줄 +1.24%"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6113",
+   "kor": "NXT중간가대비",
+   "layer": "직접",
+   "where": "레일 '중간가' 표 · NXT 행 대비 1,840"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6114",
+   "kor": "NXT중간가대비 기호",
+   "layer": "직접",
+   "where": "레일 '중간가' 표 · NXT 행 대비 셀 앞 ▲ 글리프"
+  },
+  {
+   "mapping_id": "base:0D",
+   "f": "6115",
+   "kor": "NXT중간가대비등락율",
+   "layer": "병기",
+   "where": "레일 '중간가' 표 · NXT 행 대비 셀 둘째 줄 +1.23%"
+  }
+ ]
+}

@@ -1,0 +1,142 @@
+{
+ "board_id": "2XP6-0",
+ "card_id": "CC-06",
+ "name": "CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+ "operation_refs": [
+  "base:ka10029"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10029",
+   "f": "exp_cntr_flu_rt_upper",
+   "kor": "예상체결등락률상위",
+   "layer": null,
+   "board": "2XP6-0",
+   "where": "'예상체결 등락률 상위' 순위 테이블",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2XP6-0",
+   "where": "'종목' 컬럼 하단 종목코드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2XP6-0",
+   "where": "'종목' 컬럼 종목명",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "exp_cntr_pric",
+   "kor": "예상체결가",
+   "layer": "직접",
+   "board": "2XP6-0",
+   "where": "순위표 예상체결가 열 주값 150,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "base_pric",
+   "kor": "기준가",
+   "layer": "병기",
+   "board": "2XP6-0",
+   "where": "예상체결가 셀 둘째 줄 '기준가 149,000'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2XP6-0",
+   "where": "예상 등락률 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2XP6-0",
+   "where": "우패널 '+1,850'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "board": "2XP6-0",
+   "where": "'예상 등락률' 컬럼 +7.82%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "exp_cntr_qty",
+   "kor": "예상체결량",
+   "layer": "직접",
+   "board": "2XP6-0",
+   "where": "순위표 예상체결량 열 42,800주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "sel_req",
+   "kor": "매도잔량",
+   "layer": "직접",
+   "board": "2XP6-0",
+   "where": "'잔량' 열 주값 '매도 8.2만'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "sel_bid",
+   "kor": "매도호가",
+   "layer": "직접",
+   "board": "2XP6-0",
+   "where": "'예상 호가' 열 주값 '매도 150,900'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "buy_bid",
+   "kor": "매수호가",
+   "layer": "병기",
+   "board": "2XP6-0",
+   "where": "'예상 호가' 셀 둘째 줄 '매수 150,850'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10029",
+   "f": "buy_req",
+   "kor": "매수잔량",
+   "layer": "병기",
+   "board": "2XP6-0",
+   "where": "'잔량' 셀 둘째 줄 '매수 11.4만'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 13
+}

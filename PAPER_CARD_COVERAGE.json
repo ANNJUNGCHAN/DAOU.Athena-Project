@@ -1,0 +1,1505 @@
+{
+  "updated": "2026-09-02T15:45+09:00",
+  "policy": {
+    "goal": "표현 296 + 계정 3 = 100%",
+    "계정": "내부 코드 테이블 — 증명 페이지 각주로 계정",
+    "근거": ".omc/progress.txt + 증명 페이지 RX-1"
+  },
+  "statuses": {
+    "base:00": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:04": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:ka00001": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:ka01690": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:ka10072": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:ka10073": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:ka10074": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:ka10075": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:ka10076": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:ka10077": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:ka10085": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:ka10088": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:ka10170": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:kt00002": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:kt00003": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:kt00007": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:kt00008": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:kt00015": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:kt50021": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:kt50030": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:kt50031": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:kt50075": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00001:cash_and_margin": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00001:special_deposits_and_credit": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00001:substitute_collateral": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00001:withdrawal_and_order_capacity": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00001:receivables_and_arrears": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00001:loans_and_collateral": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00001:settlement_forecast": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00001:foreign_currency_deposits": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00004:account_identity": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00004:cash_and_assets": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00004:profit_and_loss": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00004:position_valuation": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00005:cash_and_capacity": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00005:receivables_and_margin": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00005:portfolio_summary": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00005:margin_order_capacity": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00005:credit_and_collateral": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00005:settled_positions": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00009:contract_amounts": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00009:order_execution_status": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00010:margin_order_capacity": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00010:cash_and_withdrawal_capacity": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00010:purchase_settlement": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00011:margin_rates": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00011:margin_capacity_20_to_50": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00011:margin_capacity_60_to_cash_only": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00011:account_funding": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00012:guarantee_rate": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00012:guarantee_order_capacity": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00012:account_and_receivable_capacity": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00013:today_reuse": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00013:previous_day_reuse": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00013:cash_resources": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00013:substitute_resources": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00013:credit_and_lending_collateral": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00013:margin_order_capacity": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00013:repayment_losses": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00013:substitute_valuation_and_limits": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00013:d2_funding_capacity": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00016:account_manager": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00016:asset_balance_change": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00016:liability_balance_change": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00016:performance_summary": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00016:period_flows": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00017:d2_account_position": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00017:daily_cash_and_trading_flows": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00017:other_assets_and_income": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00018:portfolio_summary": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00018:financing_summary": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt00018:holdings": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt50020:gold_account_summary": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt50020:gold_holdings": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt50032:account_identity": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "detail:kt50032:gold_trade_history": {
+      "capability": "account",
+      "card": "CC-01",
+      "status": "표현"
+    },
+    "base:kt10000": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:kt10001": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:kt10002": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:kt10003": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:kt10006": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:kt10007": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:kt10008": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:kt10009": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:kt50000": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:kt50001": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:kt50002": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:kt50003": {
+      "capability": "order",
+      "card": "CC-02",
+      "status": "표현"
+    },
+    "base:ka10060": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10064": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10079": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10080": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10081": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10082": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10083": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10094": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka20004": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka20005": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka20006": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka20007": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka20008": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka20019": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka50079": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka50080": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka50081": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka50082": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka50083": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka50091": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka50092": {
+      "capability": "chart",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:0C": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "base:0D": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "base:0E": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "base:ka50101": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10004:snapshot_time": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10004:sell_bid_prices": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10004:sell_bid_quantities": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10004:sell_bid_changes": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10004:buy_bid_prices": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10004:buy_bid_quantities": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10004:buy_bid_changes": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10004:aggregate_totals": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10004:after_hours_totals": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10007:identity": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10007:expected_market": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10007:session": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10007:bid_prices": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10007:bid_quantities": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10007:bid_changes": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10007:order_counts": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10007:liquidity_provider": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10007:totals": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10087:snapshot_time": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10087:sell_bid_changes": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10087:sell_bid_quantities": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10087:sell_bid_prices": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10087:buy_bid_prices": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10087:buy_bid_quantities": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10087:buy_bid_changes": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10087:aggregate_totals": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "detail:ka10087:trading_summary": {
+      "capability": "orderbook",
+      "card": "CC-04",
+      "status": "표현"
+    },
+    "base:0w": {
+      "capability": "program-trading",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka90003": {
+      "capability": "program-trading",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka90004": {
+      "capability": "program-trading",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka90005": {
+      "capability": "program-trading",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka90006": {
+      "capability": "program-trading",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka90007": {
+      "capability": "program-trading",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka90008": {
+      "capability": "program-trading",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka90010": {
+      "capability": "program-trading",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka90013": {
+      "capability": "program-trading",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:0G": {
+      "capability": "etf",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka40001": {
+      "capability": "etf",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka40002": {
+      "capability": "etf",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka40003": {
+      "capability": "etf",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka40004": {
+      "capability": "etf",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka40006": {
+      "capability": "etf",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka40007": {
+      "capability": "etf",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka40008": {
+      "capability": "etf",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka40009": {
+      "capability": "etf",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka40010": {
+      "capability": "etf",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:0m": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:0u": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10048": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10050": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka30001": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka30002": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka30003": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka30004": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka30005": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka30009": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka30010": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka30011": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka30012:market_snapshot": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka30012:liquidity_providers": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka30012:valuation_and_rights": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka30012:liquidity_and_leverage": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka30012:key_dates": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka30012:administration": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka30012:payoff_conditions": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka30012:underlying_basket": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka30012:evaluation_window": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka30012:evaluation_extrema": {
+      "capability": "elw",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:0J": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:0U": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10010": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10051": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka20002": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka20003": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "detail:ka20001:market_snapshot": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "detail:ka20001:session_range": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "detail:ka20001:market_breadth": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "detail:ka20001:fifty_two_week_range": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "detail:ka20001:intraday_history": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "detail:ka20009:market_snapshot": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "detail:ka20009:session_range": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "detail:ka20009:market_breadth": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "detail:ka20009:fifty_two_week_range": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "detail:ka20009:daily_history": {
+      "capability": "sector",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10008": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10034": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10035": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10036": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10037": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10044": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10045": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10058": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10059": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10061": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10063": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10065": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10066": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10131": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka52301": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka90009": {
+      "capability": "investor-flow",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:0F": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10038": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10039": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10042": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10043": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10052": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10053": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10062": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10078": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "detail:ka10002:market_snapshot": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "detail:ka10002:sell_brokers": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "detail:ka10002:buy_brokers": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "detail:ka10040:sell_brokers": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "detail:ka10040:buy_brokers": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "detail:ka10040:foreign_broker_estimates": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "detail:ka10040:broker_departures": {
+      "capability": "broker",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10020": {
+      "capability": "discovery",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10021": {
+      "capability": "discovery",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10022": {
+      "capability": "discovery",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10023": {
+      "capability": "discovery",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10027": {
+      "capability": "discovery",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10029": {
+      "capability": "discovery",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10030": {
+      "capability": "discovery",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10031": {
+      "capability": "discovery",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10032": {
+      "capability": "discovery",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10098": {
+      "capability": "discovery",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10013": {
+      "capability": "credit-lending-short",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10014": {
+      "capability": "credit-lending-short",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10033": {
+      "capability": "credit-lending-short",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10068": {
+      "capability": "credit-lending-short",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka10069": {
+      "capability": "credit-lending-short",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka20068": {
+      "capability": "credit-lending-short",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:ka90012": {
+      "capability": "credit-lending-short",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:kt20016": {
+      "capability": "credit-lending-short",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:kt20017": {
+      "capability": "credit-lending-short",
+      "card": "CC-05",
+      "status": "표현"
+    },
+    "base:0g": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10003": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10015": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10016": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10017": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10018": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10019": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10024": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10025": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10026": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10028": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10054": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10055": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10084": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka10001:identity_and_capital": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka10001:market_scale_and_ownership": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka10001:price_range": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka10001:valuation": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka10001:financial_performance": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka10001:daily_price_band": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "detail:ka10001:current_trading": {
+      "capability": "stock-info",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka00198": {
+      "capability": "watchlist",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka01300": {
+      "capability": "watchlist",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka01301": {
+      "capability": "watchlist",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10095": {
+      "capability": "watchlist",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10099": {
+      "capability": "watchlist",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10100": {
+      "capability": "watchlist",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10101": {
+      "capability": "watchlist",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10102": {
+      "capability": "watchlist",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:0A": {
+      "capability": "quote",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:0B": {
+      "capability": "quote",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:0H": {
+      "capability": "quote",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10005": {
+      "capability": "quote",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10006": {
+      "capability": "quote",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10011": {
+      "capability": "quote",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10046": {
+      "capability": "quote",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10047": {
+      "capability": "quote",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka10086": {
+      "capability": "quote",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:0I": {
+      "capability": "gold",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka50010": {
+      "capability": "gold",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka50012": {
+      "capability": "gold",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka50087": {
+      "capability": "gold",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka50100": {
+      "capability": "gold",
+      "card": "CC-03",
+      "status": "표현"
+    },
+    "base:ka90001": {
+      "capability": "theme",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka90002": {
+      "capability": "theme",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:0s": {
+      "capability": "market-status",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:1h": {
+      "capability": "market-status",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10171": {
+      "capability": "condition-search",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10172": {
+      "capability": "condition-search",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10173": {
+      "capability": "condition-search",
+      "card": "CC-06",
+      "status": "표현"
+    },
+    "base:ka10174": {
+      "capability": "condition-search",
+      "card": "CC-06",
+      "status": "표현"
+    }
+  }
+}

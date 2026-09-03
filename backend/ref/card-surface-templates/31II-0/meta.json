@@ -1,0 +1,13 @@
+{
+  "board_id": "31II-0",
+  "name": "CC-03 / R01-T4-9 · 순위 — VI 발동",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "sort",
+    "parent_board": "2VDA-0",
+    "control": "VI 발동"
+  },
+  "saved_at": "2026-09-02T00:00:00Z"
+}

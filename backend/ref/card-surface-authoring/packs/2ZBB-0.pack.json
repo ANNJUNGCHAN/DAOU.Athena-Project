@@ -1,0 +1,375 @@
+{
+ "board_id": "2ZBB-0",
+ "card_id": "CC-05",
+ "name": "CC-05 / R03-T6-3 · 순위 — 대차 상위",
+ "operation_refs": [
+  "base:ka10068",
+  "base:ka10069",
+  "base:ka20068",
+  "base:ka90012"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_trnsn",
+   "kor": "대차거래추이",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "신용·대차 일별 표 '대차잔고' 열 목록",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "일별 표 '일자' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_cntrcnt",
+   "kor": "대차거래체결주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '대차 체결 1,842만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_rpy",
+   "kor": "대차거래상환주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '대차 상환 1,214만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_irds",
+   "kor": "대차거래증감",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 상위 표 '증감' 열 +82만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "rmnd",
+   "kor": "잔고주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "KPI '대차잔고 1,284만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "remn_amt",
+   "kor": "잔고금액",
+   "layer": "병기",
+   "board": "2RWK-1",
+   "where": "일별 표 대차잔고 셀 2번째 줄 금액(08/29 1.94조)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_cntrcnt_sum",
+   "kor": "대차거래체결주수합",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 요약 '체결 1,842만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_rpy_sum",
+   "kor": "대차거래상환주수합",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 요약 '상환 1,214만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "rmnd_sum",
+   "kor": "잔고주수합",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '시장 대차잔고 6.42억주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "remn_amt_sum",
+   "kor": "잔고금액합",
+   "layer": "직접",
+   "board": "2ZBB-0",
+   "where": "레일 '대차 요약' 행 '상위 종목 잔고금액 합 84.2조'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_cntrcnt_rt",
+   "kor": "대차거래체결주수비율",
+   "layer": "병기",
+   "board": "2ZBB-0",
+   "where": "표 '대차 체결' 셀 2번째 줄 비율(1위 7.5%)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_rpy_rt",
+   "kor": "대차거래상환주수비율",
+   "layer": "병기",
+   "board": "2ZBB-0",
+   "where": "표 '대차 상환' 셀 2번째 줄 비율(1위 1.1%)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "rmnd_rt",
+   "kor": "잔고주수비율",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 상위 표 '잔고비중' 열 2.1%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "remn_amt_rt",
+   "kor": "잔고금액비율",
+   "layer": "병기",
+   "board": "2ZBB-0",
+   "where": "표 '잔고 비중' 셀 2번째 줄 '금액 2.3%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_upper_10stk",
+   "kor": "대차거래상위10종목",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 상위 순위 표 목록",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "표 '종목' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "종목 카드 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_cntrcnt",
+   "kor": "대차거래체결주수",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "표 '체결' 열 96만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_rpy",
+   "kor": "대차거래상환주수",
+   "layer": "직접",
+   "board": "2ZBB-0",
+   "where": "표 신설 '대차 상환' 열(1위 14만주)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "rmnd",
+   "kor": "잔고주수",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "표 '대차잔고' 열 1,284만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "remn_amt",
+   "kor": "잔고금액",
+   "layer": "병기",
+   "board": "2ZBB-0",
+   "where": "표 '잔고' 셀 2번째 줄 금액(1위 1.94조)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_trnsn",
+   "kor": "대차거래추이",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "신용·대차 일별 표 '대차잔고' 열 목록",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "일별 표 '일자' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_cntrcnt",
+   "kor": "대차거래체결주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '대차 체결 1,842만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_rpy",
+   "kor": "대차거래상환주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "시장 전체 대차 '대차 상환 1,214만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_irds",
+   "kor": "대차거래증감",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 상위 표 '증감' 열 +82만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "rmnd",
+   "kor": "잔고주수",
+   "layer": null,
+   "board": "2RWK-1",
+   "where": "KPI '대차잔고 1,284만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "remn_amt",
+   "kor": "잔고금액",
+   "layer": "병기",
+   "board": "2RWK-1",
+   "where": "레일 '시장 대차잔고 6.42억주' 2번째 줄 '96.8조'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "dbrt_trde_prps",
+   "kor": "대차거래내역",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "대차 상위 순위 표 목록",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "표 '종목' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "종목 카드 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "dbrt_trde_cntrcnt",
+   "kor": "대차거래체결주수",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "표 '체결' 열 96만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "dbrt_trde_rpy",
+   "kor": "대차거래상환주수",
+   "layer": "직접",
+   "board": "2ZBB-0",
+   "where": "표 신설 '대차 상환' 열(1위 14만주)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "rmnd",
+   "kor": "잔고주수",
+   "layer": null,
+   "board": "2ZBB-0",
+   "where": "표 '대차잔고' 열 1,284만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "remn_amt",
+   "kor": "잔고금액",
+   "layer": "병기",
+   "board": "2ZBB-0",
+   "where": "표 '잔고' 셀 2번째 줄 금액(1위 1.94조)",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 23
+}

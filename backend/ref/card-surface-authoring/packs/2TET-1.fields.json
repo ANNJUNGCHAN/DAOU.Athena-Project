@@ -1,0 +1,61 @@
+{
+ "board": "2TET-1",
+ "fields": [
+  {
+   "mapping_id": "base:kt10003",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "where": "주문 접수 정보 · 주문번호 행"
+  },
+  {
+   "mapping_id": "base:kt10003",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "where": "주문 접수 정보 · 원주문번호 0021847 행"
+  },
+  {
+   "mapping_id": "base:kt10003",
+   "f": "cncl_qty",
+   "kor": "취소수량",
+   "layer": null,
+   "where": "주문 접수 정보 · 취소수량 10주 행"
+  },
+  {
+   "mapping_id": "base:kt10009",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "where": "주문 접수 정보 · 주문번호 행"
+  },
+  {
+   "mapping_id": "base:kt10009",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "where": "주문 접수 정보 · 원주문번호 0021847 행"
+  },
+  {
+   "mapping_id": "base:kt10009",
+   "f": "cncl_qty",
+   "kor": "취소수량",
+   "layer": null,
+   "where": "주문 접수 정보 · 취소수량 10주 행"
+  },
+  {
+   "mapping_id": "base:kt50003",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "where": "주문 접수 정보 · 원주문번호 행(금현물 탭 공용)"
+  },
+  {
+   "mapping_id": "base:kt50003",
+   "f": "cncl_qty",
+   "kor": "취소수량",
+   "layer": null,
+   "where": "주문 접수 정보 · 취소수량 행(금현물 탭 공용)"
+  }
+ ]
+}

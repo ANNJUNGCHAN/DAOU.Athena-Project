@@ -21,6 +21,7 @@
     "verify": "electron verify.js",
     "verify:plugins": "node verify-plugins.js",
     "verify:kiumi": "electron verify-kiumi.js",
+    "verify:kiumi-cards": "electron probe-orb-kiumi-96.js",
     "verify:agent-paper-parity": "electron probe-agent-paper-parity.js",
     "verify:hoga-live": "electron verify-hoga-live.js",
     "verify:integrated-cards": "electron verify-integrated-cards.js",

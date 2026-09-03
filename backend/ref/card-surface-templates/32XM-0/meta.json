@@ -1,0 +1,13 @@
+{
+  "board_id": "32XM-0",
+  "name": "CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 904,
+  "state": {
+    "kind": "tab",
+    "parent_board": "137X-2",
+    "control": "순위"
+  },
+  "saved_at": "2026-09-02T20:05:00+09:00"
+}

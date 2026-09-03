@@ -1,0 +1,12 @@
+{
+  "root": "3DI4-0",
+  "regions": [
+    { "node_id": "3DQN-0", "name": "Instrument Header", "role": "header", "depth": 1 },
+    { "node_id": "3DQO-0", "name": "Frame", "role": "strip", "depth": 2 },
+    { "node_id": "3DQ3-0", "name": "Quote and Valuation Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3DI9-0", "name": "Investor Expansion Body", "role": "workspace", "depth": 1 },
+    { "node_id": "3E98-0", "name": "펼침 머리", "role": "other", "depth": 2 },
+    { "node_id": "3E9G-0", "name": "본문 2단", "role": "primary", "depth": 2 },
+    { "node_id": "3DI5-0", "name": "Chart Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

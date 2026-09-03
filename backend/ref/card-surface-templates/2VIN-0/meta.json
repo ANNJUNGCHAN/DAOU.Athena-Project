@@ -1,0 +1,17 @@
+{
+  "board_id": "2VIN-0",
+  "name": "CC-03 / R01-T5 · 순위 — ETF 전체시세",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 1120,
+  "state": {
+    "kind": "tab",
+    "parent_board": "137X-2",
+    "control": "순위"
+  },
+  "saved_at": "2026-09-02T20:10:00+09:00",
+  "operation_refs": [
+    "base:ka40004",
+    "base:ka40001"
+  ]
+}

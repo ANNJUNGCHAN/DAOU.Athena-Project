@@ -1,0 +1,132 @@
+{
+ "board_id": "2ZZ7-0",
+ "card_id": "CC-03",
+ "name": "CC-03 / R01-T4-4 · 순위 — 가격급등락",
+ "operation_refs": [
+  "base:ka10019"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10019",
+   "f": "pric_jmpflu",
+   "kor": "가격급등락",
+   "layer": null,
+   "board": "2ZZ7-0",
+   "where": "가격급등락 순위 표 본체",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10019",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "board": "2ZZ7-0",
+   "where": "표 '종목' 셀 둘째 줄 코드 '042700'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10019",
+   "f": "stk_cls",
+   "kor": "종목분류",
+   "layer": "병기",
+   "board": "2ZZ7-0",
+   "where": "표 '종목' 셀 둘째 줄 종목분류 칩 '대형주'·'중형주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10019",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2ZZ7-0",
+   "where": "종목 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10019",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2ZZ7-0",
+   "where": "등락률의 ± 부호와 상승/하락 색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10019",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "2ZZ7-0",
+   "where": "표 '현재가' 셀 둘째 줄 '+7,900 · +4.18%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10019",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "board": "2ZZ7-0",
+   "where": "등락률 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10019",
+   "f": "base_pric",
+   "kor": "기준가",
+   "layer": null,
+   "board": "2ZZ7-0",
+   "where": "직전가 컬럼 188,400",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10019",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2ZZ7-0",
+   "where": "현재가 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10019",
+   "f": "base_pre",
+   "kor": "기준대비",
+   "layer": "병기",
+   "board": "2ZZ7-0",
+   "where": "표 '구간 등락률' 셀 둘째 줄 '기준대비 +9,000'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10019",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "board": "2ZZ7-0",
+   "where": "표 '거래량 · 거래대금' 셀 첫째 줄 '320만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10019",
+   "f": "jmp_rt",
+   "kor": "급등률",
+   "layer": null,
+   "board": "2ZZ7-0",
+   "where": "구간 등락률 컬럼 +4.8%",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 12
+}

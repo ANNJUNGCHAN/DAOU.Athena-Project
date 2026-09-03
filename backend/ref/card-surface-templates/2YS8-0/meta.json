@@ -1,0 +1,13 @@
+{
+  "board_id": "2YS8-0",
+  "name": "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+  "card_id": "CC-05",
+  "width": 1440,
+  "height": 1014,
+  "state": {
+    "kind": "sort",
+    "parent_board": "2V71-0",
+    "control": "신용비율 높은 순"
+  },
+  "saved_at": "2026-09-02T11:23:46Z"
+}

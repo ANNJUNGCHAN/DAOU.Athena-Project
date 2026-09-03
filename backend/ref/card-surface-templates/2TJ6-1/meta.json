@@ -1,0 +1,14 @@
+{
+  "board_id": "2TJ6-1",
+  "name": "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+  "card_id": "CC-02",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "tab",
+    "parent_board": "135M-2",
+    "control": "신용 · 매수",
+    "control_text": "신용"
+  },
+  "saved_at": "2026-09-02T10:49:21Z"
+}

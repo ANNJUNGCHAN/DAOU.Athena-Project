@@ -1,0 +1,10 @@
+{
+  "root": "3DZ2-0",
+  "regions": [
+    { "node_id": "3E8D-0", "name": "헤더", "role": "header", "depth": 1 },
+    { "node_id": "3E7P-0", "name": "시세 스트립", "role": "kpi", "depth": 1 },
+    { "node_id": "3ECI-0", "name": "기초자산 바스켓", "role": "primary", "depth": 1 },
+    { "node_id": "3EUH-0", "name": "만기 평가 구간", "role": "primary", "depth": 1 },
+    { "node_id": "3F2X-0", "name": "권리·산출 기준", "role": "primary", "depth": 1 }
+  ]
+}
