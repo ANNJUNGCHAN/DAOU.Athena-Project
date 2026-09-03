@@ -528,7 +528,10 @@ def test_check_leaves_the_hash_of_an_active_alarm_alone(check_client):
     assert body["ok"] is True
 
     assert runtime.store.get(spec.id).watch.version_hash == "a" * 64  # 그대로
-    assert "켜져 있는 알람 — 해시는 그대로 두었음 · 고치려면 먼저 일시중지" in body["warnings"]
+    assert (
+        "켜져 있는 알람 — 검사 결과를 알람에 심지 않았음 · 고치려면 먼저 일시중지"
+        in body["warnings"]
+    )
 
 
 def test_check_result_shows_up_in_the_detail_view(check_client):

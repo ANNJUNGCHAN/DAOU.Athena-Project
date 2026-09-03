@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import re
 from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta, timezone
@@ -335,19 +336,19 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
     백테스트의 전략·실행·배포 표에는 아무 행도 만들지 않는다(R5). 늘어날 수 있는 것은
     공유 일봉 캐시(`bt_candle` 행 추가·`bt_coverage` 구간 확장)뿐이다.
     """
-    import asyncio
-
     from athena_api.projects.store import ProjectPathError
     from athena_api.watch.check import run_check
     from athena_api.watch.data import assemble_frame, frame_from_candles
 
     runtime = _runtime(request)
-    project_id = body.get("project_id")
-    if not isinstance(project_id, str) or not project_id.strip():
+    raw_project_id = body.get("project_id")
+    if not isinstance(raw_project_id, str) or not raw_project_id.strip():
         raise HTTPException(status_code=422, detail="프로젝트를 고르지 않음")
-    path = body.get("path")
-    if not isinstance(path, str) or not path.strip():
+    project_id = raw_project_id.strip()
+    raw_path = body.get("path")
+    if not isinstance(raw_path, str) or not raw_path.strip():
         raise HTTPException(status_code=422, detail="감시 코드 경로가 비어 있음")
+    path = raw_path.strip()
     symbol = body.get("symbol")
     if not isinstance(symbol, str) or not _SYMBOL_RE.match(symbol):
         raise HTTPException(status_code=422, detail="종목코드는 6자리")
@@ -365,7 +366,7 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
         raise HTTPException(status_code=422, detail="알람 번호는 문자열")
 
     try:
-        target = resolve_watch_file(project_id.strip(), path.strip())
+        target = resolve_watch_file(project_id, path)
     except KeyError:
         raise HTTPException(status_code=404, detail="프로젝트 없음") from None
     except ProjectPathError as exc:
@@ -375,16 +376,12 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
     source = target.read_text(encoding="utf-8")
 
     if runtime.watch_runner is None:
-        raise HTTPException(
-            status_code=409, detail="백엔드 실행층 꺼짐 — 백테스트 모듈 필요"
-        )
+        raise HTTPException(status_code=409, detail="백엔드 실행층 꺼짐 — 백테스트 모듈 필요")
 
     now = datetime.now(_KST)
     today = now.date()
     warnings: list[str] = []
-    store = runtime.watch_candle_store or getattr(
-        request.app.state, "backtest_store", None
-    )
+    store = runtime.watch_candle_store or getattr(request.app.state, "backtest_store", None)
     if store is None:
         warnings.append("일봉 캐시 없음 — 받아 둔 일봉이 없으면 셀 수 없음")
     else:
@@ -421,7 +418,7 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
     payload["symbol"] = symbol
     payload["checked_at"] = datetime.now(UTC).isoformat()
 
-    key = routine_id or f"{project_id.strip()}:{path.strip()}"
+    key = routine_id or f"{project_id}:{path}"
     runtime.watch_last[f"check:{key}"] = {
         "checked_at": payload["checked_at"],
         "nodes": payload["nodes"],
@@ -443,7 +440,7 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
                 runtime.store.upsert(spec)
             else:
                 payload["warnings"].append(
-                    "켜져 있는 알람 — 해시는 그대로 두었음 · 고치려면 먼저 일시중지"
+                    "켜져 있는 알람 — 검사 결과를 알람에 심지 않았음 · 고치려면 먼저 일시중지"
                 )
     return payload
 

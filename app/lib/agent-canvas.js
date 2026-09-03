@@ -84,6 +84,13 @@ const VERDICT_ICON = {
   suppressed: { glyph: '○', colorVar: '--color-k-faint' },
 };
 
+// 상세 머리줄의 상태 배지 문구 — 일반 상세와 코드 알람 상세가 같은 말을 써야 한다.
+function statusBadgeText(status) {
+  if (status === 'paused') return '일시중지';
+  if (status === 'draft') return '초안';
+  return '활성';
+}
+
 // 11단계(프로액티브, Paper 보드 42) — 4번째 뷰 탭 "제안". "지금 읽히는 성향"
 // 스트립·제안 카드 2장은 7단계와 같은 원천(GET /api/v1/brain/profile-summary,
 // suggestionsCache)을 재사용한다 — 39번 좌측 미니 목록과 42번 전체 화면이
@@ -1594,7 +1601,7 @@ function createAgentCanvas(deps) {
 
     const headRow = el('div', 'agent-detail-head');
     const badge = el('span', `agent-status-badge is-${item.status}`);
-    badge.textContent = item.status === 'paused' ? '일시중지' : (item.status === 'draft' ? '초안' : '활성');
+    badge.textContent = statusBadgeText(item.status);
     headRow.appendChild(badge);
     const titleEl = el('span', 'agent-detail-title');
     titleEl.textContent = item.title;
@@ -1809,7 +1816,7 @@ function createAgentCanvas(deps) {
 
     const headRow = el('div', 'agent-detail-head');
     const badge = el('span', `agent-status-badge is-${item.status}`);
-    badge.textContent = item.status === 'paused' ? '일시중지' : (item.status === 'draft' ? '초안' : '활성');
+    badge.textContent = statusBadgeText(item.status);
     headRow.appendChild(badge);
     const titleEl = el('span', 'agent-detail-title');
     titleEl.textContent = item.title;
