@@ -817,7 +817,7 @@ function findStateControl(surface, control) {
   return null;
 }
 
-const RESPONSIVE_STATE_CONTROL_OWNER = '.bs-r-flow, .bs-r-scroll';
+const RESPONSIVE_STATE_CONTROL_OWNER = '.bs-r-flow, .bs-r-scroll, .bs-r-scroll-table';
 
 function isResponsiveStateControl(node) {
   return !!(node && node.childElementCount === 0 && typeof node.closest === 'function'

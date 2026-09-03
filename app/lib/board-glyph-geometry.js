@@ -165,11 +165,27 @@ function collectGlyphFindings(candidates, pairedRecords, options = {}) {
   for (const record of pairs) {
     if (!record || record.hidden) continue;
     const source = String(record.source || '');
+    if (record.kind === 'scroll_table') {
+      for (const violation of Array.isArray(record.violations) ? record.violations : []) {
+        paired.push({ source, violation: String(violation) });
+      }
+      continue;
+    }
     const violations = [];
     if (!record.source_found) violations.push('missing_source');
+    if (Number.isInteger(record.source_count) && record.source_count > 1) {
+      violations.push('duplicate_source');
+    }
     if (record.mirror_has_identity) violations.push('mirror_has_mount_identity');
     if (!record.label_found) violations.push('missing_label');
+    if (Number.isInteger(record.label_count) && record.label_count > 1) {
+      violations.push('duplicate_label');
+    }
     if (record.source_found && record.mirror_text !== record.source_text) violations.push('stale_mirror');
+    if (record.source_found && record.mirror_tone !== record.source_tone) violations.push('stale_tone');
+    if (record.source_found && record.mirror_missing !== record.source_missing) {
+      violations.push('stale_missing');
+    }
     for (const violation of violations) paired.push({ source, violation });
   }
   paired.sort((left, right) => (left.source.localeCompare(right.source)) || left.violation.localeCompare(right.violation));

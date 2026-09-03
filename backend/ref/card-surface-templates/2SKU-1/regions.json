@@ -10,6 +10,6 @@
     { "node_id": "2SKX-1", "name": "Account Status Footer", "role": "footer", "depth": 1 }
   ],
   "responsive": [
-    { "node_id": "39SW-0", "traits": ["paired-table"] }
+    { "node_id": "39SW-0", "traits": ["scroll-table"], "accessible_label": "결제 예정 표" }
   ]
 }
