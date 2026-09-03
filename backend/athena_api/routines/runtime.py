@@ -8,8 +8,11 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 from contextlib import suppress
 from dataclasses import dataclass, field
+from datetime import UTC, datetime
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from athena_api.config import Settings
@@ -41,6 +44,10 @@ class RoutinesRuntime:
     engagement: EngagementStore
     briefings: BriefingStore
     ws_client: KiwoomWsClient | None = None
+    # 코드 감시 실행층(athena_api.watch) — 백테스트 샌드박스가 켜져 있을 때만
+    # 주입된다. None이면 code-watch 알람은 활성화되지 않는다(R1: routines는
+    # 코드를 실행하지 않는다 — 실행은 주입된 러너의 몫이다).
+    watch_runner: Any | None = None
     ready: bool = False
     last_error: str | None = None
     _symbol_refcounts: dict[str, int] = field(default_factory=dict)
@@ -82,7 +89,67 @@ class RoutinesRuntime:
             return None
         if spec.mode == "scheduled":
             return None  # 벽시계 루프는 항상 기동 — 별도 가용성 게이트 없음
+        if spec.mode == "code-watch":
+            return self._code_watch_blocker(spec)
         return "이 source는 백엔드 실행 경로가 없어 활성화할 수 없다"
+
+    def _code_watch_blocker(self, spec: RoutineSpec) -> str | None:
+        """코드 감시 알람의 활성화 게이트 — 파일·해시·실행층 순으로 본다.
+
+        검사 때 통과한 그 코드가 지금도 그대로 있어야 켠다. 파일을 여는 것은
+        프로젝트 폴더 안으로 푼 경로뿐이다(임의 경로 열기 금지).
+        """
+        watch = spec.watch
+        if watch is None:
+            return "감시 코드 파일 없음 — 다시 만들기"
+        try:
+            target = resolve_watch_file(watch.project_id, watch.path)
+            raw = target.read_bytes()
+        except Exception:
+            return "감시 코드 파일 없음 — 다시 만들기"
+        if hashlib.sha256(raw).hexdigest() != watch.version_hash:
+            return "검사 뒤 코드가 바뀜 — 다시 검사"
+        if self.watch_runner is None:
+            return "백엔드 실행층 꺼짐 — 백테스트 모듈 필요"
+        return None
+
+    def restore_trigger_state(self) -> int:
+        """부팅 복원 — 저장된 마지막 발화 시각을 쿨다운 상태로 되살린다(B-20).
+
+        `TriggerState.last_fired_at`은 monotonic 초라 재시작하면 의미가 없다.
+        저장된 벽시계 시각과 지금의 차이를 monotonic 축으로 옮겨 심어야
+        재시작 직후에 쿨다운이 사라지지 않는다.
+        """
+        seeded = 0
+        now_wall = datetime.now(UTC)
+        now_mono = self.engine.clock()
+        for spec in self.store.list_active():
+            watch = spec.watch
+            if spec.mode != "code-watch" or watch is None or not watch.last_fired_at:
+                continue
+            try:
+                fired_at = datetime.fromisoformat(watch.last_fired_at)
+            except ValueError:
+                continue
+            if fired_at.tzinfo is None:
+                fired_at = fired_at.replace(tzinfo=UTC)
+            elapsed = (now_wall - fired_at).total_seconds()
+            if elapsed < 0 or elapsed >= spec.cooldown_s:
+                continue  # 이미 쿨다운이 지났다 — 심을 이유가 없다
+            self.engine._state(spec.id).last_fired_at = now_mono - elapsed
+            seeded += 1
+        return seeded
+
+
+def resolve_watch_file(project_id: str, path: str) -> Path:
+    """감시 코드 파일의 실제 경로 — 등록된 프로젝트 폴더 안으로만 푼다.
+
+    경로 탈출 방어는 projects.store가 이미 지고 있다(심볼릭 링크까지 본다).
+    여기서 다시 구현하지 않고 그 한 곳을 부른다.
+    """
+    from athena_api.projects.store import resolve_in_project, resolve_project_path
+
+    return resolve_in_project(resolve_project_path(project_id), path)
 
 
 def _archive_once(settings: Settings) -> None:
@@ -221,6 +288,7 @@ async def open_routines(
                         "note": f"'{spec.note}' 재구독 실패 — 감시가 멈춰 있다.",
                     }
                 )
+        runtime.restore_trigger_state()
         await scheduler.start()
         runtime.ready = True
         return runtime

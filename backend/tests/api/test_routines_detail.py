@@ -120,7 +120,7 @@ def test_source_catalog_lists_active_sources_only(app_client):
     assert res.status_code == 200  # /{routine_id}에 먹히지 않는다(선언 순서 계약)
     body = res.json()
     assert set(body) == set(SOURCES)
-    assert len(body) == 6
+    assert len(body) == 7
     for source in LEGACY_DISABLED_SOURCES:
         assert source not in body
     for source, entry in body.items():
