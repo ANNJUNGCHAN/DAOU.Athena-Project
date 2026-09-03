@@ -1,6 +1,6 @@
 # 코드 알람 — 실행 계획 (RALPLAN-DR, short · iteration 2)
 
-- Status: `pending approval`
+- Status: `approved for execution — ralph` (사용자 실행 승인 2026-09-03)
 - Plan id: `code-alarm-plan`
 - 근거 권위: `docs/plans/2026-09-03-code-alarm-concept.md`(§0~§6, 사용자 승인) + Paper A-2 보드 09(43WD-1)·10(446V-1)·11(44HD-1)·12(44RV-1). 두 근거가 갈리면 보드가 이긴다.
 - 실측 지도: `docs/research/2026-09-03-code-alarm-reuse-map.md`

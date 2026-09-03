@@ -2,19 +2,35 @@
 
 from __future__ import annotations
 
+import asyncio
+import hashlib
 import re
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
 
+from athena_api.projects import store as projects_store
+from athena_api.routines.briefings import BriefingStore
+from athena_api.routines.engagement import EngagementStore
 from athena_api.routines.ledger import LedgerError, RoutineLedger
-from athena_api.routines.models import Condition, RoutineSpec, derive_mode
+from athena_api.routines.models import (
+    SOURCES,
+    Condition,
+    RoutineSpec,
+    WatchSpec,
+    derive_mode,
+)
+from athena_api.routines.read_marks import ReadMarksStore
 from athena_api.routines.rules import (
     RoutineValidationError,
     validate_condition,
     validate_draft,
 )
+from athena_api.routines.runtime import RoutinesRuntime
+from athena_api.routines.scheduler import RoutineScheduler
+from athena_api.routines.store import RoutineStore
+from athena_api.routines.triggers import TriggerEngine
 
 
 def _draft(**over):
@@ -304,3 +320,262 @@ def test_goal_missing_in_legacy_dict_defaults_false():
 def test_goal_rejects_non_bool():
     with pytest.raises(RoutineValidationError):
         validate_draft(_draft(goal="true"))
+
+
+# ---------- 코드 감시 (code.watch) ----------
+
+
+def _watch(**over):
+    raw = {
+        "project_id": "p1",
+        "path": "watch/volume_spike.py",
+        "version_hash": "a" * 64,
+        "params": {"multiple": 3.0},
+        "poll_interval_s": 60,
+        "lookback_days": 30,
+    }
+    raw.update(over)
+    return raw
+
+
+def _code_draft(watch=None, **over):
+    raw = _draft(
+        condition={"source": "code.watch", "op": "==", "value": True},
+        watch=_watch() if watch is None else watch,
+    )
+    raw.update(over)
+    return raw
+
+
+def test_code_watch_source_spec_and_mode():
+    """B-1 — 카탈로그 등록값과 mode 유도."""
+    spec = SOURCES["code.watch"]
+    assert spec.transport == "code"
+    assert spec.value_type == "bool"
+    assert spec.ops == ("==",)
+    assert spec.label == "코드 감시"
+    cond = validate_condition({"source": "code.watch", "op": "==", "value": True})
+    assert derive_mode(cond) == "code-watch"
+
+
+def test_code_watch_draft_accepts_valid_watch_block():
+    spec = validate_draft(_code_draft())
+    assert spec.mode == "code-watch"
+    assert spec.watch == WatchSpec(
+        project_id="p1",
+        path="watch/volume_spike.py",
+        version_hash="a" * 64,
+        params={"multiple": 3.0},
+        poll_interval_s=60,
+        lookback_days=30,
+    )
+
+
+@pytest.mark.parametrize(
+    "over",
+    [
+        {"path": "watch/volume_spike.txt"},
+        {"path": "strategy.py"},
+        {"path": "watch/../../etc/passwd.py"},
+        {"path": "/etc/watch/x.py"},
+        {"path": "C:/watch/x.py"},
+        {"path": "watch/"},
+        {"poll_interval_s": 59},
+        {"poll_interval_s": 601},
+        {"lookback_days": 6},
+        {"lookback_days": 91},
+        {"project_id": ""},
+        {"version_hash": "not-a-hash"},
+        {"params": [1, 2]},
+        {"params": {"nested": {"a": 1}}},
+        {"last_fired_at": "어제"},
+    ],
+)
+def test_code_watch_rejects_bad_watch_fields(over):
+    """B-2 — watch 블록의 각 칸이 따로 막힌다."""
+    with pytest.raises(RoutineValidationError):
+        validate_draft(_code_draft(watch=_watch(**over)))
+
+
+def test_code_watch_requires_watch_block_and_expiry_bound_still_applies():
+    """B-2 — watch 없는 code.watch 초안은 거부, expires_days 상한은 그대로."""
+    raw = _code_draft()
+    del raw["watch"]
+    with pytest.raises(RoutineValidationError):
+        validate_draft(raw)
+    with pytest.raises(RoutineValidationError):
+        validate_draft(_code_draft(expires_days=31))
+    assert validate_draft(_code_draft(expires_days=30)).watch is not None
+
+
+def test_watch_block_is_rejected_on_non_code_sources():
+    with pytest.raises(RoutineValidationError):
+        validate_draft(_draft(watch=_watch()))
+
+
+def test_condition_keys_stay_closed_for_code_watch():
+    """B-3 — watch를 condition 안에 밀어 넣거나 모르는 키를 넣으면 거부."""
+    with pytest.raises(RoutineValidationError):
+        validate_condition(
+            {
+                "source": "code.watch",
+                "op": "==",
+                "value": True,
+                "watch": _watch(),
+            }
+        )
+    with pytest.raises(RoutineValidationError):
+        validate_condition(
+            {"source": "price.current", "op": "<", "value": 1, "code": "x"}
+        )
+
+
+def test_code_watch_condition_shape_is_fixed():
+    with pytest.raises(RoutineValidationError):
+        validate_draft(
+            _code_draft(condition={"source": "code.watch", "op": "==", "value": False})
+        )
+    with pytest.raises(RoutineValidationError):
+        validate_draft(
+            _code_draft(
+                condition={
+                    "source": "code.watch",
+                    "op": "==",
+                    "value": True,
+                    "consecutive_ticks": 2,
+                }
+            )
+        )
+
+
+def test_code_watch_store_roundtrip_has_no_source_text(tmp_path):
+    """B-4 — 저장→로드 동일, 코드 원문은 어디에도 없다."""
+    spec = validate_draft(_code_draft())
+    store = RoutineStore(tmp_path / "routines.json")
+    store.upsert(spec)
+
+    text = (tmp_path / "routines.json").read_text(encoding="utf-8")
+    assert "def signals" not in text
+    assert "source_code" not in text and "code_text" not in text
+
+    reloaded = RoutineStore(tmp_path / "routines.json")
+    reloaded.load()
+    restored = reloaded.get(spec.id)
+    assert restored is not None
+    assert restored.to_dict() == spec.to_dict()
+    assert restored.watch == spec.watch
+
+
+def test_non_code_spec_has_no_watch_key_in_dict():
+    assert "watch" not in validate_draft(_draft()).to_dict()
+
+
+def test_watch_last_fired_at_roundtrips(tmp_path):
+    """B-20(저장 측) — 마지막 발화 시각이 저장을 건너서 살아남는다."""
+    fired = "2026-09-03T01:00:00+00:00"
+    spec = validate_draft(_code_draft(watch=_watch(last_fired_at=fired)))
+    store = RoutineStore(tmp_path / "routines.json")
+    store.upsert(spec)
+    reloaded = RoutineStore(tmp_path / "routines.json")
+    reloaded.load()
+    assert reloaded.get(spec.id).watch.last_fired_at == fired
+
+
+# ---------- 코드 감시 활성화 게이트 (B-5) · 쿨다운 복원 (B-20) ----------
+
+
+class _FakeWatchRunner:
+    """주입만 확인하는 자리표 — 이 단계에서는 아무것도 실행하지 않는다."""
+
+
+def _code_runtime(tmp_path, monkeypatch, *, watch_runner=None):
+    project_root = tmp_path / "proj"
+    (project_root / "watch").mkdir(parents=True)
+    monkeypatch.setattr(
+        projects_store, "resolve_project_path", lambda pid: project_root
+    )
+
+    store = RoutineStore(tmp_path / "r.json")
+    ledger = RoutineLedger(tmp_path / "l.jsonl")
+    engine = TriggerEngine(ledger=ledger)
+
+    async def noop(_ev):
+        pass
+
+    runtime = RoutinesRuntime(
+        store=store,
+        ledger=ledger,
+        engine=engine,
+        scheduler=RoutineScheduler(store=store, engine=engine, notify=noop),
+        events=asyncio.Queue(200),
+        read_marks=ReadMarksStore(tmp_path / "read_marks.json"),
+        engagement=EngagementStore(tmp_path / "engagement.jsonl"),
+        briefings=BriefingStore(tmp_path / "briefings.jsonl"),
+        watch_runner=watch_runner,
+    )
+    return runtime, project_root
+
+
+def _write_watch_file(project_root, body="x = 1\n"):
+    target = project_root / "watch" / "volume_spike.py"
+    target.write_bytes(body.encode("utf-8"))
+    return hashlib.sha256(body.encode("utf-8")).hexdigest()
+
+
+def test_can_activate_code_watch_reports_missing_file(tmp_path, monkeypatch):
+    runtime, _ = _code_runtime(tmp_path, monkeypatch, watch_runner=_FakeWatchRunner())
+    spec = validate_draft(_code_draft())
+    assert runtime.can_activate(spec) == "감시 코드 파일 없음 — 다시 만들기"
+
+
+def test_can_activate_code_watch_reports_hash_mismatch(tmp_path, monkeypatch):
+    runtime, root = _code_runtime(
+        tmp_path, monkeypatch, watch_runner=_FakeWatchRunner()
+    )
+    _write_watch_file(root)
+    spec = validate_draft(_code_draft())
+    assert runtime.can_activate(spec) == "검사 뒤 코드가 바뀜 — 다시 검사"
+
+
+def test_can_activate_code_watch_reports_missing_runner(tmp_path, monkeypatch):
+    runtime, root = _code_runtime(tmp_path, monkeypatch, watch_runner=None)
+    digest = _write_watch_file(root)
+    spec = validate_draft(_code_draft(watch=_watch(version_hash=digest)))
+    assert runtime.can_activate(spec) == "백엔드 실행층 꺼짐 — 백테스트 모듈 필요"
+
+
+def test_can_activate_code_watch_passes_when_everything_lines_up(tmp_path, monkeypatch):
+    runtime, root = _code_runtime(
+        tmp_path, monkeypatch, watch_runner=_FakeWatchRunner()
+    )
+    digest = _write_watch_file(root)
+    spec = validate_draft(_code_draft(watch=_watch(version_hash=digest)))
+    assert runtime.can_activate(spec) is None
+
+
+def test_restore_trigger_state_seeds_cooldown_from_last_fired_at(tmp_path, monkeypatch):
+    """B-20 — 부팅 복원이 저장된 발화 시각을 쿨다운 상태로 되살린다."""
+    runtime, _ = _code_runtime(tmp_path, monkeypatch, watch_runner=_FakeWatchRunner())
+    fired = (datetime.now(UTC) - timedelta(seconds=60)).isoformat()
+    spec = validate_draft(
+        _code_draft(cooldown_s=1800, watch=_watch(last_fired_at=fired))
+    )
+    spec.status = "active"
+    runtime.store.upsert(spec)
+
+    assert runtime.restore_trigger_state() == 1
+    assert runtime.engine.evaluate(spec, True) == "suppressed"
+    assert "쿨다운" in runtime.ledger.read_all()[-1]["reason"]
+
+
+def test_restore_trigger_state_skips_expired_cooldown(tmp_path, monkeypatch):
+    runtime, _ = _code_runtime(tmp_path, monkeypatch, watch_runner=_FakeWatchRunner())
+    fired = (datetime.now(UTC) - timedelta(hours=5)).isoformat()
+    spec = validate_draft(
+        _code_draft(cooldown_s=1800, watch=_watch(last_fired_at=fired))
+    )
+    spec.status = "active"
+    runtime.store.upsert(spec)
+
+    assert runtime.restore_trigger_state() == 0
+    assert runtime.engine.evaluate(spec, True) == "fired"

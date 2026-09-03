@@ -242,7 +242,8 @@ _VALID_VALUE = {
 _OP_POOL = ("<", "==", "contains", "at")
 
 
-@pytest.mark.parametrize("source", sorted(SOURCES))
+# code.watch는 조건 편집 자체가 막히는 소스라 이 표에서 뺀다(B-17에서 따로 고정).
+@pytest.mark.parametrize("source", sorted(set(SOURCES) - {"code.watch"}))
 def test_update_revalidates_every_source_rule(app_client, source):
     """편집도 draft와 같은 규칙 표를 통과한다 — 소스마다 전수로 고정한다."""
     client, _ = app_client
