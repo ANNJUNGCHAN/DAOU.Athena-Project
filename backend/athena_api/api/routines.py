@@ -1,19 +1,21 @@
-
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta, timezone
+import re
+from dataclasses import replace
+from datetime import UTC, date, datetime, timedelta, timezone
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 
 from athena_api.routines.models import SOURCES, parse_schedule_value, source_spec
 from athena_api.routines.rules import validate_draft
-from athena_api.routines.runtime import RoutinesRuntime
+from athena_api.routines.runtime import RoutinesRuntime, resolve_watch_file
 from athena_api.routines.scheduler import record_scheduled_fire
 
 router = APIRouter(prefix="/api/v1/routines", tags=["routines"])
 
 _KST = timezone(timedelta(hours=9))
+_SYMBOL_RE = re.compile(r"^\d{6}$")
 
 
 def _next_fire_at(spec: Any, *, now: datetime | None = None) -> str | None:
@@ -116,7 +118,7 @@ def _view(
     source = source_spec(spec.condition.source)
     last_fired_at = latest_fired["ts"] if latest_fired else None
     last_read_at = runtime.read_marks.last_read_fired_at(spec.id)
-    return {
+    view: dict[str, Any] = {
         "id": spec.id,
         "symbol": spec.symbol,
         "note": spec.note,
@@ -140,6 +142,10 @@ def _view(
         "missed": spec.status == "active"
         and _is_missed(_missed_since(spec), last_fired_at),
     }
+    if spec.watch is not None:
+        # 코드 감시 알람만 갖는 블록 — 다른 모드의 행 모양은 그대로다.
+        view["watch"] = spec.watch.to_dict()
+    return view
 
 
 # 편집(POST /{id}/update)이 만질 수 있는 필드 — symbol·condition.source는
@@ -154,7 +160,7 @@ def _detail_view(spec: Any, runtime: RoutinesRuntime) -> dict[str, Any]:
     _view()와 달리 발화·읽음·놓침 같은 운영 지표는 담지 않는다(목록의 몫).
     ledger를 읽지 않으므로 편집 왕복이 원장 스캔을 유발하지 않는다."""
     source = source_spec(spec.condition.source)
-    return {
+    detail: dict[str, Any] = {
         "id": spec.id,
         "symbol": spec.symbol,
         "status": spec.status,
@@ -176,6 +182,22 @@ def _detail_view(spec: Any, runtime: RoutinesRuntime) -> dict[str, Any]:
             "label": source.label,
         },
     }
+    if spec.mode == "code-watch" and spec.watch is not None:
+        # 코드 감시 알람에만 붙는 세 칸 — 감시 파일 정보와, 프로세스 로컬로 남아
+        # 있는 마지막 검사·마지막 실행 요약이다(영속 안 함).
+        detail["watch"] = spec.watch.to_dict()
+        detail["last_check"] = _watch_last(runtime, spec, "check")
+        detail["last_run"] = _watch_last(runtime, spec, "run")
+    return detail
+
+
+def _watch_last(runtime: RoutinesRuntime, spec: Any, kind: str) -> dict[str, Any] | None:
+    """마지막 검사·실행 요약 조회 — 검사는 알람 id로도, 파일 경로로도 남는다."""
+    last = runtime.watch_last
+    entry = last.get(f"{kind}:{spec.id}")
+    if entry is None and kind == "check" and spec.watch is not None:
+        entry = last.get(f"check:{spec.watch.project_id}:{spec.watch.path}")
+    return dict(entry) if entry is not None else None
 
 
 @router.post("/draft")
@@ -300,6 +322,160 @@ async def save_watch_code_route(request: Request, body: dict[str, Any]) -> dict[
         raise HTTPException(status_code=422, detail=str(exc)) from None
 
 
+@router.post("/watch/check")
+async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, Any]:
+    """검사 = 미니 백테스트 1회 — 지난 N일 완성 일봉(어제까지)에 감시 함수를 돌린다.
+
+    선언 위치가 계약이다 — `/{routine_id}`보다 **앞**이어야 'watch'가 루틴 id로
+    잡히지 않는다(`/watch/code`와 같은 이유).
+
+    코드가 안 돌아도 500을 내지 않는다(B-12) — 200 + `ok:false` + 한국어 진단이다.
+    백테스트의 전략·실행·배포 표에는 아무 행도 만들지 않는다(R5). 늘어날 수 있는 것은
+    공유 일봉 캐시(`bt_candle` 행 추가·`bt_coverage` 구간 확장)뿐이다.
+    """
+    import asyncio
+
+    from athena_api.projects.store import ProjectPathError
+    from athena_api.watch.check import run_check
+    from athena_api.watch.data import assemble_frame, frame_from_candles
+
+    runtime = _runtime(request)
+    project_id = body.get("project_id")
+    if not isinstance(project_id, str) or not project_id.strip():
+        raise HTTPException(status_code=422, detail="프로젝트를 고르지 않음")
+    path = body.get("path")
+    if not isinstance(path, str) or not path.strip():
+        raise HTTPException(status_code=422, detail="감시 코드 경로가 비어 있음")
+    symbol = body.get("symbol")
+    if not isinstance(symbol, str) or not _SYMBOL_RE.match(symbol):
+        raise HTTPException(status_code=422, detail="종목코드는 6자리")
+    params = body.get("params") or {}
+    if not isinstance(params, dict):
+        raise HTTPException(status_code=422, detail="숫자 설정은 이름-값 짝이어야 한다")
+    lookback_days = body.get("lookback_days", 30)
+    if isinstance(lookback_days, bool) or not isinstance(lookback_days, int):
+        raise HTTPException(status_code=422, detail="며칠을 볼지는 정수")
+    cooldown_s = body.get("cooldown_s", 86400)
+    if isinstance(cooldown_s, bool) or not isinstance(cooldown_s, int):
+        raise HTTPException(status_code=422, detail="쿨다운은 정수 초")
+    routine_id = body.get("routine_id")
+    if routine_id is not None and not isinstance(routine_id, str):
+        raise HTTPException(status_code=422, detail="알람 번호는 문자열")
+
+    try:
+        target = resolve_watch_file(project_id.strip(), path.strip())
+    except KeyError:
+        raise HTTPException(status_code=404, detail="프로젝트 없음") from None
+    except ProjectPathError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+    if not target.is_file():
+        raise HTTPException(status_code=404, detail="감시 코드 파일 없음 — 먼저 만들기")
+    source = target.read_text(encoding="utf-8")
+
+    if runtime.watch_runner is None:
+        raise HTTPException(
+            status_code=409, detail="백엔드 실행층 꺼짐 — 백테스트 모듈 필요"
+        )
+
+    now = datetime.now(_KST)
+    today = now.date()
+    warnings: list[str] = []
+    store = runtime.watch_candle_store or getattr(
+        request.app.state, "backtest_store", None
+    )
+    if store is None:
+        warnings.append("일봉 캐시 없음 — 받아 둔 일봉이 없으면 셀 수 없음")
+    else:
+        warnings.extend(
+            await _ensure_watch_candles(
+                store, runtime.watch_fetch_page, symbol, lookback_days, today
+            )
+        )
+
+    frame_df = None
+    if store is not None:
+        frame = await assemble_frame(
+            store, symbol, lookback_days, today_quote=None, quote_provider=None, now=now
+        )
+        frame_df = frame.df
+        if frame.skip_reason:
+            warnings.append(frame.skip_reason)
+    if frame_df is None:
+        frame_df = frame_from_candles([])  # 빈 프레임도 날짜 인덱스를 갖춰야 한다
+
+    result = await asyncio.to_thread(
+        run_check,
+        source,
+        None,
+        frame_df,
+        cooldown_s=cooldown_s,
+        params=params,
+        lookback_days=lookback_days,
+        today=today,
+        runner=runtime.watch_runner,
+    )
+    payload = result.to_dict()
+    payload["warnings"] = warnings + list(payload["warnings"])
+    payload["symbol"] = symbol
+    payload["checked_at"] = datetime.now(UTC).isoformat()
+
+    key = routine_id or f"{project_id.strip()}:{path.strip()}"
+    runtime.watch_last[f"check:{key}"] = {
+        "checked_at": payload["checked_at"],
+        "nodes": payload["nodes"],
+        "observed": result.last_verdict,
+        "duration_ms": result.duration_ms,
+        "skip_reason": result.reason,
+        "count": result.count,
+        "counted_until": result.counted_until,
+    }
+    if routine_id and result.ok:
+        # 검사에 통과한 그 코드로 확정을 열어 준다 — can_activate가 해시를 대조한다.
+        spec = runtime.store.get(routine_id)
+        if spec is not None and spec.watch is not None:
+            # WatchSpec은 frozen이라 갈아 끼운다(검증을 거친 값의 불변성 유지).
+            spec.watch = replace(spec.watch, version_hash=result.code_hash)
+            runtime.store.upsert(spec)
+    return payload
+
+
+async def _ensure_watch_candles(
+    store: Any,
+    fetch_page: Any,
+    symbol: str,
+    lookback_days: int,
+    today: date,
+) -> list[str]:
+    """검사가 셀 만큼의 일봉이 캐시에 있게 한다 — 없으면 공유 캐시를 채운다(R5 허용).
+
+    지표가 lookback보다 긴 창을 쓸 수 있어 워밍업으로 3배 구간을 요구한다
+    (`watch/data.assemble_frame`이 읽는 구간과 같다). 백필 실패는 검사를 깨뜨리지
+    않는다 — 사유를 경고로 남기고 있는 일봉까지만 센다.
+    """
+    from athena_api.backtest.data import backfill
+
+    need_from = (today - timedelta(days=lookback_days * 3)).strftime("%Y%m%d")
+    to_dt = today.strftime("%Y%m%d")
+    coverage = await store.coverage(symbol, "day", True)
+    if coverage is not None and coverage.first_dt <= need_from and coverage.last_dt >= to_dt:
+        return []
+    if fetch_page is None:
+        return ["일봉을 더 받을 통로 없음 — 받아 둔 일봉까지만 셈"]
+    try:
+        await backfill(
+            store=store,
+            fetch_page=fetch_page,
+            stk_cd=symbol,
+            period="day",
+            adjusted=True,
+            base_dt=to_dt,
+            from_dt=need_from,
+        )
+    except Exception:
+        return ["일봉을 더 받지 못함 — 받아 둔 일봉까지만 셈"]
+    return []
+
+
 @router.get("/{routine_id}")
 async def get_routine(request: Request, routine_id: str) -> dict[str, Any]:
     """단일 루틴 상세 — 목록(_view)과 달리 **조건 원문**을 낸다.
@@ -339,6 +515,15 @@ async def update_routine(
     if body_condition is not None and not isinstance(body_condition, dict):
         raise HTTPException(status_code=422, detail="condition은 객체여야 한다")
     body_condition = body_condition or {}
+    if spec.mode == "code-watch" and body_condition:
+        # 코드 감시의 조건은 감시 함수 발화 하나뿐이다 — 고치기는 코드를 다시 쓰는 길로만.
+        raise HTTPException(
+            status_code=422, detail="코드 감시 조건은 폼에서 못 바꿈 — 고치기는 말로"
+        )
+    if "poll_interval_s" in body and spec.watch is None:
+        raise HTTPException(
+            status_code=422, detail="확인 주기는 코드 감시 알람에서만 바꿀 수 있음"
+        )
     if "symbol" in body and body["symbol"] != spec.symbol:
         raise HTTPException(status_code=422, detail="종목 — 변경 불가 · 취소 후 새로 만들기")
     if (
@@ -356,6 +541,12 @@ async def update_routine(
     for key in _UPDATABLE_FIELDS:
         if key in body:
             merged[key] = body[key]
+    if "poll_interval_s" in body:
+        # 값 범위(60~600초)는 rules.validate_watch가 아래 재검증에서 본다 —
+        # 여기서 같은 규칙을 두 번 적지 않는다.
+        watch_block = dict(merged.get("watch") or {})
+        watch_block["poll_interval_s"] = body["poll_interval_s"]
+        merged["watch"] = watch_block
     condition_changed = condition != spec.condition.to_dict()
     # note 신선도: 자동 생성문이었고 조건이 실제로 바뀌었고 새 note가 없으면
     # 비워서 재생성시킨다 — 사람이 쓴 note는 어떤 경우에도 덮어쓰지 않는다.
