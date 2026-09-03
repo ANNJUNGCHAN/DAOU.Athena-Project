@@ -57,7 +57,7 @@ cd app && npm run test:unit
 - 인계 문서를 항상 최신으로 유지하고(§4 수치·§11 이력), 마일스톤마다 feat/card-surface-paper-to-code 브랜치에 커밋·푸시한다(사용자 지시). pre-push 훅이 막으면 --no-verify 대신 초록을 만든다.
 - Paper 호출은 항상 fileId 01M0VGPX92K1TER4ZV9PWGQJJZ 를 명시한다(비슷한 이름의 duplicate 파일이 있다).
 
-현재 정확한 중단점은 W3 정비 A5/B4/C5/D3 완료, 3차 저작 8레인은 탐색 후 한도 오류·순변경 0, 게이트는 tool call 0이다. §6을 위에서부터 진행하되 정비 4레인은 다시 돌리지 마라. docs/handoff/card-surface/workflows/card-surface-w3-wf_622eeae9-f84.js의 저작 레인 프롬프트를 현재 API와 대조해 실행한 다음 게이트를 돌린다(다른 PC에서는 ROOT·PY 수정). 각 게이트가 끝나면 실보드 6장 × 4단계 캡처와 XL/M 기하 프로브를 확인해 surface overflow와 L/M/S/XS 세로 넘침/겹침 0 및 XL/M 레이아웃 계약을 단언하고, Paper와 나란히 보고한 뒤 문서 §4·§11을 갱신하고 커밋·푸시해라.
+현재 정확한 중단점은 W3 정비 A5/B4/C5/D3 완료, 재개 저작 `account-a` 리뷰·수정 완료(정확한 9건 닫힘), 다음은 `account-b`다. `3GRO-0`의 6구간 주문가능금액 12건·2 op는 Paper에 금액 잎이 없어 거짓 shares 매핑을 제거하고 blocker로 남겼다. §6의 남은 7레인을 순서대로 진행하되 정비 4레인과 account-a는 다시 돌리지 마라. docs/handoff/card-surface/workflows/card-surface-w3-wf_622eeae9-f84.js의 저작 레인 프롬프트를 현재 API와 대조해 실행한 다음 게이트를 돌린다(다른 PC에서는 ROOT·PY 수정). 각 게이트가 끝나면 실보드 6장 × 4단계 캡처와 XL/M 기하 프로브를 확인해 surface overflow와 L/M/S/XS 세로 넘침/겹침 0 및 XL/M 레이아웃 계약을 단언하고, Paper와 나란히 보고한 뒤 문서 §4·§11을 갱신하고 커밋·푸시해라.
 ```
 
 ## 블록 C — 원본 Claude 대화에서 한도 초기화 후 재개할 때
