@@ -51,7 +51,7 @@
     {
       "id": "US-003",
       "title": "W2 메인 프로세스 — revision·plugin-batch·제안 레지스트리·IPC·승인 실행",
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "app/lib/main/mcp-cli.js list()가 { servers, revision } 반환",
         "app/lib/main/mcp-runtime-coordinator.js MUTATION_KINDS에 'plugin-batch' + 테스트",

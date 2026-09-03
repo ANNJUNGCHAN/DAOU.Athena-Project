@@ -84,6 +84,47 @@ test('preload가 세션 채널을 연다', () => {
   assert.match(on, /'athena:session-run-state'/);
 });
 
+// 플러그인 제안·승인은 세 다리를 모두 쓴다 — 어느 하나가 빠지면 카드가 뜨지
+// 않거나(ON), 대기 등록이 사라지거나(SEND), 승인 버튼이 죽는다(INVOKE).
+// 세 집합은 별개 화이트리스트다.
+test('preload가 플러그인 제안 채널을 연다', () => {
+  const preload = fs.readFileSync(path.join(__dirname, '..', '..', 'preload.js'), 'utf8');
+  const invoke = preload.slice(preload.indexOf('const INVOKE_CHANNELS'), preload.indexOf('const SEND_CHANNELS'));
+  const send = preload.slice(preload.indexOf('const SEND_CHANNELS'), preload.indexOf('const ON_CHANNELS'));
+  const on = preload.slice(preload.indexOf('const ON_CHANNELS'));
+  for (const channel of ['athena:plugin-approve', 'athena:plugin-reject', 'athena:plugin-pending']) {
+    assert.match(invoke, new RegExp(`'${channel}'`), channel);
+  }
+  assert.match(send, /'athena:plugin-noted'/);
+  assert.doesNotMatch(send, /'athena:plugin-approve'/);
+  assert.match(on, /'athena:plugin-proposed'/);
+});
+
+// 승인 순서가 뒤집히면 게이트를 통과하지 않은 봉투가 실행되거나(게이트 뒤로),
+// 낡은 목록 위에서 실행되거나(판번호 뒤로), 펜스 안에서 서버가 뜬다(연결 확인 앞으로).
+test('플러그인 승인은 게이트 → 소비 → 판번호 → 묶음 실행 → 연결 확인 순서다', () => {
+  const approve = slice('async function handlePluginApprove', 'function handlePluginReject');
+  let at = -1;
+  for (const marker of [
+    'pluginProposalRegistry.gate(',
+    'pluginProposalRegistry.consume(',
+    'mcpCli.list().revision',
+    "runMcpMutation('plugin-batch'",
+    'pluginProposalRegistry.probe(',
+  ]) {
+    const next = approve.indexOf(marker);
+    assert.ok(next > at, marker);
+    at = next;
+  }
+  // 묶음은 정확히 한 번만 조정자를 탄다 — 동작마다 부르면 재기동이 그만큼 반복된다.
+  assert.equal((approve.match(/runMcpMutation\(/g) || []).length, 1);
+});
+
+test('플러그인 거부는 아무 CLI도 부르지 않는다', () => {
+  const reject = slice('function handlePluginReject', 'function handlePluginPending');
+  assert.doesNotMatch(reject, /mcpCli\./);
+});
+
 // 39번 보드 — 실행은 백테스트 채널 응답에서 붙고, 폴링 응답으로 갱신되며, 목록에 얹혀 나간다.
 test('백테스트 run·backfill 응답이 실행으로 붙고 status·result 폴링이 그것을 갱신한다', () => {
   const run = slice("ipcMain.handle('athena:backtest-run'", "ipcMain.handle('athena:backtest-status'");

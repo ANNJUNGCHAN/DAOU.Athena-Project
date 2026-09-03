@@ -20,3 +20,7 @@
 - 병합으로 app/main.js(+633) · chat.js(+939) · canvas.js(+436) · graph-mode/controller.js(+359) · preload.js(+55)가 크게 바뀌었다. US-003·US-004는 계획 문면의 파일:행이 아니라 심볼 재탐색으로 앵커를 잡는다.
 - 새 기준선: app test:unit 2329/2329(전 1984), backend 플러그인 3파일 137/137. 판정은 여전히 "신규 실패 0".
 - 다음: US-003.
+
+[US-003 완료 2026-09-03] 메인 프로세스. 신규 lib/main/plugin-proposal-registry.js(+test 14건)·plugin-proposal-forward.js(+test 4건), mcp-cli.js list()→{servers,revision}, mcp-runtime-coordinator MUTATION_KINDS 'plugin-batch', main.js(+113 순수 삽입: maybeForwardPluginProposal→'athena:plugin-proposed'·tracker 훅·approve/reject/pending handle·plugin-noted on), preload.js 채널 5종. node --test lib/main 926/926, test:unit 2354/2354(기준선 2329 대비 신규 실패 0). 리뷰 11건 반영(stage_snippet은 probe 대상 아님, stale 문구, 실행 실패 시 release로 봉투 되돌림, 조정자 영문 오류 비노출, 이미 설치 게이트, detail 분리, 상한 20, 반환 7키 헬퍼, 승인 순서 소스 스캔 테스트).
+- **US-004가 알아야 할 것:** approve/reject 반환은 항상 {ok, kind, reason, results, probes, revision, runtimeEnabled}. kind는 success|failed|rejected|stale — resultTurnCopy에 'stale' 분기가 없으므로 US-004가 추가한다(문구는 reason '목록이 바뀌어 다시 확인이 필요합니다'). results[]/probes[]의 detail은 CLI 원문이라 표시 금지. failed 봉투는 consumed에서 되돌려져 있으므로 '다시 시도' 칩이 같은 봉투를 다시 approve로 보내면 된다. pending()은 {proposals, revision}. mcp-list 응답은 {servers, revision}이라 GUI 경로의 buildProposal revision은 여기서 얻는다.
+- 편차: W2-4 ⑶ "revision null이면 현재 값으로 채운다"는 건너뛰기로 대체(봉투 변조 금지, 현재 판번호는 반환 객체로). pending 등록 함수명은 note(). 감사는 mdlog(main.js에 audit 함수 없음).

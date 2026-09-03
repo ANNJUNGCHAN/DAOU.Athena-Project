@@ -38,6 +38,11 @@ const INVOKE_CHANNELS = new Set([
   'athena:mcp-probe',
   'athena:mcp-allow-tool',
   'athena:mcp-remove',
+  // 플러그인 승인 카드 — 실행은 사람이 이 둘 중 하나를 부를 때만 일어난다.
+  'athena:plugin-approve',
+  'athena:plugin-reject',
+  // 대기 중인 제안과 현재 판번호 — 창 복원·모드 재진입 때만 부르는 조회다.
+  'athena:plugin-pending',
   'athena:load-fixture',
   'athena:reload-chart-panel',
   // 과거 봉 덧붙이기 — 좌측 끝에 닿으면 렌더러가 부른다(화면 교체 아님).
@@ -219,6 +224,9 @@ const SEND_CHANNELS = new Set([
   'athena:boot-complete',
   'athena:shell-handoff-ready',
   'athena:app-notification-shown',
+  // 카드를 그린 뒤 보내는 단방향 신호 — 모델 경로와 GUI 경로 공통의 대기 등록
+  // 지점이다. 응답을 기다리지 않으므로 카드 렌더를 막지 않는다.
+  'athena:plugin-noted',
 ]);
 
 const ON_CHANNELS = new Set([
@@ -296,6 +304,8 @@ const ON_CHANNELS = new Set([
   // 백테스트 채팅 액션 — athena_backtest의 propose_spec·propose_code·navigate·
   // propose_optimize 결과 {kind, ...}, 비영속. 셸에서만 구독한다.
   'athena:backtest-chat-action',
+  // 플러그인 제안 카드 — athena_plugin 결과, 비영속. 셸에서만 구독한다.
+  'athena:plugin-proposed',
   // 질의 왕복이 도는 동안 셸·오브 입력을 함께 잠그는 신호 — {busy: boolean}.
   'athena:live-query-state',
   // 오브에서 오간 턴을 셸의 대화 이력에도 늦게 채워 넣는다(셸이 숨어 있는 동안

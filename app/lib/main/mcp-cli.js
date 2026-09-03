@@ -133,7 +133,11 @@ function list() {
       warnings,
     };
   });
-  return { servers };
+  // revision — registry.py가 쓰기마다 1씩 올려 mcp_servers.json에 남기는 값이다
+  // (registry.py `_payload`). 승인 직전 "그 사이 목록이 바뀌었는가"를 재는 유일한
+  // 권위 값이라 목록과 같은 읽기에서 함께 돌려준다(두 번 읽으면 그 사이가 벌어진다).
+  const revision = Number.isSafeInteger(registry.revision) ? registry.revision : 0;
+  return { servers, revision };
 }
 
 // ---------------------------------------------------------------------------

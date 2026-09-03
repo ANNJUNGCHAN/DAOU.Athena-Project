@@ -18,6 +18,10 @@ const { computeShellPlacement, clampCenterToWorkArea } = require('./lib/main/win
 const orbWindow = require('./lib/main/orb-window');
 const mcpCli = require('./lib/main/mcp-cli');
 const mcpEnv = require('./lib/main/mcp-env');
+// 플러그인 제안 — 판정부와 승인 실행부는 electron 없는 순수 모듈이 진다.
+const pluginProposalForward = require('./lib/main/plugin-proposal-forward');
+const { createPluginProposalRegistry } = require('./lib/main/plugin-proposal-registry');
+const { CATALOG: PLUGIN_CATALOG } = require('./lib/plugin-catalog');
 // 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
 const { runClaudeQuery } = require('./lib/main/claude-runner');
 // 툴 호출 진행 단계(board-33) 라벨링에 render_canvas 판정 하나만 빌려 쓴다 —
@@ -2314,6 +2318,22 @@ function maybeForwardNudgeGuardProposal(step, resultBlock) {
   }
 }
 
+// 플러그인 승인 카드 — athena_plugin이 만든 제안 봉투를 셸 렌더러로 흘려보낸다.
+// **여기서 대기 목록에 등록하지 않는다.** 등록은 렌더러가 모드 게이트를 통과해
+// 카드를 그린 뒤 보내는 athena:plugin-noted 한 지점뿐이다 — 모드 밖에서 폐기한
+// 제안이 창 복원으로 되살아나면 화면이 거짓을 말한다.
+// orbWin에는 안 보낸다 — 말걸기 가드 카드와 같은 이유(채팅 전용 사람 액션)다.
+function maybeForwardPluginProposal(step, resultBlock) {
+  if (resultBlock.is_error === true) return;
+  const text = extractToolResultText(resultBlock.content);
+  if (!text) return;
+  const envelope = pluginProposalForward.extractProposal(step, text);
+  if (!envelope) return;
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:plugin-proposed', envelope);
+  }
+}
+
 const GRAPH_VIEW_TOOL_NAME = 'athena_graph_view';
 
 // 그래프 채팅 액션(2026-09-03) — athena_graph_view의 HTTP 무호출 액션 다섯
@@ -2505,6 +2525,7 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
               maybeForwardNudgeGuardProposal(step, block);
               maybeForwardBacktestChatAction(step, block);
               maybeForwardGraphChatAction(step, block);
+              maybeForwardPluginProposal(step, block);
             }
           }
         }
@@ -4748,6 +4769,98 @@ ipcMain.handle('athena:mcp-revoke', handleMcpRevoke);
 ipcMain.handle('athena:mcp-probe', handleMcpProbe);
 ipcMain.handle('athena:mcp-allow-tool', handleMcpAllowTool);
 ipcMain.handle('athena:mcp-remove', handleMcpRemove);
+
+// ---------------------------------------------------------------------------
+// 플러그인 승인 — 실행은 사람이 카드를 누른 이 경로에서만 일어난다.
+// 제안 툴은 읽기만 하고 아무것도 바꾸지 않는다(backend/athena_mcp/plugin_tools.py).
+// ---------------------------------------------------------------------------
+
+const pluginProposalRegistry = createPluginProposalRegistry({
+  catalog: PLUGIN_CATALOG,
+  executor: {
+    list: () => mcpCli.list(),
+    stageSnippet: (snippet) => mcpCli.stageSnippet(snippet),
+    register: (staged) => mcpCli.register(staged),
+    approve: (alias) => mcpCli.approve(alias),
+    revoke: (alias) => mcpCli.revoke(alias),
+    remove: (alias) => mcpCli.remove(alias),
+    allowTool: (alias, tool, allowed) => mcpCli.allowTool(alias, tool, allowed),
+    // probe만 2인자다 — 실제로 upstream 서버를 띄우므로 그 서버 하나의 env를 넘긴다.
+    probe: (alias) => mcpCli.probe(alias, mcpEnv.buildEnvOverrides(alias)),
+  },
+});
+
+// 모델 경로와 GUI 경로 공통의 대기 등록 지점. 응답을 기다리지 않는 단방향이라
+// 카드 렌더를 막지 않는다 — 등록이 늦어도 승인 인자가 봉투 전체라 손실이 없다.
+ipcMain.on('athena:plugin-noted', (e, envelope) => {
+  pluginProposalRegistry.note(envelope);
+});
+
+// 승인·거부 결과는 언제나 같은 일곱 칸을 채운다 — 결과 턴이 실패 경로에서만
+// 빈 칸을 만나 다른 코드를 타지 않게 한다.
+function pluginResult(kind, reason, extra = {}) {
+  return {
+    ok: kind === 'success' || kind === 'rejected',
+    kind,
+    reason: reason || null,
+    results: extra.results || [],
+    probes: extra.probes || [],
+    revision: extra.revision === undefined ? mcpCli.list().revision : extra.revision,
+    runtimeEnabled: providerRuntimeEnabled,
+  };
+}
+
+// 순서는 ⑴게이트 → ⑵원자 소비 → ⑶판번호 대조 → ⑷실행 → ⑸연결 확인이다.
+// handleMcp*를 재사용하지 않는다 — 그 함수들은 IPC 이벤트 인자를 받는 모양이고,
+// 런타임이 켜진 빌드에서는 자기들이 다시 runMcpMutation을 불러 교착한다.
+async function handlePluginApprove(e, envelope) {
+  const gated = pluginProposalRegistry.gate(envelope);
+  if (!gated.ok) return pluginResult('failed', gated.error);
+  const claimed = pluginProposalRegistry.consume(envelope);
+  if (!claimed.ok) return pluginResult('failed', claimed.error);
+  const revision = mcpCli.list().revision;
+  // 봉투가 판번호를 모르면(null) 만료 판정을 건너뛴다 — 모르는 것을 낡았다고 말하지 않는다.
+  if (envelope.revision !== null && envelope.revision !== undefined && envelope.revision !== revision) {
+    return pluginResult('stale', '목록이 바뀌어 다시 확인이 필요합니다', { revision });
+  }
+  const apply = () => pluginProposalRegistry.apply(envelope);
+  const applied = providerRuntimeEnabled
+    ? await runMcpMutation('plugin-batch', apply)
+    : await apply();
+  const results = Array.isArray(applied.results) ? applied.results : [];
+  for (const row of results) {
+    const outcome = row.ok ? '완료' : `실패: ${row.error}${row.detail ? ` (${row.detail})` : ''}`;
+    mdlog(`플러그인 승인 ${row.action} ${row.target || ''} — ${outcome}`);
+  }
+  // probe는 실행 시퀀스 밖이다 — apply 안에서 upstream 서버를 띄우면 펜스가 오염된다.
+  const probes = await pluginProposalRegistry.probe(applied.probeAliases || []);
+  // 조정자가 낸 문장은 영문 내부 메시지라 화면에 내지 않는다 — 로그에만 남긴다.
+  if (applied.ok !== true) mdlog(`플러그인 승인 반영 실패 — ${applied.error || '사유 없음'}`);
+  const failed = results.find((row) => !row.ok) || null;
+  const reason = failed
+    ? failed.error
+    : (applied.ok === true ? null : '설정을 바꿨지만 대화에 반영하지 못했습니다');
+  // 실패했으면 소비를 되돌린다 — 그래야 결과 턴의 다시 시도가 같은 봉투로 동작한다.
+  if (reason) pluginProposalRegistry.release(envelope);
+  return pluginResult(reason ? 'failed' : 'success', reason, { results, probes });
+}
+
+// 거부는 어떤 CLI도 부르지 않는다 — 소비 표시와 대기 목록 제거뿐이다.
+function handlePluginReject(e, envelope) {
+  const claimed = pluginProposalRegistry.consume(envelope);
+  if (!claimed.ok) return pluginResult('failed', claimed.error);
+  mdlog(`플러그인 거부 ${((envelope && envelope.actions) || []).map((row) => row.action).join(' · ')}`);
+  return pluginResult('rejected', null);
+}
+
+// 창 복원·모드 재진입 전용 — 미해결 봉투와 현재 판번호를 함께 돌려준다.
+function handlePluginPending() {
+  return pluginProposalRegistry.pending();
+}
+
+ipcMain.handle('athena:plugin-approve', handlePluginApprove);
+ipcMain.handle('athena:plugin-reject', handlePluginReject);
+ipcMain.handle('athena:plugin-pending', handlePluginPending);
 
 const BRAIN_GRAPH_REFRESH_INTERVAL_MS = 60 * 60 * 1000;
 const BRAIN_GRAPH_OBSERVER_INTERVAL_MS = 60 * 1000;
