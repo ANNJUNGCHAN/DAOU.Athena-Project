@@ -1,0 +1,18 @@
+# ralph progress — athena-agent-doctrine-plan (feat/agent-dual-control)
+
+## 2026-09-03 세션 99345b72 (인터뷰 → 합의 → ralph Step 0~1)
+- 딥 인터뷰 7라운드(모호도 17%) → 스펙 .omc/specs/deep-interview-athena-agent-doctrine.md
+- 합의 계획 6차(APPROVE) → .omc/plans/athena-agent-doctrine-plan.md (Status: approved for execution — ralph)
+- Step 0a~0c 완료: worktree .claude/worktrees/agent-dual-control @85aee35(origin/main tip), 브랜치 feat/agent-dual-control, .omc plans/specs 복사, 헌장 첫 커밋 55ab631. 메인 체크아웃 미커밋 19파일 불가침.
+- Step 0c-2 완료: EnterWorktree 진입(pwd == worktree, 상대 경로로 계획·헌장 확인).
+- Step 0d 완료: npm ci(app/node_modules) · uv sync(backend/.venv, import athena_api OK).
+- Step 0e: .omc/anchors.sh → .omc/plans/anchors-note.md (이름 앵커 실측표).
+- Step 0f: Paper get_guide 완료, A-2 활성(복귀 대상 A-2), 6보드 id/크기 대조, 토큰 --color-k-faint/--color-k-dim 실재 확인. get_font_family_info는 Step 2 시작 시 1회.
+- Step 1: npm test / uv run pytest / verify:agent-paper-parity 베이스라인 측정 → anchors-note.md baseline 절.
+
+## 학습·주의
+- OMC MCP 상태 서버 미연결 → PRD/progress는 .omc/state/sessions/<sid>/ 수동 관리. 메인 체크아웃의 .omc/prd.json은 카드 커버리지 트랙 소유(건드리지 않음), ralplan-state.json은 키우미 세션 소유.
+- Git Bash python은 stdin을 cp949로 읽는다 → 한국어 heredoc 파이썬은 `export PYTHONUTF8=1` 선행, 또는 Write 도구 사용.
+- worktree 세션은 복합 셸 명령(git 포함)을 거부한다 → 스크립트 파일로 만들어 `bash <file>`로 실행.
+- .omc/는 gitignore → worktree 간 이관은 복사. 인계용 사본은 docs/handoff/agent-dual-control/에 커밋.
+- node는 fnm multishell PATH 필요(계획 §6.1).
