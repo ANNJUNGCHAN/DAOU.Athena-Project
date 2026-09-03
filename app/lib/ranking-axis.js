@@ -101,7 +101,9 @@ function renderAxisStrip(envelope, onSelect, doc = typeof document !== 'undefine
       chip.type = 'button';
       chip.className = `ranking-axis-chip${item.active ? ' is-active' : ''}`;
       chip.textContent = item.label;
-      chip.title = item.operationRef;
+      // operationRef는 어떤 속성에도 싣지 않는다 — title·aria·data-* 전부 제품 UI의 원시
+      // 식별자 누출로 잡힌다(verify-semantic-workspaces forbiddenPattern·forbiddenAttributeName,
+      // 2026-09-04 elw-product 실측: title="base:ka10016"). 클릭은 클로저의 item으로 충분하다.
       chip.setAttribute('aria-pressed', String(!!item.active));
       if (item.active) {
         chip.disabled = true;
