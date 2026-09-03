@@ -15,3 +15,8 @@
 - **픽스처 churn 수정:** test_plugin_tools.py의 픽스처 테스트가 매 실행 proposal_id(nonce)를 새로 써서 작업 트리를 더럽혔다 → 액션 이름에서 유도한 고정 hex + 내용 동일 시 미기록으로 교체.
 - **사용자 추가 지시(2026-09-03): 설정의 플러그인 탭을 플러그인 모드로 흡수** → US-009 신설(prd.json, 순서 US-004 뒤·US-006/007 앞). 명세 "설정 02 카드 유지", 계획 확정 9·R8은 US-009가 대체한다. 지금은 구현하지 않음(인계 지시).
 - 남은 것: US-003 → US-004 → US-009 → US-006 ∥ US-007 → US-008. 브랜치 push는 사용자가 한다.
+
+[main 동기화 2026-09-03] 워크트리를 C:/Projects/DAOU.Athena/.claude/worktrees/settings-plugin-tab-absorption-6d550f로 옮기고 origin/main(298747e, 60커밋)을 -X ignore-cr-at-eol로 병합 → ce3b2a9. 충돌은 docs/handoff/README.md 1건(양쪽 안내 병기). shell.html·server.py 자동 병합.
+- 병합으로 app/main.js(+633) · chat.js(+939) · canvas.js(+436) · graph-mode/controller.js(+359) · preload.js(+55)가 크게 바뀌었다. US-003·US-004는 계획 문면의 파일:행이 아니라 심볼 재탐색으로 앵커를 잡는다.
+- 새 기준선: app test:unit 2329/2329(전 1984), backend 플러그인 3파일 137/137. 판정은 여전히 "신규 실패 0".
+- 다음: US-003.
