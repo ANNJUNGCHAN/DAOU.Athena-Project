@@ -154,22 +154,10 @@ function countingExecutor(base, overrides) {
   return wrapped;
 }
 
-// main.js handlePluginApprove와 같은 순서다(gate → consume → 만료 → apply →
-// probe → 실패 시 release). 여기서 순서를 바꾸면 앱과 다른 것을 재게 된다.
-async function approveEnvelope(registry, envelope, revisionNow) {
-  const gated = registry.gate(envelope);
-  if (!gated.ok) return { kind: 'failed', reason: gated.error, results: [], probes: [] };
-  const claimed = registry.consume(envelope);
-  if (!claimed.ok) return { kind: 'failed', reason: claimed.error, results: [], probes: [] };
-  if (envelope.revision !== null && envelope.revision !== undefined && envelope.revision !== revisionNow) {
-    return { kind: 'stale', reason: '목록이 바뀌어 다시 확인이 필요합니다', results: [], probes: [] };
-  }
-  const applied = await registry.apply(envelope);
-  const results = Array.isArray(applied.results) ? applied.results : [];
-  const probes = await registry.probe(applied.probeAliases || []);
-  const failed = results.find((row) => !row.ok) || null;
-  if (failed) registry.release(envelope);
-  return { kind: failed ? 'failed' : 'success', reason: failed ? failed.error : null, results, probes };
+// 순서는 레지스트리의 decide가 소유한다 — main.js handlePluginApprove가 부르는
+// 것과 같은 함수다. 여기서 순서를 다시 적으면 앱과 다른 것을 재게 된다.
+function approveEnvelope(registry, envelope, revisionNow) {
+  return registry.decide(envelope, { revisionNow });
 }
 
 // 거부는 어떤 CLI도 부르지 않는다 — 소비 표시뿐이다(main.js handlePluginReject).

@@ -2384,6 +2384,9 @@ function buildGuiProposal(spec, reason) {
 // 채팅이 한 줄로 알릴 수 있게 렌더러 안에서만 신호를 낸다.
 function mountPluginProposal(envelope) {
   if (!envelope) return false;
+  // 모양이 어긋난 봉투는 그리지도, 대기 등록하지도 않는다 — 반쪽 카드를 세우면
+  // 승인 버튼이 메인에서 거부될 것을 화면만 제안으로 그린다.
+  if (!pluginProposal.validateProposal(envelope).ok) return false;
   if (pluginModeAdapter.currentMode() !== 'plugin') {
     window.dispatchEvent(new CustomEvent('athena:plugin-out-of-mode', { detail: { envelope } }));
     return false;

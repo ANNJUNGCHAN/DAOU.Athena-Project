@@ -28,9 +28,31 @@ const MUTATION_CHANNELS = [
   'athena:mcp-stage-snippet',
 ];
 
-test('canvas.js는 플러그인 변이 채널을 직접 부르지 않는다 — 실행은 승인 하나뿐이다', () => {
-  const offenders = MUTATION_CHANNELS.filter((channel) => canvasSource.includes(`'${channel}'`));
-  assert.deepEqual(offenders, [], '변이는 athena:plugin-approve를 통해 메인이 실행한다');
+// 렌더러 쪽 창구는 이 넷뿐이다 — 어느 하나가 변이 채널을 직접 부르면 승인 카드를
+// 지나지 않는 두 번째 실행 경로가 생긴다.
+const RENDERER_SOURCES = {
+  'canvas.js': canvasSource,
+  'lib/plugin-canvas.js': fs.readFileSync(path.join(appDir, 'lib', 'plugin-canvas.js'), 'utf8'),
+  'lib/sidebar.js': fs.readFileSync(path.join(appDir, 'lib', 'sidebar.js'), 'utf8'),
+  'orb.js': fs.readFileSync(path.join(appDir, 'orb.js'), 'utf8'),
+};
+
+test('렌더러는 플러그인 변이 채널을 직접 부르지 않는다 — 실행은 승인 하나뿐이다', () => {
+  for (const [name, source] of Object.entries(RENDERER_SOURCES)) {
+    const offenders = MUTATION_CHANNELS.filter((channel) => source.includes(`'${channel}'`));
+    assert.deepEqual(offenders, [], `${name}: 변이는 athena:plugin-approve를 통해 메인이 실행한다`);
+  }
+});
+
+// 부를 곳이 없으면 열어 두지도 않는다 — 화이트리스트에 남아 있으면 언젠가 누가 쓴다.
+test('preload는 변이 채널을 렌더러에 열지 않는다', () => {
+  const preload = fs.readFileSync(path.join(appDir, 'preload.js'), 'utf8');
+  const offenders = MUTATION_CHANNELS.filter((channel) => preload.includes(`'${channel}'`));
+  assert.deepEqual(offenders, [], '실행의 유일한 문은 athena:plugin-approve다');
+  // 읽기 채널은 남는다 — 허브·권한 화면이 목록과 연결 상태를 그린다.
+  for (const channel of ['athena:mcp-list', 'athena:mcp-probe', 'athena:mcp-audit']) {
+    assert.ok(preload.includes(`'${channel}'`), channel);
+  }
 });
 
 // 설정에는 플러그인 표면 자체가 없다(2026-09-03 — 플러그인 모드 관리 뷰가 흡수).
@@ -80,7 +102,10 @@ test('chat.js의 athena:plugin-result 리스너는 모듈 스코프에서 _mount
 
 test('chat.js의 턴 스코프 제안 턴은 모드 게이트를 먼저 지난다', () => {
   const handler = chatSource.slice(chatSource.indexOf('const onPluginProposed = '));
-  const body = handler.slice(0, handler.indexOf('\r\n  };'));
+  // chat.js는 CRLF와 LF가 섞여 있다 — 닫는 줄을 바이트로 박으면 EOL이 바뀌는 날 깨진다.
+  const end = handler.search(/\r?\n\s*};/);
+  assert.ok(end > 0, 'onPluginProposed의 끝을 찾지 못했다');
+  const body = handler.slice(0, end);
   const gate = body.indexOf("pluginModeLib.currentMode() !== 'plugin'");
   const render = body.indexOf('renderPluginProposalTurn(');
   assert.ok(gate >= 0, '모드 게이트가 없다 — 모드 밖에서도 제안 턴이 뜬다');
@@ -106,6 +131,16 @@ test('canvas.js는 같은 번호가 다시 등록되면 앞의 카드를 뺀다'
   const mount = canvasSource.slice(canvasSource.indexOf('function mountPluginProposal('));
   const body = mount.slice(0, mount.indexOf('\n}'));
   assert.match(body, /dropPluginProposal\(envelope\);/);
+});
+
+// 모양이 어긋난 봉투는 카드도 대기 등록도 없이 폐기된다 — 검증이 send보다 앞이다.
+test('canvas.js는 마운트 첫머리에서 봉투를 검증한다', () => {
+  const mount = canvasSource.slice(canvasSource.indexOf('function mountPluginProposal('));
+  const body = mount.slice(0, mount.indexOf('\n}'));
+  const validateAt = body.indexOf('pluginProposal.validateProposal(envelope)');
+  const notedAt = body.indexOf("window.athena.send('athena:plugin-noted'");
+  assert.ok(validateAt > 0, 'validateProposal 호출이 없다');
+  assert.ok(notedAt > validateAt, '검증이 plugin-noted보다 뒤에 있다');
 });
 
 test('canvas.js는 판번호가 움직일 때 남은 카드의 만료 판정을 갱신한다', () => {

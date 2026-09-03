@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -128,6 +129,23 @@ def test_action_enum_is_exactly_the_six_names():
     # 설명이 정직성 계약을 담는다.
     assert "제안만 한다" in tool.description
     assert "athena:mcp-stage-snippet" in tool.description
+
+
+CATALOG_JS = Path(__file__).resolve().parents[3] / "app" / "lib" / "plugin-catalog.js"
+
+
+def test_catalog_ids_match_the_renderer_catalog():
+    """설치 제안의 화이트리스트는 허브가 보여주는 목록과 같아야 한다.
+
+    어긋나면 허브에 뜨는 항목을 모델이 제안할 수 없거나(누락), 화면에 없는 것을
+    제안한다(초과). 두 목록은 언어가 달라 한쪽만 고치기 쉬우므로 여기서 잠근다.
+    """
+    source = CATALOG_JS.read_text(encoding="utf-8")
+    # MARKETPLACES에도 같은 모양의 id가 있다 — CATALOG 블록만 잘라 읽는다.
+    block = source[source.index("const CATALOG = Object.freeze([") : source.index("const MARKETPLACES")]
+    ids = set(re.findall(r"^ {4}id: '([^']+)',", block, re.MULTILINE))
+    assert ids, f"카탈로그 id를 하나도 읽지 못했다: {CATALOG_JS}"
+    assert ids == set(plugin_tools._CATALOG_IDS)
 
 
 @pytest.mark.parametrize("action", ["enable", "disable", "approve", "probe", None, 5])

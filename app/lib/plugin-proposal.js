@@ -158,6 +158,8 @@ function cardCopy(envelope) {
 // 승인 뒤 채팅에 남기는 결과 턴 문구. `chip`은 실패 때만 있다.
 // 재시작 칸은 런타임이 켜졌을 때만 "반영됐다"고 말한다 — 기본 빌드는 아직
 // 낡은 목록을 쥐고 있으므로 그 문장이 거짓이다.
+// 실패 사유는 그대로 낸다 — 게이트가 막은 것("이미 설치돼 있습니다")에
+// "연결 실패"를 씌우면 일어나지 않은 일을 말하게 된다.
 function resultTurnCopy(kind, ctx) {
   const context = ctx || {};
   if (kind === 'success') {
@@ -167,7 +169,10 @@ function resultTurnCopy(kind, ctx) {
   if (kind === 'rejected') return { lines: ['그대로 뒀습니다'], chip: null };
   if (kind === 'failed') {
     const reason = String(context.reason || '').trim();
-    return { lines: [reason ? `연결 실패 — ${reason}` : '연결 실패'], chip: '다시 시도' };
+    // 다시 시도는 실행이 한 줄이라도 돌았을 때만 낸다 — 게이트에서 막힌 봉투는
+    // 다시 보내도 같은 자리에서 막힌다.
+    const ran = Array.isArray(context.results) && context.results.length > 0;
+    return { lines: [reason || '처리하지 못했습니다'], chip: ran ? '다시 시도' : null };
   }
   // 만료는 실패가 아니다 — 아무것도 하지 않았고, 목록이 그 사이 바뀌었을 뿐이다.
   if (kind === 'stale') {
@@ -192,7 +197,11 @@ function probeToolCount(probes) {
 // 않는다(CLI 원문은 화면에 내지 않는다). 재시작 줄은 성공에만 붙는다.
 function resultTurnModel(kind, result) {
   const res = result || {};
-  const copy = resultTurnCopy(kind, { toolCount: probeToolCount(res.probes), reason: res.reason });
+  const copy = resultTurnCopy(kind, {
+    toolCount: probeToolCount(res.probes),
+    reason: res.reason,
+    results: res.results,
+  });
   const lines = [...copy.lines];
   if (kind === 'success') {
     lines.push(...resultTurnCopy('restart', { runtimeEnabled: res.runtimeEnabled }).lines);
@@ -242,7 +251,7 @@ function proposalSignature(envelope) {
 const __exports = {
   ACTIONS, buildProposal, buildBatchProposal, validateProposal, isProposalStale,
   cardCopy, resultTurnCopy, resultTurnModel, probeToolCount,
-  outOfModeCopy, createOutOfModeNotifier, proposalSignature,
+  outOfModeCopy, createOutOfModeNotifier,
 };
 
 if (typeof module !== 'undefined' && module.exports) {

@@ -263,7 +263,44 @@ function createPluginProposalRegistry({ executor, catalog = [] } = {}) {
     return reports;
   }
 
-  return { gate, consume, release, note, pending, apply, probe };
+  // 승인 한 번의 순서를 소유하는 유일한 함수 — main.js도 verify-plugins.js도
+  // 이것을 부른다(두 곳이 순서를 각자 적으면 검증이 앱과 다른 것을 잰다).
+  // ⑴게이트 → ⑵원자 소비 → ⑶판번호 대조 → ⑷실행 → ⑸연결 확인, 실패면 소비 되돌림.
+  // `runMutation`은 런타임이 켜진 빌드에서 실행을 조정자로 감싸는 자리다.
+  //
+  // 만료(stale)는 소비를 되돌리지 않는 유일한 예외다 — 같은 봉투를 다시 보내도
+  // 판번호가 여전히 낡아 같은 자리에서 막힌다(다시 시도 칩도 주지 않는다).
+  async function decide(envelope, { revisionNow = null, runMutation = null } = {}) {
+    const gated = gate(envelope);
+    if (!gated.ok) return { kind: 'failed', reason: gated.error, results: [], probes: [], mutationError: null };
+    const claimed = consume(envelope);
+    if (!claimed.ok) return { kind: 'failed', reason: claimed.error, results: [], probes: [], mutationError: null };
+    const revision = envelope ? envelope.revision : null;
+    if (revision !== null && revision !== undefined && revision !== revisionNow) {
+      return {
+        kind: 'stale',
+        reason: '목록이 바뀌어 다시 확인이 필요합니다',
+        results: [],
+        probes: [],
+        mutationError: null,
+      };
+    }
+    const run = () => apply(envelope);
+    const applied = await (typeof runMutation === 'function' ? runMutation(run) : run());
+    const results = Array.isArray(applied.results) ? applied.results : [];
+    // probe는 실행 시퀀스 밖이다 — apply 안에서 upstream 서버를 띄우면 펜스가 오염된다.
+    const probes = await probe(applied.probeAliases || []);
+    const failed = results.find((row) => !row.ok) || null;
+    // 조정자가 낸 문장은 영문 내부 메시지라 화면에 내지 않는다 — 호출자가 로그에만 쓴다.
+    const mutationError = applied.ok === true ? null : (applied.error || '사유 없음');
+    const reason = failed
+      ? failed.error
+      : (applied.ok === true ? null : '설정을 바꿨지만 대화에 반영하지 못했습니다');
+    if (reason) release(envelope);
+    return { kind: reason ? 'failed' : 'success', reason, results, probes, mutationError };
+  }
+
+  return { gate, consume, release, note, pending, apply, probe, decide };
 }
 
-module.exports = { ACTIONS, createPluginProposalRegistry };
+module.exports = { createPluginProposalRegistry };
