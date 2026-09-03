@@ -3,11 +3,18 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import json
+import time
+from contextlib import suppress
 from datetime import UTC, datetime, timedelta, timezone
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
+from athena_api.backtest.store import Candle
+from athena_api.projects import store as projects_store
 from athena_api.routines.briefings import BriefingStore
 from athena_api.routines.engagement import EngagementStore
 from athena_api.routines.ledger import RoutineLedger
@@ -18,10 +25,12 @@ from athena_api.routines.runtime import RoutinesRuntime
 from athena_api.routines.scheduler import (
     RoutineScheduler,
     adapt_real_message,
+    in_code_market_hours,
     record_scheduled_fire,
 )
 from athena_api.routines.store import RoutineStore, RoutineTransitionError
 from athena_api.routines.triggers import TriggerEngine
+from athena_api.watch.runner import RunResult
 
 _KST = timezone(timedelta(hours=9))
 
@@ -762,3 +771,371 @@ def test_record_scheduled_fire_paths_produce_identical_shape(tmp_path):
     assert row_sched["verdict"] == row_catchup["verdict"] == "fired"
     assert set(row_sched) == set(row_catchup)  # 두 경로의 행 모양이 갈라지지 않는다
     assert len(ledger.read_all()) == 2
+
+
+# ---------- 코드 감시 루프(_code_loop) — B-14 · B-15 · B-20(복원) · B-21 ----------
+
+
+_WATCH_SOURCE = """NODE_LABELS = {"signals": "알림"}
+
+
+def signals(df, p):
+    out = df[[]].copy()
+    out["entry"] = df["close"] > 0
+    out["exit"] = False
+    return out
+"""
+
+_MONDAY_1000 = datetime(2026, 8, 24, 10, 0, tzinfo=_KST)  # 2026-08-24 = 월요일 장중
+_SATURDAY_1000 = datetime(2026, 8, 22, 10, 0, tzinfo=_KST)
+
+
+class _StubRunner:
+    """감시 러너 스텁 — 샌드박스를 띄우지 않고 판정만 돌려준다."""
+
+    def __init__(self, observed=True, *, error=None, blocking_s: float = 0.0):
+        self.observed = observed
+        self.error = error
+        self.blocking_s = blocking_s
+        self.calls: list[tuple[str, int, dict]] = []
+
+    async def run(self, source, df, params=None, *, trace=False):
+        self.calls.append((source, len(df), dict(params or {})))
+        if self.blocking_s:
+            # 진짜 러너와 같은 모양 — 무거운 일은 스레드 풀에서 돈다(B-15).
+            loop = asyncio.get_running_loop()
+            await loop.run_in_executor(None, time.sleep, self.blocking_s)
+        return RunResult(
+            observed=None if self.error else self.observed,
+            duration_ms=7,
+            error=self.error,
+        )
+
+
+class _CountingStore:
+    """일봉 캐시 스텁 — 종목별 조회 횟수를 센다(종목당 1회 계약)."""
+
+    def __init__(self, candles):
+        self._candles = tuple(candles)
+        self.calls: list[str] = []
+
+    async def candles(self, stk_cd, period, adjusted, *, start=None, end=None):
+        self.calls.append(stk_cd)
+        return self._candles
+
+
+def _bars(last="20260821", n=40):
+    end = datetime.strptime(last, "%Y%m%d").date()
+    out = []
+    for i in range(n):
+        day = end - timedelta(days=n - 1 - i)
+        out.append(
+            Candle(
+                dt=day.strftime("%Y%m%d"),
+                open=100.0,
+                high=101.0,
+                low=99.0,
+                close=100.0 + i,
+                volume=1000,
+            )
+        )
+    return out
+
+
+def _watch_project(tmp_path, monkeypatch, *, source=_WATCH_SOURCE, name="volume_spike.py"):
+    root = tmp_path / "proj"
+    (root / "watch").mkdir(parents=True, exist_ok=True)
+    target = root / "watch" / name
+    target.write_bytes(source.encode("utf-8"))
+    monkeypatch.setattr(projects_store, "resolve_project_path", lambda pid: root)
+    return target, hashlib.sha256(target.read_bytes()).hexdigest()
+
+
+def _code_spec(
+    store,
+    version_hash,
+    *,
+    symbol="005930",
+    path="watch/volume_spike.py",
+    cooldown_s=1800,
+    status="active",
+    lookback_days=30,
+):
+    spec = validate_draft(
+        {
+            "symbol": symbol,
+            "condition": {"source": "code.watch", "op": "==", "value": True},
+            "cooldown_s": cooldown_s,
+            "expires_days": 7,
+            "watch": {
+                "project_id": "p1",
+                "path": path,
+                "version_hash": version_hash,
+                "poll_interval_s": 60,
+                "lookback_days": lookback_days,
+            },
+        }
+    )
+    store.upsert(spec)
+    if status == "active":
+        store.transition(spec.id, "active")
+    return spec
+
+
+def _code_scheduler(tmp_path, *, runner, candle_store, now=_MONDAY_1000):
+    store = RoutineStore(tmp_path / "r.json")
+    ledger = RoutineLedger(tmp_path / "l.jsonl")
+    engine = TriggerEngine(ledger=ledger)
+    sink: list[dict] = []
+
+    async def notify(ev):
+        sink.append(ev)
+
+    sched = RoutineScheduler(store=store, engine=engine, notify=notify, now_kst=lambda: now)
+    sched.watch_runtime = SimpleNamespace(
+        watch_runner=runner,
+        watch_candle_store=candle_store,
+        watch_quote_provider=None,
+        watch_last={},
+    )
+    return sched, store, ledger, sink
+
+
+async def test_code_loop_runs_only_active_code_watch_once_per_symbol(tmp_path, monkeypatch):
+    """B-14 — 한 주기: 활성 code-watch만, 종목별 프레임 1회, fired 원장에 코드 원문 부재."""
+    _, digest = _watch_project(tmp_path, monkeypatch)
+    runner = _StubRunner(observed=True)
+    candles = _CountingStore(_bars())
+    sched, store, ledger, events = _code_scheduler(
+        tmp_path, runner=runner, candle_store=candles
+    )
+    first = _code_spec(store, digest)
+    second = _code_spec(store, digest)  # 같은 종목 두 번째 알람
+    _code_spec(store, digest, status="draft")  # 초안 — 돌지 않는다
+    other = _spec()  # 실시간 알람 — 이 루프의 대상이 아니다
+    store.upsert(other)
+    store.transition(other.id, "active")
+
+    await sched.run_code_once()
+
+    assert candles.calls == ["005930"]  # 종목당 프레임 1회
+    assert len(runner.calls) == 2  # 그 프레임을 알람 둘이 나눠 쓴다
+    rows = ledger.read_all()
+    assert {r["routine_id"] for r in rows} == {first.id, second.id}
+    assert [r["verdict"] for r in rows] == ["fired", "fired"]
+    assert set(rows[0]) == {
+        "ts",
+        "routine_id",
+        "symbol",
+        "source",
+        "verdict",
+        "observed",
+        "threshold",
+        "reason",
+        "duration_ms",
+    }
+    assert rows[0]["duration_ms"] == 7
+    assert "signals" not in json.dumps(rows, ensure_ascii=False)  # 코드 원문 없음
+    assert [e["type"] for e in events] == ["routine-fired", "routine-fired"]
+    assert sched.watch_runtime.watch_last["run:" + first.id]["observed"] is True
+
+
+async def test_code_loop_skips_outside_market_hours(tmp_path, monkeypatch):
+    """장중(KST 평일 09:00~15:30) 밖에서는 프레임도 만들지 않는다."""
+    _, digest = _watch_project(tmp_path, monkeypatch)
+    runner = _StubRunner()
+    candles = _CountingStore(_bars())
+    sched, store, ledger, _ = _code_scheduler(
+        tmp_path, runner=runner, candle_store=candles, now=_SATURDAY_1000
+    )
+    _code_spec(store, digest)
+
+    await sched.run_code_once()
+
+    assert candles.calls == []
+    assert runner.calls == []
+    assert ledger.read_all() == []
+
+
+def test_market_hours_boundaries():
+    assert not in_code_market_hours(datetime(2026, 8, 24, 8, 59, tzinfo=_KST))
+    assert in_code_market_hours(datetime(2026, 8, 24, 9, 0, tzinfo=_KST))
+    assert in_code_market_hours(datetime(2026, 8, 24, 15, 30, tzinfo=_KST))
+    assert not in_code_market_hours(datetime(2026, 8, 24, 15, 31, tzinfo=_KST))
+    assert not in_code_market_hours(datetime(2026, 8, 23, 10, 0, tzinfo=_KST))  # 일요일
+
+
+async def test_code_loop_records_stale_frame_as_suppressed(tmp_path, monkeypatch):
+    """휴장일 추정(마지막 완성 봉이 직전 평일보다 오래됨)은 사유와 함께 기록된다."""
+    _, digest = _watch_project(tmp_path, monkeypatch)
+    runner = _StubRunner()
+    candles = _CountingStore(_bars(last="20260814"))
+    sched, store, ledger, _ = _code_scheduler(
+        tmp_path, runner=runner, candle_store=candles
+    )
+    spec = _code_spec(store, digest)
+
+    await sched.run_code_once()
+
+    (row,) = ledger.read_all()
+    assert row["verdict"] == "suppressed"
+    assert row["routine_id"] == spec.id
+    assert "휴장일" in row["reason"]
+    assert runner.calls == []
+
+
+async def test_code_loop_records_run_failure_as_suppressed(tmp_path, monkeypatch):
+    _, digest = _watch_project(tmp_path, monkeypatch)
+    runner = _StubRunner(error={"type": "ValueError", "message": "터짐"})
+    sched, store, ledger, _ = _code_scheduler(
+        tmp_path, runner=runner, candle_store=_CountingStore(_bars())
+    )
+    spec = _code_spec(store, digest)
+
+    await sched.run_code_once()
+
+    (row,) = ledger.read_all()
+    assert row["verdict"] == "suppressed"
+    assert row["reason"] == "감시 함수 실행 실패"
+    assert row["duration_ms"] == 7
+    assert store.get(spec.id).status == "active"  # 실행 실패는 알람을 끄지 않는다
+
+
+async def test_code_loop_does_not_block_the_event_loop(tmp_path, monkeypatch):
+    """B-15 — 감시 함수가 도는 동안 다른 태스크가 계속 진행한다."""
+    _, digest = _watch_project(tmp_path, monkeypatch)
+    runner = _StubRunner(blocking_s=0.3)
+    sched, store, _, _ = _code_scheduler(
+        tmp_path, runner=runner, candle_store=_CountingStore(_bars())
+    )
+    _code_spec(store, digest)
+    ticks = 0
+
+    async def other():
+        nonlocal ticks
+        while True:
+            await asyncio.sleep(0.01)
+            ticks += 1
+
+    task = asyncio.create_task(other())
+    await sched.run_code_once()
+    task.cancel()
+    with suppress(asyncio.CancelledError):
+        await task
+
+    assert ticks >= 5  # 0.3초 동안 다른 태스크가 여러 번 돌았다
+    assert len(runner.calls) == 1
+
+
+async def test_code_loop_fails_the_routine_when_the_file_changed(tmp_path, monkeypatch):
+    """B-21 — 파일이 바뀌면 그 주기는 돌지 않고 알람을 failed로 옮기며 안내를 낸다."""
+    target, digest = _watch_project(tmp_path, monkeypatch)
+    runner = _StubRunner()
+    sched, store, ledger, events = _code_scheduler(
+        tmp_path, runner=runner, candle_store=_CountingStore(_bars())
+    )
+    spec = _code_spec(store, digest)
+    target.write_bytes((_WATCH_SOURCE + "\n# 몰래 고침\n").encode("utf-8"))
+
+    await sched.run_code_once()
+
+    assert runner.calls == []
+    assert store.get(spec.id).status == "failed"
+    assert events == [
+        {
+            "type": "routine-restore-failed",
+            "routine_id": spec.id,
+            "reason": "감시 코드가 바뀌거나 사라짐 — 다시 검사",
+        }
+    ]
+    assert ledger.read_all() == []
+
+
+async def test_code_loop_fails_the_routine_when_the_file_is_gone(tmp_path, monkeypatch):
+    target, digest = _watch_project(tmp_path, monkeypatch)
+    runner = _StubRunner()
+    sched, store, _, events = _code_scheduler(
+        tmp_path, runner=runner, candle_store=_CountingStore(_bars())
+    )
+    spec = _code_spec(store, digest)
+    target.unlink()
+
+    await sched.run_code_once()
+
+    assert store.get(spec.id).status == "failed"
+    assert events[0]["reason"] == "감시 코드가 바뀌거나 사라짐 — 다시 검사"
+
+
+async def test_fire_persists_last_fired_at_and_survives_restart(tmp_path, monkeypatch):
+    """B-20(복원) — 발화 시각을 저장하고, 재기동 직후 쿨다운 안에서는 다시 안 울린다."""
+    _, digest = _watch_project(tmp_path, monkeypatch)
+    sched, store, _, _ = _code_scheduler(
+        tmp_path, runner=_StubRunner(), candle_store=_CountingStore(_bars())
+    )
+    spec = _code_spec(store, digest, cooldown_s=1800)
+
+    await sched.run_code_once()
+
+    saved = json.loads((tmp_path / "r.json").read_text(encoding="utf-8"))
+    (row,) = [r for r in saved["routines"] if r["id"] == spec.id]
+    assert row["watch"]["last_fired_at"]  # 벽시계 시각이 남았다
+
+    # 재기동 — 새 저장소·새 엔진에 저장된 발화 시각을 되살린다.
+    store2 = RoutineStore(tmp_path / "r.json")
+    store2.load()
+    ledger2 = RoutineLedger(tmp_path / "l2.jsonl")
+    engine2 = TriggerEngine(ledger=ledger2)
+
+    async def noop(_ev):
+        pass
+
+    sched2 = RoutineScheduler(
+        store=store2, engine=engine2, notify=noop, now_kst=lambda: _MONDAY_1000
+    )
+    sched2.watch_runtime = SimpleNamespace(
+        watch_runner=_StubRunner(),
+        watch_candle_store=_CountingStore(_bars()),
+        watch_quote_provider=None,
+        watch_last={},
+    )
+    runtime2 = RoutinesRuntime(
+        store=store2,
+        ledger=ledger2,
+        engine=engine2,
+        scheduler=sched2,
+        events=asyncio.Queue(200),
+        read_marks=ReadMarksStore(tmp_path / "read_marks2.json"),
+        engagement=EngagementStore(tmp_path / "engagement2.jsonl"),
+        briefings=BriefingStore(tmp_path / "briefings2.jsonl"),
+    )
+    assert runtime2.restore_trigger_state() == 1
+
+    await sched2.run_code_once()
+
+    (suppressed,) = ledger2.read_all()
+    assert suppressed["verdict"] == "suppressed"
+    assert "쿨다운" in suppressed["reason"]
+
+
+async def test_code_loop_is_not_started_without_a_runner(tmp_path):
+    """러너가 없으면 code 루프는 아예 서지 않는다 — 조용히 도는 빈 루프를 만들지 않는다."""
+    store = RoutineStore(tmp_path / "r.json")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+
+    async def noop(_ev):
+        pass
+
+    sched = RoutineScheduler(store=store, engine=engine, notify=noop)
+    await sched.start()
+    started = len(sched._tasks)
+    await sched.stop()
+
+    sched.watch_runtime = SimpleNamespace(
+        watch_runner=_StubRunner(),
+        watch_candle_store=None,
+        watch_quote_provider=None,
+        watch_last={},
+    )
+    await sched.start()
+    assert len(sched._tasks) == started + 1
+    await sched.stop()

@@ -1,16 +1,20 @@
-"""루틴 스케줄러 — 실시간·예약 두 트랙, 하나의 판정 파이프라인.
+"""루틴 스케줄러 — 실시간·예약·코드 감시 세 트랙, 하나의 판정 파이프라인.
 
 - realtime 루프: 키움 WS REAL 팬아웃 큐를 구독해 틱 즉시 평가 (수신은 예산 0).
 - schedule 루프: 벽시계 예약을 평가하고 전체 활성 루틴의 만료도 정리한다.
+- code 루프: 장중에만 돌며 종목별 일봉 프레임을 한 번 만들고, 주입된 감시 러너
+  (`athena_api.watch`)로 감시 함수를 별도 프로세스에서 돌려 마지막 행을 판정한다.
+  코드를 여기서 실행하지 않는다 — 실행은 주입된 러너의 몫이다(R1).
 발화는 notify 콜백(asyncio 큐 → WS 라우트)으로 나간다. LLM 0.
 """
 
 from __future__ import annotations
 
 import asyncio
+import hashlib
 from collections.abc import Awaitable, Callable
 from contextlib import suppress
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import UTC, date, datetime, timedelta, timezone
 from typing import Any
 
@@ -22,6 +26,23 @@ from athena_api.routines.triggers import TriggerEngine
 _KST = timezone(timedelta(hours=9))
 
 NotifyFn = Callable[[dict[str, Any]], Awaitable[None]]
+
+# 장중 = KST 평일 09:00–15:30. 휴장일 달력은 저장소에 없어 요일만 본다 —
+# 휴장일은 "마지막 완성 일봉이 직전 평일보다 오래됨"으로 데이터 층이 잡는다.
+CODE_MARKET_OPEN_MINUTE = 9 * 60
+CODE_MARKET_CLOSE_MINUTE = 15 * 60 + 30
+# 실행 시 파일이 바뀌었거나 사라졌을 때의 복구 안내(B-21).
+CODE_HASH_MISMATCH_REASON = "감시 코드가 바뀌거나 사라짐 — 다시 검사"
+CODE_RUN_FAILED_REASON = "감시 함수 실행 실패"
+
+
+def in_code_market_hours(now: datetime) -> bool:
+    """이 시각에 코드 감시가 돌아야 하는가 — KST 평일 09:00~15:30."""
+    if now.isoweekday() > 5:
+        return False
+    minutes = now.hour * 60 + now.minute
+    return CODE_MARKET_OPEN_MINUTE <= minutes <= CODE_MARKET_CLOSE_MINUTE
+
 
 # REAL 필드 → 소스 카탈로그 매핑. 근거: generated/models.py 실측
 # ("10" 현재가·부호 포함, "12" 등락율, "228" 체결강도, "851" 전일동시간비).
@@ -110,6 +131,12 @@ class RoutineScheduler:
     # 90일 아카이브 롤오버(R3) — 일일 주기, 기존 3루프와 동형 패턴.
     run_archive_once: Callable[[], None] | None = None
     archive_poll_interval_s: float = 86400.0
+    # 코드 감시 실행층 주입 지점 — `RoutinesRuntime`을 그대로 쥔다(러너·일봉
+    # 캐시·시세 통로·마지막 실행 요약이 한 자리에 있고, 부팅 도중 늦게 채워지는
+    # 것도 같은 객체를 통해 보인다). None이면 code 루프는 아예 서지 않는다.
+    watch_runtime: Any | None = None
+    code_poll_interval_s: float = 60.0
+    code_rest_calls_per_cycle: int = 20
     last_error: str | None = None
     _tasks: list[asyncio.Task[None]] = field(default_factory=list)
     _stopping: bool = False
@@ -129,6 +156,8 @@ class RoutineScheduler:
             self._tasks.append(asyncio.create_task(self._archive_loop()))
         if self.subscribe_ticks is not None:
             self._tasks.append(asyncio.create_task(self._realtime_loop()))
+        if getattr(self.watch_runtime, "watch_runner", None) is not None:
+            self._tasks.append(asyncio.create_task(self._code_loop()))
 
     async def stop(self) -> None:
         self._stopping = True
@@ -330,6 +359,150 @@ class RoutineScheduler:
             # ledger에 실제로 쓴 ts를 그대로 이벤트에 싣는다 — 브리핑 보고·/runs
             # 병합의 상관 키(위 _fire 독스트링, 캐치업 경로와 동일 원칙).
             await self._fire(spec, hhmm, fired_at=row["ts"])
+
+    # ---------- code (감시 함수, 장중) ----------
+
+    async def _code_loop(self) -> None:
+        while not self._stopping:
+            await asyncio.sleep(self.code_poll_interval_s)
+            await self.run_code_once()
+
+    async def run_code_once(self) -> None:
+        """코드 감시 1주기 — 테스트가 직접 부른다.
+
+        종목별로 프레임을 **한 번만** 만들고(위험 1·2), 그 프레임을 그 종목의 알람
+        전부에 나눠 준다. 감시 함수는 주입된 러너가 스레드 풀로 보내므로 이 코루틴이
+        실시간 루프를 막지 않는다(B-15).
+        """
+        runtime = self.watch_runtime
+        runner = getattr(runtime, "watch_runner", None)
+        store = getattr(runtime, "watch_candle_store", None)
+        if runner is None or store is None:
+            return
+        now = self.now_kst()
+        if not in_code_market_hours(now):
+            return
+        specs = [
+            s
+            for s in self.store.list_active()
+            if s.mode == "code-watch" and s.watch is not None
+        ]
+        if not specs:
+            return
+
+        from athena_api.watch.data import CallBudget, assemble_frame
+
+        budget = CallBudget(self.code_rest_calls_per_cycle)
+        by_symbol: dict[str, list[RoutineSpec]] = {}
+        for spec in specs:
+            by_symbol.setdefault(spec.symbol, []).append(spec)
+
+        for symbol, group in by_symbol.items():
+            lookback = max(s.watch.lookback_days for s in group)  # type: ignore[union-attr]
+            frame = await assemble_frame(
+                store,
+                symbol,
+                lookback,
+                quote_provider=getattr(runtime, "watch_quote_provider", None),
+                now=now,
+                budget=budget,
+            )
+            if frame.skip_reason:
+                for spec in group:
+                    self._record_code_skip(spec, frame.skip_reason)
+                continue
+            for spec in group:
+                await self._run_one_code_watch(spec, frame.df, runner, runtime)
+
+    def _record_code_skip(
+        self, spec: RoutineSpec, reason: str, *, duration_ms: float | None = None
+    ) -> None:
+        """이번 주기를 못 본 사유를 원장에 남긴다 — 조용한 침묵을 만들지 않는다."""
+        self.engine.ledger.record(
+            "suppressed",
+            routine_id=spec.id,
+            symbol=spec.symbol,
+            source=spec.condition.source,
+            observed=None,
+            threshold=spec.condition.value,
+            reason=reason,
+            duration_ms=duration_ms,
+        )
+
+    def _watch_source(self, spec: RoutineSpec) -> str | None:
+        """감시 파일을 다시 읽고 해시를 대조한다 — 어긋나면 None(B-21).
+
+        코드를 실행하지 않는다. 여는 곳은 프로젝트 폴더 안으로 푼 경로뿐이다.
+        """
+        from athena_api.routines.runtime import resolve_watch_file
+
+        watch = spec.watch
+        if watch is None:
+            return None
+        try:
+            raw = resolve_watch_file(watch.project_id, watch.path).read_bytes()
+        except Exception:
+            return None
+        if hashlib.sha256(raw).hexdigest() != watch.version_hash:
+            return None
+        try:
+            return raw.decode("utf-8")
+        except UnicodeDecodeError:
+            return None
+
+    async def _fail_code_watch(self, spec: RoutineSpec) -> None:
+        """파일이 바뀌거나 사라진 알람을 멈추고 복구 안내를 낸다(B-21)."""
+        with suppress(Exception):
+            self.store.transition(spec.id, "failed")
+        await self.clear_near(spec)
+        await self.notify(
+            {
+                "type": "routine-restore-failed",
+                "routine_id": spec.id,
+                "reason": CODE_HASH_MISMATCH_REASON,
+            }
+        )
+
+    async def _run_one_code_watch(
+        self, spec: RoutineSpec, df: Any, runner: Any, runtime: Any
+    ) -> None:
+        source = self._watch_source(spec)
+        if source is None:
+            await self._fail_code_watch(spec)
+            return
+        watch = spec.watch
+        assert watch is not None
+        result = await runner.run(source, df, watch.params)
+        if not result.ok:
+            self._record_code_skip(
+                spec, CODE_RUN_FAILED_REASON, duration_ms=result.duration_ms
+            )
+            self._remember_run(runtime, spec, result, skip_reason=CODE_RUN_FAILED_REASON)
+            return
+        verdict = self.engine.evaluate(
+            spec, result.observed, duration_ms=result.duration_ms
+        )
+        await self._handle_verdict(spec, verdict, result.observed)
+        if verdict == "fired":
+            # 재시작 뒤에도 쿨다운이 살아 있어야 한다(B-20) — 벽시계 시각을 남긴다.
+            # WatchSpec은 frozen이라 갈아 끼운다(검증을 거친 값의 불변성 유지).
+            spec.watch = replace(watch, last_fired_at=datetime.now(UTC).isoformat())
+            self.store.upsert(spec)
+        self._remember_run(runtime, spec, result, skip_reason=None)
+
+    def _remember_run(
+        self, runtime: Any, spec: RoutineSpec, result: Any, *, skip_reason: str | None
+    ) -> None:
+        last = getattr(runtime, "watch_last", None)
+        if last is None:
+            return
+        last[f"run:{spec.id}"] = {
+            "checked_at": datetime.now(UTC).isoformat(),
+            "nodes": [],  # 루프 실행은 계측을 켜지 않는다 — 칸 실값은 검사가 만든다
+            "observed": result.observed,
+            "duration_ms": result.duration_ms,
+            "skip_reason": skip_reason,
+        }
 
     # ---------- archive (90일 롤오버, R3) ----------
 

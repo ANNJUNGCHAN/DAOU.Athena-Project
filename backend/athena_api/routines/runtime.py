@@ -48,6 +48,18 @@ class RoutinesRuntime:
     # 주입된다. None이면 code-watch 알람은 활성화되지 않는다(R1: routines는
     # 코드를 실행하지 않는다 — 실행은 주입된 러너의 몫이다).
     watch_runner: Any | None = None
+    # 감시 루프·검사가 읽는 일봉 캐시(BacktestStore)와 오늘 시세 제공자.
+    # 둘 다 없어도 알람은 서지만, 캐시가 없으면 루프는 아무 것도 보지 않고
+    # 시세가 없으면 완성된 일봉까지만 본다(그 사실을 watch_warning에 적는다).
+    watch_candle_store: Any | None = None
+    watch_quote_provider: Any | None = None
+    # 일봉이 부족할 때 검사 라우트가 부르는 백필 어댑터(backtest.data.FetchPage).
+    watch_fetch_page: Any | None = None
+    watch_warning: str | None = None
+    # 프로세스 로컬 마지막 검사·마지막 실행 요약 — 상세 화면이 읽는다.
+    # 키는 검사가 "check:<루틴 id 또는 프로젝트:경로>", 루프가 "run:<루틴 id>"다
+    # (한 알람의 검사 결과와 마지막 실행이 서로를 덮지 않게 접두어를 나눈다).
+    watch_last: dict[str, dict[str, Any]] = field(default_factory=dict)
     ready: bool = False
     last_error: str | None = None
     _symbol_refcounts: dict[str, int] = field(default_factory=dict)
@@ -141,6 +153,32 @@ class RoutinesRuntime:
         return seeded
 
 
+def kiwoom_quote_provider(client: Any) -> Any:
+    """오늘 시세(ka10001) 제공자 — 감시 루프가 오늘 봉을 합성할 때 부르는 유일한 통로.
+
+    `backtest.data.kiwoom_fetch_page`와 같은 층을 쓴다(`post_with_headers` +
+    코드젠 레지스트리의 upstream 경로). 실패는 예외가 아니라 None이다 —
+    시세를 못 받은 주기는 완성된 일봉까지만 보고 조용히 넘어간다.
+    """
+    from athena_api.generated.registry import TR_REGISTRY
+    from athena_api.kiwoom.client import RequestOptions
+
+    async def quote(symbol: str) -> dict[str, Any] | None:
+        try:
+            envelope = await client.post_with_headers(
+                "ka10001",
+                TR_REGISTRY["ka10001"].upstream_path,
+                {"stk_cd": symbol},
+                RequestOptions(),
+            )
+        except Exception:
+            return None
+        body = envelope.body
+        return body if isinstance(body, dict) else None
+
+    return quote
+
+
 def resolve_watch_file(project_id: str, path: str) -> Path:
     """감시 코드 파일의 실제 경로 — 등록된 프로젝트 폴더 안으로만 푼다.
 
@@ -193,10 +231,44 @@ def _notify_factory(queue: asyncio.Queue[dict[str, Any]]):
     return notify
 
 
+def _wire_watch_layer(
+    runtime: RoutinesRuntime,
+    settings: Settings,
+    *,
+    candle_store: Any | None,
+    kiwoom_client: Any | None,
+) -> None:
+    """코드 감시 실행층 주입 — 백테스트 모듈이 켜져 있을 때만 러너가 선다(R1).
+
+    감시 함수는 이 프로세스의 인터프리터로 돈다. 프로젝트 가상환경으로 돌리는
+    결정은 백테스트 실행 라우트가 프로젝트 폴더를 알고 있을 때만 내릴 수 있고
+    (`api/backtest.py`의 `venv_python`), 부팅 시점에는 알 수 있는 폴더가 없다.
+    """
+    if not settings.backtest_enabled:
+        return
+    from athena_api.watch import WatchRunner
+
+    runtime.watch_runner = WatchRunner(
+        max_concurrent=settings.routines_code_max_concurrent, python_exe=None
+    )
+    runtime.watch_candle_store = candle_store
+    if kiwoom_client is not None:
+        from athena_api.backtest.data import kiwoom_fetch_page
+
+        runtime.watch_quote_provider = kiwoom_quote_provider(kiwoom_client)
+        runtime.watch_fetch_page = kiwoom_fetch_page(kiwoom_client)
+    else:
+        runtime.watch_warning = "오늘 시세 통로 없음 — 완성된 일봉까지만 봄"
+    if candle_store is None:
+        runtime.watch_warning = "일봉 캐시 없음 — 코드 감시가 볼 데이터가 없음"
+
+
 async def open_routines(
     settings: Settings,
     *,
     ws_client: KiwoomWsClient | None,
+    candle_store: Any | None = None,
+    kiwoom_client: Any | None = None,
 ) -> RoutinesRuntime:
     events: asyncio.Queue[dict[str, Any]] = asyncio.Queue(200)
     store = RoutineStore(settings.routines_store_path)
@@ -256,6 +328,8 @@ async def open_routines(
         ),
         on_expire=_release_on_expire,
         run_archive_once=lambda: _archive_once(settings),
+        code_poll_interval_s=settings.routines_code_poll_interval_seconds,
+        code_rest_calls_per_cycle=settings.routines_code_rest_calls_per_cycle,
     )
 
     runtime = RoutinesRuntime(
@@ -270,6 +344,10 @@ async def open_routines(
         ws_client=ws_client,
         last_error=last_error,
     )
+    _wire_watch_layer(
+        runtime, settings, candle_store=candle_store, kiwoom_client=kiwoom_client
+    )
+    scheduler.watch_runtime = runtime
 
     try:
         # 복원된 활성 realtime 루틴의 REAL 구독 재수립 — 실패는 강등+알림.

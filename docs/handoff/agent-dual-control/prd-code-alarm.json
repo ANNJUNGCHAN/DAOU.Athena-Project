@@ -61,12 +61,13 @@
   {
    "id": "CA-005",
    "title": "Step 5 — REST + 실행 루프",
-   "passes": false,
+   "passes": true,
    "acceptanceCriteria": [
     "B-12~B-15, B-17, B-20(복원), B-21, B-22 통과",
     "POST /watch/check · draft가 watch 수용 · _detail_view 노드·검사 요약 · code-watch condition 수정 422 · _code_loop(장중 요일·종목 묶기·해시 재확인·failed 전이) · config 2항목",
     "V4 전체 실패 0, V5: uv run pytest -q failed==0 && passed>=3169"
-   ]
+   ],
+   "completedAt": "2026-09-04"
   },
   {
    "id": "CA-006",
