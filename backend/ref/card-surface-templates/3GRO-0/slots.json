@@ -23,12 +23,14 @@
     "detail:kt00004:cash_and_assets",
     "detail:kt00004:position_valuation",
     "detail:kt00005:cash_and_capacity",
+    "detail:kt00005:margin_order_capacity",
     "detail:kt00010:cash_and_withdrawal_capacity",
     "detail:kt00010:margin_order_capacity",
     "detail:kt00011:margin_capacity_20_to_50",
     "detail:kt00011:margin_capacity_60_to_cash_only",
     "detail:kt00012:account_and_receivable_capacity",
-    "detail:kt00012:guarantee_order_capacity"
+    "detail:kt00012:guarantee_order_capacity",
+    "detail:kt00013:margin_order_capacity"
   ],
   "state": {
     "kind": "expand",
@@ -1200,7 +1202,16 @@
       "table": null,
       "mapping_id": "detail:kt00010:margin_order_capacity",
       "f": "profa_20ord_alowq",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00005:margin_order_capacity",
+          "f": "20ord_alow_amt"
+        },
+        {
+          "mapping_id": "detail:kt00013:margin_order_capacity",
+          "f": "20ord_alow_amt"
+        }
+      ],
       "kor": "증거금20%주문가능수량",
       "format": {
         "unit": "shares",
@@ -1254,7 +1265,16 @@
       "table": null,
       "mapping_id": "detail:kt00010:margin_order_capacity",
       "f": "profa_30ord_alowq",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00005:margin_order_capacity",
+          "f": "30ord_alow_amt"
+        },
+        {
+          "mapping_id": "detail:kt00013:margin_order_capacity",
+          "f": "30ord_alow_amt"
+        }
+      ],
       "kor": "증거금30%주문가능수량",
       "format": {
         "unit": "shares",
@@ -1308,7 +1328,16 @@
       "table": null,
       "mapping_id": "detail:kt00010:margin_order_capacity",
       "f": "profa_40ord_alowq",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00005:margin_order_capacity",
+          "f": "40ord_alow_amt"
+        },
+        {
+          "mapping_id": "detail:kt00013:margin_order_capacity",
+          "f": "40ord_alow_amt"
+        }
+      ],
       "kor": "증거금40%주문가능수량",
       "format": {
         "unit": "shares",
@@ -1362,7 +1391,16 @@
       "table": null,
       "mapping_id": "detail:kt00010:margin_order_capacity",
       "f": "profa_50ord_alowq",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00005:margin_order_capacity",
+          "f": "50ord_alow_amt"
+        },
+        {
+          "mapping_id": "detail:kt00013:margin_order_capacity",
+          "f": "50ord_alow_amt"
+        }
+      ],
       "kor": "증거금50%주문가능수량",
       "format": {
         "unit": "shares",
@@ -1416,7 +1454,16 @@
       "table": null,
       "mapping_id": "detail:kt00010:margin_order_capacity",
       "f": "profa_60ord_alowq",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00005:margin_order_capacity",
+          "f": "60ord_alow_amt"
+        },
+        {
+          "mapping_id": "detail:kt00013:margin_order_capacity",
+          "f": "60ord_alow_amt"
+        }
+      ],
       "kor": "증거금60%주문가능수량",
       "format": {
         "unit": "shares",
@@ -1550,7 +1597,16 @@
       "table": null,
       "mapping_id": "detail:kt00010:margin_order_capacity",
       "f": "profa_100ord_alowq",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00005:margin_order_capacity",
+          "f": "100ord_alow_amt"
+        },
+        {
+          "mapping_id": "detail:kt00013:margin_order_capacity",
+          "f": "100ord_alow_amt"
+        }
+      ],
       "kor": "증거금100%주문가능수량",
       "format": {
         "unit": "shares",
