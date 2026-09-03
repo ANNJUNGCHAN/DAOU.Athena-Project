@@ -36,6 +36,7 @@ from athena_mcp import (
     brain_tools,
     canvas_data,
     nudge_guard_tools,
+    plugin_tools,
     quirks,
     routine_tools,
     selector_tools,
@@ -412,6 +413,15 @@ class AthenaGateway:
                 "backtest", backtest_tools.BACKTEST_TOOL, success=not result.isError
             )
             return result
+        if name == plugin_tools.PLUGIN_TOOL:
+            # 같은 빌트인 우선순위·같은 감사 최소 원칙. 형제들과 달리 http
+            # 클라이언트가 아니라 레지스트리·승인 기록을 넘긴다 — 이 툴은
+            # 로컬 상태를 읽기만 하고 아무것도 바꾸지 않는다(plugin_tools.py 참고).
+            result = plugin_tools.dispatch(arguments, self.registry, self.consent_store)
+            self._audit_log("plugin").record(
+                "plugin", plugin_tools.PLUGIN_TOOL, success=not result.isError
+            )
+            return result
 
         try:
             target = self.aggregator.resolve(name)
@@ -759,6 +769,9 @@ def _builtin_tool_defs() -> list[types.Tool]:
         # 없다 — 쿼터를 태우거나 사람 검토가 필요한 상태 변경은 사람 전용
         # (backtest_tools.py 참고).
         *backtest_tools.builtin_tool_defs(),
+        # 플러그인 설치·권한·삭제 제안 툴 — routine_tools와 같은 범주. 6액션
+        # 전부 **제안일 뿐**이고 실행은 사람 클릭 전용이다(plugin_tools.py 참고).
+        *plugin_tools.builtin_tool_defs(),
     ]
 
 

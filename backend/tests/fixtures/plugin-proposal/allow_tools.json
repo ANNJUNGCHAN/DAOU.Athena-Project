@@ -1,0 +1,41 @@
+{
+  "tool_input": {
+    "actions": [
+      {
+        "action": "allow_tools",
+        "target": "fetch",
+        "features": [
+          "fetch"
+        ]
+      }
+    ],
+    "reason": "공시 원문을 읽으려면 필요합니다"
+  },
+  "envelope": {
+    "proposal_id": "55f42ca1427d44759c9008e52920f668",
+    "source": "model",
+    "revision": 1,
+    "actions": [
+      {
+        "action": "allow_tools",
+        "target": "fetch",
+        "features": [
+          "fetch"
+        ]
+      }
+    ],
+    "reason": "공시 원문을 읽으려면 필요합니다",
+    "current": {
+      "servers": [
+        {
+          "alias": "fetch",
+          "approved": true,
+          "enabled": true,
+          "tools_allowed": [
+            "fetch"
+          ]
+        }
+      ]
+    }
+  }
+}

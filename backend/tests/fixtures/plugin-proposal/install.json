@@ -1,0 +1,43 @@
+{
+  "tool_input": {
+    "actions": [
+      {
+        "action": "install",
+        "target": "time",
+        "features": [
+          "get_current_time",
+          "convert_time"
+        ]
+      }
+    ],
+    "reason": "시간대 변환이 필요해 보입니다"
+  },
+  "envelope": {
+    "proposal_id": "591e47b9302a4311890e3eb1ecbb4436",
+    "source": "model",
+    "revision": 1,
+    "actions": [
+      {
+        "action": "install",
+        "target": "time",
+        "features": [
+          "get_current_time",
+          "convert_time"
+        ]
+      }
+    ],
+    "reason": "시간대 변환이 필요해 보입니다",
+    "current": {
+      "servers": [
+        {
+          "alias": "fetch",
+          "approved": true,
+          "enabled": true,
+          "tools_allowed": [
+            "fetch"
+          ]
+        }
+      ]
+    }
+  }
+}
