@@ -1,4 +1,4 @@
-"""athena_backtest — 허용 액션 31종, 무재시도, backfill·activate·deploy 부재(사람 전용 차단).
+"""athena_backtest — 허용 액션 34종, 무재시도, backfill·activate·deploy 부재(사람 전용 차단).
 
 **왜 propose_code가 허용으로 옮겨졌나(2026-09-01).** Paper 보드 02가 요구하는 저작 흐름은
 "모델이 초안을 쓰고 → 사람이 diff를 보고 → 사람이 적용"이다. 초안 저장까지 막으면 그 흐름의
@@ -33,6 +33,7 @@ def test_tool_schema_lists_allowed_actions_only():
         "source_brief", "register_strategy",
         "visual_registry", "visual_validate", "visual_compile",
         "visual_question", "visual_patch", "visual_from_spec",
+        "technique_nodes", "technique_check", "technique_question",
     ]
     # backfill·activate·deploy는 이 툴에 없다는 것을 설명문이 명시한다.
     assert "backfill" in tool.description or "백필" in tool.description
@@ -1017,3 +1018,135 @@ def test_tool_description_says_visual_actions_do_not_save():
     schema = tool.inputSchema["properties"]
     assert schema["visual_patch"]["required"] == ["graph", "base_graph_hash", "intent"]
     assert schema["visual_validate"]["required"] == ["graph"]
+
+
+# ── 기법 저작 3종 ─────────────────────────────────────────────────────────────
+#
+# technique_nodes·technique_check는 코드를 읽고 검사할 뿐 저장하지 않고,
+# technique_question은 HTTP를 아예 타지 않는다 — 고르는 것은 사람이다.
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("action", "path"),
+    [
+        ("technique_nodes", "/api/v1/backtest/technique/nodes"),
+        ("technique_check", "/api/v1/backtest/technique/check"),
+    ],
+)
+async def test_technique_read_actions_proxy_the_body_as_is(action, path, mock_http_client):
+    sent: dict = {}
+
+    async def handler(request):
+        assert request.method == "POST"
+        assert request.url.path == path
+        sent.update(json.loads(request.content))
+        return httpx.Response(200, json={"ok": True})
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {"action": action, action: {"source": "def signals(df, p): pass", "symbol": "005930"}},
+            client,
+        )
+    assert not result.isError
+    assert sent["source"] == "def signals(df, p): pass"
+    assert sent["symbol"] == "005930"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("action", ["technique_nodes", "technique_check"])
+@pytest.mark.parametrize("payload", [None, {}, {"source": "   "}, {"source": 5}])
+async def test_technique_read_actions_need_the_current_code(action, payload, mock_http_client):
+    """소스는 앱이 실어 보낸다 — 비어 있으면 배선이 끊긴 것이라 백엔드를 두드리지 않는다."""
+
+    async def handler(request):
+        raise AssertionError("source 없이 백엔드에 도달했다")
+
+    arguments = {"action": action}
+    if payload is not None:
+        arguments[action] = payload
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(arguments, client)
+    assert result.isError
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+    assert "source" in result.content[0].text
+
+
+@pytest.mark.asyncio
+async def test_technique_question_goes_to_the_canvas_without_http(mock_http_client):
+    async def handler(request):
+        raise AssertionError("질문은 HTTP를 타지 않는다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {
+                "action": "technique_question",
+                "technique_question": {
+                    "question_ko": "무엇을 기준으로 사고팔까요?",
+                    "why_ko": "이 결정이 있어야 코드를 쓸 수 있습니다",
+                    "choices": [
+                        {"id": "ma", "label_ko": "이동평균 교차", "recommended": True},
+                        {"id": "break", "label_ko": "전고점 돌파", "detail_ko": "20봉 최고가"},
+                    ],
+                },
+            },
+            client,
+        )
+    assert not result.isError
+    body = json.loads(result.content[0].text)
+    assert body["delivered"] == "canvas"
+    assert body["kind"] == "technique_question"
+    payload = body["payload"]
+    assert payload["question_ko"] == "무엇을 기준으로 사고팔까요?"
+    assert payload["why_ko"] == "이 결정이 있어야 코드를 쓸 수 있습니다"
+    assert payload["choices"] == [
+        {"id": "ma", "label_ko": "이동평균 교차", "detail_ko": None, "recommended": True},
+        {
+            "id": "break",
+            "label_ko": "전고점 돌파",
+            "detail_ko": "20봉 최고가",
+            "recommended": False,
+        },
+    ]
+    # 모델이 대신 고르는 경로를 문구로도 막는다.
+    assert "네가 대신 고르지 마라" in body["message"]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {},
+        {"question_ko": "  ", "choices": [{"id": "a", "label_ko": "가"}]},
+        {"question_ko": "무엇을?", "choices": []},
+        {"question_ko": "무엇을?", "choices": ["가"]},
+        {"question_ko": "무엇을?", "choices": [{"label_ko": "가"}]},
+        {"question_ko": "무엇을?", "choices": [{"id": "a"}]},
+    ],
+)
+async def test_technique_question_without_a_real_choice_is_blocked(payload, mock_http_client):
+    """빈 카드를 띄우면 사용자는 고를 것이 없는 질문을 본다 — 그 전에 막는다."""
+
+    async def handler(request):
+        raise AssertionError("질문은 HTTP를 타지 않는다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {"action": "technique_question", "technique_question": payload}, client
+        )
+    assert result.isError
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+
+
+def test_tool_description_says_technique_actions_do_not_save():
+    (tool,) = backtest_tools.builtin_tool_defs()
+    action_desc = tool.inputSchema["properties"]["action"]["description"]
+    assert "technique_nodes" in action_desc and "technique_check" in action_desc
+    assert "노드는 기법마다 다르다" in action_desc
+    assert "네가 대신 고르지 마라" in action_desc
+    assert "범용 팔레트가 없다" in tool.description
+    schema = tool.inputSchema["properties"]
+    assert schema["technique_question"]["required"] == ["question_ko", "choices"]
+    assert set(schema["technique_check"]["properties"]) == {
+        "source", "symbol", "period", "from", "to",
+    }

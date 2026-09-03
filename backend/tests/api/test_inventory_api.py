@@ -167,7 +167,10 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # 399 = 393 + 시각 설계 라우트 6개(/api/v1/backtest/visual의 registry·validate·
     # compile·question·patch·from-spec) — 그래프를 검증·컴파일하고 질문·수정안을
     # 계산할 뿐 저장·실행·활성화하지 않는다(별도 파일 api/backtest_visual.py).
-    assert len(operation_ids) == 399
+    # 401 = 399 + 기법 저작 라우트 2개(/api/v1/backtest/technique의 nodes·check) —
+    # 코드를 읽어 노드·흐름을 그리고 문법·계약·짧은 시험 실행을 검사할 뿐 저장하지도
+    # 실행 이력을 만들지도 않는다(별도 파일 api/backtest_technique.py).
+    assert len(operation_ids) == 401
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
