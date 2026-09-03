@@ -82,6 +82,19 @@
 .bs-primary { min-width: 0; }
 .bs-rail { min-width: 0; }
 
+/* scroll owner는 추출기가 role/이름/tabindex를 책임진다. outline은 박스 크기를
+ * 바꾸지 않으므로 XL Paper geometry를 유지하면서 키보드 위치를 드러낸다. */
+.bs-r-scroll:focus-visible {
+  outline: 2px solid var(--color-k-text);
+  outline-offset: -2px;
+}
+
+/* canvas가 responsive group 안의 plain Paper leaf에만 role=button을 보강한다. */
+:is(.bs-r-flow, .bs-r-scroll, .bs-r-scroll-table) [data-state-board][role="button"]:focus-visible {
+  outline: 2px solid var(--color-k-text);
+  outline-offset: 2px;
+}
+
 /* 숫자 줄바꿈은 여기서 손대지 않는다 — 실측 결과. Paper 원문은 보드 루트에
  * `overflow-wrap: anywhere`를 실어 한 글자에서도 줄을 바꾼다. 보드가 Paper 폭보다
  * 좁아지면 "150,850"이 "150,85 / 0"으로 끊긴다(실측 2R3M-1 컨테이너 1171px).
@@ -95,6 +108,47 @@
 
 /* 병기 줄 — 열이 접힐 때만 켜진다. 인라인 스타일이 없는 요소라 !important가 필요 없다. */
 .bs-paired { display: none; font-variant-numeric: tabular-nums; }
+
+.bs-r-paired-table .bs-paired {
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: baseline;
+  column-gap: 8px;
+  min-width: 0;
+  width: 100%;
+}
+.bs-r-paired-table .bs-paired-label {
+  color: var(--color-k-dim);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.bs-r-paired-table [data-paired-source] {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+.bs-r-scroll-table:focus-visible {
+  outline: 2px solid var(--color-k-text);
+  outline-offset: -2px;
+}
+.bs-scroll-table-semantics {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: 100%;
+  min-width: max-content;
+}
+.bs-scroll-table-cell-semantics {
+  display: flex;
+  flex-shrink: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
 
 /* KPI 칸 — XL·L에서는 인라인 원문 폭(추출 실측 138px)을 되돌린다. M 이하에서만
  * 흐름 폭으로 바뀐다. flex-basis에서 빼는 24px은 칸 사이 gap 몫이다(원문 12px):
@@ -133,6 +187,25 @@
    * 줄 전체가 나눠 진다(다른 칸은 이미 shrink가 풀려 있다). */
   .bs-kpi-cell[data-bs-kpi-elastic="true"] { min-width: 160px; }
 
+  /* 의미 단위가 먼저 다음 줄로 이동하고, 단위 안의 글자는 쪼개지지 않는다.
+   * 값 표시는 responsive owner 밖에서도 쓰이므로 반드시 owner 아래로 한정한다. */
+  .bs-r-flow { flex-wrap: wrap; }
+  .bs-r-flow > * { flex-shrink: 0; }
+  :is(.bs-r-flow, .bs-r-scroll) :is(.bs-r-atomic, [data-bs-value-atomic="true"]) {
+    white-space: nowrap;
+    overflow-wrap: normal;
+  }
+  .bs-r-scroll-table { min-width: 0; max-width: 100%; overflow-x: auto; }
+  .bs-r-scroll-table > .bs-scroll-table-semantics { width: max-content; min-width: 100%; }
+  .bs-r-scroll-table .bs-scroll-table-semantics [data-bs-hoisted] {
+    width: var(--bs-width, auto);
+    height: var(--bs-height, auto);
+    flex-basis: var(--bs-flex-basis, auto);
+    flex-grow: var(--bs-flex-grow, 0);
+    flex-shrink: var(--bs-flex-shrink, 1);
+    max-width: none;
+  }
+
   /* Paper 원문은 primary에 고정 폭과 `flex-shrink: 0`을 함께 싣는다(실보드 6장
    * 전수 실측 — 900·820·880·880·824·420px). 레일만 360px로 줄이면 primary가
    * 그대로 서 있어 합이 컨테이너를 넘는다(실측 overflow_x 89~148px). L부터는
@@ -148,6 +221,7 @@
   .bs-col[data-col-priority="8"] { display: none; }
   .bs-paired[data-paired-col~="7"],
   .bs-paired[data-paired-col~="8"] { display: block; }
+  .bs-r-paired-table .bs-paired[data-paired-col~="7"] { display: grid; }
 }
 
 /* ---------- M: 720–959 — 6열째부터 접고 KPI는 3칸 흐름 ---------- */
@@ -164,12 +238,15 @@
   .bs-kpi { flex-wrap: wrap; }
   .bs-kpi-cell { width: auto; flex-basis: calc(33.3333% - 24px); flex-grow: 1; }
   .bs-strip { overflow-x: auto; }
+  .bs-r-scroll { min-width: 0; max-width: 100%; overflow-x: auto; }
+  .bs-r-scroll > * { flex-shrink: 0; min-width: max-content; }
   /* 스트립은 좁아지면 가로로 스크롤한다(바로 위). 칩까지 같이 줄어들면 스크롤할
    * 것이 없어지고 글자만 한 자씩 세로로 눕는다 — 한국어 원문이 `overflow-wrap:
    * anywhere`라 자동 최소 크기가 한 글자다(실측 컨테이너 377px에서 칩 7개 전부). */
   .bs-strip > * { flex-shrink: 0; }
   .bs-col[data-col-priority="6"] { display: none; }
   .bs-paired[data-paired-col~="6"] { display: block; }
+  .bs-r-paired-table .bs-paired[data-paired-col~="6"] { display: grid; }
 }
 
 /* ---------- S: 480–719 — 5열째부터 접고 KPI는 2칸 흐름 ---------- */
@@ -177,6 +254,7 @@
   .bs-kpi-cell { flex-basis: calc(50% - 24px); }
   .bs-col[data-col-priority="5"] { display: none; }
   .bs-paired[data-paired-col~="5"] { display: block; }
+  .bs-r-paired-table .bs-paired[data-paired-col~="5"] { display: grid; }
 }
 
 /* ---------- XS: < 480 — 4열째부터 접고 KPI는 1칸 세로 ---------- */
@@ -184,6 +262,7 @@
   .bs-kpi-cell { flex-basis: 100%; }
   .bs-col[data-col-priority="4"] { display: none; }
   .bs-paired[data-paired-col~="4"] { display: block; }
+  .bs-r-paired-table .bs-paired[data-paired-col~="4"] { display: grid; }
 }
 
 /* 상태 보드 조작(스트립 칩·탭). canvas.js가 계약의 control 문구와 맞는 노드에

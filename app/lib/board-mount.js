@@ -155,6 +155,41 @@ function setHidden(el, hidden) {
   el.hidden = hidden;
 }
 
+function setTone(el, tone) {
+  const color = boardFormat.toneColorVar(tone);
+  const hasOriginal = Object.prototype.hasOwnProperty.call(el, '__bsColor');
+  if (!color && !hasOriginal) return;
+  if (!hasOriginal) el.__bsColor = el.style.color || '';
+  if (color || el.__bsColor) el.style.color = color || el.__bsColor;
+  else if (typeof el.style.removeProperty === 'function') el.style.removeProperty('color');
+  else delete el.style.color;
+}
+
+function pairedMirrorIndex(root) {
+  const index = new Map();
+  for (const mirror of root.querySelectorAll('[data-paired-source]')) {
+    const source = mirror.dataset
+      ? mirror.dataset.pairedSource : mirror.getAttribute('data-paired-source');
+    if (!source) continue;
+    if (!index.has(source)) index.set(source, []);
+    index.get(source).push(mirror);
+  }
+  return index;
+}
+
+function syncPairedMirrors(source, mirrors) {
+  for (const mirror of mirrors || []) {
+    mirror.textContent = source.textContent;
+    const color = source.style.color;
+    if (color) mirror.style.color = color;
+    else if (typeof mirror.style.removeProperty === 'function') mirror.style.removeProperty('color');
+    else delete mirror.style.color;
+    if (!mirror.dataset || !source.dataset) continue;
+    if (source.dataset.missing !== undefined) mirror.dataset.missing = source.dataset.missing;
+    else delete mirror.dataset.missing;
+  }
+}
+
 // 자식 목록을 브라우저 DOM(HTMLCollection)과 테스트 스텁(배열) 양쪽에서 같은 모양으로
 // 읽는다. 스텁은 텍스트도 children에 담으므로 여기서 걸러낸다.
 function elementChildren(el) {
@@ -187,6 +222,7 @@ function hasTextContent(el) {
 // DOM 쓰기 층 — 텍스트 노드만 건드린다. 구조·인라인 스타일 원문은 손대지 않는다(D1).
 function applyPlan(root, plan, options = {}) {
   const index = nodeIndex(root);
+  const mirrors = pairedMirrorIndex(root);
   const unbound = [];
   const containers = [];
   for (const assignment of plan.assignments) {
@@ -194,8 +230,7 @@ function applyPlan(root, plan, options = {}) {
     if (!el) { unbound.push(assignment.slotId); continue; }
     if (elementChildCount(el) > 0) { containers.push(assignment.slotId); continue; }
     el.textContent = assignment.text;
-    const color = boardFormat.toneColorVar(assignment.tone);
-    if (color) el.style.color = color;
+    setTone(el, assignment.tone);
     if (el.dataset) {
       el.dataset.slotId = assignment.slotId;
       if (assignment.valueAtomic) el.dataset.bsValueAtomic = 'true';
@@ -203,6 +238,7 @@ function applyPlan(root, plan, options = {}) {
       if (assignment.missing) el.dataset.missing = 'true';
       else delete el.dataset.missing;
     }
+    syncPairedMirrors(el, mirrors.get(assignment.node));
   }
 
   for (const group of plan.collapse) {
@@ -324,6 +360,53 @@ function applyRealtimeSlots(surface, contract, values, slotIds, options = {}) {
   const plan = realtimePlan(contract, values, slotIds);
   const report = applyPlan(surface, plan, { ...options, partial: true });
   return { touched: plan.touched, plan, ...report };
+}
+
+// 상태 보드 링크의 pointer/keyboard 경로를 한 콜백으로 묶는다. 실제 button이나
+// 기존 tab/button role은 브라우저·소유 위젯의 키보드 동작을 그대로 써야 하므로
+// 추가 keydown을 달지 않는다. Paper에서 온 plain text leaf만 명시적으로 요청받았을
+// 때 button 의미를 보강한다.
+function stateLinksFromMarks(stateControls) {
+  const marks = stateControls && Array.isArray(stateControls.marks)
+    ? stateControls.marks : [];
+  const links = [];
+  for (const mark of marks) {
+    const control = String((mark && mark.control) || '').trim();
+    if (!control || !Array.isArray(mark.boards)) continue;
+    for (const board of mark.boards) {
+      const boardId = String(board || '').trim();
+      if (boardId) links.push({ control, board_id: boardId });
+    }
+  }
+  return links;
+}
+
+function stateControlActivationOwner(node) {
+  if (!node || typeof node.closest !== 'function') return node || null;
+  return node.closest('button, [role="button"], [role="tab"]') || node;
+}
+
+function wireStateControlActivation(node, activate, options = {}) {
+  if (!node || typeof node.addEventListener !== 'function' || typeof activate !== 'function') return false;
+  if (node.__athenaStateWired) return false;
+
+  const tagName = String(node.tagName || '').toLowerCase();
+  const role = typeof node.getAttribute === 'function'
+    ? String(node.getAttribute('role') || '').toLowerCase()
+    : '';
+  const nativeSemantics = tagName === 'button' || role === 'button' || role === 'tab';
+  if (options.keyboard && !nativeSemantics && !role && typeof node.setAttribute === 'function') {
+    node.setAttribute('role', 'button');
+    node.setAttribute('tabindex', '0');
+    node.addEventListener('keydown', (event) => {
+      if (!event || event.repeat || (event.key !== 'Enter' && event.key !== ' ')) return;
+      if (typeof event.preventDefault === 'function') event.preventDefault();
+      activate();
+    });
+  }
+  node.addEventListener('click', () => activate());
+  node.__athenaStateWired = true;
+  return true;
 }
 
 // ---------- 반응형 훅 (인라인 원문 ↔ 컨테이너 쿼리) ----------
@@ -493,6 +576,7 @@ const __exports = {
   nodeIndex, elementChildCount, setHidden, applyPlan,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot, mountBoard, mountBoardAsync,
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
+  stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
 };
 
 if (typeof module !== 'undefined' && module.exports) {
