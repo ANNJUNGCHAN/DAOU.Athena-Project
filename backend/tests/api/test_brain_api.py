@@ -25,6 +25,7 @@ CONVERSATIONS_PATH = "/api/v1/brain/conversations"
 PROFILE_SUMMARY_PATH = "/api/v1/brain/profile-summary"
 RESET_PATH = "/api/v1/brain/reset-and-restart"
 ENTITY_TIMELINE_PATH = "/api/v1/brain/analysis/entity-timeline"
+RETRACT_PATH = "/api/v1/brain/relations/retractions"
 SECRET_MARKER = "지난주에 삼성전자 100주를 매수하고 싶다는 비밀스러운 계획"
 
 
@@ -1748,3 +1749,36 @@ def test_entity_detail_is_closed_to_the_model_when_exposure_is_off(
     )
     assert allowed.status_code == 200
     assert allowed.json()["resolved"] is True
+
+
+# ── 사람의 직접 취소 입구(2026-09-03) ────────────────────────────────────────
+
+
+def test_relation_retraction_requires_bearer_header() -> None:
+    with _disabled_client() as client:
+        response = client.post(RETRACT_PATH, json={"relation_id": "relation:x"})
+    assert response.status_code == 422
+
+
+def test_relation_retraction_rejects_wrong_bearer() -> None:
+    with _disabled_client() as client:
+        response = client.post(
+            RETRACT_PATH,
+            json={"relation_id": "relation:x"},
+            headers={"Authorization": "Bearer nope"},
+        )
+    assert response.status_code == 401
+
+
+def test_relation_retraction_is_not_exposed_to_the_model() -> None:
+    """그래프 쓰기가 사람의 행동에서 시작한다는 규칙을 이 입구가 깨지 않는다.
+
+    모델은 athena_brain으로만 브레인에 닿고 거기엔 쓰기 액션이 없다
+    (test_no_write_action_exists). 이 입구는 사람이 카드를 누른 결과로만 불린다 —
+    OpenAPI에 그 사실이 적혀 있어야 게이트웨이가 실수로 노출하지 않는다.
+    """
+    with _disabled_client() as client:
+        schema = client.get("/openapi.json").json()
+    operation = schema["paths"]["/api/v1/brain/relations/retractions"]["post"]
+    assert operation["x-athena-llm-exposed"] is False
+    assert operation["x-athena-side-effect"] == "write"
