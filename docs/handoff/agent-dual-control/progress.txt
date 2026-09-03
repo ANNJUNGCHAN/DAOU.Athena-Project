@@ -47,3 +47,4 @@
 - CA-003 Step 3 (직접 구현): athena_api/watch/{data,runner,check,nodes}.py — assemble_frame(오늘 봉 합성/갱신·휴장 건너뛰기·CallBudget), WatchRunner(run_once/run, 세마포어, jobdir try/finally), run_check(D-1·쿨다운 시뮬·diagnose·B-23), build_nodes(최상위 함수=칸, NODE_LABELS). sandbox __main__ _summarize(None)→null 버그 수정. 테스트 24 + 샌드박스 16 = 40 통과, ruff 통과.
 - 학습: Write 도구가 test 파일을 CRLF로 쓴 사례 → 신규 파일도 node로 EOL 확인. heredoc 안 파이썬 문자열의 
 이 실제 개행으로 들어간 사례 → 긴 문자열 편집은 Edit 도구로.
+- CA-004 Step 4 (executor): watch/store_code.py save_watch_code(경로 검증·NODE_LABELS 보강·원자 쓰기·R10 CodeLocked), POST /routines/watch/code(/source-catalog 뒤·/{routine_id} 앞, 409 문구 고정), MCP propose_watch_code + draft 산문에 code.watch·watch 블록·NODE_LABELS. 579 passed(watch api + mcp + unit routines api). V2 백테스트 회귀 통과.

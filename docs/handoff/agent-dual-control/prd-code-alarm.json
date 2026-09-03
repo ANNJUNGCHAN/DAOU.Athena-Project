@@ -49,13 +49,14 @@
   {
    "id": "CA-004",
    "title": "Step 4 — 감시 코드 착지 경로",
-   "passes": false,
+   "passes": true,
    "acceptanceCriteria": [
     "POST /api/v1/routines/watch/code — resolve_in_project 경유, <project>/watch/<slug>.py만, code_hash 반환, 활성·일시중지 참조 경로 409(B-24)",
     "athena_routine _ALLOWED_ACTIONS에 propose_watch_code, _INPUT_SCHEMA 산문에 code.watch·watch(B-16)",
     "B-13 착지 측: bt_strategy·bt_strategy_version·user-strategies.json +0",
     "V4 일부: tests/api/test_routines_watch_api.py tests/mcp 실패 0"
-   ]
+   ],
+   "completedAt": "2026-09-04"
   },
   {
    "id": "CA-005",
