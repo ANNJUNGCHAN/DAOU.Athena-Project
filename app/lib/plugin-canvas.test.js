@@ -269,6 +269,8 @@ test('추천 설치는 Paper 02 승인 시트를 열고 거부하면 아무 일�
     '설치 위치 · 플러그인 모드 > 단계적 사고',
   );
   assert.equal(findByClass(container, 'plugin-canvas-sheet-feature').length, 1);
+  // 부제 없음 — "한 번에 하나씩 승인합니다"는 묶음 승인과 어긋나 폐기했다(2026-09-03 검수).
+  assert.equal(findByClass(container, 'plugin-canvas-sheet-subtitle').length, 0);
   assert.equal(buttonWithClass(container, 'is-sheet-cancel').textContent, '거부');
   assert.equal(buttonWithClass(container, 'is-sheet-confirm').textContent, '승인');
 
@@ -631,6 +633,17 @@ test('모델 제안은 출처 라벨 아테나 제안으로, GUI 제안은 내 �
   assert.deepEqual(texts(container, 'plugin-canvas-proposal-note'), [
     '허브의 설치 버튼도 이 카드로 들어옵니다',
     '허브의 설치 버튼도 이 카드로 들어옵니다',
+  ]);
+});
+
+test('승인 카드 구역은 앱 재시작 경계 문구를 한 번만 단다', () => {
+  const { container, canvas } = mountedCanvas();
+  canvas.setProposals([envelope(), envelope({ proposal_id: 'p-2', source: 'gui' })], { revision: 7 });
+
+  // Paper 09의 경계 문구를 화면에도 낸다(2026-09-03 검수 확정). 카드마다가 아니라
+  // 구역에 한 번이다 — 대기 목록 전체가 같은 운명을 진다.
+  assert.deepEqual(texts(container, 'plugin-canvas-proposal-boundary'), [
+    '앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다',
   ]);
 });
 
