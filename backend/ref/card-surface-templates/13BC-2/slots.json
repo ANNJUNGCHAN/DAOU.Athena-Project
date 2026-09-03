@@ -7,7 +7,7 @@
     "node_id": "1538-2",
     "jsx_sha256": "c6e24ba33983cdba60c11e7c0e70e11f6c73100a560b78b3a63073c41db96439"
   },
-  "html_sha256": "f90e27845dc86e49f31807bcab1a47319a56058948a17c1c8408b5c03b1061a3",
+  "html_sha256": "7c7d8b5c51e33afec7b8ba43f4268c445c1a91776157b059180980ff9a28c09f",
   "width_px": 1360.0,
   "height_px": 880.0,
   "artboard_px": [
@@ -111,7 +111,7 @@
     "text_nodes": 167,
     "slots": 167,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 114,
     "labels": 38,
     "values": 129,
     "layer_직접": 167,
@@ -149,7 +149,7 @@
         "boards": [
           "3JZ3-0"
         ],
-        "node_id": "3OSG-0",
+        "node_id": "3OSF-0",
         "how": "hand"
       },
       {
@@ -880,6 +880,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "base:0D",
@@ -922,7 +923,8 @@
       },
       "paired_with": "s013",
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s015",
@@ -970,6 +972,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "also_from": [
         {
           "mapping_id": "base:0D",
@@ -1012,7 +1015,8 @@
       },
       "paired_with": "s016",
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s018",
@@ -1059,7 +1063,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s020",
@@ -1193,24 +1198,12 @@
       "f": "131",
       "alt_mappings": [
         {
-          "mapping_id": "base:0E",
-          "f": "135"
-        },
-        {
           "mapping_id": "detail:ka10004:after_hours_totals",
           "f": "ovt_sel_req"
         },
         {
-          "mapping_id": "detail:ka10004:after_hours_totals",
-          "f": "ovt_buy_req"
-        },
-        {
           "mapping_id": "detail:ka10087:aggregate_totals",
           "f": "ovt_sel_bid_tot_req"
-        },
-        {
-          "mapping_id": "detail:ka10087:aggregate_totals",
-          "f": "ovt_buy_bid_tot_req"
         }
       ],
       "kor": "시간외매도호가총잔량",
@@ -1506,7 +1499,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s033",
@@ -1619,7 +1613,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s036",
@@ -1732,7 +1727,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s039",
@@ -1845,7 +1841,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s042",
@@ -1958,7 +1955,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s045",
@@ -2071,7 +2069,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s048",
@@ -2184,7 +2183,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s051",
@@ -2297,7 +2297,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s054",
@@ -2410,7 +2411,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s057",
@@ -2524,6 +2526,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -2753,6 +2756,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
+      "row_index": 0,
       "display_dup": true
     },
     {
@@ -2866,7 +2870,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s070",
@@ -2979,7 +2984,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s073",
@@ -3092,7 +3098,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s076",
@@ -3205,7 +3212,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s079",
@@ -3318,7 +3326,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s082",
@@ -3431,7 +3440,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s085",
@@ -3544,7 +3554,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s088",
@@ -3657,7 +3668,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s091",
@@ -3770,7 +3782,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s094",

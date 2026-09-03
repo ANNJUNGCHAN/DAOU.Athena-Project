@@ -39,6 +39,8 @@
   슬롯·열 `alt_mappings` `[{"mapping_id", "f", "json_path"?}]`
         같은 자리를 여러 op의 같은 뜻 필드가 나눠 쓸 때(차트 주기 틱/분/일/주/월/년,
         업종 차트 6종, 금현물 주기). 검사기는 이 목록도 "필드 도달"로 센다.
+  슬롯 `kind`
+        자동 label/value 판정이 Paper 의미와 다를 때 손으로 고친 값을 재추출에서도 지킨다.
   열 `indexed` `{"f_pattern": "sel_bid_{i}", "start": 1, "step": 1, "direction": "down"}`
         표 본문 행 r(0부터)이 `f_pattern.format(i=start + r*step)`을 받는다.
         호가 10단처럼 위에서 아래로 번호가 줄면 `direction: "up"` · `start: 10` · `step: -1`.
@@ -1269,9 +1271,10 @@ def mark_state_controls(
 ) -> tuple[list[dict], list[dict]]:
     """자식 상태 보드의 컨트롤 문구를 이 보드의 잎에 맞춰 표식을 찍는다.
 
-    탭·정렬은 잎 문구를, 펼침은 `▸` 잎을 감싼 블록 문구를 본다. 펼침 잎이 전혀
-    없는 보드에서는 손지정 `control_text`만 일반 잎에 맞춘다. 한 잎은 컨트롤 하나만
-    받는다 — 같은 문구를 쓰는 자식 보드들은 한 잎을 나눠 쓴다.
+    탭·정렬은 잎 문구를 본다. 펼침은 손지정 `control_text`와 정확히 같은 일반 잎이
+    있으면 그 잎을 먼저 쓰고, 없으면 기존처럼 `▸` 잎을 감싼 블록 문구를 본다. 펼침
+    잎도 없는 보드에서는 손지정 문구를 일반 잎에 맞춘다. 한 잎은 컨트롤 하나만 받는다
+    — 같은 문구를 쓰는 자식 보드들은 한 잎을 나눠 쓴다.
 
     `control_text`(손지정)를 적은 자식은 그 문구로 맞추고 잎을 먼저 가져간다.
     """
@@ -1290,10 +1293,23 @@ def mark_state_controls(
     for key in groups:
         kind, control, control_text = key
         wanted = control_text or control
+        authored_leaf_indices = {
+            index
+            for index, el in enumerate(leaves)
+            if control_text
+            and index not in expand_leaf_indices
+            and direct_text(el) == control_text
+        }
         hits: list[tuple[int, int, int]] = []
         for index, el in enumerate(leaves):
             if kind == "expand":
-                if expand_leaf_indices:
+                if authored_leaf_indices:
+                    if index not in authored_leaf_indices:
+                        continue
+                    tier, distance = 4, 1
+                    if nearest_region(el, region_of) in ("strip", "header"):
+                        distance = 0
+                elif expand_leaf_indices:
                     if index not in expand_leaf_indices:
                         continue
                     tier, distance = expand_tier(el, region_of, wanted)
@@ -1550,7 +1566,7 @@ def slice_subtree(
 # --------------------------------------------------------------------------- #
 
 GENERATED_SLOT_KEYS = frozenset(
-    """slot_id node_id node_name node_path paper_text region kind layer font_size_px
+    """slot_id node_id node_name node_path paper_text region layer font_size_px
     anchor table""".split()
 )
 GENERATED_TOP_KEYS = frozenset(
@@ -1906,6 +1922,14 @@ def merge_authored(previous: dict, payload: dict) -> dict:
                     continue
                 if value not in (None, [], {}, ""):
                     column[key] = value
+    if "counts" in payload:
+        payload["counts"].update(
+            {
+                "mapped_slots": sum(1 for slot in payload["slots"] if slot.get("mapping_id")),
+                "labels": sum(1 for slot in payload["slots"] if slot.get("kind") == "label"),
+                "values": sum(1 for slot in payload["slots"] if slot.get("kind") == "value"),
+            }
+        )
     return payload
 
 

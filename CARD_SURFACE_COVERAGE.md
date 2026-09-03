@@ -1,23 +1,23 @@
 # 카드 표면 템플릿 — occurrence 바인딩·저작 현황
 
-생성: 2026-09-03T10:07+09:00 · 템플릿 `backend/ref/card-surface-templates` · 재생성 `PYTHONIOENCODING=utf-8 python scripts/card_surface_coverage.py`
+생성: 2026-09-03T16:11+09:00 · 템플릿 `backend/ref/card-surface-templates` · 재생성 `PYTHONIOENCODING=utf-8 python scripts/card_surface_coverage.py`
 
 바인딩 판정은 이 스크립트가 하지 않는다 — `athena_api.card_surface_templates` 로더에 위임한다. 대체 바인딩(`alt_mappings`)·지시 열(`indexed`)·되풀이 행 반복 면제를 로더만 알기 때문이다. 판정 단위도 로더와 같은 **occurrence**(`wire_occurrence_id`)이고, 원장의 `(mapping_id, f)` 행이 아니다.
 
 로드 경로 `load_registry(strict=False)` · 도달 집합 `registry.coverage()` · 보드 96장 로드(색인 96 · 디렉터리 97) · `complete` 미선언(부분 로드)
 
-## 총괄 — occurrence 도달 **3,379/3,534 (95.6%)** · op 커버 **295/299**
+## 총괄 — occurrence 도달 **3,382/3,532 (95.8%)** · op 커버 **297/299**
 
 | 항목 | 값 | 판정 근거 |
 | --- | ---: | --- |
-| 가시 occurrence 도달 | 3,379/3,534 | 로더 `coverage()` (대체 바인딩 포함) |
-| 미도달 occurrence | 155 | 어느 보드도 그리지 않는 자리 |
-| 보드 없는 op | 4 | `by_operation`에 없는 op |
+| 가시 occurrence 도달 | 3,382/3,532 | 로더 `coverage()` (대체 바인딩 포함) |
+| 미도달 occurrence | 150 | 어느 보드도 그리지 않는 자리 |
+| 보드 없는 op | 2 | `by_operation`에 없는 op |
 | 밀도 하드 위반 | 0 | 로더 `DENSITY_BUDGET`·`HEIGHT_BUDGET_PX` |
 | 밀도 소프트 경고 | 22 | 로더 `SOFT_DENSITY_BUDGET` |
 | 중복 바인딩 | 0 | 로더 `_duplicate_is_declared` 미면제분 |
 | 그 밖의 보드 문제 | 0 | 해시·상태 참조·지시 열 패턴 |
-| 재표시 경고 | 128 | 주값 없는 재표시 무리(로드는 통과) |
+| 재표시 경고 | 127 | 주값 없는 재표시 무리(로드는 통과) |
 | 문제 없는 보드 | 96/96 | 보드 지역 규칙 전부 통과 |
 | 제외 보드 | 2 | 디렉터리·색인·원장 대조 |
 
@@ -25,13 +25,13 @@
 
 | 카드 | 가시 occurrence | 도달 | 도달률 |
 | --- | ---: | ---: | ---: |
-| CC-01 계좌 | 901 | 793 | 88.0% |
+| CC-01 계좌 | 899 | 801 | 89.1% |
 | CC-02 주문 | 30 | 30 | 100.0% |
-| CC-03 종목·상품 | 1,012 | 1,005 | 99.3% |
-| CC-04 호가 | 425 | 425 | 100.0% |
-| CC-05 수급 | 691 | 668 | 96.7% |
+| CC-03 종목·상품 | 1,012 | 1,006 | 99.4% |
+| CC-04 호가 | 425 | 421 | 99.1% |
+| CC-05 수급 | 691 | 666 | 96.4% |
 | CC-06 탐색 | 475 | 458 | 96.4% |
-| **합계** | **3,534** | **3,379** | **95.6%** |
+| **합계** | **3,532** | **3,382** | **95.8%** |
 
 ## 2. occurrence 도달 — 층별
 
@@ -39,16 +39,16 @@
 
 | 층 | 가시 occurrence | 도달 | 도달률 | 슬롯 판정 층 |
 | --- | ---: | ---: | ---: | ---: |
-| 직접 | 2,587 | 2,574 | 99.5% | 2,574 |
-| 병기 | 251 | 231 | 92.0% | 231 |
-| 펼침 | 576 | 574 | 99.7% | 574 |
-| 미상 | 120 | 0 | 0.0% | 0 |
+| 직접 | 2,588 | 2,573 | 99.4% | 2,573 |
+| 병기 | 253 | 232 | 91.7% | 232 |
+| 펼침 | 577 | 577 | 100.0% | 577 |
+| 미상 | 114 | 0 | 0.0% | 0 |
 
-## 3. 미도달 occurrence (155)
+## 3. 미도달 occurrence (150)
 
 어느 보드에도 자리가 없는 가시 occurrence 전량이다. 로더 strict 검증이 `visible occurrences reach no board`로 막는 바로 그 집합.
 
-이 중 **75건**은 원장이 트리 밖 보드(`17F8-2` 75)에만 귀속한 자리다 — 원장의 `board`를 카드 보드로 재귀속해야 슬롯이 생긴다. 트리 밖 보드에 귀속된 원장 행 전부가 아니라 **미도달인 것만** 센다.
+이 중 **68건**은 원장이 트리 밖 보드(`17F8-2` 68)에만 귀속한 자리다 — 원장의 `board`를 카드 보드로 재귀속해야 슬롯이 생긴다. 트리 밖 보드에 귀속된 원장 행 전부가 아니라 **미도달인 것만** 센다.
 
 | occurrence | op | f | 한글 | 카드 | 층 | 원장 귀속 보드 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -59,9 +59,9 @@
 | `base:00\|$.data[].913\|1` | `base:00` | `913` | 주문상태 | CC-01 | 미상 | `2SYW-1` |
 | `base:00\|$.data[].915\|1` | `base:00` | `915` | 단위체결량 | CC-01 | 병기 | `2SYW-1` |
 | `base:00\|$.data[].922\|1` | `base:00` | `922` | 신용구분 | CC-01 | 병기 | `2SYW-1` |
-| `base:04\|$.data[].924\|1` | `base:04` | `924` | — | CC-01 | 미상 | — |
 | `base:04\|$.data[].946\|1` | `base:04` | `946` | 매도/매수구분 | CC-01 | 미상 | `2SYW-1` |
-| `base:04\|$.data[].951\|1` | `base:04` | `951` | — | CC-01 | 미상 | — |
+| `base:0D\|$.data[].6111\|1` | `base:0D` | `6111` | KRX중간가대비 기호 | CC-04 | 직접 | `3JZ3-0` |
+| `base:0D\|$.data[].6114\|1` | `base:0D` | `6114` | NXT중간가대비 기호 | CC-04 | 직접 | `3JZ3-0` |
 | `base:0w\|$.data[].11\|1` | `base:0w` | `11` | 전일대비 | CC-05 | 미상 | `2QM7-2` |
 | `base:1h\|$.data[].9075\|1` | `base:1h` | `9075` | 장전구분 | CC-06 | 병기 | `2UHM-1` |
 | `base:ka01690\|$.day_bal_rt[].buy_wght\|1` | `base:ka01690` | `buy_wght` | 현금비중 | CC-01 | 병기 | `2SCE-1` |
@@ -78,6 +78,7 @@
 | `base:ka10034\|$.for_dt_trde_upper[].gain_pos_stkcnt\|1` | `base:ka10034` | `gain_pos_stkcnt` | 취득가능주식수 | CC-05 | 미상 | `2ZTA-0` |
 | `base:ka10035\|$.for_cont_nettrde_upper[].stk_nm\|1` | `base:ka10035` | `stk_nm` | 종목명 | CC-05 | 미상 | `1WOB-1` |
 | `base:ka10036\|$.for_limit_exh_rt_incrs_upper[].pred_pre_sig\|1` | `base:ka10036` | `pred_pre_sig` | 전일대비기호 | CC-05 | 미상 | `2ZTA-0` |
+| `base:ka10039\|$.sec_trde_upper\|1` | `base:ka10039` | `sec_trde_upper` | 증권사별매매상위 | CC-05 | 미상 | `30TY-0` |
 | `base:ka10043\|$.trde_ori_prps_anly[].trde_qty_sum\|1` | `base:ka10043` | `trde_qty_sum` | 거래량합 | CC-05 | 직접 | `2QM7-2` |
 | `base:ka10046\|$.cntr_str_tm[].trde_qty\|1` | `base:ka10046` | `trde_qty` | 거래량 | CC-03 | 미상 | `2R3M-1` |
 | `base:ka10051\|$.inds_netprps[].orgn_netprps\|1` | `base:ka10051` | `orgn_netprps` | 기관계순매수 | CC-06 | 미상 | `2TZN-1` |
@@ -96,6 +97,7 @@
 | `base:ka10076\|$.cntr[].sor_yn\|1` | `base:ka10076` | `sor_yn` | SOR 여부값 | CC-01 | 직접 | `2SYW-1` |
 | `base:ka10076\|$.cntr[].stex_tp_txt\|1` | `base:ka10076` | `stex_tp_txt` | 거래소구분텍스트 | CC-01 | 병기 | `2SYW-1` |
 | `base:ka10076\|$.cntr[].trde_tp\|1` | `base:ka10076` | `trde_tp` | 매매구분 | CC-01 | 미상 | `2SYW-1` |
+| `base:ka10078\|$.sec_stk_trde_trend[].pre_sig\|1` | `base:ka10078` | `pre_sig` | 대비기호 | CC-05 | 미상 | `30TY-0` |
 | `base:ka10084\|$.tdy_pred_cntr[].cntr_trde_qty\|1` | `base:ka10084` | `cntr_trde_qty` | 체결거래량 | CC-03 | 직접 | `2R3M-1` |
 | `base:ka10088\|$.osop[].sell_tp\|1` | `base:ka10088` | `sell_tp` | 매도/수 구분 | CC-01 | 미상 | `2SYW-1` |
 | `base:ka10088\|$.osop[].stex_tp_txt\|1` | `base:ka10088` | `stex_tp_txt` | 거래소구분텍스트 | CC-01 | 병기 | `2SYW-1` |
@@ -107,7 +109,6 @@
 | `base:ka20002\|$.inds_stkpc[].flu_rt\|1` | `base:ka20002` | `flu_rt` | 등락률 | CC-06 | 미상 | `15J9-2` |
 | `base:ka20002\|$.inds_stkpc[].low_pric\|1` | `base:ka20002` | `low_pric` | 저가 | CC-06 | 직접 | `15J9-2` |
 | `base:ka20002\|$.inds_stkpc[].pred_pre_sig\|1` | `base:ka20002` | `pred_pre_sig` | 전일대비기호 | CC-06 | 미상 | `15J9-2` |
-| `base:ka30003\|$.elwlpposs_daly_trnsn[].dt\|1` | `base:ka30003` | `dt` | 일자 | CC-03 | 미상 | `15P5-2` |
 | `base:ka52301\|$.inve_trad_stat[].all_dfrt_trst_netprps_qty\|1` | `base:ka52301` | `all_dfrt_trst_netprps_qty` | 투자자별 순매수 수량(천) | CC-05 | 미상 | `2RJ7-1` |
 | `base:ka90001\|$.thema_grp[].flu_sig\|1` | `base:ka90001` | `flu_sig` | 등락기호 | CC-06 | 미상 | `2UBO-1` |
 | `base:ka90002\|$.thema_comp_stk[].flu_sig\|1` | `base:ka90002` | `flu_sig` | 등락기호 | CC-06 | 미상 | `2UBO-1` |
@@ -124,10 +125,13 @@
 | `base:kt50021\|$.prsm_entra\|1` | `base:kt50021` | `prsm_entra` | 추정예수금 | CC-01 | 미상 | `17F8-2` |
 | `base:kt50030\|$.acnt_ord_cntr_prst[].dcd_tp_nm\|1` | `base:kt50030` | `dcd_tp_nm` | 결제구분 | CC-01 | 미상 | `17F8-2` |
 | `base:kt50030\|$.acnt_ord_cntr_prst[].mrkt_deal_tp\|1` | `base:kt50030` | `mrkt_deal_tp` | 시장구분 | CC-01 | 미상 | `17F8-2` |
+| `base:kt50031\|$.acnt_ord_cntr_prps_dtl[].rsrv_tp\|1` | `base:kt50031` | `rsrv_tp` | 반대여부 | CC-01 | 병기 | `3OIM-0` |
 | `base:kt50075\|$.acnt_ord_oso_prst[].dcd_tp_nm\|1` | `base:kt50075` | `dcd_tp_nm` | 결제구분 | CC-01 | 미상 | `17F8-2` |
 | `base:kt50075\|$.acnt_ord_oso_prst[].mrkt_deal_tp\|1` | `base:kt50075` | `mrkt_deal_tp` | 시장구분 | CC-01 | 미상 | `17F8-2` |
 | `detail:ka10002:market_snapshot\|$.pred_pre\|1` | `detail:ka10002:market_snapshot` | `pred_pre` | 전일대비 | CC-05 | 미상 | `2QM7-2` |
+| `detail:ka10004:after_hours_totals\|$.ovt_buy_req\|1` | `detail:ka10004:after_hours_totals` | `ovt_buy_req` | 시간외매수잔량 | CC-04 | 미상 | `13BC-2` |
 | `detail:ka10040:broker_departures\|$.tdy_main_trde_ori[].qry_dt\|1` | `detail:ka10040:broker_departures` | `qry_dt` | 조회일자 | CC-05 | 미상 | `1WOB-1` |
+| `detail:ka10087:aggregate_totals\|$.ovt_buy_bid_tot_req\|1` | `detail:ka10087:aggregate_totals` | `ovt_buy_bid_tot_req` | 시간외매수호가총잔량 | CC-04 | 미상 | `13BC-2` |
 | `detail:kt00001:withdrawal_and_order_capacity\|$.100stk_ord_alow_amt\|1` | `detail:kt00001:withdrawal_and_order_capacity` | `100stk_ord_alow_amt` | 100%종목주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00001:withdrawal_and_order_capacity\|$.20stk_ord_alow_amt\|1` | `detail:kt00001:withdrawal_and_order_capacity` | `20stk_ord_alow_amt` | 20%종목주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00001:withdrawal_and_order_capacity\|$.30stk_ord_alow_amt\|1` | `detail:kt00001:withdrawal_and_order_capacity` | `30stk_ord_alow_amt` | 30%종목주문가능금액 | CC-01 | 미상 | `17F8-2` |
@@ -135,8 +139,6 @@
 | `detail:kt00001:withdrawal_and_order_capacity\|$.50stk_ord_alow_amt\|1` | `detail:kt00001:withdrawal_and_order_capacity` | `50stk_ord_alow_amt` | 50%종목주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00001:withdrawal_and_order_capacity\|$.60stk_ord_alow_amt\|1` | `detail:kt00001:withdrawal_and_order_capacity` | `60stk_ord_alow_amt` | 60%종목주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00005:cash_and_capacity\|$.ord_alowa\|1` | `detail:kt00005:cash_and_capacity` | `ord_alowa` | 주문가능현금 | CC-01 | 미상 | `17F8-2` |
-| `detail:kt00005:cash_and_capacity\|$.rght_repl_amt\|1` | `detail:kt00005:cash_and_capacity` | `rght_repl_amt` | 권리대용금 | CC-01 | 펼침 | `3IGR-0` |
-| `detail:kt00005:cash_and_capacity\|$.uncl_stk_amt\|1` | `detail:kt00005:cash_and_capacity` | `uncl_stk_amt` | 미수확보금 | CC-01 | 펼침 | `3IGR-0` |
 | `detail:kt00005:margin_order_capacity\|$.100ord_alow_amt\|1` | `detail:kt00005:margin_order_capacity` | `100ord_alow_amt` | 100%주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00005:margin_order_capacity\|$.20ord_alow_amt\|1` | `detail:kt00005:margin_order_capacity` | `20ord_alow_amt` | 20%주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00005:margin_order_capacity\|$.30ord_alow_amt\|1` | `detail:kt00005:margin_order_capacity` | `30ord_alow_amt` | 30%주문가능금액 | CC-01 | 미상 | `17F8-2` |
@@ -160,11 +162,6 @@
 | `detail:kt00010:margin_order_capacity\|$.profa_40ord_alow_amt\|1` | `detail:kt00010:margin_order_capacity` | `profa_40ord_alow_amt` | 증거금40%주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00010:margin_order_capacity\|$.profa_50ord_alow_amt\|1` | `detail:kt00010:margin_order_capacity` | `profa_50ord_alow_amt` | 증거금50%주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00010:margin_order_capacity\|$.profa_60ord_alow_amt\|1` | `detail:kt00010:margin_order_capacity` | `profa_60ord_alow_amt` | 증거금60%주문가능금액 | CC-01 | 미상 | `17F8-2` |
-| `detail:kt00011:account_funding\|$.entr\|1` | `detail:kt00011:account_funding` | `entr` | 예수금 | CC-01 | 미상 | `17F8-2` |
-| `detail:kt00011:account_funding\|$.ord_alowa\|1` | `detail:kt00011:account_funding` | `ord_alowa` | 주문가능현금 | CC-01 | 미상 | `17F8-2` |
-| `detail:kt00011:account_funding\|$.ord_pos_repl\|1` | `detail:kt00011:account_funding` | `ord_pos_repl` | 주문가능대용 | CC-01 | 미상 | `17F8-2` |
-| `detail:kt00011:account_funding\|$.repl_amt\|1` | `detail:kt00011:account_funding` | `repl_amt` | 대용금 | CC-01 | 미상 | `17F8-2` |
-| `detail:kt00011:account_funding\|$.uncla\|1` | `detail:kt00011:account_funding` | `uncla` | 미수금 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00011:margin_capacity_20_to_50\|$.profa_20ord_alow_amt\|1` | `detail:kt00011:margin_capacity_20_to_50` | `profa_20ord_alow_amt` | 증거금20%주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00011:margin_capacity_20_to_50\|$.profa_30ord_alow_amt\|1` | `detail:kt00011:margin_capacity_20_to_50` | `profa_30ord_alow_amt` | 증거금30%주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00011:margin_capacity_20_to_50\|$.profa_40ord_alow_amt\|1` | `detail:kt00011:margin_capacity_20_to_50` | `profa_40ord_alow_amt` | 증거금40%주문가능금액 | CC-01 | 미상 | `17F8-2` |
@@ -181,8 +178,6 @@
 | `detail:kt00012:guarantee_order_capacity\|$.assr_60ord_alow_amt\|1` | `detail:kt00012:guarantee_order_capacity` | `assr_60ord_alow_amt` | 보증금60%주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00013:cash_resources\|$.use_pos_ch\|1` | `detail:kt00013:cash_resources` | `use_pos_ch` | 사용가능현금 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00013:credit_and_lending_collateral\|$.uncla\|1` | `detail:kt00013:credit_and_lending_collateral` | `uncla` | 미수금 | CC-01 | 미상 | `17F8-2` |
-| `detail:kt00013:d2_funding_capacity\|$.d2ch_ord_alow_amt\|1` | `detail:kt00013:d2_funding_capacity` | `d2ch_ord_alow_amt` | D2현금주문가능금액 | CC-01 | 미상 | `17F8-2` |
-| `detail:kt00013:d2_funding_capacity\|$.d2vexct_entr\|1` | `detail:kt00013:d2_funding_capacity` | `d2vexct_entr` | D2가정산예수금 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00013:margin_order_capacity\|$.100ord_alow_amt\|1` | `detail:kt00013:margin_order_capacity` | `100ord_alow_amt` | 100%주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00013:margin_order_capacity\|$.20ord_alow_amt\|1` | `detail:kt00013:margin_order_capacity` | `20ord_alow_amt` | 20%주문가능금액 | CC-01 | 미상 | `17F8-2` |
 | `detail:kt00013:margin_order_capacity\|$.30ord_alow_amt\|1` | `detail:kt00013:margin_order_capacity` | `30ord_alow_amt` | 30%주문가능금액 | CC-01 | 미상 | `17F8-2` |
@@ -208,15 +203,13 @@
 | `detail:kt50032:gold_trade_history\|$.gold_trde_hist[].proc_brch_nm\|1` | `detail:kt50032:gold_trade_history` | `proc_brch_nm` | 처리점 | CC-01 | 직접 | `3ODO-0` |
 | `detail:kt50032:gold_trade_history\|$.gold_trde_hist[].spot_remn\|1` | `detail:kt50032:gold_trade_history` | `spot_remn` | 현물잔고 | CC-01 | 미상 | `17F8-2` |
 
-## 4. 보드 없는 op (4)
+## 4. 보드 없는 op (2)
 
 op 299종 중 어느 보드도 `operation_refs`에 적지 않은 것. 로더 strict가 `operations have no board`로 막는다.
 
 | op | 카드 | 가시 occurrence |
 | --- | --- | ---: |
 | `detail:kt00005:margin_order_capacity` | CC-01 | 6 |
-| `detail:kt00011:account_funding` | CC-01 | 5 |
-| `detail:kt00013:d2_funding_capacity` | CC-01 | 2 |
 | `detail:kt00013:margin_order_capacity` | CC-01 | 6 |
 
 ## 5. 제외 보드·사유 (2)
@@ -282,12 +275,12 @@ op 299종 중 어느 보드도 `operation_refs`에 적지 않은 것. 로더 str
 | `133H-2` | CC-01 | default | ● | ● | 130 | 60 | 0 |
 | `135M-2` | CC-02 | default | ● | ● | 3 | 3 | 0 |
 | `137X-2` | CC-03 | default | ● | ● | 63 | 150 | 0 |
-| `13BC-2` | CC-04 | default | ● | ● | 114 | 115 | 0 |
+| `13BC-2` | CC-04 | default | ● | ● | 114 | 112 | 0 |
 | `13K0-2` | CC-06 | default | ● | ● | 94 | 53 | 0 |
 | `15J9-2` | CC-06 | default | ● | ● | 28 | 10 | 0 |
 | `15L8-2` | CC-06 | default | ● | ● | 73 | 10 | 0 |
 | `15N5-2` | CC-03 | default | ● | ● | 93 | 97 | 0 |
-| `15P5-2` | CC-03 | default | ● | ● | 147 | 154 | 0 |
+| `15P5-2` | CC-03 | default | ● | ● | 147 | 155 | 0 |
 | `15R0-2` | CC-06 | default | ● | ● | 53 | 27 | 0 |
 | `1JPU-0` | CC-04 | default | ● | ● | 213 | 121 | 0 |
 | `1JZW-0` | CC-04 | default | ● | ● | 214 | 99 | 0 |
@@ -303,7 +296,7 @@ op 299종 중 어느 보드도 `operation_refs`에 적지 않은 것. 로더 str
 | `2RWK-1` | CC-05 | tab | ● | ● | 97 | 40 | 0 |
 | `2S4E-1` | CC-05 | tab | ● | ● | 106 | 73 | 0 |
 | `2SCE-1` | CC-01 | tab | ● | ● | 157 | 118 | 0 |
-| `2SKU-1` | CC-01 | tab | ● | ● | 134 | 120 | 0 |
+| `2SKU-1` | CC-01 | tab | ● | ● | 134 | 123 | 0 |
 | `2SRV-1` | CC-01 | tab | ● | ● | 121 | 103 | 0 |
 | `2SYW-1` | CC-01 | tab | ● | ● | 131 | 126 | 0 |
 | `2T63-1` | CC-02 | tab | ● | ● | 3 | 3 | 0 |
@@ -313,7 +306,7 @@ op 299종 중 어느 보드도 `operation_refs`에 적지 않은 것. 로더 str
 | `2TNJ-1` | CC-02 | tab | ● | ● | 2 | 5 | 0 |
 | `2TRW-1` | CC-04 | tab | ● | ● | 101 | 49 | 0 |
 | `2TZN-1` | CC-06 | tab | ● | ● | 154 | 144 | 0 |
-| `2U5L-1` | CC-06 | tab | ● | ● | 143 | 29 | 0 |
+| `2U5L-1` | CC-06 | tab | ● | ● | 142 | 29 | 0 |
 | `2UBO-1` | CC-06 | tab | ● | ● | 88 | 23 | 0 |
 | `2UHM-1` | CC-06 | tab | ● | ● | 58 | 19 | 0 |
 | `2UN6-1` | CC-06 | tab | ● | ● | 71 | 16 | 0 |
@@ -336,7 +329,7 @@ op 299종 중 어느 보드도 `operation_refs`에 적지 않은 것. 로더 str
 | `2YNQ-0` | CC-06 | sort | ● | ● | 105 | 12 | 0 |
 | `2YS8-0` | CC-05 | sort | ● | ● | 121 | 23 | 0 |
 | `2YXS-0` | CC-03 | sort | ● | ● | 224 | 15 | 0 |
-| `2Z49-0` | CC-03 | sort | ● | ● | 126 | 9 | 0 |
+| `2Z49-0` | CC-03 | sort | ● | ● | 121 | 9 | 0 |
 | `2ZBB-0` | CC-05 | sort | ● | ● | 129 | 25 | 0 |
 | `2ZHC-0` | CC-03 | sort | ● | ● | 203 | 12 | 0 |
 | `2ZN9-0` | CC-03 | sort | ● | ● | 130 | 23 | 0 |
@@ -346,7 +339,7 @@ op 299종 중 어느 보드도 `operation_refs`에 적지 않은 것. 로더 str
 | `30C1-0` | CC-03 | sort | ● | ● | 183 | 11 | 0 |
 | `30HY-0` | CC-05 | sort | ● | ● | 111 | 27 | 0 |
 | `30O1-0` | CC-03 | sort | ● | ● | 179 | 11 | 0 |
-| `30TY-0` | CC-05 | sort | ● | ● | 140 | 36 | 0 |
+| `30TY-0` | CC-05 | sort | ● | ● | 130 | 34 | 0 |
 | `30ZW-0` | CC-03 | sort | ● | ● | 197 | 12 | 0 |
 | `316O-0` | CC-03 | sort | ● | ● | 206 | 12 | 0 |
 | `31CL-0` | CC-05 | sort | ● | ● | 136 | 15 | 0 |
@@ -362,16 +355,16 @@ op 299종 중 어느 보드도 `operation_refs`에 적지 않은 것. 로더 str
 | `3EWN-0` | CC-06 | expand | ● | ● | 57 | 42 | 0 |
 | `3FR6-0` | CC-03 | expand | ● | ● | 139 | 18 | 0 |
 | `3GRO-0` | CC-01 | expand | ● | ● | 60 | 60 | 0 |
-| `3IGR-0` | CC-01 | expand | ● | ● | 58 | 57 | 0 |
+| `3IGR-0` | CC-01 | expand | ● | ● | 58 | 63 | 0 |
 | `3JT4-0` | CC-04 | expand | ● | ● | 56 | 48 | 0 |
-| `3JZ3-0` | CC-04 | expand | ● | ● | 170 | 160 | 0 |
+| `3JZ3-0` | CC-04 | expand | ● | ● | 170 | 158 | 0 |
 | `3K7K-0` | CC-01 | expand | ● | ● | 52 | 61 | 0 |
 | `3LGC-0` | CC-01 | expand | ● | ● | 116 | 59 | 0 |
 | `3MTJ-0` | CC-01 | expand | ● | ● | 57 | 36 | 0 |
 | `3N4O-0` | CC-04 | expand | ● | ● | 117 | 132 | 0 |
 | `3NVG-0` | CC-01 | expand | ● | ● | 44 | 40 | 0 |
 | `3ODO-0` | CC-01 | expand | ● | ● | 71 | 39 | 0 |
-| `3OIM-0` | CC-01 | expand | ● | ● | 61 | 57 | 0 |
+| `3OIM-0` | CC-01 | expand | ● | ● | 61 | 56 | 0 |
 | `3TCO-0` | CC-03 | expand | ● | ● | 152 | 15 | 0 |
 | `3TOM-0` | CC-03 | expand | ● | ● | 125 | 9 | 0 |
 | `3UTA-0` | CC-01 | expand | ● | ● | 35 | 37 | 0 |

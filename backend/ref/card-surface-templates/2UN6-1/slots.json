@@ -66,7 +66,7 @@
     "text_nodes": 142,
     "slots": 142,
     "anchored_slots": 0,
-    "mapped_slots": 0,
+    "mapped_slots": 71,
     "labels": 69,
     "values": 73,
     "layer_직접": 129,
@@ -838,7 +838,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s021",
@@ -892,7 +893,8 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "row_index": 0
     },
     {
       "slot_id": "s023",
@@ -982,8 +984,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true,
-      "dup_note": "조건식 카드 밴드 — 같은 조건검색식 명 목록의 둘째 행"
+      "row_index": 1
     },
     {
       "slot_id": "s027",
@@ -1038,8 +1039,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true,
-      "dup_note": "조건식 카드 밴드 — 같은 일련번호 목록의 둘째 행"
+      "row_index": 1
     },
     {
       "slot_id": "s029",
@@ -1108,8 +1108,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "display_dup": true,
-      "dup_note": "조건식 카드 밴드 — 같은 조건검색식 명 목록의 셋째 행"
+      "row_index": 2
     },
     {
       "slot_id": "s032",
@@ -3940,7 +3939,8 @@
       "collapse_group": null,
       "expanded_board": null,
       "display_dup": true,
-      "dup_note": "감지 이력 — 표 '종목' 열과 같은 종목명 재표시"
+      "dup_note": "감지 이력 — 표 '종목' 열과 같은 종목명 재표시",
+      "row_index": 0
     },
     {
       "slot_id": "s126",
@@ -3968,7 +3968,8 @@
       "collapse_group": null,
       "expanded_board": null,
       "display_dup": true,
-      "dup_note": "감지 이력 — 표 '조건식' 열과 같은 조건검색식 명 재표시"
+      "dup_note": "감지 이력 — 표 '조건식' 열과 같은 조건검색식 명 재표시",
+      "row_index": 0
     },
     {
       "slot_id": "s127",
@@ -4024,7 +4025,8 @@
       "collapse_group": null,
       "expanded_board": null,
       "display_dup": true,
-      "dup_note": "감지 이력 — 표 '종목' 열과 같은 종목명 재표시"
+      "dup_note": "감지 이력 — 표 '종목' 열과 같은 종목명 재표시",
+      "row_index": 1
     },
     {
       "slot_id": "s129",
@@ -4052,7 +4054,8 @@
       "collapse_group": null,
       "expanded_board": null,
       "display_dup": true,
-      "dup_note": "감지 이력 — 표 '조건식' 열과 같은 조건검색식 명 재표시"
+      "dup_note": "감지 이력 — 표 '조건식' 열과 같은 조건검색식 명 재표시",
+      "row_index": 0
     },
     {
       "slot_id": "s130",
@@ -4108,7 +4111,8 @@
       "collapse_group": null,
       "expanded_board": null,
       "display_dup": true,
-      "dup_note": "감지 이력 — 표 '종목' 열과 같은 종목명 재표시"
+      "dup_note": "감지 이력 — 표 '종목' 열과 같은 종목명 재표시",
+      "row_index": 2
     },
     {
       "slot_id": "s132",
@@ -4136,7 +4140,8 @@
       "collapse_group": null,
       "expanded_board": null,
       "display_dup": true,
-      "dup_note": "감지 이력 — 표 '조건식' 열과 같은 조건검색식 명 재표시"
+      "dup_note": "감지 이력 — 표 '조건식' 열과 같은 조건검색식 명 재표시",
+      "row_index": 0
     },
     {
       "slot_id": "s133",

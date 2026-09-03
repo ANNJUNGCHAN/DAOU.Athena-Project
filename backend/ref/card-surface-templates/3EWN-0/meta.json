@@ -7,7 +7,8 @@
   "state": {
     "kind": "expand",
     "parent_board": "2U5L-1",
-    "control": null
+    "control": null,
+    "control_text": "ELW 관찰"
   },
   "saved_at": "2026-09-02T20:27:00+09:00"
 }
