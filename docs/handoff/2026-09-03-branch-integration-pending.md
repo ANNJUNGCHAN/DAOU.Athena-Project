@@ -1,8 +1,52 @@
-# 브랜치 통합 — 대기 중 (2026-09-03 22:20 KST)
+# 브랜치 통합 — 완료 (2026-09-03 22:20 중단 → 23:38 재개 → 09-04 01:00 완료)
 
 사용자 목표는 **"모든 것을 `main`으로 옮기고 브랜치를 정리한다"** 이다.
-2026-09-03 22:20에 착수했다가 **중단했다.** 지금 하면 작업이 유실되기 때문이다.
-이 문서는 왜 멈췄는지와, 안전해졌을 때 무엇을 어떤 순서로 하는지를 고정한다.
+2026-09-03 22:20에 착수했다가 **중단했고**(§1~§7, 당시 기록 그대로), 사용자가 재확인한 뒤
+23:38에 재개해 09-04 01:00에 끝냈다. 실제로 일어난 일은 **§8**에 있다.
+
+## 8. 실제로 한 것 (2026-09-04)
+
+**병합 8건** (전부 `--no-ff -X ignore-cr-at-eol`, 병합마다 EOL 노이즈 0 확인):
+
+| # | 브랜치 | 커밋 | 충돌 |
+|---|---|---|---|
+| 1 | feat/plugin-mode-doctrine (16) | b617dd7 | 0 |
+| 2 | feat/agent-dual-control (8, wip 스냅샷 6c1d248 포함) | 49c694b | main.js 병렬 함수 삽입 2개 → 둘 다 유지 · README 배너 2개 → 둘 다 유지 |
+| 3 | codex/kiumi-mini-cards-runtime (15, kiumi/mini-cards 포함) | 73e092d | test_inventory_api 라우트 핀 404 vs 377 → **실측 408**(+1 board-hydrate, +3 routines) |
+| 4 | feat/card-surface-paper-to-code (15) | a408bb6 | 15개 — 13개는 card-surface만 진화시킨 파일이라 theirs, `slots.json` 2개는 `html_sha256`을 **LF 정규화 board.html 실측 해시**로 |
+| 5 | feat/agent-dual-control 후속 (Step 3·4, fac086e) | 1f07ae1 | 0 |
+| 6 | ANNJUNGCHAN/main (Orca, cd0b98e) | cc7d2cc | 0 |
+| 7 | feat/card-surface-paper-to-code 후속 (G4, d612cb5) | c6efc21 | 0 — **삭제 사고 후 복구해 병합** |
+| 8 | feat/plugin-mode-doctrine 후속 (a18aaf4) | 6e26c6f | plugin-canvas 클래스 이름 `proposal-boundary` vs `proposals-note` → main에 먼저 들어온 이름으로 통일, CSS 합집합, 테스트 셀렉터 3곳 갱신 |
+
+**유실 방지.** agent-dual-control 워크트리의 미커밋 1,062줄은 마지막 수정 79분 뒤 `wip` 커밋(6c1d248)으로
+브랜치에 먼저 고정하고 push한 뒤 병합했다(py_compile 전부 통과, 그 테스트 113 passed).
+
+**병합이 드러낸 회귀 4건 → 96211a0에서 수정.** `verify-semantic-workspaces`가 병합 전 PASS → 후 FAIL.
+이분탐색(mid PASS · kiumi 병합 후 FAIL · kiumi tip 자체 FAIL)과 렌더러 MutationObserver 덤프로 갈랐다.
+① 보드 표면이 앱 렌더러(AITS 차트·호가·주문)를 가로챔 → `paperCardRouting.preservesAppPrimary` ②
+탭 덱이 DOM에서 떨어져도 캐시가 카드를 삼킴 → `isConnected` 자가복구 ③ 순위 축 칩 `title`에 원시
+ref 누출 → 속성 제거, 검증기는 라벨로 판정 ④ Paper 커버리지 앵커(`data-name="raw · base:… · $.…"`)
+157개 제품 DOM 누출 → 마운트 시 식별자 모양만 scrub. 넷 중 셋은 kiumi/card-surface tip에서 이미
+빨갔던 것(작성 회귀), ②는 이 병합이 처음 드러냈다. 라우트 핀은 fac086e의 watch/code 1개로 다시 409.
+
+**삭제.** `codex/kiumi-mini-cards-runtime` · `kiumi/mini-cards` · 로컬 `claude/settings-plugin-tab-absorption-6d550f`.
+**사고 1건**: ancestor 검사 결과를 출력만 하고 세 이름을 한 `--delete`에 넘겨, 검사에서 "미포함"이던
+`feat/card-surface-paper-to-code`(9분 전 Codex가 push한 b77da21·d612cb5)까지 지웠다. `git fetch --prune`이
+원격추적 reflog도 지우므로 `git fsck --unreachable --no-reflogs`로 두 커밋을 찾아 부모 사슬로 확인한 뒤
+`git push origin d612cb5:refs/heads/…`로 되살리고 main에 병합했다. 유실 0. 재발 방지 규칙은 README §1.
+
+**남긴 것.** 원격 4개(agent-dual-control · plugin-mode-doctrine · card-surface · ANNJUNGCHAN/main)는 tip이
+전부 main에 있지만 소유 세션이 그 시각에도 push 중이어서 지우지 않았다. 워크트리 4개(로컬 2 + Orca 2)도
+같은 이유로 그대로다. `verify:integrated-cards`의 M 프로브 실패는 card-surface 트랙의 미완 항목이라
+고치지 않았다(그 tip에서도 동일).
+
+**환경 사고 1건**: 이분탐색용 임시 워크트리에 `app/node_modules` 정션을 걸고 `git worktree remove --force`
+했더니 정션을 타고 본체 `node_modules`가 비었다(추적 파일 무사). `npm install` + `electron/install.js`로 복구.
+
+---
+
+> 아래 §1~§7은 2026-09-03 22:20 중단 시점의 기록이다. 재개 절차 참고용으로 그대로 둔다.
 
 ## 1. 왜 멈췄나
 
