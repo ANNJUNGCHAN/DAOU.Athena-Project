@@ -1758,3 +1758,258 @@ test('제안 미니 목록(작업 뷰)은 좁은 폭이라 여전히 한 줄로 
     '단기 회전 성향 21회 보강 — 매매일마다 정리가 필요해 보여요',
   );
 });
+
+// ---------- 코드 알람(Step 7, Paper 보드 10·11·12) ----------
+// 이 갈래는 목록 행 문법(A-1)부터 상세 문법(A-2~A-5)까지 기존 감시와 다르다.
+// 상세는 백엔드 상세 조회(fetchDetail)가 실어 오는 watch/last_run/last_check만
+// 그린다 — 값이 없으면 「—」로 남기고 지어내지 않는다.
+
+function codeRoutine(overrides) {
+  return {
+    id: 'cw1', symbol: '005930', note: '거래량 급증 감시 · 삼성전자',
+    status: 'active', mode: 'code-watch', source_label: '코드 감시',
+    cooldown_s: 86400, created_at: '2026-09-01T09:00:00',
+    expires_at: '2026-10-03T09:00:00',
+    ...overrides,
+  };
+}
+
+function watchNode(overrides) {
+  return {
+    fn: 'load_bars', title_ko: '일봉 불러오기', title_en: 'load_bars',
+    inputs: [{ name: '종목', value: '삼성전자' }, { name: '기간', value: 60 }],
+    output: '봉 60개 + 오늘 봉',
+    unused: false, called: true, changed: false, error: null, warnings: [],
+    ...overrides,
+  };
+}
+
+// 보드 10의 네 칸 그대로 — 「일봉 불러오기 / 3일 거래량 평균 / 배수 비교 / 알림」.
+function fourNodes() {
+  return [
+    watchNode({}),
+    watchNode({ fn: 'avg_volume', title_ko: '3일 거래량 평균', title_en: 'avg_volume', inputs: [{ name: '봉', value: 60 }, { name: '일수', value: 3 }], output: 12400000 }),
+    watchNode({ fn: 'volume_ratio', title_ko: '배수 비교', title_en: 'volume_ratio', inputs: [{ name: '오늘 거래량', value: 18900000 }], output: 1.52, changed: true }),
+    watchNode({ fn: 'fire', title_ko: '알림', title_en: 'fire', inputs: [{ name: '넘음', value: true }], output: null }),
+  ];
+}
+
+function codeDetail(overrides) {
+  return {
+    watch: {
+      project_id: 'p1', path: 'watch/volume_spike.py', version_hash: 'ab12cd34ef',
+      params: {}, poll_interval_s: 60, lookback_days: 30, last_fired_at: null,
+    },
+    last_check: null,
+    last_run: {
+      checked_at: '2026-09-03T15:31:00', observed: 1.52, duration_ms: 820,
+      nodes: fourNodes(), skip_reason: null,
+    },
+    ...overrides,
+  };
+}
+
+function allText(node) {
+  const out = [];
+  (function walk(n) { if (n.textContent) out.push(n.textContent); (n.children || []).forEach(walk); })(node);
+  return out.join('\n');
+}
+
+async function mountCode(overrides, deps) {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container,
+    fetchRoutines: async () => [codeRoutine(overrides || {})],
+    fetchDetail: async () => codeDetail((deps && deps.detail) || {}),
+    fetchRuns: async () => [],
+    ...(deps || {}),
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await new Promise((r) => setTimeout(r, 0)); // fetchDetail 왕복 1회
+  return { container, canvas, detail: findByClass(container, 'agent-detail-col')[0] };
+}
+
+test('A-1 목록 행: code-watch는 「코드 감시 · 장중 N분마다」 — 「주기 확인」으로 안 떨어진다', async () => {
+  const { container } = await mountCode({ watch: { poll_interval_s: 300 } });
+  const sub = findByClass(container, 'agent-row-sub')[0].textContent;
+  assert.equal(sub, '코드 감시 · 장중 5분마다');
+  assert.equal(sub.includes('주기 확인'), false);
+  assert.equal(findByClass(container, 'agent-row-dot')[0].textContent, '◆');
+});
+
+test('A-1 목록 행: 확인 주기를 모르면 1분으로 적는다(보드 12 기본값)', async () => {
+  const { container } = await mountCode({});
+  assert.equal(findByClass(container, 'agent-row-sub')[0].textContent, '코드 감시 · 장중 1분마다');
+});
+
+test('A-2 상세: 노드 카드 수가 함수 수와 같고(4칸) 각 칸에 제목·영어명·들어감·나옴이 있다', async () => {
+  const { detail } = await mountCode({});
+  const cards = findByClass(detail, 'agent-node-card');
+  assert.equal(cards.length, 4);
+  for (const card of cards) {
+    assert.ok(findByClass(card, 'agent-node-title')[0].textContent);
+    assert.ok(findByClass(card, 'agent-node-fn')[0].textContent);
+    assert.ok(findByClass(card, 'agent-node-in').length >= 1);
+    assert.ok(findByClass(card, 'agent-node-out')[0].textContent);
+  }
+  const first = cards[0];
+  assert.equal(findByClass(first, 'agent-node-title')[0].textContent, '일봉 불러오기');
+  assert.equal(findByClass(first, 'agent-node-fn')[0].textContent, 'load_bars');
+  assert.deepEqual(
+    findByClass(first, 'agent-node-io-label').map((n) => n.textContent), ['들어감', '나옴'],
+  );
+  // 큰 수는 자릿수 구분, 참/거짓은 한국어, 값이 없으면 「—」.
+  assert.equal(findByClass(cards[1], 'agent-node-out')[0].textContent, '12,400,000');
+  assert.equal(findByClass(cards[3], 'agent-node-in-value')[0].textContent, '참');
+  assert.equal(findByClass(cards[3], 'agent-node-out')[0].textContent, '—');
+  assert.equal(
+    findByClass(detail, 'agent-panel-caption').map((n) => n.textContent).includes('오늘 확인 · 15:31'),
+    true,
+  );
+});
+
+test('A-2 상세: 두 칸짜리 감시 함수는 카드도 두 장이다', async () => {
+  const { detail } = await mountCode({}, {
+    detail: { last_run: { checked_at: '2026-09-03T15:31:00', nodes: fourNodes().slice(0, 2), duration_ms: 300 } },
+  });
+  assert.equal(findByClass(detail, 'agent-node-card').length, 2);
+});
+
+test('A-3 상세: 「방금 바뀜」은 바뀐 칸에만 붙는다', async () => {
+  const { detail } = await mountCode({});
+  const badges = findByClass(detail, 'agent-node-card')
+    .map((c) => findByClass(c, 'agent-node-badge').map((b) => b.textContent));
+  assert.deepEqual(badges, [[], [], ['방금 바뀜'], []]);
+});
+
+test('A-3 상세: 칸을 고르면 진한 테두리와 「이상해요」·「물어볼게요」 칩이 붙는다', async () => {
+  let seen = null;
+  const { container, detail } = await mountCode({}, {
+    onEditInChat: (id, opts) => { seen = { id, opts }; },
+  });
+  assert.equal(findByClass(detail, 'agent-node-chip').length, 0, '고르기 전에는 칩이 없다');
+
+  findByClass(detail, 'agent-node-card')[2].dispatchEvent({ type: 'click' });
+  const after = findByClass(container, 'agent-detail-col')[0];
+  const selected = findByClass(after, 'agent-node-card').filter((c) => c.className.includes('is-selected'));
+  assert.equal(selected.length, 1);
+  assert.equal(findByClass(selected[0], 'agent-node-title')[0].textContent, '배수 비교');
+  assert.ok(selected[0].style.border, '고른 칸은 진한 테두리를 받는다');
+  const chips = findByClass(after, 'agent-node-chip');
+  assert.deepEqual(chips.map((n) => n.textContent), ['이상해요', '물어볼게요']);
+
+  chips[0].dispatchEvent({ type: 'click' });
+  assert.equal(seen.id, 'cw1');
+  assert.equal(seen.opts.node, 'volume_ratio');
+  assert.equal(seen.opts.kind, 'odd');
+});
+
+test('A-4 상세: 코드는 접혀 있고 라벨이 「코드 · 참고 · 펼치기」다', async () => {
+  const { container, detail } = await mountCode({});
+  const toggle = findByClass(detail, 'agent-code-source-toggle')[0];
+  assert.equal(toggle.textContent, '코드 · 참고 · 펼치기');
+  assert.equal(findByClass(detail, 'agent-code-source-path').length, 0);
+
+  toggle.dispatchEvent({ type: 'click' });
+  const after = findByClass(container, 'agent-detail-col')[0];
+  assert.equal(findByClass(after, 'agent-code-source-toggle')[0].textContent, '코드 · 참고 · 접기');
+  assert.equal(findByClass(after, 'agent-code-source-path')[0].textContent, 'watch/volume_spike.py');
+});
+
+test('A-5 상세: 울린 기록·일시중지·취소·고치기·만료가 있고 조건 편집 폼은 없다', async () => {
+  const { detail } = await mountCode({});
+  const text = allText(detail);
+  for (const phrase of ['울린 기록', '일시중지', '취소', '고치기 — 말로', '만료']) {
+    assert.ok(text.includes(phrase), `${phrase}가 상세에 있어야 한다`);
+  }
+  assert.equal(findByClass(detail, 'agent-history-open')[0].textContent, '전체 이력 보기 →');
+  const pairs = findByClass(detail, 'agent-detail-field').map((row) => [
+    findByClass(row, 'agent-detail-field-label')[0].textContent,
+    findByClass(row, 'agent-detail-field-value')[0].textContent,
+  ]);
+  assert.deepEqual(Object.fromEntries(pairs), { '확인 주기': '장중 1분', 쿨다운: '86400초', 만료: '2026-10-03' });
+
+  const inputs = [];
+  (function walk(n) { if (['input', 'select', 'textarea'].includes(n.tag)) inputs.push(n); (n.children || []).forEach(walk); })(detail);
+  assert.equal(inputs.length, 0, '코드 알람 상세에 조건 편집 폼이 있으면 안 된다');
+  assert.equal(findByClass(detail, 'agent-code-kind')[0].textContent, '코드 감시 · vab12cd');
+});
+
+test('A-5 상세: 안 불린 함수 칸은 「이번엔 안 쓰임」으로 남는다', async () => {
+  const nodes = fourNodes();
+  nodes[1].called = false;
+  const { detail } = await mountCode({}, {
+    detail: { last_run: { checked_at: '2026-09-03T15:31:00', nodes } },
+  });
+  const marks = findByClass(detail, 'agent-node-card')
+    .map((c) => findByClass(c, 'agent-node-unused').map((n) => n.textContent));
+  assert.deepEqual(marks, [[], ['이번엔 안 쓰임'], [], []]);
+});
+
+test('A-12 활성: 「고치기 — 말로」는 먼저 멈춤을 묻는다(거절 사유 문구 없음)', async () => {
+  const calls = [];
+  const { container, detail } = await mountCode({}, {
+    pauseRoutine: async (id) => { calls.push(['pause', id]); },
+    onEditInChat: (id, opts) => { calls.push(['edit', id, opts.kind]); },
+  });
+  findByClass(detail, 'agent-code-edit')[0].dispatchEvent({ type: 'click' });
+  let after = findByClass(container, 'agent-detail-col')[0];
+  const chips = findByClass(after, 'agent-code-edit-chip');
+  assert.deepEqual(chips.map((n) => n.textContent), ['일시중지하고 고치기', '그대로 두기']);
+  assert.equal(calls.length, 0, '묻기 전에는 아무것도 안 부른다');
+  assert.equal(allText(after).includes('409'), false, '거절 사유를 화면에 옮기지 않는다');
+
+  await chips[0].dispatchEvent({ type: 'click' });
+  assert.deepEqual(calls, [['pause', 'cw1'], ['edit', 'cw1', 'edit']]);
+  after = findByClass(container, 'agent-detail-col')[0];
+  assert.equal(findByClass(after, 'agent-code-edit-chip').length, 0, '확인 줄은 사라진다');
+});
+
+test('A-12 활성: 「그대로 두기」를 고르면 아무것도 안 부르고 확인 줄만 닫는다', async () => {
+  const calls = [];
+  const { container, detail } = await mountCode({}, {
+    pauseRoutine: async (id) => { calls.push(['pause', id]); },
+    onEditInChat: (id) => { calls.push(['edit', id]); },
+  });
+  findByClass(detail, 'agent-code-edit')[0].dispatchEvent({ type: 'click' });
+  const after = findByClass(container, 'agent-detail-col')[0];
+  findByClass(after, 'agent-code-edit-chip')[1].dispatchEvent({ type: 'click' });
+  assert.deepEqual(calls, []);
+  assert.equal(findByClass(findByClass(container, 'agent-detail-col')[0], 'agent-code-edit-chip').length, 0);
+});
+
+test('A-12 일시중지: 확인 없이 바로 고치기로 넘어간다', async () => {
+  const calls = [];
+  const { container, detail } = await mountCode({ status: 'paused' }, {
+    pauseRoutine: async (id) => { calls.push(['pause', id]); },
+    onEditInChat: (id, opts) => { calls.push(['edit', id, opts.kind]); },
+  });
+  assert.equal(findByClass(detail, 'agent-pause-btn')[0].textContent, '재개');
+  findByClass(detail, 'agent-code-edit')[0].dispatchEvent({ type: 'click' });
+  assert.deepEqual(calls, [['edit', 'cw1', 'edit']]);
+  assert.equal(findByClass(findByClass(container, 'agent-detail-col')[0], 'agent-code-edit-chip').length, 0);
+});
+
+test('초안: 검사 요약과 「검사」 버튼이 있고 누르면 검사 1회를 돈다', async () => {
+  const checked = [];
+  const { container, detail } = await mountCode({ status: 'draft' }, {
+    detail: {
+      last_run: null,
+      last_check: {
+        count: 4, lookback_days: 30, last_fire: '2026-08-26',
+        fires: [{ dt: '2026-08-26', close: 71000 }],
+        nodes: fourNodes(), warnings: [], checked_at: '2026-09-03T15:31:00', ok: true, reason: null,
+      },
+    },
+    runWatchCheck: async (item) => { checked.push(item.id); },
+  });
+  assert.equal(findByClass(detail, 'agent-code-check-summary')[0].textContent, '지난 30일 4번 · 마지막 8/26');
+  assert.equal(findByClass(detail, 'agent-code-counted-until')[0].textContent, '어제까지로 세었음 · 오늘은 진행 중');
+  assert.equal(findByClass(detail, 'agent-node-card').length, 4, '초안도 검사 결과의 칸을 그대로 보여준다');
+  assert.equal(findByClass(detail, 'agent-code-fires').length, 0, '울린 적 없는 초안에 울린 기록을 만들지 않는다');
+
+  await findByClass(detail, 'agent-code-check-btn')[0].dispatchEvent({ type: 'click' });
+  assert.deepEqual(checked, ['cw1']);
+  assert.equal(findByClass(findByClass(container, 'agent-detail-col')[0], 'agent-node-card').length, 4);
+});

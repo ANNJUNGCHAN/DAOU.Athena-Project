@@ -1,6 +1,11 @@
 // IIFE 스코프 격리(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
 (function () {
 
+// 코드 알람(Step 7, Paper 보드 10·11·12)의 문구 계산은 lib/watch-nodes.js가
+// 전담한다 — backtest-canvas.js가 세운 isNode 분기와 같은 방식으로 싣는다.
+const isNode = typeof module !== 'undefined' && module.exports;
+const WatchNodes = isNode ? require('./watch-nodes') : window.AthenaLib.WatchNodes;
+
 // 에이전트모드 캔버스(Paper 보드 39) — #agentCanvas 컨테이너를 완전히 소유하고
 // 헤더·탭·통계 카드·리스트+상세를 전부 이 파일이 그린다. shell.html은 빈
 // 컨테이너 하나만 갖는다(graph-mode의 graphSummaryTable/gridEmpty와 같은 자리 —
@@ -139,6 +144,11 @@ function svgEl(name, attrs) {
 // 되돌아가지 않도록.
 function statusRowIcon(routine) {
   if (routine.status === 'draft') return { glyph: '◌', colorVar: '--color-brand' };
+  // 코드 알람(Step 7) — 보드 12의 목록 범례가 ◆를 코드 감시에 못박는다(실시간은
+  // ●, 예약도 ●). 일시중지된 코드 알람도 같은 ◆를 흐리게 쓴다(보드 12 4행).
+  if (routine.mode === 'code-watch') {
+    return { glyph: '◆', colorVar: routine.status === 'active' ? '--color-brand' : '--color-k-faint' };
+  }
   if (routine.status === 'paused') return { glyph: '❚❚', colorVar: '--color-warn' };
   if (routine.status === 'active') {
     if (routine.mode === 'realtime-ws') return { glyph: '●', colorVar: '--color-info' };
@@ -158,6 +168,11 @@ function createAgentCanvas(deps) {
     onOpenGraph,
     onOpenInChat,
     onEditInChat,
+    // 코드 알람(Step 7) — 상세 1회 조회, 취소, 초안 검사 1회. 셋 다 사람
+    // 클릭 전용 경로이고 canvas.js가 기존 routine-* 채널과 같은 모양으로 잇는다.
+    fetchDetail,
+    cancelRoutine,
+    runWatchCheck,
   } = deps || {};
   if (!container) return { mount() {}, async refresh() {} };
 
@@ -1280,6 +1295,17 @@ function createAgentCanvas(deps) {
   // 추가할 때도 이 전제를 지켜야 한다(그렇지 않으면 예약 항목이 "주기 확인"
   // sub 라벨을 잘못 받는다, 사실11③).
   function toWatchItem(routine) {
+    // 코드 알람(Step 7, 보드 12) — 갈래가 다르므로 kind부터 갈린다. 여기서
+    // 갈라 놓지 않으면 「주기 확인」 폴백으로 떨어진다(A-1이 막는 지점).
+    if (routine.mode === 'code-watch') {
+      return {
+        id: routine.id, kind: 'code', source: 'live', status: routine.status, mode: routine.mode,
+        title: routine.note || routine.symbol || routine.id,
+        sub: WatchNodes.watchSubLabel(routine.watch),
+        trailing: '',
+        raw: routine,
+      };
+    }
     return {
       id: routine.id, kind: 'watch', source: 'live', status: routine.status, mode: routine.mode,
       title: routine.note || routine.symbol || routine.id,
@@ -1308,6 +1334,17 @@ function createAgentCanvas(deps) {
   // 지어낸 일정 문구를 붙이지 않는다(P3 — Paper 목업의 "매매일 15:40"류는
   // 예약 트리거 전용 예시라 실제 draft 필드에 대응이 없다).
   function toDraftItem(routine) {
+    // 코드 알람 초안(Step 7) — 상세가 검사 요약과 「검사」 버튼을 내야 하므로
+    // 갈래는 'code'로 두고 상태만 초안이다(아래 renderCodeDetail이 갈라 그린다).
+    if (routine.mode === 'code-watch') {
+      return {
+        id: routine.id, kind: 'code', source: 'live', status: 'draft', mode: routine.mode,
+        title: routine.note || routine.symbol || routine.id,
+        sub: `${WatchNodes.KIND_LABEL} · 초안 — 채팅에서 만드는 중`,
+        trailing: '지금',
+        raw: routine,
+      };
+    }
     return {
       id: routine.id, kind: 'draft', source: 'live', status: 'draft', mode: routine.mode,
       title: routine.note || routine.symbol || routine.id,
@@ -1419,6 +1456,340 @@ function createAgentCanvas(deps) {
     ];
   }
 
+  // ---------- 코드 알람 상세(Step 7, Paper 보드 10·11·12) ----------
+  //
+  // 조건 편집 폼이 없는 것이 이 화면의 계약이다(A-5) — 코드 알람의 조건은 감시
+  // 함수 자체이고, 고치는 길은 「고치기 — 말로」 하나뿐이다(R10). 켜져 있는
+  // 알람은 코드 파일을 덮어쓸 수 없으므로(백엔드가 막는다) 그 버튼이 먼저
+  // 멈춤을 묻는다 — 거절 사유를 그대로 옮기지 않고 다음 행동만 보여준다(A-12).
+  //
+  // 노드 카드의 값은 전부 백엔드가 실제로 기록한 값이다(P2·D2) — 없으면 「—」로
+  // 남기고 지어내지 않는다. 코드 원문은 v1에서 가져오지 않는다(R7 — 접힌 줄은
+  // 경로만 보여준다).
+  let codeDetailCache = { id: null, data: null };
+  let codeDetailRequestId = 0;
+  let codeFiresCache = { id: null, rows: [] };
+  let selectedNodeFn = null; // 선택된 노드 칸 — 진한 테두리 + 칩 2개
+  let codeSourceOpen = false; // 「코드 · 참고 · 펼치기」 토글
+  let editConfirmId = null; // 멈춤 확인(A-12)이 떠 있는 항목
+
+  function loadCodeDetail(item) {
+    if (codeDetailCache.id === item.id) return;
+    codeDetailCache = { id: item.id, data: null };
+    const rid = ++codeDetailRequestId;
+    Promise.resolve((typeof fetchDetail === 'function') ? fetchDetail(item.id) : null)
+      .then((data) => {
+        if (rid !== codeDetailRequestId || !data) return;
+        codeDetailCache = { id: item.id, data };
+        if (selectedId === item.id) renderDetail();
+      })
+      .catch(() => {});
+  }
+
+  function loadCodeFires(item) {
+    if (codeFiresCache.id === item.id) return;
+    codeFiresCache = { id: item.id, rows: [] };
+    Promise.resolve((typeof fetchRuns === 'function') ? fetchRuns(item.id) : [])
+      .then((rows) => {
+        if (codeFiresCache.id !== item.id || !Array.isArray(rows)) return;
+        codeFiresCache = {
+          id: item.id,
+          rows: rows.slice().sort((a, b) => Date.parse(b.ts) - Date.parse(a.ts)).slice(0, 3),
+        };
+        if (selectedId === item.id) renderDetail();
+      })
+      .catch(() => {});
+  }
+
+  // 채팅으로 넘기는 한 경로(동선 규칙② 재사용). 기존 호출부는 제목 하나만
+  // 넘겼다 — 두 번째 인자는 코드 알람에서만 붙는 덤이라 옛 배선이 그대로 돈다.
+  function seedEdit(item, opts) {
+    if (typeof onEditInChat !== 'function') return;
+    onEditInChat(item.id, Object.assign({ title: item.title }, opts || {}));
+  }
+
+  function makeNodeCard(card, item) {
+    const selected = selectedNodeFn === card.fn;
+    const node = el('div', selected ? 'agent-node-card is-selected' : 'agent-node-card');
+    if (selected) node.style.border = '2px solid var(--color-brand)';
+
+    const head = el('div', 'agent-node-head');
+    const titleEl = el('span', 'agent-node-title');
+    titleEl.textContent = card.titleKo;
+    head.appendChild(titleEl);
+    if (card.changed) {
+      const changed = el('span', 'agent-node-badge');
+      changed.textContent = WatchNodes.BADGE_CHANGED;
+      head.appendChild(changed);
+    }
+    node.appendChild(head);
+
+    const fnEl = el('div', 'agent-node-fn');
+    fnEl.textContent = card.titleEn;
+    node.appendChild(fnEl);
+
+    if (card.unused) {
+      const unused = el('div', 'agent-node-unused');
+      unused.textContent = WatchNodes.BADGE_UNUSED;
+      node.appendChild(unused);
+    }
+
+    const inLabel = el('div', 'agent-node-io-label');
+    inLabel.textContent = WatchNodes.LABEL_IN;
+    node.appendChild(inLabel);
+    const inputs = card.inputs.length ? card.inputs : [{ name: '', value: WatchNodes.DASH }];
+    for (const row of inputs) {
+      const line = el('div', 'agent-node-in');
+      const name = el('span', 'agent-node-in-name');
+      name.textContent = row.name;
+      const value = el('span', 'agent-node-in-value');
+      value.textContent = row.value;
+      line.appendChild(name);
+      line.appendChild(value);
+      node.appendChild(line);
+    }
+
+    node.appendChild(el('div', 'agent-node-sep'));
+    const outLabel = el('div', 'agent-node-io-label');
+    outLabel.textContent = WatchNodes.LABEL_OUT;
+    node.appendChild(outLabel);
+    const outEl = el('div', 'agent-node-out');
+    outEl.textContent = card.output;
+    outEl.style.fontWeight = '600';
+    node.appendChild(outEl);
+
+    if (selected) {
+      const chips = el('div', 'agent-node-chips');
+      for (const [label, kind] of [[WatchNodes.CHIP_ODD, 'odd'], [WatchNodes.CHIP_ASK, 'ask']]) {
+        const chip = el('button', 'agent-node-chip');
+        chip.type = 'button';
+        chip.textContent = label;
+        chip.addEventListener('click', (event) => {
+          if (event && typeof event.stopPropagation === 'function') event.stopPropagation();
+          seedEdit(item, { node: card.fn, nodeTitle: card.titleKo, kind });
+        });
+        chips.appendChild(chip);
+      }
+      node.appendChild(chips);
+    }
+
+    node.addEventListener('click', () => {
+      selectedNodeFn = selected ? null : card.fn;
+      renderDetail();
+    });
+    return node;
+  }
+
+  function renderCodeDetail(item) {
+    const raw = item.raw || {};
+    loadCodeDetail(item);
+    const detail = (codeDetailCache.id === item.id && codeDetailCache.data) ? codeDetailCache.data : {};
+    const watch = detail.watch || raw.watch || null;
+    const lastRun = detail.last_run || null;
+    const lastCheck = detail.last_check || null;
+
+    const caption = el('div', 'agent-panel-caption');
+    caption.textContent = '상세';
+    detailCol.appendChild(caption);
+
+    const headRow = el('div', 'agent-detail-head');
+    const badge = el('span', `agent-status-badge is-${item.status}`);
+    badge.textContent = item.status === 'paused' ? '일시중지' : (item.status === 'draft' ? '초안' : '활성');
+    headRow.appendChild(badge);
+    const titleEl = el('span', 'agent-detail-title');
+    titleEl.textContent = item.title;
+    headRow.appendChild(titleEl);
+    const kindEl = el('span', 'agent-code-kind');
+    kindEl.textContent = WatchNodes.versionLabel(watch);
+    headRow.appendChild(kindEl);
+    detailCol.appendChild(headRow);
+
+    // 상태 제어 행(보드 12 두 번째 줄) — 초안은 아직 켤 것이 없어 멈춤·취소가 없다.
+    const controls = el('div', 'agent-code-controls');
+    if (item.status !== 'draft') {
+      const willPause = item.status !== 'paused';
+      const pauseBtn = el('button', 'agent-pause-btn');
+      pauseBtn.type = 'button';
+      pauseBtn.textContent = willPause ? '일시중지' : '재개';
+      pauseBtn.addEventListener('click', async () => {
+        pauseBtn.disabled = true;
+        const action = willPause ? pauseRoutine : resumeRoutine;
+        try { if (typeof action === 'function') await action(item.id); } catch { /* refresh가 실제 상태를 다시 받아온다 */ }
+        await refresh();
+      });
+      controls.appendChild(pauseBtn);
+
+      const cancelBtn = el('button', 'agent-code-cancel');
+      cancelBtn.type = 'button';
+      cancelBtn.textContent = '취소';
+      cancelBtn.addEventListener('click', async () => {
+        cancelBtn.disabled = true;
+        try { if (typeof cancelRoutine === 'function') await cancelRoutine(item.id); } catch { /* 위와 같다 */ }
+        await refresh();
+      });
+      controls.appendChild(cancelBtn);
+    }
+    const editBtn = el('button', 'agent-code-edit');
+    editBtn.type = 'button';
+    editBtn.textContent = '고치기 — 말로';
+    editBtn.addEventListener('click', () => {
+      if (item.status === 'active') { editConfirmId = item.id; renderDetail(); return; }
+      seedEdit(item, { kind: 'edit' });
+    });
+    controls.appendChild(editBtn);
+    detailCol.appendChild(controls);
+
+    // A-12 — 켜져 있는 알람은 먼저 멈춤을 묻는다. 거절 사유(코드 번호)는 화면에
+    // 옮기지 않는다 — 사람이 할 수 있는 다음 행동 둘만 보여준다.
+    if (editConfirmId === item.id) {
+      const confirmRow = el('div', 'agent-code-edit-confirm');
+      const text = el('div', 'agent-code-edit-confirm-text');
+      text.textContent = '켜진 채로는 못 고쳐 — 먼저 멈출까?';
+      confirmRow.appendChild(text);
+      const pauseFirst = el('button', 'agent-code-edit-chip');
+      pauseFirst.type = 'button';
+      pauseFirst.textContent = '일시중지하고 고치기';
+      pauseFirst.addEventListener('click', async () => {
+        pauseFirst.disabled = true;
+        try { if (typeof pauseRoutine === 'function') await pauseRoutine(item.id); } catch { /* 위와 같다 */ }
+        editConfirmId = null;
+        seedEdit(item, { kind: 'edit' });
+        await refresh();
+      });
+      confirmRow.appendChild(pauseFirst);
+      const keep = el('button', 'agent-code-edit-chip');
+      keep.type = 'button';
+      keep.textContent = '그대로 두기';
+      keep.addEventListener('click', () => { editConfirmId = null; renderDetail(); });
+      confirmRow.appendChild(keep);
+      detailCol.appendChild(confirmRow);
+    }
+
+    // 「오늘 확인 · HH:MM」 — 초안은 아직 돈 적이 없으니 검사 결과의 칸을 본다.
+    const shown = item.status === 'draft' ? (lastCheck || lastRun) : (lastRun || lastCheck);
+    const cards = WatchNodes.nodeCards(shown && shown.nodes);
+    const clock = WatchNodes.clockLabel(shown && shown.checked_at);
+    const checkCaption = el('div', 'agent-panel-caption');
+    checkCaption.textContent = clock ? `오늘 확인 · ${clock}` : '오늘 확인';
+    detailCol.appendChild(checkCaption);
+    const nodeWrap = el('div', 'agent-node-cards');
+    nodeWrap.setAttribute('data-source', item.source);
+    if (!cards.length) {
+      const empty = el('div', 'agent-node-empty');
+      empty.textContent = '아직 확인한 값이 없음';
+      nodeWrap.appendChild(empty);
+    } else {
+      for (const card of cards) nodeWrap.appendChild(makeNodeCard(card, item));
+    }
+    detailCol.appendChild(nodeWrap);
+    const nodeHint = el('div', 'agent-node-hint');
+    nodeHint.textContent = '칸을 누르면 그 칸에 대해 채팅으로 물어볼 수 있어';
+    detailCol.appendChild(nodeHint);
+
+    // 코드는 참고다(R7) — v1은 원문을 가져오지 않고 경로만 편다.
+    const codeRow = el('div', 'agent-code-source');
+    const toggle = el('button', 'agent-code-source-toggle');
+    toggle.type = 'button';
+    toggle.textContent = codeSourceOpen ? WatchNodes.CODE_EXPANDED : WatchNodes.CODE_COLLAPSED;
+    toggle.addEventListener('click', () => { codeSourceOpen = !codeSourceOpen; renderDetail(); });
+    codeRow.appendChild(toggle);
+    if (codeSourceOpen) {
+      const pathEl = el('div', 'agent-code-source-path');
+      pathEl.textContent = (watch && watch.path) || WatchNodes.DASH;
+      codeRow.appendChild(pathEl);
+    }
+    detailCol.appendChild(codeRow);
+
+    if (item.status === 'draft') {
+      // 초안 — 승인 전에 사람이 몇 번이든 다시 잴 수 있다(P4의 비대칭을 함께 적는다).
+      const checkWrap = el('div', 'agent-code-check');
+      const summary = el('div', 'agent-code-check-summary');
+      summary.textContent = WatchNodes.checkSummary(lastCheck) || '아직 검사한 적 없음';
+      checkWrap.appendChild(summary);
+      const countedUntil = el('div', 'agent-code-counted-until');
+      countedUntil.textContent = WatchNodes.COUNTED_UNTIL;
+      checkWrap.appendChild(countedUntil);
+      const checkBtn = el('button', 'agent-code-check-btn');
+      checkBtn.type = 'button';
+      checkBtn.textContent = '검사';
+      checkBtn.addEventListener('click', async () => {
+        checkBtn.disabled = true;
+        try {
+          if (typeof runWatchCheck === 'function') await runWatchCheck(Object.assign({}, item, { watch }));
+        } catch { /* 결과는 아래 refresh가 상세에서 다시 받아온다 */ }
+        codeDetailCache = { id: null, data: null };
+        await refresh();
+      });
+      checkWrap.appendChild(checkBtn);
+      detailCol.appendChild(checkWrap);
+    } else {
+      // 「울린 기록」 — 드릴인(10단계)과 같은 /runs 원천이다(두 개의 진실 금지).
+      loadCodeFires(item);
+      const firesCaptionRow = el('div', 'agent-panel-caption-row');
+      const firesCaption = el('span', 'agent-panel-caption');
+      firesCaption.textContent = '울린 기록';
+      firesCaptionRow.appendChild(firesCaption);
+      const openHistoryBtn = el('button', 'agent-history-open');
+      openHistoryBtn.type = 'button';
+      openHistoryBtn.textContent = '전체 이력 보기 →';
+      openHistoryBtn.addEventListener('click', () => openHistory(item));
+      firesCaptionRow.appendChild(openHistoryBtn);
+      detailCol.appendChild(firesCaptionRow);
+
+      const firesWrap = el('div', 'agent-code-fires');
+      firesWrap.setAttribute('data-source', 'live');
+      const rows = codeFiresCache.id === item.id ? codeFiresCache.rows : [];
+      if (!rows.length) {
+        const empty = el('div', 'agent-code-fire-empty');
+        empty.textContent = '아직 울린 적 없음';
+        firesWrap.appendChild(empty);
+      } else {
+        for (const run of rows) {
+          const line = el('div', 'agent-code-fire');
+          const date = el('span', 'agent-code-fire-date');
+          date.textContent = WatchNodes.shortDate(String(run.ts || '').slice(0, 10));
+          const icon = VERDICT_ICON[run.verdict] || VERDICT_ICON.suppressed;
+          const mark = el('span', 'agent-code-fire-mark');
+          mark.textContent = icon.glyph;
+          mark.style.color = `var(${icon.colorVar})`;
+          const text = el('span', 'agent-code-fire-text');
+          text.textContent = run.reason || '';
+          const time = el('span', 'agent-code-fire-time');
+          time.textContent = formatRunTime(run.ts);
+          line.appendChild(date);
+          line.appendChild(mark);
+          line.appendChild(text);
+          line.appendChild(time);
+          firesWrap.appendChild(line);
+        }
+      }
+      detailCol.appendChild(firesWrap);
+    }
+
+    // 설정 요약 한 줄(보드 12) — 값을 바꾸는 입력은 없다(A-5).
+    const fieldsCaption = el('div', 'agent-panel-caption');
+    fieldsCaption.textContent = '설정';
+    detailCol.appendChild(fieldsCaption);
+    const fieldsWrap = el('div', 'agent-detail-fields');
+    fieldsWrap.setAttribute('data-source', item.source);
+    const fields = [['확인 주기', `장중 ${WatchNodes.pollMinutes(watch)}분`], ['쿨다운', `${raw.cooldown_s}초`]];
+    if (raw.expires_at) fields.push(['만료', WatchNodes.dayLabel(raw.expires_at)]);
+    for (const [label, value] of fields) {
+      const fieldRow = el('div', 'agent-detail-field');
+      const l = el('span', 'agent-detail-field-label');
+      l.textContent = label;
+      const v = el('span', 'agent-detail-field-value');
+      v.textContent = value;
+      fieldRow.appendChild(l);
+      fieldRow.appendChild(v);
+      fieldsWrap.appendChild(fieldRow);
+    }
+    detailCol.appendChild(fieldsWrap);
+    const hint = el('div', 'agent-code-settings-hint');
+    hint.textContent = '말로 바꾸는 건 쿨다운 · 만료 · 설명 — 조건은 「고치기 — 말로」';
+    detailCol.appendChild(hint);
+  }
+
   function renderDetail() {
     while (detailCol.firstChild) detailCol.removeChild(detailCol.firstChild);
     const item = allItems().find((i) => i.id === selectedId);
@@ -1428,6 +1799,9 @@ function createAgentCanvas(deps) {
       detailCol.appendChild(empty);
       return;
     }
+
+    // 코드 알람은 상세 문법 자체가 다르다(보드 12) — 갈래별 분기 하나로 가른다.
+    if (item.kind === 'code') { renderCodeDetail(item); return; }
 
     const caption = el('div', 'agent-panel-caption');
     caption.textContent = '상세';
@@ -1580,6 +1954,11 @@ function createAgentCanvas(deps) {
   function selectRow(id) {
     userSelected = true;
     if (id === selectedId) return;
+    // 다른 항목으로 옮기면 코드 알람의 칸 선택·코드 펼침·멈춤 확인은 초기화한다
+    // (앞 항목에서 고른 칸이 다음 항목에 남아 있으면 거짓말이 된다).
+    selectedNodeFn = null;
+    codeSourceOpen = false;
+    editConfirmId = null;
     selectedId = id;
     renderPanels();
   }
@@ -1694,6 +2073,10 @@ function createAgentCanvas(deps) {
     // 주기마다 최신 브리핑 보고를 다시 조회한다(선택 변경 없이는 영원히 낡은
     // 값이 남는 문제 방지). 다음 renderDetail이 1회 재조회한다.
     detailDestinationCache = { id: null, value: null };
+    // 코드 알람 상세·울린 기록도 같은 이유로 주기마다 다시 잰다(보드 12의
+    // 「오늘 확인 · 15:31」은 폴링마다 움직이는 값이다).
+    codeDetailCache = { id: null, data: null };
+    codeFiresCache = { id: null, rows: [] };
     const tasks = [refreshRoutines(), refreshSuggestions(), refreshNudgeGuard()];
     if (historyItem) tasks.push(refreshHistoryRuns()); // 드릴인 중이면 이력도 같이.
     await Promise.all(tasks);

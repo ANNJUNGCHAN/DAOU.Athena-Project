@@ -82,12 +82,14 @@
   {
    "id": "CA-007",
    "title": "Step 7 — 캔버스 + 테스트·프로브·문서",
-   "passes": false,
+   "passes": true,
    "acceptanceCriteria": [
     "A-1~A-5, A-11, A-12 통과 (agent-canvas.js code-watch kind·노드 카드·자동 검사 로그·접힌 코드·방금 바뀜·선택 칩·울린 기록·만료·고치기 멈춤 확인)",
     "probe-agent-paper-parity.js 보드 09~12 단언 추가, PAPER_APP_PARITY.md 갱신",
     "V6 · V7: npm run verify:agent-paper-parity 실패 0, check() >= 35"
-   ]
+   ],
+   "completedAt": "2026-09-04",
+   "note": "shell.css 노드 카드 스타일은 후속(라이브 시연 전 보강)"
   },
   {
    "id": "CA-008",
