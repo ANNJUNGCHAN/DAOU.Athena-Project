@@ -552,9 +552,11 @@ def test_source_kind_routing_splits_llm_from_deterministic() -> None:
     assert SourceKind.CHAT_MESSAGE not in EXTRACTABLE_SOURCE_KINDS
     assert SourceKind.CHAT_MESSAGE not in DETERMINISTIC_SOURCE_KINDS
     # 분류되지 않은 종류로 투영기를 붙이면 생성 시점에 터진다 — 라우팅 표와 상수가
-    # 따로 노는 것을 런타임까지 미루지 않는다.
+    # 따로 노는 것을 런타임까지 미루지 않는다. MANUAL_EDIT(2026-09-03)도 여기다:
+    # 사람의 직접 편집은 store가 그 자리에서 쓰므로 수집 투영기를 아예 타지 않는다.
     assert set(SourceKind) - EXTRACTABLE_SOURCE_KINDS - DETERMINISTIC_SOURCE_KINDS == {
-        SourceKind.CHAT_MESSAGE
+        SourceKind.CHAT_MESSAGE,
+        SourceKind.MANUAL_EDIT,
     }
 
 

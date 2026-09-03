@@ -170,7 +170,11 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # 401 = 399 + 기법 저작 라우트 2개(/api/v1/backtest/technique의 nodes·check) —
     # 코드를 읽어 노드·흐름을 그리고 문법·계약·짧은 시험 실행을 검사할 뿐 저장하지도
     # 실행 이력을 만들지도 않는다(별도 파일 api/backtest_technique.py).
-    assert len(operation_ids) == 401
+    # 404 = 401 + 사람의 직접 편집 입구 3개(/api/v1/brain/relations의 retractions·
+    # confirmations·manual, 2026-09-03) — 화면의 카드·패널이 부르는 쓰기라 전부
+    # x-athena-llm-exposed=False다(위 검사에 함께 잡힌다). 이 핀은 그 작업들에서
+    # 갱신되지 않아 이미 빨간 상태였고, 여기서 실측값으로 맞춘다.
+    assert len(operation_ids) == 404
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
