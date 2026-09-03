@@ -1850,7 +1850,11 @@ function renderGraphEditProposalCard() {
   const note = document.createElement('div');
   note.className = 'question-card-note';
   // 아직 아무것도 안 바뀌었다는 사실을 화면이 말한다 — 모델의 notice와 같은 내용이다.
-  note.textContent = '아직 그래프는 그대로입니다. 누르면 그 답이 채팅으로 보내지고, 그 답이 그래프를 갱신합니다.';
+  // 반영 시점을 정직하게 적는다(2026-09-03 실사용) — 누른 직후가 아니라 다음 수집
+  // 배치 때 추출되어 갱신된다(lifespan.py IngestionCoordinator). 앞 문구는 "그 답이
+  // 그래프를 갱신합니다"라 즉시로 읽혔고, 숫자가 안 줄어드니 같은 카드를 계속 누르는
+  // 무한 루프처럼 느껴졌다(실제 제보).
+  note.textContent = '아직 그래프는 그대로입니다. 누르면 그 답이 채팅으로 보내지고, 다음 수집 때 그래프에 반영됩니다.';
   host.appendChild(note);
 
   const actions = document.createElement('div');

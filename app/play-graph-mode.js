@@ -114,7 +114,18 @@ async function main() {
     ATHENA_BRAIN_DB_PATH: brainDbPath,
     ATHENA_BRAIN_HISTORY_DB_PATH: brainDbPath,
     ATHENA_CHAT_HISTORY_DB_PATH: chatOutboxPath,
-    ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION: 'false',
+    // 대화 추출을 **켠다**(2026-09-03). 예전에는 'false'였다 — 그래프는 씨앗
+    // 스크립트가 넣으니 추출기가 필요 없다고 봤다. 그런데 그것 때문에 이 런처에서는
+    // 카드가 닫히지 않았다: 되물을 것들·편집 제안의 '적용'은 답변 문장을 채팅으로
+    // 보내고 **추출 경로가 그것을 그래프에 반영**해야 끝나는데(lifespan.py — 추출이
+    // 꺼지면 source_projector가 None이다), 반영이 없으니 확인 필요 건수가 그대로여서
+    // 같은 카드가 무한히 되물었다(실사용 제보). 손으로 써 보는 것이 이 런처의
+    // 목적이므로, 손으로 닫을 수 있어야 한다.
+    //
+    // 제품 경로도 이 값이 기본이다(backend-launcher.js §51 — 앱이 직접 띄운 백엔드는
+    // 'true'). 그래서 이제 이 런처가 제품과 같은 조건을 본다. 대가는 속도다:
+    // 대화 소스마다 Claude CLI 왕복이 붙는다.
+    ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION: 'true',
     ATHENA_ROUTINES_ENABLED: 'false',
   });
 
@@ -145,13 +156,16 @@ async function main() {
   //
   // 백엔드는 안전측으로 expose_to_model=False로 시작하고(lifespan.py), 앱은 저장된
   // prefs 값(기본 true)을 **브레인 준비를 확인한 자리**에서 밀어 넣는다
-  // (history-sink.refreshBrainReady → pushExposeToModel). 그런데 그 자리로 가는
-  // 시작 경로(main.js waitForBrainStartup)는 `extraction_enabled === true`를 먼저
-  // 요구한다 — 이 런처는 추출기를 끄고 띄우므로(그래프는 씨앗 스크립트가 넣는다)
-  // 그 push가 한 번도 안 돈다. 결과: 화면 토글은 "켜짐"인데 실제 게이트는 닫혀 있고,
-  // 채팅이 athena_brain을 부르면 503을 받아 "노출이 꺼져 있다"고 답한다(실측).
+  // (history-sink.refreshBrainReady → pushExposeToModel). 그 자리로 가는 시작 경로
+  // (main.js waitForBrainStartup)는 `extraction_enabled === true`를 먼저 요구한다.
   //
-  // 여기서 켜는 것은 런처의 몫이다 — 씨앗된 페르소나는 실사용자 데이터가 아니다.
+  // 예전에 이 런처가 추출기를 끄고 띄웠을 때는 그 push가 한 번도 안 돌아서, 화면
+  // 토글은 "켜짐"인데 실제 게이트는 닫혀 있었고 채팅이 athena_brain을 부르면 503을
+  // 받아 "노출이 꺼져 있다"고 답했다(실측). 지금은 추출기를 켜므로(위 env) 그 경로가
+  // 정상적으로 돌 것이다 — 그래도 여기서 한 번 더 켠다: 기동 순서에 기대지 않고
+  // 게이트가 열린 것을 로그로 확인하려는 것이고, 같은 값을 두 번 쓰는 것은 무해하다.
+  //
+  // 켜는 것이 런처의 몫인 이유는 그대로다 — 씨앗된 페르소나는 실사용자 데이터가 아니다.
   const exposeRes = await fetch(`${backendUrl}/api/v1/settings/expose-to-model`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${bearerToken}` },
