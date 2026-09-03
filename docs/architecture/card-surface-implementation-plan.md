@@ -35,7 +35,7 @@ backend/ref/card-surface-templates/
   <board>/slots.json         # 슬롯 바인딩 표(편집 대상)
 ```
 
-`slots.json` 골자: `board_id`·`card_id`·`paper_source{file,page,jsx_sha256}`·`html_sha256`·`width_px`·`height_px`·`operation_refs[]`·`state{kind: default|tab|sort|expand, parent_board, control}`·`density{table_columns≤8, kpi_cells≤6, rail_blocks≤5, rail_rows_max≤6, rows_max≤6}`·`slots[]{slot_id, node_path, mapping_id, f, kor, layer, region, format{unit, sign, precision, tone}, paired_with, collapse_group{group_id, rollup_slot, rule}, expanded_board, paper_text}`·`primary{renderer|null, mount_slot, module, props_from}`·`column_priority[]`·`section_titles_ko{}`. 전문 렌더러는 `primary`로 참조만. 밀도 예산 위반은 로더 예외.
+`slots.json` 골자: `board_id`·`card_id`·`paper_source{file,page,jsx_sha256}`·`html_sha256`·`width_px`·`height_px`·`operation_refs[]`·`state{kind: default|tab|sort|expand, parent_board, control}`·`density{table_columns≤8 · rows_max≤22(표 본문 20+합계 2) · height_px≤1,120 = 하드; kpi_cells≤6 · rail_blocks≤5 · rail_rows_max≤6 = 소프트 경고}` (2026-09-03 정정 — 로더 `DENSITY_BUDGET`이 정본)·`slots[]{slot_id, node_path, mapping_id, f, kor, layer, region, format{unit, sign, precision, tone}, paired_with, collapse_group{group_id, rollup_slot, rule}, expanded_board, paper_text}`·`primary{renderer|null, mount_slot, module, props_from}`·`column_priority[]`·`section_titles_ko{}`. 전문 렌더러는 `primary`로 참조만. 밀도 하드 위반·중복·상태 참조 오류는 로더가 **그 보드만 제외**(`registry.excluded_boards`, 2026-09-03 보드별 격리)하고 `load_registry(strict=True)`(CI)만 예외를 던진다.
 
 ## 3. 백엔드 계약
 
