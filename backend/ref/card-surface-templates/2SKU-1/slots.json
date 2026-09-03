@@ -37,6 +37,7 @@
     "detail:kt00005:receivables_and_margin",
     "detail:kt00010:cash_and_withdrawal_capacity",
     "detail:kt00010:purchase_settlement",
+    "detail:kt00011:account_funding",
     "detail:kt00011:margin_rates",
     "detail:kt00012:account_and_receivable_capacity",
     "detail:kt00012:guarantee_rate",
@@ -1993,7 +1994,12 @@
       },
       "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
       "f": "uncla",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00011:account_funding",
+          "f": "uncla"
+        }
+      ],
       "kor": "미수금",
       "format": {
         "unit": "text",
@@ -5274,6 +5280,10 @@
         },
         {
           "mapping_id": "detail:kt00005:cash_and_capacity",
+          "f": "repl_amt"
+        },
+        {
+          "mapping_id": "detail:kt00011:account_funding",
           "f": "repl_amt"
         }
       ],
