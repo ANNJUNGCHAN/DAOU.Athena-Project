@@ -15,14 +15,14 @@
 > *mock 브로커 + live 시장 데이터*다.
 
 > 🟣 **2026-09-03 키우미 미니 카드 전수 — 스펙·합의 계획까지 끝났고 실행은 시작하지 않았다.**
-> 이어받는 절차·저장소 상태(로컬 `main`이 origin보다 55커밋 뒤, 카드 표면 레인 62파일 미커밋)·
-> 사용자가 확정한 설계 축은 [2026-09-03-kiumi-mini-cards-handoff.md](./2026-09-03-kiumi-mini-cards-handoff.md)에 있다.
+> 이어받는 절차·저장소 상태·사용자가 확정한 설계 축은 [2026-09-03-kiumi-mini-cards-handoff.md](./2026-09-03-kiumi-mini-cards-handoff.md)에 있다.
+> **원격 브랜치 `kiumi/mini-cards`(2a413d7)에 카드 표면 레인 스냅샷과 인계 문서가 함께 올라가 있다** — 다른 컴퓨터는 이 브랜치만 받으면 된다.
 > 정본은 `.omc/`(git 무시)라서 추적 사본을 [kiumi/](./kiumi/)에 두었다.
 > 다른 컴퓨터에서 바로 이어받으려면 [KIUMI_PROMPT.md](./KIUMI_PROMPT.md)의 블록 A(터미널)·블록 B(Claude Code 첫 메시지)를 순서대로 붙여 넣는다.
 
 > 🟢 **2026-09-03 카드 표면 Paper→코드 — Paper 96장 표현 100% 완료, 코드 슬롯 저작 ≈95.6%, 웨이브 3 실행 중.**
 > 이어받는 절차·수치·남은 일·사용자 확정 결정은 [2026-09-03-card-surface-paper-to-code.md](./2026-09-03-card-surface-paper-to-code.md)에 있다.
-> 이 트랙은 **커밋이 하나도 없다**(수정 19·미추적 65) — 다른 컴퓨터로 가려면 그 문서 §1의 WIP 커밋이 먼저다.
+> 이 트랙의 WIP 스냅샷은 **2026-09-03 `feat/card-surface-paper-to-code`(3e97022)로 푸시됐다**(웨이브 3 진행 중 상태 그대로, 완결 커밋 아님). 그 뒤의 변경은 다시 커밋해야 한다.
 > 붙여 넣을 블록은 [CARD_SURFACE_PROMPT.md](./CARD_SURFACE_PROMPT.md).
 
 ---
