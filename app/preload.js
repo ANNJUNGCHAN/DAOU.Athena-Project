@@ -53,6 +53,12 @@ const INVOKE_CHANNELS = new Set([
   'athena:routine-resume',
   // 실행 이력 드릴인(10단계) — 6단계 GET /{id}/runs.
   'athena:routine-runs',
+  // 설정 편집·초안 등록(Step 6) — POST /{id}/update · POST /routines/draft.
+  'athena:routine-update',
+  'athena:routine-draft',
+  // 상세·소스 카탈로그(Step 6) — 설정 폼 프리필과 새 작업 시트가 1회씩 부른다.
+  'athena:routine-detail',
+  'athena:routine-source-catalog',
   // 알림 방 읽음 처리(7단계, F3-FE) — 6단계 POST /{id}/ack.
   'athena:routine-ack',
   // 발화 열람·응답 계측(F-stage5b-FE) — POST /{id}/engagement.
@@ -293,6 +299,9 @@ const ON_CHANNELS = new Set([
   'athena:live-tool-step',
   // 말걸기 가드 확인 카드(F-stage9) — athena_nudge_guard propose 결과, 비영속.
   'athena:nudge-guard-proposed',
+  // 루틴 제어 제안 카드(Step 6) — athena_routine propose 결과, 비영속.
+  // 확정은 사람이 카드의 칩을 눌렀을 때 렌더러가 직접 REST를 부른다.
+  'athena:routine-proposed',
   // 백테스트 채팅 액션 — athena_backtest의 propose_spec·propose_code·navigate·
   // propose_optimize 결과 {kind, ...}, 비영속. 셸에서만 구독한다.
   'athena:backtest-chat-action',

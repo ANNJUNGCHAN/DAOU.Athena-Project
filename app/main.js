@@ -1267,6 +1267,33 @@ ipcMain.handle('athena:routine-ack', async (_e, { id }) => {
   try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/ack`); }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
+// 설정 편집 적용(Step 6, 결정 a″) — 6단계 POST /{id}/update. body를 실어
+// 보낸다: routineHttp가 jsonBody !== undefined일 때 JSON으로 직렬화한다
+// (briefing-result가 같은 방식을 먼저 쓴다) — 그래서 fetch를 직접 부르지
+// 않는다. 422(금지 필드)·404·409의 detail 번역이 routineHttp에 이미 있다.
+ipcMain.handle('athena:routine-update', async (_e, { id, body } = {}) => {
+  try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/update`, body); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+// 초안 등록(Step 6, 결정 a″-1) — POST /routines/draft. 백엔드는 raw dict를
+// 그대로 받으므로 여기서 모양을 손대지 않는다.
+ipcMain.handle('athena:routine-draft', async (_e, { body } = {}) => {
+  try { return await routineHttp('POST', '/api/v1/routines/draft', body); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+// 상세 조회(Step 6, 결정 d-2) — GET /{id}. 상세 패널의 설정 폼을 열 때 1회
+// 불러 조건 술어·source_spec을 프리필한다(목록 뷰에는 없는 값이다). 위
+// routine-runs와 같은 모양이며 body가 없다.
+ipcMain.handle('athena:routine-detail', async (_e, { id }) => {
+  try { return await routineHttp('GET', `/api/v1/routines/${encodeURIComponent(id)}`); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+// 소스 카탈로그(Step 6, 결정 e-1) — GET /routines/source-catalog. 새 작업
+// 시트는 routine_id가 없어 상세 라우트를 쓸 수 없다. 인자도 body도 없다.
+ipcMain.handle('athena:routine-source-catalog', async () => {
+  try { return await routineHttp('GET', '/api/v1/routines/source-catalog'); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
 // 발화 열람·응답 계측(F-stage5b-FE) — engagement.py로 그대로 넘긴다. "언제
 // opened/replied로 볼지"의 판정은 렌더러(sidebar.js/chat.js) 몫이다(engagement.py
 // 모듈 독스트링 참고) — 여기는 REST 프록시일 뿐 판정을 갖지 않는다.
@@ -2314,6 +2341,38 @@ function maybeForwardNudgeGuardProposal(step, resultBlock) {
   }
 }
 
+const ROUTINE_TOOL_NAME = 'athena_routine';
+
+// 루틴 제어 제안 카드(Step 6) — athena_routine의 propose 호출 결과
+// (routine_tools.py: control·routine_id·current·proposed·rationale·notice)를
+// 채팅 렌더러로 흘려보낸다. 위 말걸기 가드와 같은 이유로 비영속이다 —
+// propose는 목록 조회 말고 아무 백엔드 호출도 하지 않고 디스크에도 안 남으므로
+// 폴링으로는 발견할 수 없고, 이 tool_result 스트림이 유일한 신호다.
+// orbWin에는 안 보낸다 — 제안 확정은 routine-confirm과 같은 원칙으로 채팅
+// 전용 사람 액션이다(오브는 주문 집행·감시 승인을 못 부르는 것과 같은 이유).
+function maybeForwardRoutineProposal(step, resultBlock) {
+  if (resultBlock.is_error === true) return;
+  const base = String(step.name || '').split('__').pop();
+  if (base !== ROUTINE_TOOL_NAME) return;
+  if (!step.input || step.input.action !== 'propose') return;
+  const text = extractToolResultText(resultBlock.content);
+  if (!text) return;
+  let payload;
+  try { payload = JSON.parse(text); } catch { return; }
+  if (!payload || typeof payload !== 'object' || typeof payload.control !== 'string') return;
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:routine-proposed', {
+      control: payload.control,
+      routineId: payload.routine_id || null,
+      current: payload.current || null,
+      proposed: payload.proposed || null,
+      rationale: payload.rationale || null,
+      view: (payload.view && typeof payload.view === 'object') ? payload.view : null,
+      notice: payload.notice || null,
+    });
+  }
+}
+
 const GRAPH_VIEW_TOOL_NAME = 'athena_graph_view';
 
 // 그래프 채팅 액션(2026-09-03) — athena_graph_view의 HTTP 무호출 액션 다섯
@@ -2503,6 +2562,7 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
             sendFn({ id: block.tool_use_id, label: step.label, done: true, elapsedMs, error: !!block.is_error });
             if (forwardNudgeGuard) {
               maybeForwardNudgeGuardProposal(step, block);
+              maybeForwardRoutineProposal(step, block);
               maybeForwardBacktestChatAction(step, block);
               maybeForwardGraphChatAction(step, block);
             }
