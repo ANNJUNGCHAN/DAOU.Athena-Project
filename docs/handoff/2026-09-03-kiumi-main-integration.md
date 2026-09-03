@@ -23,6 +23,24 @@ a9fe065  style(kiumi): remove internal mini-card dividers      (cherry-pick b45f
 
 `main`에는 직접 커밋하지 않았고 push하지 않았다. 기존 작업 브랜치도 삭제하지 않았다.
 
+> ⚠ **작업 도중 origin/main이 움직였다 — 이 브랜치는 이미 대체됐다.**
+> 시작 시점 `origin/main`은 `266901e`였고 그 위에 통합했다. 작업 중 다른 쪽에서
+> `a408bb6`까지 **31커밋**을 올렸고, 거기에는 카드 표면(`9c07c1b`)과 카드미니
+> (`b45f6ca`) **양쪽 병합이 이미 들어 있다**(`git merge-base --is-ancestor` 확인).
+> 즉 이 브랜치의 git 통합 자체는 더 이상 필요하지 않다. 남는 고유 가치는 **이 문서**와
+> **Paper 수정**(§4)이다.
+>
+> 라우트 수 핀은 양쪽 다 맞다 — 범위가 다르기 때문이다. 이 브랜치는 `405`
+> (`main@266901e` + 카드 표면 + 카드미니, routines 12개), `origin/main`은 `408`
+> (거기에 agent-dual-control·plugin-mode-doctrine까지, routines 15개 —
+> `source-catalog`·`{id}`·`{id}/update` 3개가 더 있다). 각 워크트리의 `backend/`에서
+> 각자 돌려 둘 다 통과함을 실측했다.
+>
+> **함정**: `backend/.venv`가 특정 워크트리 안에 있으면 다른 워크트리의 테스트를
+> 그 venv로 돌릴 때 `athena_api`가 **venv 쪽 워크트리 코드로 해석**된다. 처음에 그걸로
+> "main이 빨갛다"는 잘못된 판정을 냈다. 반드시 **검사할 워크트리의 `backend/`를
+> cwd로** 두고 돌릴 것.
+
 ### 왜 이 순서였나
 
 `origin/main`과 두 브랜치의 공통 기준은 `f880d79`이고, main이 그 뒤로 84커밋, 두 브랜치가
