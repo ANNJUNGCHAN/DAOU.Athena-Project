@@ -2,10 +2,11 @@
 
 정본은 [2026-09-03-card-surface-paper-to-code.md](./2026-09-03-card-surface-paper-to-code.md). 여기는 그 문서를 "바로 시작"으로 옮긴 것이다.
 
-**전제조건 3가지** — 하나라도 없으면 그 자리에서 멈추고 사용자에게 말한다.
+**공통 전제조건 2가지** — 하나라도 없으면 그 자리에서 멈추고 사용자에게 말한다.
 1. 브랜치 `feat/card-surface-paper-to-code`가 origin에 있어야 한다(원본 PC가 지속 푸시한다). 확인: `git ls-remote --heads origin feat/card-surface-paper-to-code`
 2. 모든 명령은 **Git Bash**에서 돌린다. PowerShell 아님.
-3. Paper 대조·검수 PDF 단계는 **로그인된 Paper Desktop(computer-use) 또는 Paper MCP + 팀 접근 권한**이 필요하다(정본 §8). 둘 다 없으면 그 단계만 원본 계정 보유자에게 넘긴다 — 나머지는 진행 가능.
+
+Paper 대조·검수 PDF 단계만 **로그인된 Paper Desktop(computer-use) 또는 Paper MCP + 팀 접근 권한**이 필요하다(정본 §8). 둘 다 없으면 그 단계만 원본 계정 보유자에게 넘기고 나머지는 진행한다.
 
 ## 블록 A — 터미널 (새 컴퓨터 1회, Git Bash)
 
@@ -27,7 +28,7 @@ git config core.hooksPath scripts/hooks
 
 `node`가 PATH에 없으면 `eval "$(fnm env)"`를 먼저 통과시킨다(백엔드 pytest도 node가 필요하다). 한글 출력은 `export PYTHONIOENCODING=utf-8`.
 
-확인 3줄 — 셋 다 **실패 0**이어야 이어받을 자리가 맞다(개수는 트랙이 테스트를 늘려 계속 커지므로 개수로 판정하지 않는다):
+확인 3줄 — validator는 아래의 **정직한 기준선**, 두 테스트는 **실패 0**이어야 이어받을 자리가 맞다:
 
 ```bash
 backend/.venv/Scripts/python.exe scripts/validate_board_slots.py 2SKU-1 13BC-2
@@ -41,7 +42,7 @@ backend/.venv/Scripts/python.exe -m pytest scripts/tests -q
 cd app && npm run test:unit
 ```
 
-실패가 있으면: 2SKU-1·13BC-2에 문제가 뜨거나 scripts 테스트가 붉으면 팩 폴더·venv를, app 단위가 붉으면 정본 §7의 "일시 RED" 항목과 PATH(fnm)를 먼저 의심한다.
+첫 명령은 `2SKU-1` 문제 0, `13BC-2` 문제 3(`e3`)과 exit 1이 현재 정상이다. 세 건은 합성 leaf를 부분값으로 채우지 않기 위한 honest blocker다. 이 수치가 다르거나 scripts/app 테스트가 붉으면 정본 §7의 전체 기준선과 팩 폴더·venv·PATH(fnm)를 대조한다.
 
 ## 블록 B — Claude Code 첫 메시지 (통째로 복사)
 
@@ -57,13 +58,9 @@ cd app && npm run test:unit
 - 인계 문서를 항상 최신으로 유지하고(§4 수치·§11 이력), 마일스톤마다 feat/card-surface-paper-to-code 브랜치에 커밋·푸시한다(사용자 지시). pre-push 훅이 막으면 --no-verify 대신 초록을 만든다.
 - Paper 호출은 항상 fileId 01M0VGPX92K1TER4ZV9PWGQJJZ 를 명시한다(비슷한 이름의 duplicate 파일이 있다).
 
-현재 정확한 중단점은 W3 정비 A5/B4/C5/D3 완료, 재개 저작 `account-a` 리뷰·수정 완료(정확한 9건 닫힘), 다음은 `account-b`다. `3GRO-0`의 6구간 주문가능금액 12건·2 op는 Paper에 금액 잎이 없어 거짓 shares 매핑을 제거하고 blocker로 남겼다. §6의 남은 7레인을 순서대로 진행하되 정비 4레인과 account-a는 다시 돌리지 마라. docs/handoff/card-surface/workflows/card-surface-w3-wf_622eeae9-f84.js의 저작 레인 프롬프트를 현재 API와 대조해 실행한 다음 게이트를 돌린다(다른 PC에서는 ROOT·PY 수정). 각 게이트가 끝나면 실보드 6장 × 4단계 캡처와 XL/M 기하 프로브를 확인해 surface overflow와 L/M/S/XS 세로 넘침/겹침 0 및 XL/M 레이아웃 계약을 단언하고, Paper와 나란히 보고한 뒤 문서 §4·§11을 갱신하고 커밋·푸시해라.
+현재 정확한 중단점은 W3 정비 A5/B4/C5/D3와 저작 Tasks 1–8의 실행·리뷰 수정, canonical 재생성까지 완료된 shared worktree다. 2026-09-03 16:11 실측은 registry 96/excluded 0, coverage 3,382/3,532, uncovered 150, op 297/299, validator 59건(`b15 e44`)/27장이다. 저작 Tasks 1–8 또는 원본 Claude workflow를 재실행하지 말고 각 `task-{1..8}-report.md`의 honest blocker를 보존한다. `extra_fields` systemic audit는 `STOP_NO_CHANGES`이며 composite schema 승인 전 구현 금지다. final W3 nonvisual gate는 통과했지만 24장 육안 감사에서 2R3M-1·2SKU-1·2QFO-2·13K0-2·135M-2의 문자 분절/행 충돌을 확인해 시각 gate는 FAIL이다. 다음 단계는 explicit responsive role/atomic text/paired row와 glyph hard gate 설계 승인·구현·재캡처이며 zoom/전역 nowrap/overflow 숨김으로 덮지 않는다.
 ```
 
-## 블록 C — 원본 Claude 대화에서 한도 초기화 후 재개할 때
+## 블록 C — 원본 Claude workflow 역사 확인용, 실행 금지
 
-```
-Workflow({ scriptPath: "C:\\Users\\ajc22\\.claude\\projects\\C--Projects-DAOU-Athena\\dff811ca-b4d0-4ed4-9c90-07bce304dc1a\\workflows\\scripts\\card-surface-w3-wf_622eeae9-f84.js", resumeFromRunId: "wf_622eeae9-f84" })
-```
-
-주의: 워크플로 최상위 `status: completed`는 잘못된 요약이다. `C:\Users\ajc22\.claude\projects\C--Projects-DAOU-Athena\dff811ca-b4d0-4ed4-9c90-07bce304dc1a\workflows\wf_622eeae9-f84.json`의 `workflowProgress`가 정본이며, 정비 4레인만 완료되고 저작 8레인과 게이트는 오류다. 재개 전 이 상태를 확인하고, 결과가 비면 같은 세션 폴더의 `subagents/workflows/wf_622eeae9-f84/journal.jsonl`을 읽는다.
+원본 `wf_622eeae9-f84`에서 저작 8레인과 gate가 오류였던 것은 최초 실행의 역사적 사실이다. 이후 Tasks 1–8이 현재 shared worktree에서 별도로 실행·리뷰됐다. `resumeFromRunId`를 실행하지 말고 workflow JSON과 journal은 provenance 확인에만 사용한다.
