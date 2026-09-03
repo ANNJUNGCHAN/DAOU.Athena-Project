@@ -149,7 +149,8 @@ test('renderThemeClusters — cohesion이 있으면 진행바·수치를 그린�
   const container = fakeNode('div');
   renderThemeClusters(container, [{ cluster: 0, size: 9, name: null, cohesion: 0.74 }]);
   const value = container.querySelector('.theme-cluster-cohesion');
-  assert.equal(value.textContent, '응집 0.74');
+  // 원시 값(0.74)이 아니라 백분율 — 바와 같은 값을 같은 단위로 말한다.
+  assert.equal(value.textContent, '응집 74%');
   const fill = container.querySelector('.theme-cluster-bar-fill');
   assert.equal(fill.attrs.style, 'width: 74%');
 });

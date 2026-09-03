@@ -107,8 +107,13 @@ function renderClusterCard(cluster, warnUnnamed) {
     track.appendChild(fill);
     row.appendChild(track);
 
+    // 백분율로 적는다(2026-09-03) — 예전에는 `응집 0.29`처럼 backend의 원시 값을
+    // 그대로 찍었다. 0~1 스케일이라는 것을 화면이 어디서도 말하지 않아 0.29가
+    // 무엇에 대한 0.29인지 읽히지 않았다(실사용 제보). 히어로가 이미 %로 말하고
+    // (사실 69% · 추론 25%) 바로 옆 진행바도 같은 값의 %라, %가 이 화면의 어휘다.
+    // pct는 위에서 바가 쓰는 값 그대로다 — 바와 숫자가 다른 값을 말하면 안 된다.
     const value = el('span', `theme-cluster-cohesion${warnUnnamed ? ' is-warn' : ''}`);
-    value.textContent = `응집 ${cluster.cohesion.toFixed(2)}`;
+    value.textContent = `응집 ${pct}%`;
     row.appendChild(value);
     card.appendChild(row);
   }
