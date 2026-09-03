@@ -7,7 +7,7 @@
     "node_id": "2R3O-1",
     "jsx_sha256": "80cb18e17b82671c7b492cb5252403b4cc23d291afc8db32c9b014d3850b0bae"
   },
-  "html_sha256": "e25b9b43f9f6affd24b50d29816020d3b4e1fdd9f47f00c1847c446bb959de25",
+  "html_sha256": "2eb86a93c032506da58645a597ed00991660308c4169195c744146766a9341c9",
   "width_px": 1360.0,
   "height_px": 880.0,
   "artboard_px": [
@@ -61,7 +61,7 @@
         "3CUH-0"
       ],
       "foot_rows": [],
-      "source": "heuristic",
+      "source": "responsive",
       "column_labels": [
         "시각",
         "체결가",
@@ -69,7 +69,8 @@
         "체결량",
         "구분",
         "체결강도"
-      ]
+      ],
+      "responsive_mode": "paired-table"
     }
   ],
   "counts": {
@@ -86,8 +87,8 @@
     "tables": 1,
     "tree_text_truncated": 0,
     "bs_col": 40,
-    "bs_paired": 58,
-    "bs_leaf": 9,
+    "bs_paired": 54,
+    "bs_leaf": 8,
     "bs_kpi_cell": 5,
     "state_control_marks": 1
   },

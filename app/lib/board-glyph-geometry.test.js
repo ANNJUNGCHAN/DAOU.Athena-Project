@@ -8,6 +8,8 @@ const path = require('node:path');
 
 const {
   DEFAULT_READABILITY_BOARD_IDS,
+  compactAtomicTokenSpans,
+  hasInlineAmbiguity,
   collectAtomicWrapFindings,
   collectTextOverlapFindings,
   collectPairedSemanticFindings,
@@ -50,6 +52,24 @@ test('glyph geometry uses a strict greater-than-one-pixel overlap tolerance', ()
   assert.equal(overlapArea(rect(0, 0, 10, 10), rect(9, 9, 19, 19), 1.01), 0);
 });
 
+test('legacy pair ambiguity requires same-line contact rather than mere visibility', () => {
+  assert.equal(hasInlineAmbiguity(
+    [rect(30, 0, 50, 12)], [rect(50, 0, 70, 12)],
+  ), true);
+  assert.equal(hasInlineAmbiguity(
+    [rect(30, 0, 50, 12)], [rect(49, 0, 70, 12)],
+  ), true);
+  assert.equal(hasInlineAmbiguity(
+    [rect(30, 0, 50, 12)], [rect(58, 0, 78, 12)],
+  ), false);
+  assert.equal(hasInlineAmbiguity(
+    [rect(30, 0, 50, 12)], [rect(30, 14, 50, 26)],
+  ), false);
+  assert.equal(hasInlineAmbiguity(
+    [rect(30, 0, 30, 12)], [rect(30, 0, 50, 12)],
+  ), false);
+});
+
 test('atomic visual lines dedupe fragments and ignore hidden or zero-area fragments', () => {
   const fragments = [
     rect(0, 0, 30, 12),
@@ -70,6 +90,37 @@ test('atomic visual lines dedupe fragments and ignore hidden or zero-area fragme
     layout_owner: 'row', line_count: 2,
     fragments: [rect(0, 0, 30, 12), rect(0, 14, 30, 26)],
   });
+});
+
+test('compact Korean and money-unit tokens are measured without treating space wraps as fragmentation', () => {
+  assert.deepEqual(compactAtomicTokenSpans('● 실시간 갱신'), [
+    { text: '실시간', start: 2, end: 5 },
+    { text: '갱신', start: 6, end: 8 },
+  ]);
+  assert.deepEqual(compactAtomicTokenSpans('100개 결과'), [
+    { text: '100개', start: 0, end: 4 },
+    { text: '결과', start: 5, end: 7 },
+  ]);
+  assert.deepEqual(compactAtomicTokenSpans('+3,214억원'), [
+    { text: '+3,214억원', start: 0, end: 8 },
+  ]);
+  assert.deepEqual(compactAtomicTokenSpans('시간외 단일가'), [
+    { text: '시간외', start: 0, end: 3 },
+    { text: '단일가', start: 4, end: 7 },
+  ]);
+  assert.deepEqual(compactAtomicTokenSpans('https://example.com/very-long-token'), []);
+  assert.deepEqual(compactAtomicTokenSpans('한'), []);
+  assert.deepEqual(compactAtomicTokenSpans(
+    '이 문장은 설명용 산문이므로 자동 atomic 후보가 아니다',
+  ), []);
+
+  const splitToken = collectAtomicWrapFindings([
+    candidate('money', 'money', 'surface', [rect(0, 0, 30, 12), rect(0, 14, 8, 26)], {
+      text: '+3,214억원', reason: 'compact_token',
+    }),
+  ]);
+  assert.equal(splitToken.total, 1);
+  assert.equal(splitToken.items[0].text, '+3,214억원');
 });
 
 test('text-overlap excludes duplicate, hidden, same-owner, ancestor, and different-layout candidates', () => {
@@ -186,6 +237,20 @@ test('paired semantics reports visible legacy mirrors but ignores hidden ones', 
   assert.deepEqual(result.items.map((item) => item.violation), [
     'mirror_has_mount_identity', 'missing_label', 'missing_source',
   ]);
+});
+
+test('legacy pairs fail only for measured same-line ambiguity, never merely for existing', () => {
+  const result = collectPairedSemanticFindings([
+    { kind: 'legacy_pair', source: 'hidden', hidden: true, ambiguous_inline: true },
+    { kind: 'legacy_pair', source: 'separate-line', hidden: false, ambiguous_inline: false },
+    { kind: 'legacy_pair', source: 'labeled', hidden: false, ambiguous_inline: true, label_found: true },
+    { kind: 'legacy_pair', source: 'collision', hidden: false, ambiguous_inline: true, label_found: false },
+  ]);
+
+  assert.deepEqual(result.items, [
+    { source: 'collision', violation: 'legacy_unlabeled_inline' },
+  ]);
+  assert.equal(result.total, 1);
 });
 
 test('paired semantic report carries malformed scroll-table role findings', () => {
@@ -316,6 +381,32 @@ test('the frozen readability manifests and generated markup have exact responsiv
     const html = fs.readFileSync(path.join(directory, 'board.html'), 'utf8');
     assert.equal(assertReadabilityManifest(manifest, html), true, boardId);
   }
+});
+
+test('G5 production manifests declare only the measured responsive owners and atomic leaves', () => {
+  const readResponsive = (boardId) => JSON.parse(fs.readFileSync(path.join(
+    __dirname, '..', '..', 'backend', 'ref', 'card-surface-templates', boardId, 'regions.json',
+  ), 'utf8')).responsive || [];
+  const traitsOf = (boardId) => new Map(readResponsive(boardId).map(
+    (entry) => [entry.node_id, entry.traits],
+  ));
+
+  const ranking = traitsOf('13K0-2');
+  for (const node of ['2WGY-0', '2WHL-0']) assert.deepEqual(ranking.get(node), ['flow']);
+  for (const node of ['2WHJ-0', '2WHK-0', '2WHY-0', '2WI0-0', '2WI2-0']) {
+    assert.deepEqual(ranking.get(node), ['atomic']);
+  }
+
+  const quote = traitsOf('2R3M-1');
+  assert.deepEqual(quote.get('2R8O-1'), ['flow']);
+  for (const node of ['2R8S-1', '358O-0', '358Q-0']) {
+    assert.deepEqual(quote.get(node), ['atomic']);
+  }
+  assert.deepEqual(quote.get('3CRW-0'), ['paired-table']);
+
+  const flow = traitsOf('2QFO-2');
+  for (const node of ['3751-0', '376G-0', '3789-0']) assert.deepEqual(flow.get(node), ['flow']);
+  for (const node of ['375E-0', '376R-0', '378K-0']) assert.deepEqual(flow.get(node), ['atomic']);
 });
 
 test('a DOM-like 13K chip shrink mutation becomes a two-line atomic hard failure', () => {

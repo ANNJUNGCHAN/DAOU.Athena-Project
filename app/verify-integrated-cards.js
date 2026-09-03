@@ -15,7 +15,9 @@ const { visualRowCounts } = require('./lib/board-layout-geometry');
 const { stateLinksFromMarks } = require('./lib/board-mount');
 const {
   DEFAULT_READABILITY_BOARD_IDS,
+  compactAtomicTokenSpans,
   collectGlyphFindings,
+  hasInlineAmbiguity,
   assertReadability,
   assertReadabilityManifest,
   assertReadabilityMatrix,
@@ -812,7 +814,9 @@ async function settleBoardLayout(win, instanceId) {
 // 없어 도달 0이지만, 그 0이 네 단계 모두 같으므로 상등 검사가 그대로 성립한다.
 const boardStepProbe = (instanceId) => `(async () => {
   const countVisualRows = ${visualRowCounts.toString()};
+  const compactAtomicTokenSpans = ${compactAtomicTokenSpans.toString()};
   const collectGlyphFindings = ${collectGlyphFindings.toString()};
+  const hasInlineAmbiguity = ${hasInlineAmbiguity.toString()};
   const root = document.querySelector(
     '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
   if (!root) return { error: 'board card not found' };
@@ -1005,11 +1009,43 @@ const boardStepProbe = (instanceId) => `(async () => {
       });
     }
   }
+  const automaticWalker = document.createTreeWalker(surface, NodeFilter.SHOW_TEXT);
+  for (let text = automaticWalker.nextNode(); text; text = automaticWalker.nextNode()) {
+    if (!text.parentElement || !shown(text.parentElement)) continue;
+    const element = text.parentElement;
+    if (element.closest('.bs-r-atomic, [data-bs-value-atomic="true"], [data-paired-source]')) continue;
+    for (const token of compactAtomicTokenSpans(text.nodeValue)) {
+      const range = document.createRange();
+      range.setStart(text, token.start);
+      range.setEnd(text, token.end);
+      const fragments = [...range.getClientRects()]
+        .filter((rect) => rect.width > 0 && rect.height > 0)
+        .map((rect) => ({ left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom }));
+      if (!fragments.length) continue;
+      const responsiveOwner = responsiveOwnerFor(element);
+      const layoutOwner = responsiveOwner || surface;
+      const item = renderedItemFor(layoutOwner, element);
+      const semanticOwner = element.closest('[data-node], [data-slot-id]') || element;
+      glyphCandidates.push({
+        node: elementIdentity(semanticOwner),
+        name: semanticOwner.dataset.name || '',
+        owner: elementIdentity(element),
+        owner_name: element.dataset.name || semanticOwner.dataset.name || '',
+        text: token.text,
+        layout_owner: elementIdentity(layoutOwner),
+        layout_item: elementIdentity(item),
+        ancestors: ancestorsFor(element, layoutOwner),
+        atomic: true,
+        overlap: false,
+        hidden: false,
+        fragments,
+      });
+    }
+  }
   for (const element of surface.querySelectorAll(
     '.bs-r-atomic, [data-bs-value-atomic="true"], [data-paired-source]',
   )) {
-    const responsiveOwner = responsiveOwnerFor(element);
-    if (!responsiveOwner) continue;
+    const responsiveOwner = responsiveOwnerFor(element) || surface;
     const item = renderedItemFor(responsiveOwner, element);
     const owner = elementIdentity(element);
     glyphCandidates.push({
@@ -1064,6 +1100,26 @@ const boardStepProbe = (instanceId) => `(async () => {
       ),
       label_found: labels.length > 0,
       label_count: labels.length,
+      hidden: !shown(mirror),
+    });
+  }
+  for (const mirror of surface.querySelectorAll('.bs-r-paired-table .bs-paired')) {
+    if (mirror.querySelector('[data-paired-source]')) continue;
+    const parent = mirror.parentElement;
+    const neighborFragments = [];
+    if (parent) {
+      const neighborWalker = document.createTreeWalker(parent, NodeFilter.SHOW_TEXT);
+      for (let text = neighborWalker.nextNode(); text; text = neighborWalker.nextNode()) {
+        const pair = text.parentElement && text.parentElement.closest('.bs-paired');
+        if (!text.nodeValue.trim() || pair === mirror) continue;
+        neighborFragments.push(...textNodeFragments(text));
+      }
+    }
+    pairedRecords.push({
+      kind: 'legacy_pair',
+      source: elementIdentity(mirror),
+      label_found: Boolean(mirror.querySelector('[data-paired-label]')),
+      ambiguous_inline: hasInlineAmbiguity(textFragments(mirror), neighborFragments),
       hidden: !shown(mirror),
     });
   }

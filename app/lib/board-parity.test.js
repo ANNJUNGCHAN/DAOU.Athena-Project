@@ -191,6 +191,9 @@ test('glyph readability probe keeps raw geometry evidence and hard-enforces ever
   assert.match(verify, /document\.fonts && document\.fonts\.ready/);
   assert.match(verify, /requiredStableSamples: 4/);
   assert.match(verify, /Range\(\)/);
+  assert.match(verify, /compactAtomicTokenSpans/);
+  assert.match(verify, /range\.setStart\(text, token\.start\)/);
+  assert.match(verify, /range\.setEnd\(text, token\.end\)/);
   assert.match(verify, /getClientRects\(\)/);
   assert.match(verify, /display !== 'contents'/);
   assert.match(verify, /data-bs-value-atomic/);
@@ -213,10 +216,14 @@ test('glyph readability probe keeps raw geometry evidence and hard-enforces ever
   assert.match(verify, /canonical:\s*CANONICAL_CAPTURE_RUN/);
 });
 
-test('paired semantic probe scans only canonical mirrors and records identity, tone, and missing parity', () => {
+test('paired semantic probe scopes legacy ambiguity to opted-in paired tables', () => {
   const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
   assert.match(verify, /surface\.querySelectorAll\('\[data-paired-source\]'\)/);
-  assert.doesNotMatch(verify, /\.bs-r-paired-table \.bs-paired, \[data-paired-source\]/);
+  assert.match(verify, /surface\.querySelectorAll\('\.bs-r-paired-table \.bs-paired'\)/);
+  assert.doesNotMatch(verify,
+    /for \(const mirror of surface\.querySelectorAll\('\.bs-paired'\)\) \{/);
+  assert.match(verify, /kind:\s*'legacy_pair'/);
+  assert.match(verify, /ambiguous_inline/);
   for (const field of [
     'source_count', 'label_count', 'source_tone', 'mirror_tone',
     'source_missing', 'mirror_missing',
@@ -400,6 +407,8 @@ test('paired-table labels form scoped label-value grids while scroll-table keeps
     /\.bs-r-paired-table \.bs-paired-label\s*\{[^}]*white-space:\s*normal[^}]*overflow-wrap:\s*anywhere/);
   assert.match(rules,
     /\.bs-r-paired-table \[data-paired-source\]\s*\{[^}]*white-space:\s*nowrap[^}]*overflow-wrap:\s*normal/);
+  assert.match(rules,
+    /\.bs-r-paired-table \[data-bs-value-atomic="true"\]\s*\{[^}]*white-space:\s*nowrap[^}]*overflow-wrap:\s*normal/);
   for (const priority of [4, 5, 6, 7]) {
     assert.match(rules, new RegExp(
       `\\.bs-r-paired-table \\.bs-paired\\[data-paired-col~="${priority}"\\]\\s*\\{\\s*display:\\s*grid`,

@@ -20,7 +20,7 @@
 > 정본은 `.omc/`(git 무시)라서 추적 사본을 [kiumi/](./kiumi/)에 두었다.
 > 다른 컴퓨터에서 바로 이어받으려면 [KIUMI_PROMPT.md](./KIUMI_PROMPT.md)의 블록 A(터미널)·블록 B(Claude Code 첫 메시지)를 순서대로 붙여 넣는다.
 
-> 🟠 **2026-09-03 카드 표면 Paper→코드 — W3 Tasks 1–8·canonical 재생성 완료, coverage 3,382/3,532(95.8%). nonvisual gate는 통과했지만 5보드 반응형 가독성 때문에 시각 gate FAIL; explicit responsive/glyph gate 설계와 composite schema 승인 대기.**
+> 🟠 **2026-09-04 카드 표면 Paper→코드 — G4 정본 자동 게이트 초록. G5 육안 FAIL은 G5a 가독성 수정(진행 중, 로컬 WIP를 지금 체크포인트) + G5b 육안 재승인(대기)으로 대체됨. 브랜치는 계속 `feat/card-surface-paper-to-code`.**
 > 이어받는 절차·수치·남은 일·사용자 확정 결정은 [2026-09-03-card-surface-paper-to-code.md](./2026-09-03-card-surface-paper-to-code.md)에 있다.
 > 이 트랙은 **`feat/card-surface-paper-to-code`**에 지속 커밋·푸시한다. 위 인계 문서가 들어 있는 최신 origin 커밋을 체크포인트로 삼는다.
 > 붙여 넣을 블록은 [CARD_SURFACE_PROMPT.md](./CARD_SURFACE_PROMPT.md).
