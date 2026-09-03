@@ -8,5 +8,8 @@
     { "node_id": "39PK-0", "name": "예수금·결제 본문", "role": "primary", "depth": 2 },
     { "node_id": "3U8K-0", "name": "예수금 레일", "role": "rail", "depth": 2 },
     { "node_id": "2SKX-1", "name": "Account Status Footer", "role": "footer", "depth": 1 }
+  ],
+  "responsive": [
+    { "node_id": "39SW-0", "traits": ["paired-table"] }
   ]
 }

@@ -7,5 +7,32 @@
     { "node_id": "33WC-0", "name": "Ranking Result Table", "role": "primary", "depth": 2 },
     { "node_id": "343X-0", "name": "Selected Stock Detail", "role": "rail", "depth": 2 },
     { "node_id": "14NQ-2", "name": "User Status Footer", "role": "footer", "depth": 1 }
+  ],
+  "responsive": [
+    { "node_id": "14JD-2", "traits": ["scroll"], "accessible_label": "종목 탐색 메뉴" },
+    { "node_id": "14JE-2", "traits": ["atomic"] },
+    { "node_id": "14JG-2", "traits": ["atomic"] },
+    { "node_id": "14JI-2", "traits": ["atomic"] },
+    { "node_id": "14JK-2", "traits": ["atomic"] },
+    { "node_id": "14JM-2", "traits": ["atomic"] },
+    { "node_id": "14JO-2", "traits": ["atomic"] },
+    { "node_id": "2WGZ-0", "traits": ["scroll"], "accessible_label": "종목 순위 정렬 기준" },
+    { "node_id": "2WH0-0", "traits": ["atomic"] },
+    { "node_id": "2WH2-0", "traits": ["atomic"] },
+    { "node_id": "2WH4-0", "traits": ["atomic"] },
+    { "node_id": "2WH6-0", "traits": ["atomic"] },
+    { "node_id": "2WH8-0", "traits": ["atomic"] },
+    { "node_id": "2WHA-0", "traits": ["atomic"] },
+    { "node_id": "2WHC-0", "traits": ["atomic"] },
+    { "node_id": "2WHE-0", "traits": ["atomic"] },
+    { "node_id": "2WHG-0", "traits": ["atomic"] },
+    { "node_id": "32AO-0", "traits": ["atomic"] },
+    { "node_id": "2WHM-0", "traits": ["scroll"], "accessible_label": "종목 순위 필터" },
+    { "node_id": "2WHN-0", "traits": ["atomic"] },
+    { "node_id": "2WHP-0", "traits": ["atomic"] },
+    { "node_id": "2WHR-0", "traits": ["atomic"] },
+    { "node_id": "2WHT-0", "traits": ["atomic"] },
+    { "node_id": "2WHV-0", "traits": ["atomic"] },
+    { "node_id": "33WD-0", "traits": ["paired-table"] }
   ]
 }

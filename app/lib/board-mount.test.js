@@ -121,7 +121,70 @@ test('isValueSlot은 숫자 계열만 영값 모수로 센다', () => {
   assert.equal(isValueSlot({ format: { kind: 'korean' } }), true);
   assert.equal(isValueSlot({ format: { kind: 'percent' } }), true);
   assert.equal(isValueSlot({ format: { kind: 'text' } }), false);
+  assert.equal(isValueSlot({ static: true, format: { kind: 'number' } }), true);
   assert.equal(isValueSlot({}), false);
+});
+
+test('static source metadata preserves numeric collapse eligibility but never marks a value atomic', () => {
+  const contract = {
+    slots: [
+      {
+        slot_id: 'static-number', node: 'static-number', kind: 'value', static: true,
+        format: { kind: 'number' },
+        collapse_group: { group_id: 'zero', item: 'static-number', label: '정적 숫자' },
+      },
+      {
+        slot_id: 'live-number', node: 'live-number', kind: 'value',
+        format: { kind: 'number' },
+        collapse_group: { group_id: 'zero', item: 'live-number', label: '실시간 숫자' },
+      },
+      {
+        slot_id: 'other-number', node: 'other-number', kind: 'value',
+        format: { kind: 'number' },
+        collapse_group: { group_id: 'zero', item: 'other-number', label: '다른 숫자' },
+      },
+      { slot_id: 'static-kind', node: 'static-kind', kind: 'static', format: { kind: 'number' } },
+      { slot_id: 'label-kind', node: 'label-kind', kind: 'label', format: { kind: 'number' } },
+    ],
+  };
+  const values = { 'static-number': 0, 'live-number': 0, 'other-number': 0 };
+
+  const [group] = collapsePlan(contract, values);
+  assert.equal(group.collapsed, true);
+  assert.deepEqual(group.hiddenItems, ['static-number', 'live-number', 'other-number']);
+
+  const assignments = new Map(mountPlan(contract, values).assignments
+    .map((assignment) => [assignment.slotId, assignment]));
+  assert.equal(assignments.get('static-number').valueAtomic, false);
+  assert.equal(assignments.get('live-number').valueAtomic, true);
+  assert.equal(assignments.get('other-number').valueAtomic, true);
+  assert.equal(assignments.get('static-kind').valueAtomic, false);
+  assert.equal(assignments.get('label-kind').valueAtomic, false);
+});
+
+test('value-atomic marker intent is exposed only for formatted numeric assignments', () => {
+  const plan = mountPlan(fixtureContract(), fixtureValues());
+  const byId = new Map(plan.assignments.map((assignment) => [assignment.slotId, assignment]));
+
+  assert.equal(byId.get('header.price').valueAtomic, true);
+  assert.equal(byId.get('header.change').valueAtomic, true);
+  assert.equal(byId.get('header.rate').valueAtomic, true);
+  assert.equal(byId.get('rail.a.label').valueAtomic, false);
+  assert.equal(byId.get('rail.rollup').valueAtomic, false);
+
+  const [missingValue] = mountPlan({
+    slots: [{ slot_id: 'missing', node: 'missing', kind: 'value', format: { kind: 'korean' } }],
+  }, {}).assignments;
+  assert.equal(missingValue.valueAtomic, true);
+
+  const nonValues = mountPlan({
+    slots: [
+      { slot_id: 'label', node: 'label', kind: 'label', paper_text: '라벨', format: { kind: 'number' } },
+      { slot_id: 'static', node: 'static', kind: 'static', format: { kind: 'percent' } },
+      { slot_id: 'static-value', node: 'static-value', kind: 'value', static: true, format: { kind: 'number' } },
+    ],
+  }, { static: 12 }).assignments;
+  assert.deepEqual(nonValues.map((assignment) => assignment.valueAtomic), [false, false, false]);
 });
 
 test('mountPlan은 슬롯마다 텍스트·색 근거를 하나씩 만들고 롤업 텍스트로 갈아끼운다', () => {
@@ -165,6 +228,28 @@ test('applyPlan은 텍스트 노드만 갱신하고 접힌 행의 인라인 disp
   assert.equal(index.get('rail.a.value').textContent, '4,200,000');
   const [rollup] = root.querySelectorAll('[data-collapse-rollup="zero"]');
   assert.equal(rollup.hidden, true);
+});
+
+test('value-atomic marker is written only to the Paper leaf and removed idempotently', () => {
+  const leaf = el({ node: 'shared', leaf: '' });
+  const container = el({ node: 'shared' }, [leaf]);
+  const root = el({}, [container]);
+  const numericContract = {
+    slots: [{ slot_id: 'value', node: 'shared', kind: 'value', format: { kind: 'number' } }],
+  };
+
+  applyPlan(root, mountPlan(numericContract, { value: 42 }));
+  assert.equal(leaf.dataset.bsValueAtomic, 'true');
+  assert.equal(container.dataset.bsValueAtomic, undefined);
+
+  const labelContract = {
+    slots: [{ slot_id: 'label', node: 'shared', kind: 'label', paper_text: '라벨', format: null }],
+  };
+  const labelPlan = mountPlan(labelContract, {});
+  applyPlan(root, labelPlan);
+  applyPlan(root, labelPlan);
+  assert.equal(leaf.dataset.bsValueAtomic, undefined);
+  assert.equal(container.dataset.bsValueAtomic, undefined);
 });
 
 test('펼침 ▸는 상태 보드 id를 훅으로 넘긴다(템플릿 교체는 호출부 몫)', () => {
@@ -549,6 +634,24 @@ test('실시간 프레임은 잎 텍스트를 포맷터로 갈아끼우고 병�
   // 부분 갱신은 잉여 스캔을 하지 않는다(계획에 없는 잎을 잉여로 세면 거짓 경보다).
   assert.deepEqual(report.unmapped, []);
   assert.deepEqual(report.touched.sort(), ['header.change', 'header.price', 'header.rate']);
+});
+
+test('value-atomic marker survives partial realtime writes without leaking to labels', () => {
+  const root = fixtureRoot();
+  const contract = fixtureContract();
+  const values = fixtureValues();
+  applyPlan(root, mountPlan(contract, values));
+  const index = nodeIndex(root);
+
+  assert.equal(index.get('header.price').dataset.bsValueAtomic, 'true');
+  assert.equal(index.get('rail.a.label').dataset.bsValueAtomic, undefined);
+  assert.equal(index.get('rail.rollup').dataset.bsValueAtomic, undefined);
+
+  values['header.price'] = 152700;
+  applyRealtimeSlots(root, contract, values, ['header.price']);
+  assert.equal(index.get('header.price').dataset.bsValueAtomic, 'true');
+  assert.equal(index.get('rail.a.label').dataset.bsValueAtomic, undefined);
+  assert.equal(index.get('rail.rollup').dataset.bsValueAtomic, undefined);
 });
 
 test('실시간 프레임은 건드리지 않은 잎을 그대로 둔다(부분 갱신)', () => {

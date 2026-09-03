@@ -186,6 +186,45 @@ test('P1 — 정본 값으로 마운트한 결과의 텍스트 다중집합이 P
   assert.deepEqual(sortedEntries(after), sortedEntries(before));
 });
 
+test('glyph readability probe keeps raw geometry evidence but starts in report-only mode', () => {
+  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  assert.match(verify, /document\.fonts && document\.fonts\.ready/);
+  assert.match(verify, /requiredStableSamples: 4/);
+  assert.match(verify, /Range\(\)/);
+  assert.match(verify, /getClientRects\(\)/);
+  assert.match(verify, /display !== 'contents'/);
+  assert.match(verify, /data-bs-value-atomic/);
+  assert.match(verify, /bs-r-flow, \.bs-r-scroll, \.bs-r-paired-table, \.bs-r-scroll-table/);
+  assert.match(verify, /atomic_wrap_total/);
+  assert.match(verify, /text_overlap_total/);
+  assert.match(verify, /paired_semantics_total/);
+  assert.match(verify, /owner_name/);
+  assert.match(verify, /text: text\.nodeValue\.trim\(\)/);
+  assert.match(verify, /text: element\.textContent\.trim\(\)/);
+  assert.match(verify, /atomic_wrap_nodes/);
+  assert.match(verify, /text_overlap_nodes/);
+  assert.match(verify, /paired_semantics_violations/);
+  assert.match(verify, /assertReadability\(surface\.boardId, preset, probe, \{ enforce: false \}\)/);
+});
+
+test('paired semantic probe includes legacy mirrors only inside opted-in paired tables', () => {
+  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  assert.match(verify,
+    /surface\.querySelectorAll\('\.bs-r-paired-table \.bs-paired, \[data-paired-source\]'\)/);
+  assert.match(verify, /hidden: !shown\(mirror\)/);
+});
+
+test('canonical glyph verifier has no alternate diagnostic success path', () => {
+  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  assert.match(verify, /waitForStableLayout/);
+  assert.doesNotMatch(verify, /ATHENA_GLYPH_DIAGNOSTIC|GLYPH_DIAGNOSTIC|glyph-performance-diagnostic/);
+});
+
+test('the integrated verifier takes its exact default readability board order from the frozen contract', () => {
+  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  assert.match(verify, /DEFAULT_REAL_BOARDS = DEFAULT_READABILITY_BOARD_IDS/);
+});
+
 test('P1 슬롯 단위 — 계산된 표기가 slots.json의 paper_text와 한 글자도 다르지 않다', () => {
   const plan = mountPlan(CONTRACT, CANON);
   const byId = new Map(plan.assignments.map((a) => [a.slotId, a.text]));
