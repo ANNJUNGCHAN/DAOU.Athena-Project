@@ -85,10 +85,9 @@ test('mobile semantic table rows remain ledger rows instead of becoming cards', 
   assert.match(metricDivider, /border-top:\s*1px solid var\(--semantic-line\)/);
 });
 
-test('graph cluster and tier structures are flat ledger rows while controls and data bars remain styled', () => {
-  for (const selector of ['.theme-cluster-card', '.panel-tier-card']) {
-    assertTransparentLedgerRule(canvasCss, selector);
-  }
+test('graph tier structures are flat ledger rows while controls and data bars remain styled', () => {
+  // .theme-cluster-card는 이 목록에서 빠졌다 — 아래 별도 테스트 참고(2026-09-03).
+  assertTransparentLedgerRule(canvasCss, '.panel-tier-card');
 
   const functionalBackgrounds = new Map([
     ['.theme-cluster-bar', 'var(--color-k-bg)'],
@@ -100,28 +99,61 @@ test('graph cluster and tier structures are flat ledger rows while controls and 
   }
 });
 
-test('horizontal unnamed-cluster warnings win the divider cascade without restoring a card shell', () => {
-  const horizontalDivider = ruleBody(
-    canvasCss,
-    '#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-card + .theme-cluster-card',
-  );
-  assert.match(horizontalDivider, /border-inline-start:\s*1px solid var\(--color-k-line\)/);
+test('theme cluster cards are the one documented exception to the ledger treatment', () => {
+  // 사용자 확정(2026-09-03): "01 셸 — 그래프 모드 요약뷰 쪽 디자인이 제일 안정적이야"
+  // = Paper 보드 01의 카드. 납작한 원장은 세로 목록에서는 읽히는데, 패널이 열려 카드가
+  // 가로 3장이 되면 250px 칸에 이름·추정·종목수·바·응집%가 들어가고 카드 사이는 1px
+  // 구분선뿐이라 세 덩어리가 붙어 버렸다("완전 찌부되었어").
+  //
+  // 예외는 이 컴포넌트 하나다 — .panel-tier-card와 .semantic-workspace-* 9개 표면은
+  // 위 테스트들이 계속 원장으로 잠근다. 그래서 이 테스트가 필요하다: 예외를 적어 두지
+  // 않으면 다음 사람이 "원장 방향에서 빠졌다"고 보고 되돌린다(실제로 이번에 그랬다).
+  const card = ruleBody(canvasCss, '.theme-cluster-card');
+  assert.match(card, /background:\s*var\(--color-k-panel2\)/, 'Paper 보드 01 — 면으로 서는 카드');
+  assert.match(card, /border-radius:\s*var\(--radius-md\)/, 'Paper 실측 8px');
+  assert.match(card, /padding:\s*11px 12px/, '좌우 여백이 있어야 내용이 벽에 붙지 않는다');
+  assert.match(card, /box-shadow:\s*none/, '떠오르는 껍데기는 바깥 .card 하나뿐이라는 원장 규칙은 지킨다');
+  assert.deepEqual(declarationValues(card, 'border-top'), [], '카드는 구분선이 아니라 면으로 갈린다');
 
-  const horizontalWarn = ruleBody(
+  // 카드끼리는 간격으로 갈린다 — 구분선(측면 레일) 해킹으로 돌아가지 않는다.
+  const list = ruleBody(canvasCss, '.theme-cluster-cards');
+  assert.match(list, /gap:\s*12px/, '세로 목록 간격(Paper 실측)');
+  const rowList = ruleBody(
     canvasCss,
-    '#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-card + .theme-cluster-card.is-unnamed-warn',
+    '#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-cards',
   );
-  assert.match(horizontalWarn, /border-inline-start-color:\s*rgba\(255, 152, 56, 0\.55\)/);
+  assert.match(rowList, /gap:\s*10px/, '가로 3장 간격(Paper 실측)');
 
+  // 좁은 변형은 내용을 줄인다(Paper 보드 02) — 이것이 찌부의 실제 해법이다.
+  const rowCount = ruleBody(
+    canvasCss,
+    '#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-count',
+  );
+  assert.match(rowCount, /display:\s*none/, '가로에서는 종목 수를 접어 제목 줄을 이름에게 준다');
+});
+
+test('unnamed-cluster warnings speak through the bar and badge, never a red-flagged shell', () => {
+  // 카드가 면으로 서면서 구분선 캐스케이드 자체가 없어졌다(2026-09-03) — 경고를
+  // 테두리로 말하던 규칙 셋이 함께 사라졌다. 남은 계약은 이것이다: 무명 군집은
+  // **바와 배지의 색으로만** 다르다. 카드 배경까지 물들이면 이름이 없다는 사실이
+  // 오류처럼 읽힌다 — 이름이 없는 것은 오류가 아니다(§0 정직성).
   const horizontalWarnBadge = ruleBody(
     canvasCss,
     '#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-card.is-unnamed-warn .theme-cluster-unnamed-badge',
   );
   assert.match(horizontalWarnBadge, /color:\s*var\(--color-warn\)/);
 
+  const warnFill = ruleBody(canvasCss, '.theme-cluster-bar-fill.is-warn');
+  assert.match(warnFill, /background:\s*var\(--color-warn\)/, '경고는 진행바가 말한다');
+
   const verticalWarn = ruleBody(canvasCss, '.theme-cluster-card.is-unnamed-warn');
-  assert.match(verticalWarn, /border-top-color:\s*rgba\(255, 152, 56, 0\.55\)/);
-  assert.deepEqual(declarationValues(verticalWarn, 'background'), ['transparent']);
+  assert.deepEqual(
+    declarationValues(verticalWarn, 'background'),
+    ['var(--color-k-panel2)'],
+    '무명 카드도 이름 붙은 카드와 같은 면이다',
+  );
+  assert.deepEqual(declarationValues(verticalWarn, 'border-top-color'), [], '테두리로 경고하지 않는다');
+  assert.deepEqual(declarationValues(verticalWarn, 'border'), [], '테두리로 경고하지 않는다');
 });
 
 test('the outer root card remains the only elevated structural shell', () => {

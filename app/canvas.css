@@ -568,34 +568,45 @@ html, body { background: transparent; }
 }
 .theme-clusters-title { font-family: var(--font-strong); font-size: var(--text-base); color: var(--color-k-bright); }
 .theme-clusters-subtitle { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
-.theme-cluster-cards { display: flex; flex-direction: column; gap: 0; }
-#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-cards { flex-direction: row; }
+/* 군집 카드만 연속 원장(continuous-ledger) 처리에서 뺀다(2026-09-03 사용자 확정:
+ * "01 셸 — 그래프 모드 요약뷰 쪽 디자인이 제일 안정적이야" = Paper 보드 01의 카드).
+ * 다른 원장 표면(.panel-tier-card · .semantic-workspace-*)은 그대로 둔다 — 방향을
+ * 통째로 뒤집은 것이 아니라 이 컴포넌트 하나의 예외다.
+ *
+ * 왜 예외가 필요했나: 납작한 원장은 세로 목록에서는 잘 읽히는데, 패널이 열려 카드가
+ * 가로 3장이 되면 250px 남짓한 칸에 이름·추정·종목수·진행바·응집%가 들어가고 카드
+ * 사이는 1px 구분선뿐이라 세 덩어리가 붙어 버렸다(사용자 제보 "완전 찌부되었어").
+ * 간격 = 세로 12px · 가로 10px(Paper 실측). */
+.theme-cluster-cards { display: flex; flex-direction: column; gap: 12px; }
+#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-cards {
+  flex-direction: row;
+  gap: 10px;
+}
 #canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-card { flex: 1 1 0%; }
-#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-card + .theme-cluster-card {
-  border-top: 0;
-  border-inline-start: 1px solid var(--color-k-line);
-  padding-inline-start: 12px;
-}
-#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-card + .theme-cluster-card.is-unnamed-warn {
-  border-inline-start-color: rgba(255, 152, 56, 0.55);
-}
+/* 좁은 변형은 내용을 줄인다(Paper 보드 02는 이름 + 바 + 숫자 하나만 그린다) —
+ * 종목 수를 접어 제목 줄을 이름에게 준다. 응집 줄은 진행바와 %가 한 쌍으로 남는다. */
+#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-count { display: none; }
 #canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-card.is-unnamed-warn .theme-cluster-unnamed-badge {
   color: var(--color-warn);
 }
 
+/* Paper 보드 01 실측: padding 11px 12px · radius 8px · background --color-k-panel2.
+ * 테두리는 없다 — 면으로 카드를 세운다(그림자도 없다: 바깥 .card 하나만 떠 있다는
+ * 원장 규칙은 그대로 지킨다). */
 .theme-cluster-card {
   display: flex; flex-direction: column; gap: 7px;
-  padding: 11px 0;
-  border-top: 1px solid var(--color-k-line);
-  border-radius: 0;
-  background: transparent;
+  padding: 11px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel2);
   box-shadow: none;
 }
 /* 이름 붙은 군집이 하나라도 있을 때만(§0 r5 임계 규칙) 무명 카드에 붙는
  * 경고 톤 — 지금(0/N, 전 군집 무명)은 절대 안 붙는다. */
+/* 무명 경고는 바와 수치의 색으로만 말한다(Paper 보드 01 실측 — 카드 배경은 이름
+ * 붙은 군집과 같은 --color-k-panel2다). 카드 테두리를 주황으로 물들이면 카드 하나가
+ * 오류처럼 읽힌다 — 이름이 없는 것은 오류가 아니다. */
 .theme-cluster-card.is-unnamed-warn {
-  border-top-color: rgba(255, 152, 56, 0.55);
-  background: transparent;
+  background: var(--color-k-panel2);
 }
 .theme-cluster-title { display: flex; align-items: baseline; gap: 6px; }
 .theme-cluster-name { font-family: var(--font-strong); font-size: var(--text-sm); color: var(--color-k-bright); }
