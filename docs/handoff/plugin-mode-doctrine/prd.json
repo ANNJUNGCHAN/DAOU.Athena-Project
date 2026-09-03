@@ -109,7 +109,7 @@
     {
       "id": "US-007",
       "title": "W5-1·W5-2·W5-3 검증 하네스·파리티 문서",
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "app/verify-plugins.js: 5동작 사슬 ⑴~⑸ 단언, 리포트 failures===0 (네트워크 필요)",
         "app/verify.js 플러그인 블록: 폐기 7·유지 7·경계 1·신설 8",
