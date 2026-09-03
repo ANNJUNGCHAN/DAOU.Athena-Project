@@ -274,6 +274,29 @@ def test_surprising_connections_score_favors_low_degree_bridges() -> None:
     assert leaf_bridge_score > hub_bridge_score, "차수가 낮은 다리가 더 놀라워야 한다"
 
 
+def test_surprising_connections_are_ordered_by_surprise() -> None:
+    """가장 놀라운 것이 맨 앞에 온다 — 이름순이 아니다."""
+    found = surprising_connections(_hub_leaf_bridge_graph(), assignment=_hub_leaf_assignment())
+    scores = [item.surprise_score for item in found]
+    assert scores == sorted(scores, reverse=True), "놀라운 순으로 내려가야 한다"
+
+
+def test_surprising_connections_limit_keeps_the_most_surprising() -> None:
+    """limit이 자르는 것은 덜 놀라운 쪽이다.
+
+    예전에는 놀라움과 무관한 기준(이름, 이 픽스처처럼 name이 없으면 엣지 삽입 순서)으로
+    정렬한 뒤 잘라서, 가장 놀라운 연결이 목록 밖으로 밀려났다. 여기서는 잎-잎 다리
+    ("a0"↔"b0")가 허브-허브 다리("hub_a"↔"hub_b")보다 놀라운데 뒤에 추가되므로,
+    옛 코드는 limit=1에서 허브 쪽을 남겼다.
+    """
+    found = surprising_connections(
+        _hub_leaf_bridge_graph(), assignment=_hub_leaf_assignment(), limit=1
+    )
+    assert len(found) == 1
+    pair = frozenset((found[0].source_entity_id, found[0].target_entity_id))
+    assert pair == frozenset(("a0", "b0")), "가장 놀라운 다리가 남아야 한다"
+
+
 def test_surprising_connections_score_is_within_unit_range() -> None:
     found = surprising_connections(_hub_leaf_bridge_graph(), assignment=_hub_leaf_assignment())
     assert len(found) == 2, "이 픽스처는 다리가 2개 있어야 한다"

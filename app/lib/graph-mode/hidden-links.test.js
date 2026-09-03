@@ -38,32 +38,53 @@ test('renderHiddenLinks — 개체명 쌍과 kinds 조인 텍스트를 그린다
   assert.equal(desc.textContent, 'co_mention · shared_cluster_boundary');
 });
 
-test('renderHiddenLinks — surprise_score가 없으면(구버전 backend) 점수 칸을 만들지 않는다', () => {
+test('renderHiddenLinks — 배지는 자리 순위이고 점수 숫자가 아니다', () => {
   const container = fakeNode('div');
-  renderHiddenLinks(container, [connection()]);
-  assert.equal(container.querySelector('.hidden-link-score'), null);
-  assert.ok(!/8\.5/.test(container.querySelector('.hidden-link-row').textContent), '지어낸 점수가 없다');
+  renderHiddenLinks(container, [
+    connection({ surprise_score: 1 }),
+    connection({ surprise_score: 1, source_name: '두 번째' }),
+  ]);
+  const badges = container.querySelectorAll('.hidden-link-score').map((n) => n.textContent);
+  // 예전에는 `상대 ${score*10}`이었다. backend가 min-max 정규화를 하므로 1등은 항상
+  // 1.0이고 전부 동점이면 전부 1.0이라, 화면에 "상대 10.0"이 나란히 찍혔다 —
+  // 라벨은 '상대'인데 순위 정보가 0이었다. 자리 순위는 그 병이 없다.
+  assert.deepEqual(badges, ['1순위', '2순위']);
+  assert.ok(!/10\.0|8\.5/.test(container.textContent), '절대 점수처럼 읽히는 숫자가 없다');
 });
 
-test('renderHiddenLinks — 상대 점수 배지는 공통 패널과 같은 0~10 스케일이다', () => {
+test('renderHiddenLinks — 순위는 surprise_score가 없어도 붙는다', () => {
+  // 구버전 backend라도 목록의 순서 자체는 있다 — 자리 순위는 점수 필드에 기대지 않는다.
   const container = fakeNode('div');
-  renderHiddenLinks(container, [connection({ surprise_score: 0.734 })]);
-  const score = container.querySelector('.hidden-link-score');
-  // controller.js relativeScoreText와 같은 값이어야 한다 — 같은 연결을 한 화면은
-  // 0.73으로, 다른 화면은 7.3으로 부르면 두 숫자가 다른 값처럼 읽힌다.
-  assert.equal(score.textContent, '상대 7.3');
-  // "상대"라는 말이 여전히 절대 점수가 아님을 밝힌다.
-  assert.match(score.textContent, /^상대 /);
+  renderHiddenLinks(container, [connection(), connection({ source_name: '두 번째' })]);
+  const badges = container.querySelectorAll('.hidden-link-score').map((n) => n.textContent);
+  assert.deepEqual(badges, ['1순위', '2순위']);
 });
 
-test('renderHiddenLinks — 상대 점수가 0이거나 없으면 배지를 안 붙인다', () => {
-  const zero = fakeNode('div');
-  renderHiddenLinks(zero, [connection({ surprise_score: 0 })]);
-  assert.equal(zero.querySelector('.hidden-link-score'), null, '0은 "가장 덜 놀랍다"는 뜻이다');
+test('renderHiddenLinks — 관계명을 한글 사전으로 바꿔 적는다', () => {
+  const container = fakeNode('div');
+  renderHiddenLinks(container, [connection({ kinds: ['belongs_to', 'co_mention'] })], {
+    relationLabels: { belongs_to: '소속' },
+  });
+  const desc = container.querySelector('.hidden-link-desc');
+  // 사전에 있는 것은 한글로, 없는 것은 원문 그대로(모르는 것을 지어내지 않는다).
+  assert.equal(desc.textContent, '소속 · co_mention');
+});
 
-  const missing = fakeNode('div');
-  renderHiddenLinks(missing, [connection({ surprise_score: undefined })]);
-  assert.equal(missing.querySelector('.hidden-link-score'), null, '구버전 backend는 이 필드가 없다');
+test('renderHiddenLinks — 사전을 안 주면 원문을 그대로 둔다', () => {
+  const container = fakeNode('div');
+  renderHiddenLinks(container, [connection({ kinds: ['belongs_to'] })]);
+  assert.equal(container.querySelector('.hidden-link-desc').textContent, 'belongs_to');
+});
+
+test('renderHiddenLinks — 잘렸으면 모수를 밝히고, 안 잘렸으면 안 밝힌다', () => {
+  const many = fakeNode('div');
+  renderHiddenLinks(many, [connection(), connection(), connection(), connection(), connection()]);
+  // 바로 위 테마 군집이 "7개 중 3개"라고 말하는데 여기만 잘린 사실을 숨겼었다.
+  assert.equal(many.querySelector('.hidden-links-count').textContent, '5개 중 3개');
+
+  const few = fakeNode('div');
+  renderHiddenLinks(few, [connection(), connection()]);
+  assert.equal(few.querySelector('.hidden-links-count'), null, '자른 게 없으면 아무 말도 안 한다');
 });
 
 test('renderHiddenLinks — name이 없으면 entity_id로 대체한다', () => {
