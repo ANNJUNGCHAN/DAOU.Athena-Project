@@ -86,3 +86,10 @@ def signals(df, p):            # df: open high low close volume, 오름차순 �
 - 루틴: `models.py:19 Transport`, `:44 SOURCES`, `:101 derive_mode`; `rules.py:5-6` exec 금지 grep 테스트, `:32 _ALLOWED_CONDITION_KEYS`; `runtime.py:71 can_activate`(미지 mode 거부 :85); `triggers.py:89 evaluate`, `duration_ms :98`; `scheduler.py:257 _realtime_loop`(단일 태스크), `:288 _schedule_loop`; `ledger.py:3-4` 원문 금지; `config.py:109 routines_schedule_poll_interval_seconds`.
 - 앱: `chat.js:3014-3018` 미리보기 실행 비활성 사유, `:2935 approvalModeLine` 3분기(새 mode는 '틱 즉시'로 떨어짐); `agent-canvas.js:1282/1296/1310` kind 3종, `:140 statusRowIcon`; `backtest-canvas.js:97 DESIGN_TABS`; `graph-mode/controller.js:329 SURFACE_BY_VIEW`.
 - MCP: `backtest_tools.py:41 _ALLOWED_ACTIONS`(propose_code·read_code·diagnose·flow·map 있음, activate·deploy 없음), `routine_tools.py:37`(draft·list·propose, confirm 없음).
+
+## 6. 사용자 확정 (2026-09-03 2차) — 접근성·격리
+
+- **코드는 참고용.** 파이썬은 기본 접힘("코드 · 참고 · 펼치기"), 직접 고치지 않아도 되고 고치는 건 말로 한다.
+- **주인공은 노드·흐름.** 노드 = 이 알람의 함수 하나. 제목은 한국어(영어 함수명은 작게 참고 표기), 칸마다 **들어가는 값·나오는 값**을 실값으로 보여 준다(예: 들어감 오늘 거래량 1,890만주 · 평균 1,240만주 · 1.5배 → 나옴 1.52배 · 넘음). 코드를 전혀 모르는 사람이 대상이며 백테스트 모드보다 접근성이 훨씬 좋아야 한다.
+- **데이터·자리 확정.** 일봉 + 오늘 현재가(1차), 에이전트 모드 안. 백테스트 부품(샌드박스·flow·diagnose·일봉 캐시)은 빌려 쓰되 **모드는 폴더 하나에서 작업해도 철저히 격리**한다 — 상태·화면·저장 위치가 섞이지 않는다.
+- **Paper A-2 09~12 보드 신설**(2026-09-03): 09 새 알람·말로 설명(43WD-1) · 10 노드·흐름·검사 결과·승인(446V-1) · 11 이상해요 루프(44HD-1) · 12 활성 코드 알람 상세(44RV-1). 노드 카드 문법: 제목(한국어) / 영어명 참고(9px mono) / 들어감 행들 / 구분선 / 나옴(굵게). 바뀐 칸은 「방금 바뀜」(warn 테두리), 선택 칸은 진한 2px 테두리 + 「이상해요·물어볼게요」 칩.
