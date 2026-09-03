@@ -9,15 +9,15 @@
 ## 0. 30초 요약
 
 - **하는 일.** Paper 디자인 파일의 카드 페이지 보드 96장을 **그대로**(픽셀 동일) Electron 앱의 대화 캔버스에 띄운다. 캔버스는 브라우저처럼 **탭 스트립 + 카드 1장 뷰포트**, 카드는 컨테이너 폭 5단(XL/L/M/S/XS) 반응형, 값·문구는 어느 단계에서도 불변.
-- **어디까지 왔나.** Paper 쪽은 끝났다(키움 REST 299 op · 가시 필드 3,532 전부 표현). 코드 쪽은 추출 96/96 · 백엔드 로더가 96장 전부 로드(제외 0) · 봉투 `surface_contract` · 프론트 탭/마운트/반응형 CSS · 보드 카드의 통합 카드 크롬 제거까지 붙었다. 슬롯 저작(보드 텍스트 자리 ↔ API 필드)은 로더 기준 **3,379/3,534 occurrence = 95.6%**.
-- **정확한 중단점.** 웨이브 3 정비 4레인(A5/B4/C5/D3)은 끝났다. 재개한 3차 저작의 `account-a`는 리뷰·수정까지 끝나 정확한 9 occurrence를 닫았고, `3GRO-0`에는 6구간 주문가능금액 잎이 없어 12 occurrence·2 op를 정직하게 미도달로 남겼다. 다음은 `account-b`이며 최종 게이트는 아직 미실행이다(§5·§6).
+- **어디까지 왔나.** Paper 쪽은 끝났다(키움 REST 299 op · 카드 표면 가시 필드 3,532 전부 표현). 코드 쪽은 추출 96/96 · 백엔드 로더가 96장 전부 로드(제외 0) · 봉투 `surface_contract` · 프론트 탭/마운트/반응형 CSS · 보드 카드의 통합 카드 크롬 제거까지 붙었다. 슬롯 저작(보드 텍스트 자리 ↔ API 필드)은 로더 기준 **3,382/3,532 occurrence = 95.8%**다. semantic authority 후보 3,534개 중 예비 `base:04` FID `924`·`951`만 카드 표면 visible universe에서 제외한다.
+- **정확한 중단점.** 웨이브 3 정비 4레인(A5/B4/C5/D3)과 저작 Tasks 1–8은 모두 실행·리뷰·수정됐다. 현재 미도달 150, validator 59건(`b15 e44`)/27장, 보드 없는 op 2이며, 남은 항목은 거짓 alt로 닫지 않은 exact-leaf/composite/aspect/join/realtime blocker다. `extra_fields` end-to-end 합성은 현재 스키마로 lossless하지 않아 `STOP_NO_CHANGES`이며 사용자 설계 승인 대기다. **final W3 gate는 실행됐지만 시각 가독성 leg가 FAIL**이다(§4·§6).
 - **커밋.** 2026-09-03부터 브랜치 `feat/card-surface-paper-to-code`에 지속 커밋·푸시한다(사용자 지시). `main`은 origin보다 60커밋 뒤라 직접 올리지 않는다.
 
 ---
 
 ## 1. 저장소 상태
 
-| 항목 | 값 (2026-09-03 11:15) |
+| 항목 | 값 (2026-09-03 16:11) |
 |---|---|
 | 브랜치 | 작업 브랜치 `feat/card-surface-paper-to-code`(origin 추적). **같은 체크아웃을 키우미 트랙 대화가 함께 쓴다** — `git status --short --branch`로 현재 브랜치를 매번 확인. 이 문서가 들어 있는 커밋을 최신 카드 트랙 체크포인트로 삼는다. 로컬 `main`은 `origin/main`보다 **60커밋 뒤**. 병합은 나중에 `-X ignore-cr-at-eol`로 |
 | 미커밋 세는 법 | `git status --short \| grep -c '^ M'` / `grep -c '^??'` — 접힌 디렉터리 기준. 웨이브가 돌면 계속 변하므로 숫자는 §11에만 남긴다 |
@@ -32,7 +32,7 @@
 
 1. **"카드는 오직 paper design에 있는 카드만 써야하며, 디자인은 완전 동일해야해."** 범용 렌더러·새 프리미티브·"비슷하게 재구성" 전부 금지. 앱은 Paper `get_jsx` 추출물을 그대로 그린다.
 2. **캔버스 = 탭 브라우저.** 카드 1장만 뷰포트에, 여러 카드는 탭. 모든 카드 크기 동일(뷰포트 100%). 창을 2분할·4분할·원본·최소로 바꿔도 반응형. 축소(zoom) 금지.
-3. **집약 불인정.** 필드는 직접·병기·펼침 3층 중 하나로 **값이 보여야** 표현이다. 비노출은 명문 계정 173뿐 = 전송·내부 171(`backend/ref/kiwoom-presentation-hidden-occurrences.json`) + 예비 슬롯 2(`base:04` 951·924, 헌장 §6). 로더의 가시 모수 3,534는 원장 3,534행 그대로라 이 예비 슬롯 2건이 아직 "미도달"로 세어진다 → §6-2.
+3. **집약 불인정.** 필드는 직접·병기·펼침 3층 중 하나로 **값이 보여야** 표현이다. semantic authority 후보는 3,534행이며 카드 표면 visible universe는 예비 `base:04` FID 924·951만 제외한 3,532개다. 두 예비 occurrence는 semantic authority에서 삭제하지 않되 카드 표면 미도달로 세지 않으며, 별도 transport/internal hidden authority 171개도 불변이다(§10).
 4. **밀도 규칙 H1~H4 승인**(영값 묶음 "0원 N항목 ▸", 값 우선, 병기 2값, 행 리듬 13/32px) — "응 진행해봐".
 5. **검수 방식.** 마일스톤마다 전 보드 스크린샷/PDF를 보내 사용자 검수. 문구 3원칙: 설명문 금지·한국어 단위·내부용어 금지.
 6. **운영 방식(2026-09-03).** 인계 문서를 항상 최신으로 유지하고, 커밋·푸시를 지속하고, 남은 일을 순차 진행한다.
@@ -53,7 +53,7 @@
 | 클레임 병합기 | `scripts/merge_field_claims.py` | 클레임 JSONL → 원장 |
 | 현황판 | `scripts/surface_dashboard.py` → http://127.0.0.1:8765 | `.claude/launch.json` "surface-dashboard" |
 | **Paper 원문 저장소** | `backend/ref/card-surface-templates/<board>/` | `meta.json`·`paper.jsx`·`paper.tree.txt`·`regions.json`(사람이 저장) → `board.html`·`slots.json`(생성). `index.json` 96장. 디렉터리는 97 = 96 + `fixture-quote`(테스트 픽스처, 색인 밖) |
-| 저작 팩 | `backend/ref/card-surface-authoring/packs/<board>.pack.json` | 보드 몫 필드 목록(96장 전부). `.fields.json`은 선택(93장; `17F8-2.fields.json`은 증명 페이지 잔재 → §6-4). 2026-09-03 세션 임시 폴더에서 저장소로 옮김 |
+| 저작 팩 | `backend/ref/card-surface-authoring/packs/<board>.pack.json` | 보드 몫 필드 목록(96장 전부). `.fields.json`은 선택(93장; `17F8-2.fields.json`은 모수 밖 증명 페이지의 역사적 잔재). 2026-09-03 세션 임시 폴더에서 저장소로 옮김 |
 | 추출기 | `scripts/paper_board_extract.py` | JSX→HTML, 영역 클래스 `bs-*`, 슬롯 골격, `--apply-columns`·`--no-index`·`--check` |
 | 슬롯 검증기 | `scripts/validate_board_slots.py` | 보드별 a~g 검사. 팩 경로 기본값 = 위 packs, `ATHENA_PACK_DIR`/`--pack-dir`로 덮어씀. 팩 폴더가 없으면 즉시 실패 |
 | 커버리지 판 | `scripts/card_surface_coverage.py` → `CARD_SURFACE_COVERAGE.md` | 바인딩 판정은 로더에 위임(스크립트가 세지 않는다) |
@@ -63,26 +63,26 @@
 | 배선 | `backend/athena_api/api/canvas_push.py`(+`/api/v1/internal/canvas/board-hydrate`), `backend/athena_mcp/canvas_data.py` | |
 | 프론트 | `app/lib/canvas-tabs.js`·`board-mount.js`·`board-format.js`·`board-template-registry.js`·`main/board-hydrate.js`, `app/styles/board-surface.css`·`canvas-tabs.css`, `app/canvas.js`(renderBoardSurfaceCard — 보드 카드는 통합 카드 크롬을 그리지 않는다) | |
 | 검증 스크립트 | `app/verify-integrated-cards.js` → `app/captures/integrated-cards/` | 창 4종 1920·960·640·480 |
-| 워크플로 스크립트 사본 | `docs/handoff/card-surface/workflows/*.js` | W1·W2a·W2b·W2c·W3. W3는 `PACK`을 저장소 상대 경로로 만들고 `NODE`는 PATH 존재만 검사한다. **다른 PC에서는 `ROOT`·`PY`를 고친다.** 레인 프롬프트는 당시 가정(API 이름 등)을 담고 있으니 그대로 주기 전에 현재 시그니처를 확인 |
+| 워크플로 스크립트 사본 | `docs/handoff/card-surface/workflows/*.js` | W1·W2a·W2b·W2c·W3의 **역사적 provenance 전용 사본**. 현재 Tasks 1–8이 별도 실행·리뷰됐으므로 `ROOT`·`PY`를 고치거나 레인 프롬프트를 다시 배포하지 않는다. `resumeFromRunId`도 금지(§5) |
 | 진행 로그 사본 | `docs/handoff/card-surface/progress.txt`, `prd.json` | 정본은 `.omc/`(git 무시) |
 
 ---
 
-## 4. 수치 (측정 2026-09-03 12:52, W3 account-a 리뷰·수정 반영 후)
+## 4. 수치 (측정 2026-09-03 16:11, canonical 재생성·final gate 반영 후)
 
 | 항목 | 값 |
 |---|---|
 | 보드 | 96 (카드 6 · 증명 페이지 17F8-2와 fixture-quote는 모수 밖 — 해소 대상 아님) |
 | 추출 | 96/96, `--check` 드리프트 0 |
 | **로더** | `get_registry()` 보드 96 · `excluded_boards` 비어 있음 · `complete=False`는 부분 로드 경로라 정상 |
-| **커버리지(정본 = 로더 `coverage()`)** | occurrence 도달 **3,388 / 3,534 (95.9%)** · op 커버 297/299 |
-| 미도달 146의 구성 | 17F8-2에만 귀속된 75 + 트리 안 보드 귀속 71(그중 예비 슬롯 2). `account-a`가 정확한 9건을 닫음 |
-| 보드 없는 op | 2 — `detail:kt00005:margin_order_capacity`, `detail:kt00013:margin_order_capacity`. `3GRO-0`에는 6구간 `…주` 잎만 있고 금액 잎이 없어 거짓 shares 매핑을 제거한 상태 |
-| 슬롯 검증기 잔여 | 37건(b1 e36) / 21장 — `account-a`의 `3IGR-0` b1 e2를 닫음. 나머지는 후속 저작 레인 몫 |
-| 밀도 | 하드 위반 0 · 소프트 경고 22(레일 행 7~11) · 재표시 경고 128 · 중복 바인딩 0 |
-| 상태 컨트롤 미해소 | 2 (3EWN-0·3ODO-0 — 부모 보드에 후보 문구 없음) |
-| C5 반응형 검증 | 실보드 6장 × 4단계 PNG **24장** + 보드별 XL 1,360px·M 851px 기하 프로브 **12회**, P5·단계 간 텍스트 상등 전부 통과, **surface overflow 최대 0px**. height hoist가 작동하는 L/M/S/XS의 세로 내용 넘침·형제 겹침 0; XL은 열 접힘·KPI 줄바꿈 없이 primary/rail 병렬, M은 6열부터 접고 KPI 최대 3칸·rail 하단 이동을 하드 판정한다. XL Paper 원문 `2R3M-1/36Q0-0`의 기존 2px 세로 넘침은 원시 결과에 기록하되 hoist 검증에서 제외한다. 리뷰 위험 표본 15P5-2·3DZ1-0(8 KPI)·2QX1-1(6 KPI)도 별도 6단계 검증 0px. `app/captures/integrated-cards/VERIFY-INTEGRATED-CARDS.json` |
-| 앱 단위 테스트 | **2,042 pass / 0 fail** (`npm run test:unit`, 2026-09-03 12:17 재검증) |
+| **커버리지(정본 = 로더 `coverage()`)** | occurrence 도달 **3,382 / 3,532 (95.8%)** · op 커버 297/299 |
+| 미도달 | **150 occurrence**. Tasks 1–8에서 semantic/unit/row/runtime를 대조했으며, 독립 Paper leaf 부재·합성/aspect·join·realtime 계약 부재를 거짓 alt로 닫지 않은 결과 |
+| 보드 없는 op | 2 — `detail:kt00005:margin_order_capacity`, `detail:kt00013:margin_order_capacity`. `3GRO-0`에는 6구간 `…주` 잎만 있고 금액 잎이 없어 12 occurrence를 정직하게 미도달로 유지 |
+| 슬롯 검증기 잔여 | **59건 (`b15 e44`) / 27장**. coverage와 validator 문제 수는 일대일 지표가 아니며, 남은 항목은 task 보고서의 명시적 blocker |
+| 밀도 | 하드 위반 0 · 소프트 경고 22(레일 행 7~11) · 재표시 경고 127 · 중복 바인딩 0 |
+| 상태 컨트롤 미해소 | **0** — account/gold/watch/orderbook의 canonical child meta → parent marker → runtime click 경로 검증 |
+| C5 반응형 자동 검증 | 실보드 6장 × 4단계 PNG **24장** + 보드별 XL 1,360px·M 851px 기하 프로브 **12회**, P5·단계 간 텍스트 상등, surface overflow 최대 0px, L/M/S/XS 세로 내용 넘침·형제 box 겹침 0. XL 원문 `2R3M-1/36Q0-0`의 2px 세로 넘침 1건은 기록·제외. **그러나 24장 육안 전수에서 2R3M-1·2SKU-1·2QFO-2·13K0-2·135M-2의 문자 단위 줄바꿈/동일 행 텍스트 충돌을 확인해 최종 시각 gate는 FAIL**이다. P5는 삭제 여부만 증명하고 glyph 가독성은 증명하지 못한다. `13BC-2`만 4폭 모두 양호. 검증 JSON이 참조하는 현 증거는 24장이지만 캡처 폴더에는 이전 표본 `15P5-2`·`2QX1-1`·`3DZ1-0` 각 4장, 합계 12장이 더 남아 있어 `board-*.png` 실파일은 36장이다. 재캡처 시 현 보드 집합 밖 파일을 정확히 정리하거나 별도 폴더로 격리한다 |
+| 테스트 | scripts **241 pass** · backend 카드표면 **158 pass** · app **2,042 pass**. backend 전수 **2,762 pass / 기존 WIP 1 fail / 5 skip**(2026-09-03 16:11 재검증) |
 
 ---
 
@@ -99,13 +99,13 @@
 | C5 보드 카드 크롬 제거 | `app/canvas.js` renderBoardSurfaceCard가 `.card-head`·요약 칩·"전체 원본 필드"를 만들지 않음. `app/captures/integrated-cards/board-<id>-<w>x<h>.png` **24장과 검증 JSON 존재**. 5단 컨테이너 전부 측정·surface overflow 0·L/M/S/XS 세로 넘침/겹침 0·XL/M 레이아웃 계약 하드 판정, 앱 단위 2,042/0 |
 | D3 커버리지 정본화 | `CARD_SURFACE_COVERAGE.md` 머리글이 "로더에 위임"이고 총괄이 로더 수치와 같음 |
 
-**3차 저작 8레인**(account-a/b, quote-flow, rank-a/b, watch-answer, orderbook, uncovered-sweep; 보드 소유 겹침 없음)은 각각 탐색 명령 12~19회를 실행했지만 약 100초 뒤 주간 한도 오류로 끝났고, 작업 트리에 저작 순변경을 남기지 않았다. **게이트는 tool call 0회로 즉시 오류 종료**했다. Claude 워크플로 JSON의 최상위 `status: completed`는 단계 상태를 대표하지 않으므로 믿지 말고 `workflowProgress`를 본다.
+**역사적 원본 workflow 상태:** 3차 저작 8레인(account-a/b, quote-flow, rank-a/b, watch-answer, orderbook, uncovered-sweep)은 각각 탐색 명령 12~19회를 실행했지만 주간 한도 오류로 끝났고, **게이트는 tool call 0회로 즉시 종료**했다. Claude 워크플로 JSON의 최상위 `status: completed`는 단계 상태를 대표하지 않는다. **이후 현재 shared worktree에서 Tasks 1–8을 모두 독립 실행하고 리뷰 수정을 반영했으므로 원본 저작 레인을 재개하거나 다시 실행하지 않는다.** 각 결과와 honest blocker는 `.superpowers/sdd/card-surface-w3-authoring/task-{1..8}-report.md`가 정본이다.
 
-**Codex 재개:** `account-a`는 커밋 `6cbb2b7` 후 독립 리뷰에서 금액→shares 오매핑 12건과 의미가 다른 account 필드 2건을 발견했다. 수정 `c52a446`에서 오매핑을 제거하고 `repl_amt`·`uncla`를 `2SKU-1`의 정확한 슬롯으로 옮겼다. 결과는 안전한 순증가 9건, 담당 validator 3장 문제 0. 금액 잎이 없는 12건은 Paper 정본에 이름 있는 `krw_ko` 잎을 만들기 전에는 닫지 않는다.
+**Task 1 account-a 역사 및 잔존 blocker:** `account-a`는 커밋 `6cbb2b7` 후 독립 리뷰에서 금액→shares 오매핑 12건과 의미가 다른 account 필드 2건을 발견했다. 수정 `c52a446`에서 오매핑을 제거하고 `repl_amt`·`uncla`를 `2SKU-1`의 정확한 슬롯으로 옮겼다. 결과는 안전한 순증가 9건, 담당 validator 3장 문제 0. 금액 잎이 없는 12건은 Paper 정본에 이름 있는 `krw_ko` 잎을 만들기 전에는 닫지 않는다. 이는 Task 1의 결과이며 Tasks 2–8도 이후 실행·리뷰됐다.
 
-**원본 증거:** `C:\Users\USER\.claude\projects\C--Projects-DAOU-Athena\dff811ca-b4d0-4ed4-9c90-07bce304dc1a\workflows\wf_622eeae9-f84.json`. 같은 Claude 세션에서 한도가 초기화된 뒤 재개할 때만 `resumeFromRunId: "wf_622eeae9-f84"`를 쓸 수 있다. 재개 전 `workflowProgress`를 읽어 정비 4레인을 다시 돌리지 않는지 확인한다.
+**원본 증거:** `C:\Users\USER\.claude\projects\C--Projects-DAOU-Athena\dff811ca-b4d0-4ed4-9c90-07bce304dc1a\workflows\wf_622eeae9-f84.json`. 원본 workflow JSON과 journal은 최초 실패의 역사적 증거로만 보존한다. 현재 상태 복구에 `resumeFromRunId`를 사용하지 않는다.
 
-**다른 대화·다른 PC:** 캐시가 없다. §7 표의 읽기전용 명령으로 위 완료 신호와 §4 수치를 실측 → 저장된 W3 스크립트에서 **3차 저작 8레인과 게이트만** 실행하거나 해당 레인 프롬프트를 서브에이전트에 준다.
+**다른 대화·다른 PC:** 캐시가 없다. §7 표의 읽기전용 명령으로 위 완료 신호와 §4 수치를 실측하고 Tasks 1–8 보고서를 읽는다. **저작 8레인은 재실행하지 않는다.** 다음 작업은 §6의 설계/Paper 결정과 final gate다.
 
 **게이트가 끝나면 사용자에게 보여줄 것:** 실보드 6장(2SKU-1·2R3M-1·13BC-2·2QFO-2·13K0-2·135M-2) 4단계 캡처를 Paper 스크린샷과 나란히 놓고 차이를 보고. Paper 대조는 로그인된 Paper Desktop을 computer-use로 보거나 Paper MCP를 쓴다(§8) — 둘 다 없으면 그 단계만 원본 계정 보유자에게 넘긴다.
 
@@ -113,13 +113,15 @@
 
 ## 6. 남은 일 (순서대로) — 🔒 = 사람·외부 의존
 
-1. **3차 슬롯 저작 남은 7레인.** 현재 미도달 146 → 0: `account-b` → `quote-flow` → `rank-a` → `rank-b` → `watch-answer` → `orderbook` → `uncovered-sweep`. (a) 트리 안 보드 귀속 71은 슬롯 저작, (b) 17F8-2 귀속 75는 카드 보드로 재귀속 — 몸통은 금현물(kt50020·kt50030·kt50031·kt50032·kt50075), (c) 예비 슬롯 2(`base:04` 951·924)는 **로더의 가시 universe에서 원장(`PAPER_FIELD_COVERAGE.json`) 비노출 행을 빼는 방식**으로 모수를 3,532로 맞춘다 — `kiwoom-presentation-hidden-occurrences.json`은 `semantic_presentation_registry.py`가 해시·개수(171)로 잠근 신뢰 게이트 원장이라 건드리지 않는다. 별도 설계 결함: `3GRO-0` 6구간 주문가능금액 12건은 Paper 금액 잎 저작 없이는 닫지 않는다. 상태 컨트롤 2건 `meta.state.control_text`. 바인딩 슬롯 `row_index` 좌표. `17F8-2.fields.json` 잔재도 재귀속과 함께 정리.
-2. **W3 게이트 실행** → 추출·`--check`, 로드 96·excluded 0, 커버리지 3,532/3,532, 검증기 0, 청크 재빌드·드리프트 0, 앱/백엔드 전수, 실보드 캡처 24장 재생성 + XL/M 기하 프로브 + surface overflow 0 + 반응형 세로 넘침/겹침 0 + XL/M 레이아웃 계약. 통과 후 문서 수치 갱신·커밋·푸시.
-3. **실앱 QA.** 4단계 창 캡처 vs Paper 시각 대조 🔒(로그인된 Paper Desktop/computer-use 또는 Paper MCP) · 헌장 게이트(밀도 하드 0, 문구 3원칙) · 사용자 검수 PDF 🔒(승인) · 실키움(모의) 봉투로 보드 카드 실데이터 표시 1회 🔒(모의투자 자격증명·장중).
-4. ~~구현 계획 문서의 밀도 줄 정정~~ — 2026-09-03 10:3x 완료.
-5. 보류 결정 4건 🔒 — 사용자에게 한 번에 물어 닫는다.
+1. **시각 가독성 gate 보강·수정.** final W3 자동 수치는 통과했지만 육안 gate가 실패했다. 구현 전 명시적 responsive role/atomic text/paired row 계약과 `Range.getClientRects()` 기반 `atomic_wrap_nodes`·`text_overlap_nodes` 하드 판정을 승인한다. 전역 `nowrap`·`overflow:hidden`·zoom으로 숨기지 않는다.
+2. **final W3 gate 재실행.** 현재 nonvisual은 추출 96/96 멱등, chunk 97/6 최신, coverage/validator 기준선 유지, scripts/backend 카드표면/app 통과다. 시각 수정 후 24장과 XL/M probe를 다시 만들고 새 glyph 가독성 판정까지 0인지 확인한다. `3,532/3,532`, validator 0을 달성했다고 쓰지 않는다.
+3. **Tasks 1–8 honest blocker 고정.** 현재 150 uncovered와 validator 59건을 각 task report와 대조한다. exact leaf가 없는 항목, 서로 다른 의미·단위의 same-op 필드, composite/aspect/join/realtime gap은 alt mapping으로 닫지 않는다.
+4. **🔒 composite schema 결정.** systemic audit는 `STOP_NO_CHANGES`다. 감사 당시 실제 영향을 받는 uncovered는 38 unique occurrences/19 boards였고, 현재 metadata만으로 lossless한 subset 19개는 이미 다른 primary/alt에서 covered여서 순증가가 0이었다. 구현 전 per-part `format`, order/template/prefix, optional·missing policy, row selection/inheritance, aspect/sign, realtime recomposition/fail-closed 규칙과 대표 JSON migration을 승인한다.
+5. **🔒 Paper leaf·라우팅 결정.** `3GRO-0`의 6구간 금액 12건·2 op 등 독립 leaf 부재 항목은 Paper 저작 또는 명시적 예외 승인 전에는 닫지 않는다. `1JZW-0`은 정본 계획상 direct-board 전용 예외로, canonical operation/state 결정 전에는 정상 라우팅을 추측하지 않는다.
+6. **실앱 QA.** 4단계 창 캡처 vs Paper 시각 대조 🔒(로그인된 Paper Desktop/computer-use 또는 Paper MCP) · 헌장 게이트(밀도 하드 0, 문구 3원칙) · 사용자 검수 PDF 🔒(승인) · 실키움(모의) 봉투로 보드 카드 실데이터 표시 1회 🔒(모의투자 자격증명·장중).
+7. 보류 결정 4건 🔒 — 사용자에게 한 번에 물어 닫는다.
 
-승인 없이 진행 가능한 것: 1·2와 3의 헌장 게이트.
+승인 없이 가능한 것은 현재 상태의 읽기전용 재측정·기존 회귀 테스트·인계 문서 최신화·현재 체크포인트 커밋/푸시다. 시각 동작 변경, composite schema, Paper leaf 추가, 라우팅/예외 처리에는 각각의 명시적 승인이 필요하다.
 
 ---
 
@@ -135,18 +137,18 @@ eval "$(fnm env)"; export PYTHONIOENCODING=utf-8
 |---|---|---|---|
 | 추출 드리프트 | `backend/.venv/Scripts/python.exe scripts/paper_board_extract.py --check` | 읽기 | 보드 96줄 · `드리프트:` 줄 없음 · exit 0 |
 | 추출 전수(재생성) | `backend/.venv/Scripts/python.exe scripts/paper_board_extract.py` | **쓰기**(board.html·slots.json·index.json) | 템플릿 원문을 고쳤을 때만 |
-| 슬롯 검증 | `backend/.venv/Scripts/python.exe scripts/validate_board_slots.py [board…]` | 읽기 | `합계 문제 0` 목표(현재 40) |
+| 슬롯 검증 | `backend/.venv/Scripts/python.exe scripts/validate_board_slots.py [board…]` | 읽기 | 현재 정직한 기준선 `합계 문제 59 (b15 e44)`/27장 · exit 1. exact leaf/schema 승인 없이 0으로 만들지 않음 |
 | 게이트 읽기 | `cd backend && uv run python -c "from athena_api.card_surface_templates import get_registry; r=get_registry(); c=r.coverage(); print(len(r.boards), r.excluded_boards, {k:(v if not isinstance(v,list) else len(v)) for k,v in c.items()})" 2>/dev/null` | 읽기 | `96 [] {...}` — stderr의 소프트 예산 경고는 정상 |
 | 커버리지 판 | `python scripts/card_surface_coverage.py` | **쓰기**(`CARD_SURFACE_COVERAGE.md`) | 총괄 = 게이트 읽기 수치 |
 | 청크 드리프트 | `python scripts/build_board_registry.py --check` | 읽기 | `최신 — 보드 97장, 청크 6개` · exit 0. 붉으면 아래 빌드 |
 | 레지스트리 빌드 | `python scripts/build_board_registry.py` | **쓰기**(청크 7파일) | `보드 97장` |
-| scripts 테스트 | `backend/.venv/Scripts/python.exe -m pytest scripts/tests -q` | 읽기 | 실패 0 (10:1x 측정 235) |
-| app 단위 | `cd app && npm run test:unit` | 읽기 | 실패 0 (12:17 측정 2,042) |
-| backend 카드표면 | `cd backend && uv run pytest tests/unit/test_card_surface_templates.py tests/unit/test_card_surface_contract.py tests/api/test_canvas_push.py tests/unit/test_canvas_data_parity.py -q` | 읽기 | 실패 0 (10:1x 측정 154) |
-| backend 전수 | `cd backend && uv run pytest tests -q` (≈25분) | 읽기 | 기존 WIP RED 1건 외 0 |
-| 4단계 캡처 + 5단 기하 | `cd app && npm run verify:integrated-cards` | **쓰기**(`app/captures/integrated-cards/`) | `missing 0`, PNG 6×4 = 24장, `breakpoint_probes` 6×2(XL 1,360px·M 851px), P5·텍스트 상등 true, `max_overflow_x` 0, L/M/S/XS 세로 넘침/겹침 0, XL/M 배치 계약 통과(XL 원문 2px는 기록·제외) |
+| scripts 테스트 | `backend/.venv/Scripts/python.exe -m pytest scripts/tests -q` | 읽기 | 실패 0 (16:11 측정 241) |
+| app 단위 | `cd app && npm run test:unit` | 읽기 | 실패 0 (16:11 측정 2,042) |
+| backend 카드표면 | `cd backend && uv run pytest tests/unit/test_card_surface_templates.py tests/unit/test_card_surface_contract.py tests/api/test_canvas_push.py tests/unit/test_canvas_data_parity.py -q` | 읽기 | 실패 0 (16:11 측정 158) |
+| backend 전수 | `cd backend && uv run pytest tests -q` (≈25분) | 읽기 | 16:1x 측정 2,762 pass · 기존 WIP RED 1 · skip 5 |
+| 4단계 캡처 + 5단 기하 | `cd app && npm run verify:integrated-cards` | **쓰기**(`app/captures/integrated-cards/`) | 기존 수치 계약은 통과하지만 현재 육안 FAIL. `atomic_wrap_nodes`·`text_overlap_nodes` 하드 판정 추가 후 둘 다 0, `missing 0`, PNG 6×4 = 24장, probe 6×2, P5, overflow/배치 계약을 함께 만족해야 최종 PASS |
 
-인터프리터: 추출·검증·scripts 테스트는 `backend/.venv/Scripts/python.exe`, 백엔드 코드는 `uv run`, 커버리지·빌더는 시스템 `python`(의존성 없음). Workflow 스크립트는 LF만(CRLF는 "control characters"로 거부), 템플릿 프롬프트 안 백틱 금지. `.omc/`는 git 무시.
+인터프리터: 추출·검증·scripts 테스트는 `backend/.venv/Scripts/python.exe`, 백엔드 코드는 `uv run`, 커버리지·빌더는 시스템 `python`(의존성 없음). `.omc/`는 git 무시. 저장된 Workflow 스크립트의 LF·프롬프트 제약은 최초 실행의 역사적 기록일 뿐이며 현재 워크플로를 재실행하는 지침이 아니다.
 
 ---
 
@@ -170,7 +172,7 @@ eval "$(fnm env)"; export PYTHONIOENCODING=utf-8
 
 ## 10. 다시 조사하지 말 것
 
-- 커버리지 판은 로더에 위임한다(예전 67.8%는 alt_mappings·indexed를 모르던 계산이었고 D3에서 고쳤다). 분모는 로더 `coverage().visible_total`=3,534 하나다.
+- 커버리지 판은 로더에 위임한다(예전 67.8%는 alt_mappings·indexed를 모르던 계산이었고 D3에서 고쳤다). semantic authority 후보는 3,534개로 보존하며, 카드 표면 coverage의 유일한 분모는 `coverage().visible_total`=3,532다. 예비 `base:04|$.data[].924|1`·`951|1`만 visible universe에서 제외하고 hidden authority와 `base:1h/1279` 등은 불변이다.
 - 레일 블록 계수는 A5에서 고쳤다(호가 보드 13→2~4). 남은 것은 소프트 경고(레일 행 7~11, 19장)뿐이며 보드 재설계 대상이 아니다.
 - `rows_max` 하드 예산은 22(표 본문 20 + 합계 2), 레일 블록·KPI는 소프트. 구현 계획 문서의 밀도 줄은 2026-09-03에 로더 값으로 정정했다.
 - 레거시 `card-kind-*.js` 16개는 `app/shell.html`이 로드하는 **기존 CC 카드 경로**(호가 사다리·AITS 차트)다. 보드 표면과는 별개(보드 96장 중 `primary.renderer` 비-null은 32S7-0의 `athena-chart` 하나). 기존 카드 회귀를 막기 위해 삭제 금지.
@@ -190,3 +192,5 @@ eval "$(fnm env)"; export PYTHONIOENCODING=utf-8
 - 2026-09-03 12:07 — C5 독립 재리뷰의 잔여 2건을 1차 보강. 반응형 단계에서 고정 높이 hoist의 세로 내용 넘침·형제 겹침을 하드 실패로 만들고, XL/M 프로브가 접힘·KPI 행/열·primary/rail 상대 위치를 계약과 대조하도록 보강. 빈·중복·미등록 `ATHENA_VERIFY_BOARD_IDS`도 main 진입 시 즉시 실패. 기본 6장 24캡처+12 프로브 재생성 결과 surface overflow 0, P5·텍스트 상등 통과; KPI 행 계측의 false-negative는 12:17 재리뷰에서 발견·교정.
 - 2026-09-03 12:17 — 재리뷰가 높이가 다른 KPI 셀을 `top` 동일성으로 세어 3+2를 1+2+2로 오판하는 false-negative를 발견. 세로 구간 겹침 기반 순수 행 계산기와 4열 음성 테스트를 추가해 `2R3M-1` M 결과가 `[[3,2]]`·최대 3열로 교정됨. 기본 6장 24캡처+12 프로브 재통과, 앱 2,042/0. 문서의 세로 0 범위를 L/M/S/XS로 명시하고 XL Paper 원문 2px는 기록·게이트 제외로 정정.
 - 2026-09-03 12:52 — 재개 저작 `account-a` 리뷰·수정 완료. 최초 21건 감소 중 금액→shares 오매핑 12건과 의미 불일치 2건을 독립 리뷰가 발견. `c52a446`에서 거짓 매핑을 제거하고 account 필드 2건을 정확한 `2SKU-1` 슬롯으로 이동해 안전한 순증가 9건(coverage 3,388/3,534, 미도달 146, op 297/299), validator 37건/21장. `3GRO-0`에 6구간 금액 잎이 없어 12건·2 op는 Paper 표면 저작 전까지 명시적 blocker.
+- 2026-09-03 15:29 — W3 Tasks 1–8 독립 실행·리뷰 수정 완료. 예비 `base:04` 924/951만 card-surface universe에서 제외해 모수 3,534→3,532. 공유 트리 실측 coverage 3,382/3,532, 미도달 150, op 297/299, validator 59건(`b15 e44`)/27장. exact-leaf/composite/aspect/join/realtime gap은 거짓 alt로 닫지 않았다. systemic `extra_fields` audit는 스키마 불충분으로 `STOP_NO_CHANGES`; 사용자 schema 승인 및 대표 JSON migration 대기. final W3 gate 미실행.
+- 2026-09-03 16:11 — 추출기의 authored `kind` 덮어쓰기와 merge 전 count 계산을 RED→GREEN 회귀로 수정하고 96장 canonical 재생성. authored 의미 손실 0, 추출 `--check` 멱등, validator 59·coverage 3,382/3,532 유지, 청크 97장/6개 최신. scripts 241·backend 카드표면 158·app 2,042 통과, backend 전수는 기존 WIP 1건 외 2,762 통과. 통합 자동 수치는 6장/24 PNG/12 probe·overflow 0이지만 육안 전수에서 5보드의 문자 분절·행 텍스트 충돌을 발견해 final W3 시각 gate FAIL. explicit responsive role/atomic/paired 계약과 glyph hard gate 설계 승인 대기.
