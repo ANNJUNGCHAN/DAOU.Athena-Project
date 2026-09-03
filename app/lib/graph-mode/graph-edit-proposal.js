@@ -54,6 +54,12 @@ function normalizeProposal(message, relationLabels) {
     object,
     relation,
     relationText: dict[relation] || relation,
+    // 지울 관계의 id(2026-09-03). 있으면 '적용'이 그래프에서 **바로** 지운다 —
+    // 수집(대화를 캐는 일)과 편집(주인이 화면에서 고치는 일)은 다른 일이고, 편집을
+    // 배치까지 기다리게 하면 누른 직후 아무 일도 안 일어나 같은 카드를 반복해 누른다
+    // (실측). 없으면 예전 경로(답변 문장 제출 → 수집 때 반영)를 그대로 쓴다.
+    // op이 remove가 아닐 때는 쓰지 않는다 — 추가·수정의 직접 쓰기는 아직 없다.
+    relationId: message.relationId ? String(message.relationId).trim() || null : null,
     reason: message.reason ? String(message.reason).trim() || null : null,
   };
 }

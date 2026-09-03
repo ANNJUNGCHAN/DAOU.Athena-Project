@@ -2368,6 +2368,9 @@ function maybeForwardGraphChatAction(step, resultBlock) {
       subject: payload.subject == null ? null : payload.subject,
       object: payload.object,
       relation: payload.relation,
+      // 있으면 카드가 '적용'에서 바로 지운다(2026-09-03). 없으면 카드가 예전
+      // 경로(답변 문장 제출 → 수집 때 반영)를 그대로 쓴다.
+      relationId: payload.relation_id == null ? null : payload.relation_id,
       reason: payload.reason == null ? null : payload.reason,
     };
   }
@@ -4132,7 +4135,9 @@ ipcMain.handle('athena:orb-chat-submit', async (e, payload = {}) => {
 });
 
 
-async function fetchBrainJson(path, { params, signal } = {}) {
+// method/body를 받는다(2026-09-03) — 사람의 직접 취소가 POST라서 필요해졌다.
+// 기본값은 그대로 GET이므로 기존 호출자(전부 GET)는 한 줄도 안 바뀐다.
+async function fetchBrainJson(path, { params, signal, method, payload } = {}) {
   const token = historySink.getBearerToken();
   if (!token) return { ok: false, error: '로컬 베어러 토큰이 설정되지 않았다' };
   const url = new URL(path, historySink.getBackendUrl());
@@ -4143,7 +4148,14 @@ async function fetchBrainJson(path, { params, signal } = {}) {
   }
   let res;
   try {
-    res = await fetch(url, { headers: { Authorization: `Bearer ${token}` }, ...(signal ? { signal } : {}) });
+    const headers = { Authorization: `Bearer ${token}` };
+    if (payload !== undefined) headers['Content-Type'] = 'application/json';
+    res = await fetch(url, {
+      ...(method ? { method } : {}),
+      headers,
+      ...(payload === undefined ? {} : { body: JSON.stringify(payload) }),
+      ...(signal ? { signal } : {}),
+    });
   } catch (err) {
     return { ok: false, error: `요청 실패 — ${String((err && err.message) || err)}` };
   }
@@ -4194,6 +4206,30 @@ ipcMain.handle('athena:brain-surprising-connections', async (_e, { limit } = {})
     params: { limit },
   });
   if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
+// 사람의 직접 취소(2026-09-03) — 확정 카드의 '적용'이 부른다. 수집을 기다리지
+// 않고 바로 지운다: 수집(대화를 캐는 일)과 편집(주인이 화면에서 고치는 일)은
+// 다른 일이다. 모델은 이 채널에 닿지 않는다 — 렌더러의 카드만 부른다.
+ipcMain.handle('athena:brain-retract-relation', async (_e, { relationId } = {}) => {
+  const id = typeof relationId === 'string' ? relationId.trim() : '';
+  if (!id) return { ok: false, error: 'relationId가 없다' };
+  const result = await fetchBrainJson('/api/v1/brain/relations/retractions', {
+    method: 'POST',
+    payload: { relation_id: id },
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  // 지웠으면 화면을 바로 다시 읽게 한다 — 이 이벤트는 이미 canvas.js가 구독해
+  // refreshConversationGraphSurfaces()를 돈다(표·지도·숨은 연관·히어로 전부).
+  // broadcastConversationGraphUpdated()의 중복 방지 키를 타지 않는다: 사람이 방금
+  // 누른 편집은 '같은 그래프'로 접혀서는 안 된다.
+  if (result.body && result.body.removed && shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:brain-graph-updated', {
+      revision: result.body.revision,
+      trigger: 'human-retraction',
+    });
+  }
   return { ok: true, ...result.body };
 });
 
