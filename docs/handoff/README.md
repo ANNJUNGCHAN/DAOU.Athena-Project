@@ -59,7 +59,7 @@ kiumi/mini-cards 2 · ANNJUNGCHAN/main 1 · plugin-mode-doctrine 후속 1)를 �
 | 워크트리 | main + `.claude/worktrees/agent-dual-control-handoff-6f05c9` + `.claude/worktrees/settings-plugin-tab-absorption-6d550f` + Orca 2개(`orca/workspaces/DAOU.Athena/{hydra,main}`) |
 | 게이트 4종 | 4/4 PASS (6e26c6f, 저장소 루트에서만 돈다) |
 | app 단위 | **2,696 / 2,696** (6e26c6f) |
-| backend 전수 | 3,572 passed / 6 skipped / 0 failed (a408bb6 + 회귀 수정 시점) — 6e26c6f 재실행은 §3 |
+| backend 전수 | **3,619 passed / 6 skipped / 0 failed** (6e26c6f, 격리 HOME, 20분 25초) |
 | verify | semantic-workspaces 12/12 · hoga-live · kiumi 19 · plugins 154 · agent-paper-parity PASS |
 | 알려진 빨감 | `verify:integrated-cards` — `board 2SKU-1 M 프로브: container 1360px outside 720..959px`. card-surface tip에서도 동일. 그 트랙의 W3 반응형 미완(visual blocker) |
 
