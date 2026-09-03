@@ -306,6 +306,19 @@ test('팔레트 그룹은 registry가 선언한 순서 그대로 선다 — 화�
   assert.ok(kinds.indexOf('output.exit') !== -1);
 });
 
+test('팔레트 목록은 자기 스크롤 상자 안에만 있다 — 열이 캔버스보다 길어지지 않는다', () => {
+  const { root } = mount();
+  const scroll = byClass(root, 'backtest-vis-palette-scroll-body');
+  assert.equal(scroll.length, 1);
+  // 검색칸·머리말은 상자 밖(위)에 남고, 묶음은 전부 상자 안이다.
+  assert.equal(byClass(scroll[0], 'backtest-vis-search').length, 0);
+  assert.equal(byClass(scroll[0], 'backtest-vis-palette-head').length, 0);
+  assert.equal(
+    byClass(scroll[0], 'backtest-vis-palette-group').length,
+    byClass(root, 'backtest-vis-palette-group').length,
+  );
+});
+
 test('노드 검색은 registry 라벨로 좁힌다', () => {
   const { root, handle } = mount();
   const search = byClass(root, 'backtest-vis-search')[0];

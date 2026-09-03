@@ -149,12 +149,19 @@ const NOTICE_MS = 4000;
 
 function cloneGraph(graph) {
   const base = graph || {};
-  return {
+  const out = {
     graph_version: base.graph_version || '1',
     nodes: JSON.parse(JSON.stringify(base.nodes || [])),
     edges: JSON.parse(JSON.stringify(base.edges || [])),
     scenario: JSON.parse(JSON.stringify(base.scenario || {})),
   };
+  // 이름표(meta — 전략 이름·설명·태그·분류)는 이 편집기가 그리지 않는 값이지만 **그래프의
+  // 일부**다. 여기서 떨어뜨리면 노드 값 하나만 고쳐도 그 넷이 사라져 컴파일된 스펙이
+  // "시각 전략"이 되고, 저장할 bundle의 graph_hash도 서버가 다시 계산한 값과 어긋난다
+  // (2026-09-03 실측 — O07이 422 "bundle hash가 …다르다: graph_hash"로 막혔다).
+  // 그리지 않는다고 버리지 않는다.
+  if (base.meta) out.meta = JSON.parse(JSON.stringify(base.meta));
+  return out;
 }
 
 // 노드 ID는 만들 때 한 번 발급하고 이름·이동·값 변경에 그대로 둔다(US-006). 라벨이나 좌표에서
@@ -945,9 +952,18 @@ function createVisualEditor(container, options) {
     wrap.appendChild(search);
     refs.search = search;
 
+    // 묶음 목록은 자기 상자 안에서만 흐른다 — 종류가 늘어도 팔레트 열이 캔버스보다
+    // 길어지면 안 된다(그러면 캔버스가 그만큼 늘어나 화면 밖으로 나간다). 바깥 상자는
+    // 자리만 잡고, 안쪽 상자가 그 자리를 채우며 스스로 스크롤한다 — 안쪽이 절대 위치라
+    // 목록 길이가 열 높이 계산에 끼지 않는 것이 이 두 겹의 이유다(shell.css 짝 규칙).
+    const scroll = el('div', 'backtest-vis-palette-scroll');
+    const scrollBody = el('div', 'backtest-vis-palette-scroll-body');
+    scroll.appendChild(scrollBody);
+    wrap.appendChild(scroll);
+
     const groups = paletteGroups();
     if (!groups.length) {
-      wrap.appendChild(el('div', 'backtest-vis-palette-empty', PALETTE_EMPTY));
+      scrollBody.appendChild(el('div', 'backtest-vis-palette-empty', PALETTE_EMPTY));
       return wrap;
     }
     groups.forEach((group) => {
@@ -964,7 +980,7 @@ function createVisualEditor(container, options) {
         item.appendChild(el('span', 'backtest-vis-palette-label', k.label_ko || k.kind));
         box.appendChild(item);
       });
-      wrap.appendChild(box);
+      scrollBody.appendChild(box);
     });
     return wrap;
   }

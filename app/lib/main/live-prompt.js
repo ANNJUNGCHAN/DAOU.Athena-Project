@@ -229,6 +229,12 @@ function buildLiveSystemPrompt() {
 // 넘치면 몇 개가 더 있는지만 알리고, 그 이상은 모델이 list_files로 직접 읽는다.
 const PROJECT_FILE_LIMIT = 40;
 
+// 경고로만 찍는 기법 검사 id(docs/technique-code-rules.md의 검사표). 나머지 — 문법·계약·
+// 시험 실행·룩어헤드·워밍업 — 는 통과를 막는 차단이다. 둘을 같은 '실패'로 적으면 모델이
+// 무엇을 먼저 고쳐야 하는지 가리지 못하고, 경고 하나 때문에 통과한 코드를 다시 쓴다.
+// 백엔드가 severity를 실어 보내면 그것을 먼저 믿는다.
+const WARN_CHECK_IDS = new Set(['magic', 'structure']);
+
 function buildBacktestModePrefix(context, today) {
   const ctx = context && typeof context === 'object' ? context : null;
   const obj = (v) => (v && typeof v === 'object' ? v : null);
@@ -366,6 +372,104 @@ function buildBacktestModePrefix(context, today) {
     })
     : '없음';
 
+  // 새 기법 초안(사용자 구도 2026-09-03) — 프리셋이 없어진 자리다. 여기서 대화가 다루는
+  // 것은 폼도 지도 칸도 아니라 그 기법 파이썬의 **함수**다: 모델이 질문 카드로 알고리즘을
+  // 정하고 코드를 직접 쓰면, 앱이 자동으로 돌린 검사 3줄과 그 코드에서 뽑은 노드·흐름이
+  // 매 턴 이 블록으로 돌아온다. 블록이 없으면 모델은 자기가 방금 쓴 코드가 검사를 통과했는지
+  // 모른 채 다음 질문을 던지고, "노드 X()를 설명해줘"에 줄 범위 없이 지어낸 설명을 한다.
+  //
+  // technique 키는 캔버스가 새로 싣는 것이라 옛 컨텍스트에는 없다 — 없으면 검사 '아직 돌지
+  // 않았다', 노드 '아직 없다'로 내려앉고 절대 던지지 않는다.
+  const techniqueDraft = Boolean(ctx && ctx.techniqueDraft);
+  const technique = obj(ctx && ctx.technique);
+  const techniqueChecks = technique && Array.isArray(technique.checks) ? technique.checks : [];
+  const techniqueNodes = technique && Array.isArray(technique.nodes) ? technique.nodes : [];
+  const flows = obj(technique && technique.flows);
+  const techniqueName = (technique && typeof technique.name === 'string' && technique.name)
+    || (obj(ctx && ctx.spec) && typeof ctx.spec.name === 'string' && ctx.spec.name)
+    || '아직 없음';
+  const isWarnCheck = (c) => Boolean(obj(c)) && (c.severity === 'warn' || WARN_CHECK_IDS.has(c.id));
+  const blockingChecks = techniqueChecks.filter((c) => !isWarnCheck(c));
+  const warnHits = techniqueChecks.filter((c) => isWarnCheck(c) && !(obj(c) && c.ok));
+  const okChecks = blockingChecks.filter((c) => obj(c) && c.ok).length;
+  const stats = obj(technique && technique.stats);
+  // 줄 범위는 설명의 근거다 — 이것이 없으면 모델이 함수 본문을 기억으로 지어낸다.
+  const nodeRange = (node) => (node && node.first_line != null && node.last_line != null
+    ? `${node.first_line}–${node.last_line}줄`
+    : '줄 범위 모름');
+  const nodeSummary = (node) => (node && typeof node.summary_ko === 'string' && node.summary_ko
+    ? ` — ${node.summary_ko}`
+    : '');
+  // selectedNode는 id 문자열이지만, 캔버스가 노드 객체를 통째로 실어도 깨지지 않게 둘 다 받는다.
+  const selectedRaw = technique && technique.selectedNode;
+  const selectedId = typeof selectedRaw === 'string'
+    ? selectedRaw
+    : (obj(selectedRaw) && typeof selectedRaw.id === 'string' ? selectedRaw.id : '');
+  const selectedNode = selectedId
+    ? (techniqueNodes.filter((n) => obj(n) && n.id === selectedId)[0] || null)
+    : null;
+  const flowLine = (key, ko) => {
+    const seq = flows && Array.isArray(flows[key]) ? flows[key] : [];
+    return seq.length ? `흐름 ${ko}: ${seq.join(' → ')}` : '';
+  };
+  const granularityKo = { function: '함수', stage: '단계' };
+  const techniqueBlock = techniqueDraft
+    ? [
+      `새 기법 만들기 — 이 화면은 기법 초안이다. 이름: ${techniqueName}`,
+      techniqueChecks.length
+        ? `검사: ${okChecks}/${blockingChecks.length}${technique.passed ? ' — 모두 통과' : ' — 아직 통과하지 못했다'}`
+          + (warnHits.length ? ` · 경고 ${warnHits.length}건 — 통과를 막지는 않는다` : '')
+        : '검사: 아직 돌지 않았다',
+    ]
+      .concat(techniqueChecks.map((c) => `- ${label(c && c.label_ko)}: ${c && c.ok ? '통과' : (isWarnCheck(c) ? '경고' : '실패')}`
+        + (c && c.detail_ko ? ` — ${c.detail_ko}` : '')
+        + (c && c.ok ? '' : (isWarnCheck(c) ? ' (고치면 좋음)' : ' (고쳐야 함)'))))
+      .concat([
+        stats
+          ? `시험 실행: 워밍업 ${stats.warmup_bars}봉 · entry ${stats.entry} · exit ${stats.exit} · ${stats.rows}행`
+          : '',
+        techniqueNodes.length
+          ? `노드(${granularityKo[technique.granularity] || '모름'} 단위) — 이 기법의 함수들:`
+          : '노드: 아직 없다 — 검사를 모두 통과하면 앱이 코드에서 뽑아 온다.',
+      ])
+      .concat(techniqueNodes.map((n) => `- ${label(n && n.id)} (${label(n && n.role)})`
+        + ` ${nodeRange(n)}${nodeSummary(n)}`))
+      .concat([
+        flowLine('entry', '진입'),
+        flowLine('exit', '청산'),
+        selectedNode
+          ? `선택된 노드: ${selectedNode.id} (${nodeRange(selectedNode)})${nodeSummary(selectedNode)}`
+          : (selectedId
+            ? `선택된 노드: ${selectedId} — 노드 목록에 없다`
+            : '선택된 노드: 없음 — 사용자가 아무것도 고르지 않았다'),
+      ])
+      .filter(Boolean)
+      .join('\n')
+    : '';
+  // 기법 초안일 때만 서는 규칙. 초안이 아니면 빈 배열이라 접두는 이전과 바이트 동일하다.
+  const techniqueRules = techniqueDraft ? [
+    '- **여기는 새 기법 초안이다 — 코드창은 네가 제어한다.** 위의 지도 칸 규칙 대신 이 규칙을 따른다: 노드는 이 기법 파이썬의 함수 한 단위라, 사용자에게 함수 이름과 줄 범위로 말해도 된다.',
+    '- **알고리즘은 질문 카드로 하나씩 정한다.** athena_backtest action=technique_question 으로 한 턴에 질문 하나만 던진다 — choices는 2~4개이고 그중 하나에 recommended와 why_ko(권장하는 이유)를 붙인다. 네가 대신 고르지 마라; 사용자가 카드에서 고르면 그 답이 채팅으로 온다.',
+    '- **답이 오면 propose_code로 코드를 바로 쓴다.** 편집기에 즉시 들어가므로 "적용했다"가 아니라 "썼다"고 말한다. 코드는 전체(PARAMS 딕셔너리 + def signals(df, p))를 보낸다.',
+    '- **코드를 쓸 때 원칙 10개를 그대로 지킨다**(원본: docs/technique-code-rules.md — 이 열 줄과 자동 검사가 같은 문장을 쓴다).',
+    '  1. 계약: 최상위 PARAMS(리터럴 dict — 이름 → {default,min,max,step,type})와 signals(df, p)가 있고, entry·exit 두 bool 열을 돌려준다. 쓸 수 있는 것은 athena_bt(as bt)·pandas·numpy뿐이다.',
+    '  2. 노드 단위 = 최상위 함수 하나 = 판단 하나. signals()는 조립(호출 순서)만 하고 계산은 함수로 뺀다 — 지표 compute_*, 진입 should_enter, 청산 should_exit, 필요 시 손절·익절 stop_*/take_*, 비중 position_size.',
+    '  3. 함수 첫 줄 docstring이 곧 노드 설명이다 — 사람 말 한 문장에 숫자·근거를 담는다(예: """20봉 최고가에 ATR×배수를 얹은 돌파선을 만든다.""").',
+    '  4. 미래를 보지 않는다: shift(-n)·rolling(center=True)·미래 인덱스 접근 금지. 오늘 종가로 오늘 판단하되 체결가는 앱이 다음 봉 시가로 정한다 — 코드가 체결가를 계산하지 않는다.',
+    '  5. 워밍업: 지표가 준비되기 전 봉에는 신호를 내지 않는다(NaN은 False).',
+    '  6. 결정성: 난수·현재 시각·외부 상태를 쓰지 않는다. 같은 입력이면 같은 출력.',
+    '  7. 매직 넘버 금지: 기간·배수·문턱은 전부 PARAMS로(범위 포함). 0·1·-1·100·0.5 같은 항등·단위 값만 예외.',
+    '  8. 한 열 한 뜻: 중간 열 이름은 무엇인지 드러나게(atr, breakout_level), entry/exit는 bool.',
+    '  9. 부작용 없음: 파일·네트워크·print 남발 금지(샌드박스가 막는다).',
+    '  10. 완성 기준은 자동 검사 통과: 문법·계약·시험 실행 3개가 통과하고 룩어헤드·워밍업 검사가 통과하며 매직 넘버·구조 경고가 0이다.',
+    '- **노드 단위는 최상위 함수 하나 — 이름이 역할을 정하고 docstring 첫 줄이 노드 설명이 된다.** enter·entry·buy면 진입, exit·sell·stop·close면 청산, size·position·qty면 비중, 어느 낱말도 없이 수치 시리즈를 돌려주면 지표다. signals() 하나에 다 몰아넣으면 노드가 하나뿐이라 4단계 폴백으로 접힌다 — 그건 그림이 아니다.',
+    '- **검사는 앱이 자동으로 돌린다.** 코드를 쓸 때마다 문법·계약·짧은 구간 시험 실행 결과가 아래 "검사"에 실려 온다 — 실패가 있으면 사용자에게 묻지 말고 원인을 고쳐 propose_code로 다시 쓴다(직접 확인이 필요하면 action=technique_check).',
+    '- **차단과 경고를 가려서 고친다.** 아래 검사 줄에 "(고쳐야 함)"이 붙은 것은 차단이라 통과할 때까지 고쳐 다시 쓴다(문법·계약·시험 실행·룩어헤드·워밍업). "(고치면 좋음)"이 붙은 것은 경고라 통과를 막지 않지만(매직 넘버·구조) 다음에 코드를 쓸 때 함께 고치고, 경고 때문에 통과한 코드를 되돌리지 않는다.',
+    '- **검사를 모두 통과하면 노드·흐름 창이 자동으로 열린다** — 열렸다는 사실을 사용자에게 한 줄로 알린다.',
+    '- **노드·흐름·기법 전체를 설명해달라고 하면 그 함수의 줄 범위 코드를 근거로 사람 말로 설명한다.** 아래에 노드가 없으면 action=technique_nodes로 지금 코드의 노드·흐름을 받아 온다. 설명의 마지막 줄은 "이상한 점이 있으면 말해 주세요 — 코드를 고쳐 노드를 다시 그립니다".',
+    '- **이상하다는 말이 나오면 propose_code로 고친다** — 코드를 고치면 검사와 노드가 다시 그려진다(코드 ↔ 노드 ↔ 백테스트를 오간다). 백테스트 실행은 그대로 사람이 [실행]을 누르고, 이 기법을 목록에 넣는 승인도 사람이 누른다.',
+  ] : [];
+
   return [
     `[모드: 백테스트] 오늘: ${today ? String(today) : '미상'}`,
     '사용자는 백테스트 캔버스에 있고, 캔버스는 채팅이 제어한다. 이 턴의 규칙:',
@@ -390,7 +494,9 @@ function buildBacktestModePrefix(context, today) {
     '- 실행은 propose_spec/propose_code에 suggest_run:true를 넣으면 채팅에 [실행] 버튼이 뜬다 — 사람이 누른다. run·optimize·backfill 액션을 직접 부르지 않는다.',
     '- 실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다.',
     '- 이미 채워진 값은 되묻지 않는다. 모르면 짧게 하나만 묻는다. 실행당 종목 1개, 날짜 YYYYMMDD. 답은 두세 문장 — 무엇을 바꿨는지 한 줄과 다음 질문 한 줄.',
+    ...techniqueRules,
     `현재 화면: tab=${label(ctx && ctx.tab)} · designTab=${label(ctx && ctx.designTab)} · 실행경로=${label(ctx && ctx.runPath)}`,
+    techniqueBlock,
     mapBlock,
     `현재 폼(JSON): ${spec}`,
     `실행 전 확인: ${pending}`,
@@ -405,7 +511,7 @@ function buildBacktestModePrefix(context, today) {
     `프로젝트: ${projectLine}`,
     `프로젝트 파일(.py): ${filesLine}`,
     `파일 적용 대기: ${fileDraft}`,
-  ].join('\n');
+  ].filter(Boolean).join('\n');
 }
 
 // 그래프 모드 접두(2026-09-02) — 캔버스가 그래프 모드일 때만 턴 앞에 붙는다.

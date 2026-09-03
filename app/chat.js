@@ -3165,6 +3165,9 @@ const BACKTEST_CHANGE_TITLES = {
   visual_patch: '그래프 + 코드 패치',
   visual_synced: '동기화 완료',
   visual_conflict: '다시 검토',
+  // 새 기법 만들기(보드 20·21, 2026-09-03) — AI가 하나씩 묻고, 검사는 자동으로 돈다.
+  technique_question: '하나만 정해요',
+  technique_check: '자동 검사',
 };
 
 function backtestChangeRowText(row) {
@@ -3410,11 +3413,176 @@ function renderBacktestVisualCard(receipt) {
   _mountTurn(line, card);
 }
 
+// ---------- 새 기법 만들기 카드 (보드 20·21, 2026-09-03) ----------
+// 둘 다 아무것도 적용하지 않는다.
+//   technique_question — AI가 알고리즘을 정하려고 던진 질문. 선택지를 누르면 그 문장이
+//     **사용자 메시지로** 나간다(캔버스의 [+ 새 기법 만들기] 첫 문장과 같은 길이다).
+//     AI가 대신 고르지 않는다는 규칙이 여기서 화면으로 지켜진다.
+//   technique_check — 코드가 바뀔 때마다 자동으로 돈 검사와 통계 한 줄. 항목 수는 세지
+//     않는다(백엔드가 차단·경고를 더 보낸다). 버튼이 없다: 사람이 누를 것이 없기
+//     때문이다(검사는 전부 자동이다).
+const BACKTEST_TECHNIQUE_KINDS = new Set(['technique_question', 'technique_check']);
+
+// 캔버스가 대화를 시작하는 길과 같다(backtest-canvas.js emitChatSubmit → 이 파일의
+// 'athena:chat-submit' 수신부 → dispatchUserQuery). 입력창에 치고 Enter를 누른 것과 같다.
+function backtestChatSubmit(text) {
+  const value = String(text || '').trim();
+  if (!value) return;
+  document.dispatchEvent(new CustomEvent('athena:chat-submit', { detail: { text: value } }));
+}
+
+// 검사 줄의 갈래 — severity가 'warn'인 것만 경고이고 나머지는 전부 차단이다(캔버스
+// 명령창과 같은 규칙). 통과 여부는 서버가 정한 receipt.passed를 쓴다 — 카드가 다시
+// 세지 않는다: 경고 하나에 '아직 통과하지 못했습니다'라고 적으면 화면이 거짓말을 한다.
+function backtestCheckIsWarn(check) {
+  return !!check && String(check.severity || '') === 'warn';
+}
+
+// 요약 한 줄 — '차단 2/3 통과 · 경고 1'. 경고는 아직 안 고친 것만 센다.
+function backtestCheckSummary(checks) {
+  const list = Array.isArray(checks) ? checks : [];
+  const blocks = list.filter((c) => c && !backtestCheckIsWarn(c));
+  const done = blocks.filter((c) => c.ok).length;
+  const warn = list.filter((c) => backtestCheckIsWarn(c) && !c.ok).length;
+  return `차단 ${done}/${blocks.length} 통과 · 경고 ${warn}`;
+}
+
+function renderBacktestTechniqueCard(receipt) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent backtest-change backtest-technique';
+
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const kindPill = document.createElement('span');
+  kindPill.className = 'routine-draft-pill is-filled';
+  kindPill.textContent = BACKTEST_CHANGE_TITLES[receipt.kind] || '새 기법';
+  head.appendChild(kindPill);
+  card.appendChild(head);
+
+  const bodyLine = (text, className) => {
+    if (!text) return;
+    const el = document.createElement('div');
+    el.className = className || 'agent-body';
+    el.textContent = text;
+    card.appendChild(el);
+  };
+
+  if (receipt.kind === 'technique_question') {
+    const q = receipt.question || {};
+    bodyLine(q.question_ko || '');
+    bodyLine(q.why_ko || '', 'agent-source');
+
+    const status = document.createElement('span');
+    status.className = 'agent-mode';
+    const list = document.createElement('div');
+    list.className = 'backtest-visual-choices';
+    list.setAttribute('role', 'group');
+    if (q.question_ko) list.setAttribute('aria-label', q.question_ko);
+    const picks = [];
+    (Array.isArray(q.choices) ? q.choices : []).forEach((choice) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'backtest-visual-choice backtest-technique-choice';
+      const label = document.createElement('span');
+      label.className = 'backtest-visual-choice-label';
+      label.textContent = choice.label_ko || '';
+      btn.appendChild(label);
+      if (choice.recommended) {
+        const rec = document.createElement('span');
+        rec.className = 'routine-draft-pill is-filled';
+        rec.textContent = '권장';
+        btn.appendChild(rec);
+      }
+      if (choice.detail_ko) {
+        const detail = document.createElement('span');
+        detail.className = 'backtest-visual-choice-detail';
+        detail.textContent = choice.detail_ko;
+        btn.appendChild(detail);
+      }
+      btn.addEventListener('click', () => {
+        // 고른 것은 사람의 대답이다 — 그대로 다음 사용자 메시지가 된다.
+        picks.forEach((b) => { b.disabled = true; });
+        btn.classList.add('is-on');
+        status.textContent = '고른 답을 보냈습니다';
+        backtestChatSubmit(choice.label_ko || '');
+      });
+      picks.push(btn);
+      list.appendChild(btn);
+    });
+    card.appendChild(list);
+    const actions = document.createElement('div');
+    actions.className = 'routine-approval-actions backtest-change-actions';
+    actions.appendChild(status);
+    card.appendChild(actions);
+  } else {
+    // 검사 줄 — 백엔드가 준 항목을 그대로 그린다(3개라고 세지 않는다). 차단과 경고를
+    // 점 색으로 나누고, 경고에는 '고치면 좋음'을 붙여 통과를 막지 않는다고 적는다.
+    const list = Array.isArray(receipt.checks) ? receipt.checks : [];
+    const checks = document.createElement('div');
+    checks.className = 'backtest-technique-checks';
+    if (list.length) {
+      const summary = document.createElement('div');
+      summary.className = 'backtest-technique-summary';
+      summary.textContent = backtestCheckSummary(list);
+      checks.appendChild(summary);
+    }
+    list.forEach((check) => {
+      const warn = backtestCheckIsWarn(check);
+      const ok = !!(check && check.ok);
+      const row = document.createElement('div');
+      const tone = ok ? ' is-ok' : (warn ? ' is-warn' : ' is-fail');
+      row.className = `backtest-technique-check${tone}`;
+      const dot = document.createElement('span');
+      dot.className = 'backtest-technique-check-dot';
+      row.appendChild(dot);
+      const mark = document.createElement('span');
+      mark.className = 'backtest-technique-check-mark';
+      mark.textContent = ok ? '통과' : (warn ? '경고' : '고쳐야 함');
+      row.appendChild(mark);
+      const label = document.createElement('span');
+      label.className = 'backtest-technique-check-label';
+      label.textContent = (check && (check.label_ko || check.id)) || '';
+      row.appendChild(label);
+      if (check && check.detail_ko) {
+        const detail = document.createElement('span');
+        detail.className = 'backtest-technique-check-detail';
+        detail.textContent = check.detail_ko;
+        row.appendChild(detail);
+      }
+      if (warn && !ok) {
+        const note = document.createElement('span');
+        note.className = 'backtest-technique-check-note';
+        note.textContent = '고치면 좋음';
+        row.appendChild(note);
+      }
+      checks.appendChild(row);
+    });
+    card.appendChild(checks);
+    const stats = receipt.stats;
+    if (stats) {
+      const parts = [];
+      if (stats.warmup_bars != null) parts.push(`워밍업 ${stats.warmup_bars}봉`);
+      if (stats.entry != null) parts.push(`진입 신호 ${stats.entry}`);
+      if (stats.exit != null) parts.push(`청산 신호 ${stats.exit}`);
+      if (stats.rows != null) parts.push(`봉 ${stats.rows}개`);
+      bodyLine(parts.join(' · '), 'backtest-technique-stats');
+    }
+    bodyLine(receipt.passed ? '노드·흐름 창이 열렸습니다' : '아직 통과하지 못했습니다', 'agent-source');
+  }
+
+  _mountTurn(line, card);
+}
+
 function renderBacktestChangeCard(receipt) {
   if (!receipt || typeof receipt !== 'object') return;
   // 시각 설계 4종은 머리 태그와 상태 문구가 다르다 — 질문 카드에 "반영 안 됨"을 적으면
   // 사람이 실패로 읽는다. 기존 spec/code/file 초안 렌더에 분기를 섞지 않고 나눈다.
   if (BACKTEST_VISUAL_KINDS.has(receipt.kind)) { renderBacktestVisualCard(receipt); return; }
+  // 새 기법 만들기 2종도 머리 태그와 버튼이 다르다 — 검사 카드에는 누를 것이 없고,
+  // 질문 카드의 버튼은 적용이 아니라 **대답을 보내는** 자리다.
+  if (BACKTEST_TECHNIQUE_KINDS.has(receipt.kind)) { renderBacktestTechniqueCard(receipt); return; }
 
 
   const line = document.createElement('div');
@@ -3653,6 +3821,15 @@ window.athena.on('athena:backtest-chat-action', async (action) => {
 // 캔버스가 document에 던지는 이 이벤트가 그 하나뿐인 통로다(backtest-canvas.js emitChatCard).
 document.addEventListener('athena:backtest-receipt', (event) => {
   renderBacktestChangeCard(event && event.detail);
+});
+
+// 캔버스가 대화를 **시작**해야 하는 자리 — 백테스트 [+ 새 기법 만들기]가 던진다.
+// 입력창과 제출은 이 파일에만 있다(dispatchUserQuery). 캔버스는 첫 문장만 넘기고,
+// 보내는 길은 사람이 Enter를 눌렀을 때와 같다 — 위 영수증 통로와 같은 문법이다.
+document.addEventListener('athena:chat-submit', (event) => {
+  const text = String((event && event.detail && event.detail.text) || '').trim();
+  if (!text) return;
+  dispatchUserQuery(text);
 });
 
 // ---------- 주문 확인 모드 — #order (P4, 2026-08-19) ----------

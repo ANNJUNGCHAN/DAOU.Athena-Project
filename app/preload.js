@@ -116,6 +116,9 @@ const INVOKE_CHANNELS = new Set([
   // 흐름 지도(2026-09-03) — 지도는 조회 전용이고 codegen은 저장하지 않는다.
   'athena:backtest-map',
   'athena:backtest-codegen',
+  // 새 기법 만들기(보드 20·21) — 코드를 노드로 자르는 길과 자동 검사 3개.
+  'athena:backtest-technique-nodes',
+  'athena:backtest-technique-check',
   // 시각 설계 ↔ 코드 왕복(2026-09-03) — question·patch는 수정안을 만들 뿐이고,
   // save는 비활성 초안 버전 하나를 남길 뿐이다(활성화·실행은 여전히 다른 버튼).
   'athena:backtest-visual-registry',

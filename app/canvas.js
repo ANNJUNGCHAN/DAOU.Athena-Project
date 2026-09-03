@@ -2715,6 +2715,19 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(backtestError(res, '지도 뒤의 코드를 만들지 못했습니다'));
     return res.data;
   },
+  // 새 기법 만들기(2026-09-03, 보드 20·21) — 코드 한 덩이를 두 가지로 읽는 둘.
+  // 노드는 그 기법 파이썬의 함수 한 단위이고(범용 팔레트가 아니다), 검사는 문법·계약·
+  // 짧은 구간 시험 실행 세 가지다. 라우트가 없는 백엔드(404)는 캔버스가 그대로 본다.
+  techniqueNodes: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-technique-nodes', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '코드를 노드로 읽지 못했습니다'));
+    return res.data;
+  },
+  techniqueCheck: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-technique-check', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '검사를 돌리지 못했습니다'));
+    return res.data;
+  },
   // 시각 설계 ↔ 코드 왕복(2026-09-03, US-007/008/009) — 지도 탭이 편집 가능해지는 자리.
   // 위 map/codegen과 같은 봉투 규칙이다. 라우트가 없는 백엔드(404)를 만나면 캔버스가 그
   // 실패를 한 번 보고 지도를 읽기 전용으로 접는다 — 여기서 감추면 화면이 이유를 못 댄다.
@@ -3408,7 +3421,11 @@ async function loadHiddenLinks() {
   // 스텝14 — 그래프 지도(핑크 점선)·컨텍스트 패널("숨은" 관계 행)이 재사용할
   // 캐시를 여기서 채운다(위 lastSurprisingConnections 선언 참고).
   lastSurprisingConnections = Array.isArray(res.connections) ? res.connections : [];
-  window.AthenaLib.HiddenLinks.renderHiddenLinks(container, res.connections);
+  // 관계명 한글 사전을 주입한다(2026-09-03) — 없으면 화면에 belongs_to가 샌다.
+  // 사전의 진실은 controller.js RELATION_LABELS 하나다(graph-edit-proposal.js와 같은 규약).
+  window.AthenaLib.HiddenLinks.renderHiddenLinks(container, res.connections, {
+    relationLabels: window.AthenaLib.GraphModeController.RELATION_LABELS,
+  });
 }
 
 // 성향 신호 전체를 받아 캐시에 담는다(위 lastProfileSignals 주석 참고).

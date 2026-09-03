@@ -1384,6 +1384,11 @@ const BACKTEST_EXTRA_CHANNELS = {
   'athena:backtest-map': backtestBridge.fetchMap,
   // 지도 뒤의 코드 생성 — 저장하지 않는다(소스만 돌려준다, §7.3).
   'athena:backtest-codegen': backtestBridge.fetchCodegen,
+  // 새 기법 만들기(2026-09-03, 보드 20·21) — 코드 한 덩이를 노드로 자르는 길과
+  // 자동 검사 3개를 도는 길. 둘 다 저장하지 않는다(검사의 시험 실행도 이력을 남기지
+  // 않는다) — 그 경계는 백엔드가 진다.
+  'athena:backtest-technique-nodes': backtestBridge.fetchTechniqueNodes,
+  'athena:backtest-technique-check': backtestBridge.fetchTechniqueCheck,
   // 시각 설계 ↔ 코드 왕복(2026-09-03) — 대화형 오류 수정 계약의 요청 표면이다.
   // visual-save는 기존 버전 라우트로 간다(새 저장 경로 없음). 저장해도 활성화·실행은
   // 일어나지 않는다 — 그 경계는 백엔드가 지고, 여기서는 프록시만 한다.
@@ -2409,7 +2414,8 @@ function maybeForwardBacktestChatAction(step, resultBlock) {
       suggest_run: input.suggest_run === true,
     };
   } else if (action === 'propose_spec' || action === 'navigate' || action === 'propose_optimize'
-    || action === 'visual_question' || action === 'visual_patch') {
+    || action === 'visual_question' || action === 'visual_patch'
+    || action === 'technique_question') {
     const text = extractToolResultText(resultBlock.content);
     if (!text) return;
     let payload;
@@ -2431,6 +2437,10 @@ function maybeForwardBacktestChatAction(step, resultBlock) {
       message = { kind: 'visual_question', payload: payload.payload };
     } else if (action === 'visual_patch' && payload.kind === 'visual_patch') {
       message = { kind: 'visual_patch', payload: payload.payload };
+    } else if (action === 'technique_question' && payload.kind === 'technique_question') {
+      // 새 기법 만들기의 질문 카드 — visual_question과 같은 모양이다. 고른 선택지는
+      // 캔버스가 채팅 입력으로 되돌려 보낸다(모델이 대신 고르지 않는다).
+      message = { kind: 'technique_question', payload: payload.payload };
     }
   }
   if (!message) return;

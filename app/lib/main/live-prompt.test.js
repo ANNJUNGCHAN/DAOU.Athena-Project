@@ -952,3 +952,250 @@ test('buildBacktestModePrefix: code_only면 동기화됐다고 말하지 말고 
   // code_only:false인 기본 fixture에는 줄이 없다.
   assert.ok(!buildBacktestModePrefix(BT_GRAPH_CONTEXT, '20260903').includes('코드 전용 분기'));
 });
+
+// ---- 새 기법 초안(사용자 구도 2026-09-03) — 프리셋 없이 AI가 코드창을 제어한다 ----
+// 여기서 고정하는 것은 두 가지다. (1) 모델이 자기가 방금 쓴 코드의 검사 결과와 그
+// 코드에서 뽑힌 노드·흐름을 볼 수 있는가 — 이것이 없으면 통과 여부도 모른 채 다음
+// 질문을 던지고, "노드 X()를 설명해줘"에 줄 범위 없이 지어낸다. (2) 기법 초안이
+// 아닐 때는 이 블록도 규칙도 서지 않는가 — 그 턴은 이전과 바이트 동일해야 한다.
+
+const BT_TECHNIQUE_CONTEXT = {
+  tab: 'design',
+  designTab: 'nodes',
+  runPath: 'code',
+  techniqueDraft: true,
+  spec: { name: '새 기법', symbols: ['005930'] },
+  technique: {
+    checks: [
+      { id: 'syntax', label_ko: '문법·금지 import', ok: true, detail_ko: '' },
+      { id: 'contract', label_ko: 'signals(df, p) 계약 · entry/exit 두 열', ok: true, detail_ko: '' },
+      { id: 'dryrun', label_ko: '짧은 구간 시험 실행', ok: true, detail_ko: '워밍업 59봉 · entry 41 · exit 41' },
+    ],
+    passed: true,
+    stats: { warmup_bars: 59, entry: 41, exit: 41, rows: 606 },
+    nodes: [
+      {
+        id: 'compute_atr', label: 'compute_atr()', summary_ko: '변동폭을 잽니다',
+        first_line: 12, last_line: 24, role: 'indicator', stage: 'indicators',
+      },
+      {
+        id: 'should_enter', label: 'should_enter()', summary_ko: '돌파했는지 봅니다',
+        first_line: 26, last_line: 33, role: 'entry', stage: 'conditions',
+      },
+      {
+        id: 'should_exit', label: 'should_exit()', summary_ko: '',
+        first_line: 35, last_line: 41, role: 'exit', stage: 'conditions',
+      },
+    ],
+    flows: { entry: ['compute_atr', 'should_enter'], exit: ['compute_atr', 'should_exit'] },
+    granularity: 'function',
+    selectedNode: 'should_enter',
+    lastCheckAt: 1756900000000,
+  },
+};
+
+test('buildBacktestModePrefix: 기법 초안 블록은 이름·검사 3줄·시험 실행 통계를 싣는다', () => {
+  const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
+  assert.ok(p.includes('새 기법 만들기 — 이 화면은 기법 초안이다. 이름: 새 기법'));
+  assert.ok(p.includes('검사: 3/3 — 모두 통과'));
+  assert.ok(p.includes('- 문법·금지 import: 통과'));
+  assert.ok(p.includes('- signals(df, p) 계약 · entry/exit 두 열: 통과'));
+  assert.ok(p.includes('- 짧은 구간 시험 실행: 통과 — 워밍업 59봉 · entry 41 · exit 41'));
+  assert.ok(p.includes('시험 실행: 워밍업 59봉 · entry 41 · exit 41 · 606행'));
+});
+
+test('buildBacktestModePrefix: 검사 실패는 실패로 찍고 detail_ko를 그대로 붙인다', () => {
+  const p = buildBacktestModePrefix({
+    techniqueDraft: true,
+    technique: {
+      checks: [
+        { id: 'syntax', label_ko: '문법·금지 import', ok: true, detail_ko: '' },
+        { id: 'contract', label_ko: 'signals(df, p) 계약 · entry/exit 두 열', ok: false, detail_ko: 'entry 열이 없습니다' },
+        { id: 'dryrun', label_ko: '짧은 구간 시험 실행', ok: false, detail_ko: '봉 캐시 없음 — 대상을 정하면 시험 실행합니다' },
+      ],
+      passed: false,
+      stats: null,
+    },
+  }, '20260903');
+  assert.ok(p.includes('검사: 1/3 — 아직 통과하지 못했다'));
+  assert.ok(p.includes('- signals(df, p) 계약 · entry/exit 두 열: 실패 — entry 열이 없습니다'));
+  assert.ok(p.includes('- 짧은 구간 시험 실행: 실패 — 봉 캐시 없음 — 대상을 정하면 시험 실행합니다'));
+  // stats가 null이면 통계 줄 자체가 서지 않는다 — 지어낼 숫자를 주지 않는다.
+  assert.ok(!p.includes('시험 실행: 워밍업'));
+});
+
+test('buildBacktestModePrefix: 노드는 id·역할·줄 범위·한 줄 설명으로, 흐름은 순서 그대로 싣는다', () => {
+  const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
+  assert.ok(p.includes('노드(함수 단위) — 이 기법의 함수들:'));
+  assert.ok(p.includes('- compute_atr (indicator) 12–24줄 — 변동폭을 잽니다'));
+  assert.ok(p.includes('- should_enter (entry) 26–33줄 — 돌파했는지 봅니다'));
+  // summary_ko가 빈 문자열이면 설명 꼬리를 붙이지 않는다(계약: 없으면 빈 문자열).
+  assert.ok(p.includes('- should_exit (exit) 35–41줄\n'));
+  assert.ok(p.includes('흐름 진입: compute_atr → should_enter'));
+  assert.ok(p.includes('흐름 청산: compute_atr → should_exit'));
+});
+
+test('buildBacktestModePrefix: 선택된 노드는 줄 범위와 설명을 함께 싣는다', () => {
+  const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
+  assert.ok(p.includes('선택된 노드: should_enter (26–33줄) — 돌파했는지 봅니다'));
+  // 고른 것이 없으면 없다고 말한다 — 화면에 없는 노드를 중심으로 답하지 않게.
+  const none = buildBacktestModePrefix({
+    techniqueDraft: true,
+    technique: Object.assign({}, BT_TECHNIQUE_CONTEXT.technique, { selectedNode: null }),
+  }, '20260903');
+  assert.ok(none.includes('선택된 노드: 없음 — 사용자가 아무것도 고르지 않았다'));
+});
+
+test('buildBacktestModePrefix: 기법 초안인데 technique 키가 없으면 아직 안 돌았다고만 적고 던지지 않는다', () => {
+  const p = buildBacktestModePrefix({ techniqueDraft: true }, '20260903');
+  assert.ok(p.includes('새 기법 만들기 — 이 화면은 기법 초안이다. 이름: 아직 없음'));
+  assert.ok(p.includes('검사: 아직 돌지 않았다'));
+  assert.ok(p.includes('노드: 아직 없다 — 검사를 모두 통과하면 앱이 코드에서 뽑아 온다.'));
+  assert.ok(p.includes('선택된 노드: 없음'));
+  assert.ok(!p.includes('흐름 진입:'));
+});
+
+test('buildBacktestModePrefix: 기법 초안 규칙 — 질문 하나씩, 답이 오면 바로 쓴다', () => {
+  const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
+  assert.ok(p.includes('여기는 새 기법 초안이다 — 코드창은 네가 제어한다'));
+  assert.ok(p.includes('노드는 이 기법 파이썬의 함수 한 단위라, 사용자에게 함수 이름과 줄 범위로 말해도 된다'));
+  assert.ok(p.includes('athena_backtest action=technique_question 으로 한 턴에 질문 하나만 던진다'));
+  assert.ok(p.includes('choices는 2~4개이고 그중 하나에 recommended와 why_ko(권장하는 이유)를 붙인다'));
+  assert.ok(p.includes('네가 대신 고르지 마라'));
+  assert.ok(p.includes('답이 오면 propose_code로 코드를 바로 쓴다'));
+  assert.ok(p.includes('"적용했다"가 아니라 "썼다"고 말한다'));
+});
+
+test('buildBacktestModePrefix: 기법 초안 규칙 — 검사는 자동, 실패는 묻지 말고 고쳐 다시 쓴다', () => {
+  const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
+  assert.ok(p.includes('검사는 앱이 자동으로 돌린다'));
+  assert.ok(p.includes('실패가 있으면 사용자에게 묻지 말고 원인을 고쳐 propose_code로 다시 쓴다'));
+  assert.ok(p.includes('검사를 모두 통과하면 노드·흐름 창이 자동으로 열린다'));
+  assert.ok(p.includes('열렸다는 사실을 사용자에게 한 줄로 알린다'));
+});
+
+test('buildBacktestModePrefix: 기법 초안 규칙 — 설명은 줄 범위 근거로, 마지막은 이상하면 말해달라', () => {
+  const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
+  assert.ok(p.includes('노드·흐름·기법 전체를 설명해달라고 하면 그 함수의 줄 범위 코드를 근거로 사람 말로 설명한다'));
+  assert.ok(p.includes('action=technique_nodes로 지금 코드의 노드·흐름을 받아 온다'));
+  assert.ok(p.includes('이상한 점이 있으면 말해 주세요 — 코드를 고쳐 노드를 다시 그립니다'));
+  assert.ok(p.includes('이상하다는 말이 나오면 propose_code로 고친다'));
+  assert.ok(p.includes('코드 ↔ 노드 ↔ 백테스트를 오간다'));
+});
+
+test('buildBacktestModePrefix: 기법 초안 규칙도 실행·활성화·저장을 모델에게 시키지 않는다', () => {
+  const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
+  // 규칙 줄은 '현재 화면:' 앞까지다 — 그 뒤의 '- ' 줄은 검사·노드 목록이다.
+  const rules = p.split('현재 화면:')[0].split('\n').filter((line) => line.startsWith('- '));
+  assert.ok(rules.length >= 22);
+  for (const line of rules) {
+    assert.ok(!/action=(run|activate|backfill|deploy)\b/.test(line), line);
+  }
+  assert.ok(p.includes('백테스트 실행은 그대로 사람이 [실행]을 누르고, 이 기법을 목록에 넣는 승인도 사람이 누른다'));
+  assert.ok(p.includes('실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
+});
+
+test('buildBacktestModePrefix: 기법 초안이 아니면 블록도 규칙도 서지 않는다(기존 턴 그대로)', () => {
+  for (const ctx of [null, BT_CONTEXT, BT_FULL_CONTEXT, BT_GRAPH_CONTEXT]) {
+    const p = buildBacktestModePrefix(ctx, '20260903');
+    assert.ok(!p.includes('새 기법 만들기'));
+    assert.ok(!p.includes('technique_question'));
+    assert.ok(!p.includes('technique_nodes'));
+    assert.ok(!p.includes('검사: 아직 돌지 않았다'));
+  }
+});
+
+test('buildLiveTurnPrompt: 기법 초안 컨텍스트도 마지막 줄은 사용자 질문이다', () => {
+  const p = buildLiveTurnPrompt({
+    userText: '노드 should_enter()를 설명해줘',
+    canvasMode: 'backtest',
+    backtestContext: BT_TECHNIQUE_CONTEXT,
+    today: '20260903',
+  });
+  assert.ok(p.includes('선택된 노드: should_enter (26–33줄) — 돌파했는지 봅니다'));
+  assert.ok(p.endsWith('\n\n사용자 질문:\n노드 should_enter()를 설명해줘'));
+});
+
+// ---- 기법 코드 원칙 10개 · 차단과 경고(사용자 확정 2026-09-03) ----
+// 원본은 docs/technique-code-rules.md다. 여기서 고정하는 것은 둘이다. (1) 열 개 원칙이
+// 번호 그대로 접두에 서는가 — 하나라도 빠지면 모델이 그 원칙만 어긴 코드를 쓰고, 검사는
+// 그 사실을 나중에야 말한다. (2) 경고와 차단이 같은 '실패'로 뭉개지지 않는가 — 뭉개지면
+// 매직 넘버 경고 하나 때문에 이미 통과한 코드를 다시 쓴다.
+
+test('buildBacktestModePrefix: 기법 초안 규칙은 코드 원칙 10개를 번호 그대로 싣는다', () => {
+  const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
+  assert.ok(p.includes('코드를 쓸 때 원칙 10개를 그대로 지킨다'));
+  assert.ok(p.includes('docs/technique-code-rules.md'));
+  const principles = [
+    '  1. 계약: 최상위 PARAMS(리터럴 dict — 이름 → {default,min,max,step,type})와 signals(df, p)가 있고, entry·exit 두 bool 열을 돌려준다.',
+    '  2. 노드 단위 = 최상위 함수 하나 = 판단 하나. signals()는 조립(호출 순서)만 하고 계산은 함수로 뺀다',
+    '  3. 함수 첫 줄 docstring이 곧 노드 설명이다',
+    '  4. 미래를 보지 않는다: shift(-n)·rolling(center=True)·미래 인덱스 접근 금지.',
+    '  5. 워밍업: 지표가 준비되기 전 봉에는 신호를 내지 않는다(NaN은 False).',
+    '  6. 결정성: 난수·현재 시각·외부 상태를 쓰지 않는다. 같은 입력이면 같은 출력.',
+    '  7. 매직 넘버 금지: 기간·배수·문턱은 전부 PARAMS로(범위 포함).',
+    '  8. 한 열 한 뜻: 중간 열 이름은 무엇인지 드러나게(atr, breakout_level), entry/exit는 bool.',
+    '  9. 부작용 없음: 파일·네트워크·print 남발 금지(샌드박스가 막는다).',
+    '  10. 완성 기준은 자동 검사 통과: 문법·계약·시험 실행 3개가 통과하고 룩어헤드·워밍업 검사가 통과하며 매직 넘버·구조 경고가 0이다.',
+  ];
+  for (const line of principles) assert.ok(p.includes(line), line);
+  // 체결가는 앱 몫이라는 문장은 원칙 4에 반드시 붙어 있어야 한다 — 이것이 빠지면 모델이
+  // 코드 안에서 체결가를 계산해 엔진과 두 값이 갈라진다.
+  assert.ok(p.includes('체결가는 앱이 다음 봉 시가로 정한다 — 코드가 체결가를 계산하지 않는다'));
+});
+
+test('buildBacktestModePrefix: 노드 단위는 최상위 함수 하나이고 이름이 역할을 정한다고 적는다', () => {
+  const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
+  assert.ok(p.includes('노드 단위는 최상위 함수 하나 — 이름이 역할을 정하고 docstring 첫 줄이 노드 설명이 된다'));
+  assert.ok(p.includes('enter·entry·buy면 진입, exit·sell·stop·close면 청산, size·position·qty면 비중'));
+  assert.ok(p.includes('signals() 하나에 다 몰아넣으면 노드가 하나뿐이라 4단계 폴백으로 접힌다'));
+});
+
+test('buildBacktestModePrefix: 차단과 경고를 가려 고치라는 규칙이 선다', () => {
+  const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
+  assert.ok(p.includes('차단과 경고를 가려서 고친다'));
+  assert.ok(p.includes('"(고쳐야 함)"이 붙은 것은 차단이라 통과할 때까지 고쳐 다시 쓴다'));
+  assert.ok(p.includes('"(고치면 좋음)"이 붙은 것은 경고라 통과를 막지 않지만'));
+  assert.ok(p.includes('경고 때문에 통과한 코드를 되돌리지 않는다'));
+});
+
+test('buildBacktestModePrefix: 경고 검사는 실패가 아니라 경고로 찍고 차단 수에서 뺀다', () => {
+  const p = buildBacktestModePrefix({
+    techniqueDraft: true,
+    technique: {
+      checks: [
+        { id: 'syntax', label_ko: '문법·금지 import', ok: true, detail_ko: '문법 OK · 금지 import 없음' },
+        { id: 'contract', label_ko: 'signals(df, p) 계약 · entry/exit 두 열', ok: true, detail_ko: '' },
+        { id: 'dryrun', label_ko: '짧은 구간 시험 실행', ok: true, detail_ko: '워밍업 20봉 · entry 3 · exit 3' },
+        { id: 'lookahead', label_ko: '룩어헤드', ok: false, detail_ko: 'shift(-1)이 내일 값을 봅니다(31번째 줄)' },
+        { id: 'magic', label_ko: '매직 넘버', ok: false, detail_ko: '20이 PARAMS에 없습니다(18번째 줄)' },
+        { id: 'structure', label_ko: '구조', ok: true, detail_ko: '' },
+      ],
+      passed: false,
+      stats: null,
+    },
+  }, '20260903');
+  // 분모는 차단 검사 4개다 — 경고를 섞으면 "3/6"이 되어 모델이 통과 여부를 잘못 읽는다.
+  assert.ok(p.includes('검사: 3/4 — 아직 통과하지 못했다 · 경고 1건 — 통과를 막지는 않는다'));
+  assert.ok(p.includes('- 룩어헤드: 실패 — shift(-1)이 내일 값을 봅니다(31번째 줄) (고쳐야 함)'));
+  assert.ok(p.includes('- 매직 넘버: 경고 — 20이 PARAMS에 없습니다(18번째 줄) (고치면 좋음)'));
+  // 통과한 것에는 꼬리를 붙이지 않는다(경고 검사라도).
+  assert.ok(p.includes('- 구조: 통과\n'));
+  assert.ok(p.includes('- 문법·금지 import: 통과 — 문법 OK · 금지 import 없음\n'));
+});
+
+test('buildBacktestModePrefix: severity=warn이면 id를 몰라도 경고로 찍는다', () => {
+  const p = buildBacktestModePrefix({
+    techniqueDraft: true,
+    technique: {
+      checks: [
+        { id: 'syntax', label_ko: '문법·금지 import', ok: true, detail_ko: '' },
+        { id: 'naming', label_ko: '이름', ok: false, detail_ko: 'close가 청산으로 읽힙니다', severity: 'warn' },
+      ],
+      passed: true,
+      stats: null,
+    },
+  }, '20260903');
+  assert.ok(p.includes('검사: 1/1 — 모두 통과 · 경고 1건 — 통과를 막지는 않는다'));
+  assert.ok(p.includes('- 이름: 경고 — close가 청산으로 읽힙니다 (고치면 좋음)'));
+});

@@ -189,6 +189,27 @@ function fetchVersionDiff({ backendBase, fetchImpl, strategy_id, base, head }) {
   );
 }
 
+// ── 2026-09-03 새 기법 만들기(보드 20·21) ────────────────────────────────────
+// 코드 한 덩이를 두 가지로 읽는 두 라우트다. 이 층은 여전히 아무것도 판정하지
+// 않는다 — 노드를 어떻게 자를지(함수 단위냐 단계 단위냐)도, 검사 3개의 통과 여부도
+// 서버가 정한다. 몸체를 그대로 넘기고 봉투만 지킨다.
+
+// 코드를 읽어 노드·흐름으로 자른다. 범용 팔레트가 아니라 **이 기법 코드의 함수**가
+// 노드다 — 기법마다 노드가 다르다(사용자 확정).
+function fetchTechniqueNodes({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp(
+    'POST', '/api/v1/backtest/technique/nodes', body, { backendBase, fetchImpl },
+  );
+}
+
+// 자동 검사 3개(문법·signals 계약·짧은 구간 시험 실행). dryrun은 캐시된 봉으로만
+// 돌고 결과를 저장하지 않는다 — 실행 이력이 생기지 않는다는 것도 서버가 지킨다.
+function fetchTechniqueCheck({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp(
+    'POST', '/api/v1/backtest/technique/check', body, { backendBase, fetchImpl },
+  );
+}
+
 // ── 2026-09-03 시각 설계 ↔ 코드 왕복 ─────────────────────────────────────────
 // backtest-visual-code-roundtrip-implementation-evaluation.md의 요청 표면이다.
 // 이 층은 아무것도 판정하지 않는다 — patch 가능성, optimistic concurrency,
@@ -387,6 +408,8 @@ module.exports = {
   fetchFlow,
   fetchMap,
   fetchCodegen,
+  fetchTechniqueNodes,
+  fetchTechniqueCheck,
   diagnoseBacktest,
   optimizeBacktest,
   optimizePlan,

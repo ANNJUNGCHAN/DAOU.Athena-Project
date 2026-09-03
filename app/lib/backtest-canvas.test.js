@@ -14,6 +14,7 @@ const SMA_YAML = `
 version: "1.0"
 metadata:
   name: SMA 골든크로스
+  description: 단기 이평이 장기 이평을 상향 돌파하면 진입, 하향 돌파하면 청산
 strategy:
   id: sma_crossover
   category: trend
@@ -1166,10 +1167,12 @@ test('getContext(): 키 목록이 계약으로 고정돼 있다 — spec은 복�
   const ctx = canvas.getContext();
   assert.deepEqual(Object.keys(ctx), [
     'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
+    'techniqueDraft', 'technique',
     'map', 'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage',
     'lastChange', 'project',
   ]);
   assert.equal(ctx.view, 'design');
+  assert.equal(ctx.techniqueDraft, false, '새 기법을 만드는 중이 아니다');
   assert.equal(ctx.spec.presetId, 'sma_crossover');
   assert.equal(ctx.draft, null);
   assert.deepEqual(ctx.presets, [{ id: 'sma_crossover', name: 'SMA 골든크로스' }]);
@@ -1362,12 +1365,15 @@ test('heatIntensity: 범위 밖 값을 0~1로 자른다', () => {
   assert.equal(backtestCanvas.heatIntensity(null, 0, 1), 0);
 });
 
-test('모드 탭 5개와 설계 하위 탭 3개가 계약으로 고정돼 있다', () => {
+test('모드 탭 5개와 설계 하위 탭 4개가 계약으로 고정돼 있다', () => {
   assert.deepEqual(backtestCanvas.MODE_TABS.map((t) => t[0]),
     ['design', 'result', 'history', 'optimize', 'deploy']);
   // 지도가 첫 탭이다(2026-09-03) — 코드 탭의 이름 자체가 그것이 마지막 수단임을 말한다.
-  assert.deepEqual(backtestCanvas.DESIGN_TABS.map((t) => t[0]), ['flow', 'form', 'code']);
-  assert.deepEqual(backtestCanvas.DESIGN_TABS.map((t) => t[1]), ['지도', '폼', '코드 · 최후의 보루']);
+  // 노드·흐름(2026-09-03 보드 21)은 넷째다 — 기존 기법에도 그 창이 있어야 한다.
+  assert.deepEqual(backtestCanvas.DESIGN_TABS.map((t) => t[0]),
+    ['flow', 'form', 'code', 'nodes']);
+  assert.deepEqual(backtestCanvas.DESIGN_TABS.map((t) => t[1]),
+    ['지도', '폼', '코드 · 최후의 보루', '노드·흐름']);
 });
 
 test('배포 모드 3종의 기본은 승인이다 — 자동 주문이 기본이 아니다', () => {
@@ -1770,22 +1776,85 @@ function userStrategyDeps(overrides) {
   }), overrides || {});
 }
 
-test('설계 폼: 프리셋 아래에 [내 전략] 묶음이 선다 — 같은 자리, 같은 모양', async () => {
+test('설계 폼: 내가 만든 기법도 같은 목록에 선다 — 묶음은 하나뿐이다', async () => {
   const { container } = await mounted(userStrategyDeps());
   await flush();
+  assert.equal(findByClass(container, 'backtest-technique-list').length, 1, '목록은 하나다');
   assert.equal(findByClass(container, 'backtest-preset-item').length, 1);
   const items = findByClass(container, 'backtest-user-strategy-item');
   assert.equal(items.length, 1);
   assert.match(textOf(items[0]), /golden/);
   assert.match(textOf(items[0]), /strategies\/golden\.py/);
-  assert.match(textOf(container), /내 전략 1개/);
+  // 제목은 하나이고 둘을 함께 센다. "프리셋"·"내 전략"이라는 말은 화면에 없다.
+  assert.match(textOf(container), /기법 — 2개/);
+  assert.equal(textOf(container).indexOf('프리셋'), -1);
   assert.equal(findByClass(container, 'backtest-user-strategy-remove').length, 1);
 });
 
-test('설계 폼: 등록부 배선이 없으면 [내 전략] 묶음은 아예 없다 — 옛 화면 그대로', async () => {
+test('설계 폼: 등록부 배선이 없으면 내가 만든 기법 줄이 없을 뿐 목록은 그대로다', async () => {
   const { container } = await mounted();
-  assert.equal(findByClass(container, 'backtest-user-strategy-list').length, 0);
+  assert.equal(findByClass(container, 'backtest-user-strategy-item').length, 0);
   assert.equal(findByClass(container, 'backtest-preset-item').length, 1);
+  assert.match(textOf(container), /기법 — 1개/);
+});
+
+test('기법 카드: 이름·분류 칩(한국어)·한 줄 설명이 함께 선다', async () => {
+  const { container } = await mounted();
+  const card = findByClass(container, 'backtest-preset-item')[0];
+  assert.equal(findByClass(card, 'backtest-preset-name')[0].textContent, 'SMA 골든크로스');
+  assert.equal(findByClass(card, 'backtest-preset-category')[0].textContent, '추세');
+  // 설명은 프리셋 yaml의 metadata.description을 그대로 쓴다 — 지어내지 않는다.
+  assert.match(findByClass(card, 'backtest-technique-desc')[0].textContent, /단기 이평이/);
+});
+
+test('[+ 새 기법 만들기]: 빈 뼈대를 코드창에 세우고 첫 문장을 채팅에 보낸다', async () => {
+  const sent = [];
+  const prevCustomEvent = global.CustomEvent;
+  // 문서 스텁은 beforeEach의 것을 그대로 쓰고(그리기가 그 위에서 돈다) 이 테스트가
+  // 재는 통로 하나만 얹는다.
+  global.CustomEvent = class {
+    constructor(type, init) { this.type = type; this.detail = init && init.detail; }
+  };
+  global.document.dispatchEvent = (event) => { sent.push(event); return true; };
+  try {
+    const made = await mounted();
+    await click(findByClass(made.container, 'backtest-technique-new')[0]);
+    await flush();
+    const ctx = made.canvas.getContext();
+    assert.equal(ctx.designTab, 'code', '코드창이 먼저 선다');
+    assert.equal(ctx.runPath, 'code');
+    assert.equal(ctx.techniqueDraft, true);
+    assert.equal(ctx.spec.name, '새 기법');
+    assert.equal(ctx.spec.presetId, null);
+    assert.match(ctx.code.source, /def signals\(df, p\):/);
+    assert.match(ctx.code.source, /PARAMS = \{\}/);
+    assert.match(ctx.code.source, /return df\[\["entry", "exit"\]\]/);
+    // 대화가 시작된다 — 입력창과 제출은 chat.js의 것이라 문장만 던진다.
+    const submits = sent.filter((e) => e.type === 'athena:chat-submit');
+    assert.equal(submits.length, 1);
+    assert.equal(
+      submits[0].detail.text,
+      '새 기법을 만들고 싶어요. 어떤 전략인지 하나씩 물어봐 주세요.',
+    );
+  } finally {
+    global.CustomEvent = prevCustomEvent;
+  }
+});
+
+test('[+ 새 기법 만들기] 뒤에 기법을 고르면 만들던 중이라는 신호가 꺼진다', async () => {
+  const made = await mounted();
+  await click(findByClass(made.container, 'backtest-technique-new')[0]);
+  await flush();
+  assert.equal(made.canvas.getContext().techniqueDraft, true);
+  // 초안에는 폼 탭이 없다 — 목록으로 돌아가는 문은 진행 표시의 [기법 목록] 하나다.
+  await click(findByClass(made.container, 'backtest-technique-back')[0]);
+  await flush();
+  await click(findByClass(made.container, 'backtest-preset-item')[0]);
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.techniqueDraft, false);
+  assert.equal(ctx.runPath, 'form');
+  assert.equal(ctx.code.source, '');
 });
 
 test('내 전략을 고르면 그 파일이 IDE에 열리고 실행경로가 코드로 바뀐다', async () => {
@@ -2344,15 +2413,17 @@ test('getContext().map: 마지막으로 받아온 칸만 싣는다 — 없으면
   await flush();
   const ctx = made.canvas.getContext();
   assert.equal(ctx.map.version, 1);
+  // facts는 지난 실행이 그 칸에 남긴 사실이다 — 스펙 경로에서 요약 지도를 없앤 뒤로
+  // 이 숫자를 사람에게 말할 수 있는 것은 대화뿐이라 컨텍스트가 그대로 싣는다.
   assert.deepEqual(ctx.map.nodes, [
     {
       id: 'params', numeral: '①', title: '조절할 값을 정합니다',
-      lines: ['fast 20 (5–60, 1씩)'], status: 'ok', note: null,
+      lines: ['fast 20 (5–60, 1씩)'], status: 'ok', note: null, facts: [],
     },
     {
       id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다',
       lines: ['진입: ma_fast가 ma_slow를 위로 뚫는 날', '청산: ma_fast가 ma_slow를 아래로 뚫는 날'],
-      status: 'ok', note: null,
+      status: 'ok', note: null, facts: ['entry 3개 · exit 2개'],
     },
   ]);
 });
@@ -2623,6 +2694,10 @@ test('프리셋을 세우면 지도 탭이 from-spec 그래프로 편집기를 �
   // 대상 한 줄과 코드 서랍은 편집기가 서도 그대로 남는다.
   assert.equal(findByClass(made.container, 'backtest-visual-target').length, 1);
   assert.equal(findByClass(made.container, 'backtest-visual-drawer').length, 1);
+  // 요약 지도(칸 ①~④)는 편집 표면 위에 서지 않는다(2026-09-03) — 같은 흐름을 두 번
+  // 말하지 않는다. 지도의 재료는 컨텍스트에 그대로 남는다(아래 ctx.map).
+  assert.equal(findByClass(made.container, 'backtest-flow-node').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-flow-summary').length, 0);
   // 같은 폼이면 다시 만들지 않는다 — yaml이 열쇠다.
   made.canvas.refresh();
   await flush();
@@ -3265,4 +3340,466 @@ test('버전 되열기 배선이 없으면 그 자리에 이유를 적는다 —
   await flush();
   assert.equal(findByClass(made.container, 'backtest-canvas-error').length, 0);
   assert.match(textOf(made.container), /버전 되열기 배선이 없습니다/);
+});
+
+// ── 보드 20·21 · 새 기법 만들기(코드창 · 명령창 · 노드·흐름 창) ─────────────
+
+const TECHNIQUE_SOURCE = [
+  'import athena_bt as bt',
+  '',
+  'PARAMS = {"lookback": {"default": 20}}',
+  '',
+  '',
+  'def compute_atr(df, lookback):',
+  '    return df["high"] - df["low"]',
+  '',
+  '',
+  'def signals(df, p):',
+  '    df["entry"] = compute_atr(df, p["lookback"]) > 0',
+  '    df["exit"] = False',
+  '    return df[["entry", "exit"]]',
+  '',
+].join('\n');
+
+const CHECKS_OK = [
+  { id: 'syntax', label_ko: '문법·금지 import', ok: true, detail_ko: '' },
+  { id: 'contract', label_ko: 'signals(df, p) 계약 · entry/exit 두 열', ok: true, detail_ko: '' },
+  { id: 'dryrun', label_ko: '짧은 구간 시험 실행', ok: true, detail_ko: '워밍업 59봉 · entry 41 · exit 41' },
+];
+
+const NODES_RESPONSE = {
+  nodes: [
+    {
+      id: 'compute_atr', label: 'compute_atr()', summary_ko: '변동폭을 잰다',
+      first_line: 6, last_line: 7, params: ['df', 'lookback'],
+      returns_hint: 'Series<Number>', calls: [], role: 'indicator', stage: null,
+    },
+    {
+      id: 'signals', label: 'signals()', summary_ko: '',
+      first_line: 10, last_line: 13, params: ['df', 'p'],
+      returns_hint: 'DataFrame', calls: ['compute_atr'], role: 'signals', stage: null,
+    },
+  ],
+  flows: { entry: ['compute_atr', 'signals'], exit: ['signals'] },
+  granularity: 'function',
+  unknown: [],
+  error: null,
+};
+
+// 노드 창은 다른 파일이 만든다(backtest-technique-nodes.js) — 하네스는 그 계약만
+// 흉내낸다: 만들 때 payload를 받고, 판이 바뀌면 setPayload로 다시 받는다.
+function fakeNodesLib(seen) {
+  return {
+    createTechniqueNodes(host, options) {
+      seen.host = host;
+      seen.options = options;
+      seen.payload = options.payload;
+      seen.created = (seen.created || 0) + 1;
+      return {
+        element: host,
+        setPayload(payload) { seen.payload = payload; },
+        setStats(stats) { seen.stats = stats; },
+        destroy() { seen.destroyed = true; },
+      };
+    },
+  };
+}
+
+// 새 기법 초안을 세운다 — 검사·노드 배선을 주입하고 [+ 새 기법 만들기]까지 누른다.
+async function draftCanvas(overrides) {
+  const calls = { check: [], nodes: [] };
+  const made = await mounted(Object.assign({
+    techniqueCheck: async (body) => {
+      calls.check.push(body);
+      return {
+        passed: true, checks: CHECKS_OK,
+        stats: { warmup_bars: 59, entry: 41, exit: 41, rows: 606 },
+        log: ['$ python -m athena_bt.check', '문법 통과 · 계약 통과 · 시험 실행 통과'],
+        error: null,
+      };
+    },
+    techniqueNodes: async (body) => { calls.nodes.push(body); return NODES_RESPONSE; },
+  }, overrides || {}));
+  await click(findByClass(made.container, 'backtest-technique-new')[0]);
+  await flush();
+  return Object.assign(made, { calls });
+}
+
+// 디바운스된 검사를 지금 돌린다 — makeCanvas의 가짜 타이머에 쌓인 콜백을 비운다.
+async function runPending(made) {
+  const queued = made.pending.splice(0, made.pending.length);
+  queued.forEach((fn) => fn());
+  await flush();
+  await flush();
+}
+
+test('새 기법 초안: 하위 탭은 [코드][노드·흐름]뿐이고 띠·명령창·진행 표시가 선다', async () => {
+  const made = await draftCanvas();
+  const labels = findByClass(made.container, 'backtest-subtab').map((t) => t.textContent);
+  assert.deepEqual(labels, ['코드', '노드·흐름'], '지도·폼은 초안에서 숨는다');
+  assert.equal(findByClass(made.container, 'backtest-technique-progress').length, 1);
+  assert.match(textOf(made.container), /검사 0\/5/);
+  // AI가 쥐고 있다는 사실을 먼저 말한다.
+  const band = findByClass(made.container, 'backtest-technique-band')[0];
+  assert.ok(band);
+  assert.match(textOf(band), /AI가 제어하는 중/);
+  // 명령창은 코드 아래에 서고, 아직 잰 것이 없으면 그렇다고 적는다.
+  const terminal = findByClass(made.container, 'backtest-terminal')[0];
+  assert.ok(terminal);
+  assert.match(textOf(terminal), /아직 검사하지 않았습니다/);
+  // 빈 뼈대는 검사하지 않는다 — 아무 신호도 없는 코드가 통과로 찍히면 안 된다.
+  assert.equal(made.calls.check.length, 0);
+});
+
+test('[직접 편집]을 켜면 띠 문구가 바뀐다 — 코드는 어느 쪽이든 편집 가능하다', async () => {
+  const made = await draftCanvas();
+  await click(findByClass(made.container, 'backtest-technique-hand-toggle')[0]);
+  const band = findByClass(made.container, 'backtest-technique-band')[0];
+  assert.match(textOf(band), /직접 편집 중/);
+  assert.doesNotMatch(textOf(band), /AI가 제어하는 중/);
+});
+
+test('코드가 바뀌면 자동으로 검사하고 명령창이 로그·검사 3줄·통계를 그린다', async () => {
+  const made = await draftCanvas();
+  made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+  await flush();
+  assert.equal(made.calls.check.length, 0, '700ms 묶기 전에는 부르지 않는다');
+  await runPending(made);
+  assert.equal(made.calls.check.length, 1);
+  assert.equal(made.calls.check[0].source, TECHNIQUE_SOURCE);
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
+  const terminal = findByClass(made.container, 'backtest-terminal')[0];
+  assert.match(textOf(terminal), /python -m athena_bt\.check/);
+  assert.match(textOf(terminal), /짧은 구간 시험 실행/);
+  assert.match(textOf(terminal), /워밍업 59봉 · 진입 신호 41 · 청산 신호 41 · 봉 606개/);
+  assert.equal(findByClass(terminal, 'backtest-terminal-check').length, 3);
+});
+
+test('검사 3/3을 넘으면 노드를 읽어 노드·흐름 탭이 자동으로 열리고 영수증 카드가 나간다', async () => {
+  const cards = [];
+  const prevCustomEvent = global.CustomEvent;
+  global.CustomEvent = function (type, init) { return { type, detail: init && init.detail }; };
+  global.document.dispatchEvent = (event) => { cards.push(event); return true; };
+  try {
+    const seen = {};
+    const made = await draftCanvas({ techniqueNodesLib: fakeNodesLib(seen) });
+    made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+    await runPending(made);
+    assert.deepEqual(made.calls.nodes, [{ source: TECHNIQUE_SOURCE }]);
+    // 통과한 그 순간 노드 창이 열린다(처음 한 번).
+    assert.equal(made.canvas.getContext().designTab, 'nodes');
+    assert.deepEqual(seen.payload.nodes.map((n) => n.id), ['compute_atr', 'signals']);
+    assert.equal(seen.payload.granularity, 'function');
+    assert.deepEqual(seen.payload.flows, { entry: ['compute_atr', 'signals'], exit: ['signals'] });
+    // 창은 한 번만 만든다 — 다시 그릴 때마다 새로 만들면 고른 자리가 날아간다.
+    assert.equal(seen.created, 1);
+    // 영수증 카드 — 검사 3줄과 통계가 실린다.
+    const receipts = cards.filter((e) => e.type === 'athena:backtest-receipt');
+    assert.equal(receipts.length, 1);
+    assert.equal(receipts[0].detail.kind, 'technique_check');
+    assert.equal(receipts[0].detail.passed, true);
+    assert.equal(receipts[0].detail.checks.length, 3);
+    assert.equal(receipts[0].detail.stats.rows, 606);
+  } finally {
+    global.CustomEvent = prevCustomEvent;
+  }
+});
+
+test('노드·흐름 창의 설명 요청은 사람이 친 것과 같은 길로 채팅에 실린다', async () => {
+  const sent = [];
+  const prevCustomEvent = global.CustomEvent;
+  global.CustomEvent = function (type, init) { return { type, detail: init && init.detail }; };
+  global.document.dispatchEvent = (event) => { sent.push(event); return true; };
+  try {
+    const seen = {};
+    const made = await draftCanvas({ techniqueNodesLib: fakeNodesLib(seen) });
+    made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+    await runPending(made);
+    const texts = () => sent.filter((e) => e.type === 'athena:chat-submit')
+      .map((e) => e.detail.text);
+
+    seen.options.onExplainNode('compute_atr');
+    assert.equal(texts().pop(), '노드 compute_atr()를 설명해줘');
+    assert.equal(made.canvas.getContext().technique.selectedNode, 'compute_atr');
+
+    seen.options.onExplainFlow('entry');
+    assert.equal(texts().pop(), '진입 흐름을 설명해줘');
+    seen.options.onExplainFlow('exit');
+    assert.equal(texts().pop(), '청산 흐름을 설명해줘');
+    seen.options.onExplainAll();
+    assert.equal(texts().pop(), '이 기법 전체를 설명해줘');
+  } finally {
+    global.CustomEvent = prevCustomEvent;
+  }
+});
+
+test('노드에서 코드로 — 코드 탭이 서고 그 함수의 줄이 짚힌다', async () => {
+  const seen = {};
+  const made = await draftCanvas({ techniqueNodesLib: fakeNodesLib(seen) });
+  made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+  await runPending(made);
+  seen.options.onOpenCode('signals');
+  await flush();
+  assert.equal(made.canvas.getContext().designTab, 'code');
+  const marks = findByClass(made.container, 'backtest-code-line is-flow');
+  assert.ok(findByClass(made.container, 'backtest-code-host').length === 1);
+  assert.ok(marks.length >= 0);
+});
+
+test('technique_question: 영수증만 만들고 코드도 탭도 건드리지 않는다', async () => {
+  const made = await draftCanvas();
+  made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+  await runPending(made);
+  const before = made.canvas.getContext();
+  const receipt = made.canvas.onChatAction({
+    kind: 'technique_question',
+    payload: {
+      question_ko: '무엇을 보고 사겠습니까?',
+      choices: [
+        { id: 'breakout', label_ko: '20일 최고가 돌파', detail_ko: '추세를 따라간다', recommended: true },
+        { id: 'reversion', label_ko: '5일 저가 이탈', detail_ko: '되돌림을 노린다' },
+      ],
+      why_ko: '진입 규칙이 정해져야 나머지가 따라옵니다',
+    },
+  });
+  assert.equal(receipt.kind, 'technique_question');
+  assert.equal(receipt.question.question_ko, '무엇을 보고 사겠습니까?');
+  assert.equal(receipt.question.choices.length, 2);
+  assert.equal(receipt.applied, false);
+  const after = made.canvas.getContext();
+  assert.equal(after.code.source, before.code.source);
+  assert.equal(after.designTab, before.designTab);
+});
+
+test('technique_question: 빈 봉투는 null이고 아무것도 바꾸지 않는다', async () => {
+  const made = await draftCanvas();
+  assert.equal(made.canvas.onChatAction({ kind: 'technique_question' }), null);
+  assert.equal(made.canvas.onChatAction({ kind: 'technique_question', payload: 'x' }), null);
+});
+
+test('getContext().technique: 계약 키 8개 — 명령창 로그는 싣지 않는다', async () => {
+  const made = await draftCanvas();
+  const empty = made.canvas.getContext().technique;
+  assert.deepEqual(Object.keys(empty), [
+    'checks', 'passed', 'stats', 'nodes', 'flows', 'granularity', 'selectedNode', 'lastCheckAt',
+  ]);
+  assert.deepEqual(empty.checks, []);
+  assert.equal(empty.passed, false);
+  assert.equal(empty.lastCheckAt, null);
+
+  made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+  await runPending(made);
+  const filled = made.canvas.getContext().technique;
+  assert.equal(filled.passed, true);
+  assert.equal(filled.checks.length, 3);
+  assert.equal(filled.stats.warmup_bars, 59);
+  assert.deepEqual(filled.nodes.map((n) => n.id), ['compute_atr', 'signals']);
+  assert.deepEqual(filled.flows, { entry: ['compute_atr', 'signals'], exit: ['signals'] });
+  assert.equal(filled.granularity, 'function');
+  assert.ok(filled.lastCheckAt);
+});
+
+test('검사가 통과하지 못하면 노드를 읽지 않고 탭도 뺏지 않는다', async () => {
+  const made = await draftCanvas({
+    techniqueCheck: async () => ({
+      passed: false,
+      checks: [
+        { id: 'syntax', label_ko: '문법·금지 import', ok: true, detail_ko: '' },
+        { id: 'contract', label_ko: 'signals(df, p) 계약 · entry/exit 두 열', ok: false, detail_ko: 'exit 열이 없습니다' },
+        { id: 'dryrun', label_ko: '짧은 구간 시험 실행', ok: false, detail_ko: '' },
+      ],
+      stats: null, log: ['$ python -m athena_bt.check'], error: { message: 'exit 열이 없습니다', line: 12 },
+    }),
+  });
+  made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+  await runPending(made);
+  assert.equal(made.calls.nodes.length, 0);
+  assert.equal(made.canvas.getContext().designTab, 'code');
+  assert.match(textOf(findByClass(made.container, 'backtest-terminal')[0]), /exit 열이 없습니다/);
+  assert.match(textOf(findByClass(made.container, 'backtest-technique-progress')[0]), /검사 1\/3/);
+});
+
+// ── 검사의 두 갈래(severity) ────────────────────────────────────────────────
+// 백엔드가 항목마다 갈래를 붙인다: 룩어헤드·워밍업은 차단, 매직 넘버·구조는 경고다.
+// 화면은 항목을 세지 않고 받은 배열을 그대로 그린다 — 검사가 5개로 늘어도 같은 코드다.
+const CHECKS_WITH_WARN = [
+  { id: 'syntax', label_ko: '문법·금지 import', ok: true, severity: 'block', detail_ko: '' },
+  { id: 'contract', label_ko: 'signals(df, p) 계약', ok: true, severity: 'block', detail_ko: '' },
+  { id: 'dryrun', label_ko: '짧은 구간 시험 실행', ok: true, severity: 'block', detail_ko: '' },
+  { id: 'lookahead', label_ko: '미래 참조', ok: true, severity: 'block', detail_ko: '' },
+  { id: 'warmup', label_ko: '워밍업', ok: true, severity: 'block', detail_ko: '' },
+  {
+    id: 'magic', label_ko: '매직 넘버', ok: false, severity: 'warn',
+    detail_ko: '11번째 줄의 20은 PARAMS로 빼야 합니다',
+  },
+  {
+    id: 'structure', label_ko: '노드 단위', ok: false, severity: 'warn',
+    detail_ko: 'signals()가 계산을 안고 있습니다',
+  },
+];
+
+function terminalOf(container) {
+  return findByClass(container, 'backtest-terminal')[0];
+}
+
+function checkRows(terminal) {
+  return findByClass(terminal, 'backtest-terminal-check');
+}
+
+function rowWith(terminal, token) {
+  return checkRows(terminal).find((r) => String(r.className).split(/\s+/).includes(token));
+}
+
+test('경고는 통과를 막지 않는다 — warn이 실패해도 서버 passed 그대로 노드 창이 열린다', async () => {
+  const seen = {};
+  const made = await draftCanvas({
+    techniqueNodesLib: fakeNodesLib(seen),
+    techniqueCheck: async () => ({
+      passed: true, checks: CHECKS_WITH_WARN, stats: null,
+      log: ['$ python -m athena_bt.check'], error: null,
+    }),
+  });
+  made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+  await runPending(made);
+  // 통과 여부는 서버 값이다 — 화면이 checks.every(ok)로 다시 재면 여기서 false가 된다.
+  assert.equal(made.canvas.getContext().technique.passed, true);
+  assert.equal(made.calls.nodes.length, 1, '경고가 있어도 노드를 읽는다');
+  assert.equal(made.canvas.getContext().designTab, 'nodes');
+  // 진행 표시가 세는 것은 차단뿐이다 — 경고를 섞으면 통과했는데 5/7로 보인다.
+  assert.match(
+    textOf(findByClass(made.container, 'backtest-technique-progress')[0]), /검사 5\/5/,
+  );
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
+  const terminal = terminalOf(made.container);
+  assert.equal(checkRows(terminal).length, 7, '항목 수에 의존하지 않고 그대로 그린다');
+  assert.match(textOf(terminal), /차단 5\/5 통과 · 경고 2/);
+  const warnRow = rowWith(terminal, 'is-warn');
+  assert.ok(warnRow, '경고 항목은 실패가 아닌 제 갈래로 선다');
+  assert.match(textOf(warnRow), /경고/);
+  assert.match(textOf(warnRow), /고치면 좋음/, '통과에 영향 없다는 사실을 문구로 적는다');
+  assert.doesNotMatch(textOf(warnRow), /고쳐야 함/);
+  assert.equal(rowWith(terminal, 'is-fail'), undefined, '차단 실패는 없다');
+});
+
+test('차단이 실패하면 빨간 갈래로 적고 요약 줄이 남은 수를 센다', async () => {
+  const made = await draftCanvas({
+    techniqueCheck: async () => ({
+      passed: false,
+      checks: [
+        { id: 'syntax', label_ko: '문법·금지 import', ok: true, severity: 'block', detail_ko: '' },
+        {
+          id: 'lookahead', label_ko: '미래 참조', ok: false, severity: 'block',
+          detail_ko: '12번째 줄에서 shift(-1)로 미래를 봅니다',
+        },
+        {
+          id: 'structure', label_ko: '노드 단위', ok: false, severity: 'warn',
+          detail_ko: 'signals()가 계산을 안고 있습니다',
+        },
+      ],
+      stats: null, log: [], error: null,
+    }),
+  });
+  made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+  await runPending(made);
+  assert.equal(made.calls.nodes.length, 0, '차단이 막혔으면 노드를 읽지 않는다');
+  const terminal = terminalOf(made.container);
+  assert.match(textOf(terminal), /차단 1\/2 통과 · 경고 1/);
+  const failRow = rowWith(terminal, 'is-fail');
+  assert.match(textOf(failRow), /고쳐야 함/);
+  assert.match(textOf(failRow), /미래를 봅니다/);
+  assert.match(textOf(rowWith(terminal, 'is-warn')), /경고/);
+});
+
+test('사유에 줄 번호가 있으면 그 줄로 가는 링크가 서고, 없으면 서지 않는다', async () => {
+  const made = await draftCanvas({
+    techniqueCheck: async () => ({
+      passed: false,
+      checks: [
+        {
+          id: 'lookahead', label_ko: '미래 참조', ok: false, severity: 'block',
+          detail_ko: '12번째 줄에서 shift(-1)로 미래를 봅니다',
+        },
+        {
+          id: 'structure', label_ko: '노드 단위', ok: false, severity: 'warn',
+          detail_ko: 'signals()가 계산을 안고 있습니다',
+        },
+      ],
+      stats: null, log: [], error: null,
+    }),
+  });
+  made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+  await runPending(made);
+  const jumps = findByClass(terminalOf(made.container), 'backtest-terminal-check-jump');
+  assert.equal(jumps.length, 1, '줄 번호를 읽은 항목에만 링크가 선다');
+  assert.equal(jumps[0].textContent, '12번째 줄');
+  await click(jumps[0]);
+  await flush();
+  assert.equal(made.canvas.getContext().designTab, 'code');
+  // 편집기 줄번호 홈통에 그 줄만 불이 들어온다(노드에서 들어갈 때와 같은 길이다).
+  assert.deepEqual(findByClass(made.container, 'is-lit').map((n) => n.textContent), ['12']);
+});
+
+test('검사 셈 — 차단만 통과를 좌우하고, 경고는 안 고친 것만 센다', () => {
+  const checks = [
+    { ok: true, severity: 'block' },
+    { ok: false, severity: 'block' },
+    { ok: false, severity: 'warn' },
+    { ok: true, severity: 'warn' },
+    { ok: true },
+  ];
+  assert.deepEqual(
+    backtestCanvas.techniqueCheckCounts(checks), { blockTotal: 3, blockDone: 2, warnOpen: 1 },
+  );
+  assert.equal(backtestCanvas.techniqueCheckSummary(checks), '차단 2/3 통과 · 경고 1');
+  assert.equal(backtestCanvas.techniqueCheckSummary([]), '차단 0/0 통과 · 경고 0');
+  assert.equal(backtestCanvas.techniqueCheckMark({ ok: true }), '통과');
+  assert.equal(backtestCanvas.techniqueCheckMark({ ok: false, severity: 'warn' }), '경고');
+  assert.equal(backtestCanvas.techniqueCheckMark({ ok: false }), '고쳐야 함');
+});
+
+test('줄 번호는 백엔드 line을 먼저, 없으면 사유 문장에서 읽는다', () => {
+  assert.equal(backtestCanvas.techniqueCheckLine({ line: 7, detail_ko: '34번째 줄' }), 7);
+  assert.equal(backtestCanvas.techniqueCheckLine({ detail_ko: '34번째 줄에서 미래를 봅니다' }), 34);
+  assert.equal(backtestCanvas.techniqueCheckLine({ detail_ko: 'SyntaxError (line 12)' }), 12);
+  assert.equal(backtestCanvas.techniqueCheckLine({ detail_ko: '워밍업 59봉 · entry 41' }), 0);
+  assert.equal(backtestCanvas.techniqueCheckLine(null), 0);
+});
+
+test('검사를 못 돌린 것과 실패한 것은 다르다 — 3줄을 지어내지 않는다', async () => {
+  const made = await draftCanvas({
+    techniqueCheck: async () => { throw new Error('백엔드 없음'); },
+  });
+  made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+  await runPending(made);
+  const t = made.canvas.getContext().technique;
+  assert.deepEqual(t.checks, []);
+  assert.equal(t.passed, false);
+  assert.match(textOf(findByClass(made.container, 'backtest-terminal')[0]), /검사를 돌리지 못했습니다 — 백엔드 없음/);
+});
+
+test('노드 창 배선이 없으면 그 사실을 적는다 — 빈 화면으로 두지 않는다', async () => {
+  const made = await draftCanvas({ techniqueNodesLib: {} });
+  made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+  await runPending(made);
+  assert.equal(made.canvas.getContext().designTab, 'nodes');
+  assert.match(textOf(made.container), /노드 창을 아직 불러오지 못했습니다/);
+});
+
+test('기존 기법도 노드·흐름 탭을 갖는다 — 스펙 경로는 지도 뒤의 코드를 읽는다', async () => {
+  const seen = {};
+  const calls = { codegen: [], nodes: [] };
+  const made = await mounted({
+    techniqueNodesLib: fakeNodesLib(seen),
+    codegen: async (body) => { calls.codegen.push(body); return { source: TECHNIQUE_SOURCE }; },
+    techniqueNodes: async (body) => { calls.nodes.push(body); return NODES_RESPONSE; },
+  });
+  const tabs = findByClass(made.container, 'backtest-subtab').map((t) => t.textContent);
+  assert.deepEqual(tabs, ['지도', '폼', '코드 · 최후의 보루', '노드·흐름']);
+  await click(findByClass(made.container, 'backtest-subtab')[3]);
+  await flush();
+  await flush();
+  assert.equal(calls.codegen.length, 1);
+  assert.deepEqual(calls.nodes, [{ source: TECHNIQUE_SOURCE }]);
+  assert.equal(made.canvas.getContext().designTab, 'nodes');
+  assert.deepEqual(seen.payload.nodes.map((n) => n.id), ['compute_atr', 'signals']);
 });

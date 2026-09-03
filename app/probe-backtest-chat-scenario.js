@@ -137,6 +137,10 @@ async function main() {
   record('00-백엔드 준비(8010 ready)', await backendReady(), {});
 
   await js(shellWin, "document.getElementById('modeNavBacktest').click(); true");
+  // 모드에 들어가면 첫 화면은 **지도**다(2026-09-03 · DESIGN_TABS[0]) — 프리셋 목록은
+  // [폼] 하위탭에 있다. 이 클릭이 없으면 아래 전부가 화면에 없는 칸을 만지고 조용히
+  // 실패한다(2026-09-03 실측: 01~11 열한 개가 한꺼번에 FAIL). 검사는 그대로다.
+  await js(shellWin, "(() => { const t = document.querySelectorAll('#backtestCanvas .backtest-subtab'); if (t[1]) t[1].click(); return true; })()");
   const presets = await until(shellWin, "document.querySelectorAll('#backtestCanvas .backtest-preset-item').length", 20000);
   const head = await js(shellWin, "(() => { const h = document.getElementById('chatModeHead'); return h && !h.hidden ? h.textContent.replace(/\\s+/g, ' ') : null; })()");
   record('01-백테스트 모드 진입 + 채팅 헤더', presets === 10 && !!head && head.includes('전략에게 묻기'), { presets, head });
@@ -240,6 +244,187 @@ async function main() {
   const t11 = await chat(shellWin, '배포 화면 열어줘');
   const c11 = await ctx(shellWin);
   record('11-"배포 화면 열어줘" → 배포 탭 + 사람이 한다는 안내', !t11.error && c11 && c11.tab === 'deploy', { answer: t11.answer, tab: c11 && c11.tab });
+
+  // ---------- (12~15) 연결 오류 → 질문 하나 → 답 → 패치 카드 → (사람) 적용 ----------
+  // 여기부터가 시각 설계 왕복(보드 11→12→13→14)이다. 앞 단계들이 실행경로를 code로
+  // 굳혀 놨으므로 프리셋을 다시 골라 스펙 경로로 되돌린 뒤 시작한다 — 사람이 하는
+  // 되돌리기와 같은 클릭이다(selectPreset이 코드와 실행경로를 함께 비운다).
+  //
+  // **모델 의존 표시.** 12는 사람 클릭만으로 성립하는 사실이라 모델과 무관하다.
+  // 13~15는 모델이 athena_backtest action=visual_question을 부르는지에 달려 있다 —
+  // 그 단계들의 data에 modelDependent를 박아 흔들림을 리포트에서 바로 가른다.
+  await js(shellWin, "(() => { const t = document.querySelectorAll('#backtestCanvas .backtest-tab'); if (t[0]) t[0].click(); return true; })()");
+  await wait(200);
+  await js(shellWin, "(() => { const t = document.querySelectorAll('#backtestCanvas .backtest-subtab'); if (t[1]) t[1].click(); return true; })()");
+  await wait(200);
+  await js(shellWin, "(() => { const p = document.querySelectorAll('#backtestCanvas .backtest-preset-item'); if (p[0]) p[0].click(); return true; })()");
+  await wait(600);
+  await js(shellWin, "(() => { const t = document.querySelectorAll('#backtestCanvas .backtest-subtab'); if (t[0]) t[0].click(); return true; })()");
+  await until(shellWin, "document.querySelectorAll('#backtestCanvas .backtest-vis-node').length ? true : null", 30000);
+  await js(shellWin, "(() => { const b = document.querySelector('#backtestCanvas .backtest-visual-validate'); if (b) b.click(); return true; })()");
+  await until(shellWin, "window.AthenaBacktestCanvas.getContext().map.validation_state === 'synced' ? true : null", 30000);
+
+  // 연결을 끊는 것은 사람의 손이다 — 검사기의 '오른쪽 입력'을 [연결 없음]으로 되돌린다.
+  const cut12 = await js(shellWin, `(() => {
+    const root = document.getElementById('backtestCanvas');
+    const card = root.querySelector('.backtest-vis-node[data-node-id="cond-exit-1"]');
+    if (!card) return { ok: false, reason: 'cond-exit-1 칸이 없다' };
+    card.click();
+    const sel = root.querySelector('.backtest-vis-inspector select.backtest-vis-select[data-node-id="cond-exit-1"][data-port="right"]');
+    if (!sel) return { ok: false, reason: '검사기에 오른쪽 입력 칸이 없다' };
+    sel.value = '';
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+    return { ok: true };
+  })()`);
+  const broken12 = await until(shellWin, `(() => {
+    const c = window.AthenaBacktestCanvas.getContext();
+    if (c.map.validation_state !== 'invalid') return null;
+    const run = document.querySelector('#backtestCanvas .backtest-run-button');
+    return {
+      state: c.map.validation_state,
+      codes: c.map.diagnostics.map((d) => d.code),
+      runText: run ? run.textContent.trim() : null,
+      runDisabled: run ? !!run.disabled : null,
+    };
+  })()`, 30000);
+  record('12-청산 조건의 오른쪽 입력을 끊으면 지도가 오류 상태가 된다(사람 클릭)',
+    !!cut12.ok && !!broken12 && broken12.codes.includes('BTG-PORT-002')
+      && broken12.runText === '오류 검토' && broken12.runDisabled === true,
+    { cut: cut12, broken: broken12 });
+
+  // ---------- (13) 모델이 묻는다 — 고치지 않고 ----------
+  const t13 = await chat(shellWin, '오류를 고쳐줘');
+  const q13 = await until(shellWin, `(() => {
+    const cards = document.querySelectorAll('#history .backtest-visual');
+    if (!cards.length) return null;
+    const card = cards[cards.length - 1];
+    const pill = card.querySelector('.routine-draft-pill.is-filled');
+    if (!pill || pill.textContent !== '한 가지만 확인할게요') return null;
+    const c = window.AthenaBacktestCanvas.getContext();
+    return {
+      title: pill.textContent,
+      choices: Array.from(card.querySelectorAll('.backtest-visual-choice')).length,
+      recommended: Array.from(card.querySelectorAll('.backtest-visual-choice'))
+        .filter((b) => Array.from(b.querySelectorAll('.routine-draft-pill')).some((p) => p.textContent === '권장')).length,
+      pendingQuestion: c.map.pendingQuestion,
+    };
+  })()`, 30000);
+  const c13 = await ctx(shellWin);
+  const steps13 = await js(shellWin, "Array.from(document.querySelectorAll('#history .progress-tool-step')).map((e) => e.textContent.replace(/\\s+/g, ' '))");
+  record('13-"오류를 고쳐줘" → 모델이 질문 카드 하나만 띄운다(모델 의존)',
+    !t13.error && !!q13 && q13.choices >= 2 && q13.recommended === 1
+      && !!q13.pendingQuestion && q13.pendingQuestion.code === 'BTG-PORT-002'
+      && c13.map.validation_state === 'invalid',
+    {
+      modelDependent: true,
+      answer: t13.answer, card: t13.card, question: q13, toolSteps: steps13,
+      // 카드가 없으면 그 사실 자체가 진단이다 — 모델이 안 불렀는가, 불렀는데 안 넘어왔는가.
+      // 두 갈래를 answer로 가른다: "오류가 없습니다"라고 답했으면 모델이 오류를 **못 본**
+      // 것이고(라이브 프리픽스가 map.validation_state·map.diagnostics를 map.graph 아래에서
+      // 찾는다 — lib/main/live-prompt.js), 부르고도 카드가 없으면 전달이 끊긴 것이다.
+      // 세 갈래를 answer·toolSteps로 가른다: ① 모델이 오류를 못 봤다(프리픽스가 map 밑의
+      // diagnostics를 못 읽는다) ② 툴을 불렀는데 실패했다("처리 중 실패") — visual_question은
+      // 모델이 **그래프 전체**를 실어 보내야 하는데 프리픽스는 노드 id·라벨만 준다(엣지·
+      // params·scenario가 없어 모델이 지금 그래프를 그대로 재현할 수 없다) ③ 불렸고 성공했는데
+      // 카드가 안 왔다. 2026-09-03 실측으로 ②가 이 단계가 흔들리는 이유다(같은 프롬프트로
+      // 한 번은 통과, 한 번은 "가져오지 못했습니다").
+      note: q13 ? null : '질문 카드가 없다 — answer와 toolSteps를 함께 본다(못 봤나 / 툴이 실패했나 / 전달이 끊겼나)',
+    });
+
+  // ---------- (14) 사람이 권장 선택지를 고르고 [수정안 만들기] ----------
+  const pick14 = await js(shellWin, `(() => {
+    const cards = document.querySelectorAll('#history .backtest-visual');
+    const card = cards[cards.length - 1];
+    if (!card) return { ok: false, reason: 'no card' };
+    const pick = Array.from(card.querySelectorAll('.backtest-visual-choice'))
+      .filter((b) => Array.from(b.querySelectorAll('.routine-draft-pill')).some((p) => p.textContent === '권장'))[0];
+    if (!pick) return { ok: false, reason: 'no recommended choice' };
+    pick.click();
+    return { ok: true };
+  })()`);
+  const click14 = pick14.ok ? await clickCardButton(shellWin, '수정안 만들기') : { clicked: false };
+  const p14 = await until(shellWin, `(() => {
+    const cards = document.querySelectorAll('#history .backtest-visual');
+    if (!cards.length) return null;
+    const card = cards[cards.length - 1];
+    const pill = card.querySelector('.routine-draft-pill.is-filled');
+    if (!pill || pill.textContent !== '그래프 + 코드 패치') return null;
+    const c = window.AthenaBacktestCanvas.getContext();
+    return {
+      title: pill.textContent,
+      diffRows: card.querySelectorAll('.backtest-diff-row').length,
+      buttons: Array.from(card.querySelectorAll('button')).map((b) => b.textContent.trim()),
+      pendingPatch: c.map.pendingPatch,
+      state: c.map.validation_state,
+    };
+  })()`, 30000);
+  record('14-권장 선택지 → [수정안 만들기] → 비활성 수정안 카드(모델 의존: 13의 카드가 있어야 눌린다)',
+    !!pick14.ok && !!click14.clicked && !!p14 && p14.diffRows > 0
+      && !!p14.pendingPatch && !!p14.pendingPatch.patch_id
+      && p14.state === 'invalid',
+    { modelDependent: true, pick: pick14, click: click14, patch: p14 });
+
+  // ---------- (15) 사람이 [적용] — 저장까지, 실행·활성화는 없다 ----------
+  // 이 시나리오의 머리 버전은 앞 턴들에서 **모델이 쓴 파이썬**이다(05~08). 그래서 첫
+  // [적용]은 서버의 낙관적 동시성 검사에 정직하게 걸린다("base 코드가 그 사이 바뀌었다",
+  // 409) — 실패가 아니라 [다시 검토]라는 다음 행동이고(US-010), 그 길을 사람이 눌러
+  // 끝까지 간다. 그 길이 없으면 여기서 막다른 길이 된다.
+  const click15 = p14 ? await clickCardButton(shellWin, '적용하고 시각 설계로 돌아가기') : { clicked: false };
+  const conflict15 = click15.clicked ? await until(shellWin, `(() => {
+    const cards = document.querySelectorAll('#history .backtest-visual');
+    const card = cards[cards.length - 1];
+    if (!card) return null;
+    const pill = card.querySelector('.routine-draft-pill.is-filled');
+    return (pill && pill.textContent === '다시 검토') ? { seen: true } : null;
+  })()`, 20000) : null;
+  if (conflict15) {
+    await clickCardButton(shellWin, '다시 검토');
+    // 다시 검토는 최신 base를 읽고 막고 있는 오류를 **다시 하나** 묻는다 — 사람이 다시
+    // 고르고 다시 만든 뒤에야 [적용]이 선다.
+    await until(shellWin, `(() => {
+      const cards = document.querySelectorAll('#history .backtest-visual');
+      const card = cards[cards.length - 1];
+      const pill = card && card.querySelector('.routine-draft-pill.is-filled');
+      return (pill && pill.textContent === '한 가지만 확인할게요') ? true : null;
+    })()`, 30000);
+    await js(shellWin, `(() => {
+      const cards = document.querySelectorAll('#history .backtest-visual');
+      const card = cards[cards.length - 1];
+      if (!card) return false;
+      const pick = Array.from(card.querySelectorAll('.backtest-visual-choice'))
+        .filter((b) => Array.from(b.querySelectorAll('.routine-draft-pill')).some((p) => p.textContent === '권장'))[0];
+      if (!pick) return false;
+      pick.click();
+      return true;
+    })()`);
+    await clickCardButton(shellWin, '수정안 만들기');
+    await until(shellWin, `(() => {
+      const cards = document.querySelectorAll('#history .backtest-visual');
+      const card = cards[cards.length - 1];
+      const pill = card && card.querySelector('.routine-draft-pill.is-filled');
+      return (pill && pill.textContent === '그래프 + 코드 패치') ? true : null;
+    })()`, 30000);
+    await clickCardButton(shellWin, '적용하고 시각 설계로 돌아가기');
+  }
+  const s15 = click15.clicked ? await until(shellWin, `(() => {
+    const cards = document.querySelectorAll('#history .backtest-visual');
+    if (!cards.length) return null;
+    const card = cards[cards.length - 1];
+    const pills = Array.from(card.querySelectorAll('.routine-draft-pill')).map((p) => p.textContent.trim());
+    if (pills[0] !== '동기화 완료') return null;
+    const c = window.AthenaBacktestCanvas.getContext();
+    return { pills, state: c.map.validation_state, designTab: c.designTab, pendingPatch: c.map.pendingPatch };
+  })()`, 30000) : null;
+  const c15 = await ctx(shellWin);
+  record('15-[적용하고 시각 설계로 돌아가기] → 동기화 완료 카드(모델 의존)',
+    !!click15.clicked && !!s15 && s15.state === 'synced' && s15.designTab === 'flow'
+      && s15.pendingPatch === null,
+    {
+      modelDependent: true, click: click15, synced: s15,
+      // 첫 [적용]이 409로 걸렸는가 — 걸렸다면 [다시 검토] 길을 실제로 걸어서 온 것이다.
+      conflictThenRetry: !!conflict15,
+      lastChange: c15 && c15.lastChange,
+    });
 
   const okAll = report.steps.every((s) => s.ok);
   report.finishedAt = new Date().toISOString();
