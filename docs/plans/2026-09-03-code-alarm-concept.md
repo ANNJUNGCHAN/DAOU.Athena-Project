@@ -14,7 +14,7 @@
 | 지표 25종 | `sandbox/api.py` `bt.sma/ema/rsi/atr/…` | 0 |
 | 코드 → 노드·흐름 | `backtest/flow.build_flow` (ast만, 실행 없음) · `mapmodel.build_map` · `POST /backtest/flow`, `/map` | 소 — `entry·exit 두 열만 받습니다` 문구와 `returns_columns` 검사에 감시 분기 |
 | 오류 → 진단 → 수정안 | `backtest/diagnose.diagnose` · `visual_repair` · `POST /backtest/diagnose` | 0 |
-| AI가 코드를 쓰는 경로 | MCP `athena_backtest` `propose_code / read_code / diagnose / flow / map` — 프로젝트 폴더 안 `.py`만, 폴더 밖 금지 | 0 (툴 설명문에 "감시 함수" 용례 추가) |
+| AI가 코드를 쓰는 경로 | MCP `athena_backtest` `propose_code / read_code / diagnose / flow / map` — **정정(재실측)**: `propose_code`는 `bt_strategy_version`에 쌓이고 `propose_file`은 백테스트 캔버스로 간다(프로젝트 폴더 `.py` 직행 아님) | 중 — 진단(`diagnose`)·흐름(`flow`)은 그대로 쓰되, **에이전트 모드 전용 코드 착지 경로를 새로 만든다**(프로젝트 폴더 안 `watch/<이름>.py`, 백테스트 표·등록부 미접촉) |
 | 일봉 데이터·캐시 | `backtest/data.backfill` + sqlite `bt_candle` (키움 REST ka10081, 일/주/월) | 0 |
 | 실행·상태·쿨다운·만료·발화 기록 | `routines/` — `RoutineSpec`, `TriggerEngine`(쿨다운·연속·근접), `RoutineScheduler`, ledger, WS 알림 피드, 초안→확정 게이트 | 중 — §2 |
 | 승인 카드 | `chat.js renderApprovalCard` — `미리보기 실행` 칩이 **비활성**("dry-run 개념 없음") | 이 칩이 간단 백테스트의 자리다 |
