@@ -12,7 +12,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {
   ACTIONS, buildProposal, buildBatchProposal, validateProposal, isProposalStale,
-  cardCopy, resultTurnCopy, outOfModeCopy, proposalSignature,
+  cardCopy, resultTurnCopy, resultTurnModel, probeToolCount,
+  outOfModeCopy, createOutOfModeNotifier, proposalSignature,
 } = require('./plugin-proposal');
 
 const INSTALL = { action: 'install', target: 'fetch', features: ['fetch — 지정한 URL의 본문'] };
@@ -198,6 +199,24 @@ test('resultTurnCopy: 실패는 사유 한 줄과 다시 시도 칩이다', () =
   assert.equal(failed.chip, '다시 시도');
 });
 
+test('resultTurnCopy: 만료는 한 줄이고 칩이 없다 — 실패로 그리지 않는다', () => {
+  const stale = resultTurnCopy('stale', { reason: '목록이 바뀌어 다시 확인이 필요합니다' });
+  assert.deepEqual(stale.lines, ['목록이 바뀌어 다시 확인이 필요합니다']);
+  assert.equal(stale.chip, null);
+  // 메인이 사유를 안 줘도 빈 줄을 내지 않는다.
+  assert.deepEqual(resultTurnCopy('stale', {}).lines, ['목록이 바뀌어 다시 확인이 필요합니다']);
+});
+
+test('resultTurnCopy: 승인 결과 4종이 모두 문장을 낸다(빈 줄 없음)', () => {
+  for (const kind of ['success', 'failed', 'rejected', 'stale']) {
+    const copy = resultTurnCopy(kind, { toolCount: 2, reason: '사유' });
+    assert.ok(copy.lines.length > 0, `${kind}가 빈 줄이다`);
+    copy.lines.forEach((line) => assert.ok(String(line).trim().length > 0, `${kind}에 빈 문자열이 있다`));
+  }
+  // 결과 4종 밖은 여전히 빈 배열이다(모르는 종류를 지어내지 않는다).
+  assert.deepEqual(resultTurnCopy('unknown', {}).lines, []);
+});
+
 test('resultTurnCopy: 재시작은 런타임이 켜졌을 때만 반영됐다고 말한다', () => {
   assert.deepEqual(
     resultTurnCopy('restart', { runtimeEnabled: true }).lines,
@@ -206,8 +225,55 @@ test('resultTurnCopy: 재시작은 런타임이 켜졌을 때만 반영됐다고
   assert.deepEqual(resultTurnCopy('restart', { runtimeEnabled: false }).lines, ['다음 실행부터 반영됩니다']);
 });
 
+// --- 결과 턴 모델(chat.js가 그대로 그린다) --------------------------------------
+
+test('resultTurnModel: 기능 수는 서버 수가 아니라 도구 수의 합이다', () => {
+  const model = resultTurnModel('success', {
+    probes: [{ alias: 'a', toolCount: 4 }, { alias: 'b', toolCount: 2 }],
+    runtimeEnabled: false,
+  });
+  assert.equal(model.lines[2], '기능 6개를 찾았습니다', '서버 2개를 기능 2개로 세면 안 된다');
+  assert.equal(probeToolCount([{ toolCount: 4 }, { toolCount: 2 }]), 6);
+  // probe가 실패한 줄은 toolCount 0이라 합계에 기여하지 않는다.
+  assert.equal(probeToolCount([{ ok: false }, { toolCount: 3 }]), 3);
+  assert.equal(probeToolCount(undefined), 0);
+});
+
+test('resultTurnModel: 성공에만 재시작 줄이 붙고 런타임을 따른다', () => {
+  const off = resultTurnModel('success', { probes: [{ toolCount: 1 }], runtimeEnabled: false });
+  assert.deepEqual(off.lines, ['등록했습니다', '연결을 확인했습니다', '기능 1개를 찾았습니다', '다음 실행부터 반영됩니다']);
+  const on = resultTurnModel('success', { probes: [], runtimeEnabled: true });
+  assert.deepEqual(on.lines.slice(3), ['플러그인이 바뀌어 대화를 다시 시작했습니다', '방금 승인한 내용은 반영됐습니다']);
+  // 실패·거부·만료에는 재시작 줄이 없다.
+  for (const kind of ['failed', 'rejected', 'stale']) {
+    assert.equal(resultTurnModel(kind, { runtimeEnabled: true }).lines.length, 1, kind);
+  }
+});
+
+test('resultTurnModel: 실패에만 다시 시도 칩이 있고 detail은 읽지 않는다', () => {
+  const failed = resultTurnModel('failed', { reason: '실행 파일을 찾지 못했습니다', results: [{ detail: 'ENOENT spawn npx' }] });
+  assert.equal(failed.chip, '다시 시도');
+  assert.deepEqual(failed.lines, ['연결 실패 — 실행 파일을 찾지 못했습니다']);
+  assert.ok(!failed.lines.join(' ').includes('ENOENT'), 'CLI 원문이 화면에 샜다');
+  assert.equal(resultTurnModel('stale', { reason: '목록이 바뀌어 다시 확인이 필요합니다' }).chip, null);
+});
+
 test('outOfModeCopy: 폐기 사실과 맞는 한 줄만 낸다', () => {
   assert.equal(outOfModeCopy(), '플러그인 모드에서 다시 요청합니다');
+});
+
+test('createOutOfModeNotifier: 한 턴에 한 번만 알리고 턴이 바뀌면 다시 알린다', () => {
+  const notifier = createOutOfModeNotifier();
+  const install = buildProposal({ action: 'install', target: 'fetch' }, '', 1, 'model');
+  const same = buildProposal({ action: 'install', target: 'fetch' }, '', 2, 'model');
+  const other = buildProposal({ action: 'remove', target: 'fetch' }, '', 1, 'model');
+
+  assert.equal(notifier.shouldAnnounce(install), true);
+  assert.equal(notifier.shouldAnnounce(same), false, '같은 제안은 한 턴에 한 번이다');
+  assert.equal(notifier.shouldAnnounce(other), true, '다른 동작은 따로 알린다');
+
+  notifier.reset(); // 다음 턴
+  assert.equal(notifier.shouldAnnounce(same), true, '턴이 바뀌면 다시 알린다');
 });
 
 // --- 서명(중복 알림 방지) --------------------------------------------------------

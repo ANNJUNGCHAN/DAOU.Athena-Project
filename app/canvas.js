@@ -2322,6 +2322,15 @@ function pluginMarketplaceRows() {
   }));
 }
 
+// 제안 봉투의 조립·모드 판정은 순수 모듈이 한다. 이 파일은 IPC만 잇는다.
+const pluginProposal = window.AthenaLib.PluginProposal;
+const pluginModeAdapter = window.AthenaLib.PluginModeAdapter;
+// athena:mcp-list가 준 가장 최근 판번호. 아직 못 받았으면 null이고, 그때는
+// 만료 판정을 하지 않는다(모르는 것을 낡았다고 말하지 않는다).
+let pluginRevision = null;
+// 화면에 떠 있는 미해결 봉투. pending 복원과 GUI·모델 제안이 함께 쌓인다.
+const pluginProposals = [];
+
 const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
   container: document.getElementById('pluginCanvas'),
   // 실제 목록이 도착하기 전에도 샘플 폴백을 타지 않도록 항상 명시적으로 넘긴다.
@@ -2329,18 +2338,105 @@ const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
   recommended: [],
   marketplaces: [],
   onPermission: (plugin) => { void pluginProbe(plugin && plugin.id); },
-  onSavePermissions: (plugin, features) => pluginSaveTools(plugin && plugin.id, features),
   onManage: () => { void pluginRefresh(); },
-  onStageSnippet: (snippet) => pluginStageSnippet(snippet),
-  onApproveServer: (staged) => pluginApproveStaged(staged),
-  onDiscardStaged: (staged) => { void pluginDiscardStaged(staged); },
-  onApproveInstall: (plugin) => pluginInstallCatalogEntry(plugin),
-  onTogglePlugin: (plugin, enabled) => pluginSetEnabled(plugin && plugin.id, enabled),
   onToggleMarketplace: (marketplace, enabled) => pluginSetMarketplaceEnabled(marketplace && marketplace.id, enabled),
-  onRemovePlugin: (plugin) => pluginRemove(plugin && plugin.id),
+  // GUI 진입 6종(설치·허용·철회·켜기끄기·삭제·직접 등록)이 전부 여기로 합류한다.
+  // 버튼은 봉투를 만들 뿐이고, athena:mcp-*를 부르는 실행은 승인 하나뿐이다.
+  onPropose: (spec, reason) => { mountPluginProposal(buildGuiProposal(spec, reason)); },
+  onApproveProposal: (envelope) => pluginDecide('athena:plugin-approve', envelope),
+  onRejectProposal: (envelope) => pluginDecide('athena:plugin-reject', envelope),
+  // 만료 카드를 지우는 것은 거부가 아니다 — 대기 목록에서만 빼고 채팅에는 알리지 않는다.
+  onDismissProposal: (envelope) => { void pluginForgetProposal(envelope); },
 });
 pluginCanvas.mount();
-window.AthenaPluginCanvas = pluginCanvas;
+
+// 모드 재진입마다 미해결 제안을 되살린다. 사이드바(lib/sidebar.js)는 진입할 때
+// setView('hub')만 부르므로 복원 훅의 거처는 이 래퍼다 — 사이드바는 만지지 않는다.
+// plugin-canvas.js는 IPC를 모른다: invoke는 여기서 하고 결과만 setProposals로 넣는다.
+window.AthenaPluginCanvas = {
+  ...pluginCanvas,
+  setView(view) {
+    pluginCanvas.setView(view);
+    void pluginRestorePending();
+  },
+};
+
+function buildGuiProposal(spec, reason) {
+  return Array.isArray(spec)
+    ? pluginProposal.buildBatchProposal(spec, reason, pluginRevision, 'gui')
+    : pluginProposal.buildProposal(spec, reason, pluginRevision, 'gui');
+}
+
+// 모델 경로와 GUI 경로가 만나는 단 하나의 문. 모드 밖이면 봉투를 버린다 —
+// 카드도 그리지 않고 대기 목록에도 넣지 않는다(보관했다 부활시키지 않는다).
+// 채팅이 한 줄로 알릴 수 있게 렌더러 안에서만 신호를 낸다.
+function mountPluginProposal(envelope) {
+  if (!envelope) return false;
+  if (pluginModeAdapter.currentMode() !== 'plugin') {
+    window.dispatchEvent(new CustomEvent('athena:plugin-out-of-mode', { detail: { envelope } }));
+    return false;
+  }
+  pluginProposals.push(envelope);
+  pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });
+  // 대기 등록은 카드를 그린 뒤의 단방향 통보 하나뿐이다(응답을 기다리지 않는다).
+  window.athena.send('athena:plugin-noted', envelope);
+  return true;
+}
+
+// 모델 제안은 턴 밖에서도 살아 있어야 한다 — 모듈 스코프 구독이다(턴 스코프
+// 형판을 여기 복제하면 턴이 끝나는 순간 카드가 사라진다).
+window.athena.on('athena:plugin-proposed', (envelope) => { mountPluginProposal(envelope); });
+
+function dropPluginProposal(envelope) {
+  const index = pluginProposals.findIndex((row) => row.proposal_id === envelope.proposal_id);
+  if (index >= 0) pluginProposals.splice(index, 1);
+}
+
+async function pluginForgetProposal(envelope) {
+  dropPluginProposal(envelope);
+  try {
+    await window.athena.invoke('athena:plugin-reject', envelope);
+  } catch (err) {
+    console.warn('athena:plugin-reject 실패', err);
+  }
+}
+
+// 사람의 클릭 하나가 유일한 실행 지점이다. 결과는 카드(반환값)와 채팅(이벤트)
+// 두 곳으로 간다 — 채널을 새로 만들지 않고 같은 자리의 CustomEvent를 쓴다.
+async function pluginDecide(channel, envelope) {
+  let result;
+  try {
+    result = await window.athena.invoke(channel, envelope);
+  } catch (err) {
+    result = { ok: false, kind: 'failed', reason: String((err && err.message) || err) };
+  }
+  const kind = (result && result.kind) || 'failed';
+  dropPluginProposal(envelope);
+  if (result && typeof result.revision === 'number') pluginRevision = result.revision;
+  if (kind === 'success') {
+    pluginRegistryChangedThisSession = true;
+    await pluginRefresh();
+  }
+  // 남은 카드의 만료 판정이 새 판번호를 쓰게 한다 — 방금 승인이 목록을
+  // 바꿨으면 옆 카드는 이미 낡았다.
+  pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });
+  window.dispatchEvent(new CustomEvent('athena:plugin-result', { detail: { kind, envelope, result } }));
+  return result;
+}
+
+async function pluginRestorePending() {
+  let pending;
+  try {
+    pending = await window.athena.invoke('athena:plugin-pending');
+  } catch (err) {
+    console.warn('athena:plugin-pending 실패', err);
+    return;
+  }
+  if (pending && typeof pending.revision === 'number') pluginRevision = pending.revision;
+  pluginProposals.length = 0;
+  pluginProposals.push(...((pending && Array.isArray(pending.proposals)) ? pending.proposals : []));
+  pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });
+}
 
 // probe는 실제 upstream 서버를 spawn한다(mcp-cli.js probe 주석) — 목록을 새로고칠
 // 때마다 등록된 서버를 전부 띄우지 않는다. 권한 화면을 연 그 서버만 한 번 띄우고
@@ -2388,6 +2484,8 @@ async function pluginRefresh() {
   try {
     const res = await window.athena.invoke('athena:mcp-list');
     const servers = (res && Array.isArray(res.servers)) ? res.servers : [];
+    // 목록과 함께 오는 판번호가 GUI 제안의 만료 기준이다(R-4).
+    if (res && typeof res.revision === 'number') pluginRevision = res.revision;
     const marketplaces = pluginMarketplaceRows();
     const enabledMarketplaceIds = marketplaces.filter((m) => m.enabled).map((m) => m.id);
     pluginCanvas.setData({
@@ -2399,6 +2497,8 @@ async function pluginRefresh() {
     // 채팅의 @멘션 목록과 키우미 메뉴가 같은 레지스트리를 본다 — 여기서만
     // 알리고, 그쪽은 이 신호로 캐시를 버린다(양쪽이 각자 폴링하지 않는다).
     window.dispatchEvent(new CustomEvent('athena:plugins-changed', { detail: { servers } }));
+    // 목록이 바뀌면 떠 있는 카드의 만료 판정도 함께 갱신된다.
+    pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });
   } catch (err) {
     console.warn('athena:mcp-list 실패', err);
   }
@@ -2427,125 +2527,6 @@ async function pluginProbe(alias) {
   }
 }
 
-// 저장 결과를 그대로 화면에 돌려준다 — 한 도구라도 실패하면 저장 실패다.
-// features는 "허용할 것"의 목록이므로, 캐시에 있는데 목록에 없는 도구는 해제다.
-async function pluginSaveTools(alias, features) {
-  if (!alias || !Array.isArray(features)) return { ok: false, error: '대상 플러그인을 찾지 못했습니다' };
-  const known = new Map((pluginToolCache.get(alias) || []).map((tool) => [tool.name, !!tool.allowed]));
-  const wanted = new Set(features.map((feature) => feature && feature.name).filter(Boolean));
-  for (const [name, wasAllowed] of known) {
-    const allowed = wanted.has(name);
-    if (wasAllowed === allowed) continue; // 바뀐 것만 CLI를 부른다
-    try {
-      const res = await window.athena.invoke('athena:mcp-allow-tool', { alias, tool: name, allowed });
-      if (!res || !res.ok) {
-        await pluginProbe(alias);
-        return { ok: false, error: (res && res.error) || `${name} 허용 변경에 실패했습니다` };
-      }
-    } catch (err) {
-      await pluginProbe(alias);
-      return { ok: false, error: String((err && err.message) || err) };
-    }
-  }
-  pluginRegistryChangedThisSession = true;
-  pluginToolCache.delete(alias);
-  await pluginProbe(alias);
-  return { ok: true };
-}
-
-// 스니펫 분석 = athena:mcp-stage-snippet. 이름과 달리 실제로 레지스트리에 등록까지
-// 한다(mcp-cli.js stageSnippet 주석 — 파이썬 백엔드에 dry-run이 없다). 승인 전에는
-// consent 게이트가 서버 spawn을 막으므로 안전하고, 취소는 아래 discard가 되돌린다.
-async function pluginStageSnippet(snippet) {
-  try {
-    return await window.athena.invoke('athena:mcp-stage-snippet', { snippet });
-  } catch (err) {
-    return { ok: false, error: String((err && err.message) || err) };
-  }
-}
-
-// 승인 = register 재확인 → approve → probe. probe까지 해야 노출 도구를 알 수 있고,
-// 그래야 사용자가 도구를 하나씩 허용할 수 있다.
-async function pluginApproveStaged(staged) {
-  const servers = Array.isArray(staged) ? staged : [];
-  if (!servers.length) return { ok: false, error: '승인할 서버가 없다' };
-  for (const server of servers) {
-    try {
-      const registered = await window.athena.invoke('athena:mcp-register', { staged: server });
-      if (!registered || !registered.ok) {
-        return { ok: false, error: (registered && registered.error) || '등록 확인에 실패했다' };
-      }
-      const approved = await window.athena.invoke('athena:mcp-approve', { alias: server.alias });
-      if (!approved || !approved.ok) {
-        return { ok: false, error: (approved && approved.error) || '승인에 실패했다' };
-      }
-    } catch (err) {
-      return { ok: false, error: String((err && err.message) || err) };
-    }
-  }
-  pluginRegistryChangedThisSession = true;
-  // probe는 서버를 실제로 띄운다 — 실패해도 등록·승인은 유효하므로 승인 자체를
-  // 실패로 만들지 않는다. 도구 목록은 권한 화면에서 다시 시도할 수 있다.
-  for (const server of servers) await pluginProbe(server.alias);
-  await pluginRefresh();
-  return { ok: true };
-}
-
-// 카탈로그 설치 — 추천 카드의 "설치"가 승인되면 여기로 온다. 스니펫 경로를 그대로
-// 재사용한다: 카탈로그 항목을 Claude 설정 스니펫 한 줄로 만들어 같은 등록·승인·
-// probe를 태운다. 별도 등록 경로를 하나 더 만들면 위험 스캔·별칭 정규화·동의
-// 게이트가 두 벌이 된다.
-async function pluginInstallCatalogEntry(plugin) {
-  const entry = pluginCatalog.findEntry(plugin && plugin.id);
-  if (!entry) return { ok: false, error: '카탈로그에서 이 플러그인을 찾지 못했습니다' };
-  try {
-    const listed = await window.athena.invoke('athena:mcp-list');
-    const already = ((listed && listed.servers) || []).some((s) => s.alias === entry.id);
-    if (already) {
-      await pluginRefresh();
-      return { ok: false, error: '이미 등록된 서버입니다 — 설치됨 목록에서 권한을 엽니다' };
-    }
-  } catch {
-    // 목록 조회 실패는 설치를 막을 이유가 아니다 — 중복이면 아래 등록이 거절한다.
-  }
-  const snippet = JSON.stringify({
-    mcpServers: { [entry.id]: { command: entry.command, args: [...entry.args] } },
-  });
-  const staged = await pluginStageSnippet(snippet);
-  if (!staged || !staged.ok || !Array.isArray(staged.staged) || !staged.staged.length) {
-    return { ok: false, error: (staged && staged.error) || '등록에 실패했습니다' };
-  }
-  const approved = await pluginApproveStaged(staged.staged);
-  if (!approved || !approved.ok) {
-    // 승인 단계에서 멈췄으면 등록만 남는다 — 흔적을 지우고 원래대로 돌린다.
-    await pluginDiscardStaged(staged.staged);
-    return approved || { ok: false, error: '승인에 실패했습니다' };
-  }
-  return { ok: true };
-}
-
-// 관리 화면의 켜기/끄기 = consent approve/revoke. 삭제와 다르다: 등록은 남고
-// 대화 노출만 끊긴다. revoke는 허용 도구 목록까지 비우므로 캐시도 함께 버린다.
-async function pluginSetEnabled(alias, enabled) {
-  if (!alias) return { ok: false, error: '대상 플러그인을 찾지 못했습니다' };
-  try {
-    const res = await window.athena.invoke(
-      enabled ? 'athena:mcp-approve' : 'athena:mcp-revoke',
-      { alias },
-    );
-    if (!res || !res.ok) {
-      return { ok: false, error: (res && res.error) || (enabled ? '승인에 실패했습니다' : '승인 철회에 실패했습니다') };
-    }
-  } catch (err) {
-    return { ok: false, error: String((err && err.message) || err) };
-  }
-  pluginRegistryChangedThisSession = true;
-  pluginToolCache.delete(alias);
-  pluginProbeErrors.delete(alias);
-  await pluginRefresh();
-  return { ok: true };
-}
-
 async function pluginSetMarketplaceEnabled(id, enabled) {
   if (!id) return { ok: false, error: '대상 마켓플레이스를 찾지 못했습니다' };
   if (!writeMarketplacePref(id, enabled)) {
@@ -2553,35 +2534,6 @@ async function pluginSetMarketplaceEnabled(id, enabled) {
   }
   await pluginRefresh();
   return { ok: true };
-}
-
-async function pluginRemove(alias) {
-  if (!alias) return { ok: false, error: '대상 플러그인을 찾지 못했습니다' };
-  try {
-    const res = await window.athena.invoke('athena:mcp-remove', { alias });
-    if (!res || !res.ok) return { ok: false, error: '삭제에 실패했습니다' };
-  } catch (err) {
-    return { ok: false, error: String((err && err.message) || err) };
-  }
-  pluginToolCache.delete(alias);
-  pluginProbeErrors.delete(alias);
-  pluginRegistryChangedThisSession = true;
-  await pluginRefresh();
-  return { ok: true };
-}
-
-// 취소는 흔적을 남기지 않는다 — 분석 단계가 이미 등록했으므로 되돌린다.
-async function pluginDiscardStaged(staged) {
-  for (const server of (Array.isArray(staged) ? staged : [])) {
-    try {
-      await window.athena.invoke('athena:mcp-remove', { alias: server.alias });
-    } catch (err) {
-      console.warn('athena:mcp-remove 실패', err);
-    }
-    pluginToolCache.delete(server.alias);
-    pluginProbeErrors.delete(server.alias);
-  }
-  await pluginRefresh();
 }
 
 void pluginRefresh();

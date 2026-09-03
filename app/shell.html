@@ -297,11 +297,13 @@
          (GLOSSARY §1). shell.css의 flex-shrink:0이 그 계약이다. -->
     <section id="chatRegion" class="shell-region">
       <div id="app" class="app glass" hidden>
-        <!-- 모드별 채팅 헤더(보드 38, 2026-08-27) — 그래프 모드 전용. 보드 37
-             실측: 대화 모드에는 헤더가 없다. graph-mode controller가 hidden 소유. -->
+        <!-- 모드별 채팅 헤더(보드 38, 2026-08-27) — 그래프·백테스트·플러그인 모드.
+             보드 37 실측: 대화 모드에는 헤더가 없다. 문구와 hidden은 둘 다
+             graph-mode controller가 소유한다(여기 고정 문구를 두면 모드가 바뀌어도
+             남는다). -->
         <div id="chatModeHead" class="chat-mode-head" hidden>
-          <span class="chat-mode-head-title">그래프에게 묻기</span>
-          <span class="chat-mode-head-sub">답이 캔버스를 바꿉니다</span>
+          <span class="chat-mode-head-title"></span>
+          <span class="chat-mode-head-sub"></span>
         </div>
         <!-- 알림 파생 방 머리(Paper 보드 08) — 사이드바 "알림에서" 항목을 선택했을 때만
              보인다. 메인 대화와 섞이지 않는다는 문구가 계약이다 — lib/sidebar.js가

@@ -2,7 +2,8 @@
 //
 // 여기 있는 항목은 **실제로 설치된다**. 각 항목의 command/args는 그대로
 // `athena-mcp register --alias <id> --command <command> --arg <arg>...`로 넘어가고,
-// 그 뒤 approve → probe → allow가 이어진다(canvas.js pluginInstallCatalogEntry).
+// 그 뒤 approve → probe → allow가 이어진다(승인 카드의 [승인]이 부른
+// lib/main/plugin-proposal-registry.js가 실행한다).
 // 그래서 이 파일에 실행되지 않는 스펙을 넣으면 안 된다 — 설치 버튼은 눌리는데
 // probe에서만 실패하는, 화면과 실제가 어긋나는 상태가 된다.
 //
@@ -14,7 +15,7 @@
 // `requestedFeatures`/`toolNames`는 2026-09-01에 이 저장소에서 실제로
 // register → approve → probe를 돌려 받아 적은 값이다(추측이 아니다). 그래도
 // **설치 뒤 allowlist는 probe 결과만 쓴다** — 카탈로그가 낡으면 존재하지 않는
-// 도구를 허용 목록에 넣게 되기 때문이다(canvas.js pluginSaveTools 주석의 그 결함).
+// 도구를 허용 목록에 넣게 되기 때문이다.
 // 여기 적힌 도구 이름은 설치 전 "무엇을 승인하는지" 보여주기 위한 표시값이다.
 (function () {
 'use strict';
