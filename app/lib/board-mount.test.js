@@ -328,7 +328,7 @@ function regionStub(className, inline) {
   return node;
 }
 
-test('hoistLayout은 네 속성만 커스텀 속성으로 옮기고 나머지 인라인은 손대지 않는다', () => {
+test('hoistLayout은 레이아웃 속성만 커스텀 속성으로 옮기고 나머지 인라인은 손대지 않는다', () => {
   const rail = regionStub('bs-rail', {
     width: '460px',
     'flex-shrink': '0',
@@ -353,28 +353,84 @@ test('hoistLayout은 네 속성만 커스텀 속성으로 옮기고 나머지 �
   assert.equal(rail.style.getPropertyValue('--bs-width'), '460px');
 });
 
-test('applyResponsiveHooks는 보드 루트와 반응형 영역 전부를 훑는다', () => {
+test('L 구간 최소 폭 표시는 값이 있는 탄력 KPI 칸에만 붙는다', () => {
+  const elasticValue = regionStub('bs-kpi-cell', {
+    'flex-basis': '0%',
+    'flex-grow': '1',
+  });
+  elasticValue.textContent = '현금 비중 28.0%';
+  const elasticSpacer = regionStub('bs-kpi-cell', {
+    'flex-basis': '0%',
+    'flex-grow': '1',
+  });
+  elasticSpacer.textContent = '';
+  const fixedValue = regionStub('bs-kpi-cell', { width: '245px' });
+  fixedValue.textContent = '평가손익 +1.24%';
+
+  assert.equal(hoistLayout(elasticValue), true);
+  assert.equal(hoistLayout(elasticSpacer), true);
+  assert.equal(hoistLayout(fixedValue), true);
+  assert.equal(elasticValue.dataset.bsKpiElastic, 'true');
+  assert.equal(elasticSpacer.dataset.bsKpiElastic, undefined,
+    '빈 spacer에 최소 폭을 주면 8칸 시세 스트립이 L 구간에서 넘친다');
+  assert.equal(fixedValue.dataset.bsKpiElastic, undefined,
+    '모든 KPI 칸에 최소 폭을 주면 6~8칸 보드가 L 구간에서 넘친다');
+});
+
+test('한쪽 inset과 고정 폭을 가진 absolute 상자는 좁은 단계용 양쪽 inset을 기억한다', () => {
+  const actions = regionStub('', {
+    position: 'absolute',
+    left: '24px',
+    bottom: '18px',
+    width: '490px',
+  });
+  actions.dataset.name = 'Chart Context Actions';
+  const tooltip = regionStub('', {
+    position: 'absolute',
+    left: '748px',
+    top: '120px',
+    width: '148px',
+  });
+  tooltip.dataset.name = 'Chart Tooltip Label';
+  assert.equal(hoistLayout(actions), true);
+  assert.equal(hoistLayout(tooltip), true);
+  assert.equal(actions.dataset.bsInsetX, 'true');
+  assert.equal(actions.style.getPropertyValue('--bs-inset-x'), '24px');
+  assert.equal(actions.style.getPropertyValue('left'), '24px', 'Paper의 XL 위치는 보존한다');
+  assert.equal(actions.style.getPropertyValue('bottom'), '18px');
+  assert.equal(tooltip.dataset.bsInsetX, undefined,
+    '툴팁·차트 핸들 같은 다른 absolute 요소의 위치/폭은 늘리지 않는다');
+});
+
+test('applyResponsiveHooks는 보드 루트·반응형 영역·영역 밖 고정 상자를 모두 훑는다', () => {
   const rail = regionStub('bs-rail', { width: '460px' });
   const primary = regionStub('bs-primary', { width: '912px', 'flex-grow': '1' });
   const footer = regionStub('bs-footer', { width: '1440px' });
+  const label = regionStub('', { color: '#14171d' });
   const surface = regionStub('board-surface', { width: '1440px' });
-  surface.children = [rail, primary, footer];
-  surface.querySelectorAll = (selector) => surface.children.filter(
-    (child) => String(child.className).split(/\s+/).includes(selector.slice(1)),
-  );
+  surface.children = [rail, primary, footer, label];
+  surface.querySelectorAll = (selector) => (selector === '*' ? surface.children : surface.children
+    .filter((child) => String(child.className).split(/\s+/).includes(selector.slice(1))));
 
-  assert.equal(applyResponsiveHooks(surface), 3);
+  // 루트 1 + 영역 2(bs-rail·bs-primary) + 영역 밖 고정 상자 1(bs-footer).
+  // 인라인 레이아웃 선언이 없는 노드(label)는 훑어도 표시가 남지 않는다.
+  assert.equal(applyResponsiveHooks(surface), 4);
   assert.equal(surface.style.getPropertyValue('--bs-width'), '1440px');
   assert.equal(rail.style.getPropertyValue('--bs-width'), '460px');
   assert.equal(primary.style.getPropertyValue('--bs-flex-grow'), '1');
-  // 단계가 건드리지 않는 영역은 인라인 원문 그대로 둔다.
-  assert.equal(footer.style.getPropertyValue('width'), '1440px');
-  assert.equal(footer.style.getPropertyValue('--bs-width'), '');
+  // 영역 밖 고정 폭도 걷어낸다 — 헤더·푸터·표 열·KPI 칸이 여기 속한다.
+  assert.equal(footer.style.getPropertyValue('width'), '');
+  assert.equal(footer.style.getPropertyValue('--bs-width'), '1440px');
+  assert.equal(footer.dataset.bsHoisted, 'true');
+  assert.equal(label.dataset.bsHoisted, undefined);
+  assert.equal(label.style.getPropertyValue('color'), '#14171d');
   assert.deepEqual(RESPONSIVE_REGIONS, [
     'bs-workspace', 'bs-primary', 'bs-rail', 'bs-kpi', 'bs-kpi-cell', 'bs-table', 'bs-strip',
   ]);
+  // 높이도 함께 걷어낸다 — 폭이 줄면 글자가 줄바꿈으로 내려가는데 Paper 원문은
+  // 영역마다 고정 높이를 싣는다(실측 2SKU-1 헤더 106px · KPI 줄 116px).
   assert.deepEqual(HOISTED_PROPERTIES.map(([property]) => property),
-    ['width', 'flex-basis', 'flex-grow', 'flex-shrink']);
+    ['width', 'height', 'flex-basis', 'flex-grow', 'flex-shrink']);
 });
 
 

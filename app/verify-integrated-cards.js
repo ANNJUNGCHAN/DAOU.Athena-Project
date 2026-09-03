@@ -11,6 +11,7 @@ const {
   publicPolicies,
   resolveLeaseBindings,
 } = require('./lib/main/integrated-card-realtime');
+const { visualRowCounts } = require('./lib/board-layout-geometry');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -503,6 +504,69 @@ const BOARD_WINDOW_PRESETS = Object.freeze([
   { name: '4분할', width: 640, height: 540 },
   { name: '최소', width: 480, height: 420 },
 ]);
+// 사용자 검수 PNG는 위 4종만 유지한다. 실제 셸에서 1920 창의 보드 컨테이너는
+// 1,171px(L)라 XL을 못 밟고, 960 창은 621px(S)라 M을 건너뛴다. 두 구간은
+// 별도 기하 프로브로만 재서 5단 계약을 전부 통과시키고 PNG 수는 24장을 지킨다.
+const BOARD_BREAKPOINT_PROBE_PRESETS = Object.freeze([
+  { name: 'XL 프로브', width: 2560, height: 1440, minContainer: 1280, maxContainer: 1440 },
+  { name: 'M 프로브', width: 1600, height: 900, minContainer: 720, maxContainer: 959 },
+]);
+
+function assertSurfaceGeometry(boardId, preset, probe) {
+  if (probe.overflow_x > 1) {
+    throw new Error(
+      `board ${boardId} ${preset.name}: surface overflow ${probe.overflow_x}px — ${
+        JSON.stringify(probe.overflow_nodes)}`,
+    );
+  }
+  const responsiveHeight = preset.name !== 'XL 프로브';
+  if (responsiveHeight && probe.vertical_overflow_nodes.length) {
+    throw new Error(
+      `board ${boardId} ${preset.name}: vertical content overflow — ${
+        JSON.stringify(probe.vertical_overflow_nodes)}`,
+    );
+  }
+  if (responsiveHeight && probe.vertical_overlap_nodes.length) {
+    throw new Error(
+      `board ${boardId} ${preset.name}: vertical sibling overlap — ${
+        JSON.stringify(probe.vertical_overlap_nodes)}`,
+    );
+  }
+}
+
+function assertBreakpointContract(boardId, preset, probe) {
+  const cutoff = preset.name === 'M 프로브' ? 6 : Number.POSITIVE_INFINITY;
+  const expectedFolded = probe.all_columns.filter((priority) => Number(priority) >= cutoff).sort();
+  if (JSON.stringify(probe.folded_columns) !== JSON.stringify(expectedFolded)) {
+    throw new Error(
+      `board ${boardId} ${preset.name}: folded columns ${JSON.stringify(probe.folded_columns)} !== ${
+        JSON.stringify(expectedFolded)}`,
+    );
+  }
+  if (preset.name === 'XL 프로브') {
+    if (probe.kpi_row_counts.some((rows) => rows.length > 1)) {
+      throw new Error(`board ${boardId} XL 프로브: KPI wrapped — ${JSON.stringify(probe.kpi_row_counts)}`);
+    }
+    if (probe.primary_rect && probe.rail_rect
+        && Math.abs(probe.primary_rect.top - probe.rail_rect.top) > 1) {
+      throw new Error(
+        `board ${boardId} XL 프로브: primary/rail are not side-by-side — ${
+          JSON.stringify({ primary: probe.primary_rect, rail: probe.rail_rect })}`,
+      );
+    }
+    return;
+  }
+  if (probe.kpi_max_columns > 3) {
+    throw new Error(`board ${boardId} M 프로브: KPI columns ${probe.kpi_max_columns} > 3`);
+  }
+  if (probe.primary_rect && probe.rail_rect
+      && probe.rail_rect.top < probe.primary_rect.bottom - 1) {
+    throw new Error(
+      `board ${boardId} M 프로브: rail did not move below primary — ${
+        JSON.stringify({ primary: probe.primary_rect, rail: probe.rail_rect })}`,
+    );
+  }
+}
 
 // 백엔드 card_surface_contract.observation_id_for와 **같은** 재료다. 다른 규칙으로
 // 만들면 실시간 프레임이 보드 슬롯을 못 찾는다.
@@ -698,6 +762,7 @@ async function settleBoardLayout(win, instanceId) {
 // 뺀다 — XL에서 숨어 있는 것이 정상이다. 영값 묶음(H1)으로 접힌 레일 행도 열이
 // 없어 도달 0이지만, 그 0이 네 단계 모두 같으므로 상등 검사가 그대로 성립한다.
 const boardStepProbe = (instanceId) => `(() => {
+  const countVisualRows = ${visualRowCounts.toString()};
   const root = document.querySelector(
     '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
   if (!root) return { error: 'board card not found' };
@@ -754,6 +819,70 @@ const boardStepProbe = (instanceId) => `(() => {
   }
   const foldedColumns = [...foldedSet].sort();
 
+  const rectValue = (node) => {
+    if (!node || !shown(node)) return null;
+    const rect = node.getBoundingClientRect();
+    return {
+      left: Math.round(rect.left), top: Math.round(rect.top),
+      right: Math.round(rect.right), bottom: Math.round(rect.bottom),
+      width: Math.round(rect.width), height: Math.round(rect.height),
+    };
+  };
+  const primaryRect = rectValue(surface.querySelector('.bs-primary'));
+  const railRect = rectValue(surface.querySelector('.bs-rail'));
+  const kpiRowCounts = [];
+  for (const kpi of surface.querySelectorAll('.bs-kpi')) {
+    const rects = [];
+    for (const cell of kpi.querySelectorAll(':scope > .bs-kpi-cell')) {
+      const rect = rectValue(cell);
+      if (!rect) continue;
+      rects.push(rect);
+    }
+    const rows = countVisualRows(rects);
+    if (rows.length) kpiRowCounts.push(rows);
+  }
+  const kpiMaxColumns = Math.max(0, ...kpiRowCounts.flat());
+
+  // height hoist가 좁은 단계에서 허용하는 것은 성장뿐이다. 원래 높이를 가진
+  // visible-flow 상자가 다시 내용에 뚫리거나, column flex 형제가 겹치면 실패시킨다.
+  const verticalOverflowNodes = [];
+  for (const el of surface.querySelectorAll('[data-bs-hoisted]')) {
+    if (!el.style.getPropertyValue('--bs-height') || !shown(el)) continue;
+    if (!String(el.textContent || '').trim()) continue;
+    const style = getComputedStyle(el);
+    const over = el.scrollHeight - el.clientHeight;
+    if (over > 1 && style.overflowY === 'visible') {
+      verticalOverflowNodes.push({
+        node: (el.dataset && el.dataset.node) || '',
+        name: (el.dataset && el.dataset.name) || '',
+        over, scroll_height: el.scrollHeight, client_height: el.clientHeight,
+      });
+    }
+  }
+  const verticalOverlapNodes = [];
+  for (const parent of surface.querySelectorAll('[data-bs-hoisted]')) {
+    const style = getComputedStyle(parent);
+    if (style.display !== 'flex' || style.flexDirection !== 'column') continue;
+    const children = [...parent.children].filter((child) => (
+      shown(child) && getComputedStyle(child).position !== 'absolute'
+    )).map((child) => ({ child, rect: child.getBoundingClientRect() }))
+      .filter((item) => item.rect.height > 0)
+      .sort((a, b) => a.rect.top - b.rect.top);
+    for (let index = 1; index < children.length; index += 1) {
+      const prior = children[index - 1];
+      const next = children[index];
+      const overlap = Math.round(prior.rect.bottom - next.rect.top);
+      if (overlap > 1) {
+        verticalOverlapNodes.push({
+          parent: (parent.dataset && parent.dataset.node) || '',
+          prior: (prior.child.dataset && prior.child.dataset.node) || '',
+          next: (next.child.dataset && next.child.dataset.node) || '',
+          overlap,
+        });
+      }
+    }
+  }
+
   return {
     dom_text: [...domText.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1)),
     slot_multiset: slots.sort(),
@@ -762,24 +891,42 @@ const boardStepProbe = (instanceId) => `(() => {
     reachable_slot_count: reachableSlotCount,
     folded_columns: foldedColumns,
     paired_columns: [...pairedCols].sort(),
+    primary_rect: primaryRect,
+    rail_rect: railRect,
+    kpi_row_counts: kpiRowCounts,
+    kpi_max_columns: kpiMaxColumns,
+    vertical_overflow_nodes: verticalOverflowNodes.slice(0, 20),
+    vertical_overlap_nodes: verticalOverlapNodes.slice(0, 20),
     container_width: Math.round(surface.getBoundingClientRect().width),
     // 보드가 자기 칸보다 넓으면 가로 스크롤이 생긴다 — 계획 §2는 세로 스크롤만
-    // 허용한다. 판정하지 않고 실측만 남긴다(레인 A/C가 읽을 원시값).
+    // 허용한다. 아래 검증 단계가 1px 초과를 하드 실패시키며 여기에는 원시값을 남긴다.
     overflow_x: Math.max(0, surface.scrollWidth - Math.round(surface.getBoundingClientRect().width)),
     host_client_width: surface.parentElement ? surface.parentElement.clientWidth : null,
     // 넘침이 남으면 어느 상자가 냈는지 함께 남긴다 — 숫자만으로는 못 고친다.
     overflow_nodes: (() => {
       const nodes = [];
+      const surfaceRect = surface.getBoundingClientRect();
       for (const el of surface.querySelectorAll('*')) {
         const over = el.scrollWidth - el.clientWidth;
-        if (over > 1) {
+        const rect = el.getBoundingClientRect();
+        const insideScrollStrip = Boolean(el.closest('.bs-strip'));
+        const outsideRight = insideScrollStrip ? 0 : Math.max(0, Math.round(rect.right - surfaceRect.right));
+        if (over > 1 || outsideRight > 1) {
+          const style = getComputedStyle(el);
           nodes.push({
             cls: el.className || '', node: (el.dataset && el.dataset.node) || '',
-            over, scroll_width: el.scrollWidth, client_width: el.clientWidth,
+            name: (el.dataset && el.dataset.name) || '',
+            over, outside_right: outsideRight,
+            scroll_width: el.scrollWidth, client_width: el.clientWidth,
+            width: style.width, min_width: style.minWidth, max_width: style.maxWidth,
+            flex_basis: style.flexBasis, flex_shrink: style.flexShrink,
+            overflow_x: style.overflowX,
+            padding_inline: [style.paddingLeft, style.paddingRight],
           });
         }
       }
-      return nodes.sort((a, b) => b.over - a.over).slice(0, 6);
+      return nodes.sort((a, b) => Math.max(b.over, b.outside_right)
+        - Math.max(a.over, a.outside_right)).slice(0, 20);
     })(),
     card_rect: (() => {
       const box = root.getBoundingClientRect();
@@ -891,9 +1038,28 @@ async function exerciseBoardRealtime(win, manager, surface) {
 // 원문 그대로인 실보드에서 한다. 값은 slots.json의 `paper_text` — 그 보드가
 // Paper에서 실제로 이고 있던 글자다. 마운트 계약(어느 노드에 어떤 슬롯이
 // 앉는가)은 색인이 갖고 있으므로 봉투는 board_id·card_id·값만 나른다.
-const REAL_BOARDS = Object.freeze([
+const DEFAULT_REAL_BOARDS = Object.freeze([
   '2SKU-1', '2R3M-1', '13BC-2', '2QFO-2', '13K0-2', '135M-2',
 ]);
+const REAL_BOARD_TEMPLATE_ROOT = path.join(BACKEND, 'ref', 'card-surface-templates');
+const REAL_BOARDS = Object.freeze(
+  (process.env.ATHENA_VERIFY_BOARD_IDS || DEFAULT_REAL_BOARDS.join(','))
+    .split(',').map((boardId) => boardId.trim()).filter(Boolean),
+);
+
+function validateRealBoards() {
+  if (!REAL_BOARDS.length) {
+    throw new Error('ATHENA_VERIFY_BOARD_IDS resolved to an empty board set');
+  }
+  if (new Set(REAL_BOARDS).size !== REAL_BOARDS.length) {
+    throw new Error(`ATHENA_VERIFY_BOARD_IDS contains duplicates: ${REAL_BOARDS.join(',')}`);
+  }
+  for (const boardId of REAL_BOARDS) {
+    if (!fs.existsSync(path.join(REAL_BOARD_TEMPLATE_ROOT, boardId, 'slots.json'))) {
+      throw new Error(`ATHENA_VERIFY_BOARD_IDS contains unknown board: ${boardId}`);
+    }
+  }
+}
 
 function loadRealBoardContract(boardId, ordinal) {
   const slots = JSON.parse(fs.readFileSync(
@@ -934,12 +1100,15 @@ async function captureBoardSteps(win, surface) {
 
   const originalBounds = win.getContentBounds();
   const steps = [];
+  const breakpointProbes = [];
   try {
     for (const preset of BOARD_WINDOW_PRESETS) {
       win.setContentSize(preset.width, preset.height);
       await settleBoardLayout(win, surface.instanceId);
       const probe = await win.webContents.executeJavaScript(boardStepProbe(surface.instanceId));
       if (probe.error) throw new Error(`board ${surface.boardId} ${preset.name}: ${probe.error}`);
+      // 스트립 자체의 overflow-x:auto는 허용하지만 표면 넘침·수직 겹침은 실패다.
+      assertSurfaceGeometry(surface.boardId, preset, probe);
       const image = await win.webContents.capturePage(probe.card_rect);
       const png = image.toPNG();
       const file = `board-${surface.boardId}-${preset.width}x${preset.height}.png`;
@@ -954,6 +1123,12 @@ async function captureBoardSteps(win, surface) {
         all_columns: probe.all_columns,
         folded_columns: probe.folded_columns,
         paired_columns: probe.paired_columns,
+        primary_rect: probe.primary_rect,
+        rail_rect: probe.rail_rect,
+        kpi_row_counts: probe.kpi_row_counts,
+        kpi_max_columns: probe.kpi_max_columns,
+        vertical_overflow_nodes: probe.vertical_overflow_nodes,
+        vertical_overlap_nodes: probe.vertical_overlap_nodes,
         slot_count: probe.slot_multiset.length,
         visible_slot_count: probe.visible_slot_count,
         reachable_slot_count: probe.reachable_slot_count,
@@ -965,6 +1140,42 @@ async function captureBoardSteps(win, surface) {
         __slots: probe.slot_multiset,
       });
     }
+    for (const preset of BOARD_BREAKPOINT_PROBE_PRESETS) {
+      win.setContentSize(preset.width, preset.height);
+      await settleBoardLayout(win, surface.instanceId);
+      const probe = await win.webContents.executeJavaScript(boardStepProbe(surface.instanceId));
+      if (probe.error) throw new Error(`board ${surface.boardId} ${preset.name}: ${probe.error}`);
+      if (probe.container_width < preset.minContainer || probe.container_width > preset.maxContainer) {
+        throw new Error(
+          `board ${surface.boardId} ${preset.name}: container ${probe.container_width}px outside ${
+            preset.minContainer}..${preset.maxContainer}px`,
+        );
+      }
+      assertSurfaceGeometry(surface.boardId, preset, probe);
+      assertBreakpointContract(surface.boardId, preset, probe);
+      breakpointProbes.push({
+        preset: preset.name,
+        window: { width: preset.width, height: preset.height },
+        container_width: probe.container_width,
+        overflow_x: probe.overflow_x,
+        overflow_nodes: probe.overflow_nodes,
+        all_columns: probe.all_columns,
+        folded_columns: probe.folded_columns,
+        paired_columns: probe.paired_columns,
+        primary_rect: probe.primary_rect,
+        rail_rect: probe.rail_rect,
+        kpi_row_counts: probe.kpi_row_counts,
+        kpi_max_columns: probe.kpi_max_columns,
+        vertical_overflow_nodes: probe.vertical_overflow_nodes,
+        vertical_overlap_nodes: probe.vertical_overlap_nodes,
+        slot_count: probe.slot_multiset.length,
+        visible_slot_count: probe.visible_slot_count,
+        reachable_slot_count: probe.reachable_slot_count,
+        distinct_text_count: probe.dom_text.length,
+        __domText: probe.dom_text,
+        __slots: probe.slot_multiset,
+      });
+    }
   } finally {
     win.setContentSize(originalBounds.width, originalBounds.height);
     await settleBoardLayout(win, surface.instanceId);
@@ -972,7 +1183,8 @@ async function captureBoardSteps(win, surface) {
 
   // P5 — 단계 사이에서 텍스트가 사라지지 않는다. 접힘은 이동이지 삭제가 아니다.
   const base = steps[0];
-  for (const step of steps.slice(1)) {
+  const paritySteps = [...steps, ...breakpointProbes];
+  for (const step of paritySteps.slice(1)) {
     if (JSON.stringify(step.__domText) !== JSON.stringify(base.__domText)) {
       throw new Error(
         `board ${surface.boardId} ${step.preset}: DOM 텍스트 다중집합이 ${base.preset}과 다르다`,
@@ -985,7 +1197,7 @@ async function captureBoardSteps(win, surface) {
     }
   }
   // 도달 셈은 어느 단계에서도 같다 — 접힌 열의 값은 병기 줄로 내려온다.
-  const reachableCounts = new Set(steps.map((step) => step.reachable_slot_count));
+  const reachableCounts = new Set(paritySteps.map((step) => step.reachable_slot_count));
   if (reachableCounts.size !== 1) {
     throw new Error(
       `board ${surface.boardId}: 단계마다 도달하는 슬롯 수가 다르다 — ${
@@ -1026,8 +1238,9 @@ async function captureBoardSteps(win, surface) {
     },
     text_multiset_equal_across_steps: true,
     distinct_text_count: base.__domText.length,
-    max_overflow_x: Math.max(...steps.map((step) => step.overflow_x)),
+    max_overflow_x: Math.max(...paritySteps.map((step) => step.overflow_x)),
     steps: steps.map(({ __domText, __slots, ...rest }) => rest),
+    breakpoint_probes: breakpointProbes.map(({ __domText, __slots, ...rest }) => rest),
   };
 }
 
@@ -1298,6 +1511,7 @@ async function inspect(win, cardId, detailOpen, expectedFields, expectedOperatio
 }
 
 async function main() {
+  validateRealBoards();
   const bundle = loadBundle();
   const semanticContracts = loadProductionSemanticContracts();
   if (

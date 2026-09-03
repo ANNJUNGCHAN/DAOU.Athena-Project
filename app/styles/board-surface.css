@@ -15,7 +15,7 @@
  * 인라인 원문과 싸우지 않는 방법 — `!important` 0건:
  *
  * 1) 추출 원문은 영역 노드마다 인라인 `width`/`flex-*`를 갖는다(27장 전수 실측).
- *    board-mount의 `applyResponsiveHooks`가 마운트 시점에 **그 네 속성만**
+ *    board-mount의 `applyResponsiveHooks`가 마운트 시점에 **그 다섯 속성만**
  *    같은 요소의 `--bs-width`/`--bs-flex-*`로 옮긴다. 아래 base 규칙이 그 값을
  *    그대로 되돌리므로 XL 계산값은 Paper와 같고, L 이하 컨테이너 규칙은
  *    인라인과 겨루지 않고 이긴다(같은 특이도, 뒤에 오는 선언).
@@ -35,6 +35,7 @@
  * 등록 속성으로 상속을 끊으면 자기 인라인 원문을 갖고 있던 노드만 되돌아가고,
  * 나머지는 계약대로 auto/flex 기본값으로 흐른다. */
 @property --bs-width { syntax: "*"; inherits: false; }
+@property --bs-height { syntax: "*"; inherits: false; }
 @property --bs-flex-basis { syntax: "*"; inherits: false; }
 @property --bs-flex-grow { syntax: "*"; inherits: false; }
 @property --bs-flex-shrink { syntax: "*"; inherits: false; }
@@ -56,6 +57,7 @@
  * 같은 특이도(0,1,0)라 뒤에 오는 쪽이 이기고, 영역·단계 규칙이 이겨야 한다. */
 [data-bs-hoisted] {
   width: var(--bs-width, auto);
+  height: var(--bs-height, auto);
   flex-basis: var(--bs-flex-basis, auto);
   flex-grow: var(--bs-flex-grow, 0);
   flex-shrink: var(--bs-flex-shrink, 1);
@@ -80,6 +82,14 @@
 .bs-primary { min-width: 0; }
 .bs-rail { min-width: 0; }
 
+/* 숫자 줄바꿈은 여기서 손대지 않는다 — 실측 결과. Paper 원문은 보드 루트에
+ * `overflow-wrap: anywhere`를 실어 한 글자에서도 줄을 바꾼다. 보드가 Paper 폭보다
+ * 좁아지면 "150,850"이 "150,85 / 0"으로 끊긴다(실측 2R3M-1 컨테이너 1171px).
+ * 값 자리에 `overflow-wrap: normal`을 걸면 그 끊김은 사라지지만(상속은 선언 규칙에
+ * 진다) 좁은 단계에서 가로 넘침이 되살아난다 — 실측 컨테이너 537px에서 4~90px,
+ * 377px에서 25~250px. 폭 계약(가로 넘침 0)과 숫자 가독은 여기서 맞바꿀 수 없다:
+ * Paper 쪽에서 좁은 단계의 글자 크기를 정하는 편이 맞다(파리티 레인 판단). */
+
 /* 추출기가 넣은 접기 래퍼 — XL에서는 박스 트리에서 사라진다(픽셀 동일). */
 .bs-col { display: contents; }
 
@@ -92,25 +102,41 @@
 
 /* ---------- L: 960–1279 — 표는 7열째부터 접는다 ---------- */
 @container board (max-width: 1279px) {
-  /* 걷어낸 고정 상자는 Paper 폭을 출발점으로 삼되, 좁아지면 같이 줄어든다.
-   * 원문의 `flex-shrink: 0`을 여기서만 놓아준다 — XL에서는 base가 그대로
-   * 되돌리므로 Paper 픽셀은 그대로고, L 이하에서만 줄이 접힌다. 실보드 원문에
-   * `white-space: nowrap`은 0건이라(6장 실측) 줄어든 칸의 글자는 잘리지 않고
-   * 줄바꿈으로 내려간다 — 값이 사라지지 않는다. */
-  [data-bs-hoisted] { flex-shrink: 1; max-width: 100%; }
+  /* 걷어낸 고정 상자는 Paper 값을 출발점으로 삼되, 좁아지면 같이 움직인다.
+   *
+   * 폭: 원문의 `flex-shrink: 0`을 여기서만 놓아준다. 실보드 원문에
+   *     `white-space: nowrap`은 0건이라(6장 실측) 줄어든 칸의 글자는 잘리지 않고
+   *     줄바꿈으로 내려간다 — 값이 사라지지 않는다.
+   * 높이: 고정 높이가 최소 높이가 된다. 줄바꿈으로 내용이 늘면 상자도 같이
+   *     자라야 한다 — 안 그러면 넘친 줄이 아래 영역 위에 겹쳐 찍힌다(실측
+   *     2SKU-1 컨테이너 621px: KPI 줄 116px 상자 안에 2줄 232px). 줄어드는 일은
+   *     없다: Paper 높이가 그대로 바닥이다.
+   *
+   * XL에서는 base가 다섯 값을 그대로 되돌리므로 Paper 픽셀은 그대로다. */
+  [data-bs-hoisted] {
+    flex-shrink: 1;
+    max-width: 100%;
+    /* flex item의 기본 min-width:auto는 안쪽 숫자/열의 min-content 폭을 지켜
+     * max-width보다 크게 버틴다. 2R3M-1·2QFO-2 XS 표면 넘침의 직접 원인이다. */
+    min-width: 0;
+    height: auto;
+    min-height: var(--bs-height, auto);
+  }
 
-  /* Paper 원문은 primary에 고정 폭과 `flex-shrink: 0`을 함께 싣는다(실보드 6장
-   * 전수 실측 — 900·820·880·880·824·420px). 레일만 360px로 줄이면 primary가
-   * 그대로 서 있어 합이 컨테이너를 넘는다(실측 overflow_x 89~148px). L부터는
-   * primary가 남은 폭을 받는 쪽이다 — 레일이 고정, primary가 유동. */
+  [data-bs-inset-x="true"] { right: var(--bs-inset-x); width: auto; }
+
   /* KPI 줄에는 남는 폭을 통째로 받는 탄력 칸이 있다(Paper 원문 `flex-basis: 0%`).
    * 보드가 Paper 폭(1360px)보다 좁아지면 그 칸 하나가 부족분을 다 뒤집어써서
    * 글자가 한 자씩 세로로 눕는다 — 실측 2SKU-1 "현금 비중 28.0%" 칸이 컨테이너
    * 1169px에서 265px → 74px. 한국어는 `overflow-wrap: anywhere`(Paper 원문)로
    * 한 글자까지 쪼개져서 자동 최소 크기가 칸을 못 지킨다. 바닥을 주면 부족분을
    * 줄 전체가 나눠 진다(다른 칸은 이미 shrink가 풀려 있다). */
-  .bs-kpi-cell { min-width: 160px; }
+  .bs-kpi-cell[data-bs-kpi-elastic="true"] { min-width: 160px; }
 
+  /* Paper 원문은 primary에 고정 폭과 `flex-shrink: 0`을 함께 싣는다(실보드 6장
+   * 전수 실측 — 900·820·880·880·824·420px). 레일만 360px로 줄이면 primary가
+   * 그대로 서 있어 합이 컨테이너를 넘는다(실측 overflow_x 89~148px). L부터는
+   * primary가 남은 폭을 받는 쪽이다 — 레일이 고정, primary가 유동. */
   .bs-primary { width: auto; flex-basis: 0%; flex-grow: 1; flex-shrink: 1; }
   /* 레일은 360px가 목표 폭이지 상한이 아니다 — 안쪽 블록이 더 줄 수 없으면
    * (실측 2R3M-1 레일 min-content 384px) 360px에 가두는 순간 그만큼이 그대로
@@ -138,6 +164,10 @@
   .bs-kpi { flex-wrap: wrap; }
   .bs-kpi-cell { width: auto; flex-basis: calc(33.3333% - 24px); flex-grow: 1; }
   .bs-strip { overflow-x: auto; }
+  /* 스트립은 좁아지면 가로로 스크롤한다(바로 위). 칩까지 같이 줄어들면 스크롤할
+   * 것이 없어지고 글자만 한 자씩 세로로 눕는다 — 한국어 원문이 `overflow-wrap:
+   * anywhere`라 자동 최소 크기가 한 글자다(실측 컨테이너 377px에서 칩 7개 전부). */
+  .bs-strip > * { flex-shrink: 0; }
   .bs-col[data-col-priority="6"] { display: none; }
   .bs-paired[data-paired-col~="6"] { display: block; }
 }
