@@ -19,7 +19,7 @@
 
 | 항목 | 값 (2026-09-03 10:2x) |
 |---|---|
-| 브랜치 | 작업 브랜치 `feat/card-surface-paper-to-code`(로컬 `main` f880d79에서 분기). 로컬 `main`은 `origin/main`보다 **60커밋 뒤** — 키우미·플러그인 트랙이 먼저 올라갔다. 병합은 나중에 `-X ignore-cr-at-eol`로 |
+| 브랜치 | 작업 브랜치 `feat/card-surface-paper-to-code`(로컬 `main` f880d79에서 분기, origin에 있음). **같은 체크아웃을 키우미 트랙 대화가 함께 쓴다** — 그 대화가 이 브랜치를 만들고 첫 스냅샷(3e97022)과 키우미 인계(2a413d7)를 올렸다. `git status --branch`로 현재 브랜치를 매번 확인. 로컬 `main`은 `origin/main`보다 **60커밋 뒤**. 병합은 나중에 `-X ignore-cr-at-eol`로 |
 | 미커밋 세는 법 | `git status --short \| grep -c '^ M'` / `grep -c '^??'` — 접힌 디렉터리 기준. 웨이브가 돌면 계속 변하므로 숫자는 §11에만 남긴다 |
 | 워크트리 | 카드 트랙은 메인 체크아웃에서만. 에이전트/플러그인 트랙은 별도 워크트리라 섞이지 않는다 |
 | 테스트 기준 | **실패 0**이 기준이다(개수는 웨이브가 테스트를 늘려 계속 증가). 참고 측정치는 §7 표 |
@@ -46,7 +46,7 @@
 | 무엇 | 경로 | 비고 |
 |---|---|---|
 | **헌장(디자인 표준)** | `docs/ui/paper-card-surface-charter.md` | 15 신념·표현 3층·밀도 예산·문법 A~G·H1~H4·비노출 계정 |
-| 구현 계획 | `docs/architecture/card-surface-implementation-plan.md` | D1~D7. **§2 밀도 줄(`rows_max≤6`, 전부 하드)은 낡았다 — 로더 값이 정본**(§10) |
+| 구현 계획 | `docs/architecture/card-surface-implementation-plan.md` | D1~D7 (D3 폭은 탭·반응형 계획으로 대체). §2 밀도 줄은 2026-09-03 로더 값으로 정정 |
 | 탭·반응형 계획 | `docs/architecture/canvas-tabs-responsive-plan.md` | 5단 컨테이너 쿼리, 저장 형식, 파리티 P1~P5 |
 | op 원장 (299) | `PAPER_CARD_COVERAGE.json` / `.md`, `scripts/paper_card_coverage.py` | 299/299 표현 |
 | 필드 원장 (3,534행) | `PAPER_FIELD_COVERAGE.json` | 행마다 cls·layer·board·where. 3,532 표현 + 2 비노출 |
@@ -57,7 +57,7 @@
 | 추출기 | `scripts/paper_board_extract.py` | JSX→HTML, 영역 클래스 `bs-*`, 슬롯 골격, `--apply-columns`·`--no-index`·`--check` |
 | 슬롯 검증기 | `scripts/validate_board_slots.py` | 보드별 a~g 검사. 팩 경로 기본값 = 위 packs, `ATHENA_PACK_DIR`/`--pack-dir`로 덮어씀. 팩 폴더가 없으면 즉시 실패 |
 | 커버리지 판 | `scripts/card_surface_coverage.py` → `CARD_SURFACE_COVERAGE.md` | 바인딩 판정은 로더에 위임(스크립트가 세지 않는다) |
-| 레지스트리 빌더 | `scripts/build_board_registry.py` → `app/lib/board-templates.index.generated.js` + `board-templates.CC-0n.generated.js` | 카드별 지연 로드 청크. **97장**(fixture-quote 포함)이 정상. 템플릿을 고치면 재빌드해야 한다 — 청크 드리프트를 잡는 `--check`는 아직 없다(§6-5) |
+| 레지스트리 빌더 | `scripts/build_board_registry.py` → `app/lib/board-templates.index.generated.js` + `board-templates.CC-0n.generated.js` | 카드별 지연 로드 청크. **97장**(fixture-quote 포함)이 정상. 템플릿을 고치면 재빌드해야 한다 — `--check`가 드리프트를 잡는다(§7) |
 | 백엔드 로더 | `backend/athena_api/card_surface_templates.py` | `get_registry()`(lru, 보드별 격리 → `registry.excluded_boards`, `registry.coverage()`) / `load_registry(strict=True)`(CI, 예외). 밀도 하드 = 표 열 ≤8 · 행 ≤22 · 높이 ≤1,120; 레일 블록·KPI는 소프트 |
 | 백엔드 계약 | `backend/athena_api/card_surface_contract.py` | `build_surface_contract` → 봉투 `surface_contract{slot_values…}` (REST·MCP 공용) |
 | 배선 | `backend/athena_api/api/canvas_push.py`(+`/api/v1/internal/canvas/board-hydrate`), `backend/athena_mcp/canvas_data.py` | |
@@ -109,15 +109,14 @@
 
 ## 6. 남은 일 (순서대로) — 🔒 = 사람·외부 의존
 
-1. **W3 게이트 읽기** → 로드 96·excluded 0 유지, 커버리지 상승분, 캡처 24장 존재 확인. 청크 재빌드(§6-5) 후 커밋·푸시.
-2. **슬롯 바인딩 100%.** 미도달 155 → 0: (a) 트리 안 보드 귀속 80(2SYW-1 27이 몸통)은 슬롯 저작, (b) 17F8-2 귀속 75는 카드 보드로 재귀속 — 몸통은 금현물(kt50020·kt50030·kt50031·kt50032·kt50075)과 계좌 증거금·인출(kt00001·kt00005·kt00010·kt00011·kt00012·kt00013), (c) 예비 슬롯 2(`base:04` 951·924)는 hidden json에 넣어 가시 모수를 3,532로 맞춘다(헌장 §6과 일치). 보드 없는 op 4 → 0. 상태 컨트롤 2건 `meta.state.control_text`. 바인딩 슬롯 `row_index` 좌표.
+1. **W3 게이트 읽기** → 로드 96·excluded 0 유지, 커버리지 상승분, 캡처 24장 존재 확인. 청크 재빌드(`build_board_registry.py`, §7의 `--check`가 붉으면) 후 커밋·푸시.
+2. **슬롯 바인딩 100%.** 미도달 155 → 0: (a) 트리 안 보드 귀속 80(2SYW-1 27이 몸통)은 슬롯 저작, (b) 17F8-2 귀속 75는 카드 보드로 재귀속 — 몸통은 금현물(kt50020·kt50030·kt50031·kt50032·kt50075)과 계좌 증거금·인출(kt00001·kt00005·kt00010·kt00011·kt00012·kt00013), (c) 예비 슬롯 2(`base:04` 951·924)는 **로더의 가시 universe에서 원장(`PAPER_FIELD_COVERAGE.json`) 비노출 행을 빼는 방식**으로 모수를 3,532로 맞춘다 — `kiwoom-presentation-hidden-occurrences.json`은 `semantic_presentation_registry.py`가 해시·개수(171)로 잠근 신뢰 게이트 원장이라 건드리지 않는다. 보드 없는 op 4 → 0. 상태 컨트롤 2건 `meta.state.control_text`. 바인딩 슬롯 `row_index` 좌표.
 3. **실앱 QA.** 4단계 창 캡처 vs Paper 시각 대조 🔒(Paper MCP) · 헌장 게이트(밀도 하드 0, 문구 3원칙) · 사용자 검수 PDF 🔒(승인) · 실키움(모의) 봉투로 보드 카드 실데이터 표시 1회 🔒(모의투자 자격증명·장중).
 4. `17F8-2.fields.json` 잔재 정리 — 2번 (b)와 함께.
-5. `build_board_registry.py --check`(청크 드리프트 게이트) 추가 후 §7 표에 등록.
-6. 구현 계획 문서의 밀도 줄을 로더 값으로 정정(§3).
-7. 보류 결정 4건 🔒 — 사용자에게 한 번에 물어 닫는다.
+5. ~~구현 계획 문서의 밀도 줄 정정~~ — 2026-09-03 10:3x 완료.
+6. 보류 결정 4건 🔒 — 사용자에게 한 번에 물어 닫는다.
 
-승인 없이 진행 가능한 것: 1·2·4·5·6과 3의 헌장 게이트.
+승인 없이 진행 가능한 것: 1·2·4와 3의 헌장 게이트.
 
 ---
 
@@ -136,6 +135,7 @@ export PATH="/c/Users/USER/AppData/Local/fnm_multishells/9988_1786672622598:$PAT
 | 슬롯 검증 | `backend/.venv/Scripts/python.exe scripts/validate_board_slots.py [board…]` | 읽기 | `합계 문제 0` 목표(현재 40) |
 | 게이트 읽기 | `cd backend && uv run python -c "from athena_api.card_surface_templates import get_registry; r=get_registry(); c=r.coverage(); print(len(r.boards), r.excluded_boards, {k:(v if not isinstance(v,list) else len(v)) for k,v in c.items()})" 2>/dev/null` | 읽기 | `96 [] {...}` — stderr의 소프트 예산 경고는 정상 |
 | 커버리지 판 | `python scripts/card_surface_coverage.py` | **쓰기**(`CARD_SURFACE_COVERAGE.md`) | 총괄 = 게이트 읽기 수치 |
+| 청크 드리프트 | `python scripts/build_board_registry.py --check` | 읽기 | `최신 — 보드 97장, 청크 6개` · exit 0. 붉으면 아래 빌드 |
 | 레지스트리 빌드 | `python scripts/build_board_registry.py` | **쓰기**(청크 7파일) | `보드 97장` |
 | scripts 테스트 | `backend/.venv/Scripts/python.exe -m pytest scripts/tests -q` | 읽기 | 실패 0 (10:1x 측정 235) |
 | app 단위 | `cd app && npm run test:unit` | 읽기 | 실패 0 (10:1x 측정 2,035; C5 편집 중엔 board-parity 1건 일시 RED 가능) |
@@ -169,7 +169,7 @@ export PATH="/c/Users/USER/AppData/Local/fnm_multishells/9988_1786672622598:$PAT
 
 - 커버리지 판은 로더에 위임한다(예전 67.8%는 alt_mappings·indexed를 모르던 계산이었고 D3에서 고쳤다). 분모는 로더 `coverage().visible_total`=3,534 하나다.
 - 레일 블록 계수는 A5에서 고쳤다(호가 보드 13→2~4). 남은 것은 소프트 경고(레일 행 7~11, 19장)뿐이며 보드 재설계 대상이 아니다.
-- `rows_max` 하드 예산은 22(표 본문 20 + 합계 2), 레일 블록·KPI는 소프트. 구현 계획 문서의 `rows_max≤6`·전부 하드 줄은 낡았다(§6-6).
+- `rows_max` 하드 예산은 22(표 본문 20 + 합계 2), 레일 블록·KPI는 소프트. 구현 계획 문서의 밀도 줄은 2026-09-03에 로더 값으로 정정했다.
 - 레거시 `card-kind-*.js` 16개는 `app/shell.html`이 로드하는 **기존 CC 카드 경로**(호가 사다리·AITS 차트)다. 보드 표면과는 별개(보드 96장 중 `primary.renderer` 비-null은 32S7-0의 `athena-chart` 하나). 기존 카드 회귀를 막기 위해 삭제 금지.
 - 인라인 width가 컨테이너 쿼리를 이기므로 반응형은 `--bs-*` 변수로 hoist해서 푼다. `!important` 0.
 - 보드 카드의 통합 카드 크롬(제목 줄·요약 칩·"전체 원본 필드 ▸")은 **제거 완료**(C5). 회귀 감시 대상.
@@ -180,4 +180,5 @@ export PATH="/c/Users/USER/AppData/Local/fnm_multishells/9988_1786672622598:$PAT
 ## 11. 갱신 이력
 
 - 2026-09-03 09:5x — 최초 작성(W2-C 게이트 수치). 저작 팩·워크플로 스크립트·진행 로그를 저장소로 복사. `validate_board_slots.py` 팩 경로 저장소 상대화 + 팩 폴더 부재 시 즉시 실패.
+- 2026-09-03 10:3x — 구현 계획 밀도 줄 정정. 청크 드리프트 검사는 빌더 `--check`로 이미 존재(§7 등록). 브랜치는 키우미 대화가 먼저 만들어 origin에 올렸고, 이 대화의 스냅샷 e267c32가 그 위에 얹힘(푸시는 C5 레인의 일시 RED 1건이 풀리면).
 - 2026-09-03 10:2x — 검증 워크플로(경로·수치·반증·새 세션 시뮬레이션 4레인) 반영: W3 정비 4레인 완료 상태로 정정(로더 96/제외 0, 커버리지 3,379/3,534, 크롬 제거 완료), 분모 3,534 통일, §6에 🔒 표기, §7에 쓰기 여부·게이트 읽기 스니펫, §8 Paper 전제·fileId 경고. 미커밋 `git status --short`: M 19 · ?? 50. 사용자 지시로 지속 커밋·푸시 시작(브랜치 `feat/card-surface-paper-to-code`).
