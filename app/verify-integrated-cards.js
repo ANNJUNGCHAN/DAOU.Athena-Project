@@ -12,6 +12,7 @@ const {
   resolveLeaseBindings,
 } = require('./lib/main/integrated-card-realtime');
 const { visualRowCounts } = require('./lib/board-layout-geometry');
+const { stateLinksFromMarks } = require('./lib/board-mount');
 const {
   DEFAULT_READABILITY_BOARD_IDS,
   collectGlyphFindings,
@@ -538,6 +539,27 @@ function assertSurfaceGeometry(boardId, preset, probe) {
         JSON.stringify(probe.vertical_overlap_nodes)}`,
     );
   }
+  const scrollTables = probe.scroll_tables || [];
+  const unfocusable = scrollTables.flatMap((record) => (
+    record.scroll_state_controls || []
+  )).filter((control) => !control.focusable);
+  if (unfocusable.length) {
+    throw new Error(
+      `board ${boardId} ${preset.name}: scroll_control_not_focusable — ${
+        JSON.stringify(unfocusable)}`,
+    );
+  }
+  if (preset.name === '4분할' || preset.name === '최소') {
+    const fixedTables = scrollTables.filter((record) => (
+      record.scroll_width <= record.client_width + 1
+    ));
+    if (fixedTables.length) {
+      throw new Error(
+        `board ${boardId} ${preset.name}: scroll_not_scrollable — ${
+          JSON.stringify(fixedTables)}`,
+      );
+    }
+  }
 }
 
 function assertBreakpointContract(boardId, preset, probe) {
@@ -625,7 +647,7 @@ function loadBoardSurfaceContract(contracts) {
       surface_version: 'card-surface.v1',
       board_id: slots.board_id,
       card_id: slots.card_id,
-      state_boards: [],
+      state_boards: stateLinksFromMarks(slots.state_controls),
       slot_values: slotValues,
       unbound_slots: [],
       column_priority: slots.column_priority || [],
@@ -971,7 +993,9 @@ const boardStepProbe = (instanceId) => `(async () => {
       });
     }
   }
-  for (const element of surface.querySelectorAll('.bs-r-atomic, [data-bs-value-atomic="true"]')) {
+  for (const element of surface.querySelectorAll(
+    '.bs-r-atomic, [data-bs-value-atomic="true"], [data-paired-source]',
+  )) {
     const responsiveOwner = responsiveOwnerFor(element);
     if (!responsiveOwner) continue;
     const item = renderedItemFor(responsiveOwner, element);
@@ -992,20 +1016,133 @@ const boardStepProbe = (instanceId) => `(async () => {
     });
   }
   const pairedRecords = [];
-  for (const mirror of surface.querySelectorAll('.bs-r-paired-table .bs-paired, [data-paired-source]')) {
+  const pairedSources = new Map();
+  for (const element of surface.querySelectorAll('[data-node]')) {
+    const source = element.dataset.node || '';
+    if (!source) continue;
+    if (!pairedSources.has(source)) pairedSources.set(source, []);
+    pairedSources.get(source).push(element);
+  }
+  for (const mirror of surface.querySelectorAll('[data-paired-source]')) {
     const source = mirror.dataset.pairedSource || '';
-    const sourceElement = [...surface.querySelectorAll('[data-node], [data-slot-id]')]
-      .find((element) => element.dataset.node === source || element.dataset.slotId === source);
+    const candidates = pairedSources.get(source) || [];
+    const leaves = candidates.filter((element) => element.dataset.leaf !== undefined);
+    const canonicalSources = leaves.length ? leaves : candidates;
+    const sourceElement = canonicalSources[0] || null;
     const parent = mirror.parentElement;
-    const label = parent && parent.querySelector('[data-paired-label]');
+    const labels = parent
+      ? [...parent.children].filter((element) => (
+        element.dataset.pairedLabel !== undefined && element.textContent.trim()
+      )) : [];
     pairedRecords.push({
       source,
       source_found: Boolean(sourceElement),
+      source_count: canonicalSources.length,
       source_text: sourceElement ? sourceElement.textContent.trim() : '',
       mirror_text: mirror.textContent.trim(),
-      mirror_has_identity: Boolean(mirror.dataset.node || mirror.dataset.slotId),
-      label_found: Boolean(label && label.textContent.trim()),
+      source_tone: sourceElement ? sourceElement.style.color || '' : '',
+      mirror_tone: mirror.style.color || '',
+      source_missing: Boolean(sourceElement && sourceElement.dataset.missing !== undefined),
+      mirror_missing: mirror.dataset.missing !== undefined,
+      mirror_has_identity: Boolean(
+        mirror.dataset.node !== undefined
+        || mirror.dataset.slotId !== undefined
+        || mirror.dataset.leaf !== undefined
+        || mirror.dataset.bsValueAtomic !== undefined
+      ),
+      label_found: labels.length > 0,
+      label_count: labels.length,
       hidden: !shown(mirror),
+    });
+  }
+  const scrollTableRecords = [];
+  for (const owner of surface.querySelectorAll('.bs-r-scroll-table')) {
+    const violations = [];
+    if (owner.getAttribute('role') !== 'region') violations.push('scroll_owner_role');
+    if (owner.getAttribute('tabindex') !== '0') violations.push('scroll_owner_tabindex');
+    if (!(owner.getAttribute('aria-label') || '').trim()) violations.push('scroll_owner_label');
+    const tables = [...owner.children].filter((element) => (
+      element.classList.contains('bs-scroll-table-semantics')
+    ));
+    if (tables.length !== 1) violations.push('scroll_missing_table');
+    const table = tables[0] || null;
+    if (table) {
+      if (table.getAttribute('role') !== 'table') violations.push('scroll_table_role');
+      if (!(table.getAttribute('aria-label') || '').trim()) violations.push('scroll_table_label');
+      if (table.dataset.node !== undefined || table.dataset.slotId !== undefined
+        || table.dataset.stateControl !== undefined || table.dataset.stateBoard !== undefined) {
+        violations.push('scroll_table_identity');
+      }
+      if (table.hasAttribute('id') || table.hasAttribute('aria-owns')
+        || table.hasAttribute('aria-labelledby')) violations.push('scroll_forbidden_reference');
+      const rowCount = Number(table.getAttribute('aria-rowcount'));
+      const colCount = Number(table.getAttribute('aria-colcount'));
+      const rows = [...table.querySelectorAll('[role="row"]')]
+        .filter((row) => row.closest('[role="table"]') === table);
+      if (!Number.isInteger(rowCount) || rowCount !== rows.length
+        || !rows.length || rows.some((row) => row.getAttribute('role') !== 'row'
+          || !row.dataset.node)) violations.push('scroll_missing_row');
+      let badColumnRole = !Number.isInteger(colCount) || colCount < 1;
+      let badPosition = false;
+      rows.forEach((row, rowIndex) => {
+        if (row.getAttribute('aria-rowindex') !== String(rowIndex + 1)) badPosition = true;
+        const cells = [...row.children];
+        if (cells.length !== colCount) badColumnRole = true;
+        cells.forEach((cell, colIndex) => {
+          const expectedRole = rowIndex === 0
+            ? 'columnheader' : (colIndex === 0 ? 'rowheader' : 'cell');
+          const isSemanticHeaderCell = rowIndex === 0
+            && cell.classList.contains('bs-scroll-table-cell-semantics');
+          const headerSources = isSemanticHeaderCell
+            ? [...cell.children].filter((child) => child.dataset.node !== undefined) : [];
+          const headerCellHasIdentity = isSemanticHeaderCell && (
+            cell.dataset.node !== undefined || cell.dataset.slotId !== undefined
+            || cell.dataset.stateControl !== undefined || cell.dataset.stateBoard !== undefined
+          );
+          if (cell.getAttribute('role') !== expectedRole
+              || (rowIndex === 0
+                ? (!isSemanticHeaderCell || headerCellHasIdentity || headerSources.length !== 1)
+                : !cell.dataset.node)) badColumnRole = true;
+          if (cell.getAttribute('aria-colindex') !== String(colIndex + 1)) badPosition = true;
+          if (cell.hasAttribute('aria-labelledby')) violations.push('scroll_forbidden_reference');
+        });
+      });
+      if (badColumnRole) violations.push('scroll_bad_column_role');
+      if (badPosition) violations.push('scroll_bad_position');
+    }
+    const scrollStateControls = [...owner.querySelectorAll('[data-state-board]')]
+      .map((control) => {
+        const activationOwner = control.closest('button, [role="button"], [role="tab"]') || control;
+        const role = activationOwner.getAttribute('role') || '';
+        const focusable = shown(control) && shown(activationOwner)
+          && activationOwner.tabIndex >= 0
+          && (activationOwner.tagName === 'BUTTON' || role === 'button' || role === 'tab');
+        if (['columnheader', 'rowheader', 'cell'].includes(control.getAttribute('role'))) {
+          violations.push('scroll_control_role_conflict');
+        }
+        if (!focusable) violations.push('scroll_control_not_focusable');
+        return {
+          node: elementIdentity(control),
+          activation_node: elementIdentity(activationOwner),
+          role,
+          tabindex: activationOwner.getAttribute('tabindex'),
+          visible: shown(control),
+          focusable,
+        };
+      });
+    const scrollRecord = {
+      node: elementIdentity(owner),
+      scroll_width: owner.scrollWidth,
+      client_width: owner.clientWidth,
+      scroll_state_controls: scrollStateControls,
+      violations: [...new Set(violations)],
+    };
+    scrollTableRecords.push(scrollRecord);
+    pairedRecords.push({
+      kind: 'scroll_table',
+      source: elementIdentity(owner),
+      violations: scrollRecord.violations,
+      hidden: !shown(owner),
     });
   }
   const glyph = collectGlyphFindings(glyphCandidates, pairedRecords, { cap: 20, tolerance: 1 });
@@ -1030,6 +1167,7 @@ const boardStepProbe = (instanceId) => `(async () => {
     text_overlap_total: glyph.text_overlap_nodes.total,
     paired_semantics_violations: glyph.paired_semantics_violations.items,
     paired_semantics_total: glyph.paired_semantics_violations.total,
+    scroll_tables: scrollTableRecords,
     container_width: Math.round(surface.getBoundingClientRect().width),
     // 보드가 자기 칸보다 넓으면 가로 스크롤이 생긴다 — 계획 §2는 세로 스크롤만
     // 허용한다. 아래 검증 단계가 1px 초과를 하드 실패시키며 여기에는 원시값을 남긴다.
@@ -1215,7 +1353,7 @@ function loadRealBoardContract(boardId, ordinal) {
       surface_version: 'card-surface.v1',
       board_id: slots.board_id,
       card_id: slots.card_id,
-      state_boards: [],
+      state_boards: stateLinksFromMarks(slots.state_controls),
       slot_values: slotValues,
       unbound_slots: [],
       column_priority: slots.column_priority || [],
@@ -1267,6 +1405,7 @@ async function captureBoardSteps(win, surface) {
         text_overlap_total: probe.text_overlap_total,
         paired_semantics_violations: probe.paired_semantics_violations,
         paired_semantics_total: probe.paired_semantics_total,
+        scroll_tables: probe.scroll_tables,
         slot_count: probe.slot_multiset.length,
         visible_slot_count: probe.visible_slot_count,
         reachable_slot_count: probe.reachable_slot_count,
@@ -1313,6 +1452,7 @@ async function captureBoardSteps(win, surface) {
         text_overlap_total: probe.text_overlap_total,
         paired_semantics_violations: probe.paired_semantics_violations,
         paired_semantics_total: probe.paired_semantics_total,
+        scroll_tables: probe.scroll_tables,
         slot_count: probe.slot_multiset.length,
         visible_slot_count: probe.visible_slot_count,
         reachable_slot_count: probe.reachable_slot_count,

@@ -129,6 +129,31 @@ test('paired semantics keep total violations before the report cap', () => {
   assert.equal(result.items[0].source, 'value-a');
 });
 
+test('paired semantics reject duplicate sources or labels and stale tone or missing state', () => {
+  const result = collectPairedSemanticFindings([
+    {
+      source: 'duplicate-source', source_found: true, source_count: 2,
+      mirror_has_identity: false, label_found: true, label_count: 1,
+      source_text: '10', mirror_text: '10', source_tone: 'up', mirror_tone: 'up',
+      source_missing: false, mirror_missing: false,
+    },
+    {
+      source: 'duplicate-label', source_found: true, source_count: 1,
+      mirror_has_identity: false, label_found: true, label_count: 2,
+      source_text: '20', mirror_text: '20', source_tone: 'down', mirror_tone: 'up',
+      source_missing: true, mirror_missing: false,
+    },
+  ]);
+
+  assert.deepEqual(result.items, [
+    { source: 'duplicate-label', violation: 'duplicate_label' },
+    { source: 'duplicate-label', violation: 'stale_missing' },
+    { source: 'duplicate-label', violation: 'stale_tone' },
+    { source: 'duplicate-source', violation: 'duplicate_source' },
+  ]);
+  assert.equal(result.total, 4);
+});
+
 test('paired semantics reports visible legacy mirrors but ignores hidden ones', () => {
   const legacy = {
     source: '', source_found: false, mirror_has_identity: true, label_found: false,
@@ -142,6 +167,24 @@ test('paired semantics reports visible legacy mirrors but ignores hidden ones', 
   assert.deepEqual(result.items.map((item) => item.violation), [
     'mirror_has_mount_identity', 'missing_label', 'missing_source',
   ]);
+});
+
+test('paired semantic report carries malformed scroll-table role findings', () => {
+  const result = collectPairedSemanticFindings([{
+    kind: 'scroll_table', source: 'settlement-table', hidden: false,
+    violations: [
+      'scroll_bad_column_role', 'scroll_control_not_focusable',
+      'scroll_control_role_conflict', 'scroll_missing_row',
+    ],
+  }]);
+
+  assert.deepEqual(result.items, [
+    { source: 'settlement-table', violation: 'scroll_bad_column_role' },
+    { source: 'settlement-table', violation: 'scroll_control_not_focusable' },
+    { source: 'settlement-table', violation: 'scroll_control_role_conflict' },
+    { source: 'settlement-table', violation: 'scroll_missing_row' },
+  ]);
+  assert.equal(result.total, 4);
 });
 
 test('readability assertion is report-only until explicitly enforced', () => {

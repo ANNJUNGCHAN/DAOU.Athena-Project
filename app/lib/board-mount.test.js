@@ -2,11 +2,13 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const {
   collapsePlan, mountPlan, pairedGroups, nodeIndex, applyPlan, setHidden, isValueSlot,
   hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES,
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
-  stateControlActivationOwner, wireStateControlActivation,
+  stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
 } = require('./board-mount');
 
 // jsdom 없이 검증한다 — ranking-axis.test.js와 같은 관행(DOM 스텁 주입).
@@ -14,6 +16,7 @@ const {
 // querySelectorAll / dataset / textContent / style / hidden / addEventListener.
 const SELECTORS = {
   '[data-node]': (node) => node.dataset.node !== undefined,
+  '[data-paired-source]': (node) => node.dataset.pairedSource !== undefined,
 };
 function attrSelector(selector) {
   const match = /^\[data-([a-z-]+)="([^"]+)"\]$/.exec(selector);
@@ -115,6 +118,79 @@ test('responsive plain state control activates exactly once for click, Enter, an
   assert.equal(wireStateControlActivation(node, () => activations.push('duplicate'), { keyboard: true }), false);
   node.dispatch('click');
   assert.equal(activations.at(-1), 'activate', 'rewiring must not install a second activation path');
+});
+
+test('a state control inside an identity-free columnheader wrapper keeps sole button semantics', () => {
+  const columnheader = stateControlStub({ role: 'columnheader' });
+  columnheader.dataset = {};
+  const control = stateControlStub();
+  control.dataset = {
+    node: '33WM-0', stateControl: '시간외 등락률', stateBoard: '2YNQ-0',
+  };
+  columnheader.children = [control];
+
+  const activations = [];
+  assert.equal(wireStateControlActivation(
+    control, () => activations.push('activate'), { keyboard: true },
+  ), true);
+  assert.equal(columnheader.getAttribute('role'), 'columnheader');
+  assert.deepEqual(columnheader.dataset, {}, 'semantic cell wrapper must stay identity-free');
+  assert.equal(control.getAttribute('role'), 'button');
+  assert.equal(control.getAttribute('tabindex'), '0');
+  control.dispatch('click');
+  control.dispatch('keydown', {
+    key: 'Enter', preventDefault() { activations.push('prevent-enter'); },
+  });
+  control.dispatch('keydown', {
+    key: ' ', preventDefault() { activations.push('prevent-space'); },
+  });
+  assert.deepEqual(activations, [
+    'activate', 'prevent-enter', 'activate', 'prevent-space', 'activate',
+  ]);
+  assert.equal(wireStateControlActivation(
+    control, () => activations.push('duplicate'), { keyboard: true },
+  ), false);
+  control.dispatch('click');
+  assert.equal(activations.at(-1), 'activate');
+});
+
+test('real-board fixture state marks flatten into wired 3GLA and 33WM links', () => {
+  const fixtures = [
+    ['2SKU-1', '3GLA-0', 'D+2 정산 후 계좌', '3MTJ-0'],
+    ['13K0-2', '33WM-0', '시간외 등락률', '2YNQ-0'],
+  ];
+  for (const [boardId, nodeId, controlText, targetBoard] of fixtures) {
+    const slots = JSON.parse(fs.readFileSync(path.join(
+      __dirname, '..', '..', 'backend', 'ref', 'card-surface-templates', boardId, 'slots.json',
+    ), 'utf8'));
+    const links = stateLinksFromMarks(slots.state_controls);
+    assert.ok(links.length > 0, `${boardId} fixture must retain state-board links`);
+    assert.deepEqual(
+      links.find((link) => link.control === controlText),
+      { control: controlText, board_id: targetBoard },
+    );
+    const mark = slots.state_controls.marks.find((item) => item.node_id === nodeId);
+    assert.equal(mark.control, controlText);
+
+    const node = stateControlStub();
+    const activations = [];
+    assert.equal(wireStateControlActivation(
+      node, () => activations.push(targetBoard), { keyboard: true },
+    ), true);
+    node.setAttribute('data-state-board', targetBoard);
+    assert.equal(node.getAttribute('role'), 'button');
+    assert.equal(node.getAttribute('tabindex'), '0');
+    assert.equal(node.getAttribute('data-state-board'), targetBoard);
+    node.dispatch('click');
+    node.dispatch('keydown', { key: 'Enter', preventDefault() {} });
+    node.dispatch('keydown', { key: ' ', preventDefault() {} });
+    assert.deepEqual(activations, [targetBoard, targetBoard, targetBoard]);
+    assert.equal(wireStateControlActivation(
+      node, () => activations.push('duplicate'), { keyboard: true },
+    ), false);
+    node.dispatch('click');
+    assert.deepEqual(activations, [targetBoard, targetBoard, targetBoard, targetBoard]);
+  }
 });
 
 test('native button and tab state controls keep their existing semantics', () => {
@@ -333,6 +409,64 @@ test('applyPlan은 텍스트 노드만 갱신하고 접힌 행의 인라인 disp
   assert.equal(index.get('rail.a.value').textContent, '4,200,000');
   const [rollup] = root.querySelectorAll('[data-collapse-rollup="zero"]');
   assert.equal(rollup.hidden, true);
+});
+
+test('paired display mirrors follow full and partial source text, tone, and missing state', () => {
+  const source = el({ node: 'value' });
+  source.style.color = 'var(--paper-tone)';
+  const mirrorA = el({ pairedSource: 'value' });
+  const mirrorB = el({ pairedSource: 'value' });
+  const untouched = el({ pairedSource: 'other-value' });
+  mirrorA.textContent = 'stale paper value';
+  mirrorB.textContent = 'another stale value';
+  mirrorA.style.color = 'var(--color-down)';
+  mirrorA.dataset.missing = 'true';
+  untouched.textContent = 'paper-only';
+  untouched.style.color = 'var(--paper-other)';
+  const root = el({}, [source, mirrorA, mirrorB, untouched]);
+  const contract = {
+    slots: [{
+      slot_id: 'value', node: 'value', kind: 'value',
+      format: { kind: 'number', sign: true, tone: 'signed' },
+    }],
+  };
+  const values = { value: 1850 };
+
+  applyPlan(root, mountPlan(contract, values));
+  assert.equal(source.textContent, '+1,850');
+  for (const mirror of [mirrorA, mirrorB]) {
+    assert.equal(mirror.textContent, '+1,850');
+    assert.equal(mirror.style.color, 'var(--color-up)');
+    assert.equal(mirror.dataset.missing, undefined);
+    assert.equal(mirror.dataset.node, undefined);
+    assert.equal(mirror.dataset.slotId, undefined);
+    assert.equal(mirror.dataset.leaf, undefined);
+    assert.equal(mirror.dataset.bsValueAtomic, undefined);
+  }
+
+  values.value = 0;
+  applyRealtimeSlots(root, contract, values, ['value']);
+  assert.equal(source.style.color, 'var(--paper-tone)', 'neutral restores the Paper tone');
+  assert.deepEqual([mirrorA.style.color, mirrorB.style.color],
+    ['var(--paper-tone)', 'var(--paper-tone)']);
+
+  values.value = { missing: 'pending' };
+  applyRealtimeSlots(root, contract, values, ['value']);
+  assert.equal(source.dataset.missing, 'true');
+  assert.equal(mirrorA.textContent, source.textContent);
+  assert.equal(mirrorA.style.color, source.style.color);
+  assert.deepEqual([mirrorA.dataset.missing, mirrorB.dataset.missing], ['true', 'true']);
+
+  values.value = -2400;
+  applyRealtimeSlots(root, contract, values, ['value']);
+  assert.equal(source.textContent, '-2,400');
+  assert.equal(source.style.color, 'var(--color-down)');
+  assert.deepEqual([mirrorA.textContent, mirrorB.textContent], ['-2,400', '-2,400']);
+  assert.deepEqual([mirrorA.style.color, mirrorB.style.color],
+    ['var(--color-down)', 'var(--color-down)']);
+  assert.deepEqual([mirrorA.dataset.missing, mirrorB.dataset.missing], [undefined, undefined]);
+  assert.equal(untouched.textContent, 'paper-only');
+  assert.equal(untouched.style.color, 'var(--paper-other)');
 });
 
 test('value-atomic marker is written only to the Paper leaf and removed idempotently', () => {

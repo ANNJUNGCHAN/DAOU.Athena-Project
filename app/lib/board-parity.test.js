@@ -207,11 +207,43 @@ test('glyph readability probe keeps raw geometry evidence but starts in report-o
   assert.match(verify, /assertReadability\(surface\.boardId, preset, probe, \{ enforce: false \}\)/);
 });
 
-test('paired semantic probe includes legacy mirrors only inside opted-in paired tables', () => {
+test('paired semantic probe scans only canonical mirrors and records identity, tone, and missing parity', () => {
   const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
-  assert.match(verify,
-    /surface\.querySelectorAll\('\.bs-r-paired-table \.bs-paired, \[data-paired-source\]'\)/);
+  assert.match(verify, /surface\.querySelectorAll\('\[data-paired-source\]'\)/);
+  assert.doesNotMatch(verify, /\.bs-r-paired-table \.bs-paired, \[data-paired-source\]/);
+  for (const field of [
+    'source_count', 'label_count', 'source_tone', 'mirror_tone',
+    'source_missing', 'mirror_missing',
+  ]) assert.match(verify, new RegExp(field));
+  assert.match(verify, /dataset\.leaf/);
+  assert.match(verify, /dataset\.bsValueAtomic/);
   assert.match(verify, /hidden: !shown\(mirror\)/);
+  assert.match(verify, /\.bs-r-scroll-table/);
+  assert.match(verify, /scroll_bad_column_role/);
+  assert.match(verify, /scroll_missing_row/);
+  assert.match(verify, /table\.querySelectorAll\('\[role="row"\]'\)/);
+  assert.match(verify, /row\.closest\('\[role="table"\]'\) === table/);
+  assert.doesNotMatch(verify, /const rows = \[\.\.\.table\.children\]/);
+  assert.match(verify, /bs-scroll-table-cell-semantics/);
+  assert.match(verify, /scroll_control_role_conflict/);
+  assert.match(verify, /scroll_not_scrollable/);
+  assert.match(verify, /scroll_width/);
+  assert.match(verify, /client_width/);
+  assert.match(verify, /scroll_state_controls/);
+  assert.match(verify, /scroll_control_not_focusable/);
+});
+
+test('real-board verifier fixtures preserve authored state-board links for runtime wiring', () => {
+  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  assert.match(verify, /stateLinksFromMarks/);
+  assert.match(
+    verify,
+    /function loadRealBoardContract[\s\S]*?state_boards:\s*stateLinksFromMarks\(slots\.state_controls\)/,
+  );
+  const realBoardFactory = verify.match(
+    /function loadRealBoardContract[\s\S]*?\n}\n\n\/\/ 보드 1장/,
+  )[0];
+  assert.doesNotMatch(realBoardFactory, /state_boards:\s*\[\]/);
 });
 
 test('canonical glyph verifier has no alternate diagnostic success path', () => {
@@ -331,12 +363,41 @@ test('board-surface.css는 5단이고 !important를 쓰지 않는다', () => {
     .filter((chunk) => !chunk.includes('.bs-col') && !chunk.includes('.bs-paired'))
     .map((chunk) => chunk.trim());
   assert.deepEqual(illegal, [], '컨테이너 규칙이 Paper 영역 노드의 display를 바꾼다');
-  // 4단(L·M·S·XS) x (열 숨김 + 병기 켜기) = 8 규칙.
-  assert.equal(displayChunks.length, 8);
+  // 4단(L·M·S·XS) x (열 숨김 + 기존 병기 켜기 + paired-table grid) = 12 규칙.
+  assert.equal(displayChunks.length, 12);
   for (const priority of [4, 5, 6, 7, 8]) {
     assert.match(css, new RegExp(`\\.bs-col\\[data-col-priority="${priority}"\\]`));
     assert.match(css, new RegExp(`\\.bs-paired\\[data-paired-col~="${priority}"\\]`));
   }
+});
+
+test('paired-table labels form scoped label-value grids while scroll-table keeps its native grid reachable', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8');
+  const rules = css.replace(/\/\*[\s\S]*?\*\//g, '');
+
+  assert.match(rules,
+    /\.bs-r-paired-table \.bs-paired\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\) max-content/);
+  assert.match(rules,
+    /\.bs-r-paired-table \.bs-paired-label\s*\{[^}]*white-space:\s*normal[^}]*overflow-wrap:\s*anywhere/);
+  assert.match(rules,
+    /\.bs-r-paired-table \[data-paired-source\]\s*\{[^}]*white-space:\s*nowrap[^}]*overflow-wrap:\s*normal/);
+  for (const priority of [4, 5, 6, 7]) {
+    assert.match(rules, new RegExp(
+      `\\.bs-r-paired-table \\.bs-paired\\[data-paired-col~="${priority}"\\]\\s*\\{\\s*display:\\s*grid`,
+    ));
+  }
+
+  assert.match(rules,
+    /\.bs-r-scroll-table\s*\{[^}]*max-width:\s*100%[^}]*overflow-x:\s*auto/);
+  assert.match(rules, /\.bs-r-scroll-table:focus-visible\s*\{[^}]*outline:/);
+  assert.match(rules,
+    /\.bs-scroll-table-semantics\s*\{[^}]*display:\s*flex[^}]*flex-direction:\s*column[^}]*min-width:\s*max-content/);
+  assert.doesNotMatch(rules, /\.bs-scroll-table-semantics\s*\{[^}]*display:\s*contents/);
+  assert.match(rules,
+    /\.bs-scroll-table-cell-semantics\s*\{[^}]*display:\s*flex[^}]*flex-shrink:\s*0/);
+  assert.doesNotMatch(rules, /\.bs-scroll-table-cell-semantics\s*\{[^}]*display:\s*contents/);
+  assert.doesNotMatch(rules, /#(?:39SW|33WD)|\[data-node(?:=|\])/,
+    'table behavior must never depend on Paper node ids');
 });
 
 // ---------- 생성 색인 드리프트 ----------
@@ -397,8 +458,9 @@ test('semantic flow and atomic behavior starts below XL and remains owner-scoped
   assert.match(l, /\.bs-r-flow\s*>\s*\*\s*\{\s*flex-shrink:\s*0;/);
   assert.match(l,
     /:is\(\.bs-r-flow, \.bs-r-scroll\)\s+:is\(\.bs-r-atomic, \[data-bs-value-atomic="true"\]\)\s*\{[^}]*white-space:\s*nowrap;[^}]*overflow-wrap:\s*normal;/);
-  assert.doesNotMatch(l, /bs-r-paired-table|bs-r-scroll-table/,
-    'table trait behavior belongs to G3');
+  assert.doesNotMatch(l,
+    /:is\(\.bs-r-flow, \.bs-r-scroll, \.bs-r-(?:paired|scroll)-table\)/,
+    'generic atomic behavior must not leak into either table contract');
 });
 
 test('semantic scroll behavior is bounded, nonshrinking, and visibly focusable from M down', () => {
@@ -410,7 +472,7 @@ test('semantic scroll behavior is bounded, nonshrinking, and visibly focusable f
   assert.match(m, /\.bs-r-scroll\s*>\s*\*\s*\{[^}]*flex-shrink:\s*0;[^}]*min-width:\s*max-content;/);
   assert.match(css, /\.bs-r-scroll:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--color-k-text\);[^}]*outline-offset:\s*-2px;/);
   assert.match(css,
-    /:is\(\.bs-r-flow, \.bs-r-scroll\)\s+\[data-state-board\]\[role="button"\]:focus-visible\s*\{[^}]*outline:/);
+    /:is\(\.bs-r-flow, \.bs-r-scroll, \.bs-r-scroll-table\)\s+\[data-state-board\]\[role="button"\]:focus-visible\s*\{[^}]*outline:/);
   assert.doesNotMatch(css,
     /(?:^|\n)\[data-state-board\]\[role="button"\]:focus-visible/,
     'outside-group state controls must not inherit the responsive focus contract');

@@ -375,18 +375,19 @@ test('상태 보드 전환은 계약이 준 링크 안에서만 일어나고 값
   );
 });
 
-test('상태 보드 키보드 의미는 flow/scroll 안의 plain leaf에만 보강한다', () => {
+test('상태 보드 키보드 의미는 flow/scroll/scroll-table 안의 plain leaf에만 보강한다', () => {
   const controls = CANVAS.slice(
     CANVAS.indexOf('function findStateControl'),
     CANVAS.indexOf('async function hydrateBoardSlots'),
   );
-  assert.match(controls, /RESPONSIVE_STATE_CONTROL_OWNER = '\.bs-r-flow, \.bs-r-scroll'/);
+  assert.match(controls,
+    /RESPONSIVE_STATE_CONTROL_OWNER = '\.bs-r-flow, \.bs-r-scroll, \.bs-r-scroll-table'/);
   assert.match(controls, /function isResponsiveStateControl\(node\)/);
   assert.match(controls, /node\.childElementCount === 0/);
   assert.match(controls, /node\.closest\(RESPONSIVE_STATE_CONTROL_OWNER\)/);
   assert.match(controls, /boardMount\.stateControlActivationOwner\(node\)/);
-  assert.doesNotMatch(controls, /bs-r-paired-table|bs-r-scroll-table/,
-    'table responsive behavior belongs to G3');
+  assert.doesNotMatch(controls, /bs-r-paired-table/,
+    'paired display mirrors never become interactive controls');
 });
 
 test('미결 슬롯이 있으면 하이드레이션을 부르고, 못 받으면 결측어를 그대로 둔다', () => {
