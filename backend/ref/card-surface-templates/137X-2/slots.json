@@ -4525,5 +4525,61 @@
       ]
     }
   ],
-  "unbound_reason": {}
+  "unbound_reason": {},
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "chart",
+    "title": "삼성전자 3개월 차트",
+    "eyebrow": "CC-03 / 137X-2",
+    "source_board": "CC-03 / R01 · 삼성전자 3개월 차트",
+    "elements": [
+      {
+        "source_slot_id": "s005",
+        "label": "현재가",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "150,850원"
+      },
+      {
+        "source_slot_id": "s006",
+        "label": "전일대비",
+        "role": "change",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,850 · +1.24%"
+      }
+    ],
+    "fold_counts": {
+      "total": 69,
+      "shown": 2,
+      "hidden": 67
+    },
+    "fold_note": "외 67개 계열을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01 · 삼성전자 3개월 차트",
+      "elements": "현재가 · 전일대비",
+      "grammar": "chart",
+      "folded": "외 67개 계열을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

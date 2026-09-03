@@ -198,6 +198,10 @@ class BoardTemplate:
     column_priority: tuple[str, ...]
     section_titles_ko: Mapping[str, str]
     paper_source: Mapping[str, Any]
+    # Paper 카드미니(H-1)에서 승인된 360×420 고정 표시 계약. 값은
+    # ``surface_contract.slot_values``가 계속 나르고, 이 필드는 어떤 슬롯을 어떤
+    # 문법으로 보여줄지만 정한다.
+    kiumi: Mapping[str, Any] | None
 
     def slot(self, slot_id: str) -> SurfaceSlot | None:
         for candidate in self.slots:
@@ -976,6 +980,7 @@ def _parse_board(board_dir: Path, declared_board_id: str) -> BoardTemplate:
         not isinstance(item, str) for item in column_priority
     ):
         raise CardSurfaceTemplateError(f"board {board_id!r} column_priority must be strings")
+    kiumi = _parse_kiumi(payload.get("kiumi"), board_id, set(slot_ids))
     return BoardTemplate(
         board_id=board_id,
         card_id=payload["card_id"],
@@ -1000,7 +1005,93 @@ def _parse_board(board_dir: Path, declared_board_id: str) -> BoardTemplate:
         column_priority=tuple(column_priority),
         section_titles_ko=MappingProxyType(dict(section_titles)),
         paper_source=MappingProxyType(dict(payload.get("paper_source") or {})),
+        kiumi=MappingProxyType(kiumi) if kiumi is not None else None,
     )
+
+
+def _parse_kiumi(
+    raw: Any, board_id: str, slot_ids: set[str]
+) -> dict[str, Any] | None:
+    """승인된 카드미니 정의를 fail-closed로 읽는다.
+
+    기존 축약 픽스처는 이 필드가 없어도 로드한다. 제품 트리 96장이 모두 필드를
+    갖는지는 전수 계약 테스트가 별도로 고정한다.
+    """
+
+    if raw is None:
+        return None
+    spec = _require_mapping(raw, f"board {board_id!r} kiumi")
+    if spec.get("version") != 1:
+        raise CardSurfaceTemplateError(f"board {board_id!r} kiumi version must be 1")
+    if spec.get("width_px") != 360 or spec.get("height_px") != 420:
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} kiumi size must be exactly 360x420"
+        )
+    grammar = spec.get("grammar")
+    grammars = {
+        "table",
+        "chart",
+        "facts",
+        "compound",
+        "order_ticket",
+        "order_confirm",
+        "event",
+        "auth",
+        "reader",
+        "stream",
+    }
+    if grammar not in grammars:
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} kiumi has unknown grammar {grammar!r}"
+        )
+    if spec.get("fixed") is not True:
+        raise CardSurfaceTemplateError(f"board {board_id!r} kiumi must be fixed")
+    if not isinstance(spec.get("title"), str) or not spec["title"].strip():
+        raise CardSurfaceTemplateError(f"board {board_id!r} kiumi title must be a string")
+    if not isinstance(spec.get("reviewed_by"), str) or not spec["reviewed_by"].strip():
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} kiumi reviewed_by must be a string"
+        )
+    elements = spec.get("elements")
+    if not isinstance(elements, list) or not elements:
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} kiumi elements must be a non-empty list"
+        )
+    selected: list[str] = []
+    for index, raw_element in enumerate(elements):
+        element = _require_mapping(
+            raw_element, f"board {board_id!r} kiumi element {index}"
+        )
+        source_slot_id = element.get("source_slot_id")
+        if not isinstance(source_slot_id, str) or source_slot_id not in slot_ids:
+            raise CardSurfaceTemplateError(
+                f"board {board_id!r} kiumi element {index} references unknown slot "
+                f"{source_slot_id!r}"
+            )
+        if not isinstance(element.get("label"), str) or not element["label"].strip():
+            raise CardSurfaceTemplateError(
+                f"board {board_id!r} kiumi element {index} needs a label"
+            )
+        if not isinstance(element.get("format"), dict):
+            raise CardSurfaceTemplateError(
+                f"board {board_id!r} kiumi element {index} format must be an object"
+            )
+        selected.append(source_slot_id)
+    if len(selected) != len(set(selected)):
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} kiumi repeats a source_slot_id"
+        )
+    fold_note = spec.get("fold_note")
+    if fold_note is not None and not isinstance(fold_note, str):
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} kiumi fold_note must be a string or null"
+        )
+    structure_missing = spec.get("structure_missing", False)
+    if not isinstance(structure_missing, bool):
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} kiumi structure_missing must be a boolean"
+        )
+    return dict(spec)
 
 
 def _control_text(control: Any, declared: str | None) -> str | None:

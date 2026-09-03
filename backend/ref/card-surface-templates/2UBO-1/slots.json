@@ -3977,5 +3977,78 @@
       "kor": "등락기호",
       "unbound_reason": "등락률 텍스트의 부호·색으로 그려짐 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "table",
+    "title": "테마 — 테마 등락·확산 탐색",
+    "eyebrow": "CC-06 / 2UBO-1",
+    "source_board": "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "elements": [
+      {
+        "source_slot_id": "s024",
+        "label": "테마그룹코드",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "T0142",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s025",
+        "label": "등락율",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+3.42%",
+        "rank": 2
+      },
+      {
+        "source_slot_id": "s027",
+        "label": "상승종목수",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "18 / 24",
+        "rank": 3
+      }
+    ],
+    "fold_counts": {
+      "total": 88,
+      "shown": 3,
+      "hidden": 85,
+      "rows": 0
+    },
+    "fold_note": "추가 항목은 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+      "elements": "테마그룹코드 · 등락율 · 상승종목수",
+      "grammar": "table",
+      "folded": "추가 항목은 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

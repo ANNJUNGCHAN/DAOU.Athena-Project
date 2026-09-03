@@ -6103,5 +6103,104 @@
       "expanded_board": null
     }
   ],
-  "unbound_fields": []
+  "unbound_fields": [],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "금현물 — KRX 금시장 차트·시세",
+    "eyebrow": "CC-03 / 2RJ7-1",
+    "source_board": "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "elements": [
+      {
+        "source_slot_id": "s017",
+        "label": "누적 거래량",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "185.4kg"
+      },
+      {
+        "source_slot_id": "s021",
+        "label": "등락율",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "등락률 +0.74%"
+      },
+      {
+        "source_slot_id": "s024",
+        "label": "보조 지표",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1g"
+      },
+      {
+        "source_slot_id": "s039",
+        "label": "금현물일봉차트조회",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "time",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "09:00~09:42",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s045",
+        "label": "전일대비기호",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "▲ 168,420 · +0.74%",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 106,
+      "shown": 5,
+      "hidden": 101,
+      "scalars": 2,
+      "rows": 2
+    },
+    "fold_note": "스칼라 2개 · 행 2개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+      "elements": "누적 거래량 · 등락율 · 보조 지표 · 금현물일봉차트조회 · 전일대비기호",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 2개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

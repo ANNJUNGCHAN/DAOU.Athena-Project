@@ -5620,5 +5620,104 @@
       "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
     }
   ],
-  "authoring_notes": "2차 저작(CC-01 레인). ① 열 전파(--apply-columns)로 갈음 매핑을 셀까지 내려 팩 34필드가 슬롯에 도달했다. ② display_dup는 정정된 f 규칙(같은 표·같은 열의 행 반복은 중복이 아니다)에 맞춰 단일 12·행반복 50을 걷어내고, 남은 재표시 2군(일자 축 · 보유종목 수)만 표식으로 둔다. ③ 구역 제목이 응답 배열(dt_stk_rlzt_pl·dt_rlzt_pl·tdy_rlzt_pl_dtl)에 걸린 자리는 컨테이너 표기로 두고 손대지 않았다."
+  "authoring_notes": "2차 저작(CC-01 레인). ① 열 전파(--apply-columns)로 갈음 매핑을 셀까지 내려 팩 34필드가 슬롯에 도달했다. ② display_dup는 정정된 f 규칙(같은 표·같은 열의 행 반복은 중복이 아니다)에 맞춰 단일 12·행반복 50을 걷어내고, 남은 재표시 2군(일자 축 · 보유종목 수)만 표식으로 둔다. ③ 구역 제목이 응답 배열(dt_stk_rlzt_pl·dt_rlzt_pl·tdy_rlzt_pl_dtl)에 걸린 자리는 컨테이너 표기로 두고 손대지 않았다.",
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "손익·성과 — 실현손익·수익률",
+    "eyebrow": "CC-01 / 2SRV-1",
+    "source_board": "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "elements": [
+      {
+        "source_slot_id": "s012",
+        "label": "예탁자산평가액",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "124,580,240원"
+      },
+      {
+        "source_slot_id": "s013",
+        "label": "수익률",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "수익률 +4.96%"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "종목별계좌평가현황",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "8종목"
+      },
+      {
+        "source_slot_id": "s029",
+        "label": "당일투자손익",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,082,400",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s032",
+        "label": "당월투자손익",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,082,400",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 109,
+      "shown": 5,
+      "hidden": 104,
+      "scalars": 2,
+      "rows": 5
+    },
+    "fold_note": "스칼라 2개 · 행 5개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+      "elements": "예탁자산평가액 · 수익률 · 종목별계좌평가현황 · 당일투자손익 · 당월투자손익",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 5개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

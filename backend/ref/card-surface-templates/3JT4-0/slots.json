@@ -3952,5 +3952,78 @@
       "unbound_reason": "상한·하한·기준가 — 응답에 가격 제한 필드가 없다(제도 파생)"
     }
   ],
-  "unbound_fields": []
+  "unbound_fields": [],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "table",
+    "title": "호가 — 시간외 단일가 단계별 낱값",
+    "eyebrow": "CC-04 / 3JT4-0",
+    "source_board": "CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "elements": [
+      {
+        "source_slot_id": "s080",
+        "label": "매도호가총잔량",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "38,160 / 43,000",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s082",
+        "label": "매도호가총잔량직전대비",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+2,140",
+        "rank": 2
+      },
+      {
+        "source_slot_id": "s084",
+        "label": "매수호가총잔량직전대비",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "−1,380",
+        "rank": 3
+      }
+    ],
+    "fold_counts": {
+      "total": 85,
+      "shown": 3,
+      "hidden": 82,
+      "rows": 1
+    },
+    "fold_note": "외 1개 행을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+      "elements": "매도호가총잔량 · 매도호가총잔량직전대비 · 매수호가총잔량직전대비",
+      "grammar": "table",
+      "folded": "외 1개 행을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

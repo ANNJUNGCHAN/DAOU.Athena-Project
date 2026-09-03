@@ -5130,5 +5130,78 @@
       "unbound_reason": "LP 잔량 영값 묶음 rollup — 낱값은 3JZ3-0 LP 잔량 열(collapse_group 참조)"
     }
   ],
-  "unbound_fields": []
+  "unbound_fields": [],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "table",
+    "title": "호가 — 정규장 5단",
+    "eyebrow": "CC-04 / 2TRW-1",
+    "source_board": "CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "elements": [
+      {
+        "source_slot_id": "s029",
+        "label": "매도호가5",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "150,890",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s031",
+        "label": "매도호가수량5",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "2,940",
+        "rank": 2
+      },
+      {
+        "source_slot_id": "s032",
+        "label": "매도호가4",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "150,880",
+        "rank": 3
+      }
+    ],
+    "fold_counts": {
+      "total": 106,
+      "shown": 3,
+      "hidden": 103,
+      "rows": 8
+    },
+    "fold_note": "외 8개 행을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-04 / R02-T4 · 호가 — 정규장 5단",
+      "elements": "매도호가5 · 매도호가수량5 · 매도호가4",
+      "grammar": "table",
+      "folded": "외 8개 행을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

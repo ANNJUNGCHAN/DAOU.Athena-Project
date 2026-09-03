@@ -9115,5 +9115,104 @@
       "kor": "가격대끝",
       "unbound_reason": "집중 가격대 셀 '195,000 ~ 197,000'의 둘째 값 — extra_fields로 선언했다"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 매물대집중",
+    "eyebrow": "CC-03 / 30O1-0",
+    "source_board": "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "elements": [
+      {
+        "source_slot_id": "s023",
+        "label": "매물비",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "18.4%"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "11.0%"
+      },
+      {
+        "source_slot_id": "s026",
+        "label": "보조 지표",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "3개월"
+      },
+      {
+        "source_slot_id": "s017",
+        "label": "핵심 지표",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "상위 50",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s024",
+        "label": "수량",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1위 종목",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 191,
+      "shown": 5,
+      "hidden": 186,
+      "scalars": 2,
+      "rows": 17
+    },
+    "fold_note": "스칼라 2개 · 행 17개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+      "elements": "매물비 · 변화 · 보조 지표 · 핵심 지표 · 수량",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 17개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

@@ -2437,5 +2437,100 @@
       "static_reason": "발동 중 종목 수·오늘 건수 표기 — 표시분 집계(파생)"
     }
   ],
-  "authoring_notes": "표 감지 실패: 열 머리 'VI 표 헤더'(36HF-0)와 본문 행이 형제가 아니라 'VI Instruments Table'(36IR-0) 안에 들어 있고 본문이 3행뿐이라 detect_tables가 VI 표를 잡지 못한다. tables·column_bindings가 비어 있어 셀 슬롯을 직접 저작했다(--apply-columns 대상 없음). 좌측 시장 체온 패널은 base:1h가 아닌 base:0U·ka20003·ka10051 재표시(display_dup)로 저작했다."
+  "authoring_notes": "표 감지 실패: 열 머리 'VI 표 헤더'(36HF-0)와 본문 행이 형제가 아니라 'VI Instruments Table'(36IR-0) 안에 들어 있고 본문이 3행뿐이라 detect_tables가 VI 표를 잡지 못한다. tables·column_bindings가 비어 있어 셀 슬롯을 직접 저작했다(--apply-columns 대상 없음). 좌측 시장 체온 패널은 base:1h가 아닌 base:0U·ka20003·ka10051 재표시(display_dup)로 저작했다.",
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "facts",
+    "title": "시장 체온·VI",
+    "eyebrow": "CC-06 / 15R0-2",
+    "source_board": "CC-06 / R09 · 시장 체온·VI",
+    "elements": [
+      {
+        "source_slot_id": "s006",
+        "label": "현재가",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 2,
+          "tone": "neutral"
+        },
+        "paper_text": "2,684.21"
+      },
+      {
+        "source_slot_id": "s007",
+        "label": "전일대비",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+29.73 · +1.12%"
+      },
+      {
+        "source_slot_id": "s009",
+        "label": "현재가",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 2,
+          "tone": "neutral"
+        },
+        "paper_text": "842.15"
+      },
+      {
+        "source_slot_id": "s010",
+        "label": "전일대비",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+7.01 · +0.84%"
+      },
+      {
+        "source_slot_id": "s011",
+        "label": "상승종목수",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "상승 1,486"
+      }
+    ],
+    "fold_counts": {
+      "total": 49,
+      "shown": 5,
+      "hidden": 44
+    },
+    "fold_note": "외 44개 항목을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-06 / R09 · 시장 체온·VI",
+      "elements": "현재가 · 전일대비 · 상승종목수",
+      "grammar": "facts",
+      "folded": "외 44개 항목을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

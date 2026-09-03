@@ -6740,5 +6740,100 @@
         }
       ]
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "facts",
+    "title": "순위 — ETF 기간 수익률",
+    "eyebrow": "CC-03 / 2WZK-0",
+    "source_board": "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "elements": [
+      {
+        "source_slot_id": "s017",
+        "label": "ETF수익률",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 1,
+          "tone": "change"
+        },
+        "paper_text": "+42.1%"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "종목명",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "KODEX 2차전지산업"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "ETF수익률",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 1,
+          "tone": "change"
+        },
+        "paper_text": "+88.4%"
+      },
+      {
+        "source_slot_id": "s021",
+        "label": "종목명",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "TIGER 2차전지테마"
+      },
+      {
+        "source_slot_id": "s024",
+        "label": "ETF전체시세",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "전체 1,024 종목"
+      }
+    ],
+    "fold_counts": {
+      "total": 201,
+      "shown": 5,
+      "hidden": 196
+    },
+    "fold_note": "외 196개 항목을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+      "elements": "ETF수익률 · 종목명 · ETF전체시세",
+      "grammar": "facts",
+      "folded": "외 196개 항목을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

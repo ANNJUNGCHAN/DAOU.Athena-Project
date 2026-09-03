@@ -5920,5 +5920,100 @@
       "kor": "전일대비",
       "unbound_reason": "전일대비 절대액(+1,850) — 이 보드 종가 셀은 종가와 등락률만 그린다(전일대비 금액 자리 없음)"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "facts",
+    "title": "수급 — 거래원",
+    "eyebrow": "CC-05 / 2QM7-2",
+    "source_board": "CC-05 / R03-T2 · 수급 — 거래원",
+    "elements": [
+      {
+        "source_slot_id": "s012",
+        "label": "누적순매수",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+842억원"
+      },
+      {
+        "source_slot_id": "s015",
+        "label": "외국계순매수추정합",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,666억원"
+      },
+      {
+        "source_slot_id": "s022",
+        "label": "매도상위이탈원",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "전일 4위 → 오늘 9위"
+      },
+      {
+        "source_slot_id": "s010",
+        "label": "금액",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "순매수 1위 거래원"
+      },
+      {
+        "source_slot_id": "s013",
+        "label": "기준 시각",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "time",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "외국계 창구 · 09:22 기준"
+      }
+    ],
+    "fold_counts": {
+      "total": 135,
+      "shown": 5,
+      "hidden": 130
+    },
+    "fold_note": "외 130개 항목을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T2 · 수급 — 거래원",
+      "elements": "누적순매수 · 외국계순매수추정합 · 매도상위이탈원 · 금액 · 기준 시각",
+      "grammar": "facts",
+      "folded": "외 130개 항목을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

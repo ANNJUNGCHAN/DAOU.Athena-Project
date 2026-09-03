@@ -234,6 +234,7 @@ def _board_contract(
         "unbound_slots": unbound_slots,
         "column_priority": list(board.column_priority),
         "section_titles_ko": dict(board.section_titles_ko),
+        "kiumi": dict(board.kiumi) if board.kiumi is not None else None,
     }
 
 

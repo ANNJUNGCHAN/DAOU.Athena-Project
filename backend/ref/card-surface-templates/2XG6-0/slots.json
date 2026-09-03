@@ -4320,5 +4320,101 @@
       "static_reason": "실시간 연결·마지막 반영 시각 표기 — 응답 필드가 아니다"
     }
   ],
-  "unbound_fields": []
+  "unbound_fields": [],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "facts",
+    "title": "종목찾기 — 전일 거래량",
+    "eyebrow": "CC-06 / 2XG6-0",
+    "source_board": "CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+    "elements": [
+      {
+        "source_slot_id": "s041",
+        "label": "종목코드",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "005930"
+      },
+      {
+        "source_slot_id": "s042",
+        "label": "현재가",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "150,850"
+      },
+      {
+        "source_slot_id": "s043",
+        "label": "전일대비",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,850"
+      },
+      {
+        "source_slot_id": "s045",
+        "label": "거래량",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1,180만주"
+      },
+      {
+        "source_slot_id": "s052",
+        "label": "종목코드",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "000660"
+      }
+    ],
+    "fold_counts": {
+      "total": 90,
+      "shown": 5,
+      "hidden": 85
+    },
+    "fold_note": "외 85개 항목을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+      "elements": "종목코드 · 현재가 · 전일대비 · 거래량",
+      "grammar": "facts",
+      "folded": "외 85개 항목을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": true,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    },
+    "override_reason": "원본은 반복 레코드처럼 보이나 slots 표 구조가 없어 승인된 facts 문법으로 표시"
+  }
 }

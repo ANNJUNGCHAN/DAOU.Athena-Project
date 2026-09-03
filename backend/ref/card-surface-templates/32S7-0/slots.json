@@ -2665,5 +2665,61 @@
       "kor": "거래대금",
       "unbound_reason": "주기 탭 전환으로 같은 슬롯을 다시 채우는 대체 소스 — 표시 중인 일봉(ka20006)을 슬롯 mapping으로 두고 also_from으로 선언 · 주기 탭 '년' 상태 보드가 아직 없다 — 이 보드는 일봉 상태다(헌장 신념 12: 스트립 상태마다 전개 보드)"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "chart",
+    "title": "차트 — 업종 지수",
+    "eyebrow": "CC-03 / 32S7-0",
+    "source_board": "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "elements": [
+      {
+        "source_slot_id": "s041",
+        "label": "현재가",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "3,184.52 · +2.84%"
+      },
+      {
+        "source_slot_id": "s005",
+        "label": "전일대비",
+        "role": "change",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+87.96 · +2.84%"
+      }
+    ],
+    "fold_counts": {
+      "total": 35,
+      "shown": 2,
+      "hidden": 33
+    },
+    "fold_note": "외 33개 계열을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T7 · 차트 — 업종 지수",
+      "elements": "현재가 · 전일대비",
+      "grammar": "chart",
+      "folded": "외 33개 계열을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

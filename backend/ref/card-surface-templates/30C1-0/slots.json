@@ -10306,5 +10306,104 @@
       "static": true
     }
   ],
-  "unbound_fields": []
+  "unbound_fields": [],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 거래량갱신",
+    "eyebrow": "CC-03 / 30C1-0",
+    "source_board": "CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "elements": [
+      {
+        "source_slot_id": "s017",
+        "label": "핵심 지표",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "41"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "5.2배"
+      },
+      {
+        "source_slot_id": "s026",
+        "label": "보조 지표",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "5일"
+      },
+      {
+        "source_slot_id": "s050",
+        "label": "거래량갱신",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s052",
+        "label": "종목코드",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "007660",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 257,
+      "shown": 5,
+      "hidden": 252,
+      "scalars": 2,
+      "rows": 1
+    },
+    "fold_note": "스칼라 2개 · 행 1개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+      "elements": "핵심 지표 · 변화 · 보조 지표 · 거래량갱신 · 종목코드",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 1개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

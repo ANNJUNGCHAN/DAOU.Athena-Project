@@ -6862,5 +6862,104 @@
       "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
     }
   ],
-  "authoring_notes": "2차 저작(CC-01 레인). ① 열 전파로 갈음 매핑을 셀까지 내려 팩 32필드가 슬롯에 도달했다. ② 거래내역 표 상태 열(완료·D+1 예정·D+2 예정·D+2 차감)은 결제일자에서 만드는 파생 표기라 열을 kind:\"static\"으로 못박고 7칸에 static·derived·formula를 적었다 — 결제일자는 일자 열 병기 줄 7칸(행 반복)에만 남아 재표시 표식이 필요 없다. ③ 펼침 표식 글리프(s069 ▸)에 열 전파가 남긴 d2_entra를 떼고 static으로 막았다. ④ display_dup는 단일 13·행반복 35를 걷어냈다."
+  "authoring_notes": "2차 저작(CC-01 레인). ① 열 전파로 갈음 매핑을 셀까지 내려 팩 32필드가 슬롯에 도달했다. ② 거래내역 표 상태 열(완료·D+1 예정·D+2 예정·D+2 차감)은 결제일자에서 만드는 파생 표기라 열을 kind:\"static\"으로 못박고 7칸에 static·derived·formula를 적었다 — 결제일자는 일자 열 병기 줄 7칸(행 반복)에만 남아 재표시 표식이 필요 없다. ③ 펼침 표식 글리프(s069 ▸)에 열 전파가 남긴 d2_entra를 떼고 static으로 막았다. ④ display_dup는 단일 13·행반복 35를 걷어냈다.",
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "예수금·결제 — 현금·결제 예정",
+    "eyebrow": "CC-01 / 2SKU-1",
+    "source_board": "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "elements": [
+      {
+        "source_slot_id": "s012",
+        "label": "예탁자산평가액",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "124,580,240원"
+      },
+      {
+        "source_slot_id": "s013",
+        "label": "수익률",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "수익률 +4.96%"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "종목별계좌평가현황",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "8종목"
+      },
+      {
+        "source_slot_id": "s029",
+        "label": "예수금",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "34,820,000",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s030",
+        "label": "랩출금가능금액",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "랩 출금가능 0원",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 114,
+      "shown": 5,
+      "hidden": 109,
+      "scalars": 2,
+      "rows": 5
+    },
+    "fold_note": "스칼라 2개 · 행 5개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+      "elements": "예탁자산평가액 · 수익률 · 종목별계좌평가현황 · 예수금 · 랩출금가능금액",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 5개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

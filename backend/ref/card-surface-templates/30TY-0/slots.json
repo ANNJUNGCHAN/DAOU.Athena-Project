@@ -7334,5 +7334,91 @@
       "kor": "증권사별매매상위",
       "unbound_reason": "배열 컨테이너 필드이며 Paper에는 배열 자체를 표시하는 값 잎이 없다. 화면 머리 범위 문구와 더 보기 컨트롤은 고정 레이블이다"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 증권사별 상위",
+    "eyebrow": "CC-05 / 30TY-0",
+    "source_board": "CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "elements": [
+      {
+        "source_slot_id": "s013",
+        "label": "순매수금액",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,272억원"
+      },
+      {
+        "source_slot_id": "s016",
+        "label": "수량",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "3종목"
+      },
+      {
+        "source_slot_id": "s017",
+        "label": "변화",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "상위 3종목 89.6%",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s022",
+        "label": "기준 시각",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "time",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "당일 09:40",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 142,
+      "shown": 4,
+      "hidden": 138,
+      "scalars": 2,
+      "rows": 6
+    },
+    "fold_note": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+      "elements": "순매수금액 · 수량 · 변화 · 기준 시각",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

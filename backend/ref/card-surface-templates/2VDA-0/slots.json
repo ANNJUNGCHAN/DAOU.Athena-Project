@@ -10572,5 +10572,104 @@
       "unbound_reason": "레일 '매도 197,500 · 매수 197,400' 한 텍스트의 둘째 값 — 슬롯 하나에 mapping 2개 불가라 s281 extra_fields로 선언 (레일 호가 행을 매도·매수 두 텍스트 노드로 나누면 직접 바인딩할 수 있다)"
     }
   ],
-  "authoring_notes": "2차 저작 잔여: 표 종목 열 첫 줄(종목명)이 숫자 없는 텍스트라 추출기가 kind=label로 잡아, 둘째 줄 종목코드 20칸에 paired_with를 못 건다(검사기 c가 값 슬롯만 짝으로 받는다). 대신 paired_note로 남겼고, 그 탓에 로더가 종목코드 무리에 primary가 없다고 경고한다. 정적 열 5개(순위·구분·체결강도·시장·시각)에서 배열 컨테이너 ntl_pric 매핑을 뗐다 — 컨테이너는 건수 줄 s013 하나가 받는다."
+  "authoring_notes": "2차 저작 잔여: 표 종목 열 첫 줄(종목명)이 숫자 없는 텍스트라 추출기가 kind=label로 잡아, 둘째 줄 종목코드 20칸에 paired_with를 못 건다(검사기 c가 값 슬롯만 짝으로 받는다). 대신 paired_note로 남겼고, 그 탓에 로더가 종목코드 무리에 primary가 없다고 경고한다. 정적 열 5개(순위·구분·체결강도·시장·시각)에서 배열 컨테이너 ntl_pric 매핑을 뗐다 — 컨테이너는 건수 줄 s013 하나가 받는다.",
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 주식 신호·순위",
+    "eyebrow": "CC-03 / 2VDA-0",
+    "source_board": "CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "elements": [
+      {
+        "source_slot_id": "s015",
+        "label": "핵심 지표",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "신고저가 · 52주 기준"
+      },
+      {
+        "source_slot_id": "s017",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "114"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "보조 지표",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "23"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "수량",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "어제 89종목",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s021",
+        "label": "수량",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "어제 31종목",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 199,
+      "shown": 5,
+      "hidden": 194,
+      "scalars": 2,
+      "rows": 18
+    },
+    "fold_note": "스칼라 2개 · 행 18개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+      "elements": "핵심 지표 · 변화 · 보조 지표 · 수량",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 18개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }
