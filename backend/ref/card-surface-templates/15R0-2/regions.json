@@ -1,0 +1,9 @@
+{
+  "root": "15R0-2",
+  "regions": [
+    { "node_id": "15R1-2", "name": "Header", "role": "header", "depth": 1 },
+    { "node_id": "15R9-2", "name": "Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "15RA-2", "name": "Market breadth", "role": "primary", "depth": 2 },
+    { "node_id": "170E-2", "name": "VI Affected Instruments", "role": "rail", "depth": 2 }
+  ]
+}

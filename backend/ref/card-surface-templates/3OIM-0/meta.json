@@ -1,0 +1,13 @@
+{
+  "board_id": "3OIM-0",
+  "name": "CC-01 / R10-B-X2 · 금현물 주문·체결",
+  "card_id": "CC-01",
+  "width": 1440,
+  "height": 926,
+  "state": {
+    "kind": "expand",
+    "parent_board": "3ODO-0",
+    "control": null
+  },
+  "saved_at": "2026-09-02T19:52:33+09:00"
+}

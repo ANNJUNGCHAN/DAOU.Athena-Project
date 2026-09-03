@@ -1,0 +1,61 @@
+{
+ "board": "2XG6-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10031",
+   "f": "pred_trde_qty_upper",
+   "kor": "전일거래량상위",
+   "layer": null,
+   "where": "'전일 거래량 상위' 순위 테이블"
+  },
+  {
+   "mapping_id": "base:ka10031",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "'종목' 컬럼 하단 005930"
+  },
+  {
+   "mapping_id": "base:ka10031",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'종목' 컬럼 종목명"
+  },
+  {
+   "mapping_id": "base:ka10031",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "'현재가' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10031",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률 색/± 부호"
+  },
+  {
+   "mapping_id": "base:ka10031",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "우패널 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10031",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "'전일 거래량' 컬럼 2,211만주"
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "list",
+   "kor": "종목리스트",
+   "layer": "직접",
+   "where": "좌 pane 표 아래 신설 '조회 대상' 평면 섹션(824×172, 3열×4행 미니그리드) — 12종목 각각 이름·코드(mono)·등락률을 낱값 행으로 직접 표기. 동일 블록을 2XKO-0·2XP6-0·2XTO-0·2YA8-0·2YEQ-0·2YJ8-0·2YNQ-0에도 복제(2YNQ-0은 시간외 등락률, 2XP6-0은 예상체결 08:50 기준)."
+  }
+ ]
+}

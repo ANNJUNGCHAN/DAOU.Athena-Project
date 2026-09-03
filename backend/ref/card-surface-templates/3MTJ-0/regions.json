@@ -1,0 +1,11 @@
+{
+  "root": "3MTL-0",
+  "regions": [
+    { "node_id": "3N42-0", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "3N3H-0", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3MTP-0", "name": "Account Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3OP4-0", "name": "D+2 본문", "role": "primary", "depth": 2 },
+    { "node_id": "3OW3-0", "name": "D+2 레일", "role": "rail", "depth": 2 },
+    { "node_id": "3MTM-0", "name": "Account Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

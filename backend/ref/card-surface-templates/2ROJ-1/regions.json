@@ -1,0 +1,12 @@
+{
+  "root": "2ROK-1",
+  "regions": [
+    { "node_id": "2RU9-1", "name": "Flow Header", "role": "header", "depth": 1 },
+    { "node_id": "2RUA-1", "name": "Flow Tabs", "role": "strip", "depth": 2 },
+    { "node_id": "2RTM-1", "name": "Flow Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "2ROQ-1", "name": "Flow Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "2RQD-1", "name": "Program Panel", "role": "primary", "depth": 2 },
+    { "node_id": "2ROR-1", "name": "Side Panel", "role": "rail", "depth": 2 },
+    { "node_id": "2ROL-1", "name": "Flow Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "board_id": "15L8-2",
+  "name": "CC-06 / R06 · 관심종목·조건 신호",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 932,
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "saved_at": "2026-09-02T11:33:04Z"
+}

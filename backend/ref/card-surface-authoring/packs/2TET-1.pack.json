@@ -1,0 +1,104 @@
+{
+ "board_id": "2TET-1",
+ "card_id": "CC-02",
+ "name": "CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+ "operation_refs": [
+  "base:kt10003",
+  "base:kt10009",
+  "base:kt50003"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:kt10003",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "board": "2TET-1",
+   "where": "주문 접수 정보 · 주문번호 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10003",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "board": "2TET-1",
+   "where": "주문 접수 정보 · 원주문번호 0021847 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10003",
+   "f": "cncl_qty",
+   "kor": "취소수량",
+   "layer": null,
+   "board": "2TET-1",
+   "where": "주문 접수 정보 · 취소수량 10주 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10009",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "board": "2TET-1",
+   "where": "주문 접수 정보 · 주문번호 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10009",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "board": "2TET-1",
+   "where": "주문 접수 정보 · 원주문번호 0021847 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10009",
+   "f": "cncl_qty",
+   "kor": "취소수량",
+   "layer": null,
+   "board": "2TET-1",
+   "where": "주문 접수 정보 · 취소수량 10주 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50003",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "board": "2TNJ-1",
+   "where": "주문 접수 정보 · 주문번호 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50003",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "board": "2TET-1",
+   "where": "주문 접수 정보 · 원주문번호 행(금현물 탭 공용)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50003",
+   "f": "cncl_qty",
+   "kor": "취소수량",
+   "layer": null,
+   "board": "2TET-1",
+   "where": "주문 접수 정보 · 취소수량 행(금현물 탭 공용)",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 8
+}

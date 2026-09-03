@@ -1,0 +1,11 @@
+{
+  "root": "2U5N-1",
+  "regions": [
+    { "node_id": "2U8U-1", "name": "Header and Capability Navigation", "role": "header", "depth": 1 },
+    { "node_id": "2U8D-1", "name": "Ranking Query Controls", "role": "strip", "depth": 1 },
+    { "node_id": "2U5R-1", "name": "Ranking Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3C0K-0", "name": "관심종목 표", "role": "primary", "depth": 2 },
+    { "node_id": "2UB0-1", "name": "Frame", "role": "rail", "depth": 2 },
+    { "node_id": "2U5O-1", "name": "User Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

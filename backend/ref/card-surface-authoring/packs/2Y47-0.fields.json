@@ -1,0 +1,54 @@
+{
+ "board": "2Y47-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka30001",
+   "f": "base_pric_tm",
+   "kor": "기준가시간",
+   "layer": "직접",
+   "where": "표 꼬리 상태 표기 '전체 3,482개 · 상위 8개 표시 · 기준가 09:00 기준'"
+  },
+  {
+   "mapping_id": "base:ka30001",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "where": "종목 셀 2줄 mono 10px '58H215 · KB증권 9C21회차' 등 8행"
+  },
+  {
+   "mapping_id": "base:ka30001",
+   "f": "rank",
+   "kor": "순위",
+   "layer": "직접",
+   "where": "표 1열 '순위' 신설 (1~8)"
+  },
+  {
+   "mapping_id": "base:ka30001",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "where": "현재가 셀 2줄 '▲ +45 · +12.16%' 원 단위 전일대비"
+  },
+  {
+   "mapping_id": "base:ka30001",
+   "f": "trde_end_elwbase_pric",
+   "kor": "거래종료ELW기준가",
+   "layer": "직접",
+   "where": "'거래종료 기준가' 열 1줄 (350 / 250 / 55 …)"
+  },
+  {
+   "mapping_id": "base:ka30001",
+   "f": "base_pre",
+   "kor": "기준대비",
+   "layer": "병기",
+   "where": "거래종료 기준가 셀 2줄 '기준대비 +65' 등"
+  },
+  {
+   "mapping_id": "base:ka30001",
+   "f": "jmp_rt",
+   "kor": "급등율",
+   "layer": "직접",
+   "where": "'급등률' 정렬지표 열 강조 (+18.6% ~ −12.7%)"
+  }
+ ]
+}

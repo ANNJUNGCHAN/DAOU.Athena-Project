@@ -1,0 +1,93 @@
+{
+ "board_id": "2TRW-1",
+ "card_id": "CC-04",
+ "name": "CC-04 / R02-T4 · 호가 — 정규장 5단",
+ "operation_refs": [
+  "detail:ka10004:after_hours_totals",
+  "detail:ka10004:aggregate_totals"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "detail:ka10004:after_hours_totals",
+   "f": "ovt_sel_req_pre",
+   "kor": "시간외매도잔량대비",
+   "layer": "병기",
+   "board": "2TRW-1",
+   "where": "호가 총괄 블록 '시간외 매도 대기 13,820' 스택 셀 둘째 줄 '직전대비 +640'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10004:after_hours_totals",
+   "f": "ovt_sel_req",
+   "kor": "시간외매도잔량",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "상단 요약 · '시간외 대기 매도 13,820'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10004:after_hours_totals",
+   "f": "ovt_buy_req",
+   "kor": "시간외매수잔량",
+   "layer": null,
+   "board": "13BC-2",
+   "where": "상단 요약 · '시간외 대기 매수 9,760'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10004:after_hours_totals",
+   "f": "ovt_buy_req_pre",
+   "kor": "시간외매수잔량대비",
+   "layer": "병기",
+   "board": "2TRW-1",
+   "where": "호가 총괄 블록 '시간외 매수 대기 9,760' 스택 셀 둘째 줄 '직전대비 −210'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10004:aggregate_totals",
+   "f": "tot_sel_req_jub_pre",
+   "kor": "총매도잔량직전대비",
+   "layer": "병기",
+   "board": "2TRW-1",
+   "where": "호가 총괄 블록 '매도 합 38,160' 스택 셀 둘째 줄 '직전대비 +2,140'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10004:aggregate_totals",
+   "f": "tot_sel_req",
+   "kor": "총매도잔량",
+   "layer": null,
+   "board": "1JPU-0",
+   "where": "매도·매수 총잔량 · '총 매도 193,500주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10004:aggregate_totals",
+   "f": "tot_buy_req",
+   "kor": "총매수잔량",
+   "layer": null,
+   "board": "1JPU-0",
+   "where": "매도·매수 총잔량 · '총 매수 205,630주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka10004:aggregate_totals",
+   "f": "tot_buy_req_jub_pre",
+   "kor": "총매수잔량직전대비",
+   "layer": "병기",
+   "board": "2TRW-1",
+   "where": "호가 총괄 블록 '매수 합 43,000' 스택 셀 둘째 줄 '직전대비 −1,380'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 4
+}

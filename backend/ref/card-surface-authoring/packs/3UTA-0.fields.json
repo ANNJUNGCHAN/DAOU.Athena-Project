@@ -1,0 +1,201 @@
+{
+ "board": "3UTA-0",
+ "fields": [
+  {
+   "mapping_id": "base:04",
+   "f": "957",
+   "kor": "신용금액",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 융자·대주 행"
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "crd_amt",
+   "kor": "신용금액",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 융자·대주 행"
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "grnt_use_amt",
+   "kor": "담보대출금",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 대출 잔고 행"
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "uncl_ocr",
+   "kor": "미수(원/주)",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 미수·연체 행"
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "etc_loan_dlfe",
+   "kor": "기타대여금연체료",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 기타대여금 행"
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "etc_loan_tot",
+   "kor": "기타대여금합계",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 기타대여금 행"
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "dly_amt",
+   "kor": "미수변제소요금",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 미수·연체 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "ch_uncla_dlfe",
+   "kor": "현금미수연체료",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 미수·연체 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "ch_uncla_tot",
+   "kor": "현금미수금합계",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 미수·연체 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "int_npay_amt_dlfe",
+   "kor": "신용이자미납연체료",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 미수·연체 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "int_npay_amt_tot",
+   "kor": "신용이자미납합계",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 미수·연체 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "etc_loana_dlfe",
+   "kor": "기타대여금연체료",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 기타대여금 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "etc_loan_tot",
+   "kor": "기타대여금합계",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 기타대여금 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "nrpy_loan",
+   "kor": "미상환융자금",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 융자·대주 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "loan_sum",
+   "kor": "융자금합계",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 융자·대주 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "ls_sum",
+   "kor": "대주금합계",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 융자·대주 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "loan_remn_evlt_amt",
+   "kor": "대출총평가금액",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 대출 잔고 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "dpst_grntl_remn",
+   "kor": "예탁담보대출잔고",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 대출 잔고 행"
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "sell_grntl_remn",
+   "kor": "매도담보대출잔고",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 대출 잔고 행"
+  },
+  {
+   "mapping_id": "detail:kt00004:cash_and_assets",
+   "f": "tot_grnt_sella",
+   "kor": "매도담보대출금",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 대출 잔고 행"
+  },
+  {
+   "mapping_id": "detail:kt00005:receivables_and_margin",
+   "f": "nrpy_loan",
+   "kor": "미상환융자금",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 융자·대주 행"
+  },
+  {
+   "mapping_id": "detail:kt00005:credit_and_collateral",
+   "f": "crd_loan_tot",
+   "kor": "신용융자합계",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 융자·대주 행"
+  },
+  {
+   "mapping_id": "detail:kt00005:credit_and_collateral",
+   "f": "crd_loan_ls_tot",
+   "kor": "신용융자대주합계",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 융자·대주 행"
+  },
+  {
+   "mapping_id": "detail:kt00005:credit_and_collateral",
+   "f": "dpst_grnt_use_amt_amt",
+   "kor": "예탁담보대출금액",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 대출 잔고 행"
+  },
+  {
+   "mapping_id": "detail:kt00005:credit_and_collateral",
+   "f": "grnt_loan_amt",
+   "kor": "매도담보대출금액",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 대출 잔고 행"
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "stk_pur_cptal_loan_amt",
+   "kor": "주식매입자금대출금",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 대출 잔고 행"
+  },
+  {
+   "mapping_id": "detail:kt00018:financing_summary",
+   "f": "tot_loan_amt",
+   "kor": "총대출금",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 대출 잔고 행"
+  },
+  {
+   "mapping_id": "detail:kt00018:financing_summary",
+   "f": "tot_crd_loan_amt",
+   "kor": "총융자금액",
+   "layer": "펼침",
+   "where": "부채·미수·연체 상세 융자·대주 행"
+  }
+ ]
+}

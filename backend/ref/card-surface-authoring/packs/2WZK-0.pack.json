@@ -1,0 +1,113 @@
+{
+ "board_id": "2WZK-0",
+ "card_id": "CC-03",
+ "name": "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+ "operation_refs": [
+  "base:ka40001",
+  "base:ka40002"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka40001",
+   "f": "etfprft_rt_lst",
+   "kor": "ETF수익율",
+   "layer": null,
+   "board": "2WZK-0",
+   "where": "기간 수익률 표(1주·1달·3달·1년)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40001",
+   "f": "etfprft_rt",
+   "kor": "ETF수익률",
+   "layer": null,
+   "board": "2WZK-0",
+   "where": "1주 +5.8% · 1달 +18.4% · 3달 +42.1% · 1년 +76.5%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40001",
+   "f": "cntr_prft_rt",
+   "kor": "체결수익률",
+   "layer": "직접",
+   "board": "15N5-2",
+   "where": "시세 4칸 KPI 스트립 2번째 칸 '체결 수익률 +0.84%' — 전일 종가 47,957 · 체결 기준 +403 병기",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40001",
+   "f": "for_netprps_qty",
+   "kor": "외인순매수수량",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "구성 비중 패널 외국인 순매수 행 병기 '59.2만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40001",
+   "f": "orgn_netprps_qty",
+   "kor": "기관순매수수량",
+   "layer": "병기",
+   "board": "15N5-2",
+   "where": "구성 비중 패널 기관 순매수 행 병기 '19.4만주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "KODEX 200 ETF",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "etfobjt_idex_nm",
+   "kor": "ETF대상지수명",
+   "layer": null,
+   "board": "15N5-2",
+   "where": "코스피200 추종 · 시가총액형",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "wonju_pric",
+   "kor": "원주가격",
+   "layer": "병기",
+   "board": "2WZK-0",
+   "where": "1위 종목 기간 수익률 카드 과세 행 병기 '원주가격 해당 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "etftxon_type",
+   "kor": "ETF과세유형",
+   "layer": "직접",
+   "board": "2WZK-0",
+   "where": "1위 종목 기간 수익률 카드 과세 행 'ETF 배당소득세 15.4%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "etntxon_type",
+   "kor": "ETN과세유형",
+   "layer": "병기",
+   "board": "2WZK-0",
+   "where": "1위 종목 기간 수익률 카드 과세 행 병기 'ETN 해당 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 5
+}

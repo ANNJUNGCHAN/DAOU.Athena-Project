@@ -1,0 +1,404 @@
+{
+ "board": "32S7-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka20004",
+   "f": "inds_cd",
+   "kor": "업종코드",
+   "layer": "병기",
+   "where": "헤더 코드 병기 줄 '업종 013 · KRX'"
+  },
+  {
+   "mapping_id": "base:ka20004",
+   "f": "inds_tic_chart_qry",
+   "kor": "업종틱차트조회",
+   "layer": null,
+   "where": "주기 '틱' 탭의 캔들 시리즈"
+  },
+  {
+   "mapping_id": "base:ka20004",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "지수 3,184.52 / 캔들 종가"
+  },
+  {
+   "mapping_id": "base:ka20004",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 8.4억주 / 차트 하단 839,412,000"
+  },
+  {
+   "mapping_id": "base:ka20004",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "캔들 차트 x축 시간 배열"
+  },
+  {
+   "mapping_id": "base:ka20004",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,102.11"
+  },
+  {
+   "mapping_id": "base:ka20004",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,198.40"
+  },
+  {
+   "mapping_id": "base:ka20004",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,096.85"
+  },
+  {
+   "mapping_id": "base:ka20004",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "헤더 +87.96"
+  },
+  {
+   "mapping_id": "base:ka20004",
+   "f": "pred_pre_sig",
+   "kor": "전일대비 기호",
+   "layer": null,
+   "where": "+ 부호·상승색 / 캔들 적청"
+  },
+  {
+   "mapping_id": "base:ka20005",
+   "f": "inds_cd",
+   "kor": "업종코드",
+   "layer": "병기",
+   "where": "헤더 코드 병기 줄 '업종 013 · KRX'"
+  },
+  {
+   "mapping_id": "base:ka20005",
+   "f": "inds_min_pole_qry",
+   "kor": "업종분봉조회",
+   "layer": null,
+   "where": "주기 '분' 탭의 캔들 시리즈"
+  },
+  {
+   "mapping_id": "base:ka20005",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "지수 3,184.52 / 캔들 종가"
+  },
+  {
+   "mapping_id": "base:ka20005",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 8.4억주 / 차트 하단 839,412,000"
+  },
+  {
+   "mapping_id": "base:ka20005",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "캔들 차트 x축 시간 배열"
+  },
+  {
+   "mapping_id": "base:ka20005",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,102.11"
+  },
+  {
+   "mapping_id": "base:ka20005",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,198.40"
+  },
+  {
+   "mapping_id": "base:ka20005",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,096.85"
+  },
+  {
+   "mapping_id": "base:ka20005",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": null,
+   "where": "거래량 8.4억주(누적)"
+  },
+  {
+   "mapping_id": "base:ka20005",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "헤더 +87.96"
+  },
+  {
+   "mapping_id": "base:ka20005",
+   "f": "pred_pre_sig",
+   "kor": "전일대비 기호",
+   "layer": null,
+   "where": "+ 부호·상승색 / 캔들 적청"
+  },
+  {
+   "mapping_id": "base:ka20006",
+   "f": "inds_cd",
+   "kor": "업종코드",
+   "layer": "병기",
+   "where": "헤더 코드 병기 줄 '업종 013 · KRX'"
+  },
+  {
+   "mapping_id": "base:ka20006",
+   "f": "inds_dt_pole_qry",
+   "kor": "업종일봉조회",
+   "layer": null,
+   "where": "주기 '일' 탭의 캔들 시리즈"
+  },
+  {
+   "mapping_id": "base:ka20006",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "지수 3,184.52 / 캔들 종가"
+  },
+  {
+   "mapping_id": "base:ka20006",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 8.4억주 / 차트 하단 839,412,000"
+  },
+  {
+   "mapping_id": "base:ka20006",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 지수 09-01/08-29/08-28 행 + 캔들 x축"
+  },
+  {
+   "mapping_id": "base:ka20006",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,102.11"
+  },
+  {
+   "mapping_id": "base:ka20006",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,198.40"
+  },
+  {
+   "mapping_id": "base:ka20006",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,096.85"
+  },
+  {
+   "mapping_id": "base:ka20006",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "where": "거래대금 4.2조"
+  },
+  {
+   "mapping_id": "base:ka20007",
+   "f": "inds_cd",
+   "kor": "업종코드",
+   "layer": "병기",
+   "where": "헤더 코드 병기 줄 '업종 013 · KRX'"
+  },
+  {
+   "mapping_id": "base:ka20007",
+   "f": "inds_stk_pole_qry",
+   "kor": "업종주봉조회",
+   "layer": null,
+   "where": "주기 '주' 탭의 캔들 시리즈"
+  },
+  {
+   "mapping_id": "base:ka20007",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "지수 3,184.52 / 캔들 종가"
+  },
+  {
+   "mapping_id": "base:ka20007",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 8.4억주 / 차트 하단 839,412,000"
+  },
+  {
+   "mapping_id": "base:ka20007",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 지수 09-01/08-29/08-28 행 + 캔들 x축"
+  },
+  {
+   "mapping_id": "base:ka20007",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,102.11"
+  },
+  {
+   "mapping_id": "base:ka20007",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,198.40"
+  },
+  {
+   "mapping_id": "base:ka20007",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,096.85"
+  },
+  {
+   "mapping_id": "base:ka20007",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "where": "거래대금 4.2조"
+  },
+  {
+   "mapping_id": "base:ka20008",
+   "f": "inds_cd",
+   "kor": "업종코드",
+   "layer": "병기",
+   "where": "헤더 코드 병기 줄 '업종 013 · KRX'"
+  },
+  {
+   "mapping_id": "base:ka20008",
+   "f": "inds_mth_pole_qry",
+   "kor": "업종월봉조회",
+   "layer": null,
+   "where": "주기 '월' 탭의 캔들 시리즈"
+  },
+  {
+   "mapping_id": "base:ka20008",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "지수 3,184.52 / 캔들 종가"
+  },
+  {
+   "mapping_id": "base:ka20008",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 8.4억주 / 차트 하단 839,412,000"
+  },
+  {
+   "mapping_id": "base:ka20008",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 지수 09-01/08-29/08-28 행 + 캔들 x축"
+  },
+  {
+   "mapping_id": "base:ka20008",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,102.11"
+  },
+  {
+   "mapping_id": "base:ka20008",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,198.40"
+  },
+  {
+   "mapping_id": "base:ka20008",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,096.85"
+  },
+  {
+   "mapping_id": "base:ka20008",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "where": "거래대금 4.2조"
+  },
+  {
+   "mapping_id": "base:ka20019",
+   "f": "inds_cd",
+   "kor": "업종코드",
+   "layer": "병기",
+   "where": "헤더 코드 병기 줄 '업종 013 · KRX'"
+  },
+  {
+   "mapping_id": "base:ka20019",
+   "f": "inds_yr_pole_qry",
+   "kor": "업종년봉조회",
+   "layer": null,
+   "where": "주기 '년' 탭의 캔들 시리즈"
+  },
+  {
+   "mapping_id": "base:ka20019",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "지수 3,184.52 / 캔들 종가"
+  },
+  {
+   "mapping_id": "base:ka20019",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 8.4억주 / 차트 하단 839,412,000"
+  },
+  {
+   "mapping_id": "base:ka20019",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 지수 09-01/08-29/08-28 행 + 캔들 x축"
+  },
+  {
+   "mapping_id": "base:ka20019",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,102.11"
+  },
+  {
+   "mapping_id": "base:ka20019",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,198.40"
+  },
+  {
+   "mapping_id": "base:ka20019",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "where": "시가·고가·저가 스트립 3,096.85"
+  },
+  {
+   "mapping_id": "base:ka20019",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "where": "거래대금 4.2조"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "root": "2ZBC-0",
+  "regions": [
+    { "node_id": "2ZGB-0", "name": "Flow Header", "role": "header", "depth": 2 },
+    { "node_id": "2ZGC-0", "name": "Frame", "role": "strip", "depth": 3 },
+    { "node_id": "2ZFR-0", "name": "Flow Summary Strip", "role": "kpi", "depth": 2 },
+    { "node_id": "2ZBG-0", "name": "Flow Workspace", "role": "workspace", "depth": 2 },
+    { "node_id": "2ZCP-0", "name": "Investor Panel", "role": "primary", "depth": 3 },
+    { "node_id": "2ZBH-0", "name": "Side Panel", "role": "rail", "depth": 3 },
+    { "node_id": "2ZBD-0", "name": "Flow Status Footer", "role": "footer", "depth": 2 }
+  ]
+}

@@ -1,0 +1,1013 @@
+{
+ "board": "2SYW-1",
+ "fields": [
+  {
+   "mapping_id": "base:00",
+   "f": "9203",
+   "kor": "주문번호",
+   "layer": "병기",
+   "where": "주문표 8열 상태 셀 2줄 '주문 0021846 · 체결 —'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "9205",
+   "kor": "관리자사번",
+   "layer": "직접",
+   "where": "푸터 우측 '영업부 · 담당 사번 미지정'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "912",
+   "kor": "주문업무분류",
+   "layer": "병기",
+   "where": "주문표 3열 구분 셀 2줄 '주식 · 시장가 · 현금' 중 '주식'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "913",
+   "kor": "주문상태",
+   "layer": null,
+   "where": "주문·체결 표 '상태' 컬럼(접수·미체결/체결 완료/호가 대기)"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "302",
+   "kor": "종목명",
+   "layer": null,
+   "where": "주문·체결 표 '종목' 컬럼"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "900",
+   "kor": "주문수량",
+   "layer": null,
+   "where": "'수량' 컬럼(10주)"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "901",
+   "kor": "주문가격",
+   "layer": null,
+   "where": "'주문가격' 컬럼"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "902",
+   "kor": "미체결수량",
+   "layer": null,
+   "where": "미체결 패널 '미체결 잔량 10주'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "903",
+   "kor": "체결누계금액",
+   "layer": "병기",
+   "where": "주문표 6열 체결 셀 2줄 '누계 12,090,000'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "904",
+   "kor": "원주문번호",
+   "layer": null,
+   "where": "미체결 패널 '원주문 0021846'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "905",
+   "kor": "주문구분",
+   "layer": "직접",
+   "where": "주문표 3열 구분 1줄 '매수'(빨강)/'매도'(파랑)"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "906",
+   "kor": "매매구분",
+   "layer": null,
+   "where": "'주문가격' 컬럼의 '시장가' 표기"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "907",
+   "kor": "매도수구분",
+   "layer": null,
+   "where": "'구분' 컬럼 매수/매도(상승·하락 색)"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "908",
+   "kor": "주문/체결시간",
+   "layer": null,
+   "where": "'시간' 컬럼 09:42:05"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "909",
+   "kor": "체결번호",
+   "layer": "병기",
+   "where": "주문표 8열 상태 셀 2줄 '체결 0000238'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "27",
+   "kor": "(최우선)매도호가",
+   "layer": "직접",
+   "where": "주문표 7열 '최우선 매도' 1줄 150,900"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "28",
+   "kor": "(최우선)매수호가",
+   "layer": "병기",
+   "where": "주문표 7열 2줄 '매수 150,800'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "914",
+   "kor": "단위체결가",
+   "layer": "직접",
+   "where": "주문표 6열 체결 1줄 체결가 48,360"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "915",
+   "kor": "단위체결량",
+   "layer": "병기",
+   "where": "주문표 4열 수량 셀 2줄 '확인 250 · 체결 250' 중 체결량"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "920",
+   "kor": "화면번호",
+   "layer": "직접",
+   "where": "우측 레일 R3 '주문 경로 HTS · 화면 0343 · 단말 T-02' 중 화면 0343"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "921",
+   "kor": "터미널번호",
+   "layer": "직접",
+   "where": "우측 레일 R3 주문 경로 행 '단말 T-02'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "922",
+   "kor": "신용구분",
+   "layer": "병기",
+   "where": "주문표 3열 구분 셀 2줄 '현금'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "10010",
+   "kor": "시간외단일가_현재가",
+   "layer": "직접",
+   "where": "우측 레일 R3 '시간외 단일가 — · 16:00 개시'"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "2134",
+   "kor": "거래소구분",
+   "layer": "병기",
+   "where": "주문표 2열 종목 셀 2줄 KRX 칩"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "2135",
+   "kor": "거래소구분명",
+   "layer": "병기",
+   "where": "주문표 2열 종목 셀 2줄 KRX 칩 표기명"
+  },
+  {
+   "mapping_id": "base:00",
+   "f": "2136",
+   "kor": "SOR여부",
+   "layer": "직접",
+   "where": "주문표 2열 SOR 칩 · 레일 R1 'KRX · SOR 사용'"
+  },
+  {
+   "mapping_id": "base:04",
+   "f": "946",
+   "kor": "매도/매수구분",
+   "layer": null,
+   "where": "'구분' 컬럼 매수/매도"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "oso",
+   "kor": "미체결",
+   "layer": null,
+   "where": "'미체결 2건' 패널이 목록으로 그려짐"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": "병기",
+   "where": "주문표 8열 상태 셀 2줄 '주문 0021840'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "mang_empno",
+   "kor": "관리사번",
+   "layer": "직접",
+   "where": "푸터 우측 '영업부 · 담당 사번 미지정'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "tsk_tp",
+   "kor": "업무구분",
+   "layer": "병기",
+   "where": "주문표 3열 구분 셀 2줄 '주식' · 레일 R3 '업무 주식 현물'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "ord_stt",
+   "kor": "주문상태",
+   "layer": null,
+   "where": "'상태' 컬럼 및 미체결 패널 배지(접수/호가 대기)"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'종목' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "ord_qty",
+   "kor": "주문수량",
+   "layer": null,
+   "where": "'수량' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "ord_pric",
+   "kor": "주문가격",
+   "layer": null,
+   "where": "'주문가격' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "oso_qty",
+   "kor": "미체결수량",
+   "layer": null,
+   "where": "미체결 패널 '미체결 잔량 10주'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "cntr_tot_amt",
+   "kor": "체결누계금액",
+   "layer": "병기",
+   "where": "주문표 6열 체결 셀 2줄 '누계 12,090,000'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "orig_ord_no",
+   "kor": "원주문번호",
+   "layer": null,
+   "where": "미체결 패널 '원주문 0021846'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "io_tp_nm",
+   "kor": "주문구분",
+   "layer": "직접",
+   "where": "주문표 3열 구분 1줄 매수/매도"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "trde_tp",
+   "kor": "매매구분",
+   "layer": null,
+   "where": "'주문가격' 컬럼 '시장가' 표기"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "tm",
+   "kor": "시간",
+   "layer": null,
+   "where": "'시간' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "cntr_no",
+   "kor": "체결번호",
+   "layer": "병기",
+   "where": "주문표 8열 상태 셀 2줄 '체결 0000238'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "where": "체결 완료 행 체결가 48,360"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "cntr_qty",
+   "kor": "체결량",
+   "layer": null,
+   "where": "체결 완료 행 '수량' 250주"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "미체결 패널 '현재가 232,500원'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "sel_bid",
+   "kor": "매도호가",
+   "layer": "직접",
+   "where": "주문표 7열 '최우선 매도' 1줄"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "buy_bid",
+   "kor": "매수호가",
+   "layer": "병기",
+   "where": "주문표 7열 2줄 '매수 48,355'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "unit_cntr_pric",
+   "kor": "단위체결가",
+   "layer": "직접",
+   "where": "주문표 6열 체결 1줄 체결가"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "unit_cntr_qty",
+   "kor": "단위체결량",
+   "layer": "병기",
+   "where": "주문표 4열 수량 셀 2줄 '체결 250'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "tdy_trde_tax",
+   "kor": "당일매매세금",
+   "layer": "병기",
+   "where": "오늘 약정 스트립 매매 비용 2줄 '세금 -20,720'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "ind_invsr",
+   "kor": "개인투자자",
+   "layer": "직접",
+   "where": "우측 레일 R3 '투자자 구분 개인'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": "병기",
+   "where": "주문표 2열 종목 셀 2줄 KRX 칩"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "stex_tp_txt",
+   "kor": "거래소구분텍스트",
+   "layer": "병기",
+   "where": "주문표 2열 종목 셀 2줄 KRX 칩 표기명"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "sor_yn",
+   "kor": "SOR 여부값",
+   "layer": "직접",
+   "where": "주문표 2열 SOR 칩 · 레일 R2 'SOR 미사용'"
+  },
+  {
+   "mapping_id": "base:ka10075",
+   "f": "stop_pric",
+   "kor": "스톱가",
+   "layer": "병기",
+   "where": "주문표 5열 주문가격 셀 2줄 '스톱 —'"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "cntr",
+   "kor": "체결",
+   "layer": null,
+   "where": "주문·체결 표 체결 완료 행 목록"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": "병기",
+   "where": "주문표 8열 상태 셀 2줄 '주문 0021827'"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'종목' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "io_tp_nm",
+   "kor": "주문구분",
+   "layer": "직접",
+   "where": "주문표 3열 구분 1줄 매수/매도"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "ord_pric",
+   "kor": "주문가격",
+   "layer": null,
+   "where": "'주문가격' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "ord_qty",
+   "kor": "주문수량",
+   "layer": null,
+   "where": "'수량' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "cntr_qty",
+   "kor": "체결량",
+   "layer": null,
+   "where": "체결 완료 행 '수량'"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "oso_qty",
+   "kor": "미체결수량",
+   "layer": null,
+   "where": "미체결 패널 '미체결 잔량 10주'"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "tdy_trde_tax",
+   "kor": "당일매매세금",
+   "layer": "병기",
+   "where": "오늘 약정 스트립 매매 비용 2줄 '세금 -20,720'"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "ord_stt",
+   "kor": "주문상태",
+   "layer": null,
+   "where": "'상태' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "trde_tp",
+   "kor": "매매구분",
+   "layer": null,
+   "where": "'시장가' 표기"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "orig_ord_no",
+   "kor": "원주문번호",
+   "layer": null,
+   "where": "'원주문 0021846'"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "ord_tm",
+   "kor": "주문시간",
+   "layer": null,
+   "where": "'시간' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": "병기",
+   "where": "주문표 2열 종목 셀 2줄 KRX 칩"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "stex_tp_txt",
+   "kor": "거래소구분텍스트",
+   "layer": "병기",
+   "where": "주문표 2열 종목 셀 2줄 KRX 칩 표기명"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "sor_yn",
+   "kor": "SOR 여부값",
+   "layer": "직접",
+   "where": "주문표 2열 SOR 칩"
+  },
+  {
+   "mapping_id": "base:ka10076",
+   "f": "stop_pric",
+   "kor": "스톱가",
+   "layer": "병기",
+   "where": "주문표 5열 주문가격 셀 2줄 '스톱 —'"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "osop",
+   "kor": "미체결분할주문리스트",
+   "layer": null,
+   "where": "미체결 패널 '분할 2/3회차' 카드"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "미체결 패널 '삼성전자 매수'"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": "병기",
+   "where": "주문표 8열 2줄 '주문 0021846' · 레일 R1 '원주문 0021846'"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "ord_qty",
+   "kor": "주문수량",
+   "layer": null,
+   "where": "미체결 패널 '10주'"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "ord_pric",
+   "kor": "주문가격",
+   "layer": null,
+   "where": "미체결 패널 '시장가' / '232,000원'"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "osop_qty",
+   "kor": "미체결수량",
+   "layer": null,
+   "where": "미체결 패널 '미체결 잔량 10주'"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "io_tp_nm",
+   "kor": "주문구분",
+   "layer": "직접",
+   "where": "주문표 3열 구분 1줄 매수/매도"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "trde_tp",
+   "kor": "매매구분",
+   "layer": null,
+   "where": "'시장가' 표기"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "sell_tp",
+   "kor": "매도/수 구분",
+   "layer": null,
+   "where": "'구분' 컬럼 매수/매도"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "cntr_qty",
+   "kor": "체결량",
+   "layer": null,
+   "where": "체결 완료 행 '수량'"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "ord_stt",
+   "kor": "주문상태",
+   "layer": null,
+   "where": "미체결 패널 배지 '접수'/'호가 대기'"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "미체결 패널 '현재가 232,500원'"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": "병기",
+   "where": "주문표 2열 종목 셀 2줄 KRX 칩"
+  },
+  {
+   "mapping_id": "base:ka10088",
+   "f": "stex_tp_txt",
+   "kor": "거래소구분텍스트",
+   "layer": "병기",
+   "where": "주문표 2열 종목 셀 2줄 KRX 칩 표기명"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "buy_qty",
+   "kor": "매수수량",
+   "layer": null,
+   "where": "매수 행 '수량'(10주/20주/5주)"
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "sell_qty",
+   "kor": "매도수량",
+   "layer": null,
+   "where": "매도 행 '수량'(250주/4주)"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "acnt_ord_cntr_prps_dtl",
+   "kor": "계좌별주문체결내역상세",
+   "layer": null,
+   "where": "주문·체결 표 행 목록"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": "병기",
+   "where": "주문표 8열 상태 셀 2줄 '주문 0021833'"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "trde_tp",
+   "kor": "매매구분",
+   "layer": null,
+   "where": "'시장가' 표기"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "crd_tp",
+   "kor": "신용구분",
+   "layer": "병기",
+   "where": "주문표 3열 구분 셀 2줄 '현금'"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "ord_qty",
+   "kor": "주문수량",
+   "layer": null,
+   "where": "'수량' 컬럼"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "ord_uv",
+   "kor": "주문단가",
+   "layer": null,
+   "where": "'주문가격' 컬럼"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "cnfm_qty",
+   "kor": "확인수량",
+   "layer": "병기",
+   "where": "주문표 4열 수량 셀 2줄 '확인 250'"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "acpt_tp",
+   "kor": "접수구분",
+   "layer": null,
+   "where": "'상태' 컬럼 '접수 · 미체결'"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "ord_tm",
+   "kor": "주문시간",
+   "layer": null,
+   "where": "'시간' 컬럼"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "ori_ord",
+   "kor": "원주문",
+   "layer": null,
+   "where": "미체결 패널 '원주문 0021846'"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'종목' 컬럼"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "io_tp_nm",
+   "kor": "주문구분",
+   "layer": "직접",
+   "where": "주문표 3열 구분 1줄 매수/매도"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "cntr_qty",
+   "kor": "체결수량",
+   "layer": null,
+   "where": "체결 완료 행 '수량'"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "ord_remnq",
+   "kor": "주문잔량",
+   "layer": null,
+   "where": "미체결 패널 '미체결 잔량 10주'"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "comm_ord_tp",
+   "kor": "통신구분",
+   "layer": "직접",
+   "where": "우측 레일 R3 '주문 경로 HTS'"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "cnfm_tm",
+   "kor": "확인시간",
+   "layer": "병기",
+   "where": "주문표 1열 시간 셀 2줄 '확인 09:42:06'"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": "병기",
+   "where": "주문표 2열 종목 셀 2줄 KRX 칩"
+  },
+  {
+   "mapping_id": "base:kt00007",
+   "f": "cond_uv",
+   "kor": "스톱가",
+   "layer": "병기",
+   "where": "주문표 5열 주문가격 셀 2줄 '스톱 —'"
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "engg_amt",
+   "kor": "약정금액",
+   "layer": null,
+   "where": "'오늘 약정' 매수·매도 약정 금액"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "trde_tp",
+   "kor": "매매구분",
+   "layer": null,
+   "where": "'시장가' 표기"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "data_send_end_tp",
+   "kor": "접수구분",
+   "layer": null,
+   "where": "'상태' 컬럼 '접수 · 미체결'"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "orig_ord_no",
+   "kor": "원주문번호",
+   "layer": null,
+   "where": "미체결 패널 '원주문 0021846'"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "cntr_uv",
+   "kor": "체결단가",
+   "layer": null,
+   "where": "체결 완료 행 체결가"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "trde_tp",
+   "kor": "매매구분",
+   "layer": null,
+   "where": "'시장가' 표기"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "acpt_tp",
+   "kor": "접수구분",
+   "layer": null,
+   "where": "'상태' 컬럼 '접수 · 미체결'"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ord_tm",
+   "kor": "주문시간",
+   "layer": null,
+   "where": "'시간' 컬럼"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ori_ord",
+   "kor": "원주문",
+   "layer": null,
+   "where": "미체결 패널 '원주문 0021846'"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "cntr_uv",
+   "kor": "체결단가",
+   "layer": null,
+   "where": "체결 완료 행 체결가"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ord_remnq",
+   "kor": "주문잔량",
+   "layer": null,
+   "where": "미체결 패널 '미체결 잔량 10주'"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "trde_tp",
+   "kor": "매매구분",
+   "layer": null,
+   "where": "'시장가' 표기"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "ord_qty",
+   "kor": "주문수량",
+   "layer": null,
+   "where": "'수량' 컬럼"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "data_send_end_tp",
+   "kor": "접수구분",
+   "layer": null,
+   "where": "'상태' 컬럼 '접수 · 미체결'"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "orig_ord_no",
+   "kor": "원주문번호",
+   "layer": null,
+   "where": "미체결 패널 '원주문 0021846'"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "cntr_uv",
+   "kor": "체결단가",
+   "layer": null,
+   "where": "체결 완료 행 체결가"
+  },
+  {
+   "mapping_id": "detail:kt00009:contract_amounts",
+   "f": "sell_grntl_engg_amt",
+   "kor": "매도약정금액",
+   "layer": null,
+   "where": "'오늘 약정' 바 우측 '매도 약정 12,946,000원'"
+  },
+  {
+   "mapping_id": "detail:kt00009:contract_amounts",
+   "f": "buy_engg_amt",
+   "kor": "매수약정금액",
+   "layer": null,
+   "where": "'오늘 약정' 바 좌측 '매수 약정 3,842,000원'"
+  },
+  {
+   "mapping_id": "detail:kt00009:contract_amounts",
+   "f": "engg_amt",
+   "kor": "약정금액",
+   "layer": "직접",
+   "where": "오늘 약정 스트립 '약정 합계 16,788,000원'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "acnt_ord_cntr_prst_array",
+   "kor": "계좌별주문체결현황배열",
+   "layer": null,
+   "where": "'오늘 주문·체결' 5행 표 본체"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "stk_bond_tp",
+   "kor": "주식채권구분",
+   "layer": "병기",
+   "where": "주문표 3열 구분 셀 2줄 '주식'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": "병기",
+   "where": "주문표 8열 상태 셀 2줄 '주문 0021815'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "stk_cd",
+   "kor": "종목번호",
+   "layer": "병기",
+   "where": "주문표 2열 종목 셀 2줄 코드 mono '000660'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "trde_tp",
+   "kor": "매매구분",
+   "layer": null,
+   "where": "'구분' 컬럼 매수/매도(등락 색 구분)"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "io_tp_nm",
+   "kor": "주문유형구분",
+   "layer": "병기",
+   "where": "주문표 3열 구분 셀 2줄 '시장가'/'지정가'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "ord_qty",
+   "kor": "주문수량",
+   "layer": null,
+   "where": "'수량' 컬럼(10주/250주/5주 등)"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "ord_uv",
+   "kor": "주문단가",
+   "layer": null,
+   "where": "'주문가격' 컬럼(48,360/232,000 등)"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "cnfm_qty",
+   "kor": "확인수량",
+   "layer": "병기",
+   "where": "주문표 4열 수량 셀 2줄 '확인 20'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "cntr_no",
+   "kor": "체결번호",
+   "layer": "병기",
+   "where": "주문표 8열 상태 셀 2줄 '체결 0000154'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "acpt_tp",
+   "kor": "접수구분",
+   "layer": null,
+   "where": "'상태' 컬럼 '접수 · 미체결' 및 미체결 카드 '접수' 배지"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "orig_ord_no",
+   "kor": "원주문번호",
+   "layer": null,
+   "where": "미체결 카드 '분할 2/3회차 · 원주문 0021846'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'종목' 컬럼"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "setl_tp",
+   "kor": "결제구분",
+   "layer": "병기",
+   "where": "주문표 3열 구분 셀 2줄 '현금'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "cntr_qty",
+   "kor": "체결수량",
+   "layer": "병기",
+   "where": "주문표 4열 수량 셀 2줄 '체결 20'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "comm_ord_tp",
+   "kor": "통신구분",
+   "layer": "직접",
+   "where": "우측 레일 R3 '주문 경로 HTS'"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "'시간' 컬럼(09:38:12 등)"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": "병기",
+   "where": "주문표 2열 종목 셀 2줄 KRX 칩"
+  },
+  {
+   "mapping_id": "detail:kt00009:order_execution_status",
+   "f": "cond_uv",
+   "kor": "스톱가",
+   "layer": "병기",
+   "where": "주문표 5열 주문가격 셀 2줄 '스톱 —'"
+  }
+ ]
+}

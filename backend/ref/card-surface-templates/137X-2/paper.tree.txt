@@ -1,0 +1,335 @@
+Frame "Instrument Card Surface" (14NW-2) 1360×1040
+  Frame "Instrument Header" (14NY-2) 1358×106
+    Frame "Frame" (14NZ-2) 396×69
+      Frame "Frame" (14O0-2) 396×34
+        Text "삼성전자" (14O1-2) 112×34 "삼성전자"
+        Text "005930 · KOSPI · KRX" (14O2-2) 144×16 "005930 · KOSPI · KRX"
+        Frame "Session Chips" (3962-0) 120×28
+          Frame "장구분 칩" (3963-0) 56×28
+            Text "정규장" (3964-0) 36×16 "정규장"
+          Frame "실시간 칩" (3965-0) 56×28
+            Text "실시간" (3966-0) 36×16 "실시간"
+      Frame "Frame" (14O5-2) 396×28
+        Text "150,850원" (14O6-2) 115×28 "150,850원"
+        Text "+1,850 · +1.24%" (14O7-2) 117×16 "+1,850 · +1.24%"
+        Text "09:42:18" (14O8-2) 45×16 "09:42:18"
+    Frame "Frame" (14O9-2) 474×40
+      Frame "Frame" (14OA-2) 80×36
+        Text "현재시세" (14OB-2) 52×16 "현재시세"
+      Frame "Frame" (14OC-2) 54×36
+        Text "차트" (14OD-2) 26×16 "차트"
+      Frame "Frame" (14OE-2) 80×36
+        Text "기업정보" (14OF-2) 52×16 "기업정보"
+      Frame "Frame" (14OG-2) 49×36
+        Text "ETF" (14OH-2) 21×16 "ETF"
+      Frame "Frame" (14OI-2) 54×36
+        Text "ELW" (14OJ-2) 26×16 "ELW"
+      Frame "Frame" (14OK-2) 67×36
+        Text "금현물" (14OL-2) 39×16 "금현물"
+      Frame "Frame" (2WFA-0) 54×40
+        Text "순위" (2WFB-0) 26×16 "순위"
+  Frame "Quote and Valuation Strip" (14ON-2) 1358×116
+    Frame "Frame" (14OO-2) 718×78
+      Text "시가 · 고가 · 저가" (14OP-2) 661×16 "시가 · 고가 · 저가"
+      Text "149,200 · 152,400 · …" (14OQ-2) 661×22 "149,200 · 152,400 · 148,100"
+    Frame "Frame" (14OR-2) 190×78
+      Text "거래량" (14OS-2) 141×16 "거래량"
+      Text "1,420만주" (14OT-2) 141×30 "1,420만주"
+      Text "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_prica" (14OU-2) 141×16 "거래대금 2.14조원"
+    Frame "Frame" (14OV-2) 150×78
+      Text "PER" (14OW-2) 105×16 "PER"
+      Text "21.2배" (14OX-2) 105×30 "21.2배"
+      Text "업종 11.2배" (14OY-2) 105×16 "업종 11.2배"
+    Frame "Frame" (14OZ-2) 150×78
+      Text "PBR" (14P0-2) 105×16 "PBR"
+      Text "2.63배" (14P1-2) 105×30 "2.63배"
+      Text "업종 1.61배" (14P2-2) 105×16 "업종 1.61배"
+    Frame "Frame" (14P3-2) 150×78
+      Text "ROE" (14P4-2) 106×16 "ROE"
+      Text "8.4%" (14P5-2) 106×30 "8.4%"
+      Text "전년 7.9%" (14P6-2) 106×16 "전년 7.9%"
+  Frame "Chart Workspace" (14P8-2) 1358×754
+    Frame "Athena Chart Module Mount" (14P9-2) 1000×754
+      Frame "Chart Toolbar" (14PC-2) 943×46
+        Frame "Frame" (14PD-2) 406×32
+          Frame "Frame" (14PE-2) 34×32
+            Text "일" (14PF-2) 12×16 "일"
+          Frame "Frame" (14PG-2) 34×32
+            Text "주" (14PH-2) 12×16 "주"
+          Frame "Frame" (14PI-2) 34×32
+            Text "월" (14PJ-2) 12×16 "월"
+          Rectangle "Rectangle" (14PK-2) 1×20
+          Frame "Frame" (2WKP-0) 34×32
+            Text "틱" (2WKQ-0) 12×16 "틱"
+          Frame "Frame" (2WKR-0) 34×32
+            Text "분" (2WKS-0) 12×16 "분"
+          Frame "Frame" (2WKT-0) 34×32
+            Text "년" (2WKU-0) 12×16 "년"
+          Frame "Frame" (14PL-2) 53×32
+            Text "1개월" (14PM-2) 31×16 "1개월"
+          Frame "Frame" (14PN-2) 53×32
+            Text "3개월" (14PO-2) 31×16 "3개월"
+          Frame "Frame" (14PP-2) 41×32
+            Text "1년" (14PQ-2) 19×16 "1년"
+        Frame "Frame" (14PR-2) 201×16
+          Text "시세·거래량" (14PS-2) 63×16 "시세·거래량"
+          Text "지표" (14PT-2) 24×16 "지표"
+          Text "그리기" (14PU-2) 36×16 "그리기"
+          Text "초기화" (14PV-2) 36×16 "초기화"
+        Frame "거래회전율" (395Y-0) 253×14
+          Text "거래회전율" (395Z-0) 55×14 "거래회전율"
+          Text "일 0.24% · 주 1.12% · …" (3960-0) 192×14 "일 0.24% · 주 1.12% · 월 4.36%"
+      Frame "Existing Athena Chart Module" (14PX-2) 944×620
+        SVG "Athena Chart Preview" (3SI0-0) 944×620
+          SVGVisualElement "Line" (3SI1-0) 892×0
+          SVGVisualElement "Line" (3SI2-0) 892×0
+          SVGVisualElement "Line" (3SI3-0) 892×0
+          SVGVisualElement "Line" (3SI4-0) 892×0
+          SVGVisualElement "Line" (3SI5-0) 892×0
+          SVGVisualElement "Line" (3SI6-0) 892×0
+          SVGVisualElement "Line" (3SI7-0) 892×0
+          SVGVisualElement "Line" (3SI8-0) 892×0
+          SVGVisualElement "Line" (3SI9-0) 892×0
+          SVGVisualElement "Line" (3SIA-0) 892×0
+          SVGVisualElement "Line" (3SIB-0) 0×68
+          SVGVisualElement "Rect" (3SIC-0) 14×31
+          SVGVisualElement "Rect" (3SID-0) 14×26
+          SVGVisualElement "Line" (3SIE-0) 0×58
+          SVGVisualElement "Rect" (3SIF-0) 14×18
+          SVGVisualElement "Rect" (3SIG-0) 14×31
+          SVGVisualElement "Line" (3SIH-0) 0×34
+          SVGVisualElement "Rect" (3SII-0) 14×16
+          SVGVisualElement "Rect" (3SIJ-0) 14×22
+          SVGVisualElement "Line" (3SIK-0) 0×60
+          SVGVisualElement "Rect" (3SIL-0) 14×37
+          SVGVisualElement "Rect" (3SIM-0) 14×40
+          SVGVisualElement "Line" (3SIN-0) 0×47
+          SVGVisualElement "Rect" (3SIO-0) 14×18
+          SVGVisualElement "Rect" (3SIP-0) 14×28
+          SVGVisualElement "Line" (3SIQ-0) 0×58
+          SVGVisualElement "Rect" (3SIR-0) 14×37
+          SVGVisualElement "Rect" (3SIS-0) 14×45
+          SVGVisualElement "Line" (3SIT-0) 0×42
+          SVGVisualElement "Rect" (3SIU-0) 14×13
+          SVGVisualElement "Rect" (3SIV-0) 14×53
+          SVGVisualElement "Line" (3SIW-0) 0×45
+          SVGVisualElement "Rect" (3SIX-0) 14×24
+          SVGVisualElement "Rect" (3SIY-0) 14×33
+          SVGVisualElement "Line" (3SIZ-0) 0×50
+          SVGVisualElement "Rect" (3SJ0-0) 14×37
+          SVGVisualElement "Rect" (3SJ1-0) 14×48
+          SVGVisualElement "Line" (3SJ2-0) 0×47
+          SVGVisualElement "Rect" (3SJ3-0) 14×13
+          SVGVisualElement "Rect" (3SJ4-0) 14×57
+          SVGVisualElement "Line" (3SJ5-0) 0×42
+          SVGVisualElement "Rect" (3SJ6-0) 14×10
+          SVGVisualElement "Rect" (3SJ7-0) 14×37
+          SVGVisualElement "Line" (3SJ8-0) 0×50
+          SVGVisualElement "Rect" (3SJ9-0) 14×34
+          SVGVisualElement "Rect" (3SJA-0) 14×64
+          SVGVisualElement "Line" (3SJB-0) 0×47
+          SVGVisualElement "Rect" (3SJC-0) 14×10
+          SVGVisualElement "Rect" (3SJD-0) 14×42
+          SVGVisualElement "Line" (3SJE-0) 0×55
+          SVGVisualElement "Rect" (3SJF-0) 14×39
+          SVGVisualElement "Rect" (3SJG-0) 14×69
+          SVGVisualElement "Line" (3SJH-0) 0×45
+          SVGVisualElement "Rect" (3SJI-0) 14×13
+          SVGVisualElement "Rect" (3SJJ-0) 14×58
+          SVGVisualElement "Line" (3SJK-0) 0×45
+          SVGVisualElement "Rect" (3SJL-0) 14×8
+          SVGVisualElement "Rect" (3SJM-0) 14×47
+          SVGVisualElement "Line" (3SJN-0) 0×52
+          SVGVisualElement "Rect" (3SJO-0) 14×37
+          SVGVisualElement "Rect" (3SJP-0) 14×75
+          SVGVisualElement "Line" (3SJQ-0) 0×42
+          SVGVisualElement "Rect" (3SJR-0) 14×10
+          SVGVisualElement "Rect" (3SJS-0) 14×64
+          SVGVisualElement "Line" (3SJT-0) 0×50
+          SVGVisualElement "Rect" (3SJU-0) 14×18
+          SVGVisualElement "Rect" (3SJV-0) 14×78
+          SVGVisualElement "Line" (3SJW-0) 0×50
+          SVGVisualElement "Rect" (3SJX-0) 14×18
+          SVGVisualElement "Rect" (3SJY-0) 14×84
+          SVGVisualElement "Line" (3SJZ-0) 0×366
+          SVGVisualElement "Circle" (3SK0-0) 8×8
+          SVGVisualElement "Rect" (3SK1-0) 148×30
+          SVGVisualElement "1,420만" (3SK2-0) 76×27
+          SVGVisualElement "1,065만" (3SK3-0) 76×27
+          SVGVisualElement "710만" (3SK4-0) 61×13
+          SVGVisualElement "355만" (3SK5-0) 61×13
+          SVGVisualElement "0" (3SK6-0) 27×13
+          SVGVisualElement "거래량 · 주" (3SK7-0) 85×13
+        Text "Chart Tooltip Label" (33FX-0) 148×30 "150,850 · +1.24%"
+    Frame "Instrument Context" (14PA-2) 360×754
+      Frame "종목 요약" (38KI-0) 312×179
+        Frame "Frame" (38KJ-0) 312×20
+          Text "종목 요약" (38KK-0) 66×20 "종목 요약"
+          Text "정상 거래" (38KL-0) 48×14 "정상 거래"
+        Frame "Frame" (38KM-0) 312×18
+          Text "시가총액" (38KN-0) 48×16 "시가총액"
+          Text "900.4조" (38KO-0) 48×16 "900.4조"
+        Frame "외국인 보유" (3AOT-0) 312×30
+          Text "외국인 보유" (3AOU-0) 65×16 "외국인 보유"
+          Frame "Frame" (3AOV-0) 99×31
+            Text "52.41%" (3AOW-0) 44×16 "52.41%"
+            Text "외인수량 31.3억주" (3AOX-0) 99×14 "외인수량 31.3억주"
+        Frame "Frame" (38KS-0) 312×18
+          Text "유통 주식" (38KT-0) 53×16 "유통 주식"
+          Text "44.4억주" (38KU-0) 53×16 "44.4억주"
+        Frame "52주 레인지" (3T58-0) 312×28
+          Frame "Frame" (38KV-0) 312×16
+            Text "52주 최저 67,700 · 11/0…" (38KW-0) 125×14 "52주 최저 67,700 · 11/03"
+            Text "최고 153,400 · 08/21" (38KX-0) 104×14 "최고 153,400 · 08/21"
+          Frame "Frame" (38KY-0) 312×8
+            Rectangle "Rectangle" (38KZ-0) 303×8
+            Rectangle "Rectangle" (38L0-0) 16×16
+        Frame "Frame" (38L1-0) 312×18
+          Text "250일 고·저 대비" (38L2-0) 91×16 "250일 고·저 대비"
+          Frame "Frame" (38L3-0) 115×16
+            Text "−1.66%" (38L4-0) 44×16 "−1.66%"
+            Text "·" (38L5-0) 8×16 "·"
+            Text "+122.8%" (38L6-0) 51×16 "+122.8%"
+        Frame "Frame" (38L7-0) 312×18
+          Text "거래대금" (38L8-0) 48×16 "거래대금"
+          Text "2.14조" (38L9-0) 41×16 "2.14조"
+      Frame "Investor Snapshot" (14SQ-2) 312×236
+        Text "오늘의 수급" (14SR-2) 312×18 "오늘의 수급"
+        Frame "Frame" (14SS-2) 312×18
+          Text "외국인" (14ST-2) 36×16 "외국인"
+          Text "+128억원" (14SU-2) 58×16 "+128억원"
+        Frame "Frame" (14SV-2) 312×18
+          Text "기관" (14SW-2) 24×16 "기관"
+          Frame "기관 합계 · 펼침" (3C3E-0) 74×16
+            Text "+196억원" (3C3F-0) 58×16 "+196억원"
+            Text "▸" (3C3G-0) 10×16 "▸"
+        Frame "Frame" (14SY-2) 312×18
+          Text "개인" (14SZ-2) 24×16 "개인"
+          Text "−312억원" (14T0-2) 58×16 "−312억원"
+        Frame "30분 누적" (33C2-0) 312×102
+          Frame "30분 누적 머리" (3C3I-0) 312×14
+            Text "30분 누적" (3C3J-0) 53×14 "30분 누적"
+            Frame "Frame" (3C3K-0) 75×14
+              Text "기관 12주체" (3C3L-0) 60×14 "기관 12주체"
+              Text "▸" (3C3M-0) 10×14 "▸"
+          Frame "Bars" (33C4-0) 312×75
+            Frame "09:30" (33C5-0) 46×75
+              Frame "Frame" (33C6-0) 46×24
+                Rectangle "Rectangle" (33C7-0) 12×14
+                Rectangle "Rectangle" (33C8-0) 12×8
+                Rectangle "Rectangle" (33C9-0) 12×0
+              Rectangle "Rectangle" (33CA-0) 46×1
+              Frame "Frame" (33CB-0) 46×15
+                Rectangle "Rectangle" (33CC-0) 12×0
+                Rectangle "Rectangle" (33CD-0) 12×0
+                Rectangle "Rectangle" (33CE-0) 12×11
+              Frame "Frame" (33CF-0) 46×11
+                Text "외" (33CG-0) 12×11 "외"
+                Text "기" (33CH-0) 12×11 "기"
+                Text "개" (33CI-0) 12×11 "개"
+              Text "09:00" (33CJ-0) 30×12 "09:00"
+            Frame "10:00" (33CK-0) 46×75
+              Frame "Frame" (33CL-0) 46×24
+                Rectangle "Rectangle" (33CM-0) 12×20
+                Rectangle "Rectangle" (33CN-0) 12×11
+                Rectangle "Rectangle" (33CO-0) 12×0
+              Rectangle "Rectangle" (33CP-0) 46×1
+              Frame "Frame" (33CQ-0) 46×15
+                Rectangle "Rectangle" (33CR-0) 12×0
+                Rectangle "Rectangle" (33CS-0) 12×0
+                Rectangle "Rectangle" (33CT-0) 12×15
+              Frame "Frame" (33CU-0) 46×11
+                Text "외" (33CV-0) 12×11 "외"
+                Text "기" (33CW-0) 12×11 "기"
+                Text "개" (33CX-0) 12×11 "개"
+              Text "09:30" (33CY-0) 30×12 "09:30"
+            Frame "10:30" (33CZ-0) 46×75
+              Frame "Frame" (33D0-0) 46×24
+                Rectangle "Rectangle" (33D1-0) 12×24
+                Rectangle "Rectangle" (33D2-0) 12×0
+                Rectangle "Rectangle" (33D3-0) 12×0
+              Rectangle "Rectangle" (33D4-0) 46×1
+              Frame "Frame" (33D5-0) 46×15
+                Rectangle "Rectangle" (33D6-0) 12×0
+                Rectangle "Rectangle" (33D7-0) 12×5
+                Rectangle "Rectangle" (33D8-0) 12×13
+              Frame "Frame" (33D9-0) 46×11
+                Text "외" (33DA-0) 12×11 "외"
+                Text "기" (33DB-0) 12×11 "기"
+                Text "개" (33DC-0) 12×11 "개"
+              Text "09:42" (33DD-0) 30×12 "09:42"
+        Frame "5일 누적" (33DF-0) 312×36
+          Text "5일 누적" (33DG-0) 42×12 "5일 누적"
+          Frame "Frame" (33DH-0) 312×15
+            Text "외국인" (33DI-0) 30×14 "외국인"
+            Text "+2,410억" (33DJ-0) 51×14 "+2,410억"
+            Text "·" (33DK-0) 6×14 "·"
+            Text "기관" (33DL-0) 20×14 "기관"
+            Text "+820억" (33DM-0) 38×14 "+820억"
+            Text "·" (33DN-0) 6×14 "·"
+            Text "개인" (33DO-0) 20×14 "개인"
+            Text "−3,180억" (33DP-0) 51×14 "−3,180억"
+      Frame "Chart Context Actions" (14T2-2) 312×44
+        Frame "Frame" (14T3-2) 152×44
+          Text "알림 설정" (14T4-2) 57×16 "알림 설정"
+        Frame "Frame" (14T5-2) 150×44
+          Text "호가 열기" (14T6-2) 57×16 "호가 열기"
+      Frame "세션별 거래" (38LB-0) 312×216
+        Frame "세션별 거래" (3SKW-0) 312×20
+          Text "세션별 거래" (3SKX-0) 81×20 "세션별 거래"
+          Text "거래량 · 거래대금" (3SKY-0) 88×14 "거래량 · 거래대금"
+        Frame "Frame" (38LH-0) 312×19
+          Text "장전" (38LI-0) 46×15 "장전"
+          Frame "Frame" (38LJ-0) 133×15
+            Text "42만주" (38LK-0) 39×15 "42만주"
+            Text "3.0%" (38LL-0) 27×14 "3.0%"
+          Frame "Frame" (38LM-0) 133×15
+            Text "620억원" (38LN-0) 46×15 "620억원"
+            Text "2.9%" (38LO-0) 27×14 "2.9%"
+        Frame "Frame" (38LP-0) 312×19
+          Text "장중" (38LQ-0) 46×15 "장중"
+          Frame "Frame" (38LR-0) 133×15
+            Text "1,368만주" (38LS-0) 60×15 "1,368만주"
+            Text "96.3%" (38LT-0) 33×14 "96.3%"
+          Frame "Frame" (38LU-0) 133×15
+            Text "2조 700억원" (38LV-0) 72×15 "2조 700억원"
+            Text "96.7%" (38LW-0) 33×14 "96.7%"
+        Frame "Frame" (38LX-0) 312×19
+          Text "장후" (38LY-0) 46×15 "장후"
+          Frame "Frame" (38LZ-0) 133×15
+            Text "10만주" (38M0-0) 39×15 "10만주"
+            Text "0.7%" (38M1-0) 27×14 "0.7%"
+          Frame "Frame" (38M2-0) 133×15
+            Text "80억원" (38M3-0) 39×15 "80억원"
+            Text "0.4%" (38M4-0) 27×14 "0.4%"
+        Frame "Frame" (38M5-0) 312×19
+          Text "합계" (38M6-0) 46×15 "합계"
+          Text "1,420만주" (38M7-0) 133×15 "1,420만주"
+          Text "2.14조원" (38M8-0) 133×15 "2.14조원"
+        Frame "Frame" (38M9-0) 312×17
+          Text "기간중 5일" (38MA-0) 54×14 "기간중 5일"
+          Text "5,860만주" (38MB-0) 60×15 "5,860만주"
+          Text "체결강도" (38MC-0) 44×14 "체결강도"
+          Text "108.4%" (38MD-0) 44×15 "108.4%"
+        Frame "세션 부가 지표" (3C2S-0) 312×74
+          Frame "1행" (3C2T-0) 312×30
+            Frame "Frame" (3C2U-0) 98×30
+              Text "외인" (3C2V-0) 98×13 "외인"
+              Text "52.41%" (3C2W-0) 98×15 "52.41%"
+            Frame "Frame" (3C2X-0) 98×30
+              Text "외국계" (3C2Y-0) 98×13 "외국계"
+              Text "+182만주" (3C2Z-0) 98×15 "+182만주"
+            Frame "Frame" (3C30-0) 98×30
+              Text "신용비율" (3C31-0) 98×13 "신용비율"
+              Text "0.86%" (3C32-0) 98×15 "0.86%"
+          Frame "2행" (3C33-0) 312×30
+            Frame "Frame" (3C34-0) 98×30
+              Text "프로그램" (3C35-0) 98×13 "프로그램"
+              Text "+64만주" (3C36-0) 98×15 "+64만주"
+            Frame "Frame" (3C37-0) 98×30
+              Text "전일대비" (3C38-0) 98×13 "전일대비"
+              Text "+1,850원" (3C39-0) 98×15 "+1,850원"
+  Frame "Chart Status Footer" (14T8-2) 1358×64
+    Text "● 차트 실시간 갱신 중" (14T9-2) 125×16 "● 차트 실시간 갱신 중"
+    Text "일봉 · 거래량 · 마지막 틱 30건…" (14TA-2) 289×16 "일봉 · 거래량 · 마지막 틱 30건 · 마지막 체결 09:42:18"
+    Text "기준·제한 상태" (3926-0) 550×14 "증거금율 20% · 통화단위 원 · 임의연장 없음 · 장전임의연장 없음 · 장후임의연장 없음 · 조기종료ELW 해당 없음"

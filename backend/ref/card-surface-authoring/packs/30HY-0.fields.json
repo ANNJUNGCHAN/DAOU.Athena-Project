@@ -1,0 +1,208 @@
+{
+ "board": "30HY-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10131",
+   "f": "orgn_frgnr_cont_trde_prst",
+   "kor": "기관외국인연속매매현황",
+   "layer": null,
+   "where": "외국인·기관 상위 순위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "rank",
+   "kor": "순위",
+   "layer": null,
+   "where": "표 '순위' 열"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "표 '종목' 열"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "orgn_nettrde_amt",
+   "kor": "기관순매매금액",
+   "layer": null,
+   "where": "표 '기관' 열 +348억"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "orgn_nettrde_qty",
+   "kor": "기관순매매량",
+   "layer": "병기",
+   "where": "표 기관 셀 2번째 줄 순매매 수량(1위 23.1만주)"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "frgnr_nettrde_qty",
+   "kor": "외국인순매매량",
+   "layer": "병기",
+   "where": "표 외국인 셀 2번째 줄 순매매 수량(1위 49.2만주)"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "frgnr_nettrde_amt",
+   "kor": "외국인순매매액",
+   "layer": null,
+   "where": "표 '외국인' 열 +742억"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "nettrde_qty",
+   "kor": "순매매량",
+   "layer": "병기",
+   "where": "표 '동반 순매수' 셀 2번째 줄 수량(1위 72.3만주)"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "nettrde_amt",
+   "kor": "순매매액",
+   "layer": null,
+   "where": "동반 요약 '동반 매수 1위 · 삼성전자 +1,090억'"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "tot_cont_netprps_dys",
+   "kor": "합계연속순매수일수",
+   "layer": null,
+   "where": "표 '연속일' 열 4일"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "tot_cont_nettrde_qty",
+   "kor": "합계연속순매매수량",
+   "layer": "병기",
+   "where": "표 '연속일' 셀 2번째 줄 '누적 213.0만주'"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "tot_cont_netprps_amt",
+   "kor": "합계연속순매수금액",
+   "layer": null,
+   "where": "동반 요약 '동반 매수 1위 +1,090억'"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "frgnr_orgn_trde_upper",
+   "kor": "외국인기관매매상위",
+   "layer": null,
+   "where": "외국인·기관 상위 순위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "for_netslmt_stk_cd",
+   "kor": "외인순매도종목코드",
+   "layer": "병기",
+   "where": "순매도 행 종목 셀 아래 코드 10px(49위 LG화학 051910)"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "for_netslmt_stk_nm",
+   "kor": "외인순매도종목명",
+   "layer": null,
+   "where": "하위 행 종목명 LG화학·카카오(외국인 순매도)"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "for_netslmt_amt",
+   "kor": "외인순매도금액",
+   "layer": null,
+   "where": "표 '외국인' 열 -212억"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "for_netslmt_qty",
+   "kor": "외인순매도수량",
+   "layer": "병기",
+   "where": "순매도 행 외국인 셀 2번째 줄 수량(49위 -6.8만주)"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "for_netprps_stk_cd",
+   "kor": "외인순매수종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "for_netprps_stk_nm",
+   "kor": "외인순매수종목명",
+   "layer": null,
+   "where": "표 '종목' 열 삼성전자 등"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "for_netprps_amt",
+   "kor": "외인순매수금액",
+   "layer": null,
+   "where": "표 '외국인' 열 +742억"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "for_netprps_qty",
+   "kor": "외인순매수수량",
+   "layer": "병기",
+   "where": "순매수 행 외국인 셀 2번째 줄 수량(1위 49.2만주)"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "orgn_netslmt_stk_cd",
+   "kor": "기관순매도종목코드",
+   "layer": "병기",
+   "where": "순매도 행 종목 셀 아래 코드 10px(50위 카카오 035720)"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "orgn_netslmt_stk_nm",
+   "kor": "기관순매도종목명",
+   "layer": null,
+   "where": "하위 행 종목명 LG화학·카카오(기관 순매도)"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "orgn_netslmt_amt",
+   "kor": "기관순매도금액",
+   "layer": null,
+   "where": "표 '기관' 열 -96억"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "orgn_netslmt_qty",
+   "kor": "기관순매도수량",
+   "layer": "병기",
+   "where": "순매도 행 기관 셀 2번째 줄 수량(49위 -3.1만주)"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "orgn_netprps_stk_cd",
+   "kor": "기관순매수종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "orgn_netprps_amt",
+   "kor": "기관순매수금액",
+   "layer": null,
+   "where": "표 '기관' 열 +348억"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "orgn_netprps_qty",
+   "kor": "기관순매수수량",
+   "layer": "병기",
+   "where": "순매수 행 기관 셀 2번째 줄 수량(1위 23.1만주)"
+  }
+ ]
+}

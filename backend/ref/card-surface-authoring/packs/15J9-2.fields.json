@@ -1,0 +1,96 @@
+{
+ "board": "15J9-2",
+ "fields": [
+  {
+   "mapping_id": "base:ka20002",
+   "f": "inds_stkpc",
+   "kor": "업종별주가",
+   "layer": null,
+   "where": "'주도 종목' 테이블"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "where": "주도 종목 표 종목 셀 보조줄 mono 10px 000660·042700·005930"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "주도 종목 SK하이닉스/한미반도체/삼성전자"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": "직접",
+   "where": "주도 종목 표 현재가 열 주값 198,400·128,400·150,850"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락 색/± 부호"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "where": "주도 종목 표 현재가 셀 보조줄 '+3,990 · +2.05%' 형태(3행)"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "where": "'등락' 컬럼 +2.05%"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "now_trde_qty",
+   "kor": "현재거래량",
+   "layer": "병기",
+   "where": "주도 종목 표 거래대금 셀 보조줄 860만주·242만주·1,420만주"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "sel_bid",
+   "kor": "매도호가",
+   "layer": "직접",
+   "where": "주도 종목 표 호가 열 주값 '매도 198,500·128,500·150,900'"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "buy_bid",
+   "kor": "매수호가",
+   "layer": "병기",
+   "where": "주도 종목 표 호가 셀 보조줄 '매수 198,400·128,400·150,850'"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": "병기",
+   "where": "주도 종목 표 시·고·저 셀 보조줄 '시 196,400·122,500·149,500'"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": "직접",
+   "where": "주도 종목 표 시·고·저 열 주값 '고 199,000·129,800·151,200'"
+  },
+  {
+   "mapping_id": "base:ka20002",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": "직접",
+   "where": "주도 종목 표 시·고·저 열 주값 '저 195,200·122,100·149,000'"
+  }
+ ]
+}

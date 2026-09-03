@@ -1,0 +1,20 @@
+{
+  "board_id": "2XY6-0",
+  "name": "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 1120,
+  "state": {
+    "kind": "sort",
+    "parent_board": "2VO0-0",
+    "control": "근접률"
+  },
+  "saved_at": "2026-09-02T11:07:18Z",
+  "operation_refs": [
+    "base:ka30001",
+    "base:ka30004",
+    "base:ka30005",
+    "base:ka30009",
+    "base:ka30011"
+  ]
+}

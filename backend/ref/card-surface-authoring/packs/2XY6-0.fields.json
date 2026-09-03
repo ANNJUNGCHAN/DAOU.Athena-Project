@@ -1,0 +1,33 @@
+{
+ "board": "2XY6-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka30011",
+   "f": "elwalacc_rt",
+   "kor": "ELW근접율",
+   "layer": "직접",
+   "where": "근접률 순위 표 8행 — 근접률 열이 정렬지표로 강조 (98.7% ~ 90.4%)"
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "where": "종목 셀 2줄 mono 10px '58P630 · 한국투자증권 6B44회차' 등 8행"
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "where": "현재가 셀 2줄 '▲ +10 / ▲ +5 / ▼ −10' 원 단위 전일대비"
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "alacc_rt",
+   "kor": "근접율",
+   "layer": "직접",
+   "where": "'근접률 · 잔여' 열 1줄 근접률 + 2줄 '잔여 4.55p / 1,150원 …'"
+  }
+ ]
+}

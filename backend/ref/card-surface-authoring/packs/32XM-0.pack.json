@@ -1,0 +1,142 @@
+{
+ "board_id": "32XM-0",
+ "card_id": "CC-03",
+ "name": "CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+ "operation_refs": [
+  "base:ka10011"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10011",
+   "f": "newstk_recvrht_mrpr",
+   "kor": "신주인수권시세",
+   "layer": null,
+   "board": "32XM-0",
+   "where": "신주인수권 시세 순위표",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "32XM-0",
+   "where": "우측 카드 010145",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "32XM-0",
+   "where": "종목 컬럼 삼성중공업 1WR",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "32XM-0",
+   "where": "현재가 컬럼 1,245",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "32XM-0",
+   "where": "등락률 +/- 부호와 상승·하락색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "32XM-0",
+   "where": "표 '현재가' 셀 둘째 줄 '+193 · +18.4%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "32XM-0",
+   "where": "등락률 컬럼 +18.4%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "fpr_sel_bid",
+   "kor": "최우선매도호가",
+   "layer": "직접",
+   "board": "32XM-0",
+   "where": "표 '최우선 호가' 셀 첫째 줄 '매도 1,250'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "fpr_buy_bid",
+   "kor": "최우선매수호가",
+   "layer": "병기",
+   "board": "32XM-0",
+   "where": "표 '최우선 호가' 셀 둘째 줄 '매수 1,245'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": null,
+   "board": "32XM-0",
+   "where": "거래량 컬럼 84만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": "직접",
+   "board": "32XM-0",
+   "where": "표 '시가 / 고가 / 저가' 셀 첫 값 '1,060'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": "직접",
+   "board": "32XM-0",
+   "where": "표 '시가 / 고가 / 저가' 셀 둘째 값 '1,268'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10011",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": "직접",
+   "board": "32XM-0",
+   "where": "표 '시가 / 고가 / 저가' 셀 셋째 값 '1,050'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 13
+}

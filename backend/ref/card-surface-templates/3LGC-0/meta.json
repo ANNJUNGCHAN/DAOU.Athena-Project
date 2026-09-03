@@ -1,0 +1,25 @@
+{
+  "board_id": "3LGC-0",
+  "name": "CC-01 / R10-T2-X3 · 거래내역 상세",
+  "card_id": "CC-01",
+  "width": 1440,
+  "height": 1098,
+  "state": {
+    "kind": "expand",
+    "parent_board": "2SKU-1",
+    "control": "거래내역 상세",
+    "control_text": "수표 입금·증권 입고·증권 출고"
+  },
+  "saved_at": "2026-09-02T10:51:26Z",
+  "operation_refs": [
+    "base:00",
+    "base:ka01690",
+    "base:kt00007",
+    "base:kt00015",
+    "detail:kt00001:settlement_forecast",
+    "detail:kt00004:cash_and_assets",
+    "detail:kt00004:position_valuation",
+    "detail:kt00005:cash_and_capacity",
+    "detail:kt00009:order_execution_status"
+  ]
+}

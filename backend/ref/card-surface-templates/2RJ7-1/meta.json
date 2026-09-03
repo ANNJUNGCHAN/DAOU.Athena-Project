@@ -1,0 +1,13 @@
+{
+  "board_id": "2RJ7-1",
+  "name": "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 1120,
+  "state": {
+    "kind": "tab",
+    "parent_board": "137X-2",
+    "control": "금현물"
+  },
+  "saved_at": "2026-09-02T10:59:57Z"
+}

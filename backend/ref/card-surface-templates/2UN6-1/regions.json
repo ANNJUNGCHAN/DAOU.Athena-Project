@@ -1,0 +1,11 @@
+{
+  "root": "2UN8-1",
+  "regions": [
+    { "node_id": "2UQF-1", "name": "Header and Capability Navigation", "role": "header", "depth": 1 },
+    { "node_id": "2UPY-1", "name": "Ranking Query Controls", "role": "strip", "depth": 1 },
+    { "node_id": "2UNC-1", "name": "Ranking Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "34NC-0", "name": "조건식·감지 표", "role": "primary", "depth": 2 },
+    { "node_id": "2USB-1", "name": "Frame", "role": "rail", "depth": 2 },
+    { "node_id": "2UN9-1", "name": "User Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

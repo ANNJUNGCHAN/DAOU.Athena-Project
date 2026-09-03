@@ -1,0 +1,33 @@
+{
+ "board": "15R0-2",
+ "fields": [
+  {
+   "mapping_id": "base:1h",
+   "f": "9001",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "VI 행 종목코드 042700/080220/247540"
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "9068",
+   "kor": "VI발동구분",
+   "layer": null,
+   "where": "'유형' 컬럼 정적 VI/동적 VI, 2UHM-1 '정적 상승/동적 상승'"
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1236",
+   "kor": "기준가격 정적",
+   "layer": null,
+   "where": "발동 상세 '기준가 118,900원'"
+  },
+  {
+   "mapping_id": "base:1h",
+   "f": "1279",
+   "kor": "Extra Item",
+   "layer": "직접",
+   "where": "'발동 상세' 블록 4번째 칸 '추가 정보 / 미제공'(k-faint, 결측 정직 표기)"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "root": "2SRX-1",
+  "regions": [
+    { "node_id": "2SW6-1", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "2SW7-1", "name": "Frame (탭 스트립)", "role": "strip", "depth": 2 },
+    { "node_id": "2SVL-1", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "2SS1-1", "name": "Account Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3IFY-0", "name": "Realized PL Column", "role": "primary", "depth": 2 },
+    { "node_id": "3UGS-0", "name": "Performance Rail", "role": "rail", "depth": 2 },
+    { "node_id": "3B49-0", "name": "Account Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

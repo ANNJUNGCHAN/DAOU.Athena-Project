@@ -1,0 +1,11 @@
+{
+  "root": "14YH-2",
+  "regions": [
+    { "node_id": "14YJ-2", "name": "Order Header", "role": "header", "depth": 1 },
+    { "node_id": "14Z7-2", "name": "Order Progress", "role": "other", "depth": 1 },
+    { "node_id": "14ZS-2", "name": "Order Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "14ZT-2", "name": "Order Entry", "role": "primary", "depth": 2 },
+    { "node_id": "14ZU-2", "name": "Order Preview", "role": "other", "depth": 2 },
+    { "node_id": "14ZV-2", "name": "Fees and Execution", "role": "rail", "depth": 2 }
+  ]
+}

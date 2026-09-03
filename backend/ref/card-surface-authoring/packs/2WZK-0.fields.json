@@ -1,0 +1,40 @@
+{
+ "board": "2WZK-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka40001",
+   "f": "etfprft_rt_lst",
+   "kor": "ETF수익율",
+   "layer": null,
+   "where": "기간 수익률 표(1주·1달·3달·1년)"
+  },
+  {
+   "mapping_id": "base:ka40001",
+   "f": "etfprft_rt",
+   "kor": "ETF수익률",
+   "layer": null,
+   "where": "1주 +5.8% · 1달 +18.4% · 3달 +42.1% · 1년 +76.5%"
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "wonju_pric",
+   "kor": "원주가격",
+   "layer": "병기",
+   "where": "1위 종목 기간 수익률 카드 과세 행 병기 '원주가격 해당 없음'"
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "etftxon_type",
+   "kor": "ETF과세유형",
+   "layer": "직접",
+   "where": "1위 종목 기간 수익률 카드 과세 행 'ETF 배당소득세 15.4%'"
+  },
+  {
+   "mapping_id": "base:ka40002",
+   "f": "etntxon_type",
+   "kor": "ETN과세유형",
+   "layer": "병기",
+   "where": "1위 종목 기간 수익률 카드 과세 행 병기 'ETN 해당 없음'"
+  }
+ ]
+}

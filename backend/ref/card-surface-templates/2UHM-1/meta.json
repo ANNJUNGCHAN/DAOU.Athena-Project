@@ -1,0 +1,13 @@
+{
+  "board_id": "2UHM-1",
+  "name": "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "tab",
+    "parent_board": "13K0-2",
+    "control": "시장·VI"
+  },
+  "saved_at": "2026-09-02T11:33:04Z"
+}

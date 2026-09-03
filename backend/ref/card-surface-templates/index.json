@@ -1,0 +1,4826 @@
+{
+  "boards": [
+    {
+      "board_id": "133H-2",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:00",
+        "base:04",
+        "base:ka00001",
+        "base:ka01690",
+        "base:ka10072",
+        "base:ka10073",
+        "base:ka10074",
+        "base:ka10075",
+        "base:ka10076",
+        "base:ka10085",
+        "base:kt00003",
+        "base:kt00008",
+        "detail:kt00004:account_identity",
+        "detail:kt00004:cash_and_assets",
+        "detail:kt00004:position_valuation",
+        "detail:kt00005:portfolio_summary",
+        "detail:kt00016:account_manager",
+        "detail:kt00018:portfolio_summary"
+      ],
+      "counts": {
+        "elements": 312,
+        "text_nodes": 166,
+        "slots": 166,
+        "anchored_slots": 19,
+        "mapped_slots": 16,
+        "labels": 52,
+        "values": 114,
+        "layer_직접": 166,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 4
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "보유종목",
+            "kind": "tab",
+            "boards": [
+              "2SCE-1"
+            ],
+            "node_id": "14TR-2",
+            "how": "exact"
+          },
+          {
+            "control": "손익·성과",
+            "kind": "tab",
+            "boards": [
+              "2SRV-1"
+            ],
+            "node_id": "14TV-2",
+            "how": "exact"
+          },
+          {
+            "control": "예수금·결제",
+            "kind": "tab",
+            "boards": [
+              "2SKU-1"
+            ],
+            "node_id": "14TT-2",
+            "how": "exact"
+          },
+          {
+            "control": "주문·체결",
+            "kind": "tab",
+            "boards": [
+              "2SYW-1"
+            ],
+            "node_id": "14TX-2",
+            "how": "exact"
+          }
+        ],
+        "unresolved": [
+          {
+            "board_id": "3ODO-0",
+            "kind": "expand",
+            "control": "금현물 잔고·거래내역",
+            "reason": "후보 없음"
+          }
+        ]
+      },
+      "html_sha256": "225ecb2da06b3e305c13e0342db91ea5a252b58013695980267848dfb1428ee7"
+    },
+    {
+      "board_id": "135M-2",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11 · 삼성전자 10주 시장가 매수",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:kt10000"
+      ],
+      "counts": {
+        "elements": 151,
+        "text_nodes": 74,
+        "slots": 74,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 51,
+        "values": 23,
+        "layer_직접": 74,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 5
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "금현물 · 매수",
+            "kind": "tab",
+            "boards": [
+              "2TNJ-1"
+            ],
+            "node_id": "14YW-2",
+            "how": "hand"
+          },
+          {
+            "control": "신용 · 매수",
+            "kind": "tab",
+            "boards": [
+              "2TJ6-1"
+            ],
+            "node_id": "14YU-2",
+            "how": "hand"
+          },
+          {
+            "control": "정정",
+            "kind": "tab",
+            "boards": [
+              "2TAG-1"
+            ],
+            "node_id": "14Z3-2",
+            "how": "exact"
+          },
+          {
+            "control": "취소",
+            "kind": "tab",
+            "boards": [
+              "2TET-1"
+            ],
+            "node_id": "14Z5-2",
+            "how": "exact"
+          },
+          {
+            "control": "현금 매도",
+            "kind": "tab",
+            "boards": [
+              "2T63-1"
+            ],
+            "node_id": "14Z1-2",
+            "how": "hand"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "cc3ce6eff0acb8e538676e09c1732a796c4c7b512a1478a7bdbe63f92ded1ece"
+    },
+    {
+      "board_id": "137X-2",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01 · 삼성전자 3개월 차트",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0g",
+        "base:ka10003",
+        "base:ka10015",
+        "base:ka10060",
+        "base:ka10064",
+        "base:ka10079",
+        "base:ka10080",
+        "base:ka10081",
+        "base:ka10082",
+        "base:ka10083",
+        "base:ka10084",
+        "base:ka10086",
+        "base:ka10094",
+        "detail:ka10001:current_trading",
+        "detail:ka10001:daily_price_band",
+        "detail:ka10001:identity_and_capital",
+        "detail:ka10001:market_scale_and_ownership",
+        "detail:ka10001:price_range",
+        "detail:ka10001:valuation"
+      ],
+      "counts": {
+        "elements": 335,
+        "text_nodes": 138,
+        "slots": 138,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 69,
+        "values": 69,
+        "layer_직접": 137,
+        "layer_병기": 1,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 6
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "금현물",
+            "kind": "tab",
+            "boards": [
+              "2RJ7-1"
+            ],
+            "node_id": "14OL-2",
+            "how": "exact"
+          },
+          {
+            "control": "기업정보",
+            "kind": "tab",
+            "boards": [
+              "2RBO-1"
+            ],
+            "node_id": "14OF-2",
+            "how": "exact"
+          },
+          {
+            "control": "순위",
+            "kind": "tab",
+            "boards": [
+              "2VDA-0",
+              "2VIN-0",
+              "2VO0-0",
+              "32XM-0"
+            ],
+            "node_id": "2WFB-0",
+            "how": "exact"
+          },
+          {
+            "control": "차트",
+            "kind": "tab",
+            "boards": [
+              "32S7-0"
+            ],
+            "node_id": "14OD-2",
+            "how": "exact"
+          },
+          {
+            "control": "투자자 12주체",
+            "kind": "expand",
+            "boards": [
+              "3DI2-0"
+            ],
+            "node_id": "3C3M-0",
+            "how": "token"
+          },
+          {
+            "control": "현재시세",
+            "kind": "tab",
+            "boards": [
+              "2R3M-1"
+            ],
+            "node_id": "14OB-2",
+            "how": "exact"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "35454ef9291802dd30e52c1d12d6102d5c6def788c5e46c032032fbd044fc9f2"
+    },
+    {
+      "board_id": "13BC-2",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0C",
+        "base:0D",
+        "base:0E",
+        "detail:ka10004:after_hours_totals",
+        "detail:ka10004:buy_bid_prices",
+        "detail:ka10004:sell_bid_prices",
+        "detail:ka10004:snapshot_time",
+        "detail:ka10007:bid_prices",
+        "detail:ka10007:expected_market",
+        "detail:ka10007:identity",
+        "detail:ka10087:aggregate_totals"
+      ],
+      "counts": {
+        "elements": 305,
+        "text_nodes": 167,
+        "slots": 167,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 38,
+        "values": 129,
+        "layer_직접": 167,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 78,
+        "bs_paired": 58,
+        "bs_leaf": 30,
+        "bs_kpi_cell": 4,
+        "state_control_marks": 4
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "금현물 · 5단",
+            "kind": "tab",
+            "boards": [
+              "2QX1-1"
+            ],
+            "node_id": "153R-2",
+            "how": "tail"
+          },
+          {
+            "control": "단계별 낱값·거래소별",
+            "kind": "expand",
+            "boards": [
+              "3JZ3-0"
+            ],
+            "node_id": "3OSG-0",
+            "how": "hand"
+          },
+          {
+            "control": "시간외",
+            "kind": "tab",
+            "boards": [
+              "2QRP-1"
+            ],
+            "node_id": "153M-2",
+            "how": "exact"
+          },
+          {
+            "control": "정규장 · 5단",
+            "kind": "tab",
+            "boards": [
+              "2TRW-1"
+            ],
+            "node_id": "153K-2",
+            "how": "partial"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "f90e27845dc86e49f31807bcab1a47319a56058948a17c1c8408b5c03b1061a3"
+    },
+    {
+      "board_id": "13K0-2",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04 · 거래대금 상위 저평가 탐색",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka00198",
+        "base:ka10032",
+        "base:ka10099",
+        "base:ka10100"
+      ],
+      "counts": {
+        "elements": 259,
+        "text_nodes": 153,
+        "slots": 153,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 67,
+        "values": 86,
+        "layer_직접": 140,
+        "layer_병기": 13,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 16,
+        "bs_paired": 19,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 14
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "거래량 급증",
+            "kind": "sort",
+            "boards": [
+              "2YJ8-0"
+            ],
+            "node_id": "32AP-0",
+            "how": "exact"
+          },
+          {
+            "control": "관심종목 시세 보드",
+            "kind": "tab",
+            "boards": [
+              "2U5L-1"
+            ],
+            "node_id": "14JJ-2",
+            "how": "partial"
+          },
+          {
+            "control": "당일 거래량",
+            "kind": "sort",
+            "boards": [
+              "2X5N-0"
+            ],
+            "node_id": "2WH5-0",
+            "how": "exact"
+          },
+          {
+            "control": "등락률",
+            "kind": "sort",
+            "boards": [
+              "2XKO-0"
+            ],
+            "node_id": "2WH9-0",
+            "how": "exact"
+          },
+          {
+            "control": "시간외 등락률",
+            "kind": "sort",
+            "boards": [
+              "2YNQ-0"
+            ],
+            "node_id": "33WM-0",
+            "how": "partial"
+          },
+          {
+            "control": "시장·VI",
+            "kind": "tab",
+            "boards": [
+              "2UHM-1"
+            ],
+            "node_id": "14JN-2",
+            "how": "exact"
+          },
+          {
+            "control": "업종",
+            "kind": "tab",
+            "boards": [
+              "2TZN-1"
+            ],
+            "node_id": "14JF-2",
+            "how": "exact"
+          },
+          {
+            "control": "예상체결 등락률",
+            "kind": "sort",
+            "boards": [
+              "2XP6-0"
+            ],
+            "node_id": "2WHB-0",
+            "how": "exact"
+          },
+          {
+            "control": "잔량률 급증",
+            "kind": "sort",
+            "boards": [
+              "2YEQ-0"
+            ],
+            "node_id": "2WHH-0",
+            "how": "exact"
+          },
+          {
+            "control": "전일 거래량",
+            "kind": "sort",
+            "boards": [
+              "2XG6-0"
+            ],
+            "node_id": "2WH7-0",
+            "how": "exact"
+          },
+          {
+            "control": "조건검색",
+            "kind": "tab",
+            "boards": [
+              "2UN6-1"
+            ],
+            "node_id": "14JP-2",
+            "how": "exact"
+          },
+          {
+            "control": "테마 등락·확산 탐색",
+            "kind": "tab",
+            "boards": [
+              "2UBO-1"
+            ],
+            "node_id": "14JL-2",
+            "how": "partial"
+          },
+          {
+            "control": "호가잔량 급증",
+            "kind": "sort",
+            "boards": [
+              "2YA8-0"
+            ],
+            "node_id": "2WHD-0",
+            "how": "partial"
+          },
+          {
+            "control": "호가잔량 상위",
+            "kind": "sort",
+            "boards": [
+              "2XTO-0"
+            ],
+            "node_id": "3449-0",
+            "how": "partial"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "aec69762295e74547acd56ffebc2e176dce30951667bec34f91112ba7760b083"
+    },
+    {
+      "board_id": "15J9-2",
+      "card_id": "CC-06",
+      "name": "CC-06 / R05 · 반도체 업종·AI 테마",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka20002"
+      ],
+      "counts": {
+        "elements": 162,
+        "text_nodes": 83,
+        "slots": 83,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 22,
+        "values": 61,
+        "layer_직접": 76,
+        "layer_병기": 7,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 16,
+        "bs_paired": 25,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "257b6370a450142beb3c70566e51843f0fcb72186e9090cc136db6ffe77c45c3"
+    },
+    {
+      "board_id": "15L8-2",
+      "card_id": "CC-06",
+      "name": "CC-06 / R06 · 관심종목·조건 신호",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10172"
+      ],
+      "counts": {
+        "elements": 182,
+        "text_nodes": 115,
+        "slots": 115,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 43,
+        "values": 72,
+        "layer_직접": 115,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "4f79c85f74e221c0f2d21facd4418cc1e8b1f30921683383fe32a97f53cb8d9d"
+    },
+    {
+      "board_id": "15N5-2",
+      "card_id": "CC-03",
+      "name": "CC-03 / R07 · KODEX 200 ETF",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0G",
+        "base:ka40001",
+        "base:ka40002",
+        "base:ka40003",
+        "base:ka40006",
+        "base:ka40007",
+        "base:ka40008",
+        "base:ka40009",
+        "base:ka40010"
+      ],
+      "counts": {
+        "elements": 237,
+        "text_nodes": 143,
+        "slots": 143,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 40,
+        "values": 103,
+        "layer_직접": 111,
+        "layer_병기": 32,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 36,
+        "bs_paired": 57,
+        "bs_leaf": 2,
+        "bs_kpi_cell": 4,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "ac5a5511197ab0f298f581506e116bd5908b4c1631d8187c7139a47d6d8e924b"
+    },
+    {
+      "board_id": "15P5-2",
+      "card_id": "CC-03",
+      "name": "CC-03 / R08 · ELW 위험·만기",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0G",
+        "base:0m",
+        "base:0u",
+        "base:ka10048",
+        "base:ka10050",
+        "base:ka30001",
+        "base:ka30003",
+        "base:ka30004",
+        "base:ka30005",
+        "base:ka30009",
+        "base:ka30010",
+        "base:ka30011",
+        "detail:ka30012:administration",
+        "detail:ka30012:evaluation_extrema",
+        "detail:ka30012:evaluation_window",
+        "detail:ka30012:key_dates",
+        "detail:ka30012:liquidity_and_leverage",
+        "detail:ka30012:liquidity_providers",
+        "detail:ka30012:market_snapshot",
+        "detail:ka30012:payoff_conditions",
+        "detail:ka30012:underlying_basket",
+        "detail:ka30012:valuation_and_rights"
+      ],
+      "counts": {
+        "elements": 349,
+        "text_nodes": 225,
+        "slots": 225,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 84,
+        "values": 141,
+        "layer_직접": 187,
+        "layer_병기": 38,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 45,
+        "bs_paired": 73,
+        "bs_leaf": 2,
+        "bs_kpi_cell": 8,
+        "state_control_marks": 1
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "ELW 바스켓·만기평가",
+            "kind": "expand",
+            "boards": [
+              "3DZ1-0"
+            ],
+            "node_id": "3CNB-0",
+            "how": "token"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "0cbf3678bc840069ff3b32772f5873af13a0f2e5a41736e8bed34e028256096b"
+    },
+    {
+      "board_id": "15R0-2",
+      "card_id": "CC-06",
+      "name": "CC-06 / R09 · 시장 체온·VI",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:1h"
+      ],
+      "counts": {
+        "elements": 153,
+        "text_nodes": 85,
+        "slots": 85,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 36,
+        "values": 49,
+        "layer_직접": 73,
+        "layer_병기": 12,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "694e1e44b8c5b3cdad2264340cf6e92e00523763cd3525cb093113b0aaaec9c8"
+    },
+    {
+      "board_id": "1JPU-0",
+      "card_id": "CC-04",
+      "name": "A04 · 호가 정본 — 실시간 통합 호가",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0D",
+        "detail:ka10004:aggregate_totals",
+        "detail:ka10004:buy_bid_quantities",
+        "detail:ka10004:sell_bid_quantities",
+        "detail:ka10007:bid_quantities",
+        "detail:ka10007:expected_market",
+        "detail:ka10007:identity",
+        "detail:ka10007:session",
+        "detail:ka10007:totals"
+      ],
+      "counts": {
+        "elements": 454,
+        "text_nodes": 263,
+        "slots": 263,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 63,
+        "values": 200,
+        "layer_직접": 262,
+        "layer_병기": 1,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 155,
+        "bs_paired": 137,
+        "bs_leaf": 39,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 1
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "단계별 낱값",
+            "kind": "expand",
+            "boards": [
+              "3N4O-0"
+            ],
+            "node_id": "3MTD-0",
+            "how": "hand"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "4fd5447bdd31c78898d57fbf038ca89e69125de29dc699819ca2c0d40f77d0c9"
+    },
+    {
+      "board_id": "1JZW-0",
+      "card_id": "CC-04",
+      "name": "A02×A04 · 호가 주문 정본 — 시장가 매수",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [],
+      "counts": {
+        "elements": 487,
+        "text_nodes": 278,
+        "slots": 278,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 72,
+        "values": 206,
+        "layer_직접": 277,
+        "layer_병기": 1,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 155,
+        "bs_paired": 137,
+        "bs_leaf": 39,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "90c3d6a05bfb81dbca9a8515e4aef953eacbf2e3a12fbd0dae5649d16b2bea5d"
+    },
+    {
+      "board_id": "1WOB-1",
+      "card_id": "CC-05",
+      "name": "A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+      "state": {
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0F",
+        "base:ka10034",
+        "base:ka10035",
+        "base:ka10053",
+        "base:ka90008",
+        "base:ka90013",
+        "detail:ka10040:broker_departures"
+      ],
+      "counts": {
+        "elements": 391,
+        "text_nodes": 264,
+        "slots": 264,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 37,
+        "values": 227,
+        "layer_직접": 244,
+        "layer_병기": 20,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "02d0eaa1bac600596df90db65e0c2e1088488011d951396f2ae174f3d6f63596"
+    },
+    {
+      "board_id": "2QFO-2",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T1 · 수급 — 투자자별",
+      "state": {
+        "kind": "tab",
+        "parent_board": null,
+        "control": "투자자별",
+        "control_text": "투자자별",
+        "rail_owner": true
+      },
+      "operation_refs": [
+        "base:0w",
+        "base:ka10037",
+        "base:ka10052",
+        "base:ka10059",
+        "base:ka10061",
+        "base:ka10066"
+      ],
+      "counts": {
+        "elements": 359,
+        "text_nodes": 178,
+        "slots": 178,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 58,
+        "values": 120,
+        "layer_직접": 178,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 6
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "거래원",
+            "kind": "tab",
+            "boards": [
+              "2QM7-2"
+            ],
+            "node_id": "2QG3-2",
+            "how": "exact"
+          },
+          {
+            "control": "순위",
+            "kind": "tab",
+            "boards": [
+              "2V71-0"
+            ],
+            "node_id": "2WFN-0",
+            "how": "exact"
+          },
+          {
+            "control": "신용·대차",
+            "kind": "tab",
+            "boards": [
+              "2RWK-1"
+            ],
+            "node_id": "2QG7-2",
+            "how": "exact"
+          },
+          {
+            "control": "종목 동향",
+            "kind": "tab",
+            "boards": [
+              "2S4E-1"
+            ],
+            "node_id": "2QG9-2",
+            "how": "exact"
+          },
+          {
+            "control": "투자자별",
+            "kind": "tab",
+            "boards": [
+              "2QFO-2"
+            ],
+            "node_id": "2QG1-2",
+            "how": "hand"
+          },
+          {
+            "control": "프로그램",
+            "kind": "tab",
+            "boards": [
+              "2ROJ-1"
+            ],
+            "node_id": "2QG5-2",
+            "how": "exact"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "66b7d95bcaa7a647d832a31e5d7d9e4a5b600e44bc4585a95353ad60cb6d398c"
+    },
+    {
+      "board_id": "2QM7-2",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T2 · 수급 — 거래원",
+      "state": {
+        "kind": "tab",
+        "parent_board": "2QFO-2",
+        "control": "거래원",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0F",
+        "base:0w",
+        "base:ka10038",
+        "base:ka10042",
+        "base:ka10043",
+        "base:ka10052",
+        "base:ka10053",
+        "base:ka10078",
+        "base:ka10102",
+        "detail:ka10002:buy_brokers",
+        "detail:ka10002:market_snapshot",
+        "detail:ka10002:sell_brokers",
+        "detail:ka10040:broker_departures",
+        "detail:ka10040:buy_brokers",
+        "detail:ka10040:foreign_broker_estimates",
+        "detail:ka10040:sell_brokers"
+      ],
+      "counts": {
+        "elements": 341,
+        "text_nodes": 189,
+        "slots": 189,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 54,
+        "values": 135,
+        "layer_직접": 189,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "23a7c44492fa3e35289ad1254a3250dea89f7eb27efb98a8af719dec65d4ea99"
+    },
+    {
+      "board_id": "2QRP-1",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+      "state": {
+        "kind": "tab",
+        "parent_board": "13BC-2",
+        "control": "시간외",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0D",
+        "base:0E",
+        "detail:ka10007:session",
+        "detail:ka10087:aggregate_totals",
+        "detail:ka10087:buy_bid_prices",
+        "detail:ka10087:buy_bid_quantities",
+        "detail:ka10087:sell_bid_prices",
+        "detail:ka10087:sell_bid_quantities",
+        "detail:ka10087:snapshot_time",
+        "detail:ka10087:trading_summary"
+      ],
+      "counts": {
+        "elements": 205,
+        "text_nodes": 109,
+        "slots": 109,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 37,
+        "values": 72,
+        "layer_직접": 109,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 9,
+        "bs_paired": 21,
+        "bs_leaf": 2,
+        "bs_kpi_cell": 4,
+        "state_control_marks": 1
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "시간외 단일가 단계별 낱값",
+            "kind": "expand",
+            "boards": [
+              "3JT4-0"
+            ],
+            "node_id": "3IQG-0",
+            "how": "partial"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "4aa1631ec6c2812c60eb3cb56e9d3885009e30111af5058800ee19a032cabb0c"
+    },
+    {
+      "board_id": "2QX1-1",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02-T3 · 호가 — KRX 금현물",
+      "state": {
+        "kind": "tab",
+        "parent_board": "13BC-2",
+        "control": "금현물 · 5단",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka50101"
+      ],
+      "counts": {
+        "elements": 258,
+        "text_nodes": 147,
+        "slots": 147,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 44,
+        "values": 103,
+        "layer_직접": 147,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 45,
+        "bs_paired": 57,
+        "bs_leaf": 11,
+        "bs_kpi_cell": 6,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "a793eff3b1ef17b7da14347b3d2fce5d2266eac23760f2205864324239d1b661"
+    },
+    {
+      "board_id": "2R3M-1",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+      "state": {
+        "kind": "tab",
+        "parent_board": "137X-2",
+        "control": "현재시세",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0A",
+        "base:0B",
+        "base:0H",
+        "base:0g",
+        "base:ka10003",
+        "base:ka10005",
+        "base:ka10006",
+        "base:ka10046",
+        "base:ka10047",
+        "base:ka10084",
+        "base:ka10086",
+        "detail:ka10001:current_trading"
+      ],
+      "counts": {
+        "elements": 396,
+        "text_nodes": 259,
+        "slots": 259,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 107,
+        "values": 152,
+        "layer_직접": 239,
+        "layer_병기": 20,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 40,
+        "bs_paired": 58,
+        "bs_leaf": 9,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 1
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "분봉 시세",
+            "kind": "expand",
+            "boards": [
+              "3FR6-0"
+            ],
+            "node_id": "3DFX-0",
+            "how": "token"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "b7067759e8e4aaeb3e66df301d8d6c0293f130e69b5eadeffa19628cb0d7c63f"
+    },
+    {
+      "board_id": "2RBO-1",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+      "state": {
+        "kind": "tab",
+        "parent_board": "137X-2",
+        "control": "기업정보",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10005",
+        "base:ka10086",
+        "detail:ka10001:current_trading",
+        "detail:ka10001:daily_price_band",
+        "detail:ka10001:financial_performance",
+        "detail:ka10001:identity_and_capital",
+        "detail:ka10001:market_scale_and_ownership",
+        "detail:ka10001:price_range",
+        "detail:ka10001:valuation"
+      ],
+      "counts": {
+        "elements": 197,
+        "text_nodes": 113,
+        "slots": 113,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 56,
+        "values": 57,
+        "layer_직접": 105,
+        "layer_병기": 8,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "01ffd291016c833c85310a35849a11dd31151bc506a96f2f5aa33b44ad277120"
+    },
+    {
+      "board_id": "2RJ7-1",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+      "state": {
+        "kind": "tab",
+        "parent_board": "137X-2",
+        "control": "금현물",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0I",
+        "base:ka50010",
+        "base:ka50012",
+        "base:ka50079",
+        "base:ka50080",
+        "base:ka50081",
+        "base:ka50082",
+        "base:ka50083",
+        "base:ka50087",
+        "base:ka50091",
+        "base:ka50092",
+        "base:ka50100",
+        "base:ka52301"
+      ],
+      "counts": {
+        "elements": 384,
+        "text_nodes": 191,
+        "slots": 191,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 85,
+        "values": 106,
+        "layer_직접": 164,
+        "layer_병기": 27,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 30,
+        "bs_paired": 48,
+        "bs_leaf": 2,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "0509681587912afa99b8aa8dae0430f62bb7d05f8001e743bc3755d72c51dfe1"
+    },
+    {
+      "board_id": "2ROJ-1",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T3 · 수급 — 프로그램",
+      "state": {
+        "kind": "tab",
+        "parent_board": "2QFO-2",
+        "control": "프로그램",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0w",
+        "base:ka90005",
+        "base:ka90006",
+        "base:ka90007",
+        "base:ka90008",
+        "base:ka90010",
+        "base:ka90013"
+      ],
+      "counts": {
+        "elements": 276,
+        "text_nodes": 179,
+        "slots": 179,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 61,
+        "values": 118,
+        "layer_직접": 178,
+        "layer_병기": 1,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 16,
+        "bs_paired": 25,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "e956666fc62235e0de5b33fd4acde5106ced57bf59bd0c2c67c3695baf4e3a0d"
+    },
+    {
+      "board_id": "2RWK-1",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T4 · 수급 — 신용·대차",
+      "state": {
+        "kind": "tab",
+        "parent_board": "2QFO-2",
+        "control": "신용·대차",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10013",
+        "base:ka10014",
+        "base:ka10068",
+        "base:ka10069",
+        "base:ka20068",
+        "base:ka90008",
+        "base:ka90013"
+      ],
+      "counts": {
+        "elements": 278,
+        "text_nodes": 160,
+        "slots": 160,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 51,
+        "values": 109,
+        "layer_직접": 160,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 30,
+        "bs_paired": 40,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "bc9c55ad90ad4ec4b005feec5762b04e1e944ca291fb43b810a3f6460eda84cb"
+    },
+    {
+      "board_id": "2S4E-1",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T5 · 수급 — 종목 동향",
+      "state": {
+        "kind": "tab",
+        "parent_board": "2QFO-2",
+        "control": "종목 동향",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10008",
+        "base:ka10014",
+        "base:ka10035",
+        "base:ka10044",
+        "base:ka10045",
+        "base:ka10059",
+        "base:ka10061",
+        "base:ka10066",
+        "base:ka10131",
+        "base:ka90009",
+        "base:kt20016"
+      ],
+      "counts": {
+        "elements": 362,
+        "text_nodes": 174,
+        "slots": 174,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 62,
+        "values": 112,
+        "layer_직접": 173,
+        "layer_병기": 1,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 24,
+        "bs_paired": 39,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "ce40c861c65296c3d7430c78f6477dc11b79aaf2cd7323a43599caa26c2af3c7"
+    },
+    {
+      "board_id": "2SCE-1",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+      "state": {
+        "kind": "tab",
+        "parent_board": "133H-2",
+        "control": "보유종목",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:00",
+        "base:04",
+        "base:ka01690",
+        "base:ka10072",
+        "base:ka10073",
+        "base:ka10075",
+        "base:ka10076",
+        "base:ka10077",
+        "base:ka10085",
+        "base:ka10088",
+        "base:ka10170",
+        "base:kt00007",
+        "base:kt00008",
+        "base:kt00015",
+        "base:kt50030",
+        "base:kt50031",
+        "base:kt50075",
+        "detail:kt00004:position_valuation",
+        "detail:kt00005:portfolio_summary",
+        "detail:kt00005:settled_positions",
+        "detail:kt00016:performance_summary",
+        "detail:kt00018:holdings",
+        "detail:kt00018:portfolio_summary"
+      ],
+      "counts": {
+        "elements": 369,
+        "text_nodes": 213,
+        "slots": 213,
+        "anchored_slots": 9,
+        "mapped_slots": 8,
+        "labels": 64,
+        "values": 149,
+        "layer_직접": 148,
+        "layer_병기": 65,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 45,
+        "bs_paired": 85,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "1e0bf9cacd3304de293dcbaea7a32850c7bcedf7842b3c4c58802c29a8364602"
+    },
+    {
+      "board_id": "2SKU-1",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+      "state": {
+        "kind": "tab",
+        "parent_board": "133H-2",
+        "control": "예수금·결제",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka01690",
+        "base:ka10072",
+        "base:ka10073",
+        "base:ka10085",
+        "base:ka10170",
+        "base:kt00002",
+        "base:kt00008",
+        "base:kt00015",
+        "base:kt50021",
+        "detail:kt00001:cash_and_margin",
+        "detail:kt00001:foreign_currency_deposits",
+        "detail:kt00001:loans_and_collateral",
+        "detail:kt00001:receivables_and_arrears",
+        "detail:kt00001:settlement_forecast",
+        "detail:kt00001:special_deposits_and_credit",
+        "detail:kt00001:substitute_collateral",
+        "detail:kt00001:withdrawal_and_order_capacity",
+        "detail:kt00004:cash_and_assets",
+        "detail:kt00005:cash_and_capacity",
+        "detail:kt00005:receivables_and_margin",
+        "detail:kt00010:cash_and_withdrawal_capacity",
+        "detail:kt00010:purchase_settlement",
+        "detail:kt00011:margin_rates",
+        "detail:kt00012:account_and_receivable_capacity",
+        "detail:kt00012:guarantee_rate",
+        "detail:kt00013:cash_resources",
+        "detail:kt00013:substitute_resources",
+        "detail:kt00016:period_flows",
+        "detail:kt00017:d2_account_position",
+        "detail:kt00017:daily_cash_and_trading_flows",
+        "detail:kt00017:other_assets_and_income",
+        "detail:kt00018:portfolio_summary"
+      ],
+      "counts": {
+        "elements": 339,
+        "text_nodes": 199,
+        "slots": 199,
+        "anchored_slots": 9,
+        "mapped_slots": 8,
+        "labels": 85,
+        "values": 114,
+        "layer_직접": 168,
+        "layer_병기": 31,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 44,
+        "bs_paired": 55,
+        "bs_leaf": 5,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 6
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "D+2 정산 후 계좌",
+            "kind": "expand",
+            "boards": [
+              "3MTJ-0"
+            ],
+            "node_id": "3GLA-0",
+            "how": "token"
+          },
+          {
+            "control": "거래내역 상세",
+            "kind": "expand",
+            "boards": [
+              "3LGC-0"
+            ],
+            "node_id": "3UB6-0",
+            "how": "hand"
+          },
+          {
+            "control": "부채·미수·연체 상세",
+            "kind": "expand",
+            "boards": [
+              "3UTA-0"
+            ],
+            "node_id": "3U9Z-0",
+            "how": "partial"
+          },
+          {
+            "control": "예수금 통화별·특수예수금",
+            "kind": "expand",
+            "boards": [
+              "3NVG-0"
+            ],
+            "node_id": "3UA6-0",
+            "how": "hand"
+          },
+          {
+            "control": "증거금 재원·담보 상세",
+            "kind": "expand",
+            "boards": [
+              "3IGR-0"
+            ],
+            "node_id": "3U9L-0",
+            "how": "token"
+          },
+          {
+            "control": "증거금·보증금 구간별",
+            "kind": "expand",
+            "boards": [
+              "3GRO-0"
+            ],
+            "node_id": "3U9S-0",
+            "how": "token"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "6e92a06f3748ec9574a949e7c52c1d4a752baa0dce51b73249ebc389122e6851"
+    },
+    {
+      "board_id": "2SRV-1",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+      "state": {
+        "kind": "tab",
+        "parent_board": "133H-2",
+        "control": "손익·성과",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:00",
+        "base:04",
+        "base:ka10072",
+        "base:ka10073",
+        "base:ka10074",
+        "base:ka10076",
+        "base:ka10077",
+        "base:ka10085",
+        "base:ka10170",
+        "base:kt00007",
+        "base:kt00015",
+        "detail:kt00004:profit_and_loss",
+        "detail:kt00009:order_execution_status",
+        "detail:kt00010:purchase_settlement",
+        "detail:kt00016:account_manager",
+        "detail:kt00016:performance_summary",
+        "detail:kt00017:daily_cash_and_trading_flows",
+        "detail:kt00018:holdings"
+      ],
+      "counts": {
+        "elements": 295,
+        "text_nodes": 170,
+        "slots": 170,
+        "anchored_slots": 9,
+        "mapped_slots": 3,
+        "labels": 61,
+        "values": 109,
+        "layer_직접": 167,
+        "layer_병기": 3,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 32,
+        "bs_paired": 53,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 1
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "이달 기초·기말 구성",
+            "kind": "expand",
+            "boards": [
+              "3K7K-0"
+            ],
+            "node_id": "3UIO-0",
+            "how": "token"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "a080790158fd678169c72124c4fdf6d3973910dd40bc6c622deb21d733a1204a"
+    },
+    {
+      "board_id": "2SYW-1",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+      "state": {
+        "kind": "tab",
+        "parent_board": "133H-2",
+        "control": "주문·체결",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:00",
+        "base:04",
+        "base:ka10075",
+        "base:ka10076",
+        "base:ka10088",
+        "base:ka10170",
+        "base:kt00007",
+        "base:kt00008",
+        "base:kt50030",
+        "base:kt50031",
+        "base:kt50075",
+        "detail:kt00009:contract_amounts",
+        "detail:kt00009:order_execution_status"
+      ],
+      "counts": {
+        "elements": 328,
+        "text_nodes": 189,
+        "slots": 189,
+        "anchored_slots": 9,
+        "mapped_slots": 3,
+        "labels": 96,
+        "values": 93,
+        "layer_직접": 179,
+        "layer_병기": 10,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 30,
+        "bs_paired": 55,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "f35b47ff4eecc1c14750427d6ae73a321f772a1a49b15692d0a9485884db058c"
+    },
+    {
+      "board_id": "2T63-1",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+      "state": {
+        "kind": "tab",
+        "parent_board": "135M-2",
+        "control": "현금 매도",
+        "control_text": "매도"
+      },
+      "operation_refs": [
+        "base:kt10001"
+      ],
+      "counts": {
+        "elements": 151,
+        "text_nodes": 74,
+        "slots": 74,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 51,
+        "values": 23,
+        "layer_직접": 74,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "81fd608cb5b270a7c0e25ebe7eeeebcdd8f5e0b0a92d7ad548c8fc3e517e7930"
+    },
+    {
+      "board_id": "2TAG-1",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+      "state": {
+        "kind": "tab",
+        "parent_board": "135M-2",
+        "control": "정정",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:kt10002",
+        "base:kt10008",
+        "base:kt50002"
+      ],
+      "counts": {
+        "elements": 154,
+        "text_nodes": 76,
+        "slots": 76,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 50,
+        "values": 26,
+        "layer_직접": 76,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "9113230bec7d1919bd4dc330c116ef0acf2723aedce4ff530019fead5e918a61"
+    },
+    {
+      "board_id": "2TET-1",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+      "state": {
+        "kind": "tab",
+        "parent_board": "135M-2",
+        "control": "취소",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:kt10003",
+        "base:kt10009",
+        "base:kt50003"
+      ],
+      "counts": {
+        "elements": 148,
+        "text_nodes": 72,
+        "slots": 72,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 47,
+        "values": 25,
+        "layer_직접": 72,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "3acc2e8a2a917eab67da3dba9e07d376543ebb645f21089196bca5006bc0d017"
+    },
+    {
+      "board_id": "2TJ6-1",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+      "state": {
+        "kind": "tab",
+        "parent_board": "135M-2",
+        "control": "신용 · 매수",
+        "control_text": "신용"
+      },
+      "operation_refs": [
+        "base:kt10006",
+        "base:kt10007"
+      ],
+      "counts": {
+        "elements": 154,
+        "text_nodes": 76,
+        "slots": 76,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 52,
+        "values": 24,
+        "layer_직접": 76,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "6b0be3f4800c476da3f519870f2537eb86f7d6038ca696296e83c91f681c4354"
+    },
+    {
+      "board_id": "2TNJ-1",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가",
+      "state": {
+        "kind": "tab",
+        "parent_board": "135M-2",
+        "control": "금현물 · 매수",
+        "control_text": "금현물"
+      },
+      "operation_refs": [
+        "base:kt50000",
+        "base:kt50001",
+        "base:kt50002",
+        "base:kt50003"
+      ],
+      "counts": {
+        "elements": 151,
+        "text_nodes": 74,
+        "slots": 74,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 50,
+        "values": 24,
+        "layer_직접": 74,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "5074933e93f6db1b00a39153a0c638e28d8279bd987dce4f8c039203ee72bfd0"
+    },
+    {
+      "board_id": "2TRW-1",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02-T4 · 호가 — 정규장 5단",
+      "state": {
+        "kind": "tab",
+        "parent_board": "13BC-2",
+        "control": "정규장 · 5단",
+        "control_text": null
+      },
+      "operation_refs": [
+        "detail:ka10004:after_hours_totals",
+        "detail:ka10004:aggregate_totals"
+      ],
+      "counts": {
+        "elements": 268,
+        "text_nodes": 148,
+        "slots": 148,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 42,
+        "values": 106,
+        "layer_직접": 148,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 61,
+        "bs_paired": 57,
+        "bs_leaf": 20,
+        "bs_kpi_cell": 4,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "efee2b112fb63a5dda48458d9c8ff9dfccaf819ce22ad2631a12834266eb3eff"
+    },
+    {
+      "board_id": "2TZN-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+      "state": {
+        "kind": "tab",
+        "parent_board": "13K0-2",
+        "control": "업종",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0J",
+        "base:0U",
+        "base:ka10010",
+        "base:ka10051",
+        "base:ka10101",
+        "base:ka20003",
+        "detail:ka20001:fifty_two_week_range",
+        "detail:ka20001:intraday_history",
+        "detail:ka20001:market_breadth",
+        "detail:ka20001:market_snapshot",
+        "detail:ka20001:session_range",
+        "detail:ka20009:daily_history",
+        "detail:ka20009:fifty_two_week_range",
+        "detail:ka20009:market_breadth",
+        "detail:ka20009:market_snapshot",
+        "detail:ka20009:session_range"
+      ],
+      "counts": {
+        "elements": 365,
+        "text_nodes": 222,
+        "slots": 222,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 77,
+        "values": 145,
+        "layer_직접": 216,
+        "layer_병기": 6,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 43,
+        "bs_paired": 67,
+        "bs_leaf": 2,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 1
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "업종 목록 펼침",
+            "kind": "expand",
+            "boards": [
+              "3BQB-0"
+            ],
+            "node_id": "3BQ9-0",
+            "how": "token"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "af9b28e533724797ce0cf033dc5c50b05c8c1ee7ba2e92519513d9ce8620e2e9"
+    },
+    {
+      "board_id": "2U5L-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+      "state": {
+        "kind": "tab",
+        "parent_board": "13K0-2",
+        "control": "관심종목 시세 보드",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka01300",
+        "base:ka01301",
+        "base:ka10095"
+      ],
+      "counts": {
+        "elements": 392,
+        "text_nodes": 221,
+        "slots": 221,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 94,
+        "values": 127,
+        "layer_직접": 177,
+        "layer_병기": 44,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 45,
+        "bs_paired": 133,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 1
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "삼성전자 행 펼침",
+            "kind": "expand",
+            "boards": [
+              "3D4I-0"
+            ],
+            "node_id": "3C67-0",
+            "how": "partial"
+          }
+        ],
+        "unresolved": [
+          {
+            "board_id": "3EWN-0",
+            "kind": "expand",
+            "control": "ELW 행 펼침",
+            "reason": "후보 없음"
+          }
+        ]
+      },
+      "html_sha256": "2f2c99d8939d2563530bce90a57ce10e3b0def954a435eb092ada82c9bf0e9b1"
+    },
+    {
+      "board_id": "2UBO-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+      "state": {
+        "kind": "tab",
+        "parent_board": "13K0-2",
+        "control": "테마 등락·확산 탐색",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka90001",
+        "base:ka90002"
+      ],
+      "counts": {
+        "elements": 220,
+        "text_nodes": 134,
+        "slots": 134,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 46,
+        "values": 88,
+        "layer_직접": 122,
+        "layer_병기": 12,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 16,
+        "bs_paired": 25,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "bcd4a7889889569601f5afd246a1deec6044e4f65ed4b8ad7d7867dada9bec16"
+    },
+    {
+      "board_id": "2UHM-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+      "state": {
+        "kind": "tab",
+        "parent_board": "13K0-2",
+        "control": "시장·VI",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0s",
+        "base:1h"
+      ],
+      "counts": {
+        "elements": 211,
+        "text_nodes": 121,
+        "slots": 121,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 64,
+        "values": 57,
+        "layer_직접": 115,
+        "layer_병기": 6,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 20,
+        "bs_paired": 35,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 4,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "c4c19945ffea1fdebe5161a1b046af995647122a4783bce51082be1c562a0425"
+    },
+    {
+      "board_id": "2UN6-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+      "state": {
+        "kind": "tab",
+        "parent_board": "13K0-2",
+        "control": "조건검색",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10171",
+        "base:ka10172",
+        "base:ka10173",
+        "base:ka10174"
+      ],
+      "counts": {
+        "elements": 265,
+        "text_nodes": 142,
+        "slots": 142,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 69,
+        "values": 73,
+        "layer_직접": 129,
+        "layer_병기": 13,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 35,
+        "bs_paired": 47,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "ce29575ff6f1811cdbedd7003ffa4d9109ebe59299e024e39859cac1edf5b1eb"
+    },
+    {
+      "board_id": "2V71-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6 · 수급 — 순위",
+      "state": {
+        "kind": "tab",
+        "parent_board": "2QFO-2",
+        "control": "순위",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10008",
+        "base:ka10014",
+        "base:ka10034",
+        "base:ka10035",
+        "base:ka10043",
+        "base:ka10044",
+        "base:ka10045",
+        "base:ka10053",
+        "base:ka10059",
+        "base:ka10066",
+        "base:ka10078",
+        "base:ka90003",
+        "base:ka90004",
+        "base:ka90008",
+        "base:ka90013",
+        "detail:ka10040:broker_departures"
+      ],
+      "counts": {
+        "elements": 333,
+        "text_nodes": 203,
+        "slots": 203,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 53,
+        "values": 150,
+        "layer_직접": 203,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 54,
+        "bs_paired": 94,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 8
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "대차잔고 많은 순",
+            "kind": "sort",
+            "boards": [
+              "2ZBB-0"
+            ],
+            "node_id": "3E9S-0",
+            "how": "partial"
+          },
+          {
+            "control": "동일순매매",
+            "kind": "sort",
+            "boards": [
+              "31CL-0"
+            ],
+            "node_id": "2WBK-0",
+            "how": "exact"
+          },
+          {
+            "control": "신용비율 높은 순",
+            "kind": "sort",
+            "boards": [
+              "2YS8-0"
+            ],
+            "node_id": "2WAU-0",
+            "how": "token"
+          },
+          {
+            "control": "신용융자 가능",
+            "kind": "sort",
+            "boards": [
+              "31OF-0"
+            ],
+            "node_id": "2WBM-0",
+            "how": "partial"
+          },
+          {
+            "control": "외국인·기관 상위",
+            "kind": "sort",
+            "boards": [
+              "30HY-0"
+            ],
+            "node_id": "2WBG-0",
+            "how": "exact"
+          },
+          {
+            "control": "장중 투자자 상위",
+            "kind": "sort",
+            "boards": [
+              "3063-0"
+            ],
+            "node_id": "2WBD-0",
+            "how": "exact"
+          },
+          {
+            "control": "증권사별 상위",
+            "kind": "sort",
+            "boards": [
+              "30TY-0"
+            ],
+            "node_id": "2WBI-0",
+            "how": "exact"
+          },
+          {
+            "control": "한도소진율 증가",
+            "kind": "sort",
+            "boards": [
+              "2ZTA-0"
+            ],
+            "node_id": "2WBB-0",
+            "how": "exact"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "641c5a2ed23fa730408afbab3b4efb85b9c0123ac525663b14261745439fa156"
+    },
+    {
+      "board_id": "2VDA-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+      "state": {
+        "kind": "tab",
+        "parent_board": "137X-2",
+        "control": "순위",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10016"
+      ],
+      "counts": {
+        "elements": 516,
+        "text_nodes": 319,
+        "slots": 319,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 120,
+        "values": 199,
+        "layer_직접": 259,
+        "layer_병기": 60,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 130,
+        "bs_paired": 170,
+        "bs_leaf": 5,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 9
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "VI 발동",
+            "kind": "sort",
+            "boards": [
+              "31II-0"
+            ],
+            "node_id": "3HMU-0",
+            "how": "exact"
+          },
+          {
+            "control": "가격급등락",
+            "kind": "sort",
+            "boards": [
+              "2ZZ7-0"
+            ],
+            "node_id": "3HMB-0",
+            "how": "exact"
+          },
+          {
+            "control": "거래량갱신",
+            "kind": "sort",
+            "boards": [
+              "30C1-0"
+            ],
+            "node_id": "3HMD-0",
+            "how": "exact"
+          },
+          {
+            "control": "고저 PER",
+            "kind": "sort",
+            "boards": [
+              "30ZW-0"
+            ],
+            "node_id": "3HMQ-0",
+            "how": "exact"
+          },
+          {
+            "control": "고저가근접",
+            "kind": "sort",
+            "boards": [
+              "2ZHC-0"
+            ],
+            "node_id": "3HM9-0",
+            "how": "exact"
+          },
+          {
+            "control": "당일/전일 비율순",
+            "kind": "sort",
+            "boards": [
+              "31UD-0"
+            ],
+            "node_id": "3HMW-0",
+            "how": "hand"
+          },
+          {
+            "control": "매물대집중",
+            "kind": "sort",
+            "boards": [
+              "30O1-0"
+            ],
+            "node_id": "3HMO-0",
+            "how": "exact"
+          },
+          {
+            "control": "상하한가",
+            "kind": "sort",
+            "boards": [
+              "2YXS-0"
+            ],
+            "node_id": "3HM7-0",
+            "how": "exact"
+          },
+          {
+            "control": "시가대비 등락",
+            "kind": "sort",
+            "boards": [
+              "316O-0"
+            ],
+            "node_id": "3HMS-0",
+            "how": "exact"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "bb56ee5133c786bdbe60621afc49c451e27c779ec39c9ddcfc44abf2e16cfc08"
+    },
+    {
+      "board_id": "2VIN-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T5 · 순위 — ETF 전체시세",
+      "state": {
+        "kind": "tab",
+        "parent_board": "137X-2",
+        "control": "순위",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka40004",
+        "base:ka40001"
+      ],
+      "counts": {
+        "elements": 681,
+        "text_nodes": 417,
+        "slots": 417,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 113,
+        "values": 304,
+        "layer_직접": 276,
+        "layer_병기": 141,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 126,
+        "bs_paired": 206,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 1
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "3달 수익률 높은 순",
+            "kind": "sort",
+            "boards": [
+              "2WZK-0"
+            ],
+            "node_id": "3O84-0",
+            "how": "partial"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "af23176681648fd027e5bee317e2806ac6f4f9525d4b49cf9bdb6a9ff5e3c321"
+    },
+    {
+      "board_id": "2VO0-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6 · 순위 — ELW 순위",
+      "state": {
+        "kind": "tab",
+        "parent_board": "137X-2",
+        "control": "순위",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka30010",
+        "base:ka30005"
+      ],
+      "counts": {
+        "elements": 527,
+        "text_nodes": 341,
+        "slots": 341,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 90,
+        "values": 251,
+        "layer_직접": 341,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 126,
+        "bs_paired": 206,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 5
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "가격급등락",
+            "kind": "sort",
+            "boards": [
+              "2Y47-0"
+            ],
+            "node_id": "2W5T-0",
+            "how": "exact"
+          },
+          {
+            "control": "거래원별 순매매",
+            "kind": "sort",
+            "boards": [
+              "2Z49-0"
+            ],
+            "node_id": "2W5V-0",
+            "how": "exact"
+          },
+          {
+            "control": "근접률",
+            "kind": "sort",
+            "boards": [
+              "2XY6-0"
+            ],
+            "node_id": "2W5R-0",
+            "how": "exact"
+          },
+          {
+            "control": "등락률",
+            "kind": "sort",
+            "boards": [
+              "2XA5-0"
+            ],
+            "node_id": "2W5P-0",
+            "how": "exact"
+          },
+          {
+            "control": "조건검색",
+            "kind": "sort",
+            "boards": [
+              "2ZN9-0"
+            ],
+            "node_id": "2W5X-0",
+            "how": "exact"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "0e11ae76ee8bb49221a436e163ae9d5f9b5e4e54c2cf5dfb6e7c981f56e694a0"
+    },
+    {
+      "board_id": "2WZK-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VIN-0",
+        "control": "3달 수익률 높은 순",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka40001",
+        "base:ka40002",
+        "base:ka40004"
+      ],
+      "counts": {
+        "elements": 321,
+        "text_nodes": 239,
+        "slots": 239,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 38,
+        "values": 201,
+        "layer_직접": 238,
+        "layer_병기": 1,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "1c74c440859c764ffcab37dd0564ee454aa69df5b9b99fcef871dc6d3335a52a"
+    },
+    {
+      "board_id": "2X5N-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+      "state": {
+        "kind": "sort",
+        "parent_board": "13K0-2",
+        "control": "당일 거래량",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10030"
+      ],
+      "counts": {
+        "elements": 245,
+        "text_nodes": 144,
+        "slots": 144,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 71,
+        "values": 73,
+        "layer_직접": 139,
+        "layer_병기": 5,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 12,
+        "bs_paired": 12,
+        "bs_leaf": 4,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "411537f98addc88d68143327875e82a8803d3847897a0dabb94e321ecb07fa11"
+    },
+    {
+      "board_id": "2XA5-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VO0-0",
+        "control": "등락률",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka30001",
+        "base:ka30004",
+        "base:ka30005",
+        "base:ka30009",
+        "base:ka30011"
+      ],
+      "counts": {
+        "elements": 527,
+        "text_nodes": 341,
+        "slots": 341,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 86,
+        "values": 255,
+        "layer_직접": 241,
+        "layer_병기": 100,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 126,
+        "bs_paired": 206,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "6daece0cc578d2fff8f3b95c70f247974b60e8d960be009adfe571cbc74b28dc"
+    },
+    {
+      "board_id": "2XG6-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+      "state": {
+        "kind": "sort",
+        "parent_board": "13K0-2",
+        "control": "전일 거래량",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10031",
+        "base:ka10099"
+      ],
+      "counts": {
+        "elements": 286,
+        "text_nodes": 160,
+        "slots": 160,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 70,
+        "values": 90,
+        "layer_직접": 143,
+        "layer_병기": 17,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "6117b4d538d849498032b7c0693519b76e8777b8088d56b3b214cf7e0bddb9a2"
+    },
+    {
+      "board_id": "2XKO-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S4 · 종목찾기 — 등락률",
+      "state": {
+        "kind": "sort",
+        "parent_board": "13K0-2",
+        "control": "등락률",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10027"
+      ],
+      "counts": {
+        "elements": 301,
+        "text_nodes": 165,
+        "slots": 165,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 76,
+        "values": 89,
+        "layer_직접": 153,
+        "layer_병기": 12,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "297d1d77071d5fe9de524fde2c7bedc32f930afbb5ee181ef2e3301640691b9e"
+    },
+    {
+      "board_id": "2XP6-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+      "state": {
+        "kind": "sort",
+        "parent_board": "13K0-2",
+        "control": "예상체결 등락률",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10029"
+      ],
+      "counts": {
+        "elements": 283,
+        "text_nodes": 160,
+        "slots": 160,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 70,
+        "values": 90,
+        "layer_직접": 143,
+        "layer_병기": 17,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "e0e1051647c835641d82ac38afe1cfb88222082a6d74a7bc66b25f87f5eed5fb"
+    },
+    {
+      "board_id": "2XTO-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+      "state": {
+        "kind": "sort",
+        "parent_board": "13K0-2",
+        "control": "호가잔량 상위",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10020"
+      ],
+      "counts": {
+        "elements": 298,
+        "text_nodes": 166,
+        "slots": 166,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 71,
+        "values": 95,
+        "layer_직접": 149,
+        "layer_병기": 17,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "23946513e61fc6c7bcb9db446069ea1600a49a3821f1e25906e6656c84f5f65d"
+    },
+    {
+      "board_id": "2XY6-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VO0-0",
+        "control": "근접률",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka30001",
+        "base:ka30004",
+        "base:ka30005",
+        "base:ka30009",
+        "base:ka30011"
+      ],
+      "counts": {
+        "elements": 527,
+        "text_nodes": 341,
+        "slots": 341,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 86,
+        "values": 255,
+        "layer_직접": 241,
+        "layer_병기": 100,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 126,
+        "bs_paired": 206,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "c3747667a46fd63fb073560e995f54913f148e88e044770ae0c183c76d6a9944"
+    },
+    {
+      "board_id": "2Y47-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VO0-0",
+        "control": "가격급등락",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka30001",
+        "base:ka30004",
+        "base:ka30005",
+        "base:ka30009",
+        "base:ka30011"
+      ],
+      "counts": {
+        "elements": 527,
+        "text_nodes": 341,
+        "slots": 341,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 85,
+        "values": 256,
+        "layer_직접": 241,
+        "layer_병기": 100,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 126,
+        "bs_paired": 206,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "ed6de407052ccf472c4c080693878f915351a90567dea5f74c616dbec98e8b6d"
+    },
+    {
+      "board_id": "2YA8-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+      "state": {
+        "kind": "sort",
+        "parent_board": "13K0-2",
+        "control": "호가잔량 급증",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10021"
+      ],
+      "counts": {
+        "elements": 288,
+        "text_nodes": 161,
+        "slots": 161,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 70,
+        "values": 91,
+        "layer_직접": 144,
+        "layer_병기": 17,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "ba21f50dfbfc67a995620b85cbba52254b9171231b7fb7ff59c20653c7763c9c"
+    },
+    {
+      "board_id": "2YEQ-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S8 · 종목찾기 — 잔량률 급증",
+      "state": {
+        "kind": "sort",
+        "parent_board": "13K0-2",
+        "control": "잔량률 급증",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10022"
+      ],
+      "counts": {
+        "elements": 288,
+        "text_nodes": 161,
+        "slots": 161,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 71,
+        "values": 90,
+        "layer_직접": 144,
+        "layer_병기": 17,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "3e25f7a0bc2e4d1bee2b42c9663a0e3f586d4653cd18085d01ddf9e6114d1d0c"
+    },
+    {
+      "board_id": "2YJ8-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+      "state": {
+        "kind": "sort",
+        "parent_board": "13K0-2",
+        "control": "거래량 급증",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10023"
+      ],
+      "counts": {
+        "elements": 286,
+        "text_nodes": 160,
+        "slots": 160,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 69,
+        "values": 91,
+        "layer_직접": 143,
+        "layer_병기": 17,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "80dc5c714c8e62b799a0d116a38d20134bc5d225da05e9e38a74fe824ba486a8"
+    },
+    {
+      "board_id": "2YNQ-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+      "state": {
+        "kind": "sort",
+        "parent_board": "13K0-2",
+        "control": "시간외 등락률",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10098"
+      ],
+      "counts": {
+        "elements": 290,
+        "text_nodes": 159,
+        "slots": 159,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 69,
+        "values": 90,
+        "layer_직접": 142,
+        "layer_병기": 17,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "98ac9e1227c3dc7193b8403440ffa114e7c24c3d1c9d490cccbb3251002427d0"
+    },
+    {
+      "board_id": "2YS8-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2V71-0",
+        "control": "신용비율 높은 순",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10013",
+        "base:ka10033"
+      ],
+      "counts": {
+        "elements": 336,
+        "text_nodes": 197,
+        "slots": 197,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 58,
+        "values": 139,
+        "layer_직접": 197,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 54,
+        "bs_paired": 94,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "5fdd8bb1cda8450a150ed048a5ae8218d1b241190272fcbb88f30c8d05973daa"
+    },
+    {
+      "board_id": "2YXS-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-2 · 순위 — 상하한가",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VDA-0",
+        "control": "상하한가",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10017"
+      ],
+      "counts": {
+        "elements": 625,
+        "text_nodes": 377,
+        "slots": 377,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 111,
+        "values": 266,
+        "layer_직접": 263,
+        "layer_병기": 114,
+        "layer_펼침": 0,
+        "tables": 3,
+        "tree_text_truncated": 0,
+        "bs_col": 129,
+        "bs_paired": 224,
+        "bs_leaf": 10,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "b9889d26a578d28c067040d370e0e8bd2ace182a35dc973c794e1c09b5ceec00"
+    },
+    {
+      "board_id": "2Z49-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VO0-0",
+        "control": "거래원별 순매매",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka30002"
+      ],
+      "counts": {
+        "elements": 295,
+        "text_nodes": 189,
+        "slots": 189,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 71,
+        "values": 118,
+        "layer_직접": 155,
+        "layer_병기": 34,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 66,
+        "bs_paired": 94,
+        "bs_leaf": 8,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 1
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "ELW 거래원별 10창구 전체",
+            "kind": "expand",
+            "boards": [
+              "3TOM-0"
+            ],
+            "node_id": "3T2T-0",
+            "how": "partial"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "c96012562a0f22a2d023e504f842d832dfb9bf7214bbabfa350b85e4d9e89ce2"
+    },
+    {
+      "board_id": "2ZBB-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-3 · 순위 — 대차 상위",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2V71-0",
+        "control": "대차잔고 많은 순",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10068",
+        "base:ka10069",
+        "base:ka20068",
+        "base:ka90012"
+      ],
+      "counts": {
+        "elements": 329,
+        "text_nodes": 193,
+        "slots": 193,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 56,
+        "values": 137,
+        "layer_직접": 193,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 54,
+        "bs_paired": 94,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "d37d5ccadc1e8164491d5f8c6837f25d055f93d3d6a70eb090c99ac1f5e2951f"
+    },
+    {
+      "board_id": "2ZHC-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VDA-0",
+        "control": "고저가근접",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10018"
+      ],
+      "counts": {
+        "elements": 594,
+        "text_nodes": 378,
+        "slots": 378,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 102,
+        "values": 276,
+        "layer_직접": 258,
+        "layer_병기": 120,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 130,
+        "bs_paired": 230,
+        "bs_leaf": 5,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "261a2f3f31aed861c895a092af0481b626ba4458781f6085e74fd526183af57a"
+    },
+    {
+      "board_id": "2ZN9-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VO0-0",
+        "control": "조건검색",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka30005"
+      ],
+      "counts": {
+        "elements": 319,
+        "text_nodes": 193,
+        "slots": 193,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 62,
+        "values": 131,
+        "layer_직접": 144,
+        "layer_병기": 49,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 54,
+        "bs_paired": 94,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "2686967a3ec0fe6c0e1613ee82915eb72e9af49e13d779a47ee771a17909e3aa"
+    },
+    {
+      "board_id": "2ZTA-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2V71-0",
+        "control": "한도소진율 증가",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10008",
+        "base:ka10034",
+        "base:ka10035",
+        "base:ka10036"
+      ],
+      "counts": {
+        "elements": 322,
+        "text_nodes": 189,
+        "slots": 189,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 67,
+        "values": 122,
+        "layer_직접": 189,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 54,
+        "bs_paired": 94,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "2dcce60784e07621f06a98006a480fbb930a23c1dae507bde2949efd2ccfcda0"
+    },
+    {
+      "board_id": "2ZZ7-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-4 · 순위 — 가격급등락",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VDA-0",
+        "control": "가격급등락",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10019"
+      ],
+      "counts": {
+        "elements": 453,
+        "text_nodes": 297,
+        "slots": 297,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 91,
+        "values": 206,
+        "layer_직접": 233,
+        "layer_병기": 64,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 107,
+        "bs_paired": 155,
+        "bs_leaf": 6,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "f5fda4fecd729264b2a01def0d3509e9396f63bd008ddc27d49c9e3c3230146e"
+    },
+    {
+      "board_id": "3063-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2V71-0",
+        "control": "장중 투자자 상위",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10058",
+        "base:ka10063",
+        "base:ka10065"
+      ],
+      "counts": {
+        "elements": 388,
+        "text_nodes": 237,
+        "slots": 237,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 68,
+        "values": 169,
+        "layer_직접": 237,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 64,
+        "bs_paired": 120,
+        "bs_leaf": 2,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "39910911cf131311764653618236b510f1b1c4c78d47b60b4bcb39ea82fb4c83"
+    },
+    {
+      "board_id": "30C1-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VDA-0",
+        "control": "거래량갱신",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10024"
+      ],
+      "counts": {
+        "elements": 557,
+        "text_nodes": 362,
+        "slots": 362,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 105,
+        "values": 257,
+        "layer_직접": 262,
+        "layer_병기": 100,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 4,
+        "bs_paired": 4,
+        "bs_leaf": 4,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "95e6eb29f8f5215c53cd51135a85c5016a313e578e492f16c608b413c2fb7751"
+    },
+    {
+      "board_id": "30HY-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2V71-0",
+        "control": "외국인·기관 상위",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10131",
+        "base:ka90009"
+      ],
+      "counts": {
+        "elements": 323,
+        "text_nodes": 189,
+        "slots": 189,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 56,
+        "values": 133,
+        "layer_직접": 189,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "145392fbe9a158240103da1a1930c437e80c615e65617034099efacc3f96f2bf"
+    },
+    {
+      "board_id": "30O1-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VDA-0",
+        "control": "매물대집중",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10025"
+      ],
+      "counts": {
+        "elements": 488,
+        "text_nodes": 275,
+        "slots": 275,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 84,
+        "values": 191,
+        "layer_직접": 199,
+        "layer_병기": 76,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 120,
+        "bs_paired": 158,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "ecaa40b7cfbfa20b44b347ddb20035aec8fedb5dedc6f27c71a1ccc49ca97c19"
+    },
+    {
+      "board_id": "30TY-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2V71-0",
+        "control": "증권사별 상위",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10037",
+        "base:ka10038",
+        "base:ka10039",
+        "base:ka10078"
+      ],
+      "counts": {
+        "elements": 355,
+        "text_nodes": 208,
+        "slots": 208,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 64,
+        "values": 144,
+        "layer_직접": 208,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 54,
+        "bs_paired": 94,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "62bb5911bd350e0a2ff38515b3a1610b326df9dbef335785bd71affd496b1cbe"
+    },
+    {
+      "board_id": "30ZW-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-7 · 순위 — 고저 PER",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VDA-0",
+        "control": "고저 PER",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10026",
+        "base:ka10028"
+      ],
+      "counts": {
+        "elements": 545,
+        "text_nodes": 324,
+        "slots": 324,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 91,
+        "values": 233,
+        "layer_직접": 229,
+        "layer_병기": 95,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 120,
+        "bs_paired": 196,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "05d2057f3e32820a441d8b587b826014806b44aa349701639b8eef4c1bebda3f"
+    },
+    {
+      "board_id": "316O-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-8 · 순위 — 시가대비 등락",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VDA-0",
+        "control": "시가대비 등락",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10026",
+        "base:ka10028"
+      ],
+      "counts": {
+        "elements": 510,
+        "text_nodes": 334,
+        "slots": 334,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 102,
+        "values": 232,
+        "layer_직접": 254,
+        "layer_병기": 80,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 126,
+        "bs_paired": 186,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "600ca789e9d88216e1cd99358cef622a66638f4efbe6f50a724ae8b00c0a2bd5"
+    },
+    {
+      "board_id": "31CL-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-8 · 순위 — 동일순매매",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2V71-0",
+        "control": "동일순매매",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10062"
+      ],
+      "counts": {
+        "elements": 323,
+        "text_nodes": 189,
+        "slots": 189,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 56,
+        "values": 133,
+        "layer_직접": 189,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 54,
+        "bs_paired": 94,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "00f0e67a9de647a1f94e8b496c7dc34e51a5b2dc35b5c839274afec3b10bdc50"
+    },
+    {
+      "board_id": "31II-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-9 · 순위 — VI 발동",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VDA-0",
+        "control": "VI 발동",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10054"
+      ],
+      "counts": {
+        "elements": 288,
+        "text_nodes": 164,
+        "slots": 164,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 64,
+        "values": 100,
+        "layer_직접": 164,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 42,
+        "bs_paired": 72,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 1
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "VI 발동 전체 12건",
+            "kind": "expand",
+            "boards": [
+              "3TCO-0"
+            ],
+            "node_id": "31K7-0",
+            "how": "partial"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "c11d3e883119ceb9276c2b62afa2aca3a4156ebc9d51057334a70f62dd492068"
+    },
+    {
+      "board_id": "31OF-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2V71-0",
+        "control": "신용융자 가능",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:kt20016",
+        "base:kt20017"
+      ],
+      "counts": {
+        "elements": 283,
+        "text_nodes": 162,
+        "slots": 162,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 67,
+        "values": 95,
+        "layer_직접": 162,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 54,
+        "bs_paired": 63,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "831c744c02373fe02589a492a3a6c6e1c5d2b9136a8257ac03d4c203acfb3453"
+    },
+    {
+      "board_id": "31UD-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+      "state": {
+        "kind": "sort",
+        "parent_board": "2VDA-0",
+        "control": "당일/전일 비율순",
+        "control_text": "당일·전일 체결량"
+      },
+      "operation_refs": [
+        "base:ka10055"
+      ],
+      "counts": {
+        "elements": 441,
+        "text_nodes": 290,
+        "slots": 290,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 89,
+        "values": 201,
+        "layer_직접": 232,
+        "layer_병기": 58,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 120,
+        "bs_paired": 158,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "5be300f5a9790ac7a8d933f3281df630a244fed9a4c192bf00ed6f03703b2863"
+    },
+    {
+      "board_id": "32S7-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T7 · 차트 — 업종 지수",
+      "state": {
+        "kind": "tab",
+        "parent_board": "137X-2",
+        "control": "차트",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka20004",
+        "base:ka20005",
+        "base:ka20006",
+        "base:ka20007",
+        "base:ka20008",
+        "base:ka20019"
+      ],
+      "counts": {
+        "elements": 201,
+        "text_nodes": 71,
+        "slots": 71,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 36,
+        "values": 35,
+        "layer_직접": 71,
+        "layer_병기": 0,
+        "layer_펼침": 0,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "31203427bbb6f8ab248db0065aeb4343a458043919ea5319a95be0193537891e"
+    },
+    {
+      "board_id": "32XM-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+      "state": {
+        "kind": "tab",
+        "parent_board": "137X-2",
+        "control": "순위",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10011"
+      ],
+      "counts": {
+        "elements": 391,
+        "text_nodes": 251,
+        "slots": 251,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 42,
+        "values": 209,
+        "layer_직접": 167,
+        "layer_병기": 84,
+        "layer_펼침": 0,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 90,
+        "bs_paired": 146,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "ad2543eda2047d14dc501a9255af97aef0d668508e2c7eaf1a46d9d6e3a64059"
+    },
+    {
+      "board_id": "3BQB-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2TZN-1",
+        "control": "업종 목록 펼침",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:0J",
+        "base:ka10101"
+      ],
+      "counts": {
+        "elements": 133,
+        "text_nodes": 74,
+        "slots": 74,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 38,
+        "values": 36,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 74,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "4d09e06589adf2611b6de1bf78b9fc5dc242cdb969a6210d90fc85d93b973343"
+    },
+    {
+      "board_id": "3D4I-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2U5L-1",
+        "control": "삼성전자 행 펼침",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10095"
+      ],
+      "counts": {
+        "elements": 224,
+        "text_nodes": 127,
+        "slots": 127,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 65,
+        "values": 62,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 127,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 11,
+        "bs_paired": 11,
+        "bs_leaf": 11,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "7f47acc957955a0cffa072a466136d64d33339775f9709fabac15ef0cdfa0176"
+    },
+    {
+      "board_id": "3DI2-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-X · 투자자 12주체",
+      "state": {
+        "kind": "expand",
+        "parent_board": "137X-2",
+        "control": "투자자 12주체",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10060",
+        "base:ka10064"
+      ],
+      "counts": {
+        "elements": 297,
+        "text_nodes": 220,
+        "slots": 220,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 66,
+        "values": 154,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 220,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "e874992e84e97adb0f528c7a8a42780524039f5bb10583b82cc90e0660a8a9fa"
+    },
+    {
+      "board_id": "3DZ1-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R08-X · ELW 바스켓·만기평가",
+      "state": {
+        "kind": "expand",
+        "parent_board": "15P5-2",
+        "control": "ELW 바스켓·만기평가",
+        "control_text": null
+      },
+      "operation_refs": [
+        "detail:ka30012:administration",
+        "detail:ka30012:evaluation_extrema",
+        "detail:ka30012:underlying_basket",
+        "detail:ka30012:valuation_and_rights"
+      ],
+      "counts": {
+        "elements": 126,
+        "text_nodes": 77,
+        "slots": 77,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 50,
+        "values": 27,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 77,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 12,
+        "bs_paired": 12,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 8,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "c733b6b4ca4c46c0d0d52d1dbf08f2703b6cc9aafe61709608e4c405c9220633"
+    },
+    {
+      "board_id": "3EWN-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2U5L-1",
+        "control": "ELW 행 펼침",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10095"
+      ],
+      "counts": {
+        "elements": 231,
+        "text_nodes": 128,
+        "slots": 128,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 60,
+        "values": 68,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 128,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 6,
+        "bs_paired": 6,
+        "bs_leaf": 6,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "7809f7fed26e40fa3176e08de616ede8ba0e51d9b926d59f7b64726baaf6724b"
+    },
+    {
+      "board_id": "3FR6-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T1-X · 분봉 시세",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2R3M-1",
+        "control": "분봉 시세",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10005",
+        "base:ka10006"
+      ],
+      "counts": {
+        "elements": 298,
+        "text_nodes": 213,
+        "slots": 213,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 53,
+        "values": 160,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 213,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 90,
+        "bs_paired": 106,
+        "bs_leaf": 18,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "d263e8f6e17558b7333a2e86a2856fa4247ec97331602f317162bcab45b4b247"
+    },
+    {
+      "board_id": "3GRO-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2SKU-1",
+        "control": "증거금·보증금 구간별",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:00",
+        "base:ka01690",
+        "detail:kt00001:loans_and_collateral",
+        "detail:kt00001:settlement_forecast",
+        "detail:kt00001:withdrawal_and_order_capacity",
+        "detail:kt00004:cash_and_assets",
+        "detail:kt00004:position_valuation",
+        "detail:kt00005:cash_and_capacity",
+        "detail:kt00010:cash_and_withdrawal_capacity",
+        "detail:kt00010:margin_order_capacity",
+        "detail:kt00011:margin_capacity_20_to_50",
+        "detail:kt00011:margin_capacity_60_to_cash_only",
+        "detail:kt00012:account_and_receivable_capacity",
+        "detail:kt00012:guarantee_order_capacity"
+      ],
+      "counts": {
+        "elements": 224,
+        "text_nodes": 116,
+        "slots": 116,
+        "anchored_slots": 9,
+        "mapped_slots": 8,
+        "labels": 39,
+        "values": 77,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 116,
+        "tables": 2,
+        "tree_text_truncated": 0,
+        "bs_col": 31,
+        "bs_paired": 31,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "4bafe6b84295651b6a94b9310a3f556e7edede397b6db2a7d7bca7aea0438408"
+    },
+    {
+      "board_id": "3IGR-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2SKU-1",
+        "control": "증거금 재원·담보 상세",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:00",
+        "base:ka01690",
+        "detail:kt00001:cash_and_margin",
+        "detail:kt00001:settlement_forecast",
+        "detail:kt00001:substitute_collateral",
+        "detail:kt00004:cash_and_assets",
+        "detail:kt00004:position_valuation",
+        "detail:kt00005:cash_and_capacity",
+        "detail:kt00013:cash_resources",
+        "detail:kt00013:credit_and_lending_collateral",
+        "detail:kt00013:previous_day_reuse",
+        "detail:kt00013:repayment_losses",
+        "detail:kt00013:substitute_resources",
+        "detail:kt00013:substitute_valuation_and_limits",
+        "detail:kt00013:today_reuse"
+      ],
+      "counts": {
+        "elements": 264,
+        "text_nodes": 139,
+        "slots": 139,
+        "anchored_slots": 9,
+        "mapped_slots": 8,
+        "labels": 80,
+        "values": 59,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 139,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 4,
+        "bs_paired": 4,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "0ac18f2d214c6f0d981a66e93e10863c5e0bb44260a68adb1230b4d5c5c885a3"
+    },
+    {
+      "board_id": "3JT4-0",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2QRP-1",
+        "control": "시간외 단일가 단계별 낱값",
+        "control_text": null
+      },
+      "operation_refs": [
+        "detail:ka10087:buy_bid_changes",
+        "detail:ka10087:sell_bid_changes"
+      ],
+      "counts": {
+        "elements": 226,
+        "text_nodes": 123,
+        "slots": 123,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 38,
+        "values": 85,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 123,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 13,
+        "bs_paired": 29,
+        "bs_leaf": 3,
+        "bs_kpi_cell": 4,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "1d8018c0268e793bfa70f0998175da4e5e1ce58d80b32765c2eed05b8adbdd7e"
+    },
+    {
+      "board_id": "3JZ3-0",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+      "state": {
+        "kind": "expand",
+        "parent_board": "13BC-2",
+        "control": "단계별 낱값·거래소별",
+        "control_text": "호가 잔량"
+      },
+      "operation_refs": [
+        "base:0D"
+      ],
+      "counts": {
+        "elements": 368,
+        "text_nodes": 238,
+        "slots": 238,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 65,
+        "values": 173,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 238,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 115,
+        "bs_paired": 115,
+        "bs_leaf": 21,
+        "bs_kpi_cell": 4,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "abdced098a41747f3e48ad6902fb9fbf7816065d3acc368464db990f0eef559e"
+    },
+    {
+      "board_id": "3K7K-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2SRV-1",
+        "control": "이달 기초·기말 구성",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:04",
+        "base:ka10085",
+        "base:kt00002",
+        "base:kt50021",
+        "detail:kt00001:loans_and_collateral",
+        "detail:kt00001:receivables_and_arrears",
+        "detail:kt00005:receivables_and_margin",
+        "detail:kt00016:asset_balance_change",
+        "detail:kt00016:liability_balance_change",
+        "detail:kt00016:period_flows",
+        "detail:kt00017:other_assets_and_income",
+        "detail:kt00018:financing_summary"
+      ],
+      "counts": {
+        "elements": 238,
+        "text_nodes": 148,
+        "slots": 148,
+        "anchored_slots": 7,
+        "mapped_slots": 3,
+        "labels": 64,
+        "values": 84,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 148,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "5157e1a967e64e48be3becdb96190fbcdf1b0a63a7d616007ae5ccf48d6a4e26"
+    },
+    {
+      "board_id": "3LGC-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X3 · 거래내역 상세",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2SKU-1",
+        "control": "거래내역 상세",
+        "control_text": "수표 입금·증권 입고·증권 출고"
+      },
+      "operation_refs": [
+        "base:00",
+        "base:ka01690",
+        "base:kt00007",
+        "base:kt00015",
+        "detail:kt00001:settlement_forecast",
+        "detail:kt00004:cash_and_assets",
+        "detail:kt00004:position_valuation",
+        "detail:kt00005:cash_and_capacity",
+        "detail:kt00009:order_execution_status"
+      ],
+      "counts": {
+        "elements": 359,
+        "text_nodes": 191,
+        "slots": 191,
+        "anchored_slots": 9,
+        "mapped_slots": 8,
+        "labels": 100,
+        "values": 91,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 191,
+        "tables": 1,
+        "tree_text_truncated": 1,
+        "bs_col": 30,
+        "bs_paired": 34,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "853d7baaea14f81cb55156cec7f336d9091653adb4e506d16a153c44c5b1f080"
+    },
+    {
+      "board_id": "3MTJ-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2SKU-1",
+        "control": "D+2 정산 후 계좌",
+        "control_text": null
+      },
+      "operation_refs": [
+        "detail:kt00017:d2_account_position"
+      ],
+      "counts": {
+        "elements": 223,
+        "text_nodes": 119,
+        "slots": 119,
+        "anchored_slots": 7,
+        "mapped_slots": 3,
+        "labels": 50,
+        "values": 69,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 119,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 20,
+        "bs_paired": 24,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "ac325494351e168f845eaab78a7b8f4a979dfb0c3999d0d5399a79f126b733e7"
+    },
+    {
+      "board_id": "3N4O-0",
+      "card_id": "CC-04",
+      "name": "A04-X · 호가 정본 — 단계별 낱값",
+      "state": {
+        "kind": "expand",
+        "parent_board": "1JPU-0",
+        "control": "단계별 낱값",
+        "control_text": "매도·매수 총잔량"
+      },
+      "operation_refs": [
+        "detail:ka10004:buy_bid_changes",
+        "detail:ka10004:sell_bid_changes",
+        "detail:ka10007:bid_changes",
+        "detail:ka10007:liquidity_provider",
+        "detail:ka10007:order_counts"
+      ],
+      "counts": {
+        "elements": 259,
+        "text_nodes": 190,
+        "slots": 190,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 42,
+        "values": 148,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 190,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "4d878336c97180b510a45498b3194cbaa7d709c21e9b7f52cd0674628a4f1db0"
+    },
+    {
+      "board_id": "3NVG-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2SKU-1",
+        "control": "예수금 통화별·특수예수금",
+        "control_text": "외화예수금"
+      },
+      "operation_refs": [
+        "base:kt50021",
+        "detail:kt00001:foreign_currency_deposits",
+        "detail:kt00001:special_deposits_and_credit",
+        "detail:kt00017:daily_cash_and_trading_flows",
+        "detail:kt00001:cash_and_margin",
+        "detail:kt00001:withdrawal_and_order_capacity"
+      ],
+      "counts": {
+        "elements": 180,
+        "text_nodes": 99,
+        "slots": 99,
+        "anchored_slots": 9,
+        "mapped_slots": 3,
+        "labels": 49,
+        "values": 50,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 99,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 11,
+        "bs_paired": 13,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "709d04b98a95645a74ba2541fed530b0991aab37f9aeb63542d96201607e3ff4"
+    },
+    {
+      "board_id": "3ODO-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
+      "state": {
+        "kind": "expand",
+        "parent_board": "133H-2",
+        "control": "금현물 잔고·거래내역",
+        "control_text": null
+      },
+      "operation_refs": [
+        "detail:kt50020:gold_account_summary",
+        "detail:kt50020:gold_holdings",
+        "detail:kt50032:account_identity",
+        "detail:kt50032:gold_trade_history"
+      ],
+      "counts": {
+        "elements": 227,
+        "text_nodes": 136,
+        "slots": 136,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 73,
+        "values": 63,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 136,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 16,
+        "bs_paired": 25,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 1
+      },
+      "state_controls": {
+        "marks": [
+          {
+            "control": "금현물 주문·체결",
+            "kind": "expand",
+            "boards": [
+              "3OIM-0"
+            ],
+            "node_id": "3P0B-0",
+            "how": "exact"
+          }
+        ],
+        "unresolved": []
+      },
+      "html_sha256": "602e08aee583c3a73ec3bc09a8c3df47f64ae17232f9527a2c05729ad5a6d891"
+    },
+    {
+      "board_id": "3OIM-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-B-X2 · 금현물 주문·체결",
+      "state": {
+        "kind": "expand",
+        "parent_board": "3ODO-0",
+        "control": "금현물 주문·체결",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:kt50030",
+        "base:kt50031",
+        "base:kt50075"
+      ],
+      "counts": {
+        "elements": 198,
+        "text_nodes": 120,
+        "slots": 120,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 70,
+        "values": 50,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 120,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 20,
+        "bs_paired": 33,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "56075cba73aaf02bbe1e7ea4e164e22866c3c3fd66d333909fae859c1a2b1511"
+    },
+    {
+      "board_id": "3TCO-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+      "state": {
+        "kind": "expand",
+        "parent_board": "31II-0",
+        "control": "VI 발동 전체 12건",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka10054"
+      ],
+      "counts": {
+        "elements": 407,
+        "text_nodes": 240,
+        "slots": 240,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 71,
+        "values": 169,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 240,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 78,
+        "bs_paired": 138,
+        "bs_leaf": 1,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "0bfd8ae2b724d10bc91cd0a1dfe19160efbcda4a480157a2fc44622a45b31645"
+    },
+    {
+      "board_id": "3TOM-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2Z49-0",
+        "control": "ELW 거래원별 10창구 전체",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:ka30002"
+      ],
+      "counts": {
+        "elements": 279,
+        "text_nodes": 180,
+        "slots": 180,
+        "anchored_slots": 0,
+        "mapped_slots": 0,
+        "labels": 64,
+        "values": 116,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 180,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 66,
+        "bs_paired": 96,
+        "bs_leaf": 11,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "1f26932fb997bf246ee3240123cc0cb0c19cb94815fe1f2cd436a46a1873e322"
+    },
+    {
+      "board_id": "3UTA-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+      "state": {
+        "kind": "expand",
+        "parent_board": "2SKU-1",
+        "control": "부채·미수·연체 상세",
+        "control_text": null
+      },
+      "operation_refs": [
+        "base:04",
+        "base:ka10085",
+        "base:kt00002",
+        "base:kt00015",
+        "base:kt50021",
+        "detail:kt00001:loans_and_collateral",
+        "detail:kt00001:receivables_and_arrears",
+        "detail:kt00004:cash_and_assets",
+        "detail:kt00005:credit_and_collateral",
+        "detail:kt00005:receivables_and_margin",
+        "detail:kt00017:other_assets_and_income",
+        "detail:kt00018:financing_summary"
+      ],
+      "counts": {
+        "elements": 215,
+        "text_nodes": 139,
+        "slots": 139,
+        "anchored_slots": 7,
+        "mapped_slots": 3,
+        "labels": 96,
+        "values": 43,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 139,
+        "tables": 4,
+        "tree_text_truncated": 0,
+        "bs_col": 31,
+        "bs_paired": 31,
+        "bs_leaf": 31,
+        "bs_kpi_cell": 5,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "c17f94cb28ef055d40ee0cd9ab684c24de98a7188d08fe028bd9d1933860106a"
+    }
+  ],
+  "state_controls": {
+    "resolved": 81,
+    "unresolved_count": 2,
+    "unresolved": [
+      {
+        "board_id": "3EWN-0",
+        "kind": "expand",
+        "control": "ELW 행 펼침",
+        "reason": "후보 없음"
+      },
+      {
+        "board_id": "3ODO-0",
+        "kind": "expand",
+        "control": "금현물 잔고·거래내역",
+        "reason": "후보 없음"
+      }
+    ]
+  }
+}

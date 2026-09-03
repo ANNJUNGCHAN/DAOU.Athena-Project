@@ -1,0 +1,13 @@
+{
+  "board_id": "135M-2",
+  "name": "CC-02 / R11 · 삼성전자 10주 시장가 매수",
+  "card_id": "CC-02",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "saved_at": "2026-09-02T10:49:06Z"
+}

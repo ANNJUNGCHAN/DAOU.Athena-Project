@@ -1,0 +1,11 @@
+{
+  "root": "3JT5-0",
+  "regions": [
+    { "node_id": "3JYE-0", "name": "Hoga Header", "role": "header", "depth": 1 },
+    { "node_id": "3JXR-0", "name": "Hoga Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3JTB-0", "name": "Hoga Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3JUM-0", "name": "Ladder Panel", "role": "primary", "depth": 2 },
+    { "node_id": "3JTC-0", "name": "Side Panel", "role": "rail", "depth": 2 },
+    { "node_id": "3JT6-0", "name": "Hoga Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

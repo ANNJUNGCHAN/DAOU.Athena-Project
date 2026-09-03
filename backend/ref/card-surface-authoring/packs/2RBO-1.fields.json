@@ -1,0 +1,222 @@
+{
+ "board": "2RBO-1",
+ "fields": [
+  {
+   "mapping_id": "base:ka10005",
+   "f": "crd_remn_rt",
+   "kor": "신용잔고율",
+   "layer": null,
+   "where": "수급·신용 신용비율 0.86%"
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "crd_rt",
+   "kor": "신용비",
+   "layer": null,
+   "where": "수급·신용 신용비율 0.86%"
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "for_wght",
+   "kor": "외인비중",
+   "layer": null,
+   "where": "수급·신용 외인소진율 65.5%"
+  },
+  {
+   "mapping_id": "base:ka10086",
+   "f": "crd_remn_rt",
+   "kor": "신용잔고율",
+   "layer": "병기",
+   "where": "수급·신용 열 신용비율 0.86% 아래 '신용잔고율 0.86%'"
+  },
+  {
+   "mapping_id": "detail:ka10001:identity_and_capital",
+   "f": "setl_mm",
+   "kor": "결산월",
+   "layer": "직접",
+   "where": "기업 개요 · 결산월 칸(12월) / node 3EU4-0 · 3EU6-0"
+  },
+  {
+   "mapping_id": "detail:ka10001:identity_and_capital",
+   "f": "fav",
+   "kor": "액면가",
+   "layer": "직접",
+   "where": "기업 개요 · 액면가 칸(100원) / node 3EU7-0 · 3EU9-0"
+  },
+  {
+   "mapping_id": "detail:ka10001:identity_and_capital",
+   "f": "cap",
+   "kor": "자본금",
+   "layer": "직접",
+   "where": "기업 개요 · 자본금 칸(5,970억원) / node 3EUA-0 · 3EUC-0"
+  },
+  {
+   "mapping_id": "detail:ka10001:identity_and_capital",
+   "f": "flo_stk",
+   "kor": "상장주식",
+   "layer": "직접",
+   "where": "기업 개요 · 상장주식 칸(59억 6,978만주) / node 3EUD-0 · 3EUF-0"
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "crd_rt",
+   "kor": "신용비율",
+   "layer": "직접",
+   "where": "수급·신용 열 '신용비율 0.86%' 행"
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "mac_wght",
+   "kor": "시가총액비중",
+   "layer": "병기",
+   "where": "종목 요약 · 시가총액 행 보조줄(코스피 비중 21.4%) / node 3F3V-0 · 3F3Z-0"
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "repl_pric",
+   "kor": "대용가",
+   "layer": "직접",
+   "where": "수급·신용 열 '대용가 118,800' 행"
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "fav_unit",
+   "kor": "액면가단위",
+   "layer": "병기",
+   "where": "기업 개요 액면가 100원 칸 아래 '단위 원'"
+  },
+  {
+   "mapping_id": "detail:ka10001:market_scale_and_ownership",
+   "f": "dstr_rt",
+   "kor": "유통비율",
+   "layer": "직접",
+   "where": "수급·신용 열 6행째 '유통비율 74.4%'"
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "oyr_hgst",
+   "kor": "연중최고",
+   "layer": "직접",
+   "where": "수급·신용 열 '연중최고 153,400' 행"
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "oyr_lwst",
+   "kor": "연중최저",
+   "layer": "직접",
+   "where": "수급·신용 열 '연중최저 112,300' 행"
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "250hgst_pric_dt",
+   "kor": "250최고가일",
+   "layer": "직접",
+   "where": "가격 이력·기준 열 '250일 최고 153,400 · 08/21'"
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "250hgst_pric_pre_rt",
+   "kor": "250최고가대비율",
+   "layer": "병기",
+   "where": "250일 최고 행 아래 '현재가 대비 −1.66%'"
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "250lwst_pric_dt",
+   "kor": "250최저가일",
+   "layer": "직접",
+   "where": "가격 이력·기준 열 '250일 최저 67,700 · 11/03'"
+  },
+  {
+   "mapping_id": "detail:ka10001:price_range",
+   "f": "250lwst_pric_pre_rt",
+   "kor": "250최저가대비율",
+   "layer": "병기",
+   "where": "250일 최저 행 아래 '현재가 대비 +122.8%'"
+  },
+  {
+   "mapping_id": "detail:ka10001:valuation",
+   "f": "eps",
+   "kor": "EPS",
+   "layer": "병기",
+   "where": "가치 지표 · PER 행 보조줄(EPS 7,115원) / node 3EW6-0 · 3EWA-0"
+  },
+  {
+   "mapping_id": "detail:ka10001:valuation",
+   "f": "ev",
+   "kor": "EV",
+   "layer": "직접",
+   "where": "가치 지표 열 6행째 'EV 868.2조'"
+  },
+  {
+   "mapping_id": "detail:ka10001:valuation",
+   "f": "bps",
+   "kor": "BPS",
+   "layer": "병기",
+   "where": "가치 지표 · PBR 행 보조줄(BPS 57,320원) / node 3EWB-0 · 3EWF-0"
+  },
+  {
+   "mapping_id": "detail:ka10001:financial_performance",
+   "f": "sale_amt",
+   "kor": "매출액",
+   "layer": "직접",
+   "where": "실적 스냅샷 · 매출액 칸(300조 8,700억원) / node 3F3L-0 · 3F3N-0"
+  },
+  {
+   "mapping_id": "detail:ka10001:financial_performance",
+   "f": "bus_pro",
+   "kor": "영업이익",
+   "layer": "직접",
+   "where": "실적 스냅샷 · 영업이익 칸(52조 8,000억원) / node 3F3O-0 · 3F3Q-0"
+  },
+  {
+   "mapping_id": "detail:ka10001:financial_performance",
+   "f": "cup_nga",
+   "kor": "당기순이익",
+   "layer": "직접",
+   "where": "실적 스냅샷 · 당기순이익 칸(48조 1,600억원) / node 3F3R-0 · 3F3T-0"
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "upl_pric",
+   "kor": "상한가",
+   "layer": "직접",
+   "where": "가격 이력·기준 열 '상한가 193,700' 행"
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "lst_pric",
+   "kor": "하한가",
+   "layer": "직접",
+   "where": "가격 이력·기준 열 '하한가 104,300' 행"
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "base_pric",
+   "kor": "기준가",
+   "layer": "직접",
+   "where": "가격 이력·기준 열 '기준가 149,000' 행"
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "exp_cntr_pric",
+   "kor": "예상체결가",
+   "layer": "직접",
+   "where": "가격 이력·기준 열 6행째 '예상 체결 150,900'"
+  },
+  {
+   "mapping_id": "detail:ka10001:daily_price_band",
+   "f": "exp_cntr_qty",
+   "kor": "예상체결수량",
+   "layer": "직접",
+   "where": "가격 이력·기준 열 6행째 '예상 체결 · 8,420주'"
+  },
+  {
+   "mapping_id": "detail:ka10001:current_trading",
+   "f": "trde_pre",
+   "kor": "거래대비",
+   "layer": "병기",
+   "where": "수급·신용 열 대용가 118,800 아래 '전일거래량 대비 120.3%'"
+  }
+ ]
+}

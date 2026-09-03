@@ -1,0 +1,201 @@
+{
+ "board": "2U5L-1",
+ "fields": [
+  {
+   "mapping_id": "base:ka01300",
+   "f": "rtcd",
+   "kor": "처리결과",
+   "layer": "직접",
+   "where": "푸터 우측 상태 표기 '그룹 조회 정상 · 09:42:18'"
+  },
+  {
+   "mapping_id": "base:ka01300",
+   "f": "nofi",
+   "kor": "그룹갯수",
+   "layer": null,
+   "where": "'그룹 3개' · 그룹 요약 '전체 3그룹 · 25종목'"
+  },
+  {
+   "mapping_id": "base:ka01300",
+   "f": "gcod",
+   "kor": "그룹코드",
+   "layer": "병기",
+   "where": "우 레일 그룹 요약 3행 보조줄 mono 10px G001·G002·G003"
+  },
+  {
+   "mapping_id": "base:ka01300",
+   "f": "name",
+   "kor": "그룹명",
+   "layer": null,
+   "where": "그룹 칩 '단기 관찰 / 배당주 / ETF 모음'"
+  },
+  {
+   "mapping_id": "base:ka01301",
+   "f": "rtcd",
+   "kor": "처리 결과",
+   "layer": "직접",
+   "where": "푸터 우측 상태 표기 '그룹 조회 정상 · 09:42:18'"
+  },
+  {
+   "mapping_id": "base:ka01301",
+   "f": "nofj",
+   "kor": "종목 갯수",
+   "layer": null,
+   "where": "'8종목' · 그룹 요약 8/12/5종목"
+  },
+  {
+   "mapping_id": "base:ka01301",
+   "f": "cod2",
+   "kor": "종목코드",
+   "layer": "병기",
+   "where": "관심종목 표 종목 셀 2줄 보조줄 코드 mono 10px(005930 등 8행)"
+  },
+  {
+   "mapping_id": "base:ka01301",
+   "f": "bgb",
+   "kor": "북마크 구분",
+   "layer": "직접",
+   "where": "관심종목 표 종목 셀 라벨 칩(매수 후보·급등 감시·지수 추종·관심·매도 검토)"
+  },
+  {
+   "mapping_id": "base:ka01301",
+   "f": "bgb_clr",
+   "kor": "북마크 컬러",
+   "layer": "직접",
+   "where": "관심종목 표 종목 셀 앞머리 북마크 점 6px 색(up/warn/info/navy/down)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "atn_stk_infr",
+   "kor": "관심종목정보",
+   "layer": null,
+   "where": "관심종목 테이블(8종목)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "where": "관심종목 표 종목 열 · 종목명 아래 mono 10px 코드 병기(005930 등 8행 전부)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'종목' 컬럼 삼성전자"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "'현재가' 컬럼 150,850"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "base_pric",
+   "kor": "기준가",
+   "layer": "직접",
+   "where": "관심종목 표 기준가 열 1행 · 149,000 등 8행 전부"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "where": "관심종목 표 현재가 열 2행 · '+1,850 · +1.24%' 앞자리, up/down 색 적용"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률 색/± 부호"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "'등락률' 컬럼 +1.24%"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "'거래량' 컬럼 1,420만주"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": "병기",
+   "where": "관심종목 표 거래량 열 2행 · '2.14조'(거래량 1,420만주 아래)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "pred_trde_qty_pre",
+   "kor": "전일거래량대비",
+   "layer": null,
+   "where": "우패널 '거래량 · 전일 대비 510만주 · 2.4배'"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "sel_bid",
+   "kor": "매도호가",
+   "layer": "직접",
+   "where": "관심종목 표 매도·매수호가 열 1행 · '매도 150,900'"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "buy_bid",
+   "kor": "매수호가",
+   "layer": "직접",
+   "where": "관심종목 표 매도·매수호가 열 2행 · '매수 150,850'"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": "병기",
+   "where": "관심종목 표 기준가 열 2행 · '시가 149,500'"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": "직접",
+   "where": "관심종목 표 고가·저가 열 1행 · 151,200(up 색)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": "직접",
+   "where": "관심종목 표 고가·저가 열 2행 · 149,100(down 색)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "하단 '마지막 반영 09:42:18'"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "tot_sel_req",
+   "kor": "총매도잔량",
+   "layer": "직접",
+   "where": "관심종목 표 총잔량 열 2행 · '매도 8.2만'"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "tot_buy_req",
+   "kor": "총매수잔량",
+   "layer": "직접",
+   "where": "관심종목 표 총잔량 열 1행 · '매수 11.4만 ▸' — ▸가 행 펼침 앵커"
+  }
+ ]
+}

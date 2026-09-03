@@ -1,0 +1,11 @@
+{
+  "root": "14J4-2",
+  "regions": [
+    { "node_id": "14J6-2", "name": "Header and Capability Navigation", "role": "header", "depth": 1 },
+    { "node_id": "14JR-2", "name": "Ranking Query Controls", "role": "strip", "depth": 1 },
+    { "node_id": "14K9-2", "name": "Ranking Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "33WC-0", "name": "Ranking Result Table", "role": "primary", "depth": 2 },
+    { "node_id": "343X-0", "name": "Selected Stock Detail", "role": "rail", "depth": 2 },
+    { "node_id": "14NQ-2", "name": "User Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

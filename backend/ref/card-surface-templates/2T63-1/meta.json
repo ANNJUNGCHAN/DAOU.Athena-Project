@@ -1,0 +1,14 @@
+{
+  "board_id": "2T63-1",
+  "name": "CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+  "card_id": "CC-02",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "tab",
+    "parent_board": "135M-2",
+    "control": "현금 매도",
+    "control_text": "매도"
+  },
+  "saved_at": "2026-09-02T10:49:06Z"
+}

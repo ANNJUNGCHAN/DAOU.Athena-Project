@@ -1,0 +1,740 @@
+{
+ "board": "17F8-2",
+ "fields": [
+  {
+   "mapping_id": "base:kt50021",
+   "f": "entra",
+   "kor": "예수금",
+   "layer": null,
+   "where": "금현물 패널 '금현물 예수금 4,820,000원'(증명 위임)"
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "prsm_entra",
+   "kor": "추정예수금",
+   "layer": null,
+   "where": "'D+2 예수금 31,240,000원'(증명 위임)"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "acnt_ord_cntr_prst",
+   "kor": "계좌별주문체결현황",
+   "layer": null,
+   "where": "'오늘 주문 · 체결 2건 · 1건'(증명 위임)"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "ord_qty",
+   "kor": "주문수량",
+   "layer": null,
+   "where": "금현물 '매수수량 5주'"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "ord_uv",
+   "kor": "주문단가",
+   "layer": null,
+   "where": "미체결 '금 99.99K 5g 매수 168,000원'"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "mrkt_deal_tp",
+   "kor": "시장구분",
+   "layer": null,
+   "where": "'KRX 금시장'"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'금 99.99K 5g'"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "dcd_tp_nm",
+   "kor": "결제구분",
+   "layer": null,
+   "where": "'결제 기준 D+2' 배지"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "cntr_qty",
+   "kor": "체결수량",
+   "layer": null,
+   "where": "거래 원본 '매수수량 5주'"
+  },
+  {
+   "mapping_id": "base:kt50030",
+   "f": "ord_remnq",
+   "kor": "미체결수량",
+   "layer": null,
+   "where": "'미체결 1건' / 2SYW-1 '미체결 잔량'"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "acnt_ord_cntr_prps_dtl",
+   "kor": "계좌별주문체결내역상세",
+   "layer": null,
+   "where": "금현물 '거래 원본' 행 목록(증명 위임)"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ord_qty",
+   "kor": "주문수량",
+   "layer": null,
+   "where": "'매수수량 5주'"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "ord_uv",
+   "kor": "주문단가",
+   "layer": null,
+   "where": "'매수 168,000원'"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'금 99.99K 5g'"
+  },
+  {
+   "mapping_id": "base:kt50031",
+   "f": "cntr_qty",
+   "kor": "체결수량",
+   "layer": null,
+   "where": "거래 원본 '매수수량 5주'"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "acnt_ord_oso_prst",
+   "kor": "계좌별주문미체결현황",
+   "layer": null,
+   "where": "'미체결 1건 — 금 99.99K 5g 매수 168,000원'(증명 위임)"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "ord_uv",
+   "kor": "주문단가",
+   "layer": null,
+   "where": "'매수 168,000원'"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "mrkt_deal_tp",
+   "kor": "시장구분",
+   "layer": null,
+   "where": "'KRX 금시장'"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'금 99.99K 5g'"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "dcd_tp_nm",
+   "kor": "결제구분",
+   "layer": null,
+   "where": "'결제 기준 D+2' 배지"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "cntr_qty",
+   "kor": "체결수량",
+   "layer": null,
+   "where": "거래 원본 '매수수량 5주'"
+  },
+  {
+   "mapping_id": "base:kt50075",
+   "f": "ord_remnq",
+   "kor": "미체결수량",
+   "layer": null,
+   "where": "'미체결 1건'"
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "20stk_ord_alow_amt",
+   "kor": "20%종목주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '20%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "30stk_ord_alow_amt",
+   "kor": "30%종목주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '30%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "40stk_ord_alow_amt",
+   "kor": "40%종목주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '40%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "100stk_ord_alow_amt",
+   "kor": "100%종목주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '100%(현금)' 값"
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "50stk_ord_alow_amt",
+   "kor": "50%종목주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '50%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "60stk_ord_alow_amt",
+   "kor": "60%종목주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '60%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "crd_grnt_rt",
+   "kor": "신용담보비율",
+   "layer": null,
+   "where": "상단 지표 '신용담보비율 184.2%' 카드"
+  },
+  {
+   "mapping_id": "detail:kt00005:cash_and_capacity",
+   "f": "ord_alowa",
+   "kor": "주문가능현금",
+   "layer": null,
+   "where": "'주문 가능금액 38,420,000원 · 현금 주문 기준' 카드"
+  },
+  {
+   "mapping_id": "detail:kt00005:margin_order_capacity",
+   "f": "20ord_alow_amt",
+   "kor": "20%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '20%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00005:margin_order_capacity",
+   "f": "30ord_alow_amt",
+   "kor": "30%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '30%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00005:margin_order_capacity",
+   "f": "40ord_alow_amt",
+   "kor": "40%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '40%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00005:margin_order_capacity",
+   "f": "50ord_alow_amt",
+   "kor": "50%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '50%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00005:margin_order_capacity",
+   "f": "60ord_alow_amt",
+   "kor": "60%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '60%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00005:margin_order_capacity",
+   "f": "100ord_alow_amt",
+   "kor": "100%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '100%(현금)' 값"
+  },
+  {
+   "mapping_id": "detail:kt00005:credit_and_collateral",
+   "f": "crd_grnt_rt",
+   "kor": "신용담보비율",
+   "layer": null,
+   "where": "상단 지표 '신용담보비율 184.2%' 카드"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_20ord_alow_amt",
+   "kor": "증거금20%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능 '20%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_30ord_alow_amt",
+   "kor": "증거금30%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능 '30%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_40ord_alow_amt",
+   "kor": "증거금40%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능 '40%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_50ord_alow_amt",
+   "kor": "증거금50%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능 '50%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_60ord_alow_amt",
+   "kor": "증거금60%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능 '60%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_100ord_alow_amt",
+   "kor": "증거금100%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능 '100%(현금)' 값"
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "pred_reu_alowa",
+   "kor": "전일재사용가능금액",
+   "layer": null,
+   "where": "증거금 세부 재원 '당일 · 전일 재사용' 우측 전일값"
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "tdy_reu_alowa",
+   "kor": "금일재사용가능금액",
+   "layer": null,
+   "where": "증거금 세부 재원 '당일 · 전일 재사용' 좌측 당일값"
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "entr",
+   "kor": "예수금",
+   "layer": null,
+   "where": "주문재원 원본 '예수금' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "repl_amt",
+   "kor": "대용금",
+   "layer": null,
+   "where": "주문재원 원본 '대용금액' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "uncla",
+   "kor": "미수금",
+   "layer": null,
+   "where": "주문재원 원본 '미수금' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "ord_pos_repl",
+   "kor": "주문가능대용",
+   "layer": null,
+   "where": "증거금 세부 재원 '현금 · 대용 재원' 우측 대용값"
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "ord_alowa",
+   "kor": "주문가능현금",
+   "layer": null,
+   "where": "'주문 가능금액 · 현금 주문 기준' 카드"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_20ord_alow_amt",
+   "kor": "증거금20%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능(kt00011) '20%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_30ord_alow_amt",
+   "kor": "증거금30%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능(kt00011) '30%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_40ord_alow_amt",
+   "kor": "증거금40%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능(kt00011) '40%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_50ord_alow_amt",
+   "kor": "증거금50%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능(kt00011) '50%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "profa_60ord_alow_amt",
+   "kor": "증거금60%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능(kt00011) '60%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "profa_100ord_alow_amt",
+   "kor": "증거금100%주문가능금액",
+   "layer": null,
+   "where": "증거금율별 주문가능(kt00011) '100%(현금)' 값"
+  },
+  {
+   "mapping_id": "detail:kt00011:account_funding",
+   "f": "entr",
+   "kor": "예수금",
+   "layer": null,
+   "where": "주문재원 원본 '예수금 47,600,000원' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00011:account_funding",
+   "f": "repl_amt",
+   "kor": "대용금",
+   "layer": null,
+   "where": "주문재원 원본 '대용금액 18,400,000원' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00011:account_funding",
+   "f": "uncla",
+   "kor": "미수금",
+   "layer": null,
+   "where": "주문재원 원본 '미수금 10,800,000원' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00011:account_funding",
+   "f": "ord_pos_repl",
+   "kor": "주문가능대용",
+   "layer": null,
+   "where": "증거금 세부 재원 '현금 · 대용 재원' 우측 대용값"
+  },
+  {
+   "mapping_id": "detail:kt00011:account_funding",
+   "f": "ord_alowa",
+   "kor": "주문가능현금",
+   "layer": null,
+   "where": "'주문 가능금액 · 현금 주문 기준' 카드 및 '현금 · 대용 재원' 좌측 현금값"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_50ord_alow_amt",
+   "kor": "보증금50%주문가능금액",
+   "layer": null,
+   "where": "신용보증금율별(kt00012) '50%' 값 62,480,000"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_60ord_alow_amt",
+   "kor": "보증금60%주문가능금액",
+   "layer": null,
+   "where": "신용보증금율별(kt00012) '60%' 값 52,060,000"
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "entr",
+   "kor": "예수금",
+   "layer": null,
+   "where": "주문재원 원본 '예수금' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "repl_amt",
+   "kor": "대용금",
+   "layer": null,
+   "where": "주문재원 원본 '대용금액' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "uncla",
+   "kor": "미수금",
+   "layer": null,
+   "where": "주문재원 원본 '미수금' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "ord_pos_repl",
+   "kor": "주문가능대용",
+   "layer": null,
+   "where": "증거금 세부 재원 '현금 · 대용 재원' 우측 대용값"
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "ord_alowa",
+   "kor": "주문가능현금",
+   "layer": null,
+   "where": "'주문 가능금액 · 현금 주문 기준' 카드"
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "out_alowa",
+   "kor": "미수가능금액",
+   "layer": null,
+   "where": "신용보증금율별(kt00012) 블록 '계좌·미수 재원 62,400,000' 행"
+  },
+  {
+   "mapping_id": "detail:kt00013:today_reuse",
+   "f": "tdy_reu_alowa",
+   "kor": "금일재사용가능금액",
+   "layer": null,
+   "where": "증거금 세부 재원 '당일 · 전일 재사용' 좌측 당일값"
+  },
+  {
+   "mapping_id": "detail:kt00013:previous_day_reuse",
+   "f": "pred_reu_alowa",
+   "kor": "전일재사용가능금액",
+   "layer": null,
+   "where": "증거금 세부 재원 '당일 · 전일 재사용' 우측 전일값"
+  },
+  {
+   "mapping_id": "detail:kt00013:cash_resources",
+   "f": "use_pos_ch",
+   "kor": "사용가능현금",
+   "layer": null,
+   "where": "증거금 세부 재원 '현금 · 대용 재원' 좌측 31,240,000"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_resources",
+   "f": "repl_amt_amt",
+   "kor": "대용금액",
+   "layer": null,
+   "where": "주문재원 원본 '대용금액 18,400,000원' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_resources",
+   "f": "use_pos_repl",
+   "kor": "사용가능대용",
+   "layer": null,
+   "where": "증거금 세부 재원 '현금 · 대용 재원' 우측 12,800,000"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_resources",
+   "f": "repl_use_lmtt_amt",
+   "kor": "대용사용제한금액",
+   "layer": null,
+   "where": "증거금 세부 재원 '대용 평가·한도' 우측 한도값 50,000,000"
+  },
+  {
+   "mapping_id": "detail:kt00013:credit_and_lending_collateral",
+   "f": "uncla",
+   "kor": "미수금",
+   "layer": null,
+   "where": "주문재원 원본 '미수금' 타일"
+  },
+  {
+   "mapping_id": "detail:kt00013:margin_order_capacity",
+   "f": "20ord_alow_amt",
+   "kor": "20%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '20%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00013:margin_order_capacity",
+   "f": "30ord_alow_amt",
+   "kor": "30%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '30%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00013:margin_order_capacity",
+   "f": "40ord_alow_amt",
+   "kor": "40%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '40%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00013:margin_order_capacity",
+   "f": "50ord_alow_amt",
+   "kor": "50%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '50%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00013:margin_order_capacity",
+   "f": "60ord_alow_amt",
+   "kor": "60%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '60%' 값"
+  },
+  {
+   "mapping_id": "detail:kt00013:margin_order_capacity",
+   "f": "100ord_alow_amt",
+   "kor": "100%주문가능금액",
+   "layer": null,
+   "where": "증거금 구간별 주문가능 재원 '100%(현금)' 값"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "evlt_repl_amt_spg_use_skip",
+   "kor": "평가대용금(현물사용제외)",
+   "layer": null,
+   "where": "상단 지표 '평가대용금액 76,840,000원 · 대용 평가 원본' 카드"
+  },
+  {
+   "mapping_id": "detail:kt00013:d2_funding_capacity",
+   "f": "d2vexct_entr",
+   "kor": "D2가정산예수금",
+   "layer": null,
+   "where": "결제와 증거금 변동 'D+2 예수금' 행"
+  },
+  {
+   "mapping_id": "detail:kt00013:d2_funding_capacity",
+   "f": "d2ch_ord_alow_amt",
+   "kor": "D2현금주문가능금액",
+   "layer": null,
+   "where": "증거금 세부 재원 'D+2 재원 29,850,000' 행"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_account_summary",
+   "f": "tot_entr",
+   "kor": "예수금",
+   "layer": null,
+   "where": "금현물 예수금·주문·미체결 카드 '금현물 예수금 4,820,000원' 행"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_account_summary",
+   "f": "tot_est_amt",
+   "kor": "잔고평가액",
+   "layer": null,
+   "where": "금현물 잔고 카드 '평가금액 16,057,500원'"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "gold_acnt_evlt_prst",
+   "kor": "금현물계좌평가현황",
+   "layer": null,
+   "where": "'금현물 잔고' 카드 본체(단일 종목 평가 행)"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "real_qty",
+   "kor": "보유수량",
+   "layer": null,
+   "where": "금현물 잔고 카드 '보유 125주' 타일"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "avg_prc",
+   "kor": "평균단가",
+   "layer": null,
+   "where": "금현물 잔고 카드 '평균 122,520원'"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "금현물 잔고 카드 '현재 128,460원'"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "est_amt",
+   "kor": "평가금액",
+   "layer": null,
+   "where": "금현물 잔고 카드 '평가금액 16,057,500원'"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "est_ratio",
+   "kor": "손익율",
+   "layer": null,
+   "where": "금현물 잔고 카드 '+4.85%'(등락 색)"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "cmsn",
+   "kor": "수수료",
+   "layer": null,
+   "where": "거래 원본 '수수료 1,284원'"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "vlad_tax",
+   "kor": "부가가치세",
+   "layer": null,
+   "where": "거래 원본 '부가세 미적용' 상태 표기"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "buy_qty",
+   "kor": "매수수량",
+   "layer": null,
+   "where": "금현물 잔고 카드 '매수수량 5주' 타일"
+  },
+  {
+   "mapping_id": "detail:kt50020:gold_holdings",
+   "f": "able_qty",
+   "kor": "가능수량",
+   "layer": null,
+   "where": "금현물 잔고 카드 '매매 가능 120주' 타일"
+  },
+  {
+   "mapping_id": "detail:kt50032:account_identity",
+   "f": "acnt_print",
+   "kor": "계좌번호",
+   "layer": null,
+   "where": "'종합계좌 · 끝 4721' 및 '계좌번호는 마스킹 표시'"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "gold_trde_hist",
+   "kor": "금현물거래내역",
+   "layer": null,
+   "where": "'거래 원본' 행 + '거래내역 전체 보기' 액션"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "deal_dt",
+   "kor": "거래일자",
+   "layer": null,
+   "where": "거래 원본 행 좌측 '09월 02일'"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "deal_qty",
+   "kor": "거래수량",
+   "layer": null,
+   "where": "거래 원본 '매수수량 5주'"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "gold_spot_vat",
+   "kor": "금현물부가가치세",
+   "layer": null,
+   "where": "거래 원본 '부가세 미적용' 표기"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "cmsn",
+   "kor": "수수료",
+   "layer": null,
+   "where": "거래 원본 '수수료 1,284원'"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "spot_remn",
+   "kor": "현물잔고",
+   "layer": null,
+   "where": "금계좌 원본 항목 '현물잔고 130주' 행"
+  },
+  {
+   "mapping_id": "detail:kt50032:gold_trade_history",
+   "f": "deal_amt",
+   "kor": "거래금액",
+   "layer": null,
+   "where": "거래 원본 '체결금액 642,000원'"
+  }
+ ]
+}

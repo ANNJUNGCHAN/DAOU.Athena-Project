@@ -1,0 +1,102 @@
+{
+ "board_id": "2XY6-0",
+ "card_id": "CC-03",
+ "name": "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+ "operation_refs": [
+  "base:ka30011"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka30011",
+   "f": "elwalacc_rt",
+   "kor": "ELW근접율",
+   "layer": "직접",
+   "board": "2XY6-0",
+   "where": "근접률 순위 표 8행 — 근접률 열이 정렬지표로 강조 (98.7% ~ 90.4%)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "board": "2XY6-0",
+   "where": "종목 셀 2줄 mono 10px '58P630 · 한국투자증권 6B44회차' 등 8행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "시장 순위 종목 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "현재가 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "등락률 부호와 상승·하락색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "2XY6-0",
+   "where": "현재가 셀 2줄 '▲ +10 / ▲ +5 / ▼ −10' 원 단위 전일대비",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "등락률 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "거래량 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "alacc_rt",
+   "kor": "근접율",
+   "layer": "직접",
+   "board": "2XY6-0",
+   "where": "'근접률 · 잔여' 열 1줄 근접률 + 2줄 '잔여 4.55p / 1,150원 …'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 4
+}

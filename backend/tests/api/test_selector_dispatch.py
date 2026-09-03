@@ -269,6 +269,7 @@ def test_websocket_executes_only_with_explicit_intent_and_uses_only_ws_client() 
         "workspace_generation",
         "view_generation",
         "update_policy",
+        "surface_contract",
     ):
         expected[key] = body[key]
         expected["envelope"][key] = body["envelope"][key]

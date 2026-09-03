@@ -1,0 +1,649 @@
+{
+ "board": "2ROJ-1",
+ "fields": [
+  {
+   "mapping_id": "base:0w",
+   "f": "20",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "프로그램 시간대별 표 '시간대' 열 09:15~09:40"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "13",
+   "kor": "누적거래량",
+   "layer": "병기",
+   "where": "KPI 밴드 5칸 '거래대금 2.14조' 보조줄 '거래량 1,420만주'"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "202",
+   "kor": "매도수량",
+   "layer": "병기",
+   "where": "구분 표 합계 행 매도 셀 2번째 줄 196.9만주"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "204",
+   "kor": "매도금액",
+   "layer": "직접",
+   "where": "구분 표 합계 행 매도 열 2,968억"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "206",
+   "kor": "매수수량",
+   "layer": "병기",
+   "where": "구분 표 합계 행 매수 셀 2번째 줄 319.0만주"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "208",
+   "kor": "매수금액",
+   "layer": "직접",
+   "where": "구분 표 합계 행 매수 열 4,810억"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "210",
+   "kor": "순매수수량",
+   "layer": "병기",
+   "where": "구분 표 합계 행 순매수 셀 2번째 줄 122.1만주"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "211",
+   "kor": "순매수수량증감",
+   "layer": "병기",
+   "where": "구분 표 합계 행 증감 셀 2번째 줄 +19.8만주"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "212",
+   "kor": "순매수금액",
+   "layer": null,
+   "where": "KPI 카드 '프로그램 합계 +1,842억' 및 합계 열"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "213",
+   "kor": "순매수금액증감",
+   "layer": "직접",
+   "where": "구분 표 합계 행 증감 열 +298억"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "214",
+   "kor": "장시작예상잔여시간",
+   "layer": "직접",
+   "where": "헤더 부제 '정규장 · 개장 잔여 해당 없음'"
+  },
+  {
+   "mapping_id": "base:0w",
+   "f": "216",
+   "kor": "투자자별ticker",
+   "layer": "병기",
+   "where": "푸터 좌측 상태 줄 끝 mono '실시간 005930'"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "prm_trde_trnsn",
+   "kor": "프로그램매매추이",
+   "layer": null,
+   "where": "프로그램 시간대별 표 목록"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "시간대별 표 '시간대' 열 09:15~09:40"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "dfrt_trde_sel",
+   "kor": "차익거래매도",
+   "layer": "직접",
+   "where": "구분 표 차익 행 매도 열 828억"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "dfrt_trde_buy",
+   "kor": "차익거래매수",
+   "layer": "직접",
+   "where": "구분 표 차익 행 매수 열 1,240억"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "dfrt_trde_netprps",
+   "kor": "차익거래순매수",
+   "layer": null,
+   "where": "KPI '차익 순매수 +412억' 및 시간대별 표 차익 열"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "ndiffpro_trde_sel",
+   "kor": "비차익거래매도",
+   "layer": "직접",
+   "where": "구분 표 비차익 행 매도 열 2,140억"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "ndiffpro_trde_buy",
+   "kor": "비차익거래매수",
+   "layer": "직접",
+   "where": "구분 표 비차익 행 매수 열 3,570억"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "ndiffpro_trde_netprps",
+   "kor": "비차익거래순매수",
+   "layer": null,
+   "where": "KPI '비차익 순매수 +1,430억' 및 비차익 열"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "dfrt_trde_sell_qty",
+   "kor": "차익거래매도수량",
+   "layer": "병기",
+   "where": "구분 표 차익 행 매도 셀 2번째 줄 54.9만주"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "dfrt_trde_buy_qty",
+   "kor": "차익거래매수수량",
+   "layer": "병기",
+   "where": "구분 표 차익 행 매수 셀 2번째 줄 82.2만주"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "dfrt_trde_netprps_qty",
+   "kor": "차익거래순매수수량",
+   "layer": "병기",
+   "where": "구분 표 차익 행 순매수 셀 2번째 줄 27.3만주"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "ndiffpro_trde_sell_qty",
+   "kor": "비차익거래매도수량",
+   "layer": "병기",
+   "where": "구분 표 비차익 행 매도 셀 2번째 줄 142.0만주"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "ndiffpro_trde_buy_qty",
+   "kor": "비차익거래매수수량",
+   "layer": "병기",
+   "where": "구분 표 비차익 행 매수 셀 2번째 줄 236.8만주"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "ndiffpro_trde_netprps_qty",
+   "kor": "비차익거래순매수수량",
+   "layer": "병기",
+   "where": "구분 표 비차익 행 순매수 셀 2번째 줄 94.8만주"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "all_sel",
+   "kor": "전체매도",
+   "layer": "직접",
+   "where": "구분 표 합계 행 매도 열 2,968억"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "all_buy",
+   "kor": "전체매수",
+   "layer": "직접",
+   "where": "구분 표 합계 행 매수 열 4,810억"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "all_netprps",
+   "kor": "전체순매수",
+   "layer": null,
+   "where": "'합계' 열 / 프로그램 합계 +1,842억"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "kospi200",
+   "kor": "KOSPI200",
+   "layer": "직접",
+   "where": "시간대별 표 KOSPI200 열 6구간(412.86~413.24)"
+  },
+  {
+   "mapping_id": "base:ka90005",
+   "f": "basis",
+   "kor": "BASIS",
+   "layer": "직접",
+   "where": "시간대별 표 베이시스 열 6구간(+0.42~+0.58)"
+  },
+  {
+   "mapping_id": "base:ka90006",
+   "f": "prm_trde_dfrt_remn_trnsn",
+   "kor": "프로그램매매차익잔고추이",
+   "layer": null,
+   "where": "'차익잔고 · 미결제 기준' 카드 목록"
+  },
+  {
+   "mapping_id": "base:ka90006",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "차익잔고 카드 09-01·08-29·08-28"
+  },
+  {
+   "mapping_id": "base:ka90006",
+   "f": "buy_dfrt_trde_qty",
+   "kor": "매수차익거래수량",
+   "layer": "병기",
+   "where": "레일 차익잔고 매수차익 행 83.2만주"
+  },
+  {
+   "mapping_id": "base:ka90006",
+   "f": "buy_dfrt_trde_amt",
+   "kor": "매수차익거래금액",
+   "layer": "직접",
+   "where": "레일 '차익잔고 · 미결제 기준' 매수차익 행 12,480억"
+  },
+  {
+   "mapping_id": "base:ka90006",
+   "f": "buy_dfrt_trde_irds_amt",
+   "kor": "매수차익거래증감액",
+   "layer": "병기",
+   "where": "레일 차익잔고 매수차익 행 '전일대비 +412억'"
+  },
+  {
+   "mapping_id": "base:ka90006",
+   "f": "sel_dfrt_trde_qty",
+   "kor": "매도차익거래수량",
+   "layer": "병기",
+   "where": "레일 차익잔고 매도차익 행 25.6만주"
+  },
+  {
+   "mapping_id": "base:ka90006",
+   "f": "sel_dfrt_trde_amt",
+   "kor": "매도차익거래금액",
+   "layer": "직접",
+   "where": "레일 차익잔고 매도차익 행 3,840억"
+  },
+  {
+   "mapping_id": "base:ka90006",
+   "f": "sel_dfrt_trde_irds_amt",
+   "kor": "매도차익거래증감액",
+   "layer": "병기",
+   "where": "레일 차익잔고 매도차익 행 '전일대비 -86억'"
+  },
+  {
+   "mapping_id": "base:ka90007",
+   "f": "prm_trde_acc_trnsn",
+   "kor": "프로그램매매누적추이",
+   "layer": null,
+   "where": "'프로그램 일자별 추이' 누적 카드 목록"
+  },
+  {
+   "mapping_id": "base:ka90007",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일자별 추이 '09-01' 등 일자"
+  },
+  {
+   "mapping_id": "base:ka90007",
+   "f": "kospi200",
+   "kor": "KOSPI200",
+   "layer": "직접",
+   "where": "시간대별 표 KOSPI200 열 6구간"
+  },
+  {
+   "mapping_id": "base:ka90007",
+   "f": "basis",
+   "kor": "BASIS",
+   "layer": "직접",
+   "where": "시간대별 표 베이시스 열 6구간"
+  },
+  {
+   "mapping_id": "base:ka90007",
+   "f": "dfrt_trde_tdy",
+   "kor": "차익거래당일",
+   "layer": null,
+   "where": "KPI '차익 순매수 +412억'"
+  },
+  {
+   "mapping_id": "base:ka90007",
+   "f": "dfrt_trde_acc",
+   "kor": "차익거래누적",
+   "layer": "직접",
+   "where": "레일 '프로그램 일자별 추이' 각 행 '누적 차익 +2,840억'"
+  },
+  {
+   "mapping_id": "base:ka90007",
+   "f": "ndiffpro_trde_tdy",
+   "kor": "비차익거래당일",
+   "layer": null,
+   "where": "KPI '비차익 순매수 +1,430억'"
+  },
+  {
+   "mapping_id": "base:ka90007",
+   "f": "ndiffpro_trde_acc",
+   "kor": "비차익거래누적",
+   "layer": "직접",
+   "where": "레일 '프로그램 일자별 추이' 각 행 '비차익 +5,502억'"
+  },
+  {
+   "mapping_id": "base:ka90007",
+   "f": "all_tdy",
+   "kor": "전체당일",
+   "layer": null,
+   "where": "일자별 추이 '09-01 +1,842억'"
+  },
+  {
+   "mapping_id": "base:ka90007",
+   "f": "all_acc",
+   "kor": "전체누적",
+   "layer": null,
+   "where": "일자별 추이 '누적 +8,342억'"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "stk_tm_prm_trde_trnsn",
+   "kor": "종목시간별프로그램매매추이",
+   "layer": null,
+   "where": "프로그램 시간대별 표 목록"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "tm",
+   "kor": "시간",
+   "layer": null,
+   "where": "시간대별 표 '시간대' 열 09:15~09:40"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "병기",
+   "where": "KPI 밴드 5칸 보조줄 '거래량 1,420만주'"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_sell_amt",
+   "kor": "프로그램매도금액",
+   "layer": "직접",
+   "where": "구분 표 합계 행 매도 열 2,968억"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_buy_amt",
+   "kor": "프로그램매수금액",
+   "layer": "직접",
+   "where": "구분 표 합계 행 매수 열 4,810억"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_netprps_amt",
+   "kor": "프로그램순매수금액",
+   "layer": null,
+   "where": "시간대별 표 '합계' 열 +298억"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_netprps_amt_irds",
+   "kor": "프로그램순매수금액증감",
+   "layer": "직접",
+   "where": "구분 표 합계 행 증감 열 +298억"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_sell_qty",
+   "kor": "프로그램매도수량",
+   "layer": "병기",
+   "where": "구분 표 합계 행 매도 셀 2번째 줄 196.9만주"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_buy_qty",
+   "kor": "프로그램매수수량",
+   "layer": "병기",
+   "where": "구분 표 합계 행 매수 셀 2번째 줄 319.0만주"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_netprps_qty",
+   "kor": "프로그램순매수수량",
+   "layer": "병기",
+   "where": "구분 표 합계 행 순매수 셀 2번째 줄 122.1만주"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "prm_netprps_qty_irds",
+   "kor": "프로그램순매수수량증감",
+   "layer": "병기",
+   "where": "구분 표 합계 행 증감 셀 2번째 줄 +19.8만주"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "base_pric_tm",
+   "kor": "기준가시간",
+   "layer": "직접",
+   "where": "시간대별 표 꼬리 상태 표기 '기준가 09:00:00'"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "prm_trde_trnsn",
+   "kor": "프로그램매매추이",
+   "layer": null,
+   "where": "'프로그램 일자별 추이' 카드 목록"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "일자별 추이 '09-01·08-29·08-28' 일자 표기"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "dfrt_trde_sel",
+   "kor": "차익거래매도",
+   "layer": "직접",
+   "where": "구분 표 차익 행 매도 열 828억"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "dfrt_trde_buy",
+   "kor": "차익거래매수",
+   "layer": "직접",
+   "where": "구분 표 차익 행 매수 열 1,240억"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "dfrt_trde_netprps",
+   "kor": "차익거래순매수",
+   "layer": null,
+   "where": "KPI '차익 순매수 +412억' 및 시간대별 표 차익 열"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "ndiffpro_trde_sel",
+   "kor": "비차익거래매도",
+   "layer": "직접",
+   "where": "구분 표 비차익 행 매도 열 2,140억"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "ndiffpro_trde_buy",
+   "kor": "비차익거래매수",
+   "layer": "직접",
+   "where": "구분 표 비차익 행 매수 열 3,570억"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "ndiffpro_trde_netprps",
+   "kor": "비차익거래순매수",
+   "layer": null,
+   "where": "KPI '비차익 순매수 +1,430억' 및 비차익 열"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "dfrt_trde_sell_qty",
+   "kor": "차익거래매도수량",
+   "layer": "병기",
+   "where": "구분 표 차익 행 매도 셀 2번째 줄 54.9만주"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "dfrt_trde_buy_qty",
+   "kor": "차익거래매수수량",
+   "layer": "병기",
+   "where": "구분 표 차익 행 매수 셀 2번째 줄 82.2만주"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "dfrt_trde_netprps_qty",
+   "kor": "차익거래순매수수량",
+   "layer": "병기",
+   "where": "구분 표 차익 행 순매수 셀 2번째 줄 27.3만주"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "ndiffpro_trde_sell_qty",
+   "kor": "비차익거래매도수량",
+   "layer": "병기",
+   "where": "구분 표 비차익 행 매도 셀 2번째 줄 142.0만주"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "ndiffpro_trde_buy_qty",
+   "kor": "비차익거래매수수량",
+   "layer": "병기",
+   "where": "구분 표 비차익 행 매수 셀 2번째 줄 236.8만주"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "ndiffpro_trde_netprps_qty",
+   "kor": "비차익거래순매수수량",
+   "layer": "병기",
+   "where": "구분 표 비차익 행 순매수 셀 2번째 줄 94.8만주"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "all_sel",
+   "kor": "전체매도",
+   "layer": "직접",
+   "where": "구분 표 합계 행 매도 열 2,968억"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "all_buy",
+   "kor": "전체매수",
+   "layer": "직접",
+   "where": "구분 표 합계 행 매수 열 4,810억"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "all_netprps",
+   "kor": "전체순매수",
+   "layer": null,
+   "where": "'합계' 열 / 프로그램 합계 +1,842억"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "kospi200",
+   "kor": "KOSPI200",
+   "layer": "직접",
+   "where": "시간대별 표 KOSPI200 열 6구간(412.86~413.24)"
+  },
+  {
+   "mapping_id": "base:ka90010",
+   "f": "basis",
+   "kor": "BASIS",
+   "layer": "직접",
+   "where": "시간대별 표 베이시스 열 6구간(+0.42~+0.58)"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "stk_daly_prm_trde_trnsn",
+   "kor": "종목일별프로그램매매추이",
+   "layer": null,
+   "where": "'프로그램 일자별 추이' 카드 목록"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "'프로그램 일자별 추이' 09-01 등 일자"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "병기",
+   "where": "KPI 밴드 5칸 보조줄 '거래량 1,420만주'"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_sell_amt",
+   "kor": "프로그램매도금액",
+   "layer": "직접",
+   "where": "구분 표 합계 행 매도 열 2,968억"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_buy_amt",
+   "kor": "프로그램매수금액",
+   "layer": "직접",
+   "where": "구분 표 합계 행 매수 열 4,810억"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_netprps_amt",
+   "kor": "프로그램순매수금액",
+   "layer": null,
+   "where": "일자별 추이 '09-01 +1,842억'"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_netprps_amt_irds",
+   "kor": "프로그램순매수금액증감",
+   "layer": "직접",
+   "where": "구분 표 합계 행 증감 열 +298억"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_sell_qty",
+   "kor": "프로그램매도수량",
+   "layer": "병기",
+   "where": "구분 표 합계 행 매도 셀 2번째 줄 196.9만주"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_buy_qty",
+   "kor": "프로그램매수수량",
+   "layer": "병기",
+   "where": "구분 표 합계 행 매수 셀 2번째 줄 319.0만주"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_netprps_qty",
+   "kor": "프로그램순매수수량",
+   "layer": "병기",
+   "where": "구분 표 합계 행 순매수 셀 2번째 줄 122.1만주"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "prm_netprps_qty_irds",
+   "kor": "프로그램순매수수량증감",
+   "layer": "병기",
+   "where": "구분 표 합계 행 증감 셀 2번째 줄 +19.8만주"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "base_pric_tm",
+   "kor": "기준가시간",
+   "layer": "직접",
+   "where": "시간대별 표 꼬리 상태 표기 '기준가 09:00:00'"
+  }
+ ]
+}

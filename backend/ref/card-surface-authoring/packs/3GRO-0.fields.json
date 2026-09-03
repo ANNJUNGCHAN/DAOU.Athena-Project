@@ -1,0 +1,334 @@
+{
+ "board": "3GRO-0",
+ "fields": [
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "bncr_buy_alowa",
+   "kor": "수익증권매수가능금액",
+   "layer": "펼침",
+   "where": "X1 증거금·보증금 구간별 펼침 · 주문 한도 재원 (메인 2SKU-1 인출·주문 한도 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "min_ord_alow_yn",
+   "kor": "최소주문가능금액",
+   "layer": "펼침",
+   "where": "X1 증거금·보증금 구간별 펼침 · 주문 한도 재원 (메인 2SKU-1 인출·주문 한도 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_20ord_alowq",
+   "kor": "증거금20%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 20% 칸 1,035주"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_30ord_alowq",
+   "kor": "증거금30%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 30% 칸 690주"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_40ord_alowq",
+   "kor": "증거금40%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 40% 칸 517주"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_50ord_alowq",
+   "kor": "증거금50%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 50% 칸 414주"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_60ord_alowq",
+   "kor": "증거금60%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 60% 칸 345주"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_rdex_60ord_alow_amt",
+   "kor": "증거금감면60%주문가능금",
+   "layer": "병기",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 감면 60% 칸 둘째 줄 주문가능금 56,719,600원"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_rdex_60ord_alowq",
+   "kor": "증거금감면60%주문가능수",
+   "layer": "펼침",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 감면 60% 칸 376주"
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_100ord_alowq",
+   "kor": "증거금100%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 100% 칸 207주"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_20ord_alowq",
+   "kor": "증거금20%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 20% 행 주문가능수량 1,035주"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_20pred_reu_amt",
+   "kor": "증거금20%전일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 20% 행 전일 재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_20tdy_reu_amt",
+   "kor": "증거금20%금일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 20% 행 금일 재사용 1,820,800원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_30ord_alowq",
+   "kor": "증거금30%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 30% 행 주문가능수량 690주"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_30pred_reu_amt",
+   "kor": "증거금30%전일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 30% 행 전일 재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_30tdy_reu_amt",
+   "kor": "증거금30%금일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 30% 행 금일 재사용 2,731,200원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_40ord_alowq",
+   "kor": "증거금40%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 40% 행 주문가능수량 517주"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_40pred_reu_amt",
+   "kor": "증거금40전일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 40% 행 전일 재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_40tdy_reu_amt",
+   "kor": "증거금40%금일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 40% 행 금일 재사용 3,641,600원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_50ord_alowq",
+   "kor": "증거금50%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 50% 행 주문가능수량 414주"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_50pred_reu_amt",
+   "kor": "증거금50%전일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 50% 행 전일 재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_20_to_50",
+   "f": "profa_50tdy_reu_amt",
+   "kor": "증거금50%금일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 50% 행 금일 재사용 4,552,000원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "profa_60ord_alowq",
+   "kor": "증거금60%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 60% 행 주문가능수량 345주"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "profa_60pred_reu_amt",
+   "kor": "증거금60%전일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 60% 행 전일 재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "profa_60tdy_reu_amt",
+   "kor": "증거금60%금일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 60% 행 금일 재사용 5,462,400원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "profa_100ord_alowq",
+   "kor": "증거금100%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 100% 행 주문가능수량 207주"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "profa_100pred_reu_amt",
+   "kor": "증거금100%전일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 100% 행 전일 재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "profa_100tdy_reu_amt",
+   "kor": "증거금100%금일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 100% 행 금일 재사용 9,104,000원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "min_ord_alow_amt",
+   "kor": "미수불가주문가능금액",
+   "layer": "병기",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 미수불가 행 수량 셀 둘째 줄 주문가능금 31,240,000원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "min_ord_alowq",
+   "kor": "미수불가주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 미수불가 행 주문가능수량 207주"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "min_pred_reu_amt",
+   "kor": "미수불가전일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 미수불가 행 전일 재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_capacity_60_to_cash_only",
+   "f": "min_tdy_reu_amt",
+   "kor": "미수불가금일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 구간별 재사용 · 전일·금일 표 · 미수불가 행 금일 재사용 9,104,000원"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_30ord_alow_amt",
+   "kor": "보증금30%주문가능금액",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 30% 행 주문가능금액 62,480,000원"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_30ord_alowq",
+   "kor": "보증금30%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 30% 행 주문가능수량 414주"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_30pred_reu_amt",
+   "kor": "보증금30%전일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 30% 행 전일 재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_30tdy_reu_amt",
+   "kor": "보증금30%금일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 30% 행 금일 재사용 2,731,200원"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_40ord_alow_amt",
+   "kor": "보증금40%주문가능금액",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 40% 행 주문가능금액 46,860,000원"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_40ord_alowq",
+   "kor": "보증금40%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 40% 행 주문가능수량 310주"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_40pred_reu_amt",
+   "kor": "보증금40%전일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 40% 행 전일 재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_40tdy_reu_amt",
+   "kor": "보증금40%금일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 40% 행 금일 재사용 3,641,600원"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_50ord_alowq",
+   "kor": "보증금50%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 50% 행 주문가능수량 248주 (금액 셀 미제공)"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_50pred_reu_amt",
+   "kor": "보증금50%전일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 50% 행 전일 재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_50tdy_reu_amt",
+   "kor": "보증금50%금일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 50% 행 금일 재사용 4,552,000원"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_60ord_alowq",
+   "kor": "보증금60%주문가능수량",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 60% 행 주문가능수량 207주 (금액 셀 미제공)"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_60pred_reu_amt",
+   "kor": "보증금60%전일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 60% 행 전일 재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_order_capacity",
+   "f": "assr_60tdy_reu_amt",
+   "kor": "보증금60%금일재사용금액",
+   "layer": "펼침",
+   "where": "X1 · 보증금율 구간별 주문가능·재사용 표 · 60% 행 금일 재사용 5,462,400원"
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "out_pos_qty",
+   "kor": "미수가능수량",
+   "layer": "펼침",
+   "where": "X1 증거금·보증금 구간별 펼침 · 주문 한도 재원 (메인 2SKU-1 인출·주문 한도 영값 묶음 행 경유)"
+  }
+ ]
+}

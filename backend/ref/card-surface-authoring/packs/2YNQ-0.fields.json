@@ -1,0 +1,103 @@
+{
+ "board": "2YNQ-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10098",
+   "f": "ovt_sigpric_flu_rt_rank",
+   "kor": "시간외단일가등락율순위",
+   "layer": null,
+   "where": "'시간외 단일가 등락 상위' 순위 테이블"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "rank",
+   "kor": "순위",
+   "layer": null,
+   "where": "'순위' 컬럼 01~05"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "'종목' 컬럼 하단 005930"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'종목' 컬럼 종목명"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "'현재가' 컬럼 150,850"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률 색/± 부호"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "우패널 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "where": "'단일가 등락률' 컬럼 +9.62%"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "sel_tot_req",
+   "kor": "매도총잔량",
+   "layer": "병기",
+   "where": "'총잔량' 셀 둘째 줄 '매도 3.1만'"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "buy_tot_req",
+   "kor": "매수총잔량",
+   "layer": "직접",
+   "where": "'총잔량' 열 주값 '매수 4.2만'"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": "직접",
+   "where": "'누적 거래량' 열 주값 12.4만주"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "acc_trde_prica",
+   "kor": "누적거래대금",
+   "layer": "병기",
+   "where": "'누적 거래량' 셀 둘째 줄 '거래대금 187억'"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "tdy_close_pric",
+   "kor": "당일종가",
+   "layer": "병기",
+   "where": "'시간외 가격' 셀 둘째 줄 '당일 종가 150,850'"
+  },
+  {
+   "mapping_id": "base:ka10098",
+   "f": "tdy_close_pric_flu_rt",
+   "kor": "당일종가등락률",
+   "layer": null,
+   "where": "'등락률' 컬럼 +1.24%"
+  }
+ ]
+}

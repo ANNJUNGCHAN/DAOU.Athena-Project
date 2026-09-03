@@ -1,0 +1,575 @@
+{
+ "board_id": "13K0-2",
+ "card_id": "CC-06",
+ "name": "CC-06 / R04 · 거래대금 상위 저평가 탐색",
+ "operation_refs": [
+  "base:ka00198",
+  "base:ka10032",
+  "base:ka10099",
+  "base:ka10100"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka00198",
+   "f": "item_inq_rank",
+   "kor": "실시간종목조회순위",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "좌 pane '지금 많이 보는 종목' 블록 순위 열 '1위/2위/3위'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "'지금 많이 보는 종목' 종목 열 주값 종목명",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "bigd_rank",
+   "kor": "빅데이터 순위",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "'지금 많이 보는 종목' 빅데이터 순위 열 '2위/1위/5위'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "rank_chg",
+   "kor": "순위 등락",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "'지금 많이 보는 종목' 순위 등락 열 값 2/1/2",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "rank_chg_sign",
+   "kor": "순위 등락 부호",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "순위 등락 열 ▲/▼ 부호 글리프와 상승 빨강·하락 파랑",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "past_curr_prc",
+   "kor": "과거 현재가",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "'지금 많이 보는 종목' 과거 현재가 열 149,000/194,410/786,300",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "base_comp_sign",
+   "kor": "기준가 대비 부호",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "기준 대비 값의 +/- 부호와 상승색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "base_comp_chgr",
+   "kor": "기준가 대비 등락율",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "기준·직전 대비 셀 첫 줄 '기준 대비 +1.24%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "prev_base_sign",
+   "kor": "직전 기준 대비 부호",
+   "layer": "병기",
+   "board": "13K0-2",
+   "where": "직전 대비 보조줄의 +/- 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "prev_base_chgr",
+   "kor": "직전 기준 대비 등락율",
+   "layer": "병기",
+   "board": "13K0-2",
+   "where": "기준·직전 대비 셀 둘째 줄 '직전 대비 +0.32%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "dt",
+   "kor": "일자",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "블록 헤더 우측 상태 표기 '09-02 09:42 기준' 일자부",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "tm",
+   "kor": "시간",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "블록 헤더 우측 상태 표기 '09-02 09:42 기준' 시각부",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka00198",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "board": "13K0-2",
+   "where": "'지금 많이 보는 종목' 종목 셀 둘째 줄 코드 mono 10px",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "trde_prica_upper",
+   "kor": "거래대금상위",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "'거래대금 상위' 순위 테이블",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "'종목' 컬럼 하단 005930",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "now_rank",
+   "kor": "현재순위",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "'순위' 컬럼 01~05",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "pred_rank",
+   "kor": "전일순위",
+   "layer": "병기",
+   "board": "13K0-2",
+   "where": "순위표 순위 셀 둘째 줄 '전일 3위'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "'종목' 컬럼 삼성전자",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "'현재가' 컬럼 150,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "등락률 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "우패널 '+1,850 · +1.24%'의 +1,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "'등락률' 컬럼 +1.24%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "sel_bid",
+   "kor": "매도호가",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 요약 '호가' 행 '매도 150,900'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "buy_bid",
+   "kor": "매수호가",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 요약 '호가' 행 '매수 150,850'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "now_trde_qty",
+   "kor": "현재거래량",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "순위표 거래량 열 주값 1,420만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "pred_trde_qty",
+   "kor": "전일거래량",
+   "layer": "병기",
+   "board": "13K0-2",
+   "where": "순위표 거래량 셀 둘째 줄 '전일 1,180만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10032",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "'거래대금' 컬럼 2.14조",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "list",
+   "kor": "종목리스트",
+   "layer": "직접",
+   "board": "2XG6-0",
+   "where": "좌 pane 표 아래 신설 '조회 대상' 평면 섹션(824×172, 3열×4행 미니그리드) — 12종목 각각 이름·코드(mono)·등락률을 낱값 행으로 직접 표기. 동일 블록을 2XKO-0·2XP6-0·2XTO-0·2YA8-0·2YEQ-0·2YJ8-0·2YNQ-0에도 복제(2YNQ-0은 시간외 등락률, 2XP6-0은 예상체결 08:50 기준).",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "code",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "'종목' 컬럼 하단 코드 005930",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "name",
+   "kor": "종목명",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "'종목' 컬럼 종목명",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "listCount",
+   "kor": "상장주식수",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 '상장주식수 · 상장일' 행 값 59.7억주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "auditInfo",
+   "kor": "감리구분",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 상태 칩 '감리 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "regDay",
+   "kor": "상장일",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 '상장주식수 · 상장일' 행 값 1975.06.11",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "lastPrice",
+   "kor": "전일종가",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 요약 '전일종가 149,000' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "state",
+   "kor": "종목상태",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 상태 칩 '정상'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "marketCode",
+   "kor": "시장구분코드",
+   "layer": "병기",
+   "board": "13K0-2",
+   "where": "우 레일 종목명 아래 코드줄 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "marketName",
+   "kor": "시장명",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "우패널 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "upName",
+   "kor": "업종명",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "우패널 '같이 비교해볼 종목 · 반도체'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "upSizeName",
+   "kor": "회사크기분류",
+   "layer": "병기",
+   "board": "13K0-2",
+   "where": "우 레일 코드줄 '· 대형주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "companyClassName",
+   "kor": "회사분류",
+   "layer": "병기",
+   "board": "13K0-2",
+   "where": "우 레일 코드줄 '· 제조'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "orderWarning",
+   "kor": "투자유의종목여부",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 상태 칩 '투자유의 아님'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10099",
+   "f": "nxtEnable",
+   "kor": "NXT가능여부",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 상태 칩 'NXT 가능'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "code",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "우패널 '005930'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "name",
+   "kor": "종목명",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "우패널 '삼성전자'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "listCount",
+   "kor": "상장주식수",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 '상장주식수 · 상장일' 행 값 59.7억주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "auditInfo",
+   "kor": "감리구분",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 상태 칩 '감리 없음'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "regDay",
+   "kor": "상장일",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 '상장주식수 · 상장일' 행 값 1975.06.11",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "lastPrice",
+   "kor": "전일종가",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 요약 '전일종가 149,000' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "state",
+   "kor": "종목상태",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 상태 칩 '정상'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "marketCode",
+   "kor": "시장구분코드",
+   "layer": "병기",
+   "board": "13K0-2",
+   "where": "우 레일 종목명 아래 코드줄 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "marketName",
+   "kor": "시장명",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "우패널 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "upName",
+   "kor": "업종명",
+   "layer": null,
+   "board": "13K0-2",
+   "where": "우패널 '같이 비교해볼 종목 · 반도체'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "upSizeName",
+   "kor": "회사크기분류",
+   "layer": "병기",
+   "board": "13K0-2",
+   "where": "우 레일 코드줄 '· 대형주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "companyClassName",
+   "kor": "회사분류",
+   "layer": "병기",
+   "board": "13K0-2",
+   "where": "우 레일 코드줄 '· 제조'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "orderWarning",
+   "kor": "투자유의종목여부",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 상태 칩 '투자유의 아님'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10100",
+   "f": "nxtEnable",
+   "kor": "NXT가능여부",
+   "layer": "직접",
+   "board": "13K0-2",
+   "where": "우 레일 종목 상태 칩 'NXT 가능'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 55
+}

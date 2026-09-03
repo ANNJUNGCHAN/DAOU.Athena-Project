@@ -1,0 +1,11 @@
+{
+  "root": "3D4K-0",
+  "regions": [
+    { "node_id": "3DEW-0", "name": "Header and Capability Navigation", "role": "header", "depth": 1 },
+    { "node_id": "3DEA-0", "name": "Ranking Query Controls", "role": "strip", "depth": 1 },
+    { "node_id": "3D4O-0", "name": "Ranking Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3E8R-0", "name": "행 펼침 본문", "role": "primary", "depth": 2 },
+    { "node_id": "3D4P-0", "name": "Frame", "role": "rail", "depth": 2 },
+    { "node_id": "3D4L-0", "name": "User Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

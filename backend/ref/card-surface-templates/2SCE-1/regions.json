@@ -1,0 +1,12 @@
+{
+  "root": "2SCG-1",
+  "regions": [
+    { "node_id": "2SGP-1", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "2SGQ-1", "name": "Frame (탭 스트립)", "role": "strip", "depth": 2 },
+    { "node_id": "2SG4-1", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "2SCK-1", "name": "Account Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "375G-0", "name": "Holdings Table Column", "role": "primary", "depth": 2 },
+    { "node_id": "388H-0", "name": "Holdings Rail", "role": "rail", "depth": 2 },
+    { "node_id": "2SCH-1", "name": "Account Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

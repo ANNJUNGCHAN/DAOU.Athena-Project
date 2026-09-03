@@ -1,0 +1,18 @@
+{
+  "board_id": "2WZK-0",
+  "name": "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 1120,
+  "state": {
+    "kind": "sort",
+    "parent_board": "2VIN-0",
+    "control": "3달 수익률 높은 순"
+  },
+  "saved_at": "2026-09-02T20:10:00+09:00",
+  "operation_refs": [
+    "base:ka40001",
+    "base:ka40002",
+    "base:ka40004"
+  ]
+}

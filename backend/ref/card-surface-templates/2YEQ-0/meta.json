@@ -1,0 +1,13 @@
+{
+  "board_id": "2YEQ-0",
+  "name": "CC-06 / R04-S8 · 종목찾기 — 잔량률 급증",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 980,
+  "state": {
+    "kind": "sort",
+    "parent_board": "13K0-2",
+    "control": "잔량률 급증"
+  },
+  "saved_at": "2026-09-02T11:26:22Z"
+}

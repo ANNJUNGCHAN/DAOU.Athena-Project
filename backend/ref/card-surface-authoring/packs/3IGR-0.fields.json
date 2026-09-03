@@ -1,0 +1,348 @@
+{
+ "board": "3IGR-0",
+ "fields": [
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "bncr_profa_ch",
+   "kor": "수익증권증거금현금",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 수익증권증거금현금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "nxdy_bncr_sell_exct",
+   "kor": "익일수익증권매도정산대금",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 익일수익증권매도정산대금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "fc_stk_krw_repl_set_amt",
+   "kor": "해외주식원화대용설정금",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 해외주식원화대용설정금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "crd_grnta_ch",
+   "kor": "신용보증금현금",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 신용보증금현금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "crd_grnt_ch",
+   "kor": "신용담보금현금",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 신용담보금현금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "add_grnt_ch",
+   "kor": "추가담보금현금",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 추가담보금현금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "etc_profa",
+   "kor": "기타증거금",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 기타증거금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "uncl_stk_amt",
+   "kor": "미수확보금",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 미수확보금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "remn_repl_evlta",
+   "kor": "잔고대용평가금액",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 잔고대용평가금액 63,280,000원"
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "trst_remn_repl_evlta",
+   "kor": "위탁대용잔고평가금액",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 위탁대용잔고평가금액 63,280,000원"
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "bncr_remn_repl_evlta",
+   "kor": "수익증권대용평가금액",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 수익증권대용평가금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "crd_grnta_repl",
+   "kor": "신용보증금대용",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 신용보증금대용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "crd_grnt_repl",
+   "kor": "신용담보금대용",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 신용담보금대용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "add_grnt_repl",
+   "kor": "추가담보금대용",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 추가담보금대용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "rght_repl_amt",
+   "kor": "권리대용금",
+   "layer": "펼침",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 권리대용금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00005:cash_and_capacity",
+   "f": "uncl_stk_amt",
+   "kor": "미수확보금",
+   "layer": "펼침",
+   "where": "X2 증거금·담보 펼침 · 레일 증거금 현금 재원 / 대용 평가 (메인 2SKU-1 인출·주문 한도 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00005:cash_and_capacity",
+   "f": "rght_repl_amt",
+   "kor": "권리대용금",
+   "layer": "펼침",
+   "where": "X2 증거금·담보 펼침 · 레일 증거금 현금 재원 / 대용 평가 (메인 2SKU-1 인출·주문 한도 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00013:today_reuse",
+   "f": "tdy_reu_objt_amt",
+   "kor": "금일재사용대상금액",
+   "layer": "펼침",
+   "where": "X2 · 재사용 · 대상·사용·제한·최종 표 · 금일 행 대상금액 12,946,000원"
+  },
+  {
+   "mapping_id": "detail:kt00013:today_reuse",
+   "f": "tdy_reu_use_amt",
+   "kor": "금일재사용사용금액",
+   "layer": "펼침",
+   "where": "X2 · 재사용 · 대상·사용·제한·최종 표 · 금일 행 사용금액 3,842,000원"
+  },
+  {
+   "mapping_id": "detail:kt00013:today_reuse",
+   "f": "tdy_reu_lmtt_amt",
+   "kor": "금일재사용제한금액",
+   "layer": "펼침",
+   "where": "X2 · 재사용 · 대상·사용·제한·최종 표 · 금일 행 제한금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:today_reuse",
+   "f": "tdy_reu_alowa_fin",
+   "kor": "금일재사용가능금액최종",
+   "layer": "펼침",
+   "where": "X2 · 재사용 · 대상·사용·제한·최종 표 · 금일 행 가능금액 최종 9,104,000원"
+  },
+  {
+   "mapping_id": "detail:kt00013:previous_day_reuse",
+   "f": "pred_reu_objt_amt",
+   "kor": "전일재사용대상금액",
+   "layer": "펼침",
+   "where": "X2 · 재사용 · 대상·사용·제한·최종 표 · 전일 행 대상금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:previous_day_reuse",
+   "f": "pred_reu_use_amt",
+   "kor": "전일재사용사용금액",
+   "layer": "펼침",
+   "where": "X2 · 재사용 · 대상·사용·제한·최종 표 · 전일 행 사용금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:previous_day_reuse",
+   "f": "pred_reu_lmtt_amt",
+   "kor": "전일재사용제한금액",
+   "layer": "펼침",
+   "where": "X2 · 재사용 · 대상·사용·제한·최종 표 · 전일 행 제한금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:previous_day_reuse",
+   "f": "pred_reu_alowa_fin",
+   "kor": "전일재사용가능금액최종",
+   "layer": "펼침",
+   "where": "X2 · 재사용 · 대상·사용·제한·최종 표 · 전일 행 가능금액 최종 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:cash_resources",
+   "f": "ch_amt",
+   "kor": "현금금액",
+   "layer": "펼침",
+   "where": "X2 · 현금·대용 재원 표 · 현금 행 금액 31,240,000원"
+  },
+  {
+   "mapping_id": "detail:kt00013:cash_resources",
+   "f": "ch_use_lmtt_amt",
+   "kor": "현금사용제한금액",
+   "layer": "펼침",
+   "where": "X2 · 현금·대용 재원 표 · 현금 행 사용제한금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:cash_resources",
+   "f": "use_pos_ch_fin",
+   "kor": "사용가능현금최종",
+   "layer": "펼침",
+   "where": "X2 · 현금·대용 재원 표 · 현금 행 사용가능 최종 31,240,000원"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_resources",
+   "f": "use_pos_repl_fin",
+   "kor": "사용가능대용최종",
+   "layer": "펼침",
+   "where": "X2 · 현금·대용 재원 표 · 대용 행 사용가능 최종 63,280,000원"
+  },
+  {
+   "mapping_id": "detail:kt00013:credit_and_lending_collateral",
+   "f": "crd_grnta_ch",
+   "kor": "신용보증금현금",
+   "layer": "펼침",
+   "where": "X2 · 레일 신용·대여 담보 · 재원 기준 · 신용보증금 현금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:credit_and_lending_collateral",
+   "f": "crd_grnta_repl",
+   "kor": "신용보증금대용",
+   "layer": "펼침",
+   "where": "X2 · 레일 신용·대여 담보 · 재원 기준 · 신용보증금 대용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:credit_and_lending_collateral",
+   "f": "crd_grnt_ch",
+   "kor": "신용담보금현금",
+   "layer": "펼침",
+   "where": "X2 · 레일 신용·대여 담보 · 재원 기준 · 신용담보금 현금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:credit_and_lending_collateral",
+   "f": "crd_grnt_repl",
+   "kor": "신용담보금대용",
+   "layer": "펼침",
+   "where": "X2 · 레일 신용·대여 담보 · 재원 기준 · 신용담보금 대용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:credit_and_lending_collateral",
+   "f": "ls_grnt_reu_gold",
+   "kor": "대주담보금재사용금",
+   "layer": "펼침",
+   "where": "X2 · 레일 신용·대여 담보 · 재원 기준 · 대주담보금재사용금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:repayment_losses",
+   "f": "tdy_crd_rpya_loss_amt",
+   "kor": "금일신용상환손실금액",
+   "layer": "펼침",
+   "where": "X2 · 레일 변제손실 표 · 당일 행 신용상환손실 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:repayment_losses",
+   "f": "pred_crd_rpya_loss_amt",
+   "kor": "전일신용상환손실금액",
+   "layer": "펼침",
+   "where": "X2 · 레일 변제손실 표 · 전일 행 신용상환손실 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:repayment_losses",
+   "f": "tdy_ls_rpya_loss_repl_profa",
+   "kor": "금일대주상환손실대용증거금",
+   "layer": "펼침",
+   "where": "X2 · 레일 변제손실 표 · 당일 행 대주상환손실 대용증거금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:repayment_losses",
+   "f": "pred_ls_rpya_loss_repl_profa",
+   "kor": "전일대주상환손실대용증거금",
+   "layer": "펼침",
+   "where": "X2 · 레일 변제손실 표 · 전일 행 대주상환손실 대용증거금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "evlt_repl_rt",
+   "kor": "평가대용비율",
+   "layer": "펼침",
+   "where": "X2 · 대용 평가·한도 2열 그리드 · 평가대용비율 70.50%"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "crd_repl_profa",
+   "kor": "신용대용증거금",
+   "layer": "펼침",
+   "where": "X2 · 대용 평가·한도 2열 그리드 · 신용대용증거금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "ch_ord_repl_profa",
+   "kor": "현금주문대용증거금",
+   "layer": "펼침",
+   "where": "X2 · 대용 평가·한도 2열 그리드 · 현금주문대용증거금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "crd_ord_repl_profa",
+   "kor": "신용주문대용증거금",
+   "layer": "펼침",
+   "where": "X2 · 대용 평가·한도 2열 그리드 · 신용주문대용증거금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "crd_repl_conv_gold",
+   "kor": "신용대용환산금",
+   "layer": "펼침",
+   "where": "X2 · 대용 평가·한도 2열 그리드 · 신용대용환산금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "repl_alowa",
+   "kor": "대용가능금액(현금제한)",
+   "layer": "펼침",
+   "where": "X2 · 대용 평가·한도 2열 그리드 · 대용가능금액 · 현금 제한 기준 63,280,000원"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "repl_alowa_2",
+   "kor": "대용가능금액2(신용제한)",
+   "layer": "펼침",
+   "where": "X2 · 대용 평가·한도 2열 그리드 · 대용가능금액 · 신용 제한 기준 63,280,000원"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "ch_repl_lck_gold",
+   "kor": "현금대용부족금",
+   "layer": "펼침",
+   "where": "X2 · 대용 평가·한도 2열 그리드 · 현금대용부족금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "crd_repl_lck_gold",
+   "kor": "신용대용부족금",
+   "layer": "펼침",
+   "where": "X2 · 대용 평가·한도 2열 그리드 · 신용대용부족금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "ch_ord_alow_repla",
+   "kor": "현금주문가능대용금",
+   "layer": "펼침",
+   "where": "X2 · 대용 평가·한도 2열 그리드 · 현금주문가능대용금 63,280,000원"
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_valuation_and_limits",
+   "f": "crd_ord_alow_repla",
+   "kor": "신용주문가능대용금",
+   "layer": "펼침",
+   "where": "X2 · 대용 평가·한도 2열 그리드 · 신용주문가능대용금 0원"
+  }
+ ]
+}

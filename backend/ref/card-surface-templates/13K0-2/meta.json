@@ -1,0 +1,13 @@
+{
+  "board_id": "13K0-2",
+  "name": "CC-06 / R04 · 거래대금 상위 저평가 탐색",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 980,
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "saved_at": "2026-09-02T00:00:00+09:00"
+}

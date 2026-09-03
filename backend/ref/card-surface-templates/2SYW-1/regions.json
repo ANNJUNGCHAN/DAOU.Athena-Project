@@ -1,0 +1,11 @@
+{
+  "root": "2SYY-1",
+  "regions": [
+    { "node_id": "2T37-1", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "2T2M-1", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "2SZ2-1", "name": "Account Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "39LT-0", "name": "Account Status Footer", "role": "footer", "depth": 1 },
+    { "node_id": "3Q8R-0", "name": "Order Ledger", "role": "primary", "depth": 2 },
+    { "node_id": "3UKL-0", "name": "주문 추적 레일", "role": "rail", "depth": 2 }
+  ]
+}

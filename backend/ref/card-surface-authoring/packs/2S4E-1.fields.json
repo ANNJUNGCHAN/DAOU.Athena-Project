@@ -1,0 +1,404 @@
+{
+ "board": "2S4E-1",
+ "fields": [
+  {
+   "mapping_id": "base:ka10008",
+   "f": "stk_frgnr",
+   "kor": "주식외국인",
+   "layer": null,
+   "where": "일별 투자자 순매수 표의 외국인 열 목록"
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 표 '일자' 열 09/01~08/26"
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "close_pric",
+   "kor": "종가",
+   "layer": null,
+   "where": "일별 표 '종가' 열 150,850"
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "poss_stkcnt",
+   "kor": "보유주식수",
+   "layer": null,
+   "where": "외국인 보유 '보유 31.29억주'"
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "wght",
+   "kor": "비중",
+   "layer": null,
+   "where": "외국인 보유 '지분율 52.41%'"
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "gain_pos_stkcnt",
+   "kor": "취득가능주식수",
+   "layer": null,
+   "where": "외국인 보유 '취득 가능 16.47억주'"
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "limit_exh_rt",
+   "kor": "한도소진률",
+   "layer": null,
+   "where": "외국인 보유 '한도 소진 65.5%'"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "close_pric",
+   "kor": "종가",
+   "layer": null,
+   "where": "일별 표 '종가' 열"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "'등락' 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "일별 표 '등락' 열 +1.24%"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "dm1",
+   "kor": "D-1",
+   "layer": null,
+   "where": "일별 표 09/01 행 외국인 +1,842"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "dm2",
+   "kor": "D-2",
+   "layer": null,
+   "where": "일별 표 08/29 행 외국인 +486"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "dm3",
+   "kor": "D-3",
+   "layer": null,
+   "where": "일별 표 08/28 행 외국인 +512"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "pred_pre_1",
+   "kor": "전일대비1",
+   "layer": "병기",
+   "where": "일별 표 09/01 종가 셀 2번째 줄 '+1,850 · +1.24%'"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "pred_pre_2",
+   "kor": "전일대비2",
+   "layer": "병기",
+   "where": "일별 표 08/29 종가 셀 2번째 줄 '+1,010 · +0.68%'"
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "pred_pre_3",
+   "kor": "전일대비3",
+   "layer": "병기",
+   "where": "일별 표 08/28 종가 셀 2번째 줄 '-510 · -0.34%'"
+  },
+  {
+   "mapping_id": "base:ka10044",
+   "f": "daly_orgn_trde_stk",
+   "kor": "일별기관매매종목",
+   "layer": null,
+   "where": "'기관 순매수 상위' 카드 목록"
+  },
+  {
+   "mapping_id": "base:ka10044",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "기관 순매수 상위 KB금융·현대차·POSCO홀딩스"
+  },
+  {
+   "mapping_id": "base:ka10044",
+   "f": "netprps_qty",
+   "kor": "순매수수량",
+   "layer": "병기",
+   "where": "레일 '기관 순매수 상위' 각 행 금액 아래 수량(KB금융 27.4만주)"
+  },
+  {
+   "mapping_id": "base:ka10044",
+   "f": "netprps_amt",
+   "kor": "순매수금액",
+   "layer": null,
+   "where": "기관 순매수 상위 '+214억'"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "orgn_prsm_avg_pric",
+   "kor": "기관추정평균가",
+   "layer": "직접",
+   "where": "레일 '외국인·기관 동향' 기관 추정평균가 150,240"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "for_prsm_avg_pric",
+   "kor": "외인추정평균가",
+   "layer": "직접",
+   "where": "레일 '외국인·기관 동향' 외인 추정평균가 149,820"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "stk_orgn_trde_trnsn",
+   "kor": "종목별기관매매추이",
+   "layer": null,
+   "where": "일별 투자자 순매수 표 목록"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 표 '일자' 열"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "close_pric",
+   "kor": "종가",
+   "layer": null,
+   "where": "일별 표 '종가' 열"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "'등락' 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "일별 표 '등락' 열"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "where": "일별 표 신설 '거래량' 열(09/01 1,420만주)"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "orgn_dt_acc",
+   "kor": "기관기간누적",
+   "layer": null,
+   "where": "KPI '기관 5일 누적 -1,842억'"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "orgn_daly_nettrde_qty",
+   "kor": "기관일별순매매수량",
+   "layer": "병기",
+   "where": "일별 표 기관 셀 2번째 줄 수량(09/01 -79.8만주)"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "for_dt_acc",
+   "kor": "외인기간누적",
+   "layer": null,
+   "where": "KPI '외국인 5일 누적 +3,214억'"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "for_daly_nettrde_qty",
+   "kor": "외인일별순매매수량",
+   "layer": "병기",
+   "where": "일별 표 외국인 셀 2번째 줄 수량(09/01 +122.1만주)"
+  },
+  {
+   "mapping_id": "base:ka10045",
+   "f": "limit_exh_rt",
+   "kor": "한도소진율",
+   "layer": null,
+   "where": "외국인 보유 '한도 소진 65.5%'"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 표 '일자' 열"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "'등락' 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "일별 표 '등락' 열"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "stk_invsr_orgn_tot",
+   "kor": "종목별투자자기관별합계",
+   "layer": null,
+   "where": "KPI 5일 누적 카드(외국인·기관·개인) 합계"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "ind_invsr",
+   "kor": "개인투자자",
+   "layer": null,
+   "where": "KPI '개인 5일 누적 -1,306억'"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "frgnr_invsr",
+   "kor": "외국인투자자",
+   "layer": null,
+   "where": "KPI '외국인 5일 누적 +3,214억'"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "orgn",
+   "kor": "기관계",
+   "layer": null,
+   "where": "KPI '기관 5일 누적 -1,842억'"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "opaf_invsr_trde",
+   "kor": "장중투자자별매매차트",
+   "layer": null,
+   "where": "일별 투자자 순매수 표 목록(장 마감 후 확정)"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "헤더 '삼성전자 수급'"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "일별 표 '종가' 열"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "'등락' 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "where": "일별 표 '등락' 열"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "ind_invsr",
+   "kor": "개인투자자",
+   "layer": null,
+   "where": "일별 표 '개인' 열 -638"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "frgnr_invsr",
+   "kor": "외국인투자자",
+   "layer": null,
+   "where": "일별 표 '외국인' 열 +1,842"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "orgn",
+   "kor": "기관계",
+   "layer": null,
+   "where": "일별 표 '기관' 열 -1,204"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "prid_stkpc_flu_rt",
+   "kor": "기간중주가등락률",
+   "layer": "병기",
+   "where": "KPI '연속 순매수' 칸 보조줄 '기간 등락 +2.65%'"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "orgn_cont_netprps_dys",
+   "kor": "기관계연속순매수일수",
+   "layer": null,
+   "where": "연속 순매매 '기관 5일 연속 매도'"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "orgn_cont_netprps_qty",
+   "kor": "기관계연속순매수량",
+   "layer": "병기",
+   "where": "레일 '연속 순매매' 행 2번째 줄 '기관 5일 -122.9만주'"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "orgn_cont_netprps_amt",
+   "kor": "기관계연속순매수금액",
+   "layer": null,
+   "where": "KPI '기관 5일 누적 -1,842억'"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "frgnr_cont_netprps_dys",
+   "kor": "외국인연속순매수일수",
+   "layer": null,
+   "where": "연속 순매매 '외국인 5일 연속 매수'"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "frgnr_cont_netprps_qty",
+   "kor": "외국인연속순매수량",
+   "layer": "직접",
+   "where": "레일 '연속 순매매' 행 값 '외국인 5일 +214.6만주'"
+  },
+  {
+   "mapping_id": "base:ka10131",
+   "f": "frgnr_cont_netprps_amt",
+   "kor": "외국인연속순매수금액",
+   "layer": null,
+   "where": "KPI '외국인 5일 누적 +3,214억'"
+  },
+  {
+   "mapping_id": "base:ka90009",
+   "f": "orgn_netprps_stk_nm",
+   "kor": "기관순매수종목명",
+   "layer": null,
+   "where": "'기관 순매수 상위' KB금융·현대차·POSCO홀딩스"
+  },
+  {
+   "mapping_id": "base:kt20016",
+   "f": "pred_close_pric",
+   "kor": "전일종가",
+   "layer": null,
+   "where": "일별 표 08/29 '종가 149,000'"
+  }
+ ]
+}

@@ -1,0 +1,82 @@
+{
+ "board": "30C1-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10024",
+   "f": "trde_qty_updt",
+   "kor": "거래량갱신",
+   "layer": null,
+   "where": "거래량갱신 순위 표 본체"
+  },
+  {
+   "mapping_id": "base:ka10024",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "where": "표 '종목' 셀 둘째 줄 코드 '042700'"
+  },
+  {
+   "mapping_id": "base:ka10024",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "종목 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10024",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "현재가 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10024",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률의 ± 부호와 상승/하락 색"
+  },
+  {
+   "mapping_id": "base:ka10024",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "where": "표 '현재가' 셀 둘째 줄 '+7,900 · +4.18%'"
+  },
+  {
+   "mapping_id": "base:ka10024",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "where": "등락률 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10024",
+   "f": "prev_trde_qty",
+   "kor": "이전거래량",
+   "layer": null,
+   "where": "이전 최대 컬럼 240만주"
+  },
+  {
+   "mapping_id": "base:ka10024",
+   "f": "now_trde_qty",
+   "kor": "현재거래량",
+   "layer": null,
+   "where": "오늘 거래량 컬럼 320만주"
+  },
+  {
+   "mapping_id": "base:ka10024",
+   "f": "sel_bid",
+   "kor": "매도호가",
+   "layer": "직접",
+   "where": "표 '호가' 셀 첫째 줄 '매도 197,500'"
+  },
+  {
+   "mapping_id": "base:ka10024",
+   "f": "buy_bid",
+   "kor": "매수호가",
+   "layer": "병기",
+   "where": "표 '호가' 셀 둘째 줄 '매수 197,400'"
+  }
+ ]
+}

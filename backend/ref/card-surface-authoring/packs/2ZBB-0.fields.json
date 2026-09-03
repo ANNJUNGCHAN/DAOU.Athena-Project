@@ -1,0 +1,166 @@
+{
+ "board": "2ZBB-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_irds",
+   "kor": "대차거래증감",
+   "layer": null,
+   "where": "대차 상위 표 '증감' 열 +82만주"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_cntrcnt_sum",
+   "kor": "대차거래체결주수합",
+   "layer": null,
+   "where": "대차 요약 '체결 1,842만주'"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_rpy_sum",
+   "kor": "대차거래상환주수합",
+   "layer": null,
+   "where": "대차 요약 '상환 1,214만주'"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "remn_amt_sum",
+   "kor": "잔고금액합",
+   "layer": "직접",
+   "where": "레일 '대차 요약' 행 '상위 종목 잔고금액 합 84.2조'"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_cntrcnt_rt",
+   "kor": "대차거래체결주수비율",
+   "layer": "병기",
+   "where": "표 '대차 체결' 셀 2번째 줄 비율(1위 7.5%)"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_rpy_rt",
+   "kor": "대차거래상환주수비율",
+   "layer": "병기",
+   "where": "표 '대차 상환' 셀 2번째 줄 비율(1위 1.1%)"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "rmnd_rt",
+   "kor": "잔고주수비율",
+   "layer": null,
+   "where": "대차 상위 표 '잔고비중' 열 2.1%"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "remn_amt_rt",
+   "kor": "잔고금액비율",
+   "layer": "병기",
+   "where": "표 '잔고 비중' 셀 2번째 줄 '금액 2.3%'"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_upper_10stk",
+   "kor": "대차거래상위10종목",
+   "layer": null,
+   "where": "대차 상위 순위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "표 '종목' 열"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_cntrcnt",
+   "kor": "대차거래체결주수",
+   "layer": null,
+   "where": "표 '체결' 열 96만주"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "dbrt_trde_rpy",
+   "kor": "대차거래상환주수",
+   "layer": "직접",
+   "where": "표 신설 '대차 상환' 열(1위 14만주)"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "rmnd",
+   "kor": "잔고주수",
+   "layer": null,
+   "where": "표 '대차잔고' 열 1,284만주"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "remn_amt",
+   "kor": "잔고금액",
+   "layer": "병기",
+   "where": "표 '잔고' 셀 2번째 줄 금액(1위 1.94조)"
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_irds",
+   "kor": "대차거래증감",
+   "layer": null,
+   "where": "대차 상위 표 '증감' 열 +82만주"
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "dbrt_trde_prps",
+   "kor": "대차거래내역",
+   "layer": null,
+   "where": "대차 상위 순위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "표 '종목' 열"
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "dbrt_trde_cntrcnt",
+   "kor": "대차거래체결주수",
+   "layer": null,
+   "where": "표 '체결' 열 96만주"
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "dbrt_trde_rpy",
+   "kor": "대차거래상환주수",
+   "layer": "직접",
+   "where": "표 신설 '대차 상환' 열(1위 14만주)"
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "rmnd",
+   "kor": "잔고주수",
+   "layer": null,
+   "where": "표 '대차잔고' 열 1,284만주"
+  },
+  {
+   "mapping_id": "base:ka90012",
+   "f": "remn_amt",
+   "kor": "잔고금액",
+   "layer": "병기",
+   "where": "표 '잔고' 셀 2번째 줄 금액(1위 1.94조)"
+  }
+ ]
+}

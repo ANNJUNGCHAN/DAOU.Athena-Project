@@ -1,0 +1,10 @@
+{
+  "root": "3N4P-0",
+  "regions": [
+    { "node_id": "3NGV-0", "name": "상단 제목·모드·연결", "role": "header", "depth": 1 },
+    { "node_id": "3N4U-0", "name": "호가 본문 3열", "role": "workspace", "depth": 1 },
+    { "node_id": "3OSI-0", "name": "단계별 낱값 표", "role": "primary", "depth": 2 },
+    { "node_id": "3P86-0", "name": "호가 요약 레일", "role": "rail", "depth": 2 },
+    { "node_id": "3N4Q-0", "name": "호가 하단 상태바", "role": "footer", "depth": 1 }
+  ]
+}

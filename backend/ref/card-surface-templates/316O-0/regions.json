@@ -1,0 +1,10 @@
+{
+  "root": "3NHC-0",
+  "regions": [
+    { "node_id": "3NHD-0", "name": "Header", "role": "header", "depth": 1 },
+    { "node_id": "3NI3-0", "name": "KPI", "role": "kpi", "depth": 1 },
+    { "node_id": "3NIN-0", "name": "Body", "role": "workspace", "depth": 1 },
+    { "node_id": "3NIO-0", "name": "List", "role": "primary", "depth": 2 },
+    { "node_id": "3NTB-0", "name": "Rail", "role": "rail", "depth": 2 }
+  ]
+}

@@ -154,7 +154,10 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # strategies/{id}/activate·strategies/{id}/diff·optimize/plan·optimize·
     # deployments(GET/POST)·deployments/{id}/signals·deployments/{id}/evaluate.
     # DELETE /deployments/{id}는 위 DELETE /runs/{id}와 같은 이유로 카운트에 없다.
-    assert len(operation_ids) == 376
+    # 377 = 376 + 내부 보드 하이드레이션 endpoint 1개(canvas board-hydrate) — Paper
+    # 보드 1장의 read op들을 한 번에 읽어 표면 슬롯을 채운다(D2 보드 단위 fetch-set).
+    # realtime binding contract와 같은 신뢰 경계(bearer, LLM 비노출)다.
+    assert len(operation_ids) == 377
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids

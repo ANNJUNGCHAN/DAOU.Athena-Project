@@ -1,0 +1,13 @@
+{
+  "board_id": "2UN6-1",
+  "name": "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "tab",
+    "parent_board": "13K0-2",
+    "control": "조건검색"
+  },
+  "saved_at": "2026-09-02T11:33:04Z"
+}

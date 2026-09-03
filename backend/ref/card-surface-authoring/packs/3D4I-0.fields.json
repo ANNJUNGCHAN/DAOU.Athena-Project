@@ -1,0 +1,208 @@
+{
+ "board": "3D4I-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10095",
+   "f": "cntr_qty",
+   "kor": "체결량",
+   "layer": "펼침",
+   "where": "체결·종목 기본 블록 체결 열 1행 · 체결량 3,200주"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "cntr_str",
+   "kor": "체결강도",
+   "layer": "펼침",
+   "where": "체결·종목 기본 블록 체결 열 2행 · 체결강도 118.4%(up 색)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "sel_1th_bid",
+   "kor": "매도1차호가",
+   "layer": "펼침",
+   "where": "5단계 호가 표 1차 행 매도호가 열 · 150,900"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "sel_2th_bid",
+   "kor": "매도2차호가",
+   "layer": "펼침",
+   "where": "5단계 호가 표 2차 행 매도호가 열 · 150,950"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "sel_3th_bid",
+   "kor": "매도3차호가",
+   "layer": "펼침",
+   "where": "5단계 호가 표 3차 행 매도호가 열 · 151,000"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "sel_4th_bid",
+   "kor": "매도4차호가",
+   "layer": "펼침",
+   "where": "5단계 호가 표 4차 행 매도호가 열 · 151,050"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "sel_5th_bid",
+   "kor": "매도5차호가",
+   "layer": "펼침",
+   "where": "5단계 호가 표 5차 행 매도호가 열 · 151,100"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "buy_1th_bid",
+   "kor": "매수1차호가",
+   "layer": "펼침",
+   "where": "5단계 호가 표 1차 행 매수호가 열 · 150,850"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "buy_2th_bid",
+   "kor": "매수2차호가",
+   "layer": "펼침",
+   "where": "5단계 호가 표 2차 행 매수호가 열 · 150,800"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "buy_3th_bid",
+   "kor": "매수3차호가",
+   "layer": "펼침",
+   "where": "5단계 호가 표 3차 행 매수호가 열 · 150,750"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "buy_4th_bid",
+   "kor": "매수4차호가",
+   "layer": "펼침",
+   "where": "5단계 호가 표 4차 행 매수호가 열 · 150,700"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "buy_5th_bid",
+   "kor": "매수5차호가",
+   "layer": "펼침",
+   "where": "5단계 호가 표 5차 행 매수호가 열 · 150,650"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "upl_pric",
+   "kor": "상한가",
+   "layer": "펼침",
+   "where": "오늘 가격 블록 좌열 3번째 · 상한가 193,700(up 색)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "lst_pric",
+   "kor": "하한가",
+   "layer": "펼침",
+   "where": "오늘 가격 블록 우열 3번째 · 하한가 104,300(down 색)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "close_pric",
+   "kor": "종가",
+   "layer": "펼침",
+   "where": "오늘 가격 블록 우열 2번째 · 종가 '집계 전'(장중 결측 어휘)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "exp_cntr_pric",
+   "kor": "예상체결가",
+   "layer": "펼침",
+   "where": "체결·종목 기본 블록 체결 열 3행 · 예상체결가 '해당 없음'(정규장 진행)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "exp_cntr_qty",
+   "kor": "예상체결량",
+   "layer": "펼침",
+   "where": "체결·종목 기본 블록 체결 열 4행 · 예상체결량 '해당 없음'(정규장 진행)"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "cap",
+   "kor": "자본금",
+   "layer": "펼침",
+   "where": "체결·종목 기본 블록 종목 기본 열 3행 · 자본금 7,780억"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "fav",
+   "kor": "액면가",
+   "layer": "펼침",
+   "where": "체결·종목 기본 블록 종목 기본 열 4행 · 액면가 100원"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "mac",
+   "kor": "시가총액",
+   "layer": "펼침",
+   "where": "체결·종목 기본 블록 종목 기본 열 1행 · 시가총액 900.6조"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "stkcnt",
+   "kor": "주식수",
+   "layer": "펼침",
+   "where": "체결·종목 기본 블록 종목 기본 열 2행 · 상장주식수 59.7억주"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "bid_tm",
+   "kor": "호가시간",
+   "layer": "펼침",
+   "where": "5단계 호가 블록 헤더 우측 · '09:42:18 기준'"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "dt",
+   "kor": "일자",
+   "layer": "펼침",
+   "where": "선택 행 바 우측 · '8종목 중 1행 펼침 · 09-01'"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "pri_sel_req",
+   "kor": "우선매도잔량",
+   "layer": "펼침",
+   "where": "잔량·건수 표 우선잔량 행 매도 열 · 1.7만주"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "pri_buy_req",
+   "kor": "우선매수잔량",
+   "layer": "펼침",
+   "where": "잔량·건수 표 우선잔량 행 매수 열 · 2.4만주"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "pri_sel_cnt",
+   "kor": "우선매도건수",
+   "layer": "펼침",
+   "where": "잔량·건수 표 우선건수 행 매도 열 · 298건"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "pri_buy_cnt",
+   "kor": "우선매수건수",
+   "layer": "펼침",
+   "where": "잔량·건수 표 우선건수 행 매수 열 · 412건"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "tot_sel_cnt",
+   "kor": "총매도건수",
+   "layer": "펼침",
+   "where": "잔량·건수 표 총건수 행 매도 열 · 2,410건"
+  },
+  {
+   "mapping_id": "base:ka10095",
+   "f": "tot_buy_cnt",
+   "kor": "총매수건수",
+   "layer": "펼침",
+   "where": "잔량·건수 표 총건수 행 매수 열 · 3,180건"
+  }
+ ]
+}

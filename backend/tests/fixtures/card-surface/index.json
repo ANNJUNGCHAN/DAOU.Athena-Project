@@ -1,0 +1,22 @@
+{
+  "version": "card-surface.v1",
+  "complete": false,
+  "expected": {
+    "operation_count": 3,
+    "visible_occurrence_count": 24
+  },
+  "boards": [
+    {
+      "board_id": "2SKU-1",
+      "card_id": "CC-01"
+    },
+    {
+      "board_id": "2SKU-1-T1",
+      "card_id": "CC-01"
+    },
+    {
+      "board_id": "2SKU-1-X1",
+      "card_id": "CC-01"
+    }
+  ]
+}

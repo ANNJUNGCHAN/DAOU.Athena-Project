@@ -313,7 +313,7 @@ function shellArgs(cardId) {
   return { stk_cd: '005930' };
 }
 
-async function sendRestEnvelope(win, card, fixture, cardOrdinal) {
+async function sendRestEnvelope(win, card, fixture, cardOrdinal, presentation = null) {
   await win.webContents.executeJavaScript(`(() => {
     const root = document.querySelector('#grid .integrated-card[data-card-id="${card.card_id}"]');
     if (root) root.scrollIntoView({ block: 'start' });
@@ -378,7 +378,9 @@ async function sendRestEnvelope(win, card, fixture, cardOrdinal) {
           return {
             visibility: document.visibilityState,
             shellHidden: document.getElementById('shell').hidden,
-            gridChildren: document.querySelectorAll('#grid > .card').length,
+            // 통합 카드는 캔버스 탭 덱(#grid > .canvas-tab-deck) 안에 산다 —
+            // 직계 자식만 세면 진단이 항상 0으로 나온다.
+            gridChildren: document.querySelectorAll('#grid .card').length,
             rootConnected: Boolean(root && root.isConnected),
             rect: rect && { x: rect.x, y: rect.y, width: rect.width, height: rect.height },
             rootStyle: root && compact(root),
@@ -404,8 +406,8 @@ async function sendRestEnvelope(win, card, fixture, cardOrdinal) {
         card_id: card.card_id,
         card_kind: card.card_kind,
         capability: fixture.capability_id,
-        mode: shellMode(card.card_id),
-        section: fixture.operation_ref,
+        mode: (presentation && presentation.mode) || shellMode(card.card_id),
+        section: (presentation && presentation.section) || fixture.operation_ref,
         operation_ref: fixture.operation_ref,
         canvas_type: fixture.canvas_type,
         screen_id: fixture.screen_id,
@@ -486,7 +488,644 @@ async function installProductionSemanticSnapshot(win, manager, contracts) {
   return { lease_id: mounted.leaseId, binding_count: config.semanticBindingIds.length };
 }
 
+// ---------- 보드 표면 반응형 검수 (계획 §5 P3·P5) ----------
+//
+// 창 크기 4종에서 같은 보드를 세우고, 단계마다 (1) 보드 DOM 텍스트 다중집합과
+// (2) 슬롯 도달 다중집합이 같은지 본다. 접힘은 이동이지 삭제가 아니므로
+// (계획 §2) 열이 접혀도 그 값은 병기 줄로 내려와 화면에 그대로 남아야 한다.
+const BOARD_ID = 'fixture-quote';
+const BOARD_TEMPLATE_DIR = path.join(
+  BACKEND, 'ref', 'card-surface-templates', BOARD_ID,
+);
+const BOARD_WINDOW_PRESETS = Object.freeze([
+  { name: '원본', width: 1920, height: 1080 },
+  { name: '2분할', width: 960, height: 1080 },
+  { name: '4분할', width: 640, height: 540 },
+  { name: '최소', width: 480, height: 420 },
+]);
+
+// 백엔드 card_surface_contract.observation_id_for와 **같은** 재료다. 다른 규칙으로
+// 만들면 실시간 프레임이 보드 슬롯을 못 찾는다.
+function observationIdFor(occurrenceId, rowIndex = null) {
+  const suffix = rowIndex === null ? 'scalar' : `row:${rowIndex}`;
+  const digest = crypto.createHash('sha256')
+    .update(`semantic-observation\0${occurrenceId}\0${suffix}`)
+    .digest('hex')
+    .slice(0, 20);
+  return `obs_${digest}`;
+}
+
+// 봉투가 실을 표면 계약을 픽스처 원문에서 만든다. 백엔드가 만드는 것과 같은
+// 모양이다(slot_id · occurrence_id · observation_id · value · format).
+//
+// 실시간 이음매도 여기서 함께 만든다: 보드의 현재가 슬롯이 실제 0B 시세 바인딩과
+// 같은 관찰을 가리키게 붙인다. 프론트는 그 표 하나만 보고 프레임을 잎에 꽂는다.
+const BOARD_REALTIME_SLOT = 'header.price';
+// 보드 카드가 실시간 리스를 얻으려면 봉투가 웹소켓 op를 실어야 한다(0B = 주식시세).
+const BOARD_REALTIME_OPERATION = '0B';
+const BOARD_REALTIME_FIELD = '10';
+
+function loadBoardSurfaceContract(contracts) {
+  const slots = JSON.parse(fs.readFileSync(path.join(BOARD_TEMPLATE_DIR, 'slots.json'), 'utf8'));
+  const canon = JSON.parse(
+    fs.readFileSync(path.join(BOARD_TEMPLATE_DIR, 'values.canon.json'), 'utf8'),
+  ).values;
+  const operationRef = `base:${BOARD_REALTIME_OPERATION}`;
+  const observationBySlot = {};
+  const slotValues = slots.slots
+    .filter((slot) => Object.prototype.hasOwnProperty.call(canon, slot.slot_id))
+    .map((slot) => {
+      const occurrenceId = `${operationRef}|$.${slot.slot_id}|1`;
+      const observationId = observationIdFor(occurrenceId);
+      observationBySlot[slot.slot_id] = observationId;
+      return {
+        slot_id: slot.slot_id,
+        occurrence_id: occurrenceId,
+        observation_id: observationId,
+        value: canon[slot.slot_id],
+        layer: slot.layer,
+        format: slot.format,
+      };
+    });
+  const source = contracts.realtime[BOARD_REALTIME_OPERATION]
+    .source_bindings[BOARD_REALTIME_FIELD];
+  if (!source) throw new Error('board surface: 0B current-price source binding is missing');
+  return {
+    contract: {
+      surface_version: 'card-surface.v1',
+      board_id: slots.board_id,
+      card_id: slots.card_id,
+      state_boards: [],
+      slot_values: slotValues,
+      unbound_slots: [],
+      column_priority: slots.column_priority || [],
+      section_titles_ko: slots.section_titles_ko || {},
+    },
+    realtimeBindings: [
+      { binding_id: source.binding_id, observation_id: observationBySlot[BOARD_REALTIME_SLOT] },
+    ],
+    bindingId: source.binding_id,
+    observationBySlot,
+    canon,
+    operationRef,
+    slotCount: slotValues.length,
+  };
+}
+
+// 카드 6종의 kind — 봉투의 card_kind가 card_id와 안 맞으면 통합 카드 판정이
+// 닫히고(integratedDefinition) 보드가 아예 안 선다.
+const CARD_KIND = Object.freeze({
+  'CC-01': 'account', 'CC-02': 'order', 'CC-03': 'instrument',
+  'CC-04': 'orderbook', 'CC-05': 'flow', 'CC-06': 'explorer',
+});
+
+// view_instance_id는 normalizeIdentity를 거쳐 소문자가 된다 — DOM에서 찾을 때
+// 쓰는 키도 같은 규칙으로 만든다(대문자 보드 id를 그대로 쓰면 못 찾는다).
+function boardInstanceId(boardId) {
+  return `board-${String(boardId).toLowerCase()}`;
+}
+
+async function sendBoardEnvelope(win, surface) {
+  const instanceId = surface.instanceId;
+  const correlation = {
+    dataset_id: 'all-kiwoom-integrated-cards',
+    item_id: instanceId,
+    // ordinal은 1..6만 유효하다(rest-canvas-paint.isValidCorrelation) — 영수증은
+    // item_id로 가려내므로 카드 서수와 겹쳐도 섞이지 않는다.
+    ordinal: surface.ordinal || 3,
+  };
+  const receipt = await new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      ipcMain.removeListener('athena:rest-canvas-painted', onPainted);
+      reject(new Error(`board surface ${surface.boardId}: shell paint receipt timeout`));
+    }, 15000);
+    function onPainted(_event, painted) {
+      if (!painted || painted.item_id !== correlation.item_id) return;
+      clearTimeout(timer);
+      ipcMain.removeListener('athena:rest-canvas-painted', onPainted);
+      if (painted.render_state === 'error') {
+        reject(new Error(`board surface ${surface.boardId}: ${painted.error}`));
+        return;
+      }
+      resolve(painted);
+    }
+    ipcMain.on('athena:rest-canvas-painted', onPainted);
+    win.webContents.send('athena:add-rest-canvas', {
+      operationRef: surface.operationRef,
+      operationArgs: { stk_cd: '005930' },
+      canvasType: 'facts',
+      envelope: {
+        card_id: surface.contract.card_id,
+        card_kind: CARD_KIND[surface.contract.card_id],
+        capability: 'quote',
+        mode: 'quote',
+        section: 'board-surface',
+        // 통합 카드 6장과 같은 탭을 뺏지 않게 자기 인스턴스로 연다.
+        view_instance_id: instanceId,
+        operation_ref: surface.operationRef,
+        canvas_type: 'facts',
+        card_title: surface.cardTitle,
+        fell_back: false,
+        correlation,
+        surface_contract: surface.contract,
+        realtime_bindings: surface.realtimeBindings || [],
+        operation_refs: [surface.operationRef],
+      },
+    });
+  });
+  return receipt;
+}
+
+// 보드 카드는 자기 탭에 산다 — 찍기 전에 그 탭을 켜고(다른 탭이 활성이면 패널이
+// hidden이라 높이가 0으로 나온다) 보드가 실제로 설 때까지 기다린다. 원문 HTML은
+// 카드 청크에 있어 첫 마운트가 비동기다.
+async function activateBoardTab(win, instanceId) {
+  const activated = await win.webContents.executeJavaScript(`(() => {
+    const root = document.querySelector(
+      '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
+    const panel = root && root.closest('.canvas-tab-panel');
+    if (!panel) return false;
+    const tab = document.querySelector(
+      '.canvas-tab-strip .canvas-tab[data-tab-key="' + panel.dataset.tabKey + '"]');
+    if (tab) tab.click();
+    return Boolean(tab);
+  })()`);
+  if (!activated) throw new Error(`board surface ${instanceId}: canvas tab was not found`);
+  await win.webContents.executeJavaScript(`new Promise((resolve, reject) => {
+    const started = Date.now();
+    const check = () => {
+      const root = document.querySelector(
+        '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
+      if (root && root.querySelector('.board-surface')) return resolve(true);
+      if (Date.now() - started > 10000) return reject(new Error('board surface never mounted'));
+      requestAnimationFrame(check);
+    };
+    check();
+  })`);
+}
+
+// 창 크기를 바꾼 뒤 레이아웃이 멎을 때까지 기다린다. rAF 2번으로는 모자란다 —
+// 창 리사이즈가 비동기라 아직 옛 폭에서 잰 값이 섞이고(실측: 같은 단계가
+// 실행마다 377/537px로 흔들렸다), 컨테이너 쿼리는 그 폭으로 다시 돈다.
+async function settleBoardLayout(win, instanceId) {
+  return win.webContents.executeJavaScript(`new Promise((resolve) => {
+    const root = document.querySelector(
+      '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
+    const surface = root && root.querySelector('.board-surface');
+    let last = -1;
+    let stable = 0;
+    let frames = 0;
+    const tick = () => {
+      const now = surface ? Math.round(surface.getBoundingClientRect().width) : 0;
+      stable = now === last ? stable + 1 : 0;
+      last = now;
+      frames += 1;
+      if (stable >= 4 || frames > 180) return resolve(now);
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  })`);
+}
+
+// 한 단계의 측정.
+//
+// 두 가지를 센다.
+//   1) 보드 DOM 전체의 텍스트 다중집합 — responsive가 노드를 지우지 않았다는 증거.
+//   2) 슬롯별 (텍스트, 화면 도달 여부) 다중집합 — 값이 화면에서 사라지지 않았다는
+//      증거. `도달`은 그 슬롯의 잎이 보이거나, 그 열을 대신 받는 병기 줄이 보이는
+//      것이다(계획 §2 "접힌 열은 삭제가 아니라 셀 병기로 내려간다").
+// 병기 줄(.bs-paired) 자체는 값의 1차 표현이 아니라 접힘의 착지점이라 도달 판정에서
+// 뺀다 — XL에서 숨어 있는 것이 정상이다. 영값 묶음(H1)으로 접힌 레일 행도 열이
+// 없어 도달 0이지만, 그 0이 네 단계 모두 같으므로 상등 검사가 그대로 성립한다.
+const boardStepProbe = (instanceId) => `(() => {
+  const root = document.querySelector(
+    '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
+  if (!root) return { error: 'board card not found' };
+  const surface = root.querySelector('.board-surface');
+  if (!surface) return { error: 'board surface not mounted' };
+  const shown = (node) => node.getClientRects().length > 0;
+
+  const domText = new Map();
+  const walker = document.createTreeWalker(surface, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    const text = node.nodeValue.trim();
+    if (text) domText.set(text, (domText.get(text) || 0) + 1);
+  }
+
+  const pairedCols = new Set();
+  for (const paired of surface.querySelectorAll('.bs-paired')) {
+    if (!shown(paired)) continue;
+    for (const token of String(paired.dataset.pairedCol || '').split(/\\s+/)) {
+      if (token) pairedCols.add(token);
+    }
+  }
+  const columnOf = (node) => {
+    for (let el = node; el && el !== surface; el = el.parentElement) {
+      if (el.dataset && el.dataset.colPriority) return el.dataset.colPriority;
+    }
+    return null;
+  };
+
+  const slots = [];
+  let visibleSlotCount = 0;
+  let reachableSlotCount = 0;
+  for (const leaf of surface.querySelectorAll('[data-slot-id]')) {
+    if (leaf.closest('.bs-paired')) continue;
+    const column = columnOf(leaf);
+    const visible = shown(leaf);
+    const reachable = visible || Boolean(column && pairedCols.has(column));
+    if (visible) visibleSlotCount += 1;
+    if (reachable) reachableSlotCount += 1;
+    slots.push([
+      leaf.dataset.slotId, leaf.textContent.trim(), reachable ? '1' : '0',
+    ].join('\\u0000'));
+  }
+
+  // 접힌 열은 래퍼의 계산된 display로 센다. .bs-col은 XL에서 \`display: contents\`라
+  // 자기 상자가 없다 — 화면 사각형으로 재면 어느 단계에서도 "안 보임"이 나와
+  // "전부 접혔다"는 빈 신호가 된다(실보드 6장에서 그렇게 나왔다). 게다가 실추출
+  // 보드에서는 열 셀과 병기 span이 같은 Paper 노드 id를 나눠 써서 슬롯 텍스트가
+  // 병기 쪽에 앉는다 — 열 안에 값 잎이 0개라, 잎으로도 접힘을 못 잰다.
+  const allColumns = new Set();
+  const foldedSet = new Set();
+  for (const node of surface.querySelectorAll('[data-col-priority]')) {
+    allColumns.add(node.dataset.colPriority);
+    if (getComputedStyle(node).display === 'none') foldedSet.add(node.dataset.colPriority);
+  }
+  const foldedColumns = [...foldedSet].sort();
+
+  return {
+    dom_text: [...domText.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1)),
+    slot_multiset: slots.sort(),
+    all_columns: [...allColumns].sort(),
+    visible_slot_count: visibleSlotCount,
+    reachable_slot_count: reachableSlotCount,
+    folded_columns: foldedColumns,
+    paired_columns: [...pairedCols].sort(),
+    container_width: Math.round(surface.getBoundingClientRect().width),
+    // 보드가 자기 칸보다 넓으면 가로 스크롤이 생긴다 — 계획 §2는 세로 스크롤만
+    // 허용한다. 판정하지 않고 실측만 남긴다(레인 A/C가 읽을 원시값).
+    overflow_x: Math.max(0, surface.scrollWidth - Math.round(surface.getBoundingClientRect().width)),
+    host_client_width: surface.parentElement ? surface.parentElement.clientWidth : null,
+    // 넘침이 남으면 어느 상자가 냈는지 함께 남긴다 — 숫자만으로는 못 고친다.
+    overflow_nodes: (() => {
+      const nodes = [];
+      for (const el of surface.querySelectorAll('*')) {
+        const over = el.scrollWidth - el.clientWidth;
+        if (over > 1) {
+          nodes.push({
+            cls: el.className || '', node: (el.dataset && el.dataset.node) || '',
+            over, scroll_width: el.scrollWidth, client_width: el.clientWidth,
+          });
+        }
+      }
+      return nodes.sort((a, b) => b.over - a.over).slice(0, 6);
+    })(),
+    card_rect: (() => {
+      const box = root.getBoundingClientRect();
+      return {
+        x: Math.max(0, Math.floor(box.x)),
+        y: Math.max(0, Math.floor(box.y)),
+        width: Math.max(1, Math.ceil(box.width)),
+        height: Math.max(1, Math.ceil(box.height)),
+      };
+    })(),
+  };
+})()`;
+
+// 실앱 실시간 — 프레임 하나가 보드 잎을 갈아끼우는지 본다. 프레임이 아는 것은
+// binding_id뿐이고, 그것이 어느 슬롯인지는 봉투의 두 표(slot_values.observation_id ·
+// realtime_bindings)가 이미 말해 뒀다.
+async function exerciseBoardRealtime(win, manager, surface) {
+  const instanceId = surface.instanceId;
+  const slotText = async () => win.webContents.executeJavaScript(`(() => {
+    const root = document.querySelector(
+      '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
+    const read = (slotId) => {
+      const node = root.querySelector('[data-slot-id="' + slotId + '"]');
+      return node ? node.textContent.trim() : null;
+    };
+    return {
+      price: read('header.price'),
+      change: read('header.change'),
+      changeRate: read('header.change_rate'),
+      color: (() => {
+        const node = root.querySelector('[data-slot-id="header.price"]');
+        return node ? node.style.color : null;
+      })(),
+    };
+  })()`);
+
+  const leaseId = await win.webContents.executeJavaScript(`(() => {
+    const root = document.querySelector(
+      '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
+    return (root && root.__athenaIntegratedRealtime && root.__athenaIntegratedRealtime.leaseId) || '';
+  })()`);
+  if (!leaseId) throw new Error('board surface: realtime lease id is missing');
+  let state = manager.status(leaseId);
+  const deadline = Date.now() + 3000;
+  while ((!state || state.status !== 'active') && Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    state = manager.status(leaseId);
+  }
+  if (!state || state.status !== 'active') {
+    throw new Error(`board surface: realtime lease is not active: ${JSON.stringify(state)}`);
+  }
+  const binding = state.bindings.find((item) => item.operationId === BOARD_REALTIME_OPERATION);
+  if (!binding) throw new Error('board surface: lease is missing the 0B quote binding');
+
+  const before = await slotText();
+  const ticks = manager.routeFrame({
+    trnm: 'REAL',
+    data: [{
+      type: binding.operationId,
+      item: binding.target,
+      values: { [BOARD_REALTIME_FIELD]: '151000' },
+    }],
+  }, state.connectionGeneration);
+  if (!ticks.length) throw new Error('board surface: realtime manager produced no tick');
+  win.webContents.send('athena:integrated-card-realtime-ticks', ticks);
+  await win.webContents.executeJavaScript(
+    'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))',
+  );
+  const after = await slotText();
+  if (after.price !== '151,000') {
+    throw new Error(`board surface: realtime frame did not repaint the slot: ${JSON.stringify({ before, after })}`);
+  }
+  // 병기 짝은 같은 프레임에서 다시 칠해지되 값이 안 왔으면 글자가 바뀌지 않는다 —
+  // 섞인 프레임도, 지워진 병기도 없어야 한다.
+  if (after.change !== before.change || after.changeRate !== before.changeRate) {
+    throw new Error(`board surface: paired slots drifted: ${JSON.stringify({ before, after })}`);
+  }
+
+  // 보드가 안 태운 binding_id는 아무 잎도 못 고친다.
+  const unknownTick = {
+    ...ticks[0],
+    semantic_updates: [{ binding_id: 'rtb_00000000000000000000', value: '999999' }],
+  };
+  win.webContents.send('athena:integrated-card-realtime-ticks', [unknownTick]);
+  await win.webContents.executeJavaScript(
+    'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))',
+  );
+  const afterUnknown = await slotText();
+  if (afterUnknown.price !== '151,000') {
+    throw new Error(`board surface: unknown binding changed a slot: ${JSON.stringify(afterUnknown)}`);
+  }
+
+  return {
+    lease_id: leaseId,
+    source_operation_id: binding.operationId,
+    source_field: BOARD_REALTIME_FIELD,
+    semantic_binding_id: surface.bindingId,
+    observation_id: surface.observationBySlot[BOARD_REALTIME_SLOT],
+    slot_id: BOARD_REALTIME_SLOT,
+    before,
+    after,
+    unknown_binding_ignored: afterUnknown.price === after.price,
+  };
+}
+
+// ---------- 실보드 6장 (카드 6종 × 1장) ----------
+//
+// 픽스처 보드는 실시간 이음매를 재는 자리로만 남기고, 반응형·P5 검수는 추출
+// 원문 그대로인 실보드에서 한다. 값은 slots.json의 `paper_text` — 그 보드가
+// Paper에서 실제로 이고 있던 글자다. 마운트 계약(어느 노드에 어떤 슬롯이
+// 앉는가)은 색인이 갖고 있으므로 봉투는 board_id·card_id·값만 나른다.
+const REAL_BOARDS = Object.freeze([
+  '2SKU-1', '2R3M-1', '13BC-2', '2QFO-2', '13K0-2', '135M-2',
+]);
+
+function loadRealBoardContract(boardId, ordinal) {
+  const slots = JSON.parse(fs.readFileSync(
+    path.join(BACKEND, 'ref', 'card-surface-templates', boardId, 'slots.json'), 'utf8',
+  ));
+  const slotValues = {};
+  for (const slot of slots.slots) {
+    if (typeof slot.paper_text === 'string' && slot.paper_text !== '') {
+      slotValues[slot.slot_id] = slot.paper_text;
+    }
+  }
+  return {
+    boardId,
+    instanceId: boardInstanceId(boardId),
+    ordinal,
+    cardTitle: `보드 표면 검수 · ${boardId}`,
+    operationRef: 'base:board-surface',
+    realtimeBindings: [],
+    slotCount: slots.slots.length,
+    boundCount: Object.keys(slotValues).length,
+    contract: {
+      surface_version: 'card-surface.v1',
+      board_id: slots.board_id,
+      card_id: slots.card_id,
+      state_boards: [],
+      slot_values: slotValues,
+      unbound_slots: [],
+      column_priority: slots.column_priority || [],
+      section_titles_ko: slots.section_titles_ko || {},
+    },
+  };
+}
+
+// 보드 1장을 네 단계에서 재고 찍는다. 판정은 여기서 하고 원시값은 전부 남긴다.
+async function captureBoardSteps(win, surface) {
+  const paint = await sendBoardEnvelope(win, surface);
+  await activateBoardTab(win, surface.instanceId);
+
+  const originalBounds = win.getContentBounds();
+  const steps = [];
+  try {
+    for (const preset of BOARD_WINDOW_PRESETS) {
+      win.setContentSize(preset.width, preset.height);
+      await settleBoardLayout(win, surface.instanceId);
+      const probe = await win.webContents.executeJavaScript(boardStepProbe(surface.instanceId));
+      if (probe.error) throw new Error(`board ${surface.boardId} ${preset.name}: ${probe.error}`);
+      const image = await win.webContents.capturePage(probe.card_rect);
+      const png = image.toPNG();
+      const file = `board-${surface.boardId}-${preset.width}x${preset.height}.png`;
+      fs.writeFileSync(path.join(CAPTURE_DIR, file), png);
+      steps.push({
+        preset: preset.name,
+        window: { width: preset.width, height: preset.height },
+        container_width: probe.container_width,
+        overflow_x: probe.overflow_x,
+        overflow_nodes: probe.overflow_nodes,
+        host_client_width: probe.host_client_width,
+        all_columns: probe.all_columns,
+        folded_columns: probe.folded_columns,
+        paired_columns: probe.paired_columns,
+        slot_count: probe.slot_multiset.length,
+        visible_slot_count: probe.visible_slot_count,
+        reachable_slot_count: probe.reachable_slot_count,
+        distinct_text_count: probe.dom_text.length,
+        file,
+        sha256: sha256(png),
+        dimensions: image.getSize(),
+        __domText: probe.dom_text,
+        __slots: probe.slot_multiset,
+      });
+    }
+  } finally {
+    win.setContentSize(originalBounds.width, originalBounds.height);
+    await settleBoardLayout(win, surface.instanceId);
+  }
+
+  // P5 — 단계 사이에서 텍스트가 사라지지 않는다. 접힘은 이동이지 삭제가 아니다.
+  const base = steps[0];
+  for (const step of steps.slice(1)) {
+    if (JSON.stringify(step.__domText) !== JSON.stringify(base.__domText)) {
+      throw new Error(
+        `board ${surface.boardId} ${step.preset}: DOM 텍스트 다중집합이 ${base.preset}과 다르다`,
+      );
+    }
+    if (JSON.stringify(step.__slots) !== JSON.stringify(base.__slots)) {
+      throw new Error(
+        `board ${surface.boardId} ${step.preset}: 슬롯 텍스트 다중집합이 ${base.preset}과 다르다`,
+      );
+    }
+  }
+  // 도달 셈은 어느 단계에서도 같다 — 접힌 열의 값은 병기 줄로 내려온다.
+  const reachableCounts = new Set(steps.map((step) => step.reachable_slot_count));
+  if (reachableCounts.size !== 1) {
+    throw new Error(
+      `board ${surface.boardId}: 단계마다 도달하는 슬롯 수가 다르다 — ${
+        JSON.stringify([...reachableCounts])}`,
+    );
+  }
+  // 접을 열이 있는 보드는 창이 좁아질수록 더 많이 접혀야 한다(비어 있는 상등은
+  // 증명이 아니다). 표가 아예 없는 보드(실측 2QFO-2·135M-2 — 열 우선순위 0개)는
+  // 접을 것이 없으므로 뺀다. 접을 열이 있는지는 DOM이 말한다 — 목록을 손으로
+  // 적지 않는다. 접힘 상한은 우선순위 4다(XS에서 4 이상이 전부 접힌다).
+  const foldable = base.all_columns.some((priority) => Number(priority) >= 4);
+  const foldedCounts = steps.map((step) => step.folded_columns.length);
+  if (foldable && !(foldedCounts[foldedCounts.length - 1] > foldedCounts[0])) {
+    throw new Error(
+      `board ${surface.boardId}: 창이 좁아져도 접힌 열이 늘지 않았다 — ${
+        JSON.stringify(steps.map((step) => [step.preset, step.container_width, step.folded_columns]))}`,
+    );
+  }
+  for (let index = 1; index < foldedCounts.length; index += 1) {
+    if (foldedCounts[index] < foldedCounts[index - 1]) {
+      throw new Error(
+        `board ${surface.boardId}: 창이 좁아졌는데 접힌 열이 줄었다 — ${JSON.stringify(foldedCounts)}`,
+      );
+    }
+  }
+  const widths = steps.map((step) => step.container_width);
+  if (!(widths[0] > widths[widths.length - 1])) {
+    throw new Error(`board ${surface.boardId}: 컨테이너 폭이 창을 따라 줄지 않았다 — ${JSON.stringify(widths)}`);
+  }
+
+  return {
+    board_id: surface.boardId,
+    card_id: surface.contract.card_id,
+    slot_count: surface.slotCount,
+    bound_slot_count: surface.boundCount,
+    paint_receipt: {
+      render_state: paint.render_state, verified_visible: paint.verified_visible,
+    },
+    text_multiset_equal_across_steps: true,
+    distinct_text_count: base.__domText.length,
+    max_overflow_x: Math.max(...steps.map((step) => step.overflow_x)),
+    steps: steps.map(({ __domText, __slots, ...rest }) => rest),
+  };
+}
+
+// 보드 카드에는 통합 카드 크롬이 없다 — 카드 머리(제목·기준 시각·×)도, 패널 탭
+// 칩도, 개발자 원시 필드 시트도 만들지 않는다(카드 = 보드 그 자체). 실앱 DOM에서
+// 그 셋이 0인지 세고, 대신 탭 스트립이 제목과 닫기를 이고 있는지 확인한다.
+async function inspectBoardChrome(win, surface) {
+  const dom = await win.webContents.executeJavaScript(`(() => {
+    const root = document.querySelector(
+      '#grid .card[data-integrated-instance-key="view:${surface.instanceId}"]');
+    if (!root) return { error: 'board card not found' };
+    const panel = root.closest('.canvas-tab-panel');
+    const tab = panel && document.querySelector(
+      '.canvas-tab-strip .canvas-tab[data-tab-key="' + panel.dataset.tabKey + '"]');
+    return {
+      board_surface_mark: root.dataset.boardSurface || '',
+      card_head_count: root.querySelectorAll(':scope > .card-head').length,
+      card_title_count: root.querySelectorAll('.card-title').length,
+      card_fresh_count: root.querySelectorAll('.card-fresh').length,
+      card_close_count: root.querySelectorAll('.uk-card-close').length,
+      panel_tab_strip_count: root.querySelectorAll('.integrated-card-tabs').length,
+      panel_tab_chip_count: root.querySelectorAll('.integrated-card-tab').length,
+      raw_field_sheet_count: root.querySelectorAll('.semantic-detail-sheet').length,
+      board_surface_count: root.querySelectorAll('.board-surface').length,
+      tab_label: tab ? tab.querySelector('.canvas-tab-label').textContent.trim() : null,
+      tab_close: Boolean(tab && tab.querySelector('.canvas-tab-close')),
+    };
+  })()`);
+  if (dom.error) throw new Error(`board ${surface.boardId}: ${dom.error}`);
+  const chrome = [
+    'card_head_count', 'card_title_count', 'card_fresh_count', 'card_close_count',
+    'panel_tab_strip_count', 'panel_tab_chip_count', 'raw_field_sheet_count',
+  ].filter((key) => dom[key] !== 0);
+  if (chrome.length) {
+    throw new Error(`board ${surface.boardId}: 카드 크롬이 남았다 — ${JSON.stringify(
+      Object.fromEntries(chrome.map((key) => [key, dom[key]])))}`);
+  }
+  if (dom.board_surface_mark !== 'true' || dom.board_surface_count !== 1) {
+    throw new Error(`board ${surface.boardId}: 보드 표면 표시가 없다 — ${JSON.stringify(dom)}`);
+  }
+  if (!dom.tab_label || !dom.tab_close) {
+    throw new Error(`board ${surface.boardId}: 탭 스트립이 제목·닫기를 잇지 않았다 — ${JSON.stringify(dom)}`);
+  }
+  return dom;
+}
+
+async function captureBoardResponsive(win, contracts, manager) {
+  // 실시간 이음매는 픽스처 보드가 계속 맡는다 — 0B 시세 바인딩과 정본 값을
+  // 함께 갖고 있는 유일한 보드다. 찍기는 하지 않는다(반응형은 실보드가 맡는다).
+  const fixture = {
+    ...loadBoardSurfaceContract(contracts),
+    boardId: BOARD_ID,
+    instanceId: boardInstanceId(BOARD_ID),
+    ordinal: 3,
+    cardTitle: '보드 실시간 이음매 검수',
+  };
+  const fixturePaint = await sendBoardEnvelope(win, fixture);
+  await activateBoardTab(win, fixture.instanceId);
+  const realtime = await exerciseBoardRealtime(win, manager, fixture);
+
+  const boards = [];
+  for (const [index, boardId] of REAL_BOARDS.entries()) {
+    const surface = loadRealBoardContract(boardId, (index % 6) + 1);
+    const captured = await captureBoardSteps(win, surface);
+    captured.chrome = await inspectBoardChrome(win, surface);
+    boards.push(captured);
+  }
+
+  return {
+    realtime_seam: {
+      board_id: BOARD_ID,
+      paint_receipt: {
+        render_state: fixturePaint.render_state,
+        verified_visible: fixturePaint.verified_visible,
+      },
+      ...realtime,
+    },
+    boards,
+    max_overflow_x: Math.max(...boards.map((board) => board.max_overflow_x)),
+  };
+}
+
 async function captureShellCard(win, card) {
+  // 통합 카드는 캔버스 탭 덱 안에 산다 — 뷰포트에는 활성 탭 하나만 서고 나머지
+  // 패널은 hidden이다. 찍기 전에 그 카드의 탭을 켜지 않으면 레이아웃 높이가
+  // 0으로 나와 "detail rows did not become visibly laid out"으로 떨어진다.
+  await win.webContents.executeJavaScript(`(() => {
+    const root = document.querySelector('#grid .integrated-card[data-card-id="${card.card_id}"]');
+    const panel = root && root.closest('.canvas-tab-panel');
+    if (!panel) return false;
+    const tab = document.querySelector(
+      '.canvas-tab-strip .canvas-tab[data-tab-key="' + panel.dataset.tabKey + '"]');
+    if (tab) tab.click();
+    return Boolean(tab);
+  })()`);
+  await win.webContents.executeJavaScript(
+    'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))',
+  );
   const dom = await win.webContents.executeJavaScript(`(() => {
     const root = document.querySelector('#grid .integrated-card[data-card-id="${card.card_id}"]');
     const rows = [...root.querySelectorAll('[data-field-occurrence-id]')];
@@ -828,6 +1467,63 @@ async function main() {
       entry.screenshots = shellCapture.screenshots;
       entry.actual_shell_dom = shellCapture.dom;
     }
+
+    // 순위 모드 시나리오 — 랭킹 operation이 ranking/ranked-results 표현으로 오면
+    // CC-03 root에 '순위' 탭 하나가 생기고, 패널 맨 위에 축 스트립(18칩 · 활성 1)이
+    // 서며, 비활성 칩 클릭은 seedChatInput 버스로 질문을 심는다(조회를 발명하지
+    // 않는다 — Paper R01-T4~T6 · R03-T6 계약).
+    {
+      const cc03Index = bundle.cards.findIndex((card) => card.card_id === 'CC-03');
+      const cc03 = bundle.cards[cc03Index];
+      const rankingFixture = cc03.operation_fixtures.find(
+        (fixture) => fixture.operation_ref === 'base:ka10019',
+      );
+      if (!rankingFixture) throw new Error('ranking scenario fixture base:ka10019 missing');
+      await sendRestEnvelope(win, cc03, rankingFixture, cc03Index + 1, {
+        mode: 'ranking', section: 'ranked-results',
+      });
+      const rankingDom = await win.webContents.executeJavaScript(`(() => {
+        const root = document.querySelector('#grid .integrated-card[data-card-id="CC-03"]');
+        const tabs = Array.from(root.querySelectorAll('.integrated-card-tab'));
+        const rankingTabs = tabs.filter((tab) => tab.textContent.trim() === '순위');
+        const panel = Array.from(root.querySelectorAll('.integrated-card-panel'))
+          .find((node) => node.classList.contains('integrated-card-panel--ranking'));
+        const strip = panel && panel.querySelector(':scope > .ranking-axis-strip');
+        const chips = strip ? Array.from(strip.querySelectorAll('.ranking-axis-chip')) : [];
+        const active = chips.filter((chip) => chip.classList.contains('is-active'));
+        const seeded = [];
+        const shell = window.AthenaShell || (window.AthenaShell = {});
+        const priorSeed = shell.seedChatInput;
+        shell.seedChatInput = (text) => seeded.push(text || '');
+        const target = chips.find((chip) => chip.title === 'base:ka10024');
+        if (target) target.click();
+        shell.seedChatInput = priorSeed;
+        return {
+          ranking_tab_count: rankingTabs.length,
+          chip_count: chips.length,
+          active_titles: active.map((chip) => chip.title),
+          active_disabled: active.every((chip) => chip.disabled),
+          seeded,
+        };
+      })()`);
+      if (rankingDom.ranking_tab_count !== 1) {
+        throw new Error(`ranking tab count ${rankingDom.ranking_tab_count} !== 1`);
+      }
+      if (rankingDom.chip_count !== 18) {
+        throw new Error(`CC-03 ranking axis chips ${rankingDom.chip_count} !== 18`);
+      }
+      if (rankingDom.active_titles.join(',') !== 'base:ka10019' || !rankingDom.active_disabled) {
+        throw new Error(`ranking active axis mismatch: ${JSON.stringify(rankingDom.active_titles)}`);
+      }
+      if (rankingDom.seeded.length !== 1 || !/[가-힣]/.test(rankingDom.seeded[0])) {
+        throw new Error(`ranking axis click did not seed chat input: ${JSON.stringify(rankingDom.seeded)}`);
+      }
+      report.actual_shell_ranking_mode = rankingDom;
+    }
+    report.actual_shell_board_responsive = await captureBoardResponsive(
+      win, semanticContracts, shellRealtimeManager,
+    );
+
     await win.webContents.executeJavaScript('window.AthenaShell.clearCanvases()');
     const mountedLeaseIds = [...new Set(shellIpcRecords
       .filter((item) => item.channel === 'athena:integrated-card-realtime-mount'

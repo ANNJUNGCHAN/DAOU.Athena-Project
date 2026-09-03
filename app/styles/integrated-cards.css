@@ -335,6 +335,58 @@
 .semantic-workspace-table th { color: #4f596b; font-size: 13px; font-weight: 650; }
 .semantic-workspace-table tbody tr:last-child td { border-bottom: 0; }
 
+/* 순위 모드 — 축 스트립과 순위 표(Paper R01-T4~T6 · R03-T6).
+ * 축 전환은 seedChatInput 버스를 타므로 chip은 버튼이되 조회 상태를 갖지 않는다. */
+.ranking-axis-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding: 8px 2px 10px;
+  border-bottom: 1px solid var(--semantic-line, rgba(20, 23, 29, .1));
+}
+
+.ranking-axis-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.ranking-axis-group-label {
+  color: #626b76;
+  font-size: 11px;
+  letter-spacing: .04em;
+}
+
+.ranking-axis-chip {
+  border: 1px solid rgba(20, 23, 29, .14);
+  border-radius: 999px;
+  padding: 5px 11px;
+  color: #5b6270;
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ranking-axis-chip.is-active {
+  border-color: #14171d;
+  color: #ffffff;
+  background: #14171d;
+  cursor: default;
+}
+
+.integrated-card-panel--ranking .semantic-workspace-table-wrap {
+  max-height: 420px;
+}
+
+.integrated-card-panel--ranking .semantic-workspace-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #fbfcfe;
+}
+
 .semantic-workspace-table-detail-row > td {
   padding: 0 12px 8px;
   border-bottom: 0;
