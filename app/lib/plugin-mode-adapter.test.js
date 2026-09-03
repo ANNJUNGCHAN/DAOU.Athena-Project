@@ -63,6 +63,16 @@ test('shell.html이 두 순수 모듈을 canvas.js·chat.js보다 앞에서 싣�
   assert.ok(canvasTag >= 0, 'canvas.js 스크립트 태그를 찾지 못했다');
   assert.ok(chatTag >= 0, 'chat.js 스크립트 태그를 찾지 못했다');
 
+  // plugin-proposal.js는 로드 시점에 PluginCatalog를, plugin-canvas.js는
+  // PluginProposal을 구조분해한다 — 태그 순서가 곧 이 모듈들의 생사다.
+  const catalogTag = shell.indexOf('<script src="lib/plugin-catalog.js"></script>');
+  const pluginCanvasTag = shell.indexOf('<script src="lib/plugin-canvas.js"></script>');
+  assert.ok(
+    catalogTag >= 0 && catalogTag < adapterTag && adapterTag < proposalTag
+      && proposalTag < pluginCanvasTag && pluginCanvasTag < canvasTag && canvasTag < chatTag,
+    'plugin-catalog → plugin-mode-adapter → plugin-proposal → plugin-canvas → canvas → chat 순서가 깨졌다',
+  );
+
   assert.ok(adapterTag < canvasTag, 'plugin-mode-adapter.js가 canvas.js보다 뒤에 있다');
   assert.ok(adapterTag < chatTag, 'plugin-mode-adapter.js가 chat.js보다 뒤에 있다');
   assert.ok(proposalTag < canvasTag, 'plugin-proposal.js가 canvas.js보다 뒤에 있다');

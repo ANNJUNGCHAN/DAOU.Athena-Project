@@ -169,6 +169,10 @@ function resultTurnCopy(kind, ctx) {
     const reason = String(context.reason || '').trim();
     return { lines: [reason ? `연결 실패 — ${reason}` : '연결 실패'], chip: '다시 시도' };
   }
+  // 만료는 실패가 아니다 — 아무것도 하지 않았고, 목록이 그 사이 바뀌었을 뿐이다.
+  if (kind === 'stale') {
+    return { lines: [String(context.reason || '목록이 바뀌어 다시 확인이 필요합니다')], chip: null };
+  }
   if (kind === 'restart') {
     return context.runtimeEnabled
       ? { lines: ['플러그인이 바뀌어 대화를 다시 시작했습니다', '방금 승인한 내용은 반영됐습니다'], chip: null }
@@ -177,10 +181,45 @@ function resultTurnCopy(kind, ctx) {
   return { lines: [], chip: null };
 }
 
+// probe는 서버마다 한 줄이고 그 안에 도구 수가 있다 — 줄 수를 세면 "기능 1개"가
+// 되어 여러 서버를 담은 승인에서 거짓이 된다.
+function probeToolCount(probes) {
+  return (Array.isArray(probes) ? probes : [])
+    .reduce((sum, probe) => sum + (Number(probe && probe.toolCount) || 0), 0);
+}
+
+// 결과 턴 한 장의 최종 모양. 승인 반환값을 그대로 받는다 — `detail`은 읽지
+// 않는다(CLI 원문은 화면에 내지 않는다). 재시작 줄은 성공에만 붙는다.
+function resultTurnModel(kind, result) {
+  const res = result || {};
+  const copy = resultTurnCopy(kind, { toolCount: probeToolCount(res.probes), reason: res.reason });
+  const lines = [...copy.lines];
+  if (kind === 'success') {
+    lines.push(...resultTurnCopy('restart', { runtimeEnabled: res.runtimeEnabled }).lines);
+  }
+  return { lines, chip: copy.chip };
+}
+
 // 모드 밖에서 도착한 제안은 폐기한다 — 보관했다가 나중에 띄우지 않으므로
 // "승인할 수 있습니다"라고 말하지 않는다.
 function outOfModeCopy() {
   return '플러그인 모드에서 다시 요청합니다';
+}
+
+// 폐기 한 줄의 중복 억제. 같은 제안이 한 턴에 여러 번 와도 한 번만 알리고,
+// 턴이 바뀌면(reset) 다시 알린다 — 세션 내내 눌러 두면 다음 턴에 같은 요청을
+// 해도 아무 말도 하지 않는다.
+function createOutOfModeNotifier() {
+  let seen = new Set();
+  return {
+    reset() { seen = new Set(); },
+    shouldAnnounce(envelope) {
+      const signature = proposalSignature(envelope);
+      if (seen.has(signature)) return false;
+      seen.add(signature);
+      return true;
+    },
+  };
 }
 
 function snippetHash(text) {
@@ -202,7 +241,8 @@ function proposalSignature(envelope) {
 
 const __exports = {
   ACTIONS, buildProposal, buildBatchProposal, validateProposal, isProposalStale,
-  cardCopy, resultTurnCopy, outOfModeCopy, proposalSignature,
+  cardCopy, resultTurnCopy, resultTurnModel, probeToolCount,
+  outOfModeCopy, createOutOfModeNotifier, proposalSignature,
 };
 
 if (typeof module !== 'undefined' && module.exports) {

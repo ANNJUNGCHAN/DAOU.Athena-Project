@@ -3,9 +3,9 @@
 // 이 파일은 설치 파이프라인이나 저장소를 가정하지 않는다. 화면은 전달받은
 // 목록만 그리고, 권한·설치·활성화 의도는 콜백으로 상위 셸에 돌려준다.
 //
-// 실제 설치는 MCP 서버 등록이다(canvas.js가 athena:mcp-* IPC로 잇는다):
-// 카탈로그 승인 또는 스니펫 붙여넣기 → 등록 → 승인 → probe로 노출 도구 확인 →
-// 도구별 허용 → 삭제. 아래 SAMPLE_* 는 **호스트가 아무 목록도 넘기지 않았을
+// 화면의 버튼은 아무것도 실행하지 않는다 — 제안을 만들어 deps.onPropose로
+// 돌려주고, 실행은 승인 카드의 [승인] 하나뿐이다(모델이 낸 제안과 같은 자리).
+// 아래 SAMPLE_* 는 **호스트가 아무 목록도 넘기지 않았을
 // 때만** 쓰는 단위테스트용 샘플이다. 실제 셸은 언제나 명시적으로 배열을
 // 넘기므로(빈 배열이라도) 앱 화면에 이 샘플이 뜨는 경로는 없다 — 설치된 적 없는
 // 플러그인을 설치된 것처럼 보여주지 않기 위한 경계다. 값은 lib/plugin-catalog.js
@@ -14,6 +14,21 @@
 'use strict';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
+
+// 카드 문구와 만료 판정은 순수 모듈이 소유한다(모델 경로와 GUI 경로가 같은
+// 함수를 쓴다). 이 파일은 여전히 IPC를 모른다 — window.athena 호출 0건.
+const PluginProposal = typeof module !== 'undefined' && module.exports
+  ? require('./plugin-proposal')
+  : window.AthenaLib.PluginProposal;
+const { cardCopy, isProposalStale } = PluginProposal;
+
+// 처리된 카드의 상태 문구. 실패 사유 원문(detail)은 절대 카드에 싣지 않는다.
+const PROPOSAL_STATUS = Object.freeze({
+  success: '승인됨',
+  failed: '실패',
+  rejected: '거부됨',
+  stale: '만료됨',
+});
 
 const SAMPLE_INSTALLED = Object.freeze([
   Object.freeze({
@@ -136,7 +151,10 @@ function createPluginCanvas(options) {
   const deps = options || {};
   const container = deps.container;
   if (!container) {
-    return { mount() {}, setView() {}, setSearch() {}, getState: () => ({ view: 'hub', search: '' }) };
+    return {
+      mount() {}, setView() {}, setSearch() {}, setData() {}, setProposals() {},
+      getState: () => ({ view: 'hub', search: '' }),
+    };
   }
 
   const installed = cloneRows(deps.installed || SAMPLE_INSTALLED);
@@ -152,6 +170,14 @@ function createPluginCanvas(options) {
   let root = null;
   let hubLists = null;
   let activeSheet = null;
+  // 승인 카드. 봉투는 호스트가 setProposals로 넣고, 이 모듈은 그리기와 사람의
+  // 승인·거부 의도만 돌려준다.
+  let proposals = [];
+  let proposalRevision = null;
+  // 이미 승인·거부·폐기한 제안은 복원으로 되살아나지 않는다(부활 방지).
+  const handled = new Set();
+  // 저장 전 권한 토글은 사람이 만든 값이다 — 모드를 나갔다 와도 버리지 않는다.
+  let permissionDraft = null; // { pluginId, base: {name:bool}, draft: {name:bool} }
 
   function matches(row) {
     const needle = search.trim().toLocaleLowerCase('ko-KR');
@@ -219,7 +245,7 @@ function createPluginCanvas(options) {
     }
     // probe 전에는 노출 도구를 모른다. 설명 한 줄을 가짜 기능 행으로 만들어
     // 채우지 않는다 — 그 이름으로 allow를 부르면 존재하지 않는 도구가 허용
-    // 목록에 들어가고(canvas.js pluginSaveTools가 막고 있는 그 경로), 화면에는
+    // 목록에 들어가고(허용 저장이 probe 결과만 쓰는 이유다), 화면에는
     // "허용 1 / 1"이 떠서 다 된 것처럼 보인다. 비어 있으면 비어 있다고 쓴다.
     const features = Array.isArray(plugin.features) ? plugin.features : [];
     return features.map((feature, index) => ({
@@ -230,80 +256,26 @@ function createPluginCanvas(options) {
     }));
   }
 
-  // --- MCP 서버 추가(스니펫 붙여넣기) ---------------------------------------
-  // Claude 커넥터와 같은 순서다: 스니펫 → 무엇이 등록되는지 확인 → 승인.
-  // 호스트가 실제 athena:mcp-stage-snippet/register/approve/remove를 소유한다.
+  // --- GUI 진입 6종의 유일한 출구 -------------------------------------------
+  // 버튼은 아무것도 실행하지 않는다 — 제안을 만들 뿐이다. 실행은 승인 카드의
+  // [승인] 하나뿐이고, 그 결과는 호스트가 setData로 돌려준다.
+  function propose(spec, reason) {
+    if (typeof deps.onPropose === 'function') deps.onPropose(spec, reason || null);
+  }
+
+  // --- 서버 직접 등록(스니펫 붙여넣기) ---------------------------------------
   function openAddSheet() {
-    activeSheet = { kind: 'add', snippet: '', staged: null, error: null, busy: false };
+    activeSheet = { kind: 'add', snippet: '', error: null };
     render();
   }
 
-  async function runSheetStep(sheet, run, fallbackError) {
-    if (sheet.busy) return null;
-    sheet.busy = true;
-    sheet.error = null;
-    render();
-    let result;
-    try {
-      result = await run();
-    } catch (err) {
-      result = { ok: false, error: String((err && err.message) || err) };
-    }
-    // 사용자가 그 사이 시트를 닫았으면 늦게 온 결과로 화면을 되돌리지 않는다.
-    if (activeSheet !== sheet) return null;
-    sheet.busy = false;
-    if (!result || !result.ok) {
-      sheet.error = (result && result.error) || fallbackError;
-      render();
-      return null;
-    }
-    return result;
-  }
-
-  async function stageSnippet(sheet) {
+  function proposeSnippet(sheet) {
     if (!String(sheet.snippet || '').trim()) {
       sheet.error = 'Claude 설정 스니펫을 붙여넣습니다';
       render();
       return;
     }
-    const result = await runSheetStep(
-      sheet,
-      () => (typeof deps.onStageSnippet === 'function'
-        ? deps.onStageSnippet(sheet.snippet)
-        : Promise.resolve({ ok: false, error: '설치 경로가 연결되지 않았다' })),
-      '스니펫을 해석하지 못했다',
-    );
-    if (!result) return;
-    const staged = Array.isArray(result.staged) ? result.staged : [];
-    if (!staged.length) {
-      sheet.error = '등록된 서버가 없다 — 스니펫 형식을 확인한다';
-      render();
-      return;
-    }
-    sheet.staged = staged;
-    render();
-  }
-
-  async function approveStaged(sheet) {
-    const result = await runSheetStep(
-      sheet,
-      () => (typeof deps.onApproveServer === 'function'
-        ? deps.onApproveServer(sheet.staged)
-        : Promise.resolve({ ok: false, error: '승인 경로가 연결되지 않았다' })),
-      '승인에 실패했다',
-    );
-    if (!result) return;
-    activeSheet = null;
-    render();
-  }
-
-  // stage는 미리보기가 아니라 실제 등록까지 한다(mcp-cli.js stageSnippet 주석:
-  // 파이썬 백엔드에 dry-run이 없다). 승인 없이 닫으면 미승인 서버가 레지스트리에
-  // 남으므로 되돌리기를 호스트에 맡긴다 — 취소가 흔적을 남기면 안 된다.
-  function cancelAddSheet(sheet) {
-    if (sheet.staged && typeof deps.onDiscardStaged === 'function') {
-      deps.onDiscardStaged(sheet.staged);
-    }
+    propose({ action: 'stage_snippet', target: null, snippet: sheet.snippet });
     closeSheet();
   }
 
@@ -318,8 +290,45 @@ function createPluginCanvas(options) {
   }
 
   function openPermissionSheet(plugin) {
-    activeSheet = { kind: 'permissions', plugin, features: featureRowsFor(plugin, false) };
+    const features = featureRowsFor(plugin, false);
+    const base = {};
+    features.forEach((feature) => { base[feature.name] = feature.allowed; });
+    const sheet = { kind: 'permissions', plugin, features, base, divergence: [] };
+    restoreDraft(sheet);
+    activeSheet = sheet;
     render();
+  }
+
+  // 초안을 되살리면서, 그 사이 실제 허용이 달라진 기능을 함께 집는다(PM-4).
+  // 덮어쓰기 전에 무엇이 갈렸는지 말하지 않으면 사람이 모르는 채로 되돌린다.
+  function restoreDraft(sheet) {
+    const pluginId = sheet.plugin.id || sheet.plugin.name;
+    if (!permissionDraft || permissionDraft.pluginId !== pluginId) return;
+    const divergence = [];
+    sheet.features.forEach((feature) => {
+      const was = permissionDraft.base[feature.name];
+      if (was !== undefined && was !== feature.allowed) divergence.push(feature.name);
+      const drafted = permissionDraft.draft[feature.name];
+      if (drafted !== undefined) feature.allowed = drafted;
+    });
+    sheet.divergence = divergence;
+  }
+
+  // 모드를 나가거나 목록이 갈리기 직전에 지금 화면의 토글을 초안으로 굳힌다.
+  function keepDraft() {
+    if (!activeSheet || activeSheet.kind !== 'permissions') return;
+    const draft = {};
+    activeSheet.features.forEach((feature) => { draft[feature.name] = feature.allowed; });
+    permissionDraft = {
+      pluginId: activeSheet.plugin.id || activeSheet.plugin.name,
+      base: { ...activeSheet.base },
+      draft,
+    };
+  }
+
+  function resetDraft(sheet) {
+    permissionDraft = null;
+    openPermissionSheet(sheet.plugin);
   }
 
   // 삭제는 되돌릴 수 없다(등록·승인·허용 목록이 함께 사라진다). 목록 행의 클릭
@@ -329,14 +338,16 @@ function createPluginCanvas(options) {
       kind: 'remove',
       plugin,
       error: null,
-      busy: false,
       returnFocusPluginId: plugin.id || plugin.name,
     };
     render();
   }
 
+  // 사람이 명시적으로 화면을 닫으면 초안도 함께 끝난다 — 되돌아왔을 때 저장한
+  // 적 없는 값이 떠 있으면 그것이 실제 허용으로 읽힌다.
   function closeSheet() {
     const returnFocusPluginId = activeSheet && activeSheet.returnFocusPluginId;
+    if (activeSheet && activeSheet.kind === 'permissions') permissionDraft = null;
     activeSheet = null;
     render();
     if (returnFocusPluginId && root && typeof root.querySelectorAll === 'function') {
@@ -426,10 +437,10 @@ function createPluginCanvas(options) {
     return Number.isFinite(explicit) ? explicit : fallback;
   }
 
-  // 토글은 화면 상태가 아니라 실제 승인 상태다(플러그인 = consent approve/revoke,
-  // 마켓플레이스 = 추천 노출). 그래서 낙관적으로 켜 두고 끝내지 않는다 — 호스트가
-  // 실패를 돌려주면 원래 자리로 되돌리고 이유를 같은 행에 붙인다. 되돌리지 않으면
-  // "켰는데 대화에서 안 쓰인다"가 화면상으로는 켜져 보인다.
+  // 토글은 화면 상태가 아니라 실제 승인 상태다. 그래서 누른 즉시 켜 두지 않는다 —
+  // 플러그인은 승인 카드가 확정할 때까지 행이 움직이지 않고, 마켓플레이스(추천
+  // 노출 여부, 앱 로컬 설정)는 호스트가 성공을 돌려준 뒤에 움직인다. 낙관적으로
+  // 켜 두면 "켰는데 대화에서 안 쓰인다"가 화면상으로는 켜져 보인다.
   function toggleButton(item, kind, row) {
     const label = (on) => `${item.name} ${on ? '끄기' : '켜기'}`;
     const button = el('button', `plugin-canvas-toggle ${item.enabled ? 'is-on' : 'is-off'}`);
@@ -447,27 +458,28 @@ function createPluginCanvas(options) {
 
     button.addEventListener('click', async () => {
       if (button.disabled) return;
-      const previous = !!item.enabled;
-      const next = !previous;
-      item.enabled = next;
-      paint();
+      const next = !item.enabled;
       setRowError(row, null);
-      const callback = kind === 'marketplace' ? deps.onToggleMarketplace : deps.onTogglePlugin;
-      if (typeof callback !== 'function') return;
+      if (kind !== 'marketplace') {
+        propose({ action: 'set_enabled', target: item.id || item.name, enabled: next });
+        return;
+      }
+      if (typeof deps.onToggleMarketplace !== 'function') return;
       button.disabled = true;
       let result;
       try {
-        result = await callback(item, next);
+        result = await deps.onToggleMarketplace(item, next);
       } catch (err) {
         result = { ok: false, error: String((err && err.message) || err) };
       }
       button.disabled = false;
-      // 콜백이 아무것도 안 돌려주면(구형 호스트) 성공으로 본다 — 되돌릴 근거가 없다.
       if (result && result.ok === false) {
-        item.enabled = previous;
-        paint();
         setRowError(row, result.error || (next ? '켜지 못했습니다' : '끄지 못했습니다'));
+        return;
       }
+      // 콜백이 아무것도 안 돌려주면(구형 호스트) 성공으로 본다.
+      item.enabled = next;
+      paint();
     });
     return button;
   }
@@ -492,10 +504,14 @@ function createPluginCanvas(options) {
     row.appendChild(el('div', 'plugin-canvas-spacer'));
     // 삭제는 플러그인 행에만 있다. 마켓플레이스는 끄기로 충분하고, 내장 카탈로그를
     // 지우면 되돌릴 화면이 없다.
-    if (kind !== 'marketplace' && typeof deps.onRemovePlugin === 'function') {
+    if (kind !== 'marketplace' && typeof deps.onPropose === 'function') {
       row.appendChild(actionButton('삭제', 'is-danger', () => openRemoveSheet(item)));
+      row.appendChild(el('span', 'plugin-canvas-manage-hint', '승인 후 지웁니다'));
     }
     row.appendChild(toggleButton(item, kind, row));
+    if (kind !== 'marketplace') {
+      row.appendChild(el('span', 'plugin-canvas-manage-hint', '승인 후 반영됩니다'));
+    }
     return row;
   }
 
@@ -596,61 +612,38 @@ function createPluginCanvas(options) {
     if (badge) badge.textContent = `허용 ${allowed}`;
   }
 
-  // 승인 = 실제 등록·승인·probe다. 결과를 기다리지 않고 목록에 밀어 넣으면
-  // 설치에 실패한 서버가 "설치됨"으로 남는다 — 호스트가 성공을 돌려준 뒤에만
-  // 닫고, 목록 갱신은 호스트의 setData에 맡긴다(가짜 행을 만들지 않는다).
-  async function approveInstall(sheet) {
-    const features = allowedFeatures(sheet);
-    const result = await runSheetStep(
-      sheet,
-      () => (typeof deps.onApproveInstall === 'function'
-        ? deps.onApproveInstall({ ...sheet.plugin }, features)
-        : Promise.resolve({ ok: false, error: '설치 경로가 연결되지 않았습니다' })),
-      '설치에 실패했습니다',
-    );
-    if (!result) return;
-    // 호스트가 setData로 목록을 갈아끼우기 전이라도 추천에서는 즉시 뺀다 —
-    // 방금 설치한 항목이 추천에 남아 있으면 두 번 설치하려 든다.
-    const index = recommended.findIndex((plugin) => plugin.id === sheet.plugin.id);
-    if (index >= 0) recommended.splice(index, 1);
-    activeSheet = null;
-    render();
+  // 승인 시트의 [승인]은 설치하지 않는다 — 승인 카드를 만든다. 목록은 승인이
+  // 끝난 뒤 호스트의 setData가 갈아끼운다(가짜 행을 만들지 않는다).
+  function approveInstall(sheet) {
+    propose({
+      action: 'install',
+      target: sheet.plugin.id || sheet.plugin.name,
+      features: sheet.features.map((feature) => feature.name),
+    });
+    closeSheet();
   }
 
-  async function confirmRemove(sheet) {
-    const result = await runSheetStep(
-      sheet,
-      () => (typeof deps.onRemovePlugin === 'function'
-        ? deps.onRemovePlugin({ ...sheet.plugin })
-        : Promise.resolve({ ok: false, error: '삭제 경로가 연결되지 않았습니다' })),
-      '삭제에 실패했습니다',
-    );
-    if (!result) return;
-    activeSheet = null;
-    render();
+  function confirmRemove(sheet) {
+    propose({ action: 'remove', target: sheet.plugin.id || sheet.plugin.name });
+    closeSheet();
   }
 
-  // 저장은 allow/disallow CLI 호출이다 — 실패할 수 있다. 결과를 안 보고 화면을
-  // 닫으면 "저장했는데 허용이 안 돼 있다"가 된다(설치·삭제와 같은 규칙).
-  async function savePermissions(sheet) {
-    const features = allowedFeatures(sheet);
-    const snapshot = sheet.features.map((feature) => ({ ...feature }));
-    const result = await runSheetStep(
-      sheet,
-      async () => {
-        if (typeof deps.onSavePermissions !== 'function') return { ok: true };
-        const outcome = await deps.onSavePermissions({ ...sheet.plugin }, features);
-        // 명시적으로 실패라고 말한 경우에만 실패다 — 아무것도 돌려주지 않는
-        // 호스트(구형 배선)를 조용한 실패로 만들지 않는다.
-        return (outcome && outcome.ok === false) ? outcome : { ok: true };
-      },
-      '허용 설정을 저장하지 못했습니다',
-    );
-    if (!result) return;
-    sheet.plugin.features = snapshot;
-    sheet.plugin.featureCount = snapshot.length;
-    activeSheet = null;
-    render();
+  // 저장은 초안과 실제의 차이만 제안으로 만든다 — 켤 것과 끌 것이 한 카드에
+  // 함께 실린다(둘 다 있으면 두 동작을 담은 한 장이다).
+  function savePermissions(sheet) {
+    const target = sheet.plugin.id || sheet.plugin.name;
+    const allow = [];
+    const revoke = [];
+    sheet.features.forEach((feature) => {
+      const was = sheet.base[feature.name];
+      if (feature.allowed && was !== true) allow.push(feature.name);
+      if (!feature.allowed && was === true) revoke.push(feature.name);
+    });
+    const specs = [];
+    if (allow.length) specs.push({ action: 'allow_tools', target, features: allow });
+    if (revoke.length) specs.push({ action: 'revoke_tools', target, features: revoke });
+    if (specs.length) propose(specs.length === 1 ? specs[0] : specs);
+    closeSheet();
   }
 
   // Paper 플러그인 01 — 기능 허용. 배지 넷은 설치 상태 · 기능 수 · 허용 수 ·
@@ -693,6 +686,22 @@ function createPluginCanvas(options) {
 
     if (sheet.error) panel.appendChild(el('div', 'plugin-canvas-sheet-error', sheet.error));
 
+    // 초안이 실제와 갈렸으면 덮어쓰기 전에 무엇이 달라졌는지 먼저 말한다.
+    if (Array.isArray(sheet.divergence) && sheet.divergence.length) {
+      const notice = el('div', 'plugin-canvas-draft-divergence');
+      notice.setAttribute('role', 'status');
+      notice.appendChild(el(
+        'span',
+        'plugin-canvas-draft-divergence-text',
+        `그 사이 바뀐 기능: ${sheet.divergence.join(' · ')}`,
+      ));
+      notice.appendChild(actionButton('초안대로 저장', 'is-draft-keep', () => savePermissions(sheet)));
+      notice.appendChild(actionButton('현재 값으로 초기화', 'is-draft-reset', () => resetDraft(sheet)));
+      panel.appendChild(notice);
+    }
+
+    panel.appendChild(el('h2', 'plugin-canvas-section-title', '권한 초안'));
+    panel.appendChild(el('p', 'plugin-canvas-draft-note', '승인 카드로 확정합니다'));
     const featureList = el('div', 'plugin-canvas-sheet-features plugin-canvas-permission-features');
     if (sheet.features.length) {
       sheet.features.forEach((feature) => featureList.appendChild(sheetFeatureRow(feature, true)));
@@ -707,7 +716,7 @@ function createPluginCanvas(options) {
     footer.appendChild(el('div', 'plugin-canvas-spacer'));
     const actions = el('div', 'plugin-canvas-sheet-actions');
     actions.appendChild(actionButton('플러그인으로', 'is-sheet-cancel', closeSheet));
-    actions.appendChild(actionButton(sheet.busy ? '저장하는 중…' : '선택 저장', 'is-sheet-confirm', () => { void savePermissions(sheet); }));
+    actions.appendChild(actionButton('선택 저장', 'is-sheet-confirm', () => savePermissions(sheet)));
     footer.appendChild(actions);
     panel.appendChild(footer);
     panel.appendChild(el(
@@ -718,63 +727,29 @@ function createPluginCanvas(options) {
     return panel;
   }
 
-  function stagedServerBlock(server) {
-    const block = el('div', 'plugin-canvas-sheet-info');
-    block.appendChild(el('div', 'plugin-canvas-sheet-plugin-name', server.alias));
-    if (server.originalName && server.originalName !== server.alias) {
-      block.appendChild(el('div', 'plugin-canvas-sheet-source', `스니펫 이름: ${server.originalName} → 별칭 ${server.alias}`));
-    }
-    block.appendChild(el(
-      'div',
-      'plugin-canvas-sheet-plugin-description',
-      [server.command, (Array.isArray(server.args) ? server.args.join(' ') : '')].filter(Boolean).join(' '),
-    ));
-    // 값은 절대 싣지 않는다 — mcp-cli.js가 키 이름만 돌려준다(비밀은 safestorage).
-    if (Array.isArray(server.envKeys) && server.envKeys.length) {
-      block.appendChild(el('div', 'plugin-canvas-sheet-source', `환경변수 키: ${server.envKeys.join(', ')}`));
-    }
-    (Array.isArray(server.risks) ? server.risks : []).forEach((risk) => {
-      block.appendChild(el('div', 'plugin-canvas-sheet-warning', risk));
-    });
-    return block;
-  }
-
+  // 붙여넣기 한 번으로 제안이 만들어진다 — 이 시트는 아무것도 등록하지 않는다.
+  // 무엇이 등록될지는 승인 카드가 보여주고, 등록은 그 카드의 [승인]이 한다.
   function renderAddSheetBody(sheet) {
     const body = el('div', 'plugin-canvas-sheet-body');
 
-    if (!sheet.staged) {
-      const field = el('textarea', 'plugin-canvas-snippet-input');
-      field.value = sheet.snippet || '';
-      field.setAttribute('rows', '8');
-      field.setAttribute('spellcheck', 'false');
-      field.setAttribute('aria-label', 'MCP 서버 스니펫');
-      field.placeholder = '{\n  "mcpServers": {\n    "server-name": {\n      "command": "npx",\n      "args": ["-y", "some-mcp"]\n    }\n  }\n}';
-      field.addEventListener('input', (event) => {
-        sheet.snippet = String(event && event.target ? event.target.value : '');
-      });
-      body.appendChild(field);
-      body.appendChild(el(
-        'div',
-        'plugin-canvas-sheet-warning',
-        '분석하면 서버가 레지스트리에 등록되지만 승인 전에는 실행되지 않습니다. 취소하면 등록을 되돌립니다.',
-      ));
-    } else {
-      body.appendChild(el('h3', 'plugin-canvas-sheet-section-title', '등록할 서버'));
-      sheet.staged.forEach((server) => body.appendChild(stagedServerBlock(server)));
-      body.appendChild(el(
-        'div',
-        'plugin-canvas-sheet-warning',
-        '승인하면 서버를 한 번 실행해 노출 도구를 확인합니다. 도구는 그 뒤 하나씩 허용합니다.',
-      ));
-    }
+    const field = el('textarea', 'plugin-canvas-snippet-input');
+    field.value = sheet.snippet || '';
+    field.setAttribute('rows', '8');
+    field.setAttribute('spellcheck', 'false');
+    field.setAttribute('aria-label', '서버 스니펫');
+    field.placeholder = '{\n  "mcpServers": {\n    "server-name": {\n      "command": "npx",\n      "args": ["-y", "some-mcp"]\n    }\n  }\n}';
+    field.addEventListener('input', (event) => {
+      sheet.snippet = String(event && event.target ? event.target.value : '');
+    });
+    body.appendChild(field);
+    body.appendChild(el('div', 'plugin-canvas-sheet-warning', '등록만으로는 실행되지 않습니다'));
+    body.appendChild(el('div', 'plugin-canvas-sheet-warning', '승인 카드로 확정합니다'));
 
     if (sheet.error) body.appendChild(el('div', 'plugin-canvas-sheet-error', sheet.error));
 
     const actions = el('div', 'plugin-canvas-sheet-actions');
-    actions.appendChild(actionButton('취소', 'is-sheet-cancel', () => cancelAddSheet(sheet)));
-    actions.appendChild(sheet.staged
-      ? actionButton(sheet.busy ? '승인하는 중…' : '승인', 'is-sheet-confirm', () => { void approveStaged(sheet); })
-      : actionButton(sheet.busy ? '분석하는 중…' : '분석', 'is-sheet-confirm', () => { void stageSnippet(sheet); }));
+    actions.appendChild(actionButton('취소', 'is-sheet-cancel', closeSheet));
+    actions.appendChild(actionButton('승인', 'is-sheet-confirm', () => proposeSnippet(sheet)));
     body.appendChild(actions);
     return body;
   }
@@ -811,11 +786,7 @@ function createPluginCanvas(options) {
       body.appendChild(el('div', 'plugin-canvas-sheet-command', `실행 명령: ${command}`));
     }
     body.appendChild(el('div', 'plugin-canvas-sheet-location', `설치 위치 · 플러그인 모드 > ${plugin.name}`));
-    body.appendChild(el(
-      'div',
-      'plugin-canvas-sheet-warning',
-      `승인하면 ${plugin.name} 플러그인이 설치되며, 허용한 기능만 현재 대화에서 사용할 수 있습니다.`,
-    ));
+    body.appendChild(el('div', 'plugin-canvas-sheet-warning', '승인 카드로 확정합니다'));
 
     const badges = el('div', 'plugin-canvas-sheet-badges');
     badges.appendChild(el('span', 'plugin-canvas-count', `권한 ${sheet.features.length}개 요청`));
@@ -826,7 +797,7 @@ function createPluginCanvas(options) {
 
     const actions = el('div', 'plugin-canvas-sheet-actions');
     actions.appendChild(actionButton('거부', 'is-sheet-cancel', closeSheet));
-    actions.appendChild(actionButton(sheet.busy ? '설치하는 중…' : '승인', 'is-sheet-confirm', () => { void approveInstall(sheet); }));
+    actions.appendChild(actionButton('승인', 'is-sheet-confirm', () => approveInstall(sheet)));
     body.appendChild(actions);
     return body;
   }
@@ -843,10 +814,11 @@ function createPluginCanvas(options) {
       'plugin-canvas-sheet-warning',
       '등록·승인·허용 기능이 함께 지워집니다. 되돌리려면 다시 설치하고 기능을 다시 허용해야 합니다.',
     ));
+    body.appendChild(el('div', 'plugin-canvas-sheet-warning', '승인 후 지웁니다'));
     if (sheet.error) body.appendChild(el('div', 'plugin-canvas-sheet-error', sheet.error));
     const actions = el('div', 'plugin-canvas-sheet-actions');
     actions.appendChild(actionButton('취소', 'is-sheet-cancel', closeSheet));
-    actions.appendChild(actionButton(sheet.busy ? '삭제하는 중…' : '삭제', 'is-sheet-danger', () => { void confirmRemove(sheet); }));
+    actions.appendChild(actionButton('삭제', 'is-sheet-danger', () => confirmRemove(sheet)));
     body.appendChild(actions);
     return body;
   }
@@ -856,7 +828,7 @@ function createPluginCanvas(options) {
   const MODAL_SHEET_KINDS = new Set(['install', 'add', 'remove']);
 
   const SHEET_TITLES = {
-    add: () => 'MCP 서버 추가',
+    add: () => '서버 추가',
     install: (sheet) => `${sheet.plugin.name} 설치`,
     remove: (sheet) => `${sheet.plugin.name} 삭제`,
   };
@@ -915,11 +887,109 @@ function createPluginCanvas(options) {
     return overlay;
   }
 
+  // --- 승인 카드 ---------------------------------------------------------------
+  // 사람의 클릭 하나가 유일한 실행 지점이다. 모델이 낸 것도, 허브 버튼이 낸 것도
+  // 여기로 모이고, 출처 라벨이 둘을 구분한다(만든 주체를 속이지 않는다).
+  function proposalState(entry) {
+    if (entry.done) return 'done';
+    if (isProposalStale(entry.envelope, proposalRevision)) return 'stale';
+    return 'pending';
+  }
+
+  function proposalStatusText(entry, state) {
+    if (state === 'done') return PROPOSAL_STATUS[entry.done] || '처리됨';
+    if (state === 'stale') return '만료됨';
+    return entry.busy ? '처리 중' : '제안 대기';
+  }
+
+  async function respond(entry, decision) {
+    if (entry.busy || entry.done) return;
+    entry.busy = true;
+    render();
+    const callback = decision === 'approve' ? deps.onApproveProposal : deps.onRejectProposal;
+    let result = null;
+    try {
+      if (typeof callback === 'function') result = await callback(entry.envelope);
+    } catch {
+      result = null;
+    }
+    entry.busy = false;
+    // 경로가 연결되지 않았거나 던졌으면 성공이라고 말하지 않는다.
+    entry.done = (result && result.kind) || (decision === 'approve' ? 'failed' : 'rejected');
+    handled.add(entry.envelope.proposal_id);
+    render();
+  }
+
+  // 만료 카드를 지우는 것은 거부가 아니다 — 채팅에 `그대로 뒀습니다`를 남기지
+  // 않는다. 대기 목록에서만 빼고 사람이 다시 요청하게 둔다.
+  function dismissProposal(entry) {
+    handled.add(entry.envelope.proposal_id);
+    proposals = proposals.filter((row) => row !== entry);
+    if (typeof deps.onDismissProposal === 'function') deps.onDismissProposal(entry.envelope);
+    render();
+  }
+
+  // 버튼은 전부 실제 <button>이라 Tab·Enter로 닿는다. 클릭 영역 32px은
+  // .plugin-canvas-proposal-action 하나로 CSS가 준다(US-006).
+  function proposalButton(label, modifier, onClick) {
+    return actionButton(label, `plugin-canvas-proposal-action ${modifier}`, onClick);
+  }
+
+  function proposalCard(entry) {
+    const copy = cardCopy(entry.envelope);
+    const state = proposalState(entry);
+    const card = el('article', 'plugin-canvas-proposal');
+    card.setAttribute('data-proposal-id', entry.envelope.proposal_id);
+    card.setAttribute('data-proposal-state', state);
+
+    const head = el('div', 'plugin-canvas-proposal-head');
+    head.appendChild(el('span', 'plugin-canvas-proposal-source', copy.sourceLabel));
+    head.appendChild(el('h3', 'plugin-canvas-proposal-title', copy.title));
+    const status = el('span', 'agent-mode', proposalStatusText(entry, state));
+    status.setAttribute('role', 'status');
+    head.appendChild(status);
+    card.appendChild(head);
+
+    copy.lines.forEach((line) => card.appendChild(el('div', 'plugin-canvas-proposal-line', line)));
+    if (copy.reasonLine) card.appendChild(el('div', 'plugin-canvas-proposal-reason', copy.reasonLine));
+    card.appendChild(el('div', 'plugin-canvas-proposal-note', '허브의 설치 버튼도 이 카드로 들어옵니다'));
+
+    const actions = el('div', 'plugin-canvas-proposal-actions');
+    const reject = proposalButton('거부', 'is-proposal-reject', () => { void respond(entry, 'reject'); });
+    const approve = proposalButton('승인', 'is-proposal-approve', () => { void respond(entry, 'approve'); });
+    if (state !== 'pending' || entry.busy) approve.disabled = true;
+    if (state === 'done' || entry.busy) reject.disabled = true;
+    actions.appendChild(reject);
+    actions.appendChild(approve);
+    // 만료는 승인 직전에도(메인이 kind='stale'로 돌려준다) 드러난다 — 그때도
+    // 사람이 할 수 있는 일은 같다. 두 경로에 같은 칩을 준다.
+    if (state === 'stale' || entry.done === 'stale') {
+      actions.appendChild(proposalButton('다시 제안받기', 'is-proposal-again', () => dismissProposal(entry)));
+    }
+    card.appendChild(actions);
+    return card;
+  }
+
+  function renderProposals() {
+    if (!proposals.length) return null;
+    const list = el('section', 'plugin-canvas-proposals');
+    proposals.forEach((entry) => list.appendChild(proposalCard(entry)));
+    return list;
+  }
+
   function render() {
     if (!mounted) return;
     hubLists = null;
     clear(root);
     root.setAttribute('data-view', view);
+    const cards = renderProposals();
+    if (cards) {
+      if (activeSheet && MODAL_SHEET_KINDS.has(activeSheet.kind)) {
+        cards.setAttribute('aria-hidden', 'true');
+        cards.setAttribute('inert', '');
+      }
+      root.appendChild(cards);
+    }
     const panel = activeSheet && activeSheet.kind === 'permissions'
       ? renderPermissionView()
       : (view === 'manage' ? renderManage() : renderHub());
@@ -949,9 +1019,13 @@ function createPluginCanvas(options) {
     render();
   }
 
+  // 사이드바는 모드 진입마다 setView('hub')를 부른다 — 그때 열려 있던 권한 화면의
+  // 토글을 그냥 버리면 사람이 만든 값이 사라진다. 초안으로 굳혀 두고 다음 진입에
+  // 되살린다(H4).
   function setView(nextView) {
     const normalized = nextView === 'manage' ? 'manage' : 'hub';
-    if (normalized === view && mounted) return;
+    if (normalized === view && mounted && !activeSheet) return;
+    keepDraft();
     view = normalized;
     activeSheet = null;
     render();
@@ -986,6 +1060,13 @@ function createPluginCanvas(options) {
       const openId = activeSheet.plugin.id || activeSheet.plugin.name;
       const fresh = installed.concat(recommended)
         .find((row) => (row.id || row.name) === openId);
+      if (fresh && activeSheet.kind === 'permissions') {
+        // 새 목록 위에 사람이 만든 초안을 다시 얹는다 — 갱신이 도착했다고 해서
+        // 저장 전 토글을 지우지 않는다(그 사이 갈린 기능은 발산으로 알린다).
+        keepDraft();
+        openPermissionSheet(fresh);
+        return;
+      }
       if (fresh) {
         activeSheet = {
           ...activeSheet,
@@ -997,6 +1078,18 @@ function createPluginCanvas(options) {
     render();
   }
 
+  // 호스트가 봉투를 넣는 유일한 함수. 판번호는 만료 판정에만 쓰인다.
+  function setProposals(list, options) {
+    if (options && Object.prototype.hasOwnProperty.call(options, 'revision')) {
+      proposalRevision = options.revision === undefined ? null : options.revision;
+    }
+    const previous = new Map(proposals.map((entry) => [entry.envelope.proposal_id, entry]));
+    proposals = (Array.isArray(list) ? list : [])
+      .filter((envelope) => envelope && envelope.proposal_id && !handled.has(envelope.proposal_id))
+      .map((envelope) => previous.get(envelope.proposal_id) || { envelope, busy: false, done: null });
+    render();
+  }
+
   function getState() {
     return {
       view,
@@ -1005,10 +1098,21 @@ function createPluginCanvas(options) {
       recommended: cloneRows(recommended),
       marketplaces: cloneRows(marketplaces),
       activeSheet: activeSheet ? activeSheet.kind : null,
+      revision: proposalRevision,
+      proposals: proposals.map((entry) => ({
+        id: entry.envelope.proposal_id,
+        state: proposalState(entry),
+        kind: entry.done || null,
+      })),
+      // 저장 전 토글은 모드를 나가도 남는다 — 그 사실을 상태로도 드러낸다.
+      permissionDraft: permissionDraft
+        ? { pluginId: permissionDraft.pluginId, draft: { ...permissionDraft.draft } }
+        : null,
+      divergence: (activeSheet && Array.isArray(activeSheet.divergence)) ? [...activeSheet.divergence] : [],
     };
   }
 
-  return { mount, setView, setSearch, setData, getState };
+  return { mount, setView, setSearch, setData, setProposals, getState };
 }
 
 const __exports = {

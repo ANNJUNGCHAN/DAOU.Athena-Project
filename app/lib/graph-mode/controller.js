@@ -351,14 +351,15 @@ function createGraphModeController(deps) {
     // 캔버스 빈 상태의 모드별 변형(보드 46) — CSS가 이 축으로 하나만 보여준다.
     // (모드 네비 활성 하이라이트는 lib/sidebar-mode-nav.js가 소유한다 — 리프 1.2.2.)
     if (elements.canvasRegion) elements.canvasRegion.dataset.mode = modeLabel;
-    // 모드별 채팅 헤더(보드 38 개정) — 그래프·백테스트 모드에서 보인다. 대화 모드엔
-    // 헤더가 없다(보드 37). 문구는 data-mode와 함께 여기서 바꾼다 — 제목·부제 노드는
-    // 선택이라(canvas.js elements 맵) 없으면 shell.html 정적 문구가 그대로 남는다.
+    // 모드별 채팅 헤더(보드 38 개정) — 그래프·백테스트·플러그인 모드에서 보인다.
+    // 대화 모드엔 헤더가 없다(보드 37). 문구는 data-mode와 함께 여기서 바꾼다 —
+    // shell.html의 두 span은 비어 있고 이 표가 유일한 출처다.
     const CHAT_HEAD_COPY = {
       graph: { title: '그래프에게 묻기', sub: '답이 캔버스를 바꿉니다' },
       backtest: { title: '전략에게 묻기', sub: '답이 설정과 코드를 바꿉니다' },
+      plugin: { title: '아테나 · 플러그인 대화', sub: '설치와 권한을 여기서 정합니다' },
     };
-    const chatHeadMode = graphView ? 'graph' : (activeSurface === 'backtest' ? 'backtest' : null);
+    const chatHeadMode = graphView ? 'graph' : (CHAT_HEAD_COPY[activeSurface] ? activeSurface : null);
     if (elements.chatHead) {
       elements.chatHead.hidden = !chatHeadMode;
       if (chatHeadMode) {

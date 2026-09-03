@@ -65,7 +65,7 @@
     {
       "id": "US-004",
       "title": "W3-2·W3-3·W3-4·W3-6·W0-3 렌더러 — 승인 카드·직접 IPC 제거·구독·결과 턴·모드 헤더",
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "app/lib/plugin-canvas.js: 승인 카드(출처 라벨 아테나 제안/내 요청), 3상태(만료됨=승인 비활성+다시 제안받기), setProposals(list,{revision}), GUI 진입 6종→deps.onPropose, 낙관적 토글·롤백 제거, getState/setData 권한 초안 보존+PM-4 발산, 버튼 키보드·32px, window.athena 0건",
         "app/lib/plugin-canvas.test.js: 기존 23건 + 신규(onPropose·6종 미호출, 토글 즉시 변경 없음, 3상태, stale 비활성, 초안·발산, 접근성, 모드 게이트 음성, 부활 방지)",
