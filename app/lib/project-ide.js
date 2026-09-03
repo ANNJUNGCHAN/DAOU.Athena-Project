@@ -293,6 +293,22 @@ function createProjectIde(options) {
     return activePath === pathText;
   }
 
+  // 밖에서 이 파일을 디스크에 썼다(채팅이 낸 코드를 캔버스가 자동 수락한 자리) — 열어둔
+  // 버퍼를 그 내용으로 맞춘다. 안 맞추면 디스크와 화면이 갈라져, 도는 코드와 보이는 코드가
+  // 다른 상태가 된다(실행은 늘 디스크를 다시 읽는다, D2).
+  //
+  // 저장하지 않은 사람의 편집이 있으면 건드리지 않고 false를 돌려준다 — 사람이 친 것을
+  // 소리 없이 덮지 않는다(closeAll이 dirty 탭을 남기는 것과 같은 규칙이다).
+  function adoptExternalWrite(pathText, text) {
+    const tab = findTab(pathText);
+    if (!tab || tab.dirty) return false;
+    tab.text = String(text == null ? '' : text);
+    tab.saved = tab.text;
+    tab.dirty = false;
+    paint();
+    return true;
+  }
+
   function closeTab(pathText) {
     const tab = findTab(pathText);
     if (!tab) return;
@@ -603,6 +619,7 @@ function createProjectIde(options) {
     currentProject() { return project; },
     openAt,
     closeAll,
+    adoptExternalWrite,
     activeFile() {
       const tab = activeTab();
       return tab ? { path: tab.path, text: tab.text, dirty: tab.dirty } : null;

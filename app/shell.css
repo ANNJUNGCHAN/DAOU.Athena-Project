@@ -5661,3 +5661,71 @@ body { margin: 0; overflow: hidden; }
   text-decoration: underline;
   cursor: pointer;
 }
+
+/* ── 백테스트 · 새 기법 폴더·단계·자동 실행 (보드 20~22) ── */
+/*
+ * 폴더 하나 = 기법 하나 = 대화 하나. 여기 있는 것은 그 흐름이 화면에 남긴 자국 셋이다:
+ * 진행 표시에 붙는 [이 기법 승인]과 "n번째 고침", 단계 카드가 여는 diff 패널, 그리고
+ * [출력 보기]로 펼친 명령창. 색·간격 토큰은 위 백테스트 구역의 것을 그대로 쓴다 —
+ * 새 기법이라고 다른 화면처럼 보이면 안 된다.
+ */
+
+/* 몇 번째 고침인가 — 검사 수 옆에 같은 무게로 선다. */
+.backtest-technique-progress-edits {
+  color: var(--color-k-soft);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+/* 사람이 누르는 두 버튼 중 하나(보드 23). [기법 목록]이 오른쪽 끝을 잡고 있으므로
+ * 승인은 그 왼쪽에 서고, 눈에 띄어야 하니 테두리가 아니라 채운다. */
+.backtest-technique-approve {
+  margin-left: auto;
+  padding: 4px 12px;
+  border: 1px solid var(--color-brand);
+  border-radius: 999px;
+  background: var(--color-brand);
+  color: var(--color-k-panel, #fff);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+/* 승인이 서면 [기법 목록]은 더 이상 자기 자리를 밀지 않는다 — 둘 다 auto면 사이가 벌어진다. */
+.backtest-technique-approve ~ .backtest-technique-back { margin-left: 0; }
+
+/* [diff 보기]가 코드 탭 위에 여는 패널. 줄 색은 채팅 카드·파일 초안과 같은 문법이라
+ * (backtest-diff-row) 여기서는 틀과 높이만 정한다. */
+.backtest-technique-diff {
+  margin: 6px 0;
+  padding: 8px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  background: var(--color-k-panel2, var(--color-k-panel3));
+}
+.backtest-technique-diff-body {
+  max-height: 260px;
+  overflow: auto;
+}
+/* [코드로] — 패널을 닫고 편집기로 돌아간다. 머리줄 오른쪽 끝. */
+.backtest-technique-diff-close {
+  margin-left: auto;
+  padding: 2px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-k-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* [출력 보기]로 펼친 명령창 — 카드가 가리킨 출력이 접혀 있으면 안 된다. */
+.backtest-terminal.is-open {
+  border-color: var(--color-brand);
+}
+.backtest-terminal.is-open .backtest-terminal-log {
+  max-height: 320px;
+}

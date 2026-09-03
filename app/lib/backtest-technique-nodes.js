@@ -11,7 +11,7 @@
 // 역할 칩·버튼·안내 한 줄)뿐이고 전부 보드 21에 그려진 그대로다. summary_ko가 비어 오면
 // 그 줄을 지운다 — 화면이 없는 설명을 지어내면 사용자는 그것을 코드의 사실로 읽는다.
 //
-// **고치는 곳은 여기가 아니다.** 이상하면 [이상해요, 물어볼게요]가 채팅으로 가고, AI가
+// **고치는 곳은 여기가 아니다.** 카드를 누르면 @참조가 대화 입력창에 들어가고, AI가
 // 코드 ↔ 노드 ↔ 백테스트를 오가며 고친다. 그래서 이 모듈은 콜백만 내고 페이로드를 바꾸지
 // 않는다(자기 상태는 '지금 고른 노드' 하나뿐이다).
 //
@@ -34,7 +34,6 @@ const RAIL_NOTE = '다른 기법에는 다른 노드가 생깁니다';
 const FLOW_TITLES = { entry: '진입 흐름', exit: '청산 흐름', stage: '단계 흐름' };
 const FLOW_EXPLAIN = '이 흐름 설명';
 const CARD_OPEN_CODE = '코드 보기';
-const CARD_ASK = '이상해요, 물어볼게요';
 const EXPLAIN_ALL = '이 기법 전체를 설명해줘';
 const GHOST_LABEL = '재사용';
 const GHOST_TITLE = '앞 흐름에서 만든 값을 그대로 다시 씁니다';
@@ -481,7 +480,12 @@ function createTechniqueNodes(container, options) {
     attr(card, 'aria-pressed', state.selectedId === node.id ? 'true' : 'false');
     attr(card, 'aria-label', ghost ? `${ariaLabel(node)} · ${GHOST_LABEL}` : ariaLabel(node));
     attr(card, 'style', `left:${box.x}px;top:${box.y}px;width:${box.w}px;height:${box.h}px`);
-    card.addEventListener('click', () => { select(node.id); focusEl(refs.cards[node.id]); });
+    // 클릭 = 이 노드를 참조한다. 초점을 카드로 되가져오지 않는다 — 부르는 쪽이 대화 입력창에
+    // @참조를 넣고 포커스를 주는데, 여기서 다시 뺏으면 이어서 타자할 수 없다(실측).
+    card.addEventListener('click', () => {
+      select(node.id);
+      if (opts.onExplainNode) opts.onExplainNode(node.id);
+    });
 
     const head = el('div', 'backtest-tnodes-card-head');
     head.appendChild(el('span', 'backtest-tnodes-card-title', node.label));
@@ -516,10 +520,6 @@ function createTechniqueNodes(container, options) {
       acts.appendChild(button('backtest-tnodes-act is-code', CARD_OPEN_CODE, (ev) => {
         if (ev && typeof ev.stopPropagation === 'function') ev.stopPropagation();
         if (opts.onOpenCode) opts.onOpenCode(node.id);
-      }));
-      acts.appendChild(button('backtest-tnodes-act is-ask', CARD_ASK, (ev) => {
-        if (ev && typeof ev.stopPropagation === 'function') ev.stopPropagation();
-        if (opts.onExplainNode) opts.onExplainNode(node.id);
       }));
       card.appendChild(acts);
       refs.cards[node.id] = card;
