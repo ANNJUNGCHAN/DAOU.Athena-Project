@@ -1,0 +1,13 @@
+{
+  "board_id": "2SRV-1",
+  "name": "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+  "card_id": "CC-01",
+  "width": 1440,
+  "height": 1090,
+  "state": {
+    "kind": "tab",
+    "parent_board": "133H-2",
+    "control": "손익·성과"
+  },
+  "saved_at": "2026-09-02T10:49:29Z"
+}

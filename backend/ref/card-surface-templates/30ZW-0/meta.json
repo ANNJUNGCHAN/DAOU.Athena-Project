@@ -1,0 +1,17 @@
+{
+  "board_id": "30ZW-0",
+  "name": "CC-03 / R01-T4-7 · 순위 — 고저 PER",
+  "card_id": "CC-03",
+  "operation_refs": [
+    "base:ka10026",
+    "base:ka10028"
+  ],
+  "width": 1440,
+  "height": 1120,
+  "state": {
+    "kind": "sort",
+    "parent_board": "2VDA-0",
+    "control": "고저 PER"
+  },
+  "saved_at": "2026-09-02T00:00:00Z"
+}

@@ -1,0 +1,159 @@
+{
+ "board": "2YS8-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10013",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "순위 표 '현재가' 열 150,850"
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850 · +1.24%'"
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "where": "표 신설 '거래량' 열(1위 1,420만주 · 2.14조)"
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "new",
+   "kor": "신규",
+   "layer": "직접",
+   "where": "표 신설 '신규 / 상환' 셀 1번째 줄 '신규 42만주'"
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "rpya",
+   "kor": "상환",
+   "layer": "병기",
+   "where": "표 '신규 / 상환' 셀 2번째 줄 '상환 31만주'"
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "remn",
+   "kor": "잔고",
+   "layer": "직접",
+   "where": "표 '융자 잔고' 열 주수(1위 279만주, 아래 4,208억 병기)"
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "amt",
+   "kor": "금액",
+   "layer": null,
+   "where": "순위 표 '융자잔고' 열 4,208억"
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "pre",
+   "kor": "대비",
+   "layer": "병기",
+   "where": "표 '신용비율' 셀 2번째 줄 '전일 +0.4%p'"
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "shr_rt",
+   "kor": "공여율",
+   "layer": "직접",
+   "where": "표 신설 '공여율' 열(1위 2.14%)"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "crd_rt_upper",
+   "kor": "신용비율상위",
+   "layer": null,
+   "where": "신용비율 상위 순위 표 목록"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "stk_infr",
+   "kor": "종목정보",
+   "layer": "병기",
+   "where": "표 종목 셀 코드 옆 구분 칩 '증거금 20%'"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "종목 카드 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "순위 표 '종목' 열 삼성전자 등"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "순위 표 '현재가' 열"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률 열의 ± 부호와 상승/하락색"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "종목 카드 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "where": "순위 표 '등락률' 열"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "crd_rt",
+   "kor": "신용비율",
+   "layer": null,
+   "where": "순위 표 '신용잔고율' 열 11.8%"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "sel_req",
+   "kor": "매도잔량",
+   "layer": "직접",
+   "where": "레일 선택 종목 카드 '매도잔량 428,600주'"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "buy_req",
+   "kor": "매수잔량",
+   "layer": "직접",
+   "where": "레일 선택 종목 카드 '매수잔량 512,400주'"
+  },
+  {
+   "mapping_id": "base:ka10033",
+   "f": "now_trde_qty",
+   "kor": "현재거래량",
+   "layer": "직접",
+   "where": "레일 선택 종목 카드 '현재 거래량 1,420만주'"
+  }
+ ]
+}

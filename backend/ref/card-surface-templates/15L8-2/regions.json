@@ -1,0 +1,9 @@
+{
+  "root": "15L8-2",
+  "regions": [
+    { "node_id": "15L9-2", "name": "Header", "role": "header", "depth": 1 },
+    { "node_id": "15LH-2", "name": "Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "15LI-2", "name": "Watchlist", "role": "primary", "depth": 2 },
+    { "node_id": "15LJ-2", "name": "Signals", "role": "rail", "depth": 2 }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "board_id": "2SCE-1",
+  "name": "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+  "card_id": "CC-01",
+  "width": 1440,
+  "height": 1092,
+  "state": {
+    "kind": "tab",
+    "parent_board": "133H-2",
+    "control": "보유종목"
+  },
+  "saved_at": "2026-09-02T10:49:29Z"
+}

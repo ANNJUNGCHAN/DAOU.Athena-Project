@@ -1,0 +1,12 @@
+{
+  "root": "3ODQ-0",
+  "regions": [
+    { "node_id": "3OHW-0", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "3OZQ-0", "name": "Header Right", "role": "strip", "depth": 2 },
+    { "node_id": "3P0E-0", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3P3E-0", "name": "Account Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3P3F-0", "name": "Gold Ledger", "role": "primary", "depth": 2 },
+    { "node_id": "3P6P-0", "name": "Selected Trade Rail", "role": "rail", "depth": 2 },
+    { "node_id": "3ODR-0", "name": "Account Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

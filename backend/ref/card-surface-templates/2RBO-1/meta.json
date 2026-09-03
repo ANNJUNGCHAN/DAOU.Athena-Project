@@ -1,0 +1,24 @@
+{
+  "board_id": "2RBO-1",
+  "name": "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+  "card_id": "CC-03",
+  "operation_refs": [
+    "base:ka10005",
+    "base:ka10086",
+    "detail:ka10001:current_trading",
+    "detail:ka10001:daily_price_band",
+    "detail:ka10001:financial_performance",
+    "detail:ka10001:identity_and_capital",
+    "detail:ka10001:market_scale_and_ownership",
+    "detail:ka10001:price_range",
+    "detail:ka10001:valuation"
+  ],
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "tab",
+    "parent_board": "137X-2",
+    "control": "기업정보"
+  },
+  "saved_at": "2026-09-02T10:59:57Z"
+}

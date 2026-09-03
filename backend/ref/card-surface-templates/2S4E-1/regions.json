@@ -1,0 +1,12 @@
+{
+  "root": "2S4F-1",
+  "regions": [
+    { "node_id": "2SA4-1", "name": "Flow Header", "role": "header", "depth": 2 },
+    { "node_id": "2SA5-1", "name": "Flow Tabs", "role": "strip", "depth": 3 },
+    { "node_id": "2S9H-1", "name": "Flow Summary Strip", "role": "kpi", "depth": 2 },
+    { "node_id": "2S4L-1", "name": "Flow Workspace", "role": "workspace", "depth": 2 },
+    { "node_id": "2S68-1", "name": "Daily Trend Panel", "role": "primary", "depth": 3 },
+    { "node_id": "2S4M-1", "name": "Side Panel", "role": "rail", "depth": 3 },
+    { "node_id": "2S4G-1", "name": "Flow Status Footer", "role": "footer", "depth": 2 }
+  ]
+}

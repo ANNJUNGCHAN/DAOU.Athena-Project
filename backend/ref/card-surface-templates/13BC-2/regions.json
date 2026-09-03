@@ -1,0 +1,12 @@
+{
+  "root": "1538-2",
+  "regions": [
+    { "node_id": "153A-2", "name": "Order Book Header", "role": "header", "depth": 1 },
+    { "node_id": "153I-2", "name": "Frame (탭 스트립)", "role": "strip", "depth": 2 },
+    { "node_id": "153V-2", "name": "Best Quote Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "154K-2", "name": "Order Book Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "154L-2", "name": "Ten Step Ladder", "role": "primary", "depth": 2 },
+    { "node_id": "3IMQ-0", "name": "Trade Flow Panel", "role": "rail", "depth": 2 },
+    { "node_id": "15BR-2", "name": "Order Book Footer", "role": "footer", "depth": 1 }
+  ]
+}

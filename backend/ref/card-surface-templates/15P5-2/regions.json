@@ -1,0 +1,17 @@
+{
+  "root": "3C0I-0",
+  "regions": [
+    { "node_id": "3C0U-0", "name": "헤더", "role": "header", "depth": 1 },
+    { "node_id": "3C1A-0", "name": "시세 스트립", "role": "kpi", "depth": 1 },
+    { "node_id": "3C3O-0", "name": "계약·권리 · LP 유동성", "role": "workspace", "depth": 1 },
+    { "node_id": "3C3P-0", "name": "계약·권리", "role": "primary", "depth": 2 },
+    { "node_id": "3C4M-0", "name": "LP 유동성", "role": "rail", "depth": 2 },
+    { "node_id": "3C6H-0", "name": "민감도 · 계약·일정", "role": "workspace", "depth": 1 },
+    { "node_id": "3C6I-0", "name": "민감도·이론가", "role": "primary", "depth": 2 },
+    { "node_id": "3C7U-0", "name": "계약·일정", "role": "rail", "depth": 2 },
+    { "node_id": "3CCM-0", "name": "시장 순위", "role": "primary", "depth": 1 },
+    { "node_id": "3CN4-0", "name": "기초자산·평가 · 일별 지표", "role": "workspace", "depth": 1 },
+    { "node_id": "3CN5-0", "name": "기초자산·평가", "role": "rail", "depth": 2 },
+    { "node_id": "3D17-0", "name": "일별 지표", "role": "primary", "depth": 2 }
+  ]
+}

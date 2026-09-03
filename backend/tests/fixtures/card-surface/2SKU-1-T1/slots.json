@@ -1,0 +1,377 @@
+{
+  "board_id": "2SKU-1-T1",
+  "card_id": "CC-01",
+  "name": "CC-01 · 2SKU-1 탭(픽스처)",
+  "paper_source": {
+    "file": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+    "page": "5-1",
+    "jsx_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "html_sha256": "e5196c28bca847c57d7b2a661e2d09b68873aa3f895b2087b4b402d562c85de0",
+  "width_px": 1360.0,
+  "height_px": 480.0,
+  "operation_refs": [
+    "base:ka10085",
+    "base:kt00003",
+    "detail:ka10087:sell_bid_prices"
+  ],
+  "state": {
+    "kind": "tab",
+    "parent_board": "2SKU-1",
+    "control": "tab|시간외 단일가"
+  },
+  "density": {
+    "table_columns": 2,
+    "kpi_cells": 1,
+    "rail_blocks": 0,
+    "rail_rows_max": 0,
+    "rows_max": 5
+  },
+  "primary": null,
+  "column_priority": [
+    "t1_stk_nm_r0",
+    "t1_bid_r0"
+  ],
+  "section_titles_ko": {
+    "after-hours": "시간외 단일가"
+  },
+  "column_bindings": [
+    {
+      "table_id": "T1T",
+      "columns": [
+        {
+          "col": 1,
+          "data_col": 0,
+          "header": "종목명",
+          "mapping_id": "base:ka10085",
+          "f": "stk_nm",
+          "slot_ids": [
+            "t1_stk_nm_r0",
+            "t1_stk_nm_r1"
+          ]
+        }
+      ]
+    },
+    {
+      "table_id": "T1L",
+      "columns": [
+        {
+          "col": 1,
+          "data_col": 0,
+          "header": "매도호가",
+          "mapping_id": "detail:ka10087:sell_bid_prices",
+          "indexed": {
+            "f_pattern": "ovt_sigpric_sel_bid_{i}",
+            "start": 1,
+            "step": 1,
+            "direction": "down"
+          },
+          "slot_ids": [
+            "t1_bid_r0",
+            "t1_bid_r1",
+            "t1_bid_r2",
+            "t1_bid_r3",
+            "t1_bid_r4"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "slot_id": "t1_label",
+      "node_id": "B000",
+      "node_name": "시간외 단일가",
+      "node_path": "0/0/1",
+      "paper_text": "시간외 단일가",
+      "region": "bs-strip",
+      "kind": "label",
+      "layer": "직접",
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "t1_kpi_summary",
+      "node_id": "B001",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/1/0",
+      "paper_text": "+3.21%",
+      "region": "bs-kpi",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "acnt_prft_rt"
+      },
+      "table": null,
+      "mapping_id": "base:ka10085",
+      "f": "acnt_prft_rt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00003",
+          "f": "prsm_dpst_aset_amt"
+        }
+      ],
+      "kor": "요약",
+      "format": {
+        "unit": null,
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "t1_stk_nm_r0",
+      "node_id": "B010",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/2/0/0",
+      "paper_text": "삼성전자",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "stk_nm"
+      },
+      "table": {
+        "table": "T1T",
+        "row": "0",
+        "col": 0
+      },
+      "row_index": 0,
+      "mapping_id": "base:ka10085",
+      "f": "stk_nm",
+      "alt_mappings": null,
+      "kor": "종목명",
+      "format": {
+        "unit": null,
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "t1_stk_nm_r1",
+      "node_id": "B011",
+      "node_name": "mapping|base:ka10085",
+      "node_path": "0/2/1/0",
+      "paper_text": "SK하이닉스",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10085",
+        "section": "body",
+        "field": "stk_nm"
+      },
+      "table": {
+        "table": "T1T",
+        "row": "1",
+        "col": 0
+      },
+      "row_index": 1,
+      "mapping_id": "base:ka10085",
+      "f": "stk_nm",
+      "alt_mappings": null,
+      "kor": "종목명",
+      "format": {
+        "unit": null,
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "t1_bid_r0",
+      "node_id": "B020",
+      "node_name": "mapping|detail:ka10087:sell_bid_prices",
+      "node_path": "0/3/0/0",
+      "paper_text": "71,400",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10087",
+        "section": "body",
+        "field": "ovt_sigpric_sel_bid_1"
+      },
+      "table": {
+        "table": "T1L",
+        "row": "0",
+        "col": 0
+      },
+      "mapping_id": "detail:ka10087:sell_bid_prices",
+      "f": "ovt_sigpric_sel_bid_1",
+      "alt_mappings": null,
+      "kor": "시간외매도호가1",
+      "format": {
+        "unit": "원",
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "t1_bid_r1",
+      "node_id": "B021",
+      "node_name": "mapping|detail:ka10087:sell_bid_prices",
+      "node_path": "0/3/1/0",
+      "paper_text": "71,300",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10087",
+        "section": "body",
+        "field": "ovt_sigpric_sel_bid_2"
+      },
+      "table": {
+        "table": "T1L",
+        "row": "1",
+        "col": 0
+      },
+      "mapping_id": "detail:ka10087:sell_bid_prices",
+      "f": "ovt_sigpric_sel_bid_2",
+      "alt_mappings": null,
+      "kor": "시간외매도호가2",
+      "format": {
+        "unit": "원",
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "t1_bid_r2",
+      "node_id": "B022",
+      "node_name": "mapping|detail:ka10087:sell_bid_prices",
+      "node_path": "0/3/2/0",
+      "paper_text": "71,200",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10087",
+        "section": "body",
+        "field": "ovt_sigpric_sel_bid_3"
+      },
+      "table": {
+        "table": "T1L",
+        "row": "2",
+        "col": 0
+      },
+      "mapping_id": "detail:ka10087:sell_bid_prices",
+      "f": "ovt_sigpric_sel_bid_3",
+      "alt_mappings": null,
+      "kor": "시간외매도호가3",
+      "format": {
+        "unit": "원",
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "t1_bid_r3",
+      "node_id": "B023",
+      "node_name": "mapping|detail:ka10087:sell_bid_prices",
+      "node_path": "0/3/3/0",
+      "paper_text": "71,100",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10087",
+        "section": "body",
+        "field": "ovt_sigpric_sel_bid_4"
+      },
+      "table": {
+        "table": "T1L",
+        "row": "3",
+        "col": 0
+      },
+      "mapping_id": "detail:ka10087:sell_bid_prices",
+      "f": "ovt_sigpric_sel_bid_4",
+      "alt_mappings": null,
+      "kor": "시간외매도호가4",
+      "format": {
+        "unit": "원",
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "t1_bid_r4",
+      "node_id": "B024",
+      "node_name": "mapping|detail:ka10087:sell_bid_prices",
+      "node_path": "0/3/4/0",
+      "paper_text": "71,000",
+      "region": "bs-table",
+      "kind": "value",
+      "layer": "직접",
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka10087",
+        "section": "body",
+        "field": "ovt_sigpric_sel_bid_5"
+      },
+      "table": {
+        "table": "T1L",
+        "row": "4",
+        "col": 0
+      },
+      "mapping_id": "detail:ka10087:sell_bid_prices",
+      "f": "ovt_sigpric_sel_bid_5",
+      "alt_mappings": null,
+      "kor": "시간외매도호가5",
+      "format": {
+        "unit": "원",
+        "sign": "plain",
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    }
+  ]
+}

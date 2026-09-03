@@ -1,0 +1,495 @@
+{
+ "board": "3N4O-0",
+ "fields": [
+  {
+   "mapping_id": "detail:ka10004:sell_bid_changes",
+   "f": "sel_10th_pre_req_pre",
+   "kor": "매도10차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 10단 행 직전대비 셀 (ka10007 매도10호가직전대비 · ka10004 매도10차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:sell_bid_changes",
+   "f": "sel_9th_pre_req_pre",
+   "kor": "매도9차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 9단 행 직전대비 셀 (ka10007 매도9호가직전대비 · ka10004 매도9차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:sell_bid_changes",
+   "f": "sel_8th_pre_req_pre",
+   "kor": "매도8차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 8단 행 직전대비 셀 (ka10007 매도8호가직전대비 · ka10004 매도8차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:sell_bid_changes",
+   "f": "sel_7th_pre_req_pre",
+   "kor": "매도7차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 7단 행 직전대비 셀 (ka10007 매도7호가직전대비 · ka10004 매도7차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:sell_bid_changes",
+   "f": "sel_6th_pre_req_pre",
+   "kor": "매도6차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 6단 행 직전대비 셀 (ka10007 매도6호가직전대비 · ka10004 매도6차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:sell_bid_changes",
+   "f": "sel_5th_pre_req_pre",
+   "kor": "매도5차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 5단 행 직전대비 셀 (ka10007 매도5호가직전대비 · ka10004 매도5차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:sell_bid_changes",
+   "f": "sel_4th_pre_req_pre",
+   "kor": "매도4차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 4단 행 직전대비 셀 (ka10007 매도4호가직전대비 · ka10004 매도4차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:sell_bid_changes",
+   "f": "sel_3th_pre_req_pre",
+   "kor": "매도3차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 3단 행 직전대비 셀 (ka10007 매도3호가직전대비 · ka10004 매도3차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:sell_bid_changes",
+   "f": "sel_2th_pre_req_pre",
+   "kor": "매도2차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 2단 행 직전대비 셀 (ka10007 매도2호가직전대비 · ka10004 매도2차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:sell_bid_changes",
+   "f": "sel_1th_pre_req_pre",
+   "kor": "매도1차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 1단 행 직전대비 셀 (ka10007 매도1호가직전대비 · ka10004 매도1차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:buy_bid_changes",
+   "f": "buy_1th_pre_req_pre",
+   "kor": "매수1차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 1단 행 직전대비 셀 (ka10007 매수1호가직전대비 · ka10004 매수1차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:buy_bid_changes",
+   "f": "buy_2th_pre_req_pre",
+   "kor": "매수2차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 2단 행 직전대비 셀 (ka10007 매수2호가직전대비 · ka10004 매수2차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:buy_bid_changes",
+   "f": "buy_3th_pre_req_pre",
+   "kor": "매수3차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 3단 행 직전대비 셀 (ka10007 매수3호가직전대비 · ka10004 매수3차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:buy_bid_changes",
+   "f": "buy_4th_pre_req_pre",
+   "kor": "매수4차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 4단 행 직전대비 셀 (ka10007 매수4호가직전대비 · ka10004 매수4차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:buy_bid_changes",
+   "f": "buy_5th_pre_req_pre",
+   "kor": "매수5차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 5단 행 직전대비 셀 (ka10007 매수5호가직전대비 · ka10004 매수5차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:buy_bid_changes",
+   "f": "buy_6th_pre_req_pre",
+   "kor": "매수6차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 6단 행 직전대비 셀 (ka10007 매수6호가직전대비 · ka10004 매수6차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:buy_bid_changes",
+   "f": "buy_7th_pre_req_pre",
+   "kor": "매수7차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 7단 행 직전대비 셀 (ka10007 매수7호가직전대비 · ka10004 매수7차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:buy_bid_changes",
+   "f": "buy_8th_pre_req_pre",
+   "kor": "매수8차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 8단 행 직전대비 셀 (ka10007 매수8호가직전대비 · ka10004 매수8차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:buy_bid_changes",
+   "f": "buy_9th_pre_req_pre",
+   "kor": "매수9차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 9단 행 직전대비 셀 (ka10007 매수9호가직전대비 · ka10004 매수9차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10004:buy_bid_changes",
+   "f": "buy_10th_pre_req_pre",
+   "kor": "매수10차선잔량대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 10단 행 직전대비 셀 (ka10007 매수10호가직전대비 · ka10004 매수10차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "sel_1bid_jub_pre",
+   "kor": "매도1호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 1단 행 직전대비 셀 (ka10007 매도1호가직전대비 · ka10004 매도1차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "sel_2bid_jub_pre",
+   "kor": "매도2호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 2단 행 직전대비 셀 (ka10007 매도2호가직전대비 · ka10004 매도2차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "sel_3bid_jub_pre",
+   "kor": "매도3호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 3단 행 직전대비 셀 (ka10007 매도3호가직전대비 · ka10004 매도3차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "sel_4bid_jub_pre",
+   "kor": "매도4호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 4단 행 직전대비 셀 (ka10007 매도4호가직전대비 · ka10004 매도4차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "sel_5bid_jub_pre",
+   "kor": "매도5호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 5단 행 직전대비 셀 (ka10007 매도5호가직전대비 · ka10004 매도5차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "sel_6bid_jub_pre",
+   "kor": "매도6호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 6단 행 직전대비 셀 (ka10007 매도6호가직전대비 · ka10004 매도6차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "sel_7bid_jub_pre",
+   "kor": "매도7호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 7단 행 직전대비 셀 (ka10007 매도7호가직전대비 · ka10004 매도7차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "sel_8bid_jub_pre",
+   "kor": "매도8호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 8단 행 직전대비 셀 (ka10007 매도8호가직전대비 · ka10004 매도8차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "sel_9bid_jub_pre",
+   "kor": "매도9호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 9단 행 직전대비 셀 (ka10007 매도9호가직전대비 · ka10004 매도9차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "sel_10bid_jub_pre",
+   "kor": "매도10호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 10단 행 직전대비 셀 (ka10007 매도10호가직전대비 · ka10004 매도10차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "buy_1bid_jub_pre",
+   "kor": "매수1호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 1단 행 직전대비 셀 (ka10007 매수1호가직전대비 · ka10004 매수1차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "buy_2bid_jub_pre",
+   "kor": "매수2호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 2단 행 직전대비 셀 (ka10007 매수2호가직전대비 · ka10004 매수2차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "buy_3bid_jub_pre",
+   "kor": "매수3호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 3단 행 직전대비 셀 (ka10007 매수3호가직전대비 · ka10004 매수3차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "buy_4bid_jub_pre",
+   "kor": "매수4호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 4단 행 직전대비 셀 (ka10007 매수4호가직전대비 · ka10004 매수4차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "buy_5bid_jub_pre",
+   "kor": "매수5호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 5단 행 직전대비 셀 (ka10007 매수5호가직전대비 · ka10004 매수5차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "buy_6bid_jub_pre",
+   "kor": "매수6호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 6단 행 직전대비 셀 (ka10007 매수6호가직전대비 · ka10004 매수6차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "buy_7bid_jub_pre",
+   "kor": "매수7호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 7단 행 직전대비 셀 (ka10007 매수7호가직전대비 · ka10004 매수7차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "buy_8bid_jub_pre",
+   "kor": "매수8호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 8단 행 직전대비 셀 (ka10007 매수8호가직전대비 · ka10004 매수8차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "buy_9bid_jub_pre",
+   "kor": "매수9호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 9단 행 직전대비 셀 (ka10007 매수9호가직전대비 · ka10004 매수9차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:bid_changes",
+   "f": "buy_10bid_jub_pre",
+   "kor": "매수10호가직전대비",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 10단 행 직전대비 셀 (ka10007 매수10호가직전대비 · ka10004 매수10차선잔량대비 공동 셀 — 단위 1주·부호 포함 동일 값)"
+  },
+  {
+   "mapping_id": "detail:ka10007:order_counts",
+   "f": "sel_1bid_cnt",
+   "kor": "매도1호가건수",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 1단 행 건수 셀 (열 제목 건수 (1~5단), 합계 행 336건과 정합)"
+  },
+  {
+   "mapping_id": "detail:ka10007:order_counts",
+   "f": "sel_2bid_cnt",
+   "kor": "매도2호가건수",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 2단 행 건수 셀 (열 제목 건수 (1~5단), 합계 행 336건과 정합)"
+  },
+  {
+   "mapping_id": "detail:ka10007:order_counts",
+   "f": "sel_3bid_cnt",
+   "kor": "매도3호가건수",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 3단 행 건수 셀 (열 제목 건수 (1~5단), 합계 행 336건과 정합)"
+  },
+  {
+   "mapping_id": "detail:ka10007:order_counts",
+   "f": "sel_4bid_cnt",
+   "kor": "매도4호가건수",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 4단 행 건수 셀 (열 제목 건수 (1~5단), 합계 행 336건과 정합)"
+  },
+  {
+   "mapping_id": "detail:ka10007:order_counts",
+   "f": "sel_5bid_cnt",
+   "kor": "매도5호가건수",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 5단 행 건수 셀 (열 제목 건수 (1~5단), 합계 행 336건과 정합)"
+  },
+  {
+   "mapping_id": "detail:ka10007:order_counts",
+   "f": "buy_1bid_cnt",
+   "kor": "매수1호가건수",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 1단 행 건수 셀 (열 제목 건수 (1~5단), 합계 행 324건과 정합)"
+  },
+  {
+   "mapping_id": "detail:ka10007:order_counts",
+   "f": "buy_2bid_cnt",
+   "kor": "매수2호가건수",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 2단 행 건수 셀 (열 제목 건수 (1~5단), 합계 행 324건과 정합)"
+  },
+  {
+   "mapping_id": "detail:ka10007:order_counts",
+   "f": "buy_3bid_cnt",
+   "kor": "매수3호가건수",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 3단 행 건수 셀 (열 제목 건수 (1~5단), 합계 행 324건과 정합)"
+  },
+  {
+   "mapping_id": "detail:ka10007:order_counts",
+   "f": "buy_4bid_cnt",
+   "kor": "매수4호가건수",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 4단 행 건수 셀 (열 제목 건수 (1~5단), 합계 행 324건과 정합)"
+  },
+  {
+   "mapping_id": "detail:ka10007:order_counts",
+   "f": "buy_5bid_cnt",
+   "kor": "매수5호가건수",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 5단 행 건수 셀 (열 제목 건수 (1~5단), 합계 행 324건과 정합)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpsel_1bid_req",
+   "kor": "LP매도1호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 1단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpsel_2bid_req",
+   "kor": "LP매도2호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 2단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpsel_3bid_req",
+   "kor": "LP매도3호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 3단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpsel_4bid_req",
+   "kor": "LP매도4호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 4단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpsel_5bid_req",
+   "kor": "LP매도5호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 5단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpsel_6bid_req",
+   "kor": "LP매도6호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 6단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpsel_7bid_req",
+   "kor": "LP매도7호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 7단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpsel_8bid_req",
+   "kor": "LP매도8호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 8단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpsel_9bid_req",
+   "kor": "LP매도9호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 9단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpsel_10bid_req",
+   "kor": "LP매도10호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매도 10단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpbuy_1bid_req",
+   "kor": "LP매수1호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 1단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpbuy_2bid_req",
+   "kor": "LP매수2호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 2단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpbuy_3bid_req",
+   "kor": "LP매수3호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 3단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpbuy_4bid_req",
+   "kor": "LP매수4호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 4단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpbuy_5bid_req",
+   "kor": "LP매수5호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 5단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpbuy_6bid_req",
+   "kor": "LP매수6호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 6단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpbuy_7bid_req",
+   "kor": "LP매수7호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 7단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpbuy_8bid_req",
+   "kor": "LP매수8호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 8단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpbuy_9bid_req",
+   "kor": "LP매수9호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 9단 행 LP 잔량 셀 (값 0, k-ghost)"
+  },
+  {
+   "mapping_id": "detail:ka10007:liquidity_provider",
+   "f": "lpbuy_10bid_req",
+   "kor": "LP매수10호가잔량",
+   "layer": "펼침",
+   "where": "A04-X 단계별 낱값 표 · 매수 10단 행 LP 잔량 셀 (값 0, k-ghost)"
+  }
+ ]
+}

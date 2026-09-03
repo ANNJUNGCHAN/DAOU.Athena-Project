@@ -1,0 +1,6850 @@
+{
+  "board_id": "2SKU-1",
+  "card_id": "CC-01",
+  "name": "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+  "paper_source": {
+    "saved_at": "2026-09-02T10:49:29Z",
+    "node_id": "2SKW-1",
+    "jsx_sha256": "0856e76b3cc89c969c46e88c4c823d1ac47f73905d8a6dab4126c5b155169486"
+  },
+  "html_sha256": "6e92a06f3748ec9574a949e7c52c1d4a752baa0dce51b73249ebc389122e6851",
+  "width_px": 1360.0,
+  "height_px": 1042.0,
+  "artboard_px": [
+    1440,
+    1110
+  ],
+  "operation_refs": [
+    "base:ka01690",
+    "base:ka10072",
+    "base:ka10073",
+    "base:ka10085",
+    "base:ka10170",
+    "base:kt00002",
+    "base:kt00008",
+    "base:kt00015",
+    "base:kt50021",
+    "detail:kt00001:cash_and_margin",
+    "detail:kt00001:foreign_currency_deposits",
+    "detail:kt00001:loans_and_collateral",
+    "detail:kt00001:receivables_and_arrears",
+    "detail:kt00001:settlement_forecast",
+    "detail:kt00001:special_deposits_and_credit",
+    "detail:kt00001:substitute_collateral",
+    "detail:kt00001:withdrawal_and_order_capacity",
+    "detail:kt00004:cash_and_assets",
+    "detail:kt00005:cash_and_capacity",
+    "detail:kt00005:receivables_and_margin",
+    "detail:kt00010:cash_and_withdrawal_capacity",
+    "detail:kt00010:purchase_settlement",
+    "detail:kt00011:margin_rates",
+    "detail:kt00012:account_and_receivable_capacity",
+    "detail:kt00012:guarantee_rate",
+    "detail:kt00013:cash_resources",
+    "detail:kt00013:substitute_resources",
+    "detail:kt00016:period_flows",
+    "detail:kt00017:d2_account_position",
+    "detail:kt00017:daily_cash_and_trading_flows",
+    "detail:kt00017:other_assets_and_income",
+    "detail:kt00018:portfolio_summary"
+  ],
+  "state": {
+    "kind": "tab",
+    "parent_board": "133H-2",
+    "control": "예수금·결제",
+    "control_text": null
+  },
+  "regions": {
+    "2SP5-1": "header",
+    "2SP6-1": "strip",
+    "2SOK-1": "kpi",
+    "2SL0-1": "workspace",
+    "39PK-0": "primary",
+    "3U8K-0": "rail",
+    "2SKX-1": "footer"
+  },
+  "tables": [
+    {
+      "node_id": "39SW-0",
+      "node_name": "결제 예정 표",
+      "columns": 7,
+      "header_row": "39SX-0",
+      "body_rows": [
+        "39T5-0",
+        "39TD-0",
+        "39TL-0"
+      ],
+      "foot_rows": [],
+      "source": "heuristic",
+      "column_labels": [
+        "결제 예정",
+        "매도 정산",
+        "매수 정산",
+        "정산 합계",
+        "미수 변제소요",
+        "출금가능",
+        "예수금 예상"
+      ]
+    },
+    {
+      "node_id": "3A4F-0",
+      "node_name": "거래내역 표",
+      "columns": 5,
+      "header_row": "3A4G-0",
+      "body_rows": [
+        "3A4M-0",
+        "3A51-0",
+        "3A5G-0",
+        "3G1S-0",
+        "3G2A-0",
+        "3G2T-0",
+        "3GKQ-0"
+      ],
+      "foot_rows": [],
+      "source": "heuristic",
+      "column_labels": [
+        "일자",
+        "구분",
+        "내용",
+        "금액",
+        "상태"
+      ]
+    }
+  ],
+  "counts": {
+    "elements": 339,
+    "text_nodes": 199,
+    "slots": 199,
+    "anchored_slots": 9,
+    "mapped_slots": 8,
+    "labels": 85,
+    "values": 114,
+    "layer_직접": 168,
+    "layer_병기": 31,
+    "layer_펼침": 0,
+    "tables": 2,
+    "tree_text_truncated": 0,
+    "bs_col": 44,
+    "bs_paired": 55,
+    "bs_leaf": 5,
+    "bs_kpi_cell": 5,
+    "state_control_marks": 6
+  },
+  "density": {
+    "table_columns": 7,
+    "rows_max": 7,
+    "kpi_cells": 5,
+    "rail_blocks": 5,
+    "rail_rows_max": 7
+  },
+  "state_controls": {
+    "marks": [
+      {
+        "control": "D+2 정산 후 계좌",
+        "kind": "expand",
+        "boards": [
+          "3MTJ-0"
+        ],
+        "node_id": "3GLA-0",
+        "how": "token"
+      },
+      {
+        "control": "거래내역 상세",
+        "kind": "expand",
+        "boards": [
+          "3LGC-0"
+        ],
+        "node_id": "3UB6-0",
+        "how": "hand"
+      },
+      {
+        "control": "부채·미수·연체 상세",
+        "kind": "expand",
+        "boards": [
+          "3UTA-0"
+        ],
+        "node_id": "3U9Z-0",
+        "how": "partial"
+      },
+      {
+        "control": "예수금 통화별·특수예수금",
+        "kind": "expand",
+        "boards": [
+          "3NVG-0"
+        ],
+        "node_id": "3UA6-0",
+        "how": "hand"
+      },
+      {
+        "control": "증거금 재원·담보 상세",
+        "kind": "expand",
+        "boards": [
+          "3IGR-0"
+        ],
+        "node_id": "3U9L-0",
+        "how": "token"
+      },
+      {
+        "control": "증거금·보증금 구간별",
+        "kind": "expand",
+        "boards": [
+          "3GRO-0"
+        ],
+        "node_id": "3U9S-0",
+        "how": "token"
+      }
+    ],
+    "unresolved": []
+  },
+  "text_multiset": {
+    "+12,946,000": 2,
+    "+35,809,090": 1,
+    "+4,240,900원": 1,
+    "+5,000,000": 1,
+    "+5,054,300원": 1,
+    "+54,300": 1,
+    "+55,540원": 1,
+    "+9,079,400": 1,
+    "+9,079,400원": 1,
+    "-1,502,000원": 1,
+    "-1,635,600": 3,
+    "-24,600": 1,
+    "-3,842,000": 2,
+    "0": 7,
+    "08-28": 1,
+    "08-31": 1,
+    "08/26": 1,
+    "08/27": 1,
+    "08/28": 1,
+    "08/31": 1,
+    "09-01": 1,
+    "09/01": 3,
+    "09/01 09:42 기준 · D+2 결제": 1,
+    "09/01 기준": 1,
+    "09/01 체결 · 비용 -24,600": 1,
+    "0달러": 1,
+    "0원 3항목": 1,
+    "0원 4항목 · 0주 1항목": 1,
+    "0원 6항목": 2,
+    "124,580,240원": 1,
+    "1억 2,043만": 1,
+    "1억 2,180만": 1,
+    "1억 2,458만": 1,
+    "27,304,400": 1,
+    "28,940,000": 2,
+    "28,940,000원": 1,
+    "28.0%": 1,
+    "3,120,000 · 3,120,000원": 1,
+    "31,240,000원": 2,
+    "33,184,400": 2,
+    "34,820,000": 2,
+    "36,383,800": 1,
+    "42,263,800": 2,
+    "6,240,000원": 1,
+    "63,280,000원": 1,
+    "89,760,240원": 1,
+    "8종목": 1,
+    "D+1 09/02": 1,
+    "D+1 예상": 1,
+    "D+1 예정": 1,
+    "D+2 09/03": 1,
+    "D+2 예상": 1,
+    "D+2 예정": 1,
+    "D+2 차감": 2,
+    "KODEX 200 250주 · NAVER 4주": 1,
+    "RP·채권·ELS 평가·매도담보 이자·신용이자·중도이용료": 1,
+    "SK하이닉스 매수 20주 · 192,100원": 1,
+    "▸": 7,
+    "● 예수금·결제 실시간 반영 중": 1,
+    "감면 미적용": 1,
+    "거래세 -5,180 · 농특세 -15,540": 1,
+    "결제 08/26": 1,
+    "결제 08/27": 1,
+    "결제 09/02": 1,
+    "결제 09/03": 3,
+    "결제 예정": 1,
+    "결제 전체 내역 보기": 1,
+    "구분": 1,
+    "금액": 1,
+    "금현물": 1,
+    "기타 수익": 1,
+    "기타 자산·수익": 1,
+    "내 계좌": 1,
+    "내용": 1,
+    "대용금액": 1,
+    "대출일 해당 없음": 6,
+    "랩 출금가능 0원": 1,
+    "매도 거래 비용 합계": 1,
+    "매도 결제": 2,
+    "매도 정산": 1,
+    "매매 순유입": 1,
+    "매수 결제": 2,
+    "매수 결제 08/27": 1,
+    "매수 정산": 1,
+    "매입 85,519,340원": 1,
+    "미수 미사용": 1,
+    "미수 변제소요": 1,
+    "미수확보금·미수가능·최소 주문가능·수익증권 매수가능·권리대용금": 1,
+    "배당 54,300 · 이용료 1,240": 1,
+    "배당금 입금": 1,
+    "보유종목": 1,
+    "보유종목 8종": 1,
+    "보증금율 45% · 등급 45%구간": 1,
+    "부채·미수": 1,
+    "비용 -24,600": 1,
+    "비용 -66,010": 1,
+    "삼성전자 매도 235주 · 152,660원": 1,
+    "삼성전자 분기 배당 · 세후": 1,
+    "상태": 1,
+    "세금 -20,720 · 수수료 -3,880": 1,
+    "손익·성과": 1,
+    "수수료·제세금": 1,
+    "수익률 +4.96%": 1,
+    "수익증권 제외 1억 2,458만": 1,
+    "수표 입금·증권 입고·증권 출고": 1,
+    "순번 136": 1,
+    "순번 137": 1,
+    "순번 138": 1,
+    "순번 139": 1,
+    "순번 140": 1,
+    "순번 141": 1,
+    "순번 142": 1,
+    "신용융자·대주담보·담보대출·현금미수·이자미납·기타대여": 1,
+    "실시간": 1,
+    "연결 은행계좌에서 이체": 1,
+    "예수금 예상": 1,
+    "예수금·결제": 2,
+    "예탁자산 추이": 1,
+    "오늘 09/01": 1,
+    "완료": 3,
+    "외화예수금": 1,
+    "이체 08/26 500만 · 배당 08/27 54,300": 1,
+    "이체 입금": 1,
+    "익일 인출 28,940,000원": 1,
+    "인출·주문 한도": 1,
+    "일자": 1,
+    "입금": 1,
+    "자산 종합": 1,
+    "정산 +9,079,400": 1,
+    "정산 -1,635,600": 1,
+    "정산 합계": 1,
+    "주문·체결": 1,
+    "주문가능금액": 2,
+    "주문증거금": 1,
+    "주식 평가액": 1,
+    "증거금 현금·대용": 1,
+    "증거금·담보": 1,
+    "증거금율 종목 20% · 계좌·적용 40%": 1,
+    "체결 08/26": 1,
+    "총자산": 1,
+    "최근 7건 표시 · 미수금 0원": 1,
+    "최근 현금 흐름": 1,
+    "추정 28,940,000원": 1,
+    "출금": 1,
+    "출금가능": 2,
+    "출금가능 28,940,000원": 1,
+    "출금가능금액": 1,
+    "카카오 매수 40주 · 40,890원": 1,
+    "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18": 1,
+    "평가손익": 1,
+    "현금": 7,
+    "현금 비중": 1,
+    "현금주문 31,240,000원 · 207주": 1,
+    "현재 예수금": 1
+  },
+  "column_priority": [
+    "결제 예정",
+    "매도 정산",
+    "매수 정산",
+    "정산 합계",
+    "미수 변제소요",
+    "출금가능",
+    "예수금 예상",
+    "일자",
+    "구분",
+    "내용",
+    "금액",
+    "상태"
+  ],
+  "column_bindings": [
+    {
+      "table_id": "39SW-0",
+      "columns": [
+        {
+          "col": 1,
+          "data_col": 0,
+          "header": "결제 예정",
+          "slot_ids": [
+            "s047",
+            "s054",
+            "s061"
+          ],
+          "mapping_id": "base:kt00008",
+          "f": "trde_dt",
+          "kor": "매매일자"
+        },
+        {
+          "col": 2,
+          "data_col": 1,
+          "header": "매도 정산",
+          "slot_ids": [
+            "s048",
+            "s055",
+            "s062"
+          ],
+          "mapping_id": "detail:kt00001:settlement_forecast",
+          "f": "d2_sel_exct_amt",
+          "kor": "d+2매도정산금"
+        },
+        {
+          "col": 3,
+          "data_col": 2,
+          "header": "매수 정산",
+          "slot_ids": [
+            "s049",
+            "s056",
+            "s063"
+          ],
+          "mapping_id": "detail:kt00001:settlement_forecast",
+          "f": "d2_buy_exct_amt",
+          "kor": "d+2매수정산금"
+        },
+        {
+          "col": 4,
+          "data_col": 3,
+          "header": "정산 합계",
+          "slot_ids": [
+            "s050",
+            "s057",
+            "s064",
+            "s065"
+          ],
+          "mapping_id": "detail:kt00001:settlement_forecast",
+          "f": "d2_slby_exct_amt",
+          "kor": "d+2매도매수정산금"
+        },
+        {
+          "col": 5,
+          "data_col": 4,
+          "header": "미수 변제소요",
+          "slot_ids": [
+            "s051",
+            "s058",
+            "s066"
+          ],
+          "mapping_id": "detail:kt00001:settlement_forecast",
+          "f": "d2_out_rep_mor",
+          "kor": "d+2미수변제소요금"
+        },
+        {
+          "col": 6,
+          "data_col": 5,
+          "header": "출금가능",
+          "slot_ids": [
+            "s052",
+            "s059",
+            "s067"
+          ],
+          "mapping_id": "detail:kt00001:settlement_forecast",
+          "f": "d2_pymn_alow_amt",
+          "kor": "d+2출금가능금액"
+        },
+        {
+          "col": 7,
+          "data_col": 6,
+          "header": "예수금 예상",
+          "slot_ids": [
+            "s053",
+            "s060",
+            "s068",
+            "s069"
+          ],
+          "mapping_id": "detail:kt00001:settlement_forecast",
+          "f": "d2_entra",
+          "kor": "d+2추정예수금",
+          "alt_mappings": [
+            {
+              "mapping_id": "detail:kt00005:cash_and_capacity",
+              "f": "entr_d2"
+            },
+            {
+              "mapping_id": "detail:kt00010:purchase_settlement",
+              "f": "d2entra"
+            },
+            {
+              "mapping_id": "detail:kt00017:d2_account_position",
+              "f": "d2_entra"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "table_id": "3A4F-0",
+      "columns": [
+        {
+          "col": 1,
+          "data_col": 0,
+          "header": "일자",
+          "slot_ids": [
+            "s075",
+            "s076",
+            "s084",
+            "s085",
+            "s093",
+            "s094",
+            "s103",
+            "s104",
+            "s112",
+            "s113",
+            "s122",
+            "s123",
+            "s131",
+            "s132"
+          ],
+          "mapping_id": "base:kt00015",
+          "f": "trde_dt",
+          "kor": "거래일자"
+        },
+        {
+          "col": 2,
+          "data_col": 1,
+          "header": "구분",
+          "slot_ids": [
+            "s077",
+            "s078",
+            "s079",
+            "s086",
+            "s087",
+            "s088",
+            "s095",
+            "s096",
+            "s097",
+            "s105",
+            "s106",
+            "s107",
+            "s114",
+            "s115",
+            "s116",
+            "s124",
+            "s125",
+            "s126",
+            "s133",
+            "s134",
+            "s135"
+          ],
+          "mapping_id": "base:kt00015",
+          "f": "trde_kind_nm",
+          "kor": "거래종류명",
+          "alt_mappings": [
+            {
+              "mapping_id": "base:kt00008",
+              "f": "sell_tp"
+            }
+          ]
+        },
+        {
+          "col": 3,
+          "data_col": 2,
+          "header": "내용",
+          "slot_ids": [
+            "s080",
+            "s081",
+            "s089",
+            "s090",
+            "s098",
+            "s099",
+            "s108",
+            "s109",
+            "s117",
+            "s118",
+            "s127",
+            "s128",
+            "s136",
+            "s137"
+          ],
+          "mapping_id": "base:kt00015",
+          "f": "rmrk_nm",
+          "kor": "적요명",
+          "alt_mappings": [
+            {
+              "mapping_id": "base:kt00008",
+              "f": "qty"
+            },
+            {
+              "mapping_id": "base:kt00015",
+              "f": "stk_nm"
+            },
+            {
+              "mapping_id": "base:kt00015",
+              "f": "trde_qty_jwa_cnt"
+            }
+          ]
+        },
+        {
+          "col": 4,
+          "data_col": 3,
+          "header": "금액",
+          "slot_ids": [
+            "s082",
+            "s091",
+            "s100",
+            "s101",
+            "s110",
+            "s119",
+            "s120",
+            "s129",
+            "s138"
+          ],
+          "mapping_id": "base:kt00015",
+          "f": "exct_amt",
+          "kor": "정산금액",
+          "alt_mappings": [
+            {
+              "mapping_id": "detail:kt00010:purchase_settlement",
+              "f": "pur_exct_amt"
+            }
+          ]
+        },
+        {
+          "col": 5,
+          "data_col": 4,
+          "header": "상태",
+          "slot_ids": [
+            "s083",
+            "s092",
+            "s102",
+            "s111",
+            "s121",
+            "s130",
+            "s139"
+          ],
+          "kind": "static",
+          "note": "정산 상태 열 — 결제일자에서 만드는 파생 표기라 한 필드로 묶이지 않는다"
+        }
+      ]
+    }
+  ],
+  "section_titles_ko": {
+    "header": "내 계좌",
+    "strip": "계좌 탭",
+    "kpi": "자산 요약",
+    "workspace": "계좌 작업 영역",
+    "primary": "예수금·결제",
+    "table": "결제 예정 · 거래·결제 내역",
+    "rail": "인출·주문 한도 · 부채·미수 · 기타 자산·수익 · 최근 현금 흐름 · 예탁자산 추이",
+    "footer": "예수금·결제 상태"
+  },
+  "primary": {
+    "renderer": null,
+    "mount_slot": null,
+    "module": null,
+    "props_from": null
+  },
+  "slots": [
+    {
+      "slot_id": "s001",
+      "node_id": "2SPQ-1",
+      "node_name": "내 계좌",
+      "node_path": "0/0/0/0",
+      "paper_text": "내 계좌",
+      "region": "header",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 28.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s002",
+      "node_id": "2SPP-1",
+      "node_name": "실시간",
+      "node_path": "0/0/0/1/0",
+      "paper_text": "실시간",
+      "region": "header",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s003",
+      "node_id": "2SPM-1",
+      "node_name": "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18",
+      "node_path": "0/0/1",
+      "paper_text": "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18",
+      "region": "header",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00004:account_identity",
+      "f": "acnt_nm",
+      "alt_mappings": null,
+      "kor": "계좌명",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka00001",
+          "f": "acctNo",
+          "sep": " "
+        },
+        {
+          "mapping_id": "base:00",
+          "f": "9201",
+          "sep": " "
+        }
+      ]
+    },
+    {
+      "slot_id": "s004",
+      "node_id": "2SPK-1",
+      "node_name": "자산 종합",
+      "node_path": "0/1/0/0",
+      "paper_text": "자산 종합",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s005",
+      "node_id": "2SPI-1",
+      "node_name": "보유종목",
+      "node_path": "0/1/1/0",
+      "paper_text": "보유종목",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s006",
+      "node_id": "2SPG-1",
+      "node_name": "예수금·결제",
+      "node_path": "0/1/2/0",
+      "paper_text": "예수금·결제",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s007",
+      "node_id": "2SPE-1",
+      "node_name": "손익·성과",
+      "node_path": "0/1/3/0",
+      "paper_text": "손익·성과",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s008",
+      "node_id": "2SPC-1",
+      "node_name": "주문·체결",
+      "node_path": "0/1/4/0",
+      "paper_text": "주문·체결",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s009",
+      "node_id": "2SPA-1",
+      "node_name": "증거금·담보",
+      "node_path": "0/1/5/0",
+      "paper_text": "증거금·담보",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s010",
+      "node_id": "2SP8-1",
+      "node_name": "금현물",
+      "node_path": "0/1/6/0",
+      "paper_text": "금현물",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s011",
+      "node_id": "2SP4-1",
+      "node_name": "총자산",
+      "node_path": "1/0/0",
+      "paper_text": "총자산",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s012",
+      "node_id": "2SP3-1",
+      "node_name": "raw|ka01690|body|tot_evlt_amt",
+      "node_path": "1/0/1",
+      "paper_text": "124,580,240원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 28.0,
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka01690",
+        "section": "body",
+        "field": "tot_evlt_amt"
+      },
+      "table": null,
+      "mapping_id": "detail:kt00004:cash_and_assets",
+      "f": "aset_evlt_amt",
+      "alt_mappings": null,
+      "kor": "예탁자산평가액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s013",
+      "node_id": "2SP2-1",
+      "node_name": "raw|ka01690|body|tot_prft_rt",
+      "node_path": "1/0/2",
+      "paper_text": "수익률 +4.96%",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka01690",
+        "section": "body",
+        "field": "tot_prft_rt"
+      },
+      "table": null,
+      "mapping_id": "base:ka01690",
+      "f": "tot_prft_rt",
+      "alt_mappings": null,
+      "kor": "수익률",
+      "format": {
+        "unit": "percent",
+        "sign": true,
+        "precision": 2,
+        "tone": "change"
+      },
+      "paired_with": "s012",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s014",
+      "node_id": "2SP0-1",
+      "node_name": "주문가능금액",
+      "node_path": "1/1/0",
+      "paper_text": "주문가능금액",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s015",
+      "node_id": "2SOZ-1",
+      "node_name": "raw|kt00001|body|d2_pymn_alow_amt",
+      "node_path": "1/1/1",
+      "paper_text": "31,240,000원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 24.0,
+      "anchor": {
+        "kind": "raw",
+        "tr": "kt00001",
+        "section": "body",
+        "field": "d2_pymn_alow_amt"
+      },
+      "table": null,
+      "mapping_id": "base:kt50021",
+      "f": "ord_alow_amt",
+      "alt_mappings": null,
+      "kor": "주문가능금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s016",
+      "node_id": "2SOY-1",
+      "node_name": "raw|kt00005|body|pymn_alow_amt",
+      "node_path": "1/1/2",
+      "paper_text": "출금가능 28,940,000원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": {
+        "kind": "raw",
+        "tr": "kt00005",
+        "section": "body",
+        "field": "pymn_alow_amt"
+      },
+      "table": null,
+      "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+      "f": "wthd_alowa",
+      "alt_mappings": null,
+      "kor": "인출가능금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s015",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s017",
+      "node_id": "2SOW-1",
+      "node_name": "주식 평가액",
+      "node_path": "1/2/0",
+      "paper_text": "주식 평가액",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s018",
+      "node_id": "2SOV-1",
+      "node_name": "raw|kt00004|body|aset_evlt_amt",
+      "node_path": "1/2/1",
+      "paper_text": "89,760,240원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 24.0,
+      "anchor": {
+        "kind": "raw",
+        "tr": "kt00004",
+        "section": "body",
+        "field": "aset_evlt_amt"
+      },
+      "table": null,
+      "mapping_id": "detail:kt00004:cash_and_assets",
+      "f": "tot_est_amt",
+      "alt_mappings": null,
+      "kor": "유가잔고평가액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s019",
+      "node_id": "2SOU-1",
+      "node_name": "structure|kt00004|stk_acnt_evlt_prst|count",
+      "node_path": "1/2/2",
+      "paper_text": "8종목",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": {
+        "kind": "structure",
+        "tr": "kt00004",
+        "array": "stk_acnt_evlt_prst",
+        "field": "count"
+      },
+      "table": null,
+      "mapping_id": "detail:kt00004:position_valuation",
+      "f": "stk_acnt_evlt_prst",
+      "alt_mappings": null,
+      "kor": "종목별계좌평가현황",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s018",
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s020",
+      "node_id": "2SOS-1",
+      "node_name": "평가손익",
+      "node_path": "1/3/0",
+      "paper_text": "평가손익",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s021",
+      "node_id": "2SOR-1",
+      "node_name": "raw|ka01690|body|tot_evltv_prft",
+      "node_path": "1/3/1",
+      "paper_text": "+4,240,900원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 24.0,
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka01690",
+        "section": "body",
+        "field": "tot_evltv_prft"
+      },
+      "table": null,
+      "mapping_id": "base:ka01690",
+      "f": "tot_evltv_prft",
+      "alt_mappings": null,
+      "kor": "총 평가손익",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s022",
+      "node_id": "2SOQ-1",
+      "node_name": "raw|ka01690|body|tot_prft_rt",
+      "node_path": "1/3/2",
+      "paper_text": "매입 85,519,340원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka01690",
+        "section": "body",
+        "field": "tot_prft_rt"
+      },
+      "table": null,
+      "mapping_id": "base:ka01690",
+      "f": "tot_buy_amt",
+      "alt_mappings": null,
+      "kor": "총 매입가",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s021",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s023",
+      "node_id": "2SOO-1",
+      "node_name": "현금 비중",
+      "node_path": "1/4/0",
+      "paper_text": "현금 비중",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s024",
+      "node_id": "2SON-1",
+      "node_name": "raw|ka01690|body|buy_wght",
+      "node_path": "1/4/1",
+      "paper_text": "28.0%",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 24.0,
+      "anchor": {
+        "kind": "raw",
+        "tr": "ka01690",
+        "section": "body",
+        "field": "buy_wght"
+      },
+      "table": null,
+      "mapping_id": "base:ka01690",
+      "f": "buy_wght",
+      "alt_mappings": null,
+      "kor": "매수비중",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "json_path": "$.buy_wght"
+    },
+    {
+      "slot_id": "s025",
+      "node_id": "2SOM-1",
+      "node_name": "보유종목 8종",
+      "node_path": "1/4/2",
+      "paper_text": "보유종목 8종",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00004:position_valuation",
+      "f": "stk_acnt_evlt_prst",
+      "alt_mappings": null,
+      "kor": "종목별계좌평가현황",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s024",
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s026",
+      "node_id": "39PM-0",
+      "node_name": "예수금·결제",
+      "node_path": "2/0/0/0",
+      "paper_text": "예수금·결제",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 15.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s027",
+      "node_id": "39PN-0",
+      "node_name": "09/01 09:42 기준 · D+2 결제",
+      "node_path": "2/0/0/1",
+      "paper_text": "09/01 09:42 기준 · D+2 결제",
+      "region": "primary",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:kt00008",
+      "f": "acnt_nxdy_setl_frcs_prps_array",
+      "alt_mappings": null,
+      "kor": "계좌별익일결제예정내역배열",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s028",
+      "node_id": "39QN-0",
+      "node_name": "현재 예수금",
+      "node_path": "2/0/1/0/0",
+      "paper_text": "현재 예수금",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s029",
+      "node_id": "39QO-0",
+      "node_name": "34,820,000",
+      "node_path": "2/0/1/0/1",
+      "paper_text": "34,820,000",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 17.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:cash_and_margin",
+      "f": "entr",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka01690",
+          "f": "dbst_bal"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "entra_remn"
+        },
+        {
+          "mapping_id": "detail:kt00004:cash_and_assets",
+          "f": "entr"
+        },
+        {
+          "mapping_id": "detail:kt00005:cash_and_capacity",
+          "f": "entr"
+        }
+      ],
+      "kor": "예수금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka01690",
+          "f": "dbst_bal",
+          "sep": null
+        },
+        {
+          "mapping_id": "detail:kt00004:cash_and_assets",
+          "f": "entr",
+          "sep": null
+        },
+        {
+          "mapping_id": "detail:kt00005:cash_and_capacity",
+          "f": "entr",
+          "sep": null
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "entra_remn",
+          "sep": null
+        }
+      ]
+    },
+    {
+      "slot_id": "s030",
+      "node_id": "39QP-0",
+      "node_name": "랩 출금가능 0원",
+      "node_path": "2/0/1/0/2",
+      "paper_text": "랩 출금가능 0원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+      "f": "wrap_pymn_alow_amt",
+      "alt_mappings": null,
+      "kor": "랩출금가능금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s029",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s031",
+      "node_id": "39QR-0",
+      "node_name": "D+1 예상",
+      "node_path": "2/0/1/1/0",
+      "paper_text": "D+1 예상",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "결제일 고정 라벨(D+1) — 응답 필드가 아니다"
+    },
+    {
+      "slot_id": "s032",
+      "node_id": "39QS-0",
+      "node_name": "33,184,400",
+      "node_path": "2/0/1/1/1",
+      "paper_text": "33,184,400",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 17.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d1_entra",
+      "alt_mappings": null,
+      "kor": "d+1추정예수금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s033",
+      "node_id": "39QT-0",
+      "node_name": "정산 -1,635,600",
+      "node_path": "2/0/1/1/2",
+      "paper_text": "정산 -1,635,600",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d1_slby_exct_amt",
+      "alt_mappings": null,
+      "kor": "d+1매도매수정산금",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": "s032",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s034",
+      "node_id": "39QV-0",
+      "node_name": "D+2 예상",
+      "node_path": "2/0/1/2/0",
+      "paper_text": "D+2 예상",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "결제일 고정 라벨(D+2) — 응답 필드가 아니다"
+    },
+    {
+      "slot_id": "s035",
+      "node_id": "39QW-0",
+      "node_name": "42,263,800",
+      "node_path": "2/0/1/2/1",
+      "paper_text": "42,263,800",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 17.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d2_entra",
+      "alt_mappings": null,
+      "kor": "d+2추정예수금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s036",
+      "node_id": "39QX-0",
+      "node_name": "정산 +9,079,400",
+      "node_path": "2/0/1/2/2",
+      "paper_text": "정산 +9,079,400",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d2_slby_exct_amt",
+      "alt_mappings": null,
+      "kor": "d+2매도매수정산금",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": "s035",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s037",
+      "node_id": "39QZ-0",
+      "node_name": "출금가능",
+      "node_path": "2/0/1/3/0",
+      "paper_text": "출금가능",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s038",
+      "node_id": "39R0-0",
+      "node_name": "28,940,000",
+      "node_path": "2/0/1/3/1",
+      "paper_text": "28,940,000",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 17.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+      "f": "pymn_alow_amt",
+      "alt_mappings": null,
+      "kor": "출금가능금액",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s039",
+      "node_id": "39R1-0",
+      "node_name": "익일 인출 28,940,000원",
+      "node_path": "2/0/1/3/2",
+      "paper_text": "익일 인출 28,940,000원",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+      "f": "nxdy_wthd_alowa",
+      "alt_mappings": null,
+      "kor": "익일인출가능금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s038",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s040",
+      "node_id": "39SY-0",
+      "node_name": "결제 예정",
+      "node_path": "2/0/2/0/0",
+      "paper_text": "결제 예정",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "head",
+        "col": 0
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s041",
+      "node_id": "39SZ-0",
+      "node_name": "매도 정산",
+      "node_path": "2/0/2/0/1",
+      "paper_text": "매도 정산",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "head",
+        "col": 1
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s042",
+      "node_id": "39T0-0",
+      "node_name": "매수 정산",
+      "node_path": "2/0/2/0/2",
+      "paper_text": "매수 정산",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "head",
+        "col": 2
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s043",
+      "node_id": "39T1-0",
+      "node_name": "정산 합계",
+      "node_path": "2/0/2/0/3",
+      "paper_text": "정산 합계",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "head",
+        "col": 3
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s044",
+      "node_id": "39T2-0",
+      "node_name": "미수 변제소요",
+      "node_path": "2/0/2/0/4",
+      "paper_text": "미수 변제소요",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "head",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s045",
+      "node_id": "39T3-0",
+      "node_name": "출금가능",
+      "node_path": "2/0/2/0/5",
+      "paper_text": "출금가능",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "head",
+        "col": 5
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s046",
+      "node_id": "39T4-0",
+      "node_name": "예수금 예상",
+      "node_path": "2/0/2/0/6",
+      "paper_text": "예수금 예상",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "head",
+        "col": 6
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s047",
+      "node_id": "39T6-0",
+      "node_name": "오늘 09/01",
+      "node_path": "2/0/2/1/0",
+      "paper_text": "오늘 09/01",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "0",
+        "col": 0
+      },
+      "mapping_id": "base:kt00008",
+      "f": "trde_dt",
+      "alt_mappings": null,
+      "kor": "매매일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s048",
+      "node_id": "39T7-0",
+      "node_name": "0",
+      "node_path": "2/0/2/1/1",
+      "paper_text": "0",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "0",
+        "col": 1
+      },
+      "mapping_id": "base:kt50021",
+      "f": "sell_exct_amt",
+      "alt_mappings": null,
+      "kor": "매도정산금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s049",
+      "node_id": "39T8-0",
+      "node_name": "0",
+      "node_path": "2/0/2/1/2",
+      "paper_text": "0",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "0",
+        "col": 2
+      },
+      "mapping_id": "base:kt50021",
+      "f": "buy_exct_amt",
+      "alt_mappings": null,
+      "kor": "매수정산금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s050",
+      "node_id": "39T9-0",
+      "node_name": "0",
+      "node_path": "2/0/2/1/3",
+      "paper_text": "0",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "0",
+        "col": 3
+      },
+      "mapping_id": "base:kt00008",
+      "f": "exct_amt",
+      "alt_mappings": null,
+      "kor": "정산금액",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s051",
+      "node_id": "39TA-0",
+      "node_name": "0",
+      "node_path": "2/0/2/1/4",
+      "paper_text": "0",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "0",
+        "col": 4
+      },
+      "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+      "f": "uncla",
+      "alt_mappings": null,
+      "kor": "미수금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s052",
+      "node_id": "39TB-0",
+      "node_name": "28,940,000",
+      "node_path": "2/0/2/1/5",
+      "paper_text": "28,940,000",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "0",
+        "col": 5
+      },
+      "mapping_id": "base:kt50021",
+      "f": "pymn_alow_amt",
+      "alt_mappings": null,
+      "kor": "출금가능금액",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s053",
+      "node_id": "39TC-0",
+      "node_name": "34,820,000",
+      "node_path": "2/0/2/1/6",
+      "paper_text": "34,820,000",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "0",
+        "col": 6
+      },
+      "mapping_id": "base:kt00002",
+      "f": "entr",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00005:cash_and_capacity",
+          "f": "entr_d2"
+        },
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "d2entra"
+        },
+        {
+          "mapping_id": "detail:kt00017:d2_account_position",
+          "f": "d2_entra"
+        }
+      ],
+      "kor": "예수금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s054",
+      "node_id": "39TE-0",
+      "node_name": "D+1 09/02",
+      "node_path": "2/0/2/2/0",
+      "paper_text": "D+1 09/02",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "1",
+        "col": 0
+      },
+      "mapping_id": "base:kt00008",
+      "f": "trde_dt",
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s055",
+      "node_id": "39TF-0",
+      "node_name": "0",
+      "node_path": "2/0/2/2/1",
+      "paper_text": "0",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "1",
+        "col": 1
+      },
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d1_sel_exct_amt",
+      "alt_mappings": null,
+      "kor": "d+1매도정산금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s056",
+      "node_id": "39TG-0",
+      "node_name": "-1,635,600",
+      "node_path": "2/0/2/2/2",
+      "paper_text": "-1,635,600",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "1",
+        "col": 2
+      },
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d1_buy_exct_amt",
+      "alt_mappings": null,
+      "kor": "d+1매수정산금",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s057",
+      "node_id": "39TH-0",
+      "node_name": "-1,635,600",
+      "node_path": "2/0/2/2/3",
+      "paper_text": "-1,635,600",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "1",
+        "col": 3
+      },
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d1_slby_exct_amt",
+      "alt_mappings": null,
+      "kor": "d+1매도매수정산금",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s058",
+      "node_id": "39TI-0",
+      "node_name": "0",
+      "node_path": "2/0/2/2/4",
+      "paper_text": "0",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "1",
+        "col": 4
+      },
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d1_out_rep_mor",
+      "alt_mappings": null,
+      "kor": "d+1미수변제소요금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s059",
+      "node_id": "39TJ-0",
+      "node_name": "27,304,400",
+      "node_path": "2/0/2/2/5",
+      "paper_text": "27,304,400",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "1",
+        "col": 5
+      },
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d1_pymn_alow_amt",
+      "alt_mappings": null,
+      "kor": "d+1출금가능금액",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s060",
+      "node_id": "39TK-0",
+      "node_name": "33,184,400",
+      "node_path": "2/0/2/2/6",
+      "paper_text": "33,184,400",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "1",
+        "col": 6
+      },
+      "mapping_id": "detail:kt00005:cash_and_capacity",
+      "f": "entr_d1",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00005:cash_and_capacity",
+          "f": "entr_d2"
+        },
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "d2entra"
+        },
+        {
+          "mapping_id": "detail:kt00017:d2_account_position",
+          "f": "d2_entra"
+        }
+      ],
+      "kor": "예수금D+1",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s061",
+      "node_id": "39TM-0",
+      "node_name": "D+2 09/03",
+      "node_path": "2/0/2/3/0",
+      "paper_text": "D+2 09/03",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "2",
+        "col": 0
+      },
+      "mapping_id": "base:kt00008",
+      "f": "trde_dt",
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s062",
+      "node_id": "39TN-0",
+      "node_name": "+12,946,000",
+      "node_path": "2/0/2/3/1",
+      "paper_text": "+12,946,000",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "2",
+        "col": 1
+      },
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d2_sel_exct_amt",
+      "alt_mappings": null,
+      "kor": "d+2매도정산금",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s063",
+      "node_id": "39TO-0",
+      "node_name": "-3,842,000",
+      "node_path": "2/0/2/3/2",
+      "paper_text": "-3,842,000",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "2",
+        "col": 2
+      },
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d2_buy_exct_amt",
+      "alt_mappings": null,
+      "kor": "d+2매수정산금",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s064",
+      "node_id": "39TQ-0",
+      "node_name": "+9,079,400",
+      "node_path": "2/0/2/3/3/0",
+      "paper_text": "+9,079,400",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "2",
+        "col": 3
+      },
+      "mapping_id": "base:kt50021",
+      "f": "sell_buy_exct_amt",
+      "alt_mappings": null,
+      "kor": "매도매수정산금",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s065",
+      "node_id": "39TR-0",
+      "node_name": "비용 -24,600",
+      "node_path": "2/0/2/3/3/1",
+      "paper_text": "비용 -24,600",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "2",
+        "col": 3
+      },
+      "mapping_id": "base:ka10170",
+      "f": "cmsn_alm_tax",
+      "alt_mappings": null,
+      "kor": "수수료_제세금",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": "s064",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s066",
+      "node_id": "39TS-0",
+      "node_name": "0",
+      "node_path": "2/0/2/3/4",
+      "paper_text": "0",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "2",
+        "col": 4
+      },
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d2_out_rep_mor",
+      "alt_mappings": null,
+      "kor": "d+2미수변제소요금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s067",
+      "node_id": "39TT-0",
+      "node_name": "36,383,800",
+      "node_path": "2/0/2/3/5",
+      "paper_text": "36,383,800",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "2",
+        "col": 5
+      },
+      "mapping_id": "detail:kt00001:settlement_forecast",
+      "f": "d2_pymn_alow_amt",
+      "alt_mappings": null,
+      "kor": "d+2출금가능금액",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s068",
+      "node_id": "3GL9-0",
+      "node_name": "42,263,800",
+      "node_path": "2/0/2/3/6/0",
+      "paper_text": "42,263,800",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "2",
+        "col": 6
+      },
+      "mapping_id": "detail:kt00004:cash_and_assets",
+      "f": "d2_entra",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00005:cash_and_capacity",
+          "f": "entr_d2"
+        },
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "d2entra"
+        },
+        {
+          "mapping_id": "detail:kt00017:d2_account_position",
+          "f": "d2_entra"
+        }
+      ],
+      "kor": "D+2추정예수금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "detail:kt00005:cash_and_capacity",
+          "f": "entr_d2",
+          "sep": null
+        },
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "d2entra",
+          "sep": null
+        },
+        {
+          "mapping_id": "detail:kt00017:d2_account_position",
+          "f": "d2_entra",
+          "sep": null
+        }
+      ]
+    },
+    {
+      "slot_id": "s069",
+      "node_id": "3GLA-0",
+      "node_name": "▸",
+      "node_path": "2/0/2/3/6/1",
+      "paper_text": "▸",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "39SW-0",
+        "row": "2",
+        "col": 6
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": "3MTJ-0",
+      "static": true,
+      "unbound_reason": "펼침 표식 글리프 — 대응 응답 필드가 없다"
+    },
+    {
+      "slot_id": "s070",
+      "node_id": "3A4H-0",
+      "node_name": "일자",
+      "node_path": "2/0/3/0/0",
+      "paper_text": "일자",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "head",
+        "col": 0
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s071",
+      "node_id": "3A4I-0",
+      "node_name": "구분",
+      "node_path": "2/0/3/0/1",
+      "paper_text": "구분",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "head",
+        "col": 1
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s072",
+      "node_id": "3A4J-0",
+      "node_name": "내용",
+      "node_path": "2/0/3/0/2",
+      "paper_text": "내용",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "head",
+        "col": 2
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s073",
+      "node_id": "3A4K-0",
+      "node_name": "금액",
+      "node_path": "2/0/3/0/3",
+      "paper_text": "금액",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "head",
+        "col": 3
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s074",
+      "node_id": "3A4L-0",
+      "node_name": "상태",
+      "node_path": "2/0/3/0/4",
+      "paper_text": "상태",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "head",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s075",
+      "node_id": "3A4O-0",
+      "node_name": "09/01",
+      "node_path": "2/0/3/1/0/0",
+      "paper_text": "09/01",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "0",
+        "col": 0
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_dt",
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s076",
+      "node_id": "3A4P-0",
+      "node_name": "결제 09/03",
+      "node_path": "2/0/3/1/0/1",
+      "paper_text": "결제 09/03",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "0",
+        "col": 0
+      },
+      "mapping_id": "base:kt00008",
+      "f": "setl_dt",
+      "alt_mappings": null,
+      "kor": "결제일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s075",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s077",
+      "node_id": "3A4R-0",
+      "node_name": "매도 결제",
+      "node_path": "2/0/3/1/1/0",
+      "paper_text": "매도 결제",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "0",
+        "col": 1
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_kind_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp",
+          "sep": null
+        }
+      ]
+    },
+    {
+      "slot_id": "s078",
+      "node_id": "3A4U-0",
+      "node_name": "현금",
+      "node_path": "2/0/3/1/1/1/0/0",
+      "paper_text": "현금",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "0",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "crd_tp",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "신용구분",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s079",
+      "node_id": "3A4V-0",
+      "node_name": "순번 142",
+      "node_path": "2/0/3/1/1/1/1",
+      "paper_text": "순번 142",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "0",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "seq",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "일련번호",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s080",
+      "node_id": "3A4X-0",
+      "node_name": "KODEX 200 250주 · NAVER 4주",
+      "node_path": "2/0/3/1/2/0",
+      "paper_text": "KODEX 200 250주 · NAVER 4주",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "0",
+        "col": 2
+      },
+      "mapping_id": "base:kt00008",
+      "f": "stk_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": "종목명",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty",
+          "sep": " "
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt",
+          "sep": " "
+        }
+      ]
+    },
+    {
+      "slot_id": "s081",
+      "node_id": "3A4Y-0",
+      "node_name": "대출일 해당 없음",
+      "node_path": "2/0/3/1/2/1",
+      "paper_text": "대출일 해당 없음",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "0",
+        "col": 2
+      },
+      "mapping_id": "base:kt00008",
+      "f": "loan_dt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": "대출일",
+      "format": null,
+      "paired_with": "s080",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s082",
+      "node_id": "3A4Z-0",
+      "node_name": "+12,946,000",
+      "node_path": "2/0/3/1/3",
+      "paper_text": "+12,946,000",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "0",
+        "col": 3
+      },
+      "mapping_id": "base:kt00008",
+      "f": "sell_amt_sum",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "pur_exct_amt"
+        }
+      ],
+      "kor": "매도정산합",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s083",
+      "node_id": "3A50-0",
+      "node_name": "D+2 예정",
+      "node_path": "2/0/3/1/4",
+      "paper_text": "D+2 예정",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "0",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "derived": true,
+      "formula": "결제일자(setl_dt)와 오늘 날짜의 차 — 완료 · D+1 예정 · D+2 예정 · D+2 차감",
+      "unbound_reason": "정산 상태는 kt00008·kt00015 응답 필드가 아니다 — 결제일자에서 만드는 파생 표기"
+    },
+    {
+      "slot_id": "s084",
+      "node_id": "3A53-0",
+      "node_name": "09/01",
+      "node_path": "2/0/3/2/0/0",
+      "paper_text": "09/01",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "1",
+        "col": 0
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_dt",
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s085",
+      "node_id": "3A54-0",
+      "node_name": "결제 09/03",
+      "node_path": "2/0/3/2/0/1",
+      "paper_text": "결제 09/03",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "1",
+        "col": 0
+      },
+      "mapping_id": "base:kt00008",
+      "f": "setl_dt",
+      "alt_mappings": null,
+      "kor": "결제일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s084",
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s086",
+      "node_id": "3A56-0",
+      "node_name": "매수 결제",
+      "node_path": "2/0/3/2/1/0",
+      "paper_text": "매수 결제",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "1",
+        "col": 1
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_kind_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s087",
+      "node_id": "3A59-0",
+      "node_name": "현금",
+      "node_path": "2/0/3/2/1/1/0/0",
+      "paper_text": "현금",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "1",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "crd_tp",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "신용구분",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s088",
+      "node_id": "3A5A-0",
+      "node_name": "순번 141",
+      "node_path": "2/0/3/2/1/1/1",
+      "paper_text": "순번 141",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "1",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "seq",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "일련번호",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s089",
+      "node_id": "3A5C-0",
+      "node_name": "SK하이닉스 매수 20주 · 192,100원",
+      "node_path": "2/0/3/2/2/0",
+      "paper_text": "SK하이닉스 매수 20주 · 192,100원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "1",
+        "col": 2
+      },
+      "mapping_id": "base:kt00008",
+      "f": "unp",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_unit"
+        }
+      ],
+      "kor": "단가",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_unit",
+          "sep": " · "
+        }
+      ]
+    },
+    {
+      "slot_id": "s090",
+      "node_id": "3A5D-0",
+      "node_name": "대출일 해당 없음",
+      "node_path": "2/0/3/2/2/1",
+      "paper_text": "대출일 해당 없음",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "1",
+        "col": 2
+      },
+      "mapping_id": "base:kt00008",
+      "f": "loan_dt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": "대출일",
+      "format": null,
+      "paired_with": "s089",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s091",
+      "node_id": "3A5E-0",
+      "node_name": "-3,842,000",
+      "node_path": "2/0/3/2/3",
+      "paper_text": "-3,842,000",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "1",
+        "col": 3
+      },
+      "mapping_id": "base:kt00008",
+      "f": "buy_amt_sum",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "pur_exct_amt"
+        }
+      ],
+      "kor": "매수정산합",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "pur_exct_amt",
+          "sep": null
+        }
+      ]
+    },
+    {
+      "slot_id": "s092",
+      "node_id": "3A5F-0",
+      "node_name": "D+2 차감",
+      "node_path": "2/0/3/2/4",
+      "paper_text": "D+2 차감",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "1",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "derived": true,
+      "formula": "결제일자(setl_dt)와 오늘 날짜의 차 — 완료 · D+1 예정 · D+2 예정 · D+2 차감",
+      "unbound_reason": "정산 상태는 kt00008·kt00015 응답 필드가 아니다 — 결제일자에서 만드는 파생 표기"
+    },
+    {
+      "slot_id": "s093",
+      "node_id": "3A5I-0",
+      "node_name": "09/01",
+      "node_path": "2/0/3/3/0/0",
+      "paper_text": "09/01",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "2",
+        "col": 0
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_dt",
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s094",
+      "node_id": "3A5J-0",
+      "node_name": "결제 09/03",
+      "node_path": "2/0/3/3/0/1",
+      "paper_text": "결제 09/03",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "2",
+        "col": 0
+      },
+      "mapping_id": "base:kt00008",
+      "f": "setl_dt",
+      "alt_mappings": null,
+      "kor": "결제일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s093",
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s095",
+      "node_id": "3A5L-0",
+      "node_name": "수수료·제세금",
+      "node_path": "2/0/3/3/1/0",
+      "paper_text": "수수료·제세금",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "2",
+        "col": 1
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_kind_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s096",
+      "node_id": "3A5O-0",
+      "node_name": "현금",
+      "node_path": "2/0/3/3/1/1/0/0",
+      "paper_text": "현금",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "2",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "crd_tp",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "신용구분",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s097",
+      "node_id": "3A5P-0",
+      "node_name": "순번 140",
+      "node_path": "2/0/3/3/1/1/1",
+      "paper_text": "순번 140",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "2",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "seq",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "일련번호",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s098",
+      "node_id": "3A5R-0",
+      "node_name": "매도 거래 비용 합계",
+      "node_path": "2/0/3/3/2/0",
+      "paper_text": "매도 거래 비용 합계",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "2",
+        "col": 2
+      },
+      "mapping_id": "base:kt00015",
+      "f": "rmrk_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s099",
+      "node_id": "3A5S-0",
+      "node_name": "거래세 -5,180 · 농특세 -15,540",
+      "node_path": "2/0/3/3/2/1",
+      "paper_text": "거래세 -5,180 · 농특세 -15,540",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "2",
+        "col": 2
+      },
+      "mapping_id": "base:kt00008",
+      "f": "trde_tax",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "incm_tax"
+        },
+        {
+          "mapping_id": "base:kt00008",
+          "f": "rstx"
+        },
+        {
+          "mapping_id": "base:kt00008",
+          "f": "resi_tax"
+        }
+      ],
+      "kor": "거래세",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "rstx",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:kt00008",
+          "f": "incm_tax",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:kt00008",
+          "f": "resi_tax",
+          "sep": " · "
+        }
+      ]
+    },
+    {
+      "slot_id": "s100",
+      "node_id": "3A5U-0",
+      "node_name": "-24,600",
+      "node_path": "2/0/3/3/3/0",
+      "paper_text": "-24,600",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "2",
+        "col": 3
+      },
+      "mapping_id": "base:kt00015",
+      "f": "cmsn",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "pur_exct_amt"
+        }
+      ],
+      "kor": "수수료",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s101",
+      "node_id": "3A5V-0",
+      "node_name": "세금 -20,720 · 수수료 -3,880",
+      "node_path": "2/0/3/3/3/1",
+      "paper_text": "세금 -20,720 · 수수료 -3,880",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "2",
+        "col": 3
+      },
+      "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+      "f": "tax",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "pur_exct_amt"
+        }
+      ],
+      "kor": "세금",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": "s100",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s102",
+      "node_id": "3A5W-0",
+      "node_name": "D+2 차감",
+      "node_path": "2/0/3/3/4",
+      "paper_text": "D+2 차감",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "2",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "derived": true,
+      "formula": "결제일자(setl_dt)와 오늘 날짜의 차 — 완료 · D+1 예정 · D+2 예정 · D+2 차감",
+      "unbound_reason": "정산 상태는 kt00008·kt00015 응답 필드가 아니다 — 결제일자에서 만드는 파생 표기"
+    },
+    {
+      "slot_id": "s103",
+      "node_id": "3G1U-0",
+      "node_name": "08/31",
+      "node_path": "2/0/3/4/0/0",
+      "paper_text": "08/31",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "3",
+        "col": 0
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_dt",
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s104",
+      "node_id": "3G1V-0",
+      "node_name": "결제 09/02",
+      "node_path": "2/0/3/4/0/1",
+      "paper_text": "결제 09/02",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "3",
+        "col": 0
+      },
+      "mapping_id": "base:kt00008",
+      "f": "setl_dt",
+      "alt_mappings": null,
+      "kor": "결제일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s103",
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s105",
+      "node_id": "3G1X-0",
+      "node_name": "매수 결제",
+      "node_path": "2/0/3/4/1/0",
+      "paper_text": "매수 결제",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "3",
+        "col": 1
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_kind_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s106",
+      "node_id": "3G20-0",
+      "node_name": "현금",
+      "node_path": "2/0/3/4/1/1/0/0",
+      "paper_text": "현금",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "3",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "crd_tp",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "신용구분",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s107",
+      "node_id": "3G21-0",
+      "node_name": "순번 139",
+      "node_path": "2/0/3/4/1/1/1",
+      "paper_text": "순번 139",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "3",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "seq",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "일련번호",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s108",
+      "node_id": "3G23-0",
+      "node_name": "카카오 매수 40주 · 40,890원",
+      "node_path": "2/0/3/4/2/0",
+      "paper_text": "카카오 매수 40주 · 40,890원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "3",
+        "col": 2
+      },
+      "mapping_id": "base:kt00015",
+      "f": "rmrk_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": null,
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s109",
+      "node_id": "3G24-0",
+      "node_name": "대출일 해당 없음",
+      "node_path": "2/0/3/4/2/1",
+      "paper_text": "대출일 해당 없음",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "3",
+        "col": 2
+      },
+      "mapping_id": "base:kt00008",
+      "f": "loan_dt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": "대출일",
+      "format": null,
+      "paired_with": "s108",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s110",
+      "node_id": "3G26-0",
+      "node_name": "-1,635,600",
+      "node_path": "2/0/3/4/3/0",
+      "paper_text": "-1,635,600",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "3",
+        "col": 3
+      },
+      "mapping_id": "base:kt00015",
+      "f": "exct_amt",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "pur_exct_amt"
+        }
+      ],
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s111",
+      "node_id": "3G28-0",
+      "node_name": "D+1 예정",
+      "node_path": "2/0/3/4/4/0",
+      "paper_text": "D+1 예정",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "3",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "derived": true,
+      "formula": "결제일자(setl_dt)와 오늘 날짜의 차 — 완료 · D+1 예정 · D+2 예정 · D+2 차감",
+      "unbound_reason": "정산 상태는 kt00008·kt00015 응답 필드가 아니다 — 결제일자에서 만드는 파생 표기"
+    },
+    {
+      "slot_id": "s112",
+      "node_id": "3G2C-0",
+      "node_name": "08/28",
+      "node_path": "2/0/3/5/0/0",
+      "paper_text": "08/28",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "4",
+        "col": 0
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_dt",
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s113",
+      "node_id": "3G2D-0",
+      "node_name": "체결 08/26",
+      "node_path": "2/0/3/5/0/1",
+      "paper_text": "체결 08/26",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "4",
+        "col": 0
+      },
+      "mapping_id": "base:kt00008",
+      "f": "setl_dt",
+      "alt_mappings": null,
+      "kor": "결제일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s112",
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s114",
+      "node_id": "3G2F-0",
+      "node_name": "매도 결제",
+      "node_path": "2/0/3/5/1/0",
+      "paper_text": "매도 결제",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "4",
+        "col": 1
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_kind_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s115",
+      "node_id": "3G2I-0",
+      "node_name": "현금",
+      "node_path": "2/0/3/5/1/1/0/0",
+      "paper_text": "현금",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "4",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "crd_tp",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "신용구분",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s116",
+      "node_id": "3G2J-0",
+      "node_name": "순번 138",
+      "node_path": "2/0/3/5/1/1/1",
+      "paper_text": "순번 138",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "4",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "seq",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "일련번호",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s117",
+      "node_id": "3G2L-0",
+      "node_name": "삼성전자 매도 235주 · 152,660원",
+      "node_path": "2/0/3/5/2/0",
+      "paper_text": "삼성전자 매도 235주 · 152,660원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "4",
+        "col": 2
+      },
+      "mapping_id": "base:kt00015",
+      "f": "rmrk_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": null,
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s118",
+      "node_id": "3G2M-0",
+      "node_name": "대출일 해당 없음",
+      "node_path": "2/0/3/5/2/1",
+      "paper_text": "대출일 해당 없음",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "4",
+        "col": 2
+      },
+      "mapping_id": "base:kt00008",
+      "f": "loan_dt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": "대출일",
+      "format": null,
+      "paired_with": "s117",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s119",
+      "node_id": "3G2O-0",
+      "node_name": "+35,809,090",
+      "node_path": "2/0/3/5/3/0",
+      "paper_text": "+35,809,090",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "4",
+        "col": 3
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_amt",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "pur_exct_amt"
+        }
+      ],
+      "kor": "거래금액",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s120",
+      "node_id": "3G2P-0",
+      "node_name": "비용 -66,010",
+      "node_path": "2/0/3/5/3/1",
+      "paper_text": "비용 -66,010",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "4",
+        "col": 3
+      },
+      "mapping_id": "base:kt00015",
+      "f": "tax_sum_cmsn",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "pur_exct_amt"
+        }
+      ],
+      "kor": "세금수수료합",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": "s119",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s121",
+      "node_id": "3G2R-0",
+      "node_name": "완료",
+      "node_path": "2/0/3/5/4/0",
+      "paper_text": "완료",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "4",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "derived": true,
+      "formula": "결제일자(setl_dt)와 오늘 날짜의 차 — 완료 · D+1 예정 · D+2 예정 · D+2 차감",
+      "unbound_reason": "정산 상태는 kt00008·kt00015 응답 필드가 아니다 — 결제일자에서 만드는 파생 표기"
+    },
+    {
+      "slot_id": "s122",
+      "node_id": "3G2V-0",
+      "node_name": "08/27",
+      "node_path": "2/0/3/6/0/0",
+      "paper_text": "08/27",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "5",
+        "col": 0
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_dt",
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s123",
+      "node_id": "3G2W-0",
+      "node_name": "결제 08/27",
+      "node_path": "2/0/3/6/0/1",
+      "paper_text": "결제 08/27",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "5",
+        "col": 0
+      },
+      "mapping_id": "base:kt00008",
+      "f": "setl_dt",
+      "alt_mappings": null,
+      "kor": "결제일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s122",
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s124",
+      "node_id": "3G2Y-0",
+      "node_name": "배당금 입금",
+      "node_path": "2/0/3/6/1/0",
+      "paper_text": "배당금 입금",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "5",
+        "col": 1
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_kind_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s125",
+      "node_id": "3G31-0",
+      "node_name": "현금",
+      "node_path": "2/0/3/6/1/1/0/0",
+      "paper_text": "현금",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "5",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "crd_tp",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "신용구분",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s126",
+      "node_id": "3G32-0",
+      "node_name": "순번 137",
+      "node_path": "2/0/3/6/1/1/1",
+      "paper_text": "순번 137",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "5",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "seq",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "일련번호",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s127",
+      "node_id": "3G34-0",
+      "node_name": "삼성전자 분기 배당 · 세후",
+      "node_path": "2/0/3/6/2/0",
+      "paper_text": "삼성전자 분기 배당 · 세후",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "5",
+        "col": 2
+      },
+      "mapping_id": "base:kt00015",
+      "f": "rmrk_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s128",
+      "node_id": "3G35-0",
+      "node_name": "대출일 해당 없음",
+      "node_path": "2/0/3/6/2/1",
+      "paper_text": "대출일 해당 없음",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "5",
+        "col": 2
+      },
+      "mapping_id": "base:kt00008",
+      "f": "loan_dt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": "대출일",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s129",
+      "node_id": "3G37-0",
+      "node_name": "+54,300",
+      "node_path": "2/0/3/6/3/0",
+      "paper_text": "+54,300",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "5",
+        "col": 3
+      },
+      "mapping_id": "detail:kt00017:other_assets_and_income",
+      "f": "dvida_amt",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "pur_exct_amt"
+        }
+      ],
+      "kor": "배당금액",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s130",
+      "node_id": "3G39-0",
+      "node_name": "완료",
+      "node_path": "2/0/3/6/4/0",
+      "paper_text": "완료",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "5",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "derived": true,
+      "formula": "결제일자(setl_dt)와 오늘 날짜의 차 — 완료 · D+1 예정 · D+2 예정 · D+2 차감",
+      "unbound_reason": "정산 상태는 kt00008·kt00015 응답 필드가 아니다 — 결제일자에서 만드는 파생 표기"
+    },
+    {
+      "slot_id": "s131",
+      "node_id": "3GKS-0",
+      "node_name": "08/26",
+      "node_path": "2/0/3/7/0/0",
+      "paper_text": "08/26",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "6",
+        "col": 0
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_dt",
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s132",
+      "node_id": "3GKT-0",
+      "node_name": "결제 08/26",
+      "node_path": "2/0/3/7/0/1",
+      "paper_text": "결제 08/26",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "6",
+        "col": 0
+      },
+      "mapping_id": "base:kt00008",
+      "f": "setl_dt",
+      "alt_mappings": null,
+      "kor": "결제일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s131",
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s133",
+      "node_id": "3GKV-0",
+      "node_name": "이체 입금",
+      "node_path": "2/0/3/7/1/0",
+      "paper_text": "이체 입금",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "6",
+        "col": 1
+      },
+      "mapping_id": "base:kt00015",
+      "f": "trde_kind_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s134",
+      "node_id": "3GKY-0",
+      "node_name": "현금",
+      "node_path": "2/0/3/7/1/1/0/0",
+      "paper_text": "현금",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "6",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "crd_tp",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "신용구분",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s135",
+      "node_id": "3GKZ-0",
+      "node_name": "순번 136",
+      "node_path": "2/0/3/7/1/1/1",
+      "paper_text": "순번 136",
+      "region": "table",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "6",
+        "col": 1
+      },
+      "mapping_id": "base:kt00008",
+      "f": "seq",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "sell_tp"
+        }
+      ],
+      "kor": "일련번호",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s136",
+      "node_id": "3GL1-0",
+      "node_name": "연결 은행계좌에서 이체",
+      "node_path": "2/0/3/7/2/0",
+      "paper_text": "연결 은행계좌에서 이체",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "6",
+        "col": 2
+      },
+      "mapping_id": "base:kt00015",
+      "f": "rmrk_nm",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s137",
+      "node_id": "3GL2-0",
+      "node_name": "대출일 해당 없음",
+      "node_path": "2/0/3/7/2/1",
+      "paper_text": "대출일 해당 없음",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "6",
+        "col": 2
+      },
+      "mapping_id": "base:kt00008",
+      "f": "loan_dt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00008",
+          "f": "qty"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "stk_nm"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "trde_qty_jwa_cnt"
+        }
+      ],
+      "kor": "대출일",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s138",
+      "node_id": "3GL4-0",
+      "node_name": "+5,000,000",
+      "node_path": "2/0/3/7/3/0",
+      "paper_text": "+5,000,000",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "6",
+        "col": 3
+      },
+      "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+      "f": "ina_amt",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00010:purchase_settlement",
+          "f": "pur_exct_amt"
+        }
+      ],
+      "kor": "입금금액",
+      "format": {
+        "unit": "text",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s139",
+      "node_id": "3GL6-0",
+      "node_name": "완료",
+      "node_path": "2/0/3/7/4/0",
+      "paper_text": "완료",
+      "region": "table",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": {
+        "table": "3A4F-0",
+        "row": "6",
+        "col": 4
+      },
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "derived": true,
+      "formula": "결제일자(setl_dt)와 오늘 날짜의 차 — 완료 · D+1 예정 · D+2 예정 · D+2 차감",
+      "unbound_reason": "정산 상태는 kt00008·kt00015 응답 필드가 아니다 — 결제일자에서 만드는 파생 표기"
+    },
+    {
+      "slot_id": "s140",
+      "node_id": "3A7N-0",
+      "node_name": "최근 7건 표시 · 미수금 0원",
+      "node_path": "2/0/3/8/0",
+      "paper_text": "최근 7건 표시 · 미수금 0원",
+      "region": "table",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:kt00015",
+      "f": "trst_ovrl_trde_prps_array",
+      "alt_mappings": null,
+      "kor": "위탁종합거래내역배열",
+      "format": {
+        "unit": "count",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s141",
+      "node_id": "3U8O-0",
+      "node_name": "인출·주문 한도",
+      "node_path": "2/1/0/0/0/0",
+      "paper_text": "인출·주문 한도",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s142",
+      "node_id": "3U8Q-0",
+      "node_name": "미수 미사용",
+      "node_path": "2/1/0/0/0/1/0",
+      "paper_text": "미수 미사용",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s143",
+      "node_id": "3U8R-0",
+      "node_name": "09/01 기준",
+      "node_path": "2/1/0/0/1",
+      "paper_text": "09/01 기준",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "static": true,
+      "unbound_reason": "기준 시각 표기 — 응답 필드가 아니다"
+    },
+    {
+      "slot_id": "s144",
+      "node_id": "3U8U-0",
+      "node_name": "주문가능금액",
+      "node_path": "2/1/0/1/0/0",
+      "paper_text": "주문가능금액",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s145",
+      "node_id": "3U8V-0",
+      "node_name": "31,240,000원",
+      "node_path": "2/1/0/1/0/1",
+      "paper_text": "31,240,000원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+      "f": "ord_alow_amt",
+      "alt_mappings": null,
+      "kor": "주문가능금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s146",
+      "node_id": "3U8X-0",
+      "node_name": "현금주문 31,240,000원 · 207주",
+      "node_path": "2/1/0/1/1/0",
+      "paper_text": "현금주문 31,240,000원 · 207주",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+      "f": "min_amt",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+          "f": "min_qty"
+        }
+      ],
+      "kor": "미수불가금액",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+          "f": "min_qty",
+          "sep": " · "
+        }
+      ]
+    },
+    {
+      "slot_id": "s147",
+      "node_id": "3U90-0",
+      "node_name": "출금가능금액",
+      "node_path": "2/1/0/2/0/0",
+      "paper_text": "출금가능금액",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s148",
+      "node_id": "3U91-0",
+      "node_name": "28,940,000원",
+      "node_path": "2/1/0/2/0/1",
+      "paper_text": "28,940,000원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00005:cash_and_capacity",
+      "f": "pymn_alow_amt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10072",
+          "f": "wthd_alowa"
+        },
+        {
+          "mapping_id": "base:ka10073",
+          "f": "wthd_alowa"
+        }
+      ],
+      "kor": "출금가능금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10072",
+          "f": "wthd_alowa",
+          "sep": null
+        },
+        {
+          "mapping_id": "base:ka10073",
+          "f": "wthd_alowa",
+          "sep": null
+        }
+      ]
+    },
+    {
+      "slot_id": "s149",
+      "node_id": "3U93-0",
+      "node_name": "추정 28,940,000원",
+      "node_path": "2/1/0/2/1/0",
+      "paper_text": "추정 28,940,000원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:kt50021",
+      "f": "prsm_pymn_alow_amt",
+      "alt_mappings": null,
+      "kor": "추정출금가능금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s150",
+      "node_id": "3U95-0",
+      "node_name": "대용금액",
+      "node_path": "2/1/0/3/0",
+      "paper_text": "대용금액",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s151",
+      "node_id": "3U96-0",
+      "node_name": "63,280,000원",
+      "node_path": "2/1/0/3/1",
+      "paper_text": "63,280,000원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:substitute_collateral",
+      "f": "repl_amt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00002",
+          "f": "repl_amt"
+        },
+        {
+          "mapping_id": "detail:kt00005:cash_and_capacity",
+          "f": "repl_amt"
+        }
+      ],
+      "kor": "대용금평가금액(합계)",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:kt00002",
+          "f": "repl_amt",
+          "sep": null
+        },
+        {
+          "mapping_id": "detail:kt00005:cash_and_capacity",
+          "f": "repl_amt",
+          "sep": null
+        }
+      ]
+    },
+    {
+      "slot_id": "s152",
+      "node_id": "3U99-0",
+      "node_name": "주문증거금",
+      "node_path": "2/1/0/4/0/0",
+      "paper_text": "주문증거금",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s153",
+      "node_id": "3U9C-0",
+      "node_name": "감면 미적용",
+      "node_path": "2/1/0/4/0/1/0/0",
+      "paper_text": "감면 미적용",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00010:purchase_settlement",
+      "f": "profa_rdex_aplc_tp",
+      "alt_mappings": null,
+      "kor": "증거금감면적용구분",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s154",
+      "node_id": "3U9D-0",
+      "node_name": "6,240,000원",
+      "node_path": "2/1/0/4/0/1/1",
+      "paper_text": "6,240,000원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00005:receivables_and_margin",
+      "f": "profa_ch",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00005:receivables_and_margin",
+          "f": "repl_profa"
+        }
+      ],
+      "kor": "증거금현금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "detail:kt00005:receivables_and_margin",
+          "f": "repl_profa",
+          "sep": " · "
+        }
+      ]
+    },
+    {
+      "slot_id": "s155",
+      "node_id": "3U9F-0",
+      "node_name": "증거금율 종목 20% · 계좌·적용 40%",
+      "node_path": "2/1/0/4/1/0",
+      "paper_text": "증거금율 종목 20% · 계좌·적용 40%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00011:margin_rates",
+      "f": "stk_profa_rt",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00011:margin_rates",
+          "f": "profa_rt"
+        },
+        {
+          "mapping_id": "detail:kt00011:margin_rates",
+          "f": "aplc_rt"
+        }
+      ],
+      "kor": "종목증거금율",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "detail:kt00011:margin_rates",
+          "f": "profa_rt",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "detail:kt00011:margin_rates",
+          "f": "aplc_rt",
+          "sep": " · "
+        }
+      ]
+    },
+    {
+      "slot_id": "s156",
+      "node_id": "3U9I-0",
+      "node_name": "증거금 현금·대용",
+      "node_path": "2/1/0/5/0/0",
+      "paper_text": "증거금 현금·대용",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s157",
+      "node_id": "3U9K-0",
+      "node_name": "3,120,000 · 3,120,000원",
+      "node_path": "2/1/0/5/0/1/0",
+      "paper_text": "3,120,000 · 3,120,000원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:cash_and_margin",
+      "f": "profa_ch",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt50021",
+          "f": "profa_ch"
+        },
+        {
+          "mapping_id": "detail:kt00001:substitute_collateral",
+          "f": "profa_repl"
+        },
+        {
+          "mapping_id": "detail:kt00013:cash_resources",
+          "f": "ch_profa"
+        },
+        {
+          "mapping_id": "detail:kt00013:substitute_resources",
+          "f": "repl_profa"
+        }
+      ],
+      "kor": "주식증거금현금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "detail:kt00001:substitute_collateral",
+          "f": "profa_repl",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:kt50021",
+          "f": "profa_ch",
+          "sep": null
+        },
+        {
+          "mapping_id": "detail:kt00013:cash_resources",
+          "f": "ch_profa",
+          "sep": null
+        },
+        {
+          "mapping_id": "detail:kt00013:substitute_resources",
+          "f": "repl_profa",
+          "sep": null
+        }
+      ]
+    },
+    {
+      "slot_id": "s158",
+      "node_id": "3U9L-0",
+      "node_name": "▸",
+      "node_path": "2/1/0/5/0/1/1",
+      "paper_text": "▸",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": "3IGR-0"
+    },
+    {
+      "slot_id": "s159",
+      "node_id": "3U9N-0",
+      "node_name": "보증금율 45% · 등급 45%구간",
+      "node_path": "2/1/0/5/1/0",
+      "paper_text": "보증금율 45% · 등급 45%구간",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00012:guarantee_rate",
+      "f": "stk_assr_rt",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00012:guarantee_rate",
+          "f": "stk_assr_rt_nm"
+        }
+      ],
+      "kor": "종목보증금율",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "detail:kt00012:guarantee_rate",
+          "f": "stk_assr_rt_nm",
+          "sep": " · "
+        }
+      ]
+    },
+    {
+      "slot_id": "s160",
+      "node_id": "3U9P-0",
+      "node_name": "미수확보금·미수가능·최소 주문가능·수익증권 매수가능·권리대용금",
+      "node_path": "2/1/0/6/0",
+      "paper_text": "미수확보금·미수가능·최소 주문가능·수익증권 매수가능·권리대용금",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s161",
+      "node_id": "3U9R-0",
+      "node_name": "0원 4항목 · 0주 1항목",
+      "node_path": "2/1/0/6/1/0",
+      "paper_text": "0원 4항목 · 0주 1항목",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:cash_and_margin",
+      "f": "uncl_stk_amt",
+      "alt_mappings": null,
+      "kor": "미수확보금",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": {
+        "group_id": "rail.limit.zero",
+        "rule": "H1",
+        "rollup_slot": "s161",
+        "label": "미수확보금·미수가능·최소 주문가능·수익증권 매수가능·권리대용금",
+        "expanded_board": "3GRO-0",
+        "members": [
+          {
+            "mapping_id": "detail:kt00001:cash_and_margin",
+            "f": "uncl_stk_amt"
+          },
+          {
+            "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+            "f": "out_pos_qty"
+          },
+          {
+            "mapping_id": "detail:kt00001:loans_and_collateral",
+            "f": "min_ord_alow_yn"
+          },
+          {
+            "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+            "f": "bncr_buy_alowa"
+          },
+          {
+            "mapping_id": "detail:kt00001:substitute_collateral",
+            "f": "rght_repl_amt"
+          }
+        ]
+      },
+      "expanded_board": "3GRO-0"
+    },
+    {
+      "slot_id": "s162",
+      "node_id": "3U9S-0",
+      "node_name": "▸",
+      "node_path": "2/1/0/6/1/1",
+      "paper_text": "▸",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s163",
+      "node_id": "3U9U-0",
+      "node_name": "부채·미수",
+      "node_path": "2/1/1/0",
+      "paper_text": "부채·미수",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s164",
+      "node_id": "3U9W-0",
+      "node_name": "신용융자·대주담보·담보대출·현금미수·이자미납·기타대여",
+      "node_path": "2/1/1/1/0",
+      "paper_text": "신용융자·대주담보·담보대출·현금미수·이자미납·기타대여",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s165",
+      "node_id": "3U9Y-0",
+      "node_name": "0원 6항목",
+      "node_path": "2/1/1/1/1/0",
+      "paper_text": "0원 6항목",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:kt00002",
+      "f": "crd_loan",
+      "alt_mappings": null,
+      "kor": "신용융자금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": {
+        "group_id": "rail.debt.zero",
+        "rule": "H1",
+        "rollup_slot": "s165",
+        "label": "신용융자·대주담보·담보대출·현금미수·이자미납·기타대여",
+        "expanded_board": "3UTA-0",
+        "members": [
+          {
+            "mapping_id": "base:kt00002",
+            "f": "crd_loan"
+          },
+          {
+            "mapping_id": "base:kt00002",
+            "f": "ls_grnt"
+          },
+          {
+            "mapping_id": "base:kt00002",
+            "f": "grnt_use_amt"
+          },
+          {
+            "mapping_id": "detail:kt00001:receivables_and_arrears",
+            "f": "ch_uncla"
+          },
+          {
+            "mapping_id": "detail:kt00001:receivables_and_arrears",
+            "f": "crd_int_npay"
+          },
+          {
+            "mapping_id": "detail:kt00001:receivables_and_arrears",
+            "f": "etc_loana"
+          }
+        ]
+      },
+      "expanded_board": "3UTA-0"
+    },
+    {
+      "slot_id": "s166",
+      "node_id": "3U9Z-0",
+      "node_name": "▸",
+      "node_path": "2/1/1/1/1/1",
+      "paper_text": "▸",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s167",
+      "node_id": "3UA1-0",
+      "node_name": "기타 자산·수익",
+      "node_path": "2/1/2/0",
+      "paper_text": "기타 자산·수익",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s168",
+      "node_id": "3UA3-0",
+      "node_name": "외화예수금",
+      "node_path": "2/1/2/1/0",
+      "paper_text": "외화예수금",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s169",
+      "node_id": "3UA5-0",
+      "node_name": "0달러",
+      "node_path": "2/1/2/1/1/0",
+      "paper_text": "0달러",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:foreign_currency_deposits",
+      "f": "fx_entr",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:kt00015",
+          "f": "crnc_cd"
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "fc_entra"
+        },
+        {
+          "mapping_id": "detail:kt00001:foreign_currency_deposits",
+          "f": "crnc_cd"
+        }
+      ],
+      "kor": "외화예수금",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": "3NVG-0",
+      "extra_fields": [
+        {
+          "mapping_id": "base:kt00015",
+          "f": "fc_entra",
+          "sep": null
+        },
+        {
+          "mapping_id": "detail:kt00001:foreign_currency_deposits",
+          "f": "crnc_cd",
+          "sep": null
+        },
+        {
+          "mapping_id": "base:kt00015",
+          "f": "crnc_cd",
+          "sep": null
+        }
+      ]
+    },
+    {
+      "slot_id": "s170",
+      "node_id": "3UA6-0",
+      "node_name": "▸",
+      "node_path": "2/1/2/1/1/1",
+      "paper_text": "▸",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s171",
+      "node_id": "3UA8-0",
+      "node_name": "RP·채권·ELS 평가·매도담보 이자·신용이자·중도이용료",
+      "node_path": "2/1/2/2/0",
+      "paper_text": "RP·채권·ELS 평가·매도담보 이자·신용이자·중도이용료",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s172",
+      "node_id": "3UAA-0",
+      "node_name": "0원 6항목",
+      "node_path": "2/1/2/2/1/0",
+      "paper_text": "0원 6항목",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00017:other_assets_and_income",
+      "f": "rp_evlt_amt",
+      "alt_mappings": null,
+      "kor": "RP평가금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": {
+        "group_id": "rail.other.zero",
+        "rule": "H1",
+        "rollup_slot": "s172",
+        "label": "RP·채권·ELS 평가·매도담보 이자·신용이자·중도이용료",
+        "expanded_board": "3K7K-0",
+        "members": [
+          {
+            "mapping_id": "detail:kt00017:other_assets_and_income",
+            "f": "rp_evlt_amt"
+          },
+          {
+            "mapping_id": "detail:kt00017:other_assets_and_income",
+            "f": "bd_evlt_amt"
+          },
+          {
+            "mapping_id": "detail:kt00017:other_assets_and_income",
+            "f": "elsevlt_amt"
+          },
+          {
+            "mapping_id": "detail:kt00017:other_assets_and_income",
+            "f": "sel_prica_grnt_loan_int_amt_amt"
+          },
+          {
+            "mapping_id": "detail:kt00017:other_assets_and_income",
+            "f": "crd_int_amt"
+          },
+          {
+            "mapping_id": "detail:kt00001:loans_and_collateral",
+            "f": "mdstrm_usfe"
+          }
+        ]
+      },
+      "expanded_board": "3K7K-0"
+    },
+    {
+      "slot_id": "s173",
+      "node_id": "3UAB-0",
+      "node_name": "▸",
+      "node_path": "2/1/2/2/1/1",
+      "paper_text": "▸",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s174",
+      "node_id": "3UAD-0",
+      "node_name": "최근 현금 흐름",
+      "node_path": "2/1/3/0",
+      "paper_text": "최근 현금 흐름",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s175",
+      "node_id": "3UAG-0",
+      "node_name": "입금",
+      "node_path": "2/1/3/1/0/0",
+      "paper_text": "입금",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:kt00015",
+      "f": "io_tp_nm",
+      "alt_mappings": null,
+      "kor": "입출구분명",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s176",
+      "node_id": "3UAH-0",
+      "node_name": "+5,054,300원",
+      "node_path": "2/1/3/1/0/1",
+      "paper_text": "+5,054,300원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00016:period_flows",
+      "f": "termin_tot_trns",
+      "alt_mappings": null,
+      "kor": "기간내총입금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s177",
+      "node_id": "3UAJ-0",
+      "node_name": "이체 08/26 500만 · 배당 08/27 54,300",
+      "node_path": "2/1/3/1/1/0",
+      "paper_text": "이체 08/26 500만 · 배당 08/27 54,300",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+      "f": "ina_amt",
+      "alt_mappings": null,
+      "kor": "입금금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s178",
+      "node_id": "3UAM-0",
+      "node_name": "출금",
+      "node_path": "2/1/3/2/0/0",
+      "paper_text": "출금",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:kt00015",
+      "f": "io_tp",
+      "alt_mappings": null,
+      "kor": "입출구분",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s179",
+      "node_id": "3UAN-0",
+      "node_name": "-1,502,000원",
+      "node_path": "2/1/3/2/0/1",
+      "paper_text": "-1,502,000원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00016:period_flows",
+      "f": "termin_tot_pymn",
+      "alt_mappings": null,
+      "kor": "기간내총출금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s180",
+      "node_id": "3UAP-0",
+      "node_name": "매수 결제 08/27",
+      "node_path": "2/1/3/2/1/0",
+      "paper_text": "매수 결제 08/27",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+      "f": "outa",
+      "alt_mappings": null,
+      "kor": "출금금액",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s181",
+      "node_id": "3UAS-0",
+      "node_name": "매매 순유입",
+      "node_path": "2/1/3/3/0/0",
+      "paper_text": "매매 순유입",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s182",
+      "node_id": "3UAT-0",
+      "node_name": "+9,079,400원",
+      "node_path": "2/1/3/3/0/1",
+      "paper_text": "+9,079,400원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10170",
+      "f": "tot_exct_amt",
+      "alt_mappings": null,
+      "kor": "총정산금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s183",
+      "node_id": "3UAV-0",
+      "node_name": "09/01 체결 · 비용 -24,600",
+      "node_path": "2/1/3/3/1/0",
+      "paper_text": "09/01 체결 · 비용 -24,600",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10170",
+      "f": "cmsn_alm_tax",
+      "alt_mappings": null,
+      "kor": "수수료_제세금",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s184",
+      "node_id": "3UAY-0",
+      "node_name": "기타 수익",
+      "node_path": "2/1/3/4/0/0",
+      "paper_text": "기타 수익",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s185",
+      "node_id": "3UAZ-0",
+      "node_name": "+55,540원",
+      "node_path": "2/1/3/4/0/1",
+      "paper_text": "+55,540원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00017:other_assets_and_income",
+      "f": "dvida_amt",
+      "alt_mappings": null,
+      "kor": "배당금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s186",
+      "node_id": "3UB1-0",
+      "node_name": "배당 54,300 · 이용료 1,240",
+      "node_path": "2/1/3/4/1/0",
+      "paper_text": "배당 54,300 · 이용료 1,240",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:kt00015",
+      "f": "int_ls_usfe",
+      "alt_mappings": null,
+      "kor": "이자/대주이용",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s187",
+      "node_id": "3UB3-0",
+      "node_name": "수표 입금·증권 입고·증권 출고",
+      "node_path": "2/1/3/5/0",
+      "paper_text": "수표 입금·증권 입고·증권 출고",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s188",
+      "node_id": "3UB5-0",
+      "node_name": "0원 3항목",
+      "node_path": "2/1/3/5/1/0",
+      "paper_text": "0원 3항목",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00001:special_deposits_and_credit",
+      "f": "chck_ina_amt",
+      "alt_mappings": null,
+      "kor": "수표입금액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": {
+        "group_id": "rail.flow.zero",
+        "rule": "H1",
+        "rollup_slot": "s188",
+        "label": "수표 입금·증권 입고·증권 출고",
+        "expanded_board": "3NVG-0",
+        "members": [
+          {
+            "mapping_id": "detail:kt00001:special_deposits_and_credit",
+            "f": "chck_ina_amt"
+          },
+          {
+            "mapping_id": "detail:kt00016:period_flows",
+            "f": "termin_tot_inq"
+          },
+          {
+            "mapping_id": "detail:kt00016:period_flows",
+            "f": "termin_tot_outq"
+          }
+        ]
+      },
+      "expanded_board": "3NVG-0"
+    },
+    {
+      "slot_id": "s189",
+      "node_id": "3UB6-0",
+      "node_name": "▸",
+      "node_path": "2/1/3/5/1/1",
+      "paper_text": "▸",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s190",
+      "node_id": "3UB8-0",
+      "node_name": "예탁자산 추이",
+      "node_path": "2/1/4/0",
+      "paper_text": "예탁자산 추이",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:kt00002",
+      "f": "daly_prsm_dpst_aset_amt_prst",
+      "alt_mappings": null,
+      "kor": "일별추정예탁자산현황",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s191",
+      "node_id": "3UBB-0",
+      "node_name": "09-01",
+      "node_path": "2/1/4/1/0/0",
+      "paper_text": "09-01",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:kt00002",
+      "f": "dt",
+      "alt_mappings": null,
+      "kor": "일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s192",
+      "node_id": "3UBC-0",
+      "node_name": "1억 2,458만",
+      "node_path": "2/1/4/1/0/1",
+      "paper_text": "1억 2,458만",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:kt00002",
+      "f": "prsm_dpst_aset_amt",
+      "alt_mappings": null,
+      "kor": "추정예탁자산",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s193",
+      "node_id": "3UBD-0",
+      "node_name": "수익증권 제외 1억 2,458만",
+      "node_path": "2/1/4/1/0/2",
+      "paper_text": "수익증권 제외 1억 2,458만",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:kt00002",
+      "f": "prsm_dpst_aset_amt_bncr_skip",
+      "alt_mappings": null,
+      "kor": "추정예탁자산수익증권제외",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": "s192",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s194",
+      "node_id": "3UBF-0",
+      "node_name": "08-31",
+      "node_path": "2/1/4/1/1/0",
+      "paper_text": "08-31",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka01690",
+      "f": "dt",
+      "alt_mappings": null,
+      "kor": "일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s195",
+      "node_id": "3UBG-0",
+      "node_name": "1억 2,180만",
+      "node_path": "2/1/4/1/1/1",
+      "paper_text": "1억 2,180만",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00004:cash_and_assets",
+      "f": "prsm_dpst_aset_amt",
+      "alt_mappings": null,
+      "kor": "추정예탁자산",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s196",
+      "node_id": "3UBI-0",
+      "node_name": "08-28",
+      "node_path": "2/1/4/1/2/0",
+      "paper_text": "08-28",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10085",
+      "f": "dt",
+      "alt_mappings": null,
+      "kor": "일자",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s197",
+      "node_id": "3UBJ-0",
+      "node_name": "1억 2,043만",
+      "node_path": "2/1/4/1/2/1",
+      "paper_text": "1억 2,043만",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:kt00018:portfolio_summary",
+      "f": "prsm_dpst_aset_amt",
+      "alt_mappings": null,
+      "kor": "추정예탁자산",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s198",
+      "node_id": "2SKZ-1",
+      "node_name": "● 예수금·결제 실시간 반영 중",
+      "node_path": "3/0",
+      "paper_text": "● 예수금·결제 실시간 반영 중",
+      "region": "footer",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s199",
+      "node_id": "2SKY-1",
+      "node_name": "결제 전체 내역 보기",
+      "node_path": "3/1",
+      "paper_text": "결제 전체 내역 보기",
+      "region": "footer",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    }
+  ],
+  "unbound_fields": [
+    {
+      "mapping_id": "base:ka01690",
+      "f": "dbst_bal",
+      "kor": "예수금",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:ka10072",
+      "f": "wthd_alowa",
+      "kor": "인출가능금액",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:ka10073",
+      "f": "wthd_alowa",
+      "kor": "인출가능금액",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:kt00002",
+      "f": "repl_amt",
+      "kor": "대용금",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:kt00008",
+      "f": "qty",
+      "kor": "수량",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:kt00008",
+      "f": "incm_tax",
+      "kor": "소득세",
+      "unbound_reason": "이 보드 문구에 소득세 값이 없다 — 거래내역 상세(3LGC-0) 몫"
+    },
+    {
+      "mapping_id": "base:kt00008",
+      "f": "rstx",
+      "kor": "농특세",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:kt00008",
+      "f": "sell_tp",
+      "kor": "매도수구분",
+      "unbound_reason": "구분 열은 거래종류명(kt00015)으로 그려진다 — 매도수구분은 같은 칸의 별칭"
+    },
+    {
+      "mapping_id": "base:kt00008",
+      "f": "resi_tax",
+      "kor": "주민세",
+      "unbound_reason": "이 보드 문구에 주민세 값이 없다 — 거래내역 상세(3LGC-0) 몫"
+    },
+    {
+      "mapping_id": "base:kt00015",
+      "f": "entra_remn",
+      "kor": "예수금잔고",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:kt00015",
+      "f": "crnc_cd",
+      "kor": "통화코드",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:kt00015",
+      "f": "stk_nm",
+      "kor": "종목명",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:kt00015",
+      "f": "fc_entra",
+      "kor": "외화예수금잔고",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:kt00015",
+      "f": "trde_qty_jwa_cnt",
+      "kor": "거래수량/좌수",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:kt00015",
+      "f": "trde_unit",
+      "kor": "거래단가/환율",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "base:kt50021",
+      "f": "profa_ch",
+      "kor": "증거금현금",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00001:foreign_currency_deposits",
+      "f": "crnc_cd",
+      "kor": "통화코드",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00001:substitute_collateral",
+      "f": "profa_repl",
+      "kor": "위탁증거금대용",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00004:cash_and_assets",
+      "f": "entr",
+      "kor": "예수금",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00005:cash_and_capacity",
+      "f": "entr",
+      "kor": "예수금",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00005:cash_and_capacity",
+      "f": "entr_d2",
+      "kor": "예수금D+2",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00005:cash_and_capacity",
+      "f": "repl_amt",
+      "kor": "대용금",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00005:receivables_and_margin",
+      "f": "repl_profa",
+      "kor": "증거금대용",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00010:purchase_settlement",
+      "f": "pur_exct_amt",
+      "kor": "매입정산금",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00010:purchase_settlement",
+      "f": "d2entra",
+      "kor": "D2추정예수금",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00011:margin_rates",
+      "f": "profa_rt",
+      "kor": "계좌증거금율",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00011:margin_rates",
+      "f": "aplc_rt",
+      "kor": "적용증거금율",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+      "f": "min_qty",
+      "kor": "미수불가수량",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00012:guarantee_rate",
+      "f": "stk_assr_rt_nm",
+      "kor": "종목보증금율명",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00013:cash_resources",
+      "f": "ch_profa",
+      "kor": "현금증거금",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00013:substitute_resources",
+      "f": "repl_profa",
+      "kor": "대용증거금",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    },
+    {
+      "mapping_id": "detail:kt00017:d2_account_position",
+      "f": "d2_entra",
+      "kor": "D+2추정예수금",
+      "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가)"
+    }
+  ],
+  "authoring_notes": "2차 저작(CC-01 레인). ① 열 전파로 갈음 매핑을 셀까지 내려 팩 32필드가 슬롯에 도달했다. ② 거래내역 표 상태 열(완료·D+1 예정·D+2 예정·D+2 차감)은 결제일자에서 만드는 파생 표기라 열을 kind:\"static\"으로 못박고 7칸에 static·derived·formula를 적었다 — 결제일자는 일자 열 병기 줄 7칸(행 반복)에만 남아 재표시 표식이 필요 없다. ③ 펼침 표식 글리프(s069 ▸)에 열 전파가 남긴 d2_entra를 떼고 static으로 막았다. ④ display_dup는 단일 13·행반복 35를 걷어냈다."
+}

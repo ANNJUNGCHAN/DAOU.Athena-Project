@@ -1,0 +1,82 @@
+{
+ "board": "2YEQ-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10022",
+   "f": "req_rt_sdnin",
+   "kor": "잔량율급증",
+   "layer": null,
+   "where": "'잔량률 급증' 순위 테이블"
+  },
+  {
+   "mapping_id": "base:ka10022",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "'종목' 컬럼 하단 종목코드"
+  },
+  {
+   "mapping_id": "base:ka10022",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'종목' 컬럼 종목명"
+  },
+  {
+   "mapping_id": "base:ka10022",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "'현재가' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10022",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률 색/± 부호"
+  },
+  {
+   "mapping_id": "base:ka10022",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "우패널 '+1,850 · +1.24%'의 +1,850"
+  },
+  {
+   "mapping_id": "base:ka10022",
+   "f": "int",
+   "kor": "기준률",
+   "layer": "병기",
+   "where": "'매수/매도비 증가' 셀 둘째 줄 기준률 101.4%"
+  },
+  {
+   "mapping_id": "base:ka10022",
+   "f": "now_rt",
+   "kor": "현재비율",
+   "layer": "병기",
+   "where": "'매수/매도비 증가' 셀 둘째 줄 현재비율 139.6%"
+  },
+  {
+   "mapping_id": "base:ka10022",
+   "f": "sdnin_rt",
+   "kor": "급증률",
+   "layer": null,
+   "where": "'매수/매도비 증가' 컬럼 +38.2%p"
+  },
+  {
+   "mapping_id": "base:ka10022",
+   "f": "tot_sel_req",
+   "kor": "총매도잔량",
+   "layer": "병기",
+   "where": "'잔량 매수·매도' 셀 둘째 줄 '매도 8.2만'"
+  },
+  {
+   "mapping_id": "base:ka10022",
+   "f": "tot_buy_req",
+   "kor": "총매수잔량",
+   "layer": "직접",
+   "where": "'잔량 매수·매도' 열 주값 '매수 11.45만'"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "root": "3OIO-0",
+  "regions": [
+    { "node_id": "3OMU-0", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "3PCF-0", "name": "Tabs", "role": "strip", "depth": 2 },
+    { "node_id": "3PEA-0", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "3SUI-0", "name": "Account Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3SUJ-0", "name": "Gold Order Ledger", "role": "primary", "depth": 2 },
+    { "node_id": "3SWQ-0", "name": "금현물 주문 레일", "role": "rail", "depth": 2 },
+    { "node_id": "3OIP-0", "name": "Account Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

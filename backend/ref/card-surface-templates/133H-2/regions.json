@@ -1,0 +1,12 @@
+{
+  "root": "14TE-2",
+  "regions": [
+    { "node_id": "14TG-2", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "14TN-2", "name": "Frame (탭 스트립)", "role": "strip", "depth": 2 },
+    { "node_id": "14U3-2", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "14UP-2", "name": "Account Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "14UQ-2", "name": "Holdings and Allocation", "role": "primary", "depth": 2 },
+    { "node_id": "14UR-2", "name": "Settlement and Performance", "role": "rail", "depth": 2 },
+    { "node_id": "14XR-2", "name": "Account Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

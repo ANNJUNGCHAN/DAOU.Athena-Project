@@ -1,0 +1,1477 @@
+{
+ "board_id": "2TZN-1",
+ "card_id": "CC-06",
+ "name": "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+ "operation_refs": [
+  "base:0J",
+  "base:0U",
+  "base:ka10010",
+  "base:ka10051",
+  "base:ka10101",
+  "base:ka20003",
+  "detail:ka20001:fifty_two_week_range",
+  "detail:ka20001:intraday_history",
+  "detail:ka20001:market_breadth",
+  "detail:ka20001:market_snapshot",
+  "detail:ka20001:session_range",
+  "detail:ka20009:daily_history",
+  "detail:ka20009:fifty_two_week_range",
+  "detail:ka20009:market_breadth",
+  "detail:ka20009:market_snapshot",
+  "detail:ka20009:session_range"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:0J",
+   "f": "20",
+   "kor": "체결시간",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "하단 '마지막 반영 09:42:18' 갱신 시각",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0J",
+   "f": "10",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "업종 테이블 '지수' 컬럼 3,184.52",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0J",
+   "f": "11",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '지수' 열 셀 보조줄 '+87.96'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0J",
+   "f": "12",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'등락률' 컬럼 +2.84%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0J",
+   "f": "15",
+   "kor": "거래량",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 블록 시간별 그룹 '거래량' 열 주값 940만주·1,180만주·4,200만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0J",
+   "f": "13",
+   "kor": "누적거래량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '거래대금' 열 셀 보조줄 '3억 4,200만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0J",
+   "f": "14",
+   "kor": "누적거래대금",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'거래대금' 컬럼 4.2조",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0J",
+   "f": "16",
+   "kor": "시가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '시가 · 고가 · 저가' 3,102.11",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0J",
+   "f": "17",
+   "kor": "고가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '시가 · 고가 · 저가' 3,198.40",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0J",
+   "f": "18",
+   "kor": "저가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '시가 · 고가 · 저가' 3,096.85",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0J",
+   "f": "25",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "등락률 색(text-up/down)과 ± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0J",
+   "f": "26",
+   "kor": "전일거래량대비",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 블록1 '거래대금 · 거래량' 행 3번째 값 '전일 1.6배'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "20",
+   "kor": "체결시간",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "하단 '마지막 반영 09:42:18'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "252",
+   "kor": "상승종목수",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'상승 · 보합 · 하락' 컬럼의 71",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "251",
+   "kor": "상한종목수",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '상승 · 보합 · 하락' 열 셀 보조줄 '상한 2'; 15R0-2 좌 카드 '상한 4 · 하한 2' 행에도 표기",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "253",
+   "kor": "보합종목수",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'상승 · 보합 · 하락' 컬럼의 8",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "255",
+   "kor": "하락종목수",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'상승 · 보합 · 하락' 컬럼의 23",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "254",
+   "kor": "하한종목수",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '상승 · 보합 · 하락' 열 셀 보조줄 '하한 1'; 15R0-2 좌 카드 '상한 4 · 하한 2' 행에도 표기",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "13",
+   "kor": "누적거래량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '거래대금' 열 셀 보조줄 '3억 4,200만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "14",
+   "kor": "누적거래대금",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'거래대금' 컬럼 4.2조",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "10",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'지수' 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "11",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '지수' 열 셀 보조줄 '+87.96'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "12",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'등락률' 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "256",
+   "kor": "거래형성종목수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 블록1 '구성 종목 · 거래 형성' 행 '거래형성 96개'; 15R0-2 '거래 형성 종목 2,182개'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "257",
+   "kor": "거래형성비율",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 블록1 '구성 종목 · 거래 형성' 행 '(94.1%)'; 15R0-2 '(95.3%)'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:0U",
+   "f": "25",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "등락률 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "dfrt_trst_sell_qty",
+   "kor": "차익위탁매도수량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 차익 행 매도 셀 보조줄 '8.2만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "dfrt_trst_sell_amt",
+   "kor": "차익위탁매도금액",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 차익 행 매도 셀 주값 '1,240억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "dfrt_trst_buy_qty",
+   "kor": "차익위탁매수수량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 차익 행 매수 셀 보조줄 '8.7만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "dfrt_trst_buy_amt",
+   "kor": "차익위탁매수금액",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 차익 행 매수 셀 주값 '1,322억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "dfrt_trst_netprps_qty",
+   "kor": "차익위탁순매수수량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 차익 행 순매수 셀 보조줄 '+0.5만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "dfrt_trst_netprps_amt",
+   "kor": "차익위탁순매수금액",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '프로그램 +412억 · 차익 +82억'의 차익 +82억",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "ndiffpro_trst_sell_qty",
+   "kor": "비차익위탁매도수량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 비차익 행 매도 셀 보조줄 '21.0만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "ndiffpro_trst_sell_amt",
+   "kor": "비차익위탁매도금액",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 비차익 행 매도 셀 주값 '3,180억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "ndiffpro_trst_buy_qty",
+   "kor": "비차익위탁매수수량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 비차익 행 매수 셀 보조줄 '23.2만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "ndiffpro_trst_buy_amt",
+   "kor": "비차익위탁매수금액",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 비차익 행 매수 셀 주값 '3,510억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "ndiffpro_trst_netprps_qty",
+   "kor": "비차익위탁순매수수량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 비차익 행 순매수 셀 보조줄 '+2.2만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "ndiffpro_trst_netprps_amt",
+   "kor": "비차익위탁순매수금액",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 비차익 행 순매수 셀 주값 '+330억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "all_dfrt_trst_sell_qty",
+   "kor": "전체차익위탁매도수량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 전체 행 매도 셀 보조줄 '29.2만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "all_dfrt_trst_sell_amt",
+   "kor": "전체차익위탁매도금액",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 전체 행 매도 셀 주값 '4,420억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "all_dfrt_trst_buy_qty",
+   "kor": "전체차익위탁매수수량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 전체 행 매수 셀 보조줄 '31.9만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "all_dfrt_trst_buy_amt",
+   "kor": "전체차익위탁매수금액",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 전체 행 매수 셀 주값 '4,832억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "all_dfrt_trst_netprps_qty",
+   "kor": "전체차익위탁순매수수량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '프로그램 매매' 블록 전체 행 순매수 셀 보조줄 '+2.7만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10010",
+   "f": "all_dfrt_trst_netprps_amt",
+   "kor": "전체차익위탁순매수금액",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '프로그램 +412억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "inds_netprps",
+   "kor": "업종별순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 헤더 우측 '반도체 +14억 · 09:42'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "inds_cd",
+   "kor": "업종코드",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "업종 행 코드 G2510",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "inds_nm",
+   "kor": "업종명",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "업종명 반도체",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'지수' 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "pre_smbol",
+   "kor": "대비부호",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "등락률 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '지수' 열 셀 보조줄 '+87.96'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'등락률' 컬럼 +2.84%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '거래대금' 열 셀 보조줄 '3억 4,200만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "sc_netprps",
+   "kor": "증권순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 2행 좌 '증권 −180억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "insrnc_netprps",
+   "kor": "보험순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 2행 우 '보험 −42억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "invtrt_netprps",
+   "kor": "투신순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 3행 좌 '투신 −96억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "bank_netprps",
+   "kor": "은행순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 3행 우 '은행 −12억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "jnsinkm_netprps",
+   "kor": "종신금순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 4행 좌 '종합금융 −8억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "endw_netprps",
+   "kor": "기금순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 4행 우 '기금 −10억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "etc_corp_netprps",
+   "kor": "기타법인순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 5행 우 '기타법인 +18억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "ind_netprps",
+   "kor": "개인순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 1행 좌 '개인 −820억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "frgnr_netprps",
+   "kor": "외국인순매수",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '투자자 외국인 +1,204억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "native_trmt_frgnr_netprps",
+   "kor": "내국인대우외국인순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 6행 좌 '내국인대우 외국인 −52억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "natn_netprps",
+   "kor": "국가순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 6행 우 '국가 +4억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "samo_fund_netprps",
+   "kor": "사모펀드순매수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 '투자자 순매수' 블록 5행 좌 '사모펀드 +8억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10051",
+   "f": "orgn_netprps",
+   "kor": "기관계순매수",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '기관 -340억'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10101",
+   "f": "list",
+   "kor": "업종코드리스트",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "업종 테이블(21개 업종)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10101",
+   "f": "marketCode",
+   "kor": "시장구분코드",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "업종표 신설 '시장' 열 행마다 'KOSPI' 칩",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10101",
+   "f": "code",
+   "kor": "코드",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "업종 행 코드 G2510/G3520",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10101",
+   "f": "name",
+   "kor": "업종명",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "업종명 반도체/의약품/은행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10101",
+   "f": "group",
+   "kor": "그룹",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '업종' 셀 보조줄 'G2510 · 제조'의 구분 부분",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "all_inds_idex",
+   "kor": "전업종지수",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "업종 테이블(21개 업종)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "업종 행 코드 G2510",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "업종명 반도체",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'지수' 컬럼 3,184.52",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "등락률 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '지수' 열 셀 보조줄 '+87.96'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'등락률' 컬럼 +2.84%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '거래대금' 열 셀 보조줄 '3억 4,200만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "wght",
+   "kor": "비중",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "업종표 신설 '비중' 열 '18.4%' 등 6행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'거래대금' 컬럼 4.2조",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "upl",
+   "kor": "상한",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '상승 · 보합 · 하락' 셀 보조줄 '상한 2'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "rising",
+   "kor": "상승",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'상승 · 보합 · 하락' 71",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "stdns",
+   "kor": "보합",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'상승 · 보합 · 하락' 8",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "fall",
+   "kor": "하락",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'상승 · 보합 · 하락' 23",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "lst",
+   "kor": "하한",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '상승 · 보합 · 하락' 셀 보조줄 '하한 1'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka20003",
+   "f": "flo_stk_num",
+   "kor": "상장종목수",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '구성 종목 102개'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:fifty_two_week_range",
+   "f": "52wk_hgst_pric",
+   "kor": "52주최고가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '52주 범위 2,410.20 ~ 3,214.80'의 상단",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:fifty_two_week_range",
+   "f": "52wk_hgst_pric_dt",
+   "kor": "52주최고가일",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '52주 범위' 행 보조줄 '최고 2026.07.18'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:fifty_two_week_range",
+   "f": "52wk_hgst_pric_pre_rt",
+   "kor": "52주최고가대비율",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '52주 범위' 행 보조줄 '최고 … −0.94%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:fifty_two_week_range",
+   "f": "52wk_lwst_pric",
+   "kor": "52주최저가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '52주 범위'의 하단 2,410.20",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:fifty_two_week_range",
+   "f": "52wk_lwst_pric_dt",
+   "kor": "52주최저가일",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '52주 범위' 행 보조줄 '최저 2025.10.02'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:fifty_two_week_range",
+   "f": "52wk_lwst_pric_pre_rt",
+   "kor": "52주최저가대비율",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '52주 범위' 행 보조줄 '최저 … +32.1%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:intraday_history",
+   "f": "inds_cur_prc_tm",
+   "kor": "업종현재가_시간별",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 블록 '시간별' 그룹 헤더",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:intraday_history",
+   "f": "tm_n",
+   "kor": "시간n",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 시간별 그룹 '시점' 열 09:42·09:30·09:00",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:intraday_history",
+   "f": "cur_prc_n",
+   "kor": "현재가n",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 시간별 그룹 '지수' 열 주값 3,184.52·3,171.08·3,142.66",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:intraday_history",
+   "f": "pred_pre_sig_n",
+   "kor": "전일대비기호n",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 시간별 그룹 지수 셀 보조줄 부호 '+' (상승색)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:intraday_history",
+   "f": "pred_pre_n",
+   "kor": "전일대비n",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 시간별 그룹 지수 셀 보조줄 '+87.96·+74.52·+46.10'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:intraday_history",
+   "f": "flu_rt_n",
+   "kor": "등락률n",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 시간별 그룹 '등락률' 열 +2.84%·+2.41%·+1.49%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:intraday_history",
+   "f": "trde_qty_n",
+   "kor": "거래량n",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 시간별 그룹 '거래량' 열 주값 940만주·1,180만주·4,200만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:intraday_history",
+   "f": "acc_trde_qty_n",
+   "kor": "누적거래량n",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 시간별 그룹 거래량 셀 보조줄 '누적 3억 4,200만주' 등",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_breadth",
+   "f": "upl",
+   "kor": "상한",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '상승 · 보합 · 하락' 셀 보조줄 '상한 2' 및 레일 '등락 종목' 행 '상한 2'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_breadth",
+   "f": "rising",
+   "kor": "상승",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'상승 · 보합 · 하락 71 · 8 · 23'의 71",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_breadth",
+   "f": "stdns",
+   "kor": "보합",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'상승 · 보합 · 하락'의 8",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_breadth",
+   "f": "fall",
+   "kor": "하락",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'상승 · 보합 · 하락'의 23",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_breadth",
+   "f": "lst",
+   "kor": "하한",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '상승 · 보합 · 하락' 셀 보조줄 '하한 1' 및 레일 '등락 종목' 행 '하한 1'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_snapshot",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '지수 · 등락 3,184.52'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_snapshot",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "등락 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_snapshot",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '지수' 셀 보조줄 '+87.96' 및 지수 흐름 시간별 행 보조줄",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_snapshot",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '지수 · 등락 · +2.84%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_snapshot",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '거래대금' 셀 보조줄 '3억 4,200만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_snapshot",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '거래대금 · 전일 대비 4.2조 · 1.6배'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_snapshot",
+   "f": "trde_frmatn_stk_num",
+   "kor": "거래형성종목수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 블록1 '구성 종목 · 거래 형성' 행 '거래형성 96개'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:market_snapshot",
+   "f": "trde_frmatn_rt",
+   "kor": "거래형성비율",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 블록1 '구성 종목 · 거래 형성' 행 '(94.1%)'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:session_range",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '시가 · 고가 · 저가' 3,102.11",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:session_range",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '시가 · 고가 · 저가' 3,198.40",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20001:session_range",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '시가 · 고가 · 저가' 3,096.85",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:daily_history",
+   "f": "inds_cur_prc_daly_rept",
+   "kor": "업종현재가_일별반복",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'일별 지수' 테이블",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:daily_history",
+   "f": "dt_n",
+   "kor": "일자n",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "일별 지수 '일자' 09-01 / 08-29 / 08-28",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:daily_history",
+   "f": "cur_prc_n",
+   "kor": "현재가n",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "일별 지수 '지수' 3,184.52 / 3,096.56 / 3,083.62",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:daily_history",
+   "f": "pred_pre_sig_n",
+   "kor": "전일대비기호n",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "일별 지수 등락률 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:daily_history",
+   "f": "pred_pre_n",
+   "kor": "전일대비n",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 일별 그룹 지수 셀 보조줄 '+87.96·+12.94·−10.83'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:daily_history",
+   "f": "flu_rt_n",
+   "kor": "등락률n",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "일별 지수 '등락률' +2.84% / +0.42% / -0.35%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:daily_history",
+   "f": "acc_trde_qty_n",
+   "kor": "누적거래량n",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 일별 그룹 거래량 셀 보조줄 '누적 9억 5,400만주' 등",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:fifty_two_week_range",
+   "f": "52wk_hgst_pric",
+   "kor": "52주최고가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '52주 범위 2,410.20 ~ 3,214.80'의 상단",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:fifty_two_week_range",
+   "f": "52wk_hgst_pric_dt",
+   "kor": "52주최고가일",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '52주 범위' 행 보조줄 '최고 2026.07.18'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:fifty_two_week_range",
+   "f": "52wk_hgst_pric_pre_rt",
+   "kor": "52주최고가대비율",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '52주 범위' 행 보조줄 '최고 … −0.94%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:fifty_two_week_range",
+   "f": "52wk_lwst_pric",
+   "kor": "52주최저가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '52주 범위'의 하단 2,410.20",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:fifty_two_week_range",
+   "f": "52wk_lwst_pric_dt",
+   "kor": "52주최저가일",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '52주 범위' 행 보조줄 '최저 2025.10.02'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:fifty_two_week_range",
+   "f": "52wk_lwst_pric_pre_rt",
+   "kor": "52주최저가대비율",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "레일 '52주 범위' 행 보조줄 '최저 … +32.1%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_breadth",
+   "f": "upl",
+   "kor": "상한",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '상승 · 보합 · 하락' 셀 보조줄 '상한 2'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_breadth",
+   "f": "rising",
+   "kor": "상승",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "일별 지수 '상승 · 하락 71 · 23'의 71",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_breadth",
+   "f": "stdns",
+   "kor": "보합",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "업종 행 '상승 · 보합 · 하락'의 보합 8",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_breadth",
+   "f": "fall",
+   "kor": "하락",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "일별 지수 '상승 · 하락'의 23",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_breadth",
+   "f": "lst",
+   "kor": "하한",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '상승 · 보합 · 하락' 셀 보조줄 '하한 1'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_snapshot",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "'일별 지수' 카드의 지수 컬럼 3,184.52",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_snapshot",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "일별 지수 등락률 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_snapshot",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "'지수 흐름' 일별 그룹 지수 셀 보조줄 '+87.96·+12.94·−10.83'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_snapshot",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "일별 지수 '등락률' +2.84%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_snapshot",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "병기",
+   "board": "2TZN-1",
+   "where": "업종표 '거래대금' 셀 보조줄 '3억 4,200만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_snapshot",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '거래대금 4.2조'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_snapshot",
+   "f": "trde_frmatn_stk_num",
+   "kor": "거래형성종목수",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 블록1 '구성 종목 · 거래 형성' 행 '거래형성 96개'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:market_snapshot",
+   "f": "trde_frmatn_rt",
+   "kor": "거래형성비율",
+   "layer": "직접",
+   "board": "2TZN-1",
+   "where": "레일 블록1 '구성 종목 · 거래 형성' 행 '(94.1%)'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:session_range",
+   "f": "open_pric",
+   "kor": "시가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '시가 · 고가 · 저가' 3,102.11",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:session_range",
+   "f": "high_pric",
+   "kor": "고가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '시가 · 고가 · 저가' 3,198.40",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka20009:session_range",
+   "f": "low_pric",
+   "kor": "저가",
+   "layer": null,
+   "board": "2TZN-1",
+   "where": "우패널 '시가 · 고가 · 저가' 3,096.85",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 145
+}

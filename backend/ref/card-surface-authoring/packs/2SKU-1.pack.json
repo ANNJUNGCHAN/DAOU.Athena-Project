@@ -1,0 +1,3775 @@
+{
+ "board_id": "2SKU-1",
+ "card_id": "CC-01",
+ "name": "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+ "operation_refs": [
+  "base:ka01690",
+  "base:ka10072",
+  "base:ka10073",
+  "base:ka10085",
+  "base:ka10170",
+  "base:kt00002",
+  "base:kt00008",
+  "base:kt00015",
+  "base:kt50021",
+  "detail:kt00001:cash_and_margin",
+  "detail:kt00001:foreign_currency_deposits",
+  "detail:kt00001:settlement_forecast",
+  "detail:kt00001:substitute_collateral",
+  "detail:kt00001:withdrawal_and_order_capacity",
+  "detail:kt00004:cash_and_assets",
+  "detail:kt00005:cash_and_capacity",
+  "detail:kt00005:receivables_and_margin",
+  "detail:kt00010:cash_and_withdrawal_capacity",
+  "detail:kt00010:purchase_settlement",
+  "detail:kt00011:margin_rates",
+  "detail:kt00012:account_and_receivable_capacity",
+  "detail:kt00012:guarantee_rate",
+  "detail:kt00013:cash_resources",
+  "detail:kt00013:substitute_resources",
+  "detail:kt00016:period_flows",
+  "detail:kt00017:d2_account_position",
+  "detail:kt00017:daily_cash_and_trading_flows",
+  "detail:kt00017:other_assets_and_income",
+  "detail:kt00018:portfolio_summary"
+ ],
+ "suggested_extra_ops": [
+  "detail:kt00001:loans_and_collateral",
+  "detail:kt00001:receivables_and_arrears",
+  "detail:kt00001:special_deposits_and_credit",
+  "detail:kt00010:margin_order_capacity"
+ ],
+ "fields": [
+  {
+   "mapping_id": "base:ka01690",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "예탁자산 추이 일자 '09-01 / 08-29 / 08-28'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "tot_buy_amt",
+   "kor": "총 매입가",
+   "layer": null,
+   "board": "133H-2",
+   "where": "계좌 평가 '총매입금액 85,519,340원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "tot_evlt_amt",
+   "kor": "총 평가금액",
+   "layer": null,
+   "board": "133H-2",
+   "where": "계좌 평가 '총평가금액 89,760,240원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "tot_evltv_prft",
+   "kor": "총 평가손익",
+   "layer": null,
+   "board": "133H-2",
+   "where": "계좌 평가 '총평가손익 +4,240,900원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "tot_prft_rt",
+   "kor": "수익률",
+   "layer": null,
+   "board": "133H-2",
+   "where": "KPI '수익률 +4.96%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "dbst_bal",
+   "kor": "예수금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'현재 예수금 34,820,000'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "day_stk_asst",
+   "kor": "추정자산",
+   "layer": null,
+   "board": "133H-2",
+   "where": "KPI '총자산 124,580,240원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "buy_wght",
+   "kor": "매수비중",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "배분 게이지 '주식 72.0%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "day_bal_rt",
+   "kor": "일별잔고수익률",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "보유종목 표가 배열을 행 목록으로 그림",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "'현재가' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목코드 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목명 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "rmnd_qty",
+   "kor": "보유 수량",
+   "layer": "직접",
+   "board": "2SCE-1",
+   "where": "보유표 '수량' 열 1줄 보유수량 (전 8행)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "buy_uv",
+   "kor": "매입 단가",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "'평균단가' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "buy_wght",
+   "kor": "매수비중",
+   "layer": "병기",
+   "board": "2SCE-1",
+   "where": "보유표 '평가액' 셀 둘째 줄 '매수 44.5%' (합 100.0%)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "evltv_prft",
+   "kor": "평가손익",
+   "layer": "직접",
+   "board": "2SCE-1",
+   "where": "보유표 '손익' 열 행별 평가손익 (+3,439,150 등)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "prft_rt",
+   "kor": "수익률",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "'수익률' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "evlt_amt",
+   "kor": "평가금액",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "'평가액' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka01690",
+   "f": "evlt_wght",
+   "kor": "평가비중",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "'비중' 컬럼(33.3% 등)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "dt_stk_div_rlzt_pl",
+   "kor": "일자별종목별실현손익",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "실현손익 표가 배열을 행 목록으로 그림",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'매도 종목' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "cntr_qty",
+   "kor": "체결량",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 실현 상세 '250주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "buy_uv",
+   "kor": "매입단가",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 실현 상세 '매입 43,820'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 실현 상세 '체결 48,360'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "tdy_sel_pl",
+   "kor": "당일매도손익",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'실현손익' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "pl_rt",
+   "kor": "손익율",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'수익률' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목코드 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "tdy_trde_cmsn",
+   "kor": "당일매매수수료",
+   "layer": null,
+   "board": "133H-2",
+   "where": "손익·비용 '거래수수료 -24,600원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "tdy_trde_tax",
+   "kor": "당일매매세금",
+   "layer": "직접",
+   "board": "2SRV-1",
+   "where": "실현손익표 6열 세금 1줄 행별 값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "wthd_alowa",
+   "kor": "인출가능금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "인출·주문 한도 '출금가능금액 28,940,000원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "loan_dt",
+   "kor": "대출일",
+   "layer": "병기",
+   "board": "2SRV-1",
+   "where": "실현손익표 2열 매도 종목 셀 2줄 '대출일 —'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "crd_tp",
+   "kor": "신용구분",
+   "layer": "병기",
+   "board": "2SRV-1",
+   "where": "실현손익표 2열 매도 종목 셀 2줄 '현금' 칩",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "stk_cd_1",
+   "kor": "종목코드1",
+   "layer": "병기",
+   "board": "2SRV-1",
+   "where": "실현손익표 2열 셀 2줄 코드 mono '069500 · 035420'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10072",
+   "f": "tdy_sel_pl_1",
+   "kor": "당일매도손익1",
+   "layer": "병기",
+   "board": "2SRV-1",
+   "where": "실현손익표 3열 셀 2줄 '매도손익 +1,107,000'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "dt_stk_rlzt_pl",
+   "kor": "일자별종목별실현손익",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "실현손익 표가 배열을 행 목록으로 그림",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'일자' 컬럼(09/01 등)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "tdy_htssel_cmsn",
+   "kor": "당일hts매도수수료",
+   "layer": "병기",
+   "board": "2SRV-1",
+   "where": "실현손익표 5열 수수료 셀 2줄 'HTS 매도 -3,110'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'매도 종목' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "cntr_qty",
+   "kor": "체결량",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 실현 상세 '250주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "buy_uv",
+   "kor": "매입단가",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 실현 상세 '매입 43,820'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "cntr_pric",
+   "kor": "체결가",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 실현 상세 '체결 48,360'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "tdy_sel_pl",
+   "kor": "당일매도손익",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'실현손익' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "pl_rt",
+   "kor": "손익율",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'수익률' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목코드 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "tdy_trde_cmsn",
+   "kor": "당일매매수수료",
+   "layer": null,
+   "board": "133H-2",
+   "where": "'거래수수료 -24,600원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "tdy_trde_tax",
+   "kor": "당일매매세금",
+   "layer": "직접",
+   "board": "2SRV-1",
+   "where": "실현손익표 6열 세금 1줄 행별 값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "wthd_alowa",
+   "kor": "인출가능금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'출금가능금액 28,940,000원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "loan_dt",
+   "kor": "대출일",
+   "layer": "병기",
+   "board": "2SRV-1",
+   "where": "실현손익표 2열 매도 종목 셀 2줄 '대출일 —'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10073",
+   "f": "crd_tp",
+   "kor": "신용구분",
+   "layer": "병기",
+   "board": "2SRV-1",
+   "where": "실현손익표 2열 매도 종목 셀 2줄 '현금' 칩",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "acnt_prft_rt",
+   "kor": "계좌수익률",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "보유종목 표 행 목록 및 배분 '수익률 +4.96%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "예탁자산 추이 일자",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목코드 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목명 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "'현재가' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "pur_pric",
+   "kor": "매입가",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "'평균단가' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "pur_amt",
+   "kor": "매입금액",
+   "layer": "병기",
+   "board": "2SCE-1",
+   "where": "보유표 '평단' 셀 둘째 줄 '매입 38,044,600' (합 85,519,340)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "rmnd_qty",
+   "kor": "보유수량",
+   "layer": "직접",
+   "board": "2SCE-1",
+   "where": "보유표 '수량' 열 1줄 보유수량",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "tdy_sel_pl",
+   "kor": "당일매도손익",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'실현손익' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "tdy_trde_cmsn",
+   "kor": "당일매매수수료",
+   "layer": null,
+   "board": "133H-2",
+   "where": "'거래수수료 -24,600원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "tdy_trde_tax",
+   "kor": "당일매매세금",
+   "layer": "병기",
+   "board": "2SCE-1",
+   "where": "R4 '매매 비용' 둘째 줄 '당일매매세금 -20,720'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "crd_tp",
+   "kor": "신용구분",
+   "layer": "직접",
+   "board": "2SCE-1",
+   "where": "보유표 종목 셀 구분 칩 '현금'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "loan_dt",
+   "kor": "대출일",
+   "layer": "직접",
+   "board": "2SCE-1",
+   "where": "우측 레일 R3 '대출일 해당 없음'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "setl_remn",
+   "kor": "결제잔고",
+   "layer": "병기",
+   "board": "2SCE-1",
+   "where": "보유표 '수량' 셀 둘째 줄 '결제 275' (KODEX 434 등 행별 상이)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "clrn_alow_qty",
+   "kor": "청산가능수량",
+   "layer": "병기",
+   "board": "2SCE-1",
+   "where": "보유표 '수량' 셀 둘째 줄 '가능 275'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "crd_amt",
+   "kor": "신용금액",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 융자·대주 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "crd_int",
+   "kor": "신용이자",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 신용이자·대주 (메인 2SCE-1 신용·대출 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10085",
+   "f": "expr_dt",
+   "kor": "만기일",
+   "layer": "직접",
+   "board": "2SCE-1",
+   "where": "우측 레일 R3 '만기일 해당 없음'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tot_sell_amt",
+   "kor": "총매도금액",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 매매일지 '매도 금액 12,946,000원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tot_buy_amt",
+   "kor": "총매수금액",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 매매일지 '매수 금액 3,842,000원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tot_cmsn_tax",
+   "kor": "총수수료_세금",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 매매일지 '매매 비용 -24,600원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tot_exct_amt",
+   "kor": "총정산금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "최근 현금 흐름 '매매 순유입 +9,079,400원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tot_pl_amt",
+   "kor": "총손익금액",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 매매일지 '순손익 +1,082,400원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tot_prft_rt",
+   "kor": "총수익률",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "실현손익 표 09/01 행 '수익률 +9.14%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "tdy_trde_diary",
+   "kor": "당일매매일지",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'오늘 매매일지' 카드",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 실현 상세 종목명",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "buy_avg_pric",
+   "kor": "매수평균가",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 실현 상세 '매입 43,820'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "buy_qty",
+   "kor": "매수수량",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "매수 행 '수량'(10주/20주/5주)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "sel_avg_pric",
+   "kor": "매도평균가",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 실현 상세 '체결 48,360'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "sell_qty",
+   "kor": "매도수량",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "매도 행 '수량'(250주/4주)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "cmsn_alm_tax",
+   "kor": "수수료_제세금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '수수료·제세금 -24,600' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "pl_amt",
+   "kor": "손익금액",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'실현손익' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "sell_amt",
+   "kor": "매도금액",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 매매일지 '매도 금액'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "buy_amt",
+   "kor": "매수금액",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 매매일지 '매수 금액'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "prft_rt",
+   "kor": "수익률",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'수익률' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10170",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목코드 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "daly_prsm_dpst_aset_amt_prst",
+   "kor": "일별추정예탁자산현황",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'예탁자산 추이' 카드 일자별 3행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "예탁자산 추이 '09-01 / 08-29 / 08-28'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "entr",
+   "kor": "예수금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'현재 예수금 34,820,000'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "grnt_use_amt",
+   "kor": "담보대출금",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 대출 잔고 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "crd_loan",
+   "kor": "신용융자금",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "ls_grnt",
+   "kor": "대주담보금",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "repl_amt",
+   "kor": "대용금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "인출·주문 한도 '대용금액 63,280,000원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "prsm_dpst_aset_amt",
+   "kor": "추정예탁자산",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "예탁자산 추이 '1억 2,458만'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00002",
+   "f": "prsm_dpst_aset_amt_bncr_skip",
+   "kor": "추정예탁자산수익증권제외",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "레일 예탁자산 추이 09-01 행 2줄 '수익증권 제외 1억 2,458만'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "trde_dt",
+   "kor": "매매일자",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '일자' 컬럼(09/03)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "setl_dt",
+   "kor": "결제일자",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "거래내역 표 일자 셀 2줄 '결제 09/03'·'결제 08/27' 등 7행 전부",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "sell_amt_sum",
+   "kor": "매도정산합",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '매도 결제 +12,946,000'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "buy_amt_sum",
+   "kor": "매수정산합",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '매수 결제 -3,842,000'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "acnt_nxdy_setl_frcs_prps_array",
+   "kor": "계좌별익일결제예정내역배열",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표가 배열을 행 목록으로 그림",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "seq",
+   "kor": "일련번호",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "거래내역 표 구분 셀 2줄 '순번 142'~'순번 136'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "stk_cd",
+   "kor": "종목번호",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목코드 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "loan_dt",
+   "kor": "대출일",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "거래내역 표 내용 셀 2줄 '대출일 —'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "qty",
+   "kor": "수량",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 내용 'KODEX 200 250주 · NAVER 4주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "engg_amt",
+   "kor": "약정금액",
+   "layer": null,
+   "board": "2SYW-1",
+   "where": "'오늘 약정' 매수·매도 약정 금액",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "cmsn",
+   "kor": "수수료",
+   "layer": null,
+   "board": "133H-2",
+   "where": "'거래수수료 -24,600원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "incm_tax",
+   "kor": "소득세",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "거래내역 수수료·제세금 행 내용 2줄 '소득세 0'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "rstx",
+   "kor": "농특세",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "거래내역 수수료·제세금 행 내용 2줄 '농특세 -15,540'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 내용 'KODEX 200'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "sell_tp",
+   "kor": "매도수구분",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '구분' 컬럼 매도 결제/매수 결제",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "unp",
+   "kor": "단가",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 내용 'SK하이닉스 매수 20주 · 192,100원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "exct_amt",
+   "kor": "정산금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '금액' 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "trde_tax",
+   "kor": "거래세",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "거래내역 수수료·제세금 행 내용 2줄 '거래세 -5,180'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "resi_tax",
+   "kor": "주민세",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "거래내역 수수료·제세금 행 내용 2줄 '주민세 0'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00008",
+   "f": "crd_tp",
+   "kor": "신용구분",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "거래내역 표 구분 셀 2줄 칩 '현금'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trst_ovrl_trde_prps_array",
+   "kor": "위탁종합거래내역배열",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "거래·결제 내역 표가 배열을 행 목록으로 그림",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_dt",
+   "kor": "거래일자",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "거래 표 '일자' 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_no",
+   "kor": "거래번호",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ① 거래 식별 1행 좌 · 거래번호 0000000142",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "rmrk_nm",
+   "kor": "적요명",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'내용' 컬럼('삼성전자 분기 배당 · 세후' 등)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "crd_deal_tp_nm",
+   "kor": "신용거래구분명",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ② 거래 성격 2행 우 · 신용거래 구분 현금",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "exct_amt",
+   "kor": "정산금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "거래 표 '금액' 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "loan_amt_rpya",
+   "kor": "대출금상환",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ④ 정산·세금·잔고 2행 우 · 대출금상환 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_trde_amt",
+   "kor": "거래금액(외)",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ⑤ 외화 정산 1행 좌 · 거래금액 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_exct_amt",
+   "kor": "정산금액(외)",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ⑤ 외화 정산 1행 우 · 정산금액 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "entra_remn",
+   "kor": "예수금잔고",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'현재 예수금 34,820,000'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "crnc_cd",
+   "kor": "통화코드",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'외화예수금 (USD)' 통화 표기",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_ocr_tp",
+   "kor": "거래종류구분",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ② 거래 성격 1행 좌 · 거래 종류 매도 결제",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_kind_nm",
+   "kor": "거래종류명",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'구분' 컬럼(매도 결제/배당금 입금/이자 입금 등)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'내용' 컬럼 종목명",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_amt",
+   "kor": "거래금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "거래 표 '금액' 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_agri_tax",
+   "kor": "거래및농특세",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ④ 정산·세금·잔고 강조 행 · 거래세·농특세 -20,720원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "rpy_diffa",
+   "kor": "상환차금",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ④ 정산·세금·잔고 3행 좌 · 상환차금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_trde_tax",
+   "kor": "거래세(외)",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ⑤ 외화 정산 2행 좌 · 거래세 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "dly_sum",
+   "kor": "연체합",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ④ 정산·세금·잔고 4행 좌 · 연체합 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_entra",
+   "kor": "외화예수금잔고",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'외화예수금 (USD) $0.00'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "mdia_tp_nm",
+   "kor": "매체구분명",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ① 거래 식별 4행 좌 · 거래 매체 HTS",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "io_tp",
+   "kor": "입출구분",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'금액' 컬럼의 ± 부호와 상승·하락 색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "io_tp_nm",
+   "kor": "입출구분명",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "최근 현금 흐름 '입금'/'출금' 라벨",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "orig_deal_no",
+   "kor": "원거래번호",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ① 거래 식별 1행 우 · 원거래번호 해당 없음",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "종목코드 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_qty_jwa_cnt",
+   "kor": "거래수량/좌수",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'내용' 컬럼 '250주' / '20주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "cmsn",
+   "kor": "수수료",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '수수료·제세금' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "int_ls_usfe",
+   "kor": "이자/대주이용",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "거래 표 '이자 입금 · 예탁금 이용료 +1,240'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_cmsn",
+   "kor": "수수료(외)",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ⑤ 외화 정산 2행 우 · 수수료 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_dly_sum",
+   "kor": "연체합(외)",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ⑤ 외화 정산 3행 좌 · 연체합 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "vlbl_nowrm",
+   "kor": "유가금잔",
+   "layer": "직접",
+   "board": "3LGC-0",
+   "where": "좌 이달 거래 표 5열 '유가금잔' 9행 + 레일 ④ 마감 행 89,760,240원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "proc_tm",
+   "kor": "처리시간",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ① 거래 식별 2행 우 · 처리시간 09:41:52",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "isin_cd",
+   "kor": "ISIN코드",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ③ 종목·시장 2행 좌 · ISIN코드 KR7069500007",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "stex_cd",
+   "kor": "거래소코드",
+   "layer": "병기",
+   "board": "3LGC-0",
+   "where": "레일 ③ 종목·시장 2행 우 · 거래소 KRX · 코드 1 둘째 값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "stex_nm",
+   "kor": "거래소명",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ③ 종목·시장 2행 우 · 거래소 KRX",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_unit",
+   "kor": "거래단가/환율",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'내용' 컬럼 단가 '192,100원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "incm_resi_tax",
+   "kor": "소득/주민세",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ④ 정산·세금·잔고 2행 좌 · 소득세·주민세 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "loan_dt",
+   "kor": "대출일",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ② 거래 성격 3행 좌 · 대출일 해당 없음",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "uncl_ocr",
+   "kor": "미수(원/주)",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 미수·연체 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "rpym_sum",
+   "kor": "변제합",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ④ 정산·세금·잔고 3행 우 · 변제합 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "cntr_dt",
+   "kor": "체결일",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "실현손익 표 '일자' 컬럼(매도 확정일)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "rcpy_no",
+   "kor": "출납번호",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ① 거래 식별 2행 좌 · 출납번호 0000318",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "prcsr",
+   "kor": "처리자",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ① 거래 식별 3행 좌 · 처리자 시스템",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "proc_brch",
+   "kor": "처리점",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ① 거래 식별 3행 우 · 처리점 영업부",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_stle",
+   "kor": "매매형태",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ② 거래 성격 2행 좌 · 매매 형태 보통",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "txon_base_pric",
+   "kor": "과세기준가",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ③ 종목·시장 3행 좌 · 과세기준가 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "tax_sum_cmsn",
+   "kor": "세금수수료합",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'수수료·세금' 컬럼",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "frgn_pay_txam",
+   "kor": "외국납부세액(외)",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ⑤ 외화 정산 4행 우 · 외국납부세액 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "fc_uncl_ocr",
+   "kor": "미수(외)",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ⑤ 외화 정산 3행 우 · 미수 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "rpym_sum_fr",
+   "kor": "변제합(외)",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ⑤ 외화 정산 4행 좌 · 변제합 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "rcpmnyer",
+   "kor": "입금자",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ① 거래 식별 4행 우 · 입금자 해당 없음(08/26 이체 행 병기 예금주 본인)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt00015",
+   "f": "trde_prtc_tp",
+   "kor": "거래내역구분",
+   "layer": "펼침",
+   "board": "3LGC-0",
+   "where": "레일 ② 거래 성격 1행 우 · 내역 구분 위탁",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "entra",
+   "kor": "예수금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "금현물 패널 '금현물 예수금 4,820,000원'(증명 위임)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "profa_ch",
+   "kor": "증거금현금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'증거금 현금·대용 3,120,000 · 3,120,000원' 현금 값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "chck_ina_amt",
+   "kor": "수표입금액",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "특수예수금·외화 펼침 · 레일 ① 특수예수금 · 증권 입출고 (메인 2SKU-1 최근 현금 흐름 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "etc_loan",
+   "kor": "기타대여금",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "etc_loan_dlfe",
+   "kor": "기타대여금연체료",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 기타대여금 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "etc_loan_tot",
+   "kor": "기타대여금합계",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 기타대여금 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "prsm_entra",
+   "kor": "추정예수금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'D+2 예수금 31,240,000원'(증명 위임)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "buy_exct_amt",
+   "kor": "매수정산금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '매수 결제 -3,842,000'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "sell_exct_amt",
+   "kor": "매도정산금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '매도 결제 +12,946,000'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "sell_buy_exct_amt",
+   "kor": "매도매수정산금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "최근 현금 흐름 '매매 순유입 +9,079,400원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "dly_amt",
+   "kor": "미수변제소요금",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 미수·연체 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "prsm_pymn_alow_amt",
+   "kor": "추정출금가능금액",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "레일 인출·주문 한도 출금가능금액 행 2줄 '추정 28,940,000원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "pymn_alow_amt",
+   "kor": "출금가능금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'출금가능금액 28,940,000원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50021",
+   "f": "ord_alow_amt",
+   "kor": "주문가능금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'주문가능금액 31,240,000원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "entr",
+   "kor": "예수금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "예수금·결제 상단 '현재 예수금' 카드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "profa_ch",
+   "kor": "주식증거금현금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "인출·주문 한도 '증거금 현금·대용' 좌측 현금값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "bncr_profa_ch",
+   "kor": "수익증권증거금현금",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 수익증권증거금현금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "nxdy_bncr_sell_exct",
+   "kor": "익일수익증권매도정산대금",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 익일수익증권매도정산대금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "fc_stk_krw_repl_set_amt",
+   "kor": "해외주식원화대용설정금",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 해외주식원화대용설정금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "crd_grnta_ch",
+   "kor": "신용보증금현금",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 신용보증금현금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "crd_grnt_ch",
+   "kor": "신용담보금현금",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 신용담보금현금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "add_grnt_ch",
+   "kor": "추가담보금현금",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 추가담보금현금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "etc_profa",
+   "kor": "기타증거금",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 기타증거금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:cash_and_margin",
+   "f": "uncl_stk_amt",
+   "kor": "미수확보금",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 현금 열 미수확보금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "stk_entr_prst",
+   "kor": "종목별예수금",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ① '통화별 예수금 · 주문·출금' 표 통화 열 2행(원화 참조 · 미국달러 활성) — 통화별 배열이 행으로 전개",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "crnc_cd",
+   "kor": "통화코드",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'외화예수금 (USD)' 라벨의 통화 표기",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "fx_entr",
+   "kor": "외화예수금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'외화예수금 (USD) $0.00' 값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "fc_krw_repl_evlta",
+   "kor": "원화대용평가금",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ④ '원화 표시 항목' 밴드 1칸 · 원화대용평가금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "fc_trst_profa",
+   "kor": "해외주식증거금",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ④ '원화 표시 항목' 밴드 2칸 · 해외주식증거금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "pymn_alow_amt_entr",
+   "kor": "출금가능금액(예수금)",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ① 표 4열 '출금가능금액(예수금)' 미국달러 행 · 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "pymn_alow_amt",
+   "kor": "출금가능금액",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ① 표 5열 '출금가능금액' 미국달러 행 · 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "ord_alow_amt_entr",
+   "kor": "주문가능금액(예수금)",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ① 표 3열 '주문가능금액(예수금)' 미국달러 행 · 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "fc_uncla",
+   "kor": "외화미수(합계)",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ③ '외화 미수·연체' 밴드 1칸 · 미수 합계 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "fc_ch_uncla",
+   "kor": "외화현금미수금",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ③ '외화 미수·연체' 밴드 2칸 · 현금미수금 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "dly_amt",
+   "kor": "연체료",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ③ '외화 미수·연체' 밴드 3칸 · 연체료 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "d1_fx_entr",
+   "kor": "d+1외화예수금",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ② 'D+1 ~ D+4 외화예수금' 밴드 1칸 · D+1 09/02 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "d2_fx_entr",
+   "kor": "d+2외화예수금",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ② 'D+1 ~ D+4 외화예수금' 밴드 2칸 · D+2 09/03 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "d3_fx_entr",
+   "kor": "d+3외화예수금",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ② 'D+1 ~ D+4 외화예수금' 밴드 3칸 · D+3 09/04 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "d4_fx_entr",
+   "kor": "d+4외화예수금",
+   "layer": "직접",
+   "board": "3NVG-0",
+   "where": "좌 ② 'D+1 ~ D+4 외화예수금' 밴드 4칸 · D+4 09/07 0달러",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "nrpy_loan",
+   "kor": "미상환융자금",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 융자·대주 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "loan_sum",
+   "kor": "융자금합계",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 융자·대주 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "ls_sum",
+   "kor": "대주금합계",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 융자·대주 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "crd_grnt_rt",
+   "kor": "신용담보비율",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "상단 지표 '신용담보비율 184.2%' 카드",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "mdstrm_usfe",
+   "kor": "중도이용료",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "min_ord_alow_yn",
+   "kor": "최소주문가능금액",
+   "layer": "펼침",
+   "board": "3GRO-0",
+   "where": "X1 증거금·보증금 구간별 펼침 · 주문 한도 재원 (메인 2SKU-1 인출·주문 한도 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "loan_remn_evlt_amt",
+   "kor": "대출총평가금액",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 대출 잔고 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "dpst_grntl_remn",
+   "kor": "예탁담보대출잔고",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 대출 잔고 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:loans_and_collateral",
+   "f": "sell_grntl_remn",
+   "kor": "매도담보대출잔고",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 대출 잔고 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "ch_uncla",
+   "kor": "현금미수금",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "ch_uncla_dlfe",
+   "kor": "현금미수연체료",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 미수·연체 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "ch_uncla_tot",
+   "kor": "현금미수금합계",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 미수·연체 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "crd_int_npay",
+   "kor": "신용이자미납",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "int_npay_amt_dlfe",
+   "kor": "신용이자미납연체료",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 미수·연체 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "int_npay_amt_tot",
+   "kor": "신용이자미납합계",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 미수·연체 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "etc_loana",
+   "kor": "기타대여금",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "etc_loana_dlfe",
+   "kor": "기타대여금연체료",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 기타대여금 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:receivables_and_arrears",
+   "f": "etc_loan_tot",
+   "kor": "기타대여금합계",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 기타대여금 행",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d1_entra",
+   "kor": "d+1추정예수금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "예수금·결제 상단 'D+1 예상' 카드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d1_slby_exct_amt",
+   "kor": "d+1매도매수정산금",
+   "layer": "직접",
+   "board": "2SKU-1",
+   "where": "결제 예정 표 D+1 09/02 행 정산 합계 열 -1,635,600",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d1_buy_exct_amt",
+   "kor": "d+1매수정산금",
+   "layer": "직접",
+   "board": "2SKU-1",
+   "where": "결제 예정 표 D+1 09/02 행 매수 정산 열 -1,635,600",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d1_out_rep_mor",
+   "kor": "d+1미수변제소요금",
+   "layer": "직접",
+   "board": "2SKU-1",
+   "where": "결제 예정 표 D+1 09/02 행 미수 변제소요 열 0",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d1_sel_exct_amt",
+   "kor": "d+1매도정산금",
+   "layer": "직접",
+   "board": "2SKU-1",
+   "where": "결제 예정 표 D+1 09/02 행 매도 정산 열 0",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d1_pymn_alow_amt",
+   "kor": "d+1출금가능금액",
+   "layer": "직접",
+   "board": "2SKU-1",
+   "where": "결제 예정 표 D+1 09/02 행 출금가능 열 27,304,400",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d2_entra",
+   "kor": "d+2추정예수금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "예수금·결제 상단 'D+2 예상' 카드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d2_slby_exct_amt",
+   "kor": "d+2매도매수정산금",
+   "layer": "직접",
+   "board": "2SKU-1",
+   "where": "결제 예정 표 D+2 09/03 행 정산 합계 열 +9,079,400",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d2_buy_exct_amt",
+   "kor": "d+2매수정산금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '매수 결제 -3,842,000 · D+2 차감' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d2_out_rep_mor",
+   "kor": "d+2미수변제소요금",
+   "layer": "직접",
+   "board": "2SKU-1",
+   "where": "결제 예정 표 D+2 09/03 행 미수 변제소요 열 0",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d2_sel_exct_amt",
+   "kor": "d+2매도정산금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '매도 결제 +12,946,000 · D+2 예정' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:settlement_forecast",
+   "f": "d2_pymn_alow_amt",
+   "kor": "d+2출금가능금액",
+   "layer": "직접",
+   "board": "2SKU-1",
+   "where": "결제 예정 표 D+2 09/03 행 출금가능 열 36,383,800",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "shrts_prica",
+   "kor": "공매도대금",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "레일 ① 특수예수금 1행 · 공매도대금 0원",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "crd_set_grnta",
+   "kor": "신용설정평가금",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "레일 ② 신용·생계형 1행 · 신용설정평가금 0원",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "chck_ina_amt",
+   "kor": "수표입금액",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "레일 ① 특수예수금 2행 · 수표입금액 0원",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "etc_chck_ina_amt",
+   "kor": "기타수표입금액",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "레일 ① 특수예수금 3행 · 기타수표입금액 0원",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "crd_grnt_ruse",
+   "kor": "신용담보재사용",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "레일 ② 신용·생계형 2행 · 신용담보재사용 0원",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "knx_asset_evltv",
+   "kor": "코넥스기본예탁금",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "레일 ① 특수예수금 4행 · 코넥스기본예탁금 0원",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "elwdpst_evlta",
+   "kor": "ELW예탁평가금",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "레일 ① 특수예수금 5행 · ELW예탁평가금 0원",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "crd_ls_rght_frcs_amt",
+   "kor": "신용대주권리예정금액",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "레일 ② 신용·생계형 3행 · 신용대주권리예정금액 0원",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "lvlh_join_amt",
+   "kor": "생계형가입금액",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "레일 ② 신용·생계형 4행 · 생계형가입금액 0원",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "lvlh_trns_alowa",
+   "kor": "생계형입금가능금액",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "레일 ② 신용·생계형 5행 · 생계형입금가능금액 0원",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "repl_amt",
+   "kor": "대용금평가금액(합계)",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "인출·주문 한도 '대용금액' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "remn_repl_evlta",
+   "kor": "잔고대용평가금액",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 잔고대용평가금액 63,280,000원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "trst_remn_repl_evlta",
+   "kor": "위탁대용잔고평가금액",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 위탁대용잔고평가금액 63,280,000원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "bncr_remn_repl_evlta",
+   "kor": "수익증권대용평가금액",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 수익증권대용평가금액 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "profa_repl",
+   "kor": "위탁증거금대용",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "인출·주문 한도 '증거금 현금·대용' 우측 대용값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "crd_grnta_repl",
+   "kor": "신용보증금대용",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 신용보증금대용 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "crd_grnt_repl",
+   "kor": "신용담보금대용",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 신용담보금대용 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "add_grnt_repl",
+   "kor": "추가담보금대용",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 추가담보금대용 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:substitute_collateral",
+   "f": "rght_repl_amt",
+   "kor": "권리대용금",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 레일 증거금 현금·대용 구성 · 예수금 기준 · 대용 열 권리대용금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "pymn_alow_amt",
+   "kor": "출금가능금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "인출·주문 한도 '출금가능금액' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "wrap_pymn_alow_amt",
+   "kor": "랩출금가능금액",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "메인 KPI 현재 예수금 타일 2줄 '랩 출금가능 0원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "ord_alow_amt",
+   "kor": "주문가능금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "인출·주문 한도 '주문가능금액' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "bncr_buy_alowa",
+   "kor": "수익증권매수가능금액",
+   "layer": "펼침",
+   "board": "3GRO-0",
+   "where": "X1 증거금·보증금 구간별 펼침 · 주문 한도 재원 (메인 2SKU-1 인출·주문 한도 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "20stk_ord_alow_amt",
+   "kor": "20%종목주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 구간별 주문가능 재원 '20%' 값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "30stk_ord_alow_amt",
+   "kor": "30%종목주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 구간별 주문가능 재원 '30%' 값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "40stk_ord_alow_amt",
+   "kor": "40%종목주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 구간별 주문가능 재원 '40%' 값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "100stk_ord_alow_amt",
+   "kor": "100%종목주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 구간별 주문가능 재원 '100%(현금)' 값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "50stk_ord_alow_amt",
+   "kor": "50%종목주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 구간별 주문가능 재원 '50%' 값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00001:withdrawal_and_order_capacity",
+   "f": "60stk_ord_alow_amt",
+   "kor": "60%종목주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 구간별 주문가능 재원 '60%' 값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00004:cash_and_assets",
+   "f": "entr",
+   "kor": "예수금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'현재 예수금' 카드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00004:cash_and_assets",
+   "f": "d2_entra",
+   "kor": "D+2추정예수금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'D+2 예상' 카드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00004:cash_and_assets",
+   "f": "tot_est_amt",
+   "kor": "유가잔고평가액",
+   "layer": null,
+   "board": "133H-2",
+   "where": "상단 지표 '주식 평가액 89,760,240원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00004:cash_and_assets",
+   "f": "aset_evlt_amt",
+   "kor": "예탁자산평가액",
+   "layer": null,
+   "board": "133H-2",
+   "where": "상단 지표 '총자산 124,580,240원'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00004:cash_and_assets",
+   "f": "tot_pur_amt",
+   "kor": "총매입금액",
+   "layer": null,
+   "board": "133H-2",
+   "where": "계좌 평가 '총매입금액' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00004:cash_and_assets",
+   "f": "prsm_dpst_aset_amt",
+   "kor": "추정예탁자산",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'예탁자산 추이' 카드 최신 행(09-01 1억 2,458만)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00004:cash_and_assets",
+   "f": "tot_grnt_sella",
+   "kor": "매도담보대출금",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 대출 잔고 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:cash_and_capacity",
+   "f": "entr",
+   "kor": "예수금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'현재 예수금' 카드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:cash_and_capacity",
+   "f": "entr_d1",
+   "kor": "예수금D+1",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'D+1 예상' 카드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:cash_and_capacity",
+   "f": "entr_d2",
+   "kor": "예수금D+2",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'D+2 예상' 카드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:cash_and_capacity",
+   "f": "pymn_alow_amt",
+   "kor": "출금가능금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'출금가능' 카드 및 인출·주문 한도 '출금가능금액' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:cash_and_capacity",
+   "f": "uncl_stk_amt",
+   "kor": "미수확보금",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 증거금·담보 펼침 · 레일 증거금 현금 재원 / 대용 평가 (메인 2SKU-1 인출·주문 한도 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:cash_and_capacity",
+   "f": "repl_amt",
+   "kor": "대용금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "인출·주문 한도 '대용금액' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:cash_and_capacity",
+   "f": "rght_repl_amt",
+   "kor": "권리대용금",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 증거금·담보 펼침 · 레일 증거금 현금 재원 / 대용 평가 (메인 2SKU-1 인출·주문 한도 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:cash_and_capacity",
+   "f": "ord_alowa",
+   "kor": "주문가능현금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'주문 가능금액 38,420,000원 · 현금 주문 기준' 카드",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:receivables_and_margin",
+   "f": "ch_uncla",
+   "kor": "현금미수금",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:receivables_and_margin",
+   "f": "crd_int_npay_gold",
+   "kor": "신용이자미납금",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:receivables_and_margin",
+   "f": "etc_loana",
+   "kor": "기타대여금",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 부채 그룹 (메인 2SKU-1 부채·미수 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:receivables_and_margin",
+   "f": "nrpy_loan",
+   "kor": "미상환융자금",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 융자·대주 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:receivables_and_margin",
+   "f": "profa_ch",
+   "kor": "증거금현금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'증거금 현금·대용' 좌측 현금값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00005:receivables_and_margin",
+   "f": "repl_profa",
+   "kor": "증거금대용",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'증거금 현금·대용' 우측 대용값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "pred_reu_alowa",
+   "kor": "전일재사용가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 세부 재원 '당일 · 전일 재사용' 우측 전일값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "tdy_reu_alowa",
+   "kor": "금일재사용가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 세부 재원 '당일 · 전일 재사용' 좌측 당일값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "entr",
+   "kor": "예수금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "주문재원 원본 '예수금' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "repl_amt",
+   "kor": "대용금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "주문재원 원본 '대용금액' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "uncla",
+   "kor": "미수금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "주문재원 원본 '미수금' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "ord_pos_repl",
+   "kor": "주문가능대용",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 세부 재원 '현금 · 대용 재원' 우측 대용값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "ord_alowa",
+   "kor": "주문가능현금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'주문 가능금액 · 현금 주문 기준' 카드",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "wthd_alowa",
+   "kor": "인출가능금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "인출·주문 한도 '출금가능금액' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:cash_and_withdrawal_capacity",
+   "f": "nxdy_wthd_alowa",
+   "kor": "익일인출가능금액",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "메인 KPI 출금가능 타일 2줄 '익일 인출 28,940,000원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_20ord_alow_amt",
+   "kor": "증거금20%주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금율별 주문가능 '20%' 값",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_20ord_alowq",
+   "kor": "증거금20%주문가능수량",
+   "layer": "펼침",
+   "board": "3GRO-0",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 20% 칸 1,035주",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_30ord_alow_amt",
+   "kor": "증거금30%주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금율별 주문가능 '30%' 값",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_30ord_alowq",
+   "kor": "증거금30%주문가능수량",
+   "layer": "펼침",
+   "board": "3GRO-0",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 30% 칸 690주",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_40ord_alow_amt",
+   "kor": "증거금40%주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금율별 주문가능 '40%' 값",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_40ord_alowq",
+   "kor": "증거금40%주문가능수량",
+   "layer": "펼침",
+   "board": "3GRO-0",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 40% 칸 517주",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_50ord_alow_amt",
+   "kor": "증거금50%주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금율별 주문가능 '50%' 값",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_50ord_alowq",
+   "kor": "증거금50%주문가능수량",
+   "layer": "펼침",
+   "board": "3GRO-0",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 50% 칸 414주",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_60ord_alow_amt",
+   "kor": "증거금60%주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금율별 주문가능 '60%' 값",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_60ord_alowq",
+   "kor": "증거금60%주문가능수량",
+   "layer": "펼침",
+   "board": "3GRO-0",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 60% 칸 345주",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_rdex_60ord_alow_amt",
+   "kor": "증거금감면60%주문가능금",
+   "layer": "병기",
+   "board": "3GRO-0",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 감면 60% 칸 둘째 줄 주문가능금 56,719,600원",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_rdex_60ord_alowq",
+   "kor": "증거금감면60%주문가능수",
+   "layer": "펼침",
+   "board": "3GRO-0",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 감면 60% 칸 376주",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_100ord_alow_amt",
+   "kor": "증거금100%주문가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금율별 주문가능 '100%(현금)' 값",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:margin_order_capacity",
+   "f": "profa_100ord_alowq",
+   "kor": "증거금100%주문가능수량",
+   "layer": "펼침",
+   "board": "3GRO-0",
+   "where": "X1 · 증거금율 구간별 주문가능 사다리 · 100% 칸 207주",
+   "attributed_here": false,
+   "extra_op": true
+  },
+  {
+   "mapping_id": "detail:kt00010:purchase_settlement",
+   "f": "pur_amt",
+   "kor": "매입금액",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 매매일지 '매수 금액 3,842,000원' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:purchase_settlement",
+   "f": "cmsn",
+   "kor": "수수료",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "'수수료·세금 (당일) -24,600' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:purchase_settlement",
+   "f": "pur_exct_amt",
+   "kor": "매입정산금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '매수 결제 -3,842,000 · D+2 차감' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:purchase_settlement",
+   "f": "d2entra",
+   "kor": "D2추정예수금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'D+2 예상' 카드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00010:purchase_settlement",
+   "f": "profa_rdex_aplc_tp",
+   "kor": "증거금감면적용구분",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "레일 인출·주문 한도 주문증거금 행 칩 '감면 미적용'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_rates",
+   "f": "stk_profa_rt",
+   "kor": "종목증거금율",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "레일 주문증거금 행 2줄 '증거금율 종목 20%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_rates",
+   "f": "profa_rt",
+   "kor": "계좌증거금율",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "레일 주문증거금 행 2줄 '계좌 40%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00011:margin_rates",
+   "f": "aplc_rt",
+   "kor": "적용증거금율",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "레일 주문증거금 행 2줄 '적용 40%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "entr",
+   "kor": "예수금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "주문재원 원본 '예수금' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "repl_amt",
+   "kor": "대용금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "주문재원 원본 '대용금액' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "uncla",
+   "kor": "미수금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "주문재원 원본 '미수금' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "ord_pos_repl",
+   "kor": "주문가능대용",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 세부 재원 '현금 · 대용 재원' 우측 대용값",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "ord_alowa",
+   "kor": "주문가능현금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "'주문 가능금액 · 현금 주문 기준' 카드",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "out_alowa",
+   "kor": "미수가능금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "신용보증금율별(kt00012) 블록 '계좌·미수 재원 62,400,000' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "out_pos_qty",
+   "kor": "미수가능수량",
+   "layer": "펼침",
+   "board": "3GRO-0",
+   "where": "X1 증거금·보증금 구간별 펼침 · 주문 한도 재원 (메인 2SKU-1 인출·주문 한도 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "min_amt",
+   "kor": "미수불가금액",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "레일 미수금 행 2줄 '현금주문 31,240,000원'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00012:account_and_receivable_capacity",
+   "f": "min_qty",
+   "kor": "미수불가수량",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "레일 미수금 행 2줄 '현금주문 … 207주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_rate",
+   "f": "stk_assr_rt",
+   "kor": "종목보증금율",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "레일 증거금 현금·대용 행 2줄 '보증금율 45%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00012:guarantee_rate",
+   "f": "stk_assr_rt_nm",
+   "kor": "종목보증금율명",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "레일 증거금 현금·대용 행 2줄 '등급 45%구간'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00013:cash_resources",
+   "f": "ch_amt",
+   "kor": "현금금액",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 현금·대용 재원 표 · 현금 행 금액 31,240,000원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00013:cash_resources",
+   "f": "ch_profa",
+   "kor": "현금증거금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "인출·주문 한도 '증거금 현금·대용' 좌측 현금값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00013:cash_resources",
+   "f": "use_pos_ch",
+   "kor": "사용가능현금",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 세부 재원 '현금 · 대용 재원' 좌측 31,240,000",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00013:cash_resources",
+   "f": "ch_use_lmtt_amt",
+   "kor": "현금사용제한금액",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 현금·대용 재원 표 · 현금 행 사용제한금액 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00013:cash_resources",
+   "f": "use_pos_ch_fin",
+   "kor": "사용가능현금최종",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 현금·대용 재원 표 · 현금 행 사용가능 최종 31,240,000원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_resources",
+   "f": "repl_amt_amt",
+   "kor": "대용금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "주문재원 원본 '대용금액 18,400,000원' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_resources",
+   "f": "repl_profa",
+   "kor": "대용증거금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "인출·주문 한도 '증거금 현금·대용' 우측 대용값",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_resources",
+   "f": "use_pos_repl",
+   "kor": "사용가능대용",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 세부 재원 '현금 · 대용 재원' 우측 12,800,000",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_resources",
+   "f": "repl_use_lmtt_amt",
+   "kor": "대용사용제한금액",
+   "layer": null,
+   "board": "17F8-2",
+   "where": "증거금 세부 재원 '대용 평가·한도' 우측 한도값 50,000,000",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00013:substitute_resources",
+   "f": "use_pos_repl_fin",
+   "kor": "사용가능대용최종",
+   "layer": "펼침",
+   "board": "3IGR-0",
+   "where": "X2 · 현금·대용 재원 표 · 대용 행 사용가능 최종 63,280,000원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00016:period_flows",
+   "f": "termin_tot_trns",
+   "kor": "기간내총입금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "최근 현금 흐름 '입금 +5,054,300원' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00016:period_flows",
+   "f": "termin_tot_pymn",
+   "kor": "기간내총출금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "최근 현금 흐름 '출금 -1,502,000원' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00016:period_flows",
+   "f": "termin_tot_inq",
+   "kor": "기간내총입고",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 기간 입출고 · 대용매도 밴드 (메인 2SRV-1 성과 요약 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00016:period_flows",
+   "f": "termin_tot_outq",
+   "kor": "기간내총출고",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 기간 입출고 · 대용매도 밴드 (메인 2SRV-1 성과 요약 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00016:period_flows",
+   "f": "futr_repl_sella",
+   "kor": "선물대용매도금액",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 기간 입출고 · 대용매도 밴드 (메인 2SRV-1 성과 요약 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00016:period_flows",
+   "f": "trst_repl_sella",
+   "kor": "위탁대용매도금액",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 기간 입출고 · 대용매도 밴드 (메인 2SRV-1 성과 요약 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "d2_entra",
+   "kor": "D+2추정예수금",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'D+2 예상' 카드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_int_npay_gold",
+   "kor": "신용이자미납금",
+   "layer": "펼침",
+   "board": "3MTJ-0",
+   "where": "레일 ① 잔여 부채 1행 · 신용이자미납금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "etc_loana",
+   "kor": "기타대여금",
+   "layer": "펼침",
+   "board": "3MTJ-0",
+   "where": "레일 ① 잔여 부채 2행 · 기타대여금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "gnrl_stk_evlt_amt_d2",
+   "kor": "일반주식평가금액D+2",
+   "layer": "직접",
+   "board": "3MTJ-0",
+   "where": "좌 ② 'D+2 확정 자산' 표 1행 D+2 금액 · 일반주식평가금액 89,760,240원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "dpst_grnt_use_amt_d2",
+   "kor": "예탁담보대출금D+2",
+   "layer": "직접",
+   "board": "3MTJ-0",
+   "where": "좌 ② 'D+2 확정 자산' 표 2행 D+2 금액 · 예탁담보대출금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_stk_evlt_amt_d2",
+   "kor": "예탁담보주식평가금액D+2",
+   "layer": "직접",
+   "board": "3MTJ-0",
+   "where": "좌 ② 'D+2 확정 자산' 표 3행 D+2 금액 · 예탁담보주식평가금액 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_loan_d2",
+   "kor": "신용융자금D+2",
+   "layer": "직접",
+   "board": "3MTJ-0",
+   "where": "좌 ② 'D+2 확정 자산' 표 4행 D+2 금액 · 신용융자금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_loan_evlta_d2",
+   "kor": "신용융자평가금D+2",
+   "layer": "직접",
+   "board": "3MTJ-0",
+   "where": "좌 ② 'D+2 확정 자산' 표 5행 D+2 금액 · 신용융자평가금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_ls_grnt_d2",
+   "kor": "신용대주담보금D+2",
+   "layer": "직접",
+   "board": "3MTJ-0",
+   "where": "좌 ② 'D+2 확정 자산' 표 6행 D+2 금액 · 신용대주담보금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_ls_evlta_d2",
+   "kor": "신용대주평가금D+2",
+   "layer": "직접",
+   "board": "3MTJ-0",
+   "where": "좌 ② 'D+2 확정 자산' 표 7행 D+2 금액 · 신용대주평가금 0원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "ina_amt",
+   "kor": "입금금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "최근 현금 흐름 '입금' 행 및 결제 표 '이체 입금 +5,000,000'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "outa",
+   "kor": "출금금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "최근 현금 흐름 '출금 -1,502,000원' 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "inq_amt",
+   "kor": "입고금액",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "특수예수금·외화 펼침 · 레일 ① 특수예수금 · 증권 입출고 (메인 2SKU-1 최근 현금 흐름 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "outq_amt",
+   "kor": "출고금액",
+   "layer": "펼침",
+   "board": "3NVG-0",
+   "where": "특수예수금·외화 펼침 · 레일 ① 특수예수금 · 증권 입출고 (메인 2SKU-1 최근 현금 흐름 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "sell_amt",
+   "kor": "매도금액",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 매매일지 '매도 금액 12,946,000원' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "buy_amt",
+   "kor": "매수금액",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 매매일지 '매수 금액 3,842,000원' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "cmsn",
+   "kor": "수수료",
+   "layer": null,
+   "board": "2SRV-1",
+   "where": "오늘 매매일지 '매매 비용 -24,600원' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "tax",
+   "kor": "세금",
+   "layer": "병기",
+   "board": "2SKU-1",
+   "where": "거래내역 수수료·제세금 행 금액 셀 2줄 '세금 -20,720'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "stk_pur_cptal_loan_amt",
+   "kor": "주식매입자금대출금",
+   "layer": "펼침",
+   "board": "3UTA-0",
+   "where": "부채·미수·연체 상세 대출 잔고 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "rp_evlt_amt",
+   "kor": "RP평가금액",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "bd_evlt_amt",
+   "kor": "채권평가금액",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "elsevlt_amt",
+   "kor": "ELS평가금액",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "crd_int_amt",
+   "kor": "신용이자금액",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "sel_prica_grnt_loan_int_amt_amt",
+   "kor": "매도대금담보대출이자금액",
+   "layer": "펼침",
+   "board": "3K7K-0",
+   "where": "이달 기초·기말 구성 펼침 · 레일 기타 자산·수익 낱값 (메인 2SKU-1 기타 자산·수익 영값 묶음 행 경유)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00017:other_assets_and_income",
+   "f": "dvida_amt",
+   "kor": "배당금액",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "결제 표 '배당금 입금 +54,300' 행 및 '기타 수익 배당 +54,300'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00018:portfolio_summary",
+   "f": "tot_pur_amt",
+   "kor": "총매입금액",
+   "layer": null,
+   "board": "133H-2",
+   "where": "계좌 평가 '총매입금액 85,519,340원' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00018:portfolio_summary",
+   "f": "tot_evlt_amt",
+   "kor": "총평가금액",
+   "layer": null,
+   "board": "133H-2",
+   "where": "계좌 평가 '총평가금액 89,760,240원' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00018:portfolio_summary",
+   "f": "tot_evlt_pl",
+   "kor": "총평가손익금액",
+   "layer": null,
+   "board": "133H-2",
+   "where": "계좌 평가 '총평가손익 +4,240,900원' 타일",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00018:portfolio_summary",
+   "f": "tot_prft_rt",
+   "kor": "총수익률(%)",
+   "layer": null,
+   "board": "2SCE-1",
+   "where": "배분 패널 '수익률 +4.96%' 행",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:kt00018:portfolio_summary",
+   "f": "prsm_dpst_aset_amt",
+   "kor": "추정예탁자산",
+   "layer": null,
+   "board": "2SKU-1",
+   "where": "'예탁자산 추이' 카드 최신 행(09-01 1억 2,458만)",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 106
+}

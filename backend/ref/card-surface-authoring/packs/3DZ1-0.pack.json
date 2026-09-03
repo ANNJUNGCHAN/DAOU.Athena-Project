@@ -1,0 +1,355 @@
+{
+ "board_id": "3DZ1-0",
+ "card_id": "CC-03",
+ "name": "CC-03 / R08-X · ELW 바스켓·만기평가",
+ "operation_refs": [
+  "detail:ka30012:administration",
+  "detail:ka30012:evaluation_extrema",
+  "detail:ka30012:underlying_basket",
+  "detail:ka30012:valuation_and_rights"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "detail:ka30012:administration",
+   "f": "elwinvt_ix_comput",
+   "kor": "ELW투자지표산출",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션③ 권리·산출 기준 · '투자지표 산출' 3칸 = 실시간 이론가 / 변동성 22.4% / 무위험금리 3.15%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:administration",
+   "f": "elwpay_agnt",
+   "kor": "ELW지급대리인",
+   "layer": "병기",
+   "board": "15P5-2",
+   "where": "계약·일정 발행기관 행 아래 병기 '지급대리인 KB증권'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:administration",
+   "f": "elwappr_way",
+   "kor": "ELW결재방법",
+   "layer": "병기",
+   "board": "15P5-2",
+   "where": "계약·일정 권리행사방식 행 아래 병기 '결제방법 현금결제'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:administration",
+   "f": "elwrght_exec_way",
+   "kor": "ELW권리행사방식",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "권리행사방식 자동행사",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:administration",
+   "f": "elwpblicte_orgn",
+   "kor": "ELW발행기관",
+   "layer": "직접",
+   "board": "15P5-2",
+   "where": "계약·일정 블록 '발행기관 KB증권' 행 신설",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_extrema",
+   "f": "all_hgst_pric",
+   "kor": "전체최고가",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "기간 최고·최저 슬롯(평가 전 — 표기)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_extrema",
+   "f": "all_lwst_pric",
+   "kor": "전체최저가",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "기간 최고·최저 슬롯(평가 전 — 표기)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_extrema",
+   "f": "imaf_hgst_pric",
+   "kor": "직후최고가",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션② 만기 평가 구간 · '직후' 행 최고가 셀 = 평가 전",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_extrema",
+   "f": "imaf_lwst_pric",
+   "kor": "직후최저가",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션② 만기 평가 구간 · '직후' 행 최저가 셀 = 평가 전",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_extrema",
+   "f": "sndhalf_mrkt_hgst_pric",
+   "kor": "후반장최고가",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션② 만기 평가 구간 · '후반장' 행 최고가 셀 = 평가 전",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_extrema",
+   "f": "sndhalf_mrkt_lwst_pric",
+   "kor": "후반장최저가",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션② 만기 평가 구간 · '후반장' 행 최저가 셀 = 평가 전",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_1",
+   "kor": "기초자산1",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "기초자산 삼성전자",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_comp_rt_1",
+   "kor": "기초자산구성비율1",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "기초자산 100%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_2",
+   "kor": "기초자산2",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션① 기초자산 바스켓 · 2행 '기초자산 · 코드' 셀 = 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_comp_rt_2",
+   "kor": "기초자산구성비율2",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션① 기초자산 바스켓 · 2행 '구성비율' 셀 = 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_3",
+   "kor": "기초자산3",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션① 기초자산 바스켓 · 3행 '기초자산 · 코드' 셀 = 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_comp_rt_3",
+   "kor": "기초자산구성비율3",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션① 기초자산 바스켓 · 3행 '구성비율' 셀 = 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_4",
+   "kor": "기초자산4",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션① 기초자산 바스켓 · 4행 '기초자산 · 코드' 셀 = 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_comp_rt_4",
+   "kor": "기초자산구성비율4",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션① 기초자산 바스켓 · 4행 '구성비율' 셀 = 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_5",
+   "kor": "기초자산5",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션① 기초자산 바스켓 · 5행 '기초자산 · 코드' 셀 = 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_comp_rt_5",
+   "kor": "기초자산구성비율5",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션① 기초자산 바스켓 · 5행 '구성비율' 셀 = 해당 없음",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwrght_cntn",
+   "kor": "ELW권리내용",
+   "layer": "펼침",
+   "board": "3DZ1-0",
+   "where": "섹션③ 권리·산출 기준 · '권리내용' 값 셀 = 기초자산 종가 − 행사가 150,000원, 최소 0원",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwexpr_evlt_pric",
+   "kor": "ELW만기평가가격",
+   "layer": "직접",
+   "board": "15P5-2",
+   "where": "계약·일정 블록 '만기평가가격 · 평가 전' 행 신설",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwtheory_pric",
+   "kor": "ELW이론가",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "이론가 1,210원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "dispty_rt",
+   "kor": "괴리율",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "괴리율 +2.89%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwinnr_vltl",
+   "kor": "ELW내재변동성",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "IV 26.8%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "exp_rght_pric",
+   "kor": "예상권리가",
+   "layer": "직접",
+   "board": "15P5-2",
+   "where": "계약 8칸 그리드 '예상권리가 850원' 칸 신설",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwpl_qutr_rt",
+   "kor": "ELW손익분기율",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "손익분기율 +12.1%",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwexec_pric",
+   "kor": "ELW행사가",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "행사가 150,000원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwcnvt_rt",
+   "kor": "ELW전환비율",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "전환비율 0.065",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwcmpn_rt",
+   "kor": "ELW보상율",
+   "layer": "병기",
+   "board": "15P5-2",
+   "where": "민감도 하단 mono 스트립 손익분기율 아래 병기 '보상율 해당 없음'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwpric_rising_part_rt",
+   "kor": "ELW가격상승참여율",
+   "layer": "병기",
+   "board": "15P5-2",
+   "where": "민감도 하단 mono 스트립 전환비율 아래 병기 '가격상승참여율 100%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwrght_type",
+   "kor": "ELW권리유형",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "권리유형 콜",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwsrvive_dys",
+   "kor": "ELW잔존일수",
+   "layer": null,
+   "board": "15P5-2",
+   "where": "잔존일수 17일",
+   "attributed_here": false,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 14
+}

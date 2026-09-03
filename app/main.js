@@ -843,6 +843,8 @@ app.on('will-quit', () => { if (routineFeed) routineFeed.stop(); });
 const chartRealtime = require('./lib/main/chart-realtime');
 const orderbookRealtime = require('./lib/main/orderbook-realtime');
 const integratedCardRealtime = require('./lib/main/integrated-card-realtime');
+// 보드 슬롯 하이드레이션 — 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다.
+const boardHydrate = require('./lib/main/board-hydrate');
 const chartSeries = require('./lib/main/chart-series');
 // 백테스트 REST 프록시(P4, backtest-mode-plan.md §8.1) — routineHttp와 같은 원칙이지만
 // main.js 밖 순수 함수라 단위 테스트(backtest-bridge.test.js)를 직접 붙일 수 있다.
@@ -1991,6 +1993,25 @@ ipcMain.handle('athena:integrated-card-realtime-command', async (event, payload 
     payload.arguments || {},
     payload.accountId || '',
   );
+});
+
+// 보드 슬롯 하이드레이션(읽기 전용). 봉투의 surface_contract.unbound_slots가 남았을
+// 때만 렌더러가 부른다. 엔드포인트가 아직 없으면 status:'unavailable'이 오고
+// 화면은 결측어를 그대로 둔다 — 없는 값을 지어내지 않는다.
+ipcMain.handle('athena:canvas-board-hydrate', async (event, payload = {}) => {
+  if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) {
+    return { ok: false, status: 'error', error: 'invalid renderer' };
+  }
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') {
+    return { ok: false, status: 'unavailable' };
+  }
+  return boardHydrate.hydrateBoard({
+    backendBase: BACKEND_HTTP_BASE,
+    fetchImpl: fetch,
+    boardId: payload.boardId || payload.board_id,
+    target: payload.target,
+    account: payload.account,
+  });
 });
 
 function emitRestReceiptAndWaitForPaint(text, { timeoutMs = 3000 } = {}) {

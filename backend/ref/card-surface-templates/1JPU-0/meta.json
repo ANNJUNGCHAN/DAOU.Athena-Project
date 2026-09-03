@@ -1,0 +1,13 @@
+{
+  "board_id": "1JPU-0",
+  "name": "A04 · 호가 정본 — 실시간 통합 호가",
+  "card_id": "CC-04",
+  "width": 1440,
+  "height": 960,
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "saved_at": "2026-09-02T11:18:02Z"
+}

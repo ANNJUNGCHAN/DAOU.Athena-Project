@@ -1,0 +1,490 @@
+Frame "CC-03 / R01-T4-6 · 순위 — 매물대집중" (30O1-0) 1440×1120
+  Frame "Instrument Root · 현재시세" (30O2-0) 1440×960
+    Frame "Instrument Card Surface" (30O3-0) 1360×1040
+      Frame "Instrument Header" (30T8-0) 1358×96
+        Frame "Frame" (30TO-0) 420×69
+          Frame "Frame" (30TT-0) 420×34
+            Text "주식 순위" (30TX-0) 122×34 "주식 순위"
+            Text "KRX 전체 · 가격대별 매물 집중" (30TW-0) 185×16 "KRX 전체 · 가격대별 매물 집중"
+            Frame "Frame" (30TU-0) 89×28
+              Text "조회 스냅샷" (30TV-0) 65×16 "조회 스냅샷"
+          Frame "Frame" (30TP-0) 420×28
+            Text "평균 비중 11.0%" (30TS-0) 181×28 "평균 비중 11.0%"
+            Text "최대 18.4%" (30TR-0) 73×16 "최대 18.4%"
+            Text "09:42:18 조회" (30TQ-0) 74×16 "09:42:18 조회"
+        Frame "Frame" (30T9-0) 474×40
+          Frame "Frame" (30TM-0) 80×40
+            Text "현재시세" (30TN-0) 52×16 "현재시세"
+          Frame "Frame" (30TK-0) 54×40
+            Text "차트" (30TL-0) 26×16 "차트"
+          Frame "Frame" (30TI-0) 80×40
+            Text "기업정보" (30TJ-0) 52×16 "기업정보"
+          Frame "Frame" (30TG-0) 49×40
+            Text "ETF" (30TH-0) 21×16 "ETF"
+          Frame "Frame" (30TE-0) 54×40
+            Text "ELW" (30TF-0) 26×16 "ELW"
+          Frame "Frame" (30TC-0) 67×40
+            Text "금현물" (30TD-0) 39×16 "금현물"
+          Frame "Frame" (30TA-0) 54×40
+            Text "순위" (30TB-0) 26×16 "순위"
+      Frame "Quote and Valuation Strip" (30SO-0) 1358×96
+        Frame "Frame" (30T5-0) 718×78
+          Text "정렬 기준" (30T7-0) 661×16 "정렬 기준"
+          Text "집중 비중 큰 순" (30T6-0) 661×22 "집중 비중 큰 순"
+        Frame "Frame" (30T1-0) 190×78
+          Text "표시 범위" (30T4-0) 141×16 "표시 범위"
+          Text "상위 50" (30T3-0) 141×30 "상위 50"
+          Text "집중 비중 순" (30T2-0) 141×16 "집중 비중 순"
+        Frame "Frame" (30SX-0) 150×78
+          Text "평균 비중" (30T0-0) 105×16 "평균 비중"
+          Text "11.0%" (30SZ-0) 105×30 "11.0%"
+          Text "표시 종목 기준" (30SY-0) 105×16 "표시 종목 기준"
+        Frame "Frame" (30ST-0) 150×78
+          Text "최대 비중" (30SW-0) 105×16 "최대 비중"
+          Text "18.4%" (30SV-0) 105×30 "18.4%"
+          Text "1위 종목" (30SU-0) 105×16 "1위 종목"
+        Frame "Frame" (30SP-0) 150×78
+          Text "집계 기간" (30SS-0) 106×16 "집계 기간"
+          Text "3개월" (30SR-0) 106×30 "3개월"
+          Text "일봉 기준" (30SQ-0) 106×16 "일봉 기준"
+      Frame "Chart Workspace" (30O7-0) 1358×848
+        Frame "Quote Detail Mount" (30PK-0) 1000×848
+          Frame "Frame" (30RS-0) 943×94
+            Frame "Frame" (30S4-0) 907×30
+              Frame "Frame" (30SD-0) 430×30
+                Frame "Frame" (30SM-0) 74×30
+                  Text "신고저가" (30SN-0) 48×16 "신고저가"
+                Frame "Frame" (30SK-0) 74×30
+                  Text "상하한가" (30SL-0) 48×16 "상하한가"
+                Frame "Frame" (30SI-0) 86×30
+                  Text "고저가근접" (30SJ-0) 60×16 "고저가근접"
+                Frame "Frame" (30SG-0) 86×30
+                  Text "가격급등락" (30SH-0) 60×16 "가격급등락"
+                Frame "Frame" (30SE-0) 86×30
+                  Text "거래량갱신" (30SF-0) 60×16 "거래량갱신"
+              Frame "Frame" (30S5-0) 179×28
+                Text "범위" (30SC-0) 22×16 "범위"
+                Frame "Frame" (30SA-0) 48×28
+                  Text "주식" (30SB-0) 24×16 "주식"
+                Frame "Frame" (30S8-0) 43×28
+                  Text "ETF" (30S9-0) 19×16 "ETF"
+                Frame "Frame" (30S6-0) 48×28
+                  Text "ELW" (30S7-0) 24×16 "ELW"
+            Frame "Frame" (30RT-0) 907×30
+              Frame "Frame" (30S2-0) 84×28
+                Text "매물대집중" (30S3-0) 60×16 "매물대집중"
+              Frame "Frame" (30S0-0) 75×30
+                Text "고저 PER" (30S1-0) 49×16 "고저 PER"
+              Frame "Frame" (30RY-0) 103×30
+                Text "시가대비 등락" (30RZ-0) 77×16 "시가대비 등락"
+              Frame "Frame" (30RW-0) 66×30
+                Text "VI 발동" (30RX-0) 40×16 "VI 발동"
+              Frame "Frame" (30RU-0) 117×30
+                Text "당일·전일 체결량" (30RV-0) 91×16 "당일·전일 체결량"
+              Text "목록 상태" (3RJS-0) 432×16 "전체 50건 · 19건 표시"
+          Frame "순위 표" (3RJU-0) 943×714
+            Frame "열 머리" (3RJV-0) 943×30
+              Text "순위" (3RJW-0) 40×14 "순위"
+              Text "종목" (3RJX-0) 267×14 "종목"
+              Text "현재가" (3RJY-0) 120×14 "현재가"
+              Text "집중 가격대" (3RJZ-0) 152×14 "집중 가격대"
+              Text "매물량 · 비중" (3RK0-0) 104×14 "매물량 · 비중"
+              Text "현재 거래량" (3RK1-0) 104×14 "현재 거래량"
+              Text "분포" (3RK2-0) 96×14 "분포"
+              Text "시장" (3RK3-0) 60×14 "시장"
+            Frame "1 한미반도체" (3RK4-0) 943×36
+              Text "1" (3RK5-0) 40×16 "1"
+              Frame "Frame" (3RK6-0) 267×30
+                Text "한미반도체" (3RK7-0) 267×16 "한미반도체"
+                Text "042700" (3RK8-0) 267×13 "042700"
+              Frame "Frame" (3RK9-0) 120×30
+                Text "197,400" (3RKA-0) 55×16 "197,400"
+                Text "+7,900 · +4.18%" (3RKB-0) 99×13 "+7,900 · +4.18%"
+              Text "195,000 ~ 197,000" (3RKC-0) 152×16 "195,000 ~ 197,000"
+              Frame "Frame" (3RKD-0) 104×30
+                Text "418만주" (3RKE-0) 50×16 "418만주"
+                Text "비중 18.4%" (3RKF-0) 62×13 "비중 18.4%"
+              Frame "Frame" (3RKG-0) 104×30
+                Text "320만주" (3RKH-0) 46×16 "320만주"
+                Text "6,317억" (3RKI-0) 44×13 "6,317억"
+              Frame "Frame" (3RKJ-0) 96×6
+                Frame "Frame" (3RKK-0) 84×6
+                  Rectangle "Rectangle" (3RKL-0) 84×6
+              Text "코스피" (3RKM-0) 60×16 "코스피"
+            Frame "2 HD현대일렉트릭" (3RKN-0) 943×36
+              Text "2" (3RKO-0) 40×16 "2"
+              Frame "Frame" (3RKP-0) 267×30
+                Text "HD현대일렉트릭" (3RKQ-0) 267×16 "HD현대일렉트릭"
+                Text "267260" (3RKR-0) 267×13 "267260"
+              Frame "Frame" (3RKS-0) 120×30
+                Text "412,500" (3RKT-0) 55×16 "412,500"
+                Text "+11,500 · +2.86%" (3RKU-0) 106×13 "+11,500 · +2.86%"
+              Text "405,000 ~ 409,000" (3RKV-0) 152×16 "405,000 ~ 409,000"
+              Frame "Frame" (3RKW-0) 104×30
+                Text "285만주" (3RKX-0) 50×16 "285만주"
+                Text "비중 16.9%" (3RKY-0) 62×13 "비중 16.9%"
+              Frame "Frame" (3RKZ-0) 104×30
+                Text "80만주" (3RL0-0) 39×16 "80만주"
+                Text "3,300억" (3RL1-0) 44×13 "3,300억"
+              Frame "Frame" (3RL2-0) 96×6
+                Frame "Frame" (3RL3-0) 84×6
+                  Rectangle "Rectangle" (3RL4-0) 77×6
+              Text "코스피" (3RL5-0) 60×16 "코스피"
+            Frame "3 알테오젠" (3RL6-0) 943×36
+              Text "3" (3RL7-0) 40×16 "3"
+              Frame "Frame" (3RL8-0) 267×30
+                Text "알테오젠" (3RL9-0) 267×16 "알테오젠"
+                Text "196170" (3RLA-0) 267×13 "196170"
+              Frame "Frame" (3RLB-0) 120×30
+                Text "391,000" (3RLC-0) 55×16 "391,000"
+                Text "+88,200 · +29.12%" (3RLD-0) 113×13 "+88,200 · +29.12%"
+              Text "398,000 ~ 402,000" (3RLE-0) 152×16 "398,000 ~ 402,000"
+              Frame "Frame" (3RLF-0) 104×30
+                Text "242만주" (3RLG-0) 50×16 "242만주"
+                Text "비중 15.2%" (3RLH-0) 62×13 "비중 15.2%"
+              Frame "Frame" (3RLI-0) 104×30
+                Text "110만주" (3RLJ-0) 46×16 "110만주"
+                Text "4,301억" (3RLK-0) 44×13 "4,301억"
+              Frame "Frame" (3RLL-0) 96×6
+                Frame "Frame" (3RLM-0) 84×6
+                  Rectangle "Rectangle" (3RLN-0) 69×6
+              Text "코스닥" (3RLO-0) 60×16 "코스닥"
+            Frame "4 삼양식품" (3RLP-0) 943×36
+              Text "4" (3RLQ-0) 40×16 "4"
+              Frame "Frame" (3RLR-0) 267×30
+                Text "삼양식품" (3RLS-0) 267×16 "삼양식품"
+                Text "003230" (3RLT-0) 267×13 "003230"
+              Frame "Frame" (3RLU-0) 120×30
+                Text "745,000" (3RLV-0) 55×16 "745,000"
+                Text "+167,600 · +29.03%" (3RLW-0) 119×13 "+167,600 · +29.03%"
+              Text "752,000 ~ 760,000" (3RLX-0) 152×16 "752,000 ~ 760,000"
+              Frame "Frame" (3RLY-0) 104×30
+                Text "86만주" (3RLZ-0) 42×16 "86만주"
+                Text "비중 14.1%" (3RM0-0) 62×13 "비중 14.1%"
+              Frame "Frame" (3RM1-0) 104×30
+                Text "20만주" (3RM2-0) 39×16 "20만주"
+                Text "1,490억" (3RM3-0) 44×13 "1,490억"
+              Frame "Frame" (3RM4-0) 96×6
+                Frame "Frame" (3RM5-0) 84×6
+                  Rectangle "Rectangle" (3RM6-0) 64×6
+              Text "코스피" (3RM7-0) 60×16 "코스피"
+            Frame "5 현대로템" (3RM8-0) 943×36
+              Text "5" (3RM9-0) 40×16 "5"
+              Frame "Frame" (3RMA-0) 267×30
+                Text "현대로템" (3RMB-0) 267×16 "현대로템"
+                Text "064350" (3RMC-0) 267×13 "064350"
+              Frame "Frame" (3RMD-0) 120×30
+                Text "128,900" (3RME-0) 55×16 "128,900"
+                Text "+29,000 · +29.03%" (3RMF-0) 113×13 "+29,000 · +29.03%"
+              Text "126,500 ~ 128,000" (3RMG-0) 152×16 "126,500 ~ 128,000"
+              Frame "Frame" (3RMH-0) 104×30
+                Text "512만주" (3RMI-0) 50×16 "512만주"
+                Text "비중 13.3%" (3RMJ-0) 62×13 "비중 13.3%"
+              Frame "Frame" (3RMK-0) 104×30
+                Text "240만주" (3RML-0) 46×16 "240만주"
+                Text "3,094억" (3RMM-0) 44×13 "3,094억"
+              Frame "Frame" (3RMN-0) 96×6
+                Frame "Frame" (3RMO-0) 84×6
+                  Rectangle "Rectangle" (3RMP-0) 61×6
+              Text "코스피" (3RMQ-0) 60×16 "코스피"
+            Frame "6 LS일렉트릭" (3RMR-0) 943×36
+              Text "6" (3RMS-0) 40×16 "6"
+              Frame "Frame" (3RMT-0) 267×30
+                Text "LS일렉트릭" (3RMU-0) 267×16 "LS일렉트릭"
+                Text "010120" (3RMV-0) 267×13 "010120"
+              Frame "Frame" (3RMW-0) 120×30
+                Text "289,500" (3RMX-0) 55×16 "289,500"
+                Text "+4,000 · +1.40%" (3RMY-0) 99×13 "+4,000 · +1.40%"
+              Text "292,000 ~ 295,000" (3RMZ-0) 152×16 "292,000 ~ 295,000"
+              Frame "Frame" (3RN0-0) 104×30
+                Text "194만주" (3RN1-0) 50×16 "194만주"
+                Text "비중 12.6%" (3RN2-0) 62×13 "비중 12.6%"
+              Frame "Frame" (3RN3-0) 104×30
+                Text "60만주" (3RN4-0) 39×16 "60만주"
+                Text "1,737억" (3RN5-0) 44×13 "1,737억"
+              Frame "Frame" (3RN6-0) 96×6
+                Frame "Frame" (3RN7-0) 84×6
+                  Rectangle "Rectangle" (3RN8-0) 58×6
+              Text "코스피" (3RN9-0) 60×16 "코스피"
+            Frame "7 롯데케미칼" (3RNA-0) 943×36
+              Text "7" (3RNB-0) 40×16 "7"
+              Frame "Frame" (3RNC-0) 267×30
+                Text "롯데케미칼" (3RND-0) 267×16 "롯데케미칼"
+                Text "011170" (3RNE-0) 267×13 "011170"
+              Frame "Frame" (3RNF-0) 120×30
+                Text "61,200" (3RNG-0) 47×16 "61,200"
+                Text "-2,000 · -3.16%" (3RNH-0) 99×13 "-2,000 · -3.16%"
+              Text "62,400 ~ 63,200" (3RNI-0) 152×16 "62,400 ~ 63,200"
+              Frame "Frame" (3RNJ-0) 104×30
+                Text "321만주" (3RNK-0) 50×16 "321만주"
+                Text "비중 11.8%" (3RNL-0) 62×13 "비중 11.8%"
+              Frame "Frame" (3RNM-0) 104×30
+                Text "90만주" (3RNN-0) 39×16 "90만주"
+                Text "551억" (3RNO-0) 31×13 "551억"
+              Frame "Frame" (3RNP-0) 96×6
+                Frame "Frame" (3RNQ-0) 84×6
+                  Rectangle "Rectangle" (3RNR-0) 54×6
+              Text "코스피" (3RNS-0) 60×16 "코스피"
+            Frame "8 이마트" (3RNT-0) 943×36
+              Text "8" (3RNU-0) 40×16 "8"
+              Frame "Frame" (3RNV-0) 267×30
+                Text "이마트" (3RNW-0) 267×16 "이마트"
+                Text "139480" (3RNX-0) 267×13 "139480"
+              Frame "Frame" (3RNY-0) 120×30
+                Text "52,300" (3RNZ-0) 47×16 "52,300"
+                Text "-21,400 · -29.04%" (3RO0-0) 113×13 "-21,400 · -29.04%"
+              Text "51,500 ~ 52,000" (3RO1-0) 152×16 "51,500 ~ 52,000"
+              Frame "Frame" (3RO2-0) 104×30
+                Text "176만주" (3RO3-0) 50×16 "176만주"
+                Text "비중 10.9%" (3RO4-0) 62×13 "비중 10.9%"
+              Frame "Frame" (3RO5-0) 104×30
+                Text "40만주" (3RO6-0) 39×16 "40만주"
+                Text "209억" (3RO7-0) 31×13 "209억"
+              Frame "Frame" (3RO8-0) 96×6
+                Frame "Frame" (3RO9-0) 84×6
+                  Rectangle "Rectangle" (3ROA-0) 50×6
+              Text "코스피" (3ROB-0) 60×16 "코스피"
+            Frame "9 실리콘투" (3ROC-0) 943×36
+              Text "9" (3ROD-0) 40×16 "9"
+              Frame "Frame" (3ROE-0) 267×30
+                Text "실리콘투" (3ROF-0) 267×16 "실리콘투"
+                Text "257720" (3ROG-0) 267×13 "257720"
+              Frame "Frame" (3ROH-0) 120×30
+                Text "58,900" (3ROI-0) 47×16 "58,900"
+                Text "+13,530 · +29.81%" (3ROJ-0) 113×13 "+13,530 · +29.81%"
+              Text "56,000 ~ 57,500" (3ROK-0) 152×16 "56,000 ~ 57,500"
+              Frame "Frame" (3ROL-0) 104×30
+                Text "288만주" (3ROM-0) 50×16 "288만주"
+                Text "비중 10.4%" (3RON-0) 62×13 "비중 10.4%"
+              Frame "Frame" (3ROO-0) 104×30
+                Text "316만주" (3ROP-0) 46×16 "316만주"
+                Text "1,861억" (3ROQ-0) 44×13 "1,861억"
+              Frame "Frame" (3ROR-0) 96×6
+                Frame "Frame" (3ROS-0) 84×6
+                  Rectangle "Rectangle" (3ROT-0) 47×6
+              Text "코스닥" (3ROU-0) 60×16 "코스닥"
+            Frame "10 하나마이크론" (3ROV-0) 943×36
+              Text "10" (3ROW-0) 40×16 "10"
+              Frame "Frame" (3ROX-0) 267×30
+                Text "하나마이크론" (3ROY-0) 267×16 "하나마이크론"
+                Text "067310" (3ROZ-0) 267×13 "067310"
+              Frame "Frame" (3RP0-0) 120×30
+                Text "27,850" (3RP1-0) 47×16 "27,850"
+                Text "+6,320 · +29.35%" (3RP2-0) 106×13 "+6,320 · +29.35%"
+              Text "26,500 ~ 27,200" (3RP3-0) 152×16 "26,500 ~ 27,200"
+              Frame "Frame" (3RP4-0) 104×30
+                Text "462만주" (3RP5-0) 50×16 "462만주"
+                Text "비중 10.1%" (3RP6-0) 62×13 "비중 10.1%"
+              Frame "Frame" (3RP7-0) 104×30
+                Text "508만주" (3RP8-0) 46×16 "508만주"
+                Text "1,415억" (3RP9-0) 44×13 "1,415억"
+              Frame "Frame" (3RPA-0) 96×6
+                Frame "Frame" (3RPB-0) 84×6
+                  Rectangle "Rectangle" (3RPC-0) 46×6
+              Text "코스닥" (3RPD-0) 60×16 "코스닥"
+            Frame "11 동진쎄미켐" (3RPE-0) 943×36
+              Text "11" (3RPF-0) 40×16 "11"
+              Frame "Frame" (3RPG-0) 267×30
+                Text "동진쎄미켐" (3RPH-0) 267×16 "동진쎄미켐"
+                Text "005290" (3RPI-0) 267×13 "005290"
+              Frame "Frame" (3RPJ-0) 120×30
+                Text "42,150" (3RPK-0) 47×16 "42,150"
+                Text "+9,530 · +29.22%" (3RPL-0) 106×13 "+9,530 · +29.22%"
+              Text "40,500 ~ 41,400" (3RPM-0) 152×16 "40,500 ~ 41,400"
+              Frame "Frame" (3RPN-0) 104×30
+                Text "196만주" (3RPO-0) 50×16 "196만주"
+                Text "비중 9.8%" (3RPP-0) 55×13 "비중 9.8%"
+              Frame "Frame" (3RPQ-0) 104×30
+                Text "214만주" (3RPR-0) 46×16 "214만주"
+                Text "902억" (3RPS-0) 31×13 "902억"
+              Frame "Frame" (3RPT-0) 96×6
+                Frame "Frame" (3RPU-0) 84×6
+                  Rectangle "Rectangle" (3RPV-0) 45×6
+              Text "코스닥" (3RPW-0) 60×16 "코스닥"
+            Frame "12 주성엔지니어링" (3RPX-0) 943×36
+              Text "12" (3RPY-0) 40×16 "12"
+              Frame "Frame" (3RPZ-0) 267×30
+                Text "주성엔지니어링" (3RQ0-0) 267×16 "주성엔지니어링"
+                Text "036930" (3RQ1-0) 267×13 "036930"
+              Frame "Frame" (3RQ2-0) 120×30
+                Text "38,700" (3RQ3-0) 47×16 "38,700"
+                Text "+8,730 · +29.13%" (3RQ4-0) 106×13 "+8,730 · +29.13%"
+              Text "37,200 ~ 38,100" (3RQ5-0) 152×16 "37,200 ~ 38,100"
+              Frame "Frame" (3RQ6-0) 104×30
+                Text "164만주" (3RQ7-0) 50×16 "164만주"
+                Text "비중 9.4%" (3RQ8-0) 55×13 "비중 9.4%"
+              Frame "Frame" (3RQ9-0) 104×30
+                Text "176만주" (3RQA-0) 46×16 "176만주"
+                Text "681억" (3RQB-0) 31×13 "681억"
+              Frame "Frame" (3RQC-0) 96×6
+                Frame "Frame" (3RQD-0) 84×6
+                  Rectangle "Rectangle" (3RQE-0) 43×6
+              Text "코스닥" (3RQF-0) 60×16 "코스닥"
+            Frame "13 원익IPS" (3RQG-0) 943×36
+              Text "13" (3RQH-0) 40×16 "13"
+              Frame "Frame" (3RQI-0) 267×30
+                Text "원익IPS" (3RQJ-0) 267×16 "원익IPS"
+                Text "240810" (3RQK-0) 267×13 "240810"
+              Frame "Frame" (3RQL-0) 120×30
+                Text "41,300" (3RQM-0) 47×16 "41,300"
+                Text "+9,300 · +29.06%" (3RQN-0) 106×13 "+9,300 · +29.06%"
+              Text "39,800 ~ 40,600" (3RQO-0) 152×16 "39,800 ~ 40,600"
+              Frame "Frame" (3RQP-0) 104×30
+                Text "138만주" (3RQQ-0) 50×16 "138만주"
+                Text "비중 9.1%" (3RQR-0) 55×13 "비중 9.1%"
+              Frame "Frame" (3RQS-0) 104×30
+                Text "148만주" (3RQT-0) 46×16 "148만주"
+                Text "611억" (3RQU-0) 31×13 "611억"
+              Frame "Frame" (3RQV-0) 96×6
+                Frame "Frame" (3RQW-0) 84×6
+                  Rectangle "Rectangle" (3RQX-0) 42×6
+              Text "코스닥" (3RQY-0) 60×16 "코스닥"
+            Frame "14 대주전자재료" (3RQZ-0) 943×36
+              Text "14" (3RR0-0) 40×16 "14"
+              Frame "Frame" (3RR1-0) 267×30
+                Text "대주전자재료" (3RR2-0) 267×16 "대주전자재료"
+                Text "078600" (3RR3-0) 267×13 "078600"
+              Frame "Frame" (3RR4-0) 120×30
+                Text "118,700" (3RR5-0) 55×16 "118,700"
+                Text "+27,120 · +29.61%" (3RR6-0) 113×13 "+27,120 · +29.61%"
+              Text "114,000 ~ 117,000" (3RR7-0) 152×16 "114,000 ~ 117,000"
+              Frame "Frame" (3RR8-0) 104×30
+                Text "52만주" (3RR9-0) 42×16 "52만주"
+                Text "비중 8.7%" (3RRA-0) 55×13 "비중 8.7%"
+              Frame "Frame" (3RRB-0) 104×30
+                Text "58만주" (3RRC-0) 39×16 "58만주"
+                Text "688억" (3RRD-0) 31×13 "688억"
+              Frame "Frame" (3RRE-0) 96×6
+                Frame "Frame" (3RRF-0) 84×6
+                  Rectangle "Rectangle" (3RRG-0) 40×6
+              Text "코스닥" (3RRH-0) 60×16 "코스닥"
+            Frame "15 티씨케이" (3RRI-0) 943×36
+              Text "15" (3RRJ-0) 40×16 "15"
+              Frame "Frame" (3RRK-0) 267×30
+                Text "티씨케이" (3RRL-0) 267×16 "티씨케이"
+                Text "064760" (3RRM-0) 267×13 "064760"
+              Frame "Frame" (3RRN-0) 120×30
+                Text "96,400" (3RRO-0) 47×16 "96,400"
+                Text "+21,700 · +29.05%" (3RRP-0) 113×13 "+21,700 · +29.05%"
+              Text "93,000 ~ 95,200" (3RRQ-0) 152×16 "93,000 ~ 95,200"
+              Frame "Frame" (3RRR-0) 104×30
+                Text "41만주" (3RRS-0) 42×16 "41만주"
+                Text "비중 8.4%" (3RRT-0) 55×13 "비중 8.4%"
+              Frame "Frame" (3RRU-0) 104×30
+                Text "44만주" (3RRV-0) 39×16 "44만주"
+                Text "424억" (3RRW-0) 31×13 "424억"
+              Frame "Frame" (3RRX-0) 96×6
+                Frame "Frame" (3RRY-0) 84×6
+                  Rectangle "Rectangle" (3RRZ-0) 38×6
+              Text "코스닥" (3RS0-0) 60×16 "코스닥"
+            Frame "16 리가켐바이오" (3RS1-0) 943×36
+              Text "16" (3RS2-0) 40×16 "16"
+              Frame "Frame" (3RS3-0) 267×30
+                Text "리가켐바이오" (3RS4-0) 267×16 "리가켐바이오"
+                Text "141080" (3RS5-0) 267×13 "141080"
+              Frame "Frame" (3RS6-0) 120×30
+                Text "172,300" (3RS7-0) 55×16 "172,300"
+                Text "+39,450 · +29.70%" (3RS8-0) 113×13 "+39,450 · +29.70%"
+              Text "166,000 ~ 170,000" (3RS9-0) 152×16 "166,000 ~ 170,000"
+              Frame "Frame" (3RSA-0) 104×30
+                Text "68만주" (3RSB-0) 42×16 "68만주"
+                Text "비중 8.1%" (3RSC-0) 55×13 "비중 8.1%"
+              Frame "Frame" (3RSD-0) 104×30
+                Text "74만주" (3RSE-0) 39×16 "74만주"
+                Text "1,275억" (3RSF-0) 44×13 "1,275억"
+              Frame "Frame" (3RSG-0) 96×6
+                Frame "Frame" (3RSH-0) 84×6
+                  Rectangle "Rectangle" (3RSI-0) 37×6
+              Text "코스닥" (3RSJ-0) 60×16 "코스닥"
+            Frame "17 레인보우로보틱스" (3RSK-0) 943×36
+              Text "17" (3RSL-0) 40×16 "17"
+              Frame "Frame" (3RSM-0) 267×30
+                Text "레인보우로보틱스" (3RSN-0) 267×16 "레인보우로보틱스"
+                Text "277810" (3RSO-0) 267×13 "277810"
+              Frame "Frame" (3RSP-0) 120×30
+                Text "246,500" (3RSQ-0) 55×16 "246,500"
+                Text "+56,800 · +29.94%" (3RSR-0) 113×13 "+56,800 · +29.94%"
+              Text "238,000 ~ 244,000" (3RSS-0) 152×16 "238,000 ~ 244,000"
+              Frame "Frame" (3RST-0) 104×30
+                Text "84만주" (3RSU-0) 42×16 "84만주"
+                Text "비중 7.8%" (3RSV-0) 55×13 "비중 7.8%"
+              Frame "Frame" (3RSW-0) 104×30
+                Text "92만주" (3RSX-0) 39×16 "92만주"
+                Text "2,268억" (3RSY-0) 44×13 "2,268억"
+              Frame "Frame" (3RSZ-0) 96×6
+                Frame "Frame" (3RT0-0) 84×6
+                  Rectangle "Rectangle" (3RT1-0) 36×6
+              Text "코스닥" (3RT2-0) 60×16 "코스닥"
+            Frame "18 코스맥스" (3RT3-0) 943×36
+              Text "18" (3RT4-0) 40×16 "18"
+              Frame "Frame" (3RT5-0) 267×30
+                Text "코스맥스" (3RT6-0) 267×16 "코스맥스"
+                Text "192820" (3RT7-0) 267×13 "192820"
+              Frame "Frame" (3RT8-0) 120×30
+                Text "118,600" (3RT9-0) 55×16 "118,600"
+                Text "-48,600 · -29.07%" (3RTA-0) 113×13 "-48,600 · -29.07%"
+              Text "148,000 ~ 155,000" (3RTB-0) 152×16 "148,000 ~ 155,000"
+              Frame "Frame" (3RTC-0) 104×30
+                Text "58만주" (3RTD-0) 42×16 "58만주"
+                Text "비중 7.4%" (3RTE-0) 55×13 "비중 7.4%"
+              Frame "Frame" (3RTF-0) 104×30
+                Text "62만주" (3RTG-0) 39×16 "62만주"
+                Text "735억" (3RTH-0) 31×13 "735억"
+              Frame "Frame" (3RTI-0) 96×6
+                Frame "Frame" (3RTJ-0) 84×6
+                  Rectangle "Rectangle" (3RTK-0) 34×6
+              Text "코스피" (3RTL-0) 60×16 "코스피"
+            Frame "19 덕산네오룩스" (3RTM-0) 943×36
+              Text "19" (3RTN-0) 40×16 "19"
+              Frame "Frame" (3RTO-0) 267×30
+                Text "덕산네오룩스" (3RTP-0) 267×16 "덕산네오룩스"
+                Text "213420" (3RTQ-0) 267×13 "213420"
+              Frame "Frame" (3RTR-0) 120×30
+                Text "26,150" (3RTS-0) 47×16 "26,150"
+                Text "-10,700 · -29.04%" (3RTT-0) 113×13 "-10,700 · -29.04%"
+              Text "32,000 ~ 34,000" (3RTU-0) 152×16 "32,000 ~ 34,000"
+              Frame "Frame" (3RTV-0) 104×30
+                Text "82만주" (3RTW-0) 42×16 "82만주"
+                Text "비중 7.1%" (3RTX-0) 55×13 "비중 7.1%"
+              Frame "Frame" (3RTY-0) 104×30
+                Text "88만주" (3RTZ-0) 39×16 "88만주"
+                Text "230억" (3RU0-0) 31×13 "230억"
+              Frame "Frame" (3RU1-0) 96×6
+                Frame "Frame" (3RU2-0) 84×6
+                  Rectangle "Rectangle" (3RU3-0) 32×6
+              Text "코스닥" (3RU4-0) 60×16 "코스닥"
+        Frame "Rail" (3ORE-0) 360×848
+          Frame "Block 1 · 집중 요약" (3ORF-0) 312×87
+            Frame "Frame" (3ORG-0) 312×16
+              Text "집중 요약" (3ORH-0) 53×16 "집중 요약"
+              Text "최근 3개월 · 일봉" (3ORI-0) 99×14 "최근 3개월 · 일봉"
+            Frame "Frame" (3ORJ-0) 312×63
+              Frame "Frame" (3ORK-0) 312×17
+                Text "평균 비중" (3ORL-0) 53×16 "평균 비중"
+                Text "11.0%" (3ORM-0) 36×16 "11.0%"
+              Frame "Frame" (3ORN-0) 312×17
+                Text "현재가 위 매물대" (3ORO-0) 93×16 "현재가 위 매물대"
+                Text "28개" (3ORP-0) 27×16 "28개"
+              Frame "Frame" (3ORQ-0) 312×17
+                Text "현재가 아래 매물대" (3ORR-0) 105×16 "현재가 아래 매물대"
+                Text "22개" (3ORS-0) 27×16 "22개"
+          Frame "Block 2 · 가격대 분포" (3ORT-0) 312×131
+            Frame "Frame" (3ORU-0) 312×16
+              Text "가격대 분포" (3ORV-0) 65×16 "가격대 분포"
+              Text "상위 3개 합계 40.3%" (3ORW-0) 115×14 "상위 3개 합계 40.3%"
+            Frame "Frame" (3ORX-0) 312×90
+              Frame "Frame" (3ORY-0) 312×26
+                Frame "Frame" (3ORZ-0) 312×16
+                  Text "195,000 ~ 197,000" (3OS0-0) 123×16 "195,000 ~ 197,000"
+                  Text "18.4%" (3OS1-0) 36×16 "18.4%"
+                Rectangle "Rectangle" (3OS2-0) 276×6
+              Frame "Frame" (3OS3-0) 312×26
+                Frame "Frame" (3OS4-0) 312×16
+                  Text "192,000 ~ 195,000" (3OS5-0) 123×16 "192,000 ~ 195,000"
+                  Text "12.1%" (3OS6-0) 36×16 "12.1%"
+                Rectangle "Rectangle" (3OS7-0) 181×6
+              Frame "Frame" (3OS8-0) 312×26
+                Frame "Frame" (3OS9-0) 312×16
+                  Text "197,000 ~ 200,000" (3OSA-0) 123×16 "197,000 ~ 200,000"
+                  Text "9.8%" (3OSB-0) 29×16 "9.8%"
+                Rectangle "Rectangle" (3OSC-0) 147×6

@@ -1,0 +1,10 @@
+{
+  "root": "30O3-0",
+  "regions": [
+    { "node_id": "30T8-0", "name": "Instrument Header", "role": "header", "depth": 1 },
+    { "node_id": "30SO-0", "name": "Quote and Valuation Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "30O7-0", "name": "Chart Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "30PK-0", "name": "Quote Detail Mount", "role": "primary", "depth": 2 },
+    { "node_id": "3ORE-0", "name": "Rail", "role": "rail", "depth": 2 }
+  ]
+}

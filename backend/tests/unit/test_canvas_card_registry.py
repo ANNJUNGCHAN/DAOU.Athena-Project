@@ -105,6 +105,27 @@ def test_runtime_metadata_is_derived_from_operation_ownership() -> None:
     }
 
 
+def test_ranking_operations_default_to_owning_cards_ranking_mode() -> None:
+    stock_info = resolve_canvas_card("base:ka10016")
+    assert stock_info.card_id == "CC-03"
+    assert stock_info.mode == "ranking"
+    assert stock_info.section == "ranked-results"
+
+    flow = resolve_canvas_card("base:ka90003")
+    assert flow.card_id == "CC-05"
+    assert flow.mode == "ranking"
+    assert flow.section == "ranked-results"
+
+    # Plan-provided mode still wins over the override default.
+    planned = resolve_canvas_card("base:ka10016", mode="profile", section="fundamentals")
+    assert planned.mode == "profile"
+    assert planned.section == "fundamentals"
+
+    # Non-ranking operations keep their capability defaults.
+    chart = resolve_canvas_card("base:ka10081")
+    assert (chart.mode, chart.section) == ("chart", "visualization")
+
+
 def test_all_299_operations_have_matching_runtime_field_contracts() -> None:
     registry = get_canvas_card_registry()
 

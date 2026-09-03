@@ -1,0 +1,122 @@
+{
+ "board_id": "2YA8-0",
+ "card_id": "CC-06",
+ "name": "CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+ "operation_refs": [
+  "base:ka10021"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10021",
+   "f": "bid_req_sdnin",
+   "kor": "호가잔량급증",
+   "layer": null,
+   "board": "2YA8-0",
+   "where": "'호가잔량 급증' 순위 테이블",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10021",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2YA8-0",
+   "where": "'종목' 컬럼 하단 종목코드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10021",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2YA8-0",
+   "where": "'종목' 컬럼 종목명",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10021",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2YA8-0",
+   "where": "'현재가' 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10021",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2YA8-0",
+   "where": "등락률 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10021",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2YA8-0",
+   "where": "우패널 '+1,850 · +1.24%'의 +1,850",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10021",
+   "f": "int",
+   "kor": "기준량",
+   "layer": "병기",
+   "board": "2YA8-0",
+   "where": "'잔량 증가율(10분)' 셀 둘째 줄 기준량 8.2만",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10021",
+   "f": "now",
+   "kor": "현재",
+   "layer": "병기",
+   "board": "2YA8-0",
+   "where": "'잔량 증가율(10분)' 셀 둘째 줄 현재 42.5만",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10021",
+   "f": "sdnin_qty",
+   "kor": "급증수량",
+   "layer": "직접",
+   "board": "2YA8-0",
+   "where": "'급증 잔량' 열 주값 '+34.3만'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10021",
+   "f": "sdnin_rt",
+   "kor": "급증률",
+   "layer": null,
+   "board": "2YA8-0",
+   "where": "'잔량 증가율(10분)' 컬럼 +418%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10021",
+   "f": "tot_buy_qty",
+   "kor": "총매수량",
+   "layer": "병기",
+   "board": "2YA8-0",
+   "where": "'급증 잔량' 셀 둘째 줄 '총매수 42.5만'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 11
+}

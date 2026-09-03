@@ -1,0 +1,13 @@
+{
+  "board_id": "2YA8-0",
+  "name": "CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 980,
+  "state": {
+    "kind": "sort",
+    "parent_board": "13K0-2",
+    "control": "호가잔량 급증"
+  },
+  "saved_at": "2026-09-02T11:26:22Z"
+}

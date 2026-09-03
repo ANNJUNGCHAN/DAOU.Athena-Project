@@ -1,0 +1,82 @@
+{
+ "board": "2YJ8-0",
+ "fields": [
+  {
+   "mapping_id": "base:ka10023",
+   "f": "trde_qty_sdnin",
+   "kor": "거래량급증",
+   "layer": null,
+   "where": "'거래량 급증' 순위 테이블"
+  },
+  {
+   "mapping_id": "base:ka10023",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "'종목' 컬럼 하단 종목코드"
+  },
+  {
+   "mapping_id": "base:ka10023",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "'종목' 컬럼 종목명"
+  },
+  {
+   "mapping_id": "base:ka10023",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "'현재가' 컬럼"
+  },
+  {
+   "mapping_id": "base:ka10023",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "등락률 색/± 부호"
+  },
+  {
+   "mapping_id": "base:ka10023",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "우패널 '+1,850'"
+  },
+  {
+   "mapping_id": "base:ka10023",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "where": "'등락률' 컬럼 +1.24%"
+  },
+  {
+   "mapping_id": "base:ka10023",
+   "f": "prev_trde_qty",
+   "kor": "이전거래량",
+   "layer": "병기",
+   "where": "'거래량 배율(5분)' 셀 둘째 줄 이전 거래량 22만"
+  },
+  {
+   "mapping_id": "base:ka10023",
+   "f": "now_trde_qty",
+   "kor": "현재거래량",
+   "layer": "병기",
+   "where": "'거래량 배율(5분)' 셀 둘째 줄 현재 거래량 141만"
+  },
+  {
+   "mapping_id": "base:ka10023",
+   "f": "sdnin_qty",
+   "kor": "급증량",
+   "layer": "직접",
+   "where": "'급증량' 열 주값 '+119만주'"
+  },
+  {
+   "mapping_id": "base:ka10023",
+   "f": "sdnin_rt",
+   "kor": "급증률",
+   "layer": null,
+   "where": "'거래량 배율(5분)' 컬럼 6.4배"
+  }
+ ]
+}

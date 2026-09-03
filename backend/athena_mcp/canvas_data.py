@@ -42,6 +42,10 @@ from athena_api.canvas_transform import (
 from athena_api.canvas_transform import (
     resolve_render_plan_kind as resolve_render_plan_kind,
 )
+
+# 표면 계약은 REST(api/canvas_push.py)와 **같은** 헬퍼로 붙는다 — 두 경로가 서로 다른
+# surface_contract를 만들면 /canvas/push의 canonical 대조가 422로 깨진다.
+from athena_api.card_surface_contract import attach_surface_contract
 from athena_api.screen_manifest import get_mapping
 from athena_mcp.canvas import validate_canvas_payload
 
@@ -91,6 +95,7 @@ def _integrated_card_contract(operation_ref: str) -> dict[str, Any]:
             },
         }
     )
+    attach_surface_contract(metadata, operation_ref)
     return metadata
 
 

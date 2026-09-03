@@ -1,0 +1,116 @@
+/* 캔버스 탭 스트립 + 뷰포트 (캔버스 탭·반응형 카드 계획 §1).
+ *
+ * 탭 스트립은 셸 크롬이다 — 카드가 아니라서 유리(.card)를 다시 칠하지 않는다.
+ * 활성 칩 관행은 셸의 `.agent-tab.is-active`(shell.css)와 같다: k-text 배경 + 흰 글자.
+ * 토큰만 쓴다(tokens.css SSOT) — 새 색을 만들지 않는다(헌장 신념 11). */
+
+/* 덱은 #grid의 첫 자식이다. 덱이 있으면 첫 행이 캔버스 높이를 전부 갖고,
+ * 남는 카드(task-canvas·free)는 그 아래 auto 행으로 흐른다 — 모자이크 2열은
+ * 키움 보드 카드에 대해서만 쓰지 않는다. */
+.grid:has(> .canvas-tab-deck) {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.canvas-tab-deck {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.canvas-tab-strip {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+.canvas-tab-strip::-webkit-scrollbar { height: 6px; }
+.canvas-tab-strip::-webkit-scrollbar-track { background: transparent; }
+.canvas-tab-strip::-webkit-scrollbar-thumb { background: rgb(16 19 26 / 18%); border-radius: var(--radius-full); }
+
+.canvas-tab {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* 클릭 영역 32px(헌장 신념 14). */
+  min-height: 32px;
+  max-width: 240px;
+  padding: 4px 8px 4px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background var(--dur-base) var(--ease), color var(--dur-base) var(--ease);
+}
+.canvas-tab:hover { color: var(--color-k-text); }
+.canvas-tab.is-active {
+  border-color: transparent;
+  background: var(--color-k-text);
+  color: #fff;
+  font-family: var(--font-strong);
+  font-weight: 400;
+}
+
+/* 끌고 있는 탭 — 원래 자리를 흐리게 남겨 어디서 떠났는지 보이게 한다.
+ * 정렬 판정은 canvas-tabs.js가 하고 여기서는 표시만 한다. */
+.canvas-tab[data-dragging="true"] { opacity: 0.45; }
+.canvas-tab:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
+
+.canvas-tab-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.canvas-tab-close {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  color: inherit;
+  opacity: 0.55;
+  font-size: var(--text-sm);
+  line-height: 1;
+  cursor: pointer;
+}
+.canvas-tab-close:hover { opacity: 1; background: rgb(16 19 26 / 10%); }
+.canvas-tab.is-active .canvas-tab-close:hover { background: rgb(255 255 255 / 22%); }
+
+/* 뷰포트 1개 — 카드 크기 = 뷰포트 크기. 본문이 길면 카드 안에서 세로 스크롤. */
+.canvas-tab-viewport {
+  flex: 1 1 auto;
+  position: relative;
+  min-height: 0;
+}
+
+.canvas-tab-panel {
+  height: 100%;
+  min-height: 0;
+}
+.canvas-tab-panel[hidden] { display: none; }
+
+/* 모자이크 카드의 200~360px 높이 예산은 뷰포트 카드에 적용되지 않는다 —
+ * 뷰포트를 가득 채우는 것이 이 카드의 크기 계약이다(계획 §1). */
+.canvas-tab-panel > .card {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+}

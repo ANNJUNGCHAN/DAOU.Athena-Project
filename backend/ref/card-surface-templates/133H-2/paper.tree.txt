@@ -1,0 +1,312 @@
+Frame "Account Card Surface" (14TE-2) 1360×952
+  Frame "Account Header" (14TG-2) 1358×106
+    Frame "Frame" (14TH-2) 363×57
+      Frame "Frame" (14TI-2) 363×34
+        Text "내 계좌" (14TJ-2) 94×34 "내 계좌"
+        Frame "Frame" (14TK-2) 56×28
+          Text "실시간" (14TL-2) 36×16 "실시간"
+      Text "키움증권 종합계좌 ****4721 ·…" (14TM-2) 363×16 "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18"
+    Frame "Frame" (14TN-2) 557×36
+      Frame "Frame" (14TO-2) 77×36
+        Text "자산 종합" (14TP-2) 53×16 "자산 종합"
+      Frame "Frame" (14TQ-2) 72×36
+        Text "보유종목" (14TR-2) 48×16 "보유종목"
+      Frame "Frame" (14TS-2) 87×36
+        Text "예수금·결제" (14TT-2) 63×16 "예수금·결제"
+      Frame "Frame" (14TU-2) 75×36
+        Text "손익·성과" (14TV-2) 51×16 "손익·성과"
+      Frame "Frame" (14TW-2) 75×36
+        Text "주문·체결" (14TX-2) 51×16 "주문·체결"
+      Frame "Frame" (14TY-2) 87×36
+        Text "증거금·담보" (14TZ-2) 63×16 "증거금·담보"
+      Frame "Frame" (14U0-2) 60×36
+        Text "금현물" (14U1-2) 36×16 "금현물"
+  Frame "Account Summary Strip" (14U3-2) 1358×116
+    Frame "Frame" (14U4-2) 340×78
+      Text "총자산" (14U5-2) 283×16 "총자산"
+      Text "raw|ka01690|body|tot_evlt_amt" (14U6-2) 283×34 "124,580,240원"
+      Text "raw|ka01690|body|tot_prft_rt" (14U7-2) 283×16 "수익률 +4.96%"
+    Frame "Frame" (14U8-2) 265×78
+      Text "주문가능금액" (14U9-2) 216×16 "주문가능금액"
+      Text "raw|kt00001|body|d2_pymn_alow_amt" (14UA-2) 216×30 "31,240,000원"
+      Text "raw|kt00005|body|pymn_alow_amt" (14UB-2) 216×16 "출금가능 28,940,000원"
+    Frame "Frame" (14UC-2) 245×78
+      Text "주식 평가액" (14UD-2) 196×16 "주식 평가액"
+      Text "raw|kt00004|body|aset_evlt_amt" (14UE-2) 196×30 "89,760,240원"
+      Text "structure|kt00004|stk_acnt_evlt_prst|count" (14UF-2) 196×16 "8종목"
+    Frame "Frame" (14UG-2) 245×78
+      Text "평가손익" (14UH-2) 196×16 "평가손익"
+      Text "raw|ka01690|body|tot_evltv_prft" (14UI-2) 196×30 "+4,240,900원"
+      Text "raw|ka01690|body|tot_prft_rt" (14UJ-2) 196×16 "매입 85,519,340원"
+    Frame "Frame" (14UK-2) 263×78
+      Text "현금 비중" (14UL-2) 215×16 "현금 비중"
+      Text "raw|ka01690|body|buy_wght" (14UM-2) 215×30 "28.0%"
+      Text "보유종목 8종" (14UN-2) 215×16 "보유종목 8종"
+  Frame "Account Workspace" (14UP-2) 1358×664
+    Frame "Holdings and Allocation" (14UQ-2) 900×664
+      Frame "Holdings Table Heading" (3JFQ-0) 843×70
+        Frame "Frame" (3JFR-0) 843×22
+          Text "보유종목" (3JFS-0) 68×22 "보유종목"
+          Text "8종목 · 평가액 순 · 09:42 …" (3JFT-0) 163×16 "8종목 · 평가액 순 · 09:42 기준"
+        Frame "Column Header" (3JFU-0) 843×34
+          Text "종목" (3JFV-0) 146×16 "종목"
+          Frame "Frame" (3JFW-0) 84×16
+            Text "수량" (3JFX-0) 24×16 "수량"
+          Frame "Frame" (3JFY-0) 110×16
+            Text "평단" (3JFZ-0) 24×16 "평단"
+          Frame "Frame" (3JG0-0) 160×16
+            Text "현재가" (3JG1-0) 36×16 "현재가"
+          Frame "Frame" (3JG2-0) 128×16
+            Text "평가액" (3JG3-0) 36×16 "평가액"
+          Frame "Frame" (3JG4-0) 96×16
+            Text "손익" (3JG5-0) 24×16 "손익"
+          Text "비중" (3JG6-0) 88×16 "비중"
+      Frame "Holdings List · 8행" (3JL3-0) 843×512
+        Frame "raw|kt00004|stk_acnt_evlt_prst|삼성전자" (3JL4-0) 843×64
+          Frame "Frame" (3JL5-0) 146×39
+            Text "삼성전자" (3JL6-0) 146×20 "삼성전자"
+            Frame "Frame" (3JL7-0) 146×16
+              Text "005930" (3JL8-0) 40×14 "005930"
+              Frame "Frame" (3JL9-0) 32×16
+                Text "현금" (3JLA-0) 20×14 "현금"
+          Frame "Frame" (3JLB-0) 84×35
+            Text "275" (3JLC-0) 24×18 "275"
+            Text "가능 275" (3JLD-0) 49×14 "가능 275"
+          Frame "Frame" (3JLE-0) 110×35
+            Text "138,344" (3JLF-0) 55×18 "138,344"
+            Text "매입 38,044,600" (3JLG-0) 95×14 "매입 38,044,600"
+          Frame "Frame" (3JLH-0) 160×35
+            Text "150,850" (3JLI-0) 55×18 "150,850"
+            Text "전일 149,000 · +1.24%" (3JLJ-0) 135×14 "전일 149,000 · +1.24%"
+          Frame "Frame" (3JLK-0) 128×35
+            Text "41,483,750" (3JLL-0) 78×18 "41,483,750"
+            Text "비중 33.3%" (3JLM-0) 62×14 "비중 33.3%"
+          Frame "Frame" (3JLN-0) 96×35
+            Text "+3,439,150" (3JLO-0) 78×18 "+3,439,150"
+            Text "+9.04%" (3JLP-0) 40×14 "+9.04%"
+          Frame "Frame" (3JLQ-0) 88×6
+            Frame "Frame" (3JLR-0) 74×6
+              Rectangle "Rectangle" (3JLS-0) 74×6
+        Frame "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스" (3JLT-0) 843×64
+          Frame "Frame" (3JLU-0) 146×39
+            Text "SK하이닉스" (3JLV-0) 146×20 "SK하이닉스"
+            Frame "Frame" (3JLW-0) 146×16
+              Text "000660" (3JLX-0) 40×14 "000660"
+              Frame "Frame" (3JLY-0) 32×16
+                Text "현금" (3JLZ-0) 20×14 "현금"
+          Frame "Frame" (3JM0-0) 84×35
+            Text "110" (3JM1-0) 24×18 "110"
+            Text "가능 110" (3JM2-0) 49×14 "가능 110"
+          Frame "Frame" (3JM3-0) 110×35
+            Text "192,300" (3JM4-0) 55×18 "192,300"
+            Text "매입 21,153,000" (3JM5-0) 95×14 "매입 21,153,000"
+          Frame "Frame" (3JM6-0) 160×35
+            Text "198,400" (3JM7-0) 55×18 "198,400"
+            Text "전일 194,410 · +2.05%" (3JM8-0) 135×14 "전일 194,410 · +2.05%"
+          Frame "Frame" (3JM9-0) 128×35
+            Text "21,824,000" (3JMA-0) 78×18 "21,824,000"
+            Text "비중 17.5%" (3JMB-0) 62×14 "비중 17.5%"
+          Frame "Frame" (3JMC-0) 96×35
+            Text "+671,000" (3JMD-0) 63×18 "+671,000"
+            Text "+3.17%" (3JME-0) 40×14 "+3.17%"
+          Frame "Frame" (3JMF-0) 88×6
+            Frame "Frame" (3JMG-0) 74×6
+              Rectangle "Rectangle" (3JMH-0) 39×6
+        Frame "raw|kt00004|stk_acnt_evlt_prst|KODEX 200" (3JMI-0) 843×64
+          Frame "Frame" (3JMJ-0) 146×39
+            Text "KODEX 200" (3JMK-0) 146×20 "KODEX 200"
+            Frame "Frame" (3JML-0) 146×16
+              Text "069500" (3JMM-0) 40×14 "069500"
+              Frame "Frame" (3JMN-0) 32×16
+                Text "현금" (3JMO-0) 20×14 "현금"
+          Frame "Frame" (3JMP-0) 84×35
+            Text "184" (3JMQ-0) 22×16 "184"
+            Text "가능 184" (3JMR-0) 106×12 "가능 184"
+          Frame "Frame" (3JMS-0) 100×31
+            Text "48,655" (3JMT-0) 44×16 "48,655"
+            Text "매입 8,952,520" (3JMU-0) 80×12 "매입 8,952,520"
+          Frame "Frame" (3JMV-0) 140×31
+            Text "48,360" (3JMW-0) 44×16 "48,360"
+            Text "전일 48,300 · +0.12%" (3JMX-0) 116×12 "전일 48,300 · +0.12%"
+          Frame "Frame" (3JMY-0) 128×35
+            Text "8,898,240" (3JMZ-0) 71×18 "8,898,240"
+            Text "비중 7.1%" (3JN0-0) 55×14 "비중 7.1%"
+          Frame "Frame" (3JN1-0) 96×35
+            Text "-54,280" (3JN2-0) 55×18 "-54,280"
+            Text "-0.61%" (3JN3-0) 40×14 "-0.61%"
+          Frame "Frame" (3JN4-0) 88×6
+            Frame "Frame" (3JN5-0) 74×6
+              Rectangle "Rectangle" (3JN6-0) 16×6
+        Frame "raw|kt00004|stk_acnt_evlt_prst|현대차" (3JN7-0) 843×64
+          Frame "Frame" (3JN8-0) 146×39
+            Text "현대차" (3JN9-0) 146×20 "현대차"
+            Frame "Frame" (3JNA-0) 146×16
+              Text "005380" (3JNB-0) 40×14 "005380"
+              Frame "Frame" (3JNC-0) 32×16
+                Text "현금" (3JND-0) 20×14 "현금"
+          Frame "Frame" (3JNE-0) 84×35
+            Text "25" (3JNF-0) 16×18 "25"
+            Text "가능 25" (3JNG-0) 42×14 "가능 25"
+          Frame "Frame" (3JNH-0) 110×35
+            Text "229,650" (3JNI-0) 55×18 "229,650"
+            Text "매입 5,741,250" (3JNJ-0) 88×14 "매입 5,741,250"
+          Frame "Frame" (3JNK-0) 160×35
+            Text "232,500" (3JNL-0) 55×18 "232,500"
+            Text "전일 229,900 · +1.13%" (3JNM-0) 135×14 "전일 229,900 · +1.13%"
+          Frame "Frame" (3JNN-0) 128×35
+            Text "5,812,500" (3JNO-0) 71×18 "5,812,500"
+            Text "비중 4.7%" (3JNP-0) 55×14 "비중 4.7%"
+          Frame "Frame" (3JNQ-0) 96×35
+            Text "+71,250" (3JNR-0) 55×18 "+71,250"
+            Text "+1.24%" (3JNS-0) 40×14 "+1.24%"
+          Frame "Frame" (3JNT-0) 88×6
+            Frame "Frame" (3JNU-0) 74×6
+              Rectangle "Rectangle" (3JNV-0) 10×6
+        Frame "raw|kt00004|stk_acnt_evlt_prst|NAVER" (3JNW-0) 843×64
+          Frame "Frame" (3JNX-0) 146×39
+            Text "NAVER" (3JNY-0) 146×20 "NAVER"
+            Frame "Frame" (3JNZ-0) 146×16
+              Text "035420" (3JO0-0) 40×14 "035420"
+              Frame "Frame" (3JO1-0) 32×16
+                Text "현금" (3JO2-0) 20×14 "현금"
+          Frame "Frame" (3JO3-0) 84×35
+            Text "25" (3JO4-0) 16×18 "25"
+            Text "가능 25" (3JO5-0) 42×14 "가능 25"
+          Frame "Frame" (3JO6-0) 110×35
+            Text "209,760" (3JO7-0) 55×18 "209,760"
+            Text "매입 5,244,000" (3JO8-0) 88×14 "매입 5,244,000"
+          Frame "Frame" (3JO9-0) 160×35
+            Text "214,000" (3JOA-0) 55×18 "214,000"
+            Text "전일 209,700 · +2.05%" (3JOB-0) 135×14 "전일 209,700 · +2.05%"
+          Frame "Frame" (3JOC-0) 128×35
+            Text "5,350,000" (3JOD-0) 71×18 "5,350,000"
+            Text "비중 4.3%" (3JOE-0) 55×14 "비중 4.3%"
+          Frame "Frame" (3JOF-0) 96×35
+            Text "+106,000" (3JOG-0) 63×18 "+106,000"
+            Text "+2.02%" (3JOH-0) 40×14 "+2.02%"
+          Frame "Frame" (3JOI-0) 88×6
+            Frame "Frame" (3JOJ-0) 74×6
+              Rectangle "Rectangle" (3JOK-0) 10×6
+        Frame "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스" (3JOL-0) 843×64
+          Frame "Frame" (3JOM-0) 146×39
+            Text "삼성바이오로직스" (3JON-0) 146×20 "삼성바이오로직스"
+            Frame "Frame" (3JOO-0) 146×16
+              Text "207940" (3JOP-0) 40×14 "207940"
+              Frame "Frame" (3JOQ-0) 32×16
+                Text "현금" (3JOR-0) 20×14 "현금"
+          Frame "Frame" (3JOS-0) 84×35
+            Text "3" (3JOT-0) 8×18 "3"
+            Text "가능 3" (3JOU-0) 36×14 "가능 3"
+          Frame "Frame" (3JOV-0) 110×35
+            Text "1,036,540" (3JOW-0) 71×18 "1,036,540"
+            Text "매입 3,109,620" (3JOX-0) 88×14 "매입 3,109,620"
+          Frame "Frame" (3JOY-0) 160×35
+            Text "1,032,000" (3JOZ-0) 71×18 "1,032,000"
+            Text "전일 1,036,000 · -0.39…" (3JP0-0) 148×14 "전일 1,036,000 · -0.39%"
+          Frame "Frame" (3JP1-0) 128×35
+            Text "3,096,000" (3JP2-0) 71×18 "3,096,000"
+            Text "비중 2.5%" (3JP3-0) 55×14 "비중 2.5%"
+          Frame "Frame" (3JP4-0) 96×35
+            Text "-13,620" (3JP5-0) 55×18 "-13,620"
+            Text "-0.44%" (3JP6-0) 40×14 "-0.44%"
+          Frame "Frame" (3JP7-0) 88×6
+            Frame "Frame" (3JP8-0) 74×6
+              Rectangle "Rectangle" (3JP9-0) 6×6
+        Frame "raw|kt00004|stk_acnt_evlt_prst|카카오" (3JPA-0) 843×64
+          Frame "Frame" (3JPB-0) 146×39
+            Text "카카오" (3JPC-0) 146×20 "카카오"
+            Frame "Frame" (3JPD-0) 146×16
+              Text "035720" (3JPE-0) 40×14 "035720"
+              Frame "Frame" (3JPF-0) 32×16
+                Text "현금" (3JPG-0) 20×14 "현금"
+          Frame "Frame" (3JPH-0) 84×35
+            Text "55" (3JPI-0) 16×18 "55"
+            Text "가능 55" (3JPJ-0) 42×14 "가능 55"
+          Frame "Frame" (3JPK-0) 110×35
+            Text "41,310" (3JPL-0) 47×18 "41,310"
+            Text "매입 2,272,050" (3JPM-0) 88×14 "매입 2,272,050"
+          Frame "Frame" (3JPN-0) 160×35
+            Text "41,850" (3JPO-0) 47×18 "41,850"
+            Text "전일 41,300 · +1.33%" (3JPP-0) 128×14 "전일 41,300 · +1.33%"
+          Frame "Frame" (3JPQ-0) 128×35
+            Text "2,301,750" (3JPR-0) 71×18 "2,301,750"
+            Text "비중 1.8%" (3JPS-0) 55×14 "비중 1.8%"
+          Frame "Frame" (3JPT-0) 96×35
+            Text "+29,700" (3JPU-0) 55×18 "+29,700"
+            Text "+1.31%" (3JPV-0) 40×14 "+1.31%"
+          Frame "Frame" (3JPW-0) 88×6
+            Frame "Frame" (3JPX-0) 74×6
+              Rectangle "Rectangle" (3JPY-0) 4×6
+        Frame "raw|kt00004|stk_acnt_evlt_prst|기아" (3JPZ-0) 843×64
+          Frame "Frame" (3JQ0-0) 146×39
+            Text "기아" (3JQ1-0) 146×20 "기아"
+            Frame "Frame" (3JQ2-0) 146×16
+              Text "000270" (3JQ3-0) 40×14 "000270"
+              Frame "Frame" (3JQ4-0) 32×16
+                Text "현금" (3JQ5-0) 20×14 "현금"
+          Frame "Frame" (3JQ6-0) 84×35
+            Text "10" (3JQ7-0) 16×18 "10"
+            Text "가능 10" (3JQ8-0) 42×14 "가능 10"
+          Frame "Frame" (3JQ9-0) 110×35
+            Text "100,230" (3JQA-0) 55×18 "100,230"
+            Text "매입 1,002,300" (3JQB-0) 88×14 "매입 1,002,300"
+          Frame "Frame" (3JQC-0) 160×35
+            Text "99,400" (3JQD-0) 47×18 "99,400"
+            Text "전일 100,100 · -0.70%" (3JQE-0) 135×14 "전일 100,100 · -0.70%"
+          Frame "Frame" (3JQF-0) 128×35
+            Text "994,000" (3JQG-0) 55×18 "994,000"
+            Text "비중 0.8%" (3JQH-0) 55×14 "비중 0.8%"
+          Frame "Frame" (3JQI-0) 96×35
+            Text "-8,300" (3JQJ-0) 47×18 "-8,300"
+            Text "-0.83%" (3JQK-0) 40×14 "-0.83%"
+          Frame "Frame" (3JQL-0) 88×6
+            Frame "Frame" (3JQM-0) 74×6
+              Rectangle "Rectangle" (3JQN-0) 2×6
+      Frame "List Footer · Complete" (1VAG-1) 843×38
+        Text "structure|kt00004|stk_acnt_evlt_prst|shown-count" (1VAH-1) 88×16 "전체 8종목 표시"
+    Frame "Settlement and Performance" (14UR-2) 460×594
+      Frame "Settlement Forecast" (14WK-2) 408×189
+        Frame "Frame" (14WL-2) 408×22
+          Text "예수금·결제" (14WM-2) 89×22 "예수금·결제"
+          Text "오늘 기준" (14WN-2) 53×16 "오늘 기준"
+        Frame "Frame" (14WO-2) 408×40
+          Text "현재 예수금" (14WP-2) 70×16 "현재 예수금"
+          Text "raw|kt00001|body|entr" (14WQ-2) 91×16 "34,820,000원"
+        Frame "Frame" (14WR-2) 408×40
+          Text "D+1 예상" (14WS-2) 57×16 "D+1 예상"
+          Text "raw|kt00001|body|d1_entra" (14WT-2) 91×16 "33,184,400원"
+        Frame "Frame" (14WU-2) 408×40
+          Text "D+2 예상" (14WV-2) 57×16 "D+2 예상"
+          Text "raw|kt00001|body|d2_entra" (14WW-2) 91×16 "42,263,800원"
+      Frame "Performance Summary" (14WY-2) 408×117
+        Frame "Frame" (14WZ-2) 408×22
+          Text "손익·비용" (14X0-2) 72×22 "손익·비용"
+          Text "오늘 기준" (14X1-2) 53×16 "오늘 기준"
+        Frame "Frame" (14X2-2) 408×16
+          Text "실현손익" (14X3-2) 52×16 "실현손익"
+          Text "raw|ka10074|body|rlzt_pl" (14X4-2) 91×16 "+1,082,400원"
+        Frame "Frame" (14X5-2) 408×16
+          Text "평가손익" (14X6-2) 52×16 "평가손익"
+          Text "raw|ka01690|body|tot_evltv_prft" (14X7-2) 91×16 "+4,240,900원"
+        Frame "Frame" (14X8-2) 408×16
+          Text "거래수수료" (14X9-2) 65×16 "거래수수료"
+          Text "raw|ka10074|body|trde_cmsn" (14XA-2) 68×16 "-24,600원"
+      Frame "Recent Orders" (14XC-2) 408×146
+        Frame "Frame" (14XD-2) 408×22
+          Text "최근 주문" (14XE-2) 74×22 "최근 주문"
+          Text "structure|ka10075|oso|count" (14XF-2) 145×16 "미체결 2건 · 최근 2건 표시"
+        Frame "Frame" (14XG-2) 408×52
+          Frame "Frame" (14XH-2) 84×35
+            Text "raw2|ka10075|oso|stk_nm+io_tp_nm" (14XI-2) 84×16 "삼성전자 매수"
+            Text "raw2|ka10075|oso|ord_qty+trde_tp" (14XJ-2) 84×16 "10주 · 시장가"
+          Text "raw|ka10075|oso|ord_stt" (14XK-2) 26×16 "접수"
+        Frame "Frame" (14XL-2) 408×52
+          Frame "Frame" (14XM-2) 111×35
+            Text "raw2|ka10076|cntr|stk_nm+io_tp_nm" (14XN-2) 111×16 "KODEX 200 매도"
+            Text "raw2|ka10076|cntr|ord_qty+cntr_pric" (14XO-2) 111×16 "250주 · 48,360원"
+          Text "raw|ka10076|cntr|ord_stt" (14XP-2) 26×16 "체결"
+  Frame "Account Status Footer" (14XR-2) 1358×64
+    Text "● 계좌·체결 실시간 반영 중" (14XS-2) 152×16 "● 계좌·체결 실시간 반영 중"
+    Frame "푸터 우측" (338D-0) 278×16
+      Text "영업부 · 담당자 미제공" (338E-0) 124×16 "영업부 · 담당자 미제공"
+      Text "계좌·결제 전체 항목 보기" (338F-0) 136×16 "계좌·결제 전체 항목 보기"

@@ -1,0 +1,525 @@
+{
+ "board_id": "2ZTA-0",
+ "card_id": "CC-05",
+ "name": "CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+ "operation_refs": [
+  "base:ka10008",
+  "base:ka10034",
+  "base:ka10035",
+  "base:ka10036"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10008",
+   "f": "stk_frgnr",
+   "kor": "주식외국인",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 투자자 순매수 표의 외국인 열 목록",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 '일자' 열 09/01~08/26",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "close_pric",
+   "kor": "종가",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 '종가' 열 150,850",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "종목 카드 '+1,850 · +1.24%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "board": "2ZTA-0",
+   "where": "표 신설 '거래량' 열(1위 1,420만주)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "chg_qty",
+   "kor": "변동수량",
+   "layer": "병기",
+   "board": "2ZTA-0",
+   "where": "표 '외국인 보유' 셀 2번째 줄 '변동 +1,320만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "poss_stkcnt",
+   "kor": "보유주식수",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "외국인 보유 '보유 31.29억주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "wght",
+   "kor": "비중",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "외국인 보유 '지분율 52.41%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "gain_pos_stkcnt",
+   "kor": "취득가능주식수",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "외국인 보유 '취득 가능 16.47억주'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "frgnr_limit",
+   "kor": "외국인한도",
+   "layer": "직접",
+   "board": "2ZTA-0",
+   "where": "표 신설 '한도' 열(1위 35,022만주)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "frgnr_limit_irds",
+   "kor": "외국인한도증감",
+   "layer": "병기",
+   "board": "2ZTA-0",
+   "where": "표 '한도' 셀 2번째 줄 '증감 미제공'(결측 표기)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10008",
+   "f": "limit_exh_rt",
+   "kor": "한도소진률",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "외국인 보유 '한도 소진 65.5%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "for_dt_trde_upper",
+   "kor": "외인기간별매매상위",
+   "layer": null,
+   "board": "1WOB-1",
+   "where": "외국인 기간별 매매 상위 목록 표",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "rank",
+   "kor": "순위",
+   "layer": null,
+   "board": "1WOB-1",
+   "where": "표 '순위' 열 01~20",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "종목 카드 '005930 · KOSPI'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "1WOB-1",
+   "where": "표 '종목' 열 삼성전자 등",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "순위 표 '현재가' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "등락률 열의 ± 부호와 상승/하락색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "종목 카드 '+1,850'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "sel_bid",
+   "kor": "매도호가",
+   "layer": "직접",
+   "board": "1WOB-1",
+   "where": "목록 표 신설 '매도호가' 열(1행 150,900)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "buy_bid",
+   "kor": "매수호가",
+   "layer": "직접",
+   "board": "1WOB-1",
+   "where": "목록 표 신설 '매수호가' 열(1행 150,800)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "board": "1WOB-1",
+   "where": "목록 표 신설 '거래량' 열(1행 1,420만주 · 2.14조)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "netprps_qty",
+   "kor": "순매수량",
+   "layer": null,
+   "board": "1WOB-1",
+   "where": "표 '누적 순매수' 열 +2,416억원",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10034",
+   "f": "gain_pos_stkcnt",
+   "kor": "취득가능주식수",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "순위 표 '잔여 한도' 열 15,280만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "for_cont_nettrde_upper",
+   "kor": "외인연속순매매상위",
+   "layer": null,
+   "board": "1WOB-1",
+   "where": "외국인 기간별 매매 상위 목록 표(연속일 열)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "종목 카드 '005930 · KOSPI'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "1WOB-1",
+   "where": "표 '종목' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "순위 표 '현재가' 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "등락률 열의 ± 부호와 상승/하락색",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2V71-0",
+   "where": "종목 카드 '+1,850'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "dm1",
+   "kor": "D-1",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 09/01 행 외국인 +1,842",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "dm2",
+   "kor": "D-2",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 08/29 행 외국인 +486",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "dm3",
+   "kor": "D-3",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 08/28 행 외국인 +512",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "tot",
+   "kor": "합계",
+   "layer": null,
+   "board": "1WOB-1",
+   "where": "'상위 합계 +1.82조원' 및 누적 순매수 열",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "limit_exh_rt",
+   "kor": "한도소진율",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "순위 표 '소진율' 열 56.4%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "pred_pre_1",
+   "kor": "전일대비1",
+   "layer": "병기",
+   "board": "2S4E-1",
+   "where": "일별 표 09/01 종가 셀 2번째 줄 '+1,850 · +1.24%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "pred_pre_2",
+   "kor": "전일대비2",
+   "layer": "병기",
+   "board": "2S4E-1",
+   "where": "일별 표 08/29 종가 셀 2번째 줄 '+1,010 · +0.68%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10035",
+   "f": "pred_pre_3",
+   "kor": "전일대비3",
+   "layer": "병기",
+   "board": "2S4E-1",
+   "where": "일별 표 08/28 종가 셀 2번째 줄 '-510 · -0.34%'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "for_limit_exh_rt_incrs_upper",
+   "kor": "외인한도소진율증가상위",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "한도소진율 증가 순위 표 목록",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "rank",
+   "kor": "순위",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "표 '순위' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "종목 카드 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "표 '종목' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "표 '현재가' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "등락률 열의 ± 부호와 상승/하락색",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "종목 카드 '+1,850'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "board": "2ZTA-0",
+   "where": "표 신설 '거래량' 열(1위 1,420만주 · 2.14조)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "poss_stkcnt",
+   "kor": "보유주식수",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "표 '외국인 보유' 열 19,742만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "gain_pos_stkcnt",
+   "kor": "취득가능주식수",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "표 '잔여 한도' 열 15,280만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "base_limit_exh_rt",
+   "kor": "기준한도소진율",
+   "layer": "병기",
+   "board": "2ZTA-0",
+   "where": "표 '소진율' 셀 2번째 줄 '기준 52.6%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "limit_exh_rt",
+   "kor": "한도소진율",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "표 '소진율' 열 56.4%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10036",
+   "f": "exh_rt_incrs",
+   "kor": "소진율증가",
+   "layer": null,
+   "board": "2ZTA-0",
+   "where": "표 '전일 대비' 열 +3.8%p",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 19
+}

@@ -1,0 +1,13 @@
+{
+  "board_id": "2TZN-1",
+  "name": "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 1120,
+  "state": {
+    "kind": "tab",
+    "parent_board": "13K0-2",
+    "control": "업종"
+  },
+  "saved_at": "2026-09-02T11:30:16Z"
+}

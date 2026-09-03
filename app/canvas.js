@@ -8,9 +8,13 @@ const { AITS_CHART_RENDERER_ID, createAitsChartPanelAdapter, fromAthenaChartData
 const { classifyCell, changeTone, formatNumeric, formatDatetime, groupFactsFields } = window.AthenaLib.FactsCard;
 const { isValidCorrelation, waitForVisiblePaint } = window.AthenaLib.RestCanvasPaint;
 const integratedCardSurface = window.AthenaLib.IntegratedCardSurface;
+const rankingAxis = window.AthenaLib.RankingAxis;
 const semanticDetailSheet = window.AthenaLib.SemanticDetailSheet;
 const semanticWorkspace = window.AthenaLib.SemanticWorkspace;
 const paperCardRouting = window.AthenaLib.PaperCardRouting;
+const boardMount = window.AthenaLib.BoardMount;
+const boardTemplateRegistry = window.AthenaLib.BoardTemplateRegistry;
+const canvasTabs = window.AthenaLib.CanvasTabs;
 const SEMANTIC_PRIMARY_TYPES = new Set(['table', 'chart', 'facts', 'compound', 'event', 'action', 'status']);
 
 function developerDiagnosticsEnabled() {
@@ -19,6 +23,9 @@ function developerDiagnosticsEnabled() {
 
 function upsertDeveloperDiagnostics(root, envelope) {
   if (!developerDiagnosticsEnabled() || !semanticDetailSheet) return null;
+  // 보드 표면 카드에는 개발자 진단 시트("전체 원본 필드 ▸")도 덧대지 않는다 —
+  // 카드가 보드 그 자체이므로 그 아래에 원시 필드 서랍이 붙을 자리가 없다(신념 8).
+  if (integratedCardSurface.isBoardSurface(root)) return null;
   return semanticDetailSheet.upsert(root, envelope);
 }
 
@@ -166,6 +173,47 @@ function destroyCard(card) {
 const grid = document.getElementById('grid');
 let activeDatasetId = null;
 
+// ---------- 캔버스 탭 뷰포트 (캔버스 탭·반응형 카드 계획 §1) ----------
+// 키움 보드 카드(통합 카드)는 모자이크 2열에 나란히 눕지 않는다 — 탭 스트립 +
+// 뷰포트 1개를 쓰고, 카드 크기 = 뷰포트 크기다. 판정·상태는 lib/canvas-tabs.js가
+// 단독으로 갖는다(canvas.js는 shell.html에서만 도는 렌더러라 단위 테스트가 안 걸린다).
+//
+// 덱은 첫 보드 카드가 올 때 만들고 마지막 탭이 닫히면 지운다 — #grid 자식 수가
+// 빈 캔버스 상태(#gridEmpty)의 유일한 판정 근거라, 빈 덱을 남겨두면 빈 화면이
+// 영영 안 돌아온다.
+let canvasTabDeck = null;
+
+function discardCanvasTabDeck() {
+  if (!canvasTabDeck || canvasTabDeck.keys().length) return;
+  canvasTabDeck.element.remove();
+  canvasTabDeck = null;
+}
+
+function ensureCanvasTabDeck() {
+  if (canvasTabDeck) return canvasTabDeck;
+  canvasTabDeck = canvasTabs.createDeck({
+    onClose: (card) => {
+      destroyCard(card);
+      discardCanvasTabDeck();
+    },
+  });
+  grid.prepend(canvasTabDeck.element);
+  return canvasTabDeck;
+}
+
+// 통합 카드 root를 자기 탭으로 옮긴다. 같은 인스턴스 키면 탭이 늘지 않고 갱신된다.
+function adoptIntoCanvasTab(root, envelope) {
+  if (!root || !canvasTabs) return null;
+  const key = integratedCardSurface.instanceKeyFor(envelope);
+  if (!key) return null;
+  const definition = integratedCardSurface.integratedDefinition(envelope);
+  const deck = ensureCanvasTabDeck();
+  return deck.upsert(root, {
+    key,
+    title: canvasTabs.tabTitleFor(envelope, definition && definition.title),
+  });
+}
+
 if (window.athena && typeof window.athena.on === 'function') {
   window.athena.on('athena:integrated-card-realtime-state', (state) => {
     if (!state || !state.leaseId) return;
@@ -195,6 +243,10 @@ if (window.athena && typeof window.athena.on === 'function') {
       if (!accepts) continue;
       if (root.dataset.taskCanvas === 'true' && semanticWorkspace) {
         semanticWorkspace.applyRealtimeTick(root, tick);
+      }
+      // 보드 표면 카드는 의미 작업대가 아니다 — 같은 프레임을 슬롯 이음매로 받는다.
+      for (const host of root.querySelectorAll('.board-surface-host')) {
+        applyBoardRealtimeTick(host, tick);
       }
       if (developerDiagnosticsEnabled() && semanticDetailSheet) {
         semanticDetailSheet.applyRealtimeTick(root, tick);
@@ -418,6 +470,11 @@ function clearCanvases() {
   for (const card of grid.querySelectorAll('.card')) {
     destroyCard(card);
   }
+  // 카드를 지워도 탭 스트립은 남는다 — 덱까지 닫아야 빈 캔버스로 돌아간다.
+  if (canvasTabDeck) {
+    for (const key of canvasTabDeck.keys()) canvasTabDeck.close(key);
+    discardCanvasTabDeck();
+  }
   activeDatasetId = null;
 }
 
@@ -609,6 +666,10 @@ async function addLiveCard(result) {
 }
 
 function renderPrimaryEnvelope(envelope, options = {}) {
+  // 표면 계약이 실려 오면 Paper 보드 원문을 그대로 마운트한다(D1) — 런타임 레이아웃
+  // 재조립 없이 텍스트 노드만 바뀐다. 계약이 없으면 기존 경로 그대로.
+  const boardCard = renderBoardSurfaceCard(envelope);
+  if (boardCard) return boardCard;
   if (envelope.canvas_type === 'table' && !envelope.fell_back) return renderMcpTable(envelope);
   if (envelope.canvas_type === 'stream' && !envelope.fell_back) return renderLiveStream(envelope);
   if (envelope.canvas_type === 'reader' && !envelope.fell_back) return renderLiveReader(envelope);
@@ -619,6 +680,223 @@ function renderPrimaryEnvelope(envelope, options = {}) {
   if (envelope.canvas_type === 'action' && !envelope.fell_back) return renderActionCard(envelope);
   if (envelope.canvas_type === 'status' && !envelope.fell_back) return renderStatusCard(envelope);
   return renderFreeCanvas(envelope);
+}
+
+// 보드 표면 카드 — surface_contract(백엔드 canvas_push가 싣는다)를 board-mount에
+// 넘겨 Paper 원문 HTML을 마운트한다. 슬롯 값이 없으면 결측어가 뜨고(신념 5),
+// 계약이 없으면 null을 돌려 기존 렌더 경로가 그대로 돈다.
+function surfaceContractOf(envelope) {
+  const contract = envelope && (envelope.surface_contract || envelope.surfaceContract);
+  return contract && typeof contract === 'object' && contract.board_id ? contract : null;
+}
+
+// slot_values는 {slot_id: value} 맵으로도, [{slot_id, value}] 목록으로도 온다.
+function slotValuesOf(contract) {
+  const raw = contract.slot_values || contract.slotValues;
+  if (!raw) return {};
+  if (!Array.isArray(raw)) return raw;
+  const map = {};
+  for (const entry of raw) {
+    if (entry && entry.slot_id !== undefined) map[entry.slot_id] = entry.value;
+  }
+  return map;
+}
+
+// 상태 보드 링크 — 백엔드는 `state_boards`로 싣고 계약 문서는 `state_links`로 부른다.
+// 둘 다 같은 목록이다: [{board_id, kind, control}].
+function stateLinksOf(contract) {
+  const raw = contract.state_links || contract.state_boards;
+  return (Array.isArray(raw) ? raw : []).filter((link) => link && link.board_id);
+}
+
+// 하이드레이션 대상 — 봉투가 아는 종목/계좌를 그대로 넘긴다(없으면 안 싣는다).
+function boardHydrateTarget(envelope) {
+  const args = (envelope && (envelope.operation_args || envelope.arguments)) || {};
+  return cardStkCd(envelope) || args.stk_cd || envelope.symbol || args.symbol || '';
+}
+
+function boardHydrateAccount(envelope) {
+  const args = (envelope && (envelope.operation_args || envelope.arguments)) || {};
+  return envelope.account_id || envelope.account_no || args.account_id || args.account_no
+    || args.acnt_no || '';
+}
+
+// 보드 마운트 상태 — 카드 1장이 사는 동안 값 표와 상태 보드 링크를 이어 쓴다.
+// 상태 보드로 갈아타도 같은 값 표를 그대로 쓰고(D5) 부족분만 더 채운다.
+function boardStateOf(host) {
+  if (!host.__athenaBoard) {
+    host.__athenaBoard = {
+      values: {}, links: [], unbound: [], boardId: null,
+      // binding_id → [slot_id]. 봉투가 두 표를 같이 실을 때만 채워진다 —
+      // 비어 있으면 실시간 프레임은 보드에 아무것도 안 한다(추측하지 않는다).
+      realtimeSlots: new Map(), surface: null, mountContract: null,
+    };
+  }
+  return host.__athenaBoard;
+}
+
+// 마운트 계약(어느 노드에 어떤 슬롯이 앉는가)은 정적이라 board-template-registry가
+// 갖고 있다. 봉투는 값(slot_values)과 상태 보드 목록만 나른다.
+function boardMountOptions(host, envelope) {
+  return {
+    // ▸ 펼침 = 상태 보드 템플릿 교체(D5). 링크에 있는 보드로만 바꾼다 — 없으면
+    // 아무것도 하지 않는다(없는 화면을 지어내지 않는다).
+    onExpand: (boardId) => switchStateBoard(host, boardId, envelope),
+  };
+}
+
+// 봉투가 실어온 계약으로 보드를 연다. 값 표·상태 링크·미결 슬롯은 여기서만 온다.
+function openBoardSurface(host, contract, envelope) {
+  const state = boardStateOf(host);
+  state.values = slotValuesOf(contract);
+  state.links = stateLinksOf(contract);
+  state.unbound = Array.isArray(contract.unbound_slots) ? contract.unbound_slots.slice() : [];
+  state.realtimeSlots = boardMount.realtimeSlotIndex(contract, realtimeBindingsOf(envelope));
+  return mountBoardState(host, contract.board_id, envelope);
+}
+
+// 봉투가 싣는 실시간 바인딩 표. semantic-workspace가 읽는 자리와 같은 자리다.
+function realtimeBindingsOf(envelope) {
+  const taskCanvas = (envelope && (envelope.task_canvas || envelope.taskCanvas)) || {};
+  return [
+    envelope && envelope.realtime_bindings, envelope && envelope.realtimeBindings,
+    taskCanvas.realtime_bindings, taskCanvas.realtimeBindings,
+  ].find(Array.isArray) || [];
+}
+
+// 실시간 프레임 → 보드 잎. 프레임이 아는 것은 binding_id뿐이고, 그것이 어느 슬롯을
+// 가리키는지는 봉투가 이미 말해 뒀다(realtimeSlots). 모르는 binding은 버린다.
+function applyBoardRealtimeTick(host, tick) {
+  const state = host && host.__athenaBoard;
+  if (!state || !state.surface || !state.mountContract || !state.realtimeSlots.size) return 0;
+  const touched = [];
+  for (const update of semanticWorkspace.semanticRealtimeUpdates(tick)) {
+    for (const slotId of state.realtimeSlots.get(update.bindingId) || []) {
+      state.values[slotId] = update.value;
+      touched.push(slotId);
+    }
+  }
+  if (!touched.length) return 0;
+  boardMount.applyRealtimeSlots(state.surface, state.mountContract, state.values, touched);
+  return touched.length;
+}
+
+// 원문 HTML은 카드 청크에 있다 — 그 카드의 첫 보드는 여기서 한 번 기다린다.
+function mountBoardState(host, boardId, envelope) {
+  const state = boardStateOf(host);
+  state.boardId = String(boardId);
+  return boardMount.mountBoardAsync(host, state.boardId, state.values, boardMountOptions(host, envelope))
+    .then((mounted) => {
+      rememberMountedBoard(state, mounted);
+      wireStateControls(host, envelope, mounted);
+      return hydrateBoardSlots(host, envelope, mounted);
+    });
+}
+
+function switchStateBoard(host, boardId, envelope) {
+  const state = boardStateOf(host);
+  const target = String(boardId || '');
+  if (!target || target === state.boardId) return null;
+  if (!state.links.some((link) => link.board_id === target)) return null;
+  return mountBoardState(host, target, envelope);
+}
+
+// 스트립 칩·탭 = 상태 보드 조작. 추출 원문에서 칩은 그냥 텍스트 노드라, 계약이 준
+// `control` 문구와 정확히 같은 글자를 내는 잎을 그 조작으로 본다(스트립·내비 안에서만).
+function findStateControl(surface, control) {
+  for (const node of surface.querySelectorAll('[data-state-control]')) {
+    if (node.dataset.stateControl === control) return node;
+  }
+  for (const scope of surface.querySelectorAll('.bs-strip, nav, [role="tablist"]')) {
+    for (const node of scope.querySelectorAll('*')) {
+      if (node.childElementCount === 0 && node.textContent.trim() === control) {
+        return node.closest('button, [role="tab"]') || node;
+      }
+    }
+  }
+  return null;
+}
+
+function wireStateControls(host, envelope, mounted) {
+  const state = boardStateOf(host);
+  const surface = mounted && mounted.surface;
+  if (!surface || !state.links.length) return 0;
+  let wired = 0;
+  for (const link of state.links) {
+    const control = String(link.control || '').trim();
+    if (!control) continue;
+    const node = findStateControl(surface, control);
+    if (!node || node.__athenaStateWired) continue;
+    node.__athenaStateWired = true;
+    // 표시는 CSS가 한다([data-state-board], board-surface.css) — 인라인 원문은 안 건드린다(D1).
+    node.dataset.stateBoard = link.board_id;
+    node.addEventListener('click', () => switchStateBoard(host, link.board_id, envelope));
+    wired += 1;
+  }
+  return wired;
+}
+
+// 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다. 엔드포인트가 아직 없으면
+// 응답이 unavailable로 오고 화면은 결측어(미제공)를 그대로 둔다 — 값을 지어내지 않는다.
+async function hydrateBoardSlots(host, envelope, mounted) {
+  const state = boardStateOf(host);
+  const pending = state.unbound.length
+    ? state.unbound
+    : ((mounted && mounted.plan && mounted.plan.missing) || []);
+  if (!pending.length || !window.athena || typeof window.athena.invoke !== 'function') return mounted;
+  let reply = null;
+  try {
+    reply = await window.athena.invoke('athena:canvas-board-hydrate', {
+      boardId: state.boardId,
+      target: boardHydrateTarget(envelope),
+      account: boardHydrateAccount(envelope),
+    });
+  } catch {
+    reply = null;
+  }
+  const filled = reply && reply.ok && reply.slot_values ? reply.slot_values : null;
+  if (!filled || !Object.keys(filled).length) return mounted;
+  state.values = { ...state.values, ...filled };
+  state.unbound = state.unbound.filter((slotId) => !(slotId in filled));
+  return boardMount
+    .mountBoardAsync(host, state.boardId, state.values, boardMountOptions(host, envelope))
+    .then((remounted) => rememberMountedBoard(state, remounted));
+}
+
+// 마운트 결과에서 실시간 갱신이 쓸 것만 남긴다: 표면 노드와 그 보드의 정적 슬롯 계약.
+// 봉투의 surface_contract가 아니라 색인이 가진 마운트 계약이다(slots가 거기에만 있다).
+function rememberMountedBoard(state, mounted) {
+  if (mounted && mounted.surface) state.surface = mounted.surface;
+  state.mountContract = boardTemplateRegistry.contractFor(state.boardId) || null;
+  return mounted;
+}
+
+function renderBoardSurfaceCard(envelope) {
+  const contract = surfaceContractOf(envelope);
+  if (!contract || !boardMount) return null;
+  const [title, subtitle] = cardTitleAndSubtitle(envelope, '보드');
+  const { card, body } = makeCard(
+    'board-surface', title, envelope.layout, envelope.correlation,
+    subtitle, cardStkCd(envelope), envelope.screen_id,
+  );
+  card.dataset.semanticPrimary = 'specialized';
+  card.dataset.boardId = contract.board_id;
+  // 카드 = 보드 그 자체다. Paper 보드가 자기 헤더(제목·기준 시각)·스트립·푸터를
+  // 갖고 있고 닫기는 탭 스트립이 맡으므로, 통합 카드 머리를 겹쳐 그리지 않는다.
+  // 표시는 integrated-card-surface가 읽어 패널 탭 칩도 만들지 않는다.
+  card.dataset.boardSurface = 'true';
+  const head = card.querySelector(':scope > .card-head');
+  if (head) head.remove();
+  stampPaperScreen(card, envelope);
+  const host = document.createElement('div');
+  host.className = 'board-surface-host';
+  body.appendChild(host);
+  openBoardSurface(host, contract, envelope).catch((error) => {
+    // 보드를 못 세우면 범용 카드로 조용히 떨어뜨리지 않는다 — 그건 계약 파생
+    // 실패이고, 감추면 사용자는 알 수 없는 표를 본다(paper-card-routing과 같은 판단).
+    body.replaceChildren(errorNote(String((error && error.message) || error)));
+  });
+  return card;
 }
 
 async function renderTaskCanvasEnvelope(envelope) {
@@ -683,8 +961,10 @@ async function renderIntegratedCard(envelope) {
   if (rendered === existing) {
     integratedCardSurface.refreshExisting(existing, envelope);
     if (semanticWorkspace) semanticWorkspace.upsert(existing, envelope);
+    decorateRankingPanel(existing, envelope);
     upsertDeveloperDiagnostics(existing, envelope);
     syncIntegratedRealtime(existing, envelope);
+    adoptIntoCanvasTab(existing, envelope);
     return existing;
   }
 
@@ -744,8 +1024,11 @@ async function renderIntegratedCard(envelope) {
   if (transientCard) transientCard.remove();
 
   if (semanticWorkspace) semanticWorkspace.upsert(root, envelope);
+  decorateRankingPanel(root, envelope, panelKey);
   upsertDeveloperDiagnostics(root, envelope);
   syncIntegratedRealtime(root, envelope);
+  // 탭 뷰포트로 옮기는 것은 마지막이다 — 그 전 단계들이 grid 스코프 질의를 쓴다.
+  adoptIntoCanvasTab(root, envelope);
   // 개발자 진단 surface를 명시적으로 켠 경우에만 wire occurrence identity를
   // 검사한다. production 제품 UI에는 이 DOM 자체를 만들지 않는다.
   if (developerDiagnosticsEnabled() && root.querySelector('.semantic-detail-row:not([data-field-occurrence-id])')) {
@@ -753,6 +1036,27 @@ async function renderIntegratedCard(envelope) {
     throw new Error('통합 카드 field occurrence identity가 누락됐다');
   }
   return root;
+}
+
+// 순위 모드 패널 장식 — 축 스트립을 패널 맨 위에 세운다(Paper R01-T4~T6 · R03-T6).
+// 축 전환은 카드가 조회를 발명하지 않고 seedChatInput 버스로 질문을 심는다
+// ("새 작업은 채팅에서" — 에이전트 동선 규칙과 같은 경로).
+function decorateRankingPanel(root, envelope, panelKey) {
+  if (!rankingAxis || !root || !envelope || envelope.mode !== 'ranking') return;
+  const key = panelKey || integratedCardSurface.panelKeyFor(envelope);
+  const panel = Array.from(root.querySelectorAll('.integrated-card-panel'))
+    .find((node) => node.__athenaPanelKey === key);
+  if (!panel) return;
+  panel.classList.add('integrated-card-panel--ranking');
+  const existingStrip = panel.querySelector(':scope > .ranking-axis-strip');
+  const strip = rankingAxis.renderAxisStrip(envelope, (item) => {
+    if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+      window.AthenaShell.seedChatInput(item.question);
+    }
+  });
+  if (!strip) return;
+  if (existingStrip) existingStrip.replaceWith(strip);
+  else panel.prepend(strip);
 }
 
 function integratedRealtimePayload(root, envelope) {
@@ -1748,6 +2052,14 @@ function freshLabel() {
 // 마지막 카드를 닫으면 빈 유리창을 남기지 않고 캔버스 자체를 접는다 — Esc가
 // 쓰는 채널을 그대로 재사용한다.
 function closeCard(card) {
+  // 탭 뷰포트 카드는 탭이 소유한다 — 카드만 지우면 빈 패널을 가진 탭이 남는다.
+  // 탭을 닫으면 덱의 onClose가 destroyCard까지 부르고 마지막 탭이면 덱도 지운다.
+  const panel = card && card.parentElement;
+  const tabKey = panel && panel.dataset ? panel.dataset.tabKey : null;
+  if (tabKey && canvasTabDeck && canvasTabDeck.has(tabKey)) {
+    canvasTabDeck.close(tabKey);
+    return;
+  }
   const destroy = cardDestroyers.get(card);
   if (destroy) {
     try { destroy(); } catch (err) { /* 카드가 이미 언마운트된 경우 등 — 닫기 자체는 막지 않는다 */ }
@@ -1790,14 +2102,22 @@ function enforceHeightBudget() {
   // REST 데이터셋은 최대 6장 전체가 한 결과 집합이다. 오래된 카드를 높이 예산으로
   // 제거하면 같은 타입 공존·ordinal 계약이 깨지므로 스크롤로 모두 보존한다.
   if (grid.querySelector('.card[data-dataset-id]')) return;
-  let cards = grid.querySelectorAll('.card');
+  // 탭 뷰포트 카드는 높이 예산 밖이다 — 한 번에 한 장만 보이고 본문은 카드 안에서
+  // 세로 스크롤한다(계획 §1). 여기서 세면 모자이크 카드가 도착할 때마다 문서 순서
+  // 맨 앞인 탭 카드부터 지워진다.
+  let cards = mosaicCards();
   while (
     cards.length > MIN_CARDS &&
     exceedsHeightBudget(grid.scrollHeight, grid.clientHeight, cards.length)
   ) {
     destroyCard(cards[0]);
-    cards = grid.querySelectorAll('.card');
+    cards = mosaicCards();
   }
+}
+
+function mosaicCards() {
+  return Array.from(grid.querySelectorAll('.card'))
+    .filter((card) => !card.closest('.canvas-tab-deck'));
 }
 
 // 대화 경로 카드 공존 키(P2, 2026-08-27) — envelope.stk_cd(backend 53ece06, 시장

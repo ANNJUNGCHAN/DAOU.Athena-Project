@@ -1,0 +1,263 @@
+{
+ "board_id": "2UBO-1",
+ "card_id": "CC-06",
+ "name": "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+ "operation_refs": [
+  "base:ka90001",
+  "base:ka90002"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka90001",
+   "f": "thema_grp",
+   "kor": "테마그룹별",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "테마 테이블(48개 테마)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90001",
+   "f": "thema_grp_cd",
+   "kor": "테마그룹코드",
+   "layer": "병기",
+   "board": "2UBO-1",
+   "where": "테마 표 테마 셀 보조줄 mono 10px T0142·T0087·T0053·T0119·T0064·T0201",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90001",
+   "f": "thema_nm",
+   "kor": "테마명",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "'테마' 컬럼 AI 반도체",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90001",
+   "f": "stk_num",
+   "kor": "종목수",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "'상승/전체' 컬럼의 전체값 24",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90001",
+   "f": "flu_sig",
+   "kor": "등락기호",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "등락률 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90001",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "'등락률' 컬럼 +3.42%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90001",
+   "f": "rising_stk_num",
+   "kor": "상승종목수",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "'상승/전체' 컬럼의 18",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90001",
+   "f": "fall_stk_num",
+   "kor": "하락종목수",
+   "layer": "병기",
+   "board": "2UBO-1",
+   "where": "테마 표 상승/전체 셀 보조줄 '하락 6'(6행 전부, 전체-상승 정합)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90001",
+   "f": "dt_prft_rt",
+   "kor": "기간수익률",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "'기간 수익률' 컬럼 +12.4%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90001",
+   "f": "main_stk",
+   "kor": "주요종목",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "우패널 '구성 상위' 3종목",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "우패널 '등락률 · 거래대금 +3.42% · 2.8조'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "dt_prft_rt",
+   "kor": "기간수익률",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "우패널 '기간 수익률 (5일) +12.4%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "thema_comp_stk",
+   "kor": "테마구성종목",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "우패널 '구성 상위' 리스트",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "board": "2UBO-1",
+   "where": "좌 pane 'AI 반도체 구성 상위' 표 종목 셀 보조줄 000660·042700·007660",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "구성 상위 SK하이닉스/한미반도체/이수페타시스",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": "직접",
+   "board": "2UBO-1",
+   "where": "구성 상위 표 현재가 열 주값 198,400·128,400·42,150",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "flu_sig",
+   "kor": "등락기호",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "구성 상위 등락률 색/± 부호",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "board": "2UBO-1",
+   "where": "구성 상위 표 현재가 셀 보조줄 +3,990·+7,290·+2,175",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "board": "2UBO-1",
+   "where": "구성 상위 등락률 +4.18%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": "직접",
+   "board": "2UBO-1",
+   "where": "구성 상위 표 누적 거래량 열 860만주·242만주·340만주",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "sel_bid",
+   "kor": "매도호가",
+   "layer": "직접",
+   "board": "2UBO-1",
+   "where": "구성 상위 표 매도호가 열 주값 198,500·128,500·42,200",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "sel_req",
+   "kor": "매도잔량",
+   "layer": "병기",
+   "board": "2UBO-1",
+   "where": "구성 상위 표 매도호가 셀 보조줄 '잔량 8.2만·3.4만·5.6만'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "buy_bid",
+   "kor": "매수호가",
+   "layer": "직접",
+   "board": "2UBO-1",
+   "where": "구성 상위 표 매수호가 열 주값 198,400·128,400·42,150",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "buy_req",
+   "kor": "매수잔량",
+   "layer": "병기",
+   "board": "2UBO-1",
+   "where": "구성 상위 표 매수호가 셀 보조줄 '잔량 11.4만·4.1만·6.8만'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka90002",
+   "f": "dt_prft_rt_n",
+   "kor": "기간수익률n",
+   "layer": "병기",
+   "board": "2UBO-1",
+   "where": "구성 상위 표 등락률 셀 보조줄 '5일 +8.2%·+18.6%·+9.7%'",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 25
+}

@@ -1,0 +1,11 @@
+{
+  "root": "2TAI-1",
+  "regions": [
+    { "node_id": "2TE6-1", "name": "Order Header", "role": "header", "depth": 1 },
+    { "node_id": "2TDM-1", "name": "Order Progress", "role": "other", "depth": 1 },
+    { "node_id": "2TAO-1", "name": "Order Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "2TCO-1", "name": "Order Entry", "role": "primary", "depth": 2 },
+    { "node_id": "2TBS-1", "name": "Order Preview", "role": "other", "depth": 2 },
+    { "node_id": "2TAP-1", "name": "Fees and Execution", "role": "rail", "depth": 2 }
+  ]
+}

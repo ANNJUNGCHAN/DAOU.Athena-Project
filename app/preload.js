@@ -65,6 +65,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:integrated-card-realtime-release-all',
   'athena:integrated-card-realtime-status',
   'athena:integrated-card-realtime-command',
+  // 보드 슬롯 하이드레이션 — 봉투가 못 채운 슬롯만 채운다. 읽기 전용이다.
+  'athena:canvas-board-hydrate',
   // 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md §2(e)/(f))
   // — 대화 모드 HISTORY_COMMAND 조회, 설정 모드 "성향・이력" 상태·전체 삭제.
   'athena:brain-status',

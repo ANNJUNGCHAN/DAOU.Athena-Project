@@ -1,0 +1,12 @@
+{
+  "root": "32S9-0",
+  "regions": [
+    { "node_id": "32WW-0", "name": "Instrument Header", "role": "header", "depth": 1 },
+    { "node_id": "32WX-0", "name": "Frame", "role": "strip", "depth": 2 },
+    { "node_id": "32WC-0", "name": "Quote and Valuation Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "32SD-0", "name": "Chart Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "32TJ-0", "name": "Athena Chart Module Mount", "role": "primary", "depth": 2 },
+    { "node_id": "32SE-0", "name": "Instrument Context", "role": "rail", "depth": 2 },
+    { "node_id": "32SA-0", "name": "Chart Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

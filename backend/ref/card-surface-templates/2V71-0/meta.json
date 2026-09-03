@@ -1,0 +1,13 @@
+{
+  "board_id": "2V71-0",
+  "name": "CC-05 / R03-T6 · 수급 — 순위",
+  "card_id": "CC-05",
+  "width": 1440,
+  "height": 1014,
+  "state": {
+    "kind": "tab",
+    "parent_board": "2QFO-2",
+    "control": "순위"
+  },
+  "saved_at": "2026-09-02T11:23:46Z"
+}

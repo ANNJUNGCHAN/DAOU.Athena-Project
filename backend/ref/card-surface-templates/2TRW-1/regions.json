@@ -1,0 +1,12 @@
+{
+  "root": "2TRY-1",
+  "regions": [
+    { "node_id": "2TZ3-1", "name": "Order Book Header", "role": "header", "depth": 1 },
+    { "node_id": "2TZ4-1", "name": "Frame (세션·단수 토글)", "role": "strip", "depth": 2 },
+    { "node_id": "2TYF-1", "name": "Best Quote Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "2TS7-1", "name": "Order Book Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "2TU5-1", "name": "Five Step Ladder", "role": "primary", "depth": 2 },
+    { "node_id": "2TS8-1", "name": "Trade Flow Panel", "role": "rail", "depth": 2 },
+    { "node_id": "2TRZ-1", "name": "Order Book Footer", "role": "footer", "depth": 1 }
+  ]
+}

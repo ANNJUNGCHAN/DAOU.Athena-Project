@@ -1,0 +1,16 @@
+{
+  "board_id": "3TOM-0",
+  "name": "CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+  "card_id": "CC-03",
+  "width": 1440,
+  "height": 1010,
+  "state": {
+    "kind": "expand",
+    "parent_board": "2Z49-0",
+    "control": null
+  },
+  "saved_at": "2026-09-02T11:13:06Z",
+  "operation_refs": [
+    "base:ka30002"
+  ]
+}

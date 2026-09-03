@@ -1,0 +1,12 @@
+{
+  "root": "2SKW-1",
+  "regions": [
+    { "node_id": "2SP5-1", "name": "Account Header", "role": "header", "depth": 1 },
+    { "node_id": "2SP6-1", "name": "Frame (탭 스트립)", "role": "strip", "depth": 2 },
+    { "node_id": "2SOK-1", "name": "Account Summary Strip", "role": "kpi", "depth": 1 },
+    { "node_id": "2SL0-1", "name": "Account Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "39PK-0", "name": "예수금·결제 본문", "role": "primary", "depth": 2 },
+    { "node_id": "3U8K-0", "name": "예수금 레일", "role": "rail", "depth": 2 },
+    { "node_id": "2SKX-1", "name": "Account Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

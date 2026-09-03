@@ -1,0 +1,13 @@
+{
+  "board_id": "2QM7-2",
+  "name": "CC-05 / R03-T2 · 수급 — 거래원",
+  "card_id": "CC-05",
+  "width": 1440,
+  "height": 1014,
+  "state": {
+    "kind": "tab",
+    "parent_board": "2QFO-2",
+    "control": "거래원"
+  },
+  "saved_at": "2026-09-02T11:20:05Z"
+}

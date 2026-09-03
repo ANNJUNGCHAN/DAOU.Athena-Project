@@ -1,0 +1,288 @@
+Frame "Explorer Card Surface" (2YAA-0) 1360×900
+  Frame "Header and Capability Navigation" (2YE6-0) 1358×112
+    Frame "Frame" (2YEK-0) 219×62
+      Frame "Frame" (2YEM-0) 219×34
+        Text "종목 찾기" (2YEP-0) 122×34 "종목 찾기"
+        Frame "Frame" (2YEN-0) 85×28
+          Text "장중 · 09:42" (2YEO-0) 65×16 "장중 · 09:42"
+      Text "호가잔량 급증 · KOSPI" (2YEL-0) 219×20 "호가잔량 급증 · KOSPI"
+    Frame "Frame" (2YE7-0) 421×36
+      Frame "Frame" (2YEI-0) 54×36
+        Text "업종" (2YEJ-0) 26×16 "업종"
+      Frame "Frame" (2YEG-0) 80×36
+        Text "종목찾기" (2YEH-0) 52×16 "종목찾기"
+      Frame "Frame" (2YEE-0) 54×36
+        Text "관심" (2YEF-0) 26×16 "관심"
+      Frame "Frame" (2YEC-0) 54×36
+        Text "테마" (2YED-0) 26×16 "테마"
+      Frame "Frame" (2YEA-0) 69×36
+        Text "시장·VI" (2YEB-0) 41×16 "시장·VI"
+      Frame "Frame" (2YE8-0) 80×36
+        Text "조건검색" (2YE9-0) 52×16 "조건검색"
+  Frame "Ranking Query Controls" (2YD0-0) 1358×109
+    Frame "Frame" (2YDJ-0) 1302×34
+      Frame "Frame" (2YDN-0) 860×34
+        Frame "Frame" (2YE4-0) 32×16
+          Text "정렬" (2YE5-0) 26×16 "정렬"
+        Frame "Frame" (2YE2-0) 74×34
+          Text "거래대금" (2YE3-0) 48×16 "거래대금"
+        Frame "Frame" (2YE0-0) 91×34
+          Text "당일 거래량" (2YE1-0) 65×16 "당일 거래량"
+        Frame "Frame" (2YDY-0) 91×34
+          Text "전일 거래량" (2YDZ-0) 65×16 "전일 거래량"
+        Frame "Frame" (2YDW-0) 62×34
+          Text "등락률" (2YDX-0) 36×16 "등락률"
+        Frame "Frame" (2YDU-0) 115×34
+          Text "예상체결 등락률" (2YDV-0) 89×16 "예상체결 등락률"
+        Frame "Frame" (2YDS-0) 74×34
+          Text "호가잔량" (2YDT-0) 48×16 "호가잔량"
+        Frame "Frame" (2YDQ-0) 85×32
+          Text "잔량 급증" (2YDR-0) 57×16 "잔량 급증"
+        Frame "Frame" (2YDO-0) 91×34
+          Text "잔량률 급증" (2YDP-0) 65×16 "잔량률 급증"
+        Frame "거래량 급증" (32B6-0) 91×34
+          Text "거래량 급증" (32B7-0) 65×16 "거래량 급증"
+      Frame "Frame" (2YDK-0) 169×16
+        Text "● 실시간 갱신" (2YDM-0) 88×16 "● 실시간 갱신"
+        Text "100개 결과" (2YDL-0) 65×16 "100개 결과"
+    Frame "Frame" (2YD1-0) 1302×34
+      Frame "Frame" (2YD8-0) 497×34
+        Frame "Frame" (2YDH-0) 32×16
+          Text "필터" (2YDI-0) 26×16 "필터"
+        Frame "Frame" (2YDF-0) 59×34
+          Text "KOSPI" (2YDG-0) 33×16 "KOSPI"
+        Frame "Frame" (2YDD-0) 79×34
+          Text "등락 전체" (2YDE-0) 53×16 "등락 전체"
+        Frame "Frame" (2YDB-0) 103×34
+          Text "시가총액 전체" (2YDC-0) 77×16 "시가총액 전체"
+        Frame "Frame" (2YD9-0) 91×34
+          Text "유동성 정상" (2YDA-0) 65×16 "유동성 정상"
+        Frame "상·하한가 제외" (3SH1-0) 103×32
+          Text "상·하한가 제외" (3SH2-0) 79×16 "상·하한가 제외"
+      Frame "Frame" (2YD2-0) 195×32
+        Text "세션" (2YD7-0) 22×16 "세션"
+        Frame "Frame" (2YD5-0) 60×32
+          Text "정규장" (2YD6-0) 36×16 "정규장"
+        Frame "Frame" (2YD3-0) 101×32
+          Text "시간외 단일가" (2YD4-0) 77×16 "시간외 단일가"
+  Frame "Ranking Workspace" (2YAE-0) 1358×612
+    Frame "Ranking Result Table" (36EO-0) 880×612
+      Frame "순위표" (36EP-0) 824×380
+        Frame "표 헤더블록" (36EQ-0) 824×64
+          Frame "Frame" (36ER-0) 824×22
+            Text "호가잔량 급증" (36ES-0) 108×22 "호가잔량 급증"
+            Text "업데이트 09:42:18" (36ET-0) 98×16 "업데이트 09:42:18"
+          Frame "열 이름" (36EU-0) 824×34
+            Text "순위" (36EV-0) 56×16 "순위"
+            Text "종목" (36EW-0) 190×16 "종목"
+            Text "현재가" (36EX-0) 114×16 "현재가"
+            Text "등락률" (36EY-0) 90×16 "등락률"
+            Text "잔량 증가율(5분)" (36EZ-0) 132×16 "잔량 증가율(5분)"
+            Text "급증 잔량" (36F0-0) 122×16 "급증 잔량"
+            Text "체결강도" (36F1-0) 88×16 "체결강도"
+        Frame "1위 삼성전자" (36F2-0) 824×56
+          Text "01" (36F3-0) 56×17 "01"
+          Frame "Frame" (36F4-0) 190×33
+            Text "삼성전자" (36F5-0) 190×18 "삼성전자"
+            Text "005930" (36F6-0) 190×13 "005930"
+          Frame "Frame" (36F7-0) 114×35
+            Text "150,850" (36F8-0) 55×17 "150,850"
+            Text "+1,850" (36F9-0) 44×16 "+1,850"
+          Text "+1.24%" (36FA-0) 90×17 "+1.24%"
+          Frame "Frame" (36FB-0) 132×35
+            Text "+212%" (36FC-0) 39×17 "+212%"
+            Text "3.65만 → 11.4만" (36FD-0) 108×16 "3.65만 → 11.4만"
+          Frame "Frame" (36FE-0) 122×35
+            Text "+7.75만" (36FF-0) 52×17 "+7.75만"
+            Text "총매수 11.4만" (36FG-0) 84×16 "총매수 11.4만"
+          Text "108.4%" (36FH-0) 88×17 "108.4%"
+        Frame "2위 SK하이닉스" (36FI-0) 824×56
+          Text "02" (36FJ-0) 56×17 "02"
+          Frame "Frame" (36FK-0) 190×33
+            Text "SK하이닉스" (36FL-0) 190×18 "SK하이닉스"
+            Text "000660" (36FM-0) 190×13 "000660"
+          Frame "Frame" (36FN-0) 114×35
+            Text "198,400" (36FO-0) 55×17 "198,400"
+            Text "+3,990" (36FP-0) 44×16 "+3,990"
+          Text "+2.05%" (36FQ-0) 90×17 "+2.05%"
+          Frame "Frame" (36FR-0) 132×35
+            Text "+183%" (36FS-0) 39×17 "+183%"
+            Text "2.4만 → 6.8만" (36FT-0) 94×16 "2.4만 → 6.8만"
+          Frame "Frame" (36FU-0) 122×35
+            Text "+4.4만" (36FV-0) 45×17 "+4.4만"
+            Text "총매수 6.8만" (36FW-0) 77×16 "총매수 6.8만"
+          Text "116.2%" (36FX-0) 88×17 "116.2%"
+        Frame "3위 현대차" (36FY-0) 824×56
+          Text "03" (36FZ-0) 56×17 "03"
+          Frame "Frame" (36G0-0) 190×33
+            Text "현대차" (36G1-0) 190×18 "현대차"
+            Text "005380" (36G2-0) 190×13 "005380"
+          Frame "Frame" (36G3-0) 114×35
+            Text "232,500" (36G4-0) 55×17 "232,500"
+            Text "-1,220" (36G5-0) 44×16 "-1,220"
+          Text "-0.52%" (36G6-0) 90×17 "-0.52%"
+          Frame "Frame" (36G7-0) 132×35
+            Text "+156%" (36G8-0) 39×17 "+156%"
+            Text "1.6만 → 4.1만" (36G9-0) 94×16 "1.6만 → 4.1만"
+          Frame "Frame" (36GA-0) 122×35
+            Text "+2.5만" (36GB-0) 45×17 "+2.5만"
+            Text "총매수 4.1만" (36GC-0) 77×16 "총매수 4.1만"
+          Text "93.8%" (36GD-0) 88×17 "93.8%"
+        Frame "4위 NAVER" (36GE-0) 824×56
+          Text "04" (36GF-0) 56×17 "04"
+          Frame "Frame" (36GG-0) 190×33
+            Text "NAVER" (36GH-0) 190×18 "NAVER"
+            Text "035420" (36GI-0) 190×13 "035420"
+          Frame "Frame" (36GJ-0) 114×35
+            Text "214,000" (36GK-0) 55×17 "214,000"
+            Text "+1,800" (36GL-0) 44×16 "+1,800"
+          Text "+0.85%" (36GM-0) 90×17 "+0.85%"
+          Frame "Frame" (36GN-0) 132×35
+            Text "+129%" (36GO-0) 39×17 "+129%"
+            Text "1.4만 → 3.2만" (36GP-0) 94×16 "1.4만 → 3.2만"
+          Frame "Frame" (36GQ-0) 122×35
+            Text "+1.8만" (36GR-0) 45×17 "+1.8만"
+            Text "총매수 3.2만" (36GS-0) 77×16 "총매수 3.2만"
+          Text "104.1%" (36GT-0) 88×17 "104.1%"
+        Frame "5위 한화에어로스페이스" (36GU-0) 824×56
+          Text "05" (36GV-0) 56×17 "05"
+          Frame "Frame" (36GW-0) 190×33
+            Text "한화에어로스페이스" (36GX-0) 190×18 "한화에어로스페이스"
+            Text "012450" (36GY-0) 190×13 "012450"
+          Frame "Frame" (36GZ-0) 114×35
+            Text "810,000" (36H0-0) 55×17 "810,000"
+            Text "+23,700" (36H1-0) 51×16 "+23,700"
+          Text "+3.01%" (36H2-0) 90×17 "+3.01%"
+          Frame "Frame" (36H3-0) 132×35
+            Text "+111%" (36H4-0) 39×17 "+111%"
+            Text "0.9만 → 1.9만" (36H5-0) 94×16 "0.9만 → 1.9만"
+          Frame "Frame" (36H6-0) 122×35
+            Text "+1.0만" (36H7-0) 45×17 "+1.0만"
+            Text "총매수 1.9만" (36H8-0) 77×16 "총매수 1.9만"
+          Text "127.5%" (36H9-0) 88×17 "127.5%"
+        Frame "표 푸터" (36HA-0) 824×36
+          Text "상위 5개 표시 · 전체 100개" (36HB-0) 147×16 "상위 5개 표시 · 전체 100개"
+          Frame "Frame" (36HC-0) 66×26
+            Text "더보기" (36HD-0) 36×16 "더보기"
+      Frame "Query Universe · 조회 대상" (3EGX-0) 824×172
+        Frame "Universe Head" (3EIR-0) 824×20
+          Text "조회 대상" (3EIT-0) 57×20 "조회 대상"
+          Text "전체 100개 중 12개 · 09:4…" (3EIS-0) 160×20 "전체 100개 중 12개 · 09:42 기준"
+        Frame "Universe Grid" (3EGY-0) 824×120
+          Frame "Row 1" (3EIB-0) 824×30
+            Frame "Frame" (3EIM-0) 264×30
+              Frame "Frame" (3EIO-0) 114×17
+                Text "이수페타시스" (3EIQ-0) 72×16 "이수페타시스"
+                Text "007660" (3EIP-0) 36×14 "007660"
+              Text "+29.90%" (3EIN-0) 51×16 "+29.90%"
+            Frame "Frame" (3EIH-0) 264×30
+              Frame "Frame" (3EIJ-0) 102×17
+                Text "한미반도체" (3EIL-0) 60×16 "한미반도체"
+                Text "042700" (3EIK-0) 36×14 "042700"
+              Text "+4.18%" (3EII-0) 44×16 "+4.18%"
+            Frame "Frame" (3EIC-0) 264×30
+              Frame "Frame" (3EIE-0) 150×17
+                Text "한화에어로스페이스" (3EIG-0) 108×16 "한화에어로스페이스"
+                Text "012450" (3EIF-0) 36×14 "012450"
+              Text "+3.01%" (3EID-0) 44×16 "+3.01%"
+          Frame "Row 2" (3EHV-0) 824×30
+            Frame "Frame" (3EI6-0) 264×30
+              Frame "Frame" (3EI8-0) 104×17
+                Text "SK하이닉스" (3EIA-0) 62×16 "SK하이닉스"
+                Text "000660" (3EI9-0) 36×14 "000660"
+              Text "+2.05%" (3EI7-0) 44×16 "+2.05%"
+            Frame "Frame" (3EI1-0) 264×30
+              Frame "Frame" (3EI3-0) 90×17
+                Text "삼성전자" (3EI5-0) 48×16 "삼성전자"
+                Text "005930" (3EI4-0) 36×14 "005930"
+              Text "+1.24%" (3EI2-0) 44×16 "+1.24%"
+            Frame "Frame" (3EHW-0) 264×30
+              Frame "Frame" (3EHY-0) 104×17
+                Text "KODEX 200" (3EI0-0) 62×16 "KODEX 200"
+                Text "069500" (3EHZ-0) 36×14 "069500"
+              Text "+0.86%" (3EHX-0) 44×16 "+0.86%"
+          Frame "Row 3" (3EHF-0) 824×30
+            Frame "Frame" (3EHQ-0) 264×30
+              Frame "Frame" (3EHS-0) 80×17
+                Text "NAVER" (3EHU-0) 38×16 "NAVER"
+                Text "035420" (3EHT-0) 36×14 "035420"
+              Text "+0.85%" (3EHR-0) 44×16 "+0.85%"
+            Frame "Frame" (3EHL-0) 264×30
+              Frame "Frame" (3EHN-0) 94×17
+                Text "DB하이텍" (3EHP-0) 52×16 "DB하이텍"
+                Text "000990" (3EHO-0) 36×14 "000990"
+              Text "-0.34%" (3EHM-0) 44×16 "-0.34%"
+            Frame "Frame" (3EHG-0) 264×30
+              Frame "Frame" (3EHI-0) 78×17
+                Text "현대차" (3EHK-0) 36×16 "현대차"
+                Text "005380" (3EHJ-0) 36×14 "005380"
+              Text "-0.52%" (3EHH-0) 44×16 "-0.52%"
+          Frame "Row 4" (3EGZ-0) 824×30
+            Frame "Frame" (3EHA-0) 264×30
+              Frame "Frame" (3EHC-0) 66×17
+                Text "기아" (3EHE-0) 24×16 "기아"
+                Text "000270" (3EHD-0) 36×14 "000270"
+              Text "-0.70%" (3EHB-0) 44×16 "-0.70%"
+            Frame "Frame" (3EH5-0) 264×30
+              Frame "Frame" (3EH7-0) 78×17
+                Text "카카오" (3EH9-0) 36×16 "카카오"
+                Text "035720" (3EH8-0) 36×14 "035720"
+              Text "-0.83%" (3EH6-0) 44×16 "-0.83%"
+            Frame "Frame" (3EH0-0) 264×30
+              Frame "Frame" (3EH2-0) 85×17
+                Text "삼성SDI" (3EH4-0) 43×16 "삼성SDI"
+                Text "006400" (3EH3-0) 36×14 "006400"
+              Text "-1.12%" (3EH1-0) 44×16 "-1.12%"
+    Frame "Selected Stock Detail" (2YAF-0) 480×612
+      Frame "Selected Stock Identity" (2YAZ-0) 424×119
+        Frame "Frame" (2YB4-0) 424×48
+          Frame "Frame" (2YB7-0) 101×48
+            Text "삼성전자" (2YB9-0) 101×28 "삼성전자"
+            Text "005930 · KOSPI" (2YB8-0) 101×16 "005930 · KOSPI"
+          Frame "Frame" (2YB5-0) 56×30
+            Text "선택됨" (2YB6-0) 36×16 "선택됨"
+        Frame "Frame" (2YB0-0) 424×42
+          Text "150,850" (2YB3-0) 152×42 "150,850"
+          Frame "Frame" (2YB1-0) 126×23
+            Text "+1,850 · +1.24%" (2YB2-0) 126×18 "+1,850 · +1.24%"
+      Frame "Peer Comparison" (2YAL-0) 424×177
+        Frame "Frame" (2YAW-0) 424×20
+          Text "같이 비교해볼 종목" (2YAY-0) 140×20 "같이 비교해볼 종목"
+          Text "반도체" (2YAX-0) 36×16 "반도체"
+        Frame "Frame" (2YAM-0) 424×126
+          Frame "Frame" (2YAT-0) 424×42
+            Text "SK하이닉스" (2YAV-0) 67×16 "SK하이닉스"
+            Text "+2.05%" (2YAU-0) 47×16 "+2.05%"
+          Frame "Frame" (2YAQ-0) 424×42
+            Text "DB하이텍" (2YAS-0) 56×16 "DB하이텍"
+            Text "-0.34%" (2YAR-0) 47×16 "-0.34%"
+          Frame "Frame" (2YAN-0) 424×42
+            Text "한미반도체" (2YAP-0) 65×16 "한미반도체"
+            Text "+4.18%" (2YAO-0) 47×16 "+4.18%"
+      Frame "Quote and Listing" (3SCD-0) 424×163
+        Text "호가와 종목 정보" (3SCW-0) 424×20 "호가와 종목 정보"
+        Frame "호가" (3SCT-0) 424×32
+          Text "호가" (3SCV-0) 26×17 "호가"
+          Text "매도 150,900 · 매수 150,…" (3SCU-0) 201×17 "매도 150,900 · 매수 150,850"
+        Frame "전일 종가" (3SCQ-0) 424×32
+          Text "전일 종가" (3SCS-0) 57×17 "전일 종가"
+          Text "149,000" (3SCR-0) 55×17 "149,000"
+        Frame "상장주식수와 상장일" (3SCN-0) 424×32
+          Text "상장주식수 · 상장일" (3SCP-0) 116×17 "상장주식수 · 상장일"
+          Text "59.7억주 · 1975.06.11" (3SCO-0) 159×17 "59.7억주 · 1975.06.11"
+        Frame "상태 칩" (3SCE-0) 424×36
+          Frame "Frame" (3SCL-0) 46×26
+            Text "정상" (3SCM-0) 24×16 "정상"
+          Frame "Frame" (3SCJ-0) 75×26
+            Text "감리 없음" (3SCK-0) 53×16 "감리 없음"
+          Frame "Frame" (3SCH-0) 99×26
+            Text "투자유의 아님" (3SCI-0) 77×16 "투자유의 아님"
+          Frame "Frame" (3SCF-0) 74×26
+            Text "VI 미발동" (3SCG-0) 52×16 "VI 미발동"
+      Frame "Selected Stock Actions" (2YAG-0) 424×44
+        Frame "Frame" (2YAJ-0) 208×44
+          Text "비교에 추가" (2YAK-0) 70×16 "비교에 추가"
+        Frame "Frame" (2YAH-0) 206×44
+          Text "종목 상세 열기" (2YAI-0) 88×16 "종목 상세 열기"
+  Frame "User Status Footer" (2YAB-0) 1358×64
+    Text "● 실시간 갱신 중 · 마지막 반영 …" (2YAD-0) 222×16 "● 실시간 갱신 중 · 마지막 반영 09:42:18"

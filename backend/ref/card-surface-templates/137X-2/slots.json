@@ -1,0 +1,4529 @@
+{
+  "board_id": "137X-2",
+  "card_id": "CC-03",
+  "name": "CC-03 / R01 · 삼성전자 3개월 차트",
+  "paper_source": {
+    "saved_at": "2026-09-02T10:59:57Z",
+    "node_id": "14NW-2",
+    "jsx_sha256": "2031bb4597c4fb69c9bca0e41200766b68cfffd251775a8c6f44cc447b98e90e"
+  },
+  "html_sha256": "35454ef9291802dd30e52c1d12d6102d5c6def788c5e46c032032fbd044fc9f2",
+  "width_px": 1360.0,
+  "height_px": 1040.0,
+  "artboard_px": [
+    1440,
+    1120
+  ],
+  "operation_refs": [
+    "base:0g",
+    "base:ka10003",
+    "base:ka10015",
+    "base:ka10060",
+    "base:ka10064",
+    "base:ka10079",
+    "base:ka10080",
+    "base:ka10081",
+    "base:ka10082",
+    "base:ka10083",
+    "base:ka10084",
+    "base:ka10086",
+    "base:ka10094",
+    "detail:ka10001:current_trading",
+    "detail:ka10001:daily_price_band",
+    "detail:ka10001:identity_and_capital",
+    "detail:ka10001:market_scale_and_ownership",
+    "detail:ka10001:price_range",
+    "detail:ka10001:valuation"
+  ],
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null,
+    "control_text": null
+  },
+  "regions": {
+    "14NY-2": "header",
+    "14O9-2": "strip",
+    "14ON-2": "kpi",
+    "14P8-2": "workspace",
+    "14P9-2": "primary",
+    "14PA-2": "rail",
+    "14T8-2": "footer"
+  },
+  "tables": [],
+  "counts": {
+    "elements": 335,
+    "text_nodes": 138,
+    "slots": 138,
+    "anchored_slots": 0,
+    "mapped_slots": 0,
+    "labels": 69,
+    "values": 69,
+    "layer_직접": 137,
+    "layer_병기": 1,
+    "layer_펼침": 0,
+    "tables": 0,
+    "tree_text_truncated": 0,
+    "bs_col": 0,
+    "bs_paired": 0,
+    "bs_leaf": 0,
+    "bs_kpi_cell": 5,
+    "state_control_marks": 6
+  },
+  "density": {
+    "table_columns": 0,
+    "rows_max": 0,
+    "kpi_cells": 5,
+    "rail_blocks": 4,
+    "rail_rows_max": 7
+  },
+  "state_controls": {
+    "marks": [
+      {
+        "control": "금현물",
+        "kind": "tab",
+        "boards": [
+          "2RJ7-1"
+        ],
+        "node_id": "14OL-2",
+        "how": "exact"
+      },
+      {
+        "control": "기업정보",
+        "kind": "tab",
+        "boards": [
+          "2RBO-1"
+        ],
+        "node_id": "14OF-2",
+        "how": "exact"
+      },
+      {
+        "control": "순위",
+        "kind": "tab",
+        "boards": [
+          "2VDA-0",
+          "2VIN-0",
+          "2VO0-0",
+          "32XM-0"
+        ],
+        "node_id": "2WFB-0",
+        "how": "exact"
+      },
+      {
+        "control": "차트",
+        "kind": "tab",
+        "boards": [
+          "32S7-0"
+        ],
+        "node_id": "14OD-2",
+        "how": "exact"
+      },
+      {
+        "control": "투자자 12주체",
+        "kind": "expand",
+        "boards": [
+          "3DI2-0"
+        ],
+        "node_id": "3C3M-0",
+        "how": "token"
+      },
+      {
+        "control": "현재시세",
+        "kind": "tab",
+        "boards": [
+          "2R3M-1"
+        ],
+        "node_id": "14OB-2",
+        "how": "exact"
+      }
+    ],
+    "unresolved": []
+  },
+  "text_multiset": {
+    "+1,850 · +1.24%": 1,
+    "+1,850원": 1,
+    "+122.8%": 1,
+    "+128억원": 1,
+    "+182만주": 1,
+    "+196억원": 1,
+    "+2,410억": 1,
+    "+64만주": 1,
+    "+820억": 1,
+    "0": 1,
+    "0.4%": 1,
+    "0.7%": 1,
+    "0.86%": 1,
+    "005930 · KOSPI · KRX": 1,
+    "09:00": 1,
+    "09:30": 1,
+    "09:42": 1,
+    "09:42:18": 1,
+    "1,065만": 1,
+    "1,368만주": 1,
+    "1,420만": 1,
+    "1,420만주": 2,
+    "108.4%": 1,
+    "10만주": 1,
+    "149,200 · 152,400 · 148,100": 1,
+    "150,850 · +1.24%": 1,
+    "150,850원": 1,
+    "1개월": 1,
+    "1년": 1,
+    "2.14조": 1,
+    "2.14조원": 1,
+    "2.63배": 1,
+    "2.9%": 1,
+    "21.2배": 1,
+    "250일 고·저 대비": 1,
+    "2조 700억원": 1,
+    "3.0%": 1,
+    "30분 누적": 1,
+    "355만": 1,
+    "3개월": 1,
+    "42만주": 1,
+    "44.4억주": 1,
+    "5,860만주": 1,
+    "52.41%": 2,
+    "52주 최저 67,700 · 11/03": 1,
+    "5일 누적": 1,
+    "620억원": 1,
+    "710만": 1,
+    "8.4%": 1,
+    "80억원": 1,
+    "900.4조": 1,
+    "96.3%": 1,
+    "96.7%": 1,
+    "ELW": 1,
+    "ETF": 1,
+    "PBR": 1,
+    "PER": 1,
+    "ROE": 1,
+    "·": 3,
+    "−1.66%": 1,
+    "−3,180억": 1,
+    "−312억원": 1,
+    "▸": 2,
+    "● 차트 실시간 갱신 중": 1,
+    "개": 3,
+    "개인": 2,
+    "거래대금": 1,
+    "거래대금 2.14조원": 1,
+    "거래량": 1,
+    "거래량 · 거래대금": 1,
+    "거래량 · 주": 1,
+    "거래회전율": 1,
+    "그리기": 1,
+    "금현물": 1,
+    "기": 3,
+    "기간중 5일": 1,
+    "기관": 2,
+    "기관 12주체": 1,
+    "기업정보": 1,
+    "년": 1,
+    "분": 1,
+    "삼성전자": 1,
+    "세션별 거래": 1,
+    "순위": 1,
+    "시가 · 고가 · 저가": 1,
+    "시가총액": 1,
+    "시세·거래량": 1,
+    "신용비율": 1,
+    "실시간": 1,
+    "알림 설정": 1,
+    "업종 1.61배": 1,
+    "업종 11.2배": 1,
+    "오늘의 수급": 1,
+    "외": 3,
+    "외국계": 1,
+    "외국인": 2,
+    "외국인 보유": 1,
+    "외인": 1,
+    "외인수량 31.3억주": 1,
+    "월": 1,
+    "유통 주식": 1,
+    "일": 1,
+    "일 0.24% · 주 1.12% · 월 4.36%": 1,
+    "일봉 · 거래량 · 마지막 틱 30건 · 마지막 체결 09:42:18": 1,
+    "장전": 1,
+    "장중": 1,
+    "장후": 1,
+    "전년 7.9%": 1,
+    "전일대비": 1,
+    "정규장": 1,
+    "정상 거래": 1,
+    "종목 요약": 1,
+    "주": 1,
+    "증거금율 20% · 통화단위 원 · 임의연장 없음 · 장전임의연장 없음 · 장후임의연장 없음 · 조기종료ELW 해당 없음": 1,
+    "지표": 1,
+    "차트": 1,
+    "체결강도": 1,
+    "초기화": 1,
+    "최고 153,400 · 08/21": 1,
+    "틱": 1,
+    "프로그램": 1,
+    "합계": 1,
+    "현재시세": 1,
+    "호가 열기": 1
+  },
+  "column_priority": [],
+  "column_bindings": [],
+  "section_titles_ko": {
+    "bs-header": "종목·현재가",
+    "bs-strip": "카드 탭",
+    "bs-kpi": "시세·가치 지표",
+    "bs-workspace": "차트 작업 영역",
+    "bs-primary": "3개월 일봉 차트",
+    "bs-rail": "종목 요약 · 오늘의 수급 · 세션별 거래",
+    "bs-footer": "차트 상태 · 기준·제한"
+  },
+  "primary": {
+    "renderer": null,
+    "mount_slot": null,
+    "module": null,
+    "props_from": null
+  },
+  "slots": [
+    {
+      "slot_id": "s001",
+      "node_id": "14O1-2",
+      "node_name": "삼성전자",
+      "node_path": "0/0/0/0",
+      "paper_text": "삼성전자",
+      "region": "header",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 28.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:identity_and_capital",
+      "f": "stk_nm",
+      "alt_mappings": null,
+      "kor": "종목명",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s002",
+      "node_id": "14O2-2",
+      "node_name": "005930 · KOSPI · KRX",
+      "node_path": "0/0/0/1",
+      "paper_text": "005930 · KOSPI · KRX",
+      "region": "header",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:identity_and_capital",
+      "f": "stk_cd",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10079",
+          "f": "stk_cd"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "stk_cd"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "stk_cd"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "stk_cd"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "stk_cd"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "stk_cd"
+        }
+      ],
+      "kor": "종목코드",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10079",
+          "f": "stk_cd",
+          "kor": "종목코드"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "stk_cd",
+          "kor": "종목코드"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "stk_cd",
+          "kor": "종목코드"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "stk_cd",
+          "kor": "종목코드"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "stk_cd",
+          "kor": "종목코드"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "stk_cd",
+          "kor": "종목코드"
+        }
+      ]
+    },
+    {
+      "slot_id": "s003",
+      "node_id": "3964-0",
+      "node_name": "정규장",
+      "node_path": "0/0/0/2/0/0",
+      "paper_text": "정규장",
+      "region": "header",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s004",
+      "node_id": "3966-0",
+      "node_name": "실시간",
+      "node_path": "0/0/0/2/1/0",
+      "paper_text": "실시간",
+      "region": "header",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s005",
+      "node_id": "14O6-2",
+      "node_name": "150,850원",
+      "node_path": "0/0/1/0",
+      "paper_text": "150,850원",
+      "region": "header",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 22.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10003",
+      "f": "cur_prc",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10060",
+          "f": "cur_prc"
+        },
+        {
+          "mapping_id": "base:ka10084",
+          "f": "cur_prc"
+        },
+        {
+          "mapping_id": "detail:ka10001:current_trading",
+          "f": "cur_prc"
+        }
+      ],
+      "kor": "현재가",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10084",
+          "f": "cur_prc",
+          "kor": "현재가"
+        },
+        {
+          "mapping_id": "base:ka10060",
+          "f": "cur_prc",
+          "kor": "현재가"
+        },
+        {
+          "mapping_id": "detail:ka10001:current_trading",
+          "f": "cur_prc",
+          "kor": "현재가"
+        }
+      ]
+    },
+    {
+      "slot_id": "s006",
+      "node_id": "14O7-2",
+      "node_name": "+1,850 · +1.24%",
+      "node_path": "0/0/1/1",
+      "paper_text": "+1,850 · +1.24%",
+      "region": "header",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10003",
+      "f": "pred_pre",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10003",
+          "f": "pre_rt"
+        },
+        {
+          "mapping_id": "base:ka10003",
+          "f": "sign"
+        },
+        {
+          "mapping_id": "base:ka10060",
+          "f": "pred_pre"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "pred_pre"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "pred_pre"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "pred_pre"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "pred_pre"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "pred_pre"
+        },
+        {
+          "mapping_id": "base:ka10084",
+          "f": "pred_pre"
+        },
+        {
+          "mapping_id": "base:ka10084",
+          "f": "pre_rt"
+        },
+        {
+          "mapping_id": "base:ka10084",
+          "f": "sign"
+        },
+        {
+          "mapping_id": "detail:ka10001:current_trading",
+          "f": "pre_sig"
+        },
+        {
+          "mapping_id": "detail:ka10001:current_trading",
+          "f": "pred_pre"
+        },
+        {
+          "mapping_id": "detail:ka10001:current_trading",
+          "f": "flu_rt"
+        }
+      ],
+      "kor": "전일대비",
+      "format": {
+        "unit": "percent",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10003",
+          "f": "pre_rt",
+          "kor": "대비율",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:ka10003",
+          "f": "sign",
+          "kor": "대비기호"
+        },
+        {
+          "mapping_id": "base:ka10084",
+          "f": "pred_pre",
+          "kor": "전일대비"
+        },
+        {
+          "mapping_id": "base:ka10084",
+          "f": "pre_rt",
+          "kor": "대비율",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:ka10084",
+          "f": "sign",
+          "kor": "전일대비기호"
+        },
+        {
+          "mapping_id": "base:ka10060",
+          "f": "pred_pre",
+          "kor": "전일대비"
+        },
+        {
+          "mapping_id": "detail:ka10001:current_trading",
+          "f": "pred_pre",
+          "kor": "전일대비"
+        },
+        {
+          "mapping_id": "detail:ka10001:current_trading",
+          "f": "flu_rt",
+          "kor": "등락율",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "detail:ka10001:current_trading",
+          "f": "pre_sig",
+          "kor": "대비기호"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "pred_pre",
+          "kor": "전일대비"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "pred_pre",
+          "kor": "전일대비"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "pred_pre",
+          "kor": "전일대비"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "pred_pre",
+          "kor": "전일대비"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "pred_pre",
+          "kor": "전일대비"
+        }
+      ]
+    },
+    {
+      "slot_id": "s007",
+      "node_id": "14O8-2",
+      "node_name": "09:42:18",
+      "node_path": "0/0/1/2",
+      "paper_text": "09:42:18",
+      "region": "header",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10003",
+      "f": "tm",
+      "alt_mappings": null,
+      "kor": "시간",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s008",
+      "node_id": "14OB-2",
+      "node_name": "현재시세",
+      "node_path": "0/1/0/0",
+      "paper_text": "현재시세",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s009",
+      "node_id": "14OD-2",
+      "node_name": "차트",
+      "node_path": "0/1/1/0",
+      "paper_text": "차트",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s010",
+      "node_id": "14OF-2",
+      "node_name": "기업정보",
+      "node_path": "0/1/2/0",
+      "paper_text": "기업정보",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s011",
+      "node_id": "14OH-2",
+      "node_name": "ETF",
+      "node_path": "0/1/3/0",
+      "paper_text": "ETF",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s012",
+      "node_id": "14OJ-2",
+      "node_name": "ELW",
+      "node_path": "0/1/4/0",
+      "paper_text": "ELW",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s013",
+      "node_id": "14OL-2",
+      "node_name": "금현물",
+      "node_path": "0/1/5/0",
+      "paper_text": "금현물",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s014",
+      "node_id": "2WFB-0",
+      "node_name": "순위",
+      "node_path": "0/1/6/0",
+      "paper_text": "순위",
+      "region": "strip",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s015",
+      "node_id": "14OP-2",
+      "node_name": "시가 · 고가 · 저가",
+      "node_path": "1/0/0",
+      "paper_text": "시가 · 고가 · 저가",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s016",
+      "node_id": "14OQ-2",
+      "node_name": "149,200 · 152,400 · 148,100",
+      "node_path": "1/0/1",
+      "paper_text": "149,200 · 152,400 · 148,100",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 18.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:daily_price_band",
+      "f": "open_pric",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10079",
+          "f": "open_pric"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "high_pric"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "low_pric"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "open_pric"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "high_pric"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "low_pric"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "open_pric"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "high_pric"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "low_pric"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "open_pric"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "high_pric"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "low_pric"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "open_pric"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "high_pric"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "low_pric"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "open_pric"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "high_pric"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "low_pric"
+        },
+        {
+          "mapping_id": "detail:ka10001:daily_price_band",
+          "f": "high_pric"
+        },
+        {
+          "mapping_id": "detail:ka10001:daily_price_band",
+          "f": "low_pric"
+        }
+      ],
+      "kor": "시가",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "detail:ka10001:daily_price_band",
+          "f": "high_pric",
+          "kor": "고가",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "detail:ka10001:daily_price_band",
+          "f": "low_pric",
+          "kor": "저가",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "open_pric",
+          "kor": "시가"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "high_pric",
+          "kor": "고가"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "low_pric",
+          "kor": "저가"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "open_pric",
+          "kor": "시가"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "high_pric",
+          "kor": "고가"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "low_pric",
+          "kor": "저가"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "open_pric",
+          "kor": "시가"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "high_pric",
+          "kor": "고가"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "low_pric",
+          "kor": "저가"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "open_pric",
+          "kor": "시가"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "high_pric",
+          "kor": "고가"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "low_pric",
+          "kor": "저가"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "open_pric",
+          "kor": "시가"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "high_pric",
+          "kor": "고가"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "low_pric",
+          "kor": "저가"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "open_pric",
+          "kor": "시가"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "high_pric",
+          "kor": "고가"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "low_pric",
+          "kor": "저가"
+        }
+      ]
+    },
+    {
+      "slot_id": "s017",
+      "node_id": "14OS-2",
+      "node_name": "거래량",
+      "node_path": "1/1/0",
+      "paper_text": "거래량",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s018",
+      "node_id": "14OT-2",
+      "node_name": "1,420만주",
+      "node_path": "1/1/1",
+      "paper_text": "1,420만주",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 24.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10003",
+      "f": "acc_trde_qty",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10084",
+          "f": "acc_trde_qty"
+        },
+        {
+          "mapping_id": "detail:ka10001:current_trading",
+          "f": "trde_qty"
+        }
+      ],
+      "kor": "누적거래량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10084",
+          "f": "acc_trde_qty",
+          "kor": "누적거래량"
+        },
+        {
+          "mapping_id": "detail:ka10001:current_trading",
+          "f": "trde_qty",
+          "kor": "거래량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s019",
+      "node_id": "14OU-2",
+      "node_name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_prica",
+      "node_path": "1/1/2",
+      "paper_text": "거래대금 2.14조원",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10081",
+      "f": "trde_prica",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10060",
+          "f": "acc_trde_prica"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "trde_prica"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "trde_prica"
+        },
+        {
+          "mapping_id": "base:ka10084",
+          "f": "acc_trde_prica"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "trde_prica"
+        }
+      ],
+      "kor": "거래대금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 2,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10082",
+          "f": "trde_prica",
+          "kor": "거래대금"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "trde_prica",
+          "kor": "거래대금"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "trde_prica",
+          "kor": "거래대금"
+        },
+        {
+          "mapping_id": "base:ka10060",
+          "f": "acc_trde_prica",
+          "kor": "누적거래대금"
+        },
+        {
+          "mapping_id": "base:ka10084",
+          "f": "acc_trde_prica",
+          "kor": "누적거래대금"
+        }
+      ]
+    },
+    {
+      "slot_id": "s020",
+      "node_id": "14OW-2",
+      "node_name": "PER",
+      "node_path": "1/2/0",
+      "paper_text": "PER",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s021",
+      "node_id": "14OX-2",
+      "node_name": "21.2배",
+      "node_path": "1/2/1",
+      "paper_text": "21.2배",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 24.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:valuation",
+      "f": "per",
+      "alt_mappings": null,
+      "kor": "PER",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s022",
+      "node_id": "14OY-2",
+      "node_name": "업종 11.2배",
+      "node_path": "1/2/2",
+      "paper_text": "업종 11.2배",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "unbound_reason": "업종 평균 PER — 이 보드 19개 op 응답에 업종 비교값 필드가 없다(정본 비교 기준값)",
+      "static": true,
+      "note": "업종 평균 PER — 이 보드 op 응답에 없는 비교값"
+    },
+    {
+      "slot_id": "s023",
+      "node_id": "14P0-2",
+      "node_name": "PBR",
+      "node_path": "1/3/0",
+      "paper_text": "PBR",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s024",
+      "node_id": "14P1-2",
+      "node_name": "2.63배",
+      "node_path": "1/3/1",
+      "paper_text": "2.63배",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 24.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:valuation",
+      "f": "pbr",
+      "alt_mappings": null,
+      "kor": "PBR",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s025",
+      "node_id": "14P2-2",
+      "node_name": "업종 1.61배",
+      "node_path": "1/3/2",
+      "paper_text": "업종 1.61배",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "unbound_reason": "업종 평균 PBR — 이 보드 19개 op 응답에 업종 비교값 필드가 없다(정본 비교 기준값)",
+      "static": true,
+      "note": "업종 평균 PBR — 이 보드 op 응답에 없는 비교값"
+    },
+    {
+      "slot_id": "s026",
+      "node_id": "14P4-2",
+      "node_name": "ROE",
+      "node_path": "1/4/0",
+      "paper_text": "ROE",
+      "region": "kpi",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s027",
+      "node_id": "14P5-2",
+      "node_name": "8.4%",
+      "node_path": "1/4/1",
+      "paper_text": "8.4%",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 24.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:valuation",
+      "f": "roe",
+      "alt_mappings": null,
+      "kor": "ROE",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s028",
+      "node_id": "14P6-2",
+      "node_name": "전년 7.9%",
+      "node_path": "1/4/2",
+      "paper_text": "전년 7.9%",
+      "region": "kpi",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "unbound_reason": "전년 ROE — 응답에 전년 값 필드가 없다(정본 비교 기준값)",
+      "static": true,
+      "note": "전년 ROE — 이 보드 op 응답에 없는 비교값"
+    },
+    {
+      "slot_id": "s029",
+      "node_id": "14PF-2",
+      "node_name": "일",
+      "node_path": "2/0/0/0/0/0",
+      "paper_text": "일",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s030",
+      "node_id": "14PH-2",
+      "node_name": "주",
+      "node_path": "2/0/0/0/1/0",
+      "paper_text": "주",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s031",
+      "node_id": "14PJ-2",
+      "node_name": "월",
+      "node_path": "2/0/0/0/2/0",
+      "paper_text": "월",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s032",
+      "node_id": "2WKQ-0",
+      "node_name": "틱",
+      "node_path": "2/0/0/0/4/0",
+      "paper_text": "틱",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s033",
+      "node_id": "2WKS-0",
+      "node_name": "분",
+      "node_path": "2/0/0/0/5/0",
+      "paper_text": "분",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s034",
+      "node_id": "2WKU-0",
+      "node_name": "년",
+      "node_path": "2/0/0/0/6/0",
+      "paper_text": "년",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s035",
+      "node_id": "14PM-2",
+      "node_name": "1개월",
+      "node_path": "2/0/0/0/7/0",
+      "paper_text": "1개월",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "unbound_reason": "고정 문구(static) — 차트 조회 기간 선택 컨트롤, 응답 필드가 아니다",
+      "static": true,
+      "note": "차트 기간 범위 칩 — 고정 문구"
+    },
+    {
+      "slot_id": "s036",
+      "node_id": "14PO-2",
+      "node_name": "3개월",
+      "node_path": "2/0/0/0/8/0",
+      "paper_text": "3개월",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "unbound_reason": "고정 문구(static) — 차트 조회 기간 선택 컨트롤, 응답 필드가 아니다",
+      "static": true,
+      "note": "차트 기간 범위 칩 — 고정 문구"
+    },
+    {
+      "slot_id": "s037",
+      "node_id": "14PQ-2",
+      "node_name": "1년",
+      "node_path": "2/0/0/0/9/0",
+      "paper_text": "1년",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "unbound_reason": "고정 문구(static) — 차트 조회 기간 선택 컨트롤, 응답 필드가 아니다",
+      "static": true,
+      "note": "차트 기간 범위 칩 — 고정 문구"
+    },
+    {
+      "slot_id": "s038",
+      "node_id": "14PS-2",
+      "node_name": "시세·거래량",
+      "node_path": "2/0/0/1/0",
+      "paper_text": "시세·거래량",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s039",
+      "node_id": "14PT-2",
+      "node_name": "지표",
+      "node_path": "2/0/0/1/1",
+      "paper_text": "지표",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s040",
+      "node_id": "14PU-2",
+      "node_name": "그리기",
+      "node_path": "2/0/0/1/2",
+      "paper_text": "그리기",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s041",
+      "node_id": "14PV-2",
+      "node_name": "초기화",
+      "node_path": "2/0/0/1/3",
+      "paper_text": "초기화",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s042",
+      "node_id": "395Z-0",
+      "node_name": "거래회전율",
+      "node_path": "2/0/0/2/0",
+      "paper_text": "거래회전율",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s043",
+      "node_id": "3960-0",
+      "node_name": "일 0.24% · 주 1.12% · 월 4.36%",
+      "node_path": "2/0/0/2/1",
+      "paper_text": "일 0.24% · 주 1.12% · 월 4.36%",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10081",
+      "f": "trde_tern_rt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10082",
+          "f": "trde_tern_rt"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "trde_tern_rt"
+        }
+      ],
+      "kor": "거래회전율",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10082",
+          "f": "trde_tern_rt",
+          "kor": "거래회전율",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "trde_tern_rt",
+          "kor": "거래회전율",
+          "sep": " · "
+        }
+      ]
+    },
+    {
+      "slot_id": "s044",
+      "node_id": "3SK2-0",
+      "node_name": "1,420만",
+      "node_path": "2/0/1/0/73",
+      "paper_text": "1,420만",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10081",
+      "f": "trde_qty",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10015",
+          "f": "trde_qty"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "trde_qty"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "trde_qty"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "trde_qty"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "trde_qty"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "trde_qty"
+        }
+      ],
+      "kor": "거래량",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10015",
+          "f": "trde_qty",
+          "kor": "거래량"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "trde_qty",
+          "kor": "거래량"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "trde_qty",
+          "kor": "거래량"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "trde_qty",
+          "kor": "거래량"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "trde_qty",
+          "kor": "거래량"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "trde_qty",
+          "kor": "거래량"
+        }
+      ]
+    },
+    {
+      "slot_id": "s045",
+      "node_id": "3SK3-0",
+      "node_name": "1,065만",
+      "node_path": "2/0/1/0/74",
+      "paper_text": "1,065만",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10081",
+      "f": "trde_qty",
+      "alt_mappings": null,
+      "kor": "거래량",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s046",
+      "node_id": "3SK4-0",
+      "node_name": "710만",
+      "node_path": "2/0/1/0/75",
+      "paper_text": "710만",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10081",
+      "f": "trde_qty",
+      "alt_mappings": null,
+      "kor": "거래량",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s047",
+      "node_id": "3SK5-0",
+      "node_name": "355만",
+      "node_path": "2/0/1/0/76",
+      "paper_text": "355만",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10081",
+      "f": "trde_qty",
+      "alt_mappings": null,
+      "kor": "거래량",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s048",
+      "node_id": "3SK6-0",
+      "node_name": "0",
+      "node_path": "2/0/1/0/77",
+      "paper_text": "0",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10081",
+      "f": "trde_qty",
+      "alt_mappings": null,
+      "kor": "거래량",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s049",
+      "node_id": "3SK7-0",
+      "node_name": "거래량 · 주",
+      "node_path": "2/0/1/0/78",
+      "paper_text": "거래량 · 주",
+      "region": "primary",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s050",
+      "node_id": "33FX-0",
+      "node_name": "Chart Tooltip Label",
+      "node_path": "2/0/1/1",
+      "paper_text": "150,850 · +1.24%",
+      "region": "primary",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "close_pric",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10015",
+          "f": "dt"
+        },
+        {
+          "mapping_id": "base:ka10015",
+          "f": "pred_pre_sig"
+        },
+        {
+          "mapping_id": "base:ka10015",
+          "f": "flu_rt"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "stk_tic_chart_qry"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "cur_prc"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "cntr_tm"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "pred_pre_sig"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "stk_min_pole_chart_qry"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "cur_prc"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "cntr_tm"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "pred_pre_sig"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "stk_dt_pole_chart_qry"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "cur_prc"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "dt"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "pred_pre_sig"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "stk_stk_pole_chart_qry"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "cur_prc"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "dt"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "pred_pre_sig"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "stk_mth_pole_chart_qry"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "cur_prc"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "dt"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "pred_pre_sig"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "stk_yr_pole_chart_qry"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "cur_prc"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "dt"
+        }
+      ],
+      "kor": "종가",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10015",
+          "f": "flu_rt",
+          "kor": "등락율",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "cur_prc",
+          "kor": "현재가"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "stk_tic_chart_qry",
+          "kor": "주식틱차트조회"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "cur_prc",
+          "kor": "현재가"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "stk_min_pole_chart_qry",
+          "kor": "주식분봉차트조회"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "cntr_tm",
+          "kor": "체결시간"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "cur_prc",
+          "kor": "현재가"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "stk_dt_pole_chart_qry",
+          "kor": "주식일봉차트조회"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "cur_prc",
+          "kor": "현재가"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "stk_stk_pole_chart_qry",
+          "kor": "주식주봉차트조회"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "cur_prc",
+          "kor": "현재가"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "stk_mth_pole_chart_qry",
+          "kor": "주식월봉차트조회"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "cur_prc",
+          "kor": "현재가"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "stk_yr_pole_chart_qry",
+          "kor": "주식년봉차트조회"
+        },
+        {
+          "mapping_id": "base:ka10094",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka10015",
+          "f": "dt",
+          "kor": "일자"
+        },
+        {
+          "mapping_id": "base:ka10079",
+          "f": "pred_pre_sig",
+          "kor": "전일대비기호"
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "f": "pred_pre_sig",
+          "kor": "전일대비기호"
+        },
+        {
+          "mapping_id": "base:ka10081",
+          "f": "pred_pre_sig",
+          "kor": "전일대비기호"
+        },
+        {
+          "mapping_id": "base:ka10082",
+          "f": "pred_pre_sig",
+          "kor": "전일대비기호"
+        },
+        {
+          "mapping_id": "base:ka10083",
+          "f": "pred_pre_sig",
+          "kor": "전일대비기호"
+        },
+        {
+          "mapping_id": "base:ka10015",
+          "f": "pred_pre_sig",
+          "kor": "전일대비기호"
+        }
+      ]
+    },
+    {
+      "slot_id": "s051",
+      "node_id": "38KK-0",
+      "node_name": "종목 요약",
+      "node_path": "2/1/0/0/0",
+      "paper_text": "종목 요약",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 15.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s052",
+      "node_id": "38KL-0",
+      "node_name": "정상 거래",
+      "node_path": "2/1/0/0/1",
+      "paper_text": "정상 거래",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:0g",
+      "f": "370",
+      "alt_mappings": null,
+      "kor": "종목정보",
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s053",
+      "node_id": "38KN-0",
+      "node_name": "시가총액",
+      "node_path": "2/1/0/1/0",
+      "paper_text": "시가총액",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s054",
+      "node_id": "38KO-0",
+      "node_name": "900.4조",
+      "node_path": "2/1/0/1/1",
+      "paper_text": "900.4조",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:market_scale_and_ownership",
+      "f": "mac",
+      "alt_mappings": null,
+      "kor": "시가총액",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s055",
+      "node_id": "3AOU-0",
+      "node_name": "외국인 보유",
+      "node_path": "2/1/0/2/0",
+      "paper_text": "외국인 보유",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s056",
+      "node_id": "3AOW-0",
+      "node_name": "52.41%",
+      "node_path": "2/1/0/2/1/0",
+      "paper_text": "52.41%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "for_poss",
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:ka10001:market_scale_and_ownership",
+          "f": "for_exh_rt"
+        }
+      ],
+      "kor": "외인보유",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "detail:ka10001:market_scale_and_ownership",
+          "f": "for_exh_rt",
+          "kor": "외인소진률"
+        }
+      ]
+    },
+    {
+      "slot_id": "s057",
+      "node_id": "3AOX-0",
+      "node_name": "외인수량 31.3억주",
+      "node_path": "2/1/0/2/1/1",
+      "paper_text": "외인수량 31.3억주",
+      "region": "rail",
+      "kind": "value",
+      "layer": "병기",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10086",
+      "f": "for_qty",
+      "alt_mappings": null,
+      "kor": "외인수량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s056",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s058",
+      "node_id": "38KT-0",
+      "node_name": "유통 주식",
+      "node_path": "2/1/0/3/0",
+      "paper_text": "유통 주식",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s059",
+      "node_id": "38KU-0",
+      "node_name": "44.4억주",
+      "node_path": "2/1/0/3/1",
+      "paper_text": "44.4억주",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:market_scale_and_ownership",
+      "f": "dstr_stk",
+      "alt_mappings": null,
+      "kor": "유통주식",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s060",
+      "node_id": "38KW-0",
+      "node_name": "52주 최저 67,700 · 11/03",
+      "node_path": "2/1/0/4/0/0",
+      "paper_text": "52주 최저 67,700 · 11/03",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:price_range",
+      "f": "250lwst",
+      "alt_mappings": null,
+      "kor": "250최저",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "detail:ka10001:price_range",
+          "f": "250lwst_pric_dt",
+          "kor": "250최저가일",
+          "sep": " · ",
+          "display_dup": true
+        }
+      ]
+    },
+    {
+      "slot_id": "s061",
+      "node_id": "38KX-0",
+      "node_name": "최고 153,400 · 08/21",
+      "node_path": "2/1/0/4/0/1",
+      "paper_text": "최고 153,400 · 08/21",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:price_range",
+      "f": "250hgst",
+      "alt_mappings": null,
+      "kor": "250최고",
+      "format": {
+        "unit": "date",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "detail:ka10001:price_range",
+          "f": "250hgst_pric_dt",
+          "kor": "250최고가일",
+          "sep": " · ",
+          "display_dup": true
+        }
+      ]
+    },
+    {
+      "slot_id": "s062",
+      "node_id": "38L2-0",
+      "node_name": "250일 고·저 대비",
+      "node_path": "2/1/0/5/0",
+      "paper_text": "250일 고·저 대비",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "unbound_reason": "고정 문구(static) — 250일 고·저 대비 행 라벨, 응답 필드가 아니다",
+      "static": true,
+      "note": "블록 라벨 — 숫자를 품어 값으로 분류됐다"
+    },
+    {
+      "slot_id": "s063",
+      "node_id": "38L4-0",
+      "node_name": "−1.66%",
+      "node_path": "2/1/0/5/1/0",
+      "paper_text": "−1.66%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:price_range",
+      "f": "250hgst_pric_pre_rt",
+      "alt_mappings": null,
+      "kor": "250최고가대비율",
+      "format": {
+        "unit": "percent",
+        "sign": true,
+        "precision": 2,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s064",
+      "node_id": "38L5-0",
+      "node_name": "·",
+      "node_path": "2/1/0/5/1/1",
+      "paper_text": "·",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s065",
+      "node_id": "38L6-0",
+      "node_name": "+122.8%",
+      "node_path": "2/1/0/5/1/2",
+      "paper_text": "+122.8%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "detail:ka10001:price_range",
+      "f": "250lwst_pric_pre_rt",
+      "alt_mappings": null,
+      "kor": "250최저가대비율",
+      "format": {
+        "unit": "percent",
+        "sign": true,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s066",
+      "node_id": "38L8-0",
+      "node_name": "거래대금",
+      "node_path": "2/1/0/6/0",
+      "paper_text": "거래대금",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s067",
+      "node_id": "38L9-0",
+      "node_name": "2.14조",
+      "node_path": "2/1/0/6/1",
+      "paper_text": "2.14조",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10003",
+      "f": "acc_trde_prica",
+      "alt_mappings": null,
+      "kor": "누적거래대금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s068",
+      "node_id": "14SR-2",
+      "node_name": "오늘의 수급",
+      "node_path": "2/1/1/0",
+      "paper_text": "오늘의 수급",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 15.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s069",
+      "node_id": "14ST-2",
+      "node_name": "외국인",
+      "node_path": "2/1/1/1/0",
+      "paper_text": "외국인",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s070",
+      "node_id": "14SU-2",
+      "node_name": "+128억원",
+      "node_path": "2/1/1/1/1",
+      "paper_text": "+128억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "for_netprps",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10064",
+          "f": "frgnr_invsr"
+        }
+      ],
+      "kor": "외인순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10064",
+          "f": "frgnr_invsr",
+          "kor": "외국인투자자"
+        }
+      ]
+    },
+    {
+      "slot_id": "s071",
+      "node_id": "14SW-2",
+      "node_name": "기관",
+      "node_path": "2/1/1/2/0",
+      "paper_text": "기관",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s072",
+      "node_id": "3C3F-0",
+      "node_name": "+196억원",
+      "node_path": "2/1/1/2/1/0",
+      "paper_text": "+196억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "orgn_netprps",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10064",
+          "f": "orgn"
+        }
+      ],
+      "kor": "기관순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10064",
+          "f": "orgn",
+          "kor": "기관계"
+        }
+      ]
+    },
+    {
+      "slot_id": "s073",
+      "node_id": "3C3G-0",
+      "node_name": "▸",
+      "node_path": "2/1/1/2/1/1",
+      "paper_text": "▸",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s074",
+      "node_id": "14SZ-2",
+      "node_name": "개인",
+      "node_path": "2/1/1/3/0",
+      "paper_text": "개인",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s075",
+      "node_id": "14T0-2",
+      "node_name": "−312억원",
+      "node_path": "2/1/1/3/1",
+      "paper_text": "−312억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "ind_netprps",
+      "alt_mappings": null,
+      "kor": "개인순매수",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s076",
+      "node_id": "3C3J-0",
+      "node_name": "30분 누적",
+      "node_path": "2/1/1/4/0/0",
+      "paper_text": "30분 누적",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10064",
+      "f": "opmr_invsr_trde_chart",
+      "alt_mappings": null,
+      "kor": "장중투자자별매매차트",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s077",
+      "node_id": "3C3L-0",
+      "node_name": "기관 12주체",
+      "node_path": "2/1/1/4/0/1/0",
+      "paper_text": "기관 12주체",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": {
+        "group_id": "orgn-12",
+        "rollup_slot": "s077",
+        "members": [
+          {
+            "mapping_id": "base:ka10060",
+            "f": "fnnc_invt",
+            "kor": "금융투자"
+          },
+          {
+            "mapping_id": "base:ka10060",
+            "f": "insrnc",
+            "kor": "보험"
+          },
+          {
+            "mapping_id": "base:ka10060",
+            "f": "invtrt",
+            "kor": "투신"
+          },
+          {
+            "mapping_id": "base:ka10060",
+            "f": "etc_fnnc",
+            "kor": "기타금융"
+          },
+          {
+            "mapping_id": "base:ka10060",
+            "f": "bank",
+            "kor": "은행"
+          },
+          {
+            "mapping_id": "base:ka10060",
+            "f": "penfnd_etc",
+            "kor": "연기금등"
+          },
+          {
+            "mapping_id": "base:ka10060",
+            "f": "samo_fund",
+            "kor": "사모펀드"
+          },
+          {
+            "mapping_id": "base:ka10060",
+            "f": "natn",
+            "kor": "국가"
+          },
+          {
+            "mapping_id": "base:ka10060",
+            "f": "etc_corp",
+            "kor": "기타법인"
+          },
+          {
+            "mapping_id": "base:ka10060",
+            "f": "natfor",
+            "kor": "내외국인"
+          }
+        ],
+        "expanded_board": "3DI2-0"
+      },
+      "expanded_board": "3DI2-0",
+      "unbound_reason": "기관 12주체 펼침 rollup 라벨 — 낱값은 3DI2-0(collapse_group 참조)",
+      "static": true
+    },
+    {
+      "slot_id": "s078",
+      "node_id": "3C3M-0",
+      "node_name": "▸",
+      "node_path": "2/1/1/4/0/1/1",
+      "paper_text": "▸",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s079",
+      "node_id": "33CG-0",
+      "node_name": "외",
+      "node_path": "2/1/1/4/1/0/3/0",
+      "paper_text": "외",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 9.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s080",
+      "node_id": "33CH-0",
+      "node_name": "기",
+      "node_path": "2/1/1/4/1/0/3/1",
+      "paper_text": "기",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 9.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s081",
+      "node_id": "33CI-0",
+      "node_name": "개",
+      "node_path": "2/1/1/4/1/0/3/2",
+      "paper_text": "개",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 9.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s082",
+      "node_id": "33CJ-0",
+      "node_name": "09:00",
+      "node_path": "2/1/1/4/1/0/4",
+      "paper_text": "09:00",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10064",
+      "f": "tm",
+      "alt_mappings": null,
+      "kor": "시간",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s083",
+      "node_id": "33CV-0",
+      "node_name": "외",
+      "node_path": "2/1/1/4/1/1/3/0",
+      "paper_text": "외",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 9.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s084",
+      "node_id": "33CW-0",
+      "node_name": "기",
+      "node_path": "2/1/1/4/1/1/3/1",
+      "paper_text": "기",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 9.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s085",
+      "node_id": "33CX-0",
+      "node_name": "개",
+      "node_path": "2/1/1/4/1/1/3/2",
+      "paper_text": "개",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 9.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s086",
+      "node_id": "33CY-0",
+      "node_name": "09:30",
+      "node_path": "2/1/1/4/1/1/4",
+      "paper_text": "09:30",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10064",
+      "f": "tm",
+      "alt_mappings": null,
+      "kor": "시간",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s087",
+      "node_id": "33DA-0",
+      "node_name": "외",
+      "node_path": "2/1/1/4/1/2/3/0",
+      "paper_text": "외",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 9.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s088",
+      "node_id": "33DB-0",
+      "node_name": "기",
+      "node_path": "2/1/1/4/1/2/3/1",
+      "paper_text": "기",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 9.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s089",
+      "node_id": "33DC-0",
+      "node_name": "개",
+      "node_path": "2/1/1/4/1/2/3/2",
+      "paper_text": "개",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 9.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s090",
+      "node_id": "33DD-0",
+      "node_name": "09:42",
+      "node_path": "2/1/1/4/1/2/4",
+      "paper_text": "09:42",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10064",
+      "f": "tm",
+      "alt_mappings": null,
+      "kor": "시간",
+      "format": {
+        "unit": "time",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "display_dup": true
+    },
+    {
+      "slot_id": "s091",
+      "node_id": "33DG-0",
+      "node_name": "5일 누적",
+      "node_path": "2/1/1/5/0",
+      "paper_text": "5일 누적",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10060",
+      "f": "stk_invsr_orgn_chart",
+      "alt_mappings": null,
+      "kor": "종목별투자자기관별차트",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s092",
+      "node_id": "33DI-0",
+      "node_name": "외국인",
+      "node_path": "2/1/1/5/1/0",
+      "paper_text": "외국인",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s093",
+      "node_id": "33DJ-0",
+      "node_name": "+2,410억",
+      "node_path": "2/1/1/5/1/1",
+      "paper_text": "+2,410억",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10060",
+      "f": "frgnr_invsr",
+      "alt_mappings": null,
+      "kor": "외국인투자자",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s094",
+      "node_id": "33DK-0",
+      "node_name": "·",
+      "node_path": "2/1/1/5/1/2",
+      "paper_text": "·",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s095",
+      "node_id": "33DL-0",
+      "node_name": "기관",
+      "node_path": "2/1/1/5/1/3",
+      "paper_text": "기관",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s096",
+      "node_id": "33DM-0",
+      "node_name": "+820억",
+      "node_path": "2/1/1/5/1/4",
+      "paper_text": "+820억",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10060",
+      "f": "orgn",
+      "alt_mappings": null,
+      "kor": "기관계",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s097",
+      "node_id": "33DN-0",
+      "node_name": "·",
+      "node_path": "2/1/1/5/1/5",
+      "paper_text": "·",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s098",
+      "node_id": "33DO-0",
+      "node_name": "개인",
+      "node_path": "2/1/1/5/1/6",
+      "paper_text": "개인",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 10.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s099",
+      "node_id": "33DP-0",
+      "node_name": "−3,180억",
+      "node_path": "2/1/1/5/1/7",
+      "paper_text": "−3,180억",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10060",
+      "f": "ind_invsr",
+      "alt_mappings": null,
+      "kor": "개인투자자",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s100",
+      "node_id": "14T4-2",
+      "node_name": "알림 설정",
+      "node_path": "2/1/2/0/0",
+      "paper_text": "알림 설정",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s101",
+      "node_id": "14T6-2",
+      "node_name": "호가 열기",
+      "node_path": "2/1/2/1/0",
+      "paper_text": "호가 열기",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 13.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s102",
+      "node_id": "3SKX-0",
+      "node_name": "세션별 거래",
+      "node_path": "2/1/3/0/0",
+      "paper_text": "세션별 거래",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 15.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s103",
+      "node_id": "3SKY-0",
+      "node_name": "거래량 · 거래대금",
+      "node_path": "2/1/3/0/1",
+      "paper_text": "거래량 · 거래대금",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s104",
+      "node_id": "38LI-0",
+      "node_name": "장전",
+      "node_path": "2/1/3/1/0",
+      "paper_text": "장전",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s105",
+      "node_id": "38LK-0",
+      "node_name": "42만주",
+      "node_path": "2/1/3/1/1/0",
+      "paper_text": "42만주",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "bf_mkrt_trde_qty",
+      "alt_mappings": null,
+      "kor": "장전거래량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s106",
+      "node_id": "38LL-0",
+      "node_name": "3.0%",
+      "node_path": "2/1/3/1/1/1",
+      "paper_text": "3.0%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "bf_mkrt_trde_wght",
+      "alt_mappings": null,
+      "kor": "장전거래비중",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s105",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s107",
+      "node_id": "38LN-0",
+      "node_name": "620억원",
+      "node_path": "2/1/3/1/2/0",
+      "paper_text": "620억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "bf_mkrt_trde_prica",
+      "alt_mappings": null,
+      "kor": "장전거래대금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s108",
+      "node_id": "38LO-0",
+      "node_name": "2.9%",
+      "node_path": "2/1/3/1/2/1",
+      "paper_text": "2.9%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "bf_mkrt_trde_prica_wght",
+      "alt_mappings": null,
+      "kor": "장전거래대금비중",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s107",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s109",
+      "node_id": "38LQ-0",
+      "node_name": "장중",
+      "node_path": "2/1/3/2/0",
+      "paper_text": "장중",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s110",
+      "node_id": "38LS-0",
+      "node_name": "1,368만주",
+      "node_path": "2/1/3/2/1/0",
+      "paper_text": "1,368만주",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "opmr_trde_qty",
+      "alt_mappings": null,
+      "kor": "장중거래량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s111",
+      "node_id": "38LT-0",
+      "node_name": "96.3%",
+      "node_path": "2/1/3/2/1/1",
+      "paper_text": "96.3%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "opmr_trde_wght",
+      "alt_mappings": null,
+      "kor": "장중거래비중",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s110",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s112",
+      "node_id": "38LV-0",
+      "node_name": "2조 700억원",
+      "node_path": "2/1/3/2/2/0",
+      "paper_text": "2조 700억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "opmr_trde_prica",
+      "alt_mappings": null,
+      "kor": "장중거래대금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s113",
+      "node_id": "38LW-0",
+      "node_name": "96.7%",
+      "node_path": "2/1/3/2/2/1",
+      "paper_text": "96.7%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "opmr_trde_prica_wght",
+      "alt_mappings": null,
+      "kor": "장중거래대금비중",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s112",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s114",
+      "node_id": "38LY-0",
+      "node_name": "장후",
+      "node_path": "2/1/3/3/0",
+      "paper_text": "장후",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s115",
+      "node_id": "38M0-0",
+      "node_name": "10만주",
+      "node_path": "2/1/3/3/1/0",
+      "paper_text": "10만주",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "af_mkrt_trde_qty",
+      "alt_mappings": null,
+      "kor": "장후거래량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s116",
+      "node_id": "38M1-0",
+      "node_name": "0.7%",
+      "node_path": "2/1/3/3/1/1",
+      "paper_text": "0.7%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "af_mkrt_trde_wght",
+      "alt_mappings": null,
+      "kor": "장후거래비중",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s115",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s117",
+      "node_id": "38M3-0",
+      "node_name": "80억원",
+      "node_path": "2/1/3/3/2/0",
+      "paper_text": "80억원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "af_mkrt_trde_prica",
+      "alt_mappings": null,
+      "kor": "장후거래대금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s118",
+      "node_id": "38M4-0",
+      "node_name": "0.4%",
+      "node_path": "2/1/3/3/2/1",
+      "paper_text": "0.4%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "af_mkrt_trde_prica_wght",
+      "alt_mappings": null,
+      "kor": "장후거래대금비중",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "neutral"
+      },
+      "paired_with": "s117",
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s119",
+      "node_id": "38M6-0",
+      "node_name": "합계",
+      "node_path": "2/1/3/4/0",
+      "paper_text": "합계",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s120",
+      "node_id": "38M7-0",
+      "node_name": "1,420만주",
+      "node_path": "2/1/3/4/1",
+      "paper_text": "1,420만주",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "tot_3",
+      "alt_mappings": null,
+      "kor": "합계3",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s121",
+      "node_id": "38M8-0",
+      "node_name": "2.14조원",
+      "node_path": "2/1/3/4/2",
+      "paper_text": "2.14조원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "trde_prica",
+      "alt_mappings": null,
+      "kor": "거래대금",
+      "format": {
+        "unit": "krw_ko",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s122",
+      "node_id": "38MA-0",
+      "node_name": "기간중 5일",
+      "node_path": "2/1/3/5/0",
+      "paper_text": "기간중 5일",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "daly_trde_dtl",
+      "alt_mappings": null,
+      "kor": "일별거래상세",
+      "format": {
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s123",
+      "node_id": "38MB-0",
+      "node_name": "5,860만주",
+      "node_path": "2/1/3/5/1",
+      "paper_text": "5,860만주",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "prid_trde_qty",
+      "alt_mappings": null,
+      "kor": "기간중거래량",
+      "format": {
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s124",
+      "node_id": "38MC-0",
+      "node_name": "체결강도",
+      "node_path": "2/1/3/5/2",
+      "paper_text": "체결강도",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s125",
+      "node_id": "38MD-0",
+      "node_name": "108.4%",
+      "node_path": "2/1/3/5/3",
+      "paper_text": "108.4%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "cntr_str",
+      "alt_mappings": null,
+      "kor": "체결강도",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 1,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s126",
+      "node_id": "3C2V-0",
+      "node_name": "외인",
+      "node_path": "2/1/3/6/0/0/0",
+      "paper_text": "외인",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s127",
+      "node_id": "3C2W-0",
+      "node_name": "52.41%",
+      "node_path": "2/1/3/6/0/0/1",
+      "paper_text": "52.41%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "for_wght",
+      "alt_mappings": null,
+      "kor": "외인비중",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s128",
+      "node_id": "3C2Y-0",
+      "node_name": "외국계",
+      "node_path": "2/1/3/6/0/1/0",
+      "paper_text": "외국계",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s129",
+      "node_id": "3C2Z-0",
+      "node_name": "+182만주",
+      "node_path": "2/1/3/6/0/1/1",
+      "paper_text": "+182만주",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "frgn",
+      "alt_mappings": null,
+      "kor": "외국계",
+      "format": {
+        "unit": "shares",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s130",
+      "node_id": "3C31-0",
+      "node_name": "신용비율",
+      "node_path": "2/1/3/6/0/2/0",
+      "paper_text": "신용비율",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s131",
+      "node_id": "3C32-0",
+      "node_name": "0.86%",
+      "node_path": "2/1/3/6/0/2/1",
+      "paper_text": "0.86%",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "crd_remn_rt",
+      "alt_mappings": null,
+      "kor": "신용잔고율",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 2,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s132",
+      "node_id": "3C35-0",
+      "node_name": "프로그램",
+      "node_path": "2/1/3/6/1/0/0",
+      "paper_text": "프로그램",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s133",
+      "node_id": "3C36-0",
+      "node_name": "+64만주",
+      "node_path": "2/1/3/6/1/0/1",
+      "paper_text": "+64만주",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "prm",
+      "alt_mappings": null,
+      "kor": "프로그램",
+      "format": {
+        "unit": "shares",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s134",
+      "node_id": "3C38-0",
+      "node_name": "전일대비",
+      "node_path": "2/1/3/6/1/1/0",
+      "paper_text": "전일대비",
+      "region": "rail",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s135",
+      "node_id": "3C39-0",
+      "node_name": "+1,850원",
+      "node_path": "2/1/3/6/1/1/1",
+      "paper_text": "+1,850원",
+      "region": "rail",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10015",
+      "f": "pred_pre",
+      "alt_mappings": null,
+      "kor": "전일대비",
+      "format": {
+        "unit": "krw_ko",
+        "sign": true,
+        "precision": 0,
+        "tone": "change"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s136",
+      "node_id": "14T9-2",
+      "node_name": "● 차트 실시간 갱신 중",
+      "node_path": "3/0",
+      "paper_text": "● 차트 실시간 갱신 중",
+      "region": "footer",
+      "kind": "label",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "kor": null,
+      "format": null,
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null
+    },
+    {
+      "slot_id": "s137",
+      "node_id": "14TA-2",
+      "node_name": "일봉 · 거래량 · 마지막 틱 30건 · 마지막 체결 09:42:18",
+      "node_path": "3/1",
+      "paper_text": "일봉 · 거래량 · 마지막 틱 30건 · 마지막 체결 09:42:18",
+      "region": "footer",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 12.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:ka10079",
+      "f": "last_tic_cnt",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:ka10084",
+          "f": "tm"
+        }
+      ],
+      "kor": "마지막틱갯수",
+      "format": {
+        "unit": "count",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:ka10084",
+          "f": "tm",
+          "kor": "시간",
+          "sep": " · "
+        }
+      ]
+    },
+    {
+      "slot_id": "s138",
+      "node_id": "3926-0",
+      "node_name": "기준·제한 상태",
+      "node_path": "3/2",
+      "paper_text": "증거금율 20% · 통화단위 원 · 임의연장 없음 · 장전임의연장 없음 · 장후임의연장 없음 · 조기종료ELW 해당 없음",
+      "region": "footer",
+      "kind": "value",
+      "layer": "직접",
+      "font_size_px": 11.0,
+      "anchor": null,
+      "table": null,
+      "mapping_id": "base:0g",
+      "f": "382",
+      "alt_mappings": [
+        {
+          "mapping_id": "base:0g",
+          "f": "297"
+        },
+        {
+          "mapping_id": "base:0g",
+          "f": "592"
+        },
+        {
+          "mapping_id": "base:0g",
+          "f": "593"
+        },
+        {
+          "mapping_id": "base:0g",
+          "f": "689"
+        },
+        {
+          "mapping_id": "base:0g",
+          "f": "594"
+        }
+      ],
+      "kor": "증거금율표시",
+      "format": {
+        "unit": "percent",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
+      },
+      "paired_with": null,
+      "collapse_group": null,
+      "expanded_board": null,
+      "extra_fields": [
+        {
+          "mapping_id": "base:0g",
+          "f": "594",
+          "kor": "통화단위",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:0g",
+          "f": "297",
+          "kor": "임의연장",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:0g",
+          "f": "592",
+          "kor": "장전임의연장",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:0g",
+          "f": "593",
+          "kor": "장후임의연장",
+          "sep": " · "
+        },
+        {
+          "mapping_id": "base:0g",
+          "f": "689",
+          "kor": "조기종료ELW발생",
+          "sep": " · "
+        }
+      ]
+    }
+  ],
+  "unbound_reason": {}
+}

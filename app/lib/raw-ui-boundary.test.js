@@ -16,6 +16,46 @@ test('production canvas never mounts raw detail diagnostics without the explicit
   assert.doesNotMatch(canvas, /semanticDetailSheet\.upsert\(existing, envelope\)/);
 });
 
+test('board surface cards draw no integrated card chrome over the Paper board', () => {
+  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
+  const surface = fs.readFileSync(path.join(__dirname, 'integrated-card-surface.js'), 'utf8');
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8');
+
+  // 카드 머리(제목·기준 시각·×)는 만들지 않는다 — 탭 스트립이 그 셋을 맡는다.
+  const board = canvas.slice(
+    canvas.indexOf('function renderBoardSurfaceCard'),
+    canvas.indexOf('async function renderTaskCanvasEnvelope'),
+  );
+  assert.match(board, /card\.dataset\.boardSurface = 'true'/);
+  assert.match(board, /card\.querySelector\(':scope > \.card-head'\)/);
+  assert.match(board, /if \(head\) head\.remove\(\)/);
+
+  // 패널 탭 칩("요약" 등)도 만들지 않는다 — 스트립은 Paper 보드가 갖고 있다.
+  const scaffold = surface.slice(
+    surface.indexOf('function ensureScaffold'), surface.indexOf('function stampRoot'),
+  );
+  assert.match(surface, /function isBoardSurface\(node\)/);
+  assert.match(surface, /node\.dataset\.boardSurface === 'true'/);
+  assert.match(scaffold, /if \(!isBoardSurface\(root\)\) \{[\s\S]*integrated-card-tabs/);
+  const mount = surface.slice(
+    surface.indexOf('function mountOrUpdate'), surface.indexOf('const api = {'),
+  );
+  assert.match(mount, /if \(tabs\) \{[\s\S]*integrated-card-tab['"]/);
+
+  // 하단 "전체 원본 필드 ▸"(헌장 신념 8) — 개발자 플래그를 켜도 보드에는 안 붙는다.
+  const helper = canvas.slice(
+    canvas.indexOf('function upsertDeveloperDiagnostics'), canvas.indexOf('// 모든 chart surface'),
+  );
+  assert.match(helper, /if \(integratedCardSurface\.isBoardSurface\(root\)\) return null/);
+  assert.ok(
+    helper.indexOf('isBoardSurface(root)') < helper.indexOf('semanticDetailSheet.upsert(root, envelope)'),
+  );
+
+  // 남은 카드 껍데기는 유리·테두리·여백을 보드에 내준다(테두리 두 줄 금지).
+  assert.match(css, /\.card\[data-board-surface="true"\] \{[^}]*padding: 0;/);
+  assert.match(css, /\.card\[data-board-surface="true"\] \{[^}]*border: 0;/);
+});
+
 test('task-canvas is routed through semantic presentation and cannot use free JSON fallback', () => {
   const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
   assert.match(canvas, /semanticWorkspace\.isTaskCanvasEnvelope\(envelope\)/);
@@ -34,7 +74,14 @@ test('generic task-canvas primary DOM is destroyed before semantic-only replacem
   assert.match(helper, /semanticWorkspace\.isSafePrimary\(envelope, rendered\)/);
   assert.match(helper, /destroyCard\(rendered\)/);
   assert.match(helper, /createSemanticWorkspaceCard\(envelope\)/);
-  assert.equal((canvas.match(/card\.dataset\.semanticPrimary = 'specialized'/g) || []).length, 4);
+  // 'specialized' 표시를 달 수 있는 자리는 정확히 5곳이다 — 전문 렌더러 4종
+  // (facts·compound·event/action·chart 계열)과 Paper 보드 표면(renderBoardSurfaceCard).
+  // 범용 렌더러가 이 표시를 달면 task-canvas 안전 판정을 통과해버리므로 개수를 고정한다.
+  assert.equal((canvas.match(/card\.dataset\.semanticPrimary = 'specialized'/g) || []).length, 5);
+  assert.match(
+    canvas.slice(canvas.indexOf('function renderBoardSurfaceCard')),
+    /card\.dataset\.semanticPrimary = 'specialized'/,
+  );
   assert.match(canvas, /rendered = replaceUnsafeTaskPrimary\(rendered, envelope\)/);
   assert.equal((canvas.match(/if \(semanticWorkspace\.isTaskCanvasEnvelope\(envelope\)\) return null;/g) || []).length, 3);
 });

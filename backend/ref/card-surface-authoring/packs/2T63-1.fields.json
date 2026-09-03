@@ -1,0 +1,19 @@
+{
+ "board": "2T63-1",
+ "fields": [
+  {
+   "mapping_id": "base:kt10001",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "where": "주문 접수 정보 · 주문번호 행"
+  },
+  {
+   "mapping_id": "base:kt10001",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": null,
+   "where": "주문 접수 정보 · 국내거래소구분 행"
+  }
+ ]
+}

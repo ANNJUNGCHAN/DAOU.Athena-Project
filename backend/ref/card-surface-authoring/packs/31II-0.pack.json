@@ -1,0 +1,162 @@
+{
+ "board_id": "31II-0",
+ "card_id": "CC-03",
+ "name": "CC-03 / R01-T4-9 · 순위 — VI 발동",
+ "operation_refs": [
+  "base:ka10054"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:ka10054",
+   "f": "motn_stk",
+   "kor": "발동종목",
+   "layer": null,
+   "board": "31II-0",
+   "where": "VI 발동 순위 표 본체",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": "병기",
+   "board": "31II-0",
+   "where": "표 '종목' 셀 둘째 줄 '042700 · KRX'의 코드",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "31II-0",
+   "where": "종목 컬럼",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": "직접",
+   "board": "31II-0",
+   "where": "표 '누적거래량' 셀 첫째 줄 '320만주'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "motn_pric",
+   "kor": "발동가격",
+   "layer": null,
+   "board": "31II-0",
+   "where": "발동가 컬럼 198,000",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "dynm_dispty_rt",
+   "kor": "동적괴리율",
+   "layer": "병기",
+   "board": "31II-0",
+   "where": "표 '괴리율' 셀 둘째 줄 '동적 +3.0%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "trde_cntr_proc_time",
+   "kor": "매매체결처리시각",
+   "layer": null,
+   "board": "31II-0",
+   "where": "발동 시각 컬럼 10:24 / 타임라인 '09:12 발동'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "virelis_time",
+   "kor": "VI해제시각",
+   "layer": null,
+   "board": "31II-0",
+   "where": "타임라인 '09:44 해제 예정' / 발동 현황 해제 예정 09:44",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "viaplc_tp",
+   "kor": "VI적용구분",
+   "layer": null,
+   "board": "31II-0",
+   "where": "유형 컬럼 정적/동적",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "dynm_stdpc",
+   "kor": "동적기준가격",
+   "layer": "병기",
+   "board": "31II-0",
+   "where": "표 '기준가격' 셀 둘째 줄 '동적 192,200'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "static_stdpc",
+   "kor": "정적기준가격",
+   "layer": "직접",
+   "board": "31II-0",
+   "where": "표 '기준가격' 셀 첫째 줄 '정적 180,000'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "static_dispty_rt",
+   "kor": "정적괴리율",
+   "layer": "직접",
+   "board": "31II-0",
+   "where": "표 '괴리율' 셀 첫째 줄 '정적 +10.0%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "open_pric_pre_flu_rt",
+   "kor": "시가대비등락률",
+   "layer": "병기",
+   "board": "31II-0",
+   "where": "표 '누적거래량' 셀 둘째 줄 '시가대비 +8.4%'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "vimotn_cnt",
+   "kor": "VI발동횟수",
+   "layer": "직접",
+   "board": "31II-0",
+   "where": "표 '발동 횟수' 셀 첫째 줄 '1회'(행별 값)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:ka10054",
+   "f": "stex_tp",
+   "kor": "거래소구분",
+   "layer": "병기",
+   "board": "31II-0",
+   "where": "표 '종목' 셀 둘째 줄 '042700 · KRX'의 거래소 표기",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 15
+}

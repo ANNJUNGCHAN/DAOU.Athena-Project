@@ -1,0 +1,1146 @@
+{
+ "board": "15P5-2",
+ "fields": [
+  {
+   "mapping_id": "base:0G",
+   "f": "667",
+   "kor": "ELW기어링비율",
+   "layer": null,
+   "where": "기어링 7.9"
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "668",
+   "kor": "ELW손익분기율",
+   "layer": null,
+   "where": "손익분기율 +12.1%"
+  },
+  {
+   "mapping_id": "base:0G",
+   "f": "669",
+   "kor": "ELW자본지지점",
+   "layer": null,
+   "where": "자본지지점 150,000원"
+  },
+  {
+   "mapping_id": "base:0m",
+   "f": "20",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "헤더 '09:42 기준' 칩"
+  },
+  {
+   "mapping_id": "base:0m",
+   "f": "10",
+   "kor": "현재가",
+   "layer": null,
+   "where": "현재가 1,245원"
+  },
+  {
+   "mapping_id": "base:0m",
+   "f": "670",
+   "kor": "ELW이론가",
+   "layer": null,
+   "where": "이론가 1,210원"
+  },
+  {
+   "mapping_id": "base:0m",
+   "f": "671",
+   "kor": "ELW내재변동성",
+   "layer": null,
+   "where": "IV 26.8%"
+  },
+  {
+   "mapping_id": "base:0m",
+   "f": "672",
+   "kor": "ELW델타",
+   "layer": null,
+   "where": "델타 0.54"
+  },
+  {
+   "mapping_id": "base:0m",
+   "f": "673",
+   "kor": "ELW감마",
+   "layer": null,
+   "where": "감마 0.018"
+  },
+  {
+   "mapping_id": "base:0m",
+   "f": "674",
+   "kor": "ELW쎄타",
+   "layer": null,
+   "where": "쎄타 -1.9"
+  },
+  {
+   "mapping_id": "base:0m",
+   "f": "675",
+   "kor": "ELW베가",
+   "layer": null,
+   "where": "베가 0.22"
+  },
+  {
+   "mapping_id": "base:0m",
+   "f": "676",
+   "kor": "ELW로",
+   "layer": null,
+   "where": "로 0.07"
+  },
+  {
+   "mapping_id": "base:0m",
+   "f": "706",
+   "kor": "LP호가내재변동성",
+   "layer": "병기",
+   "where": "민감도·이론가 IV 칸 아래 병기 'LP호가 27.1%'"
+  },
+  {
+   "mapping_id": "base:0u",
+   "f": "20",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "헤더 '09:42 기준' 칩"
+  },
+  {
+   "mapping_id": "base:0u",
+   "f": "666",
+   "kor": "ELW패리티",
+   "layer": null,
+   "where": "패리티 100.6%"
+  },
+  {
+   "mapping_id": "base:0u",
+   "f": "1211",
+   "kor": "ELW프리미엄",
+   "layer": null,
+   "where": "프리미엄 12.3%"
+  },
+  {
+   "mapping_id": "base:0u",
+   "f": "667",
+   "kor": "ELW기어링비율",
+   "layer": null,
+   "where": "기어링 7.9"
+  },
+  {
+   "mapping_id": "base:0u",
+   "f": "668",
+   "kor": "ELW손익분기율",
+   "layer": null,
+   "where": "손익분기율 +12.1%"
+  },
+  {
+   "mapping_id": "base:0u",
+   "f": "669",
+   "kor": "ELW자본지지점",
+   "layer": null,
+   "where": "자본지지점 150,000원"
+  },
+  {
+   "mapping_id": "base:ka10048",
+   "f": "elwdaly_snst_ix",
+   "kor": "ELW일별민감도지표",
+   "layer": null,
+   "where": "일별 지표 표"
+  },
+  {
+   "mapping_id": "base:ka10048",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일자 컬럼 09-01·08-29·08-28"
+  },
+  {
+   "mapping_id": "base:ka10048",
+   "f": "iv",
+   "kor": "IV",
+   "layer": null,
+   "where": "IV 컬럼 26.8%"
+  },
+  {
+   "mapping_id": "base:ka10048",
+   "f": "delta",
+   "kor": "델타",
+   "layer": null,
+   "where": "델타 컬럼 0.54"
+  },
+  {
+   "mapping_id": "base:ka10048",
+   "f": "gam",
+   "kor": "감마",
+   "layer": "직접",
+   "where": "일별 지표 표 '감마·쎄타' 열 1줄 (09-01 0.018 / 08-29 0.017 / 08-28 0.016)"
+  },
+  {
+   "mapping_id": "base:ka10048",
+   "f": "theta",
+   "kor": "쎄타",
+   "layer": "병기",
+   "where": "일별 지표 표 감마 셀 2줄 '쎄타 −1.9 / −1.8 / −1.8'"
+  },
+  {
+   "mapping_id": "base:ka10048",
+   "f": "vega",
+   "kor": "베가",
+   "layer": "직접",
+   "where": "일별 지표 표 '베가·로' 열 1줄 (0.22 / 0.21 / 0.21)"
+  },
+  {
+   "mapping_id": "base:ka10048",
+   "f": "law",
+   "kor": "로",
+   "layer": "병기",
+   "where": "일별 지표 표 베가 셀 2줄 '로 0.07 / 0.07 / 0.06'"
+  },
+  {
+   "mapping_id": "base:ka10048",
+   "f": "lp",
+   "kor": "LP",
+   "layer": null,
+   "where": "일별 지표 LP보유 컬럼 642만주"
+  },
+  {
+   "mapping_id": "base:ka10050",
+   "f": "elwsnst_ix_array",
+   "kor": "ELW민감도지표배열",
+   "layer": "펼침",
+   "where": "일별 지표 표 헤더 '일별 · 시간별' 칩 2개 — 시간별 칩이 같은 표를 시간별 배열 행으로 전환"
+  },
+  {
+   "mapping_id": "base:ka10050",
+   "f": "cntr_tm",
+   "kor": "체결시간",
+   "layer": null,
+   "where": "헤더 '09:42 기준'"
+  },
+  {
+   "mapping_id": "base:ka10050",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "현재가 1,245원"
+  },
+  {
+   "mapping_id": "base:ka10050",
+   "f": "elwtheory_pric",
+   "kor": "ELW이론가",
+   "layer": null,
+   "where": "이론가 1,210원"
+  },
+  {
+   "mapping_id": "base:ka10050",
+   "f": "iv",
+   "kor": "IV",
+   "layer": null,
+   "where": "IV 26.8%"
+  },
+  {
+   "mapping_id": "base:ka10050",
+   "f": "delta",
+   "kor": "델타",
+   "layer": null,
+   "where": "델타 0.54"
+  },
+  {
+   "mapping_id": "base:ka10050",
+   "f": "gam",
+   "kor": "감마",
+   "layer": null,
+   "where": "감마 0.018"
+  },
+  {
+   "mapping_id": "base:ka10050",
+   "f": "theta",
+   "kor": "쎄타",
+   "layer": null,
+   "where": "쎄타 -1.9"
+  },
+  {
+   "mapping_id": "base:ka10050",
+   "f": "vega",
+   "kor": "베가",
+   "layer": null,
+   "where": "베가 0.22"
+  },
+  {
+   "mapping_id": "base:ka10050",
+   "f": "law",
+   "kor": "로",
+   "layer": null,
+   "where": "로 0.07"
+  },
+  {
+   "mapping_id": "base:ka10050",
+   "f": "lp",
+   "kor": "LP",
+   "layer": null,
+   "where": "LP보유수량 642만주"
+  },
+  {
+   "mapping_id": "base:ka30001",
+   "f": "elwpric_jmpflu",
+   "kor": "ELW가격급등락",
+   "layer": null,
+   "where": "시장 순위 표"
+  },
+  {
+   "mapping_id": "base:ka30001",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "종목 컬럼 KB 7412 삼성전자 콜"
+  },
+  {
+   "mapping_id": "base:ka30001",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "등락률 +/- 부호와 상승·하락색"
+  },
+  {
+   "mapping_id": "base:ka30001",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "현재가 컬럼 312"
+  },
+  {
+   "mapping_id": "base:ka30001",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 컬럼 842만주"
+  },
+  {
+   "mapping_id": "base:ka30003",
+   "f": "elwlpposs_daly_trnsn",
+   "kor": "ELWLP보유일별추이",
+   "layer": null,
+   "where": "일별 지표 표의 LP보유 계열"
+  },
+  {
+   "mapping_id": "base:ka30003",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일자 컬럼 09-01·08-29·08-28"
+  },
+  {
+   "mapping_id": "base:ka30003",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": "직접",
+   "where": "일별 지표 표 '종가 · 등락' 열 1줄 (1,245 / 1,210 / 1,230)"
+  },
+  {
+   "mapping_id": "base:ka30003",
+   "f": "pre_tp",
+   "kor": "대비구분",
+   "layer": "병기",
+   "where": "일별 지표 종가 셀 2줄 대비기호 ▲/▼ + 상승 빨강·하락 파랑"
+  },
+  {
+   "mapping_id": "base:ka30003",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": "병기",
+   "where": "일별 지표 종가 셀 2줄 '+35 / −20 / +10' 원 단위 전일대비"
+  },
+  {
+   "mapping_id": "base:ka30003",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": "병기",
+   "where": "일별 지표 종가 셀 2줄 '+2.89% / −1.6% / +0.8%'"
+  },
+  {
+   "mapping_id": "base:ka30003",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "where": "일별 지표 표 '거래량 · 대금' 열 1줄 (4.8만주 / 5.2만주 / 4.4만주)"
+  },
+  {
+   "mapping_id": "base:ka30003",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": "병기",
+   "where": "일별 지표 거래량 셀 2줄 '5.9억원 / 6.3억원 / 5.4억원'"
+  },
+  {
+   "mapping_id": "base:ka30003",
+   "f": "chg_qty",
+   "kor": "변동수량",
+   "layer": null,
+   "where": "LP 유동성 변동 -18.4만주"
+  },
+  {
+   "mapping_id": "base:ka30003",
+   "f": "lprmnd_qty",
+   "kor": "LP보유수량",
+   "layer": null,
+   "where": "LP보유수량 642만주 · 일별 지표 LP보유 컬럼"
+  },
+  {
+   "mapping_id": "base:ka30003",
+   "f": "wght",
+   "kor": "비중",
+   "layer": null,
+   "where": "LP 유동성 비율 64.2%"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "elwdispty_rt",
+   "kor": "ELW괴리율",
+   "layer": "병기",
+   "where": "시장 순위 표 등락률 셀 2줄 '괴리율 +5.2% / −3.1% / +1.8% / +2.89%' 행별 낱값"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "헤더 58H215"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "isscomp_nm",
+   "kor": "발행사명",
+   "layer": "병기",
+   "where": "시장 순위 종목 셀 2줄 mono 10px 'KB증권 / 미래에셋증권 / 한국투자증권'"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "sqnc",
+   "kor": "회차",
+   "layer": "병기",
+   "where": "시장 순위 종목 셀 2줄 '7412회차 / 8203회차 / 7719회차 / 2503회차'"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "base_aset_nm",
+   "kor": "기초자산명",
+   "layer": null,
+   "where": "기초자산 삼성전자 100%"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "rght_tp",
+   "kor": "권리구분",
+   "layer": null,
+   "where": "권리유형 콜"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "dispty_rt",
+   "kor": "괴리율",
+   "layer": null,
+   "where": "괴리율 +2.89%"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "basis",
+   "kor": "베이시스",
+   "layer": "직접",
+   "where": "계약 8칸 그리드 '베이시스 +850' 칸 신설"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "srvive_dys",
+   "kor": "잔존일수",
+   "layer": null,
+   "where": "잔존일수 17일"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "theory_pric",
+   "kor": "이론가",
+   "layer": null,
+   "where": "이론가 1,210원"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "현재가 1,245원"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "pre_tp",
+   "kor": "대비구분",
+   "layer": null,
+   "where": "▲ 기호와 상승색"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "+35원"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "+2.89%"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 4.8만주"
+  },
+  {
+   "mapping_id": "base:ka30004",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "삼성전자 2503 콜 ELW"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "헤더 58H215"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "base_aset_nm",
+   "kor": "기초자산명",
+   "layer": null,
+   "where": "기초자산 삼성전자 100%"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "rght_tp",
+   "kor": "권리구분",
+   "layer": null,
+   "where": "권리유형 콜"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "expr_dt",
+   "kor": "만기일",
+   "layer": null,
+   "where": "만기일 2026.09.18"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "현재가 1,245원"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "pre_tp",
+   "kor": "대비구분",
+   "layer": null,
+   "where": "▲ 기호와 상승색"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "+35원"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "+2.89%"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 4.8만주"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "prty",
+   "kor": "패리티",
+   "layer": null,
+   "where": "패리티 100.6%"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "gear_rt",
+   "kor": "기어링비율",
+   "layer": null,
+   "where": "기어링 7.9"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "pl_qutr_rt",
+   "kor": "손익분기율",
+   "layer": null,
+   "where": "손익분기율 +12.1%"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "cfp",
+   "kor": "자본지지점",
+   "layer": null,
+   "where": "자본지지점 150,000원"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "theory_pric",
+   "kor": "이론가",
+   "layer": null,
+   "where": "이론가 1,210원"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "innr_vltl",
+   "kor": "내재변동성",
+   "layer": null,
+   "where": "IV 26.8%"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "delta",
+   "kor": "델타",
+   "layer": null,
+   "where": "델타 0.54"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "exec_pric",
+   "kor": "행사가격",
+   "layer": null,
+   "where": "행사가 150,000원"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "cnvt_rt",
+   "kor": "전환비율",
+   "layer": null,
+   "where": "전환비율 0.065"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "lpposs_rt",
+   "kor": "LP보유비율",
+   "layer": null,
+   "where": "LP 보유 비율 64.2%"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "fin_trde_dt",
+   "kor": "최종거래일",
+   "layer": null,
+   "where": "최종거래일 2026.09.17"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "lpinitlast_suply_dt",
+   "kor": "LP초종공급일",
+   "layer": null,
+   "where": "LP공급종료일 2026.09.11"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "삼성전자 2503 콜 ELW"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "srvive_dys",
+   "kor": "잔존일수",
+   "layer": null,
+   "where": "잔존일수 17일"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "dispty_rt",
+   "kor": "괴리율",
+   "layer": null,
+   "where": "괴리율 +2.89%"
+  },
+  {
+   "mapping_id": "base:ka30005",
+   "f": "lpmmcm_nm",
+   "kor": "LP회원사명",
+   "layer": null,
+   "where": "회원사 키움증권"
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "elwflu_rt_rank",
+   "kor": "ELW등락율순위",
+   "layer": null,
+   "where": "시장 순위 표(등락률 순)"
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "종목 컬럼"
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "현재가 컬럼 312·87·1,120"
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "등락률 부호와 상승·하락색"
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "where": "등락률 컬럼 +32.8%"
+  },
+  {
+   "mapping_id": "base:ka30009",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 컬럼 842만주"
+  },
+  {
+   "mapping_id": "base:ka30010",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "시장 순위 종목 컬럼"
+  },
+  {
+   "mapping_id": "base:ka30010",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "현재가 컬럼"
+  },
+  {
+   "mapping_id": "base:ka30010",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "등락률 부호와 상승·하락색"
+  },
+  {
+   "mapping_id": "base:ka30010",
+   "f": "flu_rt",
+   "kor": "등락률",
+   "layer": null,
+   "where": "등락률 컬럼"
+  },
+  {
+   "mapping_id": "base:ka30010",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": null,
+   "where": "거래량 컬럼"
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "where": "시장 순위 종목 컬럼"
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "현재가 컬럼"
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "pre_sig",
+   "kor": "대비기호",
+   "layer": null,
+   "where": "등락률 부호와 상승·하락색"
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "등락률 컬럼"
+  },
+  {
+   "mapping_id": "base:ka30011",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": null,
+   "where": "거래량 컬럼"
+  },
+  {
+   "mapping_id": "detail:ka30012:market_snapshot",
+   "f": "aset_cd",
+   "kor": "자산코드",
+   "layer": "직접",
+   "where": "헤더 부제 mono '58H215 · 기초자산 005930 · KB증권 발행 2503회차'"
+  },
+  {
+   "mapping_id": "detail:ka30012:market_snapshot",
+   "f": "cur_prc",
+   "kor": "현재가",
+   "layer": null,
+   "where": "현재가 1,245원"
+  },
+  {
+   "mapping_id": "detail:ka30012:market_snapshot",
+   "f": "pred_pre_sig",
+   "kor": "전일대비기호",
+   "layer": null,
+   "where": "▲ 기호와 상승색"
+  },
+  {
+   "mapping_id": "detail:ka30012:market_snapshot",
+   "f": "pred_pre",
+   "kor": "전일대비",
+   "layer": null,
+   "where": "+35원"
+  },
+  {
+   "mapping_id": "detail:ka30012:market_snapshot",
+   "f": "flu_rt",
+   "kor": "등락율",
+   "layer": null,
+   "where": "+2.89%"
+  },
+  {
+   "mapping_id": "detail:ka30012:liquidity_providers",
+   "f": "lpmmcm_nm",
+   "kor": "LP회원사명",
+   "layer": null,
+   "where": "LP 유동성 회원사 키움증권"
+  },
+  {
+   "mapping_id": "detail:ka30012:liquidity_providers",
+   "f": "lpmmcm_nm_1",
+   "kor": "LP회원사명1",
+   "layer": "직접",
+   "where": "LP 유동성 블록 하단 스트립 '회원사 키움증권 · 미래에셋증권' 중 1번"
+  },
+  {
+   "mapping_id": "detail:ka30012:liquidity_providers",
+   "f": "lpmmcm_nm_2",
+   "kor": "LP회원사명2",
+   "layer": "직접",
+   "where": "LP 유동성 블록 하단 스트립 '회원사 키움증권 · 미래에셋증권' 중 2번"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwexpr_evlt_pric",
+   "kor": "ELW만기평가가격",
+   "layer": "직접",
+   "where": "계약·일정 블록 '만기평가가격 · 평가 전' 행 신설"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwtheory_pric",
+   "kor": "ELW이론가",
+   "layer": null,
+   "where": "이론가 1,210원"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "dispty_rt",
+   "kor": "괴리율",
+   "layer": null,
+   "where": "괴리율 +2.89%"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwinnr_vltl",
+   "kor": "ELW내재변동성",
+   "layer": null,
+   "where": "IV 26.8%"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "exp_rght_pric",
+   "kor": "예상권리가",
+   "layer": "직접",
+   "where": "계약 8칸 그리드 '예상권리가 850원' 칸 신설"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwpl_qutr_rt",
+   "kor": "ELW손익분기율",
+   "layer": null,
+   "where": "손익분기율 +12.1%"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwexec_pric",
+   "kor": "ELW행사가",
+   "layer": null,
+   "where": "행사가 150,000원"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwcnvt_rt",
+   "kor": "ELW전환비율",
+   "layer": null,
+   "where": "전환비율 0.065"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwcmpn_rt",
+   "kor": "ELW보상율",
+   "layer": "병기",
+   "where": "민감도 하단 mono 스트립 손익분기율 아래 병기 '보상율 해당 없음'"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwpric_rising_part_rt",
+   "kor": "ELW가격상승참여율",
+   "layer": "병기",
+   "where": "민감도 하단 mono 스트립 전환비율 아래 병기 '가격상승참여율 100%'"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwrght_type",
+   "kor": "ELW권리유형",
+   "layer": null,
+   "where": "권리유형 콜"
+  },
+  {
+   "mapping_id": "detail:ka30012:valuation_and_rights",
+   "f": "elwsrvive_dys",
+   "kor": "ELW잔존일수",
+   "layer": null,
+   "where": "잔존일수 17일"
+  },
+  {
+   "mapping_id": "detail:ka30012:liquidity_and_leverage",
+   "f": "stkcnt",
+   "kor": "상장주식수",
+   "layer": "직접",
+   "where": "LP 유동성 블록 하단 스트립 '상장주식수 1,000만주'"
+  },
+  {
+   "mapping_id": "detail:ka30012:liquidity_and_leverage",
+   "f": "elwlpord_pos",
+   "kor": "ELWLP주문가능",
+   "layer": null,
+   "where": "LP 스프레드 카드 '주문가능'"
+  },
+  {
+   "mapping_id": "detail:ka30012:liquidity_and_leverage",
+   "f": "lpposs_rt",
+   "kor": "LP보유비율",
+   "layer": null,
+   "where": "LP 보유 비율 64.2%"
+  },
+  {
+   "mapping_id": "detail:ka30012:liquidity_and_leverage",
+   "f": "lprmnd_qty",
+   "kor": "LP보유수량",
+   "layer": null,
+   "where": "LP보유수량 642만주"
+  },
+  {
+   "mapping_id": "detail:ka30012:liquidity_and_leverage",
+   "f": "elwspread",
+   "kor": "ELW스프레드",
+   "layer": null,
+   "where": "LP 스프레드 10원"
+  },
+  {
+   "mapping_id": "detail:ka30012:liquidity_and_leverage",
+   "f": "elwprty",
+   "kor": "ELW패리티",
+   "layer": null,
+   "where": "패리티 100.6%"
+  },
+  {
+   "mapping_id": "detail:ka30012:liquidity_and_leverage",
+   "f": "elwgear",
+   "kor": "ELW기어링",
+   "layer": null,
+   "where": "기어링 7.9"
+  },
+  {
+   "mapping_id": "detail:ka30012:key_dates",
+   "f": "elwflo_dt",
+   "kor": "ELW상장일",
+   "layer": "직접",
+   "where": "계약·일정 블록 '상장일 2026.03.12' 행 신설"
+  },
+  {
+   "mapping_id": "detail:ka30012:key_dates",
+   "f": "elwfin_trde_dt",
+   "kor": "ELW최종거래일",
+   "layer": null,
+   "where": "최종거래일 2026.09.17"
+  },
+  {
+   "mapping_id": "detail:ka30012:key_dates",
+   "f": "expr_dt",
+   "kor": "만기일",
+   "layer": null,
+   "where": "만기일 2026.09.18"
+  },
+  {
+   "mapping_id": "detail:ka30012:key_dates",
+   "f": "exec_dt",
+   "kor": "행사일",
+   "layer": "병기",
+   "where": "계약 8칸 만기일 칸 아래 병기 '행사일 2026.09.18'"
+  },
+  {
+   "mapping_id": "detail:ka30012:key_dates",
+   "f": "lpsuply_end_dt",
+   "kor": "LP공급종료일",
+   "layer": null,
+   "where": "LP공급종료일 2026.09.11"
+  },
+  {
+   "mapping_id": "detail:ka30012:key_dates",
+   "f": "elwpay_dt",
+   "kor": "ELW지급일",
+   "layer": null,
+   "where": "지급일 2026.09.24"
+  },
+  {
+   "mapping_id": "detail:ka30012:administration",
+   "f": "elwpay_agnt",
+   "kor": "ELW지급대리인",
+   "layer": "병기",
+   "where": "계약·일정 발행기관 행 아래 병기 '지급대리인 KB증권'"
+  },
+  {
+   "mapping_id": "detail:ka30012:administration",
+   "f": "elwappr_way",
+   "kor": "ELW결재방법",
+   "layer": "병기",
+   "where": "계약·일정 권리행사방식 행 아래 병기 '결제방법 현금결제'"
+  },
+  {
+   "mapping_id": "detail:ka30012:administration",
+   "f": "elwrght_exec_way",
+   "kor": "ELW권리행사방식",
+   "layer": null,
+   "where": "권리행사방식 자동행사"
+  },
+  {
+   "mapping_id": "detail:ka30012:administration",
+   "f": "elwpblicte_orgn",
+   "kor": "ELW발행기관",
+   "layer": "직접",
+   "where": "계약·일정 블록 '발행기관 KB증권' 행 신설"
+  },
+  {
+   "mapping_id": "detail:ka30012:payoff_conditions",
+   "f": "dcsn_pay_amt",
+   "kor": "확정지급액",
+   "layer": "병기",
+   "where": "기초자산·평가 조기종료 기준 행 아래 병기 '확정지급액 해당 없음'"
+  },
+  {
+   "mapping_id": "detail:ka30012:payoff_conditions",
+   "f": "kobarr",
+   "kor": "KO베리어",
+   "layer": "직접",
+   "where": "기초자산·평가 '조기종료 기준 · 해당 없음' 행 — 자동행사 문구와 분리된 낱값"
+  },
+  {
+   "mapping_id": "detail:ka30012:payoff_conditions",
+   "f": "iv",
+   "kor": "IV",
+   "layer": null,
+   "where": "IV 26.8%"
+  },
+  {
+   "mapping_id": "detail:ka30012:payoff_conditions",
+   "f": "clsprd_end_elwocr",
+   "kor": "종기종료ELW발생",
+   "layer": null,
+   "where": "조기종료 조건 없음"
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_1",
+   "kor": "기초자산1",
+   "layer": null,
+   "where": "기초자산 삼성전자"
+  },
+  {
+   "mapping_id": "detail:ka30012:underlying_basket",
+   "f": "bsis_aset_comp_rt_1",
+   "kor": "기초자산구성비율1",
+   "layer": null,
+   "where": "기초자산 100%"
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_window",
+   "f": "fr_dt",
+   "kor": "평가시작일자",
+   "layer": null,
+   "where": "평가 기간 2026.09.14 ~ 09.17 시작일"
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_window",
+   "f": "to_dt",
+   "kor": "평가종료일자",
+   "layer": null,
+   "where": "평가 기간 ~ 09.17 종료일"
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_window",
+   "f": "fr_tm",
+   "kor": "평가시작시간",
+   "layer": "직접",
+   "where": "기초자산·평가 '평가 기간 2026.09.14 09:00 ~ 09.17 15:30' 중 시작시각"
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_window",
+   "f": "evlt_end_tm",
+   "kor": "평가종료시간",
+   "layer": "직접",
+   "where": "기초자산·평가 '평가 기간 … ~ 09.17 15:30' 중 종료시각"
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_window",
+   "f": "evlt_pric",
+   "kor": "평가가격",
+   "layer": "직접",
+   "where": "기초자산·평가 '평가가격 · 평가 전' 행 신설(결측 위장 없이 상태 표기)"
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_window",
+   "f": "evlt_fnsh_yn",
+   "kor": "평가완료여부",
+   "layer": null,
+   "where": "기간 최고·최저 '평가 전' 상태 표기"
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_extrema",
+   "f": "all_hgst_pric",
+   "kor": "전체최고가",
+   "layer": null,
+   "where": "기간 최고·최저 슬롯(평가 전 — 표기)"
+  },
+  {
+   "mapping_id": "detail:ka30012:evaluation_extrema",
+   "f": "all_lwst_pric",
+   "kor": "전체최저가",
+   "layer": null,
+   "where": "기간 최고·최저 슬롯(평가 전 — 표기)"
+  }
+ ]
+}

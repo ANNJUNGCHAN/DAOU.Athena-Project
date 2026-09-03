@@ -1,0 +1,14 @@
+{
+  "root": "3CV5-0",
+  "regions": [
+    { "node_id": "3T4C-0", "name": "Instrument Header", "role": "header", "depth": 1 },
+    { "node_id": "3T4O-0", "name": "모드 탭", "role": "strip", "depth": 2 },
+    { "node_id": "3CV6-0", "name": "Quote Section", "role": "workspace", "depth": 1 },
+    { "node_id": "3CV7-0", "name": "Quote Main", "role": "primary", "depth": 2 },
+    { "node_id": "3CVF-0", "name": "KPI", "role": "kpi", "depth": 3 },
+    { "node_id": "3CWA-0", "name": "Quote Side", "role": "rail", "depth": 2 },
+    { "node_id": "3CXP-0", "name": "Flow Section", "role": "workspace", "depth": 1 },
+    { "node_id": "3CXQ-0", "name": "Intraday", "role": "primary", "depth": 2 },
+    { "node_id": "3D01-0", "name": "Daily", "role": "rail", "depth": 2 }
+  ]
+}

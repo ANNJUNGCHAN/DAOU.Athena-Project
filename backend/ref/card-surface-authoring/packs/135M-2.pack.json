@@ -1,0 +1,32 @@
+{
+ "board_id": "135M-2",
+ "card_id": "CC-02",
+ "name": "CC-02 / R11 · 삼성전자 10주 시장가 매수",
+ "operation_refs": [
+  "base:kt10000"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:kt10000",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "board": "135M-2",
+   "where": "주문 접수 정보 · 주문번호 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt10000",
+   "f": "dmst_stex_tp",
+   "kor": "국내거래소구분",
+   "layer": null,
+   "board": "135M-2",
+   "where": "주문 접수 정보 · 국내거래소구분 행",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 2
+}

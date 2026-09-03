@@ -8,6 +8,7 @@ import logging
 import threading
 import time
 import unicodedata
+from collections.abc import Mapping
 from dataclasses import dataclass
 from dataclasses import field as dataclass_field
 from typing import Annotated, Any, Literal
@@ -15,7 +16,9 @@ from typing import Annotated, Any, Literal
 import httpx
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response, WebSocket
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, ValidationError, model_validator
+
+from athena_api.accounts import account_runtimes
 
 # OptionalOrderClientDep/OptionalWsClientDep는 llm_tools.py가 정의한다 —
 # call과 같은 주입 의미론(부재는 주입이 아니라 dispatch에서 에러)을 그대로 쓴다.
@@ -36,14 +39,24 @@ from athena_api.canvas_transform import (
     resolve_fixed_card_title,
     resolve_screen_render_contract,
 )
+from athena_api.card_surface_contract import (
+    attach_surface_contract,
+    bind_surface_values,
+    build_board_surface_contract,
+    json_path_values,
+    observation_id_for,
+    resolve_section_titles_ko,
+)
+from athena_api.card_surface_templates import get_registry as get_card_surface_registry
 from athena_api.dependencies import (
     AccountAliasDep,
     KiwoomClientDep,
     SelectorServiceDep,
     get_kiwoom_client,
 )
-from athena_api.errors import KiwoomError
+from athena_api.errors import KiwoomError, KiwoomNotReadyError
 from athena_api.generated.registry import WEBSOCKET_TR_IDS
+from athena_api.generated.runtime import call_typed_tr
 from athena_api.kiwoom import KiwoomClient
 from athena_api.security import require_local_bearer
 from athena_api.selector import SelectorService
@@ -147,6 +160,7 @@ _INTEGRATED_CARD_FIELDS = frozenset(
         "workspace_generation",
         "view_generation",
         "update_policy",
+        "surface_contract",
     }
 )
 
@@ -154,7 +168,7 @@ _INTEGRATED_CARD_FIELDS = frozenset(
 # (_INTEGRATED_CARD_FIELDS의 부분집합). 중첩 위치에는 그 대조가 없으므로 예외가
 # 적용되지 않는다 — _forbidden_generic_task_canvas_aliases 주석 참고.
 _TOP_LEVEL_RECONCILED_CONTRACT_FIELDS = frozenset(
-    {"field_contract", "coverage_receipt"}
+    {"field_contract", "coverage_receipt", "surface_contract"}
 )
 
 _GENERIC_TASK_CANVAS_CONTRACT_ALIASES = frozenset(
@@ -179,6 +193,8 @@ _GENERIC_TASK_CANVAS_CONTRACT_ALIASES = frozenset(
         "viewGeneration",
         "update_policy",
         "updatePolicy",
+        "surface_contract",
+        "surfaceContract",
         "field_contract",
         "fieldContract",
         "coverage_receipt",
@@ -201,12 +217,9 @@ _TECHNICAL_DESCRIPTION_TOKENS = (
 )
 
 
-def _observation_id(wire_occurrence_id: str, array_index: int | None = None) -> str:
-    suffix = "scalar" if array_index is None else f"row:{array_index}"
-    digest = hashlib.sha256(
-        f"semantic-observation\0{wire_occurrence_id}\0{suffix}".encode()
-    ).hexdigest()[:20]
-    return f"obs_{digest}"
+# 표면 슬롯(surface_contract.slot_values)과 **같은** 관찰 식별자를 쓴다 — 두 벌로
+# 두면 실시간 프레임이 보드 슬롯을 못 찾는다(card_surface_contract가 단일 출처).
+_observation_id = observation_id_for
 
 
 def _realtime_binding_id(concept_id: str, display_slot: int | None) -> str:
@@ -401,7 +414,6 @@ def _view_instance_id(
         "request_scope": request_scope,
         "task": {"recipe_id": recipe_id},
         "target_query": {
-            "operation_ref": operation_ref,
             "arguments": _canonical_identity_value(arguments),
         },
         "account": unicodedata.normalize("NFKC", account).strip(),
@@ -493,6 +505,22 @@ def _apply_workspace_reservation(
     return True
 
 
+# Investor-facing Korean titles for section ids that must not fall back to the
+# hyphen-stripped internal taxonomy (buttonLabel keeps only Korean candidates).
+# 보드가 저작되면 slots.json의 section_titles_ko가 먼저다 — 여기 표는 폴백이다.
+_SECTION_TITLES_KO = {
+    "ranked-results": "순위",
+}
+
+
+def _section_title_ko(section_id: str, board_titles: Mapping[str, str]) -> str:
+    return (
+        board_titles.get(section_id)
+        or _SECTION_TITLES_KO.get(section_id)
+        or section_id.replace("-", " ")
+    )
+
+
 def _task_canvas_contract(
     operation_ref: str,
     *,
@@ -504,6 +532,7 @@ def _task_canvas_contract(
     """Derive product-safe presentation solely from canonical server registries."""
 
     recipe = get_view_recipe_registry().for_operation(operation_ref)
+    board_titles = resolve_section_titles_ko(operation_ref)
     semantic_contracts = get_semantic_presentation_registry().for_operation(operation_ref)
     fields_by_section: dict[str, list[dict[str, Any]]] = {
         section_id: [] for section_id in recipe.section_ids
@@ -520,7 +549,7 @@ def _task_canvas_contract(
         sections.append(
             {
                 "section_id": section_id,
-                "title_ko": section_id.replace("-", " "),
+                "title_ko": _section_title_ko(section_id, board_titles),
                 "section_order": policy.section_order,
                 "visibility_policy": policy.visibility_policy,
                 "required": policy.required,
@@ -561,31 +590,8 @@ def _task_canvas_contract(
     }
 
 
-def _json_path_values(source: Any, json_path: str) -> list[Any]:
-    """Evaluate the registry's small ``$.key`` / ``$.rows[].key`` path subset."""
-
-    if json_path == "$":
-        return [source]
-    if not json_path.startswith("$."):
-        return []
-    nodes = [source]
-    for raw_part in json_path[2:].split("."):
-        expands_array = raw_part.endswith("[]")
-        key = raw_part[:-2] if expands_array else raw_part
-        next_nodes: list[Any] = []
-        for node in nodes:
-            if not isinstance(node, dict) or key not in node:
-                continue
-            value = node[key]
-            if expands_array:
-                if isinstance(value, list):
-                    next_nodes.extend(value)
-            else:
-                next_nodes.append(value)
-        nodes = next_nodes
-        if not nodes:
-            break
-    return nodes
+# 표면 슬롯 바인딩과 **같은** 경로 평가기를 쓴다 — 갈리면 카드 값과 보드 값이 어긋난다.
+_json_path_values = json_path_values
 
 
 def _bind_semantic_values(
@@ -703,6 +709,8 @@ def _bind_semantic_values(
         }
         for observation in observations
     ]
+    # 보드 슬롯 값은 같은 source·같은 경로 평가기에서 나온다(표면과 관찰이 갈리지 않게).
+    attach_surface_contract(card_contract, operation_ref, source)
 
 
 def _integrated_card_contract(
@@ -755,6 +763,9 @@ def _integrated_card_contract(
             ),
         }
     )
+    # 값은 아직 없다 — 여기서는 보드 골격만 붙는다(MCP 쪽과 바이트 동일해야 게이트가
+    # canonical 대조에서 어긋나지 않는다). 값은 _bind_semantic_values가 채운다.
+    attach_surface_contract(metadata, operation_ref)
     return metadata
 
 
@@ -937,6 +948,170 @@ async def internal_canvas_realtime_bindings(
     except (KeyError, ValueError) as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     return JSONResponse(content=contract)
+
+
+class BoardHydrateRequest(BaseModel):
+    """D2 보드 단위 fetch-set 요청 — 보드 하나와 그 보드가 가리키는 대상."""
+
+    board_id: str = Field(min_length=1, max_length=64)
+    # manifest request 필드 alias로 적은 인자 가방(종목코드 `stk_cd` 등). op마다
+    # 자기 요청 모델이 선언한 alias만 골라 쓴다.
+    target: dict[str, Any] = Field(default_factory=dict)
+    account: str | None = Field(default=None, min_length=1, max_length=64)
+
+
+def _hydrate_arguments(
+    document: Any, target: Mapping[str, Any]
+) -> tuple[BaseModel | None, str | None]:
+    """target을 op의 request alias로 좁혀 검증한다. 실패는 사유 문자열."""
+
+    aliases: dict[str, bool] = {
+        (field_info.alias or name): field_info.is_required()
+        for name, field_info in document.request_model.model_fields.items()
+    }
+    arguments = {key: value for key, value in target.items() if key in aliases}
+    try:
+        return document.request_model.model_validate(arguments), None
+    except ValidationError:
+        missing = sorted(
+            alias
+            for alias, required in aliases.items()
+            if required and alias not in arguments
+        )
+        if not missing:
+            # 인자는 다 있는데 값이 이 op의 모델과 맞지 않는다 — 매핑이 아니라 값 문제다.
+            return None, "arguments_invalid"
+        return None, "arguments_unmapped:" + ",".join(missing)
+
+
+def _hydrate_data_client(
+    request: Request, account: str | None, fallback: KiwoomClient | None
+) -> KiwoomClient | None:
+    """요청이 계좌를 지목하면 그 계좌의 조회 클라이언트, 아니면 헤더가 고른 것."""
+
+    if not account:
+        return fallback
+    runtime = account_runtimes(request.app).get(account)
+    if runtime is None:
+        raise HTTPException(
+            status_code=404, detail=f"account {account!r} is not configured"
+        )
+    return runtime.data_client
+
+
+async def _hydrate_operation(
+    operation_ref: str,
+    document: Any,
+    payload: BoardHydrateRequest,
+    request: Request,
+    client: KiwoomClient,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """read op 하나를 호출해 (상태, 바인딩)으로 돌려준다. 실패는 예외로 새지 않는다."""
+
+    def unbound(reason: str) -> tuple[dict[str, Any], dict[str, Any]]:
+        return (
+            {"operation_ref": operation_ref, "status": "unbound", "reason": reason},
+            {},
+        )
+
+    if document is None:
+        return unbound("unknown_operation")
+    if document.kind == "order":
+        # 주문 op는 어떤 경우에도 호출하지 않는다 — 보드 하이드레이션은 읽기다.
+        return unbound("order_operation_refused")
+    if document.kind != "query":
+        # 실시간(websocket)·oauth는 REST 조회 경로가 없다.
+        return unbound("not_a_rest_read")
+    if not document.generic_callable:
+        return unbound("not_generic_callable")
+    arguments, reason = _hydrate_arguments(document, payload.target)
+    if arguments is None:
+        assert reason is not None
+        return unbound(reason)
+    try:
+        result = await call_typed_tr(
+            document.tr_id,
+            arguments,
+            request,
+            Response(),
+            client,
+            response_model=document.response_model if document.group_id else None,
+        )
+    except (KiwoomError, httpx.HTTPError, TimeoutError, ValueError) as exc:
+        logger.warning(
+            "board-hydrate upstream failed op=%s error=%s",
+            operation_ref,
+            type(exc).__name__,
+        )
+        return unbound("upstream_error")
+    if isinstance(result, JSONResponse):
+        # 업무 오류 응답(return_code != 0)은 값이 아니다.
+        return unbound("upstream_business_result")
+    bound = bind_surface_values(operation_ref, result.model_dump(by_alias=True))
+    return (
+        {
+            "operation_ref": operation_ref,
+            "status": "bound",
+            "reason": None,
+            "bound_count": len(bound),
+        },
+        bound,
+    )
+
+
+@router.post(
+    "/api/v1/internal/canvas/board-hydrate",
+    operation_id="internal_canvas_board_hydrate",
+    openapi_extra={"x-athena-llm-exposed": False},
+)
+async def internal_canvas_board_hydrate(
+    payload: BoardHydrateRequest,
+    request: Request,
+    client: OptionalDataClientDep,
+    selector: SelectorServiceDep,
+    authorization: Annotated[str, Header(alias="Authorization")] = "",
+) -> JSONResponse:
+    """Fill one Paper board's slots by calling its read operations (D2 fetch-set).
+
+    Same trust boundary as the realtime-binding registry above: bearer-guarded,
+    app-internal, never LLM-exposed. Order operations are refused outright, and a
+    read that fails leaves only its own slots unbound.
+    """
+
+    require_local_bearer(request, authorization)
+    registry = get_card_surface_registry()
+    board = registry.boards.get(payload.board_id)
+    if board is None:
+        raise HTTPException(
+            status_code=404, detail=f"board {payload.board_id!r} has no surface template"
+        )
+    data_client = _hydrate_data_client(request, payload.account, client)
+    if data_client is None or not data_client.is_ready:
+        raise KiwoomNotReadyError("Kiwoom data service is not ready")
+
+    operations: list[dict[str, Any]] = []
+    bound: dict[str, Any] = {}
+    for operation_ref in board.operation_refs:
+        status, values = await _hydrate_operation(
+            operation_ref,
+            selector.catalog.find_exact(operation_ref),
+            payload,
+            request,
+            data_client,
+        )
+        operations.append(status)
+        bound.update(values)
+
+    return JSONResponse(
+        content={
+            "board_id": board.board_id,
+            "card_id": board.card_id,
+            "operations": operations,
+            "surface_contract": build_board_surface_contract(
+                board.board_id, bound, registry
+            ),
+        }
+    )
 
 
 class RenderPlanRequest(BaseModel):

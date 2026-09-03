@@ -1,0 +1,13 @@
+{
+  "board_id": "2SYW-1",
+  "name": "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+  "card_id": "CC-01",
+  "width": 1440,
+  "height": 1120,
+  "state": {
+    "kind": "tab",
+    "parent_board": "133H-2",
+    "control": "주문·체결"
+  },
+  "saved_at": "2026-09-02T10:51:26Z"
+}

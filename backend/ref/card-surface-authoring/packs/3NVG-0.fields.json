@@ -1,0 +1,187 @@
+{
+ "board": "3NVG-0",
+ "fields": [
+  {
+   "mapping_id": "base:kt50021",
+   "f": "chck_ina_amt",
+   "kor": "수표입금액",
+   "layer": "펼침",
+   "where": "특수예수금·외화 펼침 · 레일 ① 특수예수금 · 증권 입출고 (메인 2SKU-1 최근 현금 흐름 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "shrts_prica",
+   "kor": "공매도대금",
+   "layer": "펼침",
+   "where": "레일 ① 특수예수금 1행 · 공매도대금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "crd_set_grnta",
+   "kor": "신용설정평가금",
+   "layer": "펼침",
+   "where": "레일 ② 신용·생계형 1행 · 신용설정평가금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "chck_ina_amt",
+   "kor": "수표입금액",
+   "layer": "펼침",
+   "where": "레일 ① 특수예수금 2행 · 수표입금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "etc_chck_ina_amt",
+   "kor": "기타수표입금액",
+   "layer": "펼침",
+   "where": "레일 ① 특수예수금 3행 · 기타수표입금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "crd_grnt_ruse",
+   "kor": "신용담보재사용",
+   "layer": "펼침",
+   "where": "레일 ② 신용·생계형 2행 · 신용담보재사용 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "knx_asset_evltv",
+   "kor": "코넥스기본예탁금",
+   "layer": "펼침",
+   "where": "레일 ① 특수예수금 4행 · 코넥스기본예탁금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "elwdpst_evlta",
+   "kor": "ELW예탁평가금",
+   "layer": "펼침",
+   "where": "레일 ① 특수예수금 5행 · ELW예탁평가금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "crd_ls_rght_frcs_amt",
+   "kor": "신용대주권리예정금액",
+   "layer": "펼침",
+   "where": "레일 ② 신용·생계형 3행 · 신용대주권리예정금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "lvlh_join_amt",
+   "kor": "생계형가입금액",
+   "layer": "펼침",
+   "where": "레일 ② 신용·생계형 4행 · 생계형가입금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:special_deposits_and_credit",
+   "f": "lvlh_trns_alowa",
+   "kor": "생계형입금가능금액",
+   "layer": "펼침",
+   "where": "레일 ② 신용·생계형 5행 · 생계형입금가능금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "stk_entr_prst",
+   "kor": "종목별예수금",
+   "layer": "직접",
+   "where": "좌 ① '통화별 예수금 · 주문·출금' 표 통화 열 2행(원화 참조 · 미국달러 활성) — 통화별 배열이 행으로 전개"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "fc_krw_repl_evlta",
+   "kor": "원화대용평가금",
+   "layer": "직접",
+   "where": "좌 ④ '원화 표시 항목' 밴드 1칸 · 원화대용평가금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "fc_trst_profa",
+   "kor": "해외주식증거금",
+   "layer": "직접",
+   "where": "좌 ④ '원화 표시 항목' 밴드 2칸 · 해외주식증거금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "pymn_alow_amt_entr",
+   "kor": "출금가능금액(예수금)",
+   "layer": "직접",
+   "where": "좌 ① 표 4열 '출금가능금액(예수금)' 미국달러 행 · 0달러"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "pymn_alow_amt",
+   "kor": "출금가능금액",
+   "layer": "직접",
+   "where": "좌 ① 표 5열 '출금가능금액' 미국달러 행 · 0달러"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "ord_alow_amt_entr",
+   "kor": "주문가능금액(예수금)",
+   "layer": "직접",
+   "where": "좌 ① 표 3열 '주문가능금액(예수금)' 미국달러 행 · 0달러"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "fc_uncla",
+   "kor": "외화미수(합계)",
+   "layer": "직접",
+   "where": "좌 ③ '외화 미수·연체' 밴드 1칸 · 미수 합계 0달러"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "fc_ch_uncla",
+   "kor": "외화현금미수금",
+   "layer": "직접",
+   "where": "좌 ③ '외화 미수·연체' 밴드 2칸 · 현금미수금 0달러"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "dly_amt",
+   "kor": "연체료",
+   "layer": "직접",
+   "where": "좌 ③ '외화 미수·연체' 밴드 3칸 · 연체료 0달러"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "d1_fx_entr",
+   "kor": "d+1외화예수금",
+   "layer": "직접",
+   "where": "좌 ② 'D+1 ~ D+4 외화예수금' 밴드 1칸 · D+1 09/02 0달러"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "d2_fx_entr",
+   "kor": "d+2외화예수금",
+   "layer": "직접",
+   "where": "좌 ② 'D+1 ~ D+4 외화예수금' 밴드 2칸 · D+2 09/03 0달러"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "d3_fx_entr",
+   "kor": "d+3외화예수금",
+   "layer": "직접",
+   "where": "좌 ② 'D+1 ~ D+4 외화예수금' 밴드 3칸 · D+3 09/04 0달러"
+  },
+  {
+   "mapping_id": "detail:kt00001:foreign_currency_deposits",
+   "f": "d4_fx_entr",
+   "kor": "d+4외화예수금",
+   "layer": "직접",
+   "where": "좌 ② 'D+1 ~ D+4 외화예수금' 밴드 4칸 · D+4 09/07 0달러"
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "inq_amt",
+   "kor": "입고금액",
+   "layer": "펼침",
+   "where": "특수예수금·외화 펼침 · 레일 ① 특수예수금 · 증권 입출고 (메인 2SKU-1 최근 현금 흐름 영값 묶음 행 경유)"
+  },
+  {
+   "mapping_id": "detail:kt00017:daily_cash_and_trading_flows",
+   "f": "outq_amt",
+   "kor": "출고금액",
+   "layer": "펼침",
+   "where": "특수예수금·외화 펼침 · 레일 ① 특수예수금 · 증권 입출고 (메인 2SKU-1 최근 현금 흐름 영값 묶음 행 경유)"
+  }
+ ]
+}

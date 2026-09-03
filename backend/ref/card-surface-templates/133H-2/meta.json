@@ -1,0 +1,13 @@
+{
+  "board_id": "133H-2",
+  "name": "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+  "card_id": "CC-01",
+  "width": 1440,
+  "height": 1032,
+  "state": {
+    "kind": "default",
+    "parent_board": null,
+    "control": null
+  },
+  "saved_at": "2026-09-02T10:49:29Z"
+}

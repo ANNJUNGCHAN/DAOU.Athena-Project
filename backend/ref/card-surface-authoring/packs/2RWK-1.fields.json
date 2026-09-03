@@ -1,0 +1,201 @@
+{
+ "board": "2RWK-1",
+ "fields": [
+  {
+   "mapping_id": "base:ka10013",
+   "f": "crd_trde_trend",
+   "kor": "신용매매동향",
+   "layer": null,
+   "where": "신용·대차 일별 표(신용잔고율 열) 목록"
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 표 '일자' 열 08/29~08/25"
+  },
+  {
+   "mapping_id": "base:ka10013",
+   "f": "remn_rt",
+   "kor": "잔고율",
+   "layer": null,
+   "where": "KPI '신용잔고율 0.86%' 및 일별 표 신용잔고율 열"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "shrts_trnsn",
+   "kor": "공매도추이",
+   "layer": null,
+   "where": "일별 표 공매도량·공매도 비중 열 목록"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 표 '일자' 열"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "직접",
+   "where": "일별 표 신설 '거래량' 열(08/29 1,422만주 · 2.12조)"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "shrts_qty",
+   "kor": "공매도량",
+   "layer": null,
+   "where": "일별 표 '공매도량' 열 486,210주"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "ovr_shrts_qty",
+   "kor": "누적공매도량",
+   "layer": "병기",
+   "where": "공매도량 셀 2번째 줄 '누적 2,418만주'"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "trde_wght",
+   "kor": "매매비중",
+   "layer": null,
+   "where": "KPI '공매도 비중 3.42%' 및 일별 표 공매도 비중 열"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "shrts_trde_prica",
+   "kor": "공매도거래대금",
+   "layer": "병기",
+   "where": "공매도량 셀 2번째 줄 '734억'"
+  },
+  {
+   "mapping_id": "base:ka10014",
+   "f": "shrts_avg_pric",
+   "kor": "공매도평균가",
+   "layer": "직접",
+   "where": "일별 표 신설 '공매도 평균가' 열(08/29 150,980)"
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_trnsn",
+   "kor": "대차거래추이",
+   "layer": null,
+   "where": "신용·대차 일별 표 '대차잔고' 열 목록"
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 표 '일자' 열"
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_cntrcnt",
+   "kor": "대차거래체결주수",
+   "layer": null,
+   "where": "시장 전체 대차 '대차 체결 1,842만주'"
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "dbrt_trde_rpy",
+   "kor": "대차거래상환주수",
+   "layer": null,
+   "where": "시장 전체 대차 '대차 상환 1,214만주'"
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "rmnd",
+   "kor": "잔고주수",
+   "layer": null,
+   "where": "KPI '대차잔고 1,284만주'"
+  },
+  {
+   "mapping_id": "base:ka10068",
+   "f": "remn_amt",
+   "kor": "잔고금액",
+   "layer": "병기",
+   "where": "일별 표 대차잔고 셀 2번째 줄 금액(08/29 1.94조)"
+  },
+  {
+   "mapping_id": "base:ka10069",
+   "f": "rmnd_sum",
+   "kor": "잔고주수합",
+   "layer": null,
+   "where": "시장 전체 대차 '시장 대차잔고 6.42억주'"
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_trnsn",
+   "kor": "대차거래추이",
+   "layer": null,
+   "where": "신용·대차 일별 표 '대차잔고' 열 목록"
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dt",
+   "kor": "일자",
+   "layer": null,
+   "where": "일별 표 '일자' 열"
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_cntrcnt",
+   "kor": "대차거래체결주수",
+   "layer": null,
+   "where": "시장 전체 대차 '대차 체결 1,842만주'"
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "dbrt_trde_rpy",
+   "kor": "대차거래상환주수",
+   "layer": null,
+   "where": "시장 전체 대차 '대차 상환 1,214만주'"
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "rmnd",
+   "kor": "잔고주수",
+   "layer": null,
+   "where": "KPI '대차잔고 1,284만주'"
+  },
+  {
+   "mapping_id": "base:ka20068",
+   "f": "remn_amt",
+   "kor": "잔고금액",
+   "layer": "병기",
+   "where": "레일 '시장 대차잔고 6.42억주' 2번째 줄 '96.8조'"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "dbrt_trde_rpy_sum",
+   "kor": "대차거래상환주수합",
+   "layer": null,
+   "where": "시장 전체 대차 '대차 상환 1,214만주'"
+  },
+  {
+   "mapping_id": "base:ka90008",
+   "f": "remn_rcvord_sum",
+   "kor": "잔고수주합",
+   "layer": null,
+   "where": "시장 전체 대차 '시장 대차잔고 6.42억주'"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "dbrt_trde_rpy_sum",
+   "kor": "대차거래상환주수합",
+   "layer": null,
+   "where": "시장 전체 대차 '대차 상환 1,214만주'"
+  },
+  {
+   "mapping_id": "base:ka90013",
+   "f": "remn_rcvord_sum",
+   "kor": "잔고수주합",
+   "layer": null,
+   "where": "시장 전체 대차 '시장 대차잔고 6.42억주'"
+  }
+ ]
+}

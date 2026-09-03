@@ -1,0 +1,68 @@
+{
+ "board": "3MTJ-0",
+ "fields": [
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_int_npay_gold",
+   "kor": "신용이자미납금",
+   "layer": "펼침",
+   "where": "레일 ① 잔여 부채 1행 · 신용이자미납금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "etc_loana",
+   "kor": "기타대여금",
+   "layer": "펼침",
+   "where": "레일 ① 잔여 부채 2행 · 기타대여금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "gnrl_stk_evlt_amt_d2",
+   "kor": "일반주식평가금액D+2",
+   "layer": "직접",
+   "where": "좌 ② 'D+2 확정 자산' 표 1행 D+2 금액 · 일반주식평가금액 89,760,240원"
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "dpst_grnt_use_amt_d2",
+   "kor": "예탁담보대출금D+2",
+   "layer": "직접",
+   "where": "좌 ② 'D+2 확정 자산' 표 2행 D+2 금액 · 예탁담보대출금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_stk_evlt_amt_d2",
+   "kor": "예탁담보주식평가금액D+2",
+   "layer": "직접",
+   "where": "좌 ② 'D+2 확정 자산' 표 3행 D+2 금액 · 예탁담보주식평가금액 0원"
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_loan_d2",
+   "kor": "신용융자금D+2",
+   "layer": "직접",
+   "where": "좌 ② 'D+2 확정 자산' 표 4행 D+2 금액 · 신용융자금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_loan_evlta_d2",
+   "kor": "신용융자평가금D+2",
+   "layer": "직접",
+   "where": "좌 ② 'D+2 확정 자산' 표 5행 D+2 금액 · 신용융자평가금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_ls_grnt_d2",
+   "kor": "신용대주담보금D+2",
+   "layer": "직접",
+   "where": "좌 ② 'D+2 확정 자산' 표 6행 D+2 금액 · 신용대주담보금 0원"
+  },
+  {
+   "mapping_id": "detail:kt00017:d2_account_position",
+   "f": "crd_ls_evlta_d2",
+   "kor": "신용대주평가금D+2",
+   "layer": "직접",
+   "where": "좌 ② 'D+2 확정 자산' 표 7행 D+2 금액 · 신용대주평가금 0원"
+  }
+ ]
+}

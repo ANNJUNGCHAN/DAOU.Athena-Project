@@ -1,0 +1,95 @@
+{
+ "board_id": "2TNJ-1",
+ "card_id": "CC-02",
+ "name": "CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가",
+ "operation_refs": [
+  "base:kt50000",
+  "base:kt50001",
+  "base:kt50002",
+  "base:kt50003"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:kt50000",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "board": "2TNJ-1",
+   "where": "주문 접수 정보 · 주문번호 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50001",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "board": "2TNJ-1",
+   "where": "주문 접수 정보 · 주문번호 행(매도 탭 공용)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50002",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "board": "2TNJ-1",
+   "where": "주문 접수 정보 · 주문번호 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50002",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 원주문번호 행(금현물 탭 공용)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50002",
+   "f": "mdfy_qty",
+   "kor": "정정수량",
+   "layer": null,
+   "board": "2TAG-1",
+   "where": "주문 접수 정보 · 정정수량 행(금현물 탭 공용)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50003",
+   "f": "ord_no",
+   "kor": "주문번호",
+   "layer": null,
+   "board": "2TNJ-1",
+   "where": "주문 접수 정보 · 주문번호 행",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50003",
+   "f": "base_orig_ord_no",
+   "kor": "모주문번호",
+   "layer": null,
+   "board": "2TET-1",
+   "where": "주문 접수 정보 · 원주문번호 행(금현물 탭 공용)",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt50003",
+   "f": "cncl_qty",
+   "kor": "취소수량",
+   "layer": null,
+   "board": "2TET-1",
+   "where": "주문 접수 정보 · 취소수량 행(금현물 탭 공용)",
+   "attributed_here": false,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 4
+}

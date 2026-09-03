@@ -1,0 +1,113 @@
+{
+ "board_id": "31OF-0",
+ "card_id": "CC-05",
+ "name": "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+ "operation_refs": [
+  "base:kt20016",
+  "base:kt20017"
+ ],
+ "suggested_extra_ops": [],
+ "fields": [
+  {
+   "mapping_id": "base:kt20016",
+   "f": "crd_loan_able",
+   "kor": "신용융자가능여부",
+   "layer": null,
+   "board": "31OF-0",
+   "where": "표 '가능 여부' 열 가능/불가",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt20016",
+   "f": "crd_loan_pos_stk",
+   "kor": "신용융자가능종목",
+   "layer": null,
+   "board": "31OF-0",
+   "where": "신용융자 가능종목 표 목록",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt20016",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "board": "31OF-0",
+   "where": "종목 카드 '005930 · KOSPI'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt20016",
+   "f": "stk_nm",
+   "kor": "종목명",
+   "layer": null,
+   "board": "31OF-0",
+   "where": "표 '종목' 열",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt20016",
+   "f": "crd_assr_rt",
+   "kor": "신용보증금율",
+   "layer": null,
+   "board": "31OF-0",
+   "where": "표 '보증금률' 열 40%",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt20016",
+   "f": "repl_pric",
+   "kor": "대용가",
+   "layer": "직접",
+   "board": "31OF-0",
+   "where": "표 신설 '대용가' 열(1위 120,680)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt20016",
+   "f": "pred_close_pric",
+   "kor": "전일종가",
+   "layer": null,
+   "board": "2S4E-1",
+   "where": "일별 표 08/29 '종가 149,000'",
+   "attributed_here": false,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt20016",
+   "f": "crd_limit_over_yn",
+   "kor": "신용한도초과여부",
+   "layer": "직접",
+   "board": "31OF-0",
+   "where": "표 '가능 여부' 칩 '가능' / '한도 초과'(50위 카카오)",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt20016",
+   "f": "crd_limit_over_txt",
+   "kor": "신용한도초과",
+   "layer": "병기",
+   "board": "31OF-0",
+   "where": "'한도 초과' 칩 아래 10px 사유 '증거금 한도 초과'",
+   "attributed_here": true,
+   "extra_op": false
+  },
+  {
+   "mapping_id": "base:kt20017",
+   "f": "crd_alow_yn",
+   "kor": "신용가능여부",
+   "layer": null,
+   "board": "31OF-0",
+   "where": "표 '가능 여부' 열 가능/불가",
+   "attributed_here": true,
+   "extra_op": false
+  }
+ ],
+ "fields_attributed_here": 9
+}

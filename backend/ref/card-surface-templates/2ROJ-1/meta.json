@@ -1,0 +1,13 @@
+{
+  "board_id": "2ROJ-1",
+  "name": "CC-05 / R03-T3 · 수급 — 프로그램",
+  "card_id": "CC-05",
+  "width": 1440,
+  "height": 1014,
+  "state": {
+    "kind": "tab",
+    "parent_board": "2QFO-2",
+    "control": "프로그램"
+  },
+  "saved_at": "2026-09-02T11:20:05Z"
+}

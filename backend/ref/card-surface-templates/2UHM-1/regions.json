@@ -1,0 +1,12 @@
+{
+  "root": "2UHO-1",
+  "regions": [
+    { "node_id": "2UKV-1", "name": "Header and Capability Navigation", "role": "header", "depth": 1 },
+    { "node_id": "2UKE-1", "name": "Ranking Query Controls", "role": "strip", "depth": 1 },
+    { "node_id": "2UHS-1", "name": "Ranking Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "2ULF-1", "name": "Frame", "role": "primary", "depth": 2 },
+    { "node_id": "357F-0", "name": "KPI 밴드", "role": "kpi", "depth": 3 },
+    { "node_id": "2UMK-1", "name": "Frame", "role": "rail", "depth": 2 },
+    { "node_id": "2UHP-1", "name": "User Status Footer", "role": "footer", "depth": 1 }
+  ]
+}

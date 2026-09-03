@@ -1,0 +1,278 @@
+{
+ "board": "2QFO-2",
+ "fields": [
+  {
+   "mapping_id": "base:0w",
+   "f": "215",
+   "kor": "장운영구분",
+   "layer": null,
+   "where": "헤더 '005930 · KOSPI · 장중' 장운영 상태 표기"
+  },
+  {
+   "mapping_id": "base:ka10037",
+   "f": "trde_prica",
+   "kor": "거래대금",
+   "layer": null,
+   "where": "KPI '거래대금 2.14조'"
+  },
+  {
+   "mapping_id": "base:ka10052",
+   "f": "stk_cd",
+   "kor": "종목코드",
+   "layer": null,
+   "where": "헤더 '005930 · KOSPI'"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "stk_invsr_orgn",
+   "kor": "종목별투자자기관별",
+   "layer": null,
+   "where": "투자자별 순매수 표 목록"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "acc_trde_qty",
+   "kor": "누적거래량",
+   "layer": "병기",
+   "where": "KPI 밴드 5칸 보조줄 '거래량 1,420만주'"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "acc_trde_prica",
+   "kor": "누적거래대금",
+   "layer": null,
+   "where": "KPI '거래대금 2.14조'"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "ind_invsr",
+   "kor": "개인투자자",
+   "layer": null,
+   "where": "투자자별 순매수 표 '개인' 행 -638억"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "frgnr_invsr",
+   "kor": "외국인투자자",
+   "layer": null,
+   "where": "투자자별 순매수 표 '외국인' 행 +1,842억"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "orgn",
+   "kor": "기관계",
+   "layer": null,
+   "where": "KPI '기관 -1,204억'"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "fnnc_invt",
+   "kor": "금융투자",
+   "layer": null,
+   "where": "투자자별 순매수 표 '금융투자' 행 -842억"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "insrnc",
+   "kor": "보험",
+   "layer": "직접",
+   "where": "투자자표 보험 행(매도·매수·순매수 310억 · 214억 · -96억)"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "invtrt",
+   "kor": "투신",
+   "layer": null,
+   "where": "투자자별 순매수 표 '투신' 행 -204억"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "etc_fnnc",
+   "kor": "기타금융",
+   "layer": "직접",
+   "where": "투자자표 기타금융 행(매도·매수·순매수 102억 · 64억 · -38억)"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "bank",
+   "kor": "은행",
+   "layer": "직접",
+   "where": "투자자표 은행 행(매도·매수·순매수 110억 · 86억 · -24억)"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "penfnd_etc",
+   "kor": "연기금등",
+   "layer": null,
+   "where": "투자자별 순매수 표 '연기금 등' 행 +186억"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "samo_fund",
+   "kor": "사모펀드",
+   "layer": "직접",
+   "where": "투자자표 사모펀드 행(매도·매수·순매수 310억 · 168억 · -142억)"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "natn",
+   "kor": "국가",
+   "layer": "직접",
+   "where": "투자자표 국가 행(매도·매수·순매수 82억 · 38억 · -44억)"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "etc_corp",
+   "kor": "기타법인",
+   "layer": null,
+   "where": "투자자별 순매수 표 '기타법인' 행 +66억"
+  },
+  {
+   "mapping_id": "base:ka10059",
+   "f": "natfor",
+   "kor": "내외국인",
+   "layer": "직접",
+   "where": "투자자표 내외국인 행(매도·매수·순매수 120억 · 54억 · -66억)"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "fnnc_invt",
+   "kor": "금융투자",
+   "layer": null,
+   "where": "투자자별 순매수 표 '금융투자' 행 -842억"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "insrnc",
+   "kor": "보험",
+   "layer": "직접",
+   "where": "투자자표 보험 행(매도·매수·순매수 310억 · 214억 · -96억)"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "invtrt",
+   "kor": "투신",
+   "layer": null,
+   "where": "투자자별 순매수 표 '투신' 행 -204억"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "etc_fnnc",
+   "kor": "기타금융",
+   "layer": "직접",
+   "where": "투자자표 기타금융 행(매도·매수·순매수 102억 · 64억 · -38억)"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "bank",
+   "kor": "은행",
+   "layer": "직접",
+   "where": "투자자표 은행 행(매도·매수·순매수 110억 · 86억 · -24억)"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "penfnd_etc",
+   "kor": "연기금등",
+   "layer": null,
+   "where": "투자자별 순매수 표 '연기금 등' 행 +186억"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "samo_fund",
+   "kor": "사모펀드",
+   "layer": "직접",
+   "where": "투자자표 사모펀드 행(매도·매수·순매수 310억 · 168억 · -142억)"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "natn",
+   "kor": "국가",
+   "layer": "직접",
+   "where": "투자자표 국가 행(매도·매수·순매수 82억 · 38억 · -44억)"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "etc_corp",
+   "kor": "기타법인",
+   "layer": null,
+   "where": "투자자별 순매수 표 '기타법인' 행 +66억"
+  },
+  {
+   "mapping_id": "base:ka10061",
+   "f": "natfor",
+   "kor": "내외국인",
+   "layer": "직접",
+   "where": "투자자표 내외국인 행(매도·매수·순매수 120억 · 54억 · -66억)"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "trde_qty",
+   "kor": "거래량",
+   "layer": "병기",
+   "where": "KPI 밴드 5칸 보조줄 '거래량 1,420만주'"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "fnnc_invt",
+   "kor": "금융투자",
+   "layer": null,
+   "where": "투자자별 순매수 표 '금융투자' 행 -842억"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "insrnc",
+   "kor": "보험",
+   "layer": "직접",
+   "where": "투자자표 보험 행(매도·매수·순매수 310억 · 214억 · -96억)"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "invtrt",
+   "kor": "투신",
+   "layer": null,
+   "where": "투자자별 순매수 표 '투신' 행 -204억"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "etc_fnnc",
+   "kor": "기타금융",
+   "layer": "직접",
+   "where": "투자자표 기타금융 행(매도·매수·순매수 102억 · 64억 · -38억)"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "bank",
+   "kor": "은행",
+   "layer": "직접",
+   "where": "투자자표 은행 행(매도·매수·순매수 110억 · 86억 · -24억)"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "penfnd_etc",
+   "kor": "연기금등",
+   "layer": null,
+   "where": "투자자별 순매수 표 '연기금 등' 행 +186억"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "samo_fund",
+   "kor": "사모펀드",
+   "layer": "직접",
+   "where": "투자자표 사모펀드 행(매도·매수·순매수 310억 · 168억 · -142억)"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "natn",
+   "kor": "국가",
+   "layer": "직접",
+   "where": "투자자표 국가 행(매도·매수·순매수 82억 · 38억 · -44억)"
+  },
+  {
+   "mapping_id": "base:ka10066",
+   "f": "etc_corp",
+   "kor": "기타법인",
+   "layer": null,
+   "where": "투자자별 순매수 표 '기타법인' 행 +66억"
+  }
+ ]
+}
