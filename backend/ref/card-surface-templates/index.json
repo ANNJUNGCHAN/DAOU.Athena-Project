@@ -550,7 +550,7 @@
         ],
         "unresolved": []
       },
-      "html_sha256": "61ed900f5a384322a5611224545e8d6f6215dc22f71ddb599fb5d932088c2355"
+      "html_sha256": "c07bca19811099b3333bbc91898d5af9f706b88db8bcebf43537a829c1ec9c4e"
     },
     {
       "board_id": "15J9-2",
@@ -1014,7 +1014,7 @@
         ],
         "unresolved": []
       },
-      "html_sha256": "8544a07694537f406f44dd9273a954f7938a46654c8e28f797718a1d3b8e7a64"
+      "html_sha256": "ff22b9300c33fdca474ca9461e252c436b660763fe309cd51d9dfad3f6b37d18"
     },
     {
       "board_id": "2QM7-2",
@@ -1202,8 +1202,8 @@
         "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 40,
-        "bs_paired": 58,
-        "bs_leaf": 9,
+        "bs_paired": 54,
+        "bs_leaf": 8,
         "bs_kpi_cell": 5,
         "state_control_marks": 1
       },
@@ -1221,7 +1221,7 @@
         ],
         "unresolved": []
       },
-      "html_sha256": "e25b9b43f9f6affd24b50d29816020d3b4e1fdd9f47f00c1847c446bb959de25"
+      "html_sha256": "2eb86a93c032506da58645a597ed00991660308c4169195c744146766a9341c9"
     },
     {
       "board_id": "2RBO-1",

@@ -12,6 +12,12 @@
   "responsive": [
     { "node_id": "2QGE-2", "traits": ["flow"] },
     { "node_id": "2QGF-2", "traits": ["atomic"] },
-    { "node_id": "2QGG-2", "traits": ["atomic"] }
+    { "node_id": "2QGG-2", "traits": ["atomic"] },
+    { "node_id": "3751-0", "traits": ["flow"] },
+    { "node_id": "375E-0", "traits": ["atomic"] },
+    { "node_id": "376G-0", "traits": ["flow"] },
+    { "node_id": "376R-0", "traits": ["atomic"] },
+    { "node_id": "3789-0", "traits": ["flow"] },
+    { "node_id": "378K-0", "traits": ["atomic"] }
   ]
 }

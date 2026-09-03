@@ -12,6 +12,48 @@ const RESPONSIVE_TRAIT_CLASS = Object.freeze({
   'scroll-table': 'bs-r-scroll-table',
 });
 
+function compactAtomicTokenSpans(value) {
+  const text = String(value || '');
+  if (!text.trim() || Array.from(text.trim()).length > 24) return [];
+  const candidates = [];
+  for (const match of text.matchAll(/\S+/gu)) {
+    const token = match[0];
+    const length = Array.from(token).length;
+    if (length < 2 || length > 12 || !/[가-힣]/u.test(token)) continue;
+    if (/(?:https?:\/\/|www\.|[/\\@])/iu.test(token)) continue;
+    candidates.push({ text: token, start: match.index, end: match.index + token.length });
+  }
+  return candidates.length <= 2 ? candidates : [];
+}
+
+function hasInlineAmbiguity(subjectRects, neighborRects, tolerance = 1) {
+  const number = (value) => Number.isFinite(value) ? value : 0;
+  const normalize = (rect) => {
+    if (!rect) return null;
+    const normalized = {
+      left: number(rect.left), top: number(rect.top),
+      right: number(rect.right), bottom: number(rect.bottom),
+    };
+    return normalized.right > normalized.left && normalized.bottom > normalized.top
+      ? normalized : null;
+  };
+  const subjects = (Array.isArray(subjectRects) ? subjectRects : []).map(normalize).filter(Boolean);
+  const neighbors = (Array.isArray(neighborRects) ? neighborRects : []).map(normalize).filter(Boolean);
+  for (const subject of subjects) {
+    for (const neighbor of neighbors) {
+      const verticalOverlap = Math.min(subject.bottom, neighbor.bottom)
+        - Math.max(subject.top, neighbor.top);
+      if (verticalOverlap <= tolerance) continue;
+      const horizontalOverlap = Math.min(subject.right, neighbor.right)
+        - Math.max(subject.left, neighbor.left);
+      const gap = horizontalOverlap >= 0 ? 0
+        : Math.max(subject.left, neighbor.left) - Math.min(subject.right, neighbor.right);
+      if (gap <= tolerance) return true;
+    }
+  }
+  return false;
+}
+
 // This function is deliberately self-contained: the Electron verifier serializes
 // it into the renderer process with Function#toString, where CommonJS helpers
 // are not available.
@@ -173,6 +215,12 @@ function collectGlyphFindings(candidates, pairedRecords, options = {}) {
   for (const record of pairs) {
     if (!record || record.hidden) continue;
     const source = String(record.source || '');
+    if (record.kind === 'legacy_pair') {
+      if (record.ambiguous_inline && !record.label_found) {
+        paired.push({ source, violation: 'legacy_unlabeled_inline' });
+      }
+      continue;
+    }
     if (record.kind === 'scroll_table') {
       for (const violation of Array.isArray(record.violations) ? record.violations : []) {
         paired.push({ source, violation: String(violation) });
@@ -478,6 +526,8 @@ function assertReadabilityMatrix(boards, {
 
 module.exports = {
   DEFAULT_READABILITY_BOARD_IDS,
+  compactAtomicTokenSpans,
+  hasInlineAmbiguity,
   collectGlyphFindings,
   collectAtomicWrapFindings,
   collectTextOverlapFindings,

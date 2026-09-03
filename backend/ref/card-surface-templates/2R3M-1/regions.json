@@ -10,9 +10,14 @@
     { "node_id": "2R3P-1", "name": "Chart Status Footer", "role": "footer", "depth": 1 }
   ],
   "responsive": [
+    { "node_id": "2R8O-1", "traits": ["flow"] },
+    { "node_id": "2R8S-1", "traits": ["atomic"] },
+    { "node_id": "358O-0", "traits": ["atomic"] },
+    { "node_id": "358Q-0", "traits": ["atomic"] },
     { "node_id": "2R8T-1", "traits": ["flow"] },
     { "node_id": "2R8W-1", "traits": ["flow"] },
     { "node_id": "2R8X-1", "traits": ["atomic"] },
-    { "node_id": "2R90-1", "traits": ["flow"] }
+    { "node_id": "2R90-1", "traits": ["flow"] },
+    { "node_id": "3CRW-0", "traits": ["paired-table"] }
   ]
 }
