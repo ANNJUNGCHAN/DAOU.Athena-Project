@@ -1,0 +1,35 @@
+{
+  "tool_input": {
+    "actions": [
+      {
+        "action": "remove",
+        "target": "fetch"
+      }
+    ],
+    "reason": "더 쓰지 않는 플러그인입니다"
+  },
+  "envelope": {
+    "proposal_id": "1793f2b969f2454bbb030f81b9ed99cc",
+    "source": "model",
+    "revision": 1,
+    "actions": [
+      {
+        "action": "remove",
+        "target": "fetch"
+      }
+    ],
+    "reason": "더 쓰지 않는 플러그인입니다",
+    "current": {
+      "servers": [
+        {
+          "alias": "fetch",
+          "approved": true,
+          "enabled": true,
+          "tools_allowed": [
+            "fetch"
+          ]
+        }
+      ]
+    }
+  }
+}

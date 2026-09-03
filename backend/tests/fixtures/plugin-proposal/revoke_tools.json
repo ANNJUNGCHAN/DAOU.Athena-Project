@@ -1,0 +1,41 @@
+{
+  "tool_input": {
+    "actions": [
+      {
+        "action": "revoke_tools",
+        "target": "fetch",
+        "features": [
+          "fetch"
+        ]
+      }
+    ],
+    "reason": "당분간 웹 읽기를 쓰지 않기로 했습니다"
+  },
+  "envelope": {
+    "proposal_id": "1ffc4fb92d574a0fbe8947fc955e147f",
+    "source": "model",
+    "revision": 1,
+    "actions": [
+      {
+        "action": "revoke_tools",
+        "target": "fetch",
+        "features": [
+          "fetch"
+        ]
+      }
+    ],
+    "reason": "당분간 웹 읽기를 쓰지 않기로 했습니다",
+    "current": {
+      "servers": [
+        {
+          "alias": "fetch",
+          "approved": true,
+          "enabled": true,
+          "tools_allowed": [
+            "fetch"
+          ]
+        }
+      ]
+    }
+  }
+}
