@@ -16,3 +16,16 @@
 - worktree 세션은 복합 셸 명령(git 포함)을 거부한다 → 스크립트 파일로 만들어 `bash <file>`로 실행.
 - .omc/는 gitignore → worktree 간 이관은 복사. 인계용 사본은 docs/handoff/agent-dual-control/에 커밋.
 - node는 fnm multishell PATH 필요(계획 §6.1).
+
+## 2026-09-03 세션 7713d907 (이 컴퓨터 worktree agent-dual-control-handoff-6f05c9 · ralph Step 2~4)
+- worktree를 origin/feat/agent-dual-control(034c73c)로 전환, .omc 복원, npm ci/uv sync 완료.
+- Paper get_guide → open_file(A-2) → get_font_family_info 1회(Daki L/M · Daki B · Daki Title · Geist Mono 400). 복귀 페이지 8-1(백테스트).
+- Step 2 완료(US-002): 01 6XC-0 문구 교체 + 합류 버튼 42QY-1(pink 1곳). 02~06 ③대화 영역 index0에 "아테나 · 에이전트 대화" 머리 삽입. 02 알람 행 '읽음' 액션 2건(42RK-1·42RN-1), 대화 = 사용자 턴/결과 턴/제안 턴 B. 03 드릴인 머리에 '채팅에서 열기 ↗' + '지금 실행'(비활성) + '놓친 예약 없음'(42SL-1), 대화 = 제안 턴 E + 결과 턴. 04 가드 패널 → 편집 폼 42U9-1(입력 5 + 저장), 대화 = 제안 턴 C + 보류 결과 + 기존 가드 조정 카드(오래된 넛지 fixture 7노드 삭제 — 높이 초과).
+- Step 3 완료(US-003): 05 rename '05 · 에이전트 — 작업', CTA '＋ 새 작업', 시트 오버레이 42W3-1(left 392 top 196, 종목코드 6자리·조건 소스/비교/값·쿨다운·만료·설명·브리핑 모델·초안 만들기/채팅에서 쓰기), 이중 제어 규칙 3줄 확정 문구, 상세 패널 상태 제어 행 42VG-1(확정·일시중지·재개·취소, 일시중지만 활성). 06 rename '06 · 에이전트 — 작업 설정', 안내 문장 삭제, 드릴인 설정 탭 = 요약 한 줄 + '설정 편집' 버튼(42VY-1), 아래 상세 패널 폼 2종 나란히(42XH-1 price.current 8필드 / 42Y1-1 schedule.daily 7필드·연속 틱 없음), 저장(pink 1) + 채팅에서 고치기 ↗, '종목·소스는 취소 후 새로 만들기' 1건. 06 대화 = 제안 턴 A + 결과 턴.
+- Step 4 완료(US-004): 07 432Z-1(A~E 5열 + 게이트 지도), 08 4330-1(4상태 + 문구 규칙). 신설 문자열 '습니다' 0건(06의 2건은 fixture 잔존이 아니라 — 확인: 06 fixture 3턴 삭제 후 0건 기대), 신설 노드 색은 토큰만, 칩·버튼 min-height 32.
+- 주의: 기존 보드의 pink/hex(#EE137B 등)는 이 계획 이전 노드. ①-10 검사는 신설·수정 노드 기준.
+- get_screenshot이 빈 결과를 내면 open_file(A-2) 재호출로 재마운트(실측).
+- backend pytest 재측정(node PATH 있음): 3,169 passed / 0 failed / 6 skipped → 기준선 확정(anchors-note.md).
+- Step 6-A 완료(US-005): executor 2개 병렬(backend / app). 검증 — 대상 pytest 105 passed(test_routine_tools 26 · update 19 · detail 5 · nudge_guard · unit routines_api), npm test 2295/2295. 정정 2건: 409/422 detail을 상태 표기형으로("취소된 작업 — 수정 불가", "종목 — 변경 불가 · 취소 후 새로 만들기", "조건 소스 — 변경 불가 · 취소 후 새로 만들기"), propose 결과·IPC payload에 view dict 통과 추가.
+- IPC 핸들러 인자 모양: 기존 관례대로 단일 객체 — routine-update {id, body} · routine-draft {body} · routine-detail {id} · routine-source-catalog 인자 없음. Step 7b 배선은 이 모양을 쓴다. athena:routine-proposed payload = {control, routineId, current, proposed, rationale, view, notice}.
+- 신규 테스트 경로: backend/tests/api/test_routines_update.py · test_routines_detail.py (기존 REST 스위트는 tests/unit/test_routines_api.py).

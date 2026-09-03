@@ -152,3 +152,11 @@
 | `cd backend && uv run pytest -q` | **3,137 passed / 32 failed / 6 skipped** (851s) | ⚠ **32건 실패는 알려진 PATH 아티팩트** — `docs/handoff/README.md` §1 경고 그대로("backend가 32건 무더기로 깨지면 코드 문제가 아니라 PATH 문제다 — `evaluate_selector_ablations.py`는 `node`를 부른다"). 이 실행은 fnm PATH 없이 백그라운드로 돌았다(예: `tests/unit/test_selector_autonomous_eval.py::test_all_critical_semantic_groups_are_green`). **기준선으로 쓰기 전에 `export PATH=<fnm multishell>:$PATH` 후 재측정해 0 failed를 확인할 것.** 전체 출력은 `docs/handoff/agent-dual-control/baseline-pytest.txt` |
 
 - 앵커 미발견 1건 `function viewToMode`는 계획 지정 이름이 아니라 검증자가 추가한 항목 — 정의는 `app/lib/session-snapshot.js:29`, `conversations.js:13`이 import. **계획이 지정한 이름은 전부 발견.**
+
+
+## baseline 재측정 (2026-09-03, 이 컴퓨터 · node v22 PATH 있음)
+
+| 게이트 | 결과 |
+|---|---|
+| `cd backend && uv run pytest -q` | **3,169 passed / 0 failed / 6 skipped** (1,536s). 이전 32 failed는 node PATH 아티팩트로 확정 → 기준선 = 3,169 pass, 0 fail |
+| `cd app && npm test` (Step 6-A 후) | 2,295 pass / 0 fail (기준선 2,291 + agent-session.test.js 4) |
