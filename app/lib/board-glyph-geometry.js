@@ -4,6 +4,14 @@ const DEFAULT_READABILITY_BOARD_IDS = Object.freeze([
   '2SKU-1', '2R3M-1', '13BC-2', '2QFO-2', '13K0-2', '135M-2',
 ]);
 
+const RESPONSIVE_TRAIT_CLASS = Object.freeze({
+  atomic: 'bs-r-atomic',
+  flow: 'bs-r-flow',
+  scroll: 'bs-r-scroll',
+  'paired-table': 'bs-r-paired-table',
+  'scroll-table': 'bs-r-scroll-table',
+});
+
 // This function is deliberately self-contained: the Electron verifier serializes
 // it into the renderer process with Function#toString, where CommonJS helpers
 // are not available.
@@ -228,6 +236,60 @@ function overlapArea(left, right, tolerance = 1) {
   return result.total ? result.items[0].pixels.area : 0;
 }
 
+function assertReadabilityManifest(manifest, boardHtml) {
+  const fail = (detail) => {
+    throw new Error(`responsive manifest and generated markup mismatch: ${detail}`);
+  };
+  if (!manifest || typeof manifest !== 'object') fail('manifest is missing');
+  const responsive = manifest.responsive === undefined ? [] : manifest.responsive;
+  if (!Array.isArray(responsive)) fail('responsive declarations are not an array');
+  if (typeof boardHtml !== 'string') fail('generated markup is missing');
+
+  const traitOrder = Object.keys(RESPONSIVE_TRAIT_CLASS);
+  const normalizeTraits = (traits, nodeId) => {
+    if (!Array.isArray(traits) || !traits.length
+      || traits.some((trait) => !Object.hasOwn(RESPONSIVE_TRAIT_CLASS, trait))
+      || new Set(traits).size !== traits.length) {
+      fail(`${nodeId || '(missing node)'} has invalid responsive traits`);
+    }
+    return traitOrder.filter((trait) => traits.includes(trait));
+  };
+  const declared = new Map();
+  for (const entry of responsive) {
+    const nodeId = entry && entry.node_id;
+    if (typeof nodeId !== 'string' || !nodeId || declared.has(nodeId)) {
+      fail(`${nodeId || '(missing node)'} has an invalid or duplicate declaration`);
+    }
+    declared.set(nodeId, normalizeTraits(entry.traits, nodeId));
+  }
+
+  const annotated = new Map();
+  for (const match of boardHtml.matchAll(/<[A-Za-z][^<>]*>/g)) {
+    const tag = match[0];
+    const classMatch = /\sclass="([^"]*)"/.exec(tag);
+    if (!classMatch) continue;
+    const classNames = new Set(classMatch[1].split(/\s+/).filter(Boolean));
+    const traits = traitOrder.filter((trait) => classNames.has(RESPONSIVE_TRAIT_CLASS[trait]));
+    if (!traits.length) continue;
+    const nodeMatches = [...tag.matchAll(/\sdata-node="([^"]+)"/g)];
+    if (nodeMatches.length !== 1 || annotated.has(nodeMatches[0][1])) {
+      fail(`${nodeMatches[0] ? nodeMatches[0][1] : '(missing node)'} has invalid responsive markup`);
+    }
+    annotated.set(nodeMatches[0][1], traits);
+  }
+
+  const nodeIds = [...new Set([...declared.keys(), ...annotated.keys()])].sort();
+  for (const nodeId of nodeIds) {
+    const manifestTraits = declared.get(nodeId) || [];
+    const markupTraits = annotated.get(nodeId) || [];
+    if (JSON.stringify(manifestTraits) !== JSON.stringify(markupTraits)) {
+      fail(`${nodeId}: manifest=${manifestTraits.join(',') || '(none)'}; markup=${
+        markupTraits.join(',') || '(none)'}`);
+    }
+  }
+  return true;
+}
+
 async function waitForStableLayout(options = {}) {
   const readSignature = options.readSignature;
   if (typeof readSignature !== 'function') throw new TypeError('readSignature must be a function');
@@ -359,7 +421,7 @@ function assertReadability(boardId, preset, probe, { enforce = false } = {}) {
     const items = probe[itemsName];
     const total = probe[totalName];
     return !Array.isArray(items) || !Number.isInteger(total) || total < 0
-      || total < items.length || (total <= 20 && total !== items.length);
+      || items.length !== Math.min(total, 20);
   });
   const failures = [
     ...(schemaInvalid ? ['readability_schema'] : []),
@@ -371,6 +433,49 @@ function assertReadability(boardId, preset, probe, { enforce = false } = {}) {
   return { enforced: Boolean(enforce), failures };
 }
 
+function assertReadabilityMatrix(boards, {
+  expectedBoardIds, stepPresets, breakpointPresets,
+}) {
+  const fail = (detail) => {
+    throw new Error(`canonical readability matrix ${detail}`);
+  };
+  if (!Array.isArray(boards) || !Array.isArray(expectedBoardIds)
+    || !Array.isArray(stepPresets) || !Array.isArray(breakpointPresets)) {
+    fail('is missing required arrays');
+  }
+  const boardIds = boards.map((board) => board && board.board_id);
+  if (JSON.stringify(boardIds) !== JSON.stringify(expectedBoardIds)) {
+    fail(`board order mismatch: ${JSON.stringify(boardIds)}`);
+  }
+  const samePreset = (record, preset) => Boolean(
+    record && record.window
+    && record.window.width === preset.width && record.window.height === preset.height
+    && (preset.name === undefined || record.preset === preset.name),
+  );
+  for (const board of boards) {
+    if (!Array.isArray(board.steps) || board.steps.length !== stepPresets.length
+      || !board.steps.every((record, index) => samePreset(record, stepPresets[index]))) {
+      fail(`${board.board_id} screenshot presets mismatch`);
+    }
+    if (!Array.isArray(board.breakpoint_probes)
+      || board.breakpoint_probes.length !== breakpointPresets.length
+      || !board.breakpoint_probes.every(
+        (record, index) => samePreset(record, breakpointPresets[index]),
+      )) {
+      fail(`${board.board_id} breakpoint presets mismatch`);
+    }
+    for (const record of [...board.steps, ...board.breakpoint_probes]) {
+      assertReadability(board.board_id, { name: record.preset }, record, { enforce: true });
+    }
+  }
+  return {
+    boards: boards.length,
+    screenshots: boards.length * stepPresets.length,
+    probes: boards.length * breakpointPresets.length,
+    measurements: boards.length * (stepPresets.length + breakpointPresets.length),
+  };
+}
+
 module.exports = {
   DEFAULT_READABILITY_BOARD_IDS,
   collectGlyphFindings,
@@ -380,5 +485,7 @@ module.exports = {
   visualLineCount,
   overlapArea,
   waitForStableLayout,
+  assertReadabilityManifest,
   assertReadability,
+  assertReadabilityMatrix,
 };

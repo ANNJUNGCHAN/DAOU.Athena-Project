@@ -186,7 +186,7 @@ test('P1 — 정본 값으로 마운트한 결과의 텍스트 다중집합이 P
   assert.deepEqual(sortedEntries(after), sortedEntries(before));
 });
 
-test('glyph readability probe keeps raw geometry evidence but starts in report-only mode', () => {
+test('glyph readability probe keeps raw geometry evidence and hard-enforces every selected board', () => {
   const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
   assert.match(verify, /document\.fonts && document\.fonts\.ready/);
   assert.match(verify, /requiredStableSamples: 4/);
@@ -204,7 +204,13 @@ test('glyph readability probe keeps raw geometry evidence but starts in report-o
   assert.match(verify, /atomic_wrap_nodes/);
   assert.match(verify, /text_overlap_nodes/);
   assert.match(verify, /paired_semantics_violations/);
-  assert.match(verify, /assertReadability\(surface\.boardId, preset, probe, \{ enforce: false \}\)/);
+  assert.equal(
+    [...verify.matchAll(/assertReadability\(surface\.boardId, preset, probe, \{ enforce: true \}\)/g)]
+      .length,
+    2,
+  );
+  assert.doesNotMatch(verify, /assertReadability\([^\n]+\{ enforce: false \}\)/);
+  assert.match(verify, /canonical:\s*CANONICAL_CAPTURE_RUN/);
 });
 
 test('paired semantic probe scans only canonical mirrors and records identity, tone, and missing parity', () => {
@@ -255,6 +261,19 @@ test('canonical glyph verifier has no alternate diagnostic success path', () => 
 test('the integrated verifier takes its exact default readability board order from the frozen contract', () => {
   const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
   assert.match(verify, /DEFAULT_REAL_BOARDS = DEFAULT_READABILITY_BOARD_IDS/);
+  assert.match(verify, /resolveBoardSelection\(BOARD_SELECTION_OVERRIDE, DEFAULT_REAL_BOARDS\)/);
+});
+
+test('canonical capture hygiene is exact-set guarded while overrides write to diagnostics', () => {
+  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  assert.match(verify, /ensureCaptureOutputDirectory\(CAPTURE_DIR, CANONICAL_CAPTURE_RUN\)/);
+  assert.match(verify, /expectedBoardCaptureNames\(DEFAULT_REAL_BOARDS, BOARD_WINDOW_PRESETS\)/);
+  assert.match(verify, /CANONICAL_CAPTURE_RUN\s*\?\s*pruneUnexpectedBoardCaptures/);
+  assert.match(verify, /if \(CANONICAL_CAPTURE_RUN\)[\s\S]*?assertReadabilityMatrix/);
+  assert.match(verify, /if \(CANONICAL_CAPTURE_RUN\)[\s\S]*?assertBoardCaptureArtifacts/);
+  assert.match(verify, /CAPTURE_OUTPUT_DIR, 'VERIFY-INTEGRATED-CARDS\.json'/);
+  assert.doesNotMatch(verify, /rmSync\(CAPTURE_DIR|rmdirSync\(CAPTURE_DIR/);
+  assert.match(verify, /assertReadabilityManifest\(regions, boardHtml\)/);
 });
 
 test('P1 슬롯 단위 — 계산된 표기가 slots.json의 paper_text와 한 글자도 다르지 않다', () => {
@@ -754,4 +773,5 @@ test('실보드 검증의 선택 필터는 빈 집합과 중복 보드를 거부
   const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
   assert.match(verify, /if \(!REAL_BOARDS\.length\)/);
   assert.match(verify, /new Set\(REAL_BOARDS\)\.size !== REAL_BOARDS\.length/);
+  assert.match(verify, /ATHENA_VERIFY_BOARD_IDS contains unknown board/);
 });

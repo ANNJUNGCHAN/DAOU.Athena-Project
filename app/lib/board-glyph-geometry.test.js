@@ -2,6 +2,9 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 
 const {
   DEFAULT_READABILITY_BOARD_IDS,
@@ -9,6 +12,8 @@ const {
   collectTextOverlapFindings,
   collectPairedSemanticFindings,
   assertReadability,
+  assertReadabilityManifest,
+  assertReadabilityMatrix,
   visualLineCount,
   overlapArea,
   waitForStableLayout,
@@ -24,6 +29,20 @@ const candidate = (node, owner, layoutOwner, fragments, extra = {}) => ({
   fragments,
   ...extra,
 });
+
+function copiedRegions(t, boardId) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), `athena-${boardId}-`));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const source = path.join(
+    __dirname, '..', '..', 'backend', 'ref', 'card-surface-templates', boardId, 'regions.json',
+  );
+  const target = path.join(directory, 'regions.json');
+  fs.copyFileSync(source, target);
+  return {
+    regionsPath: target,
+    boardHtml: fs.readFileSync(path.join(path.dirname(source), 'board.html'), 'utf8'),
+  };
+}
 
 test('glyph geometry uses a strict greater-than-one-pixel overlap tolerance', () => {
   assert.equal(overlapArea(rect(0, 0, 10, 10), rect(8, 0, 18, 10), 1), 20);
@@ -187,8 +206,8 @@ test('paired semantic report carries malformed scroll-table role findings', () =
   assert.equal(result.total, 4);
 });
 
-test('readability assertion is report-only until explicitly enforced', () => {
-  const probe = {
+test('readability assertion reports findings when optional and fails closed when enforced', () => {
+  const atomicProbe = {
     atomic_wrap_nodes: [{ node: 'price' }],
     atomic_wrap_total: 1,
     text_overlap_nodes: [],
@@ -196,12 +215,39 @@ test('readability assertion is report-only until explicitly enforced', () => {
     paired_semantics_violations: [],
     paired_semantics_total: 0,
   };
-  assert.deepEqual(assertReadability('2R3M-1', { name: 'L' }, probe, { enforce: false }), {
+  assert.deepEqual(assertReadability('2R3M-1', { name: 'L' }, atomicProbe, { enforce: false }), {
     enforced: false,
     failures: ['atomic_wrap_nodes'],
   });
-  assert.throws(() => assertReadability('2R3M-1', { name: 'L' }, probe, { enforce: true }),
+  assert.throws(() => assertReadability('2R3M-1', { name: 'L' }, atomicProbe, { enforce: true }),
     /readability atomic_wrap_nodes/);
+
+  const zeroProbe = {
+    atomic_wrap_nodes: [], atomic_wrap_total: 0,
+    text_overlap_nodes: [], text_overlap_total: 0,
+    paired_semantics_violations: [], paired_semantics_total: 0,
+  };
+  for (const [boardId, label, field, totalField, finding] of [
+    ['13K0-2', 'atomic', 'atomic_wrap_nodes', 'atomic_wrap_total', { node: 'chip' }],
+    ['2QFO-2', 'overlap', 'text_overlap_nodes', 'text_overlap_total', { node: 'label' }],
+    ['2SKU-1', 'paired', 'paired_semantics_violations', 'paired_semantics_total', {
+      source: 'price', violation: 'stale_tone',
+    }],
+    ['13K0-2', 'scroll semantics', 'paired_semantics_violations', 'paired_semantics_total', {
+      source: 'table', violation: 'scroll_missing_row',
+    }],
+  ]) {
+    const probe = { ...zeroProbe, [field]: [finding], [totalField]: 1 };
+    assert.throws(
+      () => assertReadability(boardId, { name: label }, probe, { enforce: true }),
+      /readability (atomic_wrap_nodes|text_overlap_nodes|paired_semantics_violations)/,
+      label,
+    );
+  }
+
+  assert.deepEqual(assertReadability('2R3M-1', { name: 'zero' }, zeroProbe, { enforce: true }), {
+    enforced: true, failures: [],
+  });
   assert.throws(() => assertReadability('2R3M-1', { name: 'L' }, {}, { enforce: true }),
     /readability readability_schema/);
   assert.throws(() => assertReadability('2R3M-1', { name: 'L' }, {
@@ -209,6 +255,137 @@ test('readability assertion is report-only until explicitly enforced', () => {
     text_overlap_nodes: [], text_overlap_total: 0,
     paired_semantics_violations: [], paired_semantics_total: 0,
   }, { enforce: true }), /readability .*atomic_wrap_nodes/);
+  assert.throws(() => assertReadability('2R3M-1', { name: 'L' }, {
+    ...zeroProbe, atomic_wrap_total: -1,
+  }, { enforce: true }), /readability readability_schema/);
+  assert.throws(() => assertReadability('2R3M-1', { name: 'L' }, {
+    ...zeroProbe, atomic_wrap_total: 0.5,
+  }, { enforce: true }), /readability readability_schema/);
+  assert.throws(() => assertReadability('2R3M-1', { name: 'L' }, {
+    ...zeroProbe, atomic_wrap_nodes: Array.from({ length: 19 }, (_, index) => ({ index })),
+    atomic_wrap_total: 21,
+  }, { enforce: true }), /readability readability_schema/);
+  assert.deepEqual(assertReadability('2R3M-1', { name: 'L' }, {
+    ...zeroProbe, atomic_wrap_nodes: Array.from({ length: 20 }, (_, index) => ({ index })),
+    atomic_wrap_total: 21,
+  }, { enforce: false }), { enforced: false, failures: ['atomic_wrap_nodes'] });
+});
+
+test('temp manifest mutations cannot omit 2QGE flow or omit or mispoint the 13K table owner', (t) => {
+  const { regionsPath: flowPath, boardHtml: flowHtml } = copiedRegions(t, '2QFO-2');
+  const flow = JSON.parse(fs.readFileSync(flowPath, 'utf8'));
+  assert.equal(assertReadabilityManifest(flow, flowHtml), true);
+  flow.responsive = flow.responsive.filter((entry) => entry.node_id !== '2QGE-2');
+  fs.writeFileSync(flowPath, `${JSON.stringify(flow)}\n`);
+  assert.throws(
+    () => assertReadabilityManifest(JSON.parse(fs.readFileSync(flowPath, 'utf8')), flowHtml),
+    /2QGE-2.*flow/,
+  );
+
+  const { regionsPath: tablePath, boardHtml: tableHtml } = copiedRegions(t, '13K0-2');
+  const original = JSON.parse(fs.readFileSync(tablePath, 'utf8'));
+  assert.equal(assertReadabilityManifest(original, tableHtml), true);
+  for (const mutate of [
+    (manifest) => { manifest.responsive = manifest.responsive.filter(
+      (entry) => entry.node_id !== '33WD-0'); },
+    (manifest) => { manifest.responsive.find(
+      (entry) => entry.node_id === '33WD-0').node_id = '33Z2-0'; },
+  ]) {
+    const manifest = structuredClone(original);
+    mutate(manifest);
+    fs.writeFileSync(tablePath, `${JSON.stringify(manifest)}\n`);
+    assert.throws(
+      () => assertReadabilityManifest(JSON.parse(fs.readFileSync(tablePath, 'utf8')), tableHtml),
+      /33WD-0.*scroll-table/,
+    );
+  }
+  fs.copyFileSync(path.join(
+    __dirname, '..', '..', 'backend', 'ref', 'card-surface-templates', '13K0-2', 'regions.json',
+  ), tablePath);
+  assert.equal(
+    assertReadabilityManifest(JSON.parse(fs.readFileSync(tablePath, 'utf8')), tableHtml), true,
+  );
+});
+
+test('the frozen readability manifests and generated markup have exact responsive parity', () => {
+  for (const boardId of DEFAULT_READABILITY_BOARD_IDS) {
+    const directory = path.join(
+      __dirname, '..', '..', 'backend', 'ref', 'card-surface-templates', boardId,
+    );
+    const manifest = JSON.parse(fs.readFileSync(path.join(directory, 'regions.json'), 'utf8'));
+    const html = fs.readFileSync(path.join(directory, 'board.html'), 'utf8');
+    assert.equal(assertReadabilityManifest(manifest, html), true, boardId);
+  }
+});
+
+test('a DOM-like 13K chip shrink mutation becomes a two-line atomic hard failure', () => {
+  const restored = collectAtomicWrapFindings([
+    candidate('14JF-2', '14JF-2', '14JD-2', [rect(0, 0, 40, 12)]),
+  ]);
+  const shrunk = collectAtomicWrapFindings([
+    candidate('14JF-2', '14JF-2', '14JD-2', [rect(0, 0, 20, 12), rect(0, 13, 20, 25)]),
+  ]);
+  const probe = (finding) => ({
+    atomic_wrap_nodes: finding.items, atomic_wrap_total: finding.total,
+    text_overlap_nodes: [], text_overlap_total: 0,
+    paired_semantics_violations: [], paired_semantics_total: 0,
+  });
+  assert.deepEqual(assertReadability('13K0-2', { name: 'M' }, probe(restored), {
+    enforce: true,
+  }), { enforced: true, failures: [] });
+  assert.throws(() => assertReadability('13K0-2', { name: 'M' }, probe(shrunk), {
+    enforce: true,
+  }), /readability atomic_wrap_nodes/);
+});
+
+test('a complete synthetic canonical zero report passes the enforced 6/24/12 matrix', () => {
+  const stepPresets = [
+    { name: 'original', width: 1920, height: 1080 },
+    { name: 'split-2', width: 960, height: 1080 },
+    { name: 'split-4', width: 640, height: 540 },
+    { name: 'minimum', width: 480, height: 420 },
+  ];
+  const breakpointPresets = [
+    { name: 'XL probe', width: 2560, height: 1440 },
+    { name: 'M probe', width: 1600, height: 900 },
+  ];
+  const zeroRecord = (preset) => ({
+    preset: preset.name,
+    window: { width: preset.width, height: preset.height },
+    atomic_wrap_nodes: [], atomic_wrap_total: 0,
+    text_overlap_nodes: [], text_overlap_total: 0,
+    paired_semantics_violations: [], paired_semantics_total: 0,
+  });
+  const boards = DEFAULT_READABILITY_BOARD_IDS.map((boardId) => ({
+    board_id: boardId,
+    steps: stepPresets.map(zeroRecord),
+    breakpoint_probes: breakpointPresets.map(zeroRecord),
+  }));
+  let checked = 0;
+  for (const board of boards) {
+    for (const probe of [...board.steps, ...board.breakpoint_probes]) {
+      assert.deepEqual(
+        assertReadability(board.board_id, { name: probe.preset }, probe, { enforce: true }),
+        { enforced: true, failures: [] },
+      );
+      checked += 1;
+    }
+  }
+  assert.equal(boards.length, 6);
+  assert.equal(checked, 36);
+  assert.deepEqual(assertReadabilityMatrix(boards, {
+    expectedBoardIds: DEFAULT_READABILITY_BOARD_IDS,
+    stepPresets,
+    breakpointPresets,
+  }), { boards: 6, screenshots: 24, probes: 12, measurements: 36 });
+
+  const incomplete = structuredClone(boards);
+  incomplete[0].breakpoint_probes.pop();
+  assert.throws(() => assertReadabilityMatrix(incomplete, {
+    expectedBoardIds: DEFAULT_READABILITY_BOARD_IDS,
+    stepPresets,
+    breakpointPresets,
+  }), /readability matrix/);
 });
 
 test('the frozen diagnostic board set keeps the exact six-board order', () => {
