@@ -1959,42 +1959,139 @@ app.whenReady().then(async () => {
     installedAction: document.querySelector('.plugin-canvas-installed .plugin-canvas-action')?.textContent || null,
     recommendedAction: document.querySelector('.plugin-canvas-recommended .plugin-canvas-action')?.textContent || '',
     description: document.querySelector('.plugin-canvas-description')?.textContent || '',
+    // 채팅 헤더는 그래프 전용이 아니라 모드별 공용이다(W3-6). 그래프 3종 회귀는
+    // verify-graph-mode.js가 잡고, 여기서는 플러그인 문구가 실제로 붙는지를 잰다.
+    chatHeadVisible: !document.getElementById('chatModeHead').hidden,
+    chatHeadMode: document.getElementById('chatModeHead').dataset.mode || null,
+    chatHeadTitle: document.querySelector('#chatModeHead .chat-mode-head-title')?.textContent || '',
+    chatHeadSub: document.querySelector('#chatModeHead .chat-mode-head-sub')?.textContent || '',
   }))()`);
   await shot(shellWin, '03f-plugin-hub.png');
   await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-recommended .plugin-canvas-action').click()`);
   await wait(80);
-  const pluginInstallModal = await shellWin.webContents.executeJavaScript(`(() => {
+  // 설치 시트는 **승인 표면이 아니다** — 무엇을 설치하는지 보여주고 승인 카드로
+  // 넘길 뿐이다(US-004). 그래서 여기서는 포커스 트랩 5종·"한 번에 하나씩" 부제를
+  // 재지 않는다(W5-2 폐기 7). 재는 것은 사람이 승인 전에 봐야 하는 정보 7가지다.
+  const pluginInstallSheet = await shellWin.webContents.executeJavaScript(`(() => {
     const dialog = document.querySelector('.plugin-canvas-install-sheet');
-    const panel = document.querySelector('.plugin-canvas-panel');
-    const controls = Array.from(dialog?.querySelectorAll('button:not([disabled])') || []);
-    const focusedInitially = dialog?.contains(document.activeElement) || false;
-    const initialClass = document.activeElement?.className || '';
-    document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true }));
-    const wrappedBackward = document.activeElement === controls[controls.length - 1];
-    document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
-    const wrappedForward = document.activeElement === controls[0];
     return {
-      dialogCount: document.querySelectorAll('.plugin-canvas-sheet[role="dialog"]').length,
       title: dialog?.querySelector('.plugin-canvas-sheet-title')?.textContent || '',
-      subtitle: dialog?.querySelector('.plugin-canvas-sheet-subtitle')?.textContent || '',
       confirmLabel: dialog?.querySelector('.is-sheet-confirm')?.textContent || '',
       cancelLabel: dialog?.querySelector('.is-sheet-cancel')?.textContent || '',
       provider: dialog?.querySelector('.plugin-canvas-sheet-source')?.textContent || '',
       command: dialog?.querySelector('.plugin-canvas-sheet-command')?.textContent || '',
       location: dialog?.querySelector('.plugin-canvas-sheet-location')?.textContent || '',
       badges: Array.from(dialog?.querySelectorAll('.plugin-canvas-sheet-badges .plugin-canvas-count') || []).map((n) => n.textContent),
-      panelInert: panel?.hasAttribute('inert') || false,
-      focusedInitially,
-      initialClass,
-      wrappedBackward,
-      wrappedForward,
+      historyPluginTurns: document.querySelectorAll('#history .plugin-turn').length,
     };
   })()`);
   await shot(shellWin, '03f2-plugin-install-approval.png');
-  await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-install-sheet')?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }))`);
-  await wait(80);
-  pluginInstallModal.closed = await shellWin.webContents.executeJavaScript(`!document.querySelector('.plugin-canvas-install-sheet')`);
-  pluginInstallModal.focusRestored = await shellWin.webContents.executeJavaScript(`document.activeElement?.closest('.plugin-canvas-card')?.getAttribute('data-plugin-id') === 'fetch'`);
+
+  // GUI [설치] → [승인]은 설치하지 않는다. 봉투를 만들어 승인 카드로 합류시킨다
+  // (신설 ⑸). 실행은 그 카드의 [승인] 하나뿐이고, 그건 네트워크가 필요하므로
+  // 여기서 누르지 않는다 — 실왕복은 `npm run verify:plugins`가 잰다.
+  await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-install-sheet .is-sheet-confirm').click()`);
+  await wait(160);
+  const pluginProposalCard = await shellWin.webContents.executeJavaScript(`(() => {
+    const card = document.querySelector('#pluginCanvas .plugin-canvas-proposals .plugin-canvas-proposal');
+    const approve = card?.querySelector('.plugin-canvas-proposal-action.is-proposal-approve') || null;
+    const reject = card?.querySelector('.plugin-canvas-proposal-action.is-proposal-reject') || null;
+    const box = (node) => {
+      if (!node) return null;
+      const rect = node.getBoundingClientRect();
+      return { tag: node.tagName, disabled: node.disabled === true, tabIndex: node.tabIndex, w: rect.width, h: rect.height };
+    };
+    return {
+      inPluginCanvas: !!card,
+      sheetClosed: !document.querySelector('.plugin-canvas-install-sheet'),
+      proposalId: card?.getAttribute('data-proposal-id') || '',
+      state: card?.getAttribute('data-proposal-state') || '',
+      source: card?.querySelector('.plugin-canvas-proposal-source')?.textContent || '',
+      title: card?.querySelector('.plugin-canvas-proposal-title')?.textContent || '',
+      status: card?.querySelector('[role="status"]')?.textContent || '',
+      lines: Array.from(card?.querySelectorAll('.plugin-canvas-proposal-line') || []).map((n) => n.textContent),
+      reason: card?.querySelector('.plugin-canvas-proposal-reason')?.textContent || '',
+      // A5 음성 절반 — GUI 클릭은 채팅 턴을 만들지 않는다(신설 ⑵).
+      historyPluginTurns: document.querySelectorAll('#history .plugin-turn').length,
+      approve: box(approve),
+      reject: box(reject),
+    };
+  })()`);
+  await shot(shellWin, '03f3-plugin-proposal-card.png');
+
+  // 경계 1 — 거부하면 카드가 **제거된다**(모달이 닫히는 것이 아니다). 거부는
+  // 어떤 CLI도 부르지 않으므로(main.js handlePluginReject) 네트워크가 필요 없다.
+  await shellWin.webContents.executeJavaScript(`document.querySelector('#pluginCanvas .plugin-canvas-proposal .is-proposal-reject').click()`);
+  await wait(220);
+  pluginProposalCard.removedAfterReject = await shellWin.webContents.executeJavaScript(
+    `document.querySelectorAll('#pluginCanvas .plugin-canvas-proposal').length === 0`);
+
+  // 출처 라벨 2종 · 3상태(신설 ⑶⑷). 호스트 계약인 setProposals로 봉투를 넣는다 —
+  // 만료는 봉투 판번호와 현재 판번호가 어긋난 상태이므로 이 경로로만 만들 수 있다.
+  const pluginProposalStates = await shellWin.webContents.executeJavaScript(`(() => {
+    const lib = window.AthenaLib.PluginProposal;
+    const fromModel = lib.buildProposal({ action: 'remove', target: 'korea-stock' }, '더 쓰지 않는 것 같습니다', 7, 'model');
+    const fromGui = lib.buildProposal({ action: 'set_enabled', target: 'korea-stock', enabled: false }, null, 6, 'gui');
+    window.AthenaPluginCanvas.setProposals([fromModel, fromGui], { revision: 7 });
+    const cards = Array.from(document.querySelectorAll('#pluginCanvas .plugin-canvas-proposal'));
+    return {
+      count: cards.length,
+      sources: cards.map((c) => c.querySelector('.plugin-canvas-proposal-source')?.textContent || ''),
+      states: cards.map((c) => c.getAttribute('data-proposal-state')),
+      statuses: cards.map((c) => c.querySelector('[role="status"]')?.textContent || ''),
+      againLabels: cards.map((c) => c.querySelector('.is-proposal-again')?.textContent || null),
+      // 만료 카드의 승인은 눌리지 않는다 — 낡은 것을 실행하지 않는다.
+      approveDisabled: cards.map((c) => c.querySelector('.is-proposal-approve')?.disabled === true),
+    };
+  })()`);
+  await shot(shellWin, '03f4-plugin-proposal-states.png');
+
+  // 세 번째 상태(거부됨)는 호스트에 붙은 캔버스에서는 관측할 수 없다 — canvas.js가
+  // 응답을 받는 즉시 봉투를 목록에서 빼기 때문이다(위 removedAfterReject가 그것을
+  // 잰다). 모듈이 그 상태를 그리는지는 같은 모듈의 분리 인스턴스로 잰다.
+  const pluginProposalDone = await shellWin.webContents.executeJavaScript(`(async () => {
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const canvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
+      container: host, installed: [], recommended: [], marketplaces: [],
+      onRejectProposal: () => ({ ok: true, kind: 'rejected', revision: 3 }),
+    });
+    canvas.mount();
+    const envelope = window.AthenaLib.PluginProposal.buildProposal(
+      { action: 'remove', target: 'korea-stock' }, '지울까요', 3, 'model');
+    canvas.setProposals([envelope], { revision: 3 });
+    host.querySelector('.plugin-canvas-proposal .is-proposal-reject').click();
+    await new Promise((resolve) => setTimeout(resolve, 60));
+    const card = host.querySelector('.plugin-canvas-proposal');
+    const out = {
+      state: card?.getAttribute('data-proposal-state') || '',
+      status: card?.querySelector('[role="status"]')?.textContent || '',
+      approveDisabled: card?.querySelector('.is-proposal-approve')?.disabled === true,
+    };
+    host.remove();
+    return out;
+  })()`);
+
+  // 신설 ⑺ — 기본 빌드(런타임 꺼짐)의 결과 턴은 "반영됐다"고 말하지 않는다.
+  // 승인 결과는 canvas.js가 CustomEvent로 넘기고 chat.js가 그린다. 여기서는 그
+  // 계약 지점에 실제 승인 반환 모양을 넣어 문장을 잰다(C-10 회귀 고정).
+  const pluginResultTurn = await shellWin.webContents.executeJavaScript(`(() => {
+    window.dispatchEvent(new CustomEvent('athena:plugin-result', { detail: {
+      kind: 'success',
+      envelope: null,
+      result: { ok: true, kind: 'success', results: [], probes: [{ alias: 'fetch', ok: true, toolCount: 1 }], runtimeEnabled: false },
+    } }));
+    const turns = document.querySelectorAll('#history .plugin-turn');
+    const turn = turns[turns.length - 1];
+    return {
+      lines: Array.from(turn?.querySelectorAll('.agent-body') || []).map((n) => n.textContent),
+      pills: Array.from(turn?.querySelectorAll('.routine-draft-pill') || []).map((n) => n.textContent),
+    };
+  })()`);
+
+  // 승인 카드를 치우고 관리 뷰로 넘어간다 — 남겨두면 뒤 단언이 재는 화면이 달라진다.
+  await shellWin.webContents.executeJavaScript(`window.AthenaPluginCanvas.setProposals([], { revision: null })`);
+  await wait(60);
   await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-action.is-manage').click()`);
   await wait(120);
   const pluginManage = await shellWin.webContents.executeJavaScript(`(() => ({
@@ -2078,7 +2175,11 @@ app.whenReady().then(async () => {
   await wait(100);
   report.pluginMode = {
     hub: pluginHub,
-    install: pluginInstallModal,
+    install: pluginInstallSheet,
+    proposal: pluginProposalCard,
+    proposalStates: pluginProposalStates,
+    proposalDone: pluginProposalDone,
+    resultTurn: pluginResultTurn,
     manage: pluginManage,
     permission: pluginPermission,
     probeFailure: pluginProbeFailure,
@@ -2102,22 +2203,70 @@ app.whenReady().then(async () => {
   assertOk('pluginMode: empty installed list says nothing installed, not "no search match"',
     pluginHub.emptyCopy.length === 1
     && pluginHub.emptyCopy[0] === '설치한 플러그인이 없습니다 · 아래 추천에서 설치합니다');
-  assertOk('pluginMode: Paper 02 install approval shows provider/command/location and owns focus',
-    pluginInstallModal.dialogCount === 1
-    && pluginInstallModal.title === '웹 문서 읽기 설치'
-    && pluginInstallModal.subtitle === '설치할 플러그인과 요청 권한을 확인하고 한 번에 하나씩 승인합니다'
-    && pluginInstallModal.confirmLabel === '승인'
-    && pluginInstallModal.cancelLabel === '거부'
-    && /^제공: /.test(pluginInstallModal.provider)
-    && pluginInstallModal.command === '실행 명령: uvx mcp-server-fetch'
-    && pluginInstallModal.location === '설치 위치 · 플러그인 모드 > 웹 문서 읽기'
-    && JSON.stringify(pluginInstallModal.badges) === JSON.stringify(['권한 1개 요청', '설치형 플러그인'])
-    && pluginInstallModal.panelInert === true
-    && pluginInstallModal.focusedInitially === true
-    && pluginInstallModal.wrappedBackward === true
-    && pluginInstallModal.wrappedForward === true
-    && pluginInstallModal.closed === true
-    && pluginInstallModal.focusRestored === true);
+  // A10 — 채팅 헤더는 모드별 공용이다. 그래프 문구 회귀는 verify-graph-mode.js가 잡는다.
+  assertOk('pluginMode: 채팅 헤더가 플러그인 문구를 단다',
+    pluginHub.chatHeadVisible === true
+    && pluginHub.chatHeadMode === 'plugin'
+    && pluginHub.chatHeadTitle === '아테나 · 플러그인 대화'
+    && pluginHub.chatHeadSub === '설치와 권한을 여기서 정합니다');
+  // 유지 7 — 승인 전에 사람이 봐야 하는 정보. 포커스 트랩·"한 번에 하나씩" 부제는
+  // 폐기했다(W5-2 폐기 7): 이 시트는 승인 표면이 아니라 승인 카드로 가는 문이다.
+  assertOk('pluginMode: Paper 05 install sheet shows provider/command/location before the approval card',
+    pluginInstallSheet.title === '웹 문서 읽기 설치'
+    && pluginInstallSheet.confirmLabel === '승인'
+    && pluginInstallSheet.cancelLabel === '거부'
+    && /^제공: /.test(pluginInstallSheet.provider)
+    && pluginInstallSheet.command === '실행 명령: uvx mcp-server-fetch'
+    && pluginInstallSheet.location === '설치 위치 · 플러그인 모드 > 웹 문서 읽기'
+    && JSON.stringify(pluginInstallSheet.badges) === JSON.stringify(['권한 1개 요청', '설치형 플러그인']));
+  // 신설 ⑴⑸ — GUI [설치]는 실행하지 않는다. 같은 승인 카드로 합류한다.
+  assertOk('pluginMode: GUI 설치 클릭이 #pluginCanvas 안의 승인 카드로 합류한다',
+    pluginProposalCard.inPluginCanvas === true
+    && pluginProposalCard.sheetClosed === true
+    && pluginProposalCard.title === '웹 문서 읽기 설치'
+    && pluginProposalCard.state === 'pending'
+    && pluginProposalCard.status === '제안 대기'
+    && pluginProposalCard.source === '내 요청'
+    && pluginProposalCard.reason === '허브에서 [설치]를 눌렀습니다'
+    && JSON.stringify(pluginProposalCard.lines) === JSON.stringify(['권한 1개 요청']));
+  // 신설 ⑵ — GUI 경로는 채팅 턴을 만들지 않는다(§2.3 축 2).
+  assertOk('pluginMode: GUI 클릭은 채팅 제안 턴을 만들지 않는다',
+    pluginInstallSheet.historyPluginTurns === 0 && pluginProposalCard.historyPluginTurns === 0,
+    { beforeApprove: pluginInstallSheet.historyPluginTurns, afterApprove: pluginProposalCard.historyPluginTurns });
+  // 신설 ⑻ — 승인은 파괴적 동작이다. 키보드로 닿고 클릭 영역이 32px 이상이어야 한다.
+  assertOk('pluginMode: 승인·거부 버튼이 키보드로 닿고 클릭 영역이 32px 이상이다',
+    pluginProposalCard.approve && pluginProposalCard.reject
+    && pluginProposalCard.approve.tag === 'BUTTON' && pluginProposalCard.reject.tag === 'BUTTON'
+    && pluginProposalCard.approve.disabled === false && pluginProposalCard.reject.disabled === false
+    && pluginProposalCard.approve.tabIndex >= 0 && pluginProposalCard.reject.tabIndex >= 0
+    && pluginProposalCard.approve.w >= 32 && pluginProposalCard.approve.h >= 32
+    && pluginProposalCard.reject.w >= 32 && pluginProposalCard.reject.h >= 32,
+    { approve: pluginProposalCard.approve, reject: pluginProposalCard.reject });
+  // 경계 1 — 거부하면 카드가 제거된다(모달이 닫히는 것이 아니다).
+  assertOk('pluginMode: 거부하면 승인 카드가 화면에서 제거된다',
+    pluginProposalCard.removedAfterReject === true);
+  // 신설 ⑶⑷ — 출처 라벨 2종 · 제안 대기/만료됨/거부됨 3상태.
+  assertOk('pluginMode: 출처 라벨이 아테나 제안·내 요청 두 값이다',
+    pluginProposalStates.count === 2
+    && JSON.stringify(pluginProposalStates.sources) === JSON.stringify(['아테나 제안', '내 요청']));
+  assertOk('pluginMode: 제안 대기·만료됨 두 상태가 카드에 드러난다',
+    JSON.stringify(pluginProposalStates.states) === JSON.stringify(['pending', 'stale'])
+    && JSON.stringify(pluginProposalStates.statuses) === JSON.stringify(['제안 대기', '만료됨'])
+    && JSON.stringify(pluginProposalStates.approveDisabled) === JSON.stringify([false, true])
+    && pluginProposalStates.againLabels[0] === null
+    && pluginProposalStates.againLabels[1] === '다시 제안받기');
+  assertOk('pluginMode: 거부한 카드는 거부됨 상태로 굳는다',
+    pluginProposalDone.state === 'done'
+    && pluginProposalDone.status === '거부됨'
+    && pluginProposalDone.approveDisabled === true,
+    pluginProposalDone);
+  // 신설 ⑺ — 기본 빌드에서 승인 결과 턴은 "반영됐습니다"를 주장하지 않는다(C-10).
+  assertOk('pluginMode: 기본 빌드의 승인 결과 턴은 다음 실행부터 반영된다고 말한다',
+    JSON.stringify(pluginResultTurn.pills) === JSON.stringify(['플러그인', '결과'])
+    && JSON.stringify(pluginResultTurn.lines) === JSON.stringify([
+      '등록했습니다', '연결을 확인했습니다', '기능 1개를 찾았습니다', '다음 실행부터 반영됩니다'])
+    && pluginResultTurn.lines.every((line) => line.includes('반영됐습니다') === false),
+    pluginResultTurn);
   assertOk('pluginMode: Paper 04 management counts follow the live registry',
     pluginManage.title === '플러그인 관리'
     && JSON.stringify(pluginManage.counts) === JSON.stringify(['플러그인 0', '기능 0', '마켓플레이스 1'])
@@ -2141,6 +2290,18 @@ app.whenReady().then(async () => {
     && /Athena 내장 API이므로 플러그인 권한 목록에 표시하지 않습니다/.test(pluginPermission.boundaryNote)
     && pluginPermission.errorBanner === 0
     && pluginPermission.inert === false);
+  // 모드 밖 폐기 문구 고정(RC-A3·RC-4). 폐기한 제안을 "승인할 수 있습니다"라고
+  // 말하면 §2.1 원칙 4를 어긴다 — 그 문구는 되살아나면 안 되고, 대신 다시 요청을
+  // 청하는 한 줄이 있어야 한다. 렌더 경로가 아니라 소스에 대고 재는 게이트다.
+  const pluginCopySources = ['chat.js', 'canvas.js', 'lib/plugin-proposal.js', 'lib/plugin-canvas.js']
+    .map((rel) => require('fs').readFileSync(require('path').join(__dirname, rel), 'utf-8'));
+  report.pluginMode.outOfModeCopy = {
+    retired: pluginCopySources.filter((src) => src.includes('플러그인 모드에서 승인할 수 있습니다')).length,
+    current: pluginCopySources.filter((src) => src.includes('플러그인 모드에서 다시 요청합니다')).length,
+  };
+  assertOk('pluginMode: 폐기된 "승인할 수 있습니다" 문구가 0건이고 "다시 요청합니다"가 남아 있다',
+    report.pluginMode.outOfModeCopy.retired === 0 && report.pluginMode.outOfModeCopy.current >= 1,
+    report.pluginMode.outOfModeCopy);
   assertOk('pluginMode: probe failure surfaces the reason and a retry instead of an empty toggle list',
     pluginProbeFailure.bannerText === '연결 실패 — spawn npx ENOENT'
     && pluginProbeFailure.retryLabel === '다시 확인'
