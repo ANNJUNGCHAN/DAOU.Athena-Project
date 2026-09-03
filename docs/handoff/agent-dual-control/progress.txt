@@ -37,3 +37,13 @@
 - 다음: 코드 알람 설계(백테스트 파이프라인 재사용 지점 조사 → 설계 문서 → Paper 보드 계획 → 사용자 확인).
 - 2026-09-03 사용자 승인: 코드 알람 방식 + Paper A-2 09~12 보드 4장(43WD-1·446V-1·44HD-1·44RV-1) 승인. 원칙: 코드는 참고용(접힘) · 노드·흐름 주인공(한국어 이름 + 입력·출력 실값) · 일봉+오늘 현재가 · 에이전트 모드 안 · 모드 간 철저 격리. 그래프 연계는 범위 밖(사용자 별도 지시).
 - 다음: ralplan(합의 계획) → ralph 구현. 구상 정본 docs/plans/2026-09-03-code-alarm-concept.md (a360ce8).
+
+## 2026-09-04 ralph 코드 알람 (세션 7713d907)
+- 다른 세션이 브랜치를 main과 통합(a408bb6)하며 Step 1·2 진행분을 WIP 6c1d248로 보존. 계획 파일은 CRLF로 변환됨(내용 동일).
+- CA-000 기준선 .omc/state/code-alarm-baseline.txt (3169/0 · 2295/2295 · parity 35).
+- CA-001 Step 1 검증: models WatchSpec·code.watch·code-watch, rules validate_watch(B-2/B-3), store 왕복(B-4), runtime can_activate 3사유(B-5)·restore_trigger_state(B-20), exec grep(B-6). 653 passed(test_routines_core + unit/test_routines_api + api update/detail + mcp). B-22는 api/routines.py가 mode=='realtime-ws'일 때만 구독하므로 자연 충족(Step 5에서 테스트 추가).
+- CA-002 Step 2: host.run_strategy(trace_names=) + __main__ 래핑 → node_io.json {calls:{name:{name,args,kwargs,returned,error}},truncated}. B-10a 동일성 테스트. 백테스트 회귀 114+66 통과.
+- Opus 529 과부하로 executor 4회 중단 — Step 1 감사는 직접 수행.
+- CA-003 Step 3 (직접 구현): athena_api/watch/{data,runner,check,nodes}.py — assemble_frame(오늘 봉 합성/갱신·휴장 건너뛰기·CallBudget), WatchRunner(run_once/run, 세마포어, jobdir try/finally), run_check(D-1·쿨다운 시뮬·diagnose·B-23), build_nodes(최상위 함수=칸, NODE_LABELS). sandbox __main__ _summarize(None)→null 버그 수정. 테스트 24 + 샌드박스 16 = 40 통과, ruff 통과.
+- 학습: Write 도구가 test 파일을 CRLF로 쓴 사례 → 신규 파일도 node로 EOL 확인. heredoc 안 파이썬 문자열의 
+이 실제 개행으로 들어간 사례 → 긴 문자열 편집은 Edit 도구로.
