@@ -2421,6 +2421,11 @@ function handlePersistentCanvasResult(result) {
     if (result.envelope && result.envelope.canvas_type) context.canvasTypesSeen.push(result.envelope.canvas_type);
     if (label) context.canvasCaptionsSeen.push(label);
     if (liveSymbol) ensureRealtimeForSymbol(liveSymbol);
+    // pushed 카드는 shell 전용 사이드채널로 이미 그려졌지만 오브 창에는 오지
+    // 않는다. 오브에서 시작한 질의일 때만 같은 봉투를 한 번 전달한다.
+    if (context.origin === 'orb' && orbWin && !orbWin.isDestroyed()) {
+      orbWin.webContents.send('athena:orb-canvas-result', { ...result, ...metadata });
+    }
     return;
   }
   if (context.expand && !context.expandTriggered) {
@@ -2855,8 +2860,9 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
         if (ownController && activeRestRun !== ownController) {
           throw new Error('교체된 REST 데이터셋의 늦은 카드는 표시하지 않는다');
         }
-        return emitRestCanvasAndWaitForPaint({ ...payload, retryCardId }, {
+        return emitRestCanvasForOrigin({ ...payload, retryCardId }, {
           expand,
+          origin: overrides.origin,
           timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
         });
       }),
@@ -2907,6 +2913,7 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
   // 반환하지 않는다. 렌더러가 받는 권한은 위에서 발급한 opaque one-shot ID뿐이다.
   delete result.retryAction;
   result.retryable = Boolean(retryId);
+  result.canvasResultCount = Number(result.renderedCount) || 0;
   chartFollowupTracker.observe(result, dataset);
   if (!overrides.skipHistory && !overrides.userAlreadyPersisted && dataset && dataset.question) {
     historySink.saveChatMessage(
@@ -3080,6 +3087,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       allowRetry: true,
       conversationId: turnConversationId,
       userAlreadyPersisted: true,
+      origin,
     }),
   });
   if (simpleChartRoute.handled) {
@@ -3119,6 +3127,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       allowRetry: true,
       conversationId: turnConversationId,
       userAlreadyPersisted: true,
+      origin,
     });
   }
 
@@ -3142,8 +3151,9 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         if (activeSelectorFastRun !== selectorController) {
           throw new Error('교체된 Selector fast path의 늦은 카드는 표시하지 않는다');
         }
-        return emitRestCanvasAndWaitForPaint(payload, {
+        return emitRestCanvasForOrigin(payload, {
           expand,
+          origin,
           timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
         });
       },
@@ -3200,8 +3210,9 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
             if (activeSelectorFastRun !== selectorController) {
               throw new Error('교체된 Selector cold path의 늦은 카드는 표시하지 않는다');
             }
-            return emitRestCanvasAndWaitForPaint(payload, {
+            return emitRestCanvasForOrigin(payload, {
               expand,
+              origin,
               timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
             });
           },
@@ -3358,6 +3369,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       answerText,
       canvasTypes: [...new Set(canvasTypesSeen)],
       canvasCaptions: canvasCaptionsSeen,
+      canvasResultCount: canvasTypesSeen.length,
       diagnostics: null,
       durationMs: persistentResult.timings && persistentResult.timings.totalMs,
       turnId: persistentResult.turnId,
@@ -3381,14 +3393,14 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       // 계좌·주문 카드는 그대로 자연 배제된다.
       const liveSymbol = extractLiveQuoteSymbol(r.envelope);
       if (r.status === 'pushed') {
-        // 카드는 사이드 채널(startCanvasFeed)로 이미 도착했다 — 여기선 집계만.
-        // 이 side channel은 shellWin 고정이라(startCanvasFeed 참조, 범위 밖)
-        // 오브는 애초에 'pushed' 카드의 사본을 못 받는다 — 아래 sendLiveCanvasResult
-        // 호출부와 대칭을 맞춰 orb relay도 여기선 하지 않는다(기존 셸의 이중
-        // 렌더 방지 계약을 그대로 따른 것 — 신규 회귀 아님).
+        // shell에는 사이드 채널로 이미 도착했으므로 다시 보내지 않는다. 다만
+        // 오브 기원 질의는 그 사이드 채널을 구독하지 않으므로 오브에만 한 번 보낸다.
         if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
         if (label) canvasCaptionsSeen.push(label);
         if (liveSymbol) ensureRealtimeForSymbol(liveSymbol);
+        if (origin === 'orb' && orbWin && !orbWin.isDestroyed()) {
+          orbWin.webContents.send('athena:orb-canvas-result', r);
+        }
         return;
       }
       if (expand && !expandTriggered) {
@@ -3513,6 +3525,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     answerText,
     canvasTypes: [...new Set(canvasTypesSeen)],
     canvasCaptions: canvasCaptionsSeen,
+    canvasResultCount: canvasTypesSeen.length,
     diagnostics: result.diagnostics,
     durationMs: result.finalResult && result.finalResult.duration_ms,
   };
@@ -4400,6 +4413,23 @@ function sendRendererStartupNotification(target, payload) {
       finish(false);
     }
   });
+}
+
+function emitRestCanvasForOrigin(
+  payload,
+  { expand = true, timeoutMs = 3000, origin = 'shell' } = {},
+) {
+  // REST·Selector의 inline 응답은 WS 사이드 채널을 거치지 않는다. 따라서
+  // 오브에서 시작한 턴은 메인 캔버스의 기존 paint 계약을 그대로 수행하면서,
+  // 같은 권위 봉투를 오브에도 한 번 전달해야 카드미니가 빠지지 않는다.
+  if (origin === 'orb' && orbWin && !orbWin.isDestroyed()
+      && payload && payload.envelope) {
+    orbWin.webContents.send('athena:orb-canvas-result', {
+      status: 'success',
+      envelope: payload.envelope,
+    });
+  }
+  return emitRestCanvasAndWaitForPaint(payload, { expand, timeoutMs });
 }
 
 async function notifyStartupFailuresAfterExpansion(snapshot) {

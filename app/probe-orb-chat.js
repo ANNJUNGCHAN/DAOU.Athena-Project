@@ -54,6 +54,11 @@ async function main() {
   await mainMod.createWindows();
   const { shellWin, orbWin } = mainMod.getWins();
   if (!shellWin || !orbWin) throw new Error('shellWin/orbWin 못 찾음');
+  // createWindows()를 직접 부르는 프로브는 실제 BOOT→shell handoff를 생략한다.
+  // hide/show 전이를 한 번 발생시켜 프로덕션 handoff가 보내는 것과 같은
+  // athena:shell-visibility 초기 동기화를 만든다.
+  shellWin.hide();
+  await wait(100);
   shellWin.show();
   shellWin.focus();
 
@@ -61,7 +66,13 @@ async function main() {
   await wait(12000);
 
   // ---------- (1) 부팅 직후 초기 상태 ----------
-  const s1 = await orbState(orbWin);
+  let s1 = null;
+  const initialDeadline = Date.now() + 3000;
+  while (Date.now() < initialDeadline) {
+    s1 = await orbState(orbWin);
+    if (s1.orbMode === 'alert') break;
+    await wait(100);
+  }
   record('01-boot-초기상태(셸 표시중이라 alert 모드여야 함)', s1.orbMode === 'alert', s1);
 
   // ---------- (2) 셸 숨김(닫기 버튼 경로) → 오브 대화 모드 전이 ----------
@@ -104,13 +115,25 @@ async function main() {
       return {
         turnCount: turns ? turns.children.length : 0,
         lastAnswerText: answers.length ? answers[answers.length - 1].textContent : null,
+        kiumiCards: Array.from(document.querySelectorAll('.orb-kiumi-card')).map((card) => ({
+          boardId: card.dataset.boardId || null,
+          grammar: card.dataset.kiumiGrammar || null,
+          height: Math.round(card.getBoundingClientRect().height),
+          clientHeight: card.clientHeight,
+          scrollHeight: card.scrollHeight,
+        })),
       };
     })()`);
-    if (turnResult.lastAnswerText) break;
+    if (turnResult.lastAnswerText && turnResult.kiumiCards.length > 0) break;
     await wait(300);
   }
   const submitElapsedMs = Date.now() - submitStart;
   record('03-질의 제출→답변 턴 렌더', !!(turnResult && turnResult.lastAnswerText), { ...turnResult, elapsedMs: submitElapsedMs });
+  const directCard = turnResult && turnResult.kiumiCards && turnResult.kiumiCards[0];
+  record('03b-REST 직결 카드가 키우미 360×420 표면으로 전달됨',
+    !!directCard && directCard.boardId && directCard.height === 420
+      && directCard.scrollHeight <= directCard.clientHeight,
+    directCard || null);
 
   await orbWin.webContents.capturePage().then((img) => {
     fs.writeFileSync(path.join(OUT_DIR, 'probe-orb-chat-03-answered.png'), img.toPNG());

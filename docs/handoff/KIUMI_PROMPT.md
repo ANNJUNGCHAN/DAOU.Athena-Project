@@ -1,5 +1,10 @@
 # 키우미 미니 카드 전수 — 다른 컴퓨터에서 이어받는 프롬프트 (2026-09-03)
 
+> **중단: 아래 프롬프트는 실행 전 360×640 계획용 역사 문서다.** 사용자가 이후
+> **360×420**과 런타임 구현을 승인했으므로 아래 ralph 절차를 다시 실행하지 않는다.
+> 다른 컴퓨터에서는 `git fetch origin` 후 `git switch codex/kiumi-mini-cards-runtime`로
+> 전환하고 [최신 런타임 인계](./2026-09-03-kiumi-mini-cards-runtime.md)를 따른다.
+
 아래 두 블록을 순서대로 쓴다. **블록 A**는 터미널에서, **블록 B**는 Claude Code 첫 메시지로 통째로 붙여 넣는다.
 전제: 원래 컴퓨터에서 `kiumi/mini-cards` 브랜치가 푸시되어 있다(방법은 [2026-09-03-kiumi-mini-cards-handoff.md §4](./2026-09-03-kiumi-mini-cards-handoff.md) 와 이 문서 맨 아래 "보내는 쪽" 참고).
 

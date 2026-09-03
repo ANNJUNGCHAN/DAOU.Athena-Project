@@ -14,11 +14,12 @@
 > **프로덕션 브로커 연결은 설계상 불가능**하고(도메인 하드락), 검증된 것은
 > *mock 브로커 + live 시장 데이터*다.
 
-> 🟣 **2026-09-03 키우미 미니 카드 전수 — 스펙·합의 계획까지 끝났고 실행은 시작하지 않았다.**
-> 이어받는 절차·저장소 상태·사용자가 확정한 설계 축은 [2026-09-03-kiumi-mini-cards-handoff.md](./2026-09-03-kiumi-mini-cards-handoff.md)에 있다.
-> **원격 브랜치 `kiumi/mini-cards`(2a413d7)에 카드 표면 레인 스냅샷과 인계 문서가 함께 올라가 있다** — 다른 컴퓨터는 이 브랜치만 받으면 된다.
-> 정본은 `.omc/`(git 무시)라서 추적 사본을 [kiumi/](./kiumi/)에 두었다.
-> 다른 컴퓨터에서 바로 이어받으려면 [KIUMI_PROMPT.md](./KIUMI_PROMPT.md)의 블록 A(터미널)·블록 B(Claude Code 첫 메시지)를 순서대로 붙여 넣는다.
+> 🟢 **2026-09-03 키우미 카드미니 — 360×420 런타임 구현·전수 검증 완료.**
+> 다른 컴퓨터는 원격 브랜치 `codex/kiumi-mini-cards-runtime`을 받으면 된다.
+> 구현 계약, 검증 수치, 이어받기 명령은
+> [2026-09-03-kiumi-mini-cards-runtime.md](./2026-09-03-kiumi-mini-cards-runtime.md)에 있다.
+> 옛 [360×640 계획 인계](./2026-09-03-kiumi-mini-cards-handoff.md)와
+> [KIUMI_PROMPT.md](./KIUMI_PROMPT.md)는 역사 기록이며 다시 실행하지 않는다.
 
 > 🟠 **2026-09-03 카드 표면 Paper→코드 — W3 Tasks 1–8·canonical 재생성 완료, coverage 3,382/3,532(95.8%). nonvisual gate는 통과했지만 5보드 반응형 가독성 때문에 시각 gate FAIL; explicit responsive/glyph gate 설계와 composite schema 승인 대기.**
 > 이어받는 절차·수치·남은 일·사용자 확정 결정은 [2026-09-03-card-surface-paper-to-code.md](./2026-09-03-card-surface-paper-to-code.md)에 있다.

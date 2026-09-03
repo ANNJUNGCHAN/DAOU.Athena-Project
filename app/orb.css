@@ -848,6 +848,187 @@ html, body {
   color: var(--color-k-faint);
 }
 
+/* Paper H-1 카드미니 — 360×420 한 장을 오브 폭에 맞춰 그대로 배치한다.
+ * 카드 내부는 절대 스크롤하지 않는다. 긴 제목·라벨·값은 말줄임으로 숨기지 않고
+ * 자연스럽게 줄바꿈하며, 대화 이력 전체의 스크롤은 .orb-chat-body가 맡는다. */
+.orb-kiumi-card {
+  box-sizing: border-box;
+  width: 100%;
+  height: 420px;
+  min-height: 420px;
+  max-height: 420px;
+  flex: 0 0 420px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 14px 12px 12px;
+  border: 1px solid rgb(16 19 26 / 8%);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, var(--glass-canvas));
+  color: var(--color-k-text);
+  box-shadow: none;
+  -webkit-app-region: no-drag;
+}
+
+.orb-kiumi-head {
+  min-height: 52px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgb(16 19 26 / 8%);
+}
+
+.orb-kiumi-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-strong);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+  overflow-wrap: anywhere;
+}
+
+.orb-kiumi-meta {
+  flex: 0 1 42%;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 14px;
+  text-align: right;
+  color: var(--color-k-faint);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.orb-kiumi-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.orb-kiumi-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.orb-kiumi-row {
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(116px, 1.35fr);
+  align-items: center;
+  column-gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgb(16 19 26 / 8%);
+}
+.orb-kiumi-row:last-child { border-bottom: 0; }
+
+.orb-kiumi-label {
+  min-width: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-k-dim);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.orb-kiumi-value {
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  line-height: 17px;
+  font-weight: 500;
+  text-align: right;
+  color: var(--color-k-text);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+.orb-kiumi-value.is-up { color: var(--color-up); }
+.orb-kiumi-value.is-down { color: var(--color-down); }
+.orb-kiumi-value.is-flat { color: var(--color-flat); }
+.orb-kiumi-value.is-missing { color: var(--color-k-faint); }
+
+/* 복합 문법은 Paper 승인안대로 첫 KPI를 한 줄 전체에 두고, 보조 KPI 둘을
+ * 그 아래 두 칸에 둔다. 별도 배경을 만들지 않아 카드 안에 카드가 생기지 않는다. */
+.orb-kiumi-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid rgb(16 19 26 / 8%);
+}
+
+.orb-kiumi-kpi {
+  min-width: 0;
+  min-height: 66px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 0;
+}
+.orb-kiumi-kpi.is-primary {
+  grid-column: 1 / -1;
+  min-height: 72px;
+  border-bottom: 1px solid rgb(16 19 26 / 8%);
+}
+.orb-kiumi-kpi.is-secondary:first-of-type { padding-right: 10px; }
+.orb-kiumi-kpi.is-secondary:last-child {
+  padding-left: 10px;
+  border-left: 1px solid rgb(16 19 26 / 8%);
+}
+.orb-kiumi-kpi .orb-kiumi-value { text-align: left; font-size: 14px; line-height: 18px; }
+.orb-kiumi-kpi.is-primary .orb-kiumi-value { font-size: 17px; line-height: 22px; }
+
+.orb-kiumi-chart-headline {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border-bottom: 1px solid rgb(16 19 26 / 8%);
+}
+.orb-kiumi-chart-value { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.orb-kiumi-chart-value.is-primary { flex: 1 1 auto; }
+.orb-kiumi-chart-value.is-change { flex: 0 1 42%; align-items: flex-end; }
+.orb-kiumi-chart-value.is-primary .orb-kiumi-value { font-size: 18px; line-height: 22px; text-align: left; }
+.orb-kiumi-chart {
+  width: 100%;
+  height: 116px;
+  margin-top: 14px;
+}
+.orb-kiumi-chart-dates {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-k-faint);
+}
+
+.orb-kiumi-note {
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid rgb(16 19 26 / 8%);
+  font-size: 10px;
+  line-height: 14px;
+  color: var(--color-k-faint);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* 기능 카드만은 기존 주문 티켓 DOM과 실행 경로를 그대로 쓴다. H-1의 카드 높이와
+ * 한 표면 규칙만 덮어쓰고 버튼·게이트·상태 표시를 감추지 않는다. */
+.orb-kiumi-ticket {
+  gap: 12px;
+  padding: 14px 12px 12px;
+}
+
 /* board-33④ 오브용 미니 차트(Paper 4ZM-0 실측) — .orb-fold-card 셸을 그대로
  * 쓴다(축약 카드와 같은 표면 어휘). 지표・드로잉・매물대 없음, 그리드선・면적
  * 채움・끝점 마커도 없다 — 구성 상한(가격+등락률+선 1개+날짜 2개)을 넘지 않는다. */

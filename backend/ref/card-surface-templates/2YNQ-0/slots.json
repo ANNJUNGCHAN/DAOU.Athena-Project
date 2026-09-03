@@ -4160,5 +4160,101 @@
       "kor": "당일종가등락률",
       "unbound_reason": "이 보드에 그려지지 않는다 — 표의 등락률 열은 시간외 단일가 등락률(flu_rt)이고 정규장 등락률 자리는 없다. 레일 '정규장 종가 · 전일 종가'(s150)도 가격 두 개만 보인다"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "facts",
+    "title": "종목찾기 — 시간외 등락률",
+    "eyebrow": "CC-06 / 2YNQ-0",
+    "source_board": "CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "elements": [
+      {
+        "source_slot_id": "s038",
+        "label": "순위",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "01"
+      },
+      {
+        "source_slot_id": "s040",
+        "label": "종목코드",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "005930"
+      },
+      {
+        "source_slot_id": "s041",
+        "label": "현재가",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "151,200"
+      },
+      {
+        "source_slot_id": "s042",
+        "label": "당일종가",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "당일 종가 150,850"
+      },
+      {
+        "source_slot_id": "s043",
+        "label": "등락률",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+0.23%"
+      }
+    ],
+    "fold_counts": {
+      "total": 90,
+      "shown": 5,
+      "hidden": 85
+    },
+    "fold_note": "외 85개 항목을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+      "elements": "순위 · 종목코드 · 현재가 · 당일종가 · 등락률",
+      "grammar": "facts",
+      "folded": "외 85개 항목을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": true,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    },
+    "override_reason": "원본은 반복 레코드처럼 보이나 slots 표 구조가 없어 승인된 facts 문법으로 표시"
+  }
 }

@@ -3598,5 +3598,100 @@
       "display_dup": false
     }
   ],
-  "authoring_notes": "2차 저작(CC-01 레인). ① 오늘 행 정산 4칸(s037~s040)과 레일 정산 흐름 오늘 칸(s107)은 kt00001 settlement_forecast가 D+1·D+2만 주므로 파생으로 되돌렸다. ② 일자 열 둘째 줄(요일·당일·선택)은 결제일자 자체가 아니라 파생 표기라 static으로 못박고 첫 줄에 paired_with로 묶었다. ③ 펼침 표식 글리프(s063 ▾)에 열 전파가 남긴 d2_entra를 뗐다. ④ 제목·열 머리·부제는 static, 총자산·대비·건수·구간은 derived+formula로 적었다. ⑤ 결제일자는 표 일자 열·레일 태그·레일 흐름 10곳에 그려지므로 표 첫 행만 원본으로 두고 나머지 9곳에 display_dup를 붙였다. ⑥ 1차 저작이 쓴 kind:\"derived\"·kind:\"label\"은 추출기가 매번 새로 만드는 열쇠라 재추출에서 사라진다 — static·derived·formula(추출기가 지키는 저작 열쇠)로 바꿔 적어 재추출에도 견딘다. 사유 열쇠는 이 보드가 쓰던 static_reason으로 통일했다."
+  "authoring_notes": "2차 저작(CC-01 레인). ① 오늘 행 정산 4칸(s037~s040)과 레일 정산 흐름 오늘 칸(s107)은 kt00001 settlement_forecast가 D+1·D+2만 주므로 파생으로 되돌렸다. ② 일자 열 둘째 줄(요일·당일·선택)은 결제일자 자체가 아니라 파생 표기라 static으로 못박고 첫 줄에 paired_with로 묶었다. ③ 펼침 표식 글리프(s063 ▾)에 열 전파가 남긴 d2_entra를 뗐다. ④ 제목·열 머리·부제는 static, 총자산·대비·건수·구간은 derived+formula로 적었다. ⑤ 결제일자는 표 일자 열·레일 태그·레일 흐름 10곳에 그려지므로 표 첫 행만 원본으로 두고 나머지 9곳에 display_dup를 붙였다. ⑥ 1차 저작이 쓴 kind:\"derived\"·kind:\"label\"은 추출기가 매번 새로 만드는 열쇠라 재추출에서 사라진다 — static·derived·formula(추출기가 지키는 저작 열쇠)로 바꿔 적어 재추출에도 견딘다. 사유 열쇠는 이 보드가 쓰던 static_reason으로 통일했다.",
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "D+2 정산 후 계좌",
+    "eyebrow": "CC-01 / 3MTJ-0",
+    "source_board": "CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "elements": [
+      {
+        "source_slot_id": "s015",
+        "label": "주문가능금액",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "31,240,000원"
+      },
+      {
+        "source_slot_id": "s024",
+        "label": "매수비중",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "kind": "percent",
+          "precision": 1,
+          "derived": "100 - buy_wght"
+        },
+        "paper_text": "28.0%"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "종목별계좌평가현황",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "kind": "count"
+        },
+        "paper_text": "8종목"
+      },
+      {
+        "source_slot_id": "s041",
+        "label": "출금가능금액",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "28,940,000",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s042",
+        "label": "예수금",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "34,820,000",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 69,
+      "shown": 5,
+      "hidden": 64,
+      "scalars": 2,
+      "rows": 1
+    },
+    "fold_note": "스칼라 2개 · 행 1개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+      "elements": "주문가능금액 · 매수비중 · 종목별계좌평가현황 · 출금가능금액 · 예수금",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 1개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

@@ -7483,5 +7483,104 @@
       "kor": "등락율",
       "unbound_reason": "표에 '등락률' 열이 없다 — 현재가 셀 2번째 줄 '+3,985 · +2.05%'의 둘째 값이라 extra_fields로 선언했다"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 장중 투자자 상위",
+    "eyebrow": "CC-05 / 3063-0",
+    "source_board": "CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "elements": [
+      {
+        "source_slot_id": "s020",
+        "label": "순매수금액",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+310억원"
+      },
+      {
+        "source_slot_id": "s013",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+2,368억원"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "보조 지표",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "순매수 1위"
+      },
+      {
+        "source_slot_id": "s016",
+        "label": "변화",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "-1,186억원",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s022",
+        "label": "기준 시각",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "time",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "09:30 잠정",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 169,
+      "shown": 5,
+      "hidden": 164,
+      "scalars": 2,
+      "rows": 6
+    },
+    "fold_note": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+      "elements": "순매수금액 · 변화 · 보조 지표 · 기준 시각",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

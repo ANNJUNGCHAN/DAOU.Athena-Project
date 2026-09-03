@@ -5567,5 +5567,104 @@
       "static": true,
       "note": "조회 시각 표기 — ka30002 응답에 시각 필드가 없다"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "ELW 거래원별 10창구 전체",
+    "eyebrow": "CC-03 / 3TOM-0",
+    "source_board": "CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "elements": [
+      {
+        "source_slot_id": "s017",
+        "label": "순매수",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+210만"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "순매수",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "−90만"
+      },
+      {
+        "source_slot_id": "s023",
+        "label": "순매수",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+40만"
+      },
+      {
+        "source_slot_id": "s026",
+        "label": "거래원별ELW순매매상위",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "10창구",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s016",
+        "label": "변화",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "매수 1위",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 116,
+      "shown": 5,
+      "hidden": 111,
+      "scalars": 2,
+      "rows": 8
+    },
+    "fold_note": "스칼라 2개 · 행 8개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+      "elements": "순매수 · 거래원별ELW순매매상위 · 변화",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 8개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

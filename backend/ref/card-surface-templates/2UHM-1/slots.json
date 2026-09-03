@@ -3685,5 +3685,104 @@
       "kor": "장전구분",
       "unbound_reason": "이 보드에 그려지지 않는다 — '구분' 셀 보조줄이 '장중 · 오늘 1회'에서 '동적 ±3% · 오늘 1회'로 바뀌어 장전구분 자리가 사라졌다"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "시장·VI — 시장 상태와 VI 발동",
+    "eyebrow": "CC-06 / 2UHM-1",
+    "source_board": "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "elements": [
+      {
+        "source_slot_id": "s026",
+        "label": "장시작예상잔여시간",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "장 시작 09:00 · 잔여 없음"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "2,684.21"
+      },
+      {
+        "source_slot_id": "s028",
+        "label": "수량",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "3건"
+      },
+      {
+        "source_slot_id": "s038",
+        "label": "VI해제시각",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "time",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "해제 09:43:08",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s040",
+        "label": "종목코드",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "007660",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 57,
+      "shown": 5,
+      "hidden": 52,
+      "scalars": 1,
+      "rows": 1
+    },
+    "fold_note": "스칼라 1개 · 행 1개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+      "elements": "장시작예상잔여시간 · 변화 · 수량 · VI해제시각 · 종목코드",
+      "grammar": "compound",
+      "folded": "스칼라 1개 · 행 1개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

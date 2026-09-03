@@ -8483,5 +8483,104 @@
       "kor": "저가",
       "unbound_reason": "'시가 / 고가 / 저가' 한 셀에 값 3개 — 슬롯 하나에 mapping 2개 불가, extra_fields로 선언"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 신주인수권 전체",
+    "eyebrow": "CC-03 / 32XM-0",
+    "source_board": "CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "elements": [
+      {
+        "source_slot_id": "s020",
+        "label": "전일대비기호",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "9 · 5"
+      },
+      {
+        "source_slot_id": "s023",
+        "label": "등락율",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+18.4%"
+      },
+      {
+        "source_slot_id": "s021",
+        "label": "전일대비기호",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "보합 0"
+      },
+      {
+        "source_slot_id": "s024",
+        "label": "종목명",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "삼성중공업 1WR",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s017",
+        "label": "금액",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "51억원",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 209,
+      "shown": 5,
+      "hidden": 204,
+      "scalars": 2,
+      "rows": 12
+    },
+    "fold_note": "스칼라 2개 · 행 12개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+      "elements": "전일대비기호 · 등락율 · 종목명 · 금액",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 12개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

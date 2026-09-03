@@ -5470,5 +5470,100 @@
       "unbound_reason": "같은 텍스트를 여러 op가 제공하는 별칭 — extra_fields로 선언(슬롯 하나에 mapping 2개 불가) — 순매수 행 종목 코드는 ka10131 stk_cd와 같은 자리"
     }
   ],
-  "authoring_notes": "표 감지 실패: 머리 행 '외국인+기관'에 '+'가 있어 라벨 판정에서 빠지고 detect_tables가 Rank Table(34IW-0)을 표로 잡지 못한다. column_bindings가 비어 있어 셀 슬롯을 직접 저작했다."
+  "authoring_notes": "표 감지 실패: 머리 행 '외국인+기관'에 '+'가 있어 라벨 판정에서 빠지고 detect_tables가 Rank Table(34IW-0)을 표로 잡지 못한다. column_bindings가 비어 있어 셀 슬롯을 직접 저작했다.",
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "facts",
+    "title": "순위 — 외국인·기관 상위",
+    "eyebrow": "CC-05 / 30HY-0",
+    "source_board": "CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "elements": [
+      {
+        "source_slot_id": "s020",
+        "label": "외인순매수금액",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+518억원"
+      },
+      {
+        "source_slot_id": "s013",
+        "label": "수량",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "18종목"
+      },
+      {
+        "source_slot_id": "s016",
+        "label": "수량",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "6종목"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "추가 지표",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "외국인 순매수 1위"
+      },
+      {
+        "source_slot_id": "s022",
+        "label": "기타",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "08-31 확정"
+      }
+    ],
+    "fold_counts": {
+      "total": 133,
+      "shown": 5,
+      "hidden": 128
+    },
+    "fold_note": "외 128개 항목을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+      "elements": "외인순매수금액 · 수량 · 추가 지표 · 기타",
+      "grammar": "facts",
+      "folded": "외 128개 항목을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

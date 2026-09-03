@@ -10183,5 +10183,104 @@
       "expanded_board": null
     }
   ],
-  "unbound_reason": {}
+  "unbound_reason": {},
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "보유종목 — 종목별 평가·비중",
+    "eyebrow": "CC-01 / 2SCE-1",
+    "source_board": "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "elements": [
+      {
+        "source_slot_id": "s012",
+        "label": "총 평가금액",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "124,580,240원"
+      },
+      {
+        "source_slot_id": "s013",
+        "label": "총수익률(%)",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "수익률 +4.96%"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "종목별계좌평가현황",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "8종목"
+      },
+      {
+        "source_slot_id": "s026",
+        "label": "계좌평가잔고개별합산",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "보유종목 8종목",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s036",
+        "label": "종목번호",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "005930",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 149,
+      "shown": 5,
+      "hidden": 144,
+      "scalars": 2,
+      "rows": 6
+    },
+    "fold_note": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+      "elements": "총 평가금액 · 총수익률(%) · 종목별계좌평가현황 · 계좌평가잔고개별합산 · 종목번호",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

@@ -3488,5 +3488,78 @@
       "expanded_board": null,
       "display_dup": true
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "table",
+    "title": "관심 — ELW 행 펼침",
+    "eyebrow": "CC-06 / 3EWN-0",
+    "source_board": "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "elements": [
+      {
+        "source_slot_id": "s022",
+        "label": "종목명",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "삼성전자 2503 콜",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s023",
+        "label": "종목코드",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "58H215",
+        "rank": 2
+      },
+      {
+        "source_slot_id": "s025",
+        "label": "현재가",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1,245",
+        "rank": 3
+      }
+    ],
+    "fold_counts": {
+      "total": 68,
+      "shown": 3,
+      "hidden": 65,
+      "rows": 2
+    },
+    "fold_note": "외 2개 행을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+      "elements": "종목명 · 종목코드 · 현재가",
+      "grammar": "table",
+      "folded": "외 2개 행을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }
