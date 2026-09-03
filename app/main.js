@@ -2519,7 +2519,22 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
           if (step) {
             const elapsedMs = Date.now() - step.startedAt;
             step.elapsedMs = elapsedMs; // 재-tool_result(있을 리 없지만) 방어
-            sendFn({ id: block.tool_use_id, label: step.label, done: true, elapsedMs, error: !!block.is_error });
+            // MCP 콜드스타트는 도구 실패가 아니다(2026-09-03 실측). 세션이 막 뜨면
+            // 첫 호출이 "No such tool available … still connecting"으로 즉시 깨지고,
+            // 모델은 WaitForMcpServers로 기다렸다 같은 도구를 다시 부른다(live-prompt.js
+            // 규칙). 그런데 화면에는 빨간 "실패"로 찍혀서 사용자가 기능이 없는 줄
+            // 알았다 — 실제로 그렇게 읽었다는 제보로 이 결함을 찾았다. 숨기지는
+            // 않는다(무슨 일이 있었는지는 말한다): 실패가 아니라 대기로 분류한다.
+            const errorText = block.is_error ? extractToolResultText(block.content) : '';
+            const stillConnecting = /still connecting|No such tool available/i.test(errorText || '');
+            sendFn({
+              id: block.tool_use_id,
+              label: step.label,
+              done: true,
+              elapsedMs,
+              error: !!block.is_error && !stillConnecting,
+              retrying: stillConnecting,
+            });
             if (forwardNudgeGuard) {
               maybeForwardNudgeGuardProposal(step, block);
               maybeForwardBacktestChatAction(step, block);

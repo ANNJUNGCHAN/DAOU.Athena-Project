@@ -269,6 +269,13 @@ async def test_propose_edit_refuses_an_incomplete_proposal(edit: Any) -> None:
         arguments["edit"] = edit
     result = await graph_view_tools.dispatch(arguments)
     assert result.isError
+    # 막을 때는 회복 경로까지 적는다(2026-09-03 실사용으로 발견). 이 막음이
+    # isError로 끝나면 셸은 카드를 안 띄우고(main.js maybeForwardGraphChatAction)
+    # 사람에게는 "편집 도구가 응답하지 않는다"로만 보인다 — 실제로 확정 카드가
+    # 한 번도 뜨지 않았다. 모델이 다음에 무엇을 부를지 알아야 스스로 회복한다.
+    text = "".join(getattr(block, "text", "") for block in result.content)
+    assert "athena_brain action=entity" in text, text
+    assert "클릭하라고 떠넘기지 마라" in text, text
 
 
 # ── 알 수 없는 액션 ──────────────────────────────────────────────────────────

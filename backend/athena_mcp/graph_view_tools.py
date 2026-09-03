@@ -109,7 +109,12 @@ _INPUT_SCHEMA: dict[str, Any] = {
             "description": (
                 "action=propose_edit일 때의 제안. op=add|change|remove, "
                 "subject·object는 노드 이름, relation은 관계 이름, "
-                "reason은 왜 그렇게 고쳐야 하는지(카드 부제로 사람이 읽는다)."
+                "reason은 왜 그렇게 고쳐야 하는지(카드 부제로 사람이 읽는다). "
+                # relation의 출처를 지목한다 — 이것이 없어서 모델이 관계 이름을 못
+                # 채우고 매번 막혔다(2026-09-03 실사용: 확정 카드가 한 번도 안 떴다).
+                "relation은 athena_brain action=entity가 준 관계 목록의 이름을 그대로 "
+                "쓴다 — 화면에 보이는 한글 라벨이나 지어낸 이름을 넣으면 사람이 "
+                "무엇을 승인하는지 알 수 없다. 관계를 모르면 먼저 그것을 조회해라."
             ),
             "properties": {
                 "op": {"type": "string", "enum": list(_EDIT_OPS)},
@@ -245,13 +250,34 @@ async def dispatch(arguments: dict[str, Any]) -> types.CallToolResult:
 
     edit = arguments.get("edit")
     edit = edit if isinstance(edit, dict) else {}
+    # 막을 때는 **회복 경로까지** 적는다(2026-09-03 실사용으로 발견).
+    #
+    # 실앱에서 확정 카드가 한 번도 뜨지 않았다. 원인은 백엔드가 아니라 이 막음이었다:
+    # edit이 불완전하면 isError로 끝나고, 셸은 is_error인 결과를 카드로 만들지 않는다
+    # (main.js maybeForwardGraphChatAction). 그래서 사람에게는 "편집 도구가 응답하지
+    # 않는다"로만 보였고, 모델은 관계 이름을 못 채워 "노드를 직접 클릭해 주세요"라고
+    # 떠넘겼다 — 말로 시키는 것이 이 모드의 요점인데 그것이 막힌 셈이다.
+    #
+    # relation을 어디서 얻는지 스키마가 말해 주지 않은 것이 실제 구멍이었다. 위
+    # entity 필드가 이미 쓰는 방식대로("athena_brain action=entity로 id를 확인해라")
+    # 다음에 부를 것을 지목한다. 막는 것 자체는 그대로다 — 관계 없는 제안은 카드로
+    # 만들 수 없고(무엇을 고칠지 모른다), 지어낸 관계를 넣는 것이 더 나쁘다.
+    _RECOVERY = (
+        "athena_brain action=entity로 그 노드의 관계 목록을 먼저 확인해라 — "
+        "relation에는 거기 실린 관계 이름을 그대로 넣는다. "
+        "사람에게 노드를 클릭하라고 떠넘기지 마라."
+    )
     op = edit.get("op")
     if op not in _EDIT_OPS:
-        return _blocked(f"propose_edit의 edit.op은 {'/'.join(_EDIT_OPS)} 중 하나여야 한다.")
+        return _blocked(
+            f"propose_edit의 edit.op은 {'/'.join(_EDIT_OPS)} 중 하나여야 한다. {_RECOVERY}"
+        )
     obj = _text(edit.get("object"))
     relation = _text(edit.get("relation"))
     if obj is None or relation is None:
-        return _blocked("propose_edit의 edit에는 object와 relation(문자열)이 필요하다.")
+        return _blocked(
+            f"propose_edit의 edit에는 object와 relation(문자열)이 필요하다. {_RECOVERY}"
+        )
     return _success(
         {
             "delivered": "canvas",
