@@ -1822,10 +1822,64 @@ function closeGraphEditProposal() {
 function answerGraphEditProposal(choice) {
   const lib = graphEditProposalLib();
   if (!graphEditProposal || !lib) return;
-  const sentence = lib.proposalSentence(graphEditProposal, choice);
+  const item = graphEditProposal;
+  const sentence = lib.proposalSentence(item, choice);
   closeGraphEditProposal();
+
+  // 지우기는 **바로** 지운다(2026-09-03 사용자 확정 "내가 그래프창에 있으면 편집이라고
+  // 봐야지"). 수집(대화를 캐는 일)과 편집(주인이 화면에서 고치는 일)은 다른 일이다.
+  //
+  // 예전에는 이것도 답변 문장을 채팅으로 보내는 것이 전부였고, 반영은 다음 수집
+  // 배치가 했다 — 누른 직후 아무 일도 안 일어나니 모델이 같은 제안을 다시 냈고
+  // 사람은 같은 카드를 무한히 눌렀다(실측). 문장을 **보내지 않는** 것이 중요하다:
+  // 보내면 모델이 그것을 새 요청으로 읽어 또 제안하고, 루프가 그대로 남는다.
+  //
+  // relationId가 없으면(구버전 모델이 id를 안 실었거나 추가·수정 제안이면) 예전
+  // 경로를 그대로 쓴다 — 직접 쓰기는 아직 지우기 하나뿐이다.
+  if (choice === 'apply' && item.op === 'remove' && item.relationId) {
+    void retractGraphRelation(item);
+    return;
+  }
+
   // 건너뛰기는 아무것도 보내지 않는다 — 침묵을 답으로 굳히지 않는다.
   if (sentence) dispatchUserQuery(sentence);
+}
+
+// 채팅 흐름에 결과 한 줄. 'past-empty'는 과거 대화 복원이 "메시지가 없습니다"에
+// 쓰는 것과 같은 안내 톤이다 — 말풍선(사람/모델의 발화)이 아니라 화면이 하는 말이라
+// 같은 자리·같은 톤을 쓴다(새 시각 언어를 만들지 않는다).
+function appendSystemLine(text) {
+  if (!$history) return;
+  const line = document.createElement('div');
+  line.className = 'past-empty';
+  line.textContent = String(text == null ? '' : text);
+  $history.appendChild(line);
+  scrollAfterRender();
+}
+
+// 사람이 누른 취소를 그래프에 바로 반영한다. 실패하면 조용히 넘기지 않는다 —
+// 사람은 지웠다고 믿고 화면을 떠난다(§0 정직성). 성공하면 main이 화면을 다시
+// 읽게 하는 이벤트를 쏘므로 여기서 따로 다시 그리지 않는다.
+async function retractGraphRelation(item) {
+  const label = item.subjectImplicit
+    ? `"${item.object}" · '${item.relationText}'`
+    : `"${item.subject}" → "${item.object}" · '${item.relationText}'`;
+  let res = null;
+  try {
+    res = await window.athena.invoke('athena:brain-retract-relation', { relationId: item.relationId });
+  } catch (err) {
+    appendSystemLine(`${label} — 지우지 못했습니다: ${String((err && err.message) || err)}`);
+    return;
+  }
+  if (!res || !res.ok) {
+    appendSystemLine(`${label} — 지우지 못했습니다: ${(res && res.error) || '알 수 없는 이유'}`);
+    return;
+  }
+  if (res.removed === false) {
+    appendSystemLine(`${label} — 이미 없는 연결이었습니다.`);
+    return;
+  }
+  appendSystemLine(`${label} — 지웠습니다.`);
 }
 
 function renderGraphEditProposalCard() {

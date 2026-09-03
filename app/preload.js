@@ -82,6 +82,10 @@ const INVOKE_CHANNELS = new Set([
   'athena:brain-suggested-questions',
   // 그래프 모드 요약 뷰 "숨은 연관"(스텝7) — 군집 경계를 넘는 연결. 읽기 전용이다.
   'athena:brain-surprising-connections',
+  // 사람의 직접 취소(2026-09-03) — 확정 카드의 '적용'이 부른다. **쓰기다.**
+  // 모델은 이 채널에 닿지 않는다: athena_brain에는 쓰기 액션이 없고 이 백엔드
+  // 입구는 x-athena-llm-exposed:false다. 부르는 것은 사람이 누른 카드뿐이다.
+  'athena:brain-retract-relation',
   // 엔티티 타임라인(WP-C 배선, WP-G 소비) — 선택 패널 §10-4 "최근 변화"가
   // 부른다(controller.js fetchEntityTimeline). 읽기 전용이다.
   'athena:brain-entity-timeline',

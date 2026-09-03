@@ -163,3 +163,21 @@ test('CHOICES — 되물을 것들 카드와 같은 키 힌트를 쓴다', () =>
   assert.equal(CHOICES.reject.hint, null, '"아니다"는 오타로 눌리면 안 되므로 단축키가 없다');
   assert.equal(CHOICES.apply.label, '적용');
 });
+
+// 즉시 지우기(2026-09-03) — 카드가 relationId를 알면 '적용'이 그래프에서 바로 지운다.
+// 모르면 예전 경로(답변 문장 제출 → 수집 때 반영)를 쓴다. 그 갈림을 카드가 스스로
+// 판단하므로 이 값이 정규화에서 살아남아야 한다.
+test('normalizeProposal — relationId를 싣는다', () => {
+  const item = normalizeProposal({
+    op: 'remove', object: '삼성화재', relation: 'belongs_to', relationId: 'relation:abc',
+  }, { belongs_to: '소속' });
+  assert.equal(item.relationId, 'relation:abc');
+  assert.equal(item.relationText, '소속');
+});
+
+test('normalizeProposal — relationId가 없거나 비면 null이다(예전 경로로 떨어진다)', () => {
+  const without = normalizeProposal({ op: 'remove', object: 'x', relation: 'y' });
+  assert.equal(without.relationId, null);
+  const blank = normalizeProposal({ op: 'remove', object: 'x', relation: 'y', relationId: '   ' });
+  assert.equal(blank.relationId, null, '공백만 있는 id를 진짜 id로 쓰면 취소가 조용히 실패한다');
+});

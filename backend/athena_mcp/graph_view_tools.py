@@ -122,6 +122,16 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "object": {"type": "string"},
                 "relation": {"type": "string"},
                 "reason": {"type": "string"},
+                # op=remove일 때 이것이 있으면 사람이 '적용'을 누른 순간 그래프에서
+                # 바로 사라진다(2026-09-03). 없으면 예전처럼 답변 문장이 채팅으로
+                # 나가고 다음 수집 때 반영된다 — 즉시 반영을 원하면 id를 실어라.
+                "relation_id": {
+                    "type": "string",
+                    "description": (
+                        "지울 관계의 id. athena_brain action=entity가 관계마다 "
+                        "relation_id로 준다. op=remove일 때만 쓰인다."
+                    ),
+                },
             },
             "required": ["op", "object", "relation"],
         },
@@ -288,6 +298,10 @@ async def dispatch(arguments: dict[str, Any]) -> types.CallToolResult:
             "subject": _text(edit.get("subject")),
             "object": obj,
             "relation": relation,
+            # 있으면 카드가 '적용'에서 바로 지운다(2026-09-03). 없으면 null로 실려
+            # 화면이 예전 경로(문장 제출 → 수집)를 그대로 쓴다 — 카드가 어느 쪽인지
+            # 스스로 판단할 수 있어야 하므로 필드 자체는 항상 싣는다.
+            "relation_id": _text(edit.get("relation_id")),
             "reason": _text(edit.get("reason")),
             "notice": (
                 "아직 아무것도 바뀌지 않았다 — 확정 카드를 띄웠을 뿐이다. "
