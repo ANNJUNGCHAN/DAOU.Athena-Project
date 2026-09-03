@@ -39,6 +39,24 @@ test('카드미니 표면은 420px 고정이고 내부 스크롤이나 말줄임
   assert.match(styles, /\.orb-kiumi-value[\s\S]*white-space:\s*normal/);
 });
 
+test('카드미니는 내부 가로 구분선 없이 여백으로 정보 그룹을 나눈다', () => {
+  const horizontalDividerSelectors = [
+    '.orb-kiumi-head',
+    '.orb-kiumi-row',
+    '.orb-kiumi-kpis',
+    '.orb-kiumi-kpi.is-primary',
+    '.orb-kiumi-chart-headline',
+    '.orb-kiumi-note',
+  ];
+
+  for (const selector of horizontalDividerSelectors) {
+    const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const block = styles.match(new RegExp(`${escaped}\\s*\\{([\\s\\S]*?)\\}`));
+    assert.ok(block, `${selector} 스타일이 필요하다`);
+    assert.doesNotMatch(block[1], /border-(?:top|bottom)\s*:/, `${selector}에 가로 구분선이 남아 있다`);
+  }
+});
+
 test('백엔드가 먼저 push한 카드도 orb 기원 질의면 같은 오브 창으로 전달한다', () => {
   const persistentPushed = mainSource.match(/if \(result\.status === 'pushed'\) \{([\s\S]*?)\n  \}/);
   assert.ok(persistentPushed);

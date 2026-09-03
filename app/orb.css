@@ -878,7 +878,6 @@ html, body {
   justify-content: space-between;
   gap: 12px;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgb(16 19 26 / 8%);
 }
 
 .orb-kiumi-title {
@@ -924,9 +923,7 @@ html, body {
   align-items: center;
   column-gap: 12px;
   padding: 8px 0;
-  border-bottom: 1px solid rgb(16 19 26 / 8%);
 }
-.orb-kiumi-row:last-child { border-bottom: 0; }
 
 .orb-kiumi-label {
   min-width: 0;
@@ -960,7 +957,6 @@ html, body {
 .orb-kiumi-kpis {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-bottom: 1px solid rgb(16 19 26 / 8%);
 }
 
 .orb-kiumi-kpi {
@@ -975,7 +971,6 @@ html, body {
 .orb-kiumi-kpi.is-primary {
   grid-column: 1 / -1;
   min-height: 72px;
-  border-bottom: 1px solid rgb(16 19 26 / 8%);
 }
 .orb-kiumi-kpi.is-secondary:first-of-type { padding-right: 10px; }
 .orb-kiumi-kpi.is-secondary:last-child {
@@ -990,7 +985,6 @@ html, body {
   display: flex;
   align-items: center;
   gap: 18px;
-  border-bottom: 1px solid rgb(16 19 26 / 8%);
 }
 .orb-kiumi-chart-value { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .orb-kiumi-chart-value.is-primary { flex: 1 1 auto; }
@@ -1014,7 +1008,6 @@ html, body {
   flex: 0 0 auto;
   margin-top: auto;
   padding-top: 8px;
-  border-top: 1px solid rgb(16 19 26 / 8%);
   font-size: 10px;
   line-height: 14px;
   color: var(--color-k-faint);
