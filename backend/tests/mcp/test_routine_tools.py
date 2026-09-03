@@ -21,6 +21,7 @@ def test_tool_schema_allows_draft_list_and_propose():
         "draft",
         "list",
         "propose",
+        "propose_watch_code",
     ]
     assert tool.inputSchema["properties"]["propose"]["properties"]["control"][
         "enum"
@@ -205,3 +206,91 @@ async def test_propose_update_rejects_condition_keys(proposed, mock_http_client)
         )
     assert result.isError
     assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+
+
+# ── 감시 코드 착지(B-16) ─────────────────────────────────────────────────────
+
+
+def test_tool_schema_documents_the_code_watch_source_and_watch_block():
+    """산문이 계약이다 — 모델이 code.watch 초안의 watch 블록을 스키마만 보고 채운다."""
+    (tool,) = routine_tools.builtin_tool_defs()
+    schema_text = json.dumps(tool.inputSchema, ensure_ascii=False)
+    assert "code.watch" in schema_text
+    assert "watch" in tool.inputSchema["properties"]["draft"]["properties"]
+    watch_block = tool.inputSchema["properties"]["draft"]["properties"]["watch"]
+    assert set(watch_block["properties"]) == {
+        "project_id",
+        "path",
+        "version_hash",
+        "params",
+        "poll_interval_s",
+        "lookback_days",
+    }
+    assert "60~600" in schema_text and "7~90" in schema_text
+    assert "NODE_LABELS" in schema_text  # 한국어 제목을 파일에 적으라는 지시
+    assert set(tool.inputSchema["properties"]["watch_code"]["required"]) == {
+        "project_id",
+        "path",
+        "source",
+    }
+
+
+def test_confirm_is_still_absent_from_the_actions():
+    (tool,) = routine_tools.builtin_tool_defs()
+    actions = tool.inputSchema["properties"]["action"]["enum"]
+    assert "confirm" not in actions and "cancel" not in actions
+    assert "propose_watch_code" in actions
+
+
+@pytest.mark.asyncio
+async def test_propose_watch_code_posts_to_the_landing_route(mock_http_client):
+    async def handler(request):
+        assert request.method == "POST"
+        assert request.url.path == "/api/v1/routines/watch/code"
+        assert json.loads(request.content)["path"] == "watch/volume_spike.py"
+        return httpx.Response(
+            200,
+            json={
+                "path": "watch/volume_spike.py",
+                "code_hash": "b" * 64,
+                "bytes": 120,
+            },
+        )
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await routine_tools.dispatch(
+            {
+                "action": "propose_watch_code",
+                "watch_code": {
+                    "project_id": "p1",
+                    "path": "watch/volume_spike.py",
+                    "source": "def signals(df, p):\n    return df\n",
+                },
+            },
+            client,
+        )
+    assert not result.isError
+    payload = json.loads(result.content[0].text)
+    assert payload["code_hash"] == "b" * 64
+    assert payload["notice"] == "저장됨 — 검사 전"
+
+
+@pytest.mark.asyncio
+async def test_propose_watch_code_409_comes_back_as_a_blocked_result(mock_http_client):
+    """켜진 알람의 코드는 전송 실패가 아니라 막힌 것이다(R10)."""
+    detail = "켜져 있는 알람의 코드는 못 바꿈 — 먼저 일시중지하거나 새로 만들기"
+
+    async def handler(request):
+        return httpx.Response(409, json={"detail": detail})
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await routine_tools.dispatch(
+            {
+                "action": "propose_watch_code",
+                "watch_code": {"project_id": "p1", "path": "watch/a.py", "source": "x = 1"},
+            },
+            client,
+        )
+    assert result.isError
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+    assert detail in result.content[0].text

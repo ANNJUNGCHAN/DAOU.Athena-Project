@@ -262,6 +262,44 @@ async def source_catalog(request: Request) -> dict[str, Any]:
     }
 
 
+@router.post("/watch/code")
+async def save_watch_code_route(request: Request, body: dict[str, Any]) -> dict[str, Any]:
+    """감시 코드 착지 — 모델이 쓴 감시 함수를 프로젝트 폴더 안 `watch/<이름>.py`에 쓴다.
+
+    선언 위치가 계약이다 — `/{routine_id}`보다 **앞**에 있어야 'watch'가 루틴 id로
+    잡히지 않는다(`/source-catalog`과 같은 이유).
+
+    백테스트 표·등록부에는 아무 행도 만들지 않는다(R5·R9). 활성·일시중지 알람이
+    가리키는 파일은 409로 막는다(R10) — 이 문구는 화면이 그대로 보여주지 않는다.
+    """
+    from athena_api.watch.store_code import CodeLocked, save_watch_code
+
+    runtime = _runtime(request)
+    project_id = body.get("project_id")
+    if not isinstance(project_id, str) or not project_id.strip():
+        raise HTTPException(status_code=422, detail="프로젝트를 고르지 않음")
+    labels = body.get("labels")
+    if labels is not None and not isinstance(labels, dict):
+        raise HTTPException(status_code=422, detail="노드 제목 묶음은 이름-제목 짝이어야 한다")
+    try:
+        return save_watch_code(
+            project_id.strip(),
+            body.get("path"),
+            body.get("source"),
+            labels,
+            routine_store=runtime.store,
+        )
+    except KeyError:
+        raise HTTPException(status_code=404, detail="프로젝트 없음") from None
+    except CodeLocked:
+        raise HTTPException(
+            status_code=409,
+            detail="켜져 있는 알람의 코드는 못 바꿈 — 먼저 일시중지하거나 새로 만들기",
+        ) from None
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+
+
 @router.get("/{routine_id}")
 async def get_routine(request: Request, routine_id: str) -> dict[str, Any]:
     """단일 루틴 상세 — 목록(_view)과 달리 **조건 원문**을 낸다.
