@@ -1398,7 +1398,7 @@
       "alt_mappings": null,
       "kor": "적요명",
       "format": {
-        "unit": "shares",
+        "unit": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -1672,7 +1672,7 @@
       "alt_mappings": null,
       "kor": "적요명",
       "format": {
-        "unit": "shares",
+        "unit": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -2200,7 +2200,7 @@
       "alt_mappings": null,
       "kor": "적요명",
       "format": {
-        "unit": "shares",
+        "unit": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -2445,7 +2445,7 @@
       "alt_mappings": null,
       "kor": "적요명",
       "format": {
-        "unit": "shares",
+        "unit": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -3234,7 +3234,7 @@
       "alt_mappings": null,
       "kor": "적요명",
       "format": {
-        "unit": "shares",
+        "unit": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"

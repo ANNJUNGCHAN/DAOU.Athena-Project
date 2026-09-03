@@ -387,7 +387,7 @@
       "alt_mappings": null,
       "kor": "계좌번호",
       "format": {
-        "unit": "time",
+        "unit": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -1192,9 +1192,9 @@
       "alt_mappings": null,
       "kor": "종목명",
       "format": {
-        "unit": "date",
+        "unit": "text",
         "sign": false,
-        "precision": 2,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": null,
@@ -3446,9 +3446,9 @@
       "alt_mappings": null,
       "kor": "종목명",
       "format": {
-        "unit": "date",
+        "unit": "text",
         "sign": false,
-        "precision": 2,
+        "precision": 0,
         "tone": "neutral"
       },
       "paired_with": null,
