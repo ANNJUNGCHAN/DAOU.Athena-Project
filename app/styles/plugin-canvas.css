@@ -123,8 +123,10 @@
   resize: vertical;
 }
 
-/* 재시작 안내 — 경고가 아니라 사실 고지라 톤을 낮춘다. */
-.plugin-canvas-restart-notice {
+/* 재시작 안내 — 경고가 아니라 사실 고지라 톤을 낮춘다.
+   초안 발산 알림도 같은 사실 고지라 색을 공유한다(치수는 아래에서 덮는다). */
+.plugin-canvas-restart-notice,
+.plugin-canvas-draft-divergence {
   margin: 4px 0 12px;
   padding: 9px 12px;
   border: 1px solid #f0d8a8;
@@ -724,5 +726,341 @@
   .plugin-canvas-toggle,
   .plugin-canvas-toggle-knob {
     transition: none;
+  }
+}
+
+/* --- 승인 카드 · 3상태 (Paper 플러그인 05 2NW8-2 · 06 2NXS-2) ---------------
+   캔버스 위에 뜨는 모달이 아니라 패널 위에 얹히는 목록이다. 폭 560px은
+   Paper 05의 카드 실값이고, 좁은 창에서는 캔버스 폭까지만 줄어든다. */
+.plugin-canvas-proposals {
+  padding: 22px 26px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.plugin-canvas-proposal {
+  width: 560px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-lg);
+  background: var(--color-k-panel);
+}
+
+/* 머리는 출처 알약 → 제목 순으로 읽힌다. 상태 문구(.agent-mode)는 알약 옆
+   같은 줄에 붙고, 제목은 100% 기저폭이라 늘 다음 줄이다. */
+.plugin-canvas-proposal-head {
+  padding: 16px 20px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  border-bottom: 1px solid var(--color-k-line-soft);
+}
+
+.plugin-canvas-proposal-source {
+  flex: 0 0 auto;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-k-line-soft);
+  color: var(--color-down);
+  font-family: var(--font-strong, "Daki B", system-ui, sans-serif);
+  font-size: var(--text-sm);
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.plugin-canvas-proposal-title {
+  flex: 1 1 100%;
+  min-width: 0;
+  margin: 0;
+  color: var(--color-k-text);
+  font-family: var(--font-strong, "Daki B", system-ui, sans-serif);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.plugin-canvas-proposal-line,
+.plugin-canvas-proposal-reason,
+.plugin-canvas-proposal-note,
+.plugin-canvas-proposal-actions {
+  margin: 12px 20px 0;
+}
+
+.plugin-canvas-proposal-head + .plugin-canvas-proposal-line,
+.plugin-canvas-proposal-head + .plugin-canvas-proposal-reason,
+.plugin-canvas-proposal-head + .plugin-canvas-proposal-note,
+.plugin-canvas-proposal-head + .plugin-canvas-proposal-actions {
+  margin-top: 16px;
+}
+
+.plugin-canvas-proposal-line {
+  color: var(--color-k-text);
+  font-size: var(--text-sm);
+  line-height: 17px;
+}
+
+.plugin-canvas-proposal-reason {
+  color: var(--color-k-dim);
+  font-size: var(--text-sm);
+  line-height: 17px;
+}
+
+/* 경계 고지는 근거보다 한 단계 더 옅다 — 제목 → 내용 → 근거 → 고지 순으로
+   읽히게 둔다. */
+.plugin-canvas-proposal-note {
+  color: var(--color-k-hint);
+  font-size: var(--text-sm);
+  line-height: 17px;
+}
+
+.plugin-canvas-proposal-actions {
+  margin-bottom: 20px;
+  padding-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 클릭 영역 하한 32px은 여기 한 곳에서 준다(US-006). */
+.plugin-canvas-action.plugin-canvas-proposal-action {
+  min-width: 32px;
+  min-height: 32px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-strong, "Daki B", system-ui, sans-serif);
+  font-size: var(--text-sm);
+  line-height: 16px;
+}
+
+.plugin-canvas-proposal-action.is-proposal-approve {
+  padding-inline: 18px;
+  background: var(--color-brand);
+  color: var(--color-k-panel);
+}
+
+.plugin-canvas-proposal-action.is-proposal-reject {
+  border: 1px solid var(--color-k-line);
+  background: var(--color-k-line-soft);
+  color: var(--color-k-bright);
+}
+
+.plugin-canvas-proposal-action.is-proposal-again {
+  border: 1px solid var(--color-k-line);
+  background: var(--color-k-panel);
+  color: var(--color-k-soft);
+}
+
+.plugin-canvas-proposal-action:focus-visible {
+  outline: 2px solid var(--color-down);
+  outline-offset: 2px;
+}
+
+/* 누를 수 없는 버튼은 색을 지운다 — 눌러도 되는 것처럼 보이지 않게 한다.
+   hover의 밝기 변화도 함께 끊는다. */
+.plugin-canvas-proposal-action[disabled] {
+  border-color: var(--color-k-line-soft);
+  background: var(--color-k-line-soft);
+  color: var(--color-k-ghost);
+  cursor: default;
+}
+
+.plugin-canvas-proposal-action[disabled]:hover,
+.plugin-canvas-proposal-action[disabled]:focus-visible {
+  filter: none;
+}
+
+/* 만료 — 승인만 막히고 카드는 아직 살아 있다(다시 제안받기가 남는다). */
+.plugin-canvas-proposal[data-proposal-state="stale"] .plugin-canvas-proposal-title {
+  color: var(--color-k-soft);
+}
+
+.plugin-canvas-proposal[data-proposal-state="stale"] .plugin-canvas-proposal-source {
+  color: var(--color-k-hint);
+}
+
+/* 처리됨 — 카드 전체가 기록으로 가라앉는다(Paper 06 상태 6). */
+.plugin-canvas-proposal[data-proposal-state="done"] {
+  background: var(--color-k-panel2);
+}
+
+.plugin-canvas-proposal[data-proposal-state="done"] .plugin-canvas-proposal-title,
+.plugin-canvas-proposal[data-proposal-state="done"] .plugin-canvas-proposal-source {
+  color: var(--color-k-hint);
+}
+
+/* --- 권한 초안 · 발산 알림 (Paper 플러그인 01 FT6-0 · 09 3ZNO-0) ------------ */
+.plugin-canvas-draft-note {
+  margin: 0;
+  color: var(--color-k-hint);
+  font-size: var(--text-sm);
+  line-height: 14px;
+}
+
+/* 발산은 경고가 아니라 사실 고지다 — 재시작 안내와 같은 톤을 쓴다(색은 위
+   .plugin-canvas-restart-notice 규칙과 공유한다). */
+.plugin-canvas-draft-divergence {
+  margin: 0;
+  padding: 11px 13px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  font-size: var(--text-sm);
+  line-height: 17px;
+}
+
+.plugin-canvas-draft-divergence-text {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.plugin-canvas-action.is-draft-keep,
+.plugin-canvas-action.is-draft-reset {
+  min-width: 32px;
+  min-height: 32px;
+  padding: 7px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-md);
+  font-family: var(--font-strong, "Daki B", system-ui, sans-serif);
+  line-height: 16px;
+}
+
+.plugin-canvas-action.is-draft-keep {
+  background: var(--color-k-panel);
+  color: var(--color-k-bright);
+}
+
+.plugin-canvas-action.is-draft-reset {
+  background: var(--color-k-line-soft);
+  color: var(--color-k-soft);
+}
+
+/* --- 관리 행 힌트 — 버튼이 즉시 실행하지 않는다는 사실을 그 자리에서 말한다 --- */
+.plugin-canvas-manage-hint {
+  flex: 0 0 auto;
+  color: var(--color-k-hint);
+  font-size: var(--text-xs);
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+/* --- 감사 로그 (Paper 플러그인 02 15J-0) -----------------------------------
+   4열 폭 90/180/360/120은 보드 실값이다. 도구 열만 늘고 줄어든다. */
+.plugin-canvas-audit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.plugin-canvas-audit-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.plugin-canvas-audit-head,
+.plugin-canvas-audit-row {
+  padding: 0 12px;
+  display: grid;
+  grid-template-columns: 90px 180px minmax(0, 360px) 120px;
+  align-items: center;
+  border-bottom: 1px solid var(--color-k-line-soft);
+}
+
+.plugin-canvas-audit-head {
+  min-height: 30px;
+}
+
+.plugin-canvas-audit-head > * {
+  color: var(--color-k-hint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  line-height: 14px;
+}
+
+.plugin-canvas-audit-row {
+  min-height: 40px;
+}
+
+.plugin-canvas-audit-row:last-child {
+  border-bottom: 0;
+}
+
+.plugin-canvas-audit-time {
+  color: var(--color-k-dim);
+  font-family: var(--font-mono, "Geist Mono", ui-monospace, monospace);
+  font-size: var(--text-sm);
+  line-height: 16px;
+}
+
+.plugin-canvas-audit-plugin,
+.plugin-canvas-audit-feature {
+  overflow: hidden;
+  min-width: 0;
+  padding-right: 12px;
+  color: var(--color-k-text);
+  font-size: var(--text-base);
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plugin-canvas-audit-plugin {
+  font-family: var(--font-strong, "Daki B", system-ui, sans-serif);
+}
+
+/* 결과는 알약이다 — 셀 폭을 채우지 않고 왼쪽에 붙는다. */
+.plugin-canvas-audit-result {
+  justify-self: start;
+  min-height: 20px;
+  padding: 3px 8px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-full);
+  color: var(--color-k-text);
+  font-size: var(--text-xs);
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.plugin-canvas-audit-result.is-success {
+  background: color-mix(in oklab, var(--color-ok) 14%, transparent);
+}
+
+.plugin-canvas-audit-result.is-failure {
+  background: color-mix(in oklab, var(--color-warn) 16%, transparent);
+}
+
+@media (max-width: 760px) {
+  .plugin-canvas-proposals {
+    padding: 18px 18px 0;
+  }
+
+  /* 좁은 창에서는 시각·별칭만 한 줄에 두고 도구·결과를 다음 줄로 흘린다. */
+  .plugin-canvas-audit-head,
+  .plugin-canvas-audit-row {
+    grid-template-columns: 90px minmax(0, 1fr);
+    gap: 2px 8px;
+    padding-block: 8px;
+  }
+
+  .plugin-canvas-audit-head > *:nth-child(3),
+  .plugin-canvas-audit-head > *:nth-child(4) {
+    display: none;
+  }
+
+  .plugin-canvas-audit-feature {
+    grid-column: 2;
+    white-space: normal;
+  }
+
+  .plugin-canvas-audit-result {
+    grid-column: 2;
   }
 }

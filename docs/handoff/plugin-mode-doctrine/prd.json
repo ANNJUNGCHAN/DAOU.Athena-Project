@@ -99,7 +99,7 @@
     {
       "id": "US-006",
       "title": "W3-5 CSS — 승인 카드·3상태(Paper 픽셀 대조, 토큰만)",
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "app/styles/plugin-canvas.css: 승인 카드·3상태·출처 라벨·발산 알림 스타일, tokens.css 변수만, 신규 hex 0",
         "hex grep 신규 히트 0",
