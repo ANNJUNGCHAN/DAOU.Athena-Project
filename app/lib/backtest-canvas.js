@@ -291,6 +291,18 @@ const SIGNAL_STAGES = [
   ['signal', '신호'], ['pending_approval', '승인'], ['ordered', '주문'], ['filled', '체결'],
 ];
 
+// 오늘 로그(보드 23)의 단계 뱃지. SIGNAL_STAGES는 "사람이 승인하는 길"의 네 단계만
+// 담는데, 자동 집행이 붙으며 백엔드가 차단·판단 보류·해당 없음도 같은 목록에 실어
+// 보낸다(deploy.py). 그 셋을 stage 원문 그대로 뱃지에 찍으면 화면만 영어가 된다.
+const SIGNAL_STAGE_LABELS = Object.assign(
+  Object.fromEntries(SIGNAL_STAGES),
+  { blocked: '차단', in_doubt: '판단 보류', skipped: '해당 없음' },
+);
+
+// 하루 최대 주문 수(limits.max_orders_per_day)와 같은 축으로 세는 단계 — 실제로 주문이
+// 나간 것만이다. 신호·승인 대기는 한도를 쓰지 않는다.
+const SIGNAL_ORDER_STAGES = ['ordered', 'filled'];
+
 function el(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -338,6 +350,53 @@ function metricTileValue(tile, metrics) {
 function metricTileSub(tile, metrics) {
   if (!metrics || !tile.sub) return '';
   try { return tile.sub(metrics) || ''; } catch { return ''; }
+}
+
+// ── 오늘 로그(보드 23) ──────────────────────────────────────────────────────
+
+function signalStageLabel(stage) {
+  return SIGNAL_STAGE_LABELS[stage] || String(stage == null ? '' : stage);
+}
+
+// "10주 74,250원". 수량도 체결가도 없으면 **빈 문자열**이다 — 없는 값을 0이나 '—'로
+// 채워 넣으면 나가지도 않은 주문을 사람이 나갔다고 읽는다(신호 단계에는 둘 다 없다).
+function signalQtyText(sig) {
+  const parts = [];
+  const qty = Number(sig && sig.qty);
+  if (Number.isFinite(qty) && qty > 0) parts.push(`${qty.toLocaleString('ko-KR')}주`);
+  const price = Number(sig && sig.fill_price);
+  if (Number.isFinite(price) && price > 0) parts.push(`${price.toLocaleString('ko-KR')}원`);
+  return parts.join(' ');
+}
+
+// 보드 23의 시각 칸("09:31"). 신호에는 날짜(dt=YYYYMMDD)뿐이고 시각은 created_at에만
+// 있다 — 지금 목록 라우트가 그것을 싣지 않으므로 없으면 빈 문자열이고, 화면은 칸을
+// 통째로 뺀다. 오늘 것만 보는 자리에 날짜를 시각인 척 세우지 않는다.
+function signalTimeText(sig) {
+  const raw = sig && sig.created_at;
+  if (!raw) return '';
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return '';
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+// 한 줄짜리 사람 말. 차단 사유가 있으면 그것이 이유를 대신한다 — 왜 안 나갔는지가
+// 왜 신호가 났는지보다 먼저 읽혀야 한다.
+function signalLineText(sig, stkCd) {
+  const head = [stkCd || '', signalQtyText(sig)].filter(Boolean).join(' ');
+  const note = String((sig && (sig.blocked_reason || sig.reason)) || '');
+  if (head && note) return `${head} — ${note}`;
+  return head || note;
+}
+
+function todaySignals(signals, today) {
+  return (Array.isArray(signals) ? signals : []).filter((s) => s && s.dt === today);
+}
+
+function todayOrderCount(signals, today) {
+  return todaySignals(signals, today)
+    .filter((s) => SIGNAL_ORDER_STAGES.includes(s.stage)).length;
 }
 
 // 커버리지 막대의 채움 비율(보드 04). 필요 페이지가 0이면 100%다.
@@ -734,6 +793,18 @@ function createBacktestCanvas(options) {
     || (typeof setTimeout !== 'undefined' ? setTimeout : null);
   const clearTimeoutImpl = deps.clearTimeoutImpl
     || (typeof clearTimeout !== 'undefined' ? clearTimeout : null);
+
+  // 배포 계약에 자동 매매가 붙으며 늘어난 두 손잡이(2026-09-04, 보드 23).
+  //   armDeployment(id, armed) → {armed}  · 사람 클릭 전용. 없으면 토글을 아예 안 그린다.
+  //   listSignals(id)          → [signal] · 오늘 로그가 읽는다.
+  // listSignals가 없으면 이전 이름(signals)을 그대로 받는다 — 배선 파일은 다른 사람이
+  // 쥐고 있고, 이름 하나 때문에 오늘 로그가 통째로 사라지면 안 된다.
+  const readSignals = deps.listSignals || deps.signals || null;
+  // 배포별 신호 목록 {배포id: [signal]} — 키가 없으면 "아직 못 읽었다"는 뜻이다.
+  let deploySignals = {};
+  // 무장이 거절당한 이유 {배포id: 문구}. 조용히 되돌리면 사람은 왜 안 켜지는지 모른 채
+  // "자동으로 사고팔린다"고 믿는다(409 = 멈춘 배포).
+  let armErrors = {};
 
   let presets = [];
   // 내 폴더의 .py를 프리셋과 같은 자리에 세운 등록부(GET /backtest/user-strategies).
@@ -1566,8 +1637,25 @@ function createBacktestCanvas(options) {
   async function loadDeployments() {
     setState({ view: 'deploy', tab: 'deploy' });
     if (!deps.deployments) return;
-    try { setState({ deployments: await deps.deployments() }); }
-    catch (err) { fail(err); }
+    let list;
+    try { list = await deps.deployments(); }
+    catch (err) { fail(err); return; }
+    setState({ deployments: list });
+    await loadDeploySignals(Array.isArray(list) ? list : []);
+  }
+
+  // 오늘 로그가 읽을 신호를 배포 목록과 같은 새로고침에서 채운다. 못 읽은 배포는
+  // 아예 키를 두지 않는다 — 빈 배열로 두면 "오늘 아무 일도 없었다"는 거짓말이 된다.
+  async function loadDeploySignals(list) {
+    if (!readSignals) return;
+    const next = {};
+    for (const dep of list) {
+      if (!dep || !dep.id) continue;
+      try { next[dep.id] = await readSignals(dep.id); }
+      catch { /* 그 배포만 로그가 없다 — 배포 목록 전체를 오류 화면으로 바꾸지 않는다 */ }
+    }
+    deploySignals = next;
+    render();
   }
 
   function resumePollingIfNeeded() {
@@ -5435,9 +5523,12 @@ function createBacktestCanvas(options) {
     const wrap = el('div', 'backtest-deploy');
     const head = el('div', 'backtest-card-head');
     head.appendChild(el('div', 'backtest-card-title', '전략 배포 · 실전 적용'));
+    // 2026-09-04부터 이 문장은 "신호까지만"이 아니다 — auto로 배포하고 무장하면 사람
+    // 클릭 없이 주문이 나간다(보드 23). 화면이 옛 약속을 계속 말하면 그것이 거짓말이다.
     head.appendChild(el(
       'div', 'backtest-card-note',
-      '배포는 신호까지만 만듭니다 — 주문은 주문 게이트를 통과합니다',
+      '키우미를 켜면 미리 정한 한도 안에서 주문까지 자동으로 나갑니다 — '
+      + '그 밖의 배포는 신호까지만 만듭니다',
     ));
     wrap.appendChild(head);
 
@@ -5446,16 +5537,25 @@ function createBacktestCanvas(options) {
       wrap.appendChild(el('div', 'backtest-card-empty', '아직 배포한 전략이 없습니다'));
     }
     list.forEach((dep) => {
+      const item = el('div', 'backtest-deploy-item');
       const row = el('div', `backtest-deploy-row is-${dep.status}`);
       row.appendChild(el('span', 'backtest-deploy-symbol', dep.stk_cd));
       row.appendChild(el('span', 'backtest-deploy-mode', dep.mode_label || dep.mode));
+      // "지금 실제로 자동 집행되는가"는 서버가 셋(모드·무장·상태)을 합쳐 준 auto_armed
+      // 하나로만 읽는다 — 화면에서 다시 조합하면 규칙이 두 곳에 살게 된다.
+      if (dep.auto_armed) row.appendChild(el('span', 'backtest-deploy-auto', '자동'));
       row.appendChild(el('span', 'backtest-deploy-status', dep.status));
       row.appendChild(button('backtest-deploy-stop', '배포 중지', async () => {
         if (!deps.stopDeployment) return;
         try { await deps.stopDeployment(dep.id); await loadDeployments(); }
         catch (err) { fail(err); }
       }));
-      wrap.appendChild(row);
+      item.appendChild(row);
+      const arm = renderDeployArm(dep);
+      if (arm) item.appendChild(arm);
+      const log = renderDeployLog(dep);
+      if (log) item.appendChild(log);
+      wrap.appendChild(item);
     });
 
     wrap.appendChild(renderDeployForm());
@@ -5465,6 +5565,90 @@ function createBacktestCanvas(options) {
       + '않습니다. 실전과 백테스트의 차이는 배포 후 신호 목록에서 그대로 보여드립니다.',
     ));
     return wrap;
+  }
+
+  // 키우미 줄(보드 23) — 이 스위치 하나가 "사람이 누른다"와 "혼자 나간다"를 가른다.
+  // 배선이 없는 구버전에서는 아예 그리지 않는다. 눌러도 아무 일 없는 토글은 사람에게
+  // 켜져 있다는 거짓말을 남긴다.
+  function renderDeployArm(dep) {
+    if (!deps.armDeployment) return null;
+    const on = Boolean(dep.armed);
+    const box = el('div', `backtest-deploy-arm${on ? ' is-on' : ''}`);
+    box.appendChild(el('div', 'backtest-deploy-arm-mark', '키'));
+    const text = el('div', 'backtest-deploy-arm-text');
+    text.appendChild(el('div', 'backtest-deploy-arm-title', '키우미 켜짐 = 자동 매매'));
+    text.appendChild(el(
+      'div', 'backtest-deploy-arm-detail',
+      '신호가 나면 위 한도 안에서 주문까지 자동으로 나갑니다. 한도를 넘거나 '
+      + '연속 손절 3회·낙폭 15%에 닿으면 스스로 멈춥니다.',
+    ));
+    box.appendChild(text);
+
+    // 토글의 시각 상태는 서버가 준 armed다 — 누른 뒤 낙관적으로 뒤집지 않는다.
+    const toggle = button(`backtest-deploy-arm-toggle${on ? ' is-on' : ''}`, null, async () => {
+      try {
+        await deps.armDeployment(dep.id, !on);
+        delete armErrors[dep.id];
+        await loadDeployments();
+      } catch (err) {
+        armErrors[dep.id] = String((err && err.message) || err);
+        render();
+      }
+    });
+    toggle.setAttribute('aria-pressed', String(on));
+    toggle.setAttribute('aria-label', '키우미 자동 매매');
+    toggle.appendChild(el('span', 'backtest-deploy-arm-knob'));
+    box.appendChild(toggle);
+
+    const reason = armErrors[dep.id];
+    if (!reason) return box;
+    const wrap = el('div', 'backtest-deploy-arm-wrap');
+    wrap.appendChild(box);
+    wrap.appendChild(el('div', 'backtest-deploy-arm-error', `무장하지 못했습니다 — ${reason}`));
+    return wrap;
+  }
+
+  // 오늘 로그(보드 23) — 오늘 것만 센다. 신호를 아직 못 읽었으면 로그 자체를 안 그린다.
+  function renderDeployLog(dep) {
+    const signals = deploySignals[dep.id];
+    if (!signals) return null;
+    const today = SpecModel.todayYyyymmdd();
+    const rows = todaySignals(signals, today);
+
+    const box = el('div', 'backtest-deploy-log');
+    const head = el('div', 'backtest-deploy-log-head');
+    head.appendChild(el('span', 'backtest-deploy-log-title', '오늘 로그'));
+    head.appendChild(el(
+      'span', 'backtest-deploy-log-when',
+      `${today.slice(0, 4)}-${today.slice(4, 6)}-${today.slice(6, 8)} · 모의서버`,
+    ));
+    // 하루 한도를 모르면 분모를 지어내지 않는다 — 카운터를 통째로 뺀다.
+    const perDay = Number(dep.limits && dep.limits.max_orders_per_day);
+    if (Number.isFinite(perDay) && perDay > 0) {
+      head.appendChild(el(
+        'span', 'backtest-deploy-log-count',
+        `오늘 ${todayOrderCount(signals, today)} / ${perDay}건`,
+      ));
+    }
+    box.appendChild(head);
+
+    if (!rows.length) {
+      box.appendChild(el('div', 'backtest-deploy-log-empty', '오늘은 아직 신호가 없습니다'));
+      return box;
+    }
+    rows.forEach((sig) => {
+      const line = el('div', 'backtest-deploy-log-row');
+      const when = signalTimeText(sig);
+      if (when) line.appendChild(el('span', 'backtest-deploy-log-time', when));
+      line.appendChild(el('span', `backtest-deploy-log-stage is-${sig.stage}`,
+        signalStageLabel(sig.stage)));
+      line.appendChild(el('span', 'backtest-deploy-log-text',
+        signalLineText(sig, dep.stk_cd)));
+      // 주문번호는 있을 때만 싣는다 — 신호·차단 단계에는 없다.
+      if (sig.order_no) line.appendChild(el('span', 'backtest-deploy-log-order', sig.order_no));
+      box.appendChild(line);
+    });
+    return box;
   }
 
   function renderDeployForm() {
@@ -5602,6 +5786,13 @@ const __exports = {
   DESIGN_TABS,
   DEPLOY_MODES,
   SIGNAL_STAGES,
+  SIGNAL_STAGE_LABELS,
+  signalStageLabel,
+  signalQtyText,
+  signalTimeText,
+  signalLineText,
+  todaySignals,
+  todayOrderCount,
   ASSUMPTIONS_TEXT,
   COSTS_NOTE,
 };

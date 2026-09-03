@@ -27,6 +27,7 @@ from pydantic import ValidationError
 
 from athena_api.backtest import codegen as codegen_mod
 from athena_api.backtest import deploy as deploy_mod
+from athena_api.backtest import deploy_orders
 from athena_api.backtest import diagnose as diagnose_mod
 from athena_api.backtest import flow as flow_mod
 from athena_api.backtest import indicators as indicators_mod
@@ -47,7 +48,7 @@ from athena_api.backtest.store import (
     StrategyVersion,
     VersionBundle,
 )
-from athena_api.dependencies import KiwoomClientDep
+from athena_api.dependencies import KiwoomClientDep, get_order_kiwoom_client
 from athena_api.projects.store import venv_packages, venv_python
 
 router = APIRouter(prefix="/api/v1/backtest", tags=["backtest"])
@@ -1179,6 +1180,24 @@ def _deployment_view(row: Any) -> dict[str, Any]:
         "status": row.status,
         "created_at": row.created_at,
         "stopped_at": row.stopped_at,
+        "armed": bool(getattr(row, "armed", False)),
+        # 자동 주문이 실제로 나갈 수 있는 상태인지 화면이 한 값으로 읽게 한다 —
+        # 모드·무장·상태 셋을 화면에서 다시 조합하면 규칙이 두 곳에 살게 된다.
+        "auto_armed": deploy_orders.is_armed_for_auto(
+            deploy_mod.Deployment(
+                id=row.id,
+                strategy_version_id=row.strategy_version_id,
+                run_id=row.run_id,
+                stk_cd=row.stk_cd,
+                period=row.period,
+                adjusted=row.adjusted,
+                mode=row.mode,
+                params={},
+                limits=deploy_mod.Limits(**json.loads(row.limits_json)),
+                status=row.status,
+            ),
+            armed=bool(getattr(row, "armed", False)),
+        ),
     }
 
 
@@ -1239,6 +1258,30 @@ async def stop_deployment_route(request: Request, deployment_id: str) -> dict[st
     return {"ok": True, "note": "이미 나간 주문은 취소되지 않는다"}
 
 
+@router.post("/deployments/{deployment_id}/arm")
+async def arm_deployment_route(
+    request: Request, deployment_id: str, body: dict[str, Any]
+) -> dict[str, Any]:
+    """자동 주문 무장 스위치 — **사람 클릭 전용**이다(배포 생성·activate와 같은 규율).
+
+    무장은 배포를 바꾸지 않는다. 모드가 `auto`가 아니면 켜도 주문은 나가지 않는다 —
+    무장은 "지금 이 배포를 풀어둔다"는 뜻이고, 무엇을 살지는 배포가 만들어질 때 정해졌다.
+    """
+    store = _store(request)
+    row = await store.deployment(deployment_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="배포가 존재하지 않는다")
+    armed = body.get("armed")
+    if not isinstance(armed, bool):
+        raise HTTPException(status_code=422, detail="armed는 true|false여야 한다")
+    now_armed = await store.arm_deployment(deployment_id, armed=armed)
+    if armed and not now_armed:
+        # 멈춘 배포는 무장되지 않는다. 조용히 실패하면 화면 토글만 켜져 사람이
+        # "자동으로 사고팔린다"고 믿게 된다.
+        raise HTTPException(status_code=409, detail="멈춘 배포는 무장할 수 없다")
+    return {"armed": now_armed}
+
+
 @router.get("/deployments/{deployment_id}/signals")
 async def list_signals_route(request: Request, deployment_id: str) -> dict[str, Any]:
     store = _store(request)
@@ -1250,6 +1293,9 @@ async def list_signals_route(request: Request, deployment_id: str) -> dict[str, 
                 "id": s.id, "dt": s.dt, "side": s.side, "stage": s.stage,
                 "reason": s.reason, "basis": s.basis,
                 "blocked_reason": s.blocked_reason, "fill_price": s.fill_price,
+                # 화면의 오늘 로그가 "주문 10주 · 74,250원"을 그리려면 이 둘이 필요하다.
+                "order_no": getattr(s, "order_no", None),
+                "qty": getattr(s, "qty", None),
             }
             for s in await store.signals(deployment_id)
         ]
@@ -1260,12 +1306,41 @@ async def list_signals_route(request: Request, deployment_id: str) -> dict[str, 
 async def evaluate_deployment_route(
     request: Request, deployment_id: str, body: dict[str, Any]
 ) -> dict[str, Any]:
-    """마지막 봉으로 오늘의 신호를 판정한다. **주문을 내지 않는다** — 판정과 한도 검사만
-    하고, 주문은 앱의 기존 주문 게이트가 사람 클릭으로 낸다(deploy.py 머리말)."""
+    """마지막 봉으로 오늘의 신호를 판정하고, auto+무장이면 주문까지 낸다(보드 23).
+
+    사람이 이 라우트를 부르든 스케줄러가 부르든 **같은 함수**를 지난다
+    (`evaluate_deployment_once`) — 판정 경로가 둘이 되면 화면이 본 신호와 자동이 낸
+    주문이 갈라진다.
+    """
     store = _store(request)
     row = await store.deployment(deployment_id)
     if row is None:
         raise HTTPException(status_code=404, detail="배포가 존재하지 않는다")
+    return await evaluate_deployment_once(
+        request.app,
+        store,
+        row,
+        order_client=get_order_kiwoom_client(request),
+        params=body,
+    )
+
+
+async def evaluate_deployment_once(
+    app: Any,
+    store: BacktestStore,
+    row: Any,
+    *,
+    order_client: Any,
+    params: dict[str, Any],
+) -> dict[str, Any]:
+    """배포 하나를 마지막 봉으로 판정하고, 자동 집행 조건이면 주문을 낸다.
+
+    `order_client`를 인자로 받는 이유는 스케줄러에는 Request가 없기 때문이다 — 주문
+    클라이언트를 고르는 일은 부르는 쪽(라우트는 요청 헤더의 계좌, 스케줄러는 기본 계좌)의
+    책임이고, 판정과 집행 규율은 여기 하나로 모인다.
+    """
+    body = params
+    deployment_id = row.id
     version = await store.version(row.strategy_version_id)
     if version is None:
         raise HTTPException(status_code=404, detail="배포에 묶인 전략 버전을 찾을 수 없다")
@@ -1341,14 +1416,56 @@ async def evaluate_deployment_route(
             blocked_reason=decision.blocked_reason,
             created_at=datetime.now(UTC),
         )
+
+    # ── 자동 집행(보드 23) ────────────────────────────────────────────────────
+    # 여기가 사람 클릭 없이 주문이 나가는 **유일한** 지점이다. 셋이 모두 참일 때만 지난다:
+    # 배포 모드가 auto · 무장 스위치가 켜짐 · 배포가 살아 있음(deploy_orders.is_armed_for_auto).
+    # `evaluate_latest`가 이미 한도·기간·정지 조건을 판정해 stage를 정했으므로, 여기서
+    # 한도를 다시 해석하지 않는다 — 두 곳이 한도를 해석하면 언젠가 서로 다르게 읽는다.
+    stage = decision.stage
+    order_no: str | None = None
+    order_qty: int | None = None
+    blocked_reason = decision.blocked_reason
+    if stage == "ordered" and deploy_orders.is_armed_for_auto(
+        deployment, armed=bool(getattr(row, "armed", False))
+    ):
+        last_close = float(df["close"].iloc[-1])
+        plan = deploy_orders.plan_order(deployment, decision, last_close)
+        if plan is None:
+            stage = "blocked"
+            blocked_reason = deploy_orders.blocked_reason_for_plan(
+                deployment, decision, last_close
+            )
+        else:
+            client = order_client
+            if client is None:
+                # 주문 API가 꺼져 있거나 준비되지 않았다. 신호는 남기되 "주문했다"고
+                # 말하지 않는다 — 나가지 않은 주문을 나갔다고 적는 것이 가장 나쁜 거짓말이다.
+                stage = "blocked"
+                blocked_reason = "주문 서비스가 준비되지 않아 자동 주문을 내지 못했습니다"
+            else:
+                outcome = await deploy_orders.submit_order(
+                    app, client, plan, account=str(body.get("account") or "")
+                )
+                stage = outcome.stage
+                order_no = outcome.order_no
+                order_qty = outcome.qty
+                blocked_reason = outcome.blocked_reason or blocked_reason
+        if signal_id is not None:
+            await store.update_signal_stage(
+                signal_id, stage, order_no=order_no, qty=order_qty
+            )
+
     return {
         "signal_id": signal_id,
         "dt": decision.dt,
         "side": decision.side,
-        "stage": decision.stage,
+        "stage": stage,
         "reason": decision.reason,
         "basis": decision.basis,
-        "blocked_reason": decision.blocked_reason,
+        "blocked_reason": blocked_reason,
+        "order_no": order_no,
+        "qty": order_qty,
     }
 
 
