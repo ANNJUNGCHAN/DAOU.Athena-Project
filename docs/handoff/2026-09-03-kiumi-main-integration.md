@@ -13,7 +13,8 @@
 | 카드 표면 | `origin/feat/card-surface-paper-to-code` `9c07c1b` — **15커밋 전체 병합** |
 | 카드미니 | `origin/codex/kiumi-mini-cards-runtime` `b45f6ca` — **고유 커밋 2개만** cherry-pick |
 
-만든 커밋 3개:
+당시 만든 커밋 3개 — **지금 브랜치에는 없다.** 태그 `kiumi-integration-premove`
+아래에만 남아 있고, 같은 내용은 이미 `origin/main`에 다른 경로로 들어가 있다:
 
 ```
 a9fe065  style(kiumi): remove internal mini-card dividers      (cherry-pick b45f6ca)
@@ -23,12 +24,17 @@ a9fe065  style(kiumi): remove internal mini-card dividers      (cherry-pick b45f
 
 `main`에는 직접 커밋하지 않았고 push하지 않았다. 기존 작업 브랜치도 삭제하지 않았다.
 
-> ⚠ **작업 도중 origin/main이 움직였다 — 이 브랜치는 이미 대체됐다.**
-> 시작 시점 `origin/main`은 `266901e`였고 그 위에 통합했다. 작업 중 다른 쪽에서
-> `a408bb6`까지 **31커밋**을 올렸고, 거기에는 카드 표면(`9c07c1b`)과 카드미니
-> (`b45f6ca`) **양쪽 병합이 이미 들어 있다**(`git merge-base --is-ancestor` 확인).
-> 즉 이 브랜치의 git 통합 자체는 더 이상 필요하지 않다. 남는 고유 가치는 **이 문서**와
-> **Paper 수정**(§4)이다.
+> ⚠ **작업 도중 origin/main이 움직였고, 이 문서는 새 main 위로 옮겨졌다.**
+> 통합 작업은 시작 시점의 `origin/main` `266901e` 위에서 했다. 그 사이 다른 쪽에서
+> `a408bb6`까지 **31커밋**을 올렸고 거기에 카드 표면(`9c07c1b`)·카드미니(`b45f6ca`)
+> **양쪽 병합이 이미 들어 있다**(`git merge-base --is-ancestor` 확인). 그래서 §1의
+> 통합 커밋 3개는 **더 이상 필요하지 않고**, 이 문서만 `a408bb6` 위로 cherry-pick해
+> 옮겼다. 아래 §2~§3의 충돌 해결 근거와 실측 수치는 **`266901e` 기준 기록**이고,
+> §4의 Paper 수정은 git과 무관하게 **현재 유효**하다.
+>
+> 옮기기 전 상태(통합 커밋 3개가 붙어 있던 tip `9745e15`)는 태그
+> **`kiumi-integration-premove`**로 보존했다. rebase로 옮기려 하면 `4aba359`가
+> main의 병합 커밋과 add/add 충돌을 내므로, **문서 2커밋만 cherry-pick**하는 것이 맞다.
 >
 > 라우트 수 핀은 양쪽 다 맞다 — 범위가 다르기 때문이다. 이 브랜치는 `405`
 > (`main@266901e` + 카드 표면 + 카드미니, routines 12개), `origin/main`은 `408`
