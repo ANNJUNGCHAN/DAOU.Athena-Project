@@ -10,7 +10,7 @@
 
 - **하는 일.** Paper 디자인 파일의 카드 페이지 보드 96장을 **그대로**(픽셀 동일) Electron 앱의 대화 캔버스에 띄운다. 캔버스는 브라우저처럼 **탭 스트립 + 카드 1장 뷰포트**, 카드는 컨테이너 폭 5단(XL/L/M/S/XS) 반응형, 값·문구는 어느 단계에서도 불변.
 - **어디까지 왔나.** Paper 쪽은 끝났다(키움 REST 299 op · 가시 필드 3,532 전부 표현). 코드 쪽은 추출 96/96 · 백엔드 로더가 96장 전부 로드(제외 0) · 봉투 `surface_contract` · 프론트 탭/마운트/반응형 CSS · 보드 카드의 통합 카드 크롬 제거까지 붙었다. 슬롯 저작(보드 텍스트 자리 ↔ API 필드)은 로더 기준 **3,379/3,534 occurrence = 95.6%**.
-- **정확한 중단점.** 실행 중인 워크플로는 없다. 웨이브 3 정비 4레인(A5/B4/C5/D3)은 끝났지만, **3차 저작 8레인과 최종 게이트는 Claude 주간 한도 초과로 전부 오류 종료**했다(§5). §6의 저작 8레인부터 다시 시작한다.
+- **정확한 중단점.** 웨이브 3 정비 4레인(A5/B4/C5/D3)은 끝났다. 재개한 3차 저작의 `account-a`는 리뷰·수정까지 끝나 정확한 9 occurrence를 닫았고, `3GRO-0`에는 6구간 주문가능금액 잎이 없어 12 occurrence·2 op를 정직하게 미도달로 남겼다. 다음은 `account-b`이며 최종 게이트는 아직 미실행이다(§5·§6).
 - **커밋.** 2026-09-03부터 브랜치 `feat/card-surface-paper-to-code`에 지속 커밋·푸시한다(사용자 지시). `main`은 origin보다 60커밋 뒤라 직접 올리지 않는다.
 
 ---
@@ -68,17 +68,17 @@
 
 ---
 
-## 4. 수치 (측정 2026-09-03 12:17, 웨이브 3 정비 반영 후)
+## 4. 수치 (측정 2026-09-03 12:52, W3 account-a 리뷰·수정 반영 후)
 
 | 항목 | 값 |
 |---|---|
 | 보드 | 96 (카드 6 · 증명 페이지 17F8-2와 fixture-quote는 모수 밖 — 해소 대상 아님) |
 | 추출 | 96/96, `--check` 드리프트 0 |
 | **로더** | `get_registry()` 보드 96 · `excluded_boards` 비어 있음 · `complete=False`는 부분 로드 경로라 정상 |
-| **커버리지(정본 = 로더 `coverage()`)** | occurrence 도달 **3,379 / 3,534 (95.6%)** · op 커버 295/299 |
-| 미도달 155의 구성 | 17F8-2에만 귀속된 75 + 트리 안 보드 귀속 80(몸통 2SYW-1 27) + 그중 예비 슬롯 2(§2-3) |
-| 보드 없는 op | 4 — `detail:kt00005:margin_order_capacity`, `kt00011:account_funding`, `kt00013:d2_funding_capacity`, `kt00013:margin_order_capacity` |
-| 슬롯 검증기 잔여 | 40건(b2 e38) / 22장 — 전부 아직 저작 안 붙인 필드. 3차 저작 레인은 탐색만 하고 오류 종료해 순변경 0 |
+| **커버리지(정본 = 로더 `coverage()`)** | occurrence 도달 **3,388 / 3,534 (95.9%)** · op 커버 297/299 |
+| 미도달 146의 구성 | 17F8-2에만 귀속된 75 + 트리 안 보드 귀속 71(그중 예비 슬롯 2). `account-a`가 정확한 9건을 닫음 |
+| 보드 없는 op | 2 — `detail:kt00005:margin_order_capacity`, `detail:kt00013:margin_order_capacity`. `3GRO-0`에는 6구간 `…주` 잎만 있고 금액 잎이 없어 거짓 shares 매핑을 제거한 상태 |
+| 슬롯 검증기 잔여 | 37건(b1 e36) / 21장 — `account-a`의 `3IGR-0` b1 e2를 닫음. 나머지는 후속 저작 레인 몫 |
 | 밀도 | 하드 위반 0 · 소프트 경고 22(레일 행 7~11) · 재표시 경고 128 · 중복 바인딩 0 |
 | 상태 컨트롤 미해소 | 2 (3EWN-0·3ODO-0 — 부모 보드에 후보 문구 없음) |
 | C5 반응형 검증 | 실보드 6장 × 4단계 PNG **24장** + 보드별 XL 1,360px·M 851px 기하 프로브 **12회**, P5·단계 간 텍스트 상등 전부 통과, **surface overflow 최대 0px**. height hoist가 작동하는 L/M/S/XS의 세로 내용 넘침·형제 겹침 0; XL은 열 접힘·KPI 줄바꿈 없이 primary/rail 병렬, M은 6열부터 접고 KPI 최대 3칸·rail 하단 이동을 하드 판정한다. XL Paper 원문 `2R3M-1/36Q0-0`의 기존 2px 세로 넘침은 원시 결과에 기록하되 hoist 검증에서 제외한다. 리뷰 위험 표본 15P5-2·3DZ1-0(8 KPI)·2QX1-1(6 KPI)도 별도 6단계 검증 0px. `app/captures/integrated-cards/VERIFY-INTEGRATED-CARDS.json` |
@@ -101,6 +101,8 @@
 
 **3차 저작 8레인**(account-a/b, quote-flow, rank-a/b, watch-answer, orderbook, uncovered-sweep; 보드 소유 겹침 없음)은 각각 탐색 명령 12~19회를 실행했지만 약 100초 뒤 주간 한도 오류로 끝났고, 작업 트리에 저작 순변경을 남기지 않았다. **게이트는 tool call 0회로 즉시 오류 종료**했다. Claude 워크플로 JSON의 최상위 `status: completed`는 단계 상태를 대표하지 않으므로 믿지 말고 `workflowProgress`를 본다.
 
+**Codex 재개:** `account-a`는 커밋 `6cbb2b7` 후 독립 리뷰에서 금액→shares 오매핑 12건과 의미가 다른 account 필드 2건을 발견했다. 수정 `c52a446`에서 오매핑을 제거하고 `repl_amt`·`uncla`를 `2SKU-1`의 정확한 슬롯으로 옮겼다. 결과는 안전한 순증가 9건, 담당 validator 3장 문제 0. 금액 잎이 없는 12건은 Paper 정본에 이름 있는 `krw_ko` 잎을 만들기 전에는 닫지 않는다.
+
 **원본 증거:** `C:\Users\USER\.claude\projects\C--Projects-DAOU-Athena\dff811ca-b4d0-4ed4-9c90-07bce304dc1a\workflows\wf_622eeae9-f84.json`. 같은 Claude 세션에서 한도가 초기화된 뒤 재개할 때만 `resumeFromRunId: "wf_622eeae9-f84"`를 쓸 수 있다. 재개 전 `workflowProgress`를 읽어 정비 4레인을 다시 돌리지 않는지 확인한다.
 
 **다른 대화·다른 PC:** 캐시가 없다. §7 표의 읽기전용 명령으로 위 완료 신호와 §4 수치를 실측 → 저장된 W3 스크립트에서 **3차 저작 8레인과 게이트만** 실행하거나 해당 레인 프롬프트를 서브에이전트에 준다.
@@ -111,7 +113,7 @@
 
 ## 6. 남은 일 (순서대로) — 🔒 = 사람·외부 의존
 
-1. **3차 슬롯 저작 8레인.** 미도달 155 → 0: (a) 트리 안 보드 귀속 80(2SYW-1 27이 몸통)은 슬롯 저작, (b) 17F8-2 귀속 75는 카드 보드로 재귀속 — 몸통은 금현물(kt50020·kt50030·kt50031·kt50032·kt50075)과 계좌 증거금·인출(kt00001·kt00005·kt00010·kt00011·kt00012·kt00013), (c) 예비 슬롯 2(`base:04` 951·924)는 **로더의 가시 universe에서 원장(`PAPER_FIELD_COVERAGE.json`) 비노출 행을 빼는 방식**으로 모수를 3,532로 맞춘다 — `kiwoom-presentation-hidden-occurrences.json`은 `semantic_presentation_registry.py`가 해시·개수(171)로 잠근 신뢰 게이트 원장이라 건드리지 않는다. 보드 없는 op 4 → 0. 상태 컨트롤 2건 `meta.state.control_text`. 바인딩 슬롯 `row_index` 좌표. `17F8-2.fields.json` 잔재도 재귀속과 함께 정리.
+1. **3차 슬롯 저작 남은 7레인.** 현재 미도달 146 → 0: `account-b` → `quote-flow` → `rank-a` → `rank-b` → `watch-answer` → `orderbook` → `uncovered-sweep`. (a) 트리 안 보드 귀속 71은 슬롯 저작, (b) 17F8-2 귀속 75는 카드 보드로 재귀속 — 몸통은 금현물(kt50020·kt50030·kt50031·kt50032·kt50075), (c) 예비 슬롯 2(`base:04` 951·924)는 **로더의 가시 universe에서 원장(`PAPER_FIELD_COVERAGE.json`) 비노출 행을 빼는 방식**으로 모수를 3,532로 맞춘다 — `kiwoom-presentation-hidden-occurrences.json`은 `semantic_presentation_registry.py`가 해시·개수(171)로 잠근 신뢰 게이트 원장이라 건드리지 않는다. 별도 설계 결함: `3GRO-0` 6구간 주문가능금액 12건은 Paper 금액 잎 저작 없이는 닫지 않는다. 상태 컨트롤 2건 `meta.state.control_text`. 바인딩 슬롯 `row_index` 좌표. `17F8-2.fields.json` 잔재도 재귀속과 함께 정리.
 2. **W3 게이트 실행** → 추출·`--check`, 로드 96·excluded 0, 커버리지 3,532/3,532, 검증기 0, 청크 재빌드·드리프트 0, 앱/백엔드 전수, 실보드 캡처 24장 재생성 + XL/M 기하 프로브 + surface overflow 0 + 반응형 세로 넘침/겹침 0 + XL/M 레이아웃 계약. 통과 후 문서 수치 갱신·커밋·푸시.
 3. **실앱 QA.** 4단계 창 캡처 vs Paper 시각 대조 🔒(로그인된 Paper Desktop/computer-use 또는 Paper MCP) · 헌장 게이트(밀도 하드 0, 문구 3원칙) · 사용자 검수 PDF 🔒(승인) · 실키움(모의) 봉투로 보드 카드 실데이터 표시 1회 🔒(모의투자 자격증명·장중).
 4. ~~구현 계획 문서의 밀도 줄 정정~~ — 2026-09-03 10:3x 완료.
@@ -187,3 +189,4 @@ eval "$(fnm env)"; export PYTHONIOENCODING=utf-8
 - 2026-09-03 11:45 — 별도 C5 리뷰에서 전역 KPI 160px 바닥·미측정 XL/M·surface overflow 미판정 발견. 실패 재현 후 최소폭을 값 있는 탄력 KPI에만 한정, `Chart Context Actions` absolute left+폭만 좁은 단계에서 양쪽 inset으로 전환(툴팁·차트 핸들 제외), surface overflow를 하드 실패로 변경. 기본 6장 24캡처+12 프로브 및 위험 표본 3장(8/6 KPI) 모두 overflow 0·P5 통과, 앱 2,039/0. 저작 레인은 12~19개 탐색 명령 후 오류·순변경 0으로 표현 정정.
 - 2026-09-03 12:07 — C5 독립 재리뷰의 잔여 2건을 1차 보강. 반응형 단계에서 고정 높이 hoist의 세로 내용 넘침·형제 겹침을 하드 실패로 만들고, XL/M 프로브가 접힘·KPI 행/열·primary/rail 상대 위치를 계약과 대조하도록 보강. 빈·중복·미등록 `ATHENA_VERIFY_BOARD_IDS`도 main 진입 시 즉시 실패. 기본 6장 24캡처+12 프로브 재생성 결과 surface overflow 0, P5·텍스트 상등 통과; KPI 행 계측의 false-negative는 12:17 재리뷰에서 발견·교정.
 - 2026-09-03 12:17 — 재리뷰가 높이가 다른 KPI 셀을 `top` 동일성으로 세어 3+2를 1+2+2로 오판하는 false-negative를 발견. 세로 구간 겹침 기반 순수 행 계산기와 4열 음성 테스트를 추가해 `2R3M-1` M 결과가 `[[3,2]]`·최대 3열로 교정됨. 기본 6장 24캡처+12 프로브 재통과, 앱 2,042/0. 문서의 세로 0 범위를 L/M/S/XS로 명시하고 XL Paper 원문 2px는 기록·게이트 제외로 정정.
+- 2026-09-03 12:52 — 재개 저작 `account-a` 리뷰·수정 완료. 최초 21건 감소 중 금액→shares 오매핑 12건과 의미 불일치 2건을 독립 리뷰가 발견. `c52a446`에서 거짓 매핑을 제거하고 account 필드 2건을 정확한 `2SKU-1` 슬롯으로 이동해 안전한 순증가 9건(coverage 3,388/3,534, 미도달 146, op 297/299), validator 37건/21장. `3GRO-0`에 6구간 금액 잎이 없어 12건·2 op는 Paper 표면 저작 전까지 명시적 blocker.
