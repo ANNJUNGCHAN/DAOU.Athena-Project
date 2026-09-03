@@ -10,6 +10,9 @@ const {
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
 } = require('./board-mount');
+const {
+  assertReadability, collectPairedSemanticFindings,
+} = require('./board-glyph-geometry');
 
 // jsdom 없이 검증한다 — ranking-axis.test.js와 같은 관행(DOM 스텁 주입).
 // board-mount의 DOM 쓰기 층이 실제로 건드리는 표면만 흉내낸다:
@@ -49,6 +52,34 @@ function el(dataset = {}, children = []) {
     },
   };
   return node;
+}
+
+function pairedReadabilityProbe(source, mirror, pairContainer) {
+  const labels = pairContainer ? pairContainer.children.filter((element) => (
+    element.dataset.pairedLabel !== undefined && element.textContent.trim()
+  )) : [];
+  const finding = collectPairedSemanticFindings([{
+    source: mirror.dataset.pairedSource,
+    source_found: Boolean(source),
+    source_count: source ? 1 : 0,
+    mirror_has_identity: Boolean(
+      mirror.dataset.node || mirror.dataset.slotId || mirror.dataset.leaf,
+    ),
+    label_found: labels.length > 0,
+    label_count: labels.length,
+    source_text: source && source.textContent,
+    mirror_text: mirror.textContent,
+    source_tone: source && source.style.color,
+    mirror_tone: mirror.style.color,
+    source_missing: Boolean(source && source.dataset.missing),
+    mirror_missing: Boolean(mirror.dataset.missing),
+  }]);
+  return {
+    atomic_wrap_nodes: [], atomic_wrap_total: 0,
+    text_overlap_nodes: [], text_overlap_total: 0,
+    paired_semantics_violations: finding.items,
+    paired_semantics_total: finding.total,
+  };
 }
 
 function fixtureContract() {
@@ -423,6 +454,9 @@ test('paired display mirrors follow full and partial source text, tone, and miss
   mirrorA.dataset.missing = 'true';
   untouched.textContent = 'paper-only';
   untouched.style.color = 'var(--paper-other)';
+  const label = el({ pairedLabel: '' });
+  label.textContent = '값';
+  const pairContainer = el({}, [label, mirrorA]);
   const root = el({}, [source, mirrorA, mirrorB, untouched]);
   const contract = {
     slots: [{
@@ -467,6 +501,43 @@ test('paired display mirrors follow full and partial source text, tone, and miss
   assert.deepEqual([mirrorA.dataset.missing, mirrorB.dataset.missing], [undefined, undefined]);
   assert.equal(untouched.textContent, 'paper-only');
   assert.equal(untouched.style.color, 'var(--paper-other)');
+
+  assert.deepEqual(assertReadability(
+    'paired-fixture', { name: 'partial realtime restored' },
+    pairedReadabilityProbe(source, mirrorA, pairContainer), { enforce: true },
+  ), { enforced: true, failures: [] });
+  mirrorA.textContent = 'stale after partial realtime';
+  assert.throws(() => assertReadability(
+    'paired-fixture', { name: 'partial realtime desync' },
+    pairedReadabilityProbe(source, mirrorA, pairContainer), { enforce: true },
+  ), /readability paired_semantics_violations/);
+  applyRealtimeSlots(root, contract, values, ['value']);
+  assert.deepEqual(assertReadability(
+    'paired-fixture', { name: 'partial realtime resynchronized' },
+    pairedReadabilityProbe(source, mirrorA, pairContainer), { enforce: true },
+  ), { enforced: true, failures: [] });
+});
+
+test('a generated paired value fails hard when naked and passes when labeled', () => {
+  const source = el({ node: 'value' });
+  source.textContent = '+9,079,400';
+  const mirror = el({ pairedSource: 'value' });
+  mirror.textContent = source.textContent;
+  const generatedPair = el({}, [mirror]);
+
+  assert.throws(() => assertReadability(
+    'paired-fixture', { name: 'generated naked pair' },
+    pairedReadabilityProbe(source, mirror, generatedPair),
+    { enforce: true },
+  ), /readability paired_semantics_violations/);
+  const label = el({ pairedLabel: '' });
+  label.textContent = 'Paper header';
+  generatedPair.children.unshift(label);
+  assert.deepEqual(assertReadability(
+    'paired-fixture', { name: 'generated labeled pair' },
+    pairedReadabilityProbe(source, mirror, generatedPair),
+    { enforce: true },
+  ), { enforced: true, failures: [] });
 });
 
 test('value-atomic marker is written only to the Paper leaf and removed idempotently', () => {
