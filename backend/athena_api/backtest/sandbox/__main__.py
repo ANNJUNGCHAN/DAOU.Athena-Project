@@ -41,6 +41,8 @@ def _summarize(value: object) -> object:
     Series·DataFrame은 **마지막 행**만 남긴다 — 판정이 일어나는 행이 거기고, 전체를 실으면
     산출물이 봉 수만큼 커진다.
     """
+    if value is None:
+        return None
     if isinstance(value, pd.DataFrame):
         if value.empty:
             return None
