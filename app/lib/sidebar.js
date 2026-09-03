@@ -59,6 +59,20 @@
           backtest: document.getElementById('modeNavBacktestCount'),
         },
         onSelect: (view) => {
+          // 모드가 대화의 경계다(40번 보드 · lib/main/conversations.js touch()
+          // 주석 "모드는 만들 때 한 번 정해지고 바뀌지 않는다") — 그러면 모드를
+          // 바꿀 때 그 모드의 새 대화로 갈아타야 경계가 성립한다.
+          //
+          // 이 배선이 없어서 캔버스만 바뀌고 채팅 스레드는 그대로 넘어갔다
+          // (실측 probe-graph-mode-exit.js: 그래프 모드에서 심은 턴이 대화 모드에
+          // 그대로 남았고 activeId도 같았다 — 화면 절반은 아직 앞 모드였다).
+          // 그래서 그래프 접두가 대화 모드 문맥 위에 얹히고, 대화 모드에 그래프
+          // 추천 질문이 남았다(2026-09-03 제보).
+          //
+          // 지금 보고 있는 모드를 다시 누른 것이면 갈아타지 않는다 — 같은 탭을
+          // 눌렀다고 쓰던 대화를 버리면 그건 기능이 아니라 사고다.
+          const previousView = currentMode();
+          const modeChanged = previousView !== view;
           if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
             window.AthenaCanvasMode.setView(view);
           }
@@ -82,9 +96,13 @@
             if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
               window.AthenaAgentCanvas.refresh();
             }
-          } else {
+          } else if (!modeChanged) {
             renderList();
           }
+          // 새 대화로 갈아타기 — 위 renderList()를 modeChanged일 때 건너뛴 이유가
+          // 이것이다. startNewConversation()은 clearConversationUi()로 채팅을 비우고
+          // 목록까지 다시 그린다(그 함수 주석 참고). 여기서 또 부르면 두 번 그린다.
+          if (modeChanged) startNewConversation(currentProjectId, view);
         },
       })
     : null;
@@ -601,10 +619,27 @@
       for (const row of agentRoutinesCache) $list.appendChild(makeRoutineItem(row));
     }
 
+    // 모드가 대화의 경계이므로 목록도 그 경계를 따른다(2026-09-03 사용자 확정:
+    // "'최근'과 프로젝트 둘 다 현재 모드만"). 이 필터가 없어서 그래프 모드에
+    // 백테스트·대화 이력이 통째로 섞여 나왔다 — 모드 네비가 이미 그리고 있는
+    // 모드별 대화 수 배지(updateModeCounts)와도 어긋나 있었다.
+    //
+    // viewToMode로 양쪽을 정규화해서 비교한다: currentMode()는 화면의 view id
+    // ('summary')이고 저장된 행은 mode('chat')라 문자열이 서로 다르다. 모르는
+    // 값은 그 함수가 'chat'으로 떨어뜨리므로 모드 개념 이전에 만들어진 옛 대화도
+    // 대화 모드에서 보인다(사라지지 않는다).
+    //
+    // 검색도 이 안에서 한다 — 목록에 없는 것이 검색으로만 튀어나오면 "지금 어느
+    // 모드를 보고 있는가"가 다시 흐려진다.
+    const sessionSnapshot = window.AthenaLib && window.AthenaLib.SessionSnapshot;
+    const inMode = sessionSnapshot
+      ? conversationsCache.filter(
+        (c) => sessionSnapshot.viewToMode(c.mode) === sessionSnapshot.viewToMode(currentMode()))
+      : conversationsCache;
     const q = searchQuery.trim().toLowerCase();
     const filtered = q
-      ? conversationsCache.filter((c) => c.title.toLowerCase().includes(q))
-      : conversationsCache;
+      ? inMode.filter((c) => c.title.toLowerCase().includes(q))
+      : inMode;
 
     if (notifyRooms.length && !q) {
       $list.appendChild(makeSectionLabel('알림에서'));
