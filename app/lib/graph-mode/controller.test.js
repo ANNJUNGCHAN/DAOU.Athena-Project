@@ -1198,7 +1198,11 @@ test('setView는 summary/graph/agent/plugin 네 표면을 항상 하나만 보�
     const expectedMode = view === 'summary' ? 'chat' : view;
     assert.equal(elements.kiumi.dataset.mode, expectedMode);
     assert.equal(elements.canvasRegion.dataset.mode, expectedMode);
-    assert.equal(elements.chatHead.hidden, !(view === 'graph' || view === 'backtest'), '그래프·백테스트 채팅 헤더 규칙(보드 38 개정)');
+    assert.equal(
+      elements.chatHead.hidden,
+      !(view === 'graph' || view === 'backtest' || view === 'plugin'),
+      '그래프·백테스트·플러그인 채팅 헤더 규칙(보드 38 개정 · W3-6)',
+    );
   }
 });
 
@@ -1220,6 +1224,31 @@ test('backtest로 전환하면 채팅 헤더가 보이고 data-mode·문구가 �
   assert.equal(elements.chatHeadSub.textContent, '답이 캔버스를 바꿉니다');
   await controller.setView('summary');
   assert.equal(elements.chatHead.hidden, true, '대화 모드엔 헤더가 없다(보드 37)');
+});
+
+// W3-6 — 헤더가 플러그인 모드까지 넓어져도 그래프 문구는 한 글자도 바뀌지 않는다(A10).
+test('plugin으로 전환하면 채팅 헤더가 플러그인 문구로 바뀌고 그래프 문구는 그대로다', async () => {
+  const { controller, elements } = setup();
+  elements.chatHeadTitle = fakeNode('span');
+  elements.chatHeadSub = fakeNode('span');
+  await controller.setView('plugin');
+  assert.equal(elements.chatHead.hidden, false);
+  assert.equal(elements.chatHead.dataset.mode, 'plugin');
+  assert.equal(elements.chatHeadTitle.textContent, '아테나 · 플러그인 대화');
+  assert.equal(elements.chatHeadSub.textContent, '설치와 권한을 여기서 정합니다');
+  await controller.setView('graph');
+  assert.equal(elements.chatHeadTitle.textContent, '그래프에게 묻기');
+  assert.equal(elements.chatHeadSub.textContent, '답이 캔버스를 바꿉니다');
+  await controller.setView('agent');
+  assert.equal(elements.chatHead.hidden, true, '에이전트 모드엔 헤더가 없다');
+});
+
+test('shell.html의 채팅 헤더 span은 비어 있다 — 문구의 유일한 출처는 controller다', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const shell = fs.readFileSync(path.join(__dirname, '..', '..', 'shell.html'), 'utf8');
+  assert.match(shell, /<span class="chat-mode-head-title"><\/span>/);
+  assert.match(shell, /<span class="chat-mode-head-sub"><\/span>/);
 });
 
 test('chatHeadTitle/chatHeadSub가 없어도 backtest·graph 전환이 터지지 않는다(옵셔널 가드)', async () => {

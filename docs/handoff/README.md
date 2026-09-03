@@ -8,6 +8,11 @@
 > **바로 이어서 돌리려면** [RALPH_PROMPT.md](./RALPH_PROMPT.md)를 열어 블록을 통째로 복사해
 > Claude Code에 붙여넣는다. 이 문서(§2~§6)를 실행 가능한 루프로 옮겨둔 것이다.
 
+> 🔌 **플러그인 모드 기조 정렬 트랙(브랜치 `feat/plugin-mode-doctrine`)은 별도 인계 문서를 따른다** —
+> [2026-09-03-plugin-mode-doctrine.md](./2026-09-03-plugin-mode-doctrine.md). Phase A(게이트웨이 제안 툴 ·
+> 렌더러 순수 모듈 · Paper 9장)까지 커밋됐고 US-003(메인 프로세스)부터 남았다. 계획·명세·PRD·baseline은
+> [plugin-mode-doctrine/](./plugin-mode-doctrine/)에 회수돼 있다.
+
 > 🟣 **2026-09-03 백테스트 시각 설계 ↔ 코드 왕복이 들어갔다.** 지도 탭이 편집 가능한 그래프가 되고
 > 코드는 지도에서 생성된다. 계약·검증법·남은 P4는
 > [2026-09-03-visual-strategy-roundtrip.md](./2026-09-03-visual-strategy-roundtrip.md)에 있다.
