@@ -1040,7 +1040,14 @@ async function runQueryLive(text) {
     if (myToken !== abortToken) return;
     // 문구는 대화 브랜치 디자인 정합(9ce2279)을 따르고, 표시는 main 결정(2026-08-27
     // 버블 안 중복 제거)대로 하단 잠금 힌트 한 곳에만 쓴다(병합 2026-08-27).
-    const base = calling ? `카드 ${cardCount}개 렌더됨` : '판단 중 — 어떤 TR을 부를지 고르는 중';
+    //
+    // 카드 수는 **실제로 그린 것이 있을 때만** 말한다(2026-09-03 사용자 지적 —
+    // "카드 0개 렌더됨 이런 건 그냥 없애도 될 듯"). 0개인데 "렌더됨"이라고 쓰면
+    // 아무것도 안 그렸는데 그렸다고 말하는 것이고, 그 긴 문구가 잠금 힌트의 폭을
+    // 통째로 가져가 입력창을 밀어냈다(같은 행을 나눠 쓴다 — chat.css .input-row).
+    const base = calling
+      ? (cardCount > 0 ? `카드 ${cardCount}개 렌더됨` : '답변 중…')
+      : '판단 중 — 어떤 TR을 부를지 고르는 중';
     setLocked(true, base, elapsedText());
   };
   // 100ms 간격 — 표기는 소수 1자리(29.3s)인데 1초 간격으로 갱신하면 소수 자리가

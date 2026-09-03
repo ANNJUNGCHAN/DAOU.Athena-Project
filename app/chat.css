@@ -837,6 +837,13 @@ html.is-boot-expanding #winControls { opacity: 0; }
 .input-row {
   flex-shrink: 0;
   display: flex; align-items: flex-end; gap: 16px;
+  /* 자리가 모자라면 잠금 힌트가 아랫줄로 내려간다(2026-09-03 사용자 지적 "채팅창
+   * 싹다 짤린다"). 채팅 기둥은 400px 고정이라(창 모델 계약) 이 행이 쓸 수 있는 폭은
+   * 약 302px인데, 입력창과 잠금 힌트가 한 줄을 나눠 쓰면 힌트가 먼저 가져가고
+   * 입력창에 144px만 남았다 — 심어 둔 문장이 6줄로 접혔다(실측
+   * probe-chat-input-width.js). 한 줄에 억지로 욱여넣는 대신 접는다: 넓은 창에서는
+   * 지금까지처럼 한 줄에 나란히 있고, 좁을 때만 힌트가 내려간다. */
+  flex-wrap: wrap;
   padding: 0 18px;
   /* 긴 글에서 입력창이 자란다(2026-09-02 사용자 지적) — 고정 height였을 때는
    * <input>이 한 줄에 갇혀 가로로만 스크롤됐다. 최소 높이는 그대로 44px이라
@@ -1055,11 +1062,14 @@ html.is-boot-expanding #winControls { opacity: 0; }
 
 .input {
   flex: 1;
-  /* flex 아이템의 기본 min-width:auto는 콘텐츠(placeholder) 기준 고유 최소폭을
-   * 강제한다 — 잠금 중 lock-hint(ESC 중단 칩 포함)가 그만큼 못 줄어들고 밀려나
-   * .app의 overflow:hidden 밖으로 잘려 나갔다(2026-08-26 사용자 지적 — ESC 칩이
-   * 안 보임). 0으로 풀어야 flex:1이 실제로 끝까지 줄어든다. */
-  min-width: 0;
+  /* 바닥값을 준다(2026-09-03). 원래는 min-width:0이었다 — 기본값 min-width:auto가
+   * 콘텐츠 기준 고유 최소폭을 강제해서 잠금 중 lock-hint(ESC 칩 포함)가 밀려나
+   * .app의 overflow:hidden 밖으로 잘려 나갔기 때문이다(2026-08-26 — ESC 칩이 안 보임).
+   * 그런데 0은 반대편으로 넘어갔다: 입력창이 144px까지 눌려 문장이 6줄로 접혔다.
+   * 명시값 200px은 auto와 달리 콘텐츠에 끌려다니지 않으므로 2026-08-26의 결함은
+   * 살아나지 않고, 위 flex-wrap과 짝을 이뤄 "둘 다 못 들어가면 힌트를 내린다"가 된다
+   * (0으로 두면 입력창이 끝없이 줄어들어 줄바꿈이 영원히 안 일어난다). */
+  min-width: 200px;
   background: transparent; border: none; outline: none;
   color: var(--color-k-text);
   /* AT-CH-001 보드 11 사양 "입력 커서는 무채색. 브랜드 색은 점 하나뿐이다" —
@@ -1089,6 +1099,10 @@ html.is-boot-expanding #winControls { opacity: 0; }
    이전 판은 mono 폰트 한 문자열 + flex-shrink:0이라 긴 문구가 컨테이너 밖으로
    하드 클리핑됐다. 이제 상태 문구만 말줄임되고, 시간과 ESC 칩은 항상 온전하다. */
 .lock-hint {
+  /* 아랫줄로 접혔을 때 오른쪽에 붙인다 — 한 줄일 때 있던 자리(행의 오른쪽 끝)와
+   * 같아야 눈이 힌트를 찾아 헤매지 않는다. 한 줄일 때는 입력창이 flex:1로 이미
+   * 남는 폭을 다 먹으므로 이 auto는 아무 일도 하지 않는다. */
+  margin-left: auto;
   font-family: var(--font-body);
   font-size: var(--text-sm);
   color: var(--color-k-dim);
