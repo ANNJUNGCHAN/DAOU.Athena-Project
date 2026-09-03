@@ -2464,6 +2464,187 @@ test('파일 실행이 준 전략·버전 id로 배포 탭이 열린다 — [이
   assert.equal(findByClass(made.container, 'backtest-deploy-create').length, 1);
 });
 
+// ── 무장 스위치와 오늘 로그(보드 23 · 2026-09-04) ────────────────────────────
+//
+// 여기서 지키는 것은 하나다: **화면이 자동 매매에 대해 거짓말을 하지 않는가.**
+// 토글은 서버가 준 armed만 비추고, 거절당하면 그 이유가 화면에 남고, 배선이 없으면
+// 아예 그리지 않고, 오늘 로그는 없는 수량·주문번호를 지어내지 않는다.
+
+const ARMED_DEPLOYMENT = {
+  id: 'd1', stk_cd: '005930', mode: 'auto',
+  mode_label: '한도 안에서 자동으로 주문합니다', status: 'active',
+  armed: true, auto_armed: true,
+  limits: { max_order_amount: 3000000, max_orders_per_day: 3 },
+};
+
+function deployment(overrides) {
+  return Object.assign({}, ARMED_DEPLOYMENT, overrides || {});
+}
+
+// 오늘 로그는 오늘 것만 센다 — 신호의 dt는 백엔드와 같은 YYYYMMDD다.
+function todayDt() {
+  return require('./backtest-spec').todayYyyymmdd();
+}
+
+// 배포 탭까지 간다. 배포 목록 자체는 저장된 버전이 없어도 그려진다(막는 것은 새 배포 폼뿐).
+async function atDeployTab(overrides) {
+  const made = await mounted(overrides);
+  await click(findByClass(made.container, 'backtest-tab')[4]);
+  await flush();
+  await flush();
+  return made;
+}
+
+test('무장 토글이 armDeployment(id, 반대값)를 정확히 한 번 부른다', async () => {
+  const calls = [];
+  let armed = true;
+  const { container } = await atDeployTab({
+    deployments: async () => [deployment({ armed, auto_armed: armed })],
+    listSignals: async () => [],
+    armDeployment: async (id, next) => { calls.push([id, next]); armed = next; return { armed: next }; },
+  });
+  const toggle = findByClass(container, 'backtest-deploy-arm-toggle')[0];
+  assert.ok(toggle, '무장 토글이 있어야 한다');
+  assert.equal(toggle.getAttribute('aria-pressed'), 'true');
+  await click(toggle);
+  await flush();
+  assert.deepEqual(calls, [['d1', false]]);
+  // 다시 읽은 목록이 토글의 시각 상태를 정한다 — 낙관적으로 뒤집지 않는다.
+  assert.equal(findByClass(container, 'backtest-deploy-arm-toggle')[0].getAttribute('aria-pressed'), 'false');
+});
+
+test('무장이 409로 거절당하면 그 이유가 화면에 남는다 — 조용한 실패 금지', async () => {
+  const { container } = await atDeployTab({
+    deployments: async () => [deployment({ armed: false, auto_armed: false })],
+    listSignals: async () => [],
+    armDeployment: async () => { throw new Error('멈춘 배포는 무장할 수 없다'); },
+  });
+  await click(findByClass(container, 'backtest-deploy-arm-toggle')[0]);
+  await flush();
+  assert.match(textOf(container), /멈춘 배포는 무장할 수 없다/);
+  // 배포 목록이 통째로 오류 화면으로 바뀌지는 않는다.
+  assert.equal(findByClass(container, 'backtest-canvas-error').length, 0);
+  assert.equal(findByClass(container, 'backtest-deploy-arm-toggle')[0].getAttribute('aria-pressed'), 'false');
+});
+
+test('armDeployment 배선이 없으면 무장 토글을 아예 그리지 않는다', async () => {
+  const { container } = await atDeployTab({
+    deployments: async () => [deployment()],
+    listSignals: async () => [],
+  });
+  assert.equal(findByClass(container, 'backtest-deploy-arm-toggle').length, 0);
+  assert.equal(findByClass(container, 'backtest-deploy-arm').length, 0);
+  assert.doesNotMatch(textOf(container), /키우미 켜짐/);
+});
+
+test('auto_armed가 false면 "자동" 표시가 없다 — armed만으로 자동을 말하지 않는다', async () => {
+  const { container } = await atDeployTab({
+    // 사람은 스위치를 켰지만 모드가 approve라 자동 집행은 아니다(서버 판정).
+    deployments: async () => [deployment({ mode: 'approve', armed: true, auto_armed: false })],
+    listSignals: async () => [],
+    armDeployment: async () => ({ armed: true }),
+  });
+  assert.equal(findByClass(container, 'backtest-deploy-auto').length, 0);
+  // 그래도 토글은 켜져 있다 — 그것이 서버가 준 armed다.
+  assert.equal(findByClass(container, 'backtest-deploy-arm-toggle')[0].getAttribute('aria-pressed'), 'true');
+
+  // 반대쪽도 잠근다 — 없는 것만 검사하면 뱃지를 그리는 줄을 통째로 지워도 통과한다.
+  const on = await atDeployTab({
+    deployments: async () => [deployment({ mode: 'auto', armed: true, auto_armed: true })],
+    listSignals: async () => [],
+    armDeployment: async () => ({ armed: true }),
+  });
+  assert.equal(findByClass(on.container, 'backtest-deploy-auto').length, 1);
+  assert.match(textOf(on.container), /자동/);
+});
+
+test('오늘 로그는 order_no·qty가 없는 행에 수량과 주문번호를 지어내지 않는다', async () => {
+  const dt = todayDt();
+  const { container } = await atDeployTab({
+    deployments: async () => [deployment()],
+    listSignals: async () => [
+      { id: 's1', dt, side: 'buy', stage: 'signal', reason: '종가가 돌파선을 넘음',
+        basis: '', blocked_reason: null, fill_price: null, order_no: null, qty: null },
+    ],
+    armDeployment: async () => ({ armed: true }),
+  });
+  const row = findByClass(container, 'backtest-deploy-log-row')[0];
+  assert.ok(row, '오늘 신호 한 줄이 있어야 한다');
+  assert.equal(findByClass(row, 'backtest-deploy-log-order').length, 0);
+  const text = textOf(row);
+  assert.match(text, /신호/);
+  assert.match(text, /종가가 돌파선을 넘음/);
+  assert.doesNotMatch(text, /주/);
+  assert.doesNotMatch(text, /원/);
+});
+
+test('오늘 로그는 체결 행에 수량·체결가·주문번호를 싣고 오늘 것만 센다', async () => {
+  const dt = todayDt();
+  const { container } = await atDeployTab({
+    deployments: async () => [deployment()],
+    listSignals: async () => [
+      { id: 's0', dt: '20200101', side: 'buy', stage: 'filled', reason: '어제 일',
+        fill_price: 100, order_no: 'A0', qty: 1 },
+      { id: 's1', dt, side: 'buy', stage: 'filled', reason: '사람 승인 없이 자동',
+        fill_price: 74250, order_no: 'KR0001', qty: 10 },
+    ],
+    armDeployment: async () => ({ armed: true }),
+  });
+  // 어제 행은 오늘 로그에 없다.
+  assert.equal(findByClass(container, 'backtest-deploy-log-row').length, 1);
+  const row = findByClass(container, 'backtest-deploy-log-row')[0];
+  assert.match(textOf(row), /005930 10주 74,250원 — 사람 승인 없이 자동/);
+  assert.equal(findByClass(row, 'backtest-deploy-log-order')[0].textContent, 'KR0001');
+  // 하루 한도(3건)와 같은 축으로 센다 — 오늘 나간 주문만이다.
+  assert.match(textOf(container), /오늘 1 \/ 3건/);
+});
+
+test('신호를 못 읽으면 오늘 로그를 그리지 않는다 — 빈 로그는 "아무 일도 없었다"가 된다', async () => {
+  const { container } = await atDeployTab({
+    deployments: async () => [deployment()],
+    armDeployment: async () => ({ armed: true }),
+  });
+  assert.equal(findByClass(container, 'backtest-deploy-log').length, 0);
+});
+
+test('배포 카드 머리 문구가 자동 주문 사실을 말한다 — "신호까지만"은 더 이상 참이 아니다', async () => {
+  const { container } = await atDeployTab({ deployments: async () => [] });
+  const note = textOf(container);
+  assert.match(note, /키우미를 켜면 미리 정한 한도 안에서 주문까지 자동으로 나갑니다/);
+  assert.doesNotMatch(note, /주문은 주문 게이트를 통과합니다/);
+});
+
+test('오늘 로그 순수 계산 — 없는 값은 빈 칸이고 단계는 사람 말이다', () => {
+  assert.equal(backtestCanvas.signalQtyText({ qty: null, fill_price: null }), '');
+  assert.equal(backtestCanvas.signalQtyText({ qty: 10, fill_price: null }), '10주');
+  assert.equal(backtestCanvas.signalQtyText({ qty: 10, fill_price: 74250 }), '10주 74,250원');
+  assert.equal(backtestCanvas.signalStageLabel('blocked'), '차단');
+  assert.equal(backtestCanvas.signalStageLabel('filled'), '체결');
+  // 차단 사유가 있으면 그것이 이유를 대신한다.
+  assert.equal(
+    backtestCanvas.signalLineText({ reason: '돌파', blocked_reason: '하루 3건 소진' }, '005930'),
+    '005930 — 하루 3건 소진',
+  );
+  // created_at이 없으면 시각 칸은 빈 문자열이다 — dt(날짜)를 시각인 척 세우지 않는다.
+  assert.equal(backtestCanvas.signalTimeText({ dt: '20260904' }), '');
+  // 있으면 HH:MM이다. 이 줄이 없으면 signalTimeText가 늘 ''를 돌려줘도 초록이라
+  // 화면의 시각 칸을 아무도 잠그지 않는다(검증 지적).
+  const at = new Date(2026, 8, 4, 9, 31);
+  assert.equal(backtestCanvas.signalTimeText({ created_at: at.toISOString() }), '09:31');
+  assert.equal(backtestCanvas.signalTimeText({ created_at: '말이 안 되는 값' }), '');
+  // 나머지 단계 라벨도 지어낸 말이 아니라 고정된 말이다.
+  assert.equal(backtestCanvas.signalStageLabel('in_doubt'), '판단 보류');
+  assert.equal(backtestCanvas.signalStageLabel('skipped'), '해당 없음');
+  assert.equal(
+    backtestCanvas.todayOrderCount(
+      [{ dt: '20260904', stage: 'ordered' }, { dt: '20260904', stage: 'signal' },
+        { dt: '20260903', stage: 'filled' }],
+      '20260904',
+    ),
+    1,
+  );
+});
+
 // ── US-007/008/009 · 편집 가능한 지도 탭(시각 전략 편집기) ───────────────────
 //
 // 편집기 자체의 계약(진단 4곳·키보드·목록 보기)은 backtest-visual-editor.test.js가 본다.
