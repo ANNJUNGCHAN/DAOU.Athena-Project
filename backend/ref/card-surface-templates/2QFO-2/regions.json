@@ -8,5 +8,10 @@
     { "node_id": "2QH0-2", "name": "Investor Panel", "role": "primary", "depth": 2 },
     { "node_id": "2QH1-2", "name": "Side Panel", "role": "rail", "depth": 2 },
     { "node_id": "2QKL-2", "name": "Flow Status Footer", "role": "footer", "depth": 1 }
+  ],
+  "responsive": [
+    { "node_id": "2QGE-2", "traits": ["flow"] },
+    { "node_id": "2QGF-2", "traits": ["atomic"] },
+    { "node_id": "2QGG-2", "traits": ["atomic"] }
   ]
 }

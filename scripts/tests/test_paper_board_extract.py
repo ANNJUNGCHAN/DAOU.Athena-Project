@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 
 import pytest
 
@@ -308,6 +309,143 @@ def test_load_regions_accepts_both_shapes(tmp_path):
         encoding="utf-8",
     )
     assert pbe.load_regions(b) == ({"X-0": "rail"}, "R-0")
+
+
+def test_load_responsive_validates_and_normalizes_manifest(tmp_path):
+    manifest = tmp_path / "regions.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "responsive": [
+                    {"node_id": "B-0", "traits": ["atomic"]},
+                    {
+                        "node_id": "A-0",
+                        "traits": ["scroll"],
+                        "accessible_label": "Quote details",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert pbe.load_responsive(manifest, {"A-0", "B-0"}) == [
+        {"node_id": "B-0", "traits": ("atomic",), "accessible_label": None},
+        {
+            "node_id": "A-0",
+            "traits": ("scroll",),
+            "accessible_label": "Quote details",
+        },
+    ]
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        '{"responsive": [{"node_id": "A-0", "traits": []}]}',
+        '{"responsive": [{"node_id": "A-0", "traits": ["unknown"]}]}',
+        '{"responsive": [{"node_id": "A-0", "traits": ["flow", "scroll"]}]}',
+        '{"responsive": [{"node_id": "A-0", "traits": ["scroll"]}]}',
+        '{"responsive": [{"node_id": "A-0", "traits": ["atomic"]}, '
+        '{"node_id": "A-0", "traits": ["flow"]}]}',
+        '{"responsive": [{"node_id": "A-0", "traits": ["atomic"]}], '
+        '"responsive": []}',
+    ],
+)
+def test_load_responsive_fails_closed_for_invalid_manifest(tmp_path, raw):
+    manifest = tmp_path / "regions.json"
+    manifest.write_text(raw, encoding="utf-8")
+
+    with pytest.raises(pbe.ExtractError):
+        pbe.load_responsive(manifest, {"A-0"})
+
+
+def test_load_responsive_rejects_unknown_node(tmp_path):
+    manifest = tmp_path / "regions.json"
+    manifest.write_text(
+        '{"responsive": [{"node_id": "MISSING-0", "traits": ["atomic"]}]}',
+        encoding="utf-8",
+    )
+
+    with pytest.raises(pbe.ExtractError):
+        pbe.load_responsive(manifest, {"A-0"})
+
+
+def test_apply_responsive_emits_stable_classes_and_scroll_accessibility():
+    root, elements, nodes = _aligned()
+    declarations = [
+        {"node_id": "B-0", "traits": ("scroll", "atomic"), "accessible_label": "Quote details"},
+        {"node_id": "C-0", "traits": ("atomic",), "accessible_label": None},
+    ]
+
+    pbe.apply_responsive(elements, nodes, declarations)
+    html = pbe.serialize(root)
+
+    assert 'class="bs-r-atomic bs-r-scroll"' in html
+    assert 'role="region" tabindex="0" aria-label="Quote details"' in html
+    assert 'class="bs-r-atomic"' in html
+
+
+def test_apply_responsive_fails_closed_before_overwriting_existing_role():
+    _, elements, nodes = _aligned()
+    elements[1].attrs.append(("role", "button"))
+
+    with pytest.raises(pbe.ExtractError, match="existing role"):
+        pbe.apply_responsive(
+            elements,
+            nodes,
+            [
+                {
+                    "node_id": "B-0",
+                    "traits": ("scroll",),
+                    "accessible_label": "Quote details",
+                }
+            ],
+        )
+
+
+def test_detect_tables_accepts_explicit_table_directives_without_g1_behavior_change():
+    root = pbe.parse_jsx(TABLE_JSX)
+    nodes = pbe.parse_tree(TABLE_TREE)
+    elements = pbe.flatten(root)
+    pbe.align(elements, nodes)
+
+    assert pbe.detect_tables(
+        elements,
+        nodes,
+        {},
+        explicit_tables={"T-0": {"node_id": "T-0", "traits": ("paired-table",)}},
+    ) == pbe.detect_tables(elements, nodes, {})
+
+
+def test_nonresponsive_13bc_extraction_remains_byte_equivalent():
+    board_dir = pbe.TEMPLATE_ROOT / "13BC-2"
+
+    html, payload = pbe.extract_board(board_dir)
+    previous = json.loads((board_dir / "slots.json").read_text(encoding="utf-8"))
+
+    assert html == (board_dir / "board.html").read_text(encoding="utf-8")
+    assert pbe.dump_json(pbe.merge_authored(previous, payload)) == (
+        board_dir / "slots.json"
+    ).read_text(encoding="utf-8")
+
+
+def test_non_table_responsive_annotation_preserves_structural_extraction(tmp_path):
+    source = pbe.TEMPLATE_ROOT / "13BC-2"
+    board_dir = tmp_path / source.name
+    shutil.copytree(source, board_dir)
+    baseline_html, baseline = pbe.extract_board(source)
+    manifest_path = board_dir / "regions.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["responsive"] = [{"node_id": manifest["root"], "traits": ["atomic"]}]
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False), encoding="utf-8")
+
+    annotated_html, annotated = pbe.extract_board(board_dir)
+
+    assert annotated_html != baseline_html
+    assert "bs-r-atomic" in annotated_html
+    for key in ("regions", "tables", "counts", "density", "slots", "column_bindings"):
+        assert annotated[key] == baseline[key]
 
 
 TABLE_TREE = """Frame "표" (T-0) 800×200
