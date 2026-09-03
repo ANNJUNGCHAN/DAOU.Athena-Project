@@ -13,6 +13,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
@@ -206,12 +207,11 @@ def test_empty_source_is_422(watch_client):
 # ── B-24 덮어쓰기 금지 ───────────────────────────────────────────────────────
 
 
-@pytest.mark.parametrize("status", ["active", "paused"])
-def test_live_alarm_code_is_409(watch_client, status):
+def test_active_alarm_code_is_409(watch_client):
     client, runtime, root = watch_client
     client.post(CODE, json=_body())  # 초안 단계에서 먼저 착지
     before = (root / "watch" / "volume_spike.py").read_bytes()
-    _seed_code_routine(runtime, status)
+    _seed_code_routine(runtime, "active")
 
     res = client.post(CODE, json=_body(source=SOURCE + "\n# 몰래 고침\n"))
     assert res.status_code == 409
@@ -219,6 +219,41 @@ def test_live_alarm_code_is_409(watch_client, status):
         "켜져 있는 알람의 코드는 못 바꿈 — 먼저 일시중지하거나 새로 만들기"
     )
     assert (root / "watch" / "volume_spike.py").read_bytes() == before  # 한 바이트도 안 바뀜
+
+
+@pytest.mark.parametrize("status", ["paused", "draft"])
+def test_stopped_alarm_code_can_be_rewritten(watch_client, status):
+    """일시중지·초안이 가리키는 파일은 고쳐 쓸 수 있다 — 잠그면 「멈추고 고치기」가 막다른 길."""
+    client, runtime, root = watch_client
+    client.post(CODE, json=_body())
+    _seed_code_routine(runtime, status)
+
+    res = client.post(CODE, json=_body(source=SOURCE + "\n# 고쳐 씀\n"))
+    assert res.status_code == 200, res.text
+    target = root / "watch" / "volume_spike.py"
+    assert "# 고쳐 씀" in target.read_text(encoding="utf-8")
+    assert res.json()["code_hash"] == hashlib.sha256(target.read_bytes()).hexdigest()
+
+
+def test_rewriting_a_paused_alarm_blocks_resume_until_a_new_check(check_client):
+    """고쳐 쓰면 검사 때의 해시와 어긋난다 — 재개는 다시 검사를 통과해야 열린다.
+
+    실행층이 서 있는 배치(check_client)로 본다 — 해시 말고 다른 사유로 막히면
+    이 테스트가 증명하려는 것이 가려진다.
+    """
+    client, runtime, root = check_client
+    landed = client.post(CODE, json=_body()).json()["code_hash"]
+    spec = _seed_code_routine(runtime, "paused")
+    spec.watch = replace(spec.watch, version_hash=landed)
+    runtime.store.upsert(spec)
+    assert runtime.can_activate(runtime.store.get(spec.id)) is None
+
+    edited = client.post(CODE, json=_body(source=SOURCE + "\n# 고쳐 씀\n"))
+    assert edited.status_code == 200, edited.text
+
+    assert runtime.can_activate(runtime.store.get(spec.id)) == (
+        "검사 뒤 코드가 바뀜 — 다시 검사"
+    )
 
 
 def test_a_new_file_is_allowed_while_another_alarm_is_active(watch_client):
@@ -468,6 +503,32 @@ def test_check_attaches_the_hash_to_a_draft_and_opens_confirm(check_client):
     assert confirmed.status_code == 200, confirmed.text
     assert confirmed.json()["status"] == "active"
     assert confirmed.json()["watch"]["path"] == "watch/volume_spike.py"
+
+
+def test_check_reseeds_the_hash_of_a_paused_alarm(check_client):
+    """일시중지 알람은 고쳐 쓰고 다시 검사하면 그 자리에서 재개 문이 열린다."""
+    client, runtime, root = check_client
+    digest = _write_watch(root)
+    spec = _seed_code_routine(runtime, "paused")
+
+    body = client.post(CHECK, json=_check_body(routine_id=spec.id)).json()
+    assert body["ok"] is True
+
+    assert runtime.store.get(spec.id).watch.version_hash == digest
+    assert runtime.can_activate(runtime.store.get(spec.id)) is None
+
+
+def test_check_leaves_the_hash_of_an_active_alarm_alone(check_client):
+    """켜져 있는 알람의 해시는 검사가 갈아 끼우지 않는다 — 사유를 경고로 돌려준다."""
+    client, runtime, root = check_client
+    _write_watch(root)
+    spec = _seed_code_routine(runtime, "active")
+
+    body = client.post(CHECK, json=_check_body(routine_id=spec.id)).json()
+    assert body["ok"] is True
+
+    assert runtime.store.get(spec.id).watch.version_hash == "a" * 64  # 그대로
+    assert "켜져 있는 알람 — 해시는 그대로 두었음 · 고치려면 먼저 일시중지" in body["warnings"]
 
 
 def test_check_result_shows_up_in_the_detail_view(check_client):

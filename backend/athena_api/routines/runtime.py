@@ -330,6 +330,9 @@ async def open_routines(
         run_archive_once=lambda: _archive_once(settings),
         code_poll_interval_s=settings.routines_code_poll_interval_seconds,
         code_rest_calls_per_cycle=settings.routines_code_rest_calls_per_cycle,
+        code_market_open=settings.routines_code_market_open,
+        code_market_close=settings.routines_code_market_close,
+        code_market_weekdays_only=settings.routines_code_market_weekdays_only,
     )
 
     runtime = RoutinesRuntime(

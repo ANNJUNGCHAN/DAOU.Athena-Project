@@ -138,6 +138,11 @@ class Settings(BaseSettings):
     routines_code_rest_calls_per_cycle: int = 20
     # 샌드박스 동시 실행 상한 — 프로세스 기동 비용이 있어 종목 수만큼 한꺼번에 띄우지 않는다.
     routines_code_max_concurrent: int = 2
+    # 코드 감시가 도는 장중 창 — 기본은 KST 평일 09:00~15:30. 시연에서 장 밖에도
+    # 돌려 보려면 창을 넓히거나 요일 잠금을 푼다(scheduler.in_code_market_hours).
+    routines_code_market_open: str = "09:00"
+    routines_code_market_close: str = "15:30"
+    routines_code_market_weekdays_only: bool = True
     # 라우틴별이 아닌 전역 설정 — routines_enabled와 무관하게 항상 로드된다.
     nudge_guard_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "nudge_guard.json"
