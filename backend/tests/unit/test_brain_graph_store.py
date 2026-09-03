@@ -866,3 +866,83 @@ async def test_set_relation_confidence_is_idempotent(store: GraphStore) -> None:
 
 async def test_set_relation_confidence_on_a_missing_id_is_not_an_error(store: GraphStore) -> None:
     assert await store.set_relation_confidence("relation:nope", Confidence.EXTRACTED) is None
+
+
+# ── 사람의 직접 추가·수정(2026-09-03) ────────────────────────────────────────
+
+
+async def _two_entities(store: GraphStore) -> tuple[Entity, Entity]:
+    await store.upsert_source(source("s1"))
+    samsung = entity(EntityKind.SECURITY, "삼성전자")
+    theme = entity(EntityKind.THEME, "반도체")
+    await store.apply_extraction("s1", "fp", (PROFILE, samsung, theme), ())
+    return samsung, theme
+
+
+async def test_upsert_manual_relation_writes_with_the_manual_tier(store: GraphStore) -> None:
+    samsung, theme = await _two_entities(store)
+    written = await store.upsert_manual_relation(
+        subject_id=samsung.id, object_id=theme.id, kind="belongs_to"
+    )
+    assert written is not None
+    assert written.tier == SourceTier.MANUAL.value
+    [row] = await store.relations()
+    assert row.tier == SourceTier.MANUAL.value
+    ops = [e.op for e in await store.events()]
+    assert GraphEventOp.EDGE_ADDED in ops
+
+
+async def test_a_second_manual_edit_does_not_erase_the_first(store: GraphStore) -> None:
+    """`apply_extraction`으로 구현하면 여기서 깨진다 — 그 함수는 소스의 관계 전체를
+    교체하므로 직접 수정이 한 소스를 공유하는 순간 두 번째가 첫 번째를 지운다."""
+    samsung, theme = await _two_entities(store)
+    other = entity(EntityKind.THEME, "배당")
+    await store.upsert_entity(other)
+
+    await store.upsert_manual_relation(subject_id=samsung.id, object_id=theme.id, kind="belongs_to")
+    await store.upsert_manual_relation(subject_id=samsung.id, object_id=other.id, kind="belongs_to")
+
+    assert (await store.summary()).relations == 2, "두 번째 편집이 첫 편집을 지우면 안 된다"
+
+
+async def test_conversation_extraction_cannot_overwrite_a_manual_edit(store: GraphStore) -> None:
+    """사람이 고친 것이 다음 대화 추출에 조용히 덮이면 안 된다."""
+    samsung, theme = await _two_entities(store)
+    await store.upsert_manual_relation(
+        subject_id=samsung.id, object_id=theme.id, kind="belongs_to",
+        confidence=Confidence.EXTRACTED,
+    )
+    await store.upsert_source(source("s2", fp="fp2"))
+
+    await store.apply_extraction(
+        "s2",
+        "fp2",
+        (PROFILE, samsung, theme),
+        (
+            Relation(
+                id=relation_id("belongs_to", samsung.id, theme.id),
+                kind="belongs_to",
+                source_entity_id=samsung.id,
+                target_entity_id=theme.id,
+                confidence=Confidence.AMBIGUOUS,
+                tier=SourceTier.CONVERSATIONAL,
+                source_id="s2",
+                observed_at=NOW,
+                extracted_at=NOW,
+            ),
+        ),
+    )
+
+    [row] = await store.relations()
+    assert row.tier == SourceTier.MANUAL.value, "직접 수정이 남아야 한다"
+    assert row.confidence == Confidence.EXTRACTED.value
+    ops = [e.op for e in await store.events()]
+    assert GraphEventOp.EDGE_REJECTED in ops, "밀렸다는 사실은 기록한다"
+
+
+async def test_upsert_manual_relation_refuses_a_missing_endpoint(store: GraphStore) -> None:
+    """화면에 없는 노드를 이름만으로 지어내지 않는다 — 오타가 새 노드가 된다."""
+    samsung, _ = await _two_entities(store)
+    assert await store.upsert_manual_relation(
+        subject_id=samsung.id, object_id="entity:does-not-exist", kind="belongs_to"
+    ) is None

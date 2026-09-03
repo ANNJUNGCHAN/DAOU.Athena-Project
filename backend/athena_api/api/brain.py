@@ -371,6 +371,80 @@ async def retry_startup_brain_ingestion(
         )
 
 
+class RelationManualRequest(BaseModel):
+    """사람이 화면에서 직접 추가·수정한 관계 하나.
+
+    이름이 아니라 **id**를 받는다. 이름으로 받으면 오타가 새 노드가 되고, 그것은
+    고치려던 것보다 나쁘다 — 화면은 이미 두 끝의 id를 알고 있다.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    subject_id: str = Field(min_length=1, max_length=128)
+    object_id: str = Field(min_length=1, max_length=128)
+    kind: str = Field(min_length=1, max_length=128)
+    rationale: str | None = Field(default=None, max_length=2000)
+
+
+class RelationManualResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    written: bool
+    revision: int
+    relation_id: str | None = None
+    tier: str | None = None
+    # 두 끝 중 하나가 그래프에 없으면 쓰지 않는다. 화면이 "왜 안 됐는지"를 말할 수
+    # 있어야 하므로 그 사유를 구분해 돌려준다(§0 정직성).
+    reason: str | None = None
+
+
+@router.post(
+    "/relations/manual",
+    summary="관계 하나를 사람이 직접 추가·수정한다",
+    operation_id="upsert_brain_manual_relation",
+    response_model=RelationManualResponse,
+    openapi_extra={
+        # 취소·확인 입구와 같은 규칙 — 모델은 닿지 않는다.
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "write",
+    },
+)
+async def upsert_brain_manual_relation(
+    payload: RelationManualRequest,
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> RelationManualResponse:
+    """확정 카드의 op=add·change가 부르는 입구(2026-09-03 사용자 확정).
+
+    지우기·확인과 달리 이것은 관계를 **새로 쓴다.** 그래서 티어가 MANUAL이고,
+    다음 대화 추출이 덮지 못한다(store._apply_one_relation).
+    """
+    require_local_bearer(request, authorization)
+    store = _require_store(request)
+    written = await store.upsert_manual_relation(
+        subject_id=payload.subject_id,
+        object_id=payload.object_id,
+        kind=payload.kind,
+        rationale=payload.rationale,
+    )
+    revision = await store.graph_revision()
+    if written is None:
+        logger.info(
+            "brain manual relation refused kind=%s (endpoint missing)", payload.kind
+        )
+        return RelationManualResponse(
+            written=False,
+            revision=revision,
+            reason="endpoint_not_in_graph",
+        )
+    return RelationManualResponse(
+        written=True,
+        revision=revision,
+        relation_id=written.id,
+        tier=written.tier,
+    )
+
+
 class RelationConfirmRequest(BaseModel):
     """되물을 것들 카드의 '맞다' — 사람이 확인한 관계."""
 

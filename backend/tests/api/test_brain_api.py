@@ -27,6 +27,7 @@ RESET_PATH = "/api/v1/brain/reset-and-restart"
 ENTITY_TIMELINE_PATH = "/api/v1/brain/analysis/entity-timeline"
 RETRACT_PATH = "/api/v1/brain/relations/retractions"
 CONFIRM_PATH = "/api/v1/brain/relations/confirmations"
+MANUAL_PATH = "/api/v1/brain/relations/manual"
 SECRET_MARKER = "지난주에 삼성전자 100주를 매수하고 싶다는 비밀스러운 계획"
 
 
@@ -1796,5 +1797,23 @@ def test_relation_confirmation_is_not_exposed_to_the_model() -> None:
     with _disabled_client() as client:
         schema = client.get("/openapi.json").json()
     operation = schema["paths"]["/api/v1/brain/relations/confirmations"]["post"]
+    assert operation["x-athena-llm-exposed"] is False
+    assert operation["x-athena-side-effect"] == "write"
+
+
+def test_manual_relation_requires_bearer_header() -> None:
+    with _disabled_client() as client:
+        response = client.post(
+            MANUAL_PATH,
+            json={"subject_id": "entity:a", "object_id": "entity:b", "kind": "belongs_to"},
+        )
+    assert response.status_code == 422
+
+
+def test_manual_relation_is_not_exposed_to_the_model() -> None:
+    """추가·수정도 쓰기다 — 취소·확인 입구와 같은 규칙을 따른다."""
+    with _disabled_client() as client:
+        schema = client.get("/openapi.json").json()
+    operation = schema["paths"]["/api/v1/brain/relations/manual"]["post"]
     assert operation["x-athena-llm-exposed"] is False
     assert operation["x-athena-side-effect"] == "write"

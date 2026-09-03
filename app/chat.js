@@ -1884,6 +1884,15 @@ function answerGraphEditProposal(choice) {
     return;
   }
 
+  // 추가·수정도 바로 쓴다(2026-09-03). 두 끝 id가 다 와야 한다 — 이름으로 쓰면
+  // 오타가 새 노드가 되고, 그것은 고치려던 것보다 나쁘다. 하나라도 없으면 아래
+  // 예전 경로(답변 문장 제출 → 수집 때 반영)로 떨어진다.
+  if (choice === 'apply' && (item.op === 'add' || item.op === 'change')
+      && item.subjectId && item.objectId) {
+    void writeManualRelation(item);
+    return;
+  }
+
   // 건너뛰기는 아무것도 보내지 않는다 — 침묵을 답으로 굳히지 않는다.
   if (sentence) dispatchUserQuery(sentence);
 }
@@ -1900,13 +1909,47 @@ function appendSystemLine(text) {
   scrollAfterRender();
 }
 
+// 사람이 누른 추가·수정을 그래프에 바로 쓴다. 티어는 MANUAL이라 다음 대화 추출이
+// 덮지 못한다(store._apply_one_relation). 취소와 같은 이유로 실패를 조용히 넘기지
+// 않는다 — 사람은 고쳤다고 믿고 화면을 떠난다(§0 정직성).
+async function writeManualRelation(item) {
+  const label = proposalLabel(item);
+  let res = null;
+  try {
+    res = await window.athena.invoke('athena:brain-manual-relation', {
+      subjectId: item.subjectId,
+      objectId: item.objectId,
+      kind: item.relation,
+      rationale: item.reason,
+    });
+  } catch (err) {
+    appendSystemLine(label + ' — 반영하지 못했습니다: ' + String((err && err.message) || err));
+    return;
+  }
+  if (!res || !res.ok) {
+    appendSystemLine(label + ' — 반영하지 못했습니다: ' + ((res && res.error) || '알 수 없는 이유'));
+    return;
+  }
+  if (res.written === false) {
+    // 두 끝 중 하나가 그래프에 없다 — 화면에 없는 노드를 이름만으로 만들지 않는다.
+    appendSystemLine(label + ' — 그래프에 없는 노드가 있어 반영하지 못했습니다.');
+    return;
+  }
+  appendSystemLine(label + ' — 반영했습니다(직접 수정).');
+}
+
+// 카드가 가리키는 것을 한 줄로. 세 곳이 같은 말로 불러야 사람이 같은 것으로 읽는다.
+function proposalLabel(item) {
+  return (item.subjectImplicit || !item.subject)
+    ? '"' + item.object + '" · \'' + item.relationText + '\''
+    : '"' + item.subject + '" → "' + item.object + '" · \'' + item.relationText + '\'';
+}
+
 // 사람이 누른 취소를 그래프에 바로 반영한다. 실패하면 조용히 넘기지 않는다 —
 // 사람은 지웠다고 믿고 화면을 떠난다(§0 정직성). 성공하면 main이 화면을 다시
 // 읽게 하는 이벤트를 쏘므로 여기서 따로 다시 그리지 않는다.
 async function retractGraphRelation(item) {
-  const label = item.subjectImplicit
-    ? `"${item.object}" · '${item.relationText}'`
-    : `"${item.subject}" → "${item.object}" · '${item.relationText}'`;
+  const label = proposalLabel(item);
   let res = null;
   try {
     res = await window.athena.invoke('athena:brain-retract-relation', { relationId: item.relationId });

@@ -37,6 +37,7 @@ from .ontology import (
     GraphEvent,
     GraphEventOp,
     Relation,
+    SourceKind,
     SourceRecord,
     SourceTier,
     entity_id,
@@ -674,6 +675,125 @@ class GraphStore:
 
         return await self._owner.run(read)
 
+    async def upsert_manual_relation(
+        self,
+        *,
+        subject_id: str,
+        object_id: str,
+        kind: str,
+        confidence: Confidence = Confidence.EXTRACTED,
+        rationale: str | None = None,
+        now: datetime | None = None,
+    ) -> RelationRow | None:
+        """사람이 화면에서 직접 추가·수정한 관계 하나를 쓴다(2026-09-03).
+
+        **왜 `apply_extraction`을 못 쓰나.** 그 함수는 *한 소스가 주장하는 관계 전체*를
+        원자적으로 교체한다. 직접 수정을 그 경로로 보내면 소스가 하나뿐이므로 **새 수정이
+        앞선 수정을 전부 지운다** — 두 번째 편집에서 첫 편집이 사라진다. 그래서 관계
+        하나만 건드리는 별 메서드가 필요하다(`retract_relation`과 같은 사정).
+
+        두 끝 엔티티는 이미 있어야 한다. 없는 노드를 여기서 만들지 않는 이유: 이 경로는
+        화면에 보이는 것을 고치는 자리이고, 화면에 없는 노드를 이름만으로 지어내면
+        오타가 새 노드가 된다. 없으면 None을 돌려주고 호출자가 정직하게 말한다.
+
+        티어는 MANUAL이다 — 다음 대화 추출이 덮지 못한다(`_apply_one_relation`).
+        """
+        if not kind or len(kind) > 128:
+            raise ValueError("relation kind is out of bounds")
+        stamp = now or utc_now()
+        source = SourceRecord(
+            # 직접 수정 전체가 한 소스를 공유한다. 관계마다 소스를 만들면 sources
+            # 테이블이 편집 횟수만큼 부풀고, 그것으로 얻는 것이 없다 —
+            # 무엇을 언제 고쳤는지는 graph_events가 이미 들고 간다.
+            id="source:manual-edit",
+            kind=SourceKind.MANUAL_EDIT,
+            text="사람이 그래프 화면에서 직접 고친 기록",
+            fingerprint="manual-edit",
+            occurred_at=stamp,
+            ingested_at=stamp,
+        )
+        new_id = relation_id(kind, subject_id, object_id)
+
+        def write() -> RelationRow | None:
+            connection = self._require()
+            with atomic(connection, _GRAPH_WRITE):
+                for endpoint in (subject_id, object_id):
+                    row = connection.execute(
+                        "SELECT id FROM entities WHERE id = ?", (endpoint,)
+                    ).fetchone()
+                    if row is None:
+                        return None
+                self._upsert_source_row(connection, source)
+                existing = connection.execute(
+                    "SELECT confidence, tier FROM relations WHERE id = ?", (new_id,)
+                ).fetchone()
+                before = None if existing is None else str(existing["confidence"])
+                if existing is not None and before == confidence.value \
+                        and str(existing["tier"]) == SourceTier.MANUAL.value:
+                    # 같은 값을 두 번 눌러도 이력이 부풀지 않는다.
+                    return RelationRow(
+                        id=new_id,
+                        kind=kind,
+                        source_entity_id=subject_id,
+                        target_entity_id=object_id,
+                        confidence=confidence.value,
+                        tier=SourceTier.MANUAL.value,
+                        rationale=rationale,
+                        source_id=source.id,
+                        observed_at=_ts(stamp),
+                    )
+                revision = self._bump_revision(connection)
+                connection.execute(
+                    "INSERT INTO relations(id, kind, source_entity_id, target_entity_id,"
+                    " confidence, tier, rationale, source_id, attributes_json, observed_at,"
+                    " extracted_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)"
+                    " ON CONFLICT(id) DO UPDATE SET confidence=excluded.confidence,"
+                    " tier=excluded.tier, rationale=excluded.rationale,"
+                    " source_id=excluded.source_id, observed_at=excluded.observed_at,"
+                    " extracted_at=excluded.extracted_at",
+                    (
+                        new_id,
+                        kind,
+                        subject_id,
+                        object_id,
+                        confidence.value,
+                        SourceTier.MANUAL.value,
+                        rationale,
+                        source.id,
+                        _json({}),
+                        _ts(stamp),
+                        _ts(stamp),
+                    ),
+                )
+                self._record_event(
+                    connection,
+                    revision=revision,
+                    op=(
+                        GraphEventOp.EDGE_CHANGED
+                        if existing is not None
+                        else GraphEventOp.EDGE_ADDED
+                    ),
+                    subject_id=subject_id,
+                    object_id=object_id,
+                    relation=kind,
+                    confidence_before=before,
+                    confidence_after=confidence.value,
+                    source_id=source.id,
+                )
+                return RelationRow(
+                    id=new_id,
+                    kind=kind,
+                    source_entity_id=subject_id,
+                    target_entity_id=object_id,
+                    confidence=confidence.value,
+                    tier=SourceTier.MANUAL.value,
+                    rationale=rationale,
+                    source_id=source.id,
+                    observed_at=_ts(stamp),
+                )
+
+        return await self._owner.run(write)
+
     async def set_relation_confidence(
         self, relation_id: str, confidence: Confidence
     ) -> RelationRow | None:
@@ -1039,9 +1159,16 @@ class GraphStore:
 
         if existing is not None:
             owned_by_other = str(existing["source_id"]) != relation.source_id
-            incumbent_is_fact = str(existing["tier"]) == SourceTier.DETERMINISTIC.value
+            # 대화 추론이 덮지 못하는 기득 두 층: 체결·잔고(기계적 사실)와
+            # 직접 수정(주인이 명시적으로 말한 것, 2026-09-03). 직접 수정을 여기
+            # 넣지 않으면 사람이 고친 것이 다음 대화 추출에 조용히 덮인다 —
+            # 사람은 고쳤다고 믿고 화면을 떠나는데 잠시 뒤 되돌아온다.
+            incumbent_is_authoritative = str(existing["tier"]) in (
+                SourceTier.DETERMINISTIC.value,
+                SourceTier.MANUAL.value,
+            )
             challenger_is_talk = relation.tier is SourceTier.CONVERSATIONAL
-            if owned_by_other and incumbent_is_fact and challenger_is_talk:
+            if owned_by_other and incumbent_is_authoritative and challenger_is_talk:
                 # 체결·잔고가 이미 주장한 엣지를 대화가 덮지 못한다. 다만 **밀렸다는 사실을
                 # 기록한다** — 그러지 않으면 "말과 행동이 어긋났다"는 신호가 쓰기 순서에
                 # 좌우된다. 대화가 먼저 쓰였을 때만 EDGE_ADDED로 남고 체결이 먼저면

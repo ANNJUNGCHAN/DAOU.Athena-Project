@@ -88,6 +88,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:brain-retract-relation',
   // 되물을 것들 카드의 '맞다'. 위와 같은 이유로 **쓰기**이고 모델은 닿지 않는다.
   'athena:brain-confirm-relation',
+  // 확정 카드의 op=add|change. 위 둘과 같은 이유로 **쓰기**이고 모델은 닿지 않는다.
+  'athena:brain-manual-relation',
   // 엔티티 타임라인(WP-C 배선, WP-G 소비) — 선택 패널 §10-4 "최근 변화"가
   // 부른다(controller.js fetchEntityTimeline). 읽기 전용이다.
   'athena:brain-entity-timeline',

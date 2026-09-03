@@ -34,7 +34,11 @@ function el(name, className) {
 // (backend/athena_api/brain/ontology.py의 SourceTier: "DETERMINISTIC은
 // 체결·잔고처럼... CONVERSATIONAL은 대화에서 LLM이 추론한 것") — 그래서 없는
 // 필드를 기다리지 않고 tier를 출처로 번역해 넣는다.
-const SOURCE_TIER_LABELS = { deterministic: '체결·잔고', conversational: '대화' };
+// manual — controller.js PANEL_TIER_LABELS와 같은 어휘를 쓴다(표에서 고른 것과
+// 패널에 뜬 것이 같은 말로 불려야 한다).
+const SOURCE_TIER_LABELS = {
+  deterministic: '체결·잔고', conversational: '대화', manual: '직접 수정',
+};
 
 // 최근 열(06 §7-1) — 일/주 단위 상대 시간. routine-turn.js의 relativeText는
 // 분/시간 단위(능동 턴 배지용)라 이 용도엔 맞지 않아 따로 둔다.
