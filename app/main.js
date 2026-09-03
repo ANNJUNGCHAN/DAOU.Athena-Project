@@ -1287,6 +1287,19 @@ ipcMain.handle('athena:routine-draft', async (_e, { body } = {}) => {
   try { return await routineHttp('POST', '/api/v1/routines/draft', body); }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
+// 감시 코드 검사(Step 6) — POST /routines/watch/check. 위 routine-update와 같은
+// 모양이다: 렌더러가 조립한 body를 그대로 실어 보내고, 실패는 {ok:false,error}로
+// 감싼다. 백엔드 실행층이 꺼져 있으면 409가 오고 detail 번역은 routineHttp 몫이다.
+ipcMain.handle('athena:routine-watch-check', async (_e, { body } = {}) => {
+  try { return await routineHttp('POST', '/api/v1/routines/watch/check', body); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+// 감시 코드 착지(Step 6) — POST /routines/watch/code. 켜져 있는 알람이 가리키는
+// 파일을 덮어쓰려 하면 백엔드가 409로 막는다(먼저 일시중지해야 한다).
+ipcMain.handle('athena:routine-watch-code', async (_e, { body } = {}) => {
+  try { return await routineHttp('POST', '/api/v1/routines/watch/code', body); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
 // 상세 조회(Step 6, 결정 d-2) — GET /{id}. 상세 패널의 설정 폼을 열 때 1회
 // 불러 조건 술어·source_spec을 프리필한다(목록 뷰에는 없는 값이다). 위
 // routine-runs와 같은 모양이며 body가 없다.
