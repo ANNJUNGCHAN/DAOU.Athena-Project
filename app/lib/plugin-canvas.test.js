@@ -913,3 +913,29 @@ test('목록 갱신이 도착해도 열려 있는 권한 초안은 살아남는�
     ['true', 'true'],
   );
 });
+
+test('제안 구역은 카드가 있을 때만 비영속 한 줄을 남긴다', () => {
+  // 같은 검수 회신을 두 트랙이 따로 구현해 이름이 갈렸다(proposal-boundary vs
+  // proposals-note). main에 먼저 들어온 Paper 09 이름 하나로 합친다(2026-09-04 병합).
+  const { container, canvas } = mountedCanvas();
+  assert.deepEqual(texts(container, 'plugin-canvas-proposal-boundary'), []);
+
+  canvas.setProposals([envelope()], { revision: 7 });
+  assert.deepEqual(
+    texts(container, 'plugin-canvas-proposal-boundary'),
+    ['앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다'],
+  );
+
+  canvas.setProposals([], { revision: 7 });
+  assert.deepEqual(texts(container, 'plugin-canvas-proposal-boundary'), []);
+});
+
+test('설치 시트는 부제를 달지 않는다 — 묶음 승인이 가능해 개수를 말할 수 없다', async () => {
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({ container, onPropose: () => {} });
+  canvas.mount();
+  await buttonWithClass(container, 'is-secondary').dispatchEvent({ type: 'click' });
+
+  assert.equal(findByClass(container, 'plugin-canvas-install-sheet').length, 1);
+  assert.deepEqual(texts(container, 'plugin-canvas-sheet-subtitle'), []);
+});
