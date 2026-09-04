@@ -91,6 +91,13 @@ function statusBadgeText(status) {
   return '활성';
 }
 
+// data-source="fixture"만으로는 사람이 샘플을 실시간으로 읽는다(베타 B-07).
+function fixtureMark() {
+  const badge = el('span', 'agent-demo-mark');
+  badge.textContent = '데모';
+  return badge;
+}
+
 // 11단계(프로액티브, Paper 보드 42) — 4번째 뷰 탭 "제안". "지금 읽히는 성향"
 // 스트립·제안 카드 2장은 7단계와 같은 원천(GET /api/v1/brain/profile-summary,
 // suggestionsCache)을 재사용한다 — 39번 좌측 미니 목록과 42번 전체 화면이
@@ -395,13 +402,16 @@ function createAgentCanvas(deps) {
     for (const stat of buildStats()) {
       const card = el('div', stat.accent ? 'agent-stat-card is-accent' : 'agent-stat-card');
       card.setAttribute('data-source', stat.source); // 출처 표시(P3) — 지어낸 숫자가 아님을 코드 차원에 남긴다.
+      const head = el('div', 'agent-stat-head');
       const label = el('div', 'agent-stat-label');
       label.textContent = stat.label;
+      head.appendChild(label);
+      if (stat.source === 'fixture') head.appendChild(fixtureMark());
       const value = el('div', 'agent-stat-value');
       value.textContent = stat.value;
       const sub = el('div', 'agent-stat-sub');
       sub.textContent = stat.sub;
-      card.appendChild(label);
+      card.appendChild(head);
       card.appendChild(value);
       card.appendChild(sub);
       stats.appendChild(card);
@@ -635,7 +645,7 @@ function createAgentCanvas(deps) {
   // getWsConnected(canvas.js가 athena:routine-feed-status를 구독해 준다)로 실데이터다.
   function fixtureLiveProgress() {
     return [
-      { key: 'p1', label: '● 시세 수집 — 삼성전자', badge: '실시간', sub: '조건 2/3 · 12초 전 확인', pct: 66 },
+      { key: 'p1', label: '● 시세 수집 — 삼성전자', badge: '데모', sub: '조건 2/3 · 12초 전 확인', pct: 66 },
       { key: 'p2', label: '● 평일 아침 브리핑', badge: '대기 → 07:30', sub: '49분 후 · 소스 예열됨', pct: 92 },
     ];
   }
@@ -657,6 +667,7 @@ function createAgentCanvas(deps) {
   liveCol.setAttribute('data-source', 'fixture');
   const liveCaption = el('div', 'agent-panel-caption');
   liveCaption.textContent = '라이브';
+  liveCaption.appendChild(fixtureMark());
   liveCol.appendChild(liveCaption);
 
   const liveProgressWrap = el('div', 'agent-live-progress');

@@ -2416,6 +2416,11 @@ body { margin: 0; overflow: hidden; }
   border: 1px solid var(--color-k-line);
   border-radius: 12px;
 }
+.agent-stat-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 .agent-stat-label {
   color: var(--color-k-faint);
   font-family: var(--font-body);
@@ -2479,6 +2484,9 @@ body { margin: 0; overflow: hidden; }
 }
 .agent-panel-caption {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 6px 12px 4px;
   color: var(--color-k-faint);
   font-family: var(--font-body);
@@ -2674,6 +2682,16 @@ body { margin: 0; overflow: hidden; }
 .agent-status-badge.is-draft, .agent-breadcrumb-badge.is-draft {
   border-color: var(--color-brand);
   color: var(--color-brand);
+}
+.agent-demo-mark {
+  flex-shrink: 0;
+  border: 1px solid var(--color-k-faint);
+  border-radius: 999px;
+  padding: 2px 8px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
 }
 .agent-detail-title {
   color: var(--color-k-text);
