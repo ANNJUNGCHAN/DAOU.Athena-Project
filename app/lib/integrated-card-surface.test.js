@@ -221,3 +221,18 @@ test('canvas routes canonical envelopes through one integrated root and semantic
   assert.match(main, /semanticBindingSourceProvider:\s*integratedCardRealtime\.createSemanticBindingSourceProvider/);
   assert.match(main, /token:\s*LOCAL_BEARER_TOKEN/);
 });
+
+test('account panel tabs use mode/section Korean labels instead of collapsing to summary', () => {
+  assert.equal(buttonLabel({ mode: 'holdings', section: 'holdings' }), '보유종목');
+  assert.equal(buttonLabel({ mode: 'balance', section: 'balance' }), '예수금');
+  assert.equal(buttonLabel({ mode: 'overview', section: 'other_assets_and_income' }), '기타자산');
+  assert.equal(buttonLabel({ mode: 'overview', section: 'other-assets-and-income' }), '기타자산');
+  assert.equal(buttonLabel({ mode: 'fills', section: 'fills' }), '체결');
+  assert.equal(buttonLabel({ mode: 'orderable' }), '주문가능');
+  // Card-level contract title must not overwrite a known section tab.
+  assert.equal(buttonLabel({
+    mode: 'holdings',
+    section: 'holdings',
+    presentation_contract: { title_ko: '계좌 통합', sections: [] },
+  }), '보유종목');
+});
