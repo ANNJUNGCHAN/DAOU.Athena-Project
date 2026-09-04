@@ -411,8 +411,12 @@ test('paired-table labels form scoped label-value grids while scroll-table keeps
 
   assert.match(rules,
     /\.bs-r-paired-table \.bs-paired\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\) max-content/);
+  // 라벨은 어절 경계에서만 줄바꿈한다 — `anywhere`는 `5일 누적`을 `5일 누`/`적`으로
+  // 쪼갠다(2QFO-2 960 실측). 이 웨이브가 없애려는 분절이므로 keep-all로 고정한다.
   assert.match(rules,
-    /\.bs-r-paired-table \.bs-paired-label\s*\{[^}]*white-space:\s*normal[^}]*overflow-wrap:\s*anywhere/);
+    /\.bs-r-paired-table \.bs-paired-label\s*\{[^}]*white-space:\s*normal[^}]*overflow-wrap:\s*normal[^}]*word-break:\s*keep-all/);
+  assert.doesNotMatch(rules,
+    /\.bs-r-paired-table \.bs-paired-label\s*\{[^}]*overflow-wrap:\s*anywhere/);
   assert.match(rules,
     /\.bs-r-paired-table \[data-paired-source\]\s*\{[^}]*white-space:\s*nowrap[^}]*overflow-wrap:\s*normal/);
   assert.match(rules,
