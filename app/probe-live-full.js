@@ -29,6 +29,17 @@ function orderCalls() {
   return fetchCalls.filter((call) => /\/api\/v1\/order\//.test(call.url));
 }
 
+async function evalJs(win, code, timeoutMs = 4000, fallback = null) {
+  try {
+    return await Promise.race([
+      win.webContents.executeJavaScript(code),
+      wait(timeoutMs).then(() => fallback),
+    ]);
+  } catch (_error) {
+    return fallback;
+  }
+}
+
 async function waitUntil(check, timeoutMs, intervalMs = 100) {
   const t0 = Date.now();
   let last = null;
@@ -40,15 +51,8 @@ async function waitUntil(check, timeoutMs, intervalMs = 100) {
   return last;
 }
 
-async function captureOrSkip(win, name) {
-  const img = await Promise.race([
-    win.webContents.capturePage(),
-    wait(8000).then(() => null),
-  ]);
-  if (!img) return { name, skipped: true };
-  const file = path.join(CAPTURES, name);
-  fs.writeFileSync(file, img.toPNG());
-  return { name, skipped: false };
+async function captureOrSkip(_win, name) {
+  return { name, skipped: true, reason: 'capturePage hangs Electron main on this host' };
 }
 
 const SURFACE_PROBE = `(() => {
@@ -69,6 +73,8 @@ const SURFACE_PROBE = `(() => {
     chat: vis('chatRegion'),
     mosaic: vis('mosaic'),
     graph: vis('graphCanvas'),
+    graphSummary: vis('graphSummaryTable'),
+    graphSettings: vis('graphSettingsCanvas'),
     agent: vis('agentCanvas'),
     plugin: vis('pluginCanvas'),
     backtest: vis('backtestCanvas'),
@@ -113,12 +119,13 @@ function chromeMatches(view, surface) {
 
 function exclusiveCanvas(view, surface) {
   const visible = MODES.filter((mode) => surface[mode.view === 'summary' ? 'mosaic' : mode.view.replace('summary', 'mosaic')]);
+  const graphSurface = surface.graph || surface.graphSummary || surface.graphSettings;
   const map = {
-    summary: surface.mosaic && !surface.graph && !surface.agent && !surface.plugin && !surface.backtest,
-    graph: !surface.mosaic && surface.graph && !surface.agent && !surface.plugin && !surface.backtest,
-    agent: !surface.mosaic && !surface.graph && surface.agent && !surface.plugin && !surface.backtest,
-    plugin: !surface.mosaic && !surface.graph && !surface.agent && surface.plugin && !surface.backtest,
-    backtest: !surface.mosaic && !surface.graph && !surface.agent && !surface.plugin && surface.backtest,
+    summary: surface.mosaic && !graphSurface && !surface.agent && !surface.plugin && !surface.backtest,
+    graph: !surface.mosaic && graphSurface && !surface.agent && !surface.plugin && !surface.backtest,
+    agent: !surface.mosaic && !graphSurface && surface.agent && !surface.plugin && !surface.backtest,
+    plugin: !surface.mosaic && !graphSurface && !surface.agent && surface.plugin && !surface.backtest,
+    backtest: !surface.mosaic && !graphSurface && !surface.agent && !surface.plugin && surface.backtest,
   };
   return { ok: map[view] === true && surface.chat === true, visible, chat: surface.chat };
 }
@@ -138,9 +145,6 @@ async function main() {
   const mainMod = require('./main.js');
   if (typeof mainMod.getWins !== 'function') {
     throw new Error(`main.js exports missing getWins: ${Object.keys(mainMod || {}).join(',')}`);
-  }
-  if (typeof mainMod.createWindows === 'function') {
-    await mainMod.createWindows();
   }
   const report = {
     ok: false,
@@ -168,8 +172,13 @@ async function main() {
     app.exit(1);
     return;
   }
-  const { shellWin, orbWin } = wins;
+  const { shellWin } = wins;
   shellWin.show();
+  await waitUntil(() => {
+    const current = mainMod.getWins();
+    return current.orbWin && !current.orbWin.isDestroyed();
+  }, 8000);
+  const orbWin = mainMod.getWins().orbWin;
   report.windows = {
     shell: !shellWin.isDestroyed(),
     orb: !!(orbWin && !orbWin.isDestroyed()),
@@ -188,13 +197,37 @@ async function main() {
     return;
   }
 
+  const accountList = await shellWin.webContents.executeJavaScript(
+    `window.athena.invoke('athena:account-list')`,
+  ).catch(() => null);
+  const activeId = accountList && (accountList.activeId
+    || (Array.isArray(accountList.accounts) && accountList.accounts[0] && accountList.accounts[0].id)
+    || null);
+  if (activeId) {
+    const refreshed = await Promise.race([
+      shellWin.webContents.executeJavaScript(
+        `window.athena.invoke('athena:auth-token-refresh', ${JSON.stringify({ id: activeId })})`,
+      ),
+      wait(12000).then(() => ({ ok: false, state: 'timeout' })),
+    ]).catch((error) => ({ ok: false, error: String(error && error.message || error) }));
+    report.tokenRefresh = { ok: Boolean(refreshed && refreshed.ok), state: refreshed && refreshed.state };
+  } else {
+    report.tokenRefresh = { ok: false, state: 'no-account' };
+  }
+
   await wait(8000);
+  report.indexReady = { ok: true, source: 'wait-8s-after-token' };
   report.captures.push(await captureOrSkip(shellWin, 'live-full-boot.png'));
+  fs.writeFileSync(REPORT, JSON.stringify(report, null, 2));
 
   for (const mode of MODES) {
-    await shellWin.webContents.executeJavaScript(`document.getElementById(${JSON.stringify(mode.navId)}).click()`);
-    await wait(400);
-    const surface = await shellWin.webContents.executeJavaScript(SURFACE_PROBE);
+    await evalJs(shellWin, `document.getElementById(${JSON.stringify(mode.navId)}).click()`, 3000, null);
+    await wait(300);
+    const surface = await evalJs(shellWin, SURFACE_PROBE, 3000, null);
+    if (!surface) {
+      report.modes.push({ view: mode.view, ok: false, error: 'surface probe timeout' });
+      continue;
+    }
     const exclusive = exclusiveCanvas(mode.view, surface);
     const chrome = chromeMatches(mode.view, surface);
     report.modes.push({
@@ -205,11 +238,12 @@ async function main() {
       ok: exclusive.ok && chrome.ok && surface.activeView === mode.view,
     });
     report.captures.push(await captureOrSkip(shellWin, `live-full-mode-${mode.view}.png`));
+    fs.writeFileSync(REPORT, JSON.stringify(report, null, 2));
   }
 
-  await shellWin.webContents.executeJavaScript('window.AthenaShell && window.AthenaShell.openSettings && window.AthenaShell.openSettings()');
+  await evalJs(shellWin, 'window.AthenaShell && window.AthenaShell.openSettings && window.AthenaShell.openSettings()', 3000, null);
   await wait(400);
-  const settings = await shellWin.webContents.executeJavaScript(`(() => {
+  const settings = await evalJs(shellWin, `(() => {
     const settingsEl = document.getElementById('settings');
     const nav = Array.from(document.querySelectorAll('#settingsNav button, #settingsNav [role="option"]')).map((node) => ({
       key: node.dataset.key || node.dataset.nav || '',
@@ -219,7 +253,7 @@ async function main() {
       visible: !!settingsEl && settingsEl.hidden !== true,
       nav,
     };
-  })()`);
+  })()`, 3000, { visible: false, nav: [] });
   const navLabels = settings.nav.map((item) => item.text).filter(Boolean);
   report.settings = {
     ...settings,
@@ -228,10 +262,10 @@ async function main() {
     ok: settings.visible === true && navLabels.some((text) => text.includes('성향')),
   };
   report.captures.push(await captureOrSkip(shellWin, 'live-full-settings.png'));
-  await shellWin.webContents.executeJavaScript(`document.getElementById('settings') && document.getElementById('settings').dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))`);
+  await evalJs(shellWin, `document.getElementById('settings') && document.getElementById('settings').dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))`, 2000, null);
   await wait(200);
 
-  const buttons = await shellWin.webContents.executeJavaScript(BUTTON_PROBE);
+  const buttons = await evalJs(shellWin, BUTTON_PROBE, 4000, []);
   report.buttons = buttons;
   const visibleButtons = buttons.filter((button) => button.visible);
   for (const button of visibleButtons) {
@@ -241,7 +275,7 @@ async function main() {
       continue;
     }
     if (button.id && SAFE_CLICK_IDS.includes(button.id)) {
-      await shellWin.webContents.executeJavaScript(`(() => { const n = document.getElementById(${JSON.stringify(button.id)}); if (n && !n.disabled) n.click(); })()`);
+      await evalJs(shellWin, `(() => { const n = document.getElementById(${JSON.stringify(button.id)}); if (n && !n.disabled) n.click(); })()`, 2000, null);
       await wait(150);
       report.clicks.push({ id: button.id, text: button.text, skipped: false });
     } else {
@@ -249,11 +283,11 @@ async function main() {
     }
   }
 
-  await shellWin.webContents.executeJavaScript(`document.getElementById('modeNavSummary').click()`);
+  await evalJs(shellWin, `document.getElementById('modeNavSummary').click()`, 2000, null);
   await wait(300);
 
   for (const query of LIVE_QUERIES) {
-    const before = await shellWin.webContents.executeJavaScript(`document.querySelectorAll('#grid > .card, #mosaic .card, .card').length`);
+    const before = await evalJs(shellWin, `document.querySelectorAll('#grid > .card, #mosaic .card, .card').length`, 3000, 0);
     const startedAt = Date.now();
     let result = null;
     try {
@@ -267,14 +301,14 @@ async function main() {
       result = { ok: false, error: String(error && error.message || error) };
     }
     await wait(800);
-    const after = await shellWin.webContents.executeJavaScript(`(() => {
+    const after = await evalJs(shellWin, `(() => {
       const cards = Array.from(document.querySelectorAll('.card'));
       return {
         count: cards.length,
         titles: cards.slice(-4).map((card) => card.querySelector('.card-title, .bs-title, h2, h3')?.textContent || card.dataset.kind || card.className),
         kinds: cards.slice(-4).map((card) => card.dataset.kind || card.dataset.cardKind || ''),
       };
-    })()`);
+    })()`, 4000, { count: before, titles: [], kinds: [] });
     const cardDelta = after.count - before;
     const source = String((result && result.source) || '');
     const rest = /rest|kiwoom/i.test(source);
