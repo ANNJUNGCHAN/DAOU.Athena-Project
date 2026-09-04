@@ -201,12 +201,15 @@ test('glyph readability probe keeps raw geometry evidence and hard-enforces ever
   assert.match(verify, /atomic_wrap_total/);
   assert.match(verify, /text_overlap_total/);
   assert.match(verify, /paired_semantics_total/);
+  assert.match(verify, /column_lane_total/);
   assert.match(verify, /owner_name/);
   assert.match(verify, /text: text\.nodeValue\.trim\(\)/);
   assert.match(verify, /text: element\.textContent\.trim\(\)/);
   assert.match(verify, /atomic_wrap_nodes/);
   assert.match(verify, /text_overlap_nodes/);
   assert.match(verify, /paired_semantics_violations/);
+  assert.match(verify, /column_lane_nodes/);
+  assert.match(verify, /header_lane/);
   assert.equal(
     [...verify.matchAll(/assertReadability\(surface\.boardId, preset, probe, \{ enforce: true \}\)/g)]
       .length,

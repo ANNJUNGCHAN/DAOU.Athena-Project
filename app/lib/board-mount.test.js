@@ -80,6 +80,7 @@ function pairedReadabilityProbe(source, mirror, pairContainer) {
     text_overlap_nodes: [], text_overlap_total: 0,
     paired_semantics_violations: finding.items,
     paired_semantics_total: finding.total,
+    column_lane_nodes: [], column_lane_total: 0,
   };
 }
 

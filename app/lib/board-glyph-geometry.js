@@ -460,10 +460,12 @@ async function waitForStableLayout(options = {}) {
 }
 
 function assertReadability(boardId, preset, probe, { enforce = false } = {}) {
+  // column_lane: body cell center outside its header lane (2QFO-2 960 misalign).
   const reports = [
     ['atomic_wrap_nodes', 'atomic_wrap_total'],
     ['text_overlap_nodes', 'text_overlap_total'],
     ['paired_semantics_violations', 'paired_semantics_total'],
+    ['column_lane_nodes', 'column_lane_total'],
   ];
   const schemaInvalid = !probe || reports.some(([itemsName, totalName]) => {
     const items = probe[itemsName];
@@ -491,6 +493,11 @@ function assertReadability(boardId, preset, probe, { enforce = false } = {}) {
         violation: item.violation,
         first_text: item.first_text,
         second_text: item.second_text,
+        table: item.table,
+        row: item.row,
+        col: item.col,
+        cell_center: item.cell_center,
+        header_lane: item.header_lane,
       }));
     }
     throw new Error(
