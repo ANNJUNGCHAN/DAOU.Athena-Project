@@ -947,9 +947,10 @@ function createPluginCanvas(options) {
     remove: (sheet) => `${sheet.plugin.name} 삭제`,
   };
 
+  // install에는 부제가 없다 — "한 번에 하나씩 승인합니다"는 묶음 승인이 가능한
+  // 지금 사실과 어긋난다(2026-09-03 검수 확정).
   const SHEET_SUBTITLES = {
     add: () => 'Claude 설정 형식의 스니펫을 붙여넣습니다',
-    install: () => '설치할 플러그인과 요청 권한을 확인하고 한 번에 하나씩 승인합니다',
     remove: () => '등록과 승인 기록을 함께 지웁니다',
   };
 
@@ -994,7 +995,8 @@ function createPluginCanvas(options) {
     const title = el('h2', 'plugin-canvas-sheet-title', SHEET_TITLES[sheet.kind](sheet));
     title.setAttribute('id', titleId);
     header.appendChild(title);
-    header.appendChild(el('div', 'plugin-canvas-sheet-subtitle', SHEET_SUBTITLES[sheet.kind](sheet)));
+    const subtitle = SHEET_SUBTITLES[sheet.kind];
+    if (subtitle) header.appendChild(el('div', 'plugin-canvas-sheet-subtitle', subtitle(sheet)));
     dialog.appendChild(header);
     dialog.appendChild(SHEET_BODIES[sheet.kind](sheet));
     overlay.appendChild(dialog);
@@ -1101,6 +1103,9 @@ function createPluginCanvas(options) {
     if (!proposals.length) return null;
     const list = el('section', 'plugin-canvas-proposals');
     proposals.forEach((entry) => list.appendChild(proposalCard(entry)));
+    // Paper 09 — 대기 중인 제안은 메인 프로세스 메모리에만 산다. 모드 이탈은
+    // 견디지만 앱 종료는 못 견딘다(2026-09-03 검수 확정: 화면에도 말한다).
+    list.appendChild(el('p', 'plugin-canvas-proposal-boundary', '앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다'));
     return list;
   }
 

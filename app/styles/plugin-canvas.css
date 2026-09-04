@@ -739,6 +739,16 @@
   gap: 12px;
 }
 
+/* Paper 09 경계 문구 — 카드가 아니라 구역의 사실 고지라 카드 톤보다 흐리다. */
+.plugin-canvas-proposal-boundary {
+  width: 560px;
+  max-width: 100%;
+  margin: 0;
+  color: var(--color-k-hint);
+  font-size: var(--text-sm);
+  line-height: 17px;
+}
+
 .plugin-canvas-proposal {
   width: 560px;
   max-width: 100%;

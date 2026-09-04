@@ -10,11 +10,15 @@ const {
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
 } = require('./board-mount');
+const {
+  assertReadability, collectPairedSemanticFindings,
+} = require('./board-glyph-geometry');
 
 // jsdom 없이 검증한다 — ranking-axis.test.js와 같은 관행(DOM 스텁 주입).
 // board-mount의 DOM 쓰기 층이 실제로 건드리는 표면만 흉내낸다:
 // querySelectorAll / dataset / textContent / style / hidden / addEventListener.
 const SELECTORS = {
+  '*': () => true,
   '[data-node]': (node) => node.dataset.node !== undefined,
   '[data-paired-source]': (node) => node.dataset.pairedSource !== undefined,
 };
@@ -49,6 +53,34 @@ function el(dataset = {}, children = []) {
     },
   };
   return node;
+}
+
+function pairedReadabilityProbe(source, mirror, pairContainer) {
+  const labels = pairContainer ? pairContainer.children.filter((element) => (
+    element.dataset.pairedLabel !== undefined && element.textContent.trim()
+  )) : [];
+  const finding = collectPairedSemanticFindings([{
+    source: mirror.dataset.pairedSource,
+    source_found: Boolean(source),
+    source_count: source ? 1 : 0,
+    mirror_has_identity: Boolean(
+      mirror.dataset.node || mirror.dataset.slotId || mirror.dataset.leaf,
+    ),
+    label_found: labels.length > 0,
+    label_count: labels.length,
+    source_text: source && source.textContent,
+    mirror_text: mirror.textContent,
+    source_tone: source && source.style.color,
+    mirror_tone: mirror.style.color,
+    source_missing: Boolean(source && source.dataset.missing),
+    mirror_missing: Boolean(mirror.dataset.missing),
+  }]);
+  return {
+    atomic_wrap_nodes: [], atomic_wrap_total: 0,
+    text_overlap_nodes: [], text_overlap_total: 0,
+    paired_semantics_violations: finding.items,
+    paired_semantics_total: finding.total,
+  };
 }
 
 function fixtureContract() {
@@ -423,6 +455,9 @@ test('paired display mirrors follow full and partial source text, tone, and miss
   mirrorA.dataset.missing = 'true';
   untouched.textContent = 'paper-only';
   untouched.style.color = 'var(--paper-other)';
+  const label = el({ pairedLabel: '' });
+  label.textContent = '값';
+  const pairContainer = el({}, [label, mirrorA]);
   const root = el({}, [source, mirrorA, mirrorB, untouched]);
   const contract = {
     slots: [{
@@ -467,6 +502,43 @@ test('paired display mirrors follow full and partial source text, tone, and miss
   assert.deepEqual([mirrorA.dataset.missing, mirrorB.dataset.missing], [undefined, undefined]);
   assert.equal(untouched.textContent, 'paper-only');
   assert.equal(untouched.style.color, 'var(--paper-other)');
+
+  assert.deepEqual(assertReadability(
+    'paired-fixture', { name: 'partial realtime restored' },
+    pairedReadabilityProbe(source, mirrorA, pairContainer), { enforce: true },
+  ), { enforced: true, failures: [] });
+  mirrorA.textContent = 'stale after partial realtime';
+  assert.throws(() => assertReadability(
+    'paired-fixture', { name: 'partial realtime desync' },
+    pairedReadabilityProbe(source, mirrorA, pairContainer), { enforce: true },
+  ), /readability paired_semantics_violations/);
+  applyRealtimeSlots(root, contract, values, ['value']);
+  assert.deepEqual(assertReadability(
+    'paired-fixture', { name: 'partial realtime resynchronized' },
+    pairedReadabilityProbe(source, mirrorA, pairContainer), { enforce: true },
+  ), { enforced: true, failures: [] });
+});
+
+test('a generated paired value fails hard when naked and passes when labeled', () => {
+  const source = el({ node: 'value' });
+  source.textContent = '+9,079,400';
+  const mirror = el({ pairedSource: 'value' });
+  mirror.textContent = source.textContent;
+  const generatedPair = el({}, [mirror]);
+
+  assert.throws(() => assertReadability(
+    'paired-fixture', { name: 'generated naked pair' },
+    pairedReadabilityProbe(source, mirror, generatedPair),
+    { enforce: true },
+  ), /readability paired_semantics_violations/);
+  const label = el({ pairedLabel: '' });
+  label.textContent = 'Paper header';
+  generatedPair.children.unshift(label);
+  assert.deepEqual(assertReadability(
+    'paired-fixture', { name: 'generated labeled pair' },
+    pairedReadabilityProbe(source, mirror, generatedPair),
+    { enforce: true },
+  ), { enforced: true, failures: [] });
 });
 
 test('value-atomic marker is written only to the Paper leaf and removed idempotently', () => {
@@ -931,4 +1003,35 @@ test('건드릴 슬롯이 없으면 실시간 프레임은 DOM을 건드리지 �
   assert.deepEqual(report.touched, []);
   assert.equal(report.plan, null);
   assert.equal(nodeIndex(root).get('header.price').textContent, before);
+});
+
+test('마운트 표면에서 원시 식별자를 실은 data-name만 걷어내고 나머지 레이어 이름은 둔다', () => {
+  // Paper 커버리지 앵커(raw · <mapping_id> · <json path>)가 추출 HTML에 남아 제품 DOM으로
+  // 흘러들었다(2026-09-04 gold-market 실측). 슬롯 주소(data-node)와 런타임이 읽는
+  // 'Chart Context Actions', 진단용 일반 레이어 이름은 그대로여야 한다.
+  const { scrubRawIdentityNames, RAW_IDENTITY_NAME } = require('./board-mount');
+  const anchor = el({ name: 'raw · base:ka50081 · $.gds_day_chart_qry[].acc_trde_prica', node: 'chart.volume' });
+  const detail = el({ name: 'detail:ka10004:buy_bid_prices' });
+  const path = el({ name: 'request · $.stk_cd' });
+  const actions = el({ name: 'Chart Context Actions' });
+  const plain = el({ name: 'Rectangle' });
+  const header = el({ name: 'Instrument Header', node: 'header.price' });
+  const surface = el({ name: 'Instrument Card Surface' }, [anchor, detail, path, actions, plain, header]);
+
+  assert.equal(scrubRawIdentityNames(surface), 3);
+  assert.equal(anchor.dataset.name, undefined);
+  assert.equal(anchor.dataset.node, 'chart.volume', '슬롯 주소는 건드리지 않는다');
+  assert.equal(detail.dataset.name, undefined);
+  assert.equal(path.dataset.name, undefined);
+  assert.equal(actions.dataset.name, 'Chart Context Actions');
+  assert.equal(plain.dataset.name, 'Rectangle');
+  assert.equal(header.dataset.name, 'Instrument Header');
+  assert.equal(surface.dataset.name, 'Instrument Card Surface');
+  // 두 번 돌려도 더 지울 것이 없다.
+  assert.equal(scrubRawIdentityNames(surface), 0);
+  // 패턴은 검증기의 원시 식별자 게이트와 같은 축 — 식별자 모양만 잡고 한국어·일반 명사는 통과.
+  assert.equal(RAW_IDENTITY_NAME.test('행'), false);
+  assert.equal(RAW_IDENTITY_NAME.test('Quote and Valuation Strip'), false);
+  assert.equal(RAW_IDENTITY_NAME.test('base:kt00001'), true);
+  assert.equal(RAW_IDENTITY_NAME.test('ka10081'), true);
 });

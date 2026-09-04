@@ -190,6 +190,14 @@ function discardCanvasTabDeck() {
 }
 
 function ensureCanvasTabDeck() {
+  if (canvasTabDeck && !canvasTabDeck.element.isConnected) {
+    // 덱이 밖에서 떨어져 나갔다(grid.replaceChildren 류 — verify-semantic-workspaces가
+    // recipe 사이에 그렇게 비운다). 캐시만 남은 덱에 카드를 넣으면 카드가 문서 밖으로
+    // 사라진다(2026-09-04 실측: 두 번째 recipe의 호가 카드가 통째로 증발). 남은 탭은
+    // 정식 경로로 닫아 세션·실시간 리스를 풀고, 덱은 새로 만든다.
+    for (const key of canvasTabDeck.keys()) canvasTabDeck.close(key);
+    canvasTabDeck = null;
+  }
   if (canvasTabDeck) return canvasTabDeck;
   canvasTabDeck = canvasTabs.createDeck({
     onClose: (card) => {
@@ -714,7 +722,10 @@ async function addLiveCard(result) {
 function renderPrimaryEnvelope(envelope, options = {}) {
   // 표면 계약이 실려 오면 Paper 보드 원문을 그대로 마운트한다(D1) — 런타임 레이아웃
   // 재조립 없이 텍스트 노드만 바뀐다. 계약이 없으면 기존 경로 그대로.
-  const boardCard = renderBoardSurfaceCard(envelope);
+  // 단, D1의 예외 — 앱 렌더러(AITS 차트·호가 래더·주문 초안)가 primary인 recipe는
+  // 보드가 그 렌더러를 품을 길(primary.renderer)이 아직 없어 가로채면 라이브
+  // 표면이 정적 목업으로 바뀐다(2026-09-04 실측). 판정은 paper-card-routing이 든다.
+  const boardCard = paperCardRouting.preservesAppPrimary(envelope) ? null : renderBoardSurfaceCard(envelope);
   if (boardCard) return boardCard;
   if (envelope.canvas_type === 'table' && !envelope.fell_back) return renderMcpTable(envelope);
   if (envelope.canvas_type === 'stream' && !envelope.fell_back) return renderLiveStream(envelope);

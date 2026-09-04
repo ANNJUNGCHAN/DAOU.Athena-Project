@@ -518,6 +518,29 @@ function applyResponsiveHooks(surface) {
   return hoisted;
 }
 
+// Paper 레이어 이름(data-name)에 박힌 원시 식별자 앵커를 걷어낸다. 카드 커버리지
+// 증명 규약(`raw · <mapping_id> · <json path>`, PAPER_CARD_COVERAGE.md)이 추출 HTML에
+// 그대로 남아 제품 DOM으로 흘러든다(2026-09-04 gold-market 실측:
+// data-name="raw · base:ka50081 · $.gds_day_chart_qry[].acc_trde_prica" — 97장 중 20장,
+// 157개). 런타임은 data-name을 markInsetAbsoluteBox의 'Chart Context Actions' 비교에만
+// 쓰고 슬롯은 data-node로 찾으므로, 식별자 모양의 값만 지운다. 다른 레이어 이름
+// (Rectangle·행·Instrument Header…)은 verify-integrated-cards 진단 리포트가 읽으므로 둔다.
+// 패턴은 verify-semantic-workspaces의 원시 식별자 게이트와 같은 축이다.
+const RAW_IDENTITY_NAME = /(?:\b(?:raw|alias|FID|REST)\b|(?:base|detail):[a-z0-9]|\bka\d{5}\b|\$\.|mapping[ _-]?id|operation[ _-]?ref)/i;
+
+function scrubRawIdentityNames(surface) {
+  if (!surface || typeof surface.querySelectorAll !== 'function') return 0;
+  let scrubbed = 0;
+  for (const el of [surface, ...surface.querySelectorAll('*')]) {
+    const name = el && el.dataset ? el.dataset.name : undefined;
+    if (typeof name !== 'string' || !RAW_IDENTITY_NAME.test(name)) continue;
+    if (typeof el.removeAttribute === 'function') el.removeAttribute('data-name');
+    delete el.dataset.name;
+    scrubbed += 1;
+  }
+  return scrubbed;
+}
+
 // 추출기가 보드 루트에 .board-surface를 붙이지 않은 경우 첫 요소를 표면으로 삼는다.
 // 컨테이너 쿼리의 기준점이 없으면 반응형이 통째로 죽는다.
 function surfaceRoot(root) {
@@ -549,6 +572,7 @@ function mountBoard(root, boardId, values, options = {}) {
     surface = surfaceRoot(root);
     if (!surface) throw new Error(`board.html에 보드 루트가 없다 — ${boardId}`);
     applyResponsiveHooks(surface);
+    scrubRawIdentityNames(surface);
     root.__bsSurface = surface;
     root.__bsBoardId = String(boardId);
   }
@@ -575,6 +599,7 @@ const __exports = {
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
   nodeIndex, elementChildCount, setHidden, applyPlan,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot, mountBoard, mountBoardAsync,
+  RAW_IDENTITY_NAME, scrubRawIdentityNames,
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
 };
