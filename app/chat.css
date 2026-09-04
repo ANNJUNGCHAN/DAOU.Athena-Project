@@ -461,6 +461,7 @@ html.is-boot-expanding #winControls { opacity: 0; }
    * 300px를 뚫고 나가 오른쪽으로 잘려 나갔다. anywhere를 쓰는 이유: break-word와 달리
    * 상자의 고유 최소폭 계산에도 반영돼, 좁은 창에서 버블 자체가 줄어들 수 있다. */
   overflow-wrap: anywhere;
+  word-break: keep-all;
   line-height: var(--leading-normal);
   color: var(--color-k-text);
 }
@@ -470,6 +471,7 @@ html.is-boot-expanding #winControls { opacity: 0; }
    * .turn-a는 overflows:true, wrap:normal이었다). 긴 URL·해시·공백 없는 토큰이
    * 대화 폭을 뚫고 나간다. 사용자 말풍선과 같은 이유로 anywhere를 쓴다. */
   overflow-wrap: anywhere;
+  word-break: keep-all;
   font-size: var(--text-lg);
   line-height: 1.5;
   color: var(--color-k-text);
@@ -1863,6 +1865,7 @@ html.is-boot-expanding #winControls { opacity: 0; }
 .question-card-context {
   margin-top: 4px; font-size: var(--text-sm); color: var(--color-k-soft);
   overflow-wrap: anywhere;
+  word-break: keep-all;
 }
 .question-card-note {
   margin-top: 8px; font-size: var(--text-sm); color: var(--color-k-dim);
