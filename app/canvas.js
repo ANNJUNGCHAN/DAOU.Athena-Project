@@ -3195,6 +3195,15 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(backtestError(res, '배포를 중지하지 못했습니다'));
     return res.data;
   },
+  // 자동 주문 무장 — 사람이 스위치를 누를 때만 불린다. 멈춘 배포면 백엔드가 409를
+  // 주고, 화면이 그 이유를 적는다(조용히 켜진 척하지 않는다).
+  armDeployment: async (deploymentId, armed) => {
+    const res = await window.athena.invoke(
+      'athena:backtest-deployment-arm', { deployment_id: deploymentId, armed: armed === true },
+    );
+    if (!res || !res.ok) throw new Error(backtestError(res, '무장 상태를 바꾸지 못했습니다'));
+    return res.data;
+  },
   signals: async (deploymentId) => {
     const res = await window.athena.invoke(
       'athena:backtest-signals', { deployment_id: deploymentId },

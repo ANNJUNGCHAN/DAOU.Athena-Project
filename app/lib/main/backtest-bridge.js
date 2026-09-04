@@ -309,6 +309,15 @@ function stopDeployment({ backendBase, fetchImpl, deployment_id }) {
   );
 }
 
+// 자동 주문 무장 스위치 — 사람 클릭 전용이다(배포 생성과 같은 규율). 멈춘 배포에 켜면
+// 백엔드가 409로 거절하고, 화면은 그 이유를 적는다(조용한 성공이 없어야 한다).
+function armDeployment({ backendBase, fetchImpl, deployment_id, armed }) {
+  return backtestHttp(
+    'POST', `/api/v1/backtest/deployments/${encodeURIComponent(deployment_id)}/arm`,
+    { armed: armed === true }, { backendBase, fetchImpl },
+  );
+}
+
 function fetchSignals({ backendBase, fetchImpl, deployment_id }) {
   return backtestHttp(
     'GET', `/api/v1/backtest/deployments/${encodeURIComponent(deployment_id)}/signals`,
@@ -430,6 +439,7 @@ module.exports = {
   fetchDeployments,
   createDeployment,
   stopDeployment,
+  armDeployment,
   fetchSignals,
   evaluateDeployment,
   fetchUserStrategies,

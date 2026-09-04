@@ -164,6 +164,11 @@ class RoutineScheduler:
     code_market_weekdays_only: bool = True
     # 알람별 확인 주기를 재는 단조 시계 — 테스트가 갈아 끼운다(now_kst와 같은 자리).
     monotonic: Callable[[], float] = time.monotonic
+    # 배포 판정(보드 23 자동 매매) — 아카이브와 같은 이음새다. 이 클래스는 배포가
+    # 무엇인지 모른다. 주입된 것을 주기적으로 부를 뿐이고, 그래서 정지·감사 경로가
+    # 루틴과 하나로 유지된다(자동 주문 전용 루프를 따로 만들지 않은 이유).
+    run_deployments_once: Callable[[], Awaitable[None]] | None = None
+    deployment_poll_interval_s: float = 60.0
     last_error: str | None = None
     _tasks: list[asyncio.Task[None]] = field(default_factory=list)
     _stopping: bool = False
@@ -188,6 +193,10 @@ class RoutineScheduler:
             self._tasks.append(asyncio.create_task(self._realtime_loop()))
         if getattr(self.watch_runtime, "watch_runner", None) is not None:
             self._tasks.append(asyncio.create_task(self._code_loop()))
+        # 주입되지 않으면 루프 자체가 없다 — 백테스트가 꺼진 앱에서 자동 주문 루프가
+        # 도는 일은 구조적으로 불가능하다.
+        if self.run_deployments_once is not None:
+            self._tasks.append(asyncio.create_task(self._deployment_loop()))
 
     async def stop(self) -> None:
         self._stopping = True
@@ -560,3 +569,18 @@ class RoutineScheduler:
         while not self._stopping:
             await asyncio.sleep(self.archive_poll_interval_s)
             self.run_archive_once()
+
+    # ---------- 배포 판정 (보드 23 자동 매매) ----------
+
+    async def _deployment_loop(self) -> None:
+        """한 바퀴가 터져도 루프를 멈추지 않는다 — 자동 매매가 조용히 죽으면 사람은
+        여전히 켜져 있다고 믿는다. 이유는 `last_error`에 남겨 화면이 읽게 한다."""
+        assert self.run_deployments_once is not None
+        while not self._stopping:
+            await asyncio.sleep(self.deployment_poll_interval_s)
+            try:
+                await self.run_deployments_once()
+            except asyncio.CancelledError:
+                raise
+            except Exception as exc:  # noqa: BLE001 — 한 배포의 실패가 전체를 멈추면 안 된다
+                self.last_error = f"배포 판정 실패: {exc}"
