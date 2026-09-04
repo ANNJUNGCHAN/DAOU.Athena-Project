@@ -186,7 +186,10 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # feat/agent-dual-control fac086e "Step 4" 병합 2026-09-04) — 사람이 승인한 감시 코드를
     # 루틴에 붙인다. 켜진 알람의 코드는 409로 거부한다. 그 커밋도 핀을 갱신하지 않아
     # 병합 시 실측(408→409, 소실 0)으로 맞춘다.
-    assert len(operation_ids) == 409
+    # 410 = 409 + 배포 무장 1개(arm_deployment_route: POST
+    # /api/v1/backtest/deployments/{deployment_id}/arm, 2026-09-04 자동 매매). 무장은
+    # 사람 클릭 전용이라 MCP 표면에는 없고 HTTP 라우트로만 존재한다.
+    assert len(operation_ids) == 410
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
