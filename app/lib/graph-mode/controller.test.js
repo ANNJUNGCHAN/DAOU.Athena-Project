@@ -1215,8 +1215,8 @@ test('backtest로 전환하면 채팅 헤더가 보이고 data-mode·문구가 �
   await controller.setView('backtest');
   assert.equal(elements.chatHead.hidden, false);
   assert.equal(elements.chatHead.dataset.mode, 'backtest');
-  assert.equal(elements.chatHeadTitle.textContent, '전략에게 묻기');
-  assert.equal(elements.chatHeadSub.textContent, '답이 설정과 코드를 바꿉니다');
+  assert.equal(elements.chatHeadTitle.textContent, '기법에게 묻기');
+  assert.equal(elements.chatHeadSub.textContent, '고른 기법을 다룹니다');
   await controller.setView('graph');
   assert.equal(elements.chatHead.hidden, false);
   assert.equal(elements.chatHead.dataset.mode, 'graph');

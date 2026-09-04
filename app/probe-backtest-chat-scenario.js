@@ -137,13 +137,11 @@ async function main() {
   record('00-백엔드 준비(8010 ready)', await backendReady(), {});
 
   await js(shellWin, "document.getElementById('modeNavBacktest').click(); true");
-  // 모드에 들어가면 첫 화면은 **지도**다(2026-09-03 · DESIGN_TABS[0]) — 프리셋 목록은
-  // [폼] 하위탭에 있다. 이 클릭이 없으면 아래 전부가 화면에 없는 칸을 만지고 조용히
-  // 실패한다(2026-09-03 실측: 01~11 열한 개가 한꺼번에 FAIL). 검사는 그대로다.
+  // 보드 19: 첫 화면은 폼 탭의 기법 목록이다. 하위탭 클릭은 이미 그 자리라 멱등이다.
   await js(shellWin, "(() => { const t = document.querySelectorAll('#backtestCanvas .backtest-subtab'); if (t[1]) t[1].click(); return true; })()");
   const presets = await until(shellWin, "document.querySelectorAll('#backtestCanvas .backtest-preset-item').length", 20000);
   const head = await js(shellWin, "(() => { const h = document.getElementById('chatModeHead'); return h && !h.hidden ? h.textContent.replace(/\\s+/g, ' ') : null; })()");
-  record('01-백테스트 모드 진입 + 채팅 헤더', presets === 10 && !!head && head.includes('전략에게 묻기'), { presets, head });
+  record('01-백테스트 모드 진입 + 채팅 헤더', presets === 10 && !!head && head.includes('기법에게 묻기'), { presets, head });
 
   // ---------- (2) 채팅이 폼을 채운다 ----------
   const t2 = await chat(shellWin, '52주 신고가 돌파 전략으로 삼성전자 1년치 백테스트를 알아서 설정해줘');

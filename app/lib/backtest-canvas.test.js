@@ -140,11 +140,19 @@ function makeCanvas(overrides) {
   return { container, canvas: createBacktestCanvas(deps), pending };
 }
 
-// 지도가 기본 탭이라(2026-09-03) 폼을 보는 검사는 폼 탭으로 옮긴 뒤에 시작한다.
-// 기본이 지도라는 사실 자체는 아래 '설계 하위 탭' 테스트가 따로 못 박는다.
+// 보드 19: 첫 화면은 목록만. 폼 칸을 보려면 기법을 고른 다음이다. 고른 뒤 기본 탭은
+// 지도라(2026-09-03) 폼 검사는 폼 탭으로 옮긴 뒤에 시작한다.
 async function toForm(container) {
-  const tab = findByClass(container, 'backtest-subtab')[1];
-  if (tab) await click(tab);
+  if (!findByClass(container, 'backtest-symbol-add').length) {
+    const item = findByClass(container, 'backtest-preset-item')[0];
+    if (item) {
+      await click(item);
+      await flush();
+    }
+  }
+  const tabs = findByClass(container, 'backtest-subtab');
+  const formTab = tabs.find((t) => t.textContent === '폼') || tabs[1];
+  if (formTab) await click(formTab);
 }
 
 // 폼을 실행 가능한 상태로 만든다(종목·기간). 입력 이벤트는 모델만 갱신하므로
@@ -198,6 +206,25 @@ test('프리셋 fetch 실패 시 정직한 에러 상태를 그린다(목업 데
 });
 
 // ── 보드 01 · 설계 폼 ───────────────────────────────────────────────────────
+
+test('보드 19: mount 직후는 기법 목록이고 프리셋 0번을 자동으로 고르지 않는다', async () => {
+  const { container, canvas } = makeCanvas();
+  canvas.mount();
+  await flush();
+  assert.equal(findByClass(container, 'backtest-technique-list').length, 1);
+  assert.match(textOf(container), /새 기법 만들기/);
+  assert.equal(findByClass(container, 'backtest-technique-new-chip')[0].textContent, '대화로 시작');
+  assert.equal(findByClass(container, 'backtest-subtab').length, 0);
+  const tabs = findByClass(container, 'backtest-tab').map((t) => t.textContent);
+  assert.deepEqual(tabs, ['기법', '결과', '이력']);
+  assert.equal(findByClass(container, 'backtest-symbol-add').length, 0);
+  assert.equal(findByClass(container, 'backtest-run-button').length, 0);
+  const ctx = canvas.getContext();
+  assert.equal(ctx.spec, null);
+  assert.equal(ctx.designTab, 'form');
+  assert.equal(textOf(container).includes('data.symbols'), false);
+  assert.equal(textOf(container).includes('pydantic'), false);
+});
 
 test('empty → design: 프리셋 목록·대상·지표·조건·리스크 카드를 모두 그린다', async () => {
   const { container, canvas } = makeCanvas();
@@ -806,7 +833,7 @@ test('preset이 든 설정: 전략이 바뀌고 종목·기간은 남으며 나�
   const selected = findByClass(container, 'backtest-preset-item')
     .filter((n) => n.getAttribute('aria-pressed') === 'true');
   assert.equal(selected.length, 1);
-  assert.equal(selected[0].children[0].textContent, 'RSI 과매도');
+  assert.equal(findByClass(selected[0], 'backtest-preset-name')[0].textContent, 'RSI 과매도');
 
   // 되돌리면 앞 전략으로 통째로 돌아간다.
   assert.equal(canvas.undoChatAction(receipt.id).ok, true);
@@ -1368,6 +1395,10 @@ test('heatIntensity: 범위 밖 값을 0~1로 자른다', () => {
 test('모드 탭 5개와 설계 하위 탭 4개가 계약으로 고정돼 있다', () => {
   assert.deepEqual(backtestCanvas.MODE_TABS.map((t) => t[0]),
     ['design', 'result', 'history', 'optimize', 'deploy']);
+  assert.deepEqual(backtestCanvas.MODE_TABS.map((t) => t[1]),
+    ['기법', '결과', '이력', '최적화', '배포']);
+  assert.deepEqual(backtestCanvas.MODE_TABS_LIST.map((t) => t[1]),
+    ['기법', '결과', '이력']);
   // 지도가 첫 탭이다(2026-09-03) — 코드 탭의 이름 자체가 그것이 마지막 수단임을 말한다.
   // 노드·흐름(2026-09-03 보드 21)은 넷째다 — 기존 기법에도 그 창이 있어야 한다.
   assert.deepEqual(backtestCanvas.DESIGN_TABS.map((t) => t[0]),
@@ -2812,10 +2843,15 @@ async function mountVisual(extra) {
   const stub = visualStubs(hash, extra);
   const made = makeCanvas(stub.deps);
   made.canvas.mount();
-  // 프리셋 → 스펙 → from-spec → 편집기까지 세 번의 await 사슬이다.
+  // 보드 19: 목록만 선다. 시각 편집기는 기법을 고른 뒤에 지도 탭에서 선다.
   await flush();
   await flush();
-  await flush();
+  const item = findByClass(made.container, 'backtest-preset-item')[0];
+  if (item) {
+    await click(item);
+    await flush();
+    await flush();
+  }
   return Object.assign(made, { calls: stub.calls, hash });
 }
 

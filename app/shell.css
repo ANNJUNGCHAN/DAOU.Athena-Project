@@ -536,52 +536,116 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-lg);
   margin-bottom: 12px;
 }
-/* 기법 목록(2026-09-03) — 처음 주어진 것과 내가 만든 것이 한 목록에 같은 모양으로 선다.
-   카드 한 장은 이름(굵게) + 분류 칩 한 줄, 그 아래 한 줄 설명이다. 한국어 알약은
-   줄바꿈을 막고(nowrap) 설명만 흐르게 둔다 — 칩이 글자 단위로 세로로 쪼개지지 않게. */
-.backtest-technique-list {
+/* 보드 19 기법 목록 — 새 기법 배너가 격자 위에 가로로 서고, 기법은 두 열이다. */
+.backtest-technique-wrap {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   margin-bottom: 16px;
 }
+.backtest-technique-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+.backtest-technique-note {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+  min-width: 0;
+}
+.backtest-technique-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.backtest-technique-list .backtest-design-empty { grid-column: 1 / -1; }
 .backtest-technique-card {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px 10px;
-  padding: 10px 14px;
-  background: var(--color-k-panel);
-  border: 1px solid var(--color-k-line);
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 13px 15px;
+  background: var(--color-k-panel2);
+  border: 1px solid var(--color-k-line-soft);
   border-radius: 12px;
   cursor: pointer;
   text-align: left;
 }
+.backtest-technique-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+}
 .backtest-technique-card.is-selected { border-color: var(--color-brand); }
-.backtest-technique-card:hover { border-color: var(--color-k-line-soft); }
+.backtest-technique-card:hover { border-color: var(--color-k-line); }
 .backtest-technique-card.is-selected:hover { border-color: var(--color-brand); }
-/* 설명은 이름·칩 다음 줄로 통째로 내려간다(flex-basis 100%). */
 .backtest-technique-desc {
-  flex: 0 0 100%;
   color: var(--color-k-dim);
   font-family: var(--font-body);
   font-size: var(--text-2xs);
   line-height: var(--leading-tight);
   word-break: keep-all;
 }
-/* [+ 새 기법 만들기] — 목록 맨 위. 고르는 것이 아니라 만드는 것이라 테두리를 점선으로
-   구분한다(같은 목록의 같은 카드이되, 하는 일이 다르다는 것만 말한다). */
 .backtest-technique-new {
-  border-style: dashed;
-  border-color: var(--color-k-line-soft);
-  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px dashed var(--color-brand);
+  border-radius: 12px;
+  background: #fff5fa;
+  cursor: pointer;
+  text-align: left;
 }
-.backtest-technique-new:hover { border-color: var(--color-brand); }
+.backtest-technique-new:hover { background: #ffedf6; }
+.backtest-technique-new-plus {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--color-brand);
+  color: var(--color-k-panel);
+  font-family: var(--font-strong);
+  font-size: 17px;
+  line-height: 20px;
+}
+.backtest-technique-new-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 .backtest-technique-new-label {
-  color: var(--color-brand);
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-lg);
+  line-height: 19px;
+}
+.backtest-technique-new-sub {
+  color: var(--color-k-dim);
   font-family: var(--font-body);
-  font-weight: 600;
   font-size: var(--text-sm);
+  line-height: var(--leading-tight);
+  word-break: keep-all;
+}
+.backtest-technique-new-chip {
+  flex-shrink: 0;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--color-brand);
+  color: var(--color-k-panel);
+  font-family: var(--font-strong);
+  font-size: 11px;
+  line-height: 15px;
+  white-space: nowrap;
 }
 .backtest-preset-name,
 .backtest-user-strategy-name {
@@ -613,13 +677,15 @@ body { margin: 0; overflow: hidden; }
    기법이 골라지지 않는다). 파일이 사라졌으면 그 한 줄이 카드 안에 선다. */
 .backtest-user-strategy-row {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
 }
 .backtest-user-strategy-item {
   flex: 1 1 auto;
   min-width: 0;
 }
+.backtest-user-strategy-remove { align-self: flex-end; }
 .backtest-user-strategy-missing {
   flex: 0 0 100%;
   color: var(--color-down);
@@ -855,6 +921,7 @@ body { margin: 0; overflow: hidden; }
   font-family: var(--font-body);
   font-size: var(--text-lg);
 }
+.backtest-head-count,
 .backtest-head-strategy,
 .backtest-head-version {
   color: var(--color-k-faint);
