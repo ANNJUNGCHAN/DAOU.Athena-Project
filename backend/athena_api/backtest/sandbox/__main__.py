@@ -116,7 +116,6 @@ def _write_stdout(jobdir: Path, text: str, cap_bytes: int) -> None:
     (jobdir / "stdout.txt").write_text(text, encoding="utf-8")
 
 
-
 def _coerce_signals(result: object) -> object:
     """(entry, exit) 튜플·리스트나 {"entry":…, "exit":…} dict도 DataFrame으로 받아준다.
 

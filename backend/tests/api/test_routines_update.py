@@ -277,3 +277,87 @@ def test_update_revalidates_every_source_rule(app_client, source):
         assert res.json()["condition"]["consecutive_ticks"] == 3
     else:
         assert res.status_code == 422, f"{source}: 연속 틱이 비실시간에서 통과했다"
+
+
+# ── 코드 감시 알람의 편집 경계 — B-17 ───────────────────────────────────────
+
+CODE_WATCH_DRAFT = {
+    "symbol": "005930",
+    "condition": {"source": "code.watch", "op": "==", "value": True},
+    "cooldown_s": 1800,
+    "expires_days": 7,
+    "watch": {
+        "project_id": "p1",
+        "path": "watch/volume_spike.py",
+        "version_hash": "a" * 64,
+        "poll_interval_s": 60,
+        "lookback_days": 30,
+    },
+}
+
+
+def _code_draft(client) -> str:
+    res = client.post("/api/v1/routines/draft", json=CODE_WATCH_DRAFT)
+    assert res.status_code == 200, res.text
+    assert res.json()["watch"]["path"] == "watch/volume_spike.py"  # 초안 응답에 watch가 실린다
+    return res.json()["id"]
+
+
+@pytest.mark.parametrize(
+    "condition",
+    [{"value": False}, {"op": ">="}, {"consecutive_ticks": 3}, {"source": "code.watch"}],
+)
+def test_code_watch_condition_edit_is_422(app_client, condition):
+    """코드 감시의 조건은 폼에서 못 바꾼다 — 고치기는 코드를 다시 쓰는 길로만."""
+    client, _ = app_client
+    rid = _code_draft(client)
+
+    res = client.post(f"/api/v1/routines/{rid}/update", json={"condition": condition})
+    assert res.status_code == 422
+    assert res.json()["detail"] == "코드 감시 조건은 폼에서 못 바꿈 — 고치기는 말로"
+
+
+def test_code_watch_poll_interval_is_updatable(app_client):
+    client, runtime = app_client
+    rid = _code_draft(client)
+
+    res = client.post(f"/api/v1/routines/{rid}/update", json={"poll_interval_s": 300})
+    assert res.status_code == 200, res.text
+    assert res.json()["watch"]["poll_interval_s"] == 300
+    assert runtime.store.get(rid).watch.poll_interval_s == 300
+    # 나머지 watch 값은 그대로다 — 편집이 감시 파일을 바꾸지 않는다.
+    assert runtime.store.get(rid).watch.version_hash == "a" * 64
+    assert runtime.store.get(rid).watch.path == "watch/volume_spike.py"
+
+
+@pytest.mark.parametrize("value", [30, 601, 60.0, True, "300"])
+def test_code_watch_poll_interval_out_of_range_is_422(app_client, value):
+    client, runtime = app_client
+    rid = _code_draft(client)
+
+    res = client.post(f"/api/v1/routines/{rid}/update", json={"poll_interval_s": value})
+    assert res.status_code == 422
+    assert runtime.store.get(rid).watch.poll_interval_s == 60  # 저장은 그대로
+
+
+def test_poll_interval_on_other_modes_is_422(app_client):
+    client, _ = app_client
+    rid = _draft(client)
+    res = client.post(f"/api/v1/routines/{rid}/update", json={"poll_interval_s": 120})
+    assert res.status_code == 422
+    assert res.json()["detail"] == "확인 주기는 코드 감시 알람에서만 바꿀 수 있음"
+
+
+def test_code_watch_still_allows_the_shared_fields(app_client):
+    client, runtime = app_client
+    rid = _code_draft(client)
+
+    res = client.post(
+        f"/api/v1/routines/{rid}/update",
+        json={"note": "거래량 튀면 알려줘", "cooldown_s": 3600, "expires_days": 30},
+    )
+    assert res.status_code == 200, res.text
+    body = res.json()
+    assert body["note"] == "거래량 튀면 알려줘"
+    assert body["cooldown_s"] == 3600
+    assert runtime.store.get(rid).watch.poll_interval_s == 60  # 안 건드린 값은 보존
