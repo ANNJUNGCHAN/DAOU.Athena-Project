@@ -5729,3 +5729,333 @@ body { margin: 0; overflow: hidden; }
 .backtest-terminal.is-open .backtest-terminal-log {
   max-height: 320px;
 }
+/* ---------- 코드 알람 — 노드 카드·코드 상세(11단계, Paper 보드 10/11/12 실측) ----------
+ * 보드 문법: 1px 선 테두리 + radius 8px + padding 10px 카드, 한글 제목 13px 굵게,
+ * 영문 함수명 모노 흐림(가장 가까운 단계 --text-2xs), 「들어감」/「나옴」 캡션,
+ * 값 행은 라벨 흐림 / 값 오른쪽 정렬, 1px 얇은 구분선, 「나옴」 값만 굵게.
+ * 새 hex는 만들지 않는다 — 이 패널이 이미 쓰는 토큰만 쓴다. */
+.agent-node-cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 10px 24px;
+}
+/* 칸과 칸 사이의 → (보드 10/11/12) — 화살표용 DOM이 없어 카드가 스스로 그린다. */
+.agent-node-card + .agent-node-card::before {
+  content: '\2192';
+  position: absolute;
+  top: 50%;
+  left: -18px;
+  transform: translateY(-50%);
+  color: var(--color-k-faint);
+  font-size: var(--text-xs);
+  pointer-events: none;
+}
+.agent-node-card {
+  position: relative;
+  flex: 0 1 auto;
+  min-width: 148px;
+  max-width: 230px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel);
+  cursor: pointer;
+}
+/* 고른 칸은 테두리가 2px가 된다(색은 agent-canvas.js가 인라인으로 정한다) —
+ * 여기서는 그 1px만큼 안쪽 여백을 줄여 카드가 커지지 않게 잡아 둔다. */
+.agent-node-card.is-selected {
+  padding: 9px;
+}
+.agent-node-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.agent-node-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-base);
+}
+/* 「방금 바뀜」 — 경고색 작은 배지(보드 11). */
+.agent-node-badge {
+  flex-shrink: 0;
+  border: 1px solid var(--color-warn);
+  border-radius: var(--radius-full);
+  padding: 1px 6px;
+  color: var(--color-warn);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.agent-node-fn {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+/* 「이번엔 안 쓰임」 — 흐린 한 줄. */
+.agent-node-unused {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+}
+.agent-node-io-label {
+  margin-top: 5px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+}
+.agent-node-in {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: var(--text-xs);
+}
+.agent-node-in-name {
+  flex-shrink: 0;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-weight: 300;
+  white-space: nowrap;
+}
+.agent-node-in-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--color-k-text);
+  text-align: right;
+}
+.agent-node-sep {
+  margin: 6px 0 1px;
+  border-top: 1px solid var(--color-k-line);
+}
+.agent-node-out {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  word-break: keep-all;
+}
+.agent-node-chips {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+/* 「이상해요」·「물어볼게요」 — 32px 알약. 한글이 글자 단위로 접히지 않게 nowrap. */
+.agent-node-chip {
+  flex-shrink: 0;
+  height: 32px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  padding: 0 12px;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.agent-node-empty {
+  color: var(--color-k-faint);
+  font-size: var(--text-sm);
+}
+.agent-node-hint {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+}
+
+/* 머리줄 오른쪽 「코드 감시 · v2」와 그 아래 상태 제어 행(보드 12). */
+.agent-code-kind {
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+.agent-code-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.agent-code-cancel {
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.agent-code-edit {
+  flex-shrink: 0;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  padding: 5px 14px;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.agent-code-edit-confirm {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel3);
+}
+.agent-code-edit-confirm-text {
+  flex: 1 1 100%;
+  color: var(--color-k-text);
+  font-size: var(--text-sm);
+  word-break: keep-all;
+}
+.agent-code-edit-chip {
+  flex-shrink: 0;
+  height: 28px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  padding: 0 12px;
+  background: var(--color-k-panel);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* 「코드 · 참고 · 펼치기」 — 접힌 채로 사는 흐린 한 줄, 위에 얇은 선(보드 10). */
+.agent-code-source {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-k-line);
+}
+.agent-code-source-toggle {
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.agent-code-source-path {
+  align-self: stretch;
+  overflow-wrap: anywhere;
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+/* 초안의 「검사」 줄(보드 10) — 요약 · 오늘 봉 고지 · 검사 버튼. */
+.agent-code-check {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+.agent-code-check-summary {
+  color: var(--color-k-text);
+  font-size: var(--text-sm);
+}
+.agent-code-counted-until {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+}
+.agent-code-check-btn {
+  flex-shrink: 0;
+  margin-left: auto;
+  height: 32px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  padding: 0 16px;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.agent-code-check-btn:disabled {
+  color: var(--color-k-faint);
+  cursor: not-allowed;
+}
+
+/* 「울린 기록」 최근 3줄 — 드릴인 로그(agent-detail-log)와 같은 리듬(보드 12). */
+.agent-code-fires {
+  display: flex;
+  flex-direction: column;
+}
+.agent-code-fire {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 2px;
+}
+.agent-code-fire-date,
+.agent-code-fire-time {
+  flex-shrink: 0;
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.agent-code-fire-time {
+  margin-left: auto;
+}
+.agent-code-fire-mark {
+  flex-shrink: 0;
+  font-size: var(--text-xs);
+}
+.agent-code-fire-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-xs);
+}
+.agent-code-fire-empty {
+  color: var(--color-k-faint);
+  font-size: var(--text-sm);
+}
+.agent-code-settings-hint {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+}

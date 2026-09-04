@@ -1814,7 +1814,13 @@ app.whenReady().then(async () => {
       const turn = document.createElement('article');
       turn.id = 'verifyResponsiveTurn';
       turn.className = 'turn';
-      turn.innerHTML = '<div class="turn-q">삼성전자 흐름을 짧게 알려줘</div><div class="turn-a">최근 질문에 대한 답변이 반폭에서도 입력창 위에 이어집니다.</div>';
+      const q = document.createElement('div');
+      q.className = 'turn-q';
+      q.textContent = '삼성전자 흐름을 짧게 알려줘';
+      const a = document.createElement('div');
+      a.className = 'turn-a';
+      a.textContent = '최근 질문에 대한 답변이 반폭에서도 입력창 위에 이어집니다.';
+      turn.replaceChildren(q, a);
       history.appendChild(turn);
       history.scrollTop = history.scrollHeight;
     })()`);

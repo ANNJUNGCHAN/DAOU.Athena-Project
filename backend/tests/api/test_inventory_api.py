@@ -182,11 +182,10 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # GET /api/v1/routines/{id} · 수정 POST /api/v1/routines/{id}/update · 감시 소스
     # 카탈로그 GET /api/v1/routines/source-catalog. 코드 알람 트랙의 wip 스냅샷에
     # 들어온 것으로 그쪽 핀은 갱신되지 않았고, 병합 시 실측(404→408, 소실 0)으로 맞춘다.
-    # 409 = 408 + 감시 코드 착지 1개(save_watch_code_route: POST /api/v1/routines/watch/code,
-    # feat/agent-dual-control fac086e "Step 4" 병합 2026-09-04) — 사람이 승인한 감시 코드를
-    # 루틴에 붙인다. 켜진 알람의 코드는 409로 거부한다. 그 커밋도 핀을 갱신하지 않아
-    # 병합 시 실측(408→409, 소실 0)으로 맞춘다.
-    assert len(operation_ids) == 409
+    # 410 = 408 + 코드 알람 2개: 감시 코드 착지 POST /api/v1/routines/watch/code
+    # (Step 4)와 검사 POST /api/v1/routines/watch/check(Step 5). 둘 다 백테스트의
+    # 전략·실행·배포 표에는 행을 만들지 않는다 — 늘어나는 것은 공유 일봉 캐시뿐이다.
+    assert len(operation_ids) == 410
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids

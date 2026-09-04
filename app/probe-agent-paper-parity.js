@@ -14,6 +14,12 @@
 //   (4) 알람 갈래 아이콘 2종(mode로 갈림) — 보드 02
 //   (5) 드릴인 [이력][설정] 세그먼트와 보기 전용 설정 패널 — 보드 03·06
 //   (6) 접기 푸터가 실제로 나머지를 펼친다 — 보드 02·03
+//   (7) 코드 알람(Step 7) — 보드 09~12. 목록 행 문법(◆·「코드 감시 · 장중 N분마다」),
+//       노드 카드 문법(한국어 제목·영어명·들어감·나옴·「방금 바뀜」·「이번엔 안 쓰임」),
+//       접힌 코드 줄, 「울린 기록」·「만료」·조건 폼 부재, 「고치기 — 말로」의 멈춤
+//       확인, 초안의 「어제까지로 세었음 · 오늘은 진행 중」과 「검사」.
+//       채팅 쪽 승인 카드(「이 알람 승인」)는 이 프로브가 채팅을 몰아 보지 않아
+//       범위 밖이다 — lib/watch-check-card.test.js와 chat 계열 테스트가 잰다.
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 
@@ -69,6 +75,36 @@ const ALERTS = Array.from({ length: 9 }, (_, i) => ({
   read: true,
 }));
 
+// 코드 알람 fixture(보드 10·11) — 노드 4칸 중 하나는 「방금 바뀜」, 하나는 이번에
+// 안 불린 칸이다. 값은 전부 백엔드가 기록한 모양 그대로(숫자·참·없음)를 흉내낸다.
+const WATCH_NODES = [
+  {
+    fn: 'load_bars', title_ko: '일봉 불러오기', title_en: 'load_bars',
+    inputs: [{ name: '종목', value: '삼성전자' }, { name: '기간', value: 60 }],
+    output: '봉 60개 + 오늘 봉', called: true, changed: false, warnings: [],
+  },
+  {
+    fn: 'avg_volume', title_ko: '5일 거래량 평균', title_en: 'avg_volume',
+    inputs: [{ name: '봉', value: 60 }, { name: '일수', value: 5 }],
+    output: 13000000, called: true, changed: true, warnings: [],
+  },
+  {
+    fn: 'volume_ratio', title_ko: '배수 비교', title_en: 'volume_ratio',
+    inputs: [{ name: '오늘 거래량', value: 16500000 }, { name: '배수', value: 2 }],
+    output: 1.27, called: true, changed: false, warnings: [],
+  },
+  {
+    fn: 'fire', title_ko: '알림', title_en: 'fire',
+    inputs: [{ name: '넘음', value: false }, { name: '쿨다운', value: 1 }],
+    output: null, called: false, changed: false, warnings: [],
+  },
+];
+
+const WATCH_BLOCK = {
+  project_id: 'p1', path: 'watch/volume_spike.py', version_hash: 'ab12cd34ef',
+  params: { 배수: 2 }, poll_interval_s: 60, lookback_days: 30, last_fired_at: null,
+};
+
 async function main() {
   const mainMod = require('./main.js');
   await mainMod.createWindows();
@@ -100,12 +136,54 @@ async function main() {
           source_label: '뉴스·공시', cooldown_s: 600, created_at: ISO(20, 9, 0),
           next_fire_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
         },
+        {
+          id: 'fx3', symbol: '005930', note: '거래량 급증 감시 · 삼성전자', status: 'active', mode: 'code-watch',
+          source_label: '코드 감시', cooldown_s: 86400, created_at: ISO(6, 10, 0),
+          expires_at: '2026-10-03T09:00:00', watch: WATCH_BLOCK,
+        },
+        {
+          id: 'fx4', symbol: '005930', note: '외국인 순매수 3일 연속', status: 'draft', mode: 'code-watch',
+          source_label: '코드 감시', cooldown_s: 86400, created_at: ISO(0, 9, 0),
+        },
       ],
       disclosure_ready: true,
       last_error: null,
       fired_today: 2,
     },
   }));
+  // 코드 알람 상세(Step 7) — 목록에 없는 감시 블록·오늘 확인·노드 칸이 여기 있다.
+  ipcMain.removeHandler('athena:routine-detail');
+  ipcMain.handle('athena:routine-detail', async (_e, { id }) => {
+    if (id === 'fx3') {
+      return {
+        ok: true,
+        data: {
+          id, watch: WATCH_BLOCK, last_check: null,
+          last_run: {
+            checked_at: ISO(0, 15, 31), observed: 1.27, duration_ms: 820,
+            nodes: WATCH_NODES, skip_reason: null,
+          },
+        },
+      };
+    }
+    if (id === 'fx4') {
+      return {
+        ok: true,
+        data: {
+          id, watch: WATCH_BLOCK, last_run: null,
+          last_check: {
+            count: 4, lookback_days: 30, last_fire: '2026-08-26',
+            fires: [{ dt: '2026-08-26', close: 71000 }],
+            nodes: WATCH_NODES, warnings: [], checked_at: ISO(0, 15, 31),
+            counted_until: '2026-09-02', ok: true, reason: null,
+          },
+        },
+      };
+    }
+    return { ok: true, data: { id } };
+  });
+  ipcMain.removeHandler('athena:routine-pause');
+  ipcMain.handle('athena:routine-pause', async () => ({ ok: true, data: { status: 'paused' } }));
   ipcMain.removeHandler('athena:routine-runs');
   ipcMain.handle('athena:routine-runs', async () => ({
     ok: true,
@@ -273,6 +351,156 @@ async function main() {
   check('"이력"으로 되돌리면 이력 본문이 다시 보인다', settingsProbe.historyBackVisible === true);
   check('드릴인을 닫으면 세그먼트도 함께 숨는다', settingsProbe.segHiddenAfterBack === true);
 
+  // ---------- (7) 코드 알람 — 보드 09~12 ----------
+  await shellWin.webContents.executeJavaScript("window.AthenaAgentCanvas.selectRow('fx3')");
+  await wait(500); // 상세 1회 조회 왕복
+
+  const codeProbe = await shellWin.webContents.executeJavaScript(`(() => {
+    const c = document.getElementById('agentCanvas');
+    const detail = c.querySelector('.agent-detail-col');
+    const cards = Array.from(detail.querySelectorAll('.agent-node-card'));
+    const row = Array.from(c.querySelectorAll('.agent-row')).find((n) => n.textContent.includes('거래량 급증 감시'));
+    return {
+      rowSub: row ? row.querySelector('.agent-row-sub').textContent : null,
+      rowDot: row ? row.querySelector('.agent-row-dot').textContent : null,
+      kindLabel: (detail.querySelector('.agent-code-kind') || {}).textContent,
+      cardCount: cards.length,
+      cardTitles: cards.map((n) => (n.querySelector('.agent-node-title') || {}).textContent),
+      cardFns: cards.map((n) => (n.querySelector('.agent-node-fn') || {}).textContent),
+      ioLabels: cards.map((n) => Array.from(n.querySelectorAll('.agent-node-io-label')).map((x) => x.textContent)),
+      inCounts: cards.map((n) => n.querySelectorAll('.agent-node-in').length),
+      outputs: cards.map((n) => (n.querySelector('.agent-node-out') || {}).textContent),
+      changed: cards.map((n) => Array.from(n.querySelectorAll('.agent-node-badge')).map((x) => x.textContent)),
+      unused: cards.map((n) => Array.from(n.querySelectorAll('.agent-node-unused')).map((x) => x.textContent)),
+      codeToggle: (detail.querySelector('.agent-code-source-toggle') || {}).textContent,
+      codePathShown: !!detail.querySelector('.agent-code-source-path'),
+      historyOpen: (detail.querySelector('.agent-history-open') || {}).textContent,
+      inputCount: detail.querySelectorAll('input, select, textarea').length,
+      fieldPairs: Array.from(detail.querySelectorAll('.agent-detail-field')).map((r) => [
+        r.querySelector('.agent-detail-field-label').textContent,
+        r.querySelector('.agent-detail-field-value').textContent,
+      ]),
+      hasFires: detail.textContent.includes('울린 기록'),
+      hasEdit: detail.textContent.includes('고치기 — 말로'),
+      hasTodayCaption: Array.from(detail.querySelectorAll('.agent-panel-caption')).some((n) => n.textContent.startsWith('오늘 확인')),
+    };
+  })()`);
+
+  check('목록 행이 「코드 감시 · 장중 1분마다」로 갈린다 — 보드 12(「주기 확인」 폴백 금지)',
+    codeProbe.rowSub === '코드 감시 · 장중 1분마다');
+  check('코드 감시 행 아이콘은 ◆다 — 보드 12 범례', codeProbe.rowDot === '◆');
+  check('상세 머리에 「코드 감시 · v해시」가 있다 — 보드 12', codeProbe.kindLabel === '코드 감시 · vab12cd');
+  check('노드 카드가 함수 수만큼(4칸) 그려진다 — 보드 10·11', codeProbe.cardCount === 4);
+  check('칸마다 한국어 제목과 영어 함수명이 함께 있다 — R7',
+    JSON.stringify(codeProbe.cardTitles) === JSON.stringify(['일봉 불러오기', '5일 거래량 평균', '배수 비교', '알림'])
+    && JSON.stringify(codeProbe.cardFns) === JSON.stringify(['load_bars', 'avg_volume', 'volume_ratio', 'fire']));
+  check('칸마다 「들어감」 행과 「나옴」 값이 있다 — R7',
+    codeProbe.ioLabels.every((l) => JSON.stringify(l) === JSON.stringify(['들어감', '나옴']))
+    && codeProbe.inCounts.every((n) => n >= 1)
+    && codeProbe.outputs.every((v) => !!v));
+  check('숫자는 자릿수를 끊고 값이 없으면 「—」로 남는다',
+    codeProbe.outputs[1] === '13,000,000' && codeProbe.outputs[3] === '—');
+  check('「방금 바뀜」은 바뀐 칸에만 붙는다 — 보드 11',
+    JSON.stringify(codeProbe.changed) === JSON.stringify([[], ['방금 바뀜'], [], []]));
+  check('안 불린 칸은 「이번엔 안 쓰임」으로 남는다 — A-5',
+    JSON.stringify(codeProbe.unused) === JSON.stringify([[], [], [], ['이번엔 안 쓰임']]));
+  check('오늘 확인 패널 머리가 있다 — 보드 12', codeProbe.hasTodayCaption === true);
+  check('코드는 접혀 있고 라벨이 「코드 · 참고 · 펼치기」다 — R7',
+    codeProbe.codeToggle === '코드 · 참고 · 펼치기' && codeProbe.codePathShown === false);
+  check('「울린 기록」과 「전체 이력 보기 →」가 있다 — 보드 12',
+    codeProbe.hasFires === true && codeProbe.historyOpen === '전체 이력 보기 →');
+  check('설정 요약이 확인 주기·쿨다운·만료 세 줄이다 — 보드 12',
+    JSON.stringify(codeProbe.fieldPairs)
+      === JSON.stringify([['확인 주기', '장중 1분'], ['쿨다운', '86400초'], ['만료', '2026-10-03']]));
+  check('코드 알람 상세에 조건 편집 폼이 없다 — A-5', codeProbe.inputCount === 0);
+
+  // 칸 고르기 → 칩 2개(보드 11) → 채팅으로 넘어가는 문장
+  const nodeChipProbe = await shellWin.webContents.executeJavaScript(`(() => {
+    const c = document.getElementById('agentCanvas');
+    const pick = Array.from(c.querySelectorAll('.agent-node-card')).find((n) => n.textContent.includes('배수 비교'));
+    pick.click();
+    const detail = c.querySelector('.agent-detail-col');
+    const selected = Array.from(detail.querySelectorAll('.agent-node-card')).filter((n) => n.className.includes('is-selected'));
+    const chips = Array.from(detail.querySelectorAll('.agent-node-chip'));
+    let seeded = null;
+    const prevSeed = window.AthenaShell.seedChatInput;
+    window.AthenaShell.seedChatInput = (t) => { seeded = t; };
+    chips[0].click();
+    window.AthenaShell.seedChatInput = prevSeed;
+    return {
+      selectedCount: selected.length,
+      selectedTitle: selected.length ? selected[0].querySelector('.agent-node-title').textContent : null,
+      selectedBorder: selected.length ? selected[0].style.border : '',
+      chipLabels: chips.map((n) => n.textContent),
+      seeded,
+    };
+  })()`);
+
+  check('칸을 고르면 그 칸만 진한 테두리를 받는다 — 보드 11',
+    nodeChipProbe.selectedCount === 1 && nodeChipProbe.selectedTitle === '배수 비교'
+    && !!nodeChipProbe.selectedBorder);
+  check('고른 칸에 「이상해요」·「물어볼게요」 칩이 붙는다 — R7',
+    JSON.stringify(nodeChipProbe.chipLabels) === JSON.stringify(['이상해요', '물어볼게요']));
+  check('그 칩이 시트가 아니라 채팅 입력에 그 칸을 지목한 문장을 심는다',
+    nodeChipProbe.seeded === '"거래량 급증 감시 · 삼성전자" 알람의 「배수 비교」 칸이 이상해 — ');
+
+  // 「고치기 — 말로」 — 켜진 알람은 먼저 멈춤을 묻는다(A-12·R10)
+  const editGateProbe = await shellWin.webContents.executeJavaScript(`(() => {
+    const c = document.getElementById('agentCanvas');
+    c.querySelector('.agent-code-edit').click();
+    const detail = c.querySelector('.agent-detail-col');
+    const chips = Array.from(detail.querySelectorAll('.agent-code-edit-chip'));
+    window.__probeSeeded = null;
+    window.__probePrevSeed = window.AthenaShell.seedChatInput;
+    window.AthenaShell.seedChatInput = (t) => { window.__probeSeeded = t; };
+    const out = {
+      chipLabels: chips.map((n) => n.textContent),
+      mentions409: detail.textContent.includes('409'),
+    };
+    chips[0].click();
+    return out;
+  })()`);
+  await wait(400); // 멈춤 왕복 + refresh
+
+  const editDoneProbe = await shellWin.webContents.executeJavaScript(`(() => {
+    const c = document.getElementById('agentCanvas');
+    window.AthenaShell.seedChatInput = window.__probePrevSeed;
+    return {
+      seeded: window.__probeSeeded,
+      confirmGone: c.querySelectorAll('.agent-code-edit-chip').length === 0,
+    };
+  })()`);
+
+  check('켜진 알람의 「고치기 — 말로」는 먼저 멈춤을 묻는다 — A-12',
+    JSON.stringify(editGateProbe.chipLabels) === JSON.stringify(['일시중지하고 고치기', '그대로 두기']));
+  check('거절 사유(코드 번호)는 화면에 옮기지 않는다 — R10', editGateProbe.mentions409 === false);
+  check('「일시중지하고 고치기」가 멈춤 뒤 채팅으로 넘긴다',
+    editDoneProbe.seeded === '"거래량 급증 감시 · 삼성전자" 알람을 말로 고치고 싶어 — '
+    && editDoneProbe.confirmGone === true);
+
+  // 초안(보드 09·10) — 검사 요약과 「검사」
+  await shellWin.webContents.executeJavaScript("window.AthenaAgentCanvas.selectRow('fx4')");
+  await wait(500);
+  const draftProbe = await shellWin.webContents.executeJavaScript(`(() => {
+    const detail = document.getElementById('agentCanvas').querySelector('.agent-detail-col');
+    return {
+      badge: (detail.querySelector('.agent-status-badge') || {}).textContent,
+      summary: (detail.querySelector('.agent-code-check-summary') || {}).textContent,
+      countedUntil: (detail.querySelector('.agent-code-counted-until') || {}).textContent,
+      checkLabel: (detail.querySelector('.agent-code-check-btn') || {}).textContent,
+      cardCount: detail.querySelectorAll('.agent-node-card').length,
+      firesShown: !!detail.querySelector('.agent-code-fires'),
+    };
+  })()`);
+
+  check('코드 알람 초안은 「초안」 배지와 검사 요약을 낸다 — 보드 10',
+    draftProbe.badge === '초안' && draftProbe.summary === '지난 30일 4번 · 마지막 8/26');
+  check('초안 상세에 「어제까지로 세었음 · 오늘은 진행 중」이 있다 — P4·A-10',
+    draftProbe.countedUntil === '어제까지로 세었음 · 오늘은 진행 중');
+  check('초안에 「검사」 버튼이 있고 검사 결과의 칸을 그대로 보여준다',
+    draftProbe.checkLabel === '검사' && draftProbe.cardCount === 4);
+  check('울린 적 없는 초안에 울린 기록을 지어내지 않는다', draftProbe.firesShown === false);
+
   // ---------- 제안 뷰 — 스트립 메타 · 카드 2줄 ----------
   const proactiveProbe = await shellWin.webContents.executeJavaScript(`(() => {
     const c = document.getElementById('agentCanvas');
@@ -298,7 +526,11 @@ async function main() {
   fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
   fs.writeFileSync(
     path.join(__dirname, 'captures', 'probe-agent-paper-parity.json'),
-    JSON.stringify({ tasksProbe, alarmProbe, drillProbe, settingsProbe, proactiveProbe, consoleErrors, failures, ok }, null, 1),
+    JSON.stringify({
+      tasksProbe, alarmProbe, drillProbe, settingsProbe,
+      codeProbe, nodeChipProbe, editGateProbe, editDoneProbe, draftProbe,
+      proactiveProbe, consoleErrors, failures, ok,
+    }, null, 1),
   );
   console.log(`[probe] 단언 실패 ${failures.length}건`);
   for (const f of failures) console.log('  -', f);
