@@ -409,7 +409,7 @@ function buildBacktestModePrefix(context, today) {
 
   // 새 기법 초안(사용자 구도 2026-09-03) — 프리셋이 없어진 자리다. 여기서 대화가 다루는
   // 것은 폼도 지도 칸도 아니라 그 기법 파이썬의 **함수**다: 모델이 질문 카드로 알고리즘을
-  // 정하고 코드를 직접 쓰면, 앱이 자동으로 돌린 검사 3줄과 그 코드에서 뽑은 노드·흐름이
+  // 정하고 코드를 직접 쓰면, 앱이 자동으로 돌린 검사 항목 줄과 그 코드에서 뽑은 노드·흐름이
   // 매 턴 이 블록으로 돌아온다. 블록이 없으면 모델은 자기가 방금 쓴 코드가 검사를 통과했는지
   // 모른 채 다음 질문을 던지고, "노드 X()를 설명해줘"에 줄 범위 없이 지어낸 설명을 한다.
   //
@@ -441,7 +441,7 @@ function buildBacktestModePrefix(context, today) {
     ? selectedRaw
     : (obj(selectedRaw) && typeof selectedRaw.id === 'string' ? selectedRaw.id : '');
   const selectedNode = selectedId
-    ? (techniqueNodes.filter((n) => obj(n) && n.id === selectedId)[0] || null)
+    ? (techniqueNodes.find((n) => obj(n) && n.id === selectedId) || null)
     : null;
   // 기법 폴더(사용자 구도 2026-09-03) — 기법 하나 = 폴더 하나 = 대화 하나다. projectId가
   // 실려 오면 코드는 그 폴더의 strategy.py이고, 편집·검사·백테스트는 사람에게 묻지 않고

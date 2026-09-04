@@ -45,8 +45,8 @@ const WatchNodes = isNode ? require('./watch-nodes') : window.AthenaLib.WatchNod
 // 로그는 여전히 fixture다(ledger API 라이브 연결은 10단계 몫 — 예약도 watch와
 // 마찬가지로 이 화면에선 아직 라이브 붙이지 않는다).
 //
-// 9단계(알람 센터·라이브 관제, Paper 보드 40) — 헤더에 뷰 탭 3종(작업/알람/
-// 라이브)이 생긴다. "작업" 뷰는 위 39번 화면 그대로(통계·리스트+상세·제안).
+// 9단계(알람 센터·라이브 관제, Paper 보드 40) — 헤더에 뷰 탭이 생긴다(작업/알람/
+// 라이브; 11단계에서 제안이 더해져 지금 4종). "작업" 뷰는 위 39번 화면 그대로(통계·리스트+상세·제안).
 // "알람"·"라이브" 뷰는 보드 40의 두 컬럼(알람 피드+라이브 관제)을 한 화면에
 // 같이 그린다 — Paper 아트보드가 둘을 분리해 그리지 않았다(제목 자체가
 // "알람 센터 · 라이브 관제"로 하나다), 그래서 지어내지 않고 같은 내용을
@@ -276,7 +276,7 @@ function createAgentCanvas(deps) {
   title.textContent = '에이전트';
   head.appendChild(title);
 
-  // 뷰 탭 3종(9단계, 위 머리말 참고) — 항상 보인다.
+  // 뷰 탭 4종(작업/알람/라이브/제안, 위 머리말 참고) — 항상 보인다.
   const viewTabsWrap = el('div', 'agent-view-tabs');
   const viewTabButtons = {};
   for (const view of VIEWS) {
@@ -2000,7 +2000,7 @@ function createAgentCanvas(deps) {
     renderPanels();
   }
 
-  // 뷰 탭 3종(9단계) — "작업"은 39번 화면(통계+리스트/상세), "알람"·"라이브"는
+  // 뷰 탭 4종 — "작업"은 39번 화면(통계+리스트/상세), "알람"·"라이브"는
   // 40번 화면(알람 피드+라이브 관제, 위 머리말 참고 — Paper가 하나로 그려서
   // 둘이 같은 내용을 공유한다).
   function setActiveView(key) {
