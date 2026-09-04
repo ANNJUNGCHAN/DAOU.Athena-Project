@@ -1,0 +1,59 @@
+{
+  "task": "Athena 데스크톱을 베타테스터처럼 직접 조작해 모든 사용자 표면을 실사용하고, 멈추라는 지시 전까지 발견한 개선사항·버그·마찰을 증거 기반 상세 문서로 남긴다. 소스 수정·실주문·계좌 변경·플러그인 설치 확정·알람 실활성화는 하지 않는다.",
+  "branchName": "main",
+  "note": "세션 .omc/state/sessions/01a06ab6-*/prd.json 은 다른 병렬 작업(live-full 하네스)이 덮어썼다. 이 파일과 docs/handoff/beta-test-live/ATHENA-BETA-FEEDBACK.md 가 베타테스트 정본이다.",
+  "stories": [
+    {
+      "id": "US-001",
+      "title": "사용자 표면 전수 목록을 코드+라이브 기준으로 확정한다",
+      "priority": 1,
+      "passes": true
+    },
+    {
+      "id": "US-002",
+      "title": "Athena 스택을 띄우고 첫 화면을 실측한다",
+      "priority": 2,
+      "passes": true
+    },
+    {
+      "id": "US-003",
+      "title": "한시간 단위 단타 사용자처럼 채팅·시세·호가·차트를 실사용한다",
+      "priority": 3,
+      "passes": true
+    },
+    {
+      "id": "US-004",
+      "title": "그래프·에이전트·플러그인·설정·백테스트 모드를 직접 전환해 쓴다",
+      "priority": 4,
+      "passes": true,
+      "note": "설치 미리보기 시트는 Orca 끊김으로 허브 카드까지만. 설정은 화면 탭 실측."
+    },
+    {
+      "id": "US-005",
+      "title": "키우미(오브)·관심/알림 초안 경로를 실사용한다",
+      "priority": 5,
+      "passes": false,
+      "acceptanceCriteria": [
+        "오브 접힘/펼침/채팅을 실제 클릭으로 확인한다",
+        "알림·루틴은 초안/확인 경계까지만 보고 활성화·삭제를 하지 않는다",
+        "관찰 내용이 스크린샷과 함께 문서에 남는다"
+      ]
+    },
+    {
+      "id": "US-006",
+      "title": "개선사항·피드백 상세 문서를 작성한다",
+      "priority": 6,
+      "passes": true
+    },
+    {
+      "id": "US-007",
+      "title": "사용자가 멈추라고 할 때까지 추가 표면을 계속 탐색한다",
+      "priority": 7,
+      "passes": false,
+      "acceptanceCriteria": [
+        "사용자가 명시적으로 중지/취소/중단을 말했다",
+        "그 시점까지의 모든 추가 탐색이 피드백 문서에 반영됐다"
+      ]
+    }
+  ]
+}

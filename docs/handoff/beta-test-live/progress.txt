@@ -1,0 +1,9 @@
+[ralph] Athena 라이브 베타 — 2026-09-04
+정본 문서: docs/handoff/beta-test-live/ATHENA-BETA-FEEDBACK.md
+증거: artifacts/beta-test-live/captures/
+
+US-001~003, US-006 완료. US-004 모드 투어 완료(플러그인 설치 시트·오브 클릭은 잔여).
+US-005 오브 실클릭 남음. US-007 은 사용자 stop 전까지 false.
+
+핵심 발견: Selector http_500 / 종목 인덱스 404 / 턴 좀비 락 / 에이전트 fixture / 이중 가격 255500 vs 256500 / 채팅 타임아웃 vs 캔버스 카드 공존 / Claude weekly limit 영어 원문.
+병렬 세션이 Get-Process electron | Stop-Process -Force 와 probe-live-full.js 를 돌려 창이 자주 사라짐.
