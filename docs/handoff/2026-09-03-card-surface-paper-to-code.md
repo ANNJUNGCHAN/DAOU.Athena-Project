@@ -205,6 +205,7 @@ eval "$(fnm env)"; export PYTHONIOENCODING=utf-8
 ---
 
 ## 11. 갱신 이력
+- 2026-09-04 09:3x KST — G5b 2QFO-2 WIP 코드 측 고정(미완료 표시 유지). 2QH0-2 paired-table + header_row=3843-0 선언, extract/board.html 표 마크, label word-break:keep-all, column_lane 측정·ssertReadability hard gate(77e8e2f). unit: board-glyph-geometry+board-parity 54/54. targeted verify ATHENA_VERIFY_BOARD_IDS=2QFO-2,13BC-2 exit 0, 12 probe atomic/overlap/paired/column_lane 0. **G5b Paper 시각 재감사 전이라 passed로 치지 않음.** option (c) min-width 축소 미사용. paper.jsx 미수정.
 - 2026-09-04 08:0x KST — G5a 문서 정합. README 🟠·PROMPT 블록 B·§7 캡처 행이 아직 G5a WIP/미실행으로 남아 있어, 측정된 정본 리포트(`00666f5` 직후 `generated_at` 2026-09-03T22:49:35.105Z = 07:49:35 KST)와 맞췄다. G5a 자동 게이트 닫힘. G5b 육안 pending. 자동 0을 육안 PASS로 쓰지 말 것.
 - 2026-09-04 07:52 KST — G5a 코드 마감 `00666f5`. probe 스코핑으로 2SKU-1 예탁/표 거짓양성 제거. 진단 리포트 07:47:24 KST·정본 리포트 07:49:35 KST 완결, 36측정 atomic/overlap/paired 0·overflow 0·13BC-2 대조군 깨끗. glyph/parity 54/54. G5b 육안 Paper 재승인 pending. 동시 세션의 2SKU atomic 확대·scroll-table cell `min-width:max-content` 시도는 되돌림(overflow/atomic 거짓실패).
 
