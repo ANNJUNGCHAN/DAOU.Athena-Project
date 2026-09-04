@@ -792,7 +792,7 @@ async function settleBoardLayout(win, instanceId) {
       setTimer: setTimeout,
       clearTimer: clearTimeout,
       now: performance.now.bind(performance),
-      deadlineMs: 3000,
+      deadlineMs: 10000,
       timerMs: 50,
       maxSamples: 180,
       requiredStableSamples: 4,
