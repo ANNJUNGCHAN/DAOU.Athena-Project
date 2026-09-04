@@ -1,4 +1,5 @@
 import asyncio
+from contextlib import suppress
 import json
 from collections.abc import Awaitable, Callable
 from types import SimpleNamespace
@@ -43,6 +44,24 @@ def test_ws_dependency_accepts_websocket_connection_scope() -> None:
     app = SimpleNamespace(state=SimpleNamespace(kiwoom_ws_client=expected))
     connection = HTTPConnection({"type": "websocket", "app": app, "headers": []})
     assert require_kiwoom_ws_client(connection) is expected
+
+
+def test_ws_dependency_returns_client_while_reconnect_not_ready() -> None:
+    """F08: mid-session reconnect must not 503 /ws/stream or REMOVE."""
+    from athena_api.errors import KiwoomNotReadyError
+
+    recovering = SimpleNamespace(is_ready=False)
+    app = SimpleNamespace(state=SimpleNamespace(kiwoom_ws_client=recovering))
+    connection = HTTPConnection({"type": "websocket", "app": app, "headers": []})
+    assert require_kiwoom_ws_client(connection) is recovering
+
+    empty = SimpleNamespace(state=SimpleNamespace(kiwoom_ws_client=None))
+    missing = HTTPConnection({"type": "websocket", "app": empty, "headers": []})
+    try:
+        require_kiwoom_ws_client(missing)
+        raise AssertionError("expected KiwoomNotReadyError")
+    except KiwoomNotReadyError:
+        pass
 
 
 async def until(check: Callable[[], bool]) -> None:
@@ -543,16 +562,14 @@ async def test_remove_queued_during_recovery_cannot_be_undone_by_stale_restore()
         await asyncio.sleep(0)
         client._control_lock.release()  # noqa: SLF001
 
-        for index in range(2):
-            expected_count = 2 + index
-            await until(lambda expected=expected_count: len(recovered.sent) >= expected)
-            trnm = recovered.messages()[1 + index]["trnm"]
-            recovered.push({"trnm": trnm, "return_code": 0})
+        # Early local forget means reconnect must not REG the removed lease.
+        await until(lambda: len(recovered.sent) >= 2)
+        assert recovered.messages()[1]["trnm"] == "REMOVE"
+        recovered.push({"trnm": "REMOVE", "return_code": 0})
         await remove
 
         assert [message["trnm"] for message in recovered.messages()] == [
             "LOGIN",
-            "REG",
             "REMOVE",
         ]
         assert client.subscription_count == 0
@@ -721,5 +738,86 @@ async def test_reg_refresh_zero_replaces_existing_group_before_reconnect() -> No
         assert restored["refresh"] == "0"
         recovered.push({"trnm": "REG", "return_code": 0})
         await until(lambda: client.is_ready)
+    finally:
+        await client.close()
+
+@pytest.mark.asyncio
+async def test_remove_after_control_failure_forgets_lease_and_succeeds() -> None:
+    """F06: REMOVE that hits a dead socket must not restore orphan REAL on reconnect."""
+    first, recovered = FakeSocket(), FakeSocket()
+    sockets = [first, recovered]
+
+    async def connect(_url: str) -> FakeSocket:
+        return sockets.pop(0)
+
+    async def no_sleep(_seconds: float) -> None:
+        return None
+
+    client = client_for(connect, sleep=no_sleep)
+    try:
+        await start_client(client, first)
+        registration = asyncio.create_task(client.register("00", ["005930"]))
+        await until(lambda: len(first.sent) == 2)
+        first.push({"trnm": "REG", "return_code": 0})
+        await registration
+        assert client.subscription_count == 1
+
+        first.send_error = ConnectionError("raw-upstream-secret")
+        remove = asyncio.create_task(client.remove("00", ["005930"]))
+        await until(lambda: bool(recovered.sent))
+        recovered.push({"trnm": "LOGIN", "return_code": 0})
+        # Retry REMOVE may be sent; ACK it if present, else synthetic success after timeout path.
+        async def ack_retry() -> None:
+            await until(lambda: len(recovered.sent) >= 2)
+            if recovered.messages()[-1]["trnm"] == "REMOVE":
+                recovered.push({"trnm": "REMOVE", "return_code": 0})
+
+        acker = asyncio.create_task(ack_retry())
+        result = await remove
+        acker.cancel()
+        with suppress(asyncio.CancelledError):
+            await acker
+        assert result["trnm"] == "REMOVE"
+        assert result["return_code"] == "0"
+        assert client.subscription_count == 0
+        await until(lambda: client.is_ready)
+        await asyncio.sleep(0)
+        assert recovered.messages()[0]["trnm"] == "LOGIN"
+        assert "REG" not in [message["trnm"] for message in recovered.messages()]
+    finally:
+        await client.close()
+
+
+@pytest.mark.asyncio
+async def test_remove_retries_once_against_recovered_session() -> None:
+    first, recovered = FakeSocket(), FakeSocket()
+    sockets = [first, recovered]
+
+    async def connect(_url: str) -> FakeSocket:
+        return sockets.pop(0)
+
+    async def no_sleep(_seconds: float) -> None:
+        return None
+
+    client = client_for(connect, sleep=no_sleep)
+    try:
+        await start_client(client, first)
+        registration = asyncio.create_task(client.register("00", ["005930"]))
+        await until(lambda: len(first.sent) == 2)
+        first.push({"trnm": "REG", "return_code": 0})
+        await registration
+
+        first.send_error = ConnectionError("closed-on-remove")
+        remove = asyncio.create_task(client.remove("00", ["005930"]))
+        await until(lambda: bool(recovered.sent))
+        recovered.push({"trnm": "LOGIN", "return_code": 0})
+        await until(lambda: len(recovered.sent) >= 2)
+        # Local lease was forgotten on first failure, so restore has nothing to REG;
+        # the retry sends REMOVE on the recovered socket.
+        assert recovered.messages()[1]["trnm"] == "REMOVE"
+        recovered.push({"trnm": "REMOVE", "return_code": 0})
+        result = await remove
+        assert result["return_code"] == "0"
+        assert client.subscription_count == 0
     finally:
         await client.close()
