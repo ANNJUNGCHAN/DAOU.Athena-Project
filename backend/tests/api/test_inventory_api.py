@@ -185,7 +185,11 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # 410 = 408 + 코드 알람 2개: 감시 코드 착지 POST /api/v1/routines/watch/code
     # (Step 4)와 검사 POST /api/v1/routines/watch/check(Step 5). 둘 다 백테스트의
     # 전략·실행·배포 표에는 행을 만들지 않는다 — 늘어나는 것은 공유 일봉 캐시뿐이다.
-    assert len(operation_ids) == 410
+    # 411 = 410 + 배포 무장 1개(arm_deployment_route: POST
+    # /api/v1/backtest/deployments/{deployment_id}/arm, 2026-09-04 자동 매매). 무장은
+    # 사람 클릭 전용이라 MCP 표면에는 없고 HTTP 라우트로만 존재한다.
+    # integrate/backtest-auto-trading 병합: PR #13의 코드 알람 2개 + 자동 매매 arm 1개.
+    assert len(operation_ids) == 411
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids

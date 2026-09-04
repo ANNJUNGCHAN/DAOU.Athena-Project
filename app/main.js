@@ -1459,6 +1459,7 @@ const BACKTEST_EXTRA_CHANNELS = {
   'athena:backtest-deployments': backtestBridge.fetchDeployments,
   'athena:backtest-deployment-create': backtestBridge.createDeployment,
   'athena:backtest-deployment-stop': backtestBridge.stopDeployment,
+  'athena:backtest-deployment-arm': backtestBridge.armDeployment,
   'athena:backtest-signals': backtestBridge.fetchSignals,
   'athena:backtest-evaluate': backtestBridge.evaluateDeployment,
   // 2026-09-02 사용자 전략 등록부 — 등록·해제는 사람이 누르는 버튼이다(모델의 MCP
