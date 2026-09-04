@@ -93,7 +93,12 @@ test('canvas_type chart는 recipe_id가 없어도 보드가 AITS를 가로채지
     surface_contract: { board_id: '2SKU-1' },
   }), true);
   assert.strictEqual(routing.preservesAppPrimary({
+    card_id: 'CC-03',
     operation_ref: 'base:ka10081',
+    surface_contract: { board_id: '2SKU-1' },
+  }), true);
+  assert.strictEqual(routing.preservesAppPrimary({
+    operation_ref: 'base:ka10001',
     canvas_type: 'chart',
     fell_back: true,
   }), false);
