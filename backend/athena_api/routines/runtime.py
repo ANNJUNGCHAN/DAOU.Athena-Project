@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+from collections.abc import Awaitable, Callable
 from contextlib import suppress
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -269,6 +270,7 @@ async def open_routines(
     ws_client: KiwoomWsClient | None,
     candle_store: Any | None = None,
     kiwoom_client: Any | None = None,
+    run_deployments_once: Callable[[], Awaitable[None]] | None = None,
 ) -> RoutinesRuntime:
     events: asyncio.Queue[dict[str, Any]] = asyncio.Queue(200)
     store = RoutineStore(settings.routines_store_path)
@@ -333,6 +335,9 @@ async def open_routines(
         code_market_open=settings.routines_code_market_open,
         code_market_close=settings.routines_code_market_close,
         code_market_weekdays_only=settings.routines_code_market_weekdays_only,
+        # 배포 판정(보드 23 자동 매매). 주지 않으면 그 루프는 아예 서지 않는다 —
+        # 백테스트가 꺼진 앱에서 자동 주문 루프가 도는 일은 구조적으로 없다.
+        run_deployments_once=run_deployments_once,
     )
 
     runtime = RoutinesRuntime(

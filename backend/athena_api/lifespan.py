@@ -10,6 +10,7 @@ import httpx
 from fastapi import FastAPI
 
 from athena_api.accounts import AccountRuntime
+from athena_api.backtest import deploy_runner
 from athena_api.backtest.runner import BacktestRunner
 from athena_api.backtest.store import BacktestStore
 from athena_api.brain import (
@@ -700,6 +701,12 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                     kiwoom_client=(
                         default_rt.data_client
                         if default_rt is not None and default_rt.ready
+                        else None
+                    ),
+                    # 러너는 부를 때 app.state를 읽는다 — 백테스트는 위에서 이미 열렸다.
+                    run_deployments_once=(
+                        deploy_runner.make_runner(app)
+                        if runtime_settings.backtest_enabled
                         else None
                     ),
                 )
