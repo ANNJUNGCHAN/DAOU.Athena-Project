@@ -523,6 +523,34 @@ def test_websocket_condition_list_rows_are_normalized_before_generated_model() -
     ]
 
 
+
+def test_websocket_remove_accepted_while_client_temporarily_not_ready() -> None:
+    """F06/F08: dependency must not 503 REMOVE during transient reconnect."""
+
+    class RecoveringWsClient(FakeWsClient):
+        is_ready = False
+
+        async def remove(
+            self,
+            tr_id: str,
+            items: list[str],
+            *,
+            grp_no: str = "1",
+            refresh: str = "1",
+        ) -> dict[str, object]:
+            self.removed.append((tr_id, items))
+            return {"return_code": "0", "trnm": "REMOVE", "data": []}
+
+    app = create_app(Settings(_env_file=None))
+    app.dependency_overrides[require_kiwoom_ws_client] = lambda: RecoveringWsClient()
+    response = TestClient(app).post(
+        "/api/v1/websocket/0B",
+        json=_websocket_payload("0B", "REMOVE"),
+    )
+    assert response.status_code == 200
+    assert response.json()["return_code"] == "0"
+
+
 def test_websocket_transport_error_is_mapped_to_secret_safe_502() -> None:
     class FailingWsClient(FakeWsClient):
         async def execute(self, tr_id: str, payload: dict[str, object]) -> dict[str, object]:
