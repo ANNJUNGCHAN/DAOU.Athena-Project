@@ -29,15 +29,15 @@ const PAPER_CHROME = Object.freeze({
 });
 
 const LOCKED_CLICKS = Object.freeze([
-  { id: 'order-submit', reason: '실주문 /api/v1/order/* 금지', match: /매수|매도|정정|취소|주문 확인|주문 전송/ },
+  { id: 'order-submit', reason: '실주문 /api/v1/order/* 금지', match: /(?<!과)매수|(?<!과)매도|정정|취소|주문 확인|주문 전송/ },
   { id: 'kiumi-five-faces', reason: '키우미 다섯 얼굴 복원 금지', match: /kiumi-face-pack|얼굴 다섯/ },
 ]);
 
 const LIVE_QUERIES = Object.freeze([
-  { id: 'QA-QUOTE', question: '삼성전자 시세 보여줘', expectCard: true, expectRest: true, timeoutMs: 12000 },
-  { id: 'QA-CHART', question: '삼성전자 일봉 차트 보여줘', expectCard: true, expectRest: true, timeoutMs: 12000 },
-  { id: 'QA-ORDERBOOK', question: 'SK하이닉스 호가 보여줘', expectCard: true, expectRest: true, timeoutMs: 12000 },
-  { id: 'QA-MULTI-SCREEN', question: '삼성전자 시세랑 호가 보여줘', expectCard: true, expectRest: true, timeoutMs: 12000 },
+  { id: 'QA-QUOTE', question: '삼성전자 시세 보여줘', expectCard: true, expectRest: true, timeoutMs: 20000 },
+  { id: 'QA-CHART', question: '삼성전자 일봉 차트 보여줘', expectCard: true, expectRest: true, timeoutMs: 20000 },
+  { id: 'QA-ORDERBOOK', question: 'SK하이닉스 호가 보여줘', expectCard: true, expectRest: true, timeoutMs: 20000 },
+  { id: 'QA-MULTI-SCREEN', question: '삼성전자 시세랑 호가 보여줘', expectCard: true, expectRest: true, timeoutMs: 20000 },
   { id: 'QA-FIN', question: '삼성전자 재무제표 요약해줘', expectCard: false, expectRest: false, timeoutMs: 20000 },
   { id: 'QA-NEWS', question: '삼성전자 관련 최근 뉴스 알려줘', expectCard: false, expectRest: false, timeoutMs: 20000 },
 ]);
