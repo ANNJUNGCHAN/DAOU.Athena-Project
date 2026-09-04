@@ -78,16 +78,26 @@ async function main() {
   const base = await shellWin.webContents.executeJavaScript(MEASURE);
   console.log('[live] 초기 상태:', JSON.stringify(base, null, 1));
 
-  let img = await shellWin.webContents.capturePage();
-  fs.writeFileSync(path.join(CAPTURES, 'live-chart-day.png'), img.toPNG());
+  async function captureOrSkip(name) {
+    const img = await Promise.race([
+      shellWin.webContents.capturePage(),
+      wait(12000).then(() => null),
+    ]);
+    if (!img) {
+      console.log(`[live] capture skip: ${name}`);
+      return;
+    }
+    fs.writeFileSync(path.join(CAPTURES, name), img.toPNG());
+  }
+
+  await captureOrSkip('live-chart-day.png');
 
   for (const label of ['주', '월', '년', '분', '틱']) {
     const r = await shellWin.webContents.executeJavaScript(clickTab(label));
     await wait(3500);
     const m = await shellWin.webContents.executeJavaScript(MEASURE);
     console.log(`[live] '${label}' → ${r} | trId=${m.trId} | note=${m.note.slice(0, 90)}`);
-    img = await shellWin.webContents.capturePage();
-    fs.writeFileSync(path.join(CAPTURES, `live-chart-${label}.png`), img.toPNG());
+    await captureOrSkip(`live-chart-${label}.png`);
   }
 
   app.exit(0);
