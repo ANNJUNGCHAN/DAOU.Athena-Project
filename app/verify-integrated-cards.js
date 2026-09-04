@@ -1894,12 +1894,13 @@ async function inspect(win, cardId, detailOpen, expectedFields, expectedOperatio
       cardId: root?.dataset.cardId,
       fieldCount: occurrences.length,
       uniqueOccurrenceCount: new Set(occurrences.map((node) => node.dataset.fieldOccurrenceId)).size,
-      sentinelCount: occurrences.filter((node) => node.querySelector('.semantic-detail-value')?.textContent.startsWith('sentinel::')).length,
+      // Product copy must not leak fixture/sentinel wire tokens (cc-01).
+      sentinelLeakCount: occurrences.filter((node) => /^(?:fixture|sentinel)::/i.test(node.querySelector('.semantic-detail-value')?.textContent || '')).length,
       operationCount: document.querySelectorAll('.semantic-detail-operation[data-operation-ref]').length,
       detailOpen: Boolean(detail?.open),
       productionSurfaceLoaded: Boolean(window.AthenaLib?.IntegratedCardSurface),
       productionDetailSheetLoaded: Boolean(window.AthenaLib?.SemanticDetailSheet),
-      fallbackSample: occurrences.filter((node) => !node.querySelector('.semantic-detail-value')?.textContent.startsWith('sentinel::')).slice(0, 12).map((node) => ({ id: node.dataset.fieldOccurrenceId, path: node.dataset.jsonPath })),
+      fallbackSample: occurrences.slice(0, 12).map((node) => ({ id: node.dataset.fieldOccurrenceId, path: node.dataset.jsonPath })),
     };
   })()`);
   if (dom.rootCount !== 1 || dom.nestedRootCount !== 0 || dom.cardId !== cardId) {
@@ -1908,7 +1909,7 @@ async function inspect(win, cardId, detailOpen, expectedFields, expectedOperatio
   if (!dom.productionSurfaceLoaded || !dom.productionDetailSheetLoaded || (
     dom.fieldCount !== expectedFields
     || dom.uniqueOccurrenceCount !== expectedFields
-    || dom.sentinelCount !== expectedFields
+    || dom.sentinelLeakCount !== 0
     || dom.operationCount !== expectedOperations
   )) throw new Error(`${cardId}: production field occurrence DOM coverage failed: ${JSON.stringify(dom)}`);
   if (dom.detailOpen !== detailOpen) throw new Error(`${cardId}: detail open state failed`);
