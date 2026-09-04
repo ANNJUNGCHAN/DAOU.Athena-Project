@@ -947,11 +947,11 @@
         "layer_직접": 178,
         "layer_병기": 0,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
-        "bs_col": 0,
-        "bs_paired": 0,
-        "bs_leaf": 0,
+        "bs_col": 56,
+        "bs_paired": 65,
+        "bs_leaf": 13,
         "bs_kpi_cell": 5,
         "state_control_marks": 6
       },
@@ -1014,7 +1014,7 @@
         ],
         "unresolved": []
       },
-      "html_sha256": "ff22b9300c33fdca474ca9461e252c436b660763fe309cd51d9dfad3f6b37d18"
+      "html_sha256": "906681b9f4c5cc492bce0844709f6d859d73df1fc839c17098b6bd0e562e11cb"
     },
     {
       "board_id": "2QM7-2",

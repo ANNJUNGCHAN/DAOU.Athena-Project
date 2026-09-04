@@ -98,6 +98,7 @@ RESPONSIVE_LAYOUT_TRAITS = frozenset(
     ("flow", "scroll", "paired-table", "scroll-table")
 )
 RESPONSIVE_SCROLL_TRAITS = frozenset(("scroll", "scroll-table"))
+RESPONSIVE_TABLE_TRAITS = frozenset(("paired-table", "scroll-table"))
 
 ATTR_RENAME = {"className": "class", "htmlFor": "for"}
 
@@ -204,11 +205,22 @@ def load_responsive(path: Path, known_node_ids: set[str]) -> list[dict]:
             raise ExtractError(f"responsive accessible_label must be nonempty: {node_id}")
         if set(traits) & RESPONSIVE_SCROLL_TRAITS and not accessible_label:
             raise ExtractError(f"responsive scroll requires accessible_label: {node_id}")
+        header_row = raw.get("header_row")
+        if header_row is not None:
+            if not isinstance(header_row, str) or not header_row:
+                raise ExtractError(f"responsive header_row must be a nonempty string: {node_id}")
+            if not set(traits) & RESPONSIVE_TABLE_TRAITS:
+                raise ExtractError(f"responsive header_row needs a table trait: {node_id}")
+            if header_row not in known_node_ids:
+                raise ExtractError(f"responsive header_row does not exist: {node_id}")
+            if header_row == node_id:
+                raise ExtractError(f"responsive header_row is the table owner: {node_id}")
         entries.append(
             {
                 "node_id": node_id,
                 "traits": traits,
                 "accessible_label": accessible_label,
+                "header_row": header_row,
             }
         )
         seen_nodes.add(node_id)
@@ -988,26 +1000,84 @@ def _is_header_row(row: Element) -> bool:
     return True
 
 
+def _column_label(cell: Element) -> str:
+    """헤더 칸의 열 이름. 라벨을 자식에 담은 저장본(2QFO-2 `3848-0` → `3849-0`)은
+    직접 텍스트가 비므로 텍스트 잎이 하나뿐일 때만 그 잎을 쓴다."""
+    text = direct_text(cell)
+    if text:
+        return text
+    leaves = text_leaves(cell)
+    return direct_text(leaves[0]) if len(leaves) == 1 else ""
+
+
+def _explicit_body_rows(
+    owner_node: TreeNode, tail: list[Element], columns: int
+) -> list[Element]:
+    """헤더 뒤 직계 형제를 본문 행 목록으로 편다.
+
+    저장본에 따라 본문 행이 래퍼 하나에 묶여 있다(2QFO-2 `2QHG-2`). 래퍼는 열 수가
+    헤더와 다르고 자식이 전부 헤더와 같은 열 수인 경우에만, 그리고 한 번만 편다 —
+    두 개가 나오면 어느 쪽이 본문인지 알 수 없으므로 실패한다.
+    """
+    rows: list[Element] = []
+    expanded = False
+    for row in tail:
+        children = element_children(row)
+        if (
+            len(children) >= 3
+            and len(children) != columns
+            and all(len(element_children(child)) == columns for child in children)
+        ):
+            if expanded:
+                raise ExtractError(
+                    f"explicit table {owner_node.node_id}: ambiguous body wrapper"
+                )
+            expanded = True
+            rows.extend(children)
+            continue
+        rows.append(row)
+    return rows
+
+
 def _explicit_table_shape(
-    owner: Element, node_of: dict[int, TreeNode]
+    owner: Element, node_of: dict[int, TreeNode], header_id: str | None = None
 ) -> tuple[Element, list[Element], list[Element]]:
     owner_node = node_of[id(owner)]
     rows = element_children(owner)
     candidates: list[tuple[int, Element]] = []
-    for index, row in enumerate(rows):
-        if _is_header_row(row):
-            candidates.append((index, row))
-        for nested in element_children(row):
-            if _is_header_row(nested):
-                candidates.append((index, nested))
-    if not candidates:
-        raise ExtractError(f"explicit table {owner_node.node_id}: missing header")
+    if header_id:
+        # 저작자가 헤더 행을 지목하면 그 행만 쓴다. 열 라벨에 숫자가 있으면
+        # (`5일 누적`) `_is_header_row`의 라벨 판정을 통과하지 못하기 때문이다.
+        for index, row in enumerate(rows):
+            for candidate in (row, *element_children(row)):
+                if node_of[id(candidate)].node_id == header_id:
+                    candidates.append((index, candidate))
+        if not candidates:
+            raise ExtractError(
+                f"explicit table {owner_node.node_id}: header_row {header_id} is not a row"
+            )
+    else:
+        for index, row in enumerate(rows):
+            if _is_header_row(row):
+                candidates.append((index, row))
+            for nested in element_children(row):
+                if _is_header_row(nested):
+                    candidates.append((index, nested))
+        if not candidates:
+            raise ExtractError(f"explicit table {owner_node.node_id}: missing header")
     if len(candidates) != 1:
         raise ExtractError(f"explicit table {owner_node.node_id}: ambiguous header")
 
     header_index, header = candidates[0]
+    if len(element_children(header)) < 3:
+        raise ExtractError(
+            f"explicit table {owner_node.node_id}: header has fewer than 3 columns"
+        )
     header_node = node_of[id(header)]
-    if header_node.width != owner_node.width:
+    if not header_id and header_node.width != owner_node.width:
+        # 헤더를 골라낸 경우에만 소유자 폭과 맞는지 본다. 저작자가 지목했다면
+        # 소유자에 패딩이 있을 수 있으므로(2QFO-2 880 vs 820) 아래의 헤더=본문
+        # 폭 일치가 실제 불변식이다.
         raise ExtractError(
             f"explicit table {owner_node.node_id}: header width "
             f"{header_node.width:g} != owner width {owner_node.width:g}"
@@ -1016,7 +1086,7 @@ def _explicit_table_shape(
     body: list[Element] = []
     foot: list[Element] = []
     ended = False
-    for row in rows[header_index + 1 :]:
+    for row in _explicit_body_rows(owner_node, rows[header_index + 1 :], columns):
         cells = element_children(row)
         if len(cells) < 3:
             ended = True
@@ -1085,7 +1155,11 @@ def _mark_table(
             if responsive_mode
             else ("regions" if roles.get(owner_node.node_id) == "table" else "heuristic")
         ),
-        "column_labels": [direct_text(cell) for cell in cells],
+        # 라벨을 자식에 담은 헤더 칸은 명시 선언된 표에서만 편다 — 휴리스틱으로
+        # 감지된 표까지 바꾸면 96장 생성물이 드리프트한다(13BC-2 대조군 포함).
+        "column_labels": [
+            _column_label(cell) if responsive_mode else direct_text(cell) for cell in cells
+        ],
     }
     if responsive_mode:
         table["responsive_mode"] = responsive_mode
@@ -1197,7 +1271,9 @@ def detect_tables(
             ]
             if len(modes) != 1:
                 raise ExtractError(f"explicit table {node_id}: exactly one table mode required")
-            header, body, foot = _explicit_table_shape(el, node_of)
+            header, body, foot = _explicit_table_shape(
+                el, node_of, declaration.get("header_row")
+            )
             marked.add(id(el))
             table = _mark_table(
                 el,
