@@ -10,14 +10,14 @@
 
 - **하는 일.** Paper 디자인 파일의 카드 페이지 보드 96장을 **그대로**(픽셀 동일) Electron 앱의 대화 캔버스에 띄운다. 캔버스는 브라우저처럼 **탭 스트립 + 카드 1장 뷰포트**, 카드는 컨테이너 폭 5단(XL/L/M/S/XS) 반응형, 값·문구는 어느 단계에서도 불변.
 - **어디까지 왔나.** Paper 쪽은 끝났다(키움 REST 299 op · 카드 표면 가시 필드 3,532 전부 표현). 코드 쪽은 추출 96/96 · 백엔드 로더가 96장 전부 로드(제외 0) · 봉투 `surface_contract` · 프론트 탭/마운트/반응형 CSS · 보드 카드의 통합 카드 크롬 제거까지 붙었다. 슬롯 저작(보드 텍스트 자리 ↔ API 필드)은 로더 기준 **3,382/3,532 occurrence = 95.8%**다. semantic authority 후보 3,534개 중 예비 `base:04` FID `924`·`951`만 카드 표면 visible universe에서 제외한다.
-- **정확한 중단점.** 웨이브 3 정비 4레인(A5/B4/C5/D3)과 저작 Tasks 1–8은 모두 실행·리뷰·수정됐다. 현재 미도달 150, validator 59건(`b15 e44`)/27장, 보드 없는 op 2이며, 남은 항목은 거짓 alt로 닫지 않은 exact-leaf/composite/aspect/join/realtime blocker다. `extra_fields` end-to-end 합성은 현재 스키마로 lossless하지 않아 `STOP_NO_CHANGES`이며 사용자 설계 승인 대기다. 이후 적응형 가독성 웨이브 G1–G4(하드 glyph 게이트·명시적 responsive 계약·opt-in 표·캡처 위생)를 실행·리뷰·커밋했다. **자동 게이트는 초록이지만 시각 가독성 leg는 여전히 FAIL**이고, 하드 어서션 3종 중 `paired_semantics_violations`는 생산에 검사 대상이 없어 **공허 참**이다(§4·§6).
+- **정확한 중단점.** 웨이브 3 정비 4레인(A5/B4/C5/D3)과 저작 Tasks 1–8은 모두 실행·리뷰·수정됐다. 현재 미도달 150, validator 59건(`b15 e44`)/27장, 보드 없는 op 2이며, 남은 항목은 거짓 alt로 닫지 않은 exact-leaf/composite/aspect/join/realtime blocker다. `extra_fields` end-to-end 합성은 현재 스키마로 lossless하지 않아 `STOP_NO_CHANGES`이며 사용자 설계 승인 대기다. 적응형 가독성 **G1–G4는 완료·푸시**(G4 커밋 `d612cb5`). **G5 육안 Paper 승인은 FAIL**로 확정·보존된 뒤 G5a(결함 수정+검출기 확장, in_progress)와 G5b(육안 재승인, pending)로 대체됐다. G5a 코드 — 13K0-2·2R3M-1 반응형 주석, 2QFO-2 금액+단위 atomic, 2R3M-1 `3CRW-0` paired-table, glyph/legacy-pair 검출기 확장, probe 스코핑(undeclared value-atomic 스킵 · 비-opt-in `.bs-table`/primary 예탁 캡션 자동토큰 제외 · strip/header·금액 토큰만 auto-atomic) — 은 **진단+정본 Electron 캡처까지 초록**이다(2026-09-04 07:47/07:49 KST, 36측정 atomic/overlap/paired 0, overflow 0, 13BC-2 대조군 유지). **G5b 육안 Paper 재승인은 2026-09-04 실행 결과 승인되지 않았다** — 결함 A·C는 Paper 대조로 해소 확인, 결함 B의 금액 토큰도 붙었지만 같은 보드 `2QFO-2` 960px에서 표 상위 3행의 값이 헤더 열과 어긋나는 새 Paper 불일치가 남았다(§4·§6).
 - **커밋.** 2026-09-03부터 브랜치 `feat/card-surface-paper-to-code`에 지속 커밋·푸시한다(사용자 지시). `main`은 origin보다 60커밋 뒤라 직접 올리지 않는다.
 
 ---
 
 ## 1. 저장소 상태
 
-| 항목 | 값 (2026-09-03 16:11) |
+| 항목 | 값 (2026-09-04 G5a 자동 게이트 닫힘 · G5b 대기) |
 |---|---|
 | 브랜치 | 작업 브랜치 `feat/card-surface-paper-to-code`(origin 추적). **같은 체크아웃을 키우미 트랙 대화가 함께 쓴다** — `git status --short --branch`로 현재 브랜치를 매번 확인. 이 문서가 들어 있는 커밋을 최신 카드 트랙 체크포인트로 삼는다. 로컬 `main`은 `origin/main`보다 **60커밋 뒤**. 병합은 나중에 `-X ignore-cr-at-eol`로 |
 | 미커밋 세는 법 | `git status --short \| grep -c '^ M'` / `grep -c '^??'` — 접힌 디렉터리 기준. 웨이브가 돌면 계속 변하므로 숫자는 §11에만 남긴다 |
@@ -68,7 +68,7 @@
 
 ---
 
-## 4. 수치 (측정 2026-09-03 16:11, canonical 재생성·final gate 반영 후)
+## 4. 수치 (G5a 정본 2026-09-04 07:49 KST Electron · 진단 07:47 KST)
 
 | 항목 | 값 |
 |---|---|
@@ -82,8 +82,9 @@
 | 밀도 | 하드 위반 0 · 소프트 경고 22(레일 행 7~11) · 재표시 경고 127 · 중복 바인딩 0 |
 | 상태 컨트롤 미해소 | **0** — account/gold/watch/orderbook의 canonical child meta → parent marker → runtime click 경로 검증 |
 | C5 반응형 자동 검증 | 실보드 6장 × 4단계 PNG **24장** + 보드별 XL 1,360px·M 851px 기하 프로브 **12회**, P5·단계 간 텍스트 상등, surface overflow 최대 0px, L/M/S/XS 세로 내용 넘침·형제 box 겹침 0. XL 원문 `2R3M-1/36Q0-0`의 2px 세로 넘침 1건은 기록·제외. 캡처 폴더는 정본 24장만 남았다(과거 표본 `15P5-2`·`2QX1-1`·`3DZ1-0` 각 4장 = 12장은 검증기가 정리하고 sha256과 함께 증거 폴더로 격리). `capture_hygiene`이 24 파일·24 해시·24 치수를 정본 실행에서 검증한다 |
-| 가독성 하드 게이트 | `assertReadability(..., {enforce: true})`가 24 캡처 + 12 probe = **36 측정** 전부에서 `atomic_wrap_nodes`·`text_overlap_nodes`·`paired_semantics_violations` 0을 요구하며 통과한다. **그러나 같은 캡처의 육안 전수는 여전히 FAIL이다** — 13K0-2(480·640·960)와 2R3M-1(480·960)에 읽을 수 없는 지점이 남았다. 게이트가 못 잡는 이유가 구조적이다: `atomic_wrap_nodes`는 **선언된** atomic 소유자만 측정하고, `paired_semantics_violations`는 `[data-paired-source]` 미러만 훑는데 96장 전수 실측 결과 생산 미러는 **0개**다(`bs-paired` 68장 · `bs-paired-label` 0장 · `bs-r-scroll-table` 2장). 즉 `paired_semantics_total 0`은 "접힌 열이 읽을 수 있다"가 아니라 **"검사 대상이 없다"**는 뜻이다. 상세·확정된 수정 노드는 §6 1번 |
-| 테스트 | scripts **264 pass** · backend 카드표면 **158 pass** · app **2,101 pass** · backend 전수 **2,762 pass / 1 fail / 5 skip**(22:36) — 모두 2026-09-04 재검증. 유일한 실패는 문서화된 기존 RED `tests/api/test_task_canvas_envelope.py::test_view_identity_canonicalizes_signed_scope_task_target_query_and_account`이며 신규 실패 0 |
+| 가독성 하드 게이트 | **G5a 정본(2026-09-04 07:49 KST):** `assertReadability(..., {enforce: true})`가 24 캡처 + 12 probe = **36 측정** 전부에서 `atomic_wrap_total`·`text_overlap_total`·`paired_semantics_total` **0**, `max_overflow_x` **0**. 진단(07:47 KST, `ATHENA_VERIFY_BOARD_IDS` 6장)도 동일 0. 선언 atomic/flow/paired-table(13K0-2·2R3M-1·2QFO-2) + compact auto-token(strip/header·금액) + opt-in legacy_pair가 함께 동작한다. 비-opt-in `.bs-table`·primary 예탁 캡션은 자동토큰에서 제외해 2SKU-1/13BC-2 거짓양성을 막는다. **G5b 육안 Paper 재승인은 미실행** — 자동 0을 육안 PASS로 쓰지 말 것 |
+| G5b Paper 육안 재승인 | **승인되지 않음(loop-back)** — Paper Desktop `Athena`/`카드`(fileId `01M0VGPX92K1TER4ZV9PWGQJJZ`) MCP 읽기 대조, 2026-09-04. 보드×폭 11칸 중 **10 PASS · 1 FAIL**. 해소 확인: 13K0-2 480·640·960의 `실시간 갱신`·`100개 결과`·`세션`·`정규장`·`시간외 단일가` 전부 한 줄(글자 분절 대신 그룹 줄이동), 2R3M-1 480의 `삼성전자`·`정규장`·`실시간` 온전, 2R3M-1 960의 `3CRW-0` 접힌 값이 `구분 매수체결`·`구분 KRX`·`체결강도 108.4%`로 **Paper 헤더 라벨을 달고** 나와 무라벨 연결 `150,850매수체결KRX118.1%` 소멸, 13BC-2 대조군 480·960 무변화. **미해소: `2QFO-2` 960px `투자자별 순매수` 표** — Paper 원본은 6열이 한 줄인데(외국인 매도 2,366억원·매수 4,208억원·순매수 +1,842억원·비중 44.0%·5일 누적 +3,214억원) 앱은 상위 3행에서 매도 칸이 비고 값이 한 레인씩 밀리며 `44.0%`·`+3,214억원`이 라벨 없이 셋째 줄로 내려간다. 하위 행(은행 이하)과 1920 XL은 정상 정렬이다. 세 하드 판정은 **열-헤더 대응을 보지 않으므로** 이 결함을 원리적으로 못 잡는다. 증거·다음 착수점은 §6 3번 |
+| 테스트 | **G5a(2026-09-04):** `board-parity`+`board-glyph-geometry` **54/54 pass**(실측). 진단 리포트 완결(07:47:24 KST) · 정본 리포트 완결(07:49:35 KST, 36측정 0). 전체 app/scripts/backend 스위트는 이 세션에서 전수 재실행하지 않았고 pre-push 훅이 확인한다. G4 기준선: scripts 264·app 2,101·backend 카드표면 158·backend 전수 2,762 pass / 1 fail(문서화 RED envelope) / 5 skip |
 
 ---
 
@@ -114,7 +115,7 @@
 
 ## 6. 남은 일 (순서대로) — 🔒 = 사람·외부 의존
 
-1. **시각 가독성 잔여 결함 수정(조사 완료 — 노드 확정됨).** 하드 게이트는 붙었고 통과하지만 육안 gate는 여전히 FAIL이다. 계획 M5 3단계에 따라 M2/M3로 되돌린다. 전역 `nowrap`·`overflow:hidden`·zoom으로 숨기지 않는다.
+1. **G5a 가독성 결함 수정 — Electron 자동 게이트 완료 · G5b 육안 대기.** G5 육안 전수 FAIL은 역사로 보존한다. 전역 `nowrap`·`overflow:hidden`·zoom·보드 id CSS·글자 축소·내용 삭제로 숨기지 않는다. **들어간 코드:** 13K0-2 `2WGY-0`/`2WHL-0` flow + trailing atomic; 2R3M-1 `2R8O-1` flow + atomics + `3CRW-0` paired-table; 2QFO-2 금액 flow/atomic; `compactAtomicTokenSpans`+`legacy_pair`(opt-in paired-table만); probe 스코핑(explicit `.bs-r-atomic`만 surface fallback, 비-opt-in `.bs-table` 및 non-chrome/non-money auto-token 제외). **실측(2026-09-04):** 진단 07:47:24 KST 리포트 완결 · 정본 07:49:35 KST 리포트 완결 · 6보드×(4 step+2 probe)=36측정 전부 atomic/overlap/paired 0 · overflow 0 · 13BC-2 6측정 동일 0(JSON에 findings 필드는 없음). **남은 것 = G5b** Paper 육안 재승인(대상 3결함 해소 확인). 아래 노드 목록은 G5 실패 근거로 그대로 둔다.
 
    **결함 A — 미선언 한국어 컨트롤·제목의 글자 단위 분해.** 13K0-2 480에서 `실/시/간`·`1 0 0/개/결`, 640에서 `정규/장`·`시간외 단/일가`; 2R3M-1 480에서 `삼성전/자`·`정규/장`·`실시/간`. 원인은 atomic nowrap이 `:is(.bs-r-flow, .bs-r-scroll)` 소유자 아래로만 걸리는데(`app/styles/board-surface.css:193`) 해당 노드들이 선언된 스크롤 소유자의 **뒤따르는 형제**라는 것이다.
    - 13K0-2: 정렬 행 `2WGY-0` → `flow`, 후행 `2WHJ-0`(실시간 갱신)·`2WHK-0`(100개 결과) → `atomic`. 필터 행 `2WHL-0` → `flow`, 후행 `2WHY-0`(세션)·`2WI0-0`(정규장)·`2WI2-0`(시간외 단일가) → `atomic`. `2WHW-0`은 이미 선언된 `2WHV-0` 아래라 불필요
@@ -124,7 +125,7 @@
 
    **결함 C — 접힌 열이 라벨 없이 붙는 텍스트 충돌.** 2R3M-1 `체결 흐름`에서 `150,850매수체결KRX118.1%`, 헤더 `체결가구분체결강도`. 표 루트 `3CRW-0`, 헤더 행 `3CS8-0`, 6열 10행. 살아남는 셀 `3CSA-0`(체결가)에 4열 `3CSD-0`(구분)·5열 `3CSE-0`(체결강도)이 무라벨 `.bs-paired` 사본으로 붙는다. `3CRW-0`을 `paired-table`로 선언하면 추출기 `_collapse`가 `.bs-paired-label` + `.bs-paired-value[data-paired-source]` 경로를 탄다(선언이 없으면 무라벨 경로). CSS도 `.bs-r-paired-table [data-bs-value-atomic="true"]` nowrap이 필요하다(현재는 `[data-paired-source]`만).
 
-2. **게이트 확장 — 먼저 report-only로.** 위 세 결함은 현재 게이트로 잡히지 않으므로 확장 없이 고치면 재발을 못 막는다.
+2. **게이트 확장 — G5a Electron 실측 완료.** compact auto-token(strip/header·금액)과 opt-in paired-table legacy_pair가 `enforce: true`에 연결돼 있다. 전역 `.bs-paired` 스캔은 하지 않는다. **정본·진단 모두 13BC-2 6측정 atomic/overlap/paired 0 · overflow 0**을 확인했다. 아래 항목은 여전히 유효한 제약이다.
    - `atomic_wrap_nodes`를 선언 소유자 밖 텍스트 잎까지 확대: 공백 없는 단일 토큰이 2줄 이상으로 그려지면 결함. 긴 토큰(URL 등) 오탐 방지용 길이 상한 필요
    - `paired_semantics_violations`에 "보이는 `.bs-paired`에 `.bs-paired-label` 형제 없음"을 추가
    - **켜기 전 필수 측정**: `13BC-2`는 무변경 대조군인데 `bs-paired` 58건·라벨 0건이다. 위 규칙을 켜면 대조군이 RED가 될 수 있다. 4폭에서 그 사본들이 실제로 보이는지 측정으로 확인하고, 눈으로 본 상단 영역만으로 단정하지 않는다
@@ -132,11 +133,15 @@
    - 수정 후 24장과 12 probe를 다시 만들고 확장된 판정까지 0인지 확인한다. `3,532/3,532`, validator 0을 달성했다고 쓰지 않는다
 
    **범위 밖으로 기록**: 나머지 66장의 무라벨 `.bs-paired` 접기. 육안 감사 24장에 없어 아직 시각 실패로 확정된 바 없다. 별도 결정 대상이며 이번 웨이브(5보드 + 2표)에서 임의로 확대하지 않는다.
-3. **Tasks 1–8 honest blocker 고정.** 현재 150 uncovered와 validator 59건을 각 task report와 대조한다. exact leaf가 없는 항목, 서로 다른 의미·단위의 same-op 필드, composite/aspect/join/realtime gap은 alt mapping으로 닫지 않는다.
-4. **🔒 composite schema 결정.** systemic audit는 `STOP_NO_CHANGES`다. 감사 당시 실제 영향을 받는 uncovered는 38 unique occurrences/19 boards였고, 현재 metadata만으로 lossless한 subset 19개는 이미 다른 primary/alt에서 covered여서 순증가가 0이었다. 구현 전 per-part `format`, order/template/prefix, optional·missing policy, row selection/inheritance, aspect/sign, realtime recomposition/fail-closed 규칙과 대표 JSON migration을 승인한다.
-5. **🔒 Paper leaf·라우팅 결정.** `3GRO-0`의 6구간 금액 12건·2 op 등 독립 leaf 부재 항목은 Paper 저작 또는 명시적 예외 승인 전에는 닫지 않는다. `1JZW-0`은 정본 계획상 direct-board 전용 예외로, canonical operation/state 결정 전에는 정상 라우팅을 추측하지 않는다.
-6. **실앱 QA.** 4단계 창 캡처 vs Paper 시각 대조 🔒(로그인된 Paper Desktop/computer-use 또는 Paper MCP) · 헌장 게이트(밀도 하드 0, 문구 3원칙) · 사용자 검수 PDF 🔒(승인) · 실키움(모의) 봉투로 보드 카드 실데이터 표시 1회 🔒(모의투자 자격증명·장중).
-7. 보류 결정 4건 🔒 — 사용자에게 한 번에 물어 닫는다.
+3. **G5b 블로커 — `2QFO-2` 960px 표 열 정렬.** Paper `2QH0-2`(`투자자별 순매수`)는 6열이 한 행에 한 줄이다. 앱 960에서 상위 3행(외국인·연기금 등·기타법인)만 `매도` 칸이 비고 매도값이 매수 레인, 매수값이 비중 레인 쪽, 순매수값이 5일 누적 레인에 그려지며 비중 `44.0%`와 5일 누적 `+3,214억원`이 라벨 없이 셋째 줄로 내려간다. `은행` 이하 행과 1920 XL은 Paper와 동일하게 정렬되므로 XL 파리티는 유지된다. 이 표는 감지된 표가 아니고(`data-row="head"` 0건) opt-in paired 대상도 아니라 접힌 값에 라벨이 붙지 않는다. **추정 원인(미검증):** 결함 B 수정으로 `5일 누적` 금액이 nowrap이 되어 그 열의 최소 폭이 커지면서 `매도` 열이 접혔다. **선택지:** (a) 이 표를 명시적 `paired-table`로 선언해 접힌 값에 라벨을 붙인다 (b) `scroll-table`로 6열을 유지하고 가로 스크롤한다 (c) 5일 누적 열의 최소 폭 요구를 낮춘다 — (c)는 결함 B를 되돌릴 위험이 있다. **`paper.jsx`는 바꾸지 않는다.** 함께 **열-헤더 대응 판정**(본문 셀의 가로 중심이 헤더 셀 레인을 벗어나면 실패)을 게이트에 추가한다. 증거: `.omx/artifacts/card-surface-adaptive-readability/20260903T100241Z/36-g5b-paper-visual-audit.md`, `35-g5b-visual-evidence/`.
+
+   **범위 밖 관찰(차단 아님):** `13K0-2 / 33Z2-0`(`지금 많이 보는 종목`) 960에서 `기준가`가 `종목` 칸으로 접힌다. 헤더 칸도 같은 순서로 쌓여 대응은 되고 `기준 대비`·`직전 대비`는 Paper 원문이 이미 가진 라벨이다. 비-opt-in 표의 기존 접힘이며 문서화된 범위 밖 항목이다.
+
+4. **Tasks 1–8 honest blocker 고정.** 현재 150 uncovered와 validator 59건을 각 task report와 대조한다. exact leaf가 없는 항목, 서로 다른 의미·단위의 same-op 필드, composite/aspect/join/realtime gap은 alt mapping으로 닫지 않는다.
+5. **🔒 composite schema 결정.** systemic audit는 `STOP_NO_CHANGES`다. 감사 당시 실제 영향을 받는 uncovered는 38 unique occurrences/19 boards였고, 현재 metadata만으로 lossless한 subset 19개는 이미 다른 primary/alt에서 covered여서 순증가가 0이었다. 구현 전 per-part `format`, order/template/prefix, optional·missing policy, row selection/inheritance, aspect/sign, realtime recomposition/fail-closed 규칙과 대표 JSON migration을 승인한다.
+6. **🔒 Paper leaf·라우팅 결정.** `3GRO-0`의 6구간 금액 12건·2 op 등 독립 leaf 부재 항목은 Paper 저작 또는 명시적 예외 승인 전에는 닫지 않는다. `1JZW-0`은 정본 계획상 direct-board 전용 예외로, canonical operation/state 결정 전에는 정상 라우팅을 추측하지 않는다.
+7. **실앱 QA.** 4단계 창 캡처 vs Paper 시각 대조 🔒(로그인된 Paper Desktop/computer-use 또는 Paper MCP) · 헌장 게이트(밀도 하드 0, 문구 3원칙) · 사용자 검수 PDF 🔒(승인) · 실키움(모의) 봉투로 보드 카드 실데이터 표시 1회 🔒(모의투자 자격증명·장중).
+8. 보류 결정 4건 🔒 — 사용자에게 한 번에 물어 닫는다.
 
 승인 없이 가능한 것은 현재 상태의 읽기전용 재측정·기존 회귀 테스트·인계 문서 최신화·현재 체크포인트 커밋/푸시다. 시각 동작 변경, composite schema, Paper leaf 추가, 라우팅/예외 처리에는 각각의 명시적 승인이 필요하다.
 
@@ -159,11 +164,11 @@ eval "$(fnm env)"; export PYTHONIOENCODING=utf-8
 | 커버리지 판 | `python scripts/card_surface_coverage.py` | **쓰기**(`CARD_SURFACE_COVERAGE.md`) | 총괄 = 게이트 읽기 수치 |
 | 청크 드리프트 | `python scripts/build_board_registry.py --check` | 읽기 | `최신 — 보드 97장, 청크 6개` · exit 0. 붉으면 아래 빌드 |
 | 레지스트리 빌드 | `python scripts/build_board_registry.py` | **쓰기**(청크 7파일) | `보드 97장` |
-| scripts 테스트 | `backend/.venv/Scripts/python.exe -m pytest scripts/tests -q` | 읽기 | 실패 0 (2026-09-04 측정 264) |
-| app 단위 | `cd app && npm run test:unit` | 읽기 | 실패 0 (2026-09-04 측정 2,101) |
+| scripts 테스트 | `backend/.venv/Scripts/python.exe -m pytest scripts/tests -q` | 읽기 | 실패 0 (G5a 체크포인트 실측 **265**) |
+| app 단위 | `cd app && npm run test:unit` | 읽기 | 실패 0 (G4 실측 2,101 · G5a Codex 마지막 실측 **2,105** · 이 문서 갱신 시 전체 스위트 미재실행, glyph/parity 54/54) |
 | backend 카드표면 | `cd backend && uv run pytest tests/unit/test_card_surface_templates.py tests/unit/test_card_surface_contract.py tests/api/test_canvas_push.py tests/unit/test_canvas_data_parity.py -q` | 읽기 | 실패 0 (16:11 측정 158) |
 | backend 전수 | `cd backend && uv run pytest tests -q` (≈25분) | 읽기 | 16:1x 측정 2,762 pass · 기존 WIP RED 1 · skip 5 |
-| 4단계 캡처 + 5단 기하 | `cd app && npm run verify:integrated-cards` | **쓰기**(`app/captures/integrated-cards/`) | 하드 판정이 켜진 정본 실행은 exit 0이다: `readability_gate` 24 캡처·12 probe·36 측정, `capture_hygiene` 24 파일/해시/치수, `missing 0`, overflow 0. **그래도 육안은 FAIL** — 게이트 사각지대는 §4·§6 참조. `ATHENA_VERIFY_BOARD_IDS`를 주면 진단 모드로 `captures/integrated-cards/diagnostic/`에만 쓰고 정본 파일을 건드리지 않는다 |
+| 4단계 캡처 + 5단 기하 | `cd app && npm run verify:integrated-cards` | **쓰기**(`app/captures/integrated-cards/`) | **G5a 정본 리포트**(2026-09-04 07:49:35 KST, `generated_at` 2026-09-03T22:49:35.105Z): `readability_gate` enforced·canonical, 6보드·24 PNG·12 probe·36 측정 전부 `atomic_wrap_total`/`text_overlap_total`/`paired_semantics_total` 0, `max_overflow_x` 0, `capture_hygiene` 24/24/24, `totals.missing` 0. PNG LastWriteTime ~07:50 KST. 13BC-2 6측정 동일 0. 진단(07:47:24 KST, canonical false)도 6보드 36측정 0. **08:19 KST 정본 재실행도 exit 0**(24캡처·36측정 0·위생 24/24/24)이지만 같은 24장에 §6 3번 `2QFO-2` 960 열 밀림이 그대로 있다 — 자동 0을 육안 PASS로 쓰지 말 것. **부하 민감**: Paper Desktop이 카드 페이지(31k 노드)를 렌더 중이거나 이전 실행 electron.exe 좀비가 남으면 rAF 기아로 `paint ack wall-clock timeout`/`layout did not stabilize`가 난다(08:0x 5회 재현, 부하 제거만으로 초록). 실행 전 `taskkill //F //IM electron.exe` + Paper를 증명 페이지 `F-1`로 전환. `backgroundThrottling: false` 추가는 A/B 실측에서 오히려 악화 — 금지. `ATHENA_VERIFY_BOARD_IDS`를 주면 진단 모드로 `captures/integrated-cards/diagnostic/`에만 쓰고 정본 파일을 건드리지 않는다 |
 
 인터프리터: 추출·검증·scripts 테스트는 `backend/.venv/Scripts/python.exe`, 백엔드 코드는 `uv run`, 커버리지·빌더는 시스템 `python`(의존성 없음). `.omc/`는 git 무시. 저장된 Workflow 스크립트의 LF·프롬프트 제약은 최초 실행의 역사적 기록일 뿐이며 현재 워크플로를 재실행하는 지침이 아니다.
 
@@ -200,6 +205,8 @@ eval "$(fnm env)"; export PYTHONIOENCODING=utf-8
 ---
 
 ## 11. 갱신 이력
+- 2026-09-04 08:0x KST — G5a 문서 정합. README 🟠·PROMPT 블록 B·§7 캡처 행이 아직 G5a WIP/미실행으로 남아 있어, 측정된 정본 리포트(`00666f5` 직후 `generated_at` 2026-09-03T22:49:35.105Z = 07:49:35 KST)와 맞췄다. G5a 자동 게이트 닫힘. G5b 육안 pending. 자동 0을 육안 PASS로 쓰지 말 것.
+- 2026-09-04 07:52 KST — G5a 코드 마감 `00666f5`. probe 스코핑으로 2SKU-1 예탁/표 거짓양성 제거. 진단 리포트 07:47:24 KST·정본 리포트 07:49:35 KST 완결, 36측정 atomic/overlap/paired 0·overflow 0·13BC-2 대조군 깨끗. glyph/parity 54/54. G5b 육안 Paper 재승인 pending. 동시 세션의 2SKU atomic 확대·scroll-table cell `min-width:max-content` 시도는 되돌림(overflow/atomic 거짓실패).
 
 - 2026-09-03 09:5x — 최초 작성(W2-C 게이트 수치). 저작 팩·워크플로 스크립트·진행 로그를 저장소로 복사. `validate_board_slots.py` 팩 경로 저장소 상대화 + 팩 폴더 부재 시 즉시 실패.
 - 2026-09-03 10:3x — 구현 계획 밀도 줄 정정. 청크 드리프트 검사는 빌더 `--check`로 이미 존재(§7 등록). 브랜치는 키우미 대화가 먼저 만들어 origin에 올렸고, 이 대화의 스냅샷 e267c32가 그 위에 얹힘(푸시는 C5 레인의 일시 RED 1건이 풀리면).
@@ -213,3 +220,6 @@ eval "$(fnm env)"; export PYTHONIOENCODING=utf-8
 - 2026-09-03 16:11 — 추출기의 authored `kind` 덮어쓰기와 merge 전 count 계산을 RED→GREEN 회귀로 수정하고 96장 canonical 재생성. authored 의미 손실 0, 추출 `--check` 멱등, validator 59·coverage 3,382/3,532 유지, 청크 97장/6개 최신. scripts 241·backend 카드표면 158·app 2,042 통과, backend 전수는 기존 WIP 1건 외 2,762 통과. 통합 자동 수치는 6장/24 PNG/12 probe·overflow 0이지만 육안 전수에서 5보드의 문자 분절·행 텍스트 충돌을 발견해 final W3 시각 gate FAIL. explicit responsive role/atomic/paired 계약과 glyph hard gate 설계 승인 대기.
 - 2026-09-03 19:0x~23:5x — 적응형 가독성 웨이브 G1–G3 실행·독립 리뷰·푸시. `4e4a800` 비행동 responsive manifest + report-only glyph 검출기(5보드 RED, 13BC-2 무소견), `9c11c05` manifest 기반 atomic/flow/scroll/progress 동작과 스크롤 소유자 접근성, `9c07c1b` 대상 표 2개(`2SKU-1/39SW-0`·`13K0-2/33WD-0`)의 opt-in 처리. G3 접근성 리뷰가 두 표를 paired-table에서 **scroll-table**로 바꿨고(14:56Z 스티어링에 기록) 그 결과 생산에 paired 미러가 하나도 남지 않았다.
 - 2026-09-04 — G4 정본 자동 게이트 완주. 하드 가독성 어서션을 `enforce: true`로 켜고 캡처 위생 모듈을 붙였다: 정본 실행이 과거 표본 12장(`15P5-2`·`2QX1-1`·`3DZ1-0`)을 정확히 정리하고 24 파일/해시/치수를 검증하며, `ATHENA_VERIFY_BOARD_IDS`를 주면 진단 모드가 정본 파일을 건드리지 않는다. 게이트 결과: 추출 96/96 드리프트 0·멱등, validator `59 (b15 e44)`/27, strict 3,382/3,532·미도달 150·op 297/299, 청크 97장/6개, scripts 264, app 2,101, backend 카드표면 158, 정본 캡처 exit 0(36 측정 전부 0), `git diff --check` 0, zoom·전역 nowrap·placeholder·skip 위반 0. **그러나 같은 24장 육안 전수는 여전히 FAIL이다** — 13K0-2(480·640·960)와 2R3M-1(480·960). 96장 전수 실측으로 게이트 사각지대도 확인했다: `bs-paired` 68장·`bs-paired-label` 0장·`data-paired-source` 0장이므로 `paired_semantics_violations`는 생산에서 **공허 참**이고, `atomic_wrap_nodes`는 선언된 소유자만 measure한다. 잔여 결함 3종과 수정 대상 노드는 §6 1–2번에 확정 기록. 나머지 66장의 무라벨 접기는 범위 밖 blocker로 기록. 백엔드 커버리지·composite `STOP_NO_CHANGES`는 무변경. backend 전수 재실행도 2,762 pass / 1 fail / 5 skip으로 기준선과 일치하며, 그 1건은 문서화된 기존 RED `test_view_identity_canonicalizes_signed_scope_task_target_query_and_account` 하나뿐이라 신규 실패는 0이다.
+- 2026-09-04 07:2x KST — G5a 가독성 수정 WIP 체크포인트. G5 육안 FAIL을 보존한 채 대상 3결함 주석·3CRW-0 paired-table·glyph/legacy-pair 검출기를 커밋한다. 비-Electron 실측 scripts 265 pass, glyph/parity 54/54. 전체 app 단위는 Codex 마지막 실측 2,105(이 문서 갱신 시 전체 스위트 미재실행, pre-push가 돈다). 정본 Electron 캡처·육안 대조·G5b는 남음. 13BC-2 대조군과 나머지 66장 무라벨 접기는 범위 밖 유지. coverage/validator/`STOP_NO_CHANGES` 무변경.
+- 2026-09-04 G5b — Paper 육안 재승인 실행, **승인하지 않음(loop-back)**. Paper Desktop `Athena`/`카드`(fileId `01M0VGPX92K1TER4ZV9PWGQJJZ`)를 MCP 읽기 전용으로 대조했다(`paper.jsx` 무변경). 보드×폭 11칸 중 10 PASS·1 FAIL. **해소 확인:** 결함 A — 13K0-2 480/640/960에서 `● 실시간 갱신`·`100개 결과`·`세션`·`정규장`·`시간외 단일가`가 모두 한 줄이고 폭이 모자라면 글자를 쪼개는 대신 후행 그룹이 다음 줄로 이동한다; 2R3M-1 480에서 `삼성전자`·`정규장`·`실시간` 온전. 결함 C — 2R3M-1 960의 `3CRW-0`이 접힌 값을 `구분 매수체결`·`구분 KRX`·`체결강도 108.4%`로 Paper 헤더 라벨과 함께 내보내 무라벨 연결 `150,850매수체결KRX118.1%`와 헤더 뭉침 `체결가구분체결강도`가 사라졌다. 대조군 13BC-2는 480·960 무변화. **미해소(블로커):** 결함 B의 금액 토큰 `+3,214억원`은 붙었으나, 같은 보드 `2QFO-2` 960px의 `투자자별 순매수` 표에서 상위 3행의 값이 헤더 열과 어긋난다 — Paper는 6열 한 줄인데 앱은 매도 칸이 비고 값이 한 레인씩 밀리며 `44.0%`·`+3,214억원`이 라벨 없이 셋째 줄로 내려간다. `은행` 이하 행과 1920 XL은 정상이라 XL 파리티는 유지된다. 세 하드 판정은 글자 분절·박스 겹침·opt-in 미러 라벨만 보므로 **열-헤더 대응 위반을 원리적으로 못 잡는다**. 다음 착수점(선택지 3개와 새 열-헤더 판정)은 §6 3번, 증거는 `.omx/artifacts/card-surface-adaptive-readability/20260903T100241Z/36-g5b-paper-visual-audit.md`와 `35-g5b-visual-evidence/`. 코드 변경 없음 — 이번 커밋은 감사 기록만이다. 백엔드 커버리지·validator·`STOP_NO_CHANGES`는 무변경.
+- 2026-09-04 08:4x KST — G5b loop-back 독립 재검증(별도 세션). 정본 24장을 08:19 KST에 재생성(exit 0, 36측정 0, 위생 24/24/24)하고 Paper Desktop 직결 HTTP(127.0.0.1:29979)로 뽑은 정본 6장과 전수 육안 대조했다. 결함 A(13K0-2 480/640·2R3M-1 480 분절 소멸)·C(2R3M-1 960 라벨 사본) 해소와 13BC-2 4폭 무결은 위 감사와 일치. **`2QFO-2` 960 상위 3행 열 밀림은 08:19 정본 Electron 캡처에서도 재현** — 외국인 행의 `2,366억원`이 매수 레인, `4,208억원`이 순매수 레인에 그려지고 `44.0%`·`+3,214억원`이 무라벨 둘째 줄로 내려간다. 위 감사의 추정 원인(결함 B nowrap이 5일 누적 열 최소 폭을 키움)과 정합. 이 세션은 처음에 라벨 접기로 오독해 PASS로 기록했다가 열-헤더 대응 기준으로 철회했다(로컬 커밋 폐기, 원격 이력 무영향). 검증 실행의 부하 민감성(§7 캡처 행)도 이 세션 실측이다. 코드 변경 0, 문서만 갱신. G5b는 loop-back 유지 — 다음 착수는 §6 3번.

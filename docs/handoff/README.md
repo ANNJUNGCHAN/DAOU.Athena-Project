@@ -36,7 +36,7 @@
 > 옛 [360×640 계획 인계](./2026-09-03-kiumi-mini-cards-handoff.md)와
 > [KIUMI_PROMPT.md](./KIUMI_PROMPT.md)는 역사 기록이며 다시 실행하지 않는다.
 
-> 🟠 **2026-09-03 카드 표면 Paper→코드 — W3 Tasks 1–8·canonical 재생성 완료, coverage 3,382/3,532(95.8%). nonvisual gate는 통과했지만 5보드 반응형 가독성 때문에 시각 gate FAIL; explicit responsive/glyph gate 설계와 composite schema 승인 대기.**
+> 🟠 **2026-09-04 카드 표면 Paper→코드 — G4 정본 자동 게이트 초록. G5 육안 FAIL은 G5a 가독성 자동 게이트(닫힘, 정본 Electron 2026-09-04 07:49 KST · 36측정 0) + G5b 육안 재승인은 2026-09-04 실행 결과 **승인되지 않음** — `2QFO-2` 960px 표 열 정렬 1건이 남았다. 브랜치는 계속 `feat/card-surface-paper-to-code`.**
 > 이어받는 절차·수치·남은 일·사용자 확정 결정은 [2026-09-03-card-surface-paper-to-code.md](./2026-09-03-card-surface-paper-to-code.md)에 있다.
 > 이 트랙은 **`feat/card-surface-paper-to-code`**에 지속 커밋·푸시한다. 위 인계 문서가 들어 있는 최신 origin 커밋을 체크포인트로 삼는다.
 > 붙여 넣을 블록은 [CARD_SURFACE_PROMPT.md](./CARD_SURFACE_PROMPT.md).

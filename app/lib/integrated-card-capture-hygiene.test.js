@@ -137,6 +137,7 @@ test('an alternate board selection cannot bypass an injected readability finding
     atomic_wrap_nodes: [{ node: 'price' }], atomic_wrap_total: 1,
     text_overlap_nodes: [], text_overlap_total: 0,
     paired_semantics_violations: [], paired_semantics_total: 0,
+    column_lane_nodes: [], column_lane_total: 0,
   }, { enforce: true }), /readability atomic_wrap_nodes/);
 });
 

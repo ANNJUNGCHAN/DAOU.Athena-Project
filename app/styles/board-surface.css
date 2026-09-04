@@ -119,9 +119,16 @@
 .bs-r-paired-table .bs-paired-label {
   color: var(--color-k-dim);
   white-space: normal;
-  overflow-wrap: anywhere;
+  /* 좁은 칸에서도 줄바꿈은 어절 경계에서만 한다. `anywhere`는 `5일 누적`을
+   * `5일 누`/`적`으로 쪼갠다(2QFO-2 960 실측) — 이 웨이브가 없애려는 분절이다. */
+  overflow-wrap: normal;
+  word-break: keep-all;
 }
 .bs-r-paired-table [data-paired-source] {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+.bs-r-paired-table [data-bs-value-atomic="true"] {
   white-space: nowrap;
   overflow-wrap: normal;
 }

@@ -15,7 +15,9 @@ const { visualRowCounts } = require('./lib/board-layout-geometry');
 const { stateLinksFromMarks } = require('./lib/board-mount');
 const {
   DEFAULT_READABILITY_BOARD_IDS,
+  compactAtomicTokenSpans,
   collectGlyphFindings,
+  hasInlineAmbiguity,
   assertReadability,
   assertReadabilityManifest,
   assertReadabilityMatrix,
@@ -812,7 +814,9 @@ async function settleBoardLayout(win, instanceId) {
 // 없어 도달 0이지만, 그 0이 네 단계 모두 같으므로 상등 검사가 그대로 성립한다.
 const boardStepProbe = (instanceId) => `(async () => {
   const countVisualRows = ${visualRowCounts.toString()};
+  const compactAtomicTokenSpans = ${compactAtomicTokenSpans.toString()};
   const collectGlyphFindings = ${collectGlyphFindings.toString()};
+  const hasInlineAmbiguity = ${hasInlineAmbiguity.toString()};
   const root = document.querySelector(
     '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
   if (!root) return { error: 'board card not found' };
@@ -1005,10 +1009,60 @@ const boardStepProbe = (instanceId) => `(async () => {
       });
     }
   }
+  const automaticWalker = document.createTreeWalker(surface, NodeFilter.SHOW_TEXT);
+  for (let text = automaticWalker.nextNode(); text; text = automaticWalker.nextNode()) {
+    if (!text.parentElement || !shown(text.parentElement)) continue;
+    const element = text.parentElement;
+    if (element.closest('.bs-r-atomic, [data-bs-value-atomic="true"], [data-paired-source]')) continue;
+    // Non-opted-in tables may wrap short labels (2SKU-1 deposit-trend 현금,
+    // 13BC-2 control tables). Keep compact auto-tokens for chrome outside
+    // tables; opted-in scroll/paired tables still stay gated.
+    const table = element.closest('.bs-table');
+    if (
+      table
+      && !table.classList.contains('bs-r-scroll-table')
+      && !table.classList.contains('bs-r-paired-table')
+    ) continue;
+    // Primary deposit captions (2SKU-1 현재 예수금) may wrap at XS by layout.
+    // Auto-tokens only gate strip/header chrome and money-like leaves.
+    const inChrome = Boolean(element.closest('.bs-strip, .bs-header'));
+    for (const token of compactAtomicTokenSpans(text.nodeValue)) {
+      if (!inChrome && !/\d/.test(token.text) && !/[억원%]/.test(token.text)) continue;
+      const range = document.createRange();
+      range.setStart(text, token.start);
+      range.setEnd(text, token.end);
+      const fragments = [...range.getClientRects()]
+        .filter((rect) => rect.width > 0 && rect.height > 0)
+        .map((rect) => ({ left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom }));
+      if (!fragments.length) continue;
+      const responsiveOwner = responsiveOwnerFor(element);
+      const layoutOwner = responsiveOwner || surface;
+      const item = renderedItemFor(layoutOwner, element);
+      const semanticOwner = element.closest('[data-node], [data-slot-id]') || element;
+      glyphCandidates.push({
+        node: elementIdentity(semanticOwner),
+        name: semanticOwner.dataset.name || '',
+        owner: elementIdentity(element),
+        owner_name: element.dataset.name || semanticOwner.dataset.name || '',
+        text: token.text,
+        layout_owner: elementIdentity(layoutOwner),
+        layout_item: elementIdentity(item),
+        ancestors: ancestorsFor(element, layoutOwner),
+        atomic: true,
+        overlap: false,
+        hidden: false,
+        fragments,
+      });
+    }
+  }
   for (const element of surface.querySelectorAll(
     '.bs-r-atomic, [data-bs-value-atomic="true"], [data-paired-source]',
   )) {
-    const responsiveOwner = responsiveOwnerFor(element);
+    // value-atomic/paired-source without a declared owner may wrap
+    // (2SKU-1 deposit-trend captions). Explicit .bs-r-atomic siblings still
+    // measure against the surface so G5a chips outside a flow ancestor stay gated.
+    const explicitAtomic = element.classList.contains('bs-r-atomic');
+    const responsiveOwner = responsiveOwnerFor(element) || (explicitAtomic ? surface : null);
     if (!responsiveOwner) continue;
     const item = renderedItemFor(responsiveOwner, element);
     const owner = elementIdentity(element);
@@ -1064,6 +1118,26 @@ const boardStepProbe = (instanceId) => `(async () => {
       ),
       label_found: labels.length > 0,
       label_count: labels.length,
+      hidden: !shown(mirror),
+    });
+  }
+  for (const mirror of surface.querySelectorAll('.bs-r-paired-table .bs-paired')) {
+    if (mirror.querySelector('[data-paired-source]')) continue;
+    const parent = mirror.parentElement;
+    const neighborFragments = [];
+    if (parent) {
+      const neighborWalker = document.createTreeWalker(parent, NodeFilter.SHOW_TEXT);
+      for (let text = neighborWalker.nextNode(); text; text = neighborWalker.nextNode()) {
+        const pair = text.parentElement && text.parentElement.closest('.bs-paired');
+        if (!text.nodeValue.trim() || pair === mirror) continue;
+        neighborFragments.push(...textNodeFragments(text));
+      }
+    }
+    pairedRecords.push({
+      kind: 'legacy_pair',
+      source: elementIdentity(mirror),
+      label_found: Boolean(mirror.querySelector('[data-paired-label]')),
+      ambiguous_inline: hasInlineAmbiguity(textFragments(mirror), neighborFragments),
       hidden: !shown(mirror),
     });
   }
@@ -1157,6 +1231,43 @@ const boardStepProbe = (instanceId) => `(async () => {
       hidden: !shown(owner),
     });
   }
+  // 표 본문 셀이 자기 헤더 열의 가로 레인 밖에 그려지면 값이 다른 열로 읽힌다
+  // (2QFO-2 960 실측: 매도값이 매수 레인에). 접혀서 숨은 칸은 대상이 아니다.
+  const rowCells = (row) => [...row.querySelectorAll('[data-col]')].filter((cell) => (
+    cell.closest('[data-row]') === row
+    && (cell.parentElement === null || cell.parentElement.closest('[data-col]') === null)
+  ));
+  const columnLaneNodes = [];
+  for (const table of surface.querySelectorAll('.bs-table')) {
+    const head = table.querySelector('[data-row="head"]');
+    if (!head) continue;
+    const lanes = new Map();
+    for (const cell of rowCells(head)) {
+      if (!shown(cell)) continue;
+      const rect = cell.getBoundingClientRect();
+      if (rect.width > 0) lanes.set(cell.getAttribute('data-col'), rect);
+    }
+    if (!lanes.size) continue;
+    for (const row of table.querySelectorAll('[data-row]')) {
+      if (row === head) continue;
+      for (const cell of rowCells(row)) {
+        const lane = lanes.get(cell.getAttribute('data-col'));
+        if (!lane || !shown(cell)) continue;
+        const rect = cell.getBoundingClientRect();
+        if (rect.width <= 0) continue;
+        const center = rect.left + (rect.width / 2);
+        if (center >= lane.left - 1 && center <= lane.right + 1) continue;
+        columnLaneNodes.push({
+          table: elementIdentity(table),
+          row: row.getAttribute('data-row'),
+          col: cell.getAttribute('data-col'),
+          cell_center: Math.round(center),
+          header_lane: [Math.round(lane.left), Math.round(lane.right)],
+        });
+      }
+    }
+  }
+
   const glyph = collectGlyphFindings(glyphCandidates, pairedRecords, { cap: 20, tolerance: 1 });
 
   return {
@@ -1179,6 +1290,8 @@ const boardStepProbe = (instanceId) => `(async () => {
     text_overlap_total: glyph.text_overlap_nodes.total,
     paired_semantics_violations: glyph.paired_semantics_violations.items,
     paired_semantics_total: glyph.paired_semantics_violations.total,
+    column_lane_nodes: columnLaneNodes.slice(0, 20),
+    column_lane_total: columnLaneNodes.length,
     scroll_tables: scrollTableRecords,
     container_width: Math.round(surface.getBoundingClientRect().width),
     // 보드가 자기 칸보다 넓으면 가로 스크롤이 생긴다 — 계획 §2는 세로 스크롤만
@@ -1420,6 +1533,8 @@ async function captureBoardSteps(win, surface) {
         text_overlap_total: probe.text_overlap_total,
         paired_semantics_violations: probe.paired_semantics_violations,
         paired_semantics_total: probe.paired_semantics_total,
+        column_lane_nodes: probe.column_lane_nodes,
+        column_lane_total: probe.column_lane_total,
         scroll_tables: probe.scroll_tables,
         slot_count: probe.slot_multiset.length,
         visible_slot_count: probe.visible_slot_count,
@@ -1467,6 +1582,8 @@ async function captureBoardSteps(win, surface) {
         text_overlap_total: probe.text_overlap_total,
         paired_semantics_violations: probe.paired_semantics_violations,
         paired_semantics_total: probe.paired_semantics_total,
+        column_lane_nodes: probe.column_lane_nodes,
+        column_lane_total: probe.column_lane_total,
         scroll_tables: probe.scroll_tables,
         slot_count: probe.slot_multiset.length,
         visible_slot_count: probe.visible_slot_count,
