@@ -772,8 +772,14 @@ async function createChartCard(container, opts) {
     }
     reloadPending = true;
     reloadFailure = null;
+    let reloadTimer;
     try {
-      const result = await o.onReloadRequest(request);
+      const result = await Promise.race([
+        o.onReloadRequest(request),
+        new Promise((_, reject) => {
+          reloadTimer = setTimeout(() => reject(new Error('재조회 8초 한도를 넘겼다')), 8000);
+        }),
+      ]);
       if (!result || result.ok !== true) throw new Error((result && result.error) || 'reload가 완료되지 않았다');
       currentAdjusted = request.adjusted !== false;
       toolbar.setAdjusted(currentAdjusted);
@@ -785,6 +791,7 @@ async function createChartCard(container, opts) {
       updateNote();
       return false;
     } finally {
+      clearTimeout(reloadTimer);
       reloadPending = false;
     }
   }

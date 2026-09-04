@@ -33,6 +33,8 @@ const KOREAN_CHART_COURTESY = '(?:\\s*(?:를|은|는))?(?:\\s*(?:좀|한번))?(?
 // 동사가 붙는 CHART_COURTESY와 다르다). 각 CORE는 그 카드 하나만 가리키는
 // 명사라 다른 화면과 안 겹친다(예: "시세"는 QUOTE_CORE에 이미 있어 안 넣음).
 const KOREAN_ORDERBOOK_CORE = '(?:호가)';
+const KOREAN_SCREEN_CORE = '(?:시세|현재가|오늘\\s*주가|주가|호가|(?:일봉\\s*)?차트)';
+const KOREAN_SCREEN_JOIN = '(?:랑|이랑|와|과|하고|,)';
 const KOREAN_INVESTOR_FLOW_CORE = '(?:수급|(?:외국인|기관)\\s*매매(?:\\s*동향)?)';
 const KOREAN_TRADING_SOURCE_CORE = '(?:거래원)';
 const KOREAN_STOCKINFO_CORE = '(?:종목정보|기업정보)';
@@ -145,6 +147,60 @@ function matchesStandaloneProgramTradeGrammar(query) {
   const text = String(query || '').normalize('NFKC').toLocaleLowerCase('ko-KR').trim();
   const pattern = `${GRAMMAR_EDGE}${KOREAN_PROGRAM_TRADE_CORE}${KOREAN_QUOTE_COURTESY}${GRAMMAR_EDGE}`;
   return new RegExp(`^${pattern}$`, 'iu').test(text);
+}
+
+function screenKindFromCore(token) {
+  const text = String(token || '').replace(/\s+/g, '');
+  if (text.includes('호가')) return 'orderbook';
+  if (text.includes('차트') || text.includes('일봉')) return 'chart';
+  if (text.includes('시세') || text.includes('현재가') || text.includes('주가')) return 'quote';
+  return null;
+}
+
+function matchCompoundScreenCores(query, index, entity) {
+  if (!index || !entity) return null;
+  const text = String(query || '').normalize('NFKC').toLocaleLowerCase('ko-KR').trim();
+  const aliases = index.aliasesForEntity(entity);
+  for (const alias of aliases) {
+    const aliasPattern = flexibleExactAliasPattern(alias);
+    const koreanEntity = `${aliasPattern}(?:의|은|는|이|가|을|를)?`;
+    const pattern = `${GRAMMAR_EDGE}${koreanEntity}\\s*(${KOREAN_SCREEN_CORE})\\s*${KOREAN_SCREEN_JOIN}\\s*(${KOREAN_SCREEN_CORE})${KOREAN_QUOTE_COURTESY}${GRAMMAR_EDGE}`;
+    const match = text.match(new RegExp(`^${pattern}$`, 'iu'));
+    if (!match) continue;
+    const first = screenKindFromCore(match[1]);
+    const second = screenKindFromCore(match[2]);
+    if (!first || !second || first === second) continue;
+    return [first, second];
+  }
+  return null;
+}
+
+function restItemForScreenKind(kind, entity, ordinal, today) {
+  if (kind === 'quote') {
+    return {
+      itemId: 'primary-quote',
+      ordinal,
+      operationRef: 'detail:ka10001:current_trading',
+      args: { stk_cd: entity.code },
+      caption: null,
+    };
+  }
+  if (kind === 'orderbook') {
+    return {
+      itemId: 'primary-orderbook',
+      ordinal,
+      operationRef: 'detail:ka10004:aggregate_totals',
+      args: { stk_cd: entity.code },
+      caption: null,
+    };
+  }
+  return {
+    itemId: 'primary-chart',
+    ordinal,
+    operationRef: 'base:ka10081',
+    args: { stk_cd: entity.code, base_dt: today(), upd_stkpc_tp: '1' },
+    caption: null,
+  };
 }
 
 function kstToday() {
@@ -1007,6 +1063,27 @@ function buildChartDataset(query, index, {
   };
 }
 
+function buildCompoundScreenDataset(query, index, {
+  idFactory = () => `rest-${Date.now().toString(36)}`,
+  today = kstToday,
+} = {}) {
+  const text = String(query || '').trim();
+  const entity = index && index.resolveQuery(text);
+  if (!entity || entity.kind !== 'stock') return null;
+  const kinds = matchCompoundScreenCores(text, index, entity);
+  if (!kinds) return null;
+  return {
+    datasetId: String(idFactory()).slice(0, 64),
+    question: text,
+    items: kinds.map((kind, indexInCompound) => restItemForScreenKind(
+      kind,
+      entity,
+      indexInCompound + 1,
+      today,
+    )),
+  };
+}
+
 // 호가 — detail:ka10004:aggregate_totals(호가 총잔량). base:ka10004는 split
 // family라(SPLIT_BASE_TR_IDS) detail_group 없이는 resolve 자체가
 // DETAIL_GROUP_REQUIRED로 거부된다(실측 — E2E 타이밍 프로브에서 422로 확인,
@@ -1152,6 +1229,7 @@ module.exports = {
   buildDeterministicAnswer,
   buildQuoteDataset,
   buildChartDataset,
+  buildCompoundScreenDataset,
   buildOrderBookDataset,
   buildInvestorFlowDataset,
   buildTradingSourceDataset,

@@ -3672,7 +3672,9 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   // 정형 질의 모델 우회 확장(2026-08-26 속도 레버) — 순서는 의미 없다(각자
   // 닫힌 문법이라 서로 안 겹친다, rest-dataset-runner.js 테스트로 고정).
-  const directDataset = backtestMode ? null : restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
+  const directDataset = backtestMode ? null : restDatasetRunner.buildCompoundScreenDataset(query, stockEntityIndex, {
+    idFactory: () => `rest-${crypto.randomUUID()}`,
+  }) || restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
   }) || restDatasetRunner.buildChartDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,

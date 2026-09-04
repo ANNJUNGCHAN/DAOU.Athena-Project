@@ -26,7 +26,7 @@ const fs = require('fs');
 const fetchCalls = [];
 global.fetch = async (url, init) => {
   fetchCalls.push({ url, body: init && init.body ? JSON.parse(init.body) : null });
-  return { ok: true, status: 200 };
+  return { ok: true, status: 200, json: async () => ({}) };
 };
 
 const orderbookRealtime = require('./lib/main/orderbook-realtime');

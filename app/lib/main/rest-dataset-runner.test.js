@@ -11,6 +11,7 @@ const {
   StockEntityIndex,
   buildQuoteDataset,
   buildChartDataset,
+  buildCompoundScreenDataset,
   buildOrderBookDataset,
   buildInvestorFlowDataset,
   buildTradingSourceDataset,
@@ -921,6 +922,46 @@ test('order book binder uses a closed standalone grammar and rejects every resid
   for (const orderLike of ['삼성전자 매수', '삼성전자 100주 매수 주문', '삼성전자 매도해줘']) {
     assert.equal(buildOrderBookDataset(orderLike, index), null, orderLike);
   }
+});
+
+test('main.js REST 직행 체인은 compound를 quote보다 먼저 본다', () => {
+  const main = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
+  const compoundAt = main.indexOf('buildCompoundScreenDataset(query');
+  const quoteAt = main.indexOf('buildQuoteDataset(query');
+  assert.ok(compoundAt > 0 && quoteAt > compoundAt);
+});
+
+test('compound binder accepts 시세랑 호가 and rejects comparison or single-screen queries', () => {
+  const index = new StockEntityIndex();
+  index.replace([
+    { code: '005930', name: '삼성전자', aliases: ['Samsung Electronics'], market: '0' },
+    { code: '015760', name: '한국전력', market: '0' },
+  ]);
+
+  const bound = buildCompoundScreenDataset('삼성전자 시세랑 호가 보여줘', index, {
+    idFactory: () => 'compound-quote-orderbook',
+  });
+  assert.equal(bound.datasetId, 'compound-quote-orderbook');
+  assert.equal(bound.items.length, 2);
+  assert.equal(bound.items[0].operationRef, 'detail:ka10001:current_trading');
+  assert.equal(bound.items[1].operationRef, 'detail:ka10004:aggregate_totals');
+  assert.equal(bound.items[0].args.stk_cd, '005930');
+  assert.equal(bound.items[1].args.stk_cd, '005930');
+
+  const chartHoga = buildCompoundScreenDataset('삼성전자 차트와 호가', index, {
+    idFactory: () => 'compound-chart-orderbook',
+    today: () => '20260904',
+  });
+  assert.equal(chartHoga.items[0].operationRef, 'base:ka10081');
+  assert.equal(chartHoga.items[1].operationRef, 'detail:ka10004:aggregate_totals');
+
+  assert.equal(buildCompoundScreenDataset('삼성전자 시세', index), null);
+  assert.equal(buildCompoundScreenDataset('삼성전자 호가', index), null);
+  assert.equal(buildCompoundScreenDataset('삼성전자 시세랑 호가 분석해줘', index), null);
+  assert.equal(buildCompoundScreenDataset('삼성전자와 한국전력 현재가 비교', index), null);
+  assert.equal(buildCompoundScreenDataset('삼성전자 말고 한국전력 시세랑 호가', index), null);
+  assert.equal(buildCompoundScreenDataset('삼성전자 시세랑 시세 보여줘', index), null);
+  assert.equal(buildCompoundScreenDataset('삼성전자 매수랑 호가', index), null);
 });
 
 test('investor flow binder uses a closed standalone grammar and rejects every residual semantic token', () => {
