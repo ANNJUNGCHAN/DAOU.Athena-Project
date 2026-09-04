@@ -888,6 +888,7 @@ html, body {
   font-weight: 600;
   line-height: 20px;
   overflow-wrap: anywhere;
+  word-break: keep-all;
 }
 
 .orb-kiumi-meta {
@@ -932,6 +933,7 @@ html, body {
   color: var(--color-k-dim);
   white-space: normal;
   overflow-wrap: anywhere;
+  word-break: keep-all;
 }
 
 .orb-kiumi-value {
@@ -1013,6 +1015,7 @@ html, body {
   color: var(--color-k-faint);
   white-space: normal;
   overflow-wrap: anywhere;
+  word-break: keep-all;
 }
 
 /* 기능 카드만은 기존 주문 티켓 DOM과 실행 경로를 그대로 쓴다. H-1의 카드 높이와

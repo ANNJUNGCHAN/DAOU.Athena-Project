@@ -1,8 +1,31 @@
 /* palette.md 계승. 색을 새로 만들지 않는다. */
-@font-face { font-family: 'Daki';       src: url('file:///C:/Windows/Fonts/DakiL.ttf') format('truetype'); font-weight: 300; }
-@font-face { font-family: 'Daki';       src: url('file:///C:/Windows/Fonts/DakiM.ttf') format('truetype'); font-weight: 400; }
-@font-face { font-family: 'Daki B';     src: url('file:///C:/Windows/Fonts/DakiB.ttf') format('truetype'); font-weight: 400; }
-@font-face { font-family: 'Daki Title'; src: url('file:///C:/Windows/Fonts/DakiMTitle.ttf') format('truetype'); font-weight: 400; }
+/* 설치 머신에 Daki가 있으면 local()/Windows Fonts 경로를 쓰고, 없으면 즉시
+ * 시스템 한글로 넘긴다. src가 404인데 font-display 기본(block)이면 한글이
+ * 수 초 동안 안 그려진다(실측: 모드 라벨 font-weight 300). */
+@font-face {
+  font-family: 'Daki';
+  src: local('Daki Light'), local('Daki L'), local('Daki'), url('file:///C:/Windows/Fonts/DakiL.ttf') format('truetype');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Daki';
+  src: local('Daki Medium'), local('Daki M'), local('Daki'), url('file:///C:/Windows/Fonts/DakiM.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Daki B';
+  src: local('Daki Bold'), local('Daki B'), url('file:///C:/Windows/Fonts/DakiB.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Daki Title';
+  src: local('Daki Title'), local('Daki Medium Title'), local('DakiMTitle'), url('file:///C:/Windows/Fonts/DakiMTitle.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
 
 :root {
 
@@ -64,9 +87,9 @@
   --dur-base: 180ms;
   --tracking-num: -1px;
 
-  --font-body: 'Daki', -apple-system, 'Segoe UI', sans-serif;
-  --font-strong: 'Daki B', -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Daki Title', -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Daki', 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, 'Segoe UI', sans-serif;
+  --font-strong: 'Daki B', 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Daki Title', 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, 'Cascadia Code', monospace;
 
   /* 글자 크기 스케일 — 2026-08-19 결정(질의응답): 0.5px 단위 임의값 12종 난립을
