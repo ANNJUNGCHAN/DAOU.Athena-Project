@@ -29,6 +29,7 @@
 //   O 시각 설계 왕복(보드 11→12→13→14 — 지도가 편집 표면, 오류는 질문 하나로, 적용은 비활성 버전 하나)
 //   P 새 기법 만들기(보드 20·21 — 코드창·명령창·노드·흐름 창)
 //   Q 기법 폴더 한 바퀴(보드 19~23 — 폴더·자동 수락·단계 카드·자동 백테스트·승인)
+//   S 배포 무장·자동 주문(보드 23 — 키우미 켜짐 = 자동 매매, 무장은 사람이 켜는 스위치)
 //
 // 만드는 것은 되돌린다: 배포는 전부 중지하고, M·P·Q가 만든 등록·프로젝트는 등록에서 뺀다.
 // 전략·버전·실행 행은 백엔드에 삭제 API가 없어(store에 delete가 없다) 남고, 그 세 섹션이
@@ -65,6 +66,10 @@ const ALL_SECTIONS = [
   'P',
   // 기법 폴더 한 바퀴(보드 19~23, 2026-09-03) — 폴더·자동 수락·단계 카드·자동 백테스트·승인.
   'Q',
+  // 배포 무장·자동 주문(보드 23, 2026-09-04) — 키우미 켜짐 = 자동 매매.
+  // 글자를 R로 두지 않는다: 이 파일에서 R은 캔버스 셀렉터 접두사(const R)라
+  // `on('R')`이 그 상수를 가리키는 것처럼 읽힌다.
+  'S',
 ];
 const WANTED = new Set(
   (process.env.ATHENA_PROBE_SECTIONS || ALL_SECTIONS.join(','))
@@ -2288,10 +2293,19 @@ async function main() {
         deployNote: (wrap.querySelector('.backtest-deploy-note') || {}).textContent,
       };
     })()`, WAIT_VALIDATE);
-    await step('J02', '배포 화면 머리가 "신호까지만"이라고 적는다', () => ({
-      ok: !!deployHead && deployHead.title === '전략 배포 · 실전 적용'
-            && deployHead.note === '배포는 신호까지만 만듭니다 — 주문은 주문 게이트를 통과합니다',
-      data: deployHead ? { title: deployHead.title, note: deployHead.note } : null,
+    // 머리 문구는 **문자열 동일성으로 잠그지 않는다.** 이 자리는 보드 23을 따라 계속
+    // 다듬어지고(2026-09-04 결정으로 "신호까지만"은 더는 사실이 아니다 — auto 배포를
+    // 무장하면 사람 클릭 없이 주문이 나간다), 문구를 고칠 때마다 프로브가 빨개지면
+    // 프로브가 문구의 브레이크가 된다. 잠그는 것은 뜻 하나다: 이 줄은 비어 있지 않고,
+    // **주문이 어떤 경로로 나가는지**를 말한다.
+    const headNote = deployHead ? String(deployHead.note || '').trim() : '';
+    const NOTE_NAMES_ORDER = /주문/;                     // 주문을 말하지 않는 머리 문구는 이 화면의 것이 아니다
+    const NOTE_NAMES_PATH = /(자동|게이트|승인|한도|신호)/; // 그 주문이 나가는 길을 밝힌다
+    await step('J02', '배포 화면 머리가 주문이 어떤 경로로 나가는지 적는다', () => ({
+      ok: !!deployHead && String(deployHead.title || '').indexOf('배포') !== -1
+            && headNote.length >= 10
+            && NOTE_NAMES_ORDER.test(headNote) && NOTE_NAMES_PATH.test(headNote),
+      data: deployHead ? { title: deployHead.title, note: headNote } : null,
     }));
     await step('J03', '배포 화면 하단이 백테스트와 실전의 차이를 고지한다', () => ({
       ok: !!deployHead && String(deployHead.deployNote).indexOf('다음 봉 시가에 원하는 수량이 전부 체결된다고 가정') !== -1,
@@ -5005,6 +5019,416 @@ async function main() {
     }));
 
     // 다음 섹션이 초안 화면을 물려받지 않게 폼을 되돌린다(승인으로 초안은 이미 끝났다).
+    await ensureRunnableForm(shellWin, FROM, TO);
+  });
+
+  // ==================================================================
+  // S 배포 무장 · 자동 주문(보드 23 — 키우미 켜짐 = 자동 매매)
+  // ==================================================================
+  // 2026-09-04 결정: 승인된 기법을 auto로 배포하고 **무장**하면 사람 클릭 없이 주문이
+  // 나간다. 배포 생성과 무장은 여전히 사람 클릭이다 — 그래서 이 섹션이 재는 것은
+  // "꺼진 채로 태어나는가 · 사람이 켠 것만 켜지는가 · 켜진 사실이 화면과 서버에서
+  // 같은 값인가"다.
+  //
+  // 이 섹션은 **주문을 내지 않는다.** 그런데 자동 주문의 문은 둘이다 — 이 프로브가 부르는
+  // evaluate와, 백엔드 스케줄러가 60초마다 부르는 deploy_runner다. 후자는 프로브가 막을
+  // 수 없으므로 "무장한 배포에 evaluate를 안 부른다"는 규율만으로는 부족하다.
+  //
+  // 그래서 **구조로 막는다**: 이 섹션이 만드는 배포는 유효기간이 지난 상태로 태어난다
+  // (valid_to를 과거로 둔다, makeDeployment 참조). 만료된 배포는 판정 단계에서 막히므로
+  // 누가 언제 부르든 주문 경로에 닿지 않는다. 그 위에 규율 하나를 더 얹는다: 무장한
+  // 배포에는 evaluate를 부르지 않고, 부르기 직전에 서버에 다시 물어 확인한다.
+  if (on('S')) await section('S', async () => {
+    await ensureRunnableForm(shellWin, FROM, TO);
+
+    // **이 이름들은 backtest-canvas.js의 렌더러(renderDeployArm·renderDeployLog)와
+    // 맞춰야 한다.** 2026-09-04 현재 배포 하나는 `.backtest-deploy-item` 한 덩이이고
+    // 그 안에 행·키우미 줄·오늘 로그가 차례로 선다 — 토글은 행 **밖**에 있어서
+    // 행만 뒤지면 영영 못 찾는다. 셀렉터가 갈리면 이 상수만 고치면 된다.
+    const ITEM_SEL = '.backtest-deploy-item';
+    const ARM_TOGGLE_SEL = '.backtest-deploy-arm-toggle';
+    const ARM_ERROR_SEL = '.backtest-deploy-arm-error';
+    const LOG_SEL = '.backtest-deploy-log';
+    const LOG_ROW_SEL = '.backtest-deploy-log-row';
+
+    const listDeployments = async () => {
+      const res = await invoke(shellWin, 'athena:backtest-deployments');
+      return res && res.ok && res.data ? (res.data.deployments || []) : [];
+    };
+    const serverRow = async (id) => {
+      const list = await listDeployments();
+      return list.find((d) => d.id === id) || null;
+    };
+    // 클릭 뒤의 서버 값은 곧바로 바뀌지 않는다 — 조건이 설 때까지만 기다린다(고정 sleep 금지).
+    const awaitServer = async (id, pred) => {
+      const deadline = Date.now() + WAIT_VALIDATE;
+      let row = null;
+      while (Date.now() < deadline) {
+        // eslint-disable-next-line no-await-in-loop
+        row = await serverRow(id);
+        if (row && pred(row)) return row;
+        // eslint-disable-next-line no-await-in-loop
+        await wait(250);
+      }
+      return row;
+    };
+
+    // 배포 덩이에는 id가 실리지 않는다 — 목록에서 차지한 자리로만 DOM을 고른다(J06과
+    // 같은 규칙). 덩이 수가 목록 길이와 같아질 때까지 기다린다: 아직 안 그려진 DOM에서
+    // 자리를 세면 남의 배포를 내 배포로 읽는다.
+    const domItem = async (list, id) => {
+      const idx = list.findIndex((d) => d.id === id);
+      if (idx < 0) return null;
+      return until(shellWin, `(() => {
+        const items = Array.from(document.querySelectorAll('${R}${ITEM_SEL}'));
+        if (items.length !== ${list.length}) return null;
+        const item = items[${idx}];
+        if (!item) return null;
+        const row = item.querySelector('.backtest-deploy-row');
+        const toggle = item.querySelector('${ARM_TOGGLE_SEL}');
+        const err = item.querySelector('${ARM_ERROR_SEL}');
+        return {
+          index: ${idx},
+          cls: row ? row.className : null,
+          mode: (item.querySelector('.backtest-deploy-mode') || {}).textContent,
+          status: (item.querySelector('.backtest-deploy-status') || {}).textContent,
+          // auto_armed일 때만 서는 배지 — 화면은 이 값 하나만 읽는다.
+          auto: item.querySelectorAll('.backtest-deploy-auto').length,
+          arm: !!toggle,
+          armed: toggle ? toggle.getAttribute('aria-pressed') === 'true' : null,
+          armLabel: toggle ? toggle.getAttribute('aria-label') : null,
+          armTitle: (item.querySelector('.backtest-deploy-arm-title') || {}).textContent || null,
+          reason: err ? err.textContent : null,
+        };
+      })()`, WAIT_UI);
+    };
+    const clickArm = (list, id) => {
+      const idx = list.findIndex((d) => d.id === id);
+      if (idx < 0) return Promise.resolve(false);
+      return js(shellWin, `(() => {
+        const items = Array.from(document.querySelectorAll('${R}${ITEM_SEL}'));
+        const item = items[${idx}];
+        if (!item) return false;
+        const toggle = item.querySelector('${ARM_TOGGLE_SEL}');
+        if (!toggle) return false;
+        toggle.click();
+        return true;
+      })()`);
+    };
+    // 무장은 사람 클릭 전용 경로다. 렌더러에 IPC 채널이 아직 없을 수 있어(2026-09-04
+    // 현재 main.js의 BACKTEST_EXTRA_CHANNELS에 arm이 없다) 채널을 먼저 두드리고,
+    // 없으면 라우트를 직접 두드린다 — 어느 길로 갔는지는 리포트에 남긴다.
+    const armDirect = async (id, armed) => {
+      const viaIpc = await invoke(shellWin, 'athena:backtest-deployment-arm', {
+        deployment_id: id, armed,
+      });
+      // 봉투는 {ok:true, data} | {ok:false, status, error}다 — 둘 중 하나가 아니면
+      // 채널이 없다는 뜻이니(preload가 거절한다) 라우트로 간다.
+      const answered = !!viaIpc && !viaIpc.__probeError
+        && (viaIpc.ok === true || typeof viaIpc.status === 'number');
+      if (answered) {
+        return { via: 'ipc', status: viaIpc.ok === true ? 200 : viaIpc.status, body: viaIpc };
+      }
+      const res = await backendJson(
+        'POST', `/api/v1/backtest/deployments/${encodeURIComponent(id)}/arm`, { armed },
+      );
+      return { via: 'route', status: res.status, body: res.body };
+    };
+
+    // 프로브는 주문을 내지 않는다 — evaluate 직전에 그 배포가 무장돼 있지 않은 것을
+    // 서버에 다시 묻는다. 무장한 채로 부르려 했다면 그것을 위반으로 세고 부르지 않는다.
+    const guard = { armedEvaluate: 0 };
+    const evaluateSafely = async (id, today) => {
+      const row = await serverRow(id);
+      if (!row) return null;
+      if (row.auto_armed) { guard.armedEvaluate += 1; return null; }
+      return invoke(shellWin, 'athena:backtest-evaluate', {
+        deployment_id: id, today, holding: false,
+        orders_today: 0, order_amount: 100000, consecutive_losses: 0, drawdown_pct: 0,
+      });
+    };
+
+    // 배포는 저장된 버전에 묶인다 — 앞 섹션이 무엇을 남겼든 여기서 쓸 버전을 따로 만든다.
+    const yamlText = await js(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      return window.AthenaLib.BacktestSpec.toYaml(c.spec);
+    })()`);
+    const armStrategy = await invoke(shellWin, 'athena:backtest-strategy-create', {
+      name: 'probe-full-arm', kind: 'yaml', source: yamlText,
+    });
+    if (armStrategy && armStrategy.ok && armStrategy.data && armStrategy.data.strategy_id) {
+      created.strategyIds.push(armStrategy.data.strategy_id);
+    }
+    const armVersionId = armStrategy && armStrategy.ok && armStrategy.data
+      ? armStrategy.data.version_id : null;
+    const makeDeployment = async (mode) => {
+      const res = await invoke(shellWin, 'athena:backtest-deployment-create', {
+        strategy_version_id: armVersionId,
+        stk_cd: STK, period: 'day', adjusted: true, mode, params: {},
+        limits: {
+          max_order_amount: 1000000, max_orders_per_day: 1,
+          // **유효기간을 일부러 과거로 둔다.** 이 섹션은 무장 스위치를 켜 보는 것이
+          // 목적이고, 주문을 내보는 것이 목적이 아니다. 그런데 배포 판정은 이 프로브가
+          // 부르는 evaluate 말고도 백엔드 스케줄러(deploy_runner, 60초 주기)가 부른다 —
+          // 무장한 auto 배포를 몇 초라도 열어두면 그 틱과 겹쳐 프로브가 스스로 주문을
+          // 낼 수 있다. 만료된 배포는 `is_expired`가 판정 단계에서 막으므로, 누가 언제
+          // 부르든 주문 경로에 닿지 않는다(타이밍이 아니라 구조로 막는다).
+          valid_from: '20000101', valid_to: '20200101',
+          stop_on_drawdown_pct: 90, stop_on_consecutive_losses: 99,
+        },
+      });
+      const id = res && res.ok && res.data ? res.data.deployment_id : null;
+      // Z01이 만든 배포를 전부 중지한다 — 중지된 배포는 무장이 서 있어도 자동 주문이
+      // 나가지 않는다(is_armed_for_auto는 status === 'active'를 함께 본다).
+      if (id) created.deploymentIds.push(id);
+      return id;
+    };
+    const autoId = armVersionId ? await makeDeployment('auto') : null;
+    const approveId = armVersionId ? await makeDeployment('approve') : null;
+    // 오늘 로그를 볼 배포는 **기록만**으로 만든다 — evaluate가 닿아도 주문이 나갈 수 없는
+    // 모드다. 무장 여부와 무관하게 안전한 자리에서만 판정을 부른다.
+    const observeId = armVersionId ? await makeDeployment('observe') : null;
+    // 전략을 못 만들었으면 이 섹션의 검사는 성립하지 않는다 — 같은 이유로 이름만 갈아 끼운다.
+    const noVersion = (name) => ({ skip: '배포에 묶을 버전을 만들지 못했다(전략 생성 실패)', name });
+
+    await goTab(shellWin, 4);
+
+    const born = autoId ? await serverRow(autoId) : null;
+    await step('S01', '새 배포는 무장이 꺼진 채로 태어난다(auto여도 자동 주문은 안 나간다)', () => {
+      if (!autoId) return noVersion('새 배포는 무장 꺼짐');
+      return {
+        ok: !!born && born.mode === 'auto' && born.status === 'active'
+              && born.armed === false && born.auto_armed === false,
+        data: born ? {
+          id: autoId, mode: born.mode, status: born.status,
+          armed: born.armed, auto_armed: born.auto_armed,
+        } : { id: autoId, row: null },
+      };
+    });
+
+    const listBefore = autoId ? await listDeployments() : [];
+    const rowBefore = autoId ? await domItem(listBefore, autoId) : null;
+    await step('S02', '배포 화면이 키우미 스위치를 꺼진 채로 그린다', () => {
+      if (!autoId) return noVersion('무장 스위치 꺼짐(화면)');
+      return {
+        ok: !!rowBefore && rowBefore.arm === true && rowBefore.armed === false
+              && rowBefore.auto === 0 && rowBefore.status === 'active',
+        data: {
+          row: rowBefore,
+          // 토글이 없으면 배선이 안 닿았다는 뜻이다 — renderDeployArm은 deps.armDeployment가
+          // 없으면 줄을 통째로 안 그린다(눌러도 아무 일 없는 토글보다 낫다는 판단).
+          missing: rowBefore && rowBefore.arm === false
+            ? `키우미 토글이 없다(${ARM_TOGGLE_SEL}) — canvas.js가 armDeployment를 넘기지 않는다`
+            : null,
+        },
+      };
+    });
+
+    // 사람이 누르는 길을 먼저 쓴다. 토글이 아직 화면에 없으면 라우트로 켜고 그 사실을
+    // 남긴다 — 이 검사가 잠그는 것은 "화면 값과 서버 값이 갈라지지 않는다"이다.
+    let armVia = null;
+    if (rowBefore && rowBefore.arm) {
+      await clickArm(listBefore, autoId);
+      armVia = 'ui';
+    } else if (autoId) {
+      const forced = await armDirect(autoId, true);
+      armVia = `route(${forced.via}/${forced.status})`;
+    }
+    const armedServer = autoId ? await awaitServer(autoId, (d) => d.armed === true) : null;
+    await goTab(shellWin, 4);
+    const armedDom = autoId ? await domItem(await listDeployments(), autoId) : null;
+    await step('S03', '무장을 켜면 화면과 서버가 함께 켜진다(auto_armed도 함께 선다)', () => {
+      if (!autoId) return noVersion('무장 켜기');
+      return {
+        // 화면의 "자동" 배지는 auto_armed 하나만 읽는다 — 켜진 사실이 두 곳에서 같아야 한다.
+        ok: !!armedServer && armedServer.armed === true && armedServer.auto_armed === true
+              && !!armedDom && armedDom.armed === true && armedDom.auto === 1,
+        data: { via: armVia, server: armedServer && {
+          armed: armedServer.armed, auto_armed: armedServer.auto_armed, status: armedServer.status,
+        }, dom: armedDom },
+      };
+    });
+
+    // 무장은 "이 배포를 풀어둔다"는 뜻일 뿐, 무엇을 살지는 배포가 만들어질 때 정해졌다.
+    // approve 배포를 무장해도 자동 주문의 문은 열리지 않는다 — 화면은 auto_armed 하나만 읽는다.
+    const approveArm = approveId ? await armDirect(approveId, true) : null;
+    const approveRow = approveId
+      ? await awaitServer(approveId, (d) => d.armed === true) : null;
+    await step('S04', 'approve 배포는 무장해도 auto_armed가 서지 않는다', () => {
+      if (!approveId) return noVersion('approve 무장');
+      return {
+        ok: !!approveRow && approveRow.mode === 'approve' && approveRow.armed === true
+              && approveRow.auto_armed === false,
+        data: {
+          id: approveId, arm: approveArm && { via: approveArm.via, status: approveArm.status },
+          row: approveRow && {
+            mode: approveRow.mode, armed: approveRow.armed, auto_armed: approveRow.auto_armed,
+          },
+        },
+      };
+    });
+
+    // 프로브가 켠 스위치는 프로브가 끈다 — Z01의 중지를 기다리지 않는다(중지 전에도
+    // 켜져 있는 동안은 자동 주문이 나갈 수 있는 상태다).
+    const offAuto = autoId ? await armDirect(autoId, false) : null;
+    const offApprove = approveId ? await armDirect(approveId, false) : null;
+    const offAutoRow = autoId ? await awaitServer(autoId, (d) => d.armed === false) : null;
+    const offApproveRow = approveId
+      ? await awaitServer(approveId, (d) => d.armed === false) : null;
+    await goTab(shellWin, 4);
+    const offDom = autoId ? await domItem(await listDeployments(), autoId) : null;
+    await step('S05', '무장을 끄면 화면과 서버가 함께 꺼진다(프로브가 켠 스위치를 되돌린다)', () => {
+      if (!autoId) return noVersion('무장 끄기');
+      return {
+        ok: !!offAutoRow && offAutoRow.armed === false && offAutoRow.auto_armed === false
+              && (!approveId || (!!offApproveRow && offApproveRow.armed === false))
+              && (!offDom || (offDom.armed !== true && offDom.auto === 0)),
+        data: {
+          auto: { off: offAuto && offAuto.status, row: offAutoRow && offAutoRow.armed },
+          approve: { off: offApprove && offApprove.status, row: offApproveRow && offApproveRow.armed },
+          dom: offDom,
+        },
+      };
+    });
+
+    // 오늘 로그 — 주문이 없던 신호에 없는 값(수량·주문번호)을 그리면, 사람은 나가지도
+    // 않은 주문이 나갔다고 읽는다. 판정은 **기록만** 배포에서만 부른다.
+    const evalObserve = observeId ? await evaluateSafely(observeId, TO) : null;
+    const observeSignals = observeId
+      ? await invoke(shellWin, 'athena:backtest-signals', { deployment_id: observeId }) : null;
+    const observeRows = observeSignals && observeSignals.ok && observeSignals.data
+      ? (observeSignals.data.signals || []) : [];
+    await goTab(shellWin, 4);
+    const logList = observeId ? await listDeployments() : [];
+    const logIndex = logList.findIndex((d) => d.id === observeId);
+    const logSeen = logIndex < 0 ? null : await until(shellWin, `(() => {
+      const items = Array.from(document.querySelectorAll('${R}${ITEM_SEL}'));
+      if (items.length !== ${logList.length}) return null;
+      const item = items[${logIndex}];
+      if (!item) return null;
+      const card = item.querySelector('${LOG_SEL}');
+      if (!card) return { card: false };
+      const rows = Array.from(card.querySelectorAll('${LOG_ROW_SEL}'));
+      return {
+        card: true,
+        count: (card.querySelector('.backtest-deploy-log-count') || {}).textContent || null,
+        empty: (card.querySelector('.backtest-deploy-log-empty') || {}).textContent || null,
+        // 주문번호 칸은 order_no가 있을 때만 붙는다 — 없는 신호에 붙으면 그 자체가 결함이다.
+        orderCells: card.querySelectorAll('.backtest-deploy-log-order').length,
+        rows: rows.map((r) => (r.textContent || '').replace(/\\s+/g, ' ').trim()),
+      };
+    })()`, WAIT_UI);
+    await step('S06', '오늘 로그는 order_no·qty가 없는 신호에 없는 값을 그리지 않는다', () => {
+      if (!observeId) return noVersion('오늘 로그');
+      if (!logSeen || logSeen.card !== true) {
+        return {
+          skip: `오늘 로그 카드가 없다(${LOG_SEL}) — 신호를 아직 못 읽은 배포는 로그를 안 그린다`,
+          name: '오늘 로그',
+        };
+      }
+      const drawn = logSeen.rows || [];
+      // 기록만 배포는 주문을 만들지 않는다 — 서버가 준 신호에 order_no·qty가 없어야 하고,
+      // 화면은 그 없음을 수량·주문번호·null 따위로 메우지 않아야 한다.
+      const naked = observeRows.every((s) => s.order_no == null && s.qty == null);
+      const invented = drawn.filter((t) => /(null|undefined|NaN)/.test(t)
+        || /\d+\s*주/.test(t) || t.indexOf('주문번호') !== -1);
+      return {
+        ok: naked && invented.length === 0 && logSeen.orderCells === 0
+              && drawn.length <= observeRows.length
+              // 하루 한도 1건으로 만든 배포다 — 오늘 나간 주문은 0건이어야 한다.
+              && String(logSeen.count || '') === '오늘 0 / 1건',
+        data: {
+          id: observeId,
+          stage: evalObserve && evalObserve.data ? evalObserve.data.stage : null,
+          signals: observeRows.length,
+          drawn: drawn.length,
+          count: logSeen.count,
+          empty: logSeen.empty,
+          orderCells: logSeen.orderCells,
+          invented,
+        },
+      };
+    });
+
+    // 멈춘 배포는 무장되지 않는다 — 조용히 실패하면 화면 토글만 켜져 사람이 "자동으로
+    // 사고팔린다"고 믿게 된다. 백엔드는 409로 거절하고, 화면은 그 자리에 스위치를 두지
+    // 않거나(또는 잠그거나) 이유를 남겨야 한다.
+    const stopRes = autoId
+      ? await invoke(shellWin, 'athena:backtest-deployment-stop', { deployment_id: autoId }) : null;
+    const stoppedRow = autoId
+      ? await awaitServer(autoId, (d) => d.status === 'stopped') : null;
+    const armAfterStop = autoId ? await armDirect(autoId, true) : null;
+    const afterStopRow = autoId ? await serverRow(autoId) : null;
+    await goTab(shellWin, 4);
+    const stoppedList = autoId ? await listDeployments() : [];
+    const stoppedBefore = autoId ? await domItem(stoppedList, autoId) : null;
+    // 화면에서도 한 번 눌러 본다 — 거절이 값으로만 오고 화면에는 아무 말도 안 남으면,
+    // 사람은 토글이 켜졌다고 믿는다. 이 클릭은 주문을 내지 않는다(멈춘 배포다).
+    if (stoppedBefore && stoppedBefore.arm) await clickArm(stoppedList, autoId);
+    const stoppedDom = !stoppedBefore ? null : await until(shellWin, `(() => {
+      const items = Array.from(document.querySelectorAll('${R}${ITEM_SEL}'));
+      const item = items[${stoppedBefore.index}];
+      if (!item) return null;
+      const toggle = item.querySelector('${ARM_TOGGLE_SEL}');
+      const err = item.querySelector('${ARM_ERROR_SEL}');
+      if (toggle && !err) return null;
+      return {
+        status: (item.querySelector('.backtest-deploy-status') || {}).textContent,
+        arm: !!toggle,
+        armed: toggle ? toggle.getAttribute('aria-pressed') === 'true' : null,
+        auto: item.querySelectorAll('.backtest-deploy-auto').length,
+        reason: err ? err.textContent : null,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('S07', '중지한 배포는 무장할 수 없다(409) — 거절 이유가 화면에 남는다', () => {
+      if (!autoId) return noVersion('중지 뒤 무장 거절');
+      const reason = String((stoppedDom && stoppedDom.reason) || '');
+      return {
+        ok: !!stopRes && stopRes.ok === true
+              && !!stoppedRow && stoppedRow.status === 'stopped'
+              && !!armAfterStop && armAfterStop.status === 409
+              && !!afterStopRow && afterStopRow.armed === false
+              && afterStopRow.auto_armed === false
+              && !!stoppedDom && stoppedDom.status === 'stopped'
+              && stoppedDom.armed !== true && stoppedDom.auto === 0
+              // 켤 자리가 아예 없거나(배선 없음), 눌렀을 때 이유가 남거나 — 둘 중 하나여야 한다.
+              && (stoppedDom.arm === false || /무장|멈춘/.test(reason)),
+        data: {
+          id: autoId,
+          arm: armAfterStop && { via: armAfterStop.via, status: armAfterStop.status, body: armAfterStop.body },
+          server: afterStopRow && {
+            status: afterStopRow.status, armed: afterStopRow.armed, auto_armed: afterStopRow.auto_armed,
+          },
+          dom: stoppedDom,
+        },
+      };
+    });
+
+    // 경계 — 프로브가 도는 동안 주문은 한 건도 나가지 않았다. 세 배포의 신호 어디에도
+    // order_no·qty가 없고, 'ordered' 단계도 없다. 무장한 채로 evaluate를 부른 적도 없다.
+    const allSignals = [];
+    const ids = [autoId, approveId, observeId].filter(Boolean);
+    for (let i = 0; i < ids.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      const res = await invoke(shellWin, 'athena:backtest-signals', { deployment_id: ids[i] });
+      const rows = res && res.ok && res.data ? (res.data.signals || []) : [];
+      rows.forEach((s) => allSignals.push({ id: ids[i], stage: s.stage, order_no: s.order_no, qty: s.qty }));
+    }
+    await step('S08', '경계 — 프로브가 도는 동안 주문 API가 한 번도 불리지 않았다', () => {
+      if (!ids.length) return noVersion('주문 없음 경계');
+      const ordered = allSignals.filter((s) => s.stage === 'ordered' || s.order_no != null || s.qty != null);
+      return {
+        ok: guard.armedEvaluate === 0 && ordered.length === 0,
+        data: {
+          deployments: ids.length,
+          signals: allSignals.length,
+          ordered,
+          armedEvaluate: guard.armedEvaluate,
+        },
+      };
+    });
+
+    // 다음 섹션이 배포 탭을 물려받지 않게 폼으로 되돌린다(J10과 같은 마무리).
     await ensureRunnableForm(shellWin, FROM, TO);
   });
 
