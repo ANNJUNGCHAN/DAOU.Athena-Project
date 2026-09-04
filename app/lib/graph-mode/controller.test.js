@@ -1243,6 +1243,21 @@ test('plugin으로 전환하면 채팅 헤더가 플러그인 문구로 바뀌�
   assert.equal(elements.chatHead.hidden, true, '에이전트 모드엔 헤더가 없다');
 });
 
+test('백테스트 빈 채팅은 Paper 40MQ-1이고 대화 모드 새 대화는 유지한다', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const css = fs.readFileSync(path.join(__dirname, '..', '..', 'chat.css'), 'utf8');
+  assert.match(css, /\.history:empty::before\s*\{[^}]*content:\s*'새 대화'/);
+  assert.match(
+    css,
+    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\)\s*~\s*\.history:empty::before\s*\{[^}]*content:\s*'아직 고른 기법이 없습니다'/,
+  );
+  assert.match(
+    css,
+    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\)\s*~\s*\.history:empty::after\s*\{[^}]*content:\s*none/,
+  );
+});
+
 test('shell.html의 채팅 헤더 span은 비어 있다 — 문구의 유일한 출처는 controller다', () => {
   const fs = require('node:fs');
   const path = require('node:path');

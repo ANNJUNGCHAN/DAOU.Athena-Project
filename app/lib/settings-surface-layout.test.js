@@ -91,3 +91,8 @@ test('#settingsGrid만 전체 높이를 채우고 카드 본문만 세로 스크
 
   assert.doesNotMatch(settingsCss, /#orderBody\b/);
 });
+
+test('설정 4번째 네비 라벨은 Paper 13 성향・이력이다', () => {
+  assert.match(settingsSource, /key: 'history', label: '성향・이력'/);
+  assert.doesNotMatch(settingsSource, /key: 'history', label: '그래프'/);
+});

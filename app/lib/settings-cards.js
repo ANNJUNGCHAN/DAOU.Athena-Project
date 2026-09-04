@@ -140,7 +140,7 @@ const NAV_ITEMS = [
   { key: 'model', label: '모델' },
   // Paper 보드 22 — 그래프 수집·노출 설정. 배지는 개수가 아니라 노출 on/off
   // 상태다: 대화 모델에 성향 그래프가 열려 있는지를 켜짐/꺼짐으로 보여준다.
-  { key: 'history', label: '그래프', statusFn: () => (readGraphSettings().exposeToModel ? '켜짐' : '꺼짐') },
+  { key: 'history', label: '성향・이력', statusFn: () => (readGraphSettings().exposeToModel ? '켜짐' : '꺼짐') },
 ];
 
 async function refreshNavCount(item, badgeEl) {
