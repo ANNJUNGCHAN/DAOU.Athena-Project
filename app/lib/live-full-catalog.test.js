@@ -58,6 +58,17 @@ test('live-full catalog locked clicks cover real orders and kiumi five faces', (
   }
 });
 
+test('order lock does not treat 과매도 or 과매수 technique copy as a live order', () => {
+  const orderLock = LOCKED_CLICKS.find((item) => item.id === 'order-submit');
+  assert.ok(orderLock);
+  assert.equal(orderLock.match.test('가짜 돌파 되돌림 반전 종가가 볼린저 하단 아래로 빠지면 진입(과매도 되돌림), 중심선 회복 시 청산'), false);
+  assert.equal(orderLock.match.test('RSI 과매도'), false);
+  assert.equal(orderLock.match.test('과매수에서 청산'), false);
+  assert.equal(orderLock.match.test('시장가 매수'), true);
+  assert.equal(orderLock.match.test('시장가 매도'), true);
+  assert.equal(orderLock.match.test('주문 확인'), true);
+});
+
 test('verify suite lists live-full and the official verify script with budgets', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(appDir, 'package.json'), 'utf8'));
   const names = VERIFY_SUITE.map((item) => item.script);
