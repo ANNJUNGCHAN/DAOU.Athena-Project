@@ -1,0 +1,12 @@
+G5b만 진행한다. G5a는 00666f5로 완료·푸시된 상태다.
+
+목표:
+1) app/captures/integrated-cards/ 캐논 24장과 Paper Desktop(fileId 01M0VGPX92K1TER4ZV9PWGQJJZ)을 대조
+2) 원래 FAIL 3건 해소 확인: 13K0-2/2R3M-1 한글 분절, 2QFO-2 금액+단위 atomic, 2R3M-1 3CRW-0 paired-table
+3) 13BC-2 clean control 유지 확인
+4) 보드×폭 체크리스트 + Visual Ralph ≥90 (모호하면 승인 금지, loop-back)
+5) docs/handoff 인계 문서 실측 갱신 후 feat/card-surface-paper-to-code에 커밋·푸시 (--no-verify 금지, main 머지 금지)
+
+금지: zoom, board-id CSS, blanket clip, 글자 축소, 내용 삭제, 66 unlabeled folds 확장, G5a 재구현.
+
+먼저 git status/HEAD/캡처/인계 §6·§11을 실측 보고한 뒤 G5b를 끝까지 수행하고 커밋 SHA와 푸시 결과를 보고한다.
