@@ -433,6 +433,13 @@ html.is-boot-expanding #winControls { opacity: 0; }
   line-height: 19px;
   color: var(--color-k-ghost);
 }
+/* Paper 40MQ-1 — 백테스트에서 기법을 고르기 전 빈 채팅 */
+#chatModeHead[data-mode="backtest"]:not([hidden]) ~ .history:empty::before {
+  content: '아직 고른 기법이 없습니다';
+}
+#chatModeHead[data-mode="backtest"]:not([hidden]) ~ .history:empty::after {
+  content: none;
+}
 .history::-webkit-scrollbar { width: 8px; }
 .history::-webkit-scrollbar-track { background: transparent; }
 .history::-webkit-scrollbar-thumb {
