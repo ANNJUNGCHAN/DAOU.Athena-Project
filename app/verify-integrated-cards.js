@@ -1231,6 +1231,43 @@ const boardStepProbe = (instanceId) => `(async () => {
       hidden: !shown(owner),
     });
   }
+  // 표 본문 셀이 자기 헤더 열의 가로 레인 밖에 그려지면 값이 다른 열로 읽힌다
+  // (2QFO-2 960 실측: 매도값이 매수 레인에). 접혀서 숨은 칸은 대상이 아니다.
+  const rowCells = (row) => [...row.querySelectorAll('[data-col]')].filter((cell) => (
+    cell.closest('[data-row]') === row
+    && (cell.parentElement === null || cell.parentElement.closest('[data-col]') === null)
+  ));
+  const columnLaneNodes = [];
+  for (const table of surface.querySelectorAll('.bs-table')) {
+    const head = table.querySelector('[data-row="head"]');
+    if (!head) continue;
+    const lanes = new Map();
+    for (const cell of rowCells(head)) {
+      if (!shown(cell)) continue;
+      const rect = cell.getBoundingClientRect();
+      if (rect.width > 0) lanes.set(cell.getAttribute('data-col'), rect);
+    }
+    if (!lanes.size) continue;
+    for (const row of table.querySelectorAll('[data-row]')) {
+      if (row === head) continue;
+      for (const cell of rowCells(row)) {
+        const lane = lanes.get(cell.getAttribute('data-col'));
+        if (!lane || !shown(cell)) continue;
+        const rect = cell.getBoundingClientRect();
+        if (rect.width <= 0) continue;
+        const center = rect.left + (rect.width / 2);
+        if (center >= lane.left - 1 && center <= lane.right + 1) continue;
+        columnLaneNodes.push({
+          table: elementIdentity(table),
+          row: row.getAttribute('data-row'),
+          col: cell.getAttribute('data-col'),
+          cell_center: Math.round(center),
+          header_lane: [Math.round(lane.left), Math.round(lane.right)],
+        });
+      }
+    }
+  }
+
   const glyph = collectGlyphFindings(glyphCandidates, pairedRecords, { cap: 20, tolerance: 1 });
 
   return {
@@ -1253,6 +1290,8 @@ const boardStepProbe = (instanceId) => `(async () => {
     text_overlap_total: glyph.text_overlap_nodes.total,
     paired_semantics_violations: glyph.paired_semantics_violations.items,
     paired_semantics_total: glyph.paired_semantics_violations.total,
+    column_lane_nodes: columnLaneNodes.slice(0, 20),
+    column_lane_total: columnLaneNodes.length,
     scroll_tables: scrollTableRecords,
     container_width: Math.round(surface.getBoundingClientRect().width),
     // 보드가 자기 칸보다 넓으면 가로 스크롤이 생긴다 — 계획 §2는 세로 스크롤만
