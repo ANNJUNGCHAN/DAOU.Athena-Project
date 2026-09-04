@@ -146,7 +146,15 @@ async function shot(win, name) {
   const viewport = await win.webContents.executeJavaScript(
     'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve({ width: innerWidth, height: innerHeight }))))'
   );
-  const img = await win.webContents.capturePage();
+  const img = await Promise.race([
+    win.webContents.capturePage(),
+    wait(12000).then(() => null),
+  ]);
+  if (!img) {
+    dlog(`capture skip: ${name}`);
+    captureLog.push({ name, skipped: true, reason: 'capturePage timeout' });
+    return { width: 0, height: 0, skipped: true };
+  }
   const buf = img.toPNG();
   fs.writeFileSync(path.join(CAPTURES, name), buf);
   captureLog.push({ name, hash: crypto.createHash('md5').update(buf).digest('hex'), winTitle: win.getTitle() });

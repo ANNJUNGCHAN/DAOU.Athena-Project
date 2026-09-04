@@ -813,6 +813,8 @@ test('quote binder uses a closed standalone grammar and rejects every residual s
   ]);
 
   for (const standaloneQuestion of [
+    '삼성전자 시세',
+    '삼성전자 시세 보여줘',
     '삼성전자 현재가',
     '삼성전자 현재가 알려줘',
     '005930 현재가',
@@ -837,6 +839,7 @@ test('quote binder uses a closed standalone grammar and rejects every residual s
     '삼성전자 현재가와 미상 의미를 함께',
     '삼성전자 말고 한국전력 현재가',
     '삼성전자와 한국전력 현재가 비교',
+    '삼성전자 시세랑 호가 보여줘',
   ]) {
     assert.equal(buildQuoteDataset(residualContext, index), null, residualContext);
   }
