@@ -1807,6 +1807,182 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-2xs);
   cursor: pointer;
 }
+
+/* 무장 스위치와 오늘 로그(보드 23) — 한 배포가 행·키우미 줄·로그 셋으로 선다.
+   "자동" 뱃지는 서버의 auto_armed 하나만 보고 붙는다(모드·무장·상태를 여기서 다시
+   합치지 않는다). */
+.backtest-deploy-item { margin-bottom: 12px; }
+.backtest-deploy-item .backtest-deploy-row { margin-bottom: 0; }
+.backtest-deploy-auto {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-brand);
+  color: var(--color-k-panel);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-deploy-arm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: var(--color-k-panel3);
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-lg);
+}
+.backtest-deploy-arm.is-on {
+  border-color: var(--color-brand);
+  background: var(--color-k-panel);
+}
+.backtest-deploy-arm-mark {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background: var(--color-navy);
+  color: var(--color-k-panel);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-deploy-arm-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.backtest-deploy-arm-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-deploy-arm-detail {
+  margin-top: 2px;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 15px;
+  word-break: keep-all;
+}
+.backtest-deploy-arm-toggle {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-start;
+  width: 34px;
+  height: 19px;
+  padding: 0 3px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  background: var(--color-k-panel3);
+  cursor: pointer;
+}
+.backtest-deploy-arm-toggle.is-on {
+  justify-content: flex-end;
+  border-color: var(--color-brand);
+  background: var(--color-brand);
+}
+.backtest-deploy-arm-knob {
+  width: 13px;
+  height: 13px;
+  border-radius: var(--radius-full);
+  background: var(--color-k-panel);
+  box-shadow: 0 1px 2px var(--color-k-line);
+}
+.backtest-deploy-arm-toggle .backtest-deploy-arm-knob { background: var(--color-k-faint); }
+.backtest-deploy-arm-toggle.is-on .backtest-deploy-arm-knob { background: var(--color-k-panel); }
+.backtest-deploy-arm-error {
+  margin-top: 4px;
+  padding: 0 12px;
+  color: var(--color-up);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+  word-break: keep-all;
+}
+.backtest-deploy-log {
+  margin-top: 6px;
+  padding: 11px 12px;
+  background: var(--color-k-panel2);
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-lg);
+}
+.backtest-deploy-log-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.backtest-deploy-log-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-deploy-log-when {
+  flex: 1 1 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-deploy-log-count {
+  flex: 0 0 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-deploy-log-empty {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-deploy-log-row {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 3px 0;
+}
+.backtest-deploy-log-time {
+  flex: 0 0 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-deploy-log-stage {
+  flex: 0 0 auto;
+  padding: 1px 8px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  background: var(--color-k-panel);
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-deploy-log-stage.is-signal { border-color: var(--color-info); color: var(--color-info); }
+.backtest-deploy-log-stage.is-pending_approval,
+.backtest-deploy-log-stage.is-ordered { border-color: var(--color-warn); color: var(--color-warn); }
+.backtest-deploy-log-stage.is-filled { border-color: var(--color-ok); color: var(--color-ok); }
+.backtest-deploy-log-stage.is-blocked { border-color: var(--color-up); color: var(--color-up); }
+.backtest-deploy-log-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 15px;
+  word-break: keep-all;
+}
+.backtest-deploy-log-order {
+  flex: 0 0 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
 .backtest-deploy-modes {
   display: flex;
   flex-direction: column;
