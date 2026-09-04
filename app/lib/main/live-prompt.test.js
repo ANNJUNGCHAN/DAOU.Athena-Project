@@ -3,6 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
+  buildAgentModePrefix,
   buildBacktestModePrefix, buildGraphModePrefix, buildLivePrompt, buildLiveSystemPrompt,
   buildLiveTurnPrompt,
 } = require('./live-prompt');
@@ -1294,4 +1295,58 @@ test('buildBacktestModePrefix: 폴더가 생겨도 질문은 technique_question�
   assert.ok(p.includes('athena_backtest action=technique_question 으로 한 턴에 질문 하나만 던진다'));
   assert.ok(p.includes('choices는 2~4개이고 그중 하나에 recommended와 why_ko(권장하는 이유)를 붙인다'));
   assert.ok(p.includes('네가 대신 고르지 마라'));
+});
+
+// 코드 알람(2026-09-03) — 고정 source로 적을 수 없는 규칙을 모델이 대충 바꿔 적던 자리다.
+// 접두가 없으면 propose_watch_code 계약도 프로젝트 id도 모델에게 닿지 않아 코드 알람을
+// 만들 길 자체가 없다.
+const AGENT_PROJECT = { project: { id: 'p-77', name: '내 전략' } };
+
+test('buildAgentModePrefix: 코드 알람 3단계 계약을 준다(propose_watch_code → draft → 사람 승인)', () => {
+  const p = buildAgentModePrefix(AGENT_PROJECT, '20260903');
+  assert.ok(p.includes('[모드: 에이전트] 오늘: 20260903'));
+  assert.ok(p.includes('action=propose_watch_code'));
+  assert.ok(p.includes('NODE_LABELS'));
+  assert.ok(p.includes('PARAMS'));
+  assert.ok(p.includes('signals(df, p)'));
+  assert.ok(p.includes('{source:"code.watch", op:"==", value:true}'));
+  assert.ok(p.includes('version_hash: code_hash'));
+  assert.ok(p.includes('import athena_bt as bt'));
+  // 고정 source로 바꿔 적는 폴백이 이 기능을 죽였다 — 금지 문장이 있어야 한다.
+  assert.ok(p.includes('가장 가까운 고정 source로 바꿔 적지 마라'));
+  // 켜는 것은 사람이다.
+  assert.ok(p.includes('「이 알람 승인」'));
+  assert.ok(p.includes('등록됐다·켜졌다고 말하지 마라'));
+  // 고치기 한 바퀴 — 켜진 알람은 덮어쓸 수 없다.
+  assert.ok(p.includes('같은 path로 propose_watch_code를 다시 불러'));
+  assert.ok(p.includes('먼저 잠시 멈춰 달라고 말한 뒤 고친다'));
+});
+
+test('buildAgentModePrefix: 프로젝트가 있으면 이름과 id를 싣고, 없으면 만들라고 한다', () => {
+  assert.ok(buildAgentModePrefix(AGENT_PROJECT, '20260903').includes('프로젝트: 내 전략 (p-77)'));
+  const none = buildAgentModePrefix(null, '20260903');
+  assert.ok(none.includes('프로젝트 없음 — 코드 알람은 프로젝트를 먼저 만든 뒤'));
+  assert.ok(!none.includes('프로젝트: '));
+  // 옛 컨텍스트(키 없음)도 던지지 않는다.
+  assert.ok(buildAgentModePrefix({}, '').includes('프로젝트 없음'));
+});
+
+test('buildLiveTurnPrompt: canvasMode=agent면 에이전트 접두가 질문 앞에 붙는다', () => {
+  const turn = buildLiveTurnPrompt({
+    userText: '삼성전자 거래량이 최근 3일 평균의 1.5배 넘으면 알려줘',
+    canvasMode: 'agent',
+    agentContext: AGENT_PROJECT,
+    today: '20260903',
+  });
+  const body = String.fromCharCode(10,10) + [
+    '사용자 질문:',
+    '삼성전자 거래량이 최근 3일 평균의 1.5배 넘으면 알려줘',
+  ].join(String.fromCharCode(10));
+  assert.equal(turn, buildAgentModePrefix(AGENT_PROJECT, '20260903') + body);
+});
+
+test('불변 규칙: 알람이 켜졌다고 모델이 말하지 않는다(확정은 사람 클릭)', () => {
+  const rules = buildLiveSystemPrompt();
+  assert.ok(rules.includes('어떤 알람도 네가 켤 수 없다'));
+  assert.ok(rules.includes('확정은'));
 });

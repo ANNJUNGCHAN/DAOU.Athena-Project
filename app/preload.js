@@ -61,6 +61,9 @@ const INVOKE_CHANNELS = new Set([
   // 상세·소스 카탈로그(Step 6) — 설정 폼 프리필과 새 작업 시트가 1회씩 부른다.
   'athena:routine-detail',
   'athena:routine-source-catalog',
+  // 감시 코드 검사·착지(Step 6) — POST /routines/watch/check · POST /routines/watch/code.
+  'athena:routine-watch-check',
+  'athena:routine-watch-code',
   // 알림 방 읽음 처리(7단계, F3-FE) — 6단계 POST /{id}/ack.
   'athena:routine-ack',
   // 발화 열람·응답 계측(F-stage5b-FE) — POST /{id}/engagement.
