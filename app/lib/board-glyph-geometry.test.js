@@ -279,6 +279,8 @@ test('readability assertion reports findings when optional and fails closed when
     text_overlap_total: 0,
     paired_semantics_violations: [],
     paired_semantics_total: 0,
+    column_lane_nodes: [],
+    column_lane_total: 0,
   };
   assert.deepEqual(assertReadability('2R3M-1', { name: 'L' }, atomicProbe, { enforce: false }), {
     enforced: false,
@@ -291,6 +293,7 @@ test('readability assertion reports findings when optional and fails closed when
     atomic_wrap_nodes: [], atomic_wrap_total: 0,
     text_overlap_nodes: [], text_overlap_total: 0,
     paired_semantics_violations: [], paired_semantics_total: 0,
+    column_lane_nodes: [], column_lane_total: 0,
   };
   for (const [boardId, label, field, totalField, finding] of [
     ['13K0-2', 'atomic', 'atomic_wrap_nodes', 'atomic_wrap_total', { node: 'chip' }],
@@ -301,11 +304,14 @@ test('readability assertion reports findings when optional and fails closed when
     ['13K0-2', 'scroll semantics', 'paired_semantics_violations', 'paired_semantics_total', {
       source: 'table', violation: 'scroll_missing_row',
     }],
+    ['2QFO-2', 'column lane', 'column_lane_nodes', 'column_lane_total', {
+      table: '2QH0-2', row: '0', col: '1', cell_center: 400, header_lane: [200, 300],
+    }],
   ]) {
     const probe = { ...zeroProbe, [field]: [finding], [totalField]: 1 };
     assert.throws(
       () => assertReadability(boardId, { name: label }, probe, { enforce: true }),
-      /readability (atomic_wrap_nodes|text_overlap_nodes|paired_semantics_violations)/,
+      /readability (atomic_wrap_nodes|text_overlap_nodes|paired_semantics_violations|column_lane_nodes)/,
       label,
     );
   }
@@ -319,6 +325,7 @@ test('readability assertion reports findings when optional and fails closed when
     atomic_wrap_nodes: [], atomic_wrap_total: 1,
     text_overlap_nodes: [], text_overlap_total: 0,
     paired_semantics_violations: [], paired_semantics_total: 0,
+    column_lane_nodes: [], column_lane_total: 0,
   }, { enforce: true }), /readability .*atomic_wrap_nodes/);
   assert.throws(() => assertReadability('2R3M-1', { name: 'L' }, {
     ...zeroProbe, atomic_wrap_total: -1,
@@ -424,6 +431,7 @@ test('a DOM-like 13K chip shrink mutation becomes a two-line atomic hard failure
     atomic_wrap_nodes: finding.items, atomic_wrap_total: finding.total,
     text_overlap_nodes: [], text_overlap_total: 0,
     paired_semantics_violations: [], paired_semantics_total: 0,
+    column_lane_nodes: [], column_lane_total: 0,
   });
   assert.deepEqual(assertReadability('13K0-2', { name: 'M' }, probe(restored), {
     enforce: true,
@@ -450,6 +458,7 @@ test('a complete synthetic canonical zero report passes the enforced 6/24/12 mat
     atomic_wrap_nodes: [], atomic_wrap_total: 0,
     text_overlap_nodes: [], text_overlap_total: 0,
     paired_semantics_violations: [], paired_semantics_total: 0,
+    column_lane_nodes: [], column_lane_total: 0,
   });
   const boards = DEFAULT_READABILITY_BOARD_IDS.map((boardId) => ({
     board_id: boardId,
