@@ -19,7 +19,7 @@ const AMBIGUOUS_ENTITY_CONTEXT_RE = /(?:말고|제외|아닌|비교|\b(?:not|exc
 const ENTITY_SUFFIX_PATTERN = "(?:'s|의|가|이|은|는|을|를|와|과|에|에서|으로|로)";
 const REVIEWED_MARKET_ENTITY_KIND = Object.freeze({ '0': 'stock', '10': 'stock', '8': 'etf' });
 const GRAMMAR_EDGE = `[\\s?!.,~"'():;·-]*`;
-const KOREAN_QUOTE_CORE = '(?:현재\\s*(?:가|시세)|오늘\\s*주가|주가)(?:\\s*(?:얼마(?:야|예요|에요|인가요?)?|조회))?';
+const KOREAN_QUOTE_CORE = '(?:시세|현재\\s*(?:가|시세)|오늘\\s*주가|주가)(?:\\s*(?:얼마(?:야|예요|에요|인가요?)?|조회))?';
 const KOREAN_QUOTE_COURTESY = '(?:\\s*(?:를|은|는))?(?:\\s*(?:좀|한번))?(?:\\s*(?:(?:알려|보여)\\s*(?:줘|주세요)|(?:조회|확인)\\s*(?:해)?\\s*(?:줘|주세요)|해\\s*(?:줘|주세요)))?';
 const ENGLISH_QUOTE_CORE = '(?:current\\s+(?:stock\\s+)?price|stock\\s+price\\s+today)';
 // 일봉 차트만 대상이다(base:ka10081) — "주봉/시세/호가"는 다른 TR·다른 렌더러라

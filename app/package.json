@@ -29,6 +29,8 @@
     "verify:settings": "electron verify-settings.js",
     "verify:settings-cards": "electron verify-settings-cards.js",
     "verify:life003": "node verify-life003.js",
+    "verify:live-full": "electron probe-live-full.js",
+    "verify:suite": "node scripts/run-verify-suite.js",
     "capture:wide15": "electron capture-wide15.js"
   },
   "author": "",
