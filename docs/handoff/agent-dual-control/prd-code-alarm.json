@@ -61,32 +61,36 @@
   {
    "id": "CA-005",
    "title": "Step 5 — REST + 실행 루프",
-   "passes": false,
+   "passes": true,
    "acceptanceCriteria": [
     "B-12~B-15, B-17, B-20(복원), B-21, B-22 통과",
     "POST /watch/check · draft가 watch 수용 · _detail_view 노드·검사 요약 · code-watch condition 수정 422 · _code_loop(장중 요일·종목 묶기·해시 재확인·failed 전이) · config 2항목",
     "V4 전체 실패 0, V5: uv run pytest -q failed==0 && passed>=3169"
-   ]
+   ],
+   "completedAt": "2026-09-04"
   },
   {
    "id": "CA-006",
    "title": "Step 6 — 대화",
-   "passes": false,
+   "passes": true,
    "acceptanceCriteria": [
     "A-6~A-10 통과 (routine-turn.js describeMode + routine-turn.test.js 확장, approvalModeLine, 「검사」 칩 활성 + title R6, 검사 결과 카드 + 「어제까지로 세었음 · 오늘은 진행 중」, R8 칩)",
     "main.js·preload.js 검사·착지 통로 (EOL 보존, diff는 추가만)",
     "V6: cd app && npm test failed==0 && passed>=2295"
-   ]
+   ],
+   "completedAt": "2026-09-04"
   },
   {
    "id": "CA-007",
    "title": "Step 7 — 캔버스 + 테스트·프로브·문서",
-   "passes": false,
+   "passes": true,
    "acceptanceCriteria": [
     "A-1~A-5, A-11, A-12 통과 (agent-canvas.js code-watch kind·노드 카드·자동 검사 로그·접힌 코드·방금 바뀜·선택 칩·울린 기록·만료·고치기 멈춤 확인)",
     "probe-agent-paper-parity.js 보드 09~12 단언 추가, PAPER_APP_PARITY.md 갱신",
     "V6 · V7: npm run verify:agent-paper-parity 실패 0, check() >= 35"
-   ]
+   ],
+   "completedAt": "2026-09-04",
+   "note": "shell.css 노드 카드 스타일은 후속(라이브 시연 전 보강)"
   },
   {
    "id": "CA-008",

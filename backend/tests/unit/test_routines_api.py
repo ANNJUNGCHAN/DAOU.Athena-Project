@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import json
 from datetime import UTC, datetime, timedelta
+from types import SimpleNamespace
 
 import pytest
 from fastapi import FastAPI
@@ -893,3 +894,102 @@ def test_briefing_budget_counts_today_briefed_only(app_client):
 
     budget2 = client.get("/api/v1/routines/briefing-budget").json()
     assert budget2 == {"limit": 10, "used_today": 1, "remaining": 9}
+
+
+# ── B-22 코드 감시는 실시간 구독을 잡지 않는다 ──────────────────────────────
+
+
+_CODE_WATCH_SOURCE = """NODE_LABELS = {"signals": "알림"}
+
+
+def signals(df, p):
+    out = df[[]].copy()
+    out["entry"] = df["close"] > 0
+    out["exit"] = False
+    return out
+"""
+
+
+def _watch_settings(tmp_path):
+    return Settings(
+        _env_file=None,
+        routines_enabled=True,
+        backtest_enabled=True,
+        routines_store_path=tmp_path / "routines.json",
+        routines_ledger_path=tmp_path / "ledger.jsonl",
+        routines_read_marks_path=tmp_path / "read_marks.json",
+        routines_engagement_path=tmp_path / "engagement.jsonl",
+        routines_briefings_path=tmp_path / "briefings.jsonl",
+        routines_ledger_archive_dir=tmp_path / "archive",
+    )
+
+
+def _fake_request(runtime):
+    """라우트 함수만 직접 부르기 위한 최소 요청 — TestClient 없이 확정·재개를 탄다."""
+    return SimpleNamespace(
+        app=SimpleNamespace(state=SimpleNamespace(routines_runtime=runtime))
+    )
+
+
+async def test_code_watch_never_registers_a_realtime_subscription(tmp_path, monkeypatch):
+    """B-22 — 확정·일시중지·재개·부팅 재개 어디서도 실시간 구독 경로를 타지 않는다."""
+    import hashlib
+
+    from athena_api.api.routines import (
+        confirm_routine,
+        create_draft,
+        pause_routine,
+        resume_routine,
+    )
+    from athena_api.projects import store as projects_store
+    from athena_api.routines.runtime import RoutinesRuntime, open_routines, teardown_routines
+
+    root = tmp_path / "proj"
+    (root / "watch").mkdir(parents=True)
+    target = root / "watch" / "volume_spike.py"
+    target.write_bytes(_CODE_WATCH_SOURCE.encode("utf-8"))
+    digest = hashlib.sha256(target.read_bytes()).hexdigest()
+    monkeypatch.setattr(projects_store, "resolve_project_path", lambda pid: root)
+
+    async def boom(self, symbol):
+        raise AssertionError("코드 감시가 실시간 구독을 잡았다")
+
+    monkeypatch.setattr(RoutinesRuntime, "ensure_realtime_subscription", boom)
+
+    settings = _watch_settings(tmp_path)
+    runtime = await open_routines(settings, ws_client=None)
+    try:
+        assert runtime.watch_runner is not None  # 백테스트 모듈이 켜져 러너가 섰다
+        request = _fake_request(runtime)
+        draft = await create_draft(
+            request,
+            {
+                "symbol": "005930",
+                "condition": {"source": "code.watch", "op": "==", "value": True},
+                "cooldown_s": 1800,
+                "expires_days": 7,
+                "watch": {
+                    "project_id": "p1",
+                    "path": "watch/volume_spike.py",
+                    "version_hash": digest,
+                    "poll_interval_s": 60,
+                    "lookback_days": 30,
+                },
+            },
+        )
+        rid = draft["id"]
+        assert draft["activation_blocker"] is None
+
+        assert (await confirm_routine(request, rid))["status"] == "active"
+        assert (await pause_routine(request, rid))["status"] == "paused"
+        assert (await resume_routine(request, rid))["status"] == "active"
+    finally:
+        await teardown_routines(runtime)
+
+    # 부팅 재개 — 저장된 활성 코드 감시를 되살릴 때도 구독을 잡지 않는다.
+    restored = await open_routines(settings, ws_client=None)
+    try:
+        assert restored.ready
+        assert restored.store.get(rid).status == "active"
+    finally:
+        await teardown_routines(restored)

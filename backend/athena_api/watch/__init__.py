@@ -9,12 +9,19 @@
 일봉 캐시(`bt_candle`/`bt_coverage`)뿐이다.
 """
 
-from athena_api.watch.check import CheckResult, run_check
-from athena_api.watch.data import FrameResult, assemble_frame, closed_frame, frame_from_candles
+from athena_api.watch.check import CheckResult, code_hash_of, run_check
+from athena_api.watch.data import (
+    CallBudget,
+    FrameResult,
+    assemble_frame,
+    closed_frame,
+    frame_from_candles,
+)
 from athena_api.watch.nodes import NodeCard, build_nodes
 from athena_api.watch.runner import RunResult, WatchRunner, trace_names_for, verdict_for_last_row
 
 __all__ = [
+    "CallBudget",
     "CheckResult",
     "FrameResult",
     "NodeCard",
@@ -23,6 +30,7 @@ __all__ = [
     "assemble_frame",
     "build_nodes",
     "closed_frame",
+    "code_hash_of",
     "frame_from_candles",
     "run_check",
     "trace_names_for",
