@@ -74,6 +74,7 @@ test('verify suite lists live-full and the official verify script with budgets',
   const names = VERIFY_SUITE.map((item) => item.script);
   assert.ok(names.includes('verify:live-full'));
   assert.ok(names.includes('verify'));
+  assert.ok(names.includes('verify:kiumi-cards'));
   for (const item of VERIFY_SUITE) {
     assert.ok(Number.isInteger(item.budgetMs) && item.budgetMs >= 30000, item.script);
     assert.ok(pkg.scripts[item.script], `missing npm script ${item.script}`);
