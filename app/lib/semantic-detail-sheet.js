@@ -5,9 +5,17 @@ function asObject(value) {
   return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
 }
 
+function isWireSentinel(value) {
+  return typeof value === 'string'
+    && /^(?:fixture|sentinel)::/i.test(value.trim());
+}
+
 function scalarText(value) {
   if (value === null || value === undefined) return '—';
-  if (typeof value === 'string') return value || '—';
+  if (typeof value === 'string') {
+    if (isWireSentinel(value)) return '—';
+    return value || '—';
+  }
   if (typeof value === 'object') {
     try { return JSON.stringify(value); } catch { return String(value); }
   }
@@ -183,6 +191,7 @@ function upsert(root, envelope) {
   if (!sheet) {
     sheet = document.createElement('details');
     sheet.className = 'semantic-detail-sheet';
+    sheet.open = false;
     const summary = document.createElement('summary');
     summary.className = 'semantic-detail-summary';
     sheet.appendChild(summary);
@@ -245,6 +254,7 @@ function applyRealtimeTick(root, tick) {
 
 const api = {
   applyRealtimeTick, canonicalCoveragePath, flattenSourceData, normalizeOccurrences, valueAtPath, upsert,
+  scalarText, isWireSentinel,
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 else {

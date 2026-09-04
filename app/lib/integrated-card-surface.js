@@ -178,17 +178,57 @@ function buttonLabel(envelope) {
   if (clean(envelope && envelope.mode) === 'ranking') return '순위';
   const contract = envelope && (envelope.presentation_contract || envelope.presentationContract) || {};
   const recipe = envelope && (envelope.view_recipe || envelope.viewRecipe) || {};
+  const modeKey = clean(envelope && envelope.mode);
   const sectionKey = clean(envelope && envelope.section);
   const sections = Array.isArray(contract.sections) ? contract.sections : [];
   const activeSection = sections.find((section) => (
     clean(section && (section.section_id || section.sectionId)) === sectionKey
   ));
+  // Prefer section/mode product labels before card-level titles so multi-panel
+  // account cards do not collapse every tab to "요약" or the same card name.
   const candidates = [
     activeSection && (activeSection.title_ko || activeSection.titleKo),
-    contract.title_ko || contract.titleKo,
+    SECTION_TAB_LABELS_KO[sectionKey],
+    MODE_TAB_LABELS_KO[modeKey],
+    humanizeKeyLabel(sectionKey),
+    humanizeKeyLabel(modeKey),
     recipe.title_ko || recipe.titleKo,
+    contract.title_ko || contract.titleKo,
   ];
   return candidates.map(clean).find((label) => label && /[가-힣]/.test(label)) || '요약';
+}
+
+const MODE_TAB_LABELS_KO = Object.freeze({
+  overview: '전체',
+  holdings: '보유종목',
+  balance: '예수금',
+  deposit: '예수금',
+  orderable: '주문가능',
+  fills: '체결',
+  executions: '체결',
+  credit: '증감금',
+  gold: '금현물',
+  ranking: '순위',
+});
+
+const SECTION_TAB_LABELS_KO = Object.freeze({
+  'ranked-results': '순위',
+  overview: '전체',
+  holdings: '보유종목',
+  balance: '예수금',
+  orderable: '주문가능',
+  fills: '체결',
+  credit: '증감금',
+  gold: '금현물',
+  'other-assets-and-income': '기타자산',
+  other_assets_and_income: '기타자산',
+});
+
+function humanizeKeyLabel(value) {
+  const key = clean(value);
+  if (!key) return '';
+  if (/[가-힣]/.test(key)) return key;
+  return '';
 }
 
 function workflowStateLabel(value) {
