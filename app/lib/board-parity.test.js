@@ -384,6 +384,10 @@ test('board-surface.css는 5단이고 !important를 쓰지 않는다', () => {
   assert.deepEqual(breakpoints, [1279, 959, 719, 479]);
   assert.match(rules, /\.board-surface\s*\{[^}]*container-type:\s*inline-size/);
   assert.match(rules, /\.board-surface\s*\{[^}]*max-width:\s*min\(100%, 1440px\)/);
+  assert.match(rules, /\.board-surface\s*\{[^}]*min-width:\s*0/);
+  const cardCss = fs.readFileSync(path.join(__dirname, '..', 'styles', 'canvas-tabs.css'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.match(cardCss, /\.canvas-tab-panel\s*>\s*\.card\s*\{[^}]*min-width:\s*0/);
   // 접기·병기 활성은 추출기가 새로 넣는 요소에만 건다(인라인 스타일 충돌 0).
   assert.match(rules, /\.bs-col\s*\{\s*display:\s*contents;\s*\}/);
   assert.match(rules, /\.bs-paired\s*\{\s*display:\s*none;/);

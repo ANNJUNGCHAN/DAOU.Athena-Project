@@ -43,9 +43,12 @@
 .board-surface {
   container-type: inline-size;
   container-name: board;
-  /* 보드 고유 폭(Paper 원문)을 되돌리되, 뷰포트가 좁으면 뷰포트를 따른다. */
+  /* 보드 고유 폭(Paper 원문)을 되돌리되, 뷰포트가 좁으면 뷰포트를 따른다.
+   * min-width:0 이 없으면 flex 항목 기본 min-content(2SKU-1 Paper 1360px)가
+   * max-width:100%를 이기고 컨테이너가 M(720–959)에 못 들어간다. */
   width: var(--bs-width, 1440px);
   max-width: min(100%, 1440px);
+  min-width: 0;
   margin: 0 auto;
 }
 
@@ -301,6 +304,7 @@
   box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  min-width: 0;
 }
 
 .card[data-board-surface="true"] .integrated-card-content { gap: 0; }
