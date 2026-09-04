@@ -1434,7 +1434,6 @@ async function mountAitsChartPanel(card, chartBody, descriptor) {
   card.dataset.rendererId = descriptor.rendererId;
   card.dataset.chartPanelId = descriptor.panelId;
   card.dataset.chartGeneration = String(descriptor.generation);
-  card.dataset.renderState = 'loading';
   descriptor.context.onReloadRequest = async (request) => {
     const active = aitsChartPanels.snapshot().find((candidate) => candidate.panelId === descriptor.panelId);
     if (!active) throw new Error('AITS chart session이 닫혔다');
@@ -2047,9 +2046,9 @@ async function renderLiveChart(envelope, integratedRoot = null) {
   const chartBody = document.createElement('div');
   chartBody.className = 'chart-card-body';
   body.appendChild(chartBody);
-  try {
-    await mountAitsChartPanel(card, chartBody, descriptor);
-  } catch (err) {
+  // 첫 피드백 3초 계약 — AITS 라이브러리 로드를 기다리면 paint ack가 마감을
+  // 넘긴다. 카드 껍질을 먼저 붙이고 패널은 뒤에서 채운다.
+  void mountAitsChartPanel(card, chartBody, descriptor).catch((err) => {
     chartBody.remove();
     card.dataset.renderState = 'error';
     delete card.dataset.chartAuthority;
@@ -2059,7 +2058,7 @@ async function renderLiveChart(envelope, integratedRoot = null) {
     delete card.__athenaChartSessionId;
     delete card.__athenaChartTrId;
     body.appendChild(errorNote(`차트를 그리지 못했다 — ${err && err.message ? err.message : String(err)}`));
-  }
+  });
   return card;
 }
 

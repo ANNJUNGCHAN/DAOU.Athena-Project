@@ -255,8 +255,12 @@ test('all Athena chart entry points are statically locked to the AITS adapter', 
   const lowLevel = fs.readFileSync(path.join(__dirname, 'chart-card.js'), 'utf8');
   assert.match(canvas, /createAitsChartPanelAdapter\(\{ renderChart: createChartCard, maxPanels: 6 \}\)/);
   assert.equal((canvas.match(/createChartCard\(/g) || []).length, 0, 'entry point must not call low-level renderer directly');
-  assert.match(canvas, /async function renderLiveChart[\s\S]*mountAitsChartPanel/);
-  assert.match(canvas, /async function renderChartCard[\s\S]*mountAitsChartPanel/);
+  assert.match(canvas, /async function renderLiveChart[\s\S]*void mountAitsChartPanel/);
+  assert.doesNotMatch(
+    canvas.slice(canvas.indexOf('async function renderLiveChart'), canvas.indexOf('function renderFreeCanvas')),
+    /await mountAitsChartPanel/,
+  );
+  assert.match(canvas, /async function renderChartCard[\s\S]*await mountAitsChartPanel/);
   assert.match(canvas, /athena:add-rest-canvas[\s\S]*addLiveCard/);
   assert.match(canvas, /athena:add-canvas-live[\s\S]*addLiveCard/);
   assert.ok(html.indexOf('lib/chart-card.js') < html.indexOf('lib/aits-chart-panel.js'));
