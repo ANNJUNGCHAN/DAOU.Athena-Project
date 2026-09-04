@@ -49,7 +49,10 @@ const APP_PRIMARY_RECIPES = new Set(['instrument-chart', 'live-orderbook', 'orde
 function preservesAppPrimary(envelope) {
   const contract = envelope && envelope.presentation_contract;
   const recipe = contract && typeof contract.recipe_id === 'string' ? contract.recipe_id : '';
-  return APP_PRIMARY_RECIPES.has(recipe);
+  if (APP_PRIMARY_RECIPES.has(recipe)) return true;
+  // REST 직행 차트 봉투는 recipe_id가 비어 있어도 AITS가 primary다. 보드 HTML을
+  // 먼저 붙이면 3초 paint ack를 넘긴다(실앱 live-full QA-CHART 실측).
+  return Boolean(envelope && envelope.canvas_type === 'chart' && !envelope.fell_back);
 }
 function blockedReason(envelope) {
   return `카드 계약이 없는 키움 응답이다 — ${operationRefOf(envelope)}. 범용 카드로 대체하지 않는다.`;

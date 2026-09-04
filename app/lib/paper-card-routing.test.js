@@ -84,3 +84,17 @@ test('그 외 recipe·계약 없는 봉투는 보드 표면 판정을 막지 않
   assert.strictEqual(routing.preservesAppPrimary({ operation_ref: 'base:ka10001' }), false);
   assert.strictEqual(routing.preservesAppPrimary(null), false);
 });
+
+test('canvas_type chart는 recipe_id가 없어도 보드가 AITS를 가로채지 않는다', () => {
+  assert.strictEqual(routing.preservesAppPrimary({
+    operation_ref: 'base:ka10081',
+    canvas_type: 'chart',
+    card_id: 'CC-03',
+    surface_contract: { board_id: '2SKU-1' },
+  }), true);
+  assert.strictEqual(routing.preservesAppPrimary({
+    operation_ref: 'base:ka10081',
+    canvas_type: 'chart',
+    fell_back: true,
+  }), false);
+});
