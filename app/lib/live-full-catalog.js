@@ -34,12 +34,12 @@ const LOCKED_CLICKS = Object.freeze([
 ]);
 
 const LIVE_QUERIES = Object.freeze([
-  { id: 'QA-QUOTE', question: '삼성전자 시세 보여줘', expectCard: true, expectRest: true, timeoutMs: 25000 },
-  { id: 'QA-CHART', question: '삼성전자 일봉 차트 보여줘', expectCard: true, expectRest: true, timeoutMs: 25000 },
-  { id: 'QA-ORDERBOOK', question: 'SK하이닉스 호가 보여줘', expectCard: true, expectRest: true, timeoutMs: 25000 },
-  { id: 'QA-MULTI-SCREEN', question: '삼성전자 시세랑 호가 보여줘', expectCard: true, expectRest: true, timeoutMs: 25000 },
-  { id: 'QA-FIN', question: '삼성전자 재무제표 요약해줘', expectCard: false, expectRest: false, timeoutMs: 90000 },
-  { id: 'QA-NEWS', question: '삼성전자 관련 최근 뉴스 알려줘', expectCard: false, expectRest: false, timeoutMs: 90000 },
+  { id: 'QA-QUOTE', question: '삼성전자 시세 보여줘', expectCard: true, expectRest: true, timeoutMs: 12000 },
+  { id: 'QA-CHART', question: '삼성전자 일봉 차트 보여줘', expectCard: true, expectRest: true, timeoutMs: 12000 },
+  { id: 'QA-ORDERBOOK', question: 'SK하이닉스 호가 보여줘', expectCard: true, expectRest: true, timeoutMs: 12000 },
+  { id: 'QA-MULTI-SCREEN', question: '삼성전자 시세랑 호가 보여줘', expectCard: true, expectRest: true, timeoutMs: 12000 },
+  { id: 'QA-FIN', question: '삼성전자 재무제표 요약해줘', expectCard: false, expectRest: false, timeoutMs: 20000 },
+  { id: 'QA-NEWS', question: '삼성전자 관련 최근 뉴스 알려줘', expectCard: false, expectRest: false, timeoutMs: 20000 },
 ]);
 
 const SAFE_CLICK_IDS = Object.freeze([
