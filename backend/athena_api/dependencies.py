@@ -166,8 +166,14 @@ def get_kiwoom_ws_client(request: HTTPConnection) -> KiwoomWsClient | None:
 
 
 def require_kiwoom_ws_client(request: HTTPConnection) -> KiwoomWsClient:
+    """Return the account WebSocket client even during transient reconnect.
+
+    Mid-session reconnect clears is_ready briefly. Rejecting REMOVE/stream with 503
+    then leaves broker REAL leases alive and restores them on recovery (F06/F08).
+    register/remove/execute already wait on recovery; only a missing client is fatal.
+    """
     client = get_kiwoom_ws_client(request)
-    if client is None or not client.is_ready:
+    if client is None:
         raise KiwoomNotReadyError("Kiwoom WebSocket service is not ready")
     return client
 
