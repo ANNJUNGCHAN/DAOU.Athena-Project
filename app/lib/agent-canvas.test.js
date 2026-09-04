@@ -92,6 +92,7 @@ test('통계 카드: "진행 중"만 fixture, 나머지 3장은 live로 표시�
   assert.equal(bySource('live').length, 3, '다음 실행·오늘 발화·성향 제안은 live다');
   const inProgress = cards.find((c) => findByClass(c, 'agent-stat-label')[0].textContent === '진행 중');
   assert.equal(inProgress.getAttribute('data-source'), 'fixture');
+  assert.equal(findByClass(inProgress, 'agent-demo-mark')[0].textContent, '데모');
 });
 
 test('통계 카드: 데이터가 없을 때 "다음 실행"·"오늘 발화"는 지어낸 값 없이 정직한 빈 상태를 보여준다(P3)', () => {
@@ -847,7 +848,9 @@ test('라이브 컬럼: 진행바 2건 + "다음 24시간" 타임라인 4건이 
   canvas.mount();
   const liveCol = findByClass(container, 'agent-live-col')[0];
   assert.equal(liveCol.getAttribute('data-source'), 'fixture');
+  assert.equal(findByClass(liveCol, 'agent-demo-mark')[0].textContent, '데모');
   assert.equal(findByClass(liveCol, 'agent-live-progress-row').length, 2);
+  assert.equal(findByClass(liveCol, 'agent-live-progress-badge')[0].textContent, '데모');
   assert.equal(findByClass(liveCol, 'agent-live-timeline-row').length, 4);
 });
 
