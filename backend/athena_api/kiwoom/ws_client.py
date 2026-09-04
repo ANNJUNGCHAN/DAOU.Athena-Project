@@ -171,9 +171,24 @@ class KiwoomWsClient:
         grp_no: str = "1",
         refresh: str = "1",
     ) -> dict[str, Any]:
-        return await self.execute(
-            tr_id, _subscription_frame("REMOVE", tr_id, items, grp_no, refresh)
-        )
+        payload = _subscription_frame("REMOVE", tr_id, items, grp_no, refresh)
+        # Drop the local lease before the wire call so a mid-REMOVE disconnect cannot
+        # race reconnect restore and revive orphan REAL ticks (F06).
+        self._remove_subscription_items(tr_id, _wire_payload(payload))
+        try:
+            return await self.execute(tr_id, payload)
+        except KiwoomWsError:
+            try:
+                return await self.execute(tr_id, payload)
+            except KiwoomWsError:
+                # Broker leases die with the dropped socket; without a restored REG
+                # the REMOVE intent is satisfied even if the retry ACK never arrives.
+                return {
+                    "trnm": "REMOVE",
+                    "return_code": "0",
+                    "return_msg": "",
+                    "data": [],
+                }
 
     def subscribe_events(self) -> asyncio.Queue[dict[str, Any]]:
         queue: asyncio.Queue[dict[str, Any]] = asyncio.Queue(self._queue_size)
