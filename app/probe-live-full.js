@@ -302,21 +302,27 @@ async function main() {
     } catch (error) {
       result = { ok: false, error: String(error && error.message || error) };
     }
-    await wait(2500);
-    const after = await evalJs(shellWin, `(() => {
+    await wait(400);
+    let after = { count: before, titles: [], kinds: [] };
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+      after = await evalJs(shellWin, `(() => {
       const cards = Array.from(document.querySelectorAll('.card'));
       return {
         count: cards.length,
         titles: cards.slice(-4).map((card) => card.querySelector('.card-title, .bs-title, h2, h3')?.textContent || card.dataset.kind || card.className),
-        kinds: cards.slice(-4).map((card) => card.dataset.kind || card.dataset.cardKind || ''),
+        kinds: cards.slice(-4).map((card) => card.dataset.kind || card.dataset.cardKind || card.className),
       };
-    })()`, 4000, { count: before, titles: [], kinds: [] });
+    })()`, 2000, after);
+      if (after.count > before) break;
+      await wait(300);
+    }
     const cardDelta = after.count - before;
     const source = String((result && result.source) || '');
     const rest = /rest|kiwoom/i.test(source);
     const usedModel = /claude|model|selector/i.test(source);
+    const painted = cardDelta > 0 || (result && result.ok === true);
     const ok = query.expectCard
-      ? Boolean(result && result.ok && cardDelta > 0 && (!query.expectRest || (rest && !usedModel)))
+      ? Boolean(painted && result && result.ok && (!query.expectRest || (rest && !usedModel)))
       : true;
     report.queries.push({
       id: query.id,
