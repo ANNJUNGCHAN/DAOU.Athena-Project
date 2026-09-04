@@ -1,17 +1,92 @@
 {
   "root": "2QFP-2",
   "regions": [
-    { "node_id": "2QFR-2", "name": "Flow Header", "role": "header", "depth": 1 },
-    { "node_id": "2QFZ-2", "name": "Flow Tabs", "role": "strip", "depth": 2 },
-    { "node_id": "2QGB-2", "name": "Flow Summary Strip", "role": "kpi", "depth": 1 },
-    { "node_id": "2QGZ-2", "name": "Flow Workspace", "role": "workspace", "depth": 1 },
-    { "node_id": "2QH0-2", "name": "Investor Panel", "role": "primary", "depth": 2 },
-    { "node_id": "2QH1-2", "name": "Side Panel", "role": "rail", "depth": 2 },
-    { "node_id": "2QKL-2", "name": "Flow Status Footer", "role": "footer", "depth": 1 }
+    {
+      "node_id": "2QFR-2",
+      "name": "Flow Header",
+      "role": "header",
+      "depth": 1
+    },
+    {
+      "node_id": "2QFZ-2",
+      "name": "Flow Tabs",
+      "role": "strip",
+      "depth": 2
+    },
+    {
+      "node_id": "2QGB-2",
+      "name": "Flow Summary Strip",
+      "role": "kpi",
+      "depth": 1
+    },
+    {
+      "node_id": "2QGZ-2",
+      "name": "Flow Workspace",
+      "role": "workspace",
+      "depth": 1
+    },
+    {
+      "node_id": "2QH0-2",
+      "name": "Investor Panel",
+      "role": "primary",
+      "depth": 2
+    },
+    {
+      "node_id": "2QH1-2",
+      "name": "Side Panel",
+      "role": "rail",
+      "depth": 2
+    },
+    {
+      "node_id": "2QKL-2",
+      "name": "Flow Status Footer",
+      "role": "footer",
+      "depth": 1
+    }
   ],
   "responsive": [
-    { "node_id": "2QGE-2", "traits": ["flow"] },
-    { "node_id": "2QGF-2", "traits": ["atomic"] },
-    { "node_id": "2QGG-2", "traits": ["atomic"] }
+    {
+      "node_id": "2QGE-2",
+      "traits": [
+        "flow"
+      ]
+    },
+    {
+      "node_id": "2QGF-2",
+      "traits": [
+        "atomic"
+      ]
+    },
+    {
+      "node_id": "2QGG-2",
+      "traits": [
+        "atomic"
+      ]
+    },
+    {
+      "node_id": "375E-0",
+      "traits": [
+        "atomic"
+      ]
+    },
+    {
+      "node_id": "376R-0",
+      "traits": [
+        "atomic"
+      ]
+    },
+    {
+      "node_id": "378K-0",
+      "traits": [
+        "atomic"
+      ]
+    },
+    {
+      "node_id": "2QH0-2",
+      "traits": [
+        "paired-table"
+      ],
+      "header_row": "3843-0"
+    }
   ]
 }

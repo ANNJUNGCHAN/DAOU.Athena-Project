@@ -330,11 +330,17 @@ def test_load_responsive_validates_and_normalizes_manifest(tmp_path):
     )
 
     assert pbe.load_responsive(manifest, {"A-0", "B-0"}) == [
-        {"node_id": "B-0", "traits": ("atomic",), "accessible_label": None},
+        {
+            "node_id": "B-0",
+            "traits": ("atomic",),
+            "accessible_label": None,
+            "header_row": None,
+        },
         {
             "node_id": "A-0",
             "traits": ("scroll",),
             "accessible_label": "Quote details",
+            "header_row": None,
         },
     ]
 
@@ -348,6 +354,11 @@ def test_load_responsive_validates_and_normalizes_manifest(tmp_path):
         '{"responsive": [{"node_id": "A-0", "traits": ["scroll"]}]}',
         '{"responsive": [{"node_id": "A-0", "traits": ["atomic"]}, '
         '{"node_id": "A-0", "traits": ["flow"]}]}',
+        # 저작 헤더 지목은 표 모드에서만, 존재하는 노드로, 소유자와 다르게.
+        '{"responsive": [{"node_id": "A-0", "traits": ["flow"], "header_row": "B-0"}]}',
+        '{"responsive": [{"node_id": "A-0", "traits": ["paired-table"], "header_row": "Z-9"}]}',
+        '{"responsive": [{"node_id": "A-0", "traits": ["paired-table"], "header_row": "A-0"}]}',
+        '{"responsive": [{"node_id": "A-0", "traits": ["paired-table"], "header_row": ""}]}',
         '{"responsive": [{"node_id": "A-0", "traits": ["atomic"]}], '
         '"responsive": []}',
     ],
@@ -914,7 +925,7 @@ def test_paired_table_collapse_generates_labeled_identity_free_mirrors_for_body_
     assert [item["table_id"] for item in pbe.build_column_bindings(tables, slots)] == ["T-0"]
 
 
-def test_paired_table_capability_remains_available_without_a_production_consumer(tmp_path):
+def test_paired_table_capability_remains_available_for_mutation_testing(tmp_path):
     source = pbe.TEMPLATE_ROOT / "13K0-2"
     fixture = tmp_path / "13K0-2"
     shutil.copytree(source, fixture)
@@ -964,7 +975,84 @@ def test_production_table_modes_use_scroll_fallback_after_interactive_cell_revie
         for item in manifest.get("responsive", []):
             if "paired-table" in item.get("traits", []):
                 paired_consumers.append((regions_path.parent.name, item["node_id"]))
-    assert paired_consumers == []
+    assert sorted(paired_consumers) == [("2QFO-2", "2QH0-2"), ("2R3M-1", "3CRW-0")]
+
+
+def test_production_3crw_paired_table_generates_labeled_identity_free_body_mirrors():
+    board_dir = pbe.TEMPLATE_ROOT / "2R3M-1"
+    baseline_summary = _serialized_data_node(
+        (board_dir / "board.html").read_text(encoding="utf-8"), "3CUQ-0"
+    )
+    html, payload = pbe.extract_board(board_dir)
+    table = next(table for table in payload["tables"] if table["node_id"] == "3CRW-0")
+    table_html = _serialized_data_node(html, "3CRW-0")
+
+    assert table["responsive_mode"] == "paired-table"
+    assert table["columns"] == 6
+    assert table["column_labels"] == [
+        "시각", "체결가", "전일대비", "체결량", "구분", "체결강도"
+    ]
+    assert table["header_row"] == "3CS8-0"
+    assert table["body_rows"] == [
+        "3CSF-0",
+        "3CSQ-0",
+        "3CSZ-0",
+        "3CT8-0",
+        "3CTH-0",
+        "3CTQ-0",
+        "3CTZ-0",
+        "3CU8-0",
+        "3CUH-0",
+    ]
+    assert table["foot_rows"] == []
+    assert table_html.count('class="bs-paired" data-paired-col=') == 54
+    assert table_html.count("data-paired-label") == 54
+    assert table_html.count("data-paired-source=") == 54
+    assert table_html.count('data-node="3CSA-0"') == 1
+    assert 'data-paired-source="3CSA-0"' not in table_html
+    table_root = pbe.parse_jsx(table_html)
+    paired = [
+        element
+        for element in pbe.flatten(table_root)
+        if dict(element.attrs).get("class") == "bs-paired"
+    ]
+    distribution = {}
+    paired_sources = []
+    forbidden_mirror_attrs = {
+        "data-node", "data-slot-id", "data-leaf", "data-bs-value-atomic"
+    }
+    for container in paired:
+        container_attrs = dict(container.attrs)
+        label = next(
+            child
+            for child in container.children
+            if isinstance(child, pbe.Element)
+            and "data-paired-label" in dict(child.attrs)
+        )
+        mirror = next(
+            child
+            for child in container.children
+            if isinstance(child, pbe.Element)
+            and "data-paired-source" in dict(child.attrs)
+        )
+        key = (pbe.direct_text(label), int(container_attrs["data-paired-col"]))
+        distribution[key] = distribution.get(key, 0) + 1
+        mirror_attrs = dict(mirror.attrs)
+        paired_sources.append(mirror_attrs["data-paired-source"])
+        assert forbidden_mirror_attrs.isdisjoint(mirror_attrs)
+    assert distribution == {
+        ("전일대비", 3): 18,
+        ("체결량", 4): 9,
+        ("구분", 5): 18,
+        ("체결강도", 6): 9,
+    }
+    assert len(paired_sources) == len(set(paired_sources)) == 54
+    assert all(table_html.count(f'data-node="{source}"') == 1 for source in paired_sources)
+    extracted_summary = _serialized_data_node(html, "3CUQ-0")
+    assert extracted_summary == baseline_summary
+    assert "data-row=" not in extracted_summary
+    assert "data-col=" not in extracted_summary
+    assert "bs-paired" not in extracted_summary
 
 
 def test_scroll_table_bypasses_collapse_and_emits_programmatic_grid_semantics():

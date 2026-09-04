@@ -8,6 +8,8 @@ const path = require('node:path');
 
 const {
   DEFAULT_READABILITY_BOARD_IDS,
+  compactAtomicTokenSpans,
+  hasInlineAmbiguity,
   collectAtomicWrapFindings,
   collectTextOverlapFindings,
   collectPairedSemanticFindings,
@@ -50,6 +52,24 @@ test('glyph geometry uses a strict greater-than-one-pixel overlap tolerance', ()
   assert.equal(overlapArea(rect(0, 0, 10, 10), rect(9, 9, 19, 19), 1.01), 0);
 });
 
+test('legacy pair ambiguity requires same-line contact rather than mere visibility', () => {
+  assert.equal(hasInlineAmbiguity(
+    [rect(30, 0, 50, 12)], [rect(50, 0, 70, 12)],
+  ), true);
+  assert.equal(hasInlineAmbiguity(
+    [rect(30, 0, 50, 12)], [rect(49, 0, 70, 12)],
+  ), true);
+  assert.equal(hasInlineAmbiguity(
+    [rect(30, 0, 50, 12)], [rect(58, 0, 78, 12)],
+  ), false);
+  assert.equal(hasInlineAmbiguity(
+    [rect(30, 0, 50, 12)], [rect(30, 14, 50, 26)],
+  ), false);
+  assert.equal(hasInlineAmbiguity(
+    [rect(30, 0, 30, 12)], [rect(30, 0, 50, 12)],
+  ), false);
+});
+
 test('atomic visual lines dedupe fragments and ignore hidden or zero-area fragments', () => {
   const fragments = [
     rect(0, 0, 30, 12),
@@ -70,6 +90,37 @@ test('atomic visual lines dedupe fragments and ignore hidden or zero-area fragme
     layout_owner: 'row', line_count: 2,
     fragments: [rect(0, 0, 30, 12), rect(0, 14, 30, 26)],
   });
+});
+
+test('compact Korean and money-unit tokens are measured without treating space wraps as fragmentation', () => {
+  assert.deepEqual(compactAtomicTokenSpans('● 실시간 갱신'), [
+    { text: '실시간', start: 2, end: 5 },
+    { text: '갱신', start: 6, end: 8 },
+  ]);
+  assert.deepEqual(compactAtomicTokenSpans('100개 결과'), [
+    { text: '100개', start: 0, end: 4 },
+    { text: '결과', start: 5, end: 7 },
+  ]);
+  assert.deepEqual(compactAtomicTokenSpans('+3,214억원'), [
+    { text: '+3,214억원', start: 0, end: 8 },
+  ]);
+  assert.deepEqual(compactAtomicTokenSpans('시간외 단일가'), [
+    { text: '시간외', start: 0, end: 3 },
+    { text: '단일가', start: 4, end: 7 },
+  ]);
+  assert.deepEqual(compactAtomicTokenSpans('https://example.com/very-long-token'), []);
+  assert.deepEqual(compactAtomicTokenSpans('한'), []);
+  assert.deepEqual(compactAtomicTokenSpans(
+    '이 문장은 설명용 산문이므로 자동 atomic 후보가 아니다',
+  ), []);
+
+  const splitToken = collectAtomicWrapFindings([
+    candidate('money', 'money', 'surface', [rect(0, 0, 30, 12), rect(0, 14, 8, 26)], {
+      text: '+3,214억원', reason: 'compact_token',
+    }),
+  ]);
+  assert.equal(splitToken.total, 1);
+  assert.equal(splitToken.items[0].text, '+3,214억원');
 });
 
 test('text-overlap excludes duplicate, hidden, same-owner, ancestor, and different-layout candidates', () => {
@@ -188,6 +239,20 @@ test('paired semantics reports visible legacy mirrors but ignores hidden ones', 
   ]);
 });
 
+test('legacy pairs fail only for measured same-line ambiguity, never merely for existing', () => {
+  const result = collectPairedSemanticFindings([
+    { kind: 'legacy_pair', source: 'hidden', hidden: true, ambiguous_inline: true },
+    { kind: 'legacy_pair', source: 'separate-line', hidden: false, ambiguous_inline: false },
+    { kind: 'legacy_pair', source: 'labeled', hidden: false, ambiguous_inline: true, label_found: true },
+    { kind: 'legacy_pair', source: 'collision', hidden: false, ambiguous_inline: true, label_found: false },
+  ]);
+
+  assert.deepEqual(result.items, [
+    { source: 'collision', violation: 'legacy_unlabeled_inline' },
+  ]);
+  assert.equal(result.total, 1);
+});
+
 test('paired semantic report carries malformed scroll-table role findings', () => {
   const result = collectPairedSemanticFindings([{
     kind: 'scroll_table', source: 'settlement-table', hidden: false,
@@ -214,6 +279,8 @@ test('readability assertion reports findings when optional and fails closed when
     text_overlap_total: 0,
     paired_semantics_violations: [],
     paired_semantics_total: 0,
+    column_lane_nodes: [],
+    column_lane_total: 0,
   };
   assert.deepEqual(assertReadability('2R3M-1', { name: 'L' }, atomicProbe, { enforce: false }), {
     enforced: false,
@@ -226,6 +293,7 @@ test('readability assertion reports findings when optional and fails closed when
     atomic_wrap_nodes: [], atomic_wrap_total: 0,
     text_overlap_nodes: [], text_overlap_total: 0,
     paired_semantics_violations: [], paired_semantics_total: 0,
+    column_lane_nodes: [], column_lane_total: 0,
   };
   for (const [boardId, label, field, totalField, finding] of [
     ['13K0-2', 'atomic', 'atomic_wrap_nodes', 'atomic_wrap_total', { node: 'chip' }],
@@ -236,11 +304,14 @@ test('readability assertion reports findings when optional and fails closed when
     ['13K0-2', 'scroll semantics', 'paired_semantics_violations', 'paired_semantics_total', {
       source: 'table', violation: 'scroll_missing_row',
     }],
+    ['2QFO-2', 'column lane', 'column_lane_nodes', 'column_lane_total', {
+      table: '2QH0-2', row: '0', col: '1', cell_center: 400, header_lane: [200, 300],
+    }],
   ]) {
     const probe = { ...zeroProbe, [field]: [finding], [totalField]: 1 };
     assert.throws(
       () => assertReadability(boardId, { name: label }, probe, { enforce: true }),
-      /readability (atomic_wrap_nodes|text_overlap_nodes|paired_semantics_violations)/,
+      /readability (atomic_wrap_nodes|text_overlap_nodes|paired_semantics_violations|column_lane_nodes)/,
       label,
     );
   }
@@ -254,6 +325,7 @@ test('readability assertion reports findings when optional and fails closed when
     atomic_wrap_nodes: [], atomic_wrap_total: 1,
     text_overlap_nodes: [], text_overlap_total: 0,
     paired_semantics_violations: [], paired_semantics_total: 0,
+    column_lane_nodes: [], column_lane_total: 0,
   }, { enforce: true }), /readability .*atomic_wrap_nodes/);
   assert.throws(() => assertReadability('2R3M-1', { name: 'L' }, {
     ...zeroProbe, atomic_wrap_total: -1,
@@ -318,6 +390,36 @@ test('the frozen readability manifests and generated markup have exact responsiv
   }
 });
 
+test('G5 production manifests declare only the measured responsive owners and atomic leaves', () => {
+  const readResponsive = (boardId) => JSON.parse(fs.readFileSync(path.join(
+    __dirname, '..', '..', 'backend', 'ref', 'card-surface-templates', boardId, 'regions.json',
+  ), 'utf8')).responsive || [];
+  const traitsOf = (boardId) => new Map(readResponsive(boardId).map(
+    (entry) => [entry.node_id, entry.traits],
+  ));
+
+  const ranking = traitsOf('13K0-2');
+  for (const node of ['2WGY-0', '2WHL-0']) assert.deepEqual(ranking.get(node), ['flow']);
+  for (const node of ['2WHJ-0', '2WHK-0', '2WHY-0', '2WI0-0', '2WI2-0']) {
+    assert.deepEqual(ranking.get(node), ['atomic']);
+  }
+
+  const quote = traitsOf('2R3M-1');
+  assert.deepEqual(quote.get('2R8O-1'), ['flow']);
+  for (const node of ['2R8S-1', '358O-0', '358Q-0']) {
+    assert.deepEqual(quote.get(node), ['atomic']);
+  }
+  assert.deepEqual(quote.get('3CRW-0'), ['paired-table']);
+
+  // 2QFO-2는 flow 소유자를 쓰지 않는다. `.bs-r-flow > * { flex-shrink: 0 }`이 선언된
+  // 세 행만 Paper 폭으로 얼려 헤더와 레인이 갈라졌다(960 실측). paired-table이
+  // 같은 금액에 nowrap을 주면서 접힌 값에는 열 라벨을 붙인다.
+  const flow = traitsOf('2QFO-2');
+  for (const node of ['3751-0', '376G-0', '3789-0']) assert.equal(flow.get(node), undefined);
+  for (const node of ['375E-0', '376R-0', '378K-0']) assert.deepEqual(flow.get(node), ['atomic']);
+  assert.deepEqual(flow.get('2QH0-2'), ['paired-table']);
+});
+
 test('a DOM-like 13K chip shrink mutation becomes a two-line atomic hard failure', () => {
   const restored = collectAtomicWrapFindings([
     candidate('14JF-2', '14JF-2', '14JD-2', [rect(0, 0, 40, 12)]),
@@ -329,6 +431,7 @@ test('a DOM-like 13K chip shrink mutation becomes a two-line atomic hard failure
     atomic_wrap_nodes: finding.items, atomic_wrap_total: finding.total,
     text_overlap_nodes: [], text_overlap_total: 0,
     paired_semantics_violations: [], paired_semantics_total: 0,
+    column_lane_nodes: [], column_lane_total: 0,
   });
   assert.deepEqual(assertReadability('13K0-2', { name: 'M' }, probe(restored), {
     enforce: true,
@@ -355,6 +458,7 @@ test('a complete synthetic canonical zero report passes the enforced 6/24/12 mat
     atomic_wrap_nodes: [], atomic_wrap_total: 0,
     text_overlap_nodes: [], text_overlap_total: 0,
     paired_semantics_violations: [], paired_semantics_total: 0,
+    column_lane_nodes: [], column_lane_total: 0,
   });
   const boards = DEFAULT_READABILITY_BOARD_IDS.map((boardId) => ({
     board_id: boardId,

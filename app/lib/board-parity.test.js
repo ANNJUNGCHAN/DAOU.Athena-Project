@@ -191,6 +191,9 @@ test('glyph readability probe keeps raw geometry evidence and hard-enforces ever
   assert.match(verify, /document\.fonts && document\.fonts\.ready/);
   assert.match(verify, /requiredStableSamples: 4/);
   assert.match(verify, /Range\(\)/);
+  assert.match(verify, /compactAtomicTokenSpans/);
+  assert.match(verify, /range\.setStart\(text, token\.start\)/);
+  assert.match(verify, /range\.setEnd\(text, token\.end\)/);
   assert.match(verify, /getClientRects\(\)/);
   assert.match(verify, /display !== 'contents'/);
   assert.match(verify, /data-bs-value-atomic/);
@@ -198,12 +201,15 @@ test('glyph readability probe keeps raw geometry evidence and hard-enforces ever
   assert.match(verify, /atomic_wrap_total/);
   assert.match(verify, /text_overlap_total/);
   assert.match(verify, /paired_semantics_total/);
+  assert.match(verify, /column_lane_total/);
   assert.match(verify, /owner_name/);
   assert.match(verify, /text: text\.nodeValue\.trim\(\)/);
   assert.match(verify, /text: element\.textContent\.trim\(\)/);
   assert.match(verify, /atomic_wrap_nodes/);
   assert.match(verify, /text_overlap_nodes/);
   assert.match(verify, /paired_semantics_violations/);
+  assert.match(verify, /column_lane_nodes/);
+  assert.match(verify, /header_lane/);
   assert.equal(
     [...verify.matchAll(/assertReadability\(surface\.boardId, preset, probe, \{ enforce: true \}\)/g)]
       .length,
@@ -211,12 +217,24 @@ test('glyph readability probe keeps raw geometry evidence and hard-enforces ever
   );
   assert.doesNotMatch(verify, /assertReadability\([^\n]+\{ enforce: false \}\)/);
   assert.match(verify, /canonical:\s*CANONICAL_CAPTURE_RUN/);
+  assert.match(verify, /explicitAtomic/);
+  assert.match(verify, /explicitAtomic \? surface : null/);
+  assert.match(verify, /if \(!responsiveOwner\) continue;/);
+  assert.match(verify, /element\.closest\('\.bs-table'\)/);
+  assert.match(verify, /bs-r-scroll-table/);
+  assert.match(verify, /bs-r-paired-table/);
+  assert.match(verify, /\.bs-strip, \.bs-header/);
+  assert.match(verify, /inChrome/);
 });
 
-test('paired semantic probe scans only canonical mirrors and records identity, tone, and missing parity', () => {
+test('paired semantic probe scopes legacy ambiguity to opted-in paired tables', () => {
   const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
   assert.match(verify, /surface\.querySelectorAll\('\[data-paired-source\]'\)/);
-  assert.doesNotMatch(verify, /\.bs-r-paired-table \.bs-paired, \[data-paired-source\]/);
+  assert.match(verify, /surface\.querySelectorAll\('\.bs-r-paired-table \.bs-paired'\)/);
+  assert.doesNotMatch(verify,
+    /for \(const mirror of surface\.querySelectorAll\('\.bs-paired'\)\) \{/);
+  assert.match(verify, /kind:\s*'legacy_pair'/);
+  assert.match(verify, /ambiguous_inline/);
   for (const field of [
     'source_count', 'label_count', 'source_tone', 'mirror_tone',
     'source_missing', 'mirror_missing',
@@ -396,10 +414,16 @@ test('paired-table labels form scoped label-value grids while scroll-table keeps
 
   assert.match(rules,
     /\.bs-r-paired-table \.bs-paired\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\) max-content/);
+  // 라벨은 어절 경계에서만 줄바꿈한다 — `anywhere`는 `5일 누적`을 `5일 누`/`적`으로
+  // 쪼갠다(2QFO-2 960 실측). 이 웨이브가 없애려는 분절이므로 keep-all로 고정한다.
   assert.match(rules,
-    /\.bs-r-paired-table \.bs-paired-label\s*\{[^}]*white-space:\s*normal[^}]*overflow-wrap:\s*anywhere/);
+    /\.bs-r-paired-table \.bs-paired-label\s*\{[^}]*white-space:\s*normal[^}]*overflow-wrap:\s*normal[^}]*word-break:\s*keep-all/);
+  assert.doesNotMatch(rules,
+    /\.bs-r-paired-table \.bs-paired-label\s*\{[^}]*overflow-wrap:\s*anywhere/);
   assert.match(rules,
     /\.bs-r-paired-table \[data-paired-source\]\s*\{[^}]*white-space:\s*nowrap[^}]*overflow-wrap:\s*normal/);
+  assert.match(rules,
+    /\.bs-r-paired-table \[data-bs-value-atomic="true"\]\s*\{[^}]*white-space:\s*nowrap[^}]*overflow-wrap:\s*normal/);
   for (const priority of [4, 5, 6, 7]) {
     assert.match(rules, new RegExp(
       `\\.bs-r-paired-table \\.bs-paired\\[data-paired-col~="${priority}"\\]\\s*\\{\\s*display:\\s*grid`,
