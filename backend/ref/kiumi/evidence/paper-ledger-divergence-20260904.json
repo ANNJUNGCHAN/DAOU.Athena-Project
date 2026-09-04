@@ -1,0 +1,2806 @@
+{
+ "schema_version": 1,
+ "what": "Paper page H-1 (카드미니) 96 mini cards compared against backend/ref/kiumi/kiumi-ledger.jsonl",
+ "measured_on": "2026-09-04",
+ "measured_by": "12 parallel read-only agents reading each card Body via Paper MCP get_jsx",
+ "ledger_sha_note": "ledger created in 8a39bc0 and unmodified since",
+ "counts": {
+  "compared": 96,
+  "match": 10,
+  "divergent": 84,
+  "unresolved": 2,
+  "unbacked_rows": 227,
+  "missing_elements": 190
+ },
+ "caveat": "Row extraction was done by LLM agents reading rendered JSX, not by a deterministic parser. Treat counts as a strong signal, not a hash. Re-measure before acting on any single card.",
+ "known_mapping_errors": {
+  "46S1-0": "correct ledger board is 2QRP-1 (not 2QX0-1)",
+  "48EL-0": "correct ledger board is 3JT4-0 (not 3JZ2-0)"
+ },
+ "cards": [
+  {
+   "nodeId": "46AX-0",
+   "boardId": "2SCE-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중\" contains ledger title \"보유종목 — 종목별 평가·비중\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "평가손익",
+     "value": "+4.96% — SOFT: the datum matches 총수익률(%) whose paper_text is \"수익률 +4.96%\", but the Paper label reads 평가손익 (an amount concept) rather than 총수익률(%)/수익률, and the value drops the \"수익률\" prefix"
+    },
+    {
+     "label": "종목",
+     "value": "8 — SOFT: 2SCE-1 carries this datum as 종목별계좌평가현황 = \"8종목\"; Paper renders a bare \"8\" with the unit hoisted into the label. Sibling cards (46ZI-0, 470H-0, 48CN-0, 48DM-0, 48H7-0) render the exact string \"8종목\", so this is a form deviation"
+    },
+    {
+     "label": "삼성전자 / 005930",
+     "value": "41,483,750 · +9.04% — the 005930 sub-label IS backed (종목번호), but neither 41,483,750 nor +9.04% appears anywhere in 2SCE-1"
+    },
+    {
+     "label": "SK하이닉스 / 000660",
+     "value": "21,824,000 · +3.17% — no part of this row (000660, 21,824,000, +3.17%) appears in 2SCE-1"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "계좌평가잔고개별합산",
+     "paper_text": "보유종목 8종목"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46BW-0",
+   "boardId": "2SKU-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정\" contains ledger title \"예수금·결제 — 현금·결제 예정\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "종목",
+     "value": "8 — SOFT: 2SKU-1 carries this datum as 종목별계좌평가현황 = \"8종목\"; Paper renders a bare \"8\" with the unit hoisted into the label"
+    },
+    {
+     "label": "D+1 예상 / 09/02",
+     "value": "33,184,400 · -1,635,600 — none of 09/02, 33,184,400, -1,635,600 appears in 2SKU-1"
+    },
+    {
+     "label": "D+2 예상 / 09/03",
+     "value": "42,263,800 · +9,079,400 — none of 09/03, 42,263,800, +9,079,400 appears in 2SKU-1"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "예수금",
+     "paper_text": "34,820,000"
+    },
+    {
+     "label": "랩출금가능금액",
+     "paper_text": "랩 출금가능 0원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46CV-0",
+   "boardId": "135M-2",
+   "boardIdResolved": "OK — frame name \"mini/CC-02 / R11 · 삼성전자 10주 시장가 매수\" matches ledger title \"삼성전자 10주 시장가 매수\"",
+   "paperRows": 3,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "주문 구분",
+     "value": "매수 — neither label nor value in 135M-2"
+    },
+    {
+     "label": "현재 매수 1호가",
+     "value": "150,840원 — NUMERIC DIVERGENCE: the only nearby ledger element is 금액/\"현재가 150,850원\"; Paper shows 150,840 vs ledger 150,850, and the label differs too"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "주문가능금액",
+     "paper_text": "31,240,000원"
+    },
+    {
+     "label": "금액",
+     "paper_text": "현재가 150,850원"
+    },
+    {
+     "label": "변화",
+     "paper_text": "10%"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46DE-0",
+   "boardId": "2T63-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도\" matches ledger title \"현금 매도 — 삼성전자 10주 시장가 매도\"",
+   "paperRows": 4,
+   "ledgerRows": 4,
+   "unbackedRows": [
+    {
+     "label": "종목",
+     "value": "삼성전자 / 005930 — neither label nor value in 2T63-1"
+    },
+    {
+     "label": "유형",
+     "value": "매도 — neither label nor value in 2T63-1"
+    },
+    {
+     "label": "가격",
+     "value": "150,840원 — NUMERIC DIVERGENCE: ledger element 금액 is \"현재가 150,850원\"; Paper shows 150,840 vs ledger 150,850, and the label differs too"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "매매가능수량",
+     "paper_text": "300주"
+    },
+    {
+     "label": "금액",
+     "paper_text": "현재가 150,850원"
+    },
+    {
+     "label": "계좌",
+     "paper_text": "키움증권 01"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46E2-0",
+   "boardId": "137X-2",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01 · 삼성전자 3개월 차트\" contains ledger title \"삼성전자 3개월 차트\"",
+   "paperRows": 2,
+   "ledgerRows": 2,
+   "unbackedRows": [
+    {
+     "label": "(unlabeled hero delta, right of the display price)",
+     "value": "+1.24% — PARTIAL RENDER of ledger element \"전일대비\" → \"+1,850 · +1.24%\". The percentage is correct but the absolute change \"+1,850 · \" is dropped, so the exact paper_text is not present. Fix by extending the text, not by replacing the number."
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "전일대비",
+     "paper_text": "+1,850 · +1.24%"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46FL-0",
+   "boardId": "13BC-2",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-04 / R02 · 삼성전자 실시간 호가·체결\" and header title \"삼성전자 실시간 호가·체결\" match ledger title \"삼성전자 실시간 호가·체결\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "매도 1호가",
+     "value": "150,850 / 3,420주 (가격 150,850, 잔량 3,420주) — no ledger element has this label or either value"
+    },
+    {
+     "label": "매수 1호가",
+     "value": "150,840 / 4,180주 (가격 150,840, 잔량 4,180주) — no ledger element has this label or either value"
+    },
+    {
+     "label": "총잔량",
+     "value": "— / 81,160주 (가격 —, 잔량 81,160주) — no ledger element has this label or either value"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "매도호가10",
+     "paper_text": "150,940"
+    },
+    {
+     "label": "매도호가수량10",
+     "paper_text": "2,160"
+    },
+    {
+     "label": "매도호가9",
+     "paper_text": "150,930"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46GK-0",
+   "boardId": "3N4O-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/A04-X · 호가 정본 — 단계별 낱값\" contains ledger title \"호가 정본 — 단계별 낱값\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "종목",
+     "value": "\"삼성전자 · 005930\" — no ledger element for this board carries this label or this paper_text; note it reads as a card identity row, so treat with care before removing"
+    },
+    {
+     "label": "기준 시각",
+     "value": "\"2026-09-01 09:42\" — the ledger's time element is 시간 / \"10단 · 정규장 09:42\"; label and text both differ (only the \"09:42\" fragment is shared)"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "시간",
+     "paper_text": "10단 · 정규장 09:42"
+    },
+    {
+     "label": "LP매도10호가잔량",
+     "paper_text": "0"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46H8-0",
+   "boardId": "1WOB-1",
+   "boardIdResolved": "OK — Paper frame name \"mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위\" contains ledger title \"목록 펼침 검증 — 외국인 기간별 매매 상위\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "조회",
+     "value": "\"2026-09-01 09:42\" — no ledger element has this label or this paper_text"
+    },
+    {
+     "label": "상위 50건 합계",
+     "value": "\"+1.18조원\" — no ledger element has this label or this paper_text"
+    },
+    {
+     "label": "표시",
+     "value": "\"20건 · +10,815억원\" — no ledger element has this label or this paper_text"
+    },
+    {
+     "label": "순매수 1위",
+     "value": "\"+3,214억원\" — no ledger element for 1WOB-1 has this label or this paper_text (the string exists only on a different board, 2S4E-1)"
+    },
+    {
+     "label": "연속 매수",
+     "value": "\"5일\" — no ledger element has this label or this paper_text"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "순위",
+     "paper_text": "01"
+    },
+    {
+     "label": "종목코드",
+     "paper_text": "005930"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "150,850"
+    },
+    {
+     "label": "매도호가",
+     "paper_text": "150,900"
+    },
+    {
+     "label": "매수호가",
+     "paper_text": "150,800"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46IV-0",
+   "boardId": "13K0-2",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04 · 거래대금 상위 저평가 탐색\" contains ledger title \"거래대금 상위 저평가 탐색\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "순위 / 종목 / 현재가 / 등락 (행 01)",
+     "value": "01 · 삼성전자 · 005930 · 150,850 · +1.24% — PARTIALLY backed: \"01\" matches the ledger element whose label is \"현재순위\" (Paper's column header reads \"순위\") and \"005930\" matches label \"종목코드\"; but \"삼성전자\", \"150,850\" and \"+1.24%\" appear in no ledger element of 13K0-2"
+    },
+    {
+     "label": "순위 / 종목 / 현재가 / 등락 (행 02)",
+     "value": "02 · SK하이닉스 · 000660 · 198,400 · +2.05% — no ledger element in 13K0-2 carries any of these texts"
+    },
+    {
+     "label": "순위 / 종목 / 현재가 / 등락 (행 03)",
+     "value": "03 · 현대차 · 005380 · 232,500 · -0.52% — no ledger element in 13K0-2 carries any of these texts"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "전일순위",
+     "paper_text": "전일 3위"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46JU-0",
+   "boardId": "15R0-2",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-06 / R09 · 시장 체온·VI\" contains ledger title \"시장 체온·VI\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "KOSPI",
+     "value": "\"2,684.21 · +1.12%\" — composite: 2,684.21 is 현재가's paper_text and +1.12% is the second half of 전일대비's \"+29.73 · +1.12%\"; neither label (KOSPI) nor this exact value exists as a ledger element"
+    },
+    {
+     "label": "KOSDAQ",
+     "value": "\"842.15 · +0.84%\" — composite: 842.15 is 현재가's paper_text and +0.84% is the second half of 전일대비's \"+7.01 · +0.84%\"; neither label (KOSDAQ) nor this exact value exists as a ledger element"
+    },
+    {
+     "label": "상승",
+     "value": "\"1,486종목\" — same number as ledger 상승종목수 / \"상승 1,486\", but both the label (상승 vs 상승종목수) and the text form differ; reported as unbacked per exact-pair rule, likely just a mini reformat rather than invented data"
+    },
+    {
+     "label": "보합",
+     "value": "\"183종목\" — the number 183 appears in NO ledger element for this board; fully unbacked"
+    },
+    {
+     "label": "하락",
+     "value": "\"621종목\" — the number 621 appears in NO ledger element for this board; fully unbacked"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "전일대비",
+     "paper_text": "+29.73 · +1.12%"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+7.01 · +0.84%"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46KI-0",
+   "boardId": "133H-2",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험\" contains ledger title \"내 계좌 — 손익·결제·위험\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "종목별계좌평가현황",
+     "value": "8종목 — 133H-2 has no element with this label and no element whose paper_text is \"8종목\""
+    },
+    {
+     "label": "총 평가손익",
+     "value": "+4,240,900원 — not in 133H-2 under any label (this value is 3UTA-0's 총평가손익금액)"
+    },
+    {
+     "label": "매수비중",
+     "value": "28.0% — not in 133H-2 under any label (appears in 3UTA-0 / 3MTJ-0)"
+    },
+    {
+     "label": "총 매입가",
+     "value": "매입 85,519,340원 — not in 133H-2 under any label (appears in 3UTA-0 총수익률)"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "예탁자산평가액",
+     "paper_text": "124,580,240원"
+    },
+    {
+     "label": "수익률",
+     "paper_text": "수익률 +4.96%"
+    },
+    {
+     "label": "총재매수가능금액",
+     "paper_text": "31,240,000원"
+    },
+    {
+     "label": "인출가능금액",
+     "paper_text": "출금가능 28,940,000원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46M5-0",
+   "boardId": "15L8-2",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-06 / R06 · 관심종목·조건 신호\" contains ledger title \"관심종목·조건 신호\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "현재가",
+     "value": "\"214,000\" — label 현재가 matches a ledger element but its paper_text is \"150,850\"; 214,000 appears in no ledger element"
+    },
+    {
+     "label": "종목코드",
+     "value": "\"035420\" — label 종목코드 matches a ledger element but its paper_text is \"005930\"; 035420 appears in no ledger element"
+    },
+    {
+     "label": "저가",
+     "value": "\"저 232,000\" — no ledger element has label 저가 or this paper_text"
+    },
+    {
+     "label": "전일대비",
+     "value": "\"+1,800\" — label 전일대비 matches a ledger element but its paper_text is \"+1,850\"; +1,800 appears in no ledger element"
+    },
+    {
+     "label": "고가",
+     "value": "\"고 214,800\" — no ledger element has label 고가 or this paper_text"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "종목코드",
+     "paper_text": "005930"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "150,850"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+1,850"
+    },
+    {
+     "label": "등락율",
+     "paper_text": "+1.24%"
+    },
+    {
+     "label": "시가",
+     "paper_text": "149,500"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46MT-0",
+   "boardId": "15N5-2",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R07 · KODEX 200 ETF\" and header title \"KODEX 200 ETF\" match ledger title \"KODEX 200 ETF\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "NAV전일대비",
+     "value": "전일대비 ▲ +398 · +0.83% — neither the label \"NAV전일대비\" nor the value appears in the ledger record; the closest ledger element is NAV=\"48,318\", which is a different label AND a different value"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "NAV",
+     "paper_text": "48,318"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46NS-0",
+   "boardId": "15P5-2",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R08 · ELW 위험·만기\" and header title \"ELW 위험·만기\" match ledger title \"ELW 위험·만기\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "거래대금",
+     "value": "5.9억원 — label+value pair absent from 15P5-2 (this exact pair is a 3DZ1-0 element)"
+    },
+    {
+     "label": "대비기호",
+     "value": "+77원 — label and value both absent from the ledger record"
+    },
+    {
+     "label": "전일대비",
+     "value": "+10 (+0.82%) — label and value both absent from the ledger record"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "현재가",
+     "paper_text": "1,160원"
+    },
+    {
+     "label": "행사가격",
+     "paper_text": "150,000원"
+    },
+    {
+     "label": "ELW이론가",
+     "paper_text": "1,210원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46OR-0",
+   "boardId": "1JPU-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/A04 · 호가 정본 — 실시간 통합 호가\" contains ledger title \"호가 정본 — 실시간 통합 호가\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "현재가",
+     "value": "\"+20\" — label 현재가 matches a ledger element but its paper_text is \"+90\"; +20 appears in no ledger element"
+    },
+    {
+     "label": "매도호가3",
+     "value": "\"150,870\" — ledger has 매도호가10 / \"150,940\"; neither this label (…3) nor 150,870 exists in the ledger record"
+    },
+    {
+     "label": "매도호가직전대비3",
+     "value": "\"+320\" — no ledger element has this label or this paper_text"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "매도10호가잔량",
+     "paper_text": "2,160주"
+    },
+    {
+     "label": "매도호가10",
+     "paper_text": "150,940"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "+90"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46PQ-0",
+   "boardId": "1JZW-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/A02×A04 · 호가 주문 정본 — 시장가 매수\" contains ledger title \"호가 주문 정본 — 시장가 매수\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "현재가",
+     "value": "\"+20\" — label 현재가 matches a ledger element but its paper_text is \"+90\"; +20 appears in no ledger element"
+    },
+    {
+     "label": "매도호가3",
+     "value": "\"150,870\" — ledger has 매도호가10 / \"150,940\"; neither this label (…3) nor 150,870 exists in the ledger record"
+    },
+    {
+     "label": "매도호가직전대비3",
+     "value": "\"+320\" — no ledger element has this label or this paper_text"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "매도10호가잔량",
+     "paper_text": "2,160주"
+    },
+    {
+     "label": "매도호가10",
+     "paper_text": "150,940"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "+90"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46QP-0",
+   "boardId": "2QFO-2",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T1 · 수급 — 투자자별\" contains ledger title \"수급 — 투자자별\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "누적거래량",
+     "value": "거래량 1,420만주 · 체결강도 108.4 — no element with label 누적거래량 in 2QFO-2, and this paper_text appears nowhere in the record"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "외국인투자자",
+     "paper_text": "+1,842억원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46RD-0",
+   "boardId": "2QM7-2",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T2 · 수급 — 거래원\" contains ledger title \"수급 — 거래원\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "값",
+     "value": "상위 5곳 비중 — placeholder label \"값\"; this paper_text is in no 2QM7-2 element"
+    },
+    {
+     "label": "값",
+     "value": "창구 5곳 합계 — placeholder label \"값\"; this paper_text is in no 2QM7-2 element"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "금액",
+     "paper_text": "순매수 1위 거래원"
+    },
+    {
+     "label": "기준 시각",
+     "paper_text": "외국계 창구 · 09:22 기준"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46T0-0",
+   "boardId": "2QX1-1",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-04 / R02-T3 · 호가 — KRX 금현물\" matches ledger title \"호가 — KRX 금현물\" (header renders it as \"KRX 금현물 호가\")",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "전일대비기호",
+     "value": "850 · +0.78% — label and value both absent from the ledger record"
+    },
+    {
+     "label": "체결가",
+     "value": "109,750 — label absent from the ledger record, and 109,750 is not any ledger paper_text (ledger has 109,950, a different number)"
+    },
+    {
+     "label": "금현물호가",
+     "value": "92 — LABEL MATCHES a ledger element label (금현물호가) but the VALUE does not: the ledger's three 금현물호가 values are \"110,000\", \"369\", \"109,950\", none of which is \"92\""
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "금현물호가",
+     "paper_text": "110,000"
+    },
+    {
+     "label": "금현물호가",
+     "paper_text": "369"
+    },
+    {
+     "label": "금현물호가",
+     "paper_text": "109,950"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46TZ-0",
+   "boardId": "2R3M-1",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥\" contains ledger title \"현재시세 — 체결·호가 문맥\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "PBR",
+     "value": "2.63배 — no element in 2R3M-1 carries label \"PBR\" or paper_text \"2.63배\"; both label and value are unbacked (2.63배 belongs to other boards, e.g. 2RBO-1)"
+    },
+    {
+     "label": "(최우선)매수호가",
+     "value": "150,850 — VALUE IS BACKED (ledger element \"현재가\" → \"150,850\"), but the Paper label reads \"(최우선)매수호가\", not \"현재가\". Label-only mismatch; the number is correct."
+    },
+    {
+     "label": "거래회전율",
+     "value": "0.24% — no element in 2R3M-1 carries label \"거래회전율\" or paper_text \"0.24%\"; both label and value are unbacked"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "PER",
+     "paper_text": "21.2배"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+1,850"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46VM-0",
+   "boardId": "2RJ7-1",
+   "boardIdResolved": "OK",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "전일비",
+     "value": "전일비 100.74%"
+    },
+    {
+     "label": "전일대비기호",
+     "value": "168,420 · +0.74%  [label matches ledger element 전일대비기호 exactly, but ledger paper_text is \"▲ 168,420 · +0.74%\" — the leading ▲ glyph is not rendered; numeric text is otherwise identical]"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "금현물일봉차트조회",
+     "paper_text": "09:00~09:42"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46WL-0",
+   "boardId": "2ROJ-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T3 · 수급 — 프로그램\" contains ledger title \"수급 — 프로그램\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "금융투자",
+     "value": "금융투자 -842억원 — 2ROJ-1 has no 금융투자 element; this label+value pair belongs to board 2QFO-2"
+    },
+    {
+     "label": "거래대금",
+     "value": "2.14조원 — no 거래대금 element in 2ROJ-1 and this paper_text is absent from the record"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "외국인투자자",
+     "paper_text": "+1,842억원"
+    },
+    {
+     "label": "개인투자자",
+     "paper_text": "-638억원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46XK-0",
+   "boardId": "2RWK-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T4 · 수급 — 신용·대차\" contains ledger title \"수급 — 신용·대차\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "금융투자",
+     "value": "금융투자 -842억원 — 2RWK-1 has no 금융투자 element; this pair belongs to board 2QFO-2"
+    },
+    {
+     "label": "거래대금",
+     "value": "2.14조원 — no 거래대금 element in 2RWK-1 and this paper_text is absent from the record"
+    },
+    {
+     "label": "공매도량",
+     "value": "529,470주 — no element with this label or value in 2RWK-1"
+    },
+    {
+     "label": "공매도거래대금",
+     "value": "781억원 · 누적 2,234만주 — no element with this label or value in 2RWK-1 (note: ledger's 잔고주수 is 1,284만주, a different number)"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "외국인투자자",
+     "paper_text": "+1,842억원"
+    },
+    {
+     "label": "개인투자자",
+     "paper_text": "-638억원"
+    },
+    {
+     "label": "매매비중",
+     "paper_text": "3.42%"
+    },
+    {
+     "label": "잔고주수",
+     "paper_text": "1,284만주"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46YJ-0",
+   "boardId": "2S4E-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T5 · 수급 — 종목 동향\" contains ledger title \"수급 — 종목 동향\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "금융투자",
+     "value": "금융투자 -842억원 — 2S4E-1 has no 금융투자 element; this pair belongs to board 2QFO-2"
+    },
+    {
+     "label": "누적거래대금",
+     "value": "2.14조원 — no 누적거래대금 element in 2S4E-1 and this paper_text is absent from the record"
+    },
+    {
+     "label": "외인일별순매매수량",
+     "value": "+15.4만주 — no element with this label or value in 2S4E-1"
+    },
+    {
+     "label": "기관계",
+     "value": "-142 — label 기관계 IS in the ledger, but its two values are -1,204억원 and -1,842억원; the rendered value -142 matches neither, so the pair is unbacked"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "외국인투자자",
+     "paper_text": "+1,842억원"
+    },
+    {
+     "label": "기관계",
+     "paper_text": "-1,204억원"
+    },
+    {
+     "label": "외국인투자자",
+     "paper_text": "+3,214억원"
+    },
+    {
+     "label": "기관계",
+     "paper_text": "-1,842억원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46ZI-0",
+   "boardId": "2SRV-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률\" contains ledger title \"손익·성과 — 실현손익·수익률\"",
+   "paperRows": 4,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "매수비중",
+     "value": "28.0% — not in 2SRV-1 under any label"
+    },
+    {
+     "label": "손익율",
+     "value": "+1.65% — not in 2SRV-1 under any label; the only percentage in 2SRV-1 is 수익률 \"수익률 +4.96%\""
+    },
+    {
+     "label": "당일매도손익1",
+     "value": "매도손익 +648,600 — not in 2SRV-1 under any label; 2SRV-1's 당일투자손익 is \"+1,082,400\""
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "예탁자산평가액",
+     "paper_text": "124,580,240원"
+    },
+    {
+     "label": "수익률",
+     "paper_text": "수익률 +4.96%"
+    },
+    {
+     "label": "당일투자손익",
+     "paper_text": "+1,082,400"
+    },
+    {
+     "label": "당월투자손익",
+     "paper_text": "+1,082,400"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "470H-0",
+   "boardId": "2SYW-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황\" contains ledger title \"주문·체결 — 오늘 주문 현황\"",
+   "paperRows": 4,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "매수비중",
+     "value": "28.0% — not in 2SYW-1 under any label"
+    },
+    {
+     "label": "주문번호",
+     "value": "주문 0021833 — not in 2SYW-1 under any label"
+    },
+    {
+     "label": "체결누계금액",
+     "value": "누계 0원 — not in 2SYW-1 under any label"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "추정자산",
+     "paper_text": "124,580,240원"
+    },
+    {
+     "label": "수익률",
+     "paper_text": "수익률 +4.96%"
+    },
+    {
+     "label": "계좌별주문체결현황배열",
+     "paper_text": "5건"
+    },
+    {
+     "label": "약정금액",
+     "paper_text": "약정 16,788,000원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "471G-0",
+   "boardId": "2TAG-1",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정\" contains ledger title \"정정 — 삼성전자 지정가 정정\"",
+   "paperRows": 4,
+   "ledgerRows": 4,
+   "unbackedRows": [
+    {
+     "label": "계좌",
+     "value": "키움증권 01 — no element in 2TAG-1 carries label \"계좌\" or paper_text \"키움증권 01\"; both label and value are unbacked"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "금액",
+     "paper_text": "현재가 150,850원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "4724-0",
+   "boardId": "2TET-1",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소\" contains ledger title \"취소 — 삼성전자 원주문 취소\"",
+   "paperRows": 4,
+   "ledgerRows": 4,
+   "unbackedRows": [
+    {
+     "label": "변화",
+     "value": "25% — no element in 2TET-1 carries label \"변화\" or paper_text \"25%\"; both label and value are unbacked"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "금액",
+     "paper_text": "현재가 150,850원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "472S-0",
+   "boardId": "2TJ6-1",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자\" contains ledger title \"신용 매수 — 삼성전자 10주 시장가 신용융자\"",
+   "paperRows": 4,
+   "ledgerRows": 4,
+   "unbackedRows": [
+    {
+     "label": "변화",
+     "value": "25% — no element in 2TJ6-1 carries label \"변화\" or paper_text \"25%\"; both label and value are unbacked"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "금액",
+     "paper_text": "현재가 150,850원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "473G-0",
+   "boardId": "2TNJ-1",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가\" contains ledger title \"금현물 매수 — 금 99.99K 10g 시장가\"",
+   "paperRows": 4,
+   "ledgerRows": 4,
+   "unbackedRows": [
+    {
+     "label": "값",
+     "value": "10g — VALUE IS BACKED (ledger element \"보조 지표\" → \"10g\"), but the Paper label reads \"값\", not \"보조 지표\". Label-only mismatch; the number itself is correct, so do not change the value."
+    },
+    {
+     "label": "변화",
+     "value": "25% — no element in 2TNJ-1 carries label \"변화\" or paper_text \"25%\"; both label and value are unbacked"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "금액",
+     "paper_text": "현재가 168,420원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "4744-0",
+   "boardId": "2TRW-1",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-04 / R02-T4 · 호가 — 정규장 5단\" matches ledger title \"호가 — 정규장 5단\" (header renders it as \"정규장 5단 호가\")",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "매수호가수량2",
+     "value": "5,760 — label and value both absent from the ledger record (ledger is all 매도 side: 매도호가5/매도호가수량5/매도호가4)"
+    },
+    {
+     "label": "매수호가4",
+     "value": "150,810 — label and value both absent from the ledger record"
+    },
+    {
+     "label": "매수호가3",
+     "value": "150,820 — label and value both absent from the ledger record"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "매도호가5",
+     "paper_text": "150,890"
+    },
+    {
+     "label": "매도호가수량5",
+     "paper_text": "2,940"
+    },
+    {
+     "label": "매도호가4",
+     "paper_text": "150,880"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "4753-0",
+   "boardId": "2TZN-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색\" contains ledger title \"업종 — 업종 지수·등락 탐색\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "누적거래량n",
+     "value": "누적 3억 4,200만주 — no ledger element with this label or value; label also has a stray trailing \"n\""
+    },
+    {
+     "label": "상승",
+     "value": "71 · 23 — no ledger element with this label or value"
+    },
+    {
+     "label": "시간n",
+     "value": "09:30 — no ledger element with this label or value; label also has a stray trailing \"n\""
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "코드",
+     "paper_text": "G2510 · 제조"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "3,184.52"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+87.96"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "4762-0",
+   "boardId": "2U5L-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드\" contains ledger title \"관심 — 관심종목 시세 보드\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "종목코드",
+     "value": "035420 — label matches ledger 종목코드 but the value does not (ledger paper_text is \"005930\")"
+    },
+    {
+     "label": "현재가",
+     "value": "214,000 — label matches ledger 현재가 but the value does not (ledger paper_text is \"150,850\")"
+    },
+    {
+     "label": "전일대비",
+     "value": "+1,800 (+0.85%) — label matches ledger 전일대비 but the value does not (ledger paper_text is \"+1,850 · +1.24%\")"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "종목코드",
+     "paper_text": "005930"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "150,850"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+1,850 · +1.24%"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "4771-0",
+   "boardId": "2UBO-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색\" contains ledger title \"테마 — 테마 등락·확산 탐색\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "등락율",
+     "value": "+0.86% — label matches ledger 등락율 but the value does not (ledger paper_text is \"+3.42%\")"
+    },
+    {
+     "label": "테마그룹코드",
+     "value": "T0119 — label matches ledger 테마그룹코드 but the value does not (ledger paper_text is \"T0142\")"
+    },
+    {
+     "label": "하락종목수",
+     "value": "하락 9 — no ledger element with this label or value (ledger has 상승종목수 \"18 / 24\")"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "테마그룹코드",
+     "paper_text": "T0142"
+    },
+    {
+     "label": "등락율",
+     "paper_text": "+3.42%"
+    },
+    {
+     "label": "상승종목수",
+     "paper_text": "18 / 24"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "4780-0",
+   "boardId": "2UHM-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동\" contains ledger title \"시장·VI — 시장 상태와 VI 발동\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "842.15 — neither the label \"핵심\" nor the value \"842.15\" is in ledger 2UHM-1 (\"842.15\" belongs to board 15R0-2)"
+    },
+    {
+     "label": "누적거래대금",
+     "value": "272억 — no ledger element with this label or value"
+    },
+    {
+     "label": "괴리율 동적",
+     "value": "괴리 -10.1% — no ledger element with this label or value"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "변화",
+     "paper_text": "2,684.21"
+    },
+    {
+     "label": "VI해제시각",
+     "paper_text": "해제 09:43:08"
+    },
+    {
+     "label": "종목코드",
+     "paper_text": "007660"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "478Z-0",
+   "boardId": "2UN6-1",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과\" contains ledger title \"조건검색 — 저장 조건식과 결과\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "일련번호",
+     "value": "오늘 2번째 — no ledger element with this label or value (ledger label is \"조건검색식 일련번호\" with value \"조건 01\")"
+    },
+    {
+     "label": "일련번호",
+     "value": "오늘 5번째 — no ledger element with this label or value (ledger label is \"조건검색식 일련번호\" with value \"조건 02\")"
+    },
+    {
+     "label": "종목코드",
+     "value": "005930 — no ledger element with this label or value in board 2UN6-1"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "조건검색식 일련번호",
+     "paper_text": "조건 01"
+    },
+    {
+     "label": "조건검색식 명",
+     "paper_text": "20일 신고가"
+    },
+    {
+     "label": "조건검색식 일련번호",
+     "paper_text": "조건 02"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "479Y-0",
+   "boardId": "2V71-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T6 · 수급 — 순위\" contains ledger title \"수급 — 순위\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "순매수 1위 — VALUE IS ledger-backed (element \"보조 지표\" → \"순매수 1위\"); only the label differs (Paper renders \"핵심\", ledger says \"보조 지표\"). Likely a label-naming convention difference, not wrong data — do not edit the value."
+    },
+    {
+     "label": "잔고주수",
+     "value": "1,284만주 — no 잔고주수 element in 2V71-0; this label+value pair belongs to board 2RWK-1"
+    },
+    {
+     "label": "대차거래증감",
+     "value": "전일 +82만주 — no 대차거래증감 element in 2V71-0 (board 2ZBB-0 has that label with +214만주, a different value)"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "프로그램순매수상위50",
+     "paper_text": "프로그램 순매수 상위 50"
+    },
+    {
+     "label": "프로그램순매수금액",
+     "paper_text": "+1,798억원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47BW-0",
+   "boardId": "2VIN-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-03 / R01-T5 · 순위 — ETF 전체시세\" contains ledger title \"순위 — ETF 전체시세\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "4기간 — VALUE IS BACKED, LABEL ONLY: ledger element for \"4기간\" carries label \"보조 지표\", Paper third lead slot renders the fixed word \"핵심\""
+    },
+    {
+     "label": "값",
+     "value": "전일 대비 1.2배 — VALUE IS BACKED, LABEL ONLY: ledger element for \"전일 대비 1.2배\" carries label \"핵심 지표\", Paper table row renders label \"값\""
+    },
+    {
+     "label": "수량",
+     "value": "7 종목 — NOT BACKED AT ALL: \"7 종목\" is not the paper_text of any 2VIN-0 element (its elements are 3.42조 / +0.04% / 4기간 / 전일 대비 1.2배 / 괴리 1% 초과)"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "금액",
+     "paper_text": "3.42조"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47CV-0",
+   "boardId": "2VO0-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-03 / R01-T6 · 순위 — ELW 순위\" contains ledger title \"순위 — ELW 순위\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "2건 — VALUE IS BACKED, LABEL ONLY: ledger element for \"2건\" carries label \"수량\", Paper third lead slot renders the fixed word \"핵심\""
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47EI-0",
+   "boardId": "2X5N-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량\" contains ledger title \"종목찾기 — 당일 거래량\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "거래회전율",
+     "value": "회전율 1.52%"
+    },
+    {
+     "label": "거래금액",
+     "value": "7,420억"
+    },
+    {
+     "label": "종목코드",
+     "value": "035420 — label 종목코드 matches a ledger element but the value does not; ledger 종목코드 is \"005930\""
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "종목코드",
+     "paper_text": "005930"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "150,850"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+1,850"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47FH-0",
+   "boardId": "2XA5-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률\" contains ledger title \"순위 — ELW 등락률\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "2건 — VALUE IS BACKED, LABEL ONLY: ledger element for \"2건\" carries label \"수량\", Paper third lead slot renders the fixed word \"핵심\""
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47GG-0",
+   "boardId": "2XG6-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-S3 · 종목찾기 — 전일 거래량\" contains ledger title \"종목찾기 — 전일 거래량\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "현재가",
+     "value": "810,000 — label 현재가 matches a ledger element but the value does not; ledger 현재가 is \"150,850\""
+    },
+    {
+     "label": "종목코드",
+     "value": "006400 — label 종목코드 matches ledger elements but the value does not; ledger 종목코드 values are \"005930\" and \"000660\""
+    },
+    {
+     "label": "거래량",
+     "value": "274만주 — label 거래량 matches a ledger element but the value does not; ledger 거래량 is \"1,180만주\""
+    },
+    {
+     "label": "전일거래량상위",
+     "value": "상위 5개 표시 · 전체 100개 — neither this label nor this value appears in the ledger record"
+    },
+    {
+     "label": "거래량",
+     "value": "61.2만주 — label 거래량 matches a ledger element but the value does not; ledger 거래량 is \"1,180만주\""
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "종목코드",
+     "paper_text": "005930"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "150,850"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+1,850"
+    },
+    {
+     "label": "거래량",
+     "paper_text": "1,180만주"
+    },
+    {
+     "label": "종목코드",
+     "paper_text": "000660"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47H4-0",
+   "boardId": "2XKO-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-S4 · 종목찾기 — 등락률\" contains ledger title \"종목찾기 — 등락률\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "매도잔량",
+     "value": "매도 8.2만"
+    },
+    {
+     "label": "매수잔량",
+     "value": "매수 11.4만"
+    },
+    {
+     "label": "등락률",
+     "value": "+1.24% — label 등락률 matches a ledger element but the value does not; ledger 등락률 is \"+29.90%\""
+    },
+    {
+     "label": "현재거래량",
+     "value": "1,420만주"
+    },
+    {
+     "label": "체결강도",
+     "value": "108.4%"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "전일대비등락률상위",
+     "paper_text": "01"
+    },
+    {
+     "label": "종목코드",
+     "paper_text": "007660"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "64,500"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+14,850"
+    },
+    {
+     "label": "등락률",
+     "paper_text": "+29.90%"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47HS-0",
+   "boardId": "2XP6-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률\" contains ledger title \"종목찾기 — 예상체결 등락률\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "예상체결등락률상위",
+     "value": "상위 5개 표시 · 전체 100개 — label 예상체결등락률상위 matches a ledger element but the value does not; ledger paper_text for that label is \"01\""
+    },
+    {
+     "label": "매도잔량",
+     "value": "매도 9.8만"
+    },
+    {
+     "label": "매수잔량",
+     "value": "매수 14.6만"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "예상체결등락률상위",
+     "paper_text": "01"
+    },
+    {
+     "label": "예상체결가",
+     "paper_text": "54,500"
+    },
+    {
+     "label": "기준가",
+     "paper_text": "기준가 49,650"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47IG-0",
+   "boardId": "2XTO-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위\" contains ledger title \"종목찾기 — 호가잔량 상위\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "순매수잔량",
+     "value": "+0.7만"
+    },
+    {
+     "label": "매수비율",
+     "value": "매수비율 61.3%"
+    },
+    {
+     "label": "총매도잔량",
+     "value": "매도 1.2만"
+    },
+    {
+     "label": "전일대비기호",
+     "value": "+3.01% — label 전일대비기호 matches a ledger element but the value does not; ledger 전일대비기호 is \"+1.24%\""
+    },
+    {
+     "label": "총매수잔량",
+     "value": "매수 1.9만"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "호가잔량상위",
+     "paper_text": "01"
+    },
+    {
+     "label": "종목코드",
+     "paper_text": "005930"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "150,850"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+1,850"
+    },
+    {
+     "label": "전일대비기호",
+     "paper_text": "+1.24%"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47J4-0",
+   "boardId": "2XY6-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율\" contains ledger title \"순위 — ELW 근접율\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "\"2건\" — VALUE IS BACKED (ledger element 수량 / \"2건\"). Label-only mismatch: Paper lead-slot caption reads \"핵심\", ledger label is \"수량\". Do NOT change the value."
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47K3-0",
+   "boardId": "2Y47-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락\" contains ledger title \"순위 — ELW 가격급등락\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "\"2건\" — VALUE IS BACKED (ledger element 수량 / \"2건\"). Label-only mismatch: Paper lead-slot caption reads \"핵심\", ledger label is \"수량\". Do NOT change the value."
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47L2-0",
+   "boardId": "2YA8-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증\" contains ledger title \"종목찾기 — 호가잔량 급증\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "현재가",
+     "value": "810,000 — label 현재가 matches a ledger element but the value does not; ledger 현재가 is \"150,850\""
+    },
+    {
+     "label": "종목코드",
+     "value": "006400 — label 종목코드 matches a ledger element but the value does not; ledger 종목코드 is \"005930\""
+    },
+    {
+     "label": "총매수량",
+     "value": "총매수 3.2만"
+    },
+    {
+     "label": "전일대비",
+     "value": "+23,700 — label 전일대비 matches a ledger element but the value does not; ledger 전일대비 is \"+1,850\""
+    },
+    {
+     "label": "기준량",
+     "value": "0.9만 → 1.9만"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "종목코드",
+     "paper_text": "005930"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "150,850"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+1,850"
+    },
+    {
+     "label": "전일대비기호",
+     "paper_text": "+1.24%"
+    },
+    {
+     "label": "급증률",
+     "paper_text": "+212%"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47LQ-0",
+   "boardId": "2YEQ-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-S8 · 종목찾기 — 잔량률 급증\" contains ledger title \"종목찾기 — 잔량률 급증\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "현재가",
+     "value": "810,000 — label 현재가 matches a ledger element but the value does not; ledger 현재가 is \"150,850\""
+    },
+    {
+     "label": "종목코드",
+     "value": "006400 — label 종목코드 matches a ledger element but the value does not; ledger 종목코드 is \"005930\""
+    },
+    {
+     "label": "총매도잔량",
+     "value": "매도 2.7만"
+    },
+    {
+     "label": "전일대비",
+     "value": "+23,700 — label 전일대비 matches a ledger element but the value does not; ledger 전일대비 is \"+1,850\""
+    },
+    {
+     "label": "기준률",
+     "value": "146.2% → 158.3%"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "종목코드",
+     "paper_text": "005930"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "150,850"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+1,850"
+    },
+    {
+     "label": "전일대비기호",
+     "paper_text": "+1.24%"
+    },
+    {
+     "label": "급증률",
+     "paper_text": "+37.6%p"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47ME-0",
+   "boardId": "2YJ8-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-S9 · 종목찾기 — 거래량 급증\" contains ledger title \"종목찾기 — 거래량 급증\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "현재거래량",
+     "value": "누적 73.8만주"
+    },
+    {
+     "label": "거래량급증",
+     "value": "상위 5개 표시 · 전체 100개"
+    },
+    {
+     "label": "이전거래량",
+     "value": "1.5만 → 4.2만"
+    },
+    {
+     "label": "급증량",
+     "value": "+2.7만주"
+    },
+    {
+     "label": "종목리스트",
+     "value": "전체 100개 중 12개 · 09:42 기준"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "종목코드",
+     "paper_text": "005930"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "150,850"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+1,850"
+    },
+    {
+     "label": "등락률",
+     "paper_text": "+1.24%"
+    },
+    {
+     "label": "급증률",
+     "paper_text": "6.4배"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47N2-0",
+   "boardId": "2YNQ-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률\" contains ledger title \"종목찾기 — 시간외 등락률\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "매수총잔량",
+     "value": "\"매수 0.4만\" — no ledger element has this label or this paper_text"
+    },
+    {
+     "label": "매도총잔량",
+     "value": "\"매도 0.3만\" — no ledger element has this label or this paper_text"
+    },
+    {
+     "label": "누적거래량",
+     "value": "\"0.7만주\" — no ledger element has this label or this paper_text"
+    },
+    {
+     "label": "누적거래대금",
+     "value": "\"거래대금 56.7억\" — no ledger element has this label or this paper_text"
+    },
+    {
+     "label": "시간외단일가등락율순위",
+     "value": "\"상위 5개 표시 · 전체 100개\" — no ledger element has this label or this paper_text"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "순위",
+     "paper_text": "01"
+    },
+    {
+     "label": "종목코드",
+     "paper_text": "005930"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "151,200"
+    },
+    {
+     "label": "당일종가",
+     "paper_text": "당일 종가 150,850"
+    },
+    {
+     "label": "등락률",
+     "paper_text": "+0.23%"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47NQ-0",
+   "boardId": "2YS8-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위\" contains ledger title \"순위 — 신용비율 상위\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "6종목 — VALUE IS ledger-backed (element \"수량\" → \"6종목\"); only the label differs (Paper renders \"핵심\", ledger says \"수량\"). Likely a label-naming convention difference, not wrong data — do not edit the value."
+    },
+    {
+     "label": "값",
+     "value": "상위 50 기준 — placeholder label \"값\"; this paper_text is in no 2YS8-0 element"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "변화",
+     "paper_text": "융자잔고 1위"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47PO-0",
+   "boardId": "2Z49-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매\" contains ledger title \"순위 — ELW 거래원별 순매매\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "값",
+     "value": "\"매수 1위\" — VALUE IS BACKED (ledger element 변화 / \"매수 1위\"). Label-only mismatch: the Paper row label reads \"값\", which is the table's own column-header word reused as a row label (placeholder leak); ledger label is \"변화\". Do NOT change the value."
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47QN-0",
+   "boardId": "2ZBB-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T6-3 · 순위 — 대차 상위\" contains ledger title \"순위 — 대차 상위\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "7종목 — value matches ledger element paper_text \"7종목\" but that element's label is \"수량\", not \"핵심\" (Paper uses the generic slot label)"
+    },
+    {
+     "label": "값",
+     "value": "상위 50 합계 — no ledger element in 2ZBB-0 carries this text at all, and \"값\" is not a ledger label"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "변화",
+     "paper_text": "대차잔고 1위"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47SL-0",
+   "boardId": "2ZN9-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색\" contains ledger title \"순위 — ELW 조건검색\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "ELW조건검색",
+     "value": "\"기어링 10배 이상\" — GENUINELY UNBACKED. This exact string appears in no element of board 2ZN9-0 (its two ELW조건검색 elements are \"행사가 ±10%\" and \"잔존 30~90일\"), and \"기어링\" appears nowhere in the ledger file at all. This row sits where the ledger's \"행사가 ±10%\" element should be."
+    },
+    {
+     "label": "핵심",
+     "value": "\"2건\" — VALUE IS BACKED (ledger element 수량 / \"2건\"). Label-only mismatch: Paper lead-slot caption reads \"핵심\", ledger label is \"수량\". Do NOT change the value."
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "ELW조건검색",
+     "paper_text": "행사가 ±10% — confirmed absent from the whole card: Body rows are \"기어링 10배 이상\" and \"잔존 30~90일\"; Header carries only \"ELW 조건검색\" and \"기준 09:42\"; Fold note reads \"스칼라 2개, 행 6개 접힘 · 원본에서 확인\"."
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47TK-0",
+   "boardId": "2ZTA-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가\" contains ledger title \"순위 — 한도소진율 증가\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "128종목 — value matches ledger element paper_text \"128종목\" but that element's label is \"수량\", not \"핵심\""
+    },
+    {
+     "label": "값",
+     "value": "소진율 증가 1위 — value matches ledger element paper_text \"소진율 증가 1위\" but that element's label is \"핵심 지표\", not \"값\""
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47VI-0",
+   "boardId": "3063-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위\" contains ledger title \"순위 — 장중 투자자 상위\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "값",
+     "value": "30분 집계 — no ledger element in 3063-0 carries this text at all"
+    },
+    {
+     "label": "핵심",
+     "value": "순매수 1위 — value matches ledger element paper_text \"순매수 1위\" but that element's label is \"보조 지표\", not \"핵심\""
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "변화",
+     "paper_text": "-1,186억원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47WH-0",
+   "boardId": "30C1-0",
+   "boardIdResolved": "OK",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "매수호가",
+     "value": "매수 412,500"
+    },
+    {
+     "label": "현재거래량",
+     "value": "80만주"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "거래량갱신",
+     "paper_text": "1"
+    },
+    {
+     "label": "종목코드",
+     "paper_text": "007660"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47XG-0",
+   "boardId": "30HY-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위\" contains ledger title \"순위 — 외국인·기관 상위\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "값",
+     "value": "08-31 확정 — value matches ledger element paper_text \"08-31 확정\" but that element's label is \"기타\", not \"값\""
+    },
+    {
+     "label": "기준 시각",
+     "value": "09:42 조회 — no ledger element in 30HY-0 carries this text at all (30HY-0 has no 기준 시각 element; the Header separately shows \"기준 09:42\", a different string)"
+    },
+    {
+     "label": "값",
+     "value": "외국인 순매수 1위 — value matches ledger element paper_text \"외국인 순매수 1위\" but that element's label is \"추가 지표\", not \"값\""
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "수량",
+     "paper_text": "6종목"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "47Z3-0",
+   "boardId": "30TY-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위\" contains ledger title \"순위 — 증권사별 상위\"",
+   "paperRows": 5,
+   "ledgerRows": 4,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "3종목 — value matches ledger element paper_text \"3종목\" but that element's label is \"수량\", not \"핵심\""
+    },
+    {
+     "label": "기준 시각",
+     "value": "09:42 조회 — no ledger element in 30TY-0 carries this text; the ledger's only 기준 시각 element is \"당일 09:40\", which the card already renders in the metric grid, so this is a second, unbacked 기준 시각 row"
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "4811-0",
+   "boardId": "316O-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-03 / R01-T4-8 · 순위 — 시가대비 등락\" contains ledger title \"순위 — 시가대비 등락\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "값",
+     "value": "512 — VALUE IS BACKED, LABEL ONLY: ledger element for \"512\" carries label \"변화\", Paper lead slot renders \"값\""
+    },
+    {
+     "label": "핵심",
+     "value": "318 — VALUE IS BACKED, LABEL ONLY: ledger element for \"318\" carries label \"보조 지표\", Paper third lead slot renders the fixed word \"핵심\""
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "4820-0",
+   "boardId": "31CL-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T6-8 · 순위 — 동일순매매\" contains ledger title \"순위 — 동일순매매\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "값",
+     "value": "동반 매수 1위 — value matches ledger element paper_text \"동반 매수 1위\" but that element's label is \"핵심 지표\", not \"값\""
+    },
+    {
+     "label": "핵심",
+     "value": "6종목 — value matches ledger element paper_text \"6종목\" but that element's label is \"수량\", not \"핵심\""
+    },
+    {
+     "label": "값",
+     "value": "08-31 확정 — value matches ledger element paper_text \"08-31 확정\" but that element's label is \"변화\", not \"값\""
+    },
+    {
+     "label": "기준 시각",
+     "value": "09:42 조회 — no ledger element in 31CL-0 carries this text at all (31CL-0 has no 기준 시각 element)"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "수량",
+     "paper_text": "18종목"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "482Z-0",
+   "boardId": "31II-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-03 / R01-T4-9 · 순위 — VI 발동\" contains ledger title \"순위 — VI 발동\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "1건 — NOT BACKED AT ALL: \"1건\" is not the paper_text of any 31II-0 element (its elements are 12건 / 8건 / 4건 / 전체 12건 · 6건 표시 ▸ / 09:41). Note \"1건\" IS an element of the neighbouring board 3TCO-0, so this lead slot appears to have borrowed another board's value"
+    },
+    {
+     "label": "매매체결처리시각",
+     "value": "09:41~ — LABEL MATCHES, VALUE DIFFERS: ledger paper_text is \"09:41\" with no trailing tilde"
+    },
+    {
+     "label": "VI해제시각",
+     "value": "09:43 — NOT BACKED AT ALL: 31II-0 has no \"VI해제시각\" element and no \"09:43\" value anywhere"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "VI적용구분",
+     "paper_text": "8건"
+    },
+    {
+     "label": "발동종목",
+     "paper_text": "전체 12건 · 6건 표시 ▸"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "483Y-0",
+   "boardId": "31OF-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능\" contains ledger title \"순위 — 신용융자 가능\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "214종목 — value matches ledger element paper_text \"214종목\" but that element's label is \"수량\", not \"핵심\""
+    },
+    {
+     "label": "기준 시각",
+     "value": "09:42 조회 — no ledger element in 31OF-0 carries this text at all (31OF-0 has no 기준 시각 element)"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "수량",
+     "paper_text": "전체 2,056종목"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "484X-0",
+   "boardId": "31UD-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량\" contains ledger title \"순위 — 당일·전일 체결량\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "19 — VALUE IS BACKED, LABEL ONLY: ledger element for \"19\" carries label \"보조 지표\", Paper third lead slot renders the fixed word \"핵심\""
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "486G-0",
+   "boardId": "32XM-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체\" contains ledger title \"순위 — 신주인수권 전체\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "\"51억원\" — VALUE IS BACKED (ledger element 금액 / \"51억원\"). Label-only mismatch: Paper lead-slot caption reads \"핵심\", ledger label is \"금액\". Do NOT change the value."
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "487F-0",
+   "boardId": "3BQB-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침\" contains ledger title \"업종 — 업종 목록 펼침\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "업종코드리스트",
+     "value": "4개 — label matches a ledger label but this value is not in the ledger (ledger 업종코드리스트 values are \"전체 시장 · 업종 21개\", \"21개 업종\", \"11개\")"
+    },
+    {
+     "label": "시장구분코드",
+     "value": "KOSPI200 — no ledger element with this label or value"
+    },
+    {
+     "label": "업종명",
+     "value": "K200 반도체 — no ledger element with this label or value"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "업종코드리스트",
+     "paper_text": "21개 업종"
+    },
+    {
+     "label": "업종코드리스트",
+     "paper_text": "11개"
+    },
+    {
+     "label": "코드",
+     "paper_text": "G1010"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "4883-0",
+   "boardId": "3D4I-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침\" contains ledger title \"관심 — 삼성전자 행 펼침\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "상한가",
+     "value": "193,700 — no ledger element with this label or value"
+    },
+    {
+     "label": "하한가",
+     "value": "104,300 — no ledger element with this label or value"
+    },
+    {
+     "label": "시가",
+     "value": "149,200 — no ledger element with this label or value"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "종목코드",
+     "paper_text": "005930"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "150,850"
+    },
+    {
+     "label": "전일대비",
+     "paper_text": "+1,850 · +1.24%"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "4892-0",
+   "boardId": "3DI2-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01-X · 투자자 12주체\" contains ledger title \"투자자 12주체\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "변화",
+     "value": "\"전년 7.9%\" — GENUINELY UNBACKED. No element of board 3DI2-0 has this value (its elements are \"거래대금 2.14조원\", \"1,420만주\", \"21.2배\", \"업종 11.2배\", \"2.63배\"), and the string \"전년 7.9%\" appears nowhere in the ledger file."
+    },
+    {
+     "label": "값",
+     "value": "\"업종 1.61배\" — GENUINELY UNBACKED. No element of board 3DI2-0 has this value; the ledger's 기타 element is \"2.63배\", not \"업종 1.61배\". The string \"업종 1.61배\" appears nowhere in the ledger file."
+    },
+    {
+     "label": "값",
+     "value": "\"21.2배\" — VALUE IS BACKED (ledger element 보조 지표 / \"21.2배\"). Label-only mismatch: Paper row label is the placeholder \"값\" (the table's own column-header word), ledger label is \"보조 지표\". Do NOT change the value."
+    },
+    {
+     "label": "값",
+     "value": "\"업종 11.2배\" — VALUE IS BACKED (ledger element 추가 지표 / \"업종 11.2배\"). Label-only mismatch: Paper row label is the placeholder \"값\", ledger label is \"추가 지표\". Do NOT change the value."
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "수량",
+     "paper_text": "1,420만주 — confirmed absent from the whole card: the five Body rows are 누적거래대금/\"거래대금 2.14조원\", 값/\"21.2배\", 변화/\"전년 7.9%\", 값/\"업종 11.2배\", 값/\"업종 1.61배\"; Header carries only \"투자자 12주체\" and \"기준 09:42\"; Fold note reads \"외 149개 항목 접힘 · 원본에서 확인\"."
+    },
+    {
+     "label": "기타",
+     "paper_text": "2.63배 — confirmed absent from the whole card. The nearest Paper row reads 값/\"업종 1.61배\", a different figure; \"2.63배\" appears nowhere in Header, Body, or Fold note."
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "489Q-0",
+   "boardId": "3DZ1-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R08-X · ELW 바스켓·만기평가\" and header title \"ELW 바스켓·만기평가\" match ledger title \"ELW 바스켓·만기평가\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "ELW투자지표산출",
+     "value": "22.4% — label and value both absent from the ledger record"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "기초자산1",
+     "paper_text": "삼성전자 100% · 바스켓 1종"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48AP-0",
+   "boardId": "3EWN-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침\" contains ledger title \"관심 — ELW 행 펼침\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "호가시간",
+     "value": "09:42:18 기준 — no ledger element with this label or value"
+    },
+    {
+     "label": "이론가",
+     "value": "1,210원 — no ledger element with this label or value in board 3EWN-0"
+    },
+    {
+     "label": "로",
+     "value": "0.07 — no ledger element with this label or value; the label \"로\" also looks truncated"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "종목명",
+     "paper_text": "삼성전자 2503 콜"
+    },
+    {
+     "label": "종목코드",
+     "paper_text": "58H215"
+    },
+    {
+     "label": "현재가",
+     "paper_text": "1,245"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48BO-0",
+   "boardId": "3FR6-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01-T1-X · 분봉 시세\" contains ledger title \"분봉 시세\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "21.2배 — VALUE IS BACKED (ledger element \"보조 지표\" → \"21.2배\"), but the Paper label reads \"핵심\". Note the ledger's \"핵심 지표\" element holds \"업종 11.2배\", not \"21.2배\", so label and value are crossed here."
+    },
+    {
+     "label": "값",
+     "value": "업종 1.61배 — GENUINELY UNBACKED VALUE. No element in 3FR6-0 has paper_text \"업종 1.61배\"; the nearest is \"핵심 지표\" → \"업종 11.2배\" (different number: 11.2 vs 1.61)."
+    },
+    {
+     "label": "값",
+     "value": "2.63배 — VALUE IS BACKED (ledger element \"변화\" → \"2.63배\"), but the Paper label reads \"값\", not \"변화\". Label-only mismatch; the number is correct."
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "핵심 지표",
+     "paper_text": "업종 11.2배"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48CN-0",
+   "boardId": "3GRO-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별\" contains ledger title \"증거금·보증금 구간별\"",
+   "paperRows": 4,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "매수비중",
+     "value": "28.0% — not in 3GRO-0 under any label"
+    },
+    {
+     "label": "유가잔고평가액",
+     "value": "89,760,240원 — neither this label nor this value exists in 3GRO-0 (the pair belongs to 133H-2 / 3K7K-0)"
+    },
+    {
+     "label": "총 평가손익",
+     "value": "+4,240,900원 — not in 3GRO-0 under any label"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "추정자산",
+     "paper_text": "124,580,240원"
+    },
+    {
+     "label": "수익률",
+     "paper_text": "수익률 +4.96%"
+    },
+    {
+     "label": "d+2출금가능금액",
+     "paper_text": "31,240,000원"
+    },
+    {
+     "label": "출금가능금액",
+     "paper_text": "출금가능 28,940,000원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48DM-0",
+   "boardId": "3IGR-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세\" contains ledger title \"증거금 재원·담보 상세\"",
+   "paperRows": 4,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "매수비중",
+     "value": "28.0% — not in 3IGR-0 under any label"
+    },
+    {
+     "label": "신용대용증거금",
+     "value": "0원 — neither this label nor the value \"0원\" exists in 3IGR-0"
+    },
+    {
+     "label": "전일대주상환손실대용증거금",
+     "value": "0원 — neither this label nor the value \"0원\" exists in 3IGR-0"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "추정자산",
+     "paper_text": "124,580,240원"
+    },
+    {
+     "label": "수익률",
+     "paper_text": "수익률 +4.96%"
+    },
+    {
+     "label": "금일재사용대상금액",
+     "paper_text": "12,946,000원"
+    },
+    {
+     "label": "금일재사용사용금액",
+     "paper_text": "3,842,000원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48FK-0",
+   "boardId": "3JZ3-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별\" contains ledger title \"호가 — 단계별 낱값·거래소별\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [
+    {
+     "label": "NXT 매수호가잔량2",
+     "value": "1,730 — neither label nor value appears in the 3JZ3-0 record; card renders the 매수(bid) side while the ledger records the 매도(ask) side"
+    },
+    {
+     "label": "매수호가수량3",
+     "value": "3,230 — no element with this label or value in 3JZ3-0"
+    },
+    {
+     "label": "매수호가3",
+     "value": "150,820 — no element with this label or value in 3JZ3-0"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "매도호가10",
+     "paper_text": "150,940"
+    },
+    {
+     "label": "매도호가수량10",
+     "paper_text": "2,160"
+    },
+    {
+     "label": "매도호가직전대비10",
+     "paper_text": "+770"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48GJ-0",
+   "boardId": "3K7K-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-T3-X1 · 이달 기초·기말 구성\" matches ledger title \"이달 기초·기말 구성\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "총 평가손익",
+     "value": "+4,240,900원 — not in 3K7K-0 (this value belongs to 3UTA-0's 총평가손익금액)"
+    },
+    {
+     "label": "종목별계좌평가현황",
+     "value": "보유종목 8종 — LABEL is backed by 3K7K-0's 종목별계좌평가현황, but that element's paper_text is \"8종목\", not \"보유종목 8종\" (value mismatch only)"
+    },
+    {
+     "label": "총 매입가",
+     "value": "매입 85,519,340원 — not in 3K7K-0 (this value belongs to 3UTA-0's 총수익률)"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "순자산액계_초",
+     "paper_text": "1억 1,975만 → 1억 2,458만"
+    },
+    {
+     "label": "주문가능금액",
+     "paper_text": "31,240,000원"
+    },
+    {
+     "label": "출금가능금액",
+     "paper_text": "출금가능 28,940,000원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48H7-0",
+   "boardId": "3LGC-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-T2-X3 · 거래내역 상세\" contains ledger title \"거래내역 상세\"",
+   "paperRows": 4,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "매수비중",
+     "value": "28.0% — not in 3LGC-0 under any label"
+    },
+    {
+     "label": "거래일자",
+     "value": "08/26 — LABEL MATCHES ledger 거래일자 but the VALUE DIFFERS: 3LGC-0's paper_text is \"09/01\", not \"08/26\""
+    },
+    {
+     "label": "유가금잔",
+     "value": "122,364,140 — neither this label nor this value exists in 3LGC-0"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "추정자산",
+     "paper_text": "124,580,240원"
+    },
+    {
+     "label": "수익률",
+     "paper_text": "수익률 +4.96%"
+    },
+    {
+     "label": "거래일자",
+     "paper_text": "09/01"
+    },
+    {
+     "label": "거래번호",
+     "paper_text": "순번 142"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48I6-0",
+   "boardId": "3MTJ-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌\" matches ledger title \"D+2 정산 후 계좌\"",
+   "paperRows": 4,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "신용대주평가금D+2",
+     "value": "0원 — neither the label nor the value \"0원\" exists in the 3MTJ-0 ledger record"
+    },
+    {
+     "label": "종목명",
+     "value": "SK하이닉스 20주 — neither the label nor the value exists in the 3MTJ-0 ledger record"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "주문가능금액",
+     "paper_text": "31,240,000원"
+    },
+    {
+     "label": "출금가능금액",
+     "paper_text": "28,940,000"
+    },
+    {
+     "label": "예수금",
+     "paper_text": "34,820,000"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48J5-0",
+   "boardId": "3NVG-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금\" matches ledger title \"예수금 통화별·특수예수금\"",
+   "paperRows": 4,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "매수비중",
+     "value": "28.0% — 3NVG-0 has no 매수비중 element and no \"28.0%\" value anywhere (28.0% belongs to 3MTJ-0 / 3UTA-0)"
+    },
+    {
+     "label": "d+3외화예수금",
+     "value": "0달러 — neither label nor value in 3NVG-0"
+    },
+    {
+     "label": "d+4외화예수금",
+     "value": "0달러 — neither label nor value in 3NVG-0"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "예탁자산평가액",
+     "paper_text": "124,580,240원"
+    },
+    {
+     "label": "수익률",
+     "paper_text": "수익률 +4.96%"
+    },
+    {
+     "label": "예수금",
+     "paper_text": "34,820,000원"
+    },
+    {
+     "label": "주문가능금액",
+     "paper_text": "31,240,000원"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48K4-0",
+   "boardId": "3ODO-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-B-X1 · 금현물 잔고·거래내역\" matches ledger title \"금현물 잔고·거래내역\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "결제잔고",
+     "value": "결제잔고 120g — neither label nor value in 3ODO-0"
+    },
+    {
+     "label": "총매입금액",
+     "value": "15,312,000원 — neither label nor value in 3ODO-0"
+    },
+    {
+     "label": "추정예탁자산",
+     "value": "20,870,000원 — neither label nor value in 3ODO-0"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "잔고평가액",
+     "paper_text": "16,050,000원"
+    },
+    {
+     "label": "종목명",
+     "paper_text": "금 99.99K 1g"
+    },
+    {
+     "label": "종목코드",
+     "paper_text": "04020000"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48L3-0",
+   "boardId": "3OIM-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-B-X2 · 금현물 주문·체결\" matches ledger title \"금현물 주문·체결\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "확인시간",
+     "value": "09:21:07 — neither label nor value in 3OIM-0"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "계좌별주문미체결현황",
+     "paper_text": "3건 · 09/01 · 08/31"
+    },
+    {
+     "label": "주문번호",
+     "paper_text": "0000512"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48M2-0",
+   "boardId": "3TCO-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건\" contains ledger title \"VI 발동 전체 12건\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "1건 — VALUE IS BACKED, LABEL ONLY: ledger element for \"1건\" carries label \"수량\", Paper third lead slot renders the fixed word \"핵심\""
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48N1-0",
+   "boardId": "3TOM-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체\" contains ledger title \"ELW 거래원별 10창구 전체\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "값",
+     "value": "\"매수 1위\" — VALUE IS BACKED (ledger element 변화 / \"매수 1위\"). Label-only mismatch: the Paper row label reads \"값\", the table's own column-header word reused as a row label (placeholder leak); ledger label is \"변화\". Do NOT change the value. NOTE: this card's Body markup is byte-identical to 47PO-0 (board 2Z49-0), whose ledger elements are also identical."
+    }
+   ],
+   "missingElements": [],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "48O0-0",
+   "boardId": "3UTA-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세\" matches ledger title \"부채·미수·연체 상세\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [
+    {
+     "label": "핵심",
+     "value": "0원 — VALUE matches ledger element 금액/\"0원\", but the Paper label is \"핵심\", not \"금액\" (label mismatch only)"
+    },
+    {
+     "label": "금액",
+     "value": "89,760,240원 — LABEL 금액 exists in 3UTA-0 but its ledger value is \"0원\"; \"89,760,240원\" is not any paper_text in 3UTA-0 (it is 3K7K-0's 유가잔고평가액)"
+    }
+   ],
+   "missingElements": [
+    {
+     "label": "변화",
+     "paper_text": "대출·융자·미수·연체 27항목"
+    }
+   ],
+   "verdict": "DIVERGENT"
+  },
+  {
+   "nodeId": "46L6-0",
+   "boardId": "15J9-2",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-06 / R05 · 반도체 업종·AI 테마\" contains ledger title \"반도체 업종·AI 테마\"",
+   "paperRows": 3,
+   "ledgerRows": 3,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "MATCH"
+  },
+  {
+   "nodeId": "46UY-0",
+   "boardId": "2RBO-1",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적\" contains ledger title \"기업정보 — 개요·가치·실적\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "MATCH"
+  },
+  {
+   "nodeId": "47AX-0",
+   "boardId": "2VDA-0",
+   "boardIdResolved": "OK",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "MATCH"
+  },
+  {
+   "nodeId": "47DU-0",
+   "boardId": "2WZK-0",
+   "boardIdResolved": "OK — frame name \"mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률\" contains ledger title \"순위 — ETF 기간 수익률\"",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "MATCH"
+  },
+  {
+   "nodeId": "47OP-0",
+   "boardId": "2YXS-0",
+   "boardIdResolved": "OK",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "MATCH"
+  },
+  {
+   "nodeId": "47RM-0",
+   "boardId": "2ZHC-0",
+   "boardIdResolved": "OK",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "MATCH"
+  },
+  {
+   "nodeId": "47UJ-0",
+   "boardId": "2ZZ7-0",
+   "boardIdResolved": "OK",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "MATCH"
+  },
+  {
+   "nodeId": "47Y4-0",
+   "boardId": "30O1-0",
+   "boardIdResolved": "OK",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "MATCH"
+  },
+  {
+   "nodeId": "4802-0",
+   "boardId": "30ZW-0",
+   "boardIdResolved": "OK",
+   "paperRows": 5,
+   "ledgerRows": 5,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "MATCH"
+  },
+  {
+   "nodeId": "485W-0",
+   "boardId": "32S7-0",
+   "boardIdResolved": "OK — Paper frame name \"mini/CC-03 / R01-T7 · 차트 — 업종 지수\" contains ledger title \"차트 — 업종 지수\"",
+   "paperRows": 2,
+   "ledgerRows": 2,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "MATCH"
+  },
+  {
+   "nodeId": "46S1-0",
+   "boardId": "2QX0-1",
+   "boardIdResolved": "MISMATCH: board_id \"2QX0-1\" does not exist as a key in ledger_ref.json at all, so no ledger record could be loaded for this pair. The Paper frame is named \"mini/CC-04 / R02-T2 · 호가 — 시간외 단일가\" (header title \"시간외 단일가 호가\"), whose title corresponds to ledger board 2QRP-1 (\"호가 — 시간외 단일가\"); the nearest existing key to 2QX0-1 is 2QX1-1 (\"호가 — KRX 금현물\"), which does NOT match this frame. Not guessing a substitute.",
+   "paperRows": 3,
+   "ledgerRows": 0,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "UNRESOLVED"
+  },
+  {
+   "nodeId": "48EL-0",
+   "boardId": "3JZ2-0",
+   "boardIdResolved": "MISMATCH: board_id \"3JZ2-0\" does not exist as a key in ledger_ref.json at all, so no ledger record could be loaded for this pair. The Paper frame is named \"mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값\", whose title corresponds to ledger board 3JT4-0 (\"호가 — 시간외 단일가 단계별 낱값\"); the nearest existing key to 3JZ2-0 is 3JZ3-0 (\"호가 — 단계별 낱값·거래소별\"), which does NOT match this frame. Not guessing a substitute.",
+   "paperRows": 3,
+   "ledgerRows": 0,
+   "unbackedRows": [],
+   "missingElements": [],
+   "verdict": "UNRESOLVED"
+  }
+ ]
+}

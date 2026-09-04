@@ -269,6 +269,8 @@ test('추천 설치는 Paper 02 승인 시트를 열고 거부하면 아무 일�
     '설치 위치 · 플러그인 모드 > 단계적 사고',
   );
   assert.equal(findByClass(container, 'plugin-canvas-sheet-feature').length, 1);
+  // 부제 없음 — "한 번에 하나씩 승인합니다"는 묶음 승인과 어긋나 폐기했다(2026-09-03 검수).
+  assert.equal(findByClass(container, 'plugin-canvas-sheet-subtitle').length, 0);
   assert.equal(buttonWithClass(container, 'is-sheet-cancel').textContent, '거부');
   assert.equal(buttonWithClass(container, 'is-sheet-confirm').textContent, '승인');
 
@@ -634,6 +636,17 @@ test('모델 제안은 출처 라벨 아테나 제안으로, GUI 제안은 내 �
   ]);
 });
 
+test('승인 카드 구역은 앱 재시작 경계 문구를 한 번만 단다', () => {
+  const { container, canvas } = mountedCanvas();
+  canvas.setProposals([envelope(), envelope({ proposal_id: 'p-2', source: 'gui' })], { revision: 7 });
+
+  // Paper 09의 경계 문구를 화면에도 낸다(2026-09-03 검수 확정). 카드마다가 아니라
+  // 구역에 한 번이다 — 대기 목록 전체가 같은 운명을 진다.
+  assert.deepEqual(texts(container, 'plugin-canvas-proposal-boundary'), [
+    '앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다',
+  ]);
+});
+
 test('카드는 제안 대기 → 처리됨 3상태를 가진다', async () => {
   const { container, canvas } = mountedCanvas({
     onApproveProposal: () => Promise.resolve({ kind: 'success' }),
@@ -899,4 +912,30 @@ test('목록 갱신이 도착해도 열려 있는 권한 초안은 살아남는�
     findByClass(container, 'plugin-canvas-toggle').map((toggle) => toggle.getAttribute('aria-checked')),
     ['true', 'true'],
   );
+});
+
+test('제안 구역은 카드가 있을 때만 비영속 한 줄을 남긴다', () => {
+  // 같은 검수 회신을 두 트랙이 따로 구현해 이름이 갈렸다(proposal-boundary vs
+  // proposals-note). main에 먼저 들어온 Paper 09 이름 하나로 합친다(2026-09-04 병합).
+  const { container, canvas } = mountedCanvas();
+  assert.deepEqual(texts(container, 'plugin-canvas-proposal-boundary'), []);
+
+  canvas.setProposals([envelope()], { revision: 7 });
+  assert.deepEqual(
+    texts(container, 'plugin-canvas-proposal-boundary'),
+    ['앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다'],
+  );
+
+  canvas.setProposals([], { revision: 7 });
+  assert.deepEqual(texts(container, 'plugin-canvas-proposal-boundary'), []);
+});
+
+test('설치 시트는 부제를 달지 않는다 — 묶음 승인이 가능해 개수를 말할 수 없다', async () => {
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({ container, onPropose: () => {} });
+  canvas.mount();
+  await buttonWithClass(container, 'is-secondary').dispatchEvent({ type: 'click' });
+
+  assert.equal(findByClass(container, 'plugin-canvas-install-sheet').length, 1);
+  assert.deepEqual(texts(container, 'plugin-canvas-sheet-subtitle'), []);
 });

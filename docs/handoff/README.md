@@ -30,7 +30,7 @@
 > *mock 브로커 + live 시장 데이터*다.
 
 > 🟢 **2026-09-03 키우미 카드미니 — 360×420 런타임 구현·전수 검증 완료.**
-> 다른 컴퓨터는 원격 브랜치 `codex/kiumi-mini-cards-runtime`을 받으면 된다.
+> 2026-09-03 main에 병합됐고 브랜치 `codex/kiumi-mini-cards-runtime`은 삭제됐다 — `main`만 받으면 된다.
 > 구현 계약, 검증 수치, 이어받기 명령은
 > [2026-09-03-kiumi-mini-cards-runtime.md](./2026-09-03-kiumi-mini-cards-runtime.md)에 있다.
 > 옛 [360×640 계획 인계](./2026-09-03-kiumi-mini-cards-handoff.md)와
@@ -43,40 +43,41 @@
 
 ---
 
-## 1. 저장소 상태 (2026-09-03 21:40 KST 확인)
+## 1. 저장소 상태 (2026-09-04 01:05 KST 확인)
+
+**모든 브랜치가 `main`에 들어갔다.** 2026-09-03 23:40 ~ 09-04 01:00에 브랜치 7개
+(plugin-mode-doctrine 16 · agent-dual-control 8+2 · kiumi-mini-cards-runtime 15 · card-surface 15+2 ·
+kiumi/mini-cards 2 · ANNJUNGCHAN/main 1 · plugin-mode-doctrine 후속 1)를 병합했다. 절차·충돌·회귀 수정은
+[2026-09-03-branch-integration-pending.md](./2026-09-03-branch-integration-pending.md) §8에 있다.
 
 | 항목 | 값 |
 |---|---|
-| `origin/main` | `53a2cad` — 2026-09-03 21:37 |
-| 브랜치 | **main 아님. 원격 6개 · 로컬 4개** — 아래 표 참고 |
+| `origin/main` | `6e26c6f` — 2026-09-04 01:00 |
+| 원격 브랜치 | main + **4개**(아래) — 4개 모두 tip이 main에 포함됨 |
+| 로컬 브랜치 | main · feat/agent-dual-control · feat/plugin-mode-doctrine (워크트리에 체크아웃) |
 | 열린 PR | 0건 |
-| 워크트리 | **3개** (main + `agent-dual-control-handoff-6f05c9` + `settings-plugin-tab-absorption-6d550f`) |
-| 미커밋 | main 체크아웃에 **수정 13 · 미추적 3** (백테스트 기법 노드·project-ide 계열, 진행 중) |
-| 게이트 4종 | 4/4 PASS — **2026-09-01 측정** |
-| app 단위 | 1,946 / 1,946 — **2026-09-01 측정** |
-| backend 전수 | 2,638 passed / 5 skipped / 0 failed — **2026-09-01 측정** |
+| 워크트리 | main + `.claude/worktrees/agent-dual-control-handoff-6f05c9` + `.claude/worktrees/settings-plugin-tab-absorption-6d550f` + Orca 2개(`orca/workspaces/DAOU.Athena/{hydra,main}`) |
+| 게이트 4종 | 4/4 PASS (6e26c6f, 저장소 루트에서만 돈다) |
+| app 단위 | **2,696 / 2,696** (6e26c6f) |
+| backend 전수 | **3,619 passed / 6 skipped / 0 failed** (6e26c6f, 격리 HOME, 20분 25초) |
+| verify | semantic-workspaces 12/12 · hoga-live · kiumi 19 · plugins 154 · agent-paper-parity PASS |
+| 알려진 빨감 | `verify:integrated-cards` — `board 2SKU-1 M 프로브: container 1360px outside 720..959px`. card-surface tip에서도 동일. 그 트랙의 W3 반응형 미완(visual blocker) |
 
-> ⚠ 테스트 3줄은 `3d504c0`(09-01 09:32) 시점 숫자다. 그 뒤 **85커밋**이 쌓였고
-> 재측정하지 않았다. 지금 기준선으로 쓰지 말고 §6으로 직접 다시 재라.
+**남은 원격 브랜치 4개 — 지우지 않은 이유.** tip은 전부 main에 있지만 **소유 세션이 지금도 push 중**이다
+(2026-09-04 00:29~00:46 사이 셋이 각각 커밋). 살아 있는 브랜치의 원격 ref를 지우면 그 세션의 upstream이
+끊긴다. 작업이 끝났다고 확인되면 하나씩 지운다 — **삭제 직전에 fetch하고 `merge-base --is-ancestor`로
+게이트해서**(`&&`), 일괄 `--delete` 금지. 2026-09-04 00:50에 이 규칙을 어겨 `feat/card-surface-paper-to-code`의
+push 9분 된 커밋 2개를 지웠고 `git fsck --unreachable`로 복구했다.
 
-**main에 병합되지 않은 브랜치** (2026-09-03 21:40 기준, 진행 중이라 계속 움직인다):
-
-| 브랜치 | main에 없는 커밋 |
+| 브랜치 | 상태 |
 |---|---|
-| `feat/plugin-mode-doctrine` | 16 |
-| `feat/card-surface-paper-to-code` | 14 |
-| `codex/kiumi-mini-cards-runtime` | 14 |
-| `feat/agent-dual-control` | 7 |
-| `kiumi/mini-cards` | 2 |
+| `feat/agent-dual-control` | 코드 알람 트랙, Step 4까지 main에. 워크트리 활성 |
+| `feat/plugin-mode-doctrine` | 플러그인 독트린 트랙, a18aaf4까지 main에. 워크트리 활성 |
+| `feat/card-surface-paper-to-code` | 카드 표면 트랙, d612cb5(G4)까지 main에. Codex가 원격 전용으로 push |
+| `ANNJUNGCHAN/main` | Orca 워크스페이스의 main 미러, cd0b98e까지 main에 |
 
-"통합이 끝나면 main만 남긴다"는 사용자 규칙은 **작업이 끝난 브랜치**에 적용된다.
-위 5개는 진행 중이므로 지금 지우면 안 된다.
-
-> ⏸ **통합은 착수했다가 중단된 상태다(2026-09-03 22:20).** `feat/agent-dual-control`
-> 워크트리에 커밋되지 않은 1,059줄이 있고 확인 76초 전에도 파일이 쓰이고 있었다.
-> 중단 이유·체크리스트·병합 순서·검증·정리 절차는
-> [2026-09-03-branch-integration-pending.md](./2026-09-03-branch-integration-pending.md)에
-> 전부 적혀 있다. **재개할 때 그 문서부터 읽어라.**
+삭제 완료: `codex/kiumi-mini-cards-runtime` · `kiumi/mini-cards`(둘 다 main에 포함 확인 후) ·
+로컬 `claude/settings-plugin-tab-absorption-6d550f`.
 
 > ⚠ **새 컴퓨터에서 app 단위가 1,945/1,946이거나 backend가 32건 무더기로 깨지면
 > 코드 문제가 아니라 PATH 문제다.** 원인과 조치는
