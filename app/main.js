@@ -1287,6 +1287,19 @@ ipcMain.handle('athena:routine-draft', async (_e, { body } = {}) => {
   try { return await routineHttp('POST', '/api/v1/routines/draft', body); }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
+// 감시 코드 검사(Step 6) — POST /routines/watch/check. 위 routine-update와 같은
+// 모양이다: 렌더러가 조립한 body를 그대로 실어 보내고, 실패는 {ok:false,error}로
+// 감싼다. 백엔드 실행층이 꺼져 있으면 409가 오고 detail 번역은 routineHttp 몫이다.
+ipcMain.handle('athena:routine-watch-check', async (_e, { body } = {}) => {
+  try { return await routineHttp('POST', '/api/v1/routines/watch/check', body); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+// 감시 코드 착지(Step 6) — POST /routines/watch/code. 켜져 있는 알람이 가리키는
+// 파일을 덮어쓰려 하면 백엔드가 409로 막는다(먼저 일시중지해야 한다).
+ipcMain.handle('athena:routine-watch-code', async (_e, { body } = {}) => {
+  try { return await routineHttp('POST', '/api/v1/routines/watch/code', body); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
 // 상세 조회(Step 6, 결정 d-2) — GET /{id}. 상세 패널의 설정 폼을 열 때 1회
 // 불러 조건 술어·source_spec을 프리필한다(목록 뷰에는 없는 값이다). 위
 // routine-runs와 같은 모양이며 body가 없다.
@@ -2847,6 +2860,22 @@ function historyConversationId() {
   return historyActiveConversationId;
 }
 
+// 에이전트 모드 코드 알람의 프로젝트(2026-09-03) — 감시 코드가 착지할 폴더 하나다.
+// id는 백엔드 프로젝트 레지스트리의 id다(athena:project-add가 등록 결과 id로 사이드바
+// 레코드를 만든다). 현재 대화의 프로젝트를 먼저 쓰고, 없으면 목록의 첫 프로젝트로
+// 내려앉는다(conversations.js normalizeState가 이미 같은 폴백을 쓴다). 폴더 경로가 없는
+// 기본 레코드는 레지스트리에 없는 것이라 프로젝트가 없는 것으로 본다 — 그때 접두가
+// 「프로젝트 없음」을 실어 모델이 지어내지 않고 사용자에게 묻는다.
+function activeAgentProject() {
+  try {
+    const listed = conversations.list();
+    const rows = (listed && Array.isArray(listed.projects) ? listed.projects : [])
+      .filter((row) => row && row.path);
+    const current = rows.find((row) => row.id === (listed && listed.currentProjectId)) || rows[0] || null;
+    return current ? { id: String(current.id), name: String(current.label || current.id) } : null;
+  } catch { return null; }
+}
+
 function activeRestAccountId() {
   try {
     const listed = accounts.list();
@@ -3873,6 +3902,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     canvasMode: submit.canvasMode,
     backtestContext: submit.backtestContext,
     graphContext: submit.graphContext,
+    agentContext: { project: activeAgentProject() },
     today: todayYyyymmdd(),
   };
   const turnPrompt = buildLiveTurnPrompt(liveTurnInput);

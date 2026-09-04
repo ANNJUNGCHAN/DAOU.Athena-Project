@@ -130,6 +130,19 @@ class Settings(BaseSettings):
         default_factory=lambda: Path.home() / ".athena" / "routines" / "archive"
     )
     routines_ledger_archive_cutoff_days: int = 90
+    # 코드 감시 알람의 실행 루프(scheduler._code_loop) — 장중에만 돈다.
+    # 확인 주기 하한이 60초인 이유는 쿨다운 하한이 60초라서다(models.WATCH_MIN_POLL_S).
+    routines_code_poll_interval_seconds: float = 60.0
+    # 한 주기가 쓸 수 있는 시세 조회 수 상한 — 리미터 순간 여유(headroom)는 1초 창이라
+    # 예산이 못 된다. 종목 하나당 1회를 쓰므로 종목 수 상한과 같은 뜻이다.
+    routines_code_rest_calls_per_cycle: int = 20
+    # 샌드박스 동시 실행 상한 — 프로세스 기동 비용이 있어 종목 수만큼 한꺼번에 띄우지 않는다.
+    routines_code_max_concurrent: int = 2
+    # 코드 감시가 도는 장중 창 — 기본은 KST 평일 09:00~15:30. 시연에서 장 밖에도
+    # 돌려 보려면 창을 넓히거나 요일 잠금을 푼다(scheduler.in_code_market_hours).
+    routines_code_market_open: str = "09:00"
+    routines_code_market_close: str = "15:30"
+    routines_code_market_weekdays_only: bool = True
     # 라우틴별이 아닌 전역 설정 — routines_enabled와 무관하게 항상 로드된다.
     nudge_guard_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "nudge_guard.json"
