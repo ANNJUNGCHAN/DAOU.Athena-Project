@@ -221,3 +221,24 @@ test('cold mutation does not report success when plaintext migration was skipped
   assert.equal(result.persisted, true);
   assert.equal(result.runtimeApplied, false);
 });
+
+// 플러그인 승인 묶음 — kind 검사는 mutate() 진입 첫 줄이라 mode와 무관하다.
+// 이 kind가 없으면 첫 승인이 TypeError로 죽는다.
+test('plugin-batch is an accepted mutation kind', async () => {
+  const h = harness();
+  const result = await h.coordinator.mutate({
+    kind: 'plugin-batch',
+    apply: async () => { h.calls.push(['apply']); },
+  });
+
+  assert.equal(result.ok, true);
+  assert.equal(h.calls.some(([name]) => name === 'apply'), true);
+});
+
+test('unknown mutation kind is still rejected', async () => {
+  const h = harness();
+  await assert.rejects(
+    h.coordinator.mutate({ kind: 'plugin', apply: async () => {} }),
+    TypeError,
+  );
+});

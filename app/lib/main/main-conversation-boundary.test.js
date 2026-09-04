@@ -50,13 +50,44 @@ test('new conversation serializes abort and provider rotation before record publ
   ]);
 });
 
-test('metadata-only history selection cannot retarget the live record boundary', () => {
+// 이력 행 선택은 실제 전환이다(41번 보드). 다만 기록 대상 id와 Claude 커서는
+// 새 대화 만들기와 같은 직렬화 큐 안에서만 바뀌어야 한다 — 핸들러가 큐를
+// 우회해 직접 대입하면 진행 중 턴의 메시지가 엉뚱한 제목 아래 섞인다.
+test('history selection retargets the live record only through the serialized switch queue', () => {
   const source = mainSource();
   const start = source.indexOf("ipcMain.handle('athena:conversations-set-active'");
   const end = source.indexOf("ipcMain.handle('athena:conversations-new'", start);
   const handler = source.slice(start, end);
 
+  assert.match(handler, /providerConversationRotationQueue\.switchTo\(/);
   assert.doesNotMatch(handler, /conversations\.setActive/);
   assert.doesNotMatch(handler, /historyActiveConversationId\s*=/);
-  assert.match(handler, /restorable:\s*false/);
+  assert.doesNotMatch(handler, /liveSessionId\s*=/);
+  // 모르는 id만 복원 불가다 — 아는 대화를 "복원 불가"로 돌려보내면 안 된다.
+  assert.match(handler, /if \(!known\)[\s\S]*restorable:\s*false/);
+});
+
+test('switching to an existing conversation serializes abort and rotation, then publishes the chosen id', async () => {
+  const events = [];
+  let publishedId = null;
+  const queue = createConversationRotationQueue({
+    isShuttingDown: () => false,
+    blockAdmission: (reason) => events.push(`block:${reason}`),
+    interrupt: () => events.push('abort'),
+    createConversationId: () => { throw new Error('switchTo must not mint a new id'); },
+    publishConversationId: (id) => { publishedId = id; events.push('publish'); },
+    beginConversation: () => { throw new Error('switchTo must not begin a new conversation'); },
+    selectConversation: ({ id }) => { events.push(`select:${id}`); return { activeId: id }; },
+    rotateProvider: (reason) => events.push(`rotate:${reason}:${publishedId}`),
+  });
+
+  assert.deepEqual(await queue.switchTo({ id: 'conversation-old' }), { activeId: 'conversation-old' });
+  assert.deepEqual(events, [
+    'block:conversation_switch',
+    'abort',
+    'rotate:switch_conversation:null',
+    'publish',
+    'select:conversation-old',
+  ]);
+  assert.equal(publishedId, 'conversation-old');
 });

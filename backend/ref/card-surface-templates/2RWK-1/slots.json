@@ -4888,5 +4888,104 @@
       "collapse_group": null,
       "expanded_board": null
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "수급 — 신용·대차",
+    "eyebrow": "CC-05 / 2RWK-1",
+    "source_board": "CC-05 / R03-T4 · 수급 — 신용·대차",
+    "elements": [
+      {
+        "source_slot_id": "s012",
+        "label": "외국인투자자",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,842억원"
+      },
+      {
+        "source_slot_id": "s015",
+        "label": "기관계",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "-1,204억원"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "개인투자자",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "-638억원"
+      },
+      {
+        "source_slot_id": "s029",
+        "label": "매매비중",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 2,
+          "tone": "neutral"
+        },
+        "paper_text": "3.42%",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s031",
+        "label": "잔고주수",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1,284만주",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 109,
+      "shown": 5,
+      "hidden": 104,
+      "scalars": 2,
+      "rows": 3
+    },
+    "fold_note": "스칼라 2개 · 행 3개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T4 · 수급 — 신용·대차",
+      "elements": "외국인투자자 · 기관계 · 개인투자자 · 매매비중 · 잔고주수",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 3개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

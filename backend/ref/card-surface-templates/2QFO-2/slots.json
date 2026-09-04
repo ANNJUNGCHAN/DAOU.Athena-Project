@@ -4947,5 +4947,100 @@
       "collapse_group": null,
       "expanded_board": null
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "facts",
+    "title": "수급 — 투자자별",
+    "eyebrow": "CC-05 / 2QFO-2",
+    "source_board": "CC-05 / R03-T1 · 수급 — 투자자별",
+    "elements": [
+      {
+        "source_slot_id": "s012",
+        "label": "외국인투자자",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,842억원"
+      },
+      {
+        "source_slot_id": "s015",
+        "label": "기관계",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "-1,204억원"
+      },
+      {
+        "source_slot_id": "s016",
+        "label": "금융투자",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "금융투자 -842억원"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "개인투자자",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "-638억원"
+      },
+      {
+        "source_slot_id": "s021",
+        "label": "차익거래당일",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+368억원"
+      }
+    ],
+    "fold_counts": {
+      "total": 120,
+      "shown": 5,
+      "hidden": 115
+    },
+    "fold_note": "외 115개 항목을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T1 · 수급 — 투자자별",
+      "elements": "외국인투자자 · 기관계 · 금융투자 · 개인투자자 · 차익거래당일",
+      "grammar": "facts",
+      "folded": "외 115개 항목을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

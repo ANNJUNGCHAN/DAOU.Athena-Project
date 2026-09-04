@@ -1,0 +1,158 @@
+{
+ "task": "합의 승인 계획 .omc/plans/athena-agent-doctrine-plan.md 실행 — 에이전트 모드 '두 입구, 한 게이트'(Paper 6장 정정+07·08 신설, 백엔드·IPC·렌더러 이중 제어, 테스트·프로브·파리티, 라이브 시연). worktree feat/agent-dual-control 전용. 사람 정지점 2개(Step 5 PDF 검수, Step 9 라이브 시연).",
+ "plan": ".omc/plans/athena-agent-doctrine-plan.md",
+ "spec": ".omc/specs/deep-interview-athena-agent-doctrine.md",
+ "order": [
+  "US-000",
+  "US-001",
+  "US-002",
+  "US-003",
+  "US-004",
+  "US-005",
+  "US-006",
+  "US-007",
+  "US-008",
+  "US-009",
+  "US-010"
+ ],
+ "stories": [
+  {
+   "id": "US-000",
+   "title": "Step 0 — worktree 착지·의존성·앵커·Paper 사전확인",
+   "passes": true,
+   "completedAt": "2026-09-03",
+   "acceptanceCriteria": [
+    "0a: git worktree list에 .claude/worktrees/agent-dual-control 행, HEAD 브랜치 feat/agent-dual-control, git status --short 빈 출력 — 완료(85aee35)",
+    "0b: worktree/.omc/plans/{athena-agent-doctrine-plan,open-questions}.md · .omc/specs/deep-interview-athena-agent-doctrine.md 존재 — 완료",
+    "0c: docs/ui/paper-card-surface-charter.md가 브랜치 첫 커밋으로 추적됨 — 완료(55ab631)",
+    "0c-2: EnterWorktree 후 pwd == worktree, 상대 경로로 계획·헌장 두 파일 보고",
+    "0d: node --version v20+, app/node_modules 존재, backend/.venv 존재, uv run python -c 'import athena_api' 무오류",
+    "0e: .omc/plans/anchors-note.md에 9파일(main.js·chat.js·canvas.js·sidebar.js·conversations.js·preload.js·backend-launcher.js·server.py·PAPER_APP_PARITY.md) 이름 앵커의 새 줄 번호 표 + sidebar-project-menu.js MODE_CHOICES 존재 확인, 찾지 못한 이름 0건",
+    "0f: Paper get_guide 완료, 활성 페이지 기록, A-2 활성, 6보드 id/크기 대조표(56X-0·ARM-0·B57-0·BIM-0·BV0-0·2IJN-2 1680×900), get_font_family_info 1회, 토큰 --color-k-faint·--color-k-dim 실재 여부 노트 기록"
+   ]
+  },
+  {
+   "id": "US-001",
+   "title": "Step 1 — 베이스라인 측정(worktree)",
+   "passes": true,
+   "completedAt": "2026-09-03",
+   "note": "결과는 .omc/plans/anchors-note.md baseline 절",
+   "acceptanceCriteria": [
+    "cd app && npm test 결과 pass/fail/skip 수를 anchors-note.md baseline 절에 기록, fail 0",
+    "cd backend && uv run pytest -q 결과 passed/failed/skipped 기록, failed 0",
+    "npm run verify:agent-paper-parity 단언 수 기록(기대 34, 다르면 그 값을 기준선으로 삼고 불일치 기록)"
+   ]
+  },
+  {
+   "id": "US-002",
+   "title": "Step 2 — Paper 01~04 정정",
+   "passes": true,
+   "acceptanceCriteria": [
+    "①-1 보드 56X-0: find_nodes '메인 대화와 섞이지 않습니다' 0건, '관제 창으로' ≥1건(합류 버튼, pink 1곳)",
+    "①-2 보드 ARM-0·B57-0·BIM-0·BV0-0·2IJN-2 각각 '아테나 · 에이전트 대화' ≥1건, fixture 대화가 루틴·알람·제안 턴 히스토리로 교체",
+    "①-3 ARM-0: '모두 읽음으로' 1건 + 대화 경로 칩 표기 ≥1 + '읽음' 행 액션 ≥1",
+    "①-4 B57-0: '지금 실행' 1건 + '놓친 예약 없음' 비활성 표기 1건 + '채팅에서 열기 ↗' 유지",
+    "①-5 BIM-0: 가드 편집 폼 입력 정확히 5개(하루 최대·조용 시간 시작·조용 시간 끝·근거 표시·거절 학습) + '저장' 1건, max_daily_briefings 미노출",
+    "get_screenshot 4장 검은/빈 화면 0, 하드코딩 hex 0(토큰만), 아트보드 fit-content 미사용"
+   ],
+   "completedAt": "2026-09-03"
+  },
+  {
+   "id": "US-003",
+   "title": "Step 3 — Paper 05·06 정정(문구 확정)",
+   "passes": true,
+   "acceptanceCriteria": [
+    "05 BV0-0 이름 '05 · 에이전트 — 작업', CTA '＋ 새 작업', 시트(폼) 오버레이 1건(종목코드 6자리·조건 소스/비교/값·쿨다운(초)·만료(일)·설명·브리핑 모델, 버튼 '초안 만들기'·'채팅에서 쓰기')",
+    "①-6 캡션 '이중 제어 규칙' 1건 + 3줄 확정 문구 일치('① 새 작업 — 채팅 문장으로도, 시트로도.' / '② 편집 — \"이거 고쳐줘\"로도, 폼으로도.' / '③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트.'), 상세 패널 버튼 4개(확정·일시중지·재개·취소, 1개만 활성)",
+    "06 2IJN-2 이름 '06 · 에이전트 — 작업 설정', ①-7 '이 화면에서는 값을 바꾸지 않습니다' 0건, '저장' 1건(pink), '채팅에서 고치기 ↗' 1건, '종목·소스는 취소 후 새로 만들기' 1건, 대표 2종(price.current 숫자·4연산자·연속 틱 / schedule.daily 시각·at·연속 틱 없음) 나란히, 읽기 전용 표기(종목·모드·소스·다음 실행·생성·만료 <날짜>)는 글자로 구분",
+    "get_screenshot 2장 정상, 신설 문자열에 문구 3원칙 정규식 (습니다|입니다|합니다|됩니다)[.。]?$ 0건"
+   ],
+   "completedAt": "2026-09-03"
+  },
+  {
+   "id": "US-004",
+   "title": "Step 4 — Paper 07·08 신설 + 이름 정합",
+   "passes": true,
+   "acceptanceCriteria": [
+    "①-8 A-2에 '07 · 에이전트 대화 — 제어 제안 턴 A~E' 1680×900 픽셀 고정, A~E 5열 제안 턴 카드(A 쿨다운 300초 → 600초 / B 읽지 않은 알람 3건 — 모두 읽음 / C 외국인 순매수 3일 연속 — 감시로 등록 / D 작업 › 일시중지 + '이동함' 칩 없음 / E 평일 아침 브리핑 — 07:30 놓침)",
+    "①-9 '08 · 에이전트 대화 — 결과 턴' 1680×900, 4상태('쿨다운 600초 반영' · '보류 — 목록 유지' · '이미 발화된 예약'+다시 시도 · '작업 › 일시중지 3건')",
+    "A-2 8보드 이름·순서 01~08 정합(rename_nodes + move_nodes)",
+    "①-10 get_computed_styles: 하드코딩 hex 0(알파 틴트 제외), 클릭 영역 ≥32px, 서술형 종결 0·영문 내부어 0·비한국어 단위 0"
+   ],
+   "completedAt": "2026-09-03",
+   "note": "07 432Z-1 · 08 4330-1 신설(1680×900 픽셀 고정). A-2 순서 01~08 정합. 03 보드의 \"지금 실행\" 문자열은 GUI 버튼 1 + 대화 칩 1(제안 턴 태그는 \"실행\"으로 분리)"
+  },
+  {
+   "id": "US-005",
+   "title": "Step 6-A — 백엔드 + IPC + 어댑터(문구 무관, Step 5 앞)",
+   "passes": true,
+   "acceptanceCriteria": [
+    "②-6 routine_tools.py: action enum ['draft','list','propose'], propose.control 12종(confirm·update·pause·resume·cancel·ack·ack_all·adopt·hold·guard·fire·view), proposed 허용 키 공통 5필드(condition.* blocked), dispatch propose는 GET /api/v1/routines만; server.py 등록 주석 갱신",
+    "②-7 test_state_changing_actions_are_gateway_blocked 파라미터 유지 통과; 신규 test_tool_schema_allows_draft_list_and_propose · test_propose_only_reads_list(12 파라미터, 허용 집합 == {('GET','/api/v1/routines')}) · test_propose_rejects_unknown_control · test_propose_update_rejects_condition_keys 통과",
+    "②-9 POST /api/v1/routines/{id}/update: 허용 8필드, symbol/condition.source 422, 404, cancelled 409, 레거시 소스 409 '지원하지 않는 조건 — 취소 후 새로 만들기', active 술어 반영, TriggerState reset, expires_days 미전송 시 expires_at 보존/전송 시만 재계산, note 신선도 2분기 — tests/api/test_routines_update.py 11케이스 + SOURCES 6종 테이블 구동 1건 통과",
+    "②-9b GET /api/v1/routines/source-catalog(활성 6종, 레거시 제외) → GET /{routine_id}(반환 키 = §1.6 목록, condition 4키 + source_spec 4키, missed·unread·last_fired_at·next_fire_at 부재), 선언 순서 briefing-budget → source-catalog → {routine_id}; tests/api/test_routines_detail.py 5케이스 통과",
+    "6d main.js: 핸들러 athena:routine-update/draft/detail/source-catalog(routineHttp 재사용) + maybeForwardRoutineProposal(선례 3개 동형, shellWin만) 선 디스패치 지점 합류; 6e preload.js INVOKE 4채널 + ON 'athena:routine-proposed'",
+    "6f app/lib/main/agent-session.js(FOUNDATION_PRESENT·getAgentConsoleSessionId) + agent-session.test.js ①~④ 통과; isDerivedAlertRoom은 agent-proposal.js 소유(7c)",
+    "uv run pytest tests/mcp/test_routine_tools.py tests/mcp/test_nudge_guard_tools.py tests/api/test_routines_update.py tests/api/test_routines_detail.py -q 0 failed; cd app && npm test 0 failed"
+   ],
+   "completedAt": "2026-09-03",
+   "note": "routine_tools propose(12 control, proposed 5키, view 통과) · routines.py source-catalog/{id}/update · TriggerEngine.reset_state · main.js 핸들러 4 + maybeForwardRoutineProposal · preload 5채널 · agent-session.js. 검증: 대상 pytest 105 passed, npm test 2295/2295"
+  },
+  {
+   "id": "US-006",
+   "title": "Step 5 — 🛑 PDF 발송·검수 게이트(사람 정지점 ①)",
+   "passes": false,
+   "acceptanceCriteria": [
+    "export_combined_pdf로 A-2 8장 PDF 생성(필요 시 4+4 병합), 활성 페이지 복귀 + finish_working_on_nodes",
+    "SendUserFile로 PDF + 보드별 1줄 변경 요약 전달, U-1~U-6 확인 항목을 예/아니오로 분리해 질문",
+    "사용자 PDF 승인 문자 + U-1~U-6 6항목 답 수신 전에는 Step 6-B 이후 진행 금지(반려 시 계획 Step 5.5 재작업 규칙)"
+   ]
+  },
+  {
+   "id": "US-007",
+   "title": "Step 6-B — 사용자 노출 문자열 확정(검수 후)",
+   "passes": false,
+   "acceptanceCriteria": [
+    "routine_tools.py propose notice · agent-proposal.js proposalCardModel/resultCardModel 문자열이 07·08 승인본과 일치",
+    "activation_blocker 3분기 매핑(레거시→'이 작업은 취소 후 새로 만들기' / WS 미가용→'실시간 감시 불가 — 키움 연결 없음' / 그 밖→'백엔드 실행 경로 없음', 미지→원문 폴백+노트), 접두어 '지금은 켤 수 없음' 0건",
+    "grep -rnE \"(습니다|입니다|합니다|됩니다)['\\\"]\" app/lib/agent-proposal.js backend/athena_mcp/routine_tools.py backend/athena_api/api/routines.py → 0건; agent-canvas.js는 문자열 지정 grep(놓친 예약 없음·보류함·이 작업은 취소 후 새로 만들기·종목·소스는 취소 후 새로 만들기·설정 편집·실시간 감시 불가 — 키움 연결 없음·백엔드 실행 경로 없음)이 목록과 일치"
+   ]
+  },
+  {
+   "id": "US-008",
+   "title": "Step 7 — 렌더러 GUI(agent-canvas·canvas·agent-proposal·chat)",
+   "passes": false,
+   "acceptanceCriteria": [
+    "7a agent-canvas.js: CTA '＋ 새 작업'→시트(onSubmitNewTask), 이중 제어 규칙 3줄, 주석 4곳(:300·:359·:987·:1444)+머리말 :22-27 계약 갱신, 모두 읽음 = markAllRead + ackAllAlerts(read===false ∩ routines[]), 알람 개별 읽음, 상세 패널 확정(draft && !activation_blocker, 비활성 사유 매핑 문구)·취소, 드릴인 '지금 실행'(missed===true만 활성, 아니면 '놓친 예약 없음'), 상세 패널 설정 편집 폼(routine-detail 1회, 편집 가능 = 8필드 ∩ source_spec, 읽기 전용 = 지정 라벨 6종 ∩ 존재 필드, 레거시 읽기 전용, 만료 미변경 시 patch 제외, '종목·소스는 취소 후 새로 만들기'), 드릴인 설정 탭 = 요약 + '설정 편집'(closeHistory→선택→폼 포커스), 가드 폼 5입력+저장(max_daily_briefings 왕복 보존), 제안 '루틴으로'/'보류'(보류함 N건), 반환 객체 setSearch·openDrillIn; '설정 — 보기 전용'·'이 화면에서는 값을 바꾸지 않습니다' 0건",
+    "7b canvas.js createAgentCanvas 배선: onSubmitNewTask/adoptSuggestion→athena:routine-draft, holdSuggestion 로컬, confirmRoutine→routine-confirm, fetchCondition→routine-detail, fetchSourceCatalog→routine-source-catalog, cancelRoutine, ackAlert/ackAllAlerts→routine-ack, fireNow→routine-missed-confirm, saveRoutineSettings→routine-update, saveNudgeGuard→nudge-guard-set(get 후 전체 교체); 하드코딩 소스·연산자 0",
+    "7c app/lib/agent-proposal.js(UMD, guard-confirm.js 동형): proposalCardModel·resultCardModel·viewCommand·chipToIpc(12종: 10 IPC + view/hold null)·isDerivedAlertRoom·shouldRenderProposal",
+    "7d chat.js: 'athena:routine-proposed' 구독 + onRoutineProposed가 shouldRenderProposal로 게이트, renderControlProposalCard(확정 칩 autofocus)·renderControlResultCard, view 즉시 실행, hold 결과 턴만, 기존 renderApprovalCard 무변경",
+    "cd app && npm test 0 failed"
+   ]
+  },
+  {
+   "id": "US-009",
+   "title": "Step 8 — 테스트·프로브·파리티·라이브 하네스",
+   "passes": false,
+   "acceptanceCriteria": [
+    "②-11 agent-canvas.test.js 이중 경로 매트릭스(A~E 각 GUI 1건) + 8a-3 비-루틴 방 ack 0회 + 8a-5 kind 3종 도달성·라벨 합집합 등호(양변 런타임 유도) + 8b 기존 단언 3건 교체(:554·:1339-1350·:1644) + ②-1 추가 단언 ①~⑥",
+    "agent-proposal.test.js: DUAL_PATH_TABLE 발산 단언 + _CONTROL_ACTIONS 12종 완전성 단언 + shouldRenderProposal 3분기 + isDerivedAlertRoom + proposed 허용 키 ⊆ 공통 5필드",
+    "②-10 probe-agent-paper-parity.js 갱신(이중 제어 규칙 3줄·편집 폼 집합 등호·routine-detail 1회·source-catalog 1회·설정 편집 버튼 동작·kind 3종·확정/지금 실행/읽음/루틴으로·보류/결과 턴 4상태·하드코딩 0, 머리말 :11-17·주석 :126 갱신) → npm run verify:agent-paper-parity 전건 통과, 단언 수 ≥ 베이스라인+10, 콘솔 에러 0; V9 grep '보기 전용\\|동선 규칙' 두 파일 0건",
+    "8d PAPER_APP_PARITY.md 에이전트 섹션: 판정표 8행 적용, 동선 규칙 ② 인용→이중 제어 규칙 ②, 보기 전용 결정 아래 번복 기록 추가",
+    "8e app/verify-agent-dual-control-live.js + package.json verify:agent-dual-control-live: 실백엔드(앱 기동 계약, fixture 아님) 11동작×{GUI 콜백, 주입 제안}=22케이스 통과, before/after JSON diff 저장",
+    "②-12 cd app && npm test 0 failed(베이스라인 대비 감소 0) · uv run pytest 0 failed(감소 0); V11 chat.js에 shouldRenderProposal ≥1건; V12 chipToIpc 키 집합 == 12종"
+   ]
+  },
+  {
+   "id": "US-010",
+   "title": "Step 9 — 🛑 라이브 종단 시연(사람 정지점 ②, ralph는 9a·9b까지)",
+   "passes": false,
+   "acceptanceCriteria": [
+    "9a: 8010 점유 프로세스 종료 후 cd app && npm start 한 줄로 기동, curl /api/v1/llm/manifest 200, 백테스트 모드 비-503, brain 비-degraded 3건 확인",
+    "9b: 예약 루틴(schedule.daily ALL@07:30 과거 시각, note 없음)·감시 루틴(price.current >= 88000, note '삼성전자 88,000 감시') draft+confirm으로 준비",
+    "정지 보고: 9c 19행 표(대화 경로·GUI 경로·상태 확인)와 증거 형식(12행 JSON diff / 7행 렌더러 덤프+스크린샷)을 사용자에게 제시하고 시연을 요청, 시연 전 어떤 행도 통과로 기록하지 않음",
+    "9d: 사용자 시연 결과 수신 후 docs/handoff/<날짜>-agent-dual-control-live.md §1~§6으로 문서화(미통과 항목 숨기지 않음)"
+   ]
+  }
+ ]
+}

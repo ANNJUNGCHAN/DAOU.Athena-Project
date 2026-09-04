@@ -6204,5 +6204,104 @@
       "kor": "전체누적",
       "unbound_reason": "일자별 추이 보조줄이 차익 누적·비차익 누적만 그리고 전체 누적을 그리는 텍스트가 없다 — 두 낱값에 흡수시키면 헌장 §2.2 집약 금지 위반이라 Paper에 자리를 새로 내야 한다"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "수급 — 프로그램",
+    "eyebrow": "CC-05 / 2ROJ-1",
+    "source_board": "CC-05 / R03-T3 · 수급 — 프로그램",
+    "elements": [
+      {
+        "source_slot_id": "s012",
+        "label": "외국인투자자",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,842억원"
+      },
+      {
+        "source_slot_id": "s015",
+        "label": "기관계",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "-1,204억원"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "개인투자자",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "-638억원"
+      },
+      {
+        "source_slot_id": "s073",
+        "label": "체결시간",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "time",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "09:15",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s074",
+        "label": "차익거래순매수",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+60억원",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 118,
+      "shown": 5,
+      "hidden": 113,
+      "scalars": 2,
+      "rows": 0
+    },
+    "fold_note": "스칼라 2개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T3 · 수급 — 프로그램",
+      "elements": "외국인투자자 · 기관계 · 개인투자자 · 체결시간 · 차익거래순매수",
+      "grammar": "compound",
+      "folded": "스칼라 2개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

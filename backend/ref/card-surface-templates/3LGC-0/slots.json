@@ -5525,5 +5525,104 @@
   },
   "authoring_cleared_slots": {
     "s039": "행 선택 상태 표시 — 응답 필드가 아니다, 매핑 해제"
+  },
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "거래내역 상세",
+    "eyebrow": "CC-01 / 3LGC-0",
+    "source_board": "CC-01 / R10-T2-X3 · 거래내역 상세",
+    "elements": [
+      {
+        "source_slot_id": "s012",
+        "label": "추정자산",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "124,580,240원"
+      },
+      {
+        "source_slot_id": "s013",
+        "label": "수익률",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "수익률 +4.96%"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "종목별계좌평가현황",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "8종목"
+      },
+      {
+        "source_slot_id": "s033",
+        "label": "거래일자",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "09/01",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s037",
+        "label": "거래번호",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "순번 142",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 91,
+      "shown": 5,
+      "hidden": 86,
+      "scalars": 2,
+      "rows": 7
+    },
+    "fold_note": "스칼라 2개 · 행 7개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-01 / R10-T2-X3 · 거래내역 상세",
+      "elements": "추정자산 · 수익률 · 종목별계좌평가현황 · 거래일자 · 거래번호",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 7개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
   }
 }

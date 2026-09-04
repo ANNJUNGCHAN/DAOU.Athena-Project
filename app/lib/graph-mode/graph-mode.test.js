@@ -11,11 +11,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { layoutClusterMap, nodeRadiusPx, groupByCluster, NODE_RADIUS_MIN_PX, NODE_RADIUS_MAX_PX } =
-  require('./cluster-layout');
 const store = require('./graph-mode-store');
-
-const VIEWPORT = { width: 1200, height: 800 };
 
 function node(id, cluster, degree = 1, name = id) {
   return { entity_id: id, name, kind: 'theme', cluster, degree };
@@ -39,73 +35,6 @@ function payload() {
 }
 
 // ── 배치 ────────────────────────────────────────────────────────────────────
-
-test('같은 입력이면 좌표가 픽셀까지 같다', () => {
-  const first = layoutClusterMap(payload(), VIEWPORT);
-  const second = layoutClusterMap(payload(), VIEWPORT);
-  assert.deepEqual(first, second);
-});
-
-test('모든 노드가 캔버스 안에 있다', () => {
-  const layout = layoutClusterMap(payload(), VIEWPORT);
-  assert.equal(layout.nodes.length, 4);
-  for (const placed of layout.nodes) {
-    assert.ok(placed.x >= 0 && placed.x <= VIEWPORT.width, `x=${placed.x}`);
-    assert.ok(placed.y >= 0 && placed.y <= VIEWPORT.height, `y=${placed.y}`);
-  }
-});
-
-test('차수가 큰 노드가 더 크게 그려진다', () => {
-  const layout = layoutClusterMap(payload(), VIEWPORT);
-  const byId = new Map(layout.nodes.map((n) => [n.entity_id, n]));
-  assert.ok(byId.get('e:a').radius > byId.get('e:d').radius);
-});
-
-test('반지름은 상·하한 사이에 머문다', () => {
-  assert.equal(nodeRadiusPx(0, 0), NODE_RADIUS_MIN_PX);
-  assert.equal(nodeRadiusPx(0, 100), NODE_RADIUS_MIN_PX);
-  assert.equal(nodeRadiusPx(100, 100), NODE_RADIUS_MAX_PX);
-  // 음수 차수가 와도 하한 아래로 내려가지 않는다.
-  assert.equal(nodeRadiusPx(-5, 100), NODE_RADIUS_MIN_PX);
-});
-
-test('군집을 넘는 엣지가 표시된다', () => {
-  const layout = layoutClusterMap(payload(), VIEWPORT);
-  const crossing = layout.edges.filter((edge) => edge.crossesCluster);
-  assert.equal(crossing.length, 1);
-  assert.deepEqual(
-    [crossing[0].from, crossing[0].to].sort(),
-    ['e:a', 'e:c']
-  );
-});
-
-test('한쪽 끝이 없는 엣지는 그리지 않는다', () => {
-  const broken = payload();
-  broken.edges.push(['e:a', 'e:does-not-exist']);
-  const layout = layoutClusterMap(broken, VIEWPORT);
-  assert.equal(layout.edges.length, 3, '끊어진 엣지가 걸러져야 한다');
-});
-
-test('빈 응답이 터지지 않는다', () => {
-  assert.deepEqual(layoutClusterMap({ revision: 3, nodes: [], edges: [] }, VIEWPORT), {
-    revision: 3,
-    nodes: [],
-    edges: [],
-    clusters: [],
-  });
-  assert.equal(layoutClusterMap(null, VIEWPORT).nodes.length, 0);
-  assert.equal(layoutClusterMap(payload(), null).nodes.length, 4);
-});
-
-test('군집 묶음이 번호 오름차순, 안쪽은 id 오름차순이다', () => {
-  const shuffled = {
-    nodes: [node('e:z', 1), node('e:a', 1), node('e:m', 0)],
-    edges: [],
-  };
-  const groups = groupByCluster(shuffled.nodes);
-  assert.deepEqual(groups.map((g) => g.cluster), [0, 1]);
-  assert.deepEqual(groups[1].members.map((m) => m.entity_id), ['e:a', 'e:z']);
-});
 
 // ── 상태 기계 ───────────────────────────────────────────────────────────────
 
@@ -190,52 +119,6 @@ test('리비전이 그대로면 아무것도 버리지 않는다', () => {
 });
 
 // ── 단계별로 무엇이 보이는가 ────────────────────────────────────────────────
-
-test('1단계는 전부, 2단계는 펼친 군집 + 이웃 1홉이 보인다(보드 04)', () => {
-  const layout = layoutClusterMap(payload(), VIEWPORT);
-  let state = store.applyRevision(store.toggleView(store.createInitialState()), 7);
-  assert.equal(store.visibleNodes(state, layout).length, 4);
-
-  state = store.expandCluster(state, 0);
-  const visible = store.visibleNodes(state, layout);
-  // e:a·e:b는 군집 0. e:c는 e:a와 이어진 이웃이라 함께 보인다 — 군집 경계를 넘는
-  // 연결의 반대쪽 끝을 지우면 그 연결 자체가 화면에서 사라진다.
-  assert.deepEqual(visible.map((n) => n.entity_id).sort(), ['e:a', 'e:b', 'e:c']);
-  // e:d는 2홉(e:c의 이웃)이라 안 보인다 — 1홉에서 끊는다.
-  assert.ok(!visible.some((n) => n.entity_id === 'e:d'));
-});
-
-test('2단계에서는 양 끝이 보이는 엣지만 그린다', () => {
-  // 한쪽이 화면 밖인 선을 그리면 어디로도 가지 않는 선이 된다.
-  const layout = layoutClusterMap(payload(), VIEWPORT);
-  let state = store.applyRevision(store.toggleView(store.createInitialState()), 7);
-  state = store.expandCluster(state, 0);
-  const edges = store.visibleEdges(state, layout);
-  const pairs = edges.map((e) => [e.from, e.to].sort().join('~')).sort();
-  // e:a~e:b(군집 내부)와 e:a~e:c(군집 경계 넘음) 둘 다 양 끝이 보인다.
-  // e:c~e:d는 e:d가 안 보이므로 빠진다.
-  assert.deepEqual(pairs, ['e:a~e:b', 'e:a~e:c']);
-});
-
-test('이웃이 하나도 없는 군집을 펼치면 그 군집만 보인다', () => {
-  const isolated = {
-    revision: 7,
-    nodes: [node('e:x', 0, 1), node('e:y', 0, 1), node('e:z', 1, 1)],
-    edges: [['e:x', 'e:y']],
-  };
-  const layout = layoutClusterMap(isolated, VIEWPORT);
-  let state = store.applyRevision(store.toggleView(store.createInitialState()), 7);
-  state = store.expandCluster(state, 0);
-  assert.deepEqual(store.visibleNodes(state, layout).map((n) => n.entity_id).sort(), ['e:x', 'e:y']);
-});
-
-test('없는 군집을 펼치면 빈 화면이다(지어내지 않는다)', () => {
-  const layout = layoutClusterMap(payload(), VIEWPORT);
-  let state = store.applyRevision(store.toggleView(store.createInitialState()), 7);
-  state = store.expandCluster(state, 99);
-  assert.deepEqual(store.visibleNodes(state, layout), []);
-  assert.deepEqual(store.visibleEdges(state, layout), []);
-});
 
 test('서브뷰는 요약·지도·수집노출 셋뿐이고 모르는 값은 무시된다(보드 05)', () => {
   const base = store.createInitialState();

@@ -536,16 +536,20 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-lg);
   margin-bottom: 12px;
 }
-.backtest-preset-list {
+/* 기법 목록(2026-09-03) — 처음 주어진 것과 내가 만든 것이 한 목록에 같은 모양으로 선다.
+   카드 한 장은 이름(굵게) + 분류 칩 한 줄, 그 아래 한 줄 설명이다. 한국어 알약은
+   줄바꿈을 막고(nowrap) 설명만 흐르게 둔다 — 칩이 글자 단위로 세로로 쪼개지지 않게. */
+.backtest-technique-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-bottom: 16px;
 }
-.backtest-preset-item {
+.backtest-technique-card {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 10px;
+  gap: 6px 10px;
   padding: 10px 14px;
   background: var(--color-k-panel);
   border: 1px solid var(--color-k-line);
@@ -553,20 +557,92 @@ body { margin: 0; overflow: hidden; }
   cursor: pointer;
   text-align: left;
 }
-.backtest-preset-item.is-selected {
-  border-color: var(--color-brand);
-}
-.backtest-preset-name {
-  color: var(--color-k-text);
+.backtest-technique-card.is-selected { border-color: var(--color-brand); }
+.backtest-technique-card:hover { border-color: var(--color-k-line-soft); }
+.backtest-technique-card.is-selected:hover { border-color: var(--color-brand); }
+/* 설명은 이름·칩 다음 줄로 통째로 내려간다(flex-basis 100%). */
+.backtest-technique-desc {
+  flex: 0 0 100%;
+  color: var(--color-k-dim);
   font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-tight);
+  word-break: keep-all;
+}
+/* [+ 새 기법 만들기] — 목록 맨 위. 고르는 것이 아니라 만드는 것이라 테두리를 점선으로
+   구분한다(같은 목록의 같은 카드이되, 하는 일이 다르다는 것만 말한다). */
+.backtest-technique-new {
+  border-style: dashed;
+  border-color: var(--color-k-line-soft);
+  background: transparent;
+}
+.backtest-technique-new:hover { border-color: var(--color-brand); }
+.backtest-technique-new-label {
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-weight: 600;
   font-size: var(--text-sm);
 }
-.backtest-preset-category {
+.backtest-preset-name,
+.backtest-user-strategy-name {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+/* 분류 칩(추세·모멘텀·돌파·변동성·반전)과 파일 경로 칩 — 같은 알약, 다른 재료. */
+.backtest-preset-category,
+.backtest-user-strategy-path {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
   color: var(--color-k-faint);
   font-family: var(--font-body);
   font-size: var(--text-2xs);
-  letter-spacing: 0.1em;
+  white-space: nowrap;
 }
+.backtest-user-strategy-path {
+  min-width: 0;
+  font-family: var(--font-mono);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 내가 만든 기법의 줄 — 카드 오른쪽에 [등록 해제]가 붙는다(카드 밖이라 눌러도
+   기법이 골라지지 않는다). 파일이 사라졌으면 그 한 줄이 카드 안에 선다. */
+.backtest-user-strategy-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.backtest-user-strategy-item {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.backtest-user-strategy-missing {
+  flex: 0 0 100%;
+  color: var(--color-down);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-user-strategy-remove {
+  flex: 0 0 auto;
+  padding: 5px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+}
+.backtest-user-param-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .backtest-design-form {
   display: flex;
   flex-wrap: wrap;
@@ -1113,6 +1189,68 @@ body { margin: 0; overflow: hidden; }
 .backtest-code-bounds-no { color: var(--color-down); }
 .backtest-code-bounds-note { color: var(--color-k-faint); }
 
+/* 프로젝트를 열었을 때의 코드 탭 행동줄(2026-09-02) — 환경과 등록. 옛 편집기의
+   .backtest-code-actions와 같은 자리다. */
+.backtest-ide-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.backtest-venv-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel);
+}
+.backtest-venv-title {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+}
+.backtest-venv-status {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-venv-packages {
+  width: 200px;
+  padding: 4px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel2);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-venv-create,
+.backtest-register-strategy {
+  padding: 5px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-register-strategy { border-color: var(--color-brand); color: var(--color-brand); }
+.backtest-venv-progress,
+.backtest-venv-error {
+  flex: 1 1 100%;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+}
+.backtest-venv-progress { color: var(--color-k-faint); }
+.backtest-venv-error { color: var(--color-down); }
+
 /* 플로우 지도(보드 08) — 앱/내 코드 경계 두 줄이 이 화면의 핵심이다. */
 .backtest-flow-boundary {
   display: flex;
@@ -1134,6 +1272,36 @@ body { margin: 0; overflow: hidden; }
 }
 .backtest-flow-boundary.is-mine .backtest-flow-boundary-line {
   background: rgb(238 19 123 / 28%);
+}
+/* 지도를 만드는 동안(2026-09-02 사용자 지시 "로딩 표시") — 빈 자리는 죽은 화면으로
+   읽힌다. 실패도 화면 전체를 오류로 바꾸지 않고 이 자리에 적는다. */
+.backtest-flow-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+}
+.backtest-flow-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-k-line);
+  border-top-color: var(--color-brand);
+  border-radius: 50%;
+  animation: backtest-spin 0.8s linear infinite;
+}
+@keyframes backtest-spin {
+  to { transform: rotate(360deg); }
+}
+.backtest-flow-loading-text {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-flow-error {
+  padding: 10px 0;
+  color: var(--color-down);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
 }
 .backtest-flow-node {
   display: flex;
@@ -1212,6 +1380,147 @@ body { margin: 0; overflow: hidden; }
   margin-top: 4px;
   color: var(--color-k-dim);
   font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+/* 흐름 지도가 설계의 첫 표면이 된 뒤(보드 11~14, 2026-09-03) 더해진 것들.
+   위 .backtest-flow-*를 그대로 쓰고, 여기서는 지도에만 있는 것 넷을 세운다:
+   머리줄·대상 한 줄·상태 고리·코드 서랍. */
+.backtest-map-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.backtest-map-head-body { flex: 1 1 auto; min-width: 0; }
+.backtest-map-head-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.backtest-map-head-sub {
+  margin-top: 2px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+/* 지도 판수 — 대화가 몇 번 고쳤는가. 코드 서랍의 "지도 vN과 일치"와 같은 숫자다. */
+.backtest-map-version {
+  flex: 0 0 auto;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-map-target {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--color-k-panel3);
+}
+.backtest-map-target-text {
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+/* 방금 바뀐 칸 — 대화 한 번이 어디를 건드렸는지를 눈으로 잇는 알약(보드 14-B). */
+.backtest-map-changed {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(238 19 123 / 12%);
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-flow-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* 상태가 ok가 아닐 때만 뜨는 사유 한 줄 — 늘 뜨는 줄은 아무도 읽지 않는다. */
+.backtest-flow-note {
+  margin-top: 2px;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+/* 상태 고리 3종. 빨강은 멈춘 칸, 주황은 의심스러운 칸, 점선은 모르는 칸이다 —
+   모름을 회색으로 뭉개면 사람은 그 칸을 믿어버린다. */
+.backtest-flow-node.is-error {
+  border-color: var(--color-up);
+  background: rgb(217 43 43 / 6%);
+}
+.backtest-flow-node.is-error .backtest-flow-note { color: var(--color-up); }
+.backtest-flow-node.is-suspect {
+  border-color: var(--color-warn);
+  background: rgb(255 152 56 / 8%);
+}
+.backtest-flow-node.is-suspect .backtest-flow-note { color: #A85C10; }
+.backtest-flow-node.is-unknown {
+  border: 1px dashed var(--color-k-ghost);
+  background: transparent;
+}
+/* 코드 서랍(보드 14-E) — 지도 뒤에 무엇이 있는지 한 줄. 여는 버튼은 여기 하나뿐이다. */
+.backtest-map-drawer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--color-k-line);
+}
+.backtest-map-drawer-text {
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-map-drawer-badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(255 152 56 / 14%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-map-drawer-note {
+  flex: 1 1 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-map-open-code,
+.backtest-map-back,
+.backtest-error-map {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.backtest-error-map { margin: 14px 0 0 8px; }
+/* 지도에서 코드로 들어온 사람에게 먼저 말한다 — 여기서 손대면 지도가 진실이라는
+   규칙이 깨지는 순간이 시작된다(보드 14-E). */
+.backtest-code-frommap {
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgb(255 152 56 / 10%);
+  color: #A85C10;
+  font-family: var(--font-body);
   font-size: var(--text-2xs);
 }
 
@@ -1706,6 +2015,47 @@ body { margin: 0; overflow: hidden; }
   flex: 1 1 auto;
   text-align: right;
   color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+
+/* 실행경로 2분기 — 헤더 탭·세그먼트와 같은 알약 모양을 쓴다(같은 층위의 선택이다). */
+.backtest-runpath {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--color-k-panel3);
+  border-radius: 999px;
+}
+.backtest-runpath-item {
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-runpath-item[aria-pressed='true'] {
+  background: var(--color-k-panel);
+  color: var(--color-k-text);
+}
+.backtest-result-runpath {
+  margin-bottom: 8px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+}
+
+/* 채팅이 제안한 탐색 — 버튼을 켜두되 누르는 것은 사람이다. */
+.backtest-optimize-start.is-suggested {
+  box-shadow: 0 0 0 3px rgb(238 19 123 / 25%);
+}
+.backtest-optimize-suggested {
+  margin-top: 6px;
+  color: var(--color-brand);
   font-family: var(--font-body);
   font-size: var(--text-2xs);
 }
@@ -3010,3 +3360,2372 @@ body { margin: 0; overflow: hidden; }
 .backtest-equity-overlay.is-1 { stroke: var(--color-navy); }
 .backtest-legend-overlay.is-0 { color: var(--color-brand); }
 .backtest-legend-overlay.is-1 { color: var(--color-navy); }
+
+/* 백테스트 변경 내역 카드(5단계) — 채팅 쪽 카드다. 캔버스가 액션을 바로 반영하고
+ * 무엇이 바뀌었는지·되돌리기를 여기서 보여준다. 머리 태그·버튼·안내줄은 루틴 승인
+ * 카드의 클래스를 그대로 쓴다(routine-draft-pill·routine-btn·agent-source —
+ * chat.css와 이 파일이 같은 shell.html에 로드돼 공유가 가능하다). */
+.backtest-change { border-left-color: rgba(230, 232, 238, 0.4); }
+.backtest-change-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 2px 0;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-change-error {
+  padding: 2px 0;
+  color: var(--color-down);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-change-actions { flex-wrap: wrap; }
+
+.backtest-change-error-label {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--color-text-muted, #6b7280);
+}
+
+/* 시각 설계 오류 수정 카드(보드 12·13·14) — 새 문법은 선택지 한 벌뿐이다. 머리 태그·
+ * 버튼·코드 diff·설계 diff 줄은 변경 내역 카드와 진단 카드의 클래스를 그대로 쓴다
+ * (routine-draft-pill · routine-btn · backtest-diff-row · backtest-change-row). */
+.backtest-visual-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 6px 0;
+}
+.backtest-visual-choice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  text-align: left;
+  cursor: pointer;
+}
+.backtest-visual-choice.is-picked {
+  border-color: var(--color-brand);
+  background: var(--color-k-panel3);
+}
+.backtest-visual-choice-label { font-weight: 600; }
+/* 무엇이 바뀌는지는 한 줄 아래로 내려 라벨과 겹치지 않게 한다(flex 100%). */
+.backtest-visual-choice-changes {
+  flex: 1 1 100%;
+  color: var(--color-k-soft);
+  font-size: var(--text-2xs);
+}
+
+.backtest-error-back {
+  margin-top: 14px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border, #d1d5db);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* ---------- 코드 탭의 프로젝트 IDE(2026-09-02, 결정 D1~D4) ----------
+   왼쪽 파일 트리 · 위 탭 스트립 · 오른쪽 편집기. 편집기 자체는 .backtest-code-*를
+   그대로 쓴다(같은 편집기 하나다) — 여기서는 그 둘레만 그린다. */
+.project-ide { margin-bottom: 12px; }
+
+.project-ide-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.project-ide-project,
+.project-ide-new-project,
+.project-ide-open-folder,
+.project-ide-project-go,
+.project-ide-new,
+.project-ide-new-go,
+.project-ide-save,
+.project-ide-rename,
+.project-ide-delete,
+.project-ide-rename-go,
+.project-ide-confirm-discard,
+.project-ide-confirm-cancel,
+.project-ide-delete-go,
+.project-ide-delete-cancel {
+  padding: 5px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.project-ide-project.is-on {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+.project-ide-save { border-color: var(--color-brand); color: var(--color-brand); }
+.project-ide-delete,
+.project-ide-delete-go { color: var(--color-down); }
+
+.project-ide-project-name,
+.project-ide-new-name,
+.project-ide-rename-name,
+.project-ide-filter {
+  padding: 5px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 8px;
+  background: var(--color-k-panel2);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  outline: none;
+}
+
+.project-ide-message {
+  margin-bottom: 8px;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-k-soft);
+}
+.project-ide-message.is-bad { color: var(--color-down); }
+
+.project-ide-body {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+/* 왼쪽 — 파일 트리 */
+.project-ide-side {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 8px;
+  background: var(--color-k-panel2);
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+}
+.project-ide-filter { width: 100%; }
+.project-ide-tree {
+  flex: 1 1 auto;
+  max-height: 320px;
+  overflow: auto;
+}
+.project-ide-row { display: flex; }
+.project-ide-dir,
+.project-ide-file {
+  width: 100%;
+  padding: 3px 4px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.project-ide-dir { color: var(--color-k-soft); }
+/* .py는 이 기능이 실제로 여는 파일이다 — 나머지는 보이기만 한다(D3). */
+.project-ide-file.is-py { color: var(--color-k-text); }
+.project-ide-file.is-other { color: var(--color-k-ghost); cursor: not-allowed; }
+.project-ide-file.is-on { background: var(--color-k-panel3); color: var(--color-brand); }
+.project-ide-new-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.project-ide-truncated {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--color-k-ghost);
+}
+
+/* 오른쪽 — 탭 스트립 + 머리줄 + 편집기 */
+.project-ide-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.project-ide-tabstrip { display: flex; flex-wrap: wrap; gap: 4px; }
+.project-ide-tab {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px 2px 8px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 8px;
+  background: var(--color-k-panel2);
+}
+.project-ide-tab.is-on { border-color: var(--color-brand); }
+.project-ide-tab-name,
+.project-ide-tab-close {
+  border: 0;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+}
+.project-ide-tab-close { color: var(--color-k-ghost); padding: 0 4px; }
+/* 저장 안 한 버퍼 — 이 점이 있으면 [실행]이 막힌다(D2). */
+.project-ide-tab-dot {
+  width: 8px;
+  font-size: 9px;
+  color: transparent;
+}
+.project-ide-tab-dot.is-dirty { color: var(--color-brand); }
+
+.project-ide-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.project-ide-head-project {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-k-text);
+}
+.project-ide-head-path {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-k-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.project-ide-rename-row { display: flex; gap: 6px; }
+.project-ide-rename-name { flex: 1 1 auto; min-width: 0; }
+
+/* 되묻기는 인라인 한 줄이다 — 이 앱에는 모달 관례가 없다. */
+.project-ide-confirm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 8px;
+  background: var(--color-k-panel3);
+}
+.project-ide-confirm-text {
+  flex: 1 1 auto;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-k-text);
+}
+
+.project-ide-editor { min-width: 0; }
+.project-ide-empty {
+  padding: 12px;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-k-ghost);
+}
+
+/* ── 백테스트 · 코드 탭 노드 연결 리본 (보드 13) ── */
+.backtest-code-root { display: flex; flex-direction: column; gap: 6px; }
+
+/* 이 편집기에는 옆 패널이 없다 — 보드 13의 "전략 파일" 패널을 편집기 위 한 줄 띠로 접었다. */
+.backtest-code-filemeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  color: var(--color-k-soft);
+}
+.backtest-code-filemeta-title,
+.backtest-code-filemeta-linked {
+  flex-shrink: 0;
+  color: var(--color-k-faint);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+.backtest-code-filemeta-name {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  color: var(--color-k-text);
+  white-space: nowrap;
+}
+.backtest-code-filemeta-origin,
+.backtest-code-filemeta-compat,
+.backtest-code-filemeta-chip {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  white-space: nowrap;
+}
+.backtest-code-filemeta-compat { color: var(--color-brand); }
+
+/* 리본 — 지금 보는 코드가 어느 노드에서 열렸는지. */
+.backtest-code-ribbon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  background: var(--color-k-panel);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  color: var(--color-k-text);
+}
+.backtest-code-ribbon-label { flex-shrink: 0; white-space: nowrap; }
+.backtest-code-ribbon-loc,
+.backtest-code-ribbon-code {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+.backtest-code-ribbon-loc { color: var(--color-k-soft); }
+.backtest-code-ribbon-code { color: var(--color-k-faint); }
+.backtest-code-ribbon-kind {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: #2E7D1F;
+  white-space: nowrap;
+}
+/* preview는 실행 산출물이 아니다 — 색으로도 그렇게 읽혀야 한다. */
+.backtest-code-ribbon-kind.is-preview {
+  background: rgb(255 152 56 / 10%);
+  color: #A85C10;
+}
+.backtest-code-ribbon-back {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 4px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.backtest-code-preview-banner {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgb(255 152 56 / 10%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+  word-break: keep-all;
+}
+/* 읽기 전용 미리보기는 흐리게 — 여기서 고칠 수 있다고 착각하지 않게. */
+.backtest-code-editor.is-preview-only { opacity: 0.62; }
+
+.backtest-code-notice {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--color-k-panel3);
+  color: var(--color-down);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+  word-break: keep-all;
+}
+
+/* 켠 줄 위에 겹치는 인라인 표식 — 클릭·선택은 그대로 textarea가 받는다. */
+.backtest-code-marker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 0 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 18px;
+  color: #A85C10;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+.backtest-code-linkstatus {
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+  color: var(--color-k-faint);
+  word-break: keep-all;
+}
+.backtest-code-linkstatus.is-linked { color: #2E7D1F; }
+
+/* ── 백테스트 · 시각 설계 편집기 (보드 11~14) ──
+   lib/backtest-visual-editor.js 전용. 위의 .backtest-flow-* · .backtest-map-*는 읽기 전용
+   지도의 것이고, 여기는 **편집** 표면이라 지도에 없는 것 다섯이 더 필요하다:
+   3열 골격(팔레트·캔버스·검사기) · 절대 좌표 노드 카드 · SVG 엣지 · 포트 점 · 검증 요약 바.
+
+   색은 새로 만들지 않는다 — tokens.css의 축을 그대로 쓴다. 축의 뜻도 그대로다:
+     info(파랑)  = 데이터가 흐르는 선          navy(연보라) = 값이 흐르는 선
+     brand(핑크) = 진입 쪽                     down(파랑)   = 청산 쪽
+     warn(주황)  = 사람이 확인해야 하는 곳     ok(초록)     = 검증을 통과한 곳
+   오류에 up(빨강)을 쓰지 않는 것은 이 앱의 규범이다(빨강은 가격 상승이다).
+
+   Paper 실측(2026-09-03, get_jsx inline-styles): 팔레트 150 · 캔버스 440 · 검사기 228,
+   노드 카드 100×86(출력 62×56, 데이터 92×84), 포트 점 9px, 요약 바 57px. */
+
+.backtest-vis {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  position: relative;
+}
+.backtest-vis:focus { outline: none; }
+.backtest-vis-body {
+  display: flex;
+  gap: 12px;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+/* ---------- 노드 팔레트 ---------- */
+/* 열 자체는 자리만 잡는다(overflow:hidden) — 스크롤은 안쪽 .backtest-vis-palette-scroll이
+   한다. 머리말·검색칸은 흐름에 남아 위에 붙어 있고, 그 아래 목록만 흐른다. */
+.backtest-vis-palette {
+  flex: 0 0 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-lg);
+  background: var(--color-k-panel);
+  overflow: hidden;
+}
+/* 두 겹인 이유: 목록이 길어져도 팔레트 열이 캔버스보다 커지면 안 된다. 바깥(scroll)은
+   남은 높이를 받되 자기 내용 높이는 0이고(안쪽이 절대 위치라 크기 계산에 끼지 않는다),
+   안쪽(scroll-body)이 그 자리를 채우며 스스로 스크롤한다. 그래서 열 높이는 언제나
+   캔버스가 정하고, 팔레트는 그 안에서만 흐른다(backtest-visual-editor.js 짝 주석). */
+.backtest-vis-palette-scroll {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.backtest-vis-palette-scroll-body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+/* 머리말·검색칸은 흐름에 있으므로 줄어들지 않게 못 박는다. */
+.backtest-vis-palette-head,
+.backtest-vis-search { flex: 0 0 auto; }
+/* 묶음 제목은 스크롤해도 그 묶음이 무엇이었는지 남긴다. */
+.backtest-vis-palette-group-title {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 2px 0;
+  background: var(--color-k-panel);
+}
+.backtest-vis-palette-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.backtest-vis-palette-head-body { flex: 1 1 auto; min-width: 0; }
+.backtest-vis-palette-title {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-base);
+}
+.backtest-vis-palette-sub {
+  margin-top: 2px;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-vis-search {
+  height: 30px;
+  padding: 0 9px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel2);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-vis-search:focus {
+  outline: none;
+  border-color: var(--color-brand);
+}
+.backtest-vis-palette-empty,
+.backtest-vis-list-empty,
+.backtest-vis-inspector-empty {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  line-height: var(--leading-tight);
+}
+.backtest-vis-palette-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.backtest-vis-palette-group-title {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.08em;
+}
+.backtest-vis-palette-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: var(--color-k-panel3);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.backtest-vis-palette-item:hover { border-color: var(--color-k-line); }
+.backtest-vis-palette-item:focus-visible {
+  outline: none;
+  border-color: var(--color-brand);
+}
+.backtest-vis-palette-glyph {
+  flex: 0 0 auto;
+  width: 12px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 12px;
+}
+.backtest-vis-palette-glyph.is-info { color: var(--color-info); }
+/* 지표 글리프 남색은 Paper 토큰 --color-kiwoome-visor(#0E20B2) 실값이다. tokens.css에는
+   아직 그 토큰이 없고(orb.css의 #orbRoot 안에만 있다) 셸에서는 var()가 닿지 않으므로 값을
+   그대로 적는다 — 새로 만든 색이 아니라 디자인 파일이 이미 쓰는 색이다. */
+.backtest-vis-palette-glyph.is-navy { color: #0E20B2; }
+.backtest-vis-palette-glyph.is-brand { color: var(--color-brand); }
+.backtest-vis-palette-glyph.is-out { color: var(--color-down); }
+.backtest-vis-palette-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- 캔버스 ---------- */
+.backtest-vis-canvas {
+  position: relative; /* 좁은 폭 서랍의 컨테이닝 블록 */
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-lg);
+  background: var(--color-k-panel);
+  overflow: hidden;
+}
+.backtest-vis-canvas-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 42px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--color-k-line-soft);
+}
+.backtest-vis-canvas-head-left,
+.backtest-vis-canvas-head-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.backtest-vis-canvas-title {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+/* 상태 알약 — 캔버스가 지금 어느 상태인지 한 낱말로. 한글은 글자 단위로 끊기면 못 읽는다. */
+.backtest-vis-status {
+  flex: 0 0 auto;
+  padding: 3px 7px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-vis-status.is-ok { background: rgb(95 206 63 / 12%); color: #2F7D20; }
+.backtest-vis-status.is-warn { background: rgb(255 152 56 / 13%); color: #81501E; }
+.backtest-vis-status.is-idle { background: var(--color-k-panel3); color: var(--color-k-dim); }
+
+.backtest-vis-undo,
+.backtest-vis-redo,
+.backtest-vis-fit,
+.backtest-vis-drawer-toggle,
+.backtest-vis-drawer-close {
+  flex: 0 0 auto;
+  padding: 4px 7px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.backtest-vis-undo,
+.backtest-vis-redo { font-family: var(--font-mono); }
+.backtest-vis-undo:disabled,
+.backtest-vis-redo:disabled { color: var(--color-k-ghost); cursor: default; }
+.backtest-vis-drawer-toggle[aria-expanded='true'] {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
+.backtest-vis-surface {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 260px;
+  background-color: var(--color-k-panel2);
+  /* 좌표가 있는 표면이라는 것을 바닥 격자로만 말한다 — 선이 굵으면 노드보다 먼저 읽힌다. */
+  background-image: radial-gradient(rgb(16 19 26 / 9%) 1px, transparent 1px);
+  background-size: 16px 16px;
+  overflow: auto;
+}
+.backtest-vis-watermark {
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  pointer-events: none;
+  opacity: 0.55;
+}
+.backtest-vis-edges {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+.backtest-vis-edge {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.backtest-vis-edge.is-data { stroke: var(--color-info); }
+.backtest-vis-edge.is-value,
+.backtest-vis-edge.is-bool { stroke: var(--color-navy); }
+.backtest-vis-edge.is-entry { stroke: var(--color-brand); stroke-width: 2.5; }
+.backtest-vis-edge.is-exit { stroke: var(--color-down); stroke-width: 2.5; }
+/* 두 번째 입력으로 들어가는 줄은 점선이다(보드 11) — 교차 비교에서 어느 쪽이 기준인지
+   선의 모양만으로 읽힌다. */
+.backtest-vis-edge.is-secondary { stroke-dasharray: 3 3; }
+.backtest-vis-edge.is-diag {
+  stroke: var(--color-warn);
+  stroke-width: 2.5;
+  stroke-dasharray: 4 3;
+}
+
+/* ---------- 노드 카드 ---------- */
+.backtest-vis-node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-lg);
+  background: var(--color-k-panel);
+  box-shadow: 0 5px 16px rgb(16 19 26 / 8%);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-base) var(--ease);
+}
+.backtest-vis-node.is-entry { border-color: rgb(238 19 123 / 32%); }
+.backtest-vis-node.is-exit { border-color: rgb(31 111 212 / 32%); }
+/* 고른 칸·오류 칸·동기화된 칸은 2px 고리로 말한다. 색이 아니라 굵기까지 바뀌는 이유:
+   색만으로는 색각 이상에서 같은 카드가 된다. */
+.backtest-vis-node.is-selected {
+  border: 2px solid var(--color-info);
+  box-shadow: 0 6px 18px rgb(77 159 255 / 18%);
+}
+.backtest-vis-node.is-error {
+  border: 2px solid var(--color-warn);
+  box-shadow: 0 6px 18px rgb(255 152 56 / 22%);
+  animation: backtest-vis-breathe 2.4s var(--ease) infinite;
+}
+.backtest-vis-node.is-warning { border: 1px dashed var(--color-warn); }
+.backtest-vis-node.is-synced {
+  border: 2px solid var(--color-ok);
+  box-shadow: 0 6px 18px rgb(95 206 63 / 18%);
+}
+.backtest-vis-node:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+/* 실행을 막고 있는 칸 하나만 숨을 쉰다. 여러 칸이 동시에 움직이면 어느 것이 먼저인지
+   사라진다 — 그래서 이 애니메이션은 is-error에만 붙는다. */
+@keyframes backtest-vis-breathe {
+  0%, 100% { box-shadow: 0 6px 18px rgb(255 152 56 / 22%); }
+  50% { box-shadow: 0 6px 22px rgb(255 152 56 / 40%); }
+}
+.backtest-vis-node-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.backtest-vis-node-title {
+  min-width: 0;
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-xs);
+  line-height: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.backtest-vis-node.is-entry .backtest-vis-node-title { color: var(--color-brand); }
+.backtest-vis-node.is-exit .backtest-vis-node-title { color: var(--color-down); }
+/* 값 배지 — "빠른 SMA 20"의 20. 제목 옆 작은 숫자 하나가 파라미터 패널을 열지 않아도
+   무엇이 세팅돼 있는지 말한다(보드 11). */
+.backtest-vis-node-param {
+  flex: 0 0 auto;
+  color: var(--color-info);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 12px;
+}
+.backtest-vis-node-lines {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+/* 보드처럼 접어서 읽힌다(Paper의 pre-wrap) — 말줄임으로 자르면 별칭이 긴 전략에서 조건
+   카드가 "ma_fast ↗ …"만 남아 무엇과 무엇을 비교하는지 사라진다. 넘치면 카드가 자르고,
+   잘린 줄은 title로 되찾는다. */
+.backtest-vis-node-line {
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: -0.01em;
+  line-height: 13px;
+  overflow-wrap: anywhere;
+}
+.backtest-vis-node-line.is-diag { color: #81501E; }
+/* 출력 칸(진입·청산)은 카드가 아니라 표지다 — 가운데 정렬에 옅은 바탕. */
+.backtest-vis-node.is-output {
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+.backtest-vis-node.is-output.is-entry { background: rgb(238 19 123 / 8%); }
+.backtest-vis-node.is-output.is-exit { background: rgb(31 111 212 / 8%); }
+.backtest-vis-node.is-output .backtest-vis-node-lines { display: none; }
+
+/* ---------- 포트 점 ---------- */
+.backtest-vis-port {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 2px solid var(--color-k-panel);
+  border-radius: var(--radius-full);
+  background: var(--color-navy);
+  transform: translateY(-50%);
+  cursor: crosshair;
+}
+.backtest-vis-port.is-in { left: -5px; }
+.backtest-vis-port.is-out { right: -5px; }
+/* 비어 있는 포트는 속이 빈 점이다 — 연결과 미연결이 같은 모양이면 그래프를 눈으로 못 읽는다. */
+.backtest-vis-port.is-open { background: var(--color-k-panel); box-shadow: 0 0 0 1.5px var(--color-k-ghost) inset; }
+.backtest-vis-node.is-info .backtest-vis-port.is-out,
+.backtest-vis-node.is-navy .backtest-vis-port.is-in { background: var(--color-info); }
+.backtest-vis-node.is-entry .backtest-vis-port.is-out { background: var(--color-brand); }
+.backtest-vis-node.is-exit .backtest-vis-port.is-out { background: var(--color-down); }
+.backtest-vis-port.is-diag {
+  background: var(--color-warn);
+  box-shadow: 0 0 0 4px rgb(255 152 56 / 22%);
+}
+.backtest-vis-port.is-pending {
+  background: var(--color-brand);
+  box-shadow: 0 0 0 4px rgb(238 19 123 / 22%);
+}
+.backtest-vis-port:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+.backtest-vis-port:disabled { cursor: default; }
+
+/* ---------- 목록/폼 대체 보기 ---------- */
+/* 끌지 못하는 환경에서도 같은 편집을 할 수 있어야 한다 — 캔버스는 편의이지 관문이 아니다. */
+.backtest-vis-list {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  overflow-y: auto;
+}
+.backtest-vis-list-head { display: flex; flex-direction: column; gap: 2px; }
+.backtest-vis-list-title {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+}
+.backtest-vis-list-sub {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-vis-list-add {
+  align-self: flex-start;
+  height: 30px;
+  padding: 0 9px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel2);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-vis-list-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel2);
+}
+.backtest-vis-list-row.is-selected { border-color: var(--color-info); }
+.backtest-vis-list-row.is-error {
+  border-color: rgb(255 152 56 / 48%);
+  background: rgb(255 152 56 / 6%);
+}
+.backtest-vis-list-row-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.backtest-vis-list-pick {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-xs);
+  text-align: left;
+  cursor: pointer;
+}
+.backtest-vis-list-kind {
+  flex: 0 0 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-vis-list-remove {
+  flex: 0 0 auto;
+  padding: 3px 9px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  background: var(--color-k-panel);
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+}
+
+/* ---------- 검사기 ---------- */
+.backtest-vis-inspector {
+  flex: 0 0 228px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-lg);
+  background: var(--color-k-panel);
+  overflow-y: auto;
+}
+.backtest-vis-inspector.is-error { border-color: rgb(255 152 56 / 30%); }
+.backtest-vis-inspector-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.backtest-vis-inspector-head-body { min-width: 0; }
+.backtest-vis-inspector-eyebrow {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.06em;
+}
+.backtest-vis-inspector-title {
+  margin-top: 2px;
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-md);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.backtest-vis-kind-pill {
+  flex: 0 0 auto;
+  padding: 4px 7px;
+  border-radius: var(--radius-full);
+  background: rgb(77 159 255 / 10%);
+  color: var(--color-info);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-vis-kind-pill.is-error {
+  background: rgb(255 152 56 / 13%);
+  color: #81501E;
+  font-family: var(--font-strong);
+}
+
+/* 오류 상세 — 보드 12. 코드는 진단의 신원이라 문장보다 먼저 온다. */
+.backtest-vis-inspector-error {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 11px;
+  border: 1px solid rgb(255 152 56 / 26%);
+  border-radius: 9px;
+  background: rgb(255 152 56 / 10%);
+}
+.backtest-vis-error-code {
+  color: #81501E;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.04em;
+}
+.backtest-vis-error-message {
+  color: #81501E;
+  font-family: var(--font-strong);
+  font-size: var(--text-xs);
+  line-height: 15px;
+  word-break: keep-all;
+}
+.backtest-vis-where { display: flex; flex-direction: column; gap: 6px; }
+.backtest-vis-where-title {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-vis-where-table {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel3);
+}
+.backtest-vis-where-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.backtest-vis-where-key {
+  flex: 0 0 auto;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-vis-where-value {
+  min-width: 0;
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  text-align: right;
+  /* 타입 합집합(Series<Number>|Number)과 json_path는 228px에 한 줄로 못 들어간다. break-all은
+     글자 한복판에서 끊어 타입을 못 읽게 만들므로 자연 경계(| . [ )를 먼저 쓰게 둔다. */
+  overflow-wrap: anywhere;
+}
+.backtest-vis-where-value.is-code { color: var(--color-brand); }
+
+/* 코드로 가는 문 — 보드 12. 문이 하나뿐인 이유는 지도가 먼저이기 때문이다. */
+.backtest-vis-open {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px;
+  border: 1px solid rgb(238 19 123 / 20%);
+  border-radius: 9px;
+  background: rgb(238 19 123 / 5%);
+}
+.backtest-vis-open-title {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-xs);
+}
+.backtest-vis-open-note {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 15px;
+  word-break: keep-all;
+}
+.backtest-vis-open-code {
+  height: 30px;
+  border: none;
+  border-radius: 7px;
+  background: var(--color-brand);
+  color: #FFFFFF;
+  font-family: var(--font-strong);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+}
+.backtest-vis-ask { display: flex; flex-direction: column; gap: 7px; }
+.backtest-vis-ask-chat {
+  height: 32px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel);
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+}
+.backtest-vis-ask-note {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 15px;
+  word-break: keep-all;
+}
+
+/* 입출력 타입 블록 + 상태 한 줄(보드 11·14). */
+.backtest-vis-io {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px;
+  border-radius: 9px;
+  background: var(--color-k-panel3);
+}
+.backtest-vis-io-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.backtest-vis-io-key {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+.backtest-vis-io-value {
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  text-align: right;
+}
+.backtest-vis-io-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 4px;
+  border-top: 1px solid var(--color-k-line-soft);
+}
+.backtest-vis-io-dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: var(--color-ok);
+}
+.backtest-vis-io-status.is-error .backtest-vis-io-dot { background: var(--color-warn); }
+.backtest-vis-io-status-text {
+  color: #2F7D20;
+  font-family: var(--font-strong);
+  font-size: var(--text-2xs);
+  line-height: 13px;
+  word-break: keep-all;
+}
+.backtest-vis-io-status.is-error .backtest-vis-io-status-text { color: #81501E; }
+
+/* "이 노드는 무엇을 하나요?" — 코드를 모르는 사람이 읽는 유일한 문단이다. */
+.backtest-vis-what { display: flex; flex-direction: column; gap: 6px; }
+.backtest-vis-what-title {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-xs);
+}
+.backtest-vis-what-body {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  line-height: 17px;
+  word-break: keep-all;
+}
+.backtest-vis-spec {
+  height: 30px;
+  padding: 0 9px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  text-align: left;
+  cursor: pointer;
+}
+
+/* 초안·차단 안내 두 줄. 회색 바탕은 사실 전달, 주황 바탕은 사람이 확인할 것. */
+.backtest-vis-draft,
+.backtest-vis-blocked {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 9px;
+  border-radius: var(--radius-md);
+}
+.backtest-vis-draft { background: rgb(255 152 56 / 9%); }
+.backtest-vis-blocked { background: var(--color-k-panel3); }
+.backtest-vis-callout-dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  margin-top: 4px;
+  border-radius: var(--radius-full);
+  background: var(--color-warn);
+}
+.backtest-vis-callout-text {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 15px;
+  word-break: keep-all;
+}
+.backtest-vis-draft .backtest-vis-callout-text { color: #81501E; }
+
+/* ---------- 폼 조각 ---------- */
+.backtest-vis-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.backtest-vis-field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.backtest-vis-field-label {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+.backtest-vis-field-label.is-error { color: #81501E; }
+.backtest-vis-field-value {
+  color: var(--color-info);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+.backtest-vis-select,
+.backtest-vis-text,
+.backtest-vis-number {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel2);
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  min-width: 0;
+}
+.backtest-vis-select:focus,
+.backtest-vis-text:focus,
+.backtest-vis-number:focus {
+  outline: none;
+  border-color: var(--color-brand);
+}
+.backtest-vis-select:disabled,
+.backtest-vis-text:disabled,
+.backtest-vis-number:disabled {
+  color: var(--color-k-soft);
+  background: var(--color-k-panel3);
+}
+.backtest-vis-slider {
+  width: 100%;
+  height: 18px;
+  accent-color: var(--color-info);
+}
+.backtest-vis-bounds {
+  display: flex;
+  justify-content: space-between;
+}
+.backtest-vis-bound {
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+/* ---------- 검증 요약 바 ---------- */
+.backtest-vis-summary {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 57px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel);
+}
+.backtest-vis-summary.is-invalid {
+  border-color: rgb(255 152 56 / 34%);
+  background: rgb(255 152 56 / 6%);
+}
+.backtest-vis-summary-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+.backtest-vis-summary-mark {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background: rgb(95 206 63 / 12%);
+  color: #2F7D20;
+  font-family: var(--font-strong);
+  font-size: var(--text-xs);
+}
+.backtest-vis-summary.is-invalid .backtest-vis-summary-mark {
+  background: rgb(255 152 56 / 16%);
+  color: #81501E;
+}
+.backtest-vis-summary.is-unvalidated .backtest-vis-summary-mark {
+  background: var(--color-k-panel3);
+  color: var(--color-k-faint);
+}
+.backtest-vis-summary-body { min-width: 0; }
+.backtest-vis-summary-title {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-xs);
+  line-height: 15px;
+  word-break: keep-all;
+}
+.backtest-vis-summary-detail {
+  margin-top: 2px;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-tight);
+  word-break: keep-all;
+}
+/* 좁은 폭에서 서랍을 닫아도 "무엇이 선택돼 있고 무엇이 틀렸는지"는 여기 남는다. */
+.backtest-vis-summary-selection {
+  margin-top: 3px;
+  color: #81501E;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 14px;
+}
+.backtest-vis-summary-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.backtest-vis-view-toggle,
+.backtest-vis-validate {
+  padding: 6px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 7px;
+  background: var(--color-k-panel);
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.backtest-vis-first-error {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 7px;
+  background: var(--color-warn);
+  color: #FFFFFF;
+  font-family: var(--font-strong);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* 거절 이유 한 줄 — 연결이 안 붙었는데 이유가 없으면 사용자는 자기 손을 의심한다. */
+.backtest-vis-notice {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: rgb(255 152 56 / 12%);
+  color: #81501E;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 15px;
+  word-break: keep-all;
+  animation: backtest-vis-rise var(--dur-base) var(--ease);
+}
+@keyframes backtest-vis-rise {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- 좁은 폭(<900px은 부르는 쪽이 판단해 narrow:true로 넘긴다) ---------- */
+/* 팔레트·검사기가 서랍으로 접힌다. 접혀 있어도 요약 바가 선택과 첫 오류를 계속 말하므로
+   "무엇을 하던 중이었는지"가 사라지지 않는다. */
+.backtest-vis.is-narrow .backtest-vis-body { gap: 0; }
+.backtest-vis-palette.is-drawer,
+.backtest-vis-inspector.is-drawer {
+  position: absolute;
+  z-index: 2;
+  top: 42px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-shadow: 0 -12px 32px rgb(16 19 26 / 14%);
+  animation: backtest-vis-rise var(--dur-base) var(--ease);
+}
+.backtest-vis-drawer-bar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.backtest-vis.is-readonly .backtest-vis-node { cursor: default; }
+
+@media (prefers-reduced-motion: reduce) {
+  .backtest-vis-node.is-error { animation: none; }
+  .backtest-vis-notice,
+  .backtest-vis-palette.is-drawer,
+  .backtest-vis-inspector.is-drawer { animation: none; }
+}
+
+/* ── 백테스트 · 편집 가능한 지도 탭 (US-007/008/009, 2026-09-03) ──────────────
+   편집기 자체(.backtest-vis-*)는 위 블록이 이미 세웠다. 여기 있는 것은 그 편집기를
+   지도 탭에 앉히는 껍데기 넷뿐이다: 대상 한 줄 · 머리줄과 상태 점 · 편집기 자리 ·
+   코드 서랍. 읽기 전용 지도의 .backtest-map-*와 같은 문법을 그대로 쓴다 — 같은 자리에
+   두 가지 생김새가 서면 사람은 다른 화면에 왔다고 읽는다. */
+.backtest-visual {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.backtest-visual-target {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-visual-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 8px;
+}
+.backtest-visual-head .backtest-card-title { flex: 1 1 auto; min-width: 0; }
+/* 상태 점 — 지금 서버가 이 그래프를 어떻게 보는가. 'unvalidated'는 점을 찍지 않는다
+   (아직 묻지 않은 것은 상태가 아니다). 색은 세 뜻만 구분한다: 도는 중 · 됨 · 안 됨. */
+.backtest-visual-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+.backtest-visual-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-k-ghost);
+}
+.backtest-visual-dot.is-validating { background: var(--color-k-dim); }
+.backtest-visual-dot.is-valid { background: var(--color-brand); }
+.backtest-visual-dot.is-synced { background: var(--color-brand); }
+.backtest-visual-dot.is-invalid { background: var(--color-down); }
+.backtest-visual-status-text {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+/* 헤더의 [검증] — 실행 버튼 옆에 선다. 실행과 헷갈리지 않게 채우지 않는다. */
+.backtest-visual-validate,
+.backtest-visual-open-code {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.backtest-run-button[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+/* 편집기가 앉는 자리 — 높이는 편집기가 정한다(여기서 고정하면 목록 보기가 잘린다). */
+.backtest-visual-host {
+  display: block;
+  min-height: 0;
+}
+/* 코드 서랍 — 읽기 전용 지도의 .backtest-map-drawer와 같은 줄이다. */
+.backtest-visual-drawer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--color-k-line);
+}
+.backtest-visual-drawer-file {
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-visual-drawer-match {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(238 19 123 / 12%);
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+/* 코드가 지도보다 앞섰다 — 사람이 손으로 고친 초안을 덮지 않았다는 사실을 말한다. */
+.backtest-visual-drawer-ahead {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(255 152 56 / 14%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-visual-drawer .backtest-visual-open-code { margin-left: auto; }
+/* 지도 탭의 한 줄 알림 — 낡은 연결·시각 설계 없음처럼 "지금은 못 한다"를 그 자리에
+   적는다. 화면 전체를 오류로 바꾸지 않는다(지도를 못 연 것이지 백테스트가 죽은 것이
+   아니다, .backtest-flow-error와 같은 태도). */
+.backtest-flow-notice {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgb(255 152 56 / 10%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+/* 코드 경로의 지도는 그래프로 되돌릴 수 없다 — 읽기 전용임을 먼저 말한다. */
+.backtest-flow-codeonly {
+  align-self: flex-start;
+  margin-bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+
+/* ── US-010 · P3 왕복 경계(코드 전용 분기 · 버전 되열기) ─────────────────────
+   코드가 지도보다 앞섰을 때의 두 갈래, 분기한 뒤의 읽기 전용 snapshot 배지, 그리고
+   이력 탭의 저장된 버전 목록. 어느 문구도 "동기화됨"을 쓰지 않는다 — 그것이 이
+   분기의 전부다(연구 문서 §표현 불가능한 코드 수정). */
+.backtest-code-ahead {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgb(255 152 56 / 34%);
+  border-radius: 10px;
+  background: rgb(255 152 56 / 10%);
+}
+.backtest-code-ahead-text {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(255 152 56 / 18%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-code-ahead-note {
+  flex: 1 1 240px;
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+}
+.backtest-code-ahead-regraph,
+.backtest-code-ahead-fork,
+.backtest-version-edit {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.backtest-code-ahead-error {
+  flex: 1 1 100%;
+  color: var(--color-down);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+/* 마지막 호환 그래프는 snapshot일 뿐이다 — 배지가 그 사실을 배타적으로 말한다. */
+.backtest-snapshot-badge {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(255 152 56 / 14%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-visual-host.is-snapshot { opacity: 0.86; }
+.backtest-visual.is-snapshot .backtest-version-edit { align-self: flex-start; margin-top: 10px; }
+/* 이력 탭의 저장된 버전 — 실행 이력과 다른 축이라 목록도 따로 선다. */
+.backtest-version-list { margin-bottom: 14px; }
+.backtest-version-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 4px;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--color-k-panel2);
+  text-align: left;
+  cursor: pointer;
+}
+.backtest-version-row.is-on {
+  border-color: var(--color-info);
+  background: rgb(77 159 255 / 8%);
+}
+.backtest-version-no {
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+.backtest-version-origin {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.backtest-version-origin.is-visual { color: var(--color-brand); }
+.backtest-version-origin.is-code_only { color: #A85C10; }
+.backtest-version-note {
+  flex: 1 1 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+}
+.backtest-version-active {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(238 19 123 / 12%);
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+/* 이력에서 연 버전이 무엇인지 — 제목 옆 한 줄(origin=visual · v2 · 해시 …). */
+.backtest-head-opened {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+
+/* ── 백테스트 · 노드·흐름 창 (보드 21) ──────────────────────────────────────
+   기법 파이썬의 함수 한 단위를 노드로 세우는 읽기 전용 표면. 시각 편집기(.backtest-vis-*)
+   와 클래스를 나눈 이유는 규율이 다르기 때문이다 — 여기에는 팔레트도 포트 점도 없고,
+   카드는 끌리지 않는다(cursor:pointer이지 grab이 아니다). 색은 흐름 두 갈래(진입=brand,
+   청산=down)로만 갈리고 노드 종류로는 갈리지 않는다: 기법마다 노드가 다르므로 종류별
+   색표를 만들면 기법이 바뀔 때마다 그 표가 틀린다. */
+.backtest-tnodes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  height: 100%;
+}
+.backtest-tnodes:focus-visible { outline: none; }
+.backtest-tnodes-body {
+  flex: 1 1 auto;
+  display: flex;
+  gap: 10px;
+  min-height: 0;
+}
+
+/* ---------- 왼쪽 레일 ---------- */
+.backtest-tnodes-rail {
+  flex: 0 0 176px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-lg);
+  background: var(--color-k-panel);
+  min-height: 0;
+}
+.backtest-tnodes-rail-title {
+  flex: 0 0 auto;
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+.backtest-tnodes-rail-list {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 0;
+  overflow: auto;
+}
+.backtest-tnodes-rail-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 5px 7px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+}
+.backtest-tnodes-rail-item:hover { background: var(--color-k-panel3); }
+.backtest-tnodes-rail-item.is-selected {
+  border-color: var(--color-info);
+  background: rgb(77 159 255 / 10%);
+}
+.backtest-tnodes-rail-item:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 1px;
+}
+.backtest-tnodes-rail-name {
+  min-width: 0;
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 줄 범위는 함수 이름이 길어도 끝까지 남는다 — 몇 행짜리인가가 노드 크기의 유일한 단서다. */
+.backtest-tnodes-rail-lines {
+  flex: 0 0 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-tnodes-rail-note {
+  flex: 0 0 auto;
+  padding-top: 6px;
+  border-top: 1px solid var(--color-k-line-soft);
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-tight);
+  word-break: keep-all;
+}
+
+/* ---------- 가운데 캔버스 ---------- */
+.backtest-tnodes-canvas {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-lg);
+  background: var(--color-k-panel);
+  overflow: hidden;
+}
+.backtest-tnodes-canvas-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--color-k-line-soft);
+}
+.backtest-tnodes-canvas-title {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+.backtest-tnodes-surface {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 240px;
+  background-color: var(--color-k-panel2);
+  /* 좌표가 있는 표면이라는 것만 바닥 격자로 말한다(시각 편집기와 같은 값). */
+  background-image: radial-gradient(rgb(16 19 26 / 9%) 1px, transparent 1px);
+  background-size: 16px 16px;
+  overflow: auto;
+}
+.backtest-tnodes-links {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+.backtest-tnodes-link {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.backtest-tnodes-link.is-entry { stroke: var(--color-brand); }
+.backtest-tnodes-link.is-exit { stroke: var(--color-down); }
+.backtest-tnodes-link.is-stage { stroke: var(--color-navy); }
+
+/* ---------- 흐름 머리말 ---------- */
+.backtest-tnodes-lane-head {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.backtest-tnodes-lane-title {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+.backtest-tnodes-lane-head.is-entry .backtest-tnodes-lane-title { color: var(--color-brand); }
+.backtest-tnodes-lane-head.is-exit .backtest-tnodes-lane-title { color: var(--color-down); }
+.backtest-tnodes-lane-explain {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  background: var(--color-k-panel);
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.backtest-tnodes-lane-explain:hover { border-color: var(--color-brand); color: var(--color-brand); }
+.backtest-tnodes-lane-explain:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+/* ---------- 노드 카드 ---------- */
+.backtest-tnodes-card {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-lg);
+  background: var(--color-k-panel);
+  box-shadow: 0 5px 16px rgb(16 19 26 / 8%);
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-base) var(--ease);
+}
+.backtest-tnodes-card.is-entry { border-color: rgb(238 19 123 / 32%); }
+.backtest-tnodes-card.is-exit { border-color: rgb(31 111 212 / 32%); }
+/* 고른 칸은 색이 아니라 굵기까지 바뀐다 — 색만으로는 색각 이상에서 같은 카드가 된다. */
+.backtest-tnodes-card.is-selected {
+  border: 2px solid var(--color-info);
+  padding: 7px;
+  box-shadow: 0 6px 18px rgb(77 159 255 / 18%);
+}
+/* 재사용 고스트 — 같은 함수를 두 번 계산하는 것처럼 보이면 안 되므로 한 단 낮춘다. */
+.backtest-tnodes-card.is-ghost {
+  border-style: dashed;
+  background: var(--color-k-panel2);
+  box-shadow: none;
+  opacity: 0.72;
+}
+.backtest-tnodes-card:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+.backtest-tnodes-card-head {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+.backtest-tnodes-card-title {
+  min-width: 0;
+  flex: 1 1 auto;
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 역할 칩·재사용 칩은 한글 알약이므로 글자 단위로 끊기면 못 읽는다. */
+.backtest-tnodes-card-role,
+.backtest-tnodes-card-ghost {
+  flex: 0 0 auto;
+  padding: 1px 7px;
+  border-radius: var(--radius-full);
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 14px;
+  white-space: nowrap;
+}
+.backtest-tnodes-card-role.is-entry { background: rgb(238 19 123 / 12%); color: var(--color-brand); }
+.backtest-tnodes-card-role.is-exit { background: rgb(31 111 212 / 12%); color: var(--color-down); }
+.backtest-tnodes-card-role.is-signals { background: rgb(155 159 230 / 20%); color: #4B4FA8; }
+.backtest-tnodes-card-ghost {
+  border: 1px dashed var(--color-k-ghost);
+  background: transparent;
+  color: var(--color-k-faint);
+}
+.backtest-tnodes-card-summary {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 13px;
+  word-break: keep-all;
+  overflow: hidden;
+}
+/* 입력→출력 한 줄은 잘리면 타입을 못 읽는다 — 넘치면 말줄임으로 자르고 title로 되찾는다. */
+.backtest-tnodes-card-io,
+.backtest-tnodes-card-lines {
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: -0.01em;
+  line-height: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.backtest-tnodes-card-acts {
+  margin-top: auto;
+  display: flex;
+  gap: 4px;
+}
+.backtest-tnodes-act {
+  flex: 0 1 auto;
+  padding: 2px 7px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  background: var(--color-k-panel);
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.backtest-tnodes-act:hover { border-color: var(--color-brand); color: var(--color-brand); }
+.backtest-tnodes-act:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 1px;
+}
+
+/* ---------- 아래 알약 ---------- */
+.backtest-tnodes-foot {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--color-k-line-soft);
+}
+.backtest-tnodes-pill {
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.backtest-tnodes-pill.is-entry { background: rgb(238 19 123 / 12%); color: var(--color-brand); }
+.backtest-tnodes-pill.is-exit { background: rgb(31 111 212 / 12%); color: var(--color-down); }
+.backtest-tnodes-explain-all {
+  margin-left: auto;
+  flex: 0 0 auto;
+  padding: 4px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  background: var(--color-k-panel);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.backtest-tnodes-explain-all:hover { border-color: var(--color-brand); color: var(--color-brand); }
+.backtest-tnodes-explain-all:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+/* ---------- 상태 한 줄 ---------- */
+.backtest-tnodes-status {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0 2px;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-tight);
+  word-break: keep-all;
+}
+.backtest-tnodes-status.is-error { color: #81501E; }
+.backtest-tnodes-status-text { min-width: 0; }
+.backtest-tnodes-status-unknown {
+  margin-left: auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── 백테스트 · 새 기법 만들기 (보드 20) ────────────────────────────────────
+ * 새 문법은 셋뿐이다: 진행 표시 한 줄, 코드창 위의 띠, 코드 아래 명령창. 나머지
+ * (하위 탭·카드·알약·선택지)는 이미 있는 클래스를 그대로 쓴다.
+ * 채팅 카드의 선택지도 .backtest-visual-choice를 그대로 쓰고, 여기서는 상세 한 줄과
+ * 고른 뒤의 표시만 더한다. */
+
+/* 어디까지 왔는가 — 이름과 검사 몇 개를 넘었는가. */
+.backtest-technique-progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 8px 0 4px;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  word-break: keep-all;
+}
+.backtest-technique-progress-label {
+  color: var(--color-k-dim);
+  white-space: nowrap;
+}
+.backtest-technique-progress-name {
+  font-weight: 600;
+  color: var(--color-k-text);
+}
+.backtest-technique-progress-checks {
+  color: var(--color-k-soft);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+.backtest-technique-back {
+  margin-left: auto;
+  padding: 4px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-k-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* 누가 이 코드를 쥐고 있는가 — 코드창 바로 위. */
+.backtest-technique-band {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  padding: 6px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  background: var(--color-k-panel3);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  color: var(--color-k-soft);
+  word-break: keep-all;
+}
+.backtest-technique-band.is-hand {
+  border-color: var(--color-brand);
+  color: var(--color-k-text);
+}
+.backtest-technique-band-text { min-width: 0; }
+.backtest-technique-hand-toggle {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* 명령창 — 자동 검사가 무엇을 했는지 그대로 찍는 자리. 코드 아래. */
+.backtest-terminal {
+  margin: 8px 0 0;
+  padding: 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  background: var(--color-k-panel2, var(--color-k-panel3));
+}
+.backtest-terminal-title {
+  margin-bottom: 6px;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-terminal-log {
+  max-height: 160px;
+  overflow: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-tight);
+  color: var(--color-k-soft);
+}
+.backtest-terminal-line { white-space: pre-wrap; word-break: break-all; }
+.backtest-terminal-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+.backtest-terminal-check {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+}
+.backtest-terminal-check-mark {
+  flex-shrink: 0;
+  padding: 1px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+}
+.backtest-terminal-check.is-ok .backtest-terminal-check-mark {
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+}
+.backtest-terminal-check.is-fail .backtest-terminal-check-mark {
+  background: #F6E7D6;
+  color: #81501E;
+}
+.backtest-terminal-check-label { min-width: 0; }
+.backtest-terminal-check-detail {
+  color: var(--color-k-faint);
+  min-width: 0;
+}
+.backtest-terminal-stats {
+  margin-top: 8px;
+  color: var(--color-k-soft);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 노드·흐름 탭 — 창 자체는 backtest-technique-nodes.js가 그린다(.backtest-tnodes). */
+.backtest-nodes-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+.backtest-technique-nodes-host { min-height: 0; }
+.backtest-nodes-load {
+  align-self: flex-start;
+  padding: 6px 14px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* 채팅 카드 — 질문 선택지의 상세 한 줄과 검사 3줄. */
+.backtest-technique-choice-detail,
+.backtest-visual-choice-detail {
+  flex: 1 1 100%;
+  color: var(--color-k-soft);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+}
+.backtest-technique-choice.is-on {
+  border-color: var(--color-brand);
+  background: var(--color-k-panel3);
+}
+.backtest-technique-choice[disabled] { cursor: default; opacity: 0.6; }
+.backtest-technique-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 6px 0;
+}
+.backtest-technique-check {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+}
+.backtest-technique-check-mark {
+  flex-shrink: 0;
+  padding: 1px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+}
+.backtest-technique-check.is-fail .backtest-technique-check-mark {
+  background: #F6E7D6;
+  color: #81501E;
+}
+.backtest-technique-check-label { min-width: 0; }
+.backtest-technique-check-detail { color: var(--color-k-faint); min-width: 0; }
+.backtest-technique-stats {
+  color: var(--color-k-soft);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+/* ── 검사 줄의 갈래 — 차단과 경고를 점 하나로 나눈다(보드 20, 2026-09-03) ──────
+   백엔드가 검사에 severity를 붙인다: 룩어헤드·워밍업은 차단, 매직 넘버·구조는 경고다.
+   경고는 통과를 막지 않으므로 실패처럼 보이면 안 된다 — 노란 점에 '경고 · 고치면 좋음',
+   차단 실패만 빨간 점에 '고쳐야 함'. 위쪽 .is-fail 알약이 쓰던 주황은 이제 경고의 색이라
+   여기서 차단을 붉은 쪽으로 덮는다(같은 특정도, 뒤에 선 규칙이 이긴다).
+   통과 여부 자체는 서버가 준 passed 하나뿐이고, 이 색이 그것을 바꾸지 않는다. */
+.backtest-terminal-summary,
+.backtest-technique-summary {
+  color: var(--color-k-soft);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-terminal-check-dot,
+.backtest-technique-check-dot {
+  flex-shrink: 0;
+  align-self: center;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-k-ghost);
+}
+.backtest-terminal-check.is-ok .backtest-terminal-check-dot,
+.backtest-technique-check.is-ok .backtest-technique-check-dot { background: var(--color-ok); }
+.backtest-terminal-check.is-warn .backtest-terminal-check-dot,
+.backtest-technique-check.is-warn .backtest-technique-check-dot { background: var(--color-warn); }
+.backtest-terminal-check.is-fail .backtest-terminal-check-dot,
+.backtest-technique-check.is-fail .backtest-technique-check-dot { background: #C03445; }
+.backtest-terminal-check.is-warn .backtest-terminal-check-mark,
+.backtest-technique-check.is-warn .backtest-technique-check-mark {
+  background: rgb(255 152 56 / 13%);
+  color: #81501E;
+}
+.backtest-terminal-check.is-fail .backtest-terminal-check-mark,
+.backtest-technique-check.is-fail .backtest-technique-check-mark {
+  background: rgb(192 52 69 / 12%);
+  color: #8E2432;
+}
+.backtest-terminal-check-note,
+.backtest-technique-check-note {
+  flex-shrink: 0;
+  color: var(--color-k-hint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+/* 사유에 줄 번호가 있을 때만 서는 작은 링크 — 누르면 코드 탭의 그 줄이 짚힌다. */
+.backtest-terminal-check-jump {
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ── 백테스트 · 새 기법 폴더·단계·자동 실행 (보드 20~22) ── */
+/*
+ * 폴더 하나 = 기법 하나 = 대화 하나. 여기 있는 것은 그 흐름이 화면에 남긴 자국 셋이다:
+ * 진행 표시에 붙는 [이 기법 승인]과 "n번째 고침", 단계 카드가 여는 diff 패널, 그리고
+ * [출력 보기]로 펼친 명령창. 색·간격 토큰은 위 백테스트 구역의 것을 그대로 쓴다 —
+ * 새 기법이라고 다른 화면처럼 보이면 안 된다.
+ */
+
+/* 몇 번째 고침인가 — 검사 수 옆에 같은 무게로 선다. */
+.backtest-technique-progress-edits {
+  color: var(--color-k-soft);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+/* 사람이 누르는 두 버튼 중 하나(보드 23). [기법 목록]이 오른쪽 끝을 잡고 있으므로
+ * 승인은 그 왼쪽에 서고, 눈에 띄어야 하니 테두리가 아니라 채운다. */
+.backtest-technique-approve {
+  margin-left: auto;
+  padding: 4px 12px;
+  border: 1px solid var(--color-brand);
+  border-radius: 999px;
+  background: var(--color-brand);
+  color: var(--color-k-panel, #fff);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+/* 승인이 서면 [기법 목록]은 더 이상 자기 자리를 밀지 않는다 — 둘 다 auto면 사이가 벌어진다. */
+.backtest-technique-approve ~ .backtest-technique-back { margin-left: 0; }
+
+/* [diff 보기]가 코드 탭 위에 여는 패널. 줄 색은 채팅 카드·파일 초안과 같은 문법이라
+ * (backtest-diff-row) 여기서는 틀과 높이만 정한다. */
+.backtest-technique-diff {
+  margin: 6px 0;
+  padding: 8px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  background: var(--color-k-panel2, var(--color-k-panel3));
+}
+.backtest-technique-diff-body {
+  max-height: 260px;
+  overflow: auto;
+}
+/* [코드로] — 패널을 닫고 편집기로 돌아간다. 머리줄 오른쪽 끝. */
+.backtest-technique-diff-close {
+  margin-left: auto;
+  padding: 2px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-k-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* [출력 보기]로 펼친 명령창 — 카드가 가리킨 출력이 접혀 있으면 안 된다. */
+.backtest-terminal.is-open {
+  border-color: var(--color-brand);
+}
+.backtest-terminal.is-open .backtest-terminal-log {
+  max-height: 320px;
+}

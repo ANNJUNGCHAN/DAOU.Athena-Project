@@ -4,13 +4,12 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const clusterLayout = require('./cluster-layout');
 const { groupThemeClusters, shouldWarnUnnamed, renderThemeClusters } = require('./theme-clusters');
 const { fakeNode, installFakeDocument, uninstallFakeDocument } = require('./fake-dom');
 
 test.beforeEach(() => {
   installFakeDocument();
-  global.window = { AthenaLib: { GraphClusterLayout: clusterLayout } };
+  global.window = { AthenaLib: { ClusterGrouping: require('./cluster-grouping') } };
 });
 
 test.afterEach(() => {
@@ -29,15 +28,18 @@ function payload(overrides) {
   };
 }
 
-// ── groupThemeClusters — cluster-layout.js의 groupByCluster와 일치하는지 ────
+// ── groupThemeClusters — cluster-grouping.js의 projectPayload와 일치하는지 ────
+// (옛 cluster-layout.groupByCluster 자리다 — 정적 렌더러를 지우며 좌표와 무관한
+//  그룹화만 cluster-grouping.js로 살아남았다. 검사의 뜻은 그대로다: 두 그룹화가 어긋나면
+//  요약 뷰의 테마 군집 수와 지도 헤더의 군집 수가 서로 다른 말을 한다.)
 
-test('groupThemeClusters — 군집별 size가 groupByCluster와 일치한다', () => {
-  const groups = clusterLayout.groupByCluster(payload().nodes);
+test('groupThemeClusters — 군집별 size가 projectPayload와 일치한다', () => {
+  const groups = require('./cluster-grouping').projectPayload(payload()).clusters;
   const clusters = groupThemeClusters(payload());
   assert.equal(clusters.length, groups.length);
   for (let i = 0; i < groups.length; i += 1) {
     assert.equal(clusters[i].cluster, groups[i].cluster);
-    assert.equal(clusters[i].size, groups[i].members.length);
+    assert.equal(clusters[i].size, groups[i].size);
   }
 });
 
@@ -131,7 +133,7 @@ test('renderThemeClusters — 항목이 없으면 아예 안 그린다(§0 정�
   assert.equal(container.children.length, 0);
 });
 
-test('renderThemeClusters — 헤더에 "N개 중 M개"가 붙는다(limit 적용)', () => {
+test('renderThemeClusters — 헤더가 "N개 중 가장 큰 M개"라고 밝힌다(limit 적용)', () => {
   const container = fakeNode('div');
   const clusters = [
     { cluster: 0, size: 9, name: null }, { cluster: 1, size: 6, name: null },
@@ -139,15 +141,42 @@ test('renderThemeClusters — 헤더에 "N개 중 M개"가 붙는다(limit 적�
   ];
   renderThemeClusters(container, clusters, { limit: 3 });
   const subtitle = container.querySelector('.theme-clusters-subtitle');
-  assert.equal(subtitle.textContent, '4개 중 3개');
+  assert.equal(subtitle.textContent, '4개 중 가장 큰 3개');
   assert.equal(container.querySelectorAll('.theme-cluster-card').length, 3, 'limit을 넘는 카드는 안 그린다');
+});
+
+// 회귀 가드(2026-09-03) — groupByCluster는 **군집 id 순**으로 준다. 예전에는 그것을
+// 그대로 slice해서 "내부 id가 낮은 3개"를 보여주면서 화면엔 "4개 중 3개"라고 썼다.
+// 크기 순으로 자르지 않으면 이 테스트가 깨진다.
+test('renderThemeClusters — 큰 군집부터 남는다(id 순이 아니다)', () => {
+  const container = fakeNode('div');
+  renderThemeClusters(container, [
+    { cluster: 0, size: 2, name: null, representative: '작은0' },
+    { cluster: 1, size: 9, name: null, representative: '큰1' },
+    { cluster: 2, size: 6, name: null, representative: '중간2' },
+    { cluster: 3, size: 4, name: null, representative: '작은3' },
+  ], { limit: 3 });
+  const names = container.querySelectorAll('.theme-cluster-name').map((n) => n.textContent);
+  assert.deepEqual(names, ['큰1', '중간2', '작은3'], '9 · 6 · 4가 남고 2가 잘린다');
+});
+
+test('renderThemeClusters — 크기가 같으면 군집 id 순으로 결정적이다', () => {
+  const container = fakeNode('div');
+  renderThemeClusters(container, [
+    { cluster: 5, size: 3, name: null, representative: 'id5' },
+    { cluster: 1, size: 3, name: null, representative: 'id1' },
+    { cluster: 3, size: 3, name: null, representative: 'id3' },
+  ], { limit: 3 });
+  const names = container.querySelectorAll('.theme-cluster-name').map((n) => n.textContent);
+  assert.deepEqual(names, ['id1', 'id3', 'id5'], '같은 그래프를 두 번 물으면 같은 순서가 나와야 한다');
 });
 
 test('renderThemeClusters — cohesion이 있으면 진행바·수치를 그린다', () => {
   const container = fakeNode('div');
   renderThemeClusters(container, [{ cluster: 0, size: 9, name: null, cohesion: 0.74 }]);
   const value = container.querySelector('.theme-cluster-cohesion');
-  assert.equal(value.textContent, '응집 0.74');
+  // 원시 값(0.74)이 아니라 백분율 — 바와 같은 값을 같은 단위로 말한다.
+  assert.equal(value.textContent, '응집 74%');
   const fill = container.querySelector('.theme-cluster-bar-fill');
   assert.equal(fill.attrs.style, 'width: 74%');
 });
@@ -159,15 +188,20 @@ test('renderThemeClusters — cohesion이 없으면(undefined) 진행바·수치
   assert.equal(container.querySelector('.theme-cluster-bar'), null);
 });
 
-test('renderThemeClusters — 이름이 없으면 대표 이름이 제목이 되고 "추정"으로 신호한다', () => {
+test('renderThemeClusters — 이름이 없으면 대표 이름이 제목이 되고 톤으로 추정임을 신호한다', () => {
   const container = fakeNode('div');
   renderThemeClusters(container, [
     { cluster: 0, size: 2, name: null, representative: '한미반도체' },
   ]);
   const card = container.querySelector('.theme-cluster-card');
   assert.equal(card.querySelector('.theme-cluster-name').textContent, '한미반도체');
-  assert.equal(card.querySelector('.theme-cluster-unnamed-badge').textContent, '추정');
   assert.ok(String(card.querySelector('.theme-cluster-name').attrs.class).includes('is-estimated'));
+  // 전부 추정이면 카드마다 배지를 붙이지 않는다(2026-09-03 사용자 지적) — 이름
+  // 파이프라인이 없어 name이 늘 null이라 배지가 모든 카드에 붙었고, 전부에 붙는
+  // 배지는 아무것도 구분하지 못하면서 이름 옆자리를 먹었다. 섹션이 한 번 말한다.
+  assert.equal(card.querySelector('.theme-cluster-unnamed-badge'), null, '카드에는 배지가 없다');
+  const notes = container.querySelectorAll('.theme-clusters-subtitle').map((n) => n.textContent);
+  assert.ok(notes.includes('이름은 추정'), '섹션 헤더가 한 번 말한다');
 });
 
 test('renderThemeClusters — representative가 없으면(undefined, 구버전 backend) 서브텍스트를 생략한다', () => {
@@ -244,22 +278,45 @@ test('renderThemeClusters — aiLabel이 대표 이름보다 앞선다(더 의�
     { cluster: 1, size: 3, name: null, aiLabel: undefined, representative: 'KB금융' },
   ]);
   const cards = container.querySelectorAll('.theme-cluster-card');
-  assert.equal(cards[0].querySelector('.theme-cluster-name').textContent, '반도체 밸류체인');
-  assert.equal(cards[1].querySelector('.theme-cluster-name').textContent, 'KB금융');
+  // size 3(KB금융)이 size 2(반도체 밸류체인)보다 크므로 크기 순으로 먼저 온다.
+  assert.equal(cards[0].querySelector('.theme-cluster-name').textContent, 'KB금융');
+  assert.equal(cards[1].querySelector('.theme-cluster-name').textContent, '반도체 밸류체인');
+  // 둘 다 확정 이름이 아니다 — 전부 추정이므로 배지는 카드에 안 붙고 섹션이 말한다.
   assert.deepEqual(
-    cards.map((c) => c.querySelector('.theme-cluster-unnamed-badge').textContent),
-    ['추정', '추정'],
-    '둘 다 확정 이름이 아니다',
+    cards.map((c) => c.querySelector('.theme-cluster-unnamed-badge')),
+    [null, null],
   );
+  const notes = container.querySelectorAll('.theme-clusters-subtitle').map((n) => n.textContent);
+  assert.ok(notes.includes('이름은 추정'));
 });
 
-// 회귀 가드(G-F7) — aiLabel은 name을 대체하지 않는다. 라벨이 있어도 "이름 없음"
-// 배지·shouldWarnUnnamed 판정은 계속 name만 본다.
-test('renderThemeClusters — aiLabel이 있어도 "이름 없음" 배지·경고 판정은 안 바뀐다', () => {
+// 회귀 가드(G-F7) — aiLabel은 name을 대체하지 않는다. 라벨이 있어도 추정 신호와
+// shouldWarnUnnamed 판정은 계속 name만 본다. 신호가 배지에서 섹션 문구로 옮겨졌을
+// 뿐이고(2026-09-03), "AI가 이름을 지어 줬으니 확정 이름"으로 승격되지는 않는다.
+test('renderThemeClusters — aiLabel이 있어도 확정 이름으로 승격되지 않는다', () => {
   const container = fakeNode('div');
   renderThemeClusters(container, [
     { cluster: 0, size: 2, name: null, aiLabel: '반도체 밸류체인' },
   ]);
   const card = container.querySelectorAll('.theme-cluster-card')[0];
-  assert.ok(card.querySelector('.theme-cluster-unnamed-badge'), '이름 없음 배지는 그대로다');
+  assert.ok(
+    String(card.querySelector('.theme-cluster-name').attrs.class).includes('is-estimated'),
+    '제목 톤이 추정으로 남는다',
+  );
+  const notes = container.querySelectorAll('.theme-clusters-subtitle').map((n) => n.textContent);
+  assert.ok(notes.includes('이름은 추정'), '섹션이 추정임을 밝힌다');
+});
+
+// 섞여 있을 때는 배지가 돌아온다 — 그때는 배지가 실제로 카드를 구분한다.
+test('renderThemeClusters — 확정 이름과 추정이 섞이면 추정 카드에만 배지가 붙는다', () => {
+  const container = fakeNode('div');
+  renderThemeClusters(container, [
+    { cluster: 0, size: 9, name: '반도체 대형주' },
+    { cluster: 1, size: 6, name: null, aiLabel: '배당 방어' },
+  ]);
+  const cards = container.querySelectorAll('.theme-cluster-card');
+  assert.equal(cards[0].querySelector('.theme-cluster-unnamed-badge'), null, '확정 이름엔 배지가 없다');
+  assert.equal(cards[1].querySelector('.theme-cluster-unnamed-badge').textContent, '추정');
+  const notes = container.querySelectorAll('.theme-clusters-subtitle').map((n) => n.textContent);
+  assert.ok(!notes.includes('이름은 추정'), '섞여 있으면 섹션 문구는 안 붙는다(배지가 말한다)');
 });

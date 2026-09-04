@@ -36,11 +36,26 @@ function paperCardRoute(envelope, surfaces) {
   return 'generic';
 }
 
+// 보드 표면이 가로채면 안 되는 봉투 — 앱 렌더러가 primary인 recipe.
+// card-surface-implementation-plan.md D1: "예외 = 호가 사다리·AITS 차트(Paper 보드가 앱
+// 렌더러를 담은 자리, 삭제 금지)". 보드가 앱 렌더러를 품는 길은 slots.json
+// primary.renderer인데(2026-09-03 현재 32S7-0 하나만 선언), 이 세 recipe의 보드
+// (137X-2·13BC-2·135M-2)는 renderer=null이고 board-mount에도 마운트 경로가 없다.
+// 그 상태로 가로채면 라이브 차트·호가 래더가 정적 Paper 목업으로 바뀐다
+// (2026-09-04 병합 검증 실측). 집합은 verify-semantic-workspaces.js의
+// preserve_primary와 같다 — 한쪽만 바꾸면 검증이 계약을 놓친다.
+const APP_PRIMARY_RECIPES = new Set(['instrument-chart', 'live-orderbook', 'order-safe-ticket']);
+
+function preservesAppPrimary(envelope) {
+  const contract = envelope && envelope.presentation_contract;
+  const recipe = contract && typeof contract.recipe_id === 'string' ? contract.recipe_id : '';
+  return APP_PRIMARY_RECIPES.has(recipe);
+}
 function blockedReason(envelope) {
   return `카드 계약이 없는 키움 응답이다 — ${operationRefOf(envelope)}. 범용 카드로 대체하지 않는다.`;
 }
 
-const __exports = { isKiwoomEnvelope, operationRefOf, paperCardRoute, blockedReason };
+const __exports = { isKiwoomEnvelope, operationRefOf, paperCardRoute, blockedReason, preservesAppPrimary };
 
 // UMD 각주(2026-08-18 렌더러 격리) — card-kinds.js와 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {

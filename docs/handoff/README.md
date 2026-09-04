@@ -1,11 +1,26 @@
 # 이어받기 — `main` 하나로 시작하는 법 (2026-09-01)
 
-이 저장소는 **`main` 브랜치 하나가 정본**이다. 다른 컴퓨터에서는 `main`만 받으면 된다.
+**`main`이 정본이다.** 다른 컴퓨터에서는 `main`만 받으면 이어받을 수 있다.
+다만 "브랜치가 main 하나뿐"인 것은 **2026-09-01 시점의 상태**이고 지금은 아니다 — §1을 볼 것.
 이 문서는 그 시작점이고, 2026-08-31~09-01에 병렬로 돌던 **대화 4개**가 어디까지 왔고
 무엇이 남았는지를 §4에 모아둔다.
 
 > **바로 이어서 돌리려면** [RALPH_PROMPT.md](./RALPH_PROMPT.md)를 열어 블록을 통째로 복사해
 > Claude Code에 붙여넣는다. 이 문서(§2~§6)를 실행 가능한 루프로 옮겨둔 것이다.
+
+> 🔌 **플러그인 모드 기조 정렬 트랙(브랜치 `feat/plugin-mode-doctrine`)은 별도 인계 문서를 따른다** —
+> [2026-09-03-plugin-mode-doctrine.md](./2026-09-03-plugin-mode-doctrine.md). Phase A(게이트웨이 제안 툴 ·
+> 렌더러 순수 모듈 · Paper 9장)까지 커밋됐고 US-003(메인 프로세스)부터 남았다. 계획·명세·PRD·baseline은
+> [plugin-mode-doctrine/](./plugin-mode-doctrine/)에 회수돼 있다.
+
+> 🟠 **2026-09-03 에이전트 모드 "두 입구, 한 게이트" 트랙이 브랜치 `feat/agent-dual-control`에서 시작됐다.**
+> 원격 브랜치만으로 이어받을 수 있다 — 진입점·복원 절차·붙여넣을 프롬프트는
+> [2026-09-03-agent-dual-control-handoff.md](./2026-09-03-agent-dual-control-handoff.md) →
+> [agent-dual-control/RALPH_PROMPT.md](./agent-dual-control/RALPH_PROMPT.md). 이 브랜치는 2026-09-03 main에 병합됐다.
+
+> 🟣 **2026-09-03 백테스트 시각 설계 ↔ 코드 왕복이 들어갔다.** 지도 탭이 편집 가능한 그래프가 되고
+> 코드는 지도에서 생성된다. 계약·검증법·남은 P4는
+> [2026-09-03-visual-strategy-roundtrip.md](./2026-09-03-visual-strategy-roundtrip.md)에 있다.
 
 > 🔴 **2026-09-01 정규장에 실 키움(모의투자) 연결을 처음으로 검증했다.**
 > 결과·provenance 분류·새로 찾은 결함은
@@ -14,11 +29,12 @@
 > **프로덕션 브로커 연결은 설계상 불가능**하고(도메인 하드락), 검증된 것은
 > *mock 브로커 + live 시장 데이터*다.
 
-> 🟣 **2026-09-03 키우미 미니 카드 전수 — 스펙·합의 계획까지 끝났고 실행은 시작하지 않았다.**
-> 이어받는 절차·저장소 상태·사용자가 확정한 설계 축은 [2026-09-03-kiumi-mini-cards-handoff.md](./2026-09-03-kiumi-mini-cards-handoff.md)에 있다.
-> **원격 브랜치 `kiumi/mini-cards`(2a413d7)에 카드 표면 레인 스냅샷과 인계 문서가 함께 올라가 있다** — 다른 컴퓨터는 이 브랜치만 받으면 된다.
-> 정본은 `.omc/`(git 무시)라서 추적 사본을 [kiumi/](./kiumi/)에 두었다.
-> 다른 컴퓨터에서 바로 이어받으려면 [KIUMI_PROMPT.md](./KIUMI_PROMPT.md)의 블록 A(터미널)·블록 B(Claude Code 첫 메시지)를 순서대로 붙여 넣는다.
+> 🟢 **2026-09-03 키우미 카드미니 — 360×420 런타임 구현·전수 검증 완료.**
+> 2026-09-03 main에 병합됐고 브랜치 `codex/kiumi-mini-cards-runtime`은 삭제됐다 — `main`만 받으면 된다.
+> 구현 계약, 검증 수치, 이어받기 명령은
+> [2026-09-03-kiumi-mini-cards-runtime.md](./2026-09-03-kiumi-mini-cards-runtime.md)에 있다.
+> 옛 [360×640 계획 인계](./2026-09-03-kiumi-mini-cards-handoff.md)와
+> [KIUMI_PROMPT.md](./KIUMI_PROMPT.md)는 역사 기록이며 다시 실행하지 않는다.
 
 > 🟠 **2026-09-04 카드 표면 Paper→코드 — G4 정본 자동 게이트 초록. G5 육안 FAIL은 G5a 가독성 자동 게이트(닫힘, 정본 Electron 2026-09-04 07:49 KST · 36측정 0) + G5b 육안 재승인은 2026-09-04 실행 결과 **승인되지 않음** — `2QFO-2` 960px 표 열 정렬 1건이 남았다. 브랜치는 계속 `feat/card-surface-paper-to-code`.**
 > 이어받는 절차·수치·남은 일·사용자 확정 결정은 [2026-09-03-card-surface-paper-to-code.md](./2026-09-03-card-surface-paper-to-code.md)에 있다.
@@ -27,16 +43,41 @@
 
 ---
 
-## 1. 저장소 상태 (2026-09-01 확인)
+## 1. 저장소 상태 (2026-09-04 01:05 KST 확인)
+
+**모든 브랜치가 `main`에 들어갔다.** 2026-09-03 23:40 ~ 09-04 01:00에 브랜치 7개
+(plugin-mode-doctrine 16 · agent-dual-control 8+2 · kiumi-mini-cards-runtime 15 · card-surface 15+2 ·
+kiumi/mini-cards 2 · ANNJUNGCHAN/main 1 · plugin-mode-doctrine 후속 1)를 병합했다. 절차·충돌·회귀 수정은
+[2026-09-03-branch-integration-pending.md](./2026-09-03-branch-integration-pending.md) §8에 있다.
 
 | 항목 | 값 |
 |---|---|
-| 브랜치 | 로컬 **`main` 하나뿐** (claude/* 7개는 2026-09-01 삭제 — 전부 main에 반영 확인 후) |
-| 열린 PR | 0건 — #1~#6 전부 MERGED |
-| 워크트리 | **0개** (`git worktree list`에 main만) |
-| 게이트 4종 | 4/4 PASS |
-| app 단위 | **1,946 / 1,946** (`cd app && npm run test:unit`) |
-| backend 전수 | **2,638 passed / 5 skipped / 0 failed** |
+| `origin/main` | `6e26c6f` — 2026-09-04 01:00 |
+| 원격 브랜치 | main + **4개**(아래) — 4개 모두 tip이 main에 포함됨 |
+| 로컬 브랜치 | main · feat/agent-dual-control · feat/plugin-mode-doctrine (워크트리에 체크아웃) |
+| 열린 PR | 0건 |
+| 워크트리 | main + `.claude/worktrees/agent-dual-control-handoff-6f05c9` + `.claude/worktrees/settings-plugin-tab-absorption-6d550f` + Orca 2개(`orca/workspaces/DAOU.Athena/{hydra,main}`) |
+| 게이트 4종 | 4/4 PASS (6e26c6f, 저장소 루트에서만 돈다) |
+| app 단위 | **2,696 / 2,696** (6e26c6f) |
+| backend 전수 | **3,619 passed / 6 skipped / 0 failed** (6e26c6f, 격리 HOME, 20분 25초) |
+| verify | semantic-workspaces 12/12 · hoga-live · kiumi 19 · plugins 154 · agent-paper-parity PASS |
+| 알려진 빨감 | `verify:integrated-cards` — `board 2SKU-1 M 프로브: container 1360px outside 720..959px`. card-surface tip에서도 동일. 그 트랙의 W3 반응형 미완(visual blocker) |
+
+**남은 원격 브랜치 4개 — 지우지 않은 이유.** tip은 전부 main에 있지만 **소유 세션이 지금도 push 중**이다
+(2026-09-04 00:29~00:46 사이 셋이 각각 커밋). 살아 있는 브랜치의 원격 ref를 지우면 그 세션의 upstream이
+끊긴다. 작업이 끝났다고 확인되면 하나씩 지운다 — **삭제 직전에 fetch하고 `merge-base --is-ancestor`로
+게이트해서**(`&&`), 일괄 `--delete` 금지. 2026-09-04 00:50에 이 규칙을 어겨 `feat/card-surface-paper-to-code`의
+push 9분 된 커밋 2개를 지웠고 `git fsck --unreachable`로 복구했다.
+
+| 브랜치 | 상태 |
+|---|---|
+| `feat/agent-dual-control` | 코드 알람 트랙, Step 4까지 main에. 워크트리 활성 |
+| `feat/plugin-mode-doctrine` | 플러그인 독트린 트랙, a18aaf4까지 main에. 워크트리 활성 |
+| `feat/card-surface-paper-to-code` | 카드 표면 트랙, d612cb5(G4)까지 main에. Codex가 원격 전용으로 push |
+| `ANNJUNGCHAN/main` | Orca 워크스페이스의 main 미러, cd0b98e까지 main에 |
+
+삭제 완료: `codex/kiumi-mini-cards-runtime` · `kiumi/mini-cards`(둘 다 main에 포함 확인 후) ·
+로컬 `claude/settings-plugin-tab-absorption-6d550f`.
 
 > ⚠ **새 컴퓨터에서 app 단위가 1,945/1,946이거나 backend가 32건 무더기로 깨지면
 > 코드 문제가 아니라 PATH 문제다.** 원인과 조치는

@@ -1,0 +1,101 @@
+{
+ "task": "코드 알람 합의 계획 실행 — docs/plans/2026-09-03-code-alarm-plan.md (Step 1~8, 사람 정지점 Step 8)",
+ "plan": "docs/plans/2026-09-03-code-alarm-plan.md",
+ "concept": "docs/plans/2026-09-03-code-alarm-concept.md",
+ "map": "docs/research/2026-09-03-code-alarm-reuse-map.md",
+ "stories": [
+  {
+   "id": "CA-000",
+   "title": "V0 기준선 기록",
+   "passes": true,
+   "acceptanceCriteria": [
+    ".omc/state/code-alarm-baseline.txt에 backend passed/failed · app pass/fail · parity check() 수 3줄 기록 (현재값 3169/0 · 2295/2295 · 35)"
+   ],
+   "completedAt": "2026-09-04"
+  },
+  {
+   "id": "CA-001",
+   "title": "Step 1 — 루틴 계약",
+   "passes": true,
+   "acceptanceCriteria": [
+    "계획 §3 B-1~B-6, B-20(저장 측) 통과",
+    "V1: cd backend && uv run pytest tests/unit/test_routines_core.py -q 실패 0",
+    "routines/ 안 exec/eval/compile 0 (기존 grep 테스트 통과)"
+   ],
+   "completedAt": "2026-09-04"
+  },
+  {
+   "id": "CA-002",
+   "title": "Step 2 — 샌드박스 계측(opt-in)",
+   "passes": true,
+   "acceptanceCriteria": [
+    "B-10a: trace_names 부재 시 산출물·동작 바이트 동일 테스트 통과",
+    "V2 백테스트 회귀 7파일 실패 0",
+    "signals 포함 최상위 호출가능 래핑, 마지막 호출 채택, 64항목·200자 상한, 오류 경로에도 node_io.json"
+   ],
+   "completedAt": "2026-09-04"
+  },
+  {
+   "id": "CA-003",
+   "title": "Step 3 — watch 패키지",
+   "passes": true,
+   "acceptanceCriteria": [
+    "B-7~B-11, B-18, B-19, B-23 통과",
+    "V3: tests/unit/test_watch_data.py test_watch_runner.py test_watch_check.py 실패 0",
+    "jobdir try/finally 삭제 + 동시 실행 상한 상수"
+   ],
+   "completedAt": "2026-09-04"
+  },
+  {
+   "id": "CA-004",
+   "title": "Step 4 — 감시 코드 착지 경로",
+   "passes": true,
+   "acceptanceCriteria": [
+    "POST /api/v1/routines/watch/code — resolve_in_project 경유, <project>/watch/<slug>.py만, code_hash 반환, 활성·일시중지 참조 경로 409(B-24)",
+    "athena_routine _ALLOWED_ACTIONS에 propose_watch_code, _INPUT_SCHEMA 산문에 code.watch·watch(B-16)",
+    "B-13 착지 측: bt_strategy·bt_strategy_version·user-strategies.json +0",
+    "V4 일부: tests/api/test_routines_watch_api.py tests/mcp 실패 0"
+   ],
+   "completedAt": "2026-09-04"
+  },
+  {
+   "id": "CA-005",
+   "title": "Step 5 — REST + 실행 루프",
+   "passes": false,
+   "acceptanceCriteria": [
+    "B-12~B-15, B-17, B-20(복원), B-21, B-22 통과",
+    "POST /watch/check · draft가 watch 수용 · _detail_view 노드·검사 요약 · code-watch condition 수정 422 · _code_loop(장중 요일·종목 묶기·해시 재확인·failed 전이) · config 2항목",
+    "V4 전체 실패 0, V5: uv run pytest -q failed==0 && passed>=3169"
+   ]
+  },
+  {
+   "id": "CA-006",
+   "title": "Step 6 — 대화",
+   "passes": false,
+   "acceptanceCriteria": [
+    "A-6~A-10 통과 (routine-turn.js describeMode + routine-turn.test.js 확장, approvalModeLine, 「검사」 칩 활성 + title R6, 검사 결과 카드 + 「어제까지로 세었음 · 오늘은 진행 중」, R8 칩)",
+    "main.js·preload.js 검사·착지 통로 (EOL 보존, diff는 추가만)",
+    "V6: cd app && npm test failed==0 && passed>=2295"
+   ]
+  },
+  {
+   "id": "CA-007",
+   "title": "Step 7 — 캔버스 + 테스트·프로브·문서",
+   "passes": false,
+   "acceptanceCriteria": [
+    "A-1~A-5, A-11, A-12 통과 (agent-canvas.js code-watch kind·노드 카드·자동 검사 로그·접힌 코드·방금 바뀜·선택 칩·울린 기록·만료·고치기 멈춤 확인)",
+    "probe-agent-paper-parity.js 보드 09~12 단언 추가, PAPER_APP_PARITY.md 갱신",
+    "V6 · V7: npm run verify:agent-paper-parity 실패 0, check() >= 35"
+   ]
+  },
+  {
+   "id": "CA-008",
+   "title": "Step 8 — 🛑 라이브 시연 (사람 정지점)",
+   "passes": false,
+   "acceptanceCriteria": [
+    "npm start 실기동 → 005930 60일 백필 → 대화 초안 → 검사 → 승인 → 폴링 1주기 → 고치기 한 바퀴까지 준비하고 정지 보고",
+    "L-1~L-5 표와 증거 형식을 사용자에게 제시, 시연 전 어떤 행도 통과로 기록하지 않음"
+   ]
+  }
+ ]
+}

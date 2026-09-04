@@ -5,8 +5,12 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { app } = require('electron');
 const { writeJsonAtomic, writeJsonAtomicAsync } = require('./json-store');
+// 모드 어휘의 진실은 session-snapshot 하나다 — 화면은 대화 모드를 'summary'라
+// 부르고 레코드는 'chat'이라 부르는데, 그 다리를 여기서 또 만들면 두 벌이 된다.
+const { viewToMode } = require('../session-snapshot');
 
 const TITLE_MAX = 40;
 const STATE_VERSION = 2;
@@ -25,10 +29,18 @@ function validString(value) {
 function normalizeProject(raw, fallbackId) {
   const id = validString(raw && raw.id) || fallbackId;
   const label = validString(raw && (raw.label || raw.name)) || id;
-  const project = { id, label };
+  // 프로젝트는 폴더 하나다(37번 보드). 폴더를 고르기 전의 옛 레코드는 path가
+  // 없으므로 null로 읽힌다 — 마이그레이션 없이 그대로 산다.
+  const project = { id, label, path: validString(raw && raw.path), pinned: Boolean(raw && raw.pinned) };
   const description = validString(raw && raw.description);
   if (description) project.description = description;
   return project;
+}
+
+// 폴더 비교는 절대경로로 맞추고 Windows 대소문자는 무시한다.
+function projectPathKey(value) {
+  const raw = validString(value);
+  return raw ? path.resolve(raw).toLowerCase() : null;
 }
 
 function normalizeState(raw) {
@@ -36,9 +48,14 @@ function normalizeState(raw) {
   const projectRows = Array.isArray(source.projects) ? source.projects : [];
   const projects = [];
   const seenProjectIds = new Set();
+  const seenProjectPaths = new Set();
   for (const row of projectRows) {
     const project = normalizeProject(row, `project-${projects.length + 1}`);
     if (seenProjectIds.has(project.id)) continue;
+    // 폴더 하나에 프로젝트 하나 — 같은 폴더가 두 번 오면 뒤의 것을 버린다.
+    const pathKey = projectPathKey(project.path);
+    if (pathKey && seenProjectPaths.has(pathKey)) continue;
+    if (pathKey) seenProjectPaths.add(pathKey);
     seenProjectIds.add(project.id);
     projects.push(project);
   }
@@ -66,12 +83,20 @@ function normalizeState(raw) {
       createdAt,
       updatedAt,
       projectId,
+      // 대화는 만들어진 모드에 묶인다(35·40번 보드). 옛 레코드에는 이 필드가
+      // 없으므로 viewToMode가 'chat'으로 떨어뜨린다 — 마이그레이션 없이 읽힌다.
+      mode: viewToMode(row.mode),
+      // 마지막으로 관측한 Claude session_id(--resume 커서). 이력 행을 다시 눌렀을 때
+      // 모델 문맥까지 이어 붙이는 열쇠다 — 이것이 없으면 메시지만 다시 보이고
+      // 대화는 백지에서 시작한다(41번 보드 "다시 누르면 그대로").
+      resumeSessionId: validString(row.resumeSessionId),
     });
   }
 
   return {
     version: STATE_VERSION,
     activeId: validString(source.activeId),
+    activeMode: viewToMode(source.activeMode),
     currentProjectId,
     projects,
     conversations,
@@ -133,11 +158,17 @@ function projectConversations(state, projectId) {
   return sortedConversations(state).filter((conversation) => conversation.projectId === projectId);
 }
 
+// 최상단 고정이 먼저, 나머지는 원래 순서 그대로(정렬은 안정적이다).
+function sortedProjects(state) {
+  return [...state.projects].sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)));
+}
+
 function snapshot(state) {
   return {
     activeId: state.activeId,
+    activeMode: state.activeMode,
     currentProjectId: state.currentProjectId,
-    projects: state.projects,
+    projects: sortedProjects(state),
     conversations: sortedConversations(state),
   };
 }
@@ -147,7 +178,7 @@ function list() {
 }
 
 // 새 id를 현재 대화로 시작하되, 첫 사용자 입력 전에는 목록에 빈 행을 만들지 않는다.
-function begin({ id, projectId } = {}) {
+function begin({ id, projectId, mode } = {}) {
   const nextId = validString(id);
   if (!nextId) return list();
   const state = readState();
@@ -155,6 +186,8 @@ function begin({ id, projectId } = {}) {
     ? projectId
     : state.currentProjectId;
   state.activeId = nextId;
+  // 행은 첫 입력 때 만들어지므로 모드는 여기서 기억해 두고 touch()가 쓴다.
+  state.activeMode = viewToMode(mode);
   state.currentProjectId = selectedProjectId;
   writeState(state);
   return snapshot(state);
@@ -162,7 +195,7 @@ function begin({ id, projectId } = {}) {
 
 // 첫 사용자 메시지에서 목록에 한 번만 추가한다. begin()을 거치지 않은 기존
 // 호출도 현재 프로젝트로 안전하게 귀속된다.
-function touch({ id, title, projectId } = {}) {
+function touch({ id, title, projectId, mode } = {}) {
   const conversationId = validString(id);
   if (!conversationId) return list();
   const state = readState();
@@ -170,6 +203,9 @@ function touch({ id, title, projectId } = {}) {
   const requestedProjectId = state.projects.some((project) => project.id === projectId)
     ? projectId
     : state.currentProjectId;
+  // 모드는 만들 때 한 번 정해지고 바뀌지 않는다 — 모드가 대화의 경계라서,
+  // 이미 있는 행의 모드를 나중에 갈아끼우면 그 경계가 무너진다(40번 보드).
+  const requestedMode = mode === undefined ? state.activeMode : viewToMode(mode);
   const nowIso = new Date().toISOString();
   if (existing) {
     existing.updatedAt = nowIso;
@@ -180,9 +216,12 @@ function touch({ id, title, projectId } = {}) {
       createdAt: nowIso,
       updatedAt: nowIso,
       projectId: requestedProjectId,
+      mode: requestedMode,
+      resumeSessionId: null,
     });
   }
   state.activeId = conversationId;
+  state.activeMode = existing ? existing.mode : requestedMode;
   state.currentProjectId = existing ? existing.projectId : requestedProjectId;
   writeState(state);
   return snapshot(state);
@@ -193,9 +232,89 @@ function setActive(id) {
   const conversation = state.conversations.find((row) => row.id === id);
   if (!conversation) return list();
   state.activeId = conversation.id;
+  // 이력 행을 누르면 그 대화의 모드로 화면이 따라간다 — 백테스트 대화를 열면
+  // 백테스트 캔버스가 뜬다. 셸이 이 값을 읽어 view를 맞춘다.
+  state.activeMode = conversation.mode;
   state.currentProjectId = conversation.projectId;
   writeState(state);
   return snapshot(state);
+}
+
+// 턴이 끝날 때마다 main이 관측한 Claude session_id를 그 대화에 적어 둔다.
+// 커서는 대화마다 따로 산다 — 한 대화의 커서로 다른 대화를 이으면 문맥이 섞인다.
+function setResumeCursor({ id, resumeSessionId } = {}) {
+  const conversationId = validString(id);
+  if (!conversationId) return false;
+  const state = readState();
+  const conversation = state.conversations.find((row) => row.id === conversationId);
+  if (!conversation) return false;
+  const next = validString(resumeSessionId);
+  if (conversation.resumeSessionId === next) return true;
+  conversation.resumeSessionId = next;
+  writeState(state);
+  return true;
+}
+
+// 폴더는 사용자가 고른다(37번 보드). 이 모듈은 고른 경로를 적기만 하고 폴더의
+// 존재·생성·삭제는 main의 몫이다 — 여기서 파일시스템을 만지지 않는다.
+// id를 주면 그대로 쓴다(백엔드 프로젝트 레지스트리의 project_id와 같은 것이어야 한다).
+function addProject({ id, path: folderPath, label } = {}) {
+  const state = readState();
+  const target = validString(folderPath);
+  if (!target) return { ok: false, reason: 'invalid_path' };
+  const pathKey = projectPathKey(target);
+  const taken = state.projects.find((project) => projectPathKey(project.path) === pathKey);
+  if (taken) return { ok: false, reason: 'folder_taken', project: taken };
+  const requestedId = validString(id);
+  const idTaken = requestedId && state.projects.find((project) => project.id === requestedId);
+  if (idTaken) return { ok: false, reason: 'id_taken', project: idTaken };
+  const project = {
+    id: requestedId || `proj-${crypto.randomUUID()}`,
+    // 이름을 안 주면 폴더 이름이 곧 프로젝트 이름이다.
+    label: validString(label) || path.basename(path.resolve(target)),
+    path: target,
+    pinned: false,
+  };
+  state.projects.push(project);
+  state.currentProjectId = project.id;
+  writeState(state);
+  return { ok: true, project, state: snapshot(state) };
+}
+
+function setProjectPinned(id, pinned) {
+  const state = readState();
+  const project = state.projects.find((row) => row.id === validString(id));
+  if (!project) return list();
+  project.pinned = Boolean(pinned);
+  writeState(state);
+  return snapshot(state);
+}
+
+// 레코드와 그 프로젝트의 대화들만 지운다 — 폴더 자체를 지우는 것은 main의 몫이다.
+function removeProject(id) {
+  const projectId = validString(id);
+  const state = readState();
+  if (projectId === DEFAULT_PROJECT_ID) return { ok: false, reason: 'default_project' };
+  const index = state.projects.findIndex((row) => row.id === projectId);
+  if (index < 0) return { ok: false, reason: 'unknown_project' };
+  const [project] = state.projects.splice(index, 1);
+  const conversationIds = state.conversations
+    .filter((row) => row.projectId === projectId)
+    .map((row) => row.id);
+  state.conversations = state.conversations.filter((row) => row.projectId !== projectId);
+  // 프로젝트 없는 상태는 없다 — 마지막 하나를 지웠다면 기본 프로젝트가 돌아온다.
+  if (!state.projects.length) state.projects.push({ id: DEFAULT_PROJECT_ID, label: DEFAULT_PROJECT_LABEL });
+  if (state.currentProjectId === projectId) state.currentProjectId = state.projects[0].id;
+  if (conversationIds.includes(state.activeId)) state.activeId = null;
+  writeState(state);
+  return { ok: true, removed: { project, conversationIds }, state: snapshot(state) };
+}
+
+// main이 '탐색기에서 열기'로 폴더 경로를 읽을 때 쓴다.
+function projectById(id) {
+  const projectId = validString(id);
+  if (!projectId) return null;
+  return readState().projects.find((row) => row.id === projectId) || null;
 }
 
 // 백그라운드로 미룬 파일 쓰기가 실제로 끝났는지 기다려야 할 때(테스트) 쓴다.
@@ -226,6 +345,11 @@ module.exports = {
   begin,
   touch,
   setActive,
+  setResumeCursor,
+  addProject,
+  setProjectPinned,
+  removeProject,
+  projectById,
   flush,
   flushSync,
 };

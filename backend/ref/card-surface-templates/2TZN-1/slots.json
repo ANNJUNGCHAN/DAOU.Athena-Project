@@ -8179,5 +8179,78 @@
       "kor": "기관계순매수",
       "unbound_reason": "팩이 적은 자리('우패널 기관 -340억')가 이 보드에 없다. 기관계는 증권·보험·투신·은행·종합금융·기금·사모펀드 7주체의 합이고 레일 '투자자 순매수' 블록은 그 7주체를 낱값 행으로 이미 그린다 — 합계 행을 새로 두면 낱값 7개가 집약으로 되돌아간다(신념 9). Paper에서 블록에 '기관계' 행을 신설해야 자기 자리가 생긴다"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "table",
+    "title": "업종 — 업종 지수·등락 탐색",
+    "eyebrow": "CC-06 / 2TZN-1",
+    "source_board": "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "elements": [
+      {
+        "source_slot_id": "s027",
+        "label": "코드",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "G2510 · 제조",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s029",
+        "label": "현재가",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 2,
+          "tone": "neutral"
+        },
+        "paper_text": "3,184.52",
+        "rank": 2
+      },
+      {
+        "source_slot_id": "s030",
+        "label": "전일대비",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "date",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+87.96",
+        "rank": 3
+      }
+    ],
+    "fold_counts": {
+      "total": 145,
+      "shown": 3,
+      "hidden": 142,
+      "rows": 3
+    },
+    "fold_note": "외 3개 행을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+      "elements": "코드 · 현재가 · 전일대비",
+      "grammar": "table",
+      "folded": "외 3개 행을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

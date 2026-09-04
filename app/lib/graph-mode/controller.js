@@ -58,6 +58,25 @@ function formatEventDate(iso) {
 // 확인 시 후속). 어휘는 백엔드 RelationKind(ontology.py:78-95) 전체를 덮고,
 // 미등록 relation은 원문 그대로 폴백한다(summary-table.js 기존 관례와 동일 —
 // 지어낸 한글을 강제하지 않음).
+// ── 정적 렌더러가 남기고 간 순수 함수들(2026-09-02) ─────────────────────────
+// render.js / cluster-layout.js를 지우면서, 그리기와 무관한데 **공통 패널이 계속
+// 쓰는** 것만 여기로 옮겼다. 좌표 계산은 통째로 버렸다 — 라이브 지도가 자기 좌표를
+// 정하므로 배치 결과가 더는 필요 없고, 남은 것은 "무엇이 몇 개인가"뿐이다.
+
+// 군집 제목 사다리(옛 render.clusterTitle). 확정 이름 → AI 추정 → 대표 멤버 →
+// 없음. 추정인지 아닌지를 함께 돌려주는 것이 요점이다(화면이 "· 추정"을 붙인다).
+function clusterTitle(cluster) {
+  if (cluster.name) return { text: cluster.name, estimated: false };
+  if (cluster.aiLabel) return { text: cluster.aiLabel, estimated: true };
+  if (cluster.representative) return { text: cluster.representative, estimated: true };
+  return { text: '이름 없는 군집', estimated: false };
+}
+
+function entityPairKey(a, b) {
+  const [x, y] = String(a) < String(b) ? [a, b] : [b, a];
+  return `${x} ${y}`;
+}
+
 const RELATION_LABELS = {
   relates_to: '연관',
   interested_in: '관심',
@@ -88,6 +107,19 @@ const PANEL_KIND_LABELS = {
 // 하강·동일·한쪽 미상은 전부 방어적 중립 "신뢰도 변경"으로 통일한다.
 const CONFIDENCE_RANK = { AMBIGUOUS: 0, INFERRED: 1, EXTRACTED: 2 };
 
+// 조사 '로/으로' — 받침이 없거나 ㄹ 받침이면 '로', 그 외에는 '으로'다.
+// 라벨이 '사실'·'불확실'(ㄹ 받침)일 때는 맞았는데 '추론'(ㄴ 받침)에서 "추론로 승격"이
+// 나왔다(2026-09-03 화면 실측). 한글 음절의 종성 인덱스는 (코드 − 0xAC00) % 28이고
+// 0이면 받침 없음, 8이면 ㄹ이다(brain-questions.js hasJongseong과 같은 계산이지만
+// 그 함수는 받침 유무만 보므로 ㄹ 예외를 알 수 없어 여기서 따로 판정한다).
+function roParticle(word) {
+  const last = String(word || '').slice(-1);
+  const code = last.charCodeAt(0);
+  if (!Number.isFinite(code) || code < 0xac00 || code > 0xd7a3) return '로'; // 한글이 아니면 그대로
+  const jongseong = (code - 0xac00) % 28;
+  return (jongseong === 0 || jongseong === 8) ? '로' : '으로';
+}
+
 // GraphEventOp별 문구 조립(G-G6 초안 그대로 채택 — Paper 대응 사례가 없는 op는
 // GraphEventOp 주석 의미로 직역). entity_added의 대화 제목 인용구는 backend에
 // 대응 필드가 없어 조립하지 않는다(G-G3, §0 정직성 원칙).
@@ -107,7 +139,7 @@ function timelineEventText(event) {
       if (before && after && CONFIDENCE_RANK[after] > CONFIDENCE_RANK[before]) {
         const beforeLabel = PANEL_CONFIDENCE_LABELS[before] || before;
         const afterLabel = PANEL_CONFIDENCE_LABELS[after] || after;
-        return `${prefix}${beforeLabel} → ${afterLabel}로 승격`;
+        return `${prefix}${beforeLabel} → ${afterLabel}${roParticle(afterLabel)} 승격`;
       }
       return `${prefix}신뢰도 변경`;
     }
@@ -194,22 +226,25 @@ function topSurprising(connections, limit) {
     .slice(0, cap);
 }
 
-// 상대 점수 표기(보드 01/02/04 "8.5") — backend의 surprise_score는 이 목록 안에서
-// min-max 정규화된 [0,1]이라 절대 점수가 아니다. Paper의 0~10 스케일에 맞추되
-// "상대"를 앞에 붙여 그 한계를 문구로 남긴다.
+// 놀라움 표기 — 숫자를 적지 않는다(2026-09-03).
+//
+// 예전에는 Paper의 0~10 스케일(보드 01/02/04 "8.5")에 맞춰 `상대 ${score*10}`을
+// 적었다. 그런데 backend의 surprise_score는 min-max 정규화라 1등은 **언제나** 1.0이고
+// 교차 다리가 전부 동점이면 전부 1.0이다(analysis.py — hi == lo면 모두 1.0). 그래서
+// 화면에 "상대 10.0"이 찍혔다: 라벨은 '상대'인데 순위 정보가 0이고, 10.0은 §0이
+// 금지한 절대 점수처럼 읽힌다. 목록 쪽은 자리 순위("1순위")로 바꿨고(hidden-links.js)
+// 여기는 노드 하나를 보는 자리라 순위 숫자가 뜻이 없다 — isTop만 말한다.
+//
+// 0은 "이 목록 안에서 가장 덜 놀랍다"는 뜻이라 여전히 아무 말도 하지 않는다.
 function relativeScoreText(score) {
-  // 0은 "이 목록 안에서 가장 덜 놀랍다"는 뜻이다 — 숨은 연관이라고 부르면서
-  // 0.0을 붙이면 화면이 스스로를 반박한다. 그 경우엔 아예 적지 않고 근거 절만
-  // 남긴다(§0 정책: 정보가 없는 숫자를 쓰지 않는다).
   if (!Number.isFinite(score) || score <= 0) return '';
-  return `상대 ${(score * 10).toFixed(1)}`;
+  return '이 그래프에서 놀라운 연결에 듭니다';
 }
 
 function createGraphModeController(deps) {
   const {
     store,          // graph-mode-store
-    layout,         // cluster-layout
-    render,         // render
+    grouping,       // cluster-grouping — 군집 집계(좌표 없음). 요약 뷰와 같은 구현을 쓴다.
     prefs,          // graph-mode-prefs (선택)
     elements,       // { summary, graph(가시성 전용 — applyVisibility()만 소유),
                     //   graphBody(렌더·클릭위임·크기측정 전용), summaryTable(선택 —
@@ -234,11 +269,23 @@ function createGraphModeController(deps) {
     fetchEntityTimeline,      // async (entityId) => events[] (선택) — entity-timeline 원본.
     // 보드 05 수집·노출 서브뷰 진입 훅(선택) — 이 파일은 그 카드를 직접 그리지
     // 않는다(collection-settings.js 소관). 언제 다시 그려야 하는지만 알린다.
-    onEnterSettings,          // () => void (선택)
+    onEnterSettings,
+    // 관계 목록의 삭제 손잡이(2026-09-03) — 이 모듈은 부르기만 하고 쓰기는
+    // 호출자가 한다(순수 렌더 계약). 안 주면 손잡이를 안 그린다.
+    onRelationDelete,          // () => void (선택)
     // 헤더 필터 칩(보드 03/04 "최근 90일 · 연결 N개 이상")의 실적용(선택).
     // 안 주면 필터가 없는 것처럼 전체를 그린다 — 다른 선택 주입과 같은 계약이다.
     filters,                  // graph-filters 모듈 (선택)
     getFilters,               // () => {windowDays, minDegree} (선택)
+    // 군집 지도의 라이브 렌더러(2026-09-02, live-map.js) — 힘 시뮬레이션을 계속
+    // 돌리는 두 번째 렌더러다. 안 주면 지금까지처럼 정적 SVG만 그린다(다른 선택
+    // 주입과 같은 계약). 둘 다 있으면 setLive()가 고른다.
+    //
+    // 인스턴스가 아니라 **팩토리**를 받는다 — 라이브 뷰의 노드 클릭은 정적 뷰와
+    // 똑같이 이 파일 안의 handleNodeClick으로 들어가야 같은 공통 패널이 열리는데,
+    // 그 함수는 여기 안에 있다. 밖에서 만들어 넘기면 그 배선을 호출자가 흉내 내야 하고
+    // 두 뷰의 선택 동작이 갈라진다.
+    createLiveMap,            // ({container, onSelect}) => liveMap (선택)
   } = deps;
 
   let state = store.createInitialState();
@@ -251,6 +298,33 @@ function createGraphModeController(deps) {
   // 브레인 상태를 아직 모르는 부팅 초반엔 "못 씀"으로 가정한다 — setAvailable(true)가
   // 오기 전에 그래프 모드로 들어오면 renderUnavailable()의 정직한 안내를 보여준다.
   let available = false;
+  // 군집 지도는 **라이브 렌더러 하나뿐이다**(2026-09-02 결정). 잠깐 정적 SVG와
+  // 토글로 공존시켰지만, 만져 본 뒤 라이브를 채택하고 정적을 폐기했다.
+  let liveMap = null; // 처음 그릴 때 만든다.
+
+  // 라이브 뷰의 노드 선택을 정적 뷰와 같은 경로로 넣는다. 군집 번호는 패널 부제
+  // ("군집 N · 연결 M")가 쓰는 값이라 마지막 응답에서 찾아 넘긴다.
+  function handleLiveSelect(entityId) {
+    if (!entityId) {
+      state = store.clearSelection(state);
+      renderSelection();
+      return;
+    }
+    const nodes = (lastPayload && Array.isArray(lastPayload.nodes)) ? lastPayload.nodes : [];
+    const node = nodes.find((n) => String(n.entity_id) === String(entityId));
+    handleNodeClick(entityId, node ? String(node.cluster) : null);
+  }
+
+  function ensureLiveMap() {
+    if (liveMap || typeof createLiveMap !== 'function' || !elements.graphBody) return liveMap;
+    liveMap = createLiveMap({ container: elements.graphBody, onSelect: handleLiveSelect });
+    return liveMap;
+  }
+
+  function liveActive() {
+    const map = ensureLiveMap();
+    return Boolean(map && map.available());
+  }
 
   // 보드 12d/US-007 — 답변⇄그래프⇄에이전트⇄플러그인⇄백테스트 다섯 표면의 가시성은
   // 전부 이 함수 하나가 소유한다(5중 배타 — 리프 1.2.2 사이드바 모드 네비). 부팅 시
@@ -297,9 +371,23 @@ function createGraphModeController(deps) {
     // 캔버스 빈 상태의 모드별 변형(보드 46) — CSS가 이 축으로 하나만 보여준다.
     // (모드 네비 활성 하이라이트는 lib/sidebar-mode-nav.js가 소유한다 — 리프 1.2.2.)
     if (elements.canvasRegion) elements.canvasRegion.dataset.mode = modeLabel;
-    // 모드별 채팅 헤더(보드 38) — 그래프 모드 전용. 대화 모드엔 헤더가 없다(보드 37).
-    // 백테스트 채팅 헤더는 P5 범위다(계획서 §3.4) — 여기서 새로 발명하지 않는다.
-    if (elements.chatHead) elements.chatHead.hidden = !graphView;
+    // 모드별 채팅 헤더(보드 38 개정) — 그래프·백테스트·플러그인 모드에서 보인다.
+    // 대화 모드엔 헤더가 없다(보드 37). 문구는 data-mode와 함께 여기서 바꾼다 —
+    // shell.html의 두 span은 비어 있고 이 표가 유일한 출처다.
+    const CHAT_HEAD_COPY = {
+      graph: { title: '그래프에게 묻기', sub: '답이 캔버스를 바꿉니다' },
+      backtest: { title: '전략에게 묻기', sub: '답이 설정과 코드를 바꿉니다' },
+      plugin: { title: '아테나 · 플러그인 대화', sub: '설치와 권한을 여기서 정합니다' },
+    };
+    const chatHeadMode = graphView ? 'graph' : (CHAT_HEAD_COPY[activeSurface] ? activeSurface : null);
+    if (elements.chatHead) {
+      elements.chatHead.hidden = !chatHeadMode;
+      if (chatHeadMode) {
+        elements.chatHead.dataset.mode = chatHeadMode;
+        if (elements.chatHeadTitle) elements.chatHeadTitle.textContent = CHAT_HEAD_COPY[chatHeadMode].title;
+        if (elements.chatHeadSub) elements.chatHeadSub.textContent = CHAT_HEAD_COPY[chatHeadMode].sub;
+      }
+    }
   }
 
   // 브레인이 안 됐는데 그래프 모드로 들어오면 빈 캔버스 대신 이렇게 정직하게
@@ -316,12 +404,10 @@ function createGraphModeController(deps) {
 
   // 노드 클릭 하나가 지금 단계에 따라 다른 뜻이다(보드 15): 1단계에서는 그 노드가
   // 속한 군집을 펼치고, 2단계에서는 그 노드를 고른다 — 공통 패널이 연다.
-  function handleNodeClick(entityId, cluster) {
-    if (state.stage === store.STAGE_CLUSTERS) {
-      state = store.expandCluster(state, Number(cluster));
-      redrawFromCache();
-      return;
-    }
+  // 노드 클릭은 언제나 **선택**이다. 옛 정적 지도는 1단계에서 클릭을 "군집 펼침"으로
+  // 가로챘지만(2단계 진입), 라이브 지도는 노드를 처음부터 전부 펴므로 펼칠 단계가
+  // 없다 — 그 분기를 남겨두면 클릭이 선택 대신 아무 일도 안 한다(실측).
+  function handleNodeClick(entityId) {
     selectNode(entityId);
   }
 
@@ -372,7 +458,7 @@ function createGraphModeController(deps) {
       ? lastPlaced.clusters.find((c) => c.cluster === cluster)
       : null;
     if (!meta) return null;
-    const title = render.clusterTitle(meta);
+    const title = clusterTitle(meta);
     return title.estimated ? `${title.text}(추정)` : title.text;
   }
 
@@ -504,6 +590,11 @@ function createGraphModeController(deps) {
       rows.push({
         otherId,
         otherName: (other && other.name) || otherId,
+        // 방향을 여기서 실어 둔다(2026-09-03) — 선택 노드가 도착(target)일 수도
+        // 있다. 렌더 시점에 "선택 노드 = 출발"로 지어내면 해시가 뒤집혀 취소가
+        // 조용히 miss가 난다(백엔드 relation_id는 방향을 구분한다).
+        subjectId: detail.source,
+        objectId: detail.target,
         // 관계 라벨은 첫 kind를 한글로 — RELATION_LABELS는 타임라인 문구와 공유한다.
         relationLabel: kinds.length > 0 ? (RELATION_LABELS[kinds[0]] || kinds[0]) : '관계',
         kinds,
@@ -583,20 +674,6 @@ function createGraphModeController(deps) {
     };
   }
 
-  // 렌더된 노드마다 클릭을 건다. 다시 그릴 때마다 SVG가 통째로 교체되므로
-  // (render.js 주석 참고) 리스너도 매번 새로 건다 — 개별 바인딩을 쓰는 이유는
-  // 이 파일이 최소 DOM 스텁(fake-dom.js)에서도 똑같이 돌아야 해서다(버블링 없음).
-  function wireNodeClicks() {
-    if (!elements.graphBody || typeof elements.graphBody.querySelectorAll !== 'function') return;
-    const nodeEls = elements.graphBody.querySelectorAll('.graph-node');
-    for (const nodeEl of nodeEls) {
-      if (typeof nodeEl.addEventListener !== 'function') continue;
-      nodeEl.addEventListener('click', () => {
-        handleNodeClick(nodeEl.getAttribute('data-entity-id'), nodeEl.getAttribute('data-cluster'));
-      });
-    }
-  }
-
   // 필터가 화면을 통째로 비웠을 때의 안내(보드 07 정직성 상태). 빈 캔버스는
   // "성향이 없다"로 읽히는데, 실제로는 방금 건 조건이 너무 빡빡한 것이다 —
   // 어느 조건이 얼마나 걸려 있는지까지 적어 되돌릴 길을 준다. 실측: "연결 3개
@@ -621,98 +698,22 @@ function createGraphModeController(deps) {
     elements.graphBody.appendChild(note);
   }
 
-  // 1단계(clusters)는 군집 버블 집계, 2단계(expanded)는 기존 개별 노드 렌더
-  // (스텝10) — draw()/redrawFromCache() 둘 다 이 분기를 타므로 한 곳에 모아
-  // 둘이 어긋나지 않게 한다.
-  function renderStage(placed) {
-    const surprisingConnections = topSurprising(
-      typeof getSurprisingConnections === 'function' ? getSurprisingConnections() : []
-    );
-    if (!Array.isArray(placed.nodes) || placed.nodes.length === 0) {
-      renderFilteredEmpty();
-      return;
-    }
-    if (state.stage === store.STAGE_CLUSTERS) {
-      // 숨은 연관 군집 쌍(스텝11이 캡able로 만들어 둔 것을 스텝14가 배선) —
-      // layoutClusterMap()이 자동 계산해 둔 clusterEdges(항상 isSurprising:false)를
-      // 실데이터로 다시 계산해 덮어쓴다. surprising-connections는 이미
-      // source_cluster/target_cluster를 주므로(SurprisingConnectionOut) 변환
-      // 없이 그대로 aggregateClusterEdges에 넘긴다.
-      placed.clusterEdges = layout.aggregateClusterEdges(placed, surprisingConnections);
-      render.renderClusterBubbles(elements.graphBody, placed, {});
-      return;
-    }
-    // 2단계는 보이는 것만으로 **다시 배치한다**(보드 04). 1단계 좌표를 그대로
-    // 걸러 쓰면 군집 하나가 원래 자리에서 반지름 68px 링에 뭉친 채 남아 이름표가
-    // 서로를 덮고, 캔버스의 나머지 90%가 빈 채로 남는다(실측). 같은 결정적 배치
-    // 함수를 보이는 부분집합에 다시 적용하면 그 부분집합이 캔버스를 채운다.
-    const visible = store.visibleNodes(state, placed);
-    const visibleIds = new Set(visible.map((n) => n.entity_id));
-    const subPayload = {
-      revision: lastPayload ? lastPayload.revision : 0,
-      nodes: (lastPayload && Array.isArray(lastPayload.nodes) ? lastPayload.nodes : [])
-        .filter((n) => visibleIds.has(String(n.entity_id))),
-      edges: (lastPayload && Array.isArray(lastPayload.edges) ? lastPayload.edges : [])
-        .filter((pair) => Array.isArray(pair) && visibleIds.has(String(pair[0])) && visibleIds.has(String(pair[1]))),
-      edge_details: lastPayload && Array.isArray(lastPayload.edge_details) ? lastPayload.edge_details : [],
-      cluster_cohesion: lastPayload ? lastPayload.cluster_cohesion : undefined,
-      cluster_representative_labels: lastPayload ? lastPayload.cluster_representative_labels : undefined,
-      cluster_ai_labels: lastPayload ? lastPayload.cluster_ai_labels : undefined,
-    };
-    const expandedPlaced = subPayload.nodes.length > 0
-      ? layout.layoutClusterMap(subPayload, {
-        width: elements.graphBody ? elements.graphBody.clientWidth : 0,
-        height: elements.graphBody ? elements.graphBody.clientHeight : 0,
-        // 펼친 군집을 한가운데 놓고 이웃은 그 바깥에 두른다(보드 04).
-        focusCluster: state.expandedCluster,
-      })
-      : { nodes: [], edges: [], clusters: [] };
-    const nodes = expandedPlaced.nodes;
-    const edges = expandedPlaced.edges;
-    const settings = prefs ? prefs.readPrefs() : null;
-    // 이름 있음 임계 규칙(§0 r5, §15 비차단 2번 — "전체 군집 수"는 그래프
-    // 전체 기준)과 지금 펼친 군집의 이름(스텝12가 캡able로 만들어 둔 것을
-    // 스텝14가 배선) — 이름 파이프라인이 아직 없어(§0 발견1) namedCount는
-    // 실제로 항상 0이지만, 로직은 실데이터가 와도 맞게 짠다. theme-clusters.js의
-    // shouldWarnUnnamed()와 같은 규칙이지만 이 판정 하나 때문에 새
-    // window.AthenaLib 의존을 걸지 않고 인라인으로 둔다(이 파일은 이미 store
-    // 주입 패턴이라 전역 참조를 안 만드는 게 원래 계약).
-    const clusters = Array.isArray(placed.clusters) ? placed.clusters : [];
-    const namedCount = clusters.filter((c) => c.name).length;
-    const unnamedClusterWarnEligible = namedCount > 0 && namedCount < clusters.length;
-    const unnamedClusters = clusters.filter((c) => !c.name).map((c) => c.cluster);
-    const surprisingEntityPairs = new Set(
-      surprisingConnections
-        .filter((c) => c && c.source_entity_id != null && c.target_entity_id != null)
-        .map((c) => render.entityPairKey(c.source_entity_id, c.target_entity_id))
-    );
-    render.renderClusterMap(elements.graphBody, { nodes, edges }, {
-      showLabels: prefs ? prefs.shouldShowLabels(settings, nodes.length) : true,
-      highlightCrossings: settings ? settings.highlightCrossings : true,
-      selectedEntityId: state.selectedEntityId,
-      // 노드 채움 인코딩의 근거(render.js classifyNodeFill) — 성향 신호 표와
-      // 같은 confidence/tier를 쓴다. 표가 이미 받아 둔 것을 조인만 한다.
-      nodeConfidence: new Map(
-        (typeof getProfileSummaryEntries === 'function' ? getProfileSummaryEntries() || [] : [])
-          .filter((e) => e && e.entity_id)
-          .map((e) => [String(e.entity_id), { confidence: e.confidence, tier: e.tier }])
-      ),
-      // 보드 04 — 타원 이름표가 군집 제목·전체 크기를 쓴다. 옛 판은 펼친 군집의
-      // name 한 줄만 넘겼는데, 이제 이웃 군집 타원도 그리므로 전체 목록이 필요하다.
-      clusters,
-      expandedCluster: state.expandedCluster,
-      unnamedClusterWarnEligible,
-      unnamedClusters,
-      surprisingEntityPairs,
-    });
-  }
-
   // 지금 상태로 마지막 배치를 다시 그린다 — 펼침·접기·선택 전부 이 경로를 탄다.
   // 배치는 이미 있으니 무엇을 보여줄지만 바뀐다, 네트워크 왕복이 필요 없다.
+  // 새 fetch 없이 화면만 다시 맞춘다(선택 변경 등).
+  //
+  // **지도는 다시 그리지 않는다.** 옛 정적 시절엔 선택 표시가 SVG 안에 있어서 stage를
+  // 통째로 다시 그려야 했다. 라이브 지도는 자기 상태를 들고 있어 그럴 필요가 없다 —
+  // 오히려 그리면 정적 렌더러가 캔버스를 덮어써 지도가 옛 군집 버블 그림으로
+  // 되돌아갔다(2026-09-02, probe-graph-doubleclick.js로 재현).
+  //
+  // 정적 렌더러를 지운 뒤에도 그 호출이 한 줄 남아 있었고, vis-network가 없는 경로
+  // (로드 실패 · 라이브 지도를 주입하지 않은 테스트)에서 노드를 고르면
+  // `ReferenceError: renderStage is not defined`로 죽었다 — 라이브 스텁을 주입하는
+  // 단위 테스트는 그 분기를 안 타서 못 잡았다. 이제 분기 자체가 없다: 여기서 하는
+  // 일은 선택 표시와 헤더 갱신뿐이고, 지도를 그리는 유일한 자리는 draw()다.
   function redrawFromCache() {
     if (!lastPlaced || !elements.graphBody) return;
-    renderStage(lastPlaced);
-    wireNodeClicks();
     renderSelection();
     renderGraphHeader();
   }
@@ -758,7 +759,12 @@ function createGraphModeController(deps) {
     return 'panel-dot-soft';
   }
 
-  const PANEL_TIER_LABELS = { deterministic: '체결·잔고', conversational: '대화' };
+  // manual — 사람이 화면에서 직접 고친 것(2026-09-03). 체결도 대화도 아니라 별 라벨이
+// 필요하다: 체결이라고 쓰면 체결한 적 없는 것을 체결이라 말하는 것이고, 대화라고
+// 쓰면 모델이 추론한 것처럼 읽힌다.
+const PANEL_TIER_LABELS = {
+  deterministic: '체결·잔고', conversational: '대화', manual: '직접 수정',
+};
 
   // §10-4 최근 변화(보드 15 §2.5, WP-G) — 2단계 렌더의 채움 단계. 응답 시점의
   // 실제 DOM에서 섹션을 다시 찾는다(선점해 둔 closure 노드는 같은 엔티티
@@ -805,8 +811,15 @@ function createGraphModeController(deps) {
     traitTab.setAttribute('type', 'button');
     traitTab.textContent = '성향';
     tabs.appendChild(traitTab);
-    const historyTab = elp('button', 'panel-tab');
+    // 이력 탭은 아직 콘텐츠 스펙이 없다(위 주석 §10-1). 예전에는 눌리는 것처럼
+    // 생긴 채로 아무 일도 안 해서 고장으로 읽혔다(2026-09-03 실사용: "이력은
+    // 클릭해도 안열린다"). 없는 기능을 활성처럼 두지 않는다(P3) — 비활성으로
+    // 표시하고 왜인지 말한다. 아래 §10-4 "최근 변화"가 지금은 그 역할을 한다.
+    const historyTab = elp('button', 'panel-tab is-disabled');
     historyTab.setAttribute('type', 'button');
+    historyTab.setAttribute('disabled', '');
+    historyTab.setAttribute('aria-disabled', 'true');
+    historyTab.setAttribute('title', '아직 없습니다 — 최근 변화는 아래에 있습니다');
     historyTab.textContent = '이력';
     tabs.appendChild(historyTab);
     tabs.appendChild(elp('span', 'panel-tabs-spacer'));
@@ -849,6 +862,21 @@ function createGraphModeController(deps) {
       : ((data.rationale || data.tier || data.confidence) ? [data] : []);
     const distinctTiers = new Set(sources.map((s) => s.tier).filter(Boolean));
     const conflicting = sources.length > 1 && distinctTiers.size > 1;
+    // 근거가 하나도 없으면 그 사실을 말한다(2026-09-03 실사용: "티어 대조 카드
+    // 자체가 없다"). 지도에서 고른 노드는 성향 신호 표에 같은 entity가 없을 때
+    // profileEntry가 비고(selectNode 주석), 그러면 이 절이 통째로 사라져 사용자는
+    // 고장으로 읽는다 — 같은 노드인데 표에서 고르면 근거가 있고 지도에서 고르면
+    // 없는 것처럼 보인다. 아래 관계 목록은 그대로 나오므로 "관계는 있고 성향
+    // 기록은 없다"가 정확한 사실이고, 그것을 적는다(§0 정직성).
+    if (sources.length === 0) {
+      const note = elp('div', 'panel-tier-card');
+      const noteBody = elp('div', 'panel-tier-body');
+      noteBody.textContent = data.source === 'node'
+        ? '이 노드에는 성향 기록이 없습니다 — 아래 관계만 그래프에 있습니다.'
+        : '근거 문장이 아직 없습니다.';
+      note.appendChild(noteBody);
+      panel.appendChild(note);
+    }
     if (conflicting) {
       const title = elp('div', 'panel-tier-contrast-title');
       title.textContent = '두 출처가 다르게 말합니다';
@@ -908,6 +936,33 @@ function createGraphModeController(deps) {
           count.textContent = String(rel.reinforcement);
         }
         row.appendChild(count);
+        // 삭제 손잡이(Paper 보드 04, 2026-09-03) — 화면에서 바로 고치는 입구다.
+        // 여기서 그래프에 직접 쓰지 않는다: 이 모듈은 순수 렌더이고, 쓰기는 주입받은
+        // onRelationDelete가 한다(canvas.js가 IPC로 잇는다). 계약을 뒤집지 않는다.
+        //
+        // relation_id는 화면이 모른다 — cluster-map의 edge_details가 (출발·도착·관계)만
+        // 준다. id는 그 셋의 결정적 해시이므로 백엔드가 계산한다(brain.py 취소 입구).
+        // 방향은 행이 만들어질 때 실려 온다(rel.subjectId/objectId — 선택 노드가
+        // 도착일 수도 있다). 숨은 연관 행은 확정된 관계가 아니라 분석이 띄운
+        // 표면이라 손잡이를 안 붙인다 — 엉뚱한 것을 지우는 것보다 못 지우는 게 낫다.
+        if (typeof onRelationDelete === 'function' && rel.subjectId && rel.objectId
+            && !rel.isHidden && rel.kinds.length > 0) {
+          const del = elp('button', 'panel-relation-delete');
+          del.setAttribute('type', 'button');
+          del.textContent = '삭제';
+          del.setAttribute('aria-label', `${rel.otherName} · ${rel.relationLabel} 연결 삭제`);
+          del.addEventListener('click', (event) => {
+            // 행 클릭(노드 선택)까지 번지면 지우면서 다른 노드로 넘어간다.
+            if (event && typeof event.stopPropagation === 'function') event.stopPropagation();
+            onRelationDelete({
+              subjectId: rel.subjectId,
+              objectId: rel.objectId,
+              kind: rel.kinds[0],
+              label: `${rel.otherName} · ${rel.relationLabel}`,
+            });
+          });
+          row.appendChild(del);
+        }
         relations.appendChild(row);
       }
       panel.appendChild(relations);
@@ -928,7 +983,10 @@ function createGraphModeController(deps) {
       }
       if (reason.scoreText) {
         const score = elp('div', 'panel-reason-score');
-        score.textContent = reason.isTop ? `${reason.scoreText} — 이 그래프에서 가장 높음` : reason.scoreText;
+        // 1등이면 그렇게 말하고, 아니면 "든다"까지만 말한다 — 둘 다 숫자가 없다.
+        score.textContent = reason.isTop
+          ? '이 그래프에서 가장 놀라운 연결입니다'
+          : reason.scoreText;
         block.appendChild(score);
       }
       panel.appendChild(block);
@@ -979,7 +1037,18 @@ function createGraphModeController(deps) {
     const cta = elp('button', 'panel-cta');
     cta.setAttribute('type', 'button');
     cta.textContent = ctaLabel;
-    if (typeof onPanelCta === 'function') cta.addEventListener('click', onPanelCta);
+    // 클릭에 **무엇을 물어야 하는지**를 함께 넘긴다(2026-09-02). 옛 판은 인자 없이
+    // 불러서, 받는 쪽(canvas.js)이 입력창에 포커스만 주고 끝났다 — 버튼을 눌러도
+    // 아무 일도 안 일어난다는 제보의 원인이다. 문구는 위 리드인과 같은 축을 쓴다:
+    // 숨은 연관이면 "왜 이어졌나", 어긋나면 "어느 쪽이 실제인가".
+    if (typeof onPanelCta === 'function') {
+      const ask = {
+        kind: reason ? 'hidden' : (conflicting ? 'conflict' : 'plain'),
+        name: data.name || null,
+        entityId: data.entityId || null,
+      };
+      cta.addEventListener('click', () => onPanelCta(ask));
+    }
     ctaBlock.appendChild(cta);
     panel.appendChild(ctaBlock);
   }
@@ -1007,6 +1076,9 @@ function createGraphModeController(deps) {
   // 만들지 않는다는 이 파일의 원래 계약을 지킨다.
   function renderSelection() {
     highlightSelectedRow();
+    // 라이브 뷰에는 .graph-node DOM이 없다(캔버스에 그린다) — 강조를 network에
+    // 직접 건다. 아래 이른 반환들보다 앞이어야 수집·노출로 갔다 와도 안 어긋난다.
+    if (liveActive()) liveMap.selectEntity(state.selectedEntityId);
     const panel = elements.panel;
     if (!panel) return;
     // 수집·노출(보드 05)은 노드가 아니라 설정을 보는 화면이다 — 그 옆에 노드
@@ -1051,10 +1123,7 @@ function createGraphModeController(deps) {
       payload = filters.applyGraphFilters(payload, getFilters());
     }
 
-    const placed = layout.layoutClusterMap(payload, {
-      width: elements.graphBody ? elements.graphBody.clientWidth : 0,
-      height: elements.graphBody ? elements.graphBody.clientHeight : 0,
-    });
+    const placed = grouping.projectPayload(payload);
     lastPlaced = placed;
     lastPayload = payload; // 헤더 메타의 "관계 E"(필터 전 원본)가 이 값을 읽는다.
     // 필터가 선택 노드를 걷어냈으면 선택도 놓는다 — 화면에 없는 노드의 패널이
@@ -1063,8 +1132,24 @@ function createGraphModeController(deps) {
       && !placed.nodes.some((node) => node.entity_id === state.selectedEntityId)) {
       state = store.clearSelection(state);
     }
-    renderStage(placed);
-    wireNodeClicks();
+    // 라이브 뷰는 좌표를 스스로 정한다 — placed는 헤더 메타("엔티티 N · 관계 E ·
+    // 군집 C")를 위해 계속 계산하지만 그리기에는 쓰지 않는다. 노드 선택은
+    // live-map.js의 onSelect가 handleNodeClick으로 넘겨 같은 공통 패널을 연다.
+    if (!Array.isArray(placed.nodes) || placed.nodes.length === 0) {
+      // 필터가 전부 걷어냈다 — 빈 화면 대신 무엇이 걸렸는지 적는다(보드 07
+      // 정직성 상태). 렌더러보다 **먼저** 본다: 그릴 게 없는 것과 못 그리는 것은
+      // 다르고, 지도에 빈 캔버스만 남기면 전자가 후자처럼 보인다.
+      renderFilteredEmpty();
+    } else if (liveActive()) {
+      while (elements.graphBody && elements.graphBody.firstChild) {
+        elements.graphBody.removeChild(elements.graphBody.firstChild);
+      }
+      liveMap.render(payload);
+    } else {
+      // vis-network를 못 불러왔다. 빈 화면 대신 정직하게 알린다 — 없는 것(그릴
+      // 그래프가 없다)과 못 읽은 것(렌더러가 없다)은 다르다(§0 정책).
+      renderUnavailable('그래프 렌더러를 불러오지 못했습니다. 요약 탭은 계속 사용할 수 있습니다.');
+    }
     renderSelection();
     renderGraphHeader();
     lastDrawnRevision = state.revision;
@@ -1113,6 +1198,116 @@ function createGraphModeController(deps) {
       return undefined;
     },
     applyVisibility,
+    // 그래프 모드 채팅에 실을 화면 상태(2026-09-02). backtest-canvas.js의
+    // getContext()와 같은 역할이며, 같은 경로로 흐른다:
+    //   chat.js → main.js → live-prompt.buildGraphModePrefix
+    //
+    // **왜 필요한가.** 그래프 모드에 들어와 있어도 모델은 그래프의 존재조차 몰랐다.
+    // "확인이 필요한 것 3건이 뭐야?"에 "종목 시세·차트·공시 중 어느 쪽인가"라고
+    // 되물은 것이 그 증거다(2026-09-02 제보) — 아는 도구 안에서 답한 것이다.
+    //
+    // **왜 노드를 전부 안 싣나.** cluster-map을 모델 컨텍스트에 쏟는 것은 답이 아니라
+    // 비용이다(brain_tools.py 머리말이 cluster_map 액션을 뺀 이유와 같다). 지금
+    // 40개지만 수백~수천으로 늘 수 있다. 그래서 여기서는 **집계와 지금 보고 있는
+    // 것**만 싣고, 더 깊은 질문은 모델이 athena_brain으로 직접 조회한다.
+    getContext() {
+      const entries = typeof getProfileSummaryEntries === 'function'
+        ? (getProfileSummaryEntries() || []) : [];
+      const surprising = typeof getSurprisingConnections === 'function'
+        ? (getSurprisingConnections() || []) : [];
+      const nodes = (lastPlaced && Array.isArray(lastPlaced.nodes)) ? lastPlaced.nodes : [];
+      const clusters = (lastPlaced && Array.isArray(lastPlaced.clusters)) ? lastPlaced.clusters : [];
+      const panel = state.panel;
+      return {
+        available,
+        surface: state.surface,
+        revision: state.revision,
+        filters: typeof getFilters === 'function' ? getFilters() : null,
+        counts: {
+          entities: nodes.length,
+          relations: (lastPlaced && Array.isArray(lastPlaced.edges)) ? lastPlaced.edges.length : 0,
+          clusters: clusters.filter((c) => c.cluster !== -1).length,
+          unassigned: nodes.filter((n) => n.cluster === -1).length,
+          signals: entries.length,
+          hiddenLinks: surprising.length,
+          // "확인이 필요한 것 N건" — 화면 배너와 같은 값이어야 한다. 채팅이 다른
+          // 숫자를 말하면 사용자는 둘 중 어느 쪽을 믿어야 하는지 알 수 없다.
+          uncertain: entries.filter((e) => e && e.confidence === 'AMBIGUOUS').length,
+        },
+        clusters: clusters.filter((c) => c.cluster !== -1).slice(0, 10).map((c) => ({
+          cluster: c.cluster,
+          size: c.size,
+          cohesion: c.cohesion,
+          title: clusterTitle(c).text,
+          estimated: clusterTitle(c).estimated,
+        })),
+        // 상위 신호는 표의 "상위 5"가 아니라 창 전체에서 보강 순으로 고른다 —
+        // 표가 5개만 보여도 모델은 더 물어볼 수 있어야 한다.
+        topSignals: entries.slice(0, 12).map((e) => ({
+          // id를 함께 싣는다(2026-09-03) — 채팅이 athena_graph_view action=select로
+          // 노드를 지목하려면 id가 필요한데, 이름만 주면 모델이 그것을 알 길이
+          // 없어 조회를 한 번 더 돌거나 이름을 id인 척 넣는다(전수 검증 실측).
+          entityId: e.entity_id,
+          name: e.entity_name,
+          kind: e.entity_kind,
+          relation: e.relation_kind,
+          rationale: e.rationale,
+          reinforcement: e.reinforcement,
+          confidence: e.confidence,
+          tier: e.tier,
+          observedAt: e.observed_at,
+        })),
+        hiddenLinks: surprising.slice(0, 6).map((s) => ({
+          source: s.source_name,
+          target: s.target_name,
+          score: s.surprise_score,
+          kinds: s.kinds,
+        })),
+        selected: panel ? {
+          entityId: state.selectedEntityId,
+          name: panel.name,
+          kind: panel.kind,
+          cluster: panel.cluster,
+          clusterTitle: panel.clusterTitle,
+          degree: panel.degree,
+          relation: panel.relation,
+          rationale: panel.rationale,
+          reinforcement: panel.reinforcement,
+          confidence: panel.confidence,
+          tier: panel.tier,
+          relations: Array.isArray(panel.relations)
+            ? panel.relations.slice(0, 15).map((r) => ({
+              label: r.label, name: r.name, count: r.count, hidden: r.hidden,
+            }))
+            : [],
+        } : null,
+      };
+    },
+    // 노드 선택 — 렌더러와 무관한 진입점(2026-09-02). 라이브 지도의 onSelect가
+    // 부르는 것과 **같은 경로**라, 지도 클릭과 이 호출이 같은 패널을 연다.
+    //
+    // 왜 필요한가: 옛 정적 SVG 시절에는 테스트도 사람도 `.graph-node` DOM을 클릭해
+    // 선택을 일으켰다. 라이브 지도는 캔버스에 그려 클릭할 DOM이 없다 — 선택 로직이
+    // 렌더러에 묶여 있으면 렌더러를 바꿀 때마다 그 로직의 검증이 통째로 무너진다.
+    selectNode(entityId) {
+      handleLiveSelect(entityId ? String(entityId) : null);
+      return state.panel;
+    },
+    // 지도 카메라 — 채팅이 노드를 골라 주거나 "전체 다시 보여줘"라고 할 때 쓴다
+    // (2026-09-03, athena_graph_view action=select·fit). 선택과 초점이 갈려 있는
+    // 이유: 요약 표의 행 선택은 패널만 열어야 하고(지도를 안 보고 있다), 채팅이
+    // 노드를 지목한 것은 지도에서도 그 노드가 보여야 한다.
+    //
+    // 지도가 없거나(요약 서브뷰) 그 노드가 필터에 걸려 지도에 없으면 false다 —
+    // 호출자가 "아무 일도 안 일어났다"를 알아야 채팅이 됐다고 말하지 않는다.
+    focusNode(entityId) {
+      if (!liveActive() || !entityId) return false;
+      return liveMap.focusEntity(String(entityId)) === true;
+    },
+    fitView() {
+      if (!liveActive()) return false;
+      return liveMap.fitView() === true;
+    },
     // 공통 패널 공개 API — 그래프 밖(요약 표의 행 선택, 보드 07)에서도 같은 패널을
     // 열 수 있어야 한다는 게 store의 원래 계약이다("공통 패널: 어느 단계에서든
     // 노드를 고르면 같은 패널이 열린다"). 요약 표 자체는 이 디렉터리 밖(canvas.js)에
@@ -1162,6 +1357,11 @@ function createGraphModeController(deps) {
 
 const __exports = {
   createGraphModeController,
+  // 관계명 한글 사전 — 되물을 것들 카드(brain-questions.js)가 주입받아 쓴다.
+  // 공통 패널·엔티티 타임라인과 같은 사전이어야 한 화면이 두 말을 하지 않는다.
+  RELATION_LABELS,
+  clusterTitle,
+  entityPairKey,
   computeGraphHeaderMeta,
   formatEventDate,
   buildTimelineRows,

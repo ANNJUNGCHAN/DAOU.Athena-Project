@@ -6712,5 +6712,104 @@
       "unbound_reason": "상태 표기 — 기준 시점·조회 시각"
     }
   ],
-  "unbound_fields": []
+  "unbound_fields": [],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 신용비율 상위",
+    "eyebrow": "CC-05 / 2YS8-0",
+    "source_board": "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "elements": [
+      {
+        "source_slot_id": "s013",
+        "label": "신용비율",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "11.8%"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "신용비율 10% 초과"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "수량",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "6종목"
+      },
+      {
+        "source_slot_id": "s016",
+        "label": "금액",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "4,208억원",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s015",
+        "label": "변화",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "융자잔고 1위",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 139,
+      "shown": 5,
+      "hidden": 134,
+      "scalars": 2,
+      "rows": 6
+    },
+    "fold_note": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+      "elements": "신용비율 · 변화 · 수량 · 금액",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

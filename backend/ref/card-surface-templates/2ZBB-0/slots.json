@@ -6040,5 +6040,104 @@
     "시세 재표시": "대차 응답 4종에 현재가·전일대비·등락률이 없다. 순위 카드 공통 시세(ka90013, 2RWK-1·2V71-0과 같은 op)를 재표시로 바인딩하고 display_dup으로 적었다.",
     "layer": "paper.jsx가 font-size를 var(--text-*)로만 적어 추출기가 px를 못 읽는다 — estimate_layer가 모든 슬롯을 '직접'으로 판정한다. 병기 층은 paired_with로만 남는다."
   },
-  "unbound_fields": []
+  "unbound_fields": [],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 대차 상위",
+    "eyebrow": "CC-05 / 2ZBB-0",
+    "source_board": "CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "elements": [
+      {
+        "source_slot_id": "s013",
+        "label": "잔고주수",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1,284만주"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "비중 5% 초과"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "수량",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "7종목"
+      },
+      {
+        "source_slot_id": "s016",
+        "label": "대차거래증감",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+214만주",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s012",
+        "label": "변화",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "대차잔고 1위",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 137,
+      "shown": 5,
+      "hidden": 132,
+      "scalars": 2,
+      "rows": 6
+    },
+    "fold_note": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T6-3 · 순위 — 대차 상위",
+      "elements": "잔고주수 · 변화 · 수량 · 대차거래증감",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

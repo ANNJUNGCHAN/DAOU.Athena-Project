@@ -8099,5 +8099,104 @@
     "s096": "지급일 기준 표기(만기 후 4영업일) — 응답 필드가 아니다",
     "s151": "펼침 표시 기호(▸) — 응답 필드가 아니다",
     "s158": "펼침 표시 기호(▸) — 응답 필드가 아니다"
+  },
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "ELW 위험·만기",
+    "eyebrow": "CC-03 / 15P5-2",
+    "source_board": "CC-03 / R08 · ELW 위험·만기",
+    "elements": [
+      {
+        "source_slot_id": "s015",
+        "label": "현재가",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1,160원"
+      },
+      {
+        "source_slot_id": "s022",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+1.24%"
+      },
+      {
+        "source_slot_id": "s017",
+        "label": "거래량",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "48만주"
+      },
+      {
+        "source_slot_id": "s025",
+        "label": "행사가격",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "150,000원",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s027",
+        "label": "ELW이론가",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1,210원",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 141,
+      "shown": 5,
+      "hidden": 136,
+      "scalars": 5,
+      "rows": 2
+    },
+    "fold_note": "스칼라 5개 · 행 2개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R08 · ELW 위험·만기",
+      "elements": "현재가 · 변화 · 거래량 · 행사가격 · ELW이론가",
+      "grammar": "compound",
+      "folded": "스칼라 5개 · 행 2개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
   }
 }

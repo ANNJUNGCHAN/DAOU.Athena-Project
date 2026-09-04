@@ -17,7 +17,11 @@ const INVOKE_CHANNELS = new Set([
   // 이력 사이드바(리프 1.2.2) — 실데이터 목록·선택 상태.
   'athena:conversations-list',
   'athena:conversations-set-active',
+  // 과거 대화 열기(2026-09-02) — 읽기 전용 조회다, 쓰기가 아니다.
+  'athena:conversation-messages',
   'athena:conversations-new',
+  'athena:session-load',
+  'athena:session-replay-cards',
   'athena:account-list',
   'athena:account-register',
   'athena:account-set-active',
@@ -26,14 +30,16 @@ const INVOKE_CHANNELS = new Set([
   'athena:auth-token-status',
   'athena:auth-token-refresh',
   'athena:auth-token-revoke',
+  // 플러그인은 읽기 채널만 렌더러에 연다 — 변이는 athena:plugin-approve 하나로
+  // 모인다(lib/plugin-proposal-boundary.test.js가 이 경계를 잰다).
   'athena:mcp-list',
-  'athena:mcp-stage-snippet',
-  'athena:mcp-register',
-  'athena:mcp-approve',
-  'athena:mcp-revoke',
   'athena:mcp-probe',
-  'athena:mcp-allow-tool',
-  'athena:mcp-remove',
+  'athena:mcp-audit',
+  // 플러그인 승인 카드 — 실행은 사람이 이 둘 중 하나를 부를 때만 일어난다.
+  'athena:plugin-approve',
+  'athena:plugin-reject',
+  // 대기 중인 제안과 현재 판번호 — 창 복원·모드 재진입 때만 부르는 조회다.
+  'athena:plugin-pending',
   'athena:load-fixture',
   'athena:reload-chart-panel',
   // 과거 봉 덧붙이기 — 좌측 끝에 닿으면 렌더러가 부른다(화면 교체 아님).
@@ -49,6 +55,12 @@ const INVOKE_CHANNELS = new Set([
   'athena:routine-resume',
   // 실행 이력 드릴인(10단계) — 6단계 GET /{id}/runs.
   'athena:routine-runs',
+  // 설정 편집·초안 등록(Step 6) — POST /{id}/update · POST /routines/draft.
+  'athena:routine-update',
+  'athena:routine-draft',
+  // 상세·소스 카탈로그(Step 6) — 설정 폼 프리필과 새 작업 시트가 1회씩 부른다.
+  'athena:routine-detail',
+  'athena:routine-source-catalog',
   // 알림 방 읽음 처리(7단계, F3-FE) — 6단계 POST /{id}/ack.
   'athena:routine-ack',
   // 발화 열람·응답 계측(F-stage5b-FE) — POST /{id}/engagement.
@@ -80,6 +92,14 @@ const INVOKE_CHANNELS = new Set([
   'athena:brain-suggested-questions',
   // 그래프 모드 요약 뷰 "숨은 연관"(스텝7) — 군집 경계를 넘는 연결. 읽기 전용이다.
   'athena:brain-surprising-connections',
+  // 사람의 직접 취소(2026-09-03) — 확정 카드의 '적용'이 부른다. **쓰기다.**
+  // 모델은 이 채널에 닿지 않는다: athena_brain에는 쓰기 액션이 없고 이 백엔드
+  // 입구는 x-athena-llm-exposed:false다. 부르는 것은 사람이 누른 카드뿐이다.
+  'athena:brain-retract-relation',
+  // 되물을 것들 카드의 '맞다'. 위와 같은 이유로 **쓰기**이고 모델은 닿지 않는다.
+  'athena:brain-confirm-relation',
+  // 확정 카드의 op=add|change. 위 둘과 같은 이유로 **쓰기**이고 모델은 닿지 않는다.
+  'athena:brain-manual-relation',
   // 엔티티 타임라인(WP-C 배선, WP-G 소비) — 선택 패널 §10-4 "최근 변화"가
   // 부른다(controller.js fetchEntityTimeline). 읽기 전용이다.
   'athena:brain-entity-timeline',
@@ -111,6 +131,21 @@ const INVOKE_CHANNELS = new Set([
   'athena:backtest-validate',
   'athena:backtest-coverage',
   'athena:backtest-flow',
+  // 흐름 지도(2026-09-03) — 지도는 조회 전용이고 codegen은 저장하지 않는다.
+  'athena:backtest-map',
+  'athena:backtest-codegen',
+  // 새 기법 만들기(보드 20·21) — 코드를 노드로 자르는 길과 자동 검사 3개.
+  'athena:backtest-technique-nodes',
+  'athena:backtest-technique-check',
+  // 시각 설계 ↔ 코드 왕복(2026-09-03) — question·patch는 수정안을 만들 뿐이고,
+  // save는 비활성 초안 버전 하나를 남길 뿐이다(활성화·실행은 여전히 다른 버튼).
+  'athena:backtest-visual-registry',
+  'athena:backtest-visual-validate',
+  'athena:backtest-visual-compile',
+  'athena:backtest-visual-question',
+  'athena:backtest-visual-patch',
+  'athena:backtest-visual-from-spec',
+  'athena:backtest-visual-save',
   'athena:backtest-diagnose',
   'athena:backtest-optimize',
   'athena:backtest-optimize-plan',
@@ -120,14 +155,44 @@ const INVOKE_CHANNELS = new Set([
   'athena:backtest-version-add',
   'athena:backtest-activate',
   'athena:backtest-version-diff',
+  'athena:backtest-version-detail',
   'athena:backtest-deployments',
   'athena:backtest-deployment-create',
   'athena:backtest-deployment-stop',
   'athena:backtest-signals',
   'athena:backtest-evaluate',
+  // 2026-09-02 사용자 전략 등록부 — 내 폴더의 .py 하나가 프리셋과 같은 자리에 선다.
+  // 등록·해제는 사람이 누르는 버튼이고, 목록은 설계 폼이 매번 다시 읽는다.
+  'athena:backtest-user-strategies',
+  'athena:backtest-user-strategy-register',
+  'athena:backtest-user-strategy-unregister',
+  // 프로젝트 파일 IDE(2026-09-02, 코드 탭) — 내 컴퓨터의 폴더 하나를 점유한다.
+  // open-dialog만 main 전용이다(네이티브 폴더 선택) — 나머지는 백엔드 라우트 프록시다.
+  'athena:project-list',
+  'athena:project-create',
+  'athena:project-open-dialog',
+  'athena:project-add',
+  'athena:project-pin',
+  'athena:project-reveal',
+  'athena:project-remove',
+  'athena:project-open',
+  'athena:project-tree',
+  'athena:project-file-read',
+  'athena:project-file-write',
+  'athena:project-file-create',
+  'athena:project-file-rename',
+  'athena:project-file-delete',
+  // 프로젝트 가상환경(2026-09-02) — 폴더 안의 .venv 하나. 만드는 것은 202+job_id라
+  // 진행은 기존 athena:backtest-status가 보여준다(잡 표면을 둘로 만들지 않는다).
+  'athena:project-env-get',
+  'athena:project-env-create',
 ]);
 
 const SEND_CHANNELS = new Set([
+  // 세션 저장 보고(35~43번 보드) — 렌더러 DOM은 투영이고 쓰기 주체는 main이다.
+  'athena:session-cards',
+  'athena:session-workspace',
+  'athena:session-viewport',
   'athena:provider-paint-ack',
   'athena:minimize-windows',
   'athena:close-windows',
@@ -175,6 +240,9 @@ const SEND_CHANNELS = new Set([
   'athena:boot-complete',
   'athena:shell-handoff-ready',
   'athena:app-notification-shown',
+  // 카드를 그린 뒤 보내는 단방향 신호 — 모델 경로와 GUI 경로 공통의 대기 등록
+  // 지점이다. 응답을 기다리지 않으므로 카드 렌더를 막지 않는다.
+  'athena:plugin-noted',
 ]);
 
 const ON_CHANNELS = new Set([
@@ -184,6 +252,8 @@ const ON_CHANNELS = new Set([
   'athena:window-state',
   'athena:boot-readiness',
   'athena:app-notification',
+  // 8XX  \ � ��(39� ��)  �t� �X �<�.
+  'athena:session-run-state',
   'athena:add-canvas',
   'athena:add-canvas-live',
   'athena:add-rest-canvas',
@@ -247,6 +317,14 @@ const ON_CHANNELS = new Set([
   'athena:live-tool-step',
   // 말걸기 가드 확인 카드(F-stage9) — athena_nudge_guard propose 결과, 비영속.
   'athena:nudge-guard-proposed',
+  // 루틴 제어 제안 카드(Step 6) — athena_routine propose 결과, 비영속.
+  // 확정은 사람이 카드의 칩을 눌렀을 때 렌더러가 직접 REST를 부른다.
+  'athena:routine-proposed',
+  // 백테스트 채팅 액션 — athena_backtest의 propose_spec·propose_code·navigate·
+  // propose_optimize 결과 {kind, ...}, 비영속. 셸에서만 구독한다.
+  'athena:backtest-chat-action',
+  // 플러그인 제안 카드 — athena_plugin 결과, 비영속. 셸에서만 구독한다.
+  'athena:plugin-proposed',
   // 질의 왕복이 도는 동안 셸·오브 입력을 함께 잠그는 신호 — {busy: boolean}.
   'athena:live-query-state',
   // 오브에서 오간 턴을 셸의 대화 이력에도 늦게 채워 넣는다(셸이 숨어 있는 동안
@@ -256,6 +334,10 @@ const ON_CHANNELS = new Set([
   // render_canvas 결과만 main이 여기로도 relay한다(classifyCanvasBlock의
   // status/envelope 그대로). 오브의 표/차트 축약 카드 렌더러가 구독한다.
   'athena:orb-canvas-result',
+  // 그래프 채팅 액션(2026-09-03) — athena_graph_view의 navigate·select·filter·fit·
+  // propose_edit 결과 {kind, ...}, 비영속. 백테스트 채널과 같은 성질이라 같은 자리에
+  // 둔다. propose_edit은 확정 카드를 띄우는 것이 전부다 — 그래프 쓰기가 아니다.
+  'athena:graph-chat-action',
   // ---------- 예약 자동 브리핑(R1, 4단계) — 사용자 턴 채널과 분리 ----------
   // 브리핑 텍스트 조각 — {text}. 사용자 턴(athena:live-text-delta)과 별개 채널.
   'athena:briefing-text-delta',

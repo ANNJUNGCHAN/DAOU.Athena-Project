@@ -23,12 +23,17 @@ function applyToolStep(steps, step) {
   const rawLabel = step.label || '처리 중';
   const done = !!step.done;
   const error = !!step.error;
-  const label = error ? `${rawLabel} 실패` : rawLabel;
+  // retrying — MCP 서버가 아직 연결 중이라 깨진 호출(2026-09-03). 도구가 없는
+  // 것도 고장난 것도 아니고, 모델이 기다렸다 다시 부른다(main.js 분류 · live-prompt.js
+  // 규칙). "실패"로 쓰면 사용자가 기능이 없는 줄 안다 — 실제로 그렇게 읽혔다.
+  // 숨기지도 않는다: 무슨 일이 있었는지는 말한다.
+  const retrying = !!step.retrying;
+  const label = error ? `${rawLabel} 실패` : (retrying ? `${rawLabel} — 서버 연결 대기` : rawLabel);
   const timeText = done && typeof step.elapsedMs === 'number'
     ? `${(step.elapsedMs / 1000).toFixed(1)}s`
     : (done ? '—' : '');
-  steps.set(step.id, { label, done, elapsedMs: step.elapsedMs, error });
-  return { id: step.id, label, done, timeText, error };
+  steps.set(step.id, { label, done, elapsedMs: step.elapsedMs, error, retrying });
+  return { id: step.id, label, done, timeText, error, retrying };
 }
 
 const __exports = { applyToolStep };

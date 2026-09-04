@@ -25,6 +25,9 @@ CONVERSATIONS_PATH = "/api/v1/brain/conversations"
 PROFILE_SUMMARY_PATH = "/api/v1/brain/profile-summary"
 RESET_PATH = "/api/v1/brain/reset-and-restart"
 ENTITY_TIMELINE_PATH = "/api/v1/brain/analysis/entity-timeline"
+RETRACT_PATH = "/api/v1/brain/relations/retractions"
+CONFIRM_PATH = "/api/v1/brain/relations/confirmations"
+MANUAL_PATH = "/api/v1/brain/relations/manual"
 SECRET_MARKER = "지난주에 삼성전자 100주를 매수하고 싶다는 비밀스러운 계획"
 
 
@@ -1513,3 +1516,357 @@ def test_identical_inflight_cluster_requests_reuse_labeling_tasks(
 
     assert seeded_client.portal is not None
     seeded_client.portal.call(wait_for_labels)
+
+
+# ── 노드 상세(2026-09-03, 채팅의 "이 노드 설명해줘") ────────────────────────────
+
+ENTITY_DETAIL_PATH = "/api/v1/brain/analysis/entity-detail"
+
+
+def test_entity_detail_resolves_a_plain_name_and_carries_the_source_text(
+    seeded_client: TestClient,
+) -> None:
+    """이름만 알아도 찾아야 한다 — 채팅에서 사람은 entity_id를 말하지 않는다."""
+    body = seeded_client.get(
+        ENTITY_DETAIL_PATH, headers=_headers(), params={"entity": "005930"}
+    ).json()
+    assert body["resolved"] is True
+    assert body["name"] == "005930"
+    assert body["query"] == "005930"
+    assert body["degree"] >= 1
+    assert body["revision"] > 0
+    assert body["relations"], "체결이 성향 관계로 잡혀 있어야 한다"
+
+    edge = body["relations"][0]
+    assert edge["direction"] in {"in", "out"}
+    assert edge["other_entity_name"]
+    assert edge["reinforcement"] >= 1
+    # 원문 발췌가 실려야 "왜 이렇게 기록됐나"를 모델이 인용할 수 있다.
+    assert edge["source"] is not None
+    assert edge["source"]["text"]
+    assert edge["source"]["truncated"] is False
+    assert edge["source"]["full_chars"] == len(edge["source"]["text"])
+
+
+def test_entity_detail_accepts_the_entity_id_the_canvas_already_has(
+    seeded_client: TestClient,
+) -> None:
+    by_name = seeded_client.get(
+        ENTITY_DETAIL_PATH, headers=_headers(), params={"entity": "005930"}
+    ).json()
+    by_id = seeded_client.get(
+        ENTITY_DETAIL_PATH, headers=_headers(), params={"entity": by_name["entity_id"]}
+    ).json()
+    assert by_id["resolved"] is True
+    assert by_id["entity_id"] == by_name["entity_id"]
+
+
+def test_entity_detail_carries_the_timeline_of_that_node(seeded_client: TestClient) -> None:
+    body = seeded_client.get(
+        ENTITY_DETAIL_PATH, headers=_headers(), params={"entity": "005930"}
+    ).json()
+    assert body["timeline"], "노드가 생긴 사건이라도 있어야 한다"
+    event = body["timeline"][0]
+    assert set(event) == {
+        "seq",
+        "at",
+        "revision",
+        "op",
+        "subject_id",
+        "object_id",
+        "relation",
+        "confidence_before",
+        "confidence_after",
+        "source",
+    }
+    seqs = [item["seq"] for item in body["timeline"]]
+    assert seqs == sorted(seqs, reverse=True), "최신 먼저여야 화면 타임라인과 같은 순서다"
+
+
+def test_entity_detail_does_not_invent_a_node_that_is_not_there(
+    seeded_client: TestClient,
+) -> None:
+    body = seeded_client.get(
+        ENTITY_DETAIL_PATH, headers=_headers(), params={"entity": "없는회사"}
+    ).json()
+    assert body["resolved"] is False
+    assert body["relations"] == []
+    assert body["timeline"] == []
+    assert body["entity_id"] is None
+
+
+def test_entity_detail_refuses_to_guess_between_similar_names(
+    seeded_client: TestClient,
+) -> None:
+    """이름이 여럿에 걸리면 하나를 골라 설명하면 안 된다 — 후보를 주고 되묻게 한다.
+
+    FTS5 `unicode61`은 한국어를 공백 토큰으로 자른다 — "반도체 대형주"와 "반도체 장비"는
+    `반도체` 토큰을 공유하므로 "반도체"가 둘에 걸린다. 반대로 "삼성전자"·"삼성화재"는
+    각각 한 토큰이라 "삼성"으로는 아예 안 걸린다(그건 이 저장층의 성질이고, 여기서
+    고치지 않는다 — 다만 이 테스트가 그 성질에 기대지 않게 이름을 골랐다).
+    """
+    store = seeded_client.app.state.brain_store
+
+    async def add_two_more(app) -> None:
+        from athena_api.brain.ontology import (
+            Confidence,
+            Entity,
+            EntityKind,
+            Relation,
+            SourceKind,
+            SourceRecord,
+            SourceTier,
+            entity_id,
+            relation_id,
+        )
+        from athena_api.brain.store import INVESTOR_PROFILE_ENTITY_ID
+
+        now = datetime(2026, 8, 26, 3, 0, tzinfo=UTC)
+        await store.upsert_source(
+            SourceRecord(
+                id="src:extra",
+                kind=SourceKind.CHAT_MESSAGE,
+                text="반도체 대형주랑 반도체 장비 둘 다 봤어",
+                fingerprint="fp-extra",
+                occurred_at=now,
+                ingested_at=now,
+            )
+        )
+        profile = Entity(
+            id=INVESTOR_PROFILE_ENTITY_ID,
+            kind=EntityKind.INVESTOR_PROFILE,
+            name="default",
+            created_at=now,
+            updated_at=now,
+        )
+        made = [
+            Entity(
+                id=entity_id(EntityKind.THEME, name),
+                kind=EntityKind.THEME,
+                name=name,
+                created_at=now,
+                updated_at=now,
+            )
+            for name in ("반도체 대형주", "반도체 장비")
+        ]
+        await store.apply_extraction(
+            "src:extra",
+            "fp-extra",
+            (profile, *made),
+            tuple(
+                Relation(
+                    id=relation_id("interested_in", profile.id, item.id),
+                    kind="interested_in",
+                    source_entity_id=profile.id,
+                    target_entity_id=item.id,
+                    confidence=Confidence.EXTRACTED,
+                    tier=SourceTier.CONVERSATIONAL,
+                    rationale=None,
+                    source_id="src:extra",
+                    observed_at=now,
+                    extracted_at=now,
+                )
+                for item in made
+            ),
+        )
+
+    seeded_client.portal.call(add_two_more, seeded_client.app)  # type: ignore[attr-defined]
+
+    ambiguous = seeded_client.get(
+        ENTITY_DETAIL_PATH, headers=_headers(), params={"entity": "반도체"}
+    ).json()
+    assert ambiguous["resolved"] is False
+    names = {candidate["name"] for candidate in ambiguous["candidates"]}
+    assert names == {"반도체 대형주", "반도체 장비"}, names
+    assert ambiguous["relations"] == []
+
+    # 반대로 이름을 온전히 대면 후보가 여럿 걸려도 정확히 일치하는 하나를 고른다.
+    exact = seeded_client.get(
+        ENTITY_DETAIL_PATH, headers=_headers(), params={"entity": "반도체 장비"}
+    ).json()
+    assert exact["resolved"] is True
+    assert exact["name"] == "반도체 장비"
+
+
+def test_entity_detail_treats_a_blank_query_as_unresolved(seeded_client: TestClient) -> None:
+    body = seeded_client.get(
+        ENTITY_DETAIL_PATH, headers=_headers(), params={"entity": "   "}
+    ).json()
+    assert body["resolved"] is False
+    assert body["candidates"] == []
+
+
+def test_entity_detail_clamps_the_limit_instead_of_erroring(seeded_client: TestClient) -> None:
+    for limit in (0, -5, 10_000):
+        response = seeded_client.get(
+            ENTITY_DETAIL_PATH,
+            headers=_headers(),
+            params={"entity": "005930", "limit": limit},
+        )
+        assert response.status_code == 200, (limit, response.text)
+        assert response.json()["resolved"] is True
+
+
+def test_entity_detail_requires_the_bearer_and_the_entity(seeded_client: TestClient) -> None:
+    assert seeded_client.get(ENTITY_DETAIL_PATH).status_code == 422
+    # entity 없이 부르면 무엇을 설명할지 모른다 — 422다, 빈 답이 아니다.
+    assert seeded_client.get(ENTITY_DETAIL_PATH, headers=_headers()).status_code == 422
+    assert (
+        seeded_client.get(
+            ENTITY_DETAIL_PATH,
+            headers={"Authorization": "Bearer wrong"},
+            params={"entity": "005930"},
+        ).status_code
+        == 401
+    )
+
+
+def test_entity_detail_503s_while_the_brain_is_disabled() -> None:
+    with _disabled_client() as client:
+        response = client.get(
+            ENTITY_DETAIL_PATH, headers=_headers(), params={"entity": "005930"}
+        )
+        assert response.status_code == 503
+
+
+def test_entity_detail_is_closed_to_the_model_when_exposure_is_off(
+    seeded_client: TestClient,
+) -> None:
+    """노드 원문이 나가는 경로라 노출 토글을 반드시 탄다 — entity-timeline과 다른 점이다."""
+    seeded_client.app.state.expose_to_model = False
+    denied = seeded_client.get(
+        ENTITY_DETAIL_PATH,
+        headers={**_headers(), "X-Athena-Caller": "model"},
+        params={"entity": "005930"},
+    )
+    assert denied.status_code == 503
+    # brain_tools.dispatch()가 "토글 꺼짐"과 "브레인 미기동"을 이 문자열로 구분한다.
+    assert denied.json()["detail"] == "expose-to-model-disabled"
+
+    seeded_client.app.state.expose_to_model = True
+    allowed = seeded_client.get(
+        ENTITY_DETAIL_PATH,
+        headers={**_headers(), "X-Athena-Caller": "model"},
+        params={"entity": "005930"},
+    )
+    assert allowed.status_code == 200
+    assert allowed.json()["resolved"] is True
+
+
+# ── 사람의 직접 취소 입구(2026-09-03) ────────────────────────────────────────
+
+
+def test_relation_retraction_requires_bearer_header() -> None:
+    with _disabled_client() as client:
+        response = client.post(RETRACT_PATH, json={"relation_id": "relation:x"})
+    assert response.status_code == 422
+
+
+def test_relation_retraction_rejects_wrong_bearer() -> None:
+    with _disabled_client() as client:
+        response = client.post(
+            RETRACT_PATH,
+            json={"relation_id": "relation:x"},
+            headers={"Authorization": "Bearer nope"},
+        )
+    assert response.status_code == 401
+
+
+def test_relation_retraction_is_not_exposed_to_the_model() -> None:
+    """그래프 쓰기가 사람의 행동에서 시작한다는 규칙을 이 입구가 깨지 않는다.
+
+    모델은 athena_brain으로만 브레인에 닿고 거기엔 쓰기 액션이 없다
+    (test_no_write_action_exists). 이 입구는 사람이 카드를 누른 결과로만 불린다 —
+    OpenAPI에 그 사실이 적혀 있어야 게이트웨이가 실수로 노출하지 않는다.
+    """
+    with _disabled_client() as client:
+        schema = client.get("/openapi.json").json()
+    operation = schema["paths"]["/api/v1/brain/relations/retractions"]["post"]
+    assert operation["x-athena-llm-exposed"] is False
+    assert operation["x-athena-side-effect"] == "write"
+
+
+def test_relation_retraction_accepts_the_triple_when_the_screen_has_no_id(
+    entity_timeline_client: TestClient,
+) -> None:
+    """패널의 관계 목록은 relation_id를 모른다 — (출발·도착·관계) 삼중으로 지목한다.
+
+    id는 그 셋의 결정적 해시이므로 백엔드가 계산한다(렌더러에서 해시를 다시
+    구현하면 두 벌이 되고, 어긋나는 순간 취소가 조용히 실패한다).
+    """
+    from athena_api.brain import INVESTOR_PROFILE_ENTITY_ID, EntityKind, entity_id
+
+    body = entity_timeline_client.post(
+        RETRACT_PATH,
+        headers=_headers(),
+        json={
+            "subject_id": INVESTOR_PROFILE_ENTITY_ID,
+            "object_id": entity_id(EntityKind.SECURITY, "삼성전자"),
+            "kind": "owns",
+        },
+    ).json()
+    assert body["removed"] is True
+
+    # 같은 삼중을 또 지우면 miss — 오류가 아니라 removed=False가 정직한 답이다.
+    again = entity_timeline_client.post(
+        RETRACT_PATH,
+        headers=_headers(),
+        json={
+            "subject_id": INVESTOR_PROFILE_ENTITY_ID,
+            "object_id": entity_id(EntityKind.SECURITY, "삼성전자"),
+            "kind": "owns",
+        },
+    ).json()
+    assert again["removed"] is False
+
+
+def test_relation_retraction_rejects_a_payload_that_points_at_nothing(
+    entity_timeline_client: TestClient,
+) -> None:
+    """relation_id도 삼중도 없으면 무엇을 지울지 모른다 — 422로 끊는다."""
+    assert (
+        entity_timeline_client.post(RETRACT_PATH, headers=_headers(), json={}).status_code
+        == 422
+    )
+    # 삼중이 반쪽이면(관계 종류가 빠짐) 그것도 지목이 아니다.
+    assert (
+        entity_timeline_client.post(
+            RETRACT_PATH,
+            headers=_headers(),
+            json={"subject_id": "entity:a", "object_id": "entity:b"},
+        ).status_code
+        == 422
+    )
+
+
+def test_relation_confirmation_requires_bearer_header() -> None:
+    with _disabled_client() as client:
+        response = client.post(CONFIRM_PATH, json={"relation_id": "relation:x"})
+    assert response.status_code == 422
+
+
+def test_relation_confirmation_is_not_exposed_to_the_model() -> None:
+    """확인도 쓰기다 — 취소 입구와 같은 규칙을 따른다."""
+    with _disabled_client() as client:
+        schema = client.get("/openapi.json").json()
+    operation = schema["paths"]["/api/v1/brain/relations/confirmations"]["post"]
+    assert operation["x-athena-llm-exposed"] is False
+    assert operation["x-athena-side-effect"] == "write"
+
+
+def test_manual_relation_requires_bearer_header() -> None:
+    with _disabled_client() as client:
+        response = client.post(
+            MANUAL_PATH,
+            json={"subject_id": "entity:a", "object_id": "entity:b", "kind": "belongs_to"},
+        )
+    assert response.status_code == 422
+
+
+def test_manual_relation_is_not_exposed_to_the_model() -> None:
+    """추가·수정도 쓰기다 — 취소·확인 입구와 같은 규칙을 따른다."""
+    with _disabled_client() as client:
+        schema = client.get("/openapi.json").json()
+    operation = schema["paths"]["/api/v1/brain/relations/manual"]["post"]
+    assert operation["x-athena-llm-exposed"] is False
+    assert operation["x-athena-side-effect"] == "write"

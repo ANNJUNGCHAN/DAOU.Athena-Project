@@ -33,6 +33,12 @@ function buildBackendEnv(baseEnv = process.env) {
   if (!Object.prototype.hasOwnProperty.call(baseEnv, 'ATHENA_ROUTINES_ENABLED')) {
     env.ATHENA_ROUTINES_ENABLED = 'true';
   }
+  // 백테스트 모드(2026-09-02) — 앱이 띄우는 백엔드는 백테스트 서브시스템을 켠다. 이 줄이
+  // 없으면 사이드바 다섯 번째 모드가 503(비활성)으로 죽어 있고, 어느 프로세스가 먼저
+  // 8010을 잡느냐에 따라 켜졌다 꺼졌다 한다(2026-09-02 실측). 외부에서 명시하면 그 값을 따른다.
+  if (!Object.prototype.hasOwnProperty.call(baseEnv, 'ATHENA_BACKTEST_ENABLED')) {
+    env.ATHENA_BACKTEST_ENABLED = 'true';
+  }
   if (!Object.prototype.hasOwnProperty.call(baseEnv, 'ATHENA_BRAIN_INGEST_SCHEDULE_OWNER')) {
     env.ATHENA_BRAIN_INGEST_SCHEDULE_OWNER = 'external';
   }

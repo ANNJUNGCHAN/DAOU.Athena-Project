@@ -19,7 +19,7 @@ function el(name, className) {
   return node;
 }
 
-function renderConnectionRow(connection) {
+function renderConnectionRow(connection, rank, relationLabels) {
   const row = el('div', 'hidden-link-row');
 
   const pair = el('div', 'hidden-link-pair');
@@ -34,21 +34,32 @@ function renderConnectionRow(connection) {
   pair.appendChild(target);
   row.appendChild(pair);
 
-  // 상대 순위 배지 — 공통 패널의 "왜 숨은 연관인가" 점수와 **같은 스케일**을 쓴다
-  // (controller.js relativeScoreText). 같은 연결을 한 화면은 0.85로, 다른 화면은
-  // 8.5로 부르면 두 숫자가 다른 값처럼 읽힌다. 0은 "이 목록에서 가장 덜 놀랍다"는
-  // 뜻이라 배지를 안 붙인다 — 숨은 연관이라 부르면서 0을 적으면 스스로를 반박한다.
-  // backend가 surprise_score를 안 주는 구버전에서도 마찬가지로 생략한다.
-  if (Number.isFinite(connection.surprise_score) && connection.surprise_score > 0) {
-    const score = el('span', 'hidden-link-score');
-    score.textContent = `상대 ${(connection.surprise_score * 10).toFixed(1)}`;
-    row.appendChild(score);
+  // 순위 배지 — 숫자를 적지 않는다(2026-09-03).
+  //
+  // 예전에는 `상대 ${surprise_score * 10}`을 적었다. 그런데 backend의 점수는 min-max
+  // 정규화라 1등은 **언제나** 1.0이고, 교차 다리가 전부 동점이면 전부 1.0이다
+  // (analysis.py — hi == lo면 모두 1.0). 그래서 화면에는 "상대 10.0"이 여러 줄
+  // 나란히 찍혔다: 라벨은 '상대'인데 순위 정보가 0이고, 10.0은 절대 점수처럼 읽힌다
+  // (§0 발견3이 금지한 바로 그 8.5류 표기와 구별이 안 된다).
+  //
+  // 목록은 이제 놀라운 순으로 내려온다(analysis.py가 점수순으로 정렬한 뒤 자른다).
+  // 그러면 순위는 **자리 자체**가 말한다 — 1·2·3을 적어 주면 그것으로 충분하고,
+  // 지어낸 정밀도가 없다.
+  if (Number.isFinite(rank)) {
+    const badge = el('span', 'hidden-link-score');
+    badge.textContent = `${rank}순위`;
+    row.appendChild(badge);
   }
 
   // kinds[]가 유일한 실데이터 설명 재료다 — 없으면 빈 칸(지어내지 않는다).
+  // 관계명은 한글로 바꿔 적는다(2026-09-03): 그대로 두면 화면에 `belongs_to`가
+  // 새어 나온다(실측). 사전은 controller.js RELATION_LABELS가 진실이라 주입받는다 —
+  // graph-edit-proposal.js와 같은 규약이고, 여기 복사하면 한쪽만 고치는 실수가 난다.
+  // 사전에 없는 관계는 원문 그대로 남긴다(모르는 것을 지어내지 않는다).
+  const labels = relationLabels || {};
   const kinds = Array.isArray(connection.kinds) ? connection.kinds : [];
   const desc = el('div', 'hidden-link-desc');
-  desc.textContent = kinds.join(' · ');
+  desc.textContent = kinds.map((kind) => labels[kind] || kind).join(' · ');
   row.appendChild(desc);
 
   return row;
@@ -74,13 +85,23 @@ function renderHiddenLinks(container, connections, options) {
   const subtitle = el('span', 'hidden-links-subtitle');
   subtitle.textContent = '본인이 말한 적 없는 연결';
   head.appendChild(subtitle);
+  // 모수를 밝힌다(2026-09-03) — 바로 위 테마 군집은 "7개 중 3개"라고 말하는데
+  // 여기만 잘린 사실을 숨기고 있었다. 화면만 보면 숨은 연관이 3개뿐인 줄 안다.
+  // 자른 게 없으면 붙이지 않는다(3개 중 3개는 아무 말도 안 하는 문구다).
+  if (list.length > shown.length) {
+    const count = el('span', 'hidden-links-count');
+    count.textContent = `${list.length}개 중 ${shown.length}개`;
+    head.appendChild(count);
+  }
   wrap.appendChild(head);
 
   const rows = el('div', 'hidden-link-list');
-  for (const connection of shown) {
-    if (!connection) continue;
-    rows.appendChild(renderConnectionRow(connection));
-  }
+  // 순위는 화면에 그린 자리 그대로다 — backend가 놀라운 순으로 내려주고
+  // (analysis.py), 여기서는 그 순서를 바꾸지 않는다.
+  shown.forEach((connection, index) => {
+    if (!connection) return;
+    rows.appendChild(renderConnectionRow(connection, index + 1, opts.relationLabels));
+  });
   wrap.appendChild(rows);
 
   container.appendChild(wrap);

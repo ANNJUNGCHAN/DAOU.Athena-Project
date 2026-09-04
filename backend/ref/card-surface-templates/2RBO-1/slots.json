@@ -3088,5 +3088,100 @@
     "s064/exp_cntr_qty": "예상체결수량은 예상체결가와 한 텍스트('150,900 · 8,420주')라 독립 슬롯이 없다. s064에 alt_mappings로 도달시켰다.",
     "s070/crd_rt": "신용비율 0.86% 한 자리를 detail:ka10001:market_scale_and_ownership·base:ka10086이 나눠 쓴다. 주 mapping은 앞의 것, base:ka10086·crd_rt는 alt_mappings로 도달시켰다.",
     "s071/crd_remn_rt": "신용잔고율 0.52% 한 자리를 base:ka10086·base:ka10005가 나눠 쓴다. 주 mapping은 base:ka10086, base:ka10005·crd_remn_rt는 alt_mappings로 도달시켰다."
+  },
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "facts",
+    "title": "기업정보 — 개요·가치·실적",
+    "eyebrow": "CC-03 / 2RBO-1",
+    "source_board": "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "elements": [
+      {
+        "source_slot_id": "s018",
+        "label": "거래량",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1,420만주"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "거래대금",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "거래대금 2.14조원"
+      },
+      {
+        "source_slot_id": "s021",
+        "label": "PER",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "21.2배"
+      },
+      {
+        "source_slot_id": "s024",
+        "label": "PBR",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 2,
+          "tone": "neutral"
+        },
+        "paper_text": "2.63배"
+      },
+      {
+        "source_slot_id": "s027",
+        "label": "ROE",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 1,
+          "tone": "change"
+        },
+        "paper_text": "8.4%"
+      }
+    ],
+    "fold_counts": {
+      "total": 57,
+      "shown": 5,
+      "hidden": 52
+    },
+    "fold_note": "외 52개 항목을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+      "elements": "거래량 · 거래대금 · PER · PBR · ROE",
+      "grammar": "facts",
+      "folded": "외 52개 항목을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
   }
 }

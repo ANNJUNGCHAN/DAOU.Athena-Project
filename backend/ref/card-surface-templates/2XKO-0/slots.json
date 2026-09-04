@@ -4583,5 +4583,101 @@
   ],
   "authoring_notes": {
     "표": "순위표(3DRG-0)는 헤더 행이 '표 헤더블록' 안에 한 겹 더 싸여 있어 paper_board_extract.py의 표 감지(직계 자식 헤더 행)에 걸리지 않는다. tables·column_bindings가 비어 --apply-columns로 전파할 자리가 없어 셀 슬롯에 직접 기입했다."
+  },
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "facts",
+    "title": "종목찾기 — 등락률",
+    "eyebrow": "CC-06 / 2XKO-0",
+    "source_board": "CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "elements": [
+      {
+        "source_slot_id": "s039",
+        "label": "전일대비등락률상위",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "01"
+      },
+      {
+        "source_slot_id": "s041",
+        "label": "종목코드",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "007660"
+      },
+      {
+        "source_slot_id": "s043",
+        "label": "현재가",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "64,500"
+      },
+      {
+        "source_slot_id": "s044",
+        "label": "전일대비",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+14,850"
+      },
+      {
+        "source_slot_id": "s045",
+        "label": "등락률",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+29.90%"
+      }
+    ],
+    "fold_counts": {
+      "total": 89,
+      "shown": 5,
+      "hidden": 84
+    },
+    "fold_note": "외 84개 항목을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-06 / R04-S4 · 종목찾기 — 등락률",
+      "elements": "전일대비등락률상위 · 종목코드 · 현재가 · 전일대비 · 등락률",
+      "grammar": "facts",
+      "folded": "외 84개 항목을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": true,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    },
+    "override_reason": "원본은 반복 레코드처럼 보이나 slots 표 구조가 없어 승인된 facts 문법으로 표시"
   }
 }

@@ -137,7 +137,11 @@ function windowLabel(days) {
 }
 
 function minDegreeLabel(minDegree) {
-  return minDegree > 0 ? `연결 ${minDegree}개 이상` : '연결 전체';
+  // 기본값 문구가 "연결 전체"였다 — 무슨 필터인지 안 읽힌다(2026-09-03 실사용:
+  // 이 칩을 찾지 못했다. "최소 연결 수"는 aria-label에만 있고 화면에는 없었다).
+  // "제한 없음"이라고 쓰면 이것이 **거는 조건**이고 지금은 안 걸려 있다는 두 가지가
+  // 함께 읽힌다. 걸린 상태의 문구("연결 3개 이상")와 같은 어휘를 유지한다.
+  return minDegree > 0 ? `연결 ${minDegree}개 이상` : '연결 제한 없음';
 }
 
 function sortLabel(sort) {

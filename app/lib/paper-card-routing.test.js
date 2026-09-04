@@ -62,3 +62,25 @@ test('공백뿐인 operation_ref는 키움 봉투로 보지 않는다', () => {
   assert.strictEqual(routing.isKiwoomEnvelope({ operation_ref: '   ' }), false);
   assert.strictEqual(routing.isKiwoomEnvelope({ operation_ref: 'base:00' }), true);
 });
+
+test('앱 렌더러가 primary인 recipe(차트·호가·주문)는 보드 표면이 가로채지 않는다', () => {
+  // 계획서 D1의 예외 — 이 보드들은 primary.renderer=null이라 보드 표면이 앱 렌더러를
+  // 품지 못한다. 가로채면 라이브 AITS 차트·호가 래더가 정적 목업으로 바뀐다(2026-09-04 실측).
+  for (const recipe of ['instrument-chart', 'live-orderbook', 'order-safe-ticket']) {
+    const envelope = {
+      operation_ref: 'base:ka10081', card_id: 'CC-03',
+      presentation_contract: { recipe_id: recipe, sections: [] },
+      surface_contract: { board_id: '137X-2' },
+    };
+    assert.strictEqual(routing.preservesAppPrimary(envelope), true, recipe);
+  }
+});
+
+test('그 외 recipe·계약 없는 봉투는 보드 표면 판정을 막지 않는다', () => {
+  assert.strictEqual(routing.preservesAppPrimary({
+    operation_ref: 'base:ka10001', presentation_contract: { recipe_id: 'instrument-facts', sections: [] },
+    surface_contract: { board_id: '133H-2' },
+  }), false);
+  assert.strictEqual(routing.preservesAppPrimary({ operation_ref: 'base:ka10001' }), false);
+  assert.strictEqual(routing.preservesAppPrimary(null), false);
+});

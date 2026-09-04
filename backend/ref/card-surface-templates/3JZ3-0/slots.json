@@ -7841,5 +7841,78 @@
       "kor": "NXT중간가대비 기호",
       "unbound_reason": "부호 ▲ 글리프 — s226 `▲ 1,840` 대비 값의 sign 포맷에 흡수(extra_fields)"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "table",
+    "title": "호가 — 단계별 낱값·거래소별",
+    "eyebrow": "CC-04 / 3JZ3-0",
+    "source_board": "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "elements": [
+      {
+        "source_slot_id": "s031",
+        "label": "매도호가10",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "150,940",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s032",
+        "label": "매도호가수량10",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "2,160",
+        "rank": 2
+      },
+      {
+        "source_slot_id": "s033",
+        "label": "매도호가직전대비10",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+770",
+        "rank": 3
+      }
+    ],
+    "fold_counts": {
+      "total": 173,
+      "shown": 3,
+      "hidden": 170,
+      "rows": 17
+    },
+    "fold_note": "외 17개 행을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+      "elements": "매도호가10 · 매도호가수량10 · 매도호가직전대비10",
+      "grammar": "table",
+      "folded": "외 17개 행을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

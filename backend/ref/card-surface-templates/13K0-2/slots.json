@@ -5073,5 +5073,78 @@
       "kor": "NXT가능여부",
       "unbound_reason": "원장이 적은 자리('우 레일 종목 상태 칩 NXT 가능')가 Paper 보드에 없다 — 상태 칩 네 칸은 정상·감리 없음·투자유의 아님·VI 미발동이다. 칩을 한 칸 더 그려야 풀리는 Paper 저작 공백이라 갈음 매핑으로 덮지 않았다"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "table",
+    "title": "거래대금 상위 저평가 탐색",
+    "eyebrow": "CC-06 / 13K0-2",
+    "source_board": "CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "elements": [
+      {
+        "source_slot_id": "s039",
+        "label": "현재순위",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "01",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s040",
+        "label": "전일순위",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "전일 3위",
+        "rank": 2
+      },
+      {
+        "source_slot_id": "s042",
+        "label": "종목코드",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "005930",
+        "rank": 3
+      }
+    ],
+    "fold_counts": {
+      "total": 86,
+      "shown": 3,
+      "hidden": 83,
+      "rows": 0
+    },
+    "fold_note": "추가 항목은 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-06 / R04 · 거래대금 상위 저평가 탐색",
+      "elements": "현재순위 · 전일순위 · 종목코드",
+      "grammar": "table",
+      "folded": "추가 항목은 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

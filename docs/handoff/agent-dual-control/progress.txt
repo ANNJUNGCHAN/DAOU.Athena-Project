@@ -1,0 +1,50 @@
+# ralph progress — athena-agent-doctrine-plan (feat/agent-dual-control)
+
+## 2026-09-03 세션 99345b72 (인터뷰 → 합의 → ralph Step 0~1)
+- 딥 인터뷰 7라운드(모호도 17%) → 스펙 .omc/specs/deep-interview-athena-agent-doctrine.md
+- 합의 계획 6차(APPROVE) → .omc/plans/athena-agent-doctrine-plan.md (Status: approved for execution — ralph)
+- Step 0a~0c 완료: worktree .claude/worktrees/agent-dual-control @85aee35(origin/main tip), 브랜치 feat/agent-dual-control, .omc plans/specs 복사, 헌장 첫 커밋 55ab631. 메인 체크아웃 미커밋 19파일 불가침.
+- Step 0c-2 완료: EnterWorktree 진입(pwd == worktree, 상대 경로로 계획·헌장 확인).
+- Step 0d 완료: npm ci(app/node_modules) · uv sync(backend/.venv, import athena_api OK).
+- Step 0e: .omc/anchors.sh → .omc/plans/anchors-note.md (이름 앵커 실측표).
+- Step 0f: Paper get_guide 완료, A-2 활성(복귀 대상 A-2), 6보드 id/크기 대조, 토큰 --color-k-faint/--color-k-dim 실재 확인. get_font_family_info는 Step 2 시작 시 1회.
+- Step 1: npm test / uv run pytest / verify:agent-paper-parity 베이스라인 측정 → anchors-note.md baseline 절.
+
+## 학습·주의
+- OMC MCP 상태 서버 미연결 → PRD/progress는 .omc/state/sessions/<sid>/ 수동 관리. 메인 체크아웃의 .omc/prd.json은 카드 커버리지 트랙 소유(건드리지 않음), ralplan-state.json은 키우미 세션 소유.
+- Git Bash python은 stdin을 cp949로 읽는다 → 한국어 heredoc 파이썬은 `export PYTHONUTF8=1` 선행, 또는 Write 도구 사용.
+- worktree 세션은 복합 셸 명령(git 포함)을 거부한다 → 스크립트 파일로 만들어 `bash <file>`로 실행.
+- .omc/는 gitignore → worktree 간 이관은 복사. 인계용 사본은 docs/handoff/agent-dual-control/에 커밋.
+- node는 fnm multishell PATH 필요(계획 §6.1).
+
+## 2026-09-03 세션 7713d907 (이 컴퓨터 worktree agent-dual-control-handoff-6f05c9 · ralph Step 2~4)
+- worktree를 origin/feat/agent-dual-control(034c73c)로 전환, .omc 복원, npm ci/uv sync 완료.
+- Paper get_guide → open_file(A-2) → get_font_family_info 1회(Daki L/M · Daki B · Daki Title · Geist Mono 400). 복귀 페이지 8-1(백테스트).
+- Step 2 완료(US-002): 01 6XC-0 문구 교체 + 합류 버튼 42QY-1(pink 1곳). 02~06 ③대화 영역 index0에 "아테나 · 에이전트 대화" 머리 삽입. 02 알람 행 '읽음' 액션 2건(42RK-1·42RN-1), 대화 = 사용자 턴/결과 턴/제안 턴 B. 03 드릴인 머리에 '채팅에서 열기 ↗' + '지금 실행'(비활성) + '놓친 예약 없음'(42SL-1), 대화 = 제안 턴 E + 결과 턴. 04 가드 패널 → 편집 폼 42U9-1(입력 5 + 저장), 대화 = 제안 턴 C + 보류 결과 + 기존 가드 조정 카드(오래된 넛지 fixture 7노드 삭제 — 높이 초과).
+- Step 3 완료(US-003): 05 rename '05 · 에이전트 — 작업', CTA '＋ 새 작업', 시트 오버레이 42W3-1(left 392 top 196, 종목코드 6자리·조건 소스/비교/값·쿨다운·만료·설명·브리핑 모델·초안 만들기/채팅에서 쓰기), 이중 제어 규칙 3줄 확정 문구, 상세 패널 상태 제어 행 42VG-1(확정·일시중지·재개·취소, 일시중지만 활성). 06 rename '06 · 에이전트 — 작업 설정', 안내 문장 삭제, 드릴인 설정 탭 = 요약 한 줄 + '설정 편집' 버튼(42VY-1), 아래 상세 패널 폼 2종 나란히(42XH-1 price.current 8필드 / 42Y1-1 schedule.daily 7필드·연속 틱 없음), 저장(pink 1) + 채팅에서 고치기 ↗, '종목·소스는 취소 후 새로 만들기' 1건. 06 대화 = 제안 턴 A + 결과 턴.
+- Step 4 완료(US-004): 07 432Z-1(A~E 5열 + 게이트 지도), 08 4330-1(4상태 + 문구 규칙). 신설 문자열 '습니다' 0건(06의 2건은 fixture 잔존이 아니라 — 확인: 06 fixture 3턴 삭제 후 0건 기대), 신설 노드 색은 토큰만, 칩·버튼 min-height 32.
+- 주의: 기존 보드의 pink/hex(#EE137B 등)는 이 계획 이전 노드. ①-10 검사는 신설·수정 노드 기준.
+- get_screenshot이 빈 결과를 내면 open_file(A-2) 재호출로 재마운트(실측).
+- backend pytest 재측정(node PATH 있음): 3,169 passed / 0 failed / 6 skipped → 기준선 확정(anchors-note.md).
+- Step 6-A 완료(US-005): executor 2개 병렬(backend / app). 검증 — 대상 pytest 105 passed(test_routine_tools 26 · update 19 · detail 5 · nudge_guard · unit routines_api), npm test 2295/2295. 정정 2건: 409/422 detail을 상태 표기형으로("취소된 작업 — 수정 불가", "종목 — 변경 불가 · 취소 후 새로 만들기", "조건 소스 — 변경 불가 · 취소 후 새로 만들기"), propose 결과·IPC payload에 view dict 통과 추가.
+- IPC 핸들러 인자 모양: 기존 관례대로 단일 객체 — routine-update {id, body} · routine-draft {body} · routine-detail {id} · routine-source-catalog 인자 없음. Step 7b 배선은 이 모양을 쓴다. athena:routine-proposed payload = {control, routineId, current, proposed, rationale, view, notice}.
+- 신규 테스트 경로: backend/tests/api/test_routines_update.py · test_routines_detail.py (기존 REST 스위트는 tests/unit/test_routines_api.py).
+- 커밋 4d90564 push 완료(pre-push 통과). Step 5 🛑: A-2 8장 PDF → C:/Users/ajc22/Downloads/athena-agent-A2-01-08-2026-09-03.pdf (4.4MB). 활성 페이지 8-1 복귀 + finish_working_on_nodes. 사용자 PDF 승인 + U-1~U-6 답 대기 중. 답 전에는 6-B 이후 진행 금지.
+
+## 2026-09-03 방향 전환 (사용자 결정)
+- Step 5 검수에서 사용자가 U-1/U-5/U-6 대신 새 방향 제시: 알람은 자유 편집 폼이 아니라 "코드 알람"(AI가 감시 함수 코드를 짜고 → 샌드박스 검사(간단 백테스트) → 노드로 시각화 → 승인 → 루틴 등록). 그래프 연계는 배치성으로 나중에 사용자가 별도 지시.
+- 결정: 코드 알람 우선. 기존 athena-agent-doctrine-plan의 Step 6-B~9는 보류(폐기 아님 — 07·08 제안/결과 턴, 6-A 백엔드·IPC는 재사용 후보). ralph 루프 종료.
+- 다음: 코드 알람 설계(백테스트 파이프라인 재사용 지점 조사 → 설계 문서 → Paper 보드 계획 → 사용자 확인).
+- 2026-09-03 사용자 승인: 코드 알람 방식 + Paper A-2 09~12 보드 4장(43WD-1·446V-1·44HD-1·44RV-1) 승인. 원칙: 코드는 참고용(접힘) · 노드·흐름 주인공(한국어 이름 + 입력·출력 실값) · 일봉+오늘 현재가 · 에이전트 모드 안 · 모드 간 철저 격리. 그래프 연계는 범위 밖(사용자 별도 지시).
+- 다음: ralplan(합의 계획) → ralph 구현. 구상 정본 docs/plans/2026-09-03-code-alarm-concept.md (a360ce8).
+
+## 2026-09-04 ralph 코드 알람 (세션 7713d907)
+- 다른 세션이 브랜치를 main과 통합(a408bb6)하며 Step 1·2 진행분을 WIP 6c1d248로 보존. 계획 파일은 CRLF로 변환됨(내용 동일).
+- CA-000 기준선 .omc/state/code-alarm-baseline.txt (3169/0 · 2295/2295 · parity 35).
+- CA-001 Step 1 검증: models WatchSpec·code.watch·code-watch, rules validate_watch(B-2/B-3), store 왕복(B-4), runtime can_activate 3사유(B-5)·restore_trigger_state(B-20), exec grep(B-6). 653 passed(test_routines_core + unit/test_routines_api + api update/detail + mcp). B-22는 api/routines.py가 mode=='realtime-ws'일 때만 구독하므로 자연 충족(Step 5에서 테스트 추가).
+- CA-002 Step 2: host.run_strategy(trace_names=) + __main__ 래핑 → node_io.json {calls:{name:{name,args,kwargs,returned,error}},truncated}. B-10a 동일성 테스트. 백테스트 회귀 114+66 통과.
+- Opus 529 과부하로 executor 4회 중단 — Step 1 감사는 직접 수행.
+- CA-003 Step 3 (직접 구현): athena_api/watch/{data,runner,check,nodes}.py — assemble_frame(오늘 봉 합성/갱신·휴장 건너뛰기·CallBudget), WatchRunner(run_once/run, 세마포어, jobdir try/finally), run_check(D-1·쿨다운 시뮬·diagnose·B-23), build_nodes(최상위 함수=칸, NODE_LABELS). sandbox __main__ _summarize(None)→null 버그 수정. 테스트 24 + 샌드박스 16 = 40 통과, ruff 통과.
+- 학습: Write 도구가 test 파일을 CRLF로 쓴 사례 → 신규 파일도 node로 EOL 확인. heredoc 안 파이썬 문자열의 
+이 실제 개행으로 들어간 사례 → 긴 문자열 편집은 Edit 도구로.
+- CA-004 Step 4 (executor): watch/store_code.py save_watch_code(경로 검증·NODE_LABELS 보강·원자 쓰기·R10 CodeLocked), POST /routines/watch/code(/source-catalog 뒤·/{routine_id} 앞, 409 문구 고정), MCP propose_watch_code + draft 산문에 code.watch·watch 블록·NODE_LABELS. 579 passed(watch api + mcp + unit routines api). V2 백테스트 회귀 통과.

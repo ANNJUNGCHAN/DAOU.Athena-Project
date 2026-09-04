@@ -530,14 +530,14 @@ test('main MCP list is read-only and conversation rotation uses the shared provi
   const conversationStart = source.indexOf("ipcMain.handle('athena:conversations-new'");
   const conversationEnd = source.indexOf("ipcMain.handle('athena:account-list'", conversationStart);
   const handler = source.slice(conversationStart, conversationEnd);
-  assert.match(handler, /providerConversationRotationQueue\.begin\(\{ projectId, verifierCorrelationId \}\)/);
+  assert.match(handler, /providerConversationRotationQueue\.begin\(\{ projectId, mode, verifierCorrelationId \}\)/);
 
   const queueStart = source.indexOf('const providerConversationRotationQueue');
   const queueEnd = source.indexOf('const stockEntityIndex', queueStart);
   const queue = source.slice(queueStart, queueEnd);
   const blockAt = queue.indexOf("blockNewTurns('conversation_rotation')");
   const identityAt = queue.indexOf('historyActiveConversationId = conversationId');
-  const beginAt = queue.indexOf('conversations.begin({ id, projectId })');
+  const beginAt = queue.indexOf('conversations.begin({ id, projectId, mode })');
   const rotateAt = queue.indexOf('rotatePersistentProviderInner(reason');
   assert.ok(blockAt >= 0 && blockAt < identityAt && identityAt < beginAt && beginAt < rotateAt);
   assert.match(queue, /enqueue: enqueueProviderRotation/);

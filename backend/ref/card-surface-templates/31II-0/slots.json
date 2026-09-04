@@ -4947,5 +4947,104 @@
       "static": true,
       "unbound_reason": "마지막 조회 시각 — ka10054 응답에 조회 시각 필드가 없다(고정 문구)"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — VI 발동",
+    "eyebrow": "CC-03 / 31II-0",
+    "source_board": "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "elements": [
+      {
+        "source_slot_id": "s017",
+        "label": "발동종목",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "12건"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "VI적용구분",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "8건"
+      },
+      {
+        "source_slot_id": "s023",
+        "label": "VI적용구분",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "4건"
+      },
+      {
+        "source_slot_id": "s134",
+        "label": "발동종목",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "전체 12건 · 6건 표시 ▸",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s137",
+        "label": "매매체결처리시각",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "time",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "09:41",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 100,
+      "shown": 5,
+      "hidden": 95,
+      "scalars": 2,
+      "rows": 4
+    },
+    "fold_note": "스칼라 2개 · 행 4개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T4-9 · 순위 — VI 발동",
+      "elements": "발동종목 · VI적용구분 · 매매체결처리시각",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 4개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

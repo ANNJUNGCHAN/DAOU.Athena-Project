@@ -537,7 +537,7 @@ async def test_startup_primary_error_survives_cleanup_failures(
     primary_error = RuntimeError("startup primary")
     calls: list[str] = []
 
-    async def failed_open_brain(settings) -> None:
+    async def failed_open_brain(settings, **kwargs) -> None:
         raise primary_error
 
     async def failed_accounts_cleanup(*args, **kwargs) -> None:
@@ -601,3 +601,157 @@ async def test_custom_argv_has_priority_for_the_labeling_client(tmp_path: Path) 
         client = app.state.brain_cluster_labeling_llm_client
         assert isinstance(client, LocalCommandStructuredLlm)
         assert client._argv == ("custom-llm", "--json")  # noqa: SLF001
+
+
+# --- WP-H: 체결·잔고 생산자 결선 -----------------------------------------------------
+
+
+class _CannedKiwoomClient:
+    """오늘 날짜의 kt00007(sell_tp=2)에 체결 한 건, kt00005에 잔고 한 건을 돌려준다.
+
+    나머지 조회(과거 영업일)는 빈 본문이다 — 백필이 창 전체를 훑는 것은 정상이고,
+    여기서 재는 것은 HTTP가 아니라 **결선**(생산자가 이력에 적재하고 잡을 넣는가)이다.
+    """
+
+    def __init__(self, today: str) -> None:
+        self._today = today
+        self.api_ids: list[str] = []
+
+    async def post_with_headers(self, api_id, endpoint, data=None, options=None):
+        from athena_api.kiwoom.client import ResponseEnvelope
+
+        self.api_ids.append(api_id)
+        body = dict(data or {})
+        if api_id == "kt00007" and body.get("ord_dt") == self._today and body.get("sell_tp") == "2":
+            return ResponseEnvelope(
+                body={"acnt_ord_cntr_prps_dtl": [{
+                    "ord_no": "0000001",
+                    "stk_cd": "A005930",
+                    "cntr_qty": "0000000010",
+                    "cntr_uv": "0000070000",
+                    "cnfm_tm": "10:30:00",
+                }]},
+                cont_yn="N",
+                next_key=None,
+            )
+        if api_id == "kt00005":
+            return ResponseEnvelope(
+                body={"stk_cntr_remn": [{
+                    "stk_cd": "A005930",
+                    "cur_qty": "000000000010",
+                    "buy_uv": "000000070000",
+                }]},
+                cont_yn="N",
+                next_key=None,
+            )
+        return ResponseEnvelope(body={}, cont_yn="N", next_key=None)
+
+
+async def test_kiwoom_clients_wire_the_trade_and_holding_producers(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """생산자가 결선되면 기동 직후 한 번 돌아 이력을 채우고 MANUAL 잡을 넣는다."""
+    from athena_api.brain import BACKFILL_CURSOR, utc_now
+
+    calls: list[JobTrigger] = []
+    original_enqueue = IngestionCoordinator.enqueue
+
+    async def spy_enqueue(self: IngestionCoordinator, trigger: JobTrigger):
+        calls.append(trigger)
+        return await original_enqueue(self, trigger)
+
+    monkeypatch.setattr(IngestionCoordinator, "enqueue", spy_enqueue)
+    client = _CannedKiwoomClient(utc_now().strftime("%Y%m%d"))
+    settings = _brain_settings(tmp_path, brain_ingest_schedule_owner="external")
+    brain = await _open_brain(settings, kiwoom_clients={"acct-A": client})  # type: ignore[dict-item]
+    try:
+        assert brain.producer_task is not None
+        await asyncio.wait_for(brain.producer_task, timeout=30)
+        # 백필 커서가 전진했다 = 체결 경로가 끝까지 돌았다.
+        assert await brain.history.cursor(BACKFILL_CURSOR) > 0
+        # 체결·잔고가 이력에 실제로 실렸다.
+        assert await brain.history.trade_changes(0, limit=10)
+        assert await brain.history.holding_changes(0, limit=10)
+        # 적재 뒤 잡을 넣어 새 사실이 한 시간을 기다리지 않는다.
+        assert JobTrigger.MANUAL in calls
+        assert {"kt00005", "kt00007"} <= set(client.api_ids)
+    finally:
+        await _teardown_brain(FastAPI(), brain)
+
+
+async def test_no_kiwoom_clients_means_no_producer_task(tmp_path: Path) -> None:
+    """시세 자격증명 없는 기동 — 생산자 없이 예전과 똑같이 선다."""
+    settings = _brain_settings(tmp_path, brain_ingest_schedule_owner="external")
+    brain = await _open_brain(settings, kiwoom_clients={})
+    try:
+        assert brain.producer_task is None
+        assert brain.ingestion_ready is True
+    finally:
+        await _teardown_brain(FastAPI(), brain)
+
+
+async def test_hourly_tick_produces_before_it_enqueues() -> None:
+    """생산이 잡보다 먼저다 — 그래야 그 잡이 방금 생긴 사실을 투영한다."""
+    order: list[str] = []
+    done = asyncio.Event()
+
+    class RecordingBackfill:
+        async def run(self):
+            order.append("backfill")
+
+    class RecordingHoldings:
+        async def ingest(self):
+            order.append("holdings")
+
+    class RecordingCoordinator:
+        async def enqueue(self, trigger: JobTrigger) -> None:
+            order.append("enqueue")
+            done.set()
+
+    task = asyncio.create_task(
+        lifespan_module._hourly_ingest_loop(
+            RecordingCoordinator(),  # type: ignore[arg-type]
+            0.001,
+            backfill=RecordingBackfill(),  # type: ignore[arg-type]
+            holdings=RecordingHoldings(),  # type: ignore[arg-type]
+        )
+    )
+    try:
+        await asyncio.wait_for(done.wait(), timeout=1)
+        assert order[:3] == ["backfill", "holdings", "enqueue"]
+    finally:
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+
+
+async def test_a_partial_holdings_cycle_does_not_stop_the_loop(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """계좌 일부 실패는 그 주기의 잔고만 건너뛴다 — 잡은 그대로 들어간다."""
+    from athena_api.brain import PartialHoldingsError
+
+    enqueued = asyncio.Event()
+
+    class FailingHoldings:
+        async def ingest(self):
+            raise PartialHoldingsError("acct-B 조회 실패")
+
+    class RecordingCoordinator:
+        async def enqueue(self, trigger: JobTrigger) -> None:
+            enqueued.set()
+
+    task = asyncio.create_task(
+        lifespan_module._hourly_ingest_loop(
+            RecordingCoordinator(),  # type: ignore[arg-type]
+            0.001,
+            holdings=FailingHoldings(),  # type: ignore[arg-type]
+        )
+    )
+    try:
+        await asyncio.wait_for(enqueued.wait(), timeout=1)
+        assert "partial account failure" in caplog.text
+    finally:
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task

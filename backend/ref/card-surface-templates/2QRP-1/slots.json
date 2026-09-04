@@ -3584,5 +3584,78 @@
       "kor": "예상체결량",
       "unbound_reason": "같은 값을 형제 op가 갱신한다 — 대표 op를 슬롯 mapping으로 두고 also_from으로 선언(슬롯 하나에 mapping은 하나) (예상 체결수량 슬롯 s044 · 대표 base:0D|24)"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "table",
+    "title": "호가 — 시간외 단일가",
+    "eyebrow": "CC-04 / 2QRP-1",
+    "source_board": "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "elements": [
+      {
+        "source_slot_id": "s026",
+        "label": "시간외단일가_매도호가5",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "151,150",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s028",
+        "label": "시간외단일가_매도호가수량5",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "17,940",
+        "rank": 2
+      },
+      {
+        "source_slot_id": "s029",
+        "label": "시간외단일가_매도호가4",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "151,100",
+        "rank": 3
+      }
+    ],
+    "fold_counts": {
+      "total": 72,
+      "shown": 3,
+      "hidden": 69,
+      "rows": 0
+    },
+    "fold_note": "추가 항목은 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+      "elements": "시간외단일가_매도호가5 · 시간외단일가_매도호가수량5 · 시간외단일가_매도호가4",
+      "grammar": "table",
+      "folded": "추가 항목은 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

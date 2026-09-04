@@ -15,7 +15,21 @@
 
   // 영역이 등록하는 콜백. 서로 다른 <script>가 같은 문서에 살지만 모듈 경계는
   // 유지한다 — chat.js가 canvas.js의 내부 함수를 직접 부르지 않고 여기를 지난다.
-  const hooks = { clearCanvases: null, openSettings: null, seedChatInput: null };
+  const hooks = {
+    clearCanvases: null, openSettings: null, seedChatInput: null,
+    // 과거 대화 열기(2026-09-02) — sidebar.js가 부르고 chat.js가 등록한다.
+    // seedChatInput과 같은 이유로 여기를 지난다: 사이드바가 chat.js의 $history를
+    // 직접 만지면 모듈 경계가 무너진다.
+    openConversation: null,
+    // 되물을 것들 카드(2026-09-02) — canvas.js의 확인 필요 배너가 부르고 chat.js가 등록한다.
+    openBrainQuestions: null,
+    // 그래프 편집 제안 카드(2026-09-03) — canvas.js가 athena:graph-chat-action을
+    // 받아 부르고 chat.js가 등록한다. 왜 canvas.js를 지나는가: 그 채널의 구독을
+    // 한 곳에만 두기 위해서다. chat.js가 같은 채널을 따로 구독하면 페이지 로드마다
+    // 리스너가 두 개씩 쌓여, 하네스처럼 여러 번 로드하는 환경에서 ipcRenderer의
+    // 리스너 상한(10)을 이 채널만 먼저 넘었다(전수 검증 실측).
+    openGraphEditProposal: null,
+  };
   const chromeGeometryGeneration = window.crypto?.randomUUID?.()
     || `${performance.timeOrigin}-${Math.random()}`;
   let chromeGeometryRevision = 0;
@@ -178,6 +192,26 @@
     registerSeedChatInput(fn) { hooks.seedChatInput = typeof fn === 'function' ? fn : null; },
     seedChatInput(text) {
       if (hooks.seedChatInput) hooks.seedChatInput(text);
+    },
+    // 과거 대화 열기 — chat.js가 등록한다. 돌려주는 값은 열었는지 여부다
+    // (거절될 수 있다: 답변 중이면 화면을 갈아치우지 않는다).
+    registerOpenConversation(fn) { hooks.openConversation = typeof fn === 'function' ? fn : null; },
+    openConversation(conv) {
+      return hooks.openConversation ? hooks.openConversation(conv) : false;
+    },
+    // 되물을 것들 카드를 연다. 돌려주는 값은 열었는지 여부다(물을 것이 없거나
+    // 답변 중이면 열지 않는다) — 부른 쪽이 대신 다른 안내를 할 수 있어야 한다.
+    registerOpenBrainQuestions(fn) { hooks.openBrainQuestions = typeof fn === 'function' ? fn : null; },
+    openBrainQuestions() {
+      return hooks.openBrainQuestions ? hooks.openBrainQuestions() : false;
+    },
+    // 그래프 편집 제안 카드를 연다. 돌려주는 값은 띄웠는지 여부다 — 무엇을 고칠지
+    // 모르는 제안은 카드를 띄우지 않으므로 부른 쪽이 그것을 알아야 한다.
+    registerOpenGraphEditProposal(fn) {
+      hooks.openGraphEditProposal = typeof fn === 'function' ? fn : null;
+    },
+    openGraphEditProposal(message) {
+      return hooks.openGraphEditProposal ? hooks.openGraphEditProposal(message) : false;
     },
   };
 })();

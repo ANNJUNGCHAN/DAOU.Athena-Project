@@ -154,16 +154,27 @@ function renderBrainCard(deps) {
   card.appendChild(head);
 
   // 배치 주기 — 값의 주인이 설정 파일이라는 사실 자체가 이 행의 내용이다.
+  //
+  // 사람 말을 먼저 쓴다(2026-09-03 실사용: "배치 주기를 뭔가 보유잔고처럼 정할 수
+  // 있으면 좋겠고, 수동실행, 마지막 다음 실행시각은 뭔지 모르겠다"). 예전에는 환경변수
+  // 이름이 문장의 첫머리였다 — 그 이름을 모르는 사람에게는 행 전체가 읽히지 않았다.
+  // 이름 자체는 지우지 않는다: 값을 실제로 바꿀 수 있는 사람에게는 그것이 유일한
+  // 단서다. 무엇을 하는 주기인지 → 지금 값 → 어디서 바꾸는지 순서로 바꿔 적는다.
   const intervalNote = el('div', 'graph-settings-row-note');
-  intervalNote.appendChild(el('code', 'graph-settings-envvar', 'ATHENA_BRAIN_INGEST_INTERVAL_MINUTES'));
   intervalNote.appendChild(el('span', null,
-    ` 기본 ${deps.defaultIngestIntervalMinutes}분 · 설정 파일이 소유하므로 이 화면은 값을 바꾸지 않습니다.`));
+    `대화와 체결을 모아 성향 그래프에 넣는 주기입니다 · 지금 ${deps.defaultIngestIntervalMinutes}분마다 · `));
+  intervalNote.appendChild(el('span', null, '이 화면에서는 못 바꿉니다(설정 파일 '));
+  intervalNote.appendChild(el('code', 'graph-settings-envvar', 'ATHENA_BRAIN_INGEST_INTERVAL_MINUTES'));
+  intervalNote.appendChild(el('span', null, ').'));
   card.appendChild(statusRow('배치 주기', intervalNote, el('span', 'graph-settings-row-aside', '설정 파일')));
 
   // 수동 실행·실행 시각 — 상태 API가 아직 안 주는 값이라 자리만 정직하게 남긴다.
+  // 문구는 "무엇이 없는가"가 아니라 "그래서 지금 무엇이 참인가"를 말한다 — 앞 문구는
+  // API 사정을 아는 사람에게만 뜻이 있었다(같은 제보).
   card.appendChild(statusRow(
     '수동 실행 · 마지막·다음 실행 시각',
-    el('div', 'graph-settings-row-note', '상태 API가 아직 이 값을 노출하지 않아 이 화면에서 제공하지 않습니다.'),
+    el('div', 'graph-settings-row-note',
+      '아직 없습니다 — 지금은 위 주기로만 자동으로 돌고, 사람이 직접 돌리거나 언제 돌았는지 볼 방법은 없습니다.'),
     el('span', 'graph-settings-row-aside', '제공 안 함'),
     true));
 

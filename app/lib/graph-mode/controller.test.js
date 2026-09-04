@@ -7,8 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const store = require('./graph-mode-store');
-const layout = require('./cluster-layout');
-const render = require('./render');
+const grouping = require('./cluster-grouping');
 const themeClusters = require('./theme-clusters');
 const prefs = require('./graph-mode-prefs');
 const {
@@ -61,14 +60,26 @@ function setup(options) {
   };
   elements.kiumi.dataset = {};
   elements.canvasRegion.dataset = {};
+  elements.chatHead.dataset = {};
   if (opts.withPanel) elements.panel = fakeNode('div');
   let calls = 0;
+  // 라이브 지도 스텁(2026-09-02). 실제 vis-network는 <canvas>와 브라우저 API를
+  // 요구해 node --test에서 못 돈다 — 여기서 재는 것은 픽셀이 아니라 **컨트롤러가
+  // 렌더러에 무엇을 넘기는가**다. opts.noLiveMap이면 렌더러가 아예 없는 상황
+  // (vis 로드 실패)을 흉내낸다.
+  const liveRenders = [];
+  const liveSelections = [];
   const controller = createGraphModeController({
     store,
-    layout,
-    render,
+    grouping,
     prefs: opts.prefs === undefined ? null : opts.prefs,
     elements,
+    createLiveMap: opts.noLiveMap ? undefined : () => ({
+      available: () => true,
+      render: (payloadIn) => { liveRenders.push(payloadIn); return true; },
+      selectEntity: (id) => { liveSelections.push(id); },
+      destroy: () => {},
+    }),
     fetchClusterMap: async () => {
       calls += 1;
       if (opts.fail) throw new Error('backend down');
@@ -81,13 +92,14 @@ function setup(options) {
     getProfileSummaryEntries: opts.getProfileSummaryEntries,
     fetchEntityTimeline: opts.fetchEntityTimeline,
     onEnterSettings: opts.onEnterSettings,
+    onRelationDelete: opts.onRelationDelete,
     filters: opts.filters,
     getFilters: opts.getFilters,
   });
   // 대부분의 테스트는 브레인이 켜져 있다고 가정한다 — 꺼진 채 시작하고 싶은
   // 테스트만 opts.available: false를 넘긴다.
   if (opts.available !== false) controller.setAvailable(true);
-  return { controller, elements, fetchCalls: () => calls };
+  return { controller, elements, fetchCalls: () => calls, liveRenders, liveSelections };
 }
 
 // render.js의 renderClusterBubbles(스텝10)가 theme-clusters.js의 shouldWarnUnnamed를
@@ -132,12 +144,12 @@ test('토글하면 캔버스 영역이 그래프 기능으로 바뀌고, 기본 
 });
 
 test('setSurface(지도)로 전환하면 군집 지도가 보이고 그려진다, 요약 표면은 숨는다', async () => {
-  const { controller, elements } = setup();
+  const { controller, elements, liveRenders } = setup();
   await controller.toggle();
   await controller.setSurface(store.SURFACE_MAP);
   assert.equal(elements.graph.hidden, false);
   assert.equal(elements.summaryTable.hidden, true, '지도로 전환하면 요약 표면은 숨는다(두 표면 동시 노출 금지)');
-  assert.equal(render.describeRendered(elements.graphBody).nodes, 2);
+  assert.equal(liveRenders.at(-1).nodes.length, 2, '라이브 지도에 실제 노드가 넘어간다');
 });
 
 test('setSurface(같은 값)는 아무 일도 안 한다(불필요한 재렌더 방지)', async () => {
@@ -151,7 +163,7 @@ test('setSurface(같은 값)는 아무 일도 안 한다(불필요한 재렌더 
 test('브레인 응답이 요약 서브뷰를 보는 중에 도착해도, 지도로 전환하면 그 시점 치수로 다시 그린다', async () => {
   // 실측: #graphCanvas가 hidden인 동안엔 그 안의 elements.graphBody.clientWidth/
   // Height가 실제로 0이다 — fake-dom은 이걸 재현 안 하니(고정 800×600) 직접 흉내낸다.
-  const { controller, elements, fetchCalls } = setup({ available: false });
+  const { controller, elements, fetchCalls, liveRenders } = setup({ available: false });
   await controller.toggle(); // 기본 surface='summary' — 지도는 숨어 있다.
   elements.graphBody.clientWidth = 0;
   elements.graphBody.clientHeight = 0;
@@ -163,7 +175,7 @@ test('브레인 응답이 요약 서브뷰를 보는 중에 도착해도, 지도
   await controller.setSurface(store.SURFACE_MAP);
   assert.equal(fetchCalls(), 2, '지도로 전환하면 강제로 다시 그려 최신 치수를 반영한다(redrawFromCache는 좌표만 재필터링해 치수 문제를 못 고친다)');
   assert.equal(elements.graph.hidden, false);
-  assert.equal(render.describeRendered(elements.graphBody).nodes, 2, '0×0이 아니라 실제로 노드가 그려진다');
+  assert.equal(liveRenders.at(-1).nodes.length, 2, '0×0이 아니라 실제로 노드가 그려진다');
 });
 
 test('다시 토글하면 요약으로 돌아오고 그래프 표면은 완전히 숨는다', async () => {
@@ -250,36 +262,14 @@ test('지도를 보는 중에 브레인이 꺼지면 화면 안에서 안내로 
 });
 
 test('그래프를 못 쓰다가 브레인이 켜지면 안내 대신 실제로 그린다', async () => {
-  const { controller, elements, fetchCalls } = setup({ available: false });
+  const { controller, fetchCalls, liveRenders } = setup({ available: false });
   await controller.toggle();
   assert.equal(fetchCalls(), 0);
   await controller.setAvailable(true);
   assert.equal(fetchCalls(), 1);
-  assert.equal(render.describeRendered(elements.graphBody).nodes, 2);
+  assert.equal(liveRenders.at(-1).nodes.length, 2);
 });
 
-test('설정이 이름표 임계를 정한다(2단계 개별 노드 렌더에 적용 — 1단계 버블은 항상 이름표를 보인다, 스텝10)', async () => {
-  const storage = {
-    _v: JSON.stringify({ labelThreshold: 1 }),
-    getItem() {
-      return this._v;
-    },
-    setItem(_k, v) {
-      this._v = v;
-    },
-  };
-  const boundPrefs = {
-    readPrefs: () => prefs.readPrefs(storage),
-    shouldShowLabels: (s, n) => prefs.shouldShowLabels(s, n),
-  };
-  const { controller, elements } = setup({ prefs: boundPrefs, payload: payloadTwoClusters });
-  await controller.toggle();
-  const clusterZeroBubble = elements.graphBody.querySelectorAll('.graph-node')
-    .find((n) => n.getAttribute('data-cluster') === '0');
-  clusterZeroBubble.dispatchEvent({ type: 'click' }); // 2단계로 — cluster 0엔 노드 2개(e:a, e:b)
-  // 노드가 2개인데 임계가 1이므로 이름표가 안 붙는다.
-  assert.equal(render.describeRendered(elements.graphBody).labels, 0);
-});
 
 test('요약 화면에서는 백엔드를 부르지 않는다', async () => {
   const { controller, fetchCalls } = setup();
@@ -289,32 +279,12 @@ test('요약 화면에서는 백엔드를 부르지 않는다', async () => {
 
 // ── 보드 15: 군집 펼침 · 노드 선택 와이어링 ──────────────────────────────────
 
-test('1단계에서 버블을 클릭하면 그 군집이 펼쳐진다(스텝10 — 1단계는 군집 버블 집계다)', async () => {
-  const { controller, elements, fetchCalls } = setup({ payload: payloadTwoClusters });
-  await controller.toggle();
-  assert.equal(controller.state.stage, store.STAGE_CLUSTERS);
-  const nodeEls = elements.graphBody.querySelectorAll('.graph-node');
-  assert.equal(nodeEls.length, 2, '1단계는 군집 버블 수만큼 보인다(개별 엔티티가 아니다)');
-  const clusterZeroBubble = nodeEls.find((n) => n.getAttribute('data-cluster') === '0');
-  clusterZeroBubble.dispatchEvent({ type: 'click' });
-  assert.equal(controller.state.stage, store.STAGE_EXPANDED);
-  assert.equal(controller.state.expandedCluster, 0);
-  assert.equal(fetchCalls(), 1, '펼침은 새 fetch 없이 캐시로 다시 그린다');
-  const afterExpand = elements.graphBody.querySelectorAll('.graph-node');
-  assert.deepEqual(afterExpand.map((n) => n.getAttribute('data-entity-id')).sort(), ['e:a', 'e:b']);
-});
 
 test('2단계에서 노드를 클릭하면 선택된다(패널이 채워진다)', async () => {
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
   await controller.toggle();
-  const clusterZeroBubble = elements.graphBody.querySelectorAll('.graph-node')
-    .find((n) => n.getAttribute('data-cluster') === '0');
-  clusterZeroBubble.dispatchEvent({ type: 'click' }); // 1단계 버블 클릭 — 펼친다
-  assert.equal(controller.state.stage, store.STAGE_EXPANDED);
-
-  const secondClick = elements.graphBody.querySelectorAll('.graph-node')
-    .find((n) => n.getAttribute('data-entity-id') === 'e:b');
-  secondClick.dispatchEvent({ type: 'click' }); // 2단계 클릭 — 고른다
+  // 라이브 지도는 노드를 처음부터 전부 편다 — 옛 "버블 클릭 → 펼침" 단계가 없다.
+  controller.selectNode('e:b');
   assert.equal(controller.state.selectedEntityId, 'e:b');
   assert.equal(controller.state.panel.name, '장비');
   assert.equal(elements.panel.hidden, false);
@@ -384,10 +354,31 @@ test('티어 대조 카드 — tier를 한글로, confidence를 배지로, ratio
   assert.equal(body.textContent, '체결 4건 · 평균 71,200원');
 });
 
-test('티어 대조 카드 — rationale/tier/confidence가 전부 없으면(그래프 노드 선택) 카드를 안 그린다', () => {
+test('티어 대조 카드 — 근거가 없으면 조용히 빠지지 않고 없다고 말한다', () => {
+  // 예전에는 절이 통째로 사라졌다. 그러면 같은 노드인데 표에서 고르면 근거가 있고
+  // 지도에서 고르면 없는 것처럼 보여 사용자가 고장으로 읽었다(2026-09-03 실사용:
+  // "티어 대조 카드 자체가 없다"). 관계 목록은 그대로 나오므로 "관계는 있고 성향
+  // 기록은 없다"가 정확한 사실이고, 그것을 적는다.
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
-  controller.selectEntity('e:x', { name: '이름만' }); // 그래프 노드 선택 경로와 같은 얕은 데이터
-  assert.equal(elements.panel.querySelector('.panel-tier-card'), null);
+  controller.selectEntity('e:x', { name: '이름만', source: 'node' }); // 그래프 노드 선택 경로
+  const card = elements.panel.querySelector('.panel-tier-card');
+  assert.ok(card, '자리를 비우지 않는다');
+  assert.match(card.textContent, /성향 기록이 없습니다/);
+  // 출처 라벨('출처 불명')이나 없는 신뢰도를 지어내지 않는다 — 문장 하나뿐이다.
+  assert.equal(elements.panel.querySelector('.panel-tier-label'), null);
+});
+
+test('패널 탭 — 이력은 비활성이고 왜인지 말한다(콘텐츠 스펙이 아직 없다)', () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
+  controller.selectEntity('e:x', { name: '이름만', source: 'node' });
+  const tabs = elements.panel.querySelectorAll('.panel-tab');
+  assert.equal(tabs.length, 2, '탭은 성향·이력 2종이다');
+  assert.ok(String(tabs[0].attrs.class).includes('is-active'), '성향이 활성이다');
+  // 예전에는 눌리는 것처럼 생긴 채로 아무 일도 안 했다(2026-09-03 실사용 제보).
+  assert.equal(tabs[1].textContent, '이력');
+  assert.ok(String(tabs[1].attrs.class).includes('is-disabled'));
+  assert.equal(tabs[1].attrs['aria-disabled'], 'true');
+  assert.ok(tabs[1].attrs.title, '왜 못 누르는지 말한다');
 });
 
 test('CTA "채팅에서 답하기" 클릭 시 onPanelCta가 불린다', () => {
@@ -407,21 +398,12 @@ test('§10-4 최근 변화 — 데이터가 없어 섹션 자체를 안 그린�
 });
 
 test('panel 요소가 없으면 선택 상태는 바뀌지만 조용히 넘어간다', async () => {
-  const { controller, elements } = setup({ payload: payloadTwoClusters });
+  const { controller } = setup({ payload: payloadTwoClusters });
   await controller.toggle();
-  const node = elements.graphBody.querySelectorAll('.graph-node')[0];
-  assert.doesNotThrow(() => node.dispatchEvent({ type: 'click' }));
+  assert.doesNotThrow(() => controller.selectNode('e:a'));
+  assert.equal(controller.state.selectedEntityId, 'e:a');
 });
 
-test('collapseCluster()로 2단계에서 1단계로 돌아간다', async () => {
-  const { controller, elements } = setup({ payload: payloadTwoClusters });
-  await controller.toggle();
-  elements.graphBody.querySelectorAll('.graph-node')[0].dispatchEvent({ type: 'click' });
-  assert.equal(controller.state.stage, store.STAGE_EXPANDED);
-  controller.collapseCluster();
-  assert.equal(controller.state.stage, store.STAGE_CLUSTERS);
-  assert.equal(elements.graphBody.querySelectorAll('.graph-node').length, 2, '군집 버블이 전부 다시 보인다(스텝10)');
-});
 
 // ── 그래프 뷰 헤더 메타 텍스트 + 지도 안내 바(보드 14/15, 스텝9) ────────────────
 
@@ -449,24 +431,7 @@ test('그래프 진입(1단계) 시 헤더 메타가 "군집 N개 · 엔티티 M
   assert.equal(elements.mapGuide.hidden, false, '1단계에서는 지도 안내 바가 보인다');
 });
 
-test('군집을 펼치면(2단계) 헤더 메타가 "엔티티 M · 관계 E · 군집 N"으로 바뀌고 지도 안내 바가 숨는다', async () => {
-  const { controller, elements } = setup({ payload: payloadTwoClusters });
-  await controller.toggle();
-  elements.graphBody.querySelectorAll('.graph-node')[0].dispatchEvent({ type: 'click' });
-  assert.equal(controller.state.stage, store.STAGE_EXPANDED);
-  assert.equal(elements.graphHeaderMeta.textContent, '엔티티 3 · 관계 1 · 군집 2');
-  assert.equal(elements.mapGuide.hidden, true, '2단계에서는 지도 안내 바가 사라진다');
-});
 
-test('collapseCluster()로 1단계로 돌아오면 헤더 메타·지도 안내 바가 원래대로 돌아온다', async () => {
-  const { controller, elements } = setup({ payload: payloadTwoClusters });
-  await controller.toggle();
-  elements.graphBody.querySelectorAll('.graph-node')[0].dispatchEvent({ type: 'click' });
-  controller.collapseCluster();
-  assert.equal(controller.state.stage, store.STAGE_CLUSTERS);
-  assert.equal(elements.graphHeaderMeta.textContent, '군집 2개 · 엔티티 3 · 미분류 0');
-  assert.equal(elements.mapGuide.hidden, false);
-});
 
 test('graphHeaderMeta·mapGuide가 없으면(선택 안 주입) 조용히 넘어간다', async () => {
   const elements = {
@@ -476,7 +441,7 @@ test('graphHeaderMeta·mapGuide가 없으면(선택 안 주입) 조용히 넘어
     // graphHeaderMeta·mapGuide 없음
   };
   const controller = createGraphModeController({
-    store, layout, render, prefs: null, elements,
+    store, grouping, prefs: null, elements,
     fetchClusterMap: async () => payload(7),
   });
   controller.setAvailable(true);
@@ -546,7 +511,7 @@ test('summaryTable이 없으면(선택 안 주입) 조용히 넘어간다', () =
     // summaryTable 없음
   };
   const controller = createGraphModeController({
-    store, layout, render, prefs: null, elements,
+    store, grouping, prefs: null, elements,
     fetchClusterMap: async () => payload(7),
   });
   assert.doesNotThrow(() => controller.selectEntity('e:a', { name: '반도체' }));
@@ -581,56 +546,14 @@ test('applyVisibility()는 graphBody·panel의 hidden을 건드리지 않는다(
   assert.equal(elements.panel.hidden, false, 'panel도 applyVisibility가 손대지 않는다');
 });
 
-test('draw()는 폭/높이를 elements.graphBody.clientWidth/clientHeight에서 읽는다', async () => {
-  const elements = {
-    summary: fakeNode('div'),
-    graph: fakeNode('div'),
-    graphBody: fakeNode('div'),
-    summaryTable: fakeNode('div'),
-  };
-  elements.graph.clientWidth = 999; // 가시성 전용 참조 — layoutClusterMap이 이 값을 읽으면 결함이다.
-  elements.graph.clientHeight = 999;
-  elements.graphBody.clientWidth = 321;
-  elements.graphBody.clientHeight = 654;
-  let capturedViewport = null;
-  const spyLayout = {
-    layoutClusterMap(p, viewport) {
-      capturedViewport = viewport;
-      return layout.layoutClusterMap(p, viewport);
-    },
-    // renderStage()가 스텝14부터 1단계 렌더 때마다 clusterEdges를 다시 계산한다
-    // (숨은 연관 실배선) — 이 스파이는 viewport만 살피면 되므로 진짜 구현에 위임한다.
-    aggregateClusterEdges: layout.aggregateClusterEdges,
-  };
-  const controller = createGraphModeController({
-    store,
-    layout: spyLayout,
-    render,
-    prefs: null,
-    elements,
-    fetchClusterMap: async () => payloadTwoClusters(7),
-  });
-  controller.setAvailable(true);
-  await controller.toggle();
-  assert.equal(capturedViewport.width, 321, 'graphBody.clientWidth를 읽는다');
-  assert.equal(capturedViewport.height, 654, 'graphBody.clientHeight를 읽는다');
-});
 
 // ── 스텝14: 2단계 컨텍스트 패널(관계 목록) + 스텝11·12 실배선 ─────────────────
-
-function expandBubble(elements, cluster) {
-  const bubble = elements.graphBody.querySelectorAll('.graph-node')
-    .find((n) => n.getAttribute('data-cluster') === String(cluster));
-  bubble.dispatchEvent({ type: 'click' });
-}
 
 test('selectNode() — profile-summary에 같은 entity_id가 있으면 근거·신뢰도·보강수까지 얹고 source:"node"를 단다', async () => {
   const entries = [{ entity_id: 'e:a', entity_name: '반도체', entity_kind: 'theme', relation_kind: '관심', rationale: '질문 4회', reinforcement: 4, confidence: 'INFERRED', tier: 'conversational' }];
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true, getProfileSummaryEntries: () => entries });
   await controller.toggle();
-  expandBubble(elements, 0);
-  const nodeEl = elements.graphBody.querySelectorAll('.graph-node').find((n) => n.getAttribute('data-entity-id') === 'e:a');
-  nodeEl.dispatchEvent({ type: 'click' });
+  controller.selectNode('e:a');
   assert.equal(controller.state.panel.source, 'node');
   assert.equal(controller.state.panel.relation, '관심');
   assert.equal(controller.state.panel.rationale, '질문 4회');
@@ -641,9 +564,7 @@ test('selectNode() — profile-summary에 같은 entity_id가 있으면 근거·
 test('selectNode() — profile-summary에 매칭이 없으면 그래프 노드 필드만으로 최소 패널이 뜬다(지어내지 않는다)', async () => {
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true, getProfileSummaryEntries: () => [] });
   await controller.toggle();
-  expandBubble(elements, 0);
-  const nodeEl = elements.graphBody.querySelectorAll('.graph-node').find((n) => n.getAttribute('data-entity-id') === 'e:a');
-  nodeEl.dispatchEvent({ type: 'click' });
+  controller.selectNode('e:a');
   assert.equal(controller.state.panel.source, 'node');
   assert.equal(controller.state.panel.rationale, undefined);
   assert.equal(controller.state.panel.confidence, undefined);
@@ -655,9 +576,7 @@ test('관계 목록 — 선택 엔티티가 걸린 surprising-connections가 있
   ];
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true, getSurprisingConnections: () => connections });
   await controller.toggle();
-  expandBubble(elements, 0);
-  const nodeEl = elements.graphBody.querySelectorAll('.graph-node').find((n) => n.getAttribute('data-entity-id') === 'e:a');
-  nodeEl.dispatchEvent({ type: 'click' });
+  controller.selectNode('e:a');
   const relations = elements.panel.querySelectorAll('.panel-relation-row');
   assert.equal(relations.length, 1);
   assert.match(elements.panel.textContent, /배당 방어/);
@@ -668,9 +587,7 @@ test('관계 목록 — 선택 엔티티가 어느 surprising-connections에도 
   const connections = [{ source_entity_id: 'e:zzz', target_entity_id: 'e:yyy', kinds: [] }];
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true, getSurprisingConnections: () => connections });
   await controller.toggle();
-  expandBubble(elements, 0);
-  const nodeEl = elements.graphBody.querySelectorAll('.graph-node').find((n) => n.getAttribute('data-entity-id') === 'e:a');
-  nodeEl.dispatchEvent({ type: 'click' });
+  controller.selectNode('e:a');
   assert.equal(elements.panel.querySelector('.panel-relations'), null);
 });
 
@@ -679,7 +596,7 @@ test('관계 목록 — 선택 엔티티가 어느 surprising-connections에도 
 const filtersModule = require('./graph-filters');
 
 test('필터에 맞는 노드가 없으면 빈 화면 대신 무엇이 걸렸는지 적는다', async () => {
-  const { controller, elements } = setup({
+  const { controller, elements, liveRenders } = setup({
     payload: payloadTwoClusters,
     filters: filtersModule,
     // 이 그래프의 최대 차수는 1이라 "연결 5개 이상"은 전부 걷어낸다.
@@ -689,7 +606,7 @@ test('필터에 맞는 노드가 없으면 빈 화면 대신 무엇이 걸렸는
   const text = elements.graphBody.textContent;
   assert.match(text, /연결 5개 이상/, '어느 조건이 걸렸는지 적는다');
   assert.match(text, /완화해 보세요/, '되돌릴 길을 준다');
-  assert.equal(elements.graphBody.querySelectorAll('.graph-node').length, 0);
+  assert.equal(liveRenders.length, 0, '그릴 게 없으면 지도를 아예 안 만든다(빈 캔버스로 얼버무리지 않는다)');
 });
 
 test('필터가 선택 노드를 걷어내면 패널도 함께 닫힌다(지도와 패널이 다른 그래프를 말하지 않는다)', async () => {
@@ -787,10 +704,10 @@ function payloadWithDetails(revision) {
   };
 }
 
-function selectNodeInPanel(elements, entityId) {
-  const nodeEl = elements.graphBody.querySelectorAll('.graph-node')
-    .find((n) => n.getAttribute('data-entity-id') === entityId);
-  nodeEl.dispatchEvent({ type: 'click' });
+function selectNodeInPanel(controller, entityId) {
+  // 라이브 지도는 <canvas>에 그려 클릭할 DOM이 없다 — 지도의 onSelect가 부르는
+  // 것과 같은 경로로 선택한다.
+  controller.selectNode(entityId);
 }
 
 test('관계 목록 — 성향 관계(profile-summary)와 구조 관계(edge_details)가 한 목록에 온다(보드 04)', async () => {
@@ -802,8 +719,7 @@ test('관계 목록 — 성향 관계(profile-summary)와 구조 관계(edge_det
     payload: payloadWithDetails, withPanel: true, getProfileSummaryEntries: () => entries,
   });
   await controller.toggle();
-  expandBubble(elements, 0);
-  selectNodeInPanel(elements, 'e:a');
+  selectNodeInPanel(controller, 'e:a');
   const rows = elements.panel.querySelectorAll('.panel-relation-row');
   const labels = rows.map((r) => r.querySelectorAll('.panel-relation-label')[0].textContent);
   // 성향 관계(관심)가 먼저, 그다음 구조 관계 — 프로필 노드가 지도에서 빠졌어도
@@ -823,14 +739,71 @@ test('관계 목록 — edge_details가 있으면 통상 관계까지 전부 나
     payload: payloadWithDetails, withPanel: true, getSurprisingConnections: () => connections,
   });
   await controller.toggle();
-  expandBubble(elements, 0);
-  selectNodeInPanel(elements, 'e:a');
+  selectNodeInPanel(controller, 'e:a');
   const rows = elements.panel.querySelectorAll('.panel-relation-row');
   const labels = rows.map((r) => r.querySelectorAll('.panel-relation-label')[0].textContent);
   // EXTRACTED(관심) → INFERRED(소속) → 숨은. 마지막이 숨은 연관이다.
   assert.deepEqual(labels, ['관심', '소속', '숨은']);
   const descs = rows.map((r) => r.querySelectorAll('.panel-relation-desc')[0].textContent);
   assert.deepEqual(descs, ['SK하이닉스', '반도체 대형주', '고배당주']);
+});
+
+test('삭제 손잡이 — 구조 관계 행에만 붙고, 클릭하면 방향 그대로 (출발·도착·관계)를 넘긴다(보드 04)', async () => {
+  const connections = [{
+    source_entity_id: 'e:a', source_name: '한미반도체', target_entity_id: 'e:d', target_name: '고배당주',
+    kinds: ['relates_to'], source_cluster: 0, target_cluster: 1, surprise_score: 0.9,
+  }];
+  const entries = [
+    { entity_id: 'e:a', entity_name: '한미반도체', entity_kind: 'security', relation_kind: 'interested_in',
+      rationale: 'HBM 장비 질문 4회', reinforcement: 4, confidence: 'INFERRED', tier: 'conversational' },
+  ];
+  const deleted = [];
+  const { controller, elements } = setup({
+    payload: payloadWithDetails, withPanel: true,
+    getSurprisingConnections: () => connections,
+    getProfileSummaryEntries: () => entries,
+    onRelationDelete: (target) => { deleted.push(target); },
+  });
+  await controller.toggle();
+  selectNodeInPanel(controller, 'e:a');
+  const rows = elements.panel.querySelectorAll('.panel-relation-row');
+  const handles = rows.map((r) => r.querySelectorAll('.panel-relation-delete').length);
+  // 성향 관계(프로필발)와 숨은 연관에는 손잡이가 없다 — 구조 관계 둘에만 붙는다.
+  assert.deepEqual(handles, [0, 1, 1, 0], '관심(프로필)·숨은 행은 못 지운다');
+  const btn = rows[1].querySelectorAll('.panel-relation-delete')[0];
+  let stopped = 0;
+  btn.dispatchEvent({ type: 'click', stopPropagation: () => { stopped += 1; } });
+  assert.equal(stopped, 1, '행 클릭(노드 선택)으로 번지지 않는다');
+  assert.deepEqual(deleted, [{
+    subjectId: 'e:a', objectId: 'e:b', kind: 'interested_in', label: 'SK하이닉스 · 관심',
+  }]);
+});
+
+test('삭제 손잡이 — 선택 노드가 도착이어도 방향을 지어내지 않는다(해시가 뒤집히면 조용히 miss)', async () => {
+  const deleted = [];
+  const { controller, elements } = setup({
+    payload: payloadWithDetails, withPanel: true,
+    onRelationDelete: (target) => { deleted.push(target); },
+  });
+  await controller.toggle();
+  // e:c(반도체 대형주)를 고른다 — 이 노드로 오는 간선은 e:a → e:c(belongs_to)라
+  // 선택 노드가 도착이다. subjectId는 그래도 e:a여야 한다.
+  selectNodeInPanel(controller, 'e:c');
+  const btn = elements.panel.querySelectorAll('.panel-relation-delete')[0];
+  assert.ok(btn, '구조 관계 행에 손잡이가 있다');
+  btn.dispatchEvent({ type: 'click', stopPropagation: () => {} });
+  assert.equal(deleted.length, 1);
+  assert.equal(deleted[0].subjectId, 'e:a');
+  assert.equal(deleted[0].objectId, 'e:c');
+  assert.equal(deleted[0].kind, 'belongs_to');
+});
+
+test('삭제 손잡이 — onRelationDelete를 안 주면 아예 그리지 않는다(다른 선택 주입과 같은 계약)', async () => {
+  const { controller, elements } = setup({ payload: payloadWithDetails, withPanel: true });
+  await controller.toggle();
+  selectNodeInPanel(controller, 'e:a');
+  assert.ok(elements.panel.querySelectorAll('.panel-relation-row').length > 0, '관계 목록 자체는 있다');
+  assert.equal(elements.panel.querySelectorAll('.panel-relation-delete').length, 0);
 });
 
 test('선택 헤더 부제 — 그래프 노드는 "군집 · 연결 N · 두 군집을 잇는 유일한 노드"(보드 04)', async () => {
@@ -842,8 +815,7 @@ test('선택 헤더 부제 — 그래프 노드는 "군집 · 연결 N · 두 �
     payload: payloadWithDetails, withPanel: true, getSurprisingConnections: () => connections,
   });
   await controller.toggle();
-  expandBubble(elements, 0);
-  selectNodeInPanel(elements, 'e:a');
+  selectNodeInPanel(controller, 'e:a');
   const sub = elements.panel.querySelector('.panel-header-row2').textContent;
   // 확정 이름이 없으므로 제목 사다리가 대표 멤버로 떨어진다 — 군집을 가리키는
   // 말이어야 하므로 종목(한미반도체)이 아니라 테마(반도체 대형주)를 고른다.
@@ -861,21 +833,20 @@ test('왜 숨은 연관인가 — 세 절이 전부 실데이터에서 나온다
     payload: payloadWithDetails, withPanel: true, getSurprisingConnections: () => connections,
   });
   await controller.toggle();
-  expandBubble(elements, 0);
-  selectNodeInPanel(elements, 'e:a');
+  selectNodeInPanel(controller, 'e:a');
   const body = elements.panel.querySelector('.panel-reason-body').textContent;
   assert.match(body, /두 군집을 잇는 유일한 연결/, '군집 0↔1을 잇는 엣지가 하나뿐이다');
   assert.match(body, /주변부\(2\)에서 허브\(3\)로/, 'e:d 차수 2, e:a 차수 3');
   assert.match(body, /직접 말한 적 없음/, 'confidence가 INFERRED다');
   const score = elements.panel.querySelector('.panel-reason-score').textContent;
-  assert.equal(score, '상대 8.5 — 이 그래프에서 가장 높음');
+  // 숫자가 아니라 순위를 말한다 — min-max 정규화라 1등은 항상 10.0이었다(2026-09-03).
+  assert.equal(score, '이 그래프에서 가장 놀라운 연결입니다');
 });
 
 test('왜 숨은 연관인가 — 숨은 연관이 없는 노드에는 블록도 CTA 리드인도 없다(§0 정책)', async () => {
   const { controller, elements } = setup({ payload: payloadWithDetails, withPanel: true });
   await controller.toggle();
-  expandBubble(elements, 0);
-  selectNodeInPanel(elements, 'e:b');
+  selectNodeInPanel(controller, 'e:b');
   assert.equal(elements.panel.querySelector('.panel-reason'), null);
   assert.equal(elements.panel.querySelector('.panel-cta-lead'), null);
   assert.equal(elements.panel.querySelector('.panel-cta').textContent, '채팅에서 답하기');
@@ -890,8 +861,7 @@ test('CTA — 숨은 연관 노드는 리드인 + "채팅에서 물어보기"다
     payload: payloadWithDetails, withPanel: true, getSurprisingConnections: () => connections,
   });
   await controller.toggle();
-  expandBubble(elements, 0);
-  selectNodeInPanel(elements, 'e:a');
+  selectNodeInPanel(controller, 'e:a');
   assert.equal(elements.panel.querySelector('.panel-cta-lead').textContent, '이 연결을 확인하지 않으셨습니다.');
   assert.equal(elements.panel.querySelector('.panel-cta').textContent, '채팅에서 물어보기');
 });
@@ -960,9 +930,12 @@ test('hiddenLinkReasonClauses — 근거가 없는 절은 아예 빠진다(§0 �
     []);
 });
 
-test('relativeScoreText — [0,1] 정규화 점수를 Paper의 0~10 스케일로 옮기되 "상대"를 남긴다', () => {
-  assert.equal(relativeScoreText(0.85), '상대 8.5');
-  assert.equal(relativeScoreText(1), '상대 10.0');
+test('relativeScoreText — 숫자를 적지 않는다(정규화라 1등은 항상 만점이었다)', () => {
+  // surprise_score는 목록 안 min-max 정규화라 1등은 언제나 1.0이고, 전부 동점이면
+  // 전부 1.0이다(analysis.py). 그래서 '상대 10.0'이 나란히 찍혔다 — 라벨은 '상대'인데
+  // 순위 정보가 0이고 10.0은 절대 점수처럼 읽혔다. 점수 크기는 문구로 옮기지 않는다.
+  assert.equal(relativeScoreText(0.85), '이 그래프에서 놀라운 연결에 듭니다');
+  assert.equal(relativeScoreText(1), '이 그래프에서 놀라운 연결에 듭니다');
   assert.equal(relativeScoreText(undefined), '', '없는 점수를 지어내지 않는다');
   // 0은 "이 목록에서 가장 덜 놀랍다"는 뜻이라 숨은 연관의 근거가 못 된다.
   assert.equal(relativeScoreText(0), '');
@@ -981,94 +954,12 @@ test('topSurprising — 점수 내림차순 상한 3, 동점은 이름으로 끊
 test('관계 목록 — getSurprisingConnections를 안 주면(현재 실제 상태) 조용히 섹션이 없다', async () => {
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
   await controller.toggle();
-  expandBubble(elements, 0);
-  const nodeEl = elements.graphBody.querySelectorAll('.graph-node').find((n) => n.getAttribute('data-entity-id') === 'e:a');
-  assert.doesNotThrow(() => nodeEl.dispatchEvent({ type: 'click' }));
+  assert.doesNotThrow(() => controller.selectNode('e:a'));
   assert.equal(elements.panel.querySelector('.panel-relations'), null);
 });
 
-test('1단계 — surprising-connections의 source_cluster/target_cluster와 겹치는 군집 쌍은 clusterEdges.isSurprising:true로 다시 계산된다(스텝11 실배선)', async () => {
-  // payload(): e:a는 cluster 0, e:b는 cluster 1, edges=[['e:a','e:b']] — 0↔1을 잇는 군집간 엣지가 하나 있다.
-  const connections = [{ source_entity_id: 'x', target_entity_id: 'y', source_cluster: 0, target_cluster: 1 }];
-  let capturedPlaced = null;
-  const spyRender = Object.assign({}, render, {
-    renderClusterBubbles(container, placed, options) {
-      capturedPlaced = placed;
-      return render.renderClusterBubbles(container, placed, options);
-    },
-  });
-  const controller = createGraphModeController({
-    store, layout, render: spyRender, prefs: null,
-    elements: { summary: fakeNode('div'), graph: fakeNode('div'), graphBody: fakeNode('div'), summaryTable: fakeNode('div') },
-    fetchClusterMap: async () => payload(7),
-    getSurprisingConnections: () => connections,
-  });
-  controller.setAvailable(true);
-  await controller.toggle();
-  const edge01 = capturedPlaced.clusterEdges.find((e) => (e.from === 0 && e.to === 1) || (e.from === 1 && e.to === 0));
-  assert.ok(edge01, '군집 0↔1 엣지가 있어야 한다');
-  assert.equal(edge01.isSurprising, true);
-});
 
-test('2단계 — surprising-connections의 entity 쌍이 겹치면 render.renderClusterMap에 surprisingEntityPairs로 전달된다(스텝13 실배선)', async () => {
-  const connections = [{ source_entity_id: 'e:a', target_entity_id: 'e:b' }];
-  let capturedOptions = null;
-  const spyRender = Object.assign({}, render, {
-    renderClusterMap(container, layoutArg, options) {
-      capturedOptions = options;
-      return render.renderClusterMap(container, layoutArg, options);
-    },
-  });
-  const elements = {
-    summary: fakeNode('div'), graph: fakeNode('div'),
-    graphBody: fakeNode('div'), summaryTable: fakeNode('div'),
-  };
-  const controller = createGraphModeController({
-    store, layout, render: spyRender, prefs: null, elements,
-    fetchClusterMap: async () => payloadTwoClusters(7),
-    getSurprisingConnections: () => connections,
-  });
-  controller.setAvailable(true);
-  await controller.toggle();
-  expandBubble(elements, 0); // payloadTwoClusters: e:a/e:b가 cluster 0.
-  assert.ok(capturedOptions.surprisingEntityPairs instanceof Set);
-  assert.ok(capturedOptions.surprisingEntityPairs.has(render.entityPairKey('e:a', 'e:b')));
-});
 
-test('2단계 — unnamedClusterWarnEligible/unnamedClusters/clusterName이 placed.clusters(전체 군집 기준, §15 비차단 2번)로 계산돼 전달된다(스텝12 실배선)', async () => {
-  let capturedOptions = null;
-  const spyRender = Object.assign({}, render, {
-    renderClusterMap(container, layoutArg, options) {
-      capturedOptions = options;
-      return render.renderClusterMap(container, layoutArg, options);
-    },
-  });
-  // layoutClusterMap()은 실제로 cluster.name을 안 준다(이름 파이프라인 없음) —
-  // 부분 무명 상태를 재현하려고 layoutClusterMap 결과에 name을 얹는 스파이를 쓴다.
-  const spyLayout = Object.assign({}, layout, {
-    layoutClusterMap(p, viewport) {
-      const placed = layout.layoutClusterMap(p, viewport);
-      placed.clusters = placed.clusters.map((c) => (c.cluster === 0 ? { ...c, name: '반도체 대형주' } : c));
-      return placed;
-    },
-  });
-  const elements = {
-    summary: fakeNode('div'), graph: fakeNode('div'),
-    graphBody: fakeNode('div'), summaryTable: fakeNode('div'),
-  };
-  const controller = createGraphModeController({
-    store, layout: spyLayout, render: spyRender, prefs: null, elements,
-    fetchClusterMap: async () => payloadTwoClusters(7),
-  });
-  controller.setAvailable(true);
-  await controller.toggle();
-  expandBubble(elements, 0); // cluster 0은 이름이 있다(스파이가 얹음), cluster 1은 없다 — 부분 무명.
-  // 보드 04 — 이웃 군집 타원도 그리므로 이름 한 줄이 아니라 군집 목록 전체가 간다.
-  assert.equal(capturedOptions.expandedCluster, 0);
-  assert.deepEqual(capturedOptions.clusters.map((c) => c.name), ['반도체 대형주', undefined]);
-  assert.equal(capturedOptions.unnamedClusterWarnEligible, true, '0 < 이름 붙은 군집 수(1) < 전체(2)');
-  assert.deepEqual(capturedOptions.unnamedClusters, [1]);
-});
 
 // ── 엔티티 타임라인 유틸(WP-G G1+G2) — 순수 함수라 컨트롤러 없이 직접 부른다 ────
 
@@ -1129,6 +1020,19 @@ test('buildTimelineRows — edge_changed: 상승만 "…로 승격"(G-G4), 하�
   assert.equal(rows[0].count, 1);
   assert.equal(rows[1].text, '관심 관계 신뢰도 변경');
   assert.equal(rows[1].count, 3);
+});
+
+// 조사 회귀(2026-09-03 화면 실측) — '사실'·'불확실'은 ㄹ 받침이라 '로'가 맞아서
+// 오래 안 드러났는데, '추론'(ㄴ 받침)에서 "추론로 승격"이 찍혔다.
+test('buildTimelineRows — 승격 문구의 조사가 받침을 따른다(추론으로 · 사실로)', () => {
+  const base = { at: '2026-08-19T12:00:00Z', op: 'edge_changed', relation: 'interested_in' };
+  const rows = buildTimelineRows([
+    { ...base, confidence_before: 'AMBIGUOUS', confidence_after: 'INFERRED' },
+    { ...base, at: '2026-08-20T12:00:00Z', confidence_before: 'INFERRED', confidence_after: 'EXTRACTED' },
+  ]);
+  const texts = rows.map((r) => r.text);
+  assert.ok(texts.includes('관심 관계 불확실 → 추론으로 승격'), texts.join(' | '));
+  assert.ok(texts.includes('관심 관계 추론 → 사실로 승격'), texts.join(' | '));
 });
 
 test('buildTimelineRows — 같은 날 같은 문구가 잇달으면 접고, 사이에 다른 사건이 끼면 안 접는다', () => {
@@ -1260,12 +1164,12 @@ test('setView("agent")로 전환하면 agent 표면만 보이고 나머지 둘�
 });
 
 test('setView("graph")는 toggle()과 동등하다 — 기본 서브뷰는 요약 표, 지도 내용은 graphBody에 그려진다(스텝2-보정)', async () => {
-  const { controller, elements } = setup();
+  const { controller, elements, liveRenders } = setup();
   await controller.setView('graph');
   assert.equal(elements.summary.hidden, true, '요약(답변) 모자이크가 숨는다');
   assert.equal(elements.graph.hidden, true, '기본 서브뷰는 요약이라 지도는 아직 숨어 있다');
   assert.equal(elements.summaryTable.hidden, false, '성향 신호 표가 기본으로 보인다');
-  assert.equal(render.describeRendered(elements.graphBody).nodes, 2, 'draw()는 surface와 무관하게 graphBody에 그린다');
+  assert.equal(liveRenders.at(-1).nodes.length, 2, 'draw()는 surface와 무관하게 지도를 그린다');
 });
 
 test('setView("summary")로 돌아오면 세 표면 중 요약만 보인다', async () => {
@@ -1294,8 +1198,68 @@ test('setView는 summary/graph/agent/plugin 네 표면을 항상 하나만 보�
     const expectedMode = view === 'summary' ? 'chat' : view;
     assert.equal(elements.kiumi.dataset.mode, expectedMode);
     assert.equal(elements.canvasRegion.dataset.mode, expectedMode);
-    assert.equal(elements.chatHead.hidden, view !== 'graph', '그래프 전용 채팅 헤더 규칙');
+    assert.equal(
+      elements.chatHead.hidden,
+      !(view === 'graph' || view === 'backtest' || view === 'plugin'),
+      '그래프·백테스트·플러그인 채팅 헤더 규칙(보드 38 개정 · W3-6)',
+    );
   }
+});
+
+// 보드 38 개정 — 채팅 헤더는 그래프·백테스트 두 모드에서 보이고, data-mode와
+// 제목·부제 문구가 모드를 따라간다. 제목·부제 노드는 선택이다.
+test('backtest로 전환하면 채팅 헤더가 보이고 data-mode·문구가 백테스트용으로 바뀐다', async () => {
+  const { controller, elements } = setup();
+  elements.chatHeadTitle = fakeNode('span');
+  elements.chatHeadSub = fakeNode('span');
+  await controller.setView('backtest');
+  assert.equal(elements.chatHead.hidden, false);
+  assert.equal(elements.chatHead.dataset.mode, 'backtest');
+  assert.equal(elements.chatHeadTitle.textContent, '전략에게 묻기');
+  assert.equal(elements.chatHeadSub.textContent, '답이 설정과 코드를 바꿉니다');
+  await controller.setView('graph');
+  assert.equal(elements.chatHead.hidden, false);
+  assert.equal(elements.chatHead.dataset.mode, 'graph');
+  assert.equal(elements.chatHeadTitle.textContent, '그래프에게 묻기');
+  assert.equal(elements.chatHeadSub.textContent, '답이 캔버스를 바꿉니다');
+  await controller.setView('summary');
+  assert.equal(elements.chatHead.hidden, true, '대화 모드엔 헤더가 없다(보드 37)');
+});
+
+// W3-6 — 헤더가 플러그인 모드까지 넓어져도 그래프 문구는 한 글자도 바뀌지 않는다(A10).
+test('plugin으로 전환하면 채팅 헤더가 플러그인 문구로 바뀌고 그래프 문구는 그대로다', async () => {
+  const { controller, elements } = setup();
+  elements.chatHeadTitle = fakeNode('span');
+  elements.chatHeadSub = fakeNode('span');
+  await controller.setView('plugin');
+  assert.equal(elements.chatHead.hidden, false);
+  assert.equal(elements.chatHead.dataset.mode, 'plugin');
+  assert.equal(elements.chatHeadTitle.textContent, '아테나 · 플러그인 대화');
+  assert.equal(elements.chatHeadSub.textContent, '설치와 권한을 여기서 정합니다');
+  await controller.setView('graph');
+  assert.equal(elements.chatHeadTitle.textContent, '그래프에게 묻기');
+  assert.equal(elements.chatHeadSub.textContent, '답이 캔버스를 바꿉니다');
+  await controller.setView('agent');
+  assert.equal(elements.chatHead.hidden, true, '에이전트 모드엔 헤더가 없다');
+});
+
+test('shell.html의 채팅 헤더 span은 비어 있다 — 문구의 유일한 출처는 controller다', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const shell = fs.readFileSync(path.join(__dirname, '..', '..', 'shell.html'), 'utf8');
+  assert.match(shell, /<span class="chat-mode-head-title"><\/span>/);
+  assert.match(shell, /<span class="chat-mode-head-sub"><\/span>/);
+});
+
+test('chatHeadTitle/chatHeadSub가 없어도 backtest·graph 전환이 터지지 않는다(옵셔널 가드)', async () => {
+  const { controller, elements } = setup();
+  assert.equal(elements.chatHeadTitle, undefined);
+  assert.equal(elements.chatHeadSub, undefined);
+  await assert.doesNotReject(() => controller.setView('backtest'));
+  assert.equal(elements.chatHead.hidden, false);
+  assert.equal(elements.chatHead.dataset.mode, 'backtest');
+  await assert.doesNotReject(() => controller.setView('graph'));
+  assert.equal(elements.chatHead.dataset.mode, 'graph');
 });
 
 test('controller.setView()는 모르는 mode를 무시하고 현재 plugin 가시성을 유지한다', async () => {
@@ -1318,7 +1282,7 @@ test('agent로 전환할 때는 백엔드를 부르지 않는다(그래프 뷰�
 test('elements.agent가 없어도 setView("agent")가 터지지 않는다(옵셔널 가드)', async () => {
   const elements = { summary: fakeNode('div'), graph: fakeNode('div') };
   const controller = createGraphModeController({
-    store, layout, render, prefs: null, elements,
+    store, grouping, prefs: null, elements,
     fetchClusterMap: async () => payload(7),
   });
   await assert.doesNotReject(() => controller.setView('agent'));
@@ -1347,4 +1311,99 @@ test('D4 — 5 view × 5 표면 배타표: 각 view에서 정확히 그 표면�
       assert.equal(elements[surface].hidden, expectedHidden, `${view} 진입 시 ${surface} hidden 기대값 불일치`);
     }
   }
+});
+
+// ── 라이브 렌더러가 없는 경로(2026-09-02) ───────────────────────────────────
+// 정적 렌더러를 지운 뒤 redrawFromCache()에 그 호출이 한 줄 남아 있었고,
+// vis-network가 없는 경로에서 노드를 고르면 ReferenceError로 죽었다. 위 테스트들은
+// 전부 라이브 스텁을 주입해 그 분기를 안 타서 못 잡았다 — 여기서 그 경로를 잰다.
+
+test('라이브 렌더러가 없어도 노드 선택이 터지지 않는다(정적 렌더러 잔재 가드)', async () => {
+  const { controller, elements } = setup({
+    payload: payloadTwoClusters, withPanel: true, noLiveMap: true,
+  });
+  await controller.toggle();
+  assert.doesNotThrow(() => controller.selectNode('e:a'));
+  assert.equal(controller.state.selectedEntityId, 'e:a');
+  assert.equal(elements.panel.hidden, false, '패널은 렌더러와 무관하게 열린다');
+});
+
+test('라이브 렌더러가 없으면 빈 화면 대신 정직하게 알린다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, noLiveMap: true });
+  await controller.toggle();
+  assert.match(elements.graphBody.textContent, /그래프 렌더러를 불러오지 못했습니다/);
+});
+
+// ── getContext() — 그래프 모드 채팅에 실리는 화면 상태 ──────────────────────
+// 이 계약이 깨지면 채팅이 화면과 다른 숫자를 말한다(사용자는 어느 쪽을 믿을지 모른다).
+
+test('getContext(): 필터·규모·군집·신호·숨은연관·선택을 함께 낸다', async () => {
+  const entries = [
+    { entity_id: 'e:a', entity_name: '반도체', entity_kind: 'theme', relation_kind: '관심', rationale: '질문 4회', reinforcement: 4, confidence: 'AMBIGUOUS', tier: 'conversational' },
+    { entity_id: 'e:b', entity_name: '장비', entity_kind: 'security', relation_kind: '보유', rationale: '잔고', reinforcement: 2, confidence: 'EXTRACTED', tier: 'brokerage' },
+  ];
+  const { controller } = setup({
+    payload: payloadTwoClusters,
+    withPanel: true,
+    getProfileSummaryEntries: () => entries,
+    getFilters: () => ({ windowDays: 90, minDegree: 0, summarySort: 'reinforcement' }),
+  });
+  await controller.toggle();
+  controller.selectNode('e:a');
+  const ctx = controller.getContext();
+  assert.equal(ctx.available, true);
+  assert.equal(ctx.surface, 'summary');
+  assert.deepEqual(ctx.filters, { windowDays: 90, minDegree: 0, summarySort: 'reinforcement' });
+  assert.equal(ctx.counts.signals, 2);
+  // 화면 배너의 "확인이 필요한 것 N건"과 같은 축이어야 한다 — AMBIGUOUS만 센다.
+  assert.equal(ctx.counts.uncertain, 1);
+  assert.ok(ctx.counts.entities > 0);
+  assert.ok(Array.isArray(ctx.clusters));
+  assert.equal(ctx.topSignals[0].name, '반도체');
+  assert.equal(ctx.selected.entityId, 'e:a');
+});
+
+test('getContext(): 아무것도 안 골랐으면 selected는 null이다(지어내지 않는다)', async () => {
+  const { controller } = setup({ payload: payloadTwoClusters, withPanel: true });
+  await controller.toggle();
+  assert.equal(controller.getContext().selected, null);
+});
+
+test('getContext(): 선택 주입(getProfileSummaryEntries 등)이 없어도 빈 배열로 돈다', async () => {
+  const { controller } = setup({ payload: payloadTwoClusters });
+  await controller.toggle();
+  const ctx = controller.getContext();
+  assert.deepEqual(ctx.topSignals, []);
+  assert.deepEqual(ctx.hiddenLinks, []);
+  assert.equal(ctx.counts.uncertain, 0);
+});
+
+// ── CTA가 무엇을 물어야 하는지 함께 넘긴다(2026-09-02) ─────────────────────
+// 인자 없이 부르던 옛 판에서는 받는 쪽이 상황을 몰라 입력창에 포커스만 줬다.
+// 버튼 문구는 "채팅에서 답하기"인데 눌러도 아무 일이 없다는 제보의 원인이다.
+
+test('패널 CTA — 어긋나는 신호면 kind:conflict와 이름을 넘긴다', () => {
+  const asks = [];
+  const { controller, elements } = setup({ withPanel: true, onPanelCta: (a) => asks.push(a) });
+  controller.selectEntity('e:samsung', tablePanelData({
+    // 티어가 둘이면 "두 출처가 다르게 말합니다"가 뜨고 CTA가 conflict가 된다.
+    sources: [
+      { tier: 'deterministic', confidence: 'EXTRACTED', rationale: '체결 4건' },
+      { tier: 'conversational', confidence: 'INFERRED', rationale: '장기 보유라고 말했다' },
+    ],
+  }));
+  elements.panel.querySelector('.panel-cta').dispatchEvent({ type: 'click' });
+  assert.equal(asks.length, 1);
+  assert.equal(asks[0].kind, 'conflict');
+  assert.equal(asks[0].entityId, 'e:samsung');
+  assert.ok(asks[0].name);
+});
+
+test('패널 CTA — 어긋남·숨은연관이 없으면 kind:plain이다', () => {
+  const asks = [];
+  const { controller, elements } = setup({ withPanel: true, onPanelCta: (a) => asks.push(a) });
+  controller.selectEntity('e:samsung', tablePanelData());
+  elements.panel.querySelector('.panel-cta').dispatchEvent({ type: 'click' });
+  assert.equal(asks.length, 1);
+  assert.equal(asks[0].kind, 'plain');
 });

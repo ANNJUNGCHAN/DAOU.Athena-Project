@@ -86,6 +86,35 @@ risk:
 """
 
 
+# 코드 모드의 캔버스가 실제로 보내는 폼 — 신호를 코드가 만들므로 조건 칸이 비어 있다.
+EMPTY_CONDITIONS_YAML = """
+version: "1.0"
+metadata:
+  name: 코드 전략
+data:
+  symbols: ["005930"]
+  period: day
+  adjusted: true
+  from: "20250102"
+  to: "20250210"
+strategy:
+  id: code_only
+  params:
+    fast: {default: 2, min: 2, max: 10, step: 1, type: int}
+  indicators: []
+  entry: {logic: AND, conditions: []}
+  exit: {logic: AND, conditions: []}
+risk:
+  stop_loss:   {enabled: true,  percent: 8}
+  take_profit: {enabled: false, percent: 20}
+  position:    {sizing: all_in}
+costs:
+  fee_bps: 1.5
+  tax_bps: 18.0
+  slippage_bps: 5.0
+"""
+
+
 # ── 파싱 ────────────────────────────────────────────────────────────────────
 
 
@@ -142,6 +171,41 @@ def test_condition_group_requires_at_least_one_condition() -> None:
     entry_condition_line = "      - {indicator: rsi, operator: less_than, compare_to: 30}\n"
     with pytest.raises(ValidationError):
         from_kis_yaml(KIS_YAML.replace(entry_condition_line, ""))
+
+
+def test_empty_conditions_are_rejected_by_default() -> None:
+    """폼 경로는 그대로다 — 조건 없이 온 전략은 예전과 똑같이 거부된다."""
+    with pytest.raises(ValidationError):
+        from_kis_yaml(EMPTY_CONDITIONS_YAML)
+
+
+def test_require_conditions_false_parses_and_keeps_the_rest_of_the_spec() -> None:
+    """코드 경로 완화 — 조건 칸만 비워두고 나머지(data·costs·risk·params)는 그대로 산다."""
+    spec = from_kis_yaml(EMPTY_CONDITIONS_YAML, require_conditions=False)
+    assert spec.strategy.entry.conditions == []
+    assert spec.strategy.exit.conditions == []
+    assert spec.data is not None
+    assert spec.data.symbols == ["005930"]
+    assert spec.data.from_ == "20250102"
+    assert spec.costs is not None
+    assert spec.costs.tax_bps == 18.0
+    assert spec.risk.stop_loss.percent == 8
+    assert spec.strategy.params["fast"].default == 2
+
+
+def test_require_conditions_false_still_validates_everything_else() -> None:
+    """푸는 것은 조건 개수 하나뿐이다 — 다른 이유로 깨진 스펙은 두 모드 다 거부한다."""
+    bad_operator = EMPTY_CONDITIONS_YAML.replace(
+        "entry: {logic: AND, conditions: []}",
+        "entry: {logic: AND, conditions: [{indicator: rsi, operator: 없는연산자, compare_to: 3}]}",
+    )
+    missing_risk = EMPTY_CONDITIONS_YAML.replace("risk:", "unknown_block:", 1)
+    assert bad_operator != EMPTY_CONDITIONS_YAML
+    assert missing_risk != EMPTY_CONDITIONS_YAML
+    for text in (bad_operator, missing_risk):
+        for require in (True, False):
+            with pytest.raises(ValidationError):
+                from_kis_yaml(text, require_conditions=require)
 
 
 def test_operator_covers_exactly_seven_kinds() -> None:

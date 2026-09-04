@@ -1,0 +1,36 @@
+{
+  "tool_input": {
+    "actions": [
+      {
+        "action": "stage_snippet",
+        "snippet": "{\"mcpServers\": {\"weather\": {\"command\": \"uvx\", \"args\": [\"mcp-server-weather\"]}}}"
+      }
+    ],
+    "reason": "설정 JSON으로 직접 등록합니다"
+  },
+  "envelope": {
+    "proposal_id": "358f2537d60f4f475ad557a263190422",
+    "source": "model",
+    "revision": 1,
+    "actions": [
+      {
+        "action": "stage_snippet",
+        "target": null,
+        "snippet": "{\"mcpServers\": {\"weather\": {\"command\": \"uvx\", \"args\": [\"mcp-server-weather\"]}}}"
+      }
+    ],
+    "reason": "설정 JSON으로 직접 등록합니다",
+    "current": {
+      "servers": [
+        {
+          "alias": "fetch",
+          "approved": true,
+          "enabled": true,
+          "tools_allowed": [
+            "fetch"
+          ]
+        }
+      ]
+    }
+  }
+}

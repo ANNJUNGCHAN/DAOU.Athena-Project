@@ -10735,5 +10735,104 @@
       "unbound_reason": "전용 텍스트가 없다 — 전일대비·등락률 셀의 ± 부호와 상승·하락 색으로만 표현"
     }
   ],
-  "unbound_reason": "시가(open_pric)·시가대비(open_pric_pre)는 316O-0(순위 — 시가대비 등락) 표 '시가 · 시가 대비' 열에 그려져 있다. 원장·팩이 이 보드 몫으로 잘못 적고 있었고 (316O-0 몫으로 적힌 PER은 반대로 이 보드에 그려져 있었다) 두 보드의 귀속을 서로 바로잡았다. 이 보드(고저 PER)에는 시가 자리가 없다."
+  "unbound_reason": "시가(open_pric)·시가대비(open_pric_pre)는 316O-0(순위 — 시가대비 등락) 표 '시가 · 시가 대비' 열에 그려져 있다. 원장·팩이 이 보드 몫으로 잘못 적고 있었고 (316O-0 몫으로 적힌 PER은 반대로 이 보드에 그려져 있었다) 두 보드의 귀속을 서로 바로잡았다. 이 보드(고저 PER)에는 시가 자리가 없다.",
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 고저 PER",
+    "eyebrow": "CC-03 / 30ZW-0",
+    "source_board": "CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "elements": [
+      {
+        "source_slot_id": "s017",
+        "label": "PER",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "3.1배"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "PER",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "214.0배"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "수량",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1위 종목"
+      },
+      {
+        "source_slot_id": "s023",
+        "label": "핵심 지표",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "14.2배",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s042",
+        "label": "변화",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "전체 814건 · 19건 표시",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 233,
+      "shown": 5,
+      "hidden": 228,
+      "scalars": 2,
+      "rows": 17
+    },
+    "fold_note": "스칼라 2개 · 행 17개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T4-7 · 순위 — 고저 PER",
+      "elements": "PER · 수량 · 핵심 지표 · 변화",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 17개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

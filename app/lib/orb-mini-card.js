@@ -1,8 +1,14 @@
 'use strict';
 
+const boardFormat = (typeof module !== 'undefined' && module.exports)
+  ? require('./board-format')
+  : (typeof window !== 'undefined' && window.AthenaLib && window.AthenaLib.BoardFormat);
+
+const CARD_SIZE = Object.freeze({ width: 360, height: 420 });
+
 // 키우미 미니 카드의 결정 로직 (Paper 키우미 보드 09 · 2026-09-01).
 //
-// 오브는 자기 화면을 가진다 — 360px 폭에 640px 상한이라 캔버스 카드를 그대로
+// 오브는 자기 화면을 가진다 — 360×420 고정 카드라 캔버스 카드를 그대로
 // 못 들인다. 보드 09가 캔버스 9종(table·chart·facts·compound·event·action·
 // status·reader·stream)을 미니 10종으로 받는 상한과 공통 규칙을 확정했고,
 // 이 파일은 그중 **무엇을 보여주고 무엇을 접을지**만 정한다. DOM은 orb.js가
@@ -36,6 +42,58 @@ function hasValue(value) {
 
 function fieldHasValue(field) {
   return !!field && hasValue(field.value);
+}
+
+function slotValueMap(surfaceContract) {
+  const raw = surfaceContract && (surfaceContract.slot_values || surfaceContract.slotValues);
+  if (Array.isArray(raw)) {
+    return new Map(raw.filter((entry) => entry && entry.slot_id).map((entry) => [entry.slot_id, entry]));
+  }
+  if (raw && typeof raw === 'object') {
+    return new Map(Object.entries(raw).map(([slotId, value]) => [slotId, { slot_id: slotId, value }]));
+  }
+  return new Map();
+}
+
+/**
+ * 백엔드 표면 계약에서 카드별 고정 표시 계획을 만든다. ``paper_text``는 승인 증거일
+ * 뿐 런타임 값으로 쓰지 않는다. 선택 슬롯이 이번 응답에 없으면 반드시 ``미제공``을
+ * 표시해 Paper 예시값을 실제 조회값처럼 보이는 일을 막는다.
+ */
+function buildKiumiPlan(surfaceContract) {
+  const spec = surfaceContract && surfaceContract.kiumi;
+  if (!spec || spec.version !== 1 || spec.fixed !== true) return null;
+  if (spec.width_px !== CARD_SIZE.width || spec.height_px !== CARD_SIZE.height) return null;
+  if (!Array.isArray(spec.elements) || !spec.elements.length || !boardFormat) return null;
+  const values = slotValueMap(surfaceContract);
+  const elements = spec.elements.map((element) => {
+    const slotId = element.source_slot_id;
+    const entry = values.get(slotId);
+    const format = (element.format && typeof element.format === 'object')
+      ? element.format
+      : ((entry && entry.format) || {});
+    const formatted = boardFormat.formatSlot(format, entry ? entry.value : undefined);
+    return {
+      slotId,
+      label: String(element.label || ''),
+      role: String(element.role || 'fact'),
+      band: String(element.band || 'scalar'),
+      text: formatted.text,
+      tone: formatted.tone || null,
+      missing: formatted.missing === true,
+    };
+  });
+  return {
+    boardId: String(surfaceContract.board_id || ''),
+    cardId: String(surfaceContract.card_id || ''),
+    grammar: String(spec.grammar || ''),
+    title: String(spec.title || ''),
+    eyebrow: String(spec.eyebrow || ''),
+    width: CARD_SIZE.width,
+    height: CARD_SIZE.height,
+    elements,
+    foldNote: typeof spec.fold_note === 'string' && spec.fold_note ? spec.fold_note : null,
+  };
 }
 
 /** 리스트 상한 적용의 공통 형태. 접힌 개수는 **보인 뒤 남은 것**만 센다. */
@@ -153,6 +211,7 @@ function foldNote(kind, counts = {}) {
 }
 
 const __exports = {
+  CARD_SIZE,
   LIMITS,
   hasValue,
   fieldHasValue,
@@ -164,6 +223,7 @@ const __exports = {
   formatStreamTime,
   streamSource,
   foldNote,
+  buildKiumiPlan,
 };
 
 // UMD 각주 — facts-card.js와 같은 패턴(렌더러 격리).

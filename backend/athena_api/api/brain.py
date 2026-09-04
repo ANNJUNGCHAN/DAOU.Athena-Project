@@ -8,10 +8,10 @@ import shutil
 import signal
 from datetime import datetime
 from pathlib import Path
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Self
 
 from fastapi import APIRouter, BackgroundTasks, Header, HTTPException, Request
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from athena_api.brain import (
     ChatHistoryRecord,
@@ -25,11 +25,12 @@ from athena_api.brain import (
     god_nodes,
     graph_diff,
     labeling,
+    relation_id,
     suggest_questions,
     surprising_connections,
     utc_now,
 )
-from athena_api.brain.ontology import MAX_RAW_CHAT_TEXT_CHARS
+from athena_api.brain.ontology import MAX_RAW_CHAT_TEXT_CHARS, Confidence
 from athena_api.brain.projection import cluster_cohesion, cluster_representative_labels
 from athena_api.errors import BrainNotReadyError
 from athena_api.lifespan import BrainRuntime, _teardown_brain
@@ -369,6 +370,221 @@ async def retry_startup_brain_ingestion(
             job_id=retry_job.id,
             status=retry_job.status,
         )
+
+
+class RelationManualRequest(BaseModel):
+    """사람이 화면에서 직접 추가·수정한 관계 하나.
+
+    이름이 아니라 **id**를 받는다. 이름으로 받으면 오타가 새 노드가 되고, 그것은
+    고치려던 것보다 나쁘다 — 화면은 이미 두 끝의 id를 알고 있다.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    subject_id: str = Field(min_length=1, max_length=128)
+    object_id: str = Field(min_length=1, max_length=128)
+    kind: str = Field(min_length=1, max_length=128)
+    rationale: str | None = Field(default=None, max_length=2000)
+
+
+class RelationManualResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    written: bool
+    revision: int
+    relation_id: str | None = None
+    tier: str | None = None
+    # 두 끝 중 하나가 그래프에 없으면 쓰지 않는다. 화면이 "왜 안 됐는지"를 말할 수
+    # 있어야 하므로 그 사유를 구분해 돌려준다(§0 정직성).
+    reason: str | None = None
+
+
+@router.post(
+    "/relations/manual",
+    summary="관계 하나를 사람이 직접 추가·수정한다",
+    operation_id="upsert_brain_manual_relation",
+    response_model=RelationManualResponse,
+    openapi_extra={
+        # 취소·확인 입구와 같은 규칙 — 모델은 닿지 않는다.
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "write",
+    },
+)
+async def upsert_brain_manual_relation(
+    payload: RelationManualRequest,
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> RelationManualResponse:
+    """확정 카드의 op=add·change가 부르는 입구(2026-09-03 사용자 확정).
+
+    지우기·확인과 달리 이것은 관계를 **새로 쓴다.** 그래서 티어가 MANUAL이고,
+    다음 대화 추출이 덮지 못한다(store._apply_one_relation).
+    """
+    require_local_bearer(request, authorization)
+    store = _require_store(request)
+    written = await store.upsert_manual_relation(
+        subject_id=payload.subject_id,
+        object_id=payload.object_id,
+        kind=payload.kind,
+        rationale=payload.rationale,
+    )
+    revision = await store.graph_revision()
+    if written is None:
+        logger.info(
+            "brain manual relation refused kind=%s (endpoint missing)", payload.kind
+        )
+        return RelationManualResponse(
+            written=False,
+            revision=revision,
+            reason="endpoint_not_in_graph",
+        )
+    return RelationManualResponse(
+        written=True,
+        revision=revision,
+        relation_id=written.id,
+        tier=written.tier,
+    )
+
+
+class RelationConfirmRequest(BaseModel):
+    """되물을 것들 카드의 '맞다' — 사람이 확인한 관계."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    relation_id: str = Field(min_length=1, max_length=128)
+
+
+class RelationConfirmResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    changed: bool
+    revision: int
+    confidence: str | None = None
+
+
+@router.post(
+    "/relations/confirmations",
+    summary="관계 하나를 사람이 확인한다(불확실 → 사실)",
+    operation_id="confirm_brain_relation",
+    response_model=RelationConfirmResponse,
+    openapi_extra={
+        # 취소 입구와 같은 이유로 모델에게 노출하지 않는다 — 부르는 것은 사람이 누른
+        # 카드뿐이다. athena_brain에는 여전히 쓰기 액션이 없다.
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "write",
+    },
+)
+async def confirm_brain_relation(
+    payload: RelationConfirmRequest,
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> RelationConfirmResponse:
+    """되물을 것들 카드의 '맞다'가 부르는 입구(2026-09-03 사용자 확정).
+
+    카드가 묻는 것은 AMBIGUOUS 관계다. 사람이 '맞다'를 누르면 그것은 더 이상
+    불확실이 아니다 — 주인이 확인했다. 예전에는 답변 문장이 채팅으로 나가고 다음
+    수집 배치가 반영했는데, 그래서 답해도 "확인이 필요한 것 N건"이 줄지 않아
+    같은 카드가 무한히 되물었다(실측).
+    """
+    require_local_bearer(request, authorization)
+    store = _require_store(request)
+    updated = await store.set_relation_confidence(payload.relation_id, Confidence.EXTRACTED)
+    revision = await store.graph_revision()
+    if updated is None:
+        logger.info("brain relation confirm miss relation_id=%s", payload.relation_id)
+        return RelationConfirmResponse(changed=False, revision=revision)
+    return RelationConfirmResponse(
+        changed=True, revision=revision, confidence=updated.confidence
+    )
+
+
+class RelationRetractRequest(BaseModel):
+    """사람이 화면에서 지운 관계 하나.
+
+    두 가지 방법으로 지목할 수 있다. 확정 카드는 `relation_id`를 안다(모델이
+    athena_brain에서 받아 실어 준다). 반면 패널의 관계 목록은 그 id를 모르고
+    (출발·도착·관계)만 안다(cluster-map의 edge_details가 그 셋만 준다) — id는 그
+    셋의 결정적 해시이므로 여기서 계산한다. 렌더러에서 해시를 다시 구현하면
+    두 벌이 되고, 어긋나는 순간 취소가 조용히 실패한다.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    relation_id: str | None = Field(default=None, min_length=1, max_length=128)
+    subject_id: str | None = Field(default=None, min_length=1, max_length=128)
+    object_id: str | None = Field(default=None, min_length=1, max_length=128)
+    kind: str | None = Field(default=None, min_length=1, max_length=128)
+
+    @model_validator(mode="after")
+    def require_one_way_to_point(self) -> Self:
+        if self.relation_id:
+            return self
+        if self.subject_id and self.object_id and self.kind:
+            return self
+        raise ValueError("relation_id 또는 (subject_id, object_id, kind)가 필요하다")
+
+
+class RelationRetractResponse(BaseModel):
+    """무엇을 지웠는지 그대로 돌려준다 — 화면이 "무엇이 사라졌다"를 말할 수 있어야 한다."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    removed: bool
+    revision: int
+    source_entity_id: str | None = None
+    target_entity_id: str | None = None
+    kind: str | None = None
+
+
+@router.post(
+    "/relations/retractions",
+    summary="관계 하나를 사람이 직접 지운다",
+    operation_id="retract_brain_relation",
+    response_model=RelationRetractResponse,
+    openapi_extra={
+        # 모델에게 노출하지 않는다. 그래프 쓰기가 사람의 행동에서 시작한다는 규칙은
+        # 그대로다 — 이 입구는 사람이 카드를 누른 결과로만 불린다. athena_brain에는
+        # 여전히 쓰기 액션이 없다(test_no_write_action_exists).
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "write",
+    },
+)
+async def retract_brain_relation(
+    payload: RelationRetractRequest,
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> RelationRetractResponse:
+    """확정 카드의 '적용'이 부르는 입구(2026-09-03 사용자 확정).
+
+    예전에는 카드가 답변 문장을 채팅으로만 보냈고, 그래프 반영은 다음 수집 배치가
+    했다. 그래서 누른 직후 아무 일도 안 일어나 사람이 같은 카드를 반복해 눌렀다.
+    수집(대화를 캐는 일)과 편집(주인이 화면에서 고치는 일)은 다른 일이고, 편집은
+    즉시 반영되어야 한다.
+    """
+    require_local_bearer(request, authorization)
+    store = _require_store(request)
+    target = payload.relation_id or relation_id(
+        payload.kind or "", payload.subject_id or "", payload.object_id or ""
+    )
+    removed = await store.retract_relation(target)
+    revision = await store.graph_revision()
+    if removed is None:
+        # 이미 없는 관계를 지우라고 한 것 — 오류가 아니다(사람이 두 번 눌렀거나
+        # 그사이 dedup이 합쳤을 수 있다). 아무것도 안 지웠다는 사실만 정직하게 말한다.
+        logger.info("brain relation retract miss relation_id=%s", target)
+        return RelationRetractResponse(removed=False, revision=revision)
+    logger.info(
+        "brain relation retract ok relation=%s tier=%s",
+        removed.kind,
+        removed.tier,
+    )
+    return RelationRetractResponse(
+        removed=True,
+        revision=revision,
+        source_entity_id=removed.source_entity_id,
+        target_entity_id=removed.target_entity_id,
+        kind=removed.kind,
+    )
 
 
 @router.post(
@@ -1042,3 +1258,196 @@ async def _collect_cluster_ai_labels(
 
         task.add_done_callback(discard_finished)
     return labels
+
+
+# ── 노드 하나의 상세(2026-09-03) ────────────────────────────────────────────────
+#
+# 채팅의 "이 노드 설명해줘"가 자료로 답할 수 있게 하는 유일한 경로다. 화면의 공통
+# 패널은 같은 질문에 세 왕복(profile-summary·cluster-map·entity-timeline)으로 답하는데
+# 모델에는 그 셋 중 어느 것도 노드 단위로 열려 있지 않았다.
+#
+# `entity-timeline`과 달리 `_require_model_exposure`를 탄다 — 사용자가 모델 전달을
+# 꺼 두면 노드 원문도 나가지 않아야 한다. 표시는 다른 분석과 같은 `_NOT_LLM_EXPOSED`다
+# (모델은 OpenAPI가 아니라 `athena_brain` 프록시로만 온다).
+
+_DEFAULT_ENTITY_DETAIL_LIMIT = 30
+
+
+class SourceExcerptOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    source_id: str
+    kind: str
+    text: str
+    locator: str | None
+    occurred_at: str
+    # 잘린 발췌를 전문처럼 인용하면 "원문에 그렇게 적혀 있다"가 거짓이 된다.
+    truncated: bool
+    full_chars: int
+
+
+class EntityRelationOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    relation_id: str
+    relation_kind: str
+    direction: Literal["out", "in"]
+    other_entity_id: str
+    other_entity_kind: str
+    other_entity_name: str
+    confidence: str
+    tier: str
+    rationale: str | None
+    observed_at: str
+    reinforcement: int
+    source: SourceExcerptOut | None
+
+
+class EntityDetailEventOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    seq: int
+    at: str
+    revision: int
+    op: str
+    subject_id: str
+    object_id: str | None
+    relation: str | None
+    confidence_before: str | None
+    confidence_after: str | None
+    source: SourceExcerptOut | None
+
+
+class EntityCandidateOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    entity_id: str
+    kind: str
+    name: str
+
+
+class EntityDetailResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    revision: int
+    # 질의를 그대로 돌려준다 — 모델이 "무엇을 찾아 준 것인가"를 스스로 확인할 수 있어야
+    # 이름이 비슷한 다른 노드를 설명하고도 모르는 일이 없다.
+    query: str
+    resolved: bool
+    entity_id: str | None = None
+    kind: str | None = None
+    name: str | None = None
+    degree: int | None = None
+    aliases: list[str] = []
+    relations: list[EntityRelationOut] = []
+    timeline: list[EntityDetailEventOut] = []
+    # 이름이 여럿에 걸리면 하나를 골라 단정하지 않는다(§0) — 후보를 주고 되묻게 한다.
+    candidates: list[EntityCandidateOut] = []
+
+
+def _source_excerpt_out(excerpt: object) -> SourceExcerptOut | None:
+    if excerpt is None:
+        return None
+    return SourceExcerptOut(
+        source_id=excerpt.source_id,
+        kind=excerpt.kind,
+        text=excerpt.text,
+        locator=excerpt.locator,
+        occurred_at=excerpt.occurred_at,
+        truncated=excerpt.truncated,
+        full_chars=excerpt.full_chars,
+    )
+
+
+@router.get(
+    "/analysis/entity-detail",
+    summary="노드 하나의 관계·이력·출처 원문",
+    operation_id="get_brain_entity_detail",
+    response_model=EntityDetailResponse,
+    openapi_extra={**_NOT_LLM_EXPOSED, "x-athena-side-effect": "none"},
+)
+async def get_brain_entity_detail(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+    entity: str,
+    x_athena_caller: Annotated[str | None, Header(alias="X-Athena-Caller")] = None,
+    limit: int = _DEFAULT_ENTITY_DETAIL_LIMIT,
+) -> EntityDetailResponse:
+    require_local_bearer(request, authorization)
+    _require_model_exposure(request, x_athena_caller)
+    store = _require_store(request)
+    revision = await store.graph_revision()
+    query = entity.strip()
+    if not query:
+        return EntityDetailResponse(revision=revision, query=entity, resolved=False)
+
+    bounded = _bounded(limit)
+    # 먼저 id로 본다 — 화면이 고른 노드는 id를 그대로 넘긴다. 실패하면 이름 검색이다.
+    detail = await store.entity_detail(query, relation_limit=bounded, event_limit=bounded)
+    if detail is None:
+        hits = await store.search_entities(query, limit=5)
+        if not hits:
+            return EntityDetailResponse(revision=revision, query=query, resolved=False)
+        # 이름이 정확히 하나에만 걸릴 때만 단정한다. 여럿이면 후보만 준다 —
+        # "삼성"이 삼성전자·삼성화재·삼성바이오로직스에 걸리는 일이 실제로 있다.
+        exact = [hit for hit in hits if hit.name.strip() == query]
+        chosen = exact[0] if len(exact) == 1 else (hits[0] if len(hits) == 1 else None)
+        if chosen is None:
+            return EntityDetailResponse(
+                revision=revision,
+                query=query,
+                resolved=False,
+                candidates=[
+                    EntityCandidateOut(entity_id=hit.entity_id, kind=hit.kind, name=hit.name)
+                    for hit in hits
+                ],
+            )
+        detail = await store.entity_detail(
+            chosen.entity_id, relation_limit=bounded, event_limit=bounded
+        )
+        if detail is None:
+            # FTS에는 있는데 엔티티가 없다 — 색인이 앞서간 경우다. 지어내지 않는다.
+            return EntityDetailResponse(revision=revision, query=query, resolved=False)
+
+    return EntityDetailResponse(
+        revision=revision,
+        query=query,
+        resolved=True,
+        entity_id=detail.entity.id,
+        kind=detail.entity.kind,
+        name=detail.entity.name,
+        degree=detail.entity.degree,
+        aliases=list(detail.entity.aliases),
+        relations=[
+            EntityRelationOut(
+                relation_id=edge.relation_id,
+                relation_kind=edge.relation_kind,
+                direction=edge.direction,
+                other_entity_id=edge.other_entity_id,
+                other_entity_kind=edge.other_entity_kind,
+                other_entity_name=edge.other_entity_name,
+                confidence=edge.confidence,
+                tier=edge.tier,
+                rationale=edge.rationale,
+                observed_at=edge.observed_at,
+                reinforcement=edge.reinforcement,
+                source=_source_excerpt_out(edge.source),
+            )
+            for edge in detail.relations
+        ],
+        timeline=[
+            EntityDetailEventOut(
+                seq=event.seq,
+                at=event.at,
+                revision=event.revision,
+                op=event.op,
+                subject_id=event.subject_id,
+                object_id=event.object_id,
+                relation=event.relation,
+                confidence_before=event.confidence_before,
+                confidence_after=event.confidence_after,
+                source=_source_excerpt_out(event.source),
+            )
+            for event in detail.events
+        ],
+    )
