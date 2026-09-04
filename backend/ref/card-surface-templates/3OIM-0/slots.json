@@ -3367,5 +3367,104 @@
   "unbound_reason": {
     "base:kt50031|rsrv_tp": "'정정취소 · 반대' 행은 Paper 설계상 잎이 하나('해당 없음')뿐이며 정정취소와 반대여부는 서로 다른 의미라 alt_mappings로 합치지 않는다 — 이름 있는 별도 반대여부 값 자리가 필요하다.",
     "slot:s087·s089·s091": "체결금액·수수료·정산금액은 kt50030·kt50031·kt50075 어디에도 없는 파생 합계(체결수량 × 체결단가, 그 합)라 static으로 둔다 — 응답 필드가 생기면 바인딩한다."
+  },
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "금현물 주문·체결",
+    "eyebrow": "CC-01 / 3OIM-0",
+    "source_board": "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "elements": [
+      {
+        "source_slot_id": "s016",
+        "label": "미체결수량",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "10g"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "체결수량",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "5g"
+      },
+      {
+        "source_slot_id": "s025",
+        "label": "계좌별주문체결현황",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "2건"
+      },
+      {
+        "source_slot_id": "s032",
+        "label": "계좌별주문미체결현황",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "3건 · 09/01 · 08/31",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s041",
+        "label": "주문번호",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "0000512",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 50,
+      "shown": 5,
+      "hidden": 45,
+      "scalars": 2,
+      "rows": 1
+    },
+    "fold_note": "스칼라 2개 · 행 1개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-01 / R10-B-X2 · 금현물 주문·체결",
+      "elements": "미체결수량 · 체결수량 · 계좌별주문체결현황 · 계좌별주문미체결현황 · 주문번호",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 1개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
   }
 }

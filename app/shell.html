@@ -19,6 +19,8 @@
 <link rel="stylesheet" href="styles/board-surface.css" />
 <link rel="stylesheet" href="styles/plugin-canvas.css" />
 <link rel="stylesheet" href="shell.css" />
+<link rel="stylesheet" href="styles/sidebar-session.css" />
+<link rel="stylesheet" href="styles/backtest-technique-cards.css" />
 <link rel="stylesheet" href="styles/access.css" />
 </head>
 <body>
@@ -103,6 +105,9 @@
         <button class="sidebar-mode-item is-active" id="modeNavSummary" type="button" data-view="summary" aria-pressed="true">
           <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5C2 2.7 2.7 2 3.5 2h7c.8 0 1.5.7 1.5 1.5v5c0 .8-.7 1.5-1.5 1.5H6L3.5 12v-2H3.5C2.7 10 2 9.3 2 8.5v-5z" fill="none" stroke="currentColor" stroke-width="1.2" /></svg>
           <span class="sidebar-mode-item-label">대화</span>
+          <!-- 모드별 대화 수 — 라벨 뒤에 둔다(배지처럼 오른쪽 끝에 붙는 게 아니라
+               이름에 딸린 숫자다). 0이면 hidden이라 CSS 없이도 깨지지 않는다. -->
+          <span class="sidebar-mode-count" id="modeNavSummaryCount" hidden></span>
         </button>
         <button class="sidebar-mode-item" id="modeNavGraph" type="button" data-view="graph" aria-pressed="false">
           <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true">
@@ -112,10 +117,12 @@
             <path d="M4.4 9.1 6.2 5m1.6 0 1.8 4.1M5.3 10.5h3.4" fill="none" stroke="currentColor" stroke-width="1.2" />
           </svg>
           <span class="sidebar-mode-item-label">그래프</span>
+          <span class="sidebar-mode-count" id="modeNavGraphCount" hidden></span>
         </button>
         <button class="sidebar-mode-item" id="modeNavAgent" type="button" data-view="agent" aria-pressed="false">
           <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 8.3 5.7 12.5 7 8.3 8.3 7 12.5 5.7 8.3 1.5 7 5.7 5.7z" fill="none" stroke="currentColor" stroke-width="1.2" /></svg>
           <span class="sidebar-mode-item-label">에이전트</span>
+          <span class="sidebar-mode-count" id="modeNavAgentCount" hidden></span>
           <!-- 배지 — 미확인 알람 수(2단계). 스코프 밖: 이번 단계는 마크업만
                놓고 hidden으로 둔다, 카운트 배선은 sidebar-mode-nav.js 2단계
                확장이 맡는다. -->
@@ -124,6 +131,7 @@
         <button class="sidebar-mode-item" id="modeNavPlugin" type="button" data-view="plugin" aria-pressed="false">
           <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M4.5 1.5v2M9.5 1.5v2M3 3.5h8v3A4 4 0 0 1 7 10.5 4 4 0 0 1 3 6.5v-3ZM7 10.5v2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
           <span class="sidebar-mode-item-label">플러그인</span>
+          <span class="sidebar-mode-count" id="modeNavPluginCount" hidden></span>
         </button>
         <!-- 5번째 모드 — 백테스트(P1 모드 골격, backtest-mode-plan.md §3.2). 아이콘은
              되감기(백테스트=과거로 돌아가 재생) — 다른 세 형제와 같은 15×15
@@ -131,6 +139,7 @@
         <button class="sidebar-mode-item" id="modeNavBacktest" type="button" data-view="backtest" aria-pressed="false">
           <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M11.5 7A4.5 4.5 0 1 1 7 2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" /><path d="M7 2.5 4.8 2.2 5.1 4.4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
           <span class="sidebar-mode-item-label">백테스트</span>
+          <span class="sidebar-mode-count" id="modeNavBacktestCount" hidden></span>
         </button>
       </div>
       <div class="sidebar-divider"></div>
@@ -246,7 +255,7 @@
           </div>
           <div id="graphMapGuide" class="graph-map-guide">
             <span class="graph-map-guide-title">테마 지도</span>
-            <span class="graph-map-guide-desc">군집을 누르면 그 안의 종목·테마가 펼쳐집니다 · 채팅으로 물어도 같은 곳이 열립니다</span>
+            <span class="graph-map-guide-desc">노드를 끌어 옮길 수 있습니다 · 휠 또는 Ctrl+휠로 확대 · 채팅으로 물어도 같은 곳이 열립니다</span>
           </div>
         </div>
         <div id="graphBody"></div>
@@ -291,11 +300,13 @@
          (GLOSSARY §1). shell.css의 flex-shrink:0이 그 계약이다. -->
     <section id="chatRegion" class="shell-region">
       <div id="app" class="app glass" hidden>
-        <!-- 모드별 채팅 헤더(보드 38, 2026-08-27) — 그래프 모드 전용. 보드 37
-             실측: 대화 모드에는 헤더가 없다. graph-mode controller가 hidden 소유. -->
+        <!-- 모드별 채팅 헤더(보드 38, 2026-08-27) — 그래프·백테스트·플러그인 모드.
+             보드 37 실측: 대화 모드에는 헤더가 없다. 문구와 hidden은 둘 다
+             graph-mode controller가 소유한다(여기 고정 문구를 두면 모드가 바뀌어도
+             남는다). -->
         <div id="chatModeHead" class="chat-mode-head" hidden>
-          <span class="chat-mode-head-title">그래프에게 묻기</span>
-          <span class="chat-mode-head-sub">답이 캔버스를 바꿉니다</span>
+          <span class="chat-mode-head-title"></span>
+          <span class="chat-mode-head-sub"></span>
         </div>
         <!-- 알림 파생 방 머리(Paper 보드 08) — 사이드바 "알림에서" 항목을 선택했을 때만
              보인다. 메인 대화와 섞이지 않는다는 문구가 계약이다 — lib/sidebar.js가
@@ -318,6 +329,18 @@
           <!-- 첨부 칩(2026-08-27, 코덱스 UI 이식) — 키우미 메뉴로 고른 파일/폴더가
                경로 텍스트 대신 칩으로 쌓인다. 전송 시 프롬프트에 동봉되고 비워진다. -->
           <div id="attachChips" class="attach-chips" hidden></div>
+          <!-- 되물을 것들 카드(2026-09-02) — 확인 필요 배너가 약속한 "답하시면 그대로
+               그래프가 갱신됩니다"를 실제로 하는 자리다. 입력창 바로 위에 도킹된다
+               (레퍼런스: 권한 확인 카드). 내용은 chat.js가 채우고, 재료는 백엔드의
+               suggested-questions(AMBIGUOUS로 기록된 관계)다. -->
+          <div id="brainQuestionCard" class="question-card" hidden></div>
+          <!-- 그래프 편집 제안 카드(2026-09-03) — 모델이 athena_graph_view
+               action=propose_edit으로 "이 관계를 이렇게 고칠까요"를 물으면 여기 뜬다.
+               되물을 것들 카드와 **같은 클래스**를 쓴다: 사람이 답해야 하는 일이
+               두 종류인데 모양이 다르면 무엇을 누르는지 매번 새로 배워야 한다.
+               누르면 사람의 답변 문장이 채팅으로 제출되어 추출 경로를 탄다 —
+               모델은 그래프에 직접 쓰지 못한다(graph-edit-proposal.js 참고). -->
+          <div id="graphEditProposalCard" class="question-card" hidden></div>
           <div class="input-row">
             <!-- 키우미(보드 45 v5, 2026-08-27 확정) — 입력창 안 왼쪽, 코덱스 '+' 자리.
                  클릭=옵션 메뉴(파일·폴더 첨부, 모델 설정). 전환은 사이드바 모드 네비.
@@ -339,7 +362,11 @@
                 </svg>
               </span>
             </button>
-            <input id="input" class="input" placeholder="무엇이든 물어보세요" autofocus />
+            <!-- 긴 글은 여러 줄로 자란다(2026-09-02 사용자 지적) — <input>은 한 줄에
+                 갇혀 가로로만 스크롤되므로 <textarea>로 바꿨다. 높이는 chat.js가
+                 내용에 맞춰 늘리고(최대치는 chat.css의 max-height), Enter는 그대로
+                 제출이고 Shift+Enter가 줄바꿈이다. rows=1이 한 줄 시작점이다. -->
+            <textarea id="input" class="input" rows="1" placeholder="무엇이든 물어보세요" autofocus></textarea>
             <div class="lock-hint" id="lockHint" hidden>
               <span id="lockText" class="lock-text">답변 중…</span>
               <span id="lockTime" class="lock-time"></span>
@@ -457,28 +484,47 @@
 <script src="lib/text-release-ladder.js"></script>
 <script src="lib/order-ticket.js"></script>
 <script src="lib/protected-cards.js"></script>
-<script src="lib/graph-mode/cluster-layout.js"></script>
+<script src="lib/graph-mode/cluster-grouping.js"></script>
+<script src="lib/graph-mode/brain-questions.js"></script>
+<script src="lib/graph-mode/graph-edit-proposal.js"></script>
 <script src="lib/graph-mode/graph-mode-store.js"></script>
 <script src="lib/graph-mode/graph-mode-prefs.js"></script>
-<script src="lib/graph-mode/render.js"></script>
 <script src="lib/graph-mode/summary-table.js"></script>
 <script src="lib/graph-mode/theme-clusters.js"></script>
 <script src="lib/graph-mode/hidden-links.js"></script>
 <script src="lib/graph-mode/graph-filters.js"></script>
 <script src="lib/graph-mode/collection-settings.js"></script>
+<!-- 라이브 군집 지도(2026-09-02) — vis-network를 CDN이 아니라 node_modules에서
+     직접 싣는다. 이 앱은 오프라인으로 뜨므로 unpkg를 물면 인터넷 없는 자리에서
+     지도가 통째로 죽는다. lib/vendor/로 사본을 두는 길은 .gitignore의 `vendor/`에
+     걸려 새 클론에서 파일이 조용히 사라진다 — lightweight-charts가 쓰는 경로
+     방식(lib/chart-card.js의 ../node_modules/... 해석)을 그대로 따른다. -->
+<script src="node_modules/vis-network/standalone/umd/vis-network.min.js"></script>
+<script src="lib/graph-mode/live-map.js"></script>
 <script src="lib/graph-mode/controller.js"></script>
 <script src="lib/settings-cards.js"></script>
 <script src="lib/plugin-catalog.js"></script>
+<script src="lib/plugin-mode-adapter.js"></script>
+<script src="lib/plugin-proposal.js"></script>
 <script src="lib/plugin-canvas.js"></script>
 <script src="lib/backtest-spec.js"></script>
 <script src="lib/backtest-code-editor.js"></script>
 <script src="lib/backtest-equity-chart.js"></script>
 <script src="lib/backtest-explain.js"></script>
+<script src="lib/project-ide.js"></script>
+<script src="lib/backtest-visual-editor.js"></script>
+<script src="lib/backtest-technique-nodes.js"></script>
 <script src="lib/backtest-canvas.js"></script>
+<!-- 세션 저장 계약(docs/plans/session-persistence-spec.md) — sidebar.js가 모드별
+     대화 수를 세려면 이 둘이 먼저 window.AthenaLib에 올라와 있어야 한다. -->
+<script src="lib/session-snapshot.js"></script>
+<script src="lib/session-history-view.js"></script>
+<script src="lib/session-workspace.js"></script>
 <script src="lib/history-badge.js"></script>
 <script src="lib/sidebar-mode-nav.js"></script>
 <script src="lib/agent-sidebar-list.js"></script>
 <script src="lib/agent-canvas.js"></script>
+<script src="lib/sidebar-project-menu.js"></script>
 <script src="lib/sidebar.js"></script>
 <script src="shell.js"></script>
 <script src="provider-first-paint.js"></script>

@@ -123,3 +123,37 @@ def test_stage_line_ranges_never_overlap():
     assert spans == sorted(spans)
     for (_, prev_end), (next_start, _) in zip(spans, spans[1:], strict=False):
         assert prev_end < next_start
+
+
+# ── 코드 경로 기본값 (PARAMS의 default를 실행 없이 읽는다) ─────────────────────
+
+
+def test_params_defaults_reads_numeric_defaults():
+    assert flow.params_defaults(GOLDEN) == {"fast": 20, "slow": 60, "atr_mult": 2.0}
+
+
+def test_params_defaults_skips_entries_without_a_numeric_default():
+    """모르는 값을 지어내면 사용자가 쓴 적 없는 파라미터로 전략이 돌아간다."""
+    src = (
+        "PARAMS = {\n"
+        "    'ok': {'default': 5},\n"
+        "    'no_default': {'min': 1, 'max': 9},\n"
+        "    'text': {'default': 'fast'},\n"
+        "    'flag': {'default': True},\n"
+        "    'computed': {'default': 1 + 1},\n"
+        "    'not_a_dict': 3,\n"
+        "}\n"
+    )
+    assert flow.params_defaults(src) == {"ok": 5}
+
+
+def test_params_defaults_is_empty_when_params_is_not_a_literal_dict():
+    assert flow.params_defaults("PARAMS = dict(fast=20)\n") == {}
+    assert flow.params_defaults("def signals(df, p):\n    return df\n") == {}
+    assert flow.params_defaults("PARAMS = {\n") == {}
+
+
+def test_params_defaults_never_executes_the_module():
+    """읽기만 한다 — import도 SystemExit도 일어나지 않는다(build_flow와 같은 규율)."""
+    src = "import socket\nPARAMS = {'a': {'default': 1}}\nraise SystemExit(1)\n"
+    assert flow.params_defaults(src) == {"a": 1}

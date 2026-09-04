@@ -103,6 +103,19 @@ function record(name, ok, data) {
   console.log(`[probe-orb-order-ticket] ${ok ? 'OK' : 'FAIL'} — ${name}: ${JSON.stringify(data)}`);
 }
 
+async function capturePngWithTimeout(win, fileName, timeoutMs = 5000) {
+  const image = await Promise.race([
+    win.webContents.capturePage(),
+    wait(timeoutMs).then(() => null),
+  ]);
+  if (!image) {
+    console.warn(`[probe-orb-order-ticket] 캡처 시간 제한 초과 — ${fileName}`);
+    return false;
+  }
+  fs.writeFileSync(path.join(OUT_DIR, fileName), image.toPNG());
+  return true;
+}
+
 // evalJs가 null 아닌 값을 낼 때까지 기다린다(결함4/5 보강 — 게이트 조회·실행
 // 결과가 비동기라 정적 wait()만으로는 스텝마다 타이밍을 손으로 맞춰야 했다).
 async function pollFor(win, evalJs, deadlineMs, stepMs = 200) {
@@ -232,9 +245,7 @@ async function main() {
   record('07-게이트 통과(계좌 활성) + 필수값 충족으로 실행 버튼이 풀린다', !!gateOpenState && gateOpenState.execDisabled === false && gateOpenState.gateHidden === true, gateOpenState);
 
   await wait(300);
-  await orbWin.webContents.capturePage().then((img) => {
-    fs.writeFileSync(path.join(OUT_DIR, 'probe-orb-order-ticket-rendered.png'), img.toPNG());
-  });
+  await capturePngWithTimeout(orbWin, 'probe-orb-order-ticket-rendered.png');
 
   // 실행 클릭 — athena:order-execute가 셸과 같은 페이로드 계약으로 발화하는지.
   await orbWin.webContents.executeJavaScript("document.getElementById('orbTicketExec').click()");

@@ -19,8 +19,13 @@ from athena_api.routines.models import (
     MAX_EXPIRY,
     MIN_COOLDOWN_S,
     SOURCES,
+    WATCH_MAX_LOOKBACK_DAYS,
+    WATCH_MAX_POLL_S,
+    WATCH_MIN_LOOKBACK_DAYS,
+    WATCH_MIN_POLL_S,
     Condition,
     RoutineSpec,
+    WatchSpec,
     parse_schedule_value,
 )
 
@@ -41,6 +46,23 @@ _MAX_CONSECUTIVE_TICKS = 20
 # 하이픈 금지"는 별도 검사한다(model-prefs.js:21과 동형).
 _MODEL_CHARSET_RE = re.compile(r"^[A-Za-z0-9.\[\]-]{1,64}$")
 _BRIEFING_EFFORTS = frozenset({"low", "medium", "high", "xhigh", "max"})
+
+# 코드 감시(code.watch) — 감시 코드는 조건이 아니라 프로젝트 폴더의 파일이다.
+# 그래서 검증할 것은 "어느 파일인가"뿐이고, 여기서 폴더 밖·확장자·주기를 막는다.
+WATCH_SOURCE = "code.watch"
+_WATCH_DIR = "watch/"
+_ALLOWED_WATCH_KEYS = {
+    "project_id",
+    "path",
+    "version_hash",
+    "params",
+    "poll_interval_s",
+    "lookback_days",
+    "last_fired_at",
+}
+_DRIVE_PREFIX_RE = re.compile(r"^[A-Za-z]:")
+_HEX_RE = re.compile(r"^[0-9a-f]{64}$")
+_MAX_WATCH_PARAMS = 32
 
 
 def _fail(msg: str) -> None:
@@ -105,12 +127,114 @@ def validate_condition(raw: Any) -> Condition:
     )
 
 
+def _validate_watch_path(text: Any) -> str:
+    """감시 코드 경로 — 프로젝트 폴더 안 `watch/` 아래의 .py 하나만 허용한다."""
+    if not isinstance(text, str) or not text.strip():
+        _fail("감시 코드 경로가 비어 있다")
+    path = text.strip().replace("\\", "/")
+    if not path.endswith(".py"):
+        _fail("감시 코드 경로는 .py 파일이어야 한다")
+    if path.startswith("/") or _DRIVE_PREFIX_RE.match(path):
+        _fail("감시 코드 경로는 프로젝트 폴더 안 상대 경로여야 한다")
+    parts = [p for p in path.split("/") if p not in ("", ".")]
+    if any(p == ".." for p in parts):
+        _fail("감시 코드 경로에 상위 폴더(..) 참조를 쓸 수 없다")
+    if not path.startswith(_WATCH_DIR) or len(parts) < 2:
+        _fail("감시 코드는 프로젝트의 watch 폴더 안에 있어야 한다")
+    return path
+
+
+def validate_watch(raw: Any) -> WatchSpec:
+    """code.watch 알람의 watch 블록 검증 — WatchSpec을 만드는 유일한 입구다."""
+    if not isinstance(raw, dict):
+        _fail("watch는 객체여야 한다")
+    extra = set(raw.keys()) - _ALLOWED_WATCH_KEYS
+    if extra:
+        _fail(f"허용되지 않는 watch 키: {sorted(extra)}")
+
+    project_id = raw.get("project_id")
+    if not isinstance(project_id, str) or not project_id.strip():
+        _fail("watch.project_id가 비어 있다")
+
+    path = _validate_watch_path(raw.get("path"))
+
+    version_hash = raw.get("version_hash")
+    if not isinstance(version_hash, str) or not _HEX_RE.match(version_hash):
+        _fail("watch.version_hash는 64자리 sha256 16진 문자열이어야 한다")
+
+    params = raw.get("params", {})
+    if not isinstance(params, dict):
+        _fail("watch.params는 객체여야 한다")
+    if len(params) > _MAX_WATCH_PARAMS:
+        _fail(f"watch.params는 {_MAX_WATCH_PARAMS}개 이하여야 한다")
+    for key, value in params.items():
+        if not isinstance(key, str) or not _KEYWORD_RE.match(key or " "):
+            _fail("watch.params의 이름은 제어문자 없는 문자열이어야 한다")
+        if isinstance(value, bool):
+            continue
+        if isinstance(value, (int, float)):
+            if not math.isfinite(float(value)):
+                _fail("watch.params의 숫자는 유한해야 한다")
+            continue
+        if isinstance(value, str):
+            if len(value) > _MAX_KEYWORD_LEN or not _KEYWORD_RE.match(value or " "):
+                _fail(f"watch.params의 문자열은 {_MAX_KEYWORD_LEN}자 이하여야 한다")
+            continue
+        _fail("watch.params 값은 숫자·불리언·문자열 리터럴만 허용된다")
+
+    poll = raw.get("poll_interval_s", WATCH_MIN_POLL_S)
+    if isinstance(poll, bool) or not isinstance(poll, int):
+        _fail("watch.poll_interval_s는 정수여야 한다")
+    if not WATCH_MIN_POLL_S <= poll <= WATCH_MAX_POLL_S:
+        _fail(f"watch.poll_interval_s는 {WATCH_MIN_POLL_S}~{WATCH_MAX_POLL_S} 범위다")
+
+    lookback = raw.get("lookback_days", 30)
+    if isinstance(lookback, bool) or not isinstance(lookback, int):
+        _fail("watch.lookback_days는 정수여야 한다")
+    if not WATCH_MIN_LOOKBACK_DAYS <= lookback <= WATCH_MAX_LOOKBACK_DAYS:
+        _fail(
+            f"watch.lookback_days는 {WATCH_MIN_LOOKBACK_DAYS}~"
+            f"{WATCH_MAX_LOOKBACK_DAYS} 범위다"
+        )
+
+    last_fired_at = raw.get("last_fired_at")
+    if last_fired_at is not None:
+        if not isinstance(last_fired_at, str):
+            _fail("watch.last_fired_at은 ISO8601 문자열이어야 한다")
+        try:
+            datetime.fromisoformat(last_fired_at)
+        except ValueError:
+            _fail("watch.last_fired_at은 ISO8601 문자열이어야 한다")
+
+    return WatchSpec(
+        project_id=project_id,
+        path=path,
+        version_hash=version_hash,
+        params=dict(params),
+        poll_interval_s=poll,
+        lookback_days=lookback,
+        last_fired_at=last_fired_at,
+    )
+
+
 def validate_draft(raw: Any, *, now: datetime | None = None) -> RoutineSpec:
     """draft 생성 입력 전체를 검증해 RoutineSpec(status=draft)을 만든다."""
     if not isinstance(raw, dict):
         _fail("draft 본문은 객체여야 한다")
 
     condition = validate_condition(raw.get("condition"))
+
+    watch_raw = raw.get("watch")
+    if condition.source == WATCH_SOURCE:
+        if watch_raw is None:
+            _fail("코드 감시 알람에는 watch 블록이 필요하다")
+        if not (condition.op == "==" and condition.value is True):
+            _fail("코드 감시 조건은 감시 함수 발화(== true) 하나뿐이다")
+        watch = validate_watch(watch_raw)
+    else:
+        if watch_raw is not None:
+            _fail("watch 블록은 코드 감시 알람에서만 쓸 수 있다")
+        watch = None
 
     symbol = raw.get("symbol")
     if not isinstance(symbol, str) or not _SYMBOL_RE.match(symbol):
@@ -164,6 +288,7 @@ def validate_draft(raw: Any, *, now: datetime | None = None) -> RoutineSpec:
         goal=goal,
         briefing_model=briefing_model,
         briefing_effort=briefing_effort,
+        watch=watch,
     )
     if not note:
         spec.note = spec.human_summary()

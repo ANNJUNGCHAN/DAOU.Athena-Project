@@ -3711,5 +3711,104 @@
   ],
   "unbound_reason": {
     "detail:kt50032:gold_trade_history|proc_brch_nm": "레일 '처리자 · 처리점' 한 텍스트의 뒷값 — 슬롯 하나에 mapping 2개를 줄 수 없어 s122 extra_fields로 선언했다"
+  },
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "금현물 잔고·거래내역",
+    "eyebrow": "CC-01 / 3ODO-0",
+    "source_board": "CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
+    "elements": [
+      {
+        "source_slot_id": "s016",
+        "label": "잔고평가액",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "16,050,000원"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "손익율",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+4.82%"
+      },
+      {
+        "source_slot_id": "s022",
+        "label": "보유수량",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "125g"
+      },
+      {
+        "source_slot_id": "s038",
+        "label": "종목명",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "금 99.99K 1g",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s039",
+        "label": "종목코드",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "04020000",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 63,
+      "shown": 5,
+      "hidden": 58,
+      "scalars": 2,
+      "rows": 1
+    },
+    "fold_note": "스칼라 2개 · 행 1개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
+      "elements": "잔고평가액 · 손익율 · 보유수량 · 종목명 · 종목코드",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 1개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
   }
 }

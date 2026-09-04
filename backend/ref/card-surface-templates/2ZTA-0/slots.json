@@ -5861,5 +5861,104 @@
       "kor": "전일대비기호",
       "unbound_reason": "± 부호와 상승·하락 색으로만 그려지고 독립 텍스트 노드가 없다. extra_fields는 저작 메모일 뿐 런타임 resolver가 합성 렌더하지 않으므로 정확히 선택할 수 없다"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 한도소진율 증가",
+    "eyebrow": "CC-05 / 2ZTA-0",
+    "source_board": "CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "elements": [
+      {
+        "source_slot_id": "s013",
+        "label": "소진율증가",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 1,
+          "tone": "change"
+        },
+        "paper_text": "+2.9%p"
+      },
+      {
+        "source_slot_id": "s016",
+        "label": "한도소진율",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "94.2%"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "수량",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "128종목"
+      },
+      {
+        "source_slot_id": "s012",
+        "label": "핵심 지표",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "소진율 증가 1위",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s023",
+        "label": "기준 시각",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "time",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "09:42 조회",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 122,
+      "shown": 5,
+      "hidden": 117,
+      "scalars": 2,
+      "rows": 6
+    },
+    "fold_note": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+      "elements": "소진율증가 · 한도소진율 · 수량 · 핵심 지표 · 기준 시각",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

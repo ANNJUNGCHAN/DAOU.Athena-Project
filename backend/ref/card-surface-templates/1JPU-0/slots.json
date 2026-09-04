@@ -9783,5 +9783,78 @@
       "expanded_board": null,
       "display_dup": true
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "table",
+    "title": "호가 정본 — 실시간 통합 호가",
+    "eyebrow": "CC-04 / 1JPU-0",
+    "source_board": "A04 · 호가 정본 — 실시간 통합 호가",
+    "elements": [
+      {
+        "source_slot_id": "s126",
+        "label": "매도10호가잔량",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "shares",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "2,160주",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s127",
+        "label": "매도호가10",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "150,940",
+        "rank": 2
+      },
+      {
+        "source_slot_id": "s128",
+        "label": "현재가",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+90",
+        "rank": 3
+      }
+    ],
+    "fold_counts": {
+      "total": 200,
+      "shown": 3,
+      "hidden": 197,
+      "rows": 18
+    },
+    "fold_note": "외 18개 행을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "A04 · 호가 정본 — 실시간 통합 호가",
+      "elements": "매도10호가잔량 · 매도호가10 · 현재가",
+      "grammar": "table",
+      "folded": "외 18개 행을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

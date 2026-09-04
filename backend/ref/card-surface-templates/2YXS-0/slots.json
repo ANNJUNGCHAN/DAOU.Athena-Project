@@ -12283,5 +12283,104 @@
     "s052/stk_infr": "종목 셀 둘째 줄 '007660 · 코스피 · 증거금 40%' 한 텍스트의 셋째 값이라 독립 슬롯이 없다. s052에 alt_mappings로 도달시키고 낱값 자리는 extra_fields에 적었다.",
     "s054/pred_pre_sig": "전일대비기호는 ± 부호와 상승·하락 색으로만 그려져 독립 텍스트 노드가 없다. s054(현재가 셀 둘째 줄)에 alt_mappings로 도달시켰다.",
     "병기 paired_with 보류 21": "종목 셀 둘째 줄 19개(s052·s066·…·s304)와 상한 행 호가 셀 둘째 줄 2개(s059·s073)는 같은 셀 첫 줄이 '이수페타시스'·'매도 해당 없음'처럼 숫자가 없어 추출기가 매번 kind:label로 다시 만든다. 검사 c는 값 슬롯만 짝으로 받으므로 링크를 비워 둔다 — 나머지 93개는 같은 셀 첫 줄로 짝지었다."
+  },
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 상하한가",
+    "eyebrow": "CC-03 / 2YXS-0",
+    "source_board": "CC-03 / R01-T4-2 · 순위 — 상하한가",
+    "elements": [
+      {
+        "source_slot_id": "s017",
+        "label": "핵심 지표",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "2"
+      },
+      {
+        "source_slot_id": "s024",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "±1% 이내"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "보조 지표",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "0"
+      },
+      {
+        "source_slot_id": "s023",
+        "label": "핵심 지표",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "14",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s026",
+        "label": "기준 시각",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "time",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "09:02",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 266,
+      "shown": 5,
+      "hidden": 261,
+      "scalars": 2,
+      "rows": 17
+    },
+    "fold_note": "스칼라 2개 · 행 17개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T4-2 · 순위 — 상하한가",
+      "elements": "핵심 지표 · 변화 · 보조 지표 · 기준 시각",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 17개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
   }
 }

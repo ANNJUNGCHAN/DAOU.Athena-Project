@@ -1164,6 +1164,9 @@ def detect_tables(
     explicit_tables: dict[str, dict] | None = None,
 ) -> list[dict]:
     """반복 행 구조(라벨 헤더 행 + 같은 폭 형제 행 3개 이상)를 표로 본다."""
+    # G1 only carries the authoritative directive forward. G3 resolves explicit
+    # table shapes; leaving this unused keeps existing table discovery unchanged.
+    _ = explicit_tables
     node_of = {id(el): node for el, node in zip(elements, nodes)}
     explicit = explicit_tables or {}
     known = {node.node_id for node in nodes}

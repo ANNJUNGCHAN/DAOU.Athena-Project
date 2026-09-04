@@ -2086,6 +2086,18 @@ async function main() {
       await sendRestEnvelope(win, cc03, rankingFixture, cc03Index + 1, {
         mode: 'ranking', section: 'ranked-results',
       });
+      // 칩은 operationRef를 어떤 속성에도 싣지 않는다(title 포함) — 제품 DOM의 원시
+      // 식별자 누출 게이트(verify-semantic-workspaces)와 같은 계약이다(2026-09-04).
+      // 그래서 축은 한국어 라벨로 찾는다. 라벨은 렌더러와 같은 표(ranking-axis.js)에서 읽는다.
+      const axisItems = Object.values(require('./lib/ranking-axis').RANKING_AXES)
+        .flatMap((groups) => groups.flatMap((group) => group.items));
+      const axisLabelFor = (ref) => {
+        const item = axisItems.find((entry) => entry.operationRef === ref);
+        if (!item) throw new Error(`ranking axis ${ref} missing from ranking-axis.js`);
+        return item.label;
+      };
+      const activeAxisLabel = axisLabelFor('base:ka10019');
+      const siblingAxisLabel = axisLabelFor('base:ka10024');
       const rankingDom = await win.webContents.executeJavaScript(`(() => {
         const root = document.querySelector('#grid .integrated-card[data-card-id="CC-03"]');
         const tabs = Array.from(root.querySelectorAll('.integrated-card-tab'));
@@ -2099,14 +2111,15 @@ async function main() {
         const shell = window.AthenaShell || (window.AthenaShell = {});
         const priorSeed = shell.seedChatInput;
         shell.seedChatInput = (text) => seeded.push(text || '');
-        const target = chips.find((chip) => chip.title === 'base:ka10024');
+        const target = chips.find((chip) => chip.textContent.trim() === ${JSON.stringify(siblingAxisLabel)});
         if (target) target.click();
         shell.seedChatInput = priorSeed;
         return {
           ranking_tab_count: rankingTabs.length,
           chip_count: chips.length,
-          active_titles: active.map((chip) => chip.title),
+          active_labels: active.map((chip) => chip.textContent.trim()),
           active_disabled: active.every((chip) => chip.disabled),
+          leaked_titles: chips.map((chip) => chip.getAttribute('title')).filter(Boolean),
           seeded,
         };
       })()`);
@@ -2116,8 +2129,11 @@ async function main() {
       if (rankingDom.chip_count !== 18) {
         throw new Error(`CC-03 ranking axis chips ${rankingDom.chip_count} !== 18`);
       }
-      if (rankingDom.active_titles.join(',') !== 'base:ka10019' || !rankingDom.active_disabled) {
-        throw new Error(`ranking active axis mismatch: ${JSON.stringify(rankingDom.active_titles)}`);
+      if (rankingDom.active_labels.join(',') !== activeAxisLabel || !rankingDom.active_disabled) {
+        throw new Error(`ranking active axis mismatch: ${JSON.stringify(rankingDom.active_labels)} !== ${JSON.stringify(activeAxisLabel)}`);
+      }
+      if (rankingDom.leaked_titles.length) {
+        throw new Error(`ranking axis chips leak raw refs via title: ${JSON.stringify(rankingDom.leaked_titles)}`);
       }
       if (rankingDom.seeded.length !== 1 || !/[가-힣]/.test(rankingDom.seeded[0])) {
         throw new Error(`ranking axis click did not seed chat input: ${JSON.stringify(rankingDom.seeded)}`);

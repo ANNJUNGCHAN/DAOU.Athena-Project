@@ -34,7 +34,11 @@ function el(name, className) {
 // (backend/athena_api/brain/ontology.py의 SourceTier: "DETERMINISTIC은
 // 체결·잔고처럼... CONVERSATIONAL은 대화에서 LLM이 추론한 것") — 그래서 없는
 // 필드를 기다리지 않고 tier를 출처로 번역해 넣는다.
-const SOURCE_TIER_LABELS = { deterministic: '체결·잔고', conversational: '대화' };
+// manual — controller.js PANEL_TIER_LABELS와 같은 어휘를 쓴다(표에서 고른 것과
+// 패널에 뜬 것이 같은 말로 불려야 한다).
+const SOURCE_TIER_LABELS = {
+  deterministic: '체결·잔고', conversational: '대화', manual: '직접 수정',
+};
 
 // 최근 열(06 §7-1) — 일/주 단위 상대 시간. routine-turn.js의 relativeText는
 // 분/시간 단위(능동 턴 배지용)라 이 용도엔 맞지 않아 따로 둔다.
@@ -270,12 +274,18 @@ function renderConfirmBanner(container, hintCount, onCtaClick) {
   title.textContent = `확인이 필요한 것 ${hintCount}건`;
   container.appendChild(title);
   const body = el('span', 'confirm-banner-body');
-  body.textContent = '체결과 대화가 어긋나는 성향이 있습니다 — 답하시면 그대로 그래프가 갱신됩니다';
+  // 반영 시점을 정직하게 적는다(2026-09-03 실사용). 답변은 채팅으로 나가고, 그래프는
+  // **다음 수집 배치 때** 그 답을 추출해 갱신한다(lifespan.py IngestionCoordinator) —
+  // 즉시가 아니다. "그대로 갱신됩니다"라고 쓰면 누른 직후 숫자가 안 줄어드는 것을
+  // 고장으로 읽고 같은 답을 반복하게 된다(실제로 그렇게 됐다).
+  body.textContent = '체결과 대화가 어긋나는 성향이 있습니다 — 답하시면 다음 수집 때 그래프에 반영됩니다';
   container.appendChild(body);
   const cta = el('button', 'confirm-banner-cta');
   cta.setAttribute('type', 'button');
   cta.textContent = '채팅에서 답하기';
-  if (typeof onCtaClick === 'function') cta.addEventListener('click', onCtaClick);
+  // 건수를 함께 넘긴다(2026-09-02) — 받는 쪽이 "확인이 필요한 것 N건"을 그대로
+  // 질문에 쓸 수 있어야 채팅과 배너가 같은 숫자를 말한다.
+  if (typeof onCtaClick === 'function') cta.addEventListener('click', () => onCtaClick(hintCount));
   container.appendChild(cta);
   return container;
 }

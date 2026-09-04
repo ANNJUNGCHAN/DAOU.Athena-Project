@@ -412,7 +412,7 @@ def _view_instance_id(
     )
     identity = {
         "request_scope": request_scope,
-        "task": {"recipe_id": recipe_id},
+        "task": {"operation_ref": operation_ref, "recipe_id": recipe_id},
         "target_query": {
             "arguments": _canonical_identity_value(arguments),
         },

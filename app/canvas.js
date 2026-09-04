@@ -190,6 +190,14 @@ function discardCanvasTabDeck() {
 }
 
 function ensureCanvasTabDeck() {
+  if (canvasTabDeck && !canvasTabDeck.element.isConnected) {
+    // 덱이 밖에서 떨어져 나갔다(grid.replaceChildren 류 — verify-semantic-workspaces가
+    // recipe 사이에 그렇게 비운다). 캐시만 남은 덱에 카드를 넣으면 카드가 문서 밖으로
+    // 사라진다(2026-09-04 실측: 두 번째 recipe의 호가 카드가 통째로 증발). 남은 탭은
+    // 정식 경로로 닫아 세션·실시간 리스를 풀고, 덱은 새로 만든다.
+    for (const key of canvasTabDeck.keys()) canvasTabDeck.close(key);
+    canvasTabDeck = null;
+  }
   if (canvasTabDeck) return canvasTabDeck;
   canvasTabDeck = canvasTabs.createDeck({
     onClose: (card) => {
@@ -459,8 +467,49 @@ async function loadEmptyCanvasExtras() {
 }
 
 // ---------- 캔버스 카드 추가/초기화/하이라이트 ----------
-window.athena.on('athena:add-canvas', ({ type }) => {
-  addCard(type);
+// ---------- 세션 카드 스택 보고(42번 보드) ----------
+// 카드 DOM에 그린 근거(봉투)를 매달아 두고, 추가·닫기·비우기 뒤마다 그리드의
+// 스택을 main에 보고한다. main이 세션에 적고, 복원은 같은 봉투를 같은 페인트
+// 채널로 다시 흘려 그린다 — 별도 렌더러를 두지 않는다. 봉투가 없는 카드(알림·
+// 상태 카드)는 스택에 넣지 않는다: 그릴 근거가 없는 것을 있다고 저장하지 않는다.
+// 렌더 함수들은 카드 노드를 돌려주지 않는 것이 많다(renderTable은 문자열, 일부는 undefined).
+// 그리드에 마지막으로 붙은 카드가 곧 방금 그린 카드다 — 그것을 태그한다.
+function lastCardOr(node) {
+  if (node && node.classList && node.classList.contains('card')) return node;
+  const cards = grid.querySelectorAll('.card');
+  return cards.length ? cards[cards.length - 1] : null;
+}
+
+function tagSessionCard(node, meta) {
+  if (!node || !node.classList || !node.classList.contains('card') || !meta) return node;
+  // 재생(복원)된 카드는 저장된 id를 그대로 쓴다 — 새 id를 주면 같은 카드가 두 장으로 저장된다.
+  if (meta.cardId) node.dataset.sessionCardId = meta.cardId;
+  if (!node.dataset.sessionCardId) node.dataset.sessionCardId = crypto.randomUUID();
+  node.__athenaSessionCard = meta;
+  return node;
+}
+
+function reportSessionCards() {
+  const cards = [];
+  for (const node of grid.querySelectorAll('.card')) {
+    const meta = node.__athenaSessionCard;
+    if (!meta) continue;
+    cards.push({
+      cardId: node.dataset.sessionCardId,
+      kind: meta.kind || null,
+      channel: meta.channel,
+      envelope: meta.envelope || null,
+      protected: node.dataset.protected === 'true',
+    });
+  }
+  try { window.athena.send('athena:session-cards', { cards }); } catch { /* 채널이 없는 하네스 — 보고는 그림의 필요조건이 아니다 */ }
+}
+
+window.athena.on('athena:add-canvas', ({ type, sessionCardId }) => {
+  Promise.resolve(addCard(type)).then((node) => {
+    tagSessionCard(lastCardOr(node), { channel: 'fixture', kind: type, envelope: { type }, cardId: sessionCardId || null });
+    reportSessionCards();
+  });
 });
 
 // 카드 비우기 — 옛 판에서는 main이 캔버스 창을 수축시킬 때 `athena:clear-canvases`
@@ -476,6 +525,7 @@ function clearCanvases() {
     discardCanvasTabDeck();
   }
   activeDatasetId = null;
+  reportSessionCards();
 }
 
 window.AthenaShell.registerCanvasClear(clearCanvases);
@@ -490,6 +540,8 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
       operation_args: payload.operationArgs,
     });
     const card = await addLiveCard({ status: 'success', envelope });
+    tagSessionCard(lastCardOr(card), { channel: 'rest', kind: envelope.canvas_type || null, envelope });
+    reportSessionCards();
     if (card && REST_RETRY_CARD_ID_PATTERN.test(String(payload.retryCardId || ''))) {
       Object.defineProperty(card, '__athenaRestRetryCardId', {
         value: String(payload.retryCardId), configurable: true, writable: false,
@@ -611,6 +663,8 @@ window.athena.on('athena:add-canvas-live', async (result) => {
   const rendererReceivedAt = performance.now();
   const node = await addLiveCard(result);
   if (!node || !result || (result.status !== 'success' && result.status !== 'fallback')) return;
+  tagSessionCard(lastCardOr(node), { channel: 'live', kind: result.envelope && result.envelope.canvas_type || null, envelope: result.envelope || null, cardId: result.sessionCardId || null });
+  reportSessionCards();
   window.AthenaProviderFirstPaint.claimFirstVisible({
     clientSubmitId: result.clientSubmitId,
     turnId: result.turnId,
@@ -668,7 +722,10 @@ async function addLiveCard(result) {
 function renderPrimaryEnvelope(envelope, options = {}) {
   // 표면 계약이 실려 오면 Paper 보드 원문을 그대로 마운트한다(D1) — 런타임 레이아웃
   // 재조립 없이 텍스트 노드만 바뀐다. 계약이 없으면 기존 경로 그대로.
-  const boardCard = renderBoardSurfaceCard(envelope);
+  // 단, D1의 예외 — 앱 렌더러(AITS 차트·호가 래더·주문 초안)가 primary인 recipe는
+  // 보드가 그 렌더러를 품을 길(primary.renderer)이 아직 없어 가로채면 라이브
+  // 표면이 정적 목업으로 바뀐다(2026-09-04 실측). 판정은 paper-card-routing이 든다.
+  const boardCard = paperCardRouting.preservesAppPrimary(envelope) ? null : renderBoardSurfaceCard(envelope);
   if (boardCard) return boardCard;
   if (envelope.canvas_type === 'table' && !envelope.fell_back) return renderMcpTable(envelope);
   if (envelope.canvas_type === 'stream' && !envelope.fell_back) return renderLiveStream(envelope);
@@ -2079,6 +2136,7 @@ function closeCard(card) {
   // 부모에서 remove → 그리드가 비면 캔버스 접기는 ui-kit.js의
   // removeCard로 settings-cards.js와 공용화했다(포니테일 감사).
   removeCard(card);
+  reportSessionCards();
 }
 
 function cardCloseButton(card) {
@@ -2400,11 +2458,35 @@ let lastThemeClusterCount = 0;
 // 핑크 점선·컨텍스트 패널의 "숨은" 관계 행 전부 이 한 번의 fetch에서 나온다.
 let lastSurprisingConnections = [];
 
+// 그래프 화면의 CTA가 채팅에 시작 문장을 심는 공용 다리(2026-09-02).
+//
+// 보드 43 "새 작업은 채팅에서" 원칙의 seedChatInput 버스를 그대로 쓴다 —
+// lib/agent-canvas.js의 "＋ 새 작업 · 채팅에서"와 같은 경로다. **보내지는 않는다**:
+// 사람이 문장을 읽고 고친 뒤 Enter를 누른다.
+//
+// 그래프 모드에서는 이 문장이 곧 모델의 입력이 되고, 모델은 live-prompt.js의
+// 그래프 접두로 화면 상태까지 함께 받는다 — 그래서 "확인이 필요한 것 3건"처럼
+// 화면에만 있던 숫자를 채팅이 그대로 이어받는다.
+function seedGraphChat(text) {
+  if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+    window.AthenaShell.seedChatInput(text);
+    return true;
+  }
+  // 버스가 없으면(단독 로드 등) 최소한 입력창으로 데려간다 — 옛 동작.
+  const inputEl = document.getElementById('input');
+  if (inputEl) inputEl.focus();
+  return false;
+}
+
 const graphMode = window.AthenaLib.GraphModeController.createGraphModeController({
   store: window.AthenaLib.GraphModeStore,
-  layout: window.AthenaLib.GraphClusterLayout,
-  render: window.AthenaLib.GraphRender,
+  grouping: window.AthenaLib.ClusterGrouping,
   prefs: window.AthenaLib.GraphModePrefs,
+  // 라이브 군집 지도(2026-09-02) — 헤더의 "움직이는 그래프" 토글이 켤 때만
+  // 실제로 만들어진다. vis-network가 없으면(vendoring 실패) 조용히 꺼진다.
+  createLiveMap: window.AthenaLib.GraphLiveMap
+    ? window.AthenaLib.GraphLiveMap.createLiveMap
+    : undefined,
   elements: {
     summary: document.getElementById('mosaic'),
     // 가시성 전용 — graphMode.applyVisibility() 하나만 이 hidden을 건드린다.
@@ -2425,8 +2507,11 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     // (모드 네비 활성 하이라이트는 lib/sidebar-mode-nav.js 소유 — 리프 1.2.2.)
     // 캔버스 영역 — 빈 상태 모드별 변형(보드 46)을 CSS로 가르는 data-mode 축.
     canvasRegion: document.getElementById('canvasRegion'),
-    // 모드별 채팅 헤더(보드 38) — 그래프 모드에서만 보인다.
+    // 모드별 채팅 헤더(보드 38 개정) — 그래프·백테스트 모드에서 보인다. 제목·부제
+    // 문구는 graphMode.applyVisibility()가 모드별로 바꾼다.
     chatHead: document.getElementById('chatModeHead'),
+    chatHeadTitle: document.querySelector('#chatModeHead .chat-mode-head-title'),
+    chatHeadSub: document.querySelector('#chatModeHead .chat-mode-head-sub'),
     // 그래프 뷰 본문 — 렌더·클릭위임·크기측정 전용(가시성은 위 graph가 계속
     // 소유). #graphCanvas 안 #graphHeader의 영구 형제라 다시 그려도 헤더는 안 지워진다.
     graphBody: document.getElementById('graphBody'),
@@ -2455,9 +2540,30 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   onError: (err) => console.warn('[graph-mode] cluster-map 실패', err),
   // 공통 패널 CTA "채팅에서 답하기"(보드 07 §10-5, 스텝8) — 06 확인 필요 배너의
   // onConfirmCta와 같은 최소 구현(새 기능 발명 없음, 입력창 포커스만).
-  onPanelCta: () => {
-    const inputEl = document.getElementById('input');
-    if (inputEl) inputEl.focus();
+  // 공통 패널 CTA(2026-09-02) — 배너 CTA와 같은 이유로 실제 질문을 심는다.
+  // 문구는 패널의 리드인과 같은 축이다: 숨은 연관이면 "왜 이어졌나", 체결·잔고와
+  // 대화가 어긋나면 "어느 쪽이 실제인가".
+  //
+  // 문장은 짧고 사람 말이어야 한다(2026-09-03 사용자 지적 "문장이 너무 길고
+  // 기계적이다"). 두 가지를 걷어냈다:
+  //   ① 모델 지시문 꼬리("사실과 추론을 구분해서", "근거가 약하면 그렇다고 말해줘").
+  //      사람이 자기 입으로 그렇게 쓰지 않는다. 그리고 그 지시는 이미 그래프 접두가
+  //      하고 있다(live-prompt.js) — 여기서 또 쓰면 두 벌이다.
+  //   ② 주격 조사. target은 `"삼성화재"`처럼 따옴표로 싸여 있어서 `${target}이`가
+  //      **"삼성화재"이**로 렌더됐다(받침 판정이 닿는 마지막 글자가 따옴표다).
+  //      이름 뒤에 줄표를 두면 조사가 아예 필요 없고 채팅 말투로도 자연스럽다.
+  onPanelCta: (ask) => {
+    const name = ask && ask.name ? String(ask.name) : null;
+    const target = name ? `"${name}"` : '지금 고른 것';
+    if (ask && ask.kind === 'hidden') {
+      seedGraphChat(`${target} — 왜 다른 군집과 이어졌어?`);
+      return;
+    }
+    if (ask && ask.kind === 'conflict') {
+      seedGraphChat(`${target} — 체결과 대화가 왜 다르게 나와?`);
+      return;
+    }
+    seedGraphChat(`${target} — 그래프가 뭘 알고 있어?`);
   },
   // 스텝14 — 스텝11(숨은 연관 군집 쌍)·13(숨은 연관 엔티티 쌍)의 실배선. 위
   // lastSurprisingConnections 캐시를 그대로 읽는다(이중 fetch 없음).
@@ -2478,12 +2584,66 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   },
   // 보드 05 수집·노출 — 탭에 들어올 때마다 다시 그린다(설정 오버레이가 같은
   // 저장소를 보는 두 번째 입구라, 거기서 바꾸고 돌아왔을 수 있다).
+  // 패널 관계 목록의 삭제 손잡이(Paper 보드 04, 2026-09-03) — 화면에서 바로 고치는
+  // 입구다. 확정 카드와 **같은 백엔드 입구**를 쓴다(athena:brain-retract-relation):
+  // 두 화면이 다른 경로로 지우면 한쪽만 이력을 남기거나 한쪽만 리비전을 올리는
+  // 어긋남이 생긴다. 여기서는 relation_id를 모르므로 (출발·도착·관계) 삼중을 넘기고
+  // 백엔드가 id를 계산한다(그 해시를 렌더러에서 다시 구현하면 두 벌이 된다).
+  onRelationDelete: async (target) => {
+    let res = null;
+    try {
+      res = await window.athena.invoke('athena:brain-retract-relation', {
+        subjectId: target.subjectId,
+        objectId: target.objectId,
+        kind: target.kind,
+      });
+    } catch (err) {
+      console.warn('[graph-mode] 관계 삭제 실패', err);
+      return;
+    }
+    // 실패를 조용히 넘기지 않는다 — 사람은 지웠다고 믿고 화면을 떠난다(§0 정직성).
+    // 성공하면 main이 athena:brain-graph-updated를 쏘아 화면 전체가 다시 읽힌다.
+    if (!res || !res.ok || res.removed === false) {
+      console.warn('[graph-mode] 관계 삭제 반영 안 됨', res);
+    }
+  },
   onEnterSettings: () => renderGraphCollectionSettings(),
   // 헤더 필터 칩(보드 03/04) — 기간·최소 연결 수를 배치 전에 건다.
   filters: window.AthenaLib.GraphFilters,
   getFilters: () => window.AthenaLib.GraphModePrefs.readPrefs(),
 });
 window.AthenaCanvasMode = graphMode;
+
+// ---------- 그래프 워크스페이스(42번 보드 "환경 전체가 저장된다") ----------
+// 그래프 화면의 상태 가운데 공개 API로 되돌릴 수 있는 것 — 서브뷰(요약/지도/설정)와
+// 고른 노드 — 를 세션에 남긴다. 컨트롤러는 변경 이벤트를 내지 않으므로 그래프 화면이
+// 보이는 동안 1초마다 상태를 읽어 바뀐 조각만 보고한다. 되돌릴 수 없는 것(펼친 군집)은
+// 저장하지 않는다 — 있다고 저장하고 못 돌리는 편이 더 나쁘다.
+(function registerGraphWorkspace() {
+  const bus = window.AthenaSessionWorkspace;
+  if (!bus) return;
+  const snapshotOf = () => {
+    const s = graphMode.state || {};
+    return { surface: s.surface || null, selectedEntityId: s.selectedEntityId || null };
+  };
+  let lastReported = null;
+  setInterval(() => {
+    if (!graphMode.state || graphMode.state.view !== 'graph') return;
+    const key = JSON.stringify(snapshotOf());
+    if (key === lastReported) return;
+    lastReported = key;
+    bus.report({ graph: JSON.parse(key) });
+  }, 1000);
+  bus.register('graph', {
+    async restore(workspace) {
+      const g = workspace && workspace.graph;
+      if (!g) return;
+      lastReported = JSON.stringify({ surface: g.surface || null, selectedEntityId: g.selectedEntityId || null });
+      if (g.surface) await graphMode.setSurface(g.surface);
+      if (g.selectedEntityId) graphMode.selectNode(g.selectedEntityId);
+    },
+  });
+})();
 // 부팅을 순수 답변 모드로 고정한다(US-007) — 정적 HTML의 기본 hidden 속성이
 // 우연히 답변 모드와 맞아떨어지는 데 기대지 않고, 여기서 명시적으로 한 번
 // 그린다. 이후 모든 가시성 변경은 toggle()/setView()/setAvailable() 안에서 이
@@ -2536,6 +2696,15 @@ function pluginMarketplaceRows() {
   }));
 }
 
+// 제안 봉투의 조립·모드 판정은 순수 모듈이 한다. 이 파일은 IPC만 잇는다.
+const pluginProposal = window.AthenaLib.PluginProposal;
+const pluginModeAdapter = window.AthenaLib.PluginModeAdapter;
+// athena:mcp-list가 준 가장 최근 판번호. 아직 못 받았으면 null이고, 그때는
+// 만료 판정을 하지 않는다(모르는 것을 낡았다고 말하지 않는다).
+let pluginRevision = null;
+// 화면에 떠 있는 미해결 봉투. pending 복원과 GUI·모델 제안이 함께 쌓인다.
+const pluginProposals = [];
+
 const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
   container: document.getElementById('pluginCanvas'),
   // 실제 목록이 도착하기 전에도 샘플 폴백을 타지 않도록 항상 명시적으로 넘긴다.
@@ -2543,18 +2712,137 @@ const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
   recommended: [],
   marketplaces: [],
   onPermission: (plugin) => { void pluginProbe(plugin && plugin.id); },
-  onSavePermissions: (plugin, features) => pluginSaveTools(plugin && plugin.id, features),
   onManage: () => { void pluginRefresh(); },
-  onStageSnippet: (snippet) => pluginStageSnippet(snippet),
-  onApproveServer: (staged) => pluginApproveStaged(staged),
-  onDiscardStaged: (staged) => { void pluginDiscardStaged(staged); },
-  onApproveInstall: (plugin) => pluginInstallCatalogEntry(plugin),
-  onTogglePlugin: (plugin, enabled) => pluginSetEnabled(plugin && plugin.id, enabled),
   onToggleMarketplace: (marketplace, enabled) => pluginSetMarketplaceEnabled(marketplace && marketplace.id, enabled),
-  onRemovePlugin: (plugin) => pluginRemove(plugin && plugin.id),
+  // GUI 진입 6종(설치·허용·철회·켜기끄기·삭제·직접 등록)이 전부 여기로 합류한다.
+  // 버튼은 봉투를 만들 뿐이고, athena:mcp-*를 부르는 실행은 승인 하나뿐이다.
+  onPropose: (spec, reason) => { mountPluginProposal(buildGuiProposal(spec, reason)); },
+  onApproveProposal: (envelope) => pluginDecide('athena:plugin-approve', envelope, { fromCard: true }),
+  onRejectProposal: (envelope) => pluginDecide('athena:plugin-reject', envelope, { fromCard: true }),
+  // 만료 카드를 지우는 것은 거부가 아니다 — 대기 목록에서만 빼고 채팅에는 알리지 않는다.
+  onDismissProposal: (envelope) => { void pluginForgetProposal(envelope); },
+  // 감사 로그는 읽기만 한다 — 실행 경로가 아니라서 승인 카드를 거치지 않는다.
+  onAuditLog: () => pluginAuditLog(),
 });
 pluginCanvas.mount();
-window.AthenaPluginCanvas = pluginCanvas;
+
+// 모드 재진입마다 미해결 제안을 되살린다. 사이드바(lib/sidebar.js)는 진입할 때
+// setView('hub')만 부르므로 복원 훅의 거처는 이 래퍼다 — 사이드바는 만지지 않는다.
+// plugin-canvas.js는 IPC를 모른다: invoke는 여기서 하고 결과만 setProposals로 넣는다.
+window.AthenaPluginCanvas = {
+  ...pluginCanvas,
+  setView(view) {
+    pluginCanvas.setView(view);
+    void pluginRestorePending();
+  },
+};
+
+// 감사 로그 조회. 실패 원문은 IPC 내부 문구라 화면에 올리지 않는다 — 사람이
+// 읽을 한 줄로 바꿔 던지고, 카드가 그 줄과 '다시 확인'을 함께 보여준다.
+async function pluginAuditLog() {
+  try {
+    return await window.athena.invoke('athena:mcp-audit');
+  } catch {
+    throw new Error('등록 목록을 확인하지 못했습니다');
+  }
+}
+
+function buildGuiProposal(spec, reason) {
+  return Array.isArray(spec)
+    ? pluginProposal.buildBatchProposal(spec, reason, pluginRevision, 'gui')
+    : pluginProposal.buildProposal(spec, reason, pluginRevision, 'gui');
+}
+
+// 모델 경로와 GUI 경로가 만나는 단 하나의 문. 모드 밖이면 봉투를 버린다 —
+// 카드도 그리지 않고 대기 목록에도 넣지 않는다(보관했다 부활시키지 않는다).
+// 채팅이 한 줄로 알릴 수 있게 렌더러 안에서만 신호를 낸다.
+function mountPluginProposal(envelope) {
+  if (!envelope) return false;
+  // 모양이 어긋난 봉투는 그리지도, 대기 등록하지도 않는다 — 반쪽 카드를 세우면
+  // 승인 버튼이 메인에서 거부될 것을 화면만 제안으로 그린다.
+  if (!pluginProposal.validateProposal(envelope).ok) return false;
+  if (pluginModeAdapter.currentMode() !== 'plugin') {
+    window.dispatchEvent(new CustomEvent('athena:plugin-out-of-mode', { detail: { envelope } }));
+    return false;
+  }
+  // 같은 번호가 다시 오면 앞의 카드(처리된 것일 수 있다)를 빼고 새 봉투로 건다.
+  dropPluginProposal(envelope);
+  pluginProposals.push(envelope);
+  pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });
+  // 대기 등록은 카드를 그린 뒤의 단방향 통보 하나뿐이다(응답을 기다리지 않는다).
+  window.athena.send('athena:plugin-noted', envelope);
+  return true;
+}
+
+// 모델 제안은 턴 밖에서도 살아 있어야 한다 — 모듈 스코프 구독이다(턴 스코프
+// 형판을 여기 복제하면 턴이 끝나는 순간 카드가 사라진다).
+window.athena.on('athena:plugin-proposed', (envelope) => { mountPluginProposal(envelope); });
+
+function dropPluginProposal(envelope) {
+  const index = pluginProposals.findIndex((row) => row.proposal_id === envelope.proposal_id);
+  if (index >= 0) pluginProposals.splice(index, 1);
+}
+
+// 같은 봉투의 사본으로 갈아 끼운다 — plugin-canvas는 봉투가 바뀌면 그 카드의
+// 처리 결과를 지우고 다시 대기로 그린다.
+function pluginRearmProposal(envelope) {
+  const index = pluginProposals.findIndex((row) => row.proposal_id === envelope.proposal_id);
+  if (index < 0) return;
+  pluginProposals[index] = { ...envelope };
+  pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });
+}
+
+async function pluginForgetProposal(envelope) {
+  dropPluginProposal(envelope);
+  try {
+    await window.athena.invoke('athena:plugin-reject', envelope);
+  } catch (err) {
+    console.warn('athena:plugin-reject 실패', err);
+  }
+}
+
+// 사람의 클릭 하나가 유일한 실행 지점이다. 결과는 카드(반환값)와 채팅(이벤트)
+// 두 곳으로 간다 — 채널을 새로 만들지 않고 같은 자리의 CustomEvent를 쓴다.
+// 처리된 카드는 남는다 — 승인됨·실패·거부됨을 사람이 읽을 자리다. 목록에서 빼는
+// 것은 모드 재진입(pluginRestorePending)·재등록·`다시 제안받기` 세 지점뿐이다.
+async function pluginDecide(channel, envelope, options) {
+  // 채팅 결과 턴의 `다시 시도`는 카드 밖에서 같은 봉투를 다시 보낸다 — 실패로
+  // 굳은 카드를 사본으로 갈아 끼워 대기 상태로 되돌린다(카드 버튼 경로는 카드가
+  // 스스로 처리 중·결과를 그리므로 건드리지 않는다).
+  if (!(options && options.fromCard)) pluginRearmProposal(envelope);
+  let result;
+  try {
+    result = await window.athena.invoke(channel, envelope);
+  } catch (err) {
+    result = { ok: false, kind: 'failed', reason: String((err && err.message) || err) };
+  }
+  const kind = (result && result.kind) || 'failed';
+  if (result && typeof result.revision === 'number') pluginRevision = result.revision;
+  if (kind === 'success') {
+    pluginRegistryChangedThisSession = true;
+    await pluginRefresh();
+  }
+  // 남은 카드의 만료 판정이 새 판번호를 쓰게 한다 — 방금 승인이 목록을
+  // 바꿨으면 옆 카드는 이미 낡았다.
+  pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });
+  window.dispatchEvent(new CustomEvent('athena:plugin-result', { detail: { kind, envelope, result } }));
+  return result;
+}
+
+async function pluginRestorePending() {
+  let pending;
+  try {
+    pending = await window.athena.invoke('athena:plugin-pending');
+  } catch (err) {
+    console.warn('athena:plugin-pending 실패', err);
+    return;
+  }
+  if (pending && typeof pending.revision === 'number') pluginRevision = pending.revision;
+  // 처리된 카드는 여기서 사라진다 — 메인의 미해결 목록에 없기 때문이다.
+  pluginProposals.length = 0;
+  pluginProposals.push(...((pending && Array.isArray(pending.proposals)) ? pending.proposals : []));
+  pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });
+}
 
 // probe는 실제 upstream 서버를 spawn한다(mcp-cli.js probe 주석) — 목록을 새로고칠
 // 때마다 등록된 서버를 전부 띄우지 않는다. 권한 화면을 연 그 서버만 한 번 띄우고
@@ -2602,6 +2890,8 @@ async function pluginRefresh() {
   try {
     const res = await window.athena.invoke('athena:mcp-list');
     const servers = (res && Array.isArray(res.servers)) ? res.servers : [];
+    // 목록과 함께 오는 판번호가 GUI 제안의 만료 기준이다(R-4).
+    if (res && typeof res.revision === 'number') pluginRevision = res.revision;
     const marketplaces = pluginMarketplaceRows();
     const enabledMarketplaceIds = marketplaces.filter((m) => m.enabled).map((m) => m.id);
     pluginCanvas.setData({
@@ -2613,6 +2903,8 @@ async function pluginRefresh() {
     // 채팅의 @멘션 목록과 키우미 메뉴가 같은 레지스트리를 본다 — 여기서만
     // 알리고, 그쪽은 이 신호로 캐시를 버린다(양쪽이 각자 폴링하지 않는다).
     window.dispatchEvent(new CustomEvent('athena:plugins-changed', { detail: { servers } }));
+    // 목록이 바뀌면 떠 있는 카드의 만료 판정도 함께 갱신된다.
+    pluginCanvas.setProposals(pluginProposals, { revision: pluginRevision });
   } catch (err) {
     console.warn('athena:mcp-list 실패', err);
   }
@@ -2641,125 +2933,6 @@ async function pluginProbe(alias) {
   }
 }
 
-// 저장 결과를 그대로 화면에 돌려준다 — 한 도구라도 실패하면 저장 실패다.
-// features는 "허용할 것"의 목록이므로, 캐시에 있는데 목록에 없는 도구는 해제다.
-async function pluginSaveTools(alias, features) {
-  if (!alias || !Array.isArray(features)) return { ok: false, error: '대상 플러그인을 찾지 못했습니다' };
-  const known = new Map((pluginToolCache.get(alias) || []).map((tool) => [tool.name, !!tool.allowed]));
-  const wanted = new Set(features.map((feature) => feature && feature.name).filter(Boolean));
-  for (const [name, wasAllowed] of known) {
-    const allowed = wanted.has(name);
-    if (wasAllowed === allowed) continue; // 바뀐 것만 CLI를 부른다
-    try {
-      const res = await window.athena.invoke('athena:mcp-allow-tool', { alias, tool: name, allowed });
-      if (!res || !res.ok) {
-        await pluginProbe(alias);
-        return { ok: false, error: (res && res.error) || `${name} 허용 변경에 실패했습니다` };
-      }
-    } catch (err) {
-      await pluginProbe(alias);
-      return { ok: false, error: String((err && err.message) || err) };
-    }
-  }
-  pluginRegistryChangedThisSession = true;
-  pluginToolCache.delete(alias);
-  await pluginProbe(alias);
-  return { ok: true };
-}
-
-// 스니펫 분석 = athena:mcp-stage-snippet. 이름과 달리 실제로 레지스트리에 등록까지
-// 한다(mcp-cli.js stageSnippet 주석 — 파이썬 백엔드에 dry-run이 없다). 승인 전에는
-// consent 게이트가 서버 spawn을 막으므로 안전하고, 취소는 아래 discard가 되돌린다.
-async function pluginStageSnippet(snippet) {
-  try {
-    return await window.athena.invoke('athena:mcp-stage-snippet', { snippet });
-  } catch (err) {
-    return { ok: false, error: String((err && err.message) || err) };
-  }
-}
-
-// 승인 = register 재확인 → approve → probe. probe까지 해야 노출 도구를 알 수 있고,
-// 그래야 사용자가 도구를 하나씩 허용할 수 있다.
-async function pluginApproveStaged(staged) {
-  const servers = Array.isArray(staged) ? staged : [];
-  if (!servers.length) return { ok: false, error: '승인할 서버가 없다' };
-  for (const server of servers) {
-    try {
-      const registered = await window.athena.invoke('athena:mcp-register', { staged: server });
-      if (!registered || !registered.ok) {
-        return { ok: false, error: (registered && registered.error) || '등록 확인에 실패했다' };
-      }
-      const approved = await window.athena.invoke('athena:mcp-approve', { alias: server.alias });
-      if (!approved || !approved.ok) {
-        return { ok: false, error: (approved && approved.error) || '승인에 실패했다' };
-      }
-    } catch (err) {
-      return { ok: false, error: String((err && err.message) || err) };
-    }
-  }
-  pluginRegistryChangedThisSession = true;
-  // probe는 서버를 실제로 띄운다 — 실패해도 등록·승인은 유효하므로 승인 자체를
-  // 실패로 만들지 않는다. 도구 목록은 권한 화면에서 다시 시도할 수 있다.
-  for (const server of servers) await pluginProbe(server.alias);
-  await pluginRefresh();
-  return { ok: true };
-}
-
-// 카탈로그 설치 — 추천 카드의 "설치"가 승인되면 여기로 온다. 스니펫 경로를 그대로
-// 재사용한다: 카탈로그 항목을 Claude 설정 스니펫 한 줄로 만들어 같은 등록·승인·
-// probe를 태운다. 별도 등록 경로를 하나 더 만들면 위험 스캔·별칭 정규화·동의
-// 게이트가 두 벌이 된다.
-async function pluginInstallCatalogEntry(plugin) {
-  const entry = pluginCatalog.findEntry(plugin && plugin.id);
-  if (!entry) return { ok: false, error: '카탈로그에서 이 플러그인을 찾지 못했습니다' };
-  try {
-    const listed = await window.athena.invoke('athena:mcp-list');
-    const already = ((listed && listed.servers) || []).some((s) => s.alias === entry.id);
-    if (already) {
-      await pluginRefresh();
-      return { ok: false, error: '이미 등록된 서버입니다 — 설치됨 목록에서 권한을 엽니다' };
-    }
-  } catch {
-    // 목록 조회 실패는 설치를 막을 이유가 아니다 — 중복이면 아래 등록이 거절한다.
-  }
-  const snippet = JSON.stringify({
-    mcpServers: { [entry.id]: { command: entry.command, args: [...entry.args] } },
-  });
-  const staged = await pluginStageSnippet(snippet);
-  if (!staged || !staged.ok || !Array.isArray(staged.staged) || !staged.staged.length) {
-    return { ok: false, error: (staged && staged.error) || '등록에 실패했습니다' };
-  }
-  const approved = await pluginApproveStaged(staged.staged);
-  if (!approved || !approved.ok) {
-    // 승인 단계에서 멈췄으면 등록만 남는다 — 흔적을 지우고 원래대로 돌린다.
-    await pluginDiscardStaged(staged.staged);
-    return approved || { ok: false, error: '승인에 실패했습니다' };
-  }
-  return { ok: true };
-}
-
-// 관리 화면의 켜기/끄기 = consent approve/revoke. 삭제와 다르다: 등록은 남고
-// 대화 노출만 끊긴다. revoke는 허용 도구 목록까지 비우므로 캐시도 함께 버린다.
-async function pluginSetEnabled(alias, enabled) {
-  if (!alias) return { ok: false, error: '대상 플러그인을 찾지 못했습니다' };
-  try {
-    const res = await window.athena.invoke(
-      enabled ? 'athena:mcp-approve' : 'athena:mcp-revoke',
-      { alias },
-    );
-    if (!res || !res.ok) {
-      return { ok: false, error: (res && res.error) || (enabled ? '승인에 실패했습니다' : '승인 철회에 실패했습니다') };
-    }
-  } catch (err) {
-    return { ok: false, error: String((err && err.message) || err) };
-  }
-  pluginRegistryChangedThisSession = true;
-  pluginToolCache.delete(alias);
-  pluginProbeErrors.delete(alias);
-  await pluginRefresh();
-  return { ok: true };
-}
-
 async function pluginSetMarketplaceEnabled(id, enabled) {
   if (!id) return { ok: false, error: '대상 마켓플레이스를 찾지 못했습니다' };
   if (!writeMarketplacePref(id, enabled)) {
@@ -2767,35 +2940,6 @@ async function pluginSetMarketplaceEnabled(id, enabled) {
   }
   await pluginRefresh();
   return { ok: true };
-}
-
-async function pluginRemove(alias) {
-  if (!alias) return { ok: false, error: '대상 플러그인을 찾지 못했습니다' };
-  try {
-    const res = await window.athena.invoke('athena:mcp-remove', { alias });
-    if (!res || !res.ok) return { ok: false, error: '삭제에 실패했습니다' };
-  } catch (err) {
-    return { ok: false, error: String((err && err.message) || err) };
-  }
-  pluginToolCache.delete(alias);
-  pluginProbeErrors.delete(alias);
-  pluginRegistryChangedThisSession = true;
-  await pluginRefresh();
-  return { ok: true };
-}
-
-// 취소는 흔적을 남기지 않는다 — 분석 단계가 이미 등록했으므로 되돌린다.
-async function pluginDiscardStaged(staged) {
-  for (const server of (Array.isArray(staged) ? staged : [])) {
-    try {
-      await window.athena.invoke('athena:mcp-remove', { alias: server.alias });
-    } catch (err) {
-      console.warn('athena:mcp-remove 실패', err);
-    }
-    pluginToolCache.delete(server.alias);
-    pluginProbeErrors.delete(server.alias);
-  }
-  await pluginRefresh();
 }
 
 void pluginRefresh();
@@ -2820,6 +2964,14 @@ function backtestError(res, fallback) {
   return raw;
 }
 
+// 프로젝트 라우트의 실패 문구 — 백엔드가 이미 한국어 문장으로 답하므로(경로 탈출·비 .py·
+// 이름 충돌) 그 문장을 덮어쓰지 않는다. 백엔드가 아예 없을 때만 할 일을 알려준다.
+function projectError(res, fallback) {
+  const raw = (res && res.error) || fallback;
+  if (res && res.status === 0) return `백엔드에 연결하지 못했습니다 — 백엔드가 떠 있는지 확인하세요 (${raw})`;
+  return raw;
+}
+
 const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
   container: document.getElementById('backtestCanvas'),
   fetchPresets: async () => {
@@ -2836,9 +2988,15 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
   },
   // 409(캐시 부족)는 실패가 아니라 승인 화면 전환 신호다(backtest-bridge.js
   // 머리말과 같은 원칙) — blocked로 정규화해 돌려주고, 그 외 실패만 던진다.
-  run: async ({ yaml, params, allow_partial } = {}) => {
+  run: async ({ yaml, params, allow_partial, source, project_id } = {}) => {
     const body = { yaml };
     if (params !== undefined) body.params = params;
+    // 코드 경로 실행 — 캔버스가 실을 때만 붙는다. 이걸 빠뜨리면 백엔드는 source가
+    // 없다고 보고 폼(yaml)으로 돌아, 사람이 고른 코드가 조용히 안 돈다.
+    if (source) body.source = source;
+    // 어느 폴더의 코드인가 — 백엔드가 그 폴더의 가상환경으로 돌린다(코드 경로에서만
+    // 읽힌다). 빠뜨리면 사용자가 자기 폴더에 깐 패키지를 코드가 import하지 못한다.
+    if (project_id) body.project_id = project_id;
     // 보유 구간만으로 실행(Paper 보드 04) — 휴장일을 from으로 준 경우의 영구 409
     // (계획서 §11-9)에서 빠져나오는 유일한 출구다. 사람이 그 버튼을 눌렀을 때만 붙는다.
     if (allow_partial) body.allow_partial = true;
@@ -2846,7 +3004,15 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (res && res.ok) {
       const runId = res.data && res.data.run_id;
       if (!runId) throw new Error('run_id를 받지 못했습니다');
-      return { blocked: false, run_id: runId, partial: res.data.partial || null };
+      // 백엔드가 매 실행마다 남기는 전략·버전 id — 파일로 한 번 돌린 뒤 곧바로 배포로
+      // 넘어가려면 화면이 "방금 그 실행이 어느 버전이었는가"를 알아야 한다.
+      return {
+        blocked: false,
+        run_id: runId,
+        partial: res.data.partial || null,
+        strategy_id: res.data.strategy_id || null,
+        version_id: res.data.version_id || null,
+      };
     }
     if (res && res.status === 409 && res.detail) {
       return { blocked: true, needed_pages: res.detail.needed_pages, est_seconds: res.detail.est_seconds };
@@ -2895,10 +3061,72 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(backtestError(res, '캐시 상태를 불러오지 못했습니다'));
     return res.data;
   },
-  flow: async (body) => {
-    const res = await window.athena.invoke('athena:backtest-flow', body);
-    if (!res || !res.ok) throw new Error(backtestError(res, '코드 흐름을 읽지 못했습니다'));
+  // 흐름 지도(2026-09-03) — 설계의 첫 표면이다. 폼이든 코드든 같은 라우트로 간다.
+  map: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-map', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '흐름 지도를 만들지 못했습니다'));
     return res.data;
+  },
+  // 지도 뒤의 코드를 만든다 — 사람이 [코드 열기]를 눌렀을 때만 부른다(저장은 하지 않는다).
+  codegen: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-codegen', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '지도 뒤의 코드를 만들지 못했습니다'));
+    return res.data;
+  },
+  // 새 기법 만들기(2026-09-03, 보드 20·21) — 코드 한 덩이를 두 가지로 읽는 둘.
+  // 노드는 그 기법 파이썬의 함수 한 단위이고(범용 팔레트가 아니다), 검사는 문법·계약·
+  // 짧은 구간 시험 실행 세 가지다. 라우트가 없는 백엔드(404)는 캔버스가 그대로 본다.
+  techniqueNodes: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-technique-nodes', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '코드를 노드로 읽지 못했습니다'));
+    return res.data;
+  },
+  techniqueCheck: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-technique-check', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '검사를 돌리지 못했습니다'));
+    return res.data;
+  },
+  // 시각 설계 ↔ 코드 왕복(2026-09-03, US-007/008/009) — 지도 탭이 편집 가능해지는 자리.
+  // 위 map/codegen과 같은 봉투 규칙이다. 라우트가 없는 백엔드(404)를 만나면 캔버스가 그
+  // 실패를 한 번 보고 지도를 읽기 전용으로 접는다 — 여기서 감추면 화면이 이유를 못 댄다.
+  visualRegistry: async () => {
+    const res = await window.athena.invoke('athena:backtest-visual-registry');
+    if (!res || !res.ok) throw new Error(backtestError(res, '노드 목록을 불러오지 못했습니다'));
+    return res.data;
+  },
+  visualValidate: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-validate', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '그래프를 검증하지 못했습니다'));
+    return res.data;
+  },
+  visualCompile: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-compile', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '그래프를 코드로 옮기지 못했습니다'));
+    return res.data;
+  },
+  visualQuestion: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-question', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '무엇을 물을지 정하지 못했습니다'));
+    return res.data;
+  },
+  visualPatch: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-patch', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '수정안을 만들지 못했습니다'));
+    return res.data;
+  },
+  visualFromSpec: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-from-spec', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '폼을 그래프로 옮기지 못했습니다'));
+    return res.data;
+  },
+  // 저장만 status를 살려 던진다 — 409(그 사이 다른 수정이 먼저 저장됐다)는 실패가 아니라
+  // "다시 검토"라는 다음 행동이고, 캔버스가 그 둘을 문구가 아니라 상태 코드로 갈라야 한다.
+  visualSave: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-save', body);
+    if (res && res.ok) return res.data;
+    const error = new Error(backtestError(res, '시각 버전을 저장하지 못했습니다'));
+    error.status = res ? res.status : 0;
+    throw error;
   },
   diagnose: async (body) => {
     const res = await window.athena.invoke('athena:backtest-diagnose', body);
@@ -2934,6 +3162,13 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(backtestError(res, '버전 목록을 불러오지 못했습니다'));
     return (res.data && Array.isArray(res.data.versions)) ? res.data.versions : [];
   },
+  versionDetail: async (strategyId, versionId) => {
+    const res = await window.athena.invoke(
+      'athena:backtest-version-detail', { strategy_id: strategyId, version_id: versionId },
+    );
+    if (!res || !res.ok) throw new Error(backtestError(res, '버전을 다시 열지 못했습니다'));
+    return res.data;
+  },
   // 사람 클릭 전용 — 모델의 MCP 툴에는 이 액션이 없다(§7.3).
   activate: async (strategyId, versionId) => {
     const res = await window.athena.invoke(
@@ -2967,8 +3202,108 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(backtestError(res, '신호 이력을 불러오지 못했습니다'));
     return (res.data && Array.isArray(res.data.signals)) ? res.data.signals : [];
   },
+  // 내 전략 등록부(2026-09-02) — 내 폴더의 .py 하나가 프리셋과 같은 자리에 선다.
+  // 등록·해제는 사람이 누르는 버튼이고(모델에게는 등록만 있다), 목록은 설계 폼이 읽는다.
+  userStrategies: async () => {
+    const res = await window.athena.invoke('athena:backtest-user-strategies');
+    if (!res || !res.ok) throw new Error(backtestError(res, '내 전략 목록을 불러오지 못했습니다'));
+    return (res.data && Array.isArray(res.data.strategies)) ? res.data.strategies : [];
+  },
+  registerUserStrategy: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-user-strategy-register', body);
+    if (!res || !res.ok) throw new Error(projectError(res, '내 전략으로 등록하지 못했습니다'));
+    return res.data;
+  },
+  unregisterUserStrategy: async (strategyId) => {
+    const res = await window.athena.invoke(
+      'athena:backtest-user-strategy-unregister', { strategy_id: strategyId },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '등록을 지우지 못했습니다'));
+    return res.data;
+  },
+  // 프로젝트 가상환경 — 만들기는 202+job_id라 진행은 위 status(잡 라우트)가 이어 본다.
+  projectEnv: async (projectId) => {
+    const res = await window.athena.invoke('athena:project-env-get', { project_id: projectId });
+    if (!res || !res.ok) throw new Error(projectError(res, '환경 상태를 불러오지 못했습니다'));
+    return res.data;
+  },
+  createProjectEnv: async (projectId, packages) => {
+    const res = await window.athena.invoke(
+      'athena:project-env-create', { project_id: projectId, packages },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '환경을 만들지 못했습니다'));
+    return res.data;
+  },
+  // 프로젝트 파일 IDE(2026-09-02, 코드 탭) — 봉투를 벗기는 규칙은 위 백테스트 배선과 같다.
+  // 실패 문구만 다르다: 백엔드가 이미 사람이 읽을 한국어 detail로 답하므로(400/409/415)
+  // 그것을 그대로 올리고, 백엔드가 아예 없을 때(status 0)만 할 일을 알려준다.
+  listProjects: async () => {
+    const res = await window.athena.invoke('athena:project-list');
+    if (!res || !res.ok) throw new Error(projectError(res, '프로젝트 목록을 불러오지 못했습니다'));
+    return res.data;
+  },
+  createProject: async (name) => {
+    const res = await window.athena.invoke('athena:project-create', { name });
+    if (!res || !res.ok) throw new Error(projectError(res, '프로젝트를 만들지 못했습니다'));
+    return res.data;
+  },
+  // 폴더는 사람이 네이티브 창에서 고른다 — 렌더러가 경로를 지어내는 길은 없다.
+  openProjectDialog: async () => {
+    const res = await window.athena.invoke('athena:project-open-dialog');
+    if (!res || !res.ok) throw new Error(projectError(res, '폴더 선택 창을 열지 못했습니다'));
+    return res.data;
+  },
+  openProject: async (folderPath) => {
+    const res = await window.athena.invoke('athena:project-open', { path: folderPath });
+    if (!res || !res.ok) throw new Error(projectError(res, '폴더를 열지 못했습니다'));
+    return res.data;
+  },
+  projectTree: async (projectId) => {
+    const res = await window.athena.invoke('athena:project-tree', { project_id: projectId });
+    if (!res || !res.ok) throw new Error(projectError(res, '파일 목록을 불러오지 못했습니다'));
+    return res.data;
+  },
+  readProjectFile: async (projectId, filePath) => {
+    const res = await window.athena.invoke(
+      'athena:project-file-read', { project_id: projectId, path: filePath },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '파일을 열지 못했습니다'));
+    return res.data;
+  },
+  writeProjectFile: async (projectId, filePath, text) => {
+    const res = await window.athena.invoke(
+      'athena:project-file-write', { project_id: projectId, path: filePath, text },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '파일을 저장하지 못했습니다'));
+    return res.data;
+  },
+  createProjectFile: async (projectId, filePath, kind) => {
+    const res = await window.athena.invoke(
+      'athena:project-file-create', { project_id: projectId, path: filePath, kind },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '파일을 만들지 못했습니다'));
+    return res.data;
+  },
+  renameProjectFile: async (projectId, filePath, to) => {
+    const res = await window.athena.invoke(
+      'athena:project-file-rename', { project_id: projectId, path: filePath, to },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '이름을 바꾸지 못했습니다'));
+    return res.data;
+  },
+  deleteProjectFile: async (projectId, filePath) => {
+    const res = await window.athena.invoke(
+      'athena:project-file-delete', { project_id: projectId, path: filePath },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '지우지 못했습니다'));
+    return res.data;
+  },
 });
 backtestCanvas.mount();
+// 채팅이 athena_backtest로 낸 액션 4종(설정·코드·화면 전환·최적화 제안)의 구독자는
+// chat.js 하나다 — 액션을 캔버스에 바로 반영하고, 무엇이 바뀌었는지와 [되돌리기]를
+// 채팅 카드로 남긴다(여기서 또 들으면 같은 액션이 두 번 적용된다). 이 전역이 그
+// 배선의 유일한 통로다.
 window.AthenaBacktestCanvas = backtestCanvas;
 
 // --- 에이전트모드 캔버스 배선 (4단계, Paper 보드 39) -------------------------
@@ -3124,7 +3459,18 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
   // 패널을 건드리지 않는다(스텝0-2 소유권 계약).
   container: document.getElementById('graphSummaryTableArea'),
   limit: 5, // 보드 07 "성향 신호 상위 5"
-  fetchProfileSummary: ({ limit } = {}) => window.athena.invoke('athena:brain-profile-summary', { limit }),
+  // windowDays를 반드시 함께 넘긴다(2026-09-02 결함).
+  //
+  // summary-table.js는 헤더 기간 칩 값을 `{ limit, windowDays }`로 넘기고 main.js
+  // 핸들러도 그걸 받아 `window_days`로 백엔드에 전달한다. 그런데 이 자리가
+  // `{ limit }`만 구조분해해 windowDays를 **버리고 있었다** — 그 결과 "최근 30일"을
+  // 골라도 표는 백엔드 기본 창을 그대로 봤다. graph-filters.js 머리말이 경계한
+  // "안 되는 컨트롤보다 나쁜 것은 거짓말하는 라벨"이 그대로 재발한 상태였고,
+  // 지도·전체 캐시(loadProfileSignals)는 제대로 넘기고 있어 **두 표면이 다른 창을**
+  // 보고 있었다(applyGraphFilterChange 주석이 금지한 바로 그것).
+  fetchProfileSummary: ({ limit, windowDays } = {}) => window.athena.invoke(
+    'athena:brain-profile-summary', { limit, windowDays },
+  ),
   selectEntity: (entityId, panelData) => graphMode.selectEntity(entityId, panelData),
   onError: (err) => console.warn('[graph-mode] profile-summary 실패', err),
   // 히어로(보드 06 §5)·확인 필요 배너(§6, 06 전용) — 스텝3. 배너 개수원은
@@ -3137,10 +3483,30 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
   getFilters: () => window.AthenaLib.GraphModePrefs.readPrefs(),
   // 히어로 부제 "테마 군집 N개" — 테마 군집 카드가 이미 받아 둔 수를 재사용한다.
   getClusterCount: () => lastThemeClusterCount,
-  // CTA "채팅에서 답하기" — 새 기능을 발명하지 않는다, 입력창에 포커스만 준다.
-  onConfirmCta: () => {
-    const inputEl = document.getElementById('input');
-    if (inputEl) inputEl.focus();
+  // 확인 필요 배너의 CTA "채팅에서 답하기"(2026-09-02) — 실제 질문을 심는다.
+  //
+  // 옛 판은 입력창에 포커스만 줬다. 버튼 문구가 "채팅에서 답하기"인데 눌러도
+  // 아무 일이 없어서, 사용자가 직접 문장을 타이핑해야 했다(제보). 배너가 약속하는
+  // 것("답하시면 그대로 그래프가 갱신됩니다")을 시작할 문장을 대신 써 준다.
+  //
+  // **보내지는 않는다** — 보드 43 "새 작업은 채팅에서" 원칙의 seedChatInput 버스가
+  // 이 저장소의 관례고(lib/agent-canvas.js의 "＋ 새 작업"이 같은 경로), 사람이
+  // 읽고 고친 뒤 Enter를 누른다.
+  onConfirmCta: async (hintCount) => {
+    // 되물을 것들 카드를 먼저 시도한다(2026-09-02) — 백엔드가 아는 그 N건을
+    // 하나씩 묻고, 답을 모아 채팅으로 보낸다. 문장을 심어 사용자가 직접 묻게 하는
+    // 것보다 정확하다: 모델이 후보를 추측하지 않고 실제 AMBIGUOUS 관계를 다룬다.
+    if (window.AthenaShell && typeof window.AthenaShell.openBrainQuestions === 'function') {
+      const opened = await window.AthenaShell.openBrainQuestions();
+      if (opened) return;
+    }
+    // 카드를 못 열었으면(답변 중 · 물을 것이 0건 · 조회 실패) 빈손으로 두지 않고
+    // 옛 경로로 내려간다 — 문장을 심어 사람이 직접 묻게 한다.
+    // 위 패널 CTA와 같은 규칙 — 짧게, 지시문 꼬리 없이(2026-09-03).
+    const count = Number.isFinite(hintCount) && hintCount > 0 ? hintCount : null;
+    seedGraphChat(count
+      ? `확인이 필요한 ${count}건, 하나씩 물어봐줘.`
+      : '확인이 필요한 게 뭐야?');
   },
 });
 
@@ -3295,6 +3661,81 @@ function renderSummaryUpdatedAt(entries) {
     el.textContent = '';
     return;
   }
+// --- 채팅 → 그래프 제어 (2026-09-03) ---------------------------------------
+//
+// main.js가 athena_graph_view의 delivered:'canvas' 봉투를 이 채널 하나로 보낸다
+// (백테스트의 athena:backtest-chat-action과 같은 구조). 여기서 하는 일은 **사람이
+// 직접 눌렀을 때와 같은 경로를 부르는 것**이다 — 탭 클릭 핸들러가 부르는
+// graphMode.setSurface(), 지도 클릭이 부르는 graphMode.selectNode(), 필터 select의
+// change가 부르는 GraphPrefs.writePrefs()+applyGraphFilterChange(). 채팅용 두 번째
+// 경로를 만들면 한쪽만 고치는 실수가 나고, 두 입구가 다른 상태를 남긴다.
+//
+// edit_proposal만 다르다 — 그건 화면 상태가 아니라 사람에게 물을 것이라 채팅 쪽이
+// 그린다. 이 파일은 그리지 않고 훅으로 넘긴다(shell.js openGraphEditProposal).
+// 그 채널의 **구독은 여기 하나뿐**이다: 두 파일이 각각 구독하면 페이지 로드마다
+// 리스너가 두 개씩 쌓여 ipcRenderer 상한을 이 채널만 먼저 넘었다(전수 검증 실측).
+// 구독 해제를 들고 있다가 문서가 내려갈 때 푼다. 한 렌더러 프로세스에서 문서를
+// 여러 번 로드하면(전수 검증 하네스가 그렇게 한다) preload의 ipcRenderer는 살아
+// 있어서 리스너가 로드마다 쌓이고, 이 채널만 상한 10을 먼저 넘어 경고가 났다.
+// 다른 채널이 조용했던 것은 그것들이 먼저 등록돼 상한에 안 닿았을 뿐이다.
+const disposeGraphChatAction = window.athena.on('athena:graph-chat-action', async (message) => {
+  if (!message || typeof message !== 'object') return;
+  // 편집 제안은 그래프 기능 밖에서도 유효하다(사람의 답변 문장은 어디서든 보낼 수
+  // 있다) — 아래 진입 게이트보다 앞에 둔다.
+  if (message.kind === 'edit_proposal') {
+    window.AthenaShell.openGraphEditProposal(message);
+    return;
+  }
+  // 그래프 기능 밖에 있으면 아무 일도 안 한다 — 캔버스가 다른 모드를 그리는 중에
+  // 서브뷰를 갈아치우면 사용자가 보던 화면이 이유 없이 사라진다.
+  //
+  // 진입 여부는 state.view다(state.active 같은 필드는 없다 — 첫 판에서 그것을
+  // 읽어 게이트가 **항상** 조기 반환했고, 전수 검증이 그걸 잡았다). 값 비교 대신
+  // store의 술어를 쓴다 — 'graph' 문자열을 여기 또 적으면 store가 바뀔 때 조용히
+  // 어긋난다.
+  if (!window.AthenaLib.GraphModeStore.isGraphView(graphMode.state)) return;
+
+  if (message.kind === 'navigate' && SURFACE_TAB_IDS[message.surface]) {
+    await graphMode.setSurface(message.surface);
+    updateSurfaceTabs();
+    return;
+  }
+  if (message.kind === 'select' && message.entityId) {
+    // 지도를 보고 있지 않으면 먼저 지도로 옮긴다 — 노드를 골라 달라는 요청은
+    // 그 노드를 보여 달라는 뜻이고, 요약 표에서는 선택이 표 밖의 일이 된다.
+    if (graphMode.state.surface !== 'map') {
+      await graphMode.setSurface('map');
+      updateSurfaceTabs();
+    }
+    graphMode.selectNode(message.entityId);
+    graphMode.focusNode(message.entityId);
+    return;
+  }
+  if (message.kind === 'filter' && message.patch && typeof message.patch === 'object') {
+    // 화이트리스트로만 받는다 — 봉투가 어디서 왔는지 모르는 채로 prefs에 쓰면
+    // 모르는 키가 localStorage에 쌓이고, normalize()가 그것을 조용히 버린다.
+    const patch = {};
+    if (GraphFilters.WINDOW_DAY_OPTIONS.includes(message.patch.windowDays)) {
+      patch.windowDays = message.patch.windowDays;
+    }
+    if (GraphFilters.MIN_DEGREE_OPTIONS.includes(message.patch.minDegree)) {
+      patch.minDegree = message.patch.minDegree;
+    }
+    if (GraphFilters.SORT_OPTIONS.includes(message.patch.summarySort)) {
+      patch.summarySort = message.patch.summarySort;
+    }
+    if (!Object.keys(patch).length) return;
+    GraphPrefs.writePrefs(patch);
+    renderFilterChips();
+    await applyGraphFilterChange();
+    return;
+  }
+  if (message.kind === 'fit') {
+    graphMode.fitView();
+  }
+});
+window.addEventListener('pagehide', disposeGraphChatAction, { once: true });
+
   const relative = window.AthenaLib.GraphSummaryTable.relativeDaysText(
     new Date(latestMs).toISOString(), Date.now());
   el.hidden = !relative;
@@ -3339,7 +3780,11 @@ async function loadHiddenLinks() {
   // 스텝14 — 그래프 지도(핑크 점선)·컨텍스트 패널("숨은" 관계 행)이 재사용할
   // 캐시를 여기서 채운다(위 lastSurprisingConnections 선언 참고).
   lastSurprisingConnections = Array.isArray(res.connections) ? res.connections : [];
-  window.AthenaLib.HiddenLinks.renderHiddenLinks(container, res.connections);
+  // 관계명 한글 사전을 주입한다(2026-09-03) — 없으면 화면에 belongs_to가 샌다.
+  // 사전의 진실은 controller.js RELATION_LABELS 하나다(graph-edit-proposal.js와 같은 규약).
+  window.AthenaLib.HiddenLinks.renderHiddenLinks(container, res.connections, {
+    relationLabels: window.AthenaLib.GraphModeController.RELATION_LABELS,
+  });
 }
 
 // 성향 신호 전체를 받아 캐시에 담는다(위 lastProfileSignals 주석 참고).

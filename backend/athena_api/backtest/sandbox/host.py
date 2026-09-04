@@ -17,6 +17,7 @@ import os
 import subprocess
 import sys
 import time
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any, Final
 
@@ -33,12 +34,24 @@ _ENV_ALLOWLIST: Final[tuple[str, ...]] = (
     else ("PATH", "PYTHONPATH", "ATHENA_BT_JOB")
 )
 
-# backend/ 패키지 루트. `-I` 격리 모드는 사용자 site-packages·PYTHONPATH를 무시하는 게
-# 관례적 기대이지만(실측: 이 인터프리터는 venv 자체의 site-packages는 유지하고
-# PYTHONPATH도 그대로 반영한다 — editable install이 없는 배포판에서는 이 값이 없으면
-# `import athena_api`가 끊길 수 있으므로 방어적으로 항상 채워 넣는다), §7.2 표가 명시한
-# 값이라 그대로 따른다.
+# backend/ 패키지 루트. 자식이 `athena_api.backtest.sandbox`를 찾는 유일한 길이다 —
+# 프로젝트 가상환경의 파이썬으로 띄우면 그 환경엔 athena_api가 설치돼 있지 않다.
 _PACKAGE_ROOT: Final[Path] = Path(__file__).resolve().parents[3]
+
+# 자식 인터프리터 플래그. **`-I`(격리 모드)를 쓰지 않는다** — `-I`는 `-E`를 포함해
+# PYTHONPATH를 통째로 무시하고(2026-09-02 실측: `-I`로 띄운 자식의 sys.path에 PYTHONPATH가
+# 없다. 지금까지 `import athena_api`가 되던 것은 backend .venv에 깔린 editable 설치의
+# .pth 덕이었지 PYTHONPATH 덕이 아니었다), 그러면 프로젝트 가상환경의 파이썬으로 띄운
+# 자식이 샌드박스 모듈 자체를 찾지 못한다.
+#
+# `-I`가 주던 것 중 실제로 필요한 둘만 남긴다:
+#   -s  사용자 site-packages(%APPDATA%\Python 등) 제외 — 어떤 환경으로 돌았는지 흐리지 않는다.
+#   -P  **cwd를 sys.path 맨 앞에 얹지 않는다.** cwd가 jobdir이고 전략 코드는 jobdir 안에
+#       파일을 쓸 수 있어(guard의 open 제한이 허용하는 범위가 정확히 거기다), 이게 없으면
+#       `pandas.py`를 떨어뜨려 신뢰 모듈을 가릴 수 있다. 여기서 가장 중요한 플래그다.
+# 빠진 `-E`는 손실이 아니다: 자식 env는 이미 `_child_env` 화이트리스트로만 만들어져
+# 공격자가 넣을 수 있는 PYTHON* 변수가 애초에 없다.
+_CHILD_FLAGS: Final[tuple[str, ...]] = ("-s", "-P", "-B")
 
 
 def _child_env(jobdir: Path, base_env: dict[str, str] | None = None) -> dict[str, str]:
@@ -85,6 +98,18 @@ def _read_text_if_exists(path: Path) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
 
 
+def _with_node_io(jobdir: Path, result: dict[str, Any]) -> dict[str, Any]:
+    """자식이 계측 산출물을 남겼으면 결과에 실어준다.
+
+    `trace_names` 없이 돌면 파일 자체가 없고 결과 dict도 예전과 같다 — 키가 생기지 않는다.
+    오류·타임아웃 경로에서도 같은 통로를 쓴다(부분 기록도 화면에 붙어야 한다).
+    """
+    path = jobdir / "node_io.json"
+    if path.exists():
+        result["node_io"] = json.loads(path.read_text(encoding="utf-8"))
+    return result
+
+
 def run_strategy(
     jobdir: Path,
     strategy_source: str,
@@ -93,19 +118,36 @@ def run_strategy(
     *,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
     stdout_cap_bytes: int = DEFAULT_STDOUT_CAP_BYTES,
+    python_exe: str | None = None,
+    allowed_imports: Sequence[str] | None = None,
+    trace_names: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     """전략 코드를 별도 프로세스에서 돌리고 결과를 회수한다 (§7.2 다이어그램).
 
     jobdir에 spec.json(현재 파라미터 값 + stdout 상한) · bars.csv(OHLCV) · strategy.py
-    (사용자 코드)를 쓰고, `python -I -B -m athena_api.backtest.sandbox <jobdir>`를 띄운다.
+    (사용자 코드)를 쓰고, `python -s -P -B -m athena_api.backtest.sandbox <jobdir>`를 띄운다.
 
-    반환: `{ok, signals_df, stdout, error, elapsed}`.
+    `python_exe`는 프로젝트 가상환경의 인터프리터다(기본은 이 프로세스의 `sys.executable`).
+    `allowed_imports`는 그 환경에 실제로 깔린 패키지 이름 — spec.json에 실려 자식의
+    허용목록을 넓힌다. **차단목록은 자식이 다시 적용한다**(guard.py) — 넓히는 쪽 값이
+    이 프로세스에서 오더라도 os·subprocess 같은 이름이 열리지는 않는다.
+
+    `trace_names`는 계측할 최상위 함수 이름들이다(선택). 주면 spec.json에 실려 자식이
+    그 이름의 함수만 기록 래퍼로 갈아 끼우고 `node_io.json`을 남긴다 — 주지 않으면
+    spec.json에 키 자체가 생기지 않고 자식 동작도 예전과 같다.
+
+    반환: `{ok, signals_df, stdout, error, elapsed}` (+ 자식이 `node_io.json`을 남겼으면
+    `node_io`).
     - `ok=True`  → `signals_df`에 결과, `error`는 None.
     - `ok=False` → `signals_df`는 None, `error`에 `{type, message, traceback}`.
     타임아웃이면 프로세스(트리)를 강제 종료하고 `error.type == "TimeoutError"`로 보고한다.
     """
     jobdir.mkdir(parents=True, exist_ok=True)
-    spec_payload = {"params": params, "stdout_cap_bytes": stdout_cap_bytes}
+    spec_payload: dict[str, Any] = {"params": params, "stdout_cap_bytes": stdout_cap_bytes}
+    if allowed_imports is not None:
+        spec_payload["allowed_imports"] = list(allowed_imports)
+    if trace_names:
+        spec_payload["trace_names"] = list(trace_names)
     (jobdir / "spec.json").write_text(
         json.dumps(spec_payload, ensure_ascii=False), encoding="utf-8"
     )
@@ -113,7 +155,13 @@ def run_strategy(
     (jobdir / "strategy.py").write_text(strategy_source, encoding="utf-8")
 
     env = _child_env(jobdir)
-    cmd = [sys.executable, "-I", "-B", "-m", "athena_api.backtest.sandbox", str(jobdir)]
+    cmd = [
+        python_exe or sys.executable,
+        *_CHILD_FLAGS,
+        "-m",
+        "athena_api.backtest.sandbox",
+        str(jobdir),
+    ]
 
     start = time.monotonic()
     proc = subprocess.Popen(
@@ -141,24 +189,30 @@ def run_strategy(
             "message": f"{timeout}초 안에 끝나지 않아 강제 종료됨",
             "traceback": "",
         }
-        return {
-            "ok": False,
-            "signals_df": None,
-            "stdout": stdout_text,
-            "error": error,
-            "elapsed": elapsed,
-        }
+        return _with_node_io(
+            jobdir,
+            {
+                "ok": False,
+                "signals_df": None,
+                "stdout": stdout_text,
+                "error": error,
+                "elapsed": elapsed,
+            },
+        )
 
     error_path = jobdir / "error.json"
     if error_path.exists():
         error = json.loads(error_path.read_text(encoding="utf-8"))
-        return {
-            "ok": False,
-            "signals_df": None,
-            "stdout": stdout_text,
-            "error": error,
-            "elapsed": elapsed,
-        }
+        return _with_node_io(
+            jobdir,
+            {
+                "ok": False,
+                "signals_df": None,
+                "stdout": stdout_text,
+                "error": error,
+                "elapsed": elapsed,
+            },
+        )
 
     signals_path = jobdir / "signals.csv"
     if not signals_path.exists():
@@ -168,19 +222,25 @@ def run_strategy(
             "message": f"signals.csv도 error.json도 없이 종료됨(returncode={proc.returncode})",
             "traceback": detail,
         }
-        return {
-            "ok": False,
-            "signals_df": None,
-            "stdout": stdout_text,
-            "error": error,
-            "elapsed": elapsed,
-        }
+        return _with_node_io(
+            jobdir,
+            {
+                "ok": False,
+                "signals_df": None,
+                "stdout": stdout_text,
+                "error": error,
+                "elapsed": elapsed,
+            },
+        )
 
     signals_df = pd.read_csv(signals_path, index_col=0, parse_dates=True)
-    return {
-        "ok": True,
-        "signals_df": signals_df,
-        "stdout": stdout_text,
-        "error": None,
-        "elapsed": elapsed,
-    }
+    return _with_node_io(
+        jobdir,
+        {
+            "ok": True,
+            "signals_df": signals_df,
+            "stdout": stdout_text,
+            "error": None,
+            "elapsed": elapsed,
+        },
+    )

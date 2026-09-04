@@ -10138,5 +10138,104 @@
       "formula": "mrkt_tp=101·flu_tp=2 조회 pric_jmpflu 행 수"
     }
   ],
-  "unbound_fields": []
+  "unbound_fields": [],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 가격급등락",
+    "eyebrow": "CC-03 / 2ZZ7-0",
+    "source_board": "CC-03 / R01-T4-4 · 순위 — 가격급등락",
+    "elements": [
+      {
+        "source_slot_id": "s015",
+        "label": "핵심 지표",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "5분 등락 큰 순"
+      },
+      {
+        "source_slot_id": "s023",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 1,
+          "tone": "change"
+        },
+        "paper_text": "+4.8%"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "보조 지표",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "4"
+      },
+      {
+        "source_slot_id": "s017",
+        "label": "핵심 지표",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "12",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "변화",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "5분 구간",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 206,
+      "shown": 5,
+      "hidden": 201,
+      "scalars": 2,
+      "rows": 14
+    },
+    "fold_note": "스칼라 2개 · 행 14개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T4-4 · 순위 — 가격급등락",
+      "elements": "핵심 지표 · 변화 · 보조 지표",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 14개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

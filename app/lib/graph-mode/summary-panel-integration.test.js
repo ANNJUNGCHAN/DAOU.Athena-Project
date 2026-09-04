@@ -9,8 +9,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const store = require('./graph-mode-store');
-const layout = require('./cluster-layout');
-const render = require('./render');
+const grouping = require('./cluster-grouping');
 const { createGraphModeController } = require('./controller');
 const { createSummaryTableController } = require('./summary-table');
 const { fakeNode, installFakeDocument, uninstallFakeDocument } = require('./fake-dom');
@@ -50,8 +49,7 @@ function setupSharedParent(options) {
 
   const graphMode = createGraphModeController({
     store,
-    layout,
-    render,
+    grouping,
     prefs: null,
     elements: {
       pill: fakeNode('button'),

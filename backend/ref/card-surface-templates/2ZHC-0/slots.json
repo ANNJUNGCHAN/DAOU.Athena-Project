@@ -12391,5 +12391,104 @@
       "header": "구분",
       "unbound_reason": "ka10018 응답에 신고가·신저가 구분 필드가 없다"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 고저가근접",
+    "eyebrow": "CC-03 / 2ZHC-0",
+    "source_board": "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "elements": [
+      {
+        "source_slot_id": "s017",
+        "label": "핵심 지표",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "41"
+      },
+      {
+        "source_slot_id": "s023",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "0.6%"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "보조 지표",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "9"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "핵심 지표",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "52주 고가 대비",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s021",
+        "label": "변화",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "52주 저가 대비",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 276,
+      "shown": 5,
+      "hidden": 271,
+      "scalars": 2,
+      "rows": 18
+    },
+    "fold_note": "스칼라 2개 · 행 18개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+      "elements": "핵심 지표 · 변화 · 보조 지표",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 18개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

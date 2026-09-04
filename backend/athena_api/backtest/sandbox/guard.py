@@ -20,6 +20,7 @@ pandas가 이미 `os`를 로드해둔 뒤라면 사용자 코드의 `import os`�
 from __future__ import annotations
 
 import builtins
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
@@ -29,6 +30,29 @@ from typing import Any
 ALLOWED_TOP_LEVEL_IMPORTS: frozenset[str] = frozenset(
     {"pandas", "numpy", "math", "statistics", "datetime", "athena_bt"}
 )
+
+# 허용목록을 아무리 넓혀도 절대 열리지 않는 이름. 프로젝트 가상환경에 실제로 설치돼 있어도
+# 여기 있으면 막힌다.
+#
+# **이 목록의 존재 이유.** 사용자가 자기 가상환경에 깐 패키지를 쓸 수 있게 하려고 허용목록에
+# 확장 통로를 냈다(spec.json의 allowed_imports). 그 통로가 프로세스·파일·네트워크 표면을
+# 통째로 되돌려주는 문이 되면 확장이 아니라 철거다 — 그래서 확장은 **뺄셈이 먼저**다.
+# 위 모듈 docstring의 정직한 한계는 그대로다: 이것도 사고 방지선이지 결심한 공격자를
+# 막는 경계가 아니다.
+BLOCKED_TOP_LEVEL_IMPORTS: frozenset[str] = frozenset(
+    {
+        "os", "sys", "subprocess", "socket", "urllib", "http", "httpx", "requests",
+        "pathlib", "shutil", "ctypes", "importlib", "builtins", "io", "tempfile",
+        "multiprocessing", "threading", "signal", "code", "pickle", "marshal",
+    }
+)
+
+
+def resolve_allowlist(extra: Iterable[str] | None = None) -> frozenset[str]:
+    """기본 허용목록에 `extra`(프로젝트 가상환경의 패키지)를 얹되 차단목록은 빼고 남긴다."""
+    names = set(ALLOWED_TOP_LEVEL_IMPORTS)
+    names.update(str(name).split(".", 1)[0] for name in (extra or ()))
+    return frozenset(names - BLOCKED_TOP_LEVEL_IMPORTS)
 
 _real_import = builtins.__import__
 
@@ -41,7 +65,7 @@ class SandboxFileAccessError(PermissionError):
     """전략 코드가 jobdir 밖 경로를 열려고 했을 때."""
 
 
-def _make_guarded_import(strategy_globals: dict[str, Any]):
+def _make_guarded_import(strategy_globals: dict[str, Any], allowed: frozenset[str]):
     """`strategy_globals`에서 직접 일어난 import 호출만 허용목록으로 검사하는 훅."""
 
     def guarded_import(
@@ -53,7 +77,7 @@ def _make_guarded_import(strategy_globals: dict[str, Any]):
     ) -> Any:
         if globals is strategy_globals:
             top = name.split(".", 1)[0]
-            if top not in ALLOWED_TOP_LEVEL_IMPORTS:
+            if top not in allowed:
                 raise SandboxImportError(f"허용되지 않은 import: {name!r}")
         return _real_import(name, globals, locals, fromlist, level)
 
@@ -81,23 +105,35 @@ def _make_guarded_open(jobdir: Path):
     return guarded_open
 
 
-def install(strategy_globals: dict[str, Any], jobdir: Path) -> None:
+def install(
+    strategy_globals: dict[str, Any],
+    jobdir: Path,
+    *,
+    allowed_imports: Iterable[str] | None = None,
+) -> None:
     """전략 코드 `exec()` 직전에 호출한다.
 
     `strategy_globals["__builtins__"]`를 전체 빌트인 사본으로 바꿔치기하고 `__import__`/
     `open`만 감싼 버전으로 덮는다 — 이 딕셔너리로 실행되는 코드(strategy.py의 top level과
     거기서 정의된 함수 전부)에만 적용되고, 이미 로드된 pandas/numpy 등 신뢰 모듈의 동작에는
     영향이 없다(그 모듈들은 자기 자신의 `__builtins__`를 그대로 쓴다).
+
+    `allowed_imports`는 프로젝트 가상환경의 패키지 이름이다 — `resolve_allowlist()`를
+    지나므로 차단목록은 여기서도 뚫리지 않는다.
     """
     restricted = dict(vars(builtins))
-    restricted["__import__"] = _make_guarded_import(strategy_globals)
+    restricted["__import__"] = _make_guarded_import(
+        strategy_globals, resolve_allowlist(allowed_imports)
+    )
     restricted["open"] = _make_guarded_open(jobdir)
     strategy_globals["__builtins__"] = restricted
 
 
 __all__ = [
     "ALLOWED_TOP_LEVEL_IMPORTS",
+    "BLOCKED_TOP_LEVEL_IMPORTS",
     "SandboxFileAccessError",
     "SandboxImportError",
     "install",
+    "resolve_allowlist",
 ]

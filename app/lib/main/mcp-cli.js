@@ -14,6 +14,7 @@
 // 보여주기 위해 stderr/stdout의 첫 줄을 그대로 옮기는 것(파싱 아님, 표시일 뿐).
 
 const fs = require('fs');
+const fsp = require('fs/promises');
 const os = require('os');
 const path = require('path');
 const { spawn } = require('child_process');
@@ -133,7 +134,11 @@ function list() {
       warnings,
     };
   });
-  return { servers };
+  // revision — registry.py가 쓰기마다 1씩 올려 mcp_servers.json에 남기는 값이다
+  // (registry.py `_payload`). 승인 직전 "그 사이 목록이 바뀌었는가"를 재는 유일한
+  // 권위 값이라 목록과 같은 읽기에서 함께 돌려준다(두 번 읽으면 그 사이가 벌어진다).
+  const revision = Number.isSafeInteger(registry.revision) ? registry.revision : 0;
+  return { servers, revision };
 }
 
 // ---------------------------------------------------------------------------
@@ -295,8 +300,87 @@ async function remove(alias) {
   return { ok: result.code === 0 };
 }
 
+// 감사 로그 읽기 — backend/athena_mcp/consent.py의 AuditLog가 별칭마다
+// `<state>/audit/<alias>.jsonl`에 append한 것을 그대로 모은다. 그 파일에는
+// 시각·별칭·툴·성공 여부 네 칸뿐이다(인자·응답 본문은 애초에 기록되지 않는다).
+// 레지스트리에 있는 별칭만 돌려준다 — 게이트웨이 자신의 내장 툴 로그(브레인·
+// 시세 등)는 플러그인이 아니라서 플러그인 화면에 낄 자리가 없다.
+//
+// 로그는 append-only라 계속 자란다 — 상한이 20건인데 수 MB를 통째로 읽을
+// 이유가 없어 파일마다 끝에서 64KB만 읽는다(잘린 첫 줄은 버린다).
+const AUDIT_LIMIT = 20;
+const AUDIT_TAIL_BYTES = 64 * 1024;
+
+async function readTail(filePath) {
+  const handle = await fsp.open(filePath, 'r');
+  try {
+    const { size } = await handle.stat();
+    const length = Math.min(size, AUDIT_TAIL_BYTES);
+    const start = size - length;
+    const buffer = Buffer.alloc(length);
+    await handle.read(buffer, 0, length, start);
+    const text = buffer.toString('utf-8');
+    // 중간부터 읽었으면 첫 줄은 반토막이다(바이트 경계가 줄경계가 아니다).
+    return start > 0 ? text.slice(text.indexOf('\n') + 1) : text;
+  } finally {
+    await handle.close();
+  }
+}
+
+async function auditLog(limit = AUDIT_LIMIT) {
+  const cap = Math.max(0, Number(limit) || AUDIT_LIMIT);
+  const dir = path.join(stateDir(), 'audit');
+  let names;
+  try {
+    names = (await fsp.readdir(dir)).filter((name) => name.endsWith('.jsonl'));
+  } catch {
+    return { entries: [] };
+  }
+  // 레지스트리를 못 읽으면 모든 별칭이 걸러져 "기록 없음"으로 보인다 —
+  // 그 거짓말 대신 실패를 화면까지 올려보낸다. 파일 자체가 없는 건 정상이다(등록 0건).
+  let registry;
+  try {
+    registry = JSON.parse(await fsp.readFile(registryPath(), 'utf-8'));
+  } catch (err) {
+    if (!err || err.code !== 'ENOENT') {
+      throw new Error('등록 목록을 읽지 못했다');
+    }
+    registry = { servers: {} };
+  }
+  const known = new Set(Object.keys((registry && registry.servers) || {}));
+  const entries = [];
+  for (const name of names) {
+    let text;
+    try {
+      text = await readTail(path.join(dir, name));
+    } catch {
+      continue;
+    }
+    for (const line of text.split('\n')) {
+      if (!line.trim()) continue;
+      let row;
+      try {
+        row = JSON.parse(line);
+      } catch {
+        continue;
+      }
+      if (!row || !row.alias || !row.tool || !known.has(row.alias)) continue;
+      entries.push({
+        ts: String(row.ts || ''),
+        alias: String(row.alias),
+        tool: String(row.tool),
+        success: !!row.success,
+      });
+    }
+  }
+  // 파일이 별칭마다 따로라 최신순 정렬은 여기서 한 번에 한다.
+  entries.sort((a, b) => (a.ts < b.ts ? 1 : (a.ts > b.ts ? -1 : 0)));
+  return { entries: entries.slice(0, cap) };
+}
+
 module.exports = {
   list,
+  auditLog,
   stageSnippet,
   register,
   approve,

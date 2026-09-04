@@ -1,5 +1,11 @@
 # 작업 계획 — 키우미 미니 카드 전수 (대화 모드의 축소판)
 
+> **실행 개정(2026-09-03).** 사용자가 후속으로 **360×420**을 확정하고 실제 코드 반영을
+> 승인했다. 이 rev 6 계획은 최초 360×640 Paper 저작안의 역사적 근거로만 보존한다.
+> `pending approval`, 640px 게이트, 앱 코드 동결, 옛 브랜치 생성 절차는 다시 실행하지
+> 않는다. 현재 구현·검증·다른 컴퓨터 인계의 정본은 `codex/kiumi-mini-cards-runtime`
+> 브랜치와 `backend/ref/kiumi/kiumi-ledger.jsonl`이다.
+
 ```yaml
 plan_id: kiumi-mini-cards-20260903
 revision: 6                       # rev 5 draft + 최종 Architect/Critic 패스 반영 (§9 Changelog)

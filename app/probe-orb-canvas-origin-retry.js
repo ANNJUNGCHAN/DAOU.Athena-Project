@@ -102,19 +102,27 @@ function record(name, ok, data) {
 }
 
 async function submitOrbQuery(orbWin, text) {
-  await orbWin.webContents.executeJavaScript(`(() => {
+  const previousAnswerCount = await orbWin.webContents.executeJavaScript(`(() => {
+    const answers = document.querySelectorAll('#orbChatTurns .orb-turn-a');
     const input = document.getElementById('orbInput');
     input.value = ${JSON.stringify(text)};
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+    return answers.length;
   })()`);
   const deadline = Date.now() + 20000;
   let lastAnswerText = null;
   while (Date.now() < deadline) {
-    lastAnswerText = await orbWin.webContents.executeJavaScript(`(() => {
+    const state = await orbWin.webContents.executeJavaScript(`(() => {
       const answers = document.querySelectorAll('#orbChatTurns .orb-turn-a');
-      return answers.length ? answers[answers.length - 1].textContent : null;
+      return {
+        count: answers.length,
+        text: answers.length ? answers[answers.length - 1].textContent : null,
+      };
     })()`);
-    if (lastAnswerText) break;
+    if (state.count > previousAnswerCount && state.text) {
+      lastAnswerText = state.text;
+      break;
+    }
     await wait(250);
   }
   await wait(300); // chatBusy가 renderer 쪽에서 false로 떨어질 여유
@@ -126,9 +134,31 @@ async function main() {
   process.env.ATHENA_CLAUDE_BIN = exePath;
 
   const mainMod = require('./main.js');
-  await mainMod.createWindows();
-  const { shellWin, orbWin } = mainMod.getWins();
+  // 프로덕션 자동 기동이 대화 이력 파이프라인과 창을 함께 소유하게 둔다.
+  // 여기서 createWindows()를 한 번 더 부르면 두 창 세트가 전역 참조를 경쟁한다.
+  let shellWin = null;
+  let orbWin = null;
+  const windowsDeadline = Date.now() + 10000;
+  while (Date.now() < windowsDeadline) {
+    ({ shellWin, orbWin } = mainMod.getWins());
+    if (shellWin && orbWin
+        && !shellWin.webContents.isLoadingMainFrame()
+        && !orbWin.webContents.isLoadingMainFrame()) break;
+    await wait(100);
+  }
   if (!shellWin || !orbWin) throw new Error('shellWin/orbWin 못 찾음');
+  // fixture 부팅 handoff가 끝나기 전에 닫으면, 뒤늦은 handoff가 셸을 다시
+  // 표시해 닫기 검증이 흔들린다. boot 창이 사라진 뒤 사용자 동작을 시작한다.
+  const handoffDeadline = Date.now() + 10000;
+  while (Date.now() < handoffDeadline) {
+    const { bootWin } = mainMod.getWins();
+    if (!bootWin || bootWin.isDestroyed()) break;
+    await wait(100);
+  }
+  // handoff 뒤에도 visibility 전이를 명시적으로 한 번 만들어 오브 모드를
+  // 결정론적으로 동기화한다.
+  shellWin.hide();
+  await wait(100);
   shellWin.show();
   shellWin.focus();
   await wait(1000);

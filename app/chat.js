@@ -89,6 +89,18 @@ function refreshResultDockVisibility() {
   $resultDock.hidden = resultRow.row.hidden && sourceRow.row.hidden && agentDockRow.row.hidden;
 }
 const $input = document.getElementById('input');
+
+// 입력창 높이를 내용에 맞춘다(2026-09-02 사용자 지적 "글 길게 쓰면 여러 줄이 되어야").
+// height를 먼저 비워야 scrollHeight가 "지금 높이"가 아니라 "필요한 높이"를 답한다 —
+// 안 비우면 한 번 커진 높이가 줄지 않는다. 상한은 CSS의 max-height가 쥐고, 여기서는
+// 그 값을 넘겨 받아 그 이상 키우지 않는다(넘으면 textarea가 자체 스크롤한다).
+function autoGrowInput() {
+  if (!$input) return;
+  $input.style.height = 'auto';
+  const max = parseFloat(getComputedStyle($input).maxHeight);
+  const needed = $input.scrollHeight;
+  $input.style.height = `${Number.isFinite(max) ? Math.min(needed, max) : needed}px`;
+}
 const $dot = document.getElementById('dot');
 const $lockHint = document.getElementById('lockHint');
 const $lockText = document.getElementById('lockText');
@@ -685,7 +697,34 @@ document.documentElement.style.setProperty('--glass-alpha', GLASS_WINDOW.toFixed
 let stickToBottom = true;
 $history.addEventListener('scroll', () => {
   stickToBottom = $history.scrollHeight - $history.scrollTop - $history.clientHeight < 24;
+  reportChatViewport();
 });
+
+// 세션 보고(42번 보드) — 스크롤 위치와 입력 초안은 세션의 일부다. 렌더러는 무엇이
+// 바뀌었는지만 보내고(patch), 어느 세션인지·어떤 모드인지는 main이 안다. 디바운스는
+// 여기서 한 번, main의 브리지에서 한 번 더 — 키 입력마다 IPC를 쏘지 않기 위한 것이다.
+let chatViewportTimer = null;
+function reportChatViewport() {
+  if (chatViewportTimer) clearTimeout(chatViewportTimer);
+  chatViewportTimer = setTimeout(() => {
+    chatViewportTimer = null;
+    try {
+      window.athena.send('athena:session-viewport', {
+        viewport: { chat: { scrollTop: $history.scrollTop, atBottom: stickToBottom } },
+      });
+    } catch { /* 채널이 없는 하네스 */ }
+  }, 400);
+}
+let chatDraftTimer = null;
+function reportChatDraft() {
+  if (chatDraftTimer) clearTimeout(chatDraftTimer);
+  chatDraftTimer = setTimeout(() => {
+    chatDraftTimer = null;
+    try {
+      window.athena.send('athena:session-workspace', { patch: { draft: { text: $input.value } } });
+    } catch { /* 채널이 없는 하네스 */ }
+  }, 300);
+}
 
 function scrollHistoryToBottom(force) {
   if (force) stickToBottom = true;
@@ -922,6 +961,29 @@ function renderFailureBubble(aLine, errorText) {
   aLine.appendChild(card);
 }
 
+// 보낸 말풍선의 '@참조'는 칩으로 그린다(보드 22) — 입력창은 평문 textarea라 치는 동안에는
+// 칩이 될 수 없고, 사람이 노드를 눌러 넣은 참조가 무엇이었는지는 보낸 뒤에 남으면 된다.
+// innerHTML은 쓰지 않는다: 원문을 잘라 span에 textContent로 넣으므로 무엇이 와도 태그가
+// 되지 않는다(이 파일의 innerHTML 0건 규칙 그대로). 흐름 참조 둘은 이름에 공백이 있어
+// (@진입 흐름·@청산 흐름) 낱말 규칙만으로는 반쪽만 칩이 된다 — 그래서 먼저 걸러낸다.
+function paintUserBubbleText(el, text) {
+  const value = String(text == null ? '' : text);
+  const re = /@(?:진입 흐름|청산 흐름|[A-Za-z0-9_가-힣][A-Za-z0-9_가-힣-]*)/g;
+  el.textContent = '';
+  let last = 0;
+  let m = re.exec(value);
+  while (m) {
+    if (m.index > last) el.appendChild(document.createTextNode(value.slice(last, m.index)));
+    const chip = document.createElement('span');
+    chip.className = 'chat-ref-chip';
+    chip.textContent = m[0];
+    el.appendChild(chip);
+    last = m.index + m[0].length;
+    m = re.exec(value);
+  }
+  if (last < value.length) el.appendChild(document.createTextNode(value.slice(last)));
+}
+
 async function runQueryLive(text) {
   const myToken = ++abortToken;
   let clientSubmitId = null;
@@ -943,7 +1005,7 @@ async function runQueryLive(text) {
   qLine.className = 'turn';
   const qText = document.createElement('div');
   qText.className = 'turn-q';
-  qText.textContent = text;
+  paintUserBubbleText(qText, text);
   qLine.appendChild(qText);
   $history.appendChild(qLine);
   scrollHistoryToBottom(true); // 새 질문은 무조건 바닥으로 — 위에서 읽던 중이어도 새 턴이 우선이다
@@ -1001,7 +1063,18 @@ async function runQueryLive(text) {
     if (myToken !== abortToken) return;
     // 문구는 대화 브랜치 디자인 정합(9ce2279)을 따르고, 표시는 main 결정(2026-08-27
     // 버블 안 중복 제거)대로 하단 잠금 힌트 한 곳에만 쓴다(병합 2026-08-27).
-    const base = calling ? `카드 ${cardCount}개 렌더됨` : '판단 중 — 어떤 TR을 부를지 고르는 중';
+    //
+    // 카드 수는 **실제로 그린 것이 있을 때만** 말한다(2026-09-03 사용자 지적 —
+    // "카드 0개 렌더됨 이런 건 그냥 없애도 될 듯"). 0개인데 "렌더됨"이라고 쓰면
+    // 아무것도 안 그렸는데 그렸다고 말하는 것이고, 그 긴 문구가 잠금 힌트의 폭을
+    // 통째로 가져가 입력창을 밀어냈다(같은 행을 나눠 쓴다 — chat.css .input-row).
+    const base = calling
+      ? (cardCount > 0 ? `카드 ${cardCount}개 렌더됨` : '답변 중…')
+      // "TR"은 키움 시세 요청의 이름이다 — 그래프·백테스트 모드에서는 부를 TR이
+      // 없는데도 이 문구가 떴다(2026-09-03 실사용 제보). 그래프 접두는 시세 경로를
+      // 닫아 두는데(live-prompt.js) 진행 문구만 그것을 몰랐다. 모드와 무관하게
+      // 참인 말로 바꾼다 — 무엇을 고르는 중인지는 TOOL_STEP_LABELS가 곧 말해 준다.
+      : '판단 중 — 어떤 도구를 쓸지 고르는 중';
     setLocked(true, base, elapsedText());
   };
   // 100ms 간격 — 표기는 소수 1자리(29.3s)인데 1초 간격으로 갱신하면 소수 자리가
@@ -1187,6 +1260,21 @@ async function runQueryLive(text) {
   };
   const unsubscribeNudgeGuardProposed = window.athena.on('athena:nudge-guard-proposed', onNudgeGuardProposed);
 
+  // 모델이 낸 플러그인 제안은 이 턴의 산물이다 — 채팅에는 제안 턴 한 장만
+  // 남는다. 캔버스 카드는 canvas.js의 모듈 스코프 구독이 그리고(턴이 끝나도
+  // 카드는 남아야 한다), GUI 버튼 경로는 채팅 턴을 만들지 않는다.
+  const onPluginProposed = (envelope) => {
+    if (myToken !== abortToken) return;
+    // 모드 밖이면 캔버스가 봉투를 폐기한다 — 그때 채팅에 남는 것은 폐기를
+    // 알리는 한 줄뿐이고, 제안 턴은 만들지 않는다(없는 카드를 가리키게 된다).
+    if (pluginModeLib.currentMode() !== 'plugin') return;
+    renderPluginProposalTurn(envelope);
+  };
+  const unsubscribePluginProposed = window.athena.on('athena:plugin-proposed', onPluginProposed);
+  // 폐기 한 줄의 중복 억제는 이 턴 안에서만이다 — 세션 내내 눌러 두면 다음
+  // 턴에 같은 요청을 다시 해도 아무 말도 하지 않는다.
+  pluginOutOfMode.reset();
+
   // 추론 미리보기(2026-08-26) — 답변 텍스트가 나오기 전 긴 침묵 구간을 채운다.
   // 미리보기 전용이다: 옅은 색·작은 글씨로 뚜렷이 구분하고, 답변 첫 조각이
   // 오거나 턴이 끝나면 즉시 지운다 — 턴 기록에는 절대 안 남는다.
@@ -1271,6 +1359,15 @@ async function runQueryLive(text) {
     result = await window.athena.invoke('athena__render_canvas', {
       source: 'live', query: augmentMentions(text), expand: prefs.autoExpandCanvas,
       clientSubmitId, rendererSubmittedAt,
+      // 백테스트 설계 턴 — main.js가 모드·폼 상태를 buildLiveTurnPrompt에 넘긴다. 모델은
+      // 폼을 읽기만 하고, 바꾸는 것은 propose_spec 초안 카드의 [적용]을 사람이 누를 때다.
+      canvasMode: (window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view) || 'summary',
+      backtestContext: (window.AthenaBacktestCanvas && typeof window.AthenaBacktestCanvas.getContext === 'function')
+        ? window.AthenaBacktestCanvas.getContext() : null,
+      // 그래프 모드 턴(2026-09-02) — 지금 보고 있는 그래프 상태를 함께 넘긴다.
+      // 없으면 모델은 그래프의 존재조차 몰라 시세 질문으로 되묻는다(실측).
+      graphContext: (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.getContext === 'function')
+        ? window.AthenaCanvasMode.getContext() : null,
     });
   } catch (err) {
     // 핸들러가 reject하면(예: main 쪽 미처리 예외) 결과 없이 아래로 떨어져
@@ -1282,6 +1379,7 @@ async function runQueryLive(text) {
     unsubscribeLiveToolStep();
     unsubscribeLiveSubagentStep();
     unsubscribeNudgeGuardProposed();
+    unsubscribePluginProposed();
     unsubscribeLiveThinkingDelta();
     unsubscribeLiveTextDelta();
     releaseLadder.dispose(); // 유예 타이머 누수 방지 — 방출 자체는 아래 authoritative overwrite의 몫.
@@ -1486,13 +1584,12 @@ function openSettings() {
   $app.hidden = true;
   $settings.hidden = false;
   // Paper 43쪽(2026-08-18 확정) — 좌 사이드바(화면·계좌·MCP 서버·모델) + 우 패널.
-  // 세 카드를 동시에 쌓아 보여주던 이전 판(renderScreen/renderAccounts/renderMcp를
+  // 세 카드를 동시에 쌓아 보여주던 이전 판(renderScreen/renderAccounts를
   // 나란히 호출)을 대체한다. 패널 렌더 함수 자체는 그대로 재사용 — nav가 어떤 걸
   // 부를지만 고른다.
   const SETTINGS_PANELS = {
     screen: settingsCards.renderScreen,
     accounts: settingsCards.renderAccounts,
-    mcp: settingsCards.renderMcp,
     model: settingsCards.renderModel,
     history: settingsCards.renderHistory,
   };
@@ -1590,10 +1687,529 @@ window.AthenaShell.registerOpenSettings(openSettings);
 window.AthenaShell.registerSeedChatInput((text) => {
   if (!$input) return;
   $input.value = text != null ? String(text) : '';
+  autoGrowInput();
   $input.focus();
+  // 캐럿을 문장 끝에 둔다(2026-09-03 사용자 지적 "심긴 뒤 무엇을 해야 하는지 안
+  // 알려준다"). focus()만 하면 캐럿이 맨 앞에 서서 심긴 문장이 "이미 보낸 말"처럼
+  // 읽혔다 — 끝에서 깜빡이는 캐럿이 "고쳐서 Enter"라는 뜻을 스스로 말한다.
+  // 이 문장을 보내지 않는다는 계약은 그대로다(canvas.js seedGraphChat 주석).
+  try { $input.setSelectionRange($input.value.length, $input.value.length); } catch { /* textarea가 아니면 그만 */ }
 });
 
 // ---------- @ 플러그인 멘션 ----------
+// ---------- 되물을 것들 카드(2026-09-02) ----------
+//
+// 확인 필요 배너가 "답하시면 그대로 그래프가 갱신됩니다"라고 약속한다. 산문 대화로는
+// 그 약속을 못 지킨다 — 사용자가 어디에 답해야 하고 그 답이 어떻게 그래프로 돌아가는지가
+// 안 보인다. 실제로 모델은 정직하게 "이것이 배너의 그 3건과 같다고는 말할 수 없다"고
+// 답했다(2026-09-02 실측). 배너의 그 3건은 백엔드가 이미 안다.
+//
+// **왜 N건을 다 묻고 한 번에 제출하나.** 답변마다 턴을 돌리면 그 턴 동안 입력이 잠겨
+// 다음 질문을 누를 수 없다. 카드가 하나씩 묻고, 마지막에 모아 한 문장으로 보낸다 —
+// 턴 하나, 추출 한 번이다.
+//
+// 답이 그래프로 돌아가는 경로는 사람의 채팅뿐이다(brain_tools.py: 모델은 그래프에
+// 쓸 수 없다). 그래서 선택지는 답변 **문장**이 되어 dispatchUserQuery로 제출된다.
+let brainQuestions = null; // { items, index, decisions } — 열려 있는 동안만
+
+function brainQuestionsLib() {
+  return window.AthenaLib && window.AthenaLib.BrainQuestions;
+}
+
+function closeBrainQuestions() {
+  brainQuestions = null;
+  const host = document.getElementById('brainQuestionCard');
+  if (!host) return;
+  while (host.firstChild) host.removeChild(host.firstChild);
+  host.hidden = true;
+}
+
+// 답을 **그래프에 바로 반영하고** 카드를 닫는다(2026-09-03 사용자 확정).
+//
+// 예전에는 모은 답을 한 문장으로 채팅에 보냈고 반영은 다음 수집 배치가 했다.
+// 그래서 세 건을 다 답해도 "확인이 필요한 것 3건"이 그대로였고 모델은 같은 카드를
+// 다시 띄웠다 — 사람은 무한히 답했다(실측). 수집(대화를 캐는 일)과 편집(주인이
+// 화면에서 확인하는 일)은 다른 일이다.
+//
+// 문장을 보내지 않는 것이 중요하다: 보내면 모델이 새 요청으로 읽어 카드를 또 띄운다.
+// 결과는 채팅 흐름에 한 줄로 적는다 — 무엇이 처리됐는지 사람이 알아야 한다.
+async function applyBrainAnswers() {
+  const decided = brainQuestions ? brainQuestions.decisions.slice() : [];
+  closeBrainQuestions();
+  if (!decided.length) return;
+  let confirmed = 0;
+  let removed = 0;
+  const failures = [];
+  for (const decision of decided) {
+    const channel = decision.choice === 'yes'
+      ? 'athena:brain-confirm-relation'
+      : 'athena:brain-retract-relation';
+    let res = null;
+    try {
+      res = await window.athena.invoke(channel, { relationId: decision.relationId });
+    } catch (err) {
+      failures.push(decision.label + ': ' + String((err && err.message) || err));
+      continue;
+    }
+    if (!res || !res.ok) {
+      failures.push(decision.label + ': ' + ((res && res.error) || '알 수 없는 이유'));
+      continue;
+    }
+    if (decision.choice === 'yes') confirmed += 1; else removed += 1;
+  }
+  const parts = [];
+  if (confirmed) parts.push(confirmed + '건을 확실한 것으로 기록했습니다');
+  if (removed) parts.push(removed + '건을 지웠습니다');
+  if (parts.length) appendSystemLine(parts.join(' · ') + '.');
+  // 실패를 조용히 넘기지 않는다 — 사람은 처리됐다고 믿고 화면을 떠난다(§0 정직성).
+  for (const failure of failures) appendSystemLine('반영하지 못했습니다 — ' + failure);
+}
+
+function answerBrainQuestion(choice) {
+  const lib = brainQuestionsLib();
+  if (!brainQuestions || !lib) return;
+  const item = brainQuestions.items[brainQuestions.index];
+  // 건너뛰기는 아무것도 안 남긴다 — 침묵을 부정으로 굳히지 않는다.
+  if (choice !== 'skip' && item && item.relationId) {
+    brainQuestions.decisions.push({
+      relationId: item.relationId,
+      choice,
+      label: (item.subjectImplicit || !item.subject)
+        ? "\"" + item.object + "\" · '" + item.relationText + "'"
+        : "\"" + item.subject + "\" → \"" + item.object + "\" · '" + item.relationText + "'",
+    });
+  }
+  brainQuestions.index += 1;
+  if (brainQuestions.index >= brainQuestions.items.length) {
+    void applyBrainAnswers();
+    return;
+  }
+  renderBrainQuestionCard();
+}
+
+function renderBrainQuestionCard() {
+  const lib = brainQuestionsLib();
+  const host = document.getElementById('brainQuestionCard');
+  if (!host || !brainQuestions || !lib) return;
+  while (host.firstChild) host.removeChild(host.firstChild);
+  const item = brainQuestions.items[brainQuestions.index];
+
+  const head = document.createElement('div');
+  head.className = 'question-card-head';
+  const title = document.createElement('div');
+  title.className = 'question-card-title';
+  title.textContent = item.question;
+  head.appendChild(title);
+  const progress = document.createElement('span');
+  progress.className = 'question-card-progress';
+  progress.textContent = lib.progressLabel(brainQuestions.index, brainQuestions.items.length);
+  head.appendChild(progress);
+  host.appendChild(head);
+
+  const context = document.createElement('div');
+  context.className = 'question-card-context';
+  context.textContent = lib.contextLine(item);
+  host.appendChild(context);
+
+  const note = document.createElement('div');
+  note.className = 'question-card-note';
+  // 답이 어디로 가는지 적는다 — 누르면 채팅에 문장이 제출된다는 사실을 숨기지 않는다.
+  note.textContent = '답하면 채팅으로 보내지고, 그 답이 그래프를 갱신합니다.';
+  host.appendChild(note);
+
+  const actions = document.createElement('div');
+  actions.className = 'question-card-actions';
+  const mkBtn = (choice, className) => {
+    const spec = lib.CHOICES[choice];
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `question-card-btn ${className}`;
+    const label = document.createElement('span');
+    label.textContent = spec.label;
+    btn.appendChild(label);
+    if (spec.hint) {
+      const hint = document.createElement('span');
+      hint.className = 'question-card-key';
+      hint.textContent = spec.hint;
+      btn.appendChild(hint);
+    }
+    btn.addEventListener('click', () => answerBrainQuestion(choice));
+    return btn;
+  };
+  // 레퍼런스 화면과 같은 배치 — 거절이 왼쪽, 확인이 오른쪽.
+  actions.appendChild(mkBtn('skip', 'is-quiet'));
+  const right = document.createElement('span');
+  right.className = 'question-card-right';
+  right.appendChild(mkBtn('no', 'is-quiet'));
+  right.appendChild(mkBtn('yes', 'is-primary'));
+  actions.appendChild(right);
+  host.appendChild(actions);
+  host.hidden = false;
+}
+
+// 카드가 열려 있을 때만 듣는다 — Esc는 평소 "중단"이고 Ctrl+Enter는 평소 쓰임이 없다.
+document.addEventListener('keydown', (e) => {
+  if (!brainQuestions) return;
+  if (e.key === 'Escape') { e.preventDefault(); answerBrainQuestion('skip'); return; }
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); answerBrainQuestion('yes'); }
+}, true);
+
+window.AthenaShell.registerOpenBrainQuestions(async () => {
+  const lib = brainQuestionsLib();
+  if (!lib) return false;
+  // 답변 중에는 열지 않는다 — 카드의 마지막 제출이 그 턴과 부딪힌다.
+  if (state !== 'idle' || remoteQueryBusy) return false;
+  const res = await window.athena.invoke('athena:brain-suggested-questions').catch(() => null);
+  if (!res || !res.ok) return false;
+  // IPC는 { ok, revision, questions } 평면 구조를 준다(main.js — result.body를 펼쳐 준다).
+  // 관계명 한글 사전은 공통 패널·엔티티 타임라인이 이미 쓰는 것을 그대로 넘긴다
+  // (controller.js RELATION_LABELS). 카드에 복사하면 한쪽만 고치는 실수가 나고,
+  // 그 leaf가 controller를 의존하면 층이 뒤집힌다 — 그래서 여기서 주입한다.
+  const controller = window.AthenaLib && window.AthenaLib.GraphModeController;
+  const items = lib.normalizeQuestions(res, controller && controller.RELATION_LABELS);
+  if (!items.length) return false;
+  // decisions — 답한 것을 바로 반영하려면 relationId와 선택이 필요하다.
+  // 예전 answers(문장 배열)는 채팅으로 보낼 용도였고 지금은 보내지 않는다.
+  brainQuestions = { items, index: 0, decisions: [] };
+  renderBrainQuestionCard();
+  return true;
+});
+
+// ---------- 그래프 편집 제안 카드(2026-09-03) ----------
+//
+// 사용자 확정 방향: **모델은 제안, 확정은 사람.** 모델이 athena_graph_view
+// action=propose_edit을 부르면 main.js가 athena:graph-chat-action으로 보내고,
+// 여기서 카드를 띄운다. 누르면 사람의 답변 문장이 dispatchUserQuery로 제출되어
+// POST /brain/chat → 추출로 그래프가 갱신된다 — 되물을 것들 카드와 **같은 경로**다.
+//
+// 되물을 것들 카드와 같은 클래스(.question-card*)를 쓰고 같은 키(Ctrl+Enter·Esc)를
+// 쓴다. 다른 점은 하나뿐이다: 저쪽은 백엔드가 고른 불확실한 관계를 N건 묻고 한 번에
+// 제출하고, 이쪽은 모델의 제안 한 건을 즉시 묻는다(제안은 대화 흐름 안에서 나오므로
+// 모아 둘 이유가 없다).
+let graphEditProposal = null; // 열려 있는 동안만
+
+function graphEditProposalLib() {
+  return window.AthenaLib && window.AthenaLib.GraphEditProposal;
+}
+
+function closeGraphEditProposal() {
+  graphEditProposal = null;
+  const host = document.getElementById('graphEditProposalCard');
+  if (!host) return;
+  while (host.firstChild) host.removeChild(host.firstChild);
+  host.hidden = true;
+}
+
+function answerGraphEditProposal(choice) {
+  const lib = graphEditProposalLib();
+  if (!graphEditProposal || !lib) return;
+  const item = graphEditProposal;
+  const sentence = lib.proposalSentence(item, choice);
+  closeGraphEditProposal();
+
+  // 지우기는 **바로** 지운다(2026-09-03 사용자 확정 "내가 그래프창에 있으면 편집이라고
+  // 봐야지"). 수집(대화를 캐는 일)과 편집(주인이 화면에서 고치는 일)은 다른 일이다.
+  //
+  // 예전에는 이것도 답변 문장을 채팅으로 보내는 것이 전부였고, 반영은 다음 수집
+  // 배치가 했다 — 누른 직후 아무 일도 안 일어나니 모델이 같은 제안을 다시 냈고
+  // 사람은 같은 카드를 무한히 눌렀다(실측). 문장을 **보내지 않는** 것이 중요하다:
+  // 보내면 모델이 그것을 새 요청으로 읽어 또 제안하고, 루프가 그대로 남는다.
+  //
+  // relationId가 없으면(구버전 모델이 id를 안 실었거나 추가·수정 제안이면) 예전
+  // 경로를 그대로 쓴다 — 직접 쓰기는 아직 지우기 하나뿐이다.
+  if (choice === 'apply' && item.op === 'remove' && item.relationId) {
+    void retractGraphRelation(item);
+    return;
+  }
+
+  // 추가·수정도 바로 쓴다(2026-09-03). 두 끝 id가 다 와야 한다 — 이름으로 쓰면
+  // 오타가 새 노드가 되고, 그것은 고치려던 것보다 나쁘다. 하나라도 없으면 아래
+  // 예전 경로(답변 문장 제출 → 수집 때 반영)로 떨어진다.
+  if (choice === 'apply' && (item.op === 'add' || item.op === 'change')
+      && item.subjectId && item.objectId) {
+    void writeManualRelation(item);
+    return;
+  }
+
+  // 건너뛰기는 아무것도 보내지 않는다 — 침묵을 답으로 굳히지 않는다.
+  if (sentence) dispatchUserQuery(sentence);
+}
+
+// 채팅 흐름에 결과 한 줄. 'past-empty'는 과거 대화 복원이 "메시지가 없습니다"에
+// 쓰는 것과 같은 안내 톤이다 — 말풍선(사람/모델의 발화)이 아니라 화면이 하는 말이라
+// 같은 자리·같은 톤을 쓴다(새 시각 언어를 만들지 않는다).
+function appendSystemLine(text) {
+  if (!$history) return;
+  const line = document.createElement('div');
+  line.className = 'past-empty';
+  line.textContent = String(text == null ? '' : text);
+  $history.appendChild(line);
+  scrollAfterRender();
+}
+
+// 사람이 누른 추가·수정을 그래프에 바로 쓴다. 티어는 MANUAL이라 다음 대화 추출이
+// 덮지 못한다(store._apply_one_relation). 취소와 같은 이유로 실패를 조용히 넘기지
+// 않는다 — 사람은 고쳤다고 믿고 화면을 떠난다(§0 정직성).
+async function writeManualRelation(item) {
+  const label = proposalLabel(item);
+  let res = null;
+  try {
+    res = await window.athena.invoke('athena:brain-manual-relation', {
+      subjectId: item.subjectId,
+      objectId: item.objectId,
+      kind: item.relation,
+      rationale: item.reason,
+    });
+  } catch (err) {
+    appendSystemLine(label + ' — 반영하지 못했습니다: ' + String((err && err.message) || err));
+    return;
+  }
+  if (!res || !res.ok) {
+    appendSystemLine(label + ' — 반영하지 못했습니다: ' + ((res && res.error) || '알 수 없는 이유'));
+    return;
+  }
+  if (res.written === false) {
+    // 두 끝 중 하나가 그래프에 없다 — 화면에 없는 노드를 이름만으로 만들지 않는다.
+    appendSystemLine(label + ' — 그래프에 없는 노드가 있어 반영하지 못했습니다.');
+    return;
+  }
+  appendSystemLine(label + ' — 반영했습니다(직접 수정).');
+}
+
+// 카드가 가리키는 것을 한 줄로. 세 곳이 같은 말로 불러야 사람이 같은 것으로 읽는다.
+function proposalLabel(item) {
+  return (item.subjectImplicit || !item.subject)
+    ? '"' + item.object + '" · \'' + item.relationText + '\''
+    : '"' + item.subject + '" → "' + item.object + '" · \'' + item.relationText + '\'';
+}
+
+// 사람이 누른 취소를 그래프에 바로 반영한다. 실패하면 조용히 넘기지 않는다 —
+// 사람은 지웠다고 믿고 화면을 떠난다(§0 정직성). 성공하면 main이 화면을 다시
+// 읽게 하는 이벤트를 쏘므로 여기서 따로 다시 그리지 않는다.
+async function retractGraphRelation(item) {
+  const label = proposalLabel(item);
+  let res = null;
+  try {
+    res = await window.athena.invoke('athena:brain-retract-relation', { relationId: item.relationId });
+  } catch (err) {
+    appendSystemLine(`${label} — 지우지 못했습니다: ${String((err && err.message) || err)}`);
+    return;
+  }
+  if (!res || !res.ok) {
+    appendSystemLine(`${label} — 지우지 못했습니다: ${(res && res.error) || '알 수 없는 이유'}`);
+    return;
+  }
+  if (res.removed === false) {
+    appendSystemLine(`${label} — 이미 없는 연결이었습니다.`);
+    return;
+  }
+  appendSystemLine(`${label} — 지웠습니다.`);
+}
+
+function renderGraphEditProposalCard() {
+  const lib = graphEditProposalLib();
+  const host = document.getElementById('graphEditProposalCard');
+  if (!host || !graphEditProposal || !lib) return;
+  while (host.firstChild) host.removeChild(host.firstChild);
+
+  const head = document.createElement('div');
+  head.className = 'question-card-head';
+  const title = document.createElement('div');
+  title.className = 'question-card-title';
+  title.textContent = lib.proposalTitle(graphEditProposal);
+  head.appendChild(title);
+  host.appendChild(head);
+
+  const context = document.createElement('div');
+  context.className = 'question-card-context';
+  context.textContent = lib.proposalContext(graphEditProposal);
+  host.appendChild(context);
+
+  const note = document.createElement('div');
+  note.className = 'question-card-note';
+  // 아직 아무것도 안 바뀌었다는 사실을 화면이 말한다 — 모델의 notice와 같은 내용이다.
+  // 문구는 **실제로 걸릴 경로**를 말한다(2026-09-03). 두 경로가 있다:
+  //   · relationId가 있으면(op=remove) 누른 순간 그래프에서 바로 사라진다.
+  //   · 없으면(추가·수정, 또는 모델이 id를 안 실은 경우) 답변 문장이 채팅으로 나가고
+  //     반영은 다음 수집 배치가 한다.
+  // 앞 판은 둘을 구분하지 않아, 즉시 지워지는데도 "다음 수집 때"라고 말했다 —
+  // 그 전 판은 반대로 "그 답이 그래프를 갱신합니다"라 즉시로 읽혔고, 숫자가 안
+  // 줄어드니 같은 카드를 계속 누르는 무한 루프처럼 느껴졌다(실제 제보). 어느 쪽이든
+  // 화면이 사실과 다르면 사람은 고장으로 읽는다.
+  const immediate = graphEditProposal.op === 'remove' && !!graphEditProposal.relationId;
+  note.textContent = immediate
+    ? '아직 그래프는 그대로입니다. 누르면 바로 지워집니다.'
+    : '아직 그래프는 그대로입니다. 누르면 그 답이 채팅으로 보내지고, 다음 수집 때 그래프에 반영됩니다.';
+  host.appendChild(note);
+
+  const actions = document.createElement('div');
+  actions.className = 'question-card-actions';
+  const mkBtn = (choice, className) => {
+    const spec = lib.CHOICES[choice];
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `question-card-btn ${className}`;
+    const label = document.createElement('span');
+    label.textContent = spec.label;
+    btn.appendChild(label);
+    if (spec.hint) {
+      const hint = document.createElement('span');
+      hint.className = 'question-card-key';
+      hint.textContent = spec.hint;
+      btn.appendChild(hint);
+    }
+    btn.addEventListener('click', () => answerGraphEditProposal(choice));
+    return btn;
+  };
+  // 되물을 것들 카드와 같은 배치 — 거절이 왼쪽, 확인이 오른쪽.
+  actions.appendChild(mkBtn('skip', 'is-quiet'));
+  const right = document.createElement('span');
+  right.className = 'question-card-right';
+  right.appendChild(mkBtn('reject', 'is-quiet'));
+  right.appendChild(mkBtn('apply', 'is-primary'));
+  actions.appendChild(right);
+  host.appendChild(actions);
+  host.hidden = false;
+}
+
+// 카드가 열려 있을 때만 듣는다 — 되물을 것들 카드와 같은 키를 쓰므로, 그 카드가
+// 열려 있으면 이쪽은 듣지 않는다(위 핸들러가 먼저 preventDefault한다).
+document.addEventListener('keydown', (e) => {
+  if (!graphEditProposal || brainQuestions) return;
+  if (e.key === 'Escape') { e.preventDefault(); answerGraphEditProposal('skip'); return; }
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); answerGraphEditProposal('apply'); }
+}, true);
+
+// canvas.js가 athena:graph-chat-action을 받아 이 훅을 부른다 — 그 채널의
+// 구독은 한 곳에만 둔다(shell.js hooks 주석 참고). 되물을 것들 카드가 이미
+// 같은 버스를 쓰므로 chat↔canvas 손넘김 규칙이 하나로 유지된다.
+window.AthenaShell.registerOpenGraphEditProposal((message) => {
+  const lib = graphEditProposalLib();
+  if (!lib) return false;
+  // 관계명 한글 사전은 공통 패널이 이미 쓰는 것을 그대로 넘긴다(되물을 것들 카드와
+  // 같은 이유 — 복사하면 한쪽만 고치는 실수가 난다).
+  const controller = window.AthenaLib && window.AthenaLib.GraphModeController;
+  const item = lib.normalizeProposal(message, controller && controller.RELATION_LABELS);
+  // 못 쓸 제안은 카드를 띄우지 않는다 — 무엇을 고칠지 모르는 카드에는 답할 수 없다.
+  if (!item) return false;
+  graphEditProposal = item;
+  renderGraphEditProposalCard();
+  return true;
+});
+
+// ---------- 과거 대화 열기(2026-09-02) ----------
+//
+// 제보: 대화 이력 쪽을 누르면 그 대화로 이동해야 하는데 그런 기능이 전혀 없다.
+// 실제로 없었다 — athena:conversations-set-active가 요청한 id를 의도적으로 무시하고
+// 현재 활성 id를 그대로 돌려준다(main.js 주석: "복원 배선이 생기기 전까지 선택만
+// 바꿔 새 메시지를 과거 제목 아래에 쓰면 안 된다"). 그 판단은 옳았지만, 그 주석이
+// 말하는 "메시지를 복원할 수 없다"는 전제는 지금 틀렸다: 브레인 이력 DB가
+// conversation_id와 함께 메시지를 들고 있고 조회 엔드포인트도 있다.
+//
+// **그래서 이제는 실제로 돌아간다(41번 보드 "다시 누르면 그대로").** main이
+// athena:conversations-set-active에서 기록 대상 id와 Claude 커서(--resume)를 함께
+// 바꾸므로, 여기서는 그 대화의 메시지를 다시 그리고 모드 화면을 그 대화의 모드로
+// 맞춘 뒤 입력을 연다. 읽기 전용 잠금은 없다 — 이어서 말하면 그 대화에 쌓인다.
+// 캔버스 카드·작업 환경의 복원은 세션 스토어 배선(다음 단계)의 몫이라 아직
+// 카드는 비운 채 시작한다. 없는 것을 있다고 그리지 않는다.
+
+function pastMessageTurn(message) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const body = document.createElement('div');
+  // 사용자/모델 말풍선은 살아 있는 턴과 같은 클래스를 쓴다 — 복원된 대화라고
+  // 다른 모양으로 그리면 같은 대화가 두 얼굴을 갖는다.
+  body.className = message.role === 'user' ? 'turn-q' : 'turn-a';
+  body.textContent = String((message && message.text) || '');
+  line.appendChild(body);
+  return line;
+}
+
+function restoreConversation(conv, switched, messages, snapshot) {
+  while ($history.firstChild) $history.removeChild($history.firstChild);
+  if (window.AthenaShell && typeof window.AthenaShell.clearCanvases === 'function') {
+    window.AthenaShell.clearCanvases();
+  }
+  // 대화는 모드에 묶인다 — 백테스트 대화를 열면 백테스트 캔버스가 뜬다(35번 보드).
+  const snapshotLib = window.AthenaLib && window.AthenaLib.SessionSnapshot;
+  const view = snapshotLib ? snapshotLib.modeToView(switched.activeMode) : null;
+  if (view && window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+    window.AthenaCanvasMode.setView(view);
+  }
+  if (view && window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+    window.AthenaModeNav.setActive(view);
+  }
+
+  const banner = document.createElement('div');
+  banner.className = 'past-banner';
+  const title = document.createElement('span');
+  title.className = 'past-banner-title';
+  title.textContent = conv.title ? `복원됨 · ${conv.title}` : '복원됨';
+  banner.appendChild(title);
+  const note = document.createElement('span');
+  note.className = 'past-banner-note';
+  // 문맥이 이어지는지는 커서가 있었느냐에 달렸다 — 있는 그대로 적는다.
+  note.textContent = switched.resumed
+    ? '이어서 말할 수 있습니다 — 모델 문맥까지 이어집니다'
+    : '이어서 말할 수 있습니다 — 모델은 이 대화의 문맥 없이 새로 시작합니다';
+  banner.appendChild(note);
+  $history.appendChild(banner);
+
+  if (!messages.length) {
+    // 못 읽은 것과 없는 것은 다르다 — 조회는 됐고 메시지가 0건인 경우다
+    // (이력 저장이 붙기 전에 만들어진 대화가 여기 해당한다).
+    const empty = document.createElement('div');
+    empty.className = 'past-empty';
+    empty.textContent = '이 대화에는 저장된 메시지가 없습니다.';
+    $history.appendChild(empty);
+  } else {
+    for (const message of messages) $history.appendChild(pastMessageTurn(message));
+  }
+  setLocked(false);
+  // 초안과 스크롤도 그 대화의 것이다. 초안은 지금 입력이 비어 있을 때만 채운다 —
+  // 사용자가 치던 글자를 저장본이 덮으면 안 된다. 스크롤은 저장된 자리로, 바닥이었으면 바닥으로.
+  const ws = snapshot && snapshot.workspace;
+  if (ws && ws.draft && typeof ws.draft.text === 'string' && !$input.value) {
+    $input.value = ws.draft.text;
+    autoGrowInput();
+  }
+  const vp = snapshot && snapshot.viewport && snapshot.viewport.chat;
+  if (vp && vp.atBottom === false && typeof vp.scrollTop === 'number') {
+    stickToBottom = false;
+    $history.scrollTop = vp.scrollTop;
+  } else {
+    scrollHistoryToBottom(true);
+  }
+  // 모드 화면의 상태(그래프 시점·백테스트 폼 …)는 그 모드가 등록한 핸들러가 받는다 —
+  // 여기서는 kind로 넘길 뿐이다(lib/session-workspace.js).
+  if (ws && window.AthenaSessionWorkspace) window.AthenaSessionWorkspace.restore(ws);
+}
+
+// sidebar.js가 부르는 다리(shell.js 버스). 돌아갔으면 true.
+window.AthenaShell.registerOpenConversation(async (conv) => {
+  if (!conv || !conv.id) return false;
+  // 답변 중에는 전환하지 않는다 — 진행 중 턴이 다른 대화 밑으로 사라진다.
+  if (state !== 'idle' || remoteQueryBusy) return false;
+  const switched = await window.athena.invoke('athena:conversations-set-active', { id: conv.id })
+    .catch(() => null);
+  if (!switched || !switched.restorable) return false;
+  if (switched.isCurrent) return true;
+  // 메시지의 원본은 세션 스토어다(42번 보드). 스냅샷의 currentId 경로만 그린다 — 분기가
+  // 있어도 한 줄로 보인다. 스토어에 없으면(이 배선 전에 만든 대화) 브레인 이력으로 폴백.
+  const snapshot = await window.athena.invoke('athena:session-load', { id: conv.id }).catch(() => null);
+  const snapshotLib = window.AthenaLib && window.AthenaLib.SessionSnapshot;
+  let messages = snapshot && snapshotLib ? snapshotLib.messagePath(snapshot.messages, snapshot.currentId) : [];
+  if (!messages.length) {
+    const res = await window.athena.invoke('athena:conversation-messages', { conversationId: conv.id })
+      .catch(() => null);
+    messages = res && res.ok && Array.isArray(res.messages) ? res.messages : [];
+  }
+  restoreConversation(conv, switched, messages, snapshot);
+  // 카드는 main이 저장된 봉투를 같은 페인트 채널로 다시 흘린다 — 캔버스를 비운 뒤라 순서가 맞는다.
+  void window.athena.invoke('athena:session-replay-cards', { id: conv.id }).catch(() => {});
+  return true;
+});
+
 // Claude 데스크톱의 @ 멘션과 같은 UX: 입력란에서 @를 치면 등록된 MCP 서버 목록이
 // 뜨고, 고르면 @alias가 삽입된다. 제출 시 @alias가 실제 등록 서버와 일치하면
 // 모델에게 그 서버의 도구를 우선 쓰라는 지시를 질의에 동봉한다(화면의 사용자
@@ -1651,6 +2267,7 @@ function insertMention(alias) {
   if (!token) { closeMentionMenu(); return; }
   const value = $input.value;
   $input.value = `${value.slice(0, token.start)}@${alias} ${value.slice(token.end)}`;
+  autoGrowInput();
   const caret = token.start + alias.length + 2;
   $input.setSelectionRange(caret, caret);
   $input.focus();
@@ -1722,6 +2339,10 @@ function dispatchUserQuery(text) {
   }
   runQuery(normalized);
 }
+// 사람이 타이핑하는 동안에도 자란다(붙여넣기·한글 조합 포함 — input 이벤트가
+// keydown보다 확실하다).
+$input.addEventListener('input', autoGrowInput);
+$input.addEventListener('input', reportChatDraft);
 
 $input.addEventListener('keydown', (e) => {
   // 멘션 메뉴가 열려 있으면 방향키·Enter·Tab·Esc는 메뉴 몫이다 — 제출보다 먼저.
@@ -1741,10 +2362,16 @@ $input.addEventListener('keydown', (e) => {
     }
     if (e.key === 'Escape') { e.preventDefault(); closeMentionMenu(); return; }
   }
+  // Shift+Enter는 줄바꿈이다(2026-09-02 — 입력창이 textarea가 된 뒤로 필요해졌다).
+  // 그냥 Enter는 그대로 제출이고, 이때 preventDefault를 해야 제출과 동시에 줄바꿈이
+  // 하나 들어가지 않는다(<input> 시절에는 애초에 줄바꿈이 없어 필요 없었다).
+  if (e.key === 'Enter' && e.shiftKey) return;
   if (e.key !== 'Enter' || state !== 'idle' || remoteQueryBusy) return;
+  e.preventDefault();
   // 첨부 칩이 있으면 전송 직전에 경로를 동봉한다(코덱스 UI 이식, 2026-08-27).
   const text = consumeAttachments($input.value);
   $input.value = '';
+  autoGrowInput();
   dispatchUserQuery(text);
 });
 
@@ -1993,11 +2620,13 @@ function renderKiumiMenu() {
   $kiumiMenu.appendChild(kiumiItem('target', '목표', '목표를 대화에서 구체화한다', () => {
     closeKiumiMenu();
     $input.value = '달성할 목표를 구체화해줘: ';
+    autoGrowInput();
     $input.focus();
   }));
   $kiumiMenu.appendChild(kiumiItem('plan', '계획 모드', '실행 전 단계를 먼저 정리한다', () => {
     closeKiumiMenu();
     $input.value = '다음 작업을 실행 가능한 단계와 검증 기준으로 계획해줘: ';
+    autoGrowInput();
     $input.focus();
   }));
   const sep = document.createElement('div');
@@ -2031,6 +2660,7 @@ function renderKiumiMenu() {
           const value = $input.value;
           const spacer = value && !/\s$/.test(value) ? ' ' : '';
           $input.value = `${value}${spacer}@${server.alias} `;
+          autoGrowInput();
           $input.focus();
           $input.setSelectionRange($input.value.length, $input.value.length);
         },
@@ -2610,6 +3240,7 @@ function renderApprovalCard(r) {
   const fix = _btn('고칠 게 있어', 'routine-btn');
   fix.addEventListener('click', () => {
     $input.value = draftFixSeedText(r);
+    autoGrowInput();
     $input.focus();
   });
 
@@ -2710,6 +3341,864 @@ function renderGuardConfirmCard({ current, proposed } = {}, triggerText) {
 
   _mountTurn(line, card);
 }
+
+// ---------- 플러그인 제안 턴 · 결과 턴 (US-004) ----------
+// 채팅이 제안하고 캔버스가 승인한다. 이 파일은 승인 카드를 만들지 않는다 —
+// 카드는 canvas.js가 그리고, 여기에는 무엇을 제안했는지와 승인 뒤 무엇이
+// 일어났는지만 대화 기록으로 남는다. 시각 언어는 라우틴 초안 알약을 그대로
+// 재사용한다(새 언어를 만들지 않는다).
+const pluginProposalLib = window.AthenaLib.PluginProposal;
+const pluginModeLib = window.AthenaLib.PluginModeAdapter;
+
+function pluginTurnCard(pills, bodyLines, chipRow) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent plugin-turn';
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  pills.forEach((text, index) => {
+    const pill = document.createElement('span');
+    pill.className = index === 0 ? 'routine-draft-pill is-filled' : 'routine-draft-pill';
+    pill.textContent = text;
+    head.appendChild(pill);
+  });
+  card.appendChild(head);
+  bodyLines.forEach((text) => {
+    const body = document.createElement('div');
+    body.className = 'agent-body';
+    body.textContent = text;
+    card.appendChild(body);
+  });
+  if (chipRow) card.appendChild(chipRow);
+  _mountTurn(line, card);
+}
+
+// 모델이 낸 제안만 채팅 턴이 된다 — 허브 버튼이 낸 것은 카드로만 합류한다.
+function renderPluginProposalTurn(envelope) {
+  if (!envelope || envelope.source !== 'model') return;
+  const copy = pluginProposalLib.cardCopy(envelope);
+  pluginTurnCard(['플러그인', '제안'], [copy.title, copy.reasonLine].filter(Boolean), null);
+}
+
+// 승인 클릭은 살아 있는 LLM 턴 **밖**에서 일어난다 — 턴 스코프 클로저는 이미
+// 죽어 있으므로 결과 턴은 모듈 스코프의 이 구독이 마운트한다.
+window.addEventListener('athena:plugin-result', (event) => {
+  const detail = (event && event.detail) || {};
+  const result = detail.result || {};
+  // 문장 조립(도구 수 합산·재시작 줄)은 순수 모듈이 한다 — 여기는 그리기만.
+  const copy = pluginProposalLib.resultTurnModel(detail.kind, result);
+  if (!copy.lines.length) return;
+  let chipRow = null;
+  if (copy.chip) {
+    chipRow = document.createElement('div');
+    chipRow.className = 'routine-approval-actions';
+    const retry = _btn(copy.chip, 'agent-proactive-chip');
+    // 실패한 봉투는 대기 목록으로 되돌려져 있다 — 같은 봉투를 그대로 다시 보낸다.
+    retry.addEventListener('click', () => {
+      retry.disabled = true;
+      if (typeof pluginDecide === 'function') void pluginDecide('athena:plugin-approve', detail.envelope);
+    });
+    chipRow.appendChild(retry);
+  }
+  pluginTurnCard(['플러그인', '결과'], copy.lines, chipRow);
+});
+
+// 모드 밖에서 온 제안은 폐기됐다 — 캔버스에는 카드가 없다. 같은 제안이 한 턴에
+// 여러 번 와도 한 번만 알린다(서명 1회 — 턴이 바뀌면 다시 알린다).
+const pluginOutOfMode = pluginProposalLib.createOutOfModeNotifier();
+window.addEventListener('athena:plugin-out-of-mode', (event) => {
+  const envelope = (event && event.detail && event.detail.envelope) || null;
+  if (!envelope) return;
+  if (!pluginOutOfMode.shouldAnnounce(envelope)) return;
+  pluginTurnCard(['플러그인'], [pluginProposalLib.outOfModeCopy()], null);
+});
+
+// ---------- 백테스트 변경 내역 카드 (5단계, 2026-09-02) ----------
+// 채팅이 athena_backtest로 낸 액션 4종(설정·코드·화면 전환·최적화 제안)은 이제
+// 캔버스에 **바로** 반영된다 — 초안 카드를 띄워놓고 [적용]을 기다리지 않는다
+// (사용자 확정: "바로 반영 + 채팅에 변경 내역·되돌리기"). 대신 무엇이 바뀌었는지와
+// 되돌릴 방법이 여기, 채팅에 남는다. 실행·검증·탐색은 그래도 사람이 이 카드의
+// 버튼을 눌러야 시작된다 — 경계는 그대로다.
+//
+// 구독은 이 파일 하나뿐이다(canvas.js에서 같은 채널을 또 들으면 액션이 두 번
+// 적용된다). 캔버스 API는 canvas.js가 window.AthenaBacktestCanvas로 올려둔다.
+const BACKTEST_CHANGE_TITLES = {
+  spec_draft: '지도 반영',
+  code_draft: '코드 반영',
+  file_draft: '파일 반영',
+  navigate: '탭 이동',
+  optimize_request: '최적화 준비',
+  // 시각 설계 ↔ 코드 왕복(보드 12·13·14, 2026-09-03) — 묻고, 비활성 수정안을 보이고,
+  // 동기화된 초안을 알리고, 그 사이 다른 수정이 먼저 저장됐음을 알린다.
+  visual_question: '한 가지만 확인할게요',
+  visual_patch: '그래프 + 코드 패치',
+  visual_synced: '동기화 완료',
+  visual_conflict: '다시 검토',
+  // 새 기법 만들기(보드 20·21, 2026-09-03) — AI가 하나씩 묻고, 검사는 자동으로 돈다.
+  technique_question: '하나만 정해요',
+  technique_check: '자동 검사',
+};
+
+function backtestChangeRowText(row) {
+  const label = (row && row.label) || '';
+  const before = (row && row.before) ? String(row.before) : '';
+  const after = (row && row.after) != null ? String(row.after) : '';
+  return before ? `${label} · ${before} → ${after}` : `${label} · ${after}`;
+}
+
+// ---------- 시각 설계 오류 수정 카드 (보드 12·13·14, 2026-09-03) ----------
+// backtest-visual-code-roundtrip-implementation-evaluation.md §"대화형 오류 수정 계약"의
+// 채팅 표면이다. 상태는 넷뿐이다: 하나만 묻는다(visual_question) → 비활성 수정안을
+// 보여준다(visual_patch) → 동기화된 초안이 생겼다(visual_synced) → 그 사이 다른 수정이
+// 먼저 저장됐다(visual_conflict).
+//
+// 이 카드는 아무것도 적용하지 않는다. 버튼이 캔버스 API를 부르고, 저장·활성화·실행의
+// 경계는 캔버스와 백엔드가 진다(계약: 수정안 생성만으로 활성 graph·저장된 버전·실행
+// 설정은 바뀌지 않는다). 캔버스 API는 나중에 붙으므로 전부 typeof로 막는다.
+const BACKTEST_VISUAL_KINDS = new Set([
+  'visual_question', 'visual_patch', 'visual_synced', 'visual_conflict',
+]);
+
+function backtestVisualCanvasCall(name, ...args) {
+  const api = window.AthenaBacktestCanvas;
+  if (!api || typeof api[name] !== 'function') return null;
+  return api[name](...args);
+}
+
+// 예상 StrategySpec diff — 배열이 정본이고 {rows:[…]}로 와도 같은 줄로 읽는다.
+function backtestVisualSpecRows(specDiff) {
+  if (Array.isArray(specDiff)) return specDiff;
+  return (specDiff && Array.isArray(specDiff.rows)) ? specDiff.rows : [];
+}
+
+// 코드 diff는 진단 카드의 줄 문법을 그대로 쓴다(backtest-explain.js와 같은 클래스).
+function backtestVisualDiff(diffLines) {
+  const diff = document.createElement('div');
+  diff.className = 'backtest-diff';
+  (Array.isArray(diffLines) ? diffLines : []).forEach((row) => {
+    const cls = row.mark === '+' ? 'is-add' : (row.mark === '-' ? 'is-del' : 'is-same');
+    const el = document.createElement('div');
+    el.className = `backtest-diff-row ${cls}`;
+    const mark = document.createElement('span');
+    mark.className = 'backtest-diff-mark';
+    mark.textContent = row.mark === ' ' ? '' : (row.mark || '');
+    const text = document.createElement('span');
+    text.className = 'backtest-diff-text';
+    text.textContent = row.text || '';
+    el.appendChild(mark);
+    el.appendChild(text);
+    diff.appendChild(el);
+  });
+  return diff;
+}
+
+// [차이 보기]는 예상 설계 diff를 접었다 편다 — 수정안 카드와 동기화 카드가 같이 쓴다.
+function backtestVisualSpecToggle(card, actions, specDiff, label) {
+  const host = document.createElement('div');
+  host.hidden = true;
+  const rows = backtestVisualSpecRows(specDiff);
+  if (rows.length) {
+    rows.forEach((row) => {
+      const el = document.createElement('div');
+      el.className = 'backtest-change-row';
+      el.textContent = backtestChangeRowText(row);
+      host.appendChild(el);
+    });
+  } else {
+    const el = document.createElement('div');
+    el.className = 'backtest-change-row';
+    el.textContent = '설계 차이 내역이 없습니다';
+    host.appendChild(el);
+  }
+  card.appendChild(host);
+  const btn = _btn(label, 'routine-btn');
+  btn.addEventListener('click', () => {
+    host.hidden = !host.hidden;
+    btn.textContent = host.hidden ? label : '차이 접기';
+  });
+  actions.appendChild(btn);
+}
+
+function renderBacktestVisualCard(receipt) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent backtest-change backtest-visual';
+
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const headPill = (text, filled) => {
+    const el = document.createElement('span');
+    el.className = filled ? 'routine-draft-pill is-filled' : 'routine-draft-pill';
+    el.textContent = text;
+    head.appendChild(el);
+  };
+  headPill(BACKTEST_CHANGE_TITLES[receipt.kind] || '백테스트', true);
+  card.appendChild(head);
+
+  const bodyLine = (text, className) => {
+    const el = document.createElement('div');
+    el.className = className || 'agent-body';
+    el.textContent = text;
+    card.appendChild(el);
+  };
+
+  const actions = document.createElement('div');
+  actions.className = 'routine-approval-actions backtest-change-actions';
+  const status = document.createElement('span');
+  status.className = 'agent-mode';
+  let noteText = '';
+
+  if (receipt.kind === 'visual_question') {
+    // 한 번에 질문 하나 — 고르기 전에는 [수정안 만들기]가 열리지 않는다.
+    const q = receipt.question || {};
+    bodyLine(q.question_ko || '');
+
+    const make = _btn('수정안 만들기', 'routine-btn routine-btn-approve');
+    make.disabled = true;
+    let chosen = null;
+
+    const list = document.createElement('div');
+    list.className = 'backtest-visual-choices';
+    list.setAttribute('role', 'radiogroup');
+    if (q.question_ko) list.setAttribute('aria-label', q.question_ko);
+    const picks = [];
+    (Array.isArray(q.choices) ? q.choices : []).forEach((choice) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'backtest-visual-choice';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-checked', 'false');
+      const label = document.createElement('span');
+      label.className = 'backtest-visual-choice-label';
+      label.textContent = choice.label_ko || '';
+      btn.appendChild(label);
+      if (choice.recommended) {
+        const rec = document.createElement('span');
+        rec.className = 'routine-draft-pill is-filled';
+        rec.textContent = '권장';
+        btn.appendChild(rec);
+      }
+      // 이 선택이 무엇을 바꾸는지 — 계약이 요구하는 "각 선택이 바꾸는 node/edge/parameter".
+      const what = (Array.isArray(choice.changes) ? choice.changes : [])
+        .map((c) => c && c.what_ko).filter(Boolean).join(' · ');
+      if (what) {
+        const el = document.createElement('span');
+        el.className = 'backtest-visual-choice-changes';
+        el.textContent = what;
+        btn.appendChild(el);
+      }
+      btn.addEventListener('click', () => {
+        chosen = choice.id;
+        picks.forEach((b) => {
+          const on = b === btn;
+          b.classList.toggle('is-picked', on);
+          b.setAttribute('aria-checked', on ? 'true' : 'false');
+        });
+        make.disabled = false;
+      });
+      picks.push(btn);
+      list.appendChild(btn);
+    });
+    card.appendChild(list);
+
+    make.addEventListener('click', () => {
+      if (!chosen) return;
+      make.disabled = true;
+      status.textContent = '수정안을 만드는 중…';
+      backtestVisualCanvasCall('answerVisualQuestion', { code: q.code, choice_id: chosen });
+    });
+    actions.appendChild(make);
+    noteText = 'AI는 바로 고치지 않고, 필요한 선택을 한 번에 하나씩 묻습니다 · 실행·활성화 없음';
+  }
+
+  if (receipt.kind === 'visual_patch') {
+    const patch = receipt.patch || {};
+    headPill(patch.graph_compatible ? '그래프 호환' : '그래프 비호환');
+    card.appendChild(backtestVisualDiff(patch.code_diff && patch.code_diff.diff_lines));
+    if (patch.summary_ko) bodyLine(patch.summary_ko, 'backtest-change-row');
+
+    const apply = _btn('적용하고 시각 설계로 돌아가기', 'routine-btn routine-btn-approve');
+    apply.addEventListener('click', () => {
+      apply.disabled = true;
+      status.textContent = '적용하는 중…';
+      backtestVisualCanvasCall('applyVisualPatch', patch.patch_id);
+    });
+    actions.appendChild(apply);
+
+    backtestVisualSpecToggle(card, actions, patch.spec_diff, '차이 자세히 보기');
+
+    const drop = _btn('버리기', 'routine-btn');
+    drop.addEventListener('click', () => {
+      backtestVisualCanvasCall('discardVisualPatch', patch.patch_id);
+      actions.textContent = '버렸습니다 — 지도와 코드는 그대로입니다';
+    });
+    actions.appendChild(drop);
+
+    const next = patch.next_version != null
+      ? patch.next_version
+      : (receipt.version && receipt.version.to);
+    noteText = next != null
+      ? `적용하면 새 v${next} 초안이 생깁니다. 활성화와 백테스트 실행은 별도 확인입니다.`
+      : '적용하면 새 초안이 생깁니다. 활성화와 백테스트 실행은 별도 확인입니다.';
+  }
+
+  if (receipt.kind === 'visual_synced') {
+    const from = receipt.version ? receipt.version.from : null;
+    const to = receipt.version ? receipt.version.to : null;
+    if (from != null && to != null) headPill(`v${from} → v${to}`);
+    if (receipt.summary_ko) bodyLine(receipt.summary_ko);
+
+    const review = _btn('실행 전 검토', 'routine-btn routine-btn-approve');
+    review.addEventListener('click', () => { backtestVisualCanvasCall('reviewBeforeRun'); });
+    actions.appendChild(review);
+
+    backtestVisualSpecToggle(card, actions, receipt.spec_diff, '차이 보기');
+
+    const open = _btn('코드 열기', 'routine-btn');
+    open.addEventListener('click', () => { backtestVisualCanvasCall('openCodeFromChat'); });
+    actions.appendChild(open);
+
+    noteText = from != null
+      ? `활성화하거나 실행하기 전까지 현재 v${from}에는 영향이 없습니다.`
+      : '활성화하거나 실행하기 전까지 현재 버전에는 영향이 없습니다.';
+  }
+
+  if (receipt.kind === 'visual_conflict') {
+    bodyLine('다른 수정이 먼저 저장됐습니다 — 다시 검토');
+    const retry = _btn('다시 검토', 'routine-btn routine-btn-approve');
+    retry.addEventListener('click', () => {
+      retry.disabled = true;
+      status.textContent = '다시 검토하는 중…';
+      backtestVisualCanvasCall('retryVisualPatch');
+    });
+    actions.appendChild(retry);
+  }
+
+  actions.appendChild(status);
+  card.appendChild(actions);
+  if (noteText) bodyLine(noteText, 'agent-source');
+
+  _mountTurn(line, card);
+}
+
+// ---------- 새 기법 만들기 카드 (보드 20·21, 2026-09-03) ----------
+// 둘 다 아무것도 적용하지 않는다.
+//   technique_question — AI가 알고리즘을 정하려고 던진 질문. 선택지를 누르면 그 문장이
+//     **사용자 메시지로** 나간다(캔버스의 [+ 새 기법 만들기] 첫 문장과 같은 길이다).
+//     AI가 대신 고르지 않는다는 규칙이 여기서 화면으로 지켜진다.
+//   technique_check — 코드가 바뀔 때마다 자동으로 돈 검사와 통계 한 줄. 항목 수는 세지
+//     않는다(백엔드가 차단·경고를 더 보낸다). 버튼이 없다: 사람이 누를 것이 없기
+//     때문이다(검사는 전부 자동이다).
+const BACKTEST_TECHNIQUE_KINDS = new Set(['technique_question', 'technique_check']);
+
+// 캔버스가 대화를 시작하는 길과 같다(backtest-canvas.js emitChatSubmit → 이 파일의
+// 'athena:chat-submit' 수신부 → dispatchUserQuery). 입력창에 치고 Enter를 누른 것과 같다.
+function backtestChatSubmit(text) {
+  const value = String(text || '').trim();
+  if (!value) return;
+  document.dispatchEvent(new CustomEvent('athena:chat-submit', { detail: { text: value } }));
+}
+
+// 검사 줄의 갈래 — severity가 'warn'인 것만 경고이고 나머지는 전부 차단이다(캔버스
+// 명령창과 같은 규칙). 통과 여부는 서버가 정한 receipt.passed를 쓴다 — 카드가 다시
+// 세지 않는다: 경고 하나에 '아직 통과하지 못했습니다'라고 적으면 화면이 거짓말을 한다.
+function backtestCheckIsWarn(check) {
+  return !!check && String(check.severity || '') === 'warn';
+}
+
+// 요약 한 줄 — '차단 2/3 통과 · 경고 1'. 경고는 아직 안 고친 것만 센다.
+function backtestCheckSummary(checks) {
+  const list = Array.isArray(checks) ? checks : [];
+  const blocks = list.filter((c) => c && !backtestCheckIsWarn(c));
+  const done = blocks.filter((c) => c.ok).length;
+  const warn = list.filter((c) => backtestCheckIsWarn(c) && !c.ok).length;
+  return `차단 ${done}/${blocks.length} 통과 · 경고 ${warn}`;
+}
+
+function renderBacktestTechniqueCard(receipt) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent backtest-change backtest-technique';
+
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const kindPill = document.createElement('span');
+  kindPill.className = 'routine-draft-pill is-filled';
+  kindPill.textContent = BACKTEST_CHANGE_TITLES[receipt.kind] || '새 기법';
+  head.appendChild(kindPill);
+  card.appendChild(head);
+
+  const bodyLine = (text, className) => {
+    if (!text) return;
+    const el = document.createElement('div');
+    el.className = className || 'agent-body';
+    el.textContent = text;
+    card.appendChild(el);
+  };
+
+  if (receipt.kind === 'technique_question') {
+    const q = receipt.question || {};
+    bodyLine(q.question_ko || '');
+    bodyLine(q.why_ko || '', 'agent-source');
+
+    const status = document.createElement('span');
+    status.className = 'agent-mode';
+    const list = document.createElement('div');
+    list.className = 'backtest-visual-choices';
+    list.setAttribute('role', 'group');
+    if (q.question_ko) list.setAttribute('aria-label', q.question_ko);
+    const picks = [];
+    (Array.isArray(q.choices) ? q.choices : []).forEach((choice) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'backtest-visual-choice backtest-technique-choice';
+      const label = document.createElement('span');
+      label.className = 'backtest-visual-choice-label';
+      label.textContent = choice.label_ko || '';
+      btn.appendChild(label);
+      if (choice.recommended) {
+        const rec = document.createElement('span');
+        rec.className = 'routine-draft-pill is-filled';
+        rec.textContent = '권장';
+        btn.appendChild(rec);
+      }
+      if (choice.detail_ko) {
+        const detail = document.createElement('span');
+        detail.className = 'backtest-visual-choice-detail';
+        detail.textContent = choice.detail_ko;
+        btn.appendChild(detail);
+      }
+      btn.addEventListener('click', () => {
+        // 고른 것은 사람의 대답이다 — 그대로 다음 사용자 메시지가 된다.
+        picks.forEach((b) => { b.disabled = true; });
+        btn.classList.add('is-on');
+        status.textContent = '고른 답을 보냈습니다';
+        backtestChatSubmit(choice.label_ko || '');
+      });
+      picks.push(btn);
+      list.appendChild(btn);
+    });
+    card.appendChild(list);
+    const actions = document.createElement('div');
+    actions.className = 'routine-approval-actions backtest-change-actions';
+    actions.appendChild(status);
+    card.appendChild(actions);
+  } else {
+    // 검사 줄 — 백엔드가 준 항목을 그대로 그린다(3개라고 세지 않는다). 차단과 경고를
+    // 점 색으로 나누고, 경고에는 '고치면 좋음'을 붙여 통과를 막지 않는다고 적는다.
+    const list = Array.isArray(receipt.checks) ? receipt.checks : [];
+    const checks = document.createElement('div');
+    checks.className = 'backtest-technique-checks';
+    if (list.length) {
+      const summary = document.createElement('div');
+      summary.className = 'backtest-technique-summary';
+      summary.textContent = backtestCheckSummary(list);
+      checks.appendChild(summary);
+    }
+    list.forEach((check) => {
+      const warn = backtestCheckIsWarn(check);
+      const ok = !!(check && check.ok);
+      const row = document.createElement('div');
+      const tone = ok ? ' is-ok' : (warn ? ' is-warn' : ' is-fail');
+      row.className = `backtest-technique-check${tone}`;
+      const dot = document.createElement('span');
+      dot.className = 'backtest-technique-check-dot';
+      row.appendChild(dot);
+      const mark = document.createElement('span');
+      mark.className = 'backtest-technique-check-mark';
+      mark.textContent = ok ? '통과' : (warn ? '경고' : '고쳐야 함');
+      row.appendChild(mark);
+      const label = document.createElement('span');
+      label.className = 'backtest-technique-check-label';
+      label.textContent = (check && (check.label_ko || check.id)) || '';
+      row.appendChild(label);
+      if (check && check.detail_ko) {
+        const detail = document.createElement('span');
+        detail.className = 'backtest-technique-check-detail';
+        detail.textContent = check.detail_ko;
+        row.appendChild(detail);
+      }
+      if (warn && !ok) {
+        const note = document.createElement('span');
+        note.className = 'backtest-technique-check-note';
+        note.textContent = '고치면 좋음';
+        row.appendChild(note);
+      }
+      checks.appendChild(row);
+    });
+    card.appendChild(checks);
+    const stats = receipt.stats;
+    if (stats) {
+      const parts = [];
+      if (stats.warmup_bars != null) parts.push(`워밍업 ${stats.warmup_bars}봉`);
+      if (stats.entry != null) parts.push(`진입 신호 ${stats.entry}`);
+      if (stats.exit != null) parts.push(`청산 신호 ${stats.exit}`);
+      if (stats.rows != null) parts.push(`봉 ${stats.rows}개`);
+      bodyLine(parts.join(' · '), 'backtest-technique-stats');
+    }
+    bodyLine(receipt.passed ? '노드·흐름 창이 열렸습니다' : '아직 통과하지 못했습니다', 'agent-source');
+  }
+
+  _mountTurn(line, card);
+}
+
+// ---------- 단계 카드 (보드 20·22, 2026-09-03) ----------
+// 기법 폴더 안에서 AI가 하는 일(파일 수정·검사·노드 다시 그리기·백테스트)은 묻지 않고
+// 자동으로 된다 — 그래서 이 카드에는 승인 버튼이 없다. 사람이 누르는 것은 [이 기법 승인]과
+// 실매매 적용뿐이다. 대신 한 일이 여기 한 줄씩 쌓이고, 누르면 가운데 창이 그 자리를 연다:
+// 파일을 고쳤으면 diff, 검사를 돌렸으면 터미널 출력, 노드를 다시 그렸으면 노드 창,
+// 백테스트를 돌렸으면 결과. 카드가 스스로 여는 것은 하나도 없다 — 여는 일은 전부 캔버스의
+// openStep이 한다(typeof 가드: 캔버스가 아직 안 떠 있으면 아무 일도 일어나지 않는다).
+const BACKTEST_STEP_KIND = 'technique_step';
+
+// 글리프는 다섯 갈래뿐이다 — 모르는 icon이 오면 edit으로 떨어뜨린다(빈 칸을 그리지
+// 않는다: 슬롯이 비면 제목의 왼쪽 끝이 줄마다 어긋난다).
+const BACKTEST_STEP_ICONS = {
+  file: '▤',
+  check: '✓',
+  nodes: '◈',
+  run: '▶',
+  edit: '✎',
+};
+
+// 실패 여부는 서버가 정한다(step.tone === 'warn' | 'fail'). 카드가 제목 문구를 읽어
+// 실패를 추측하지 않는다 — 화면이 원문보다 앞서 말하면 거짓말이 된다. 옛 영수증이
+// tone 대신 ok:false만 실을 수 있어 그것도 실패로 읽는다.
+function backtestStepTone(step) {
+  const tone = String((step && step.tone) || '');
+  if (tone === 'fail' || tone === 'warn') return tone;
+  if (step && step.ok === false) return 'fail';
+  return 'ok';
+}
+
+function renderBacktestStepCard(receipt) {
+  const step = (receipt && receipt.step) || {};
+  const icon = Object.prototype.hasOwnProperty.call(BACKTEST_STEP_ICONS, step.icon) ? String(step.icon) : 'edit';
+  const line = document.createElement('div');
+  line.className = 'turn backtest-step-turn';
+  const card = document.createElement('div');
+  card.className = `turn-agent backtest-step-card is-icon-${icon} is-${backtestStepTone(step)}`;
+
+  const glyph = document.createElement('span');
+  glyph.className = 'backtest-step-icon';
+  glyph.setAttribute('aria-hidden', 'true');
+  glyph.textContent = BACKTEST_STEP_ICONS[icon];
+  card.appendChild(glyph);
+
+  const text = document.createElement('div');
+  text.className = 'backtest-step-text';
+  const title = document.createElement('div');
+  title.className = 'backtest-step-title';
+  title.textContent = step.title_ko || '';
+  text.appendChild(title);
+  if (step.meta_ko) {
+    const meta = document.createElement('div');
+    meta.className = 'backtest-step-meta';
+    meta.textContent = step.meta_ko;
+    text.appendChild(meta);
+  }
+  card.appendChild(text);
+
+  const action = step.action;
+  if (action && action.label_ko) {
+    const open = () => {
+      const api = window.AthenaBacktestCanvas;
+      if (!api || typeof api.openStep !== 'function') return;
+      api.openStep(action);
+    };
+    const btn = _btn(action.label_ko, 'routine-btn backtest-step-action');
+    btn.addEventListener('click', (e) => { e.stopPropagation(); open(); });
+    card.appendChild(btn);
+    // 줄 전체가 과녁이다(보드 22). 다만 키보드로 닿는 컨트롤은 위 버튼 하나로 남긴다 —
+    // 카드에 role="button"을 덧씌우면 버튼 안에 버튼이 되어 읽는 순서가 두 겹이 된다.
+    card.classList.add('is-clickable');
+    card.addEventListener('click', open);
+  }
+
+  _mountTurn(line, card);
+}
+
+function renderBacktestChangeCard(receipt) {
+  if (!receipt || typeof receipt !== 'object') return;
+  // 시각 설계 4종은 머리 태그와 상태 문구가 다르다 — 질문 카드에 "반영 안 됨"을 적으면
+  // 사람이 실패로 읽는다. 기존 spec/code/file 초안 렌더에 분기를 섞지 않고 나눈다.
+  if (BACKTEST_VISUAL_KINDS.has(receipt.kind)) { renderBacktestVisualCard(receipt); return; }
+  // 새 기법 만들기 2종도 머리 태그와 버튼이 다르다 — 검사 카드에는 누를 것이 없고,
+  // 질문 카드의 버튼은 적용이 아니라 **대답을 보내는** 자리다.
+  if (BACKTEST_TECHNIQUE_KINDS.has(receipt.kind)) { renderBacktestTechniqueCard(receipt); return; }
+  // 단계 카드는 머리 태그도 승인 버튼도 없다 — 질문·검사 카드와 한 함수에 섞으면
+  // "누를 것이 있는 카드"와 "그냥 기록"이 같은 모양이 된다.
+  if (receipt.kind === BACKTEST_STEP_KIND) { renderBacktestStepCard(receipt); return; }
+
+
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent backtest-change';
+
+  // 태그 2종 — 무엇을(채움) · 들어갔는지(외곽선, 실패면 초안 색).
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const kindPill = document.createElement('span');
+  kindPill.className = 'routine-draft-pill is-filled';
+  kindPill.textContent = BACKTEST_CHANGE_TITLES[receipt.kind] || '백테스트';
+  head.appendChild(kindPill);
+  const statePill = document.createElement('span');
+  statePill.className = receipt.applied ? 'routine-draft-pill' : 'routine-draft-pill is-draft';
+  // 파일 초안은 실패한 게 아니라 아직 안 쓴 것이다 — 같은 '반영 안 됨'으로 적으면
+  // 사람이 "안 됐구나"로 읽고 다시 시키게 된다(디스크에 쓰는 건 아래 [적용]이다).
+  statePill.textContent = receipt.applied
+    ? '반영됨'
+    : (receipt.canApply ? '적용 대기' : '반영 안 됨');
+  head.appendChild(statePill);
+  // 지도가 몇 판이 됐는가(보드 14-B) — 반영 한 번이 지도 한 판이다.
+  if (receipt.version && receipt.version.from != null && receipt.version.to != null) {
+    const versionPill = document.createElement('span');
+    versionPill.className = 'routine-draft-pill';
+    versionPill.textContent = `v${receipt.version.from} → v${receipt.version.to}`;
+    head.appendChild(versionPill);
+  }
+  card.appendChild(head);
+
+  if (receipt.note) {
+    const note = document.createElement('div');
+    note.className = 'agent-body';
+    note.textContent = receipt.note;
+    card.appendChild(note);
+  }
+
+  // 어느 칸이 바뀌었는지를 값보다 먼저 적는다 — 사람이 읽는 단위는 칸이다(보드 14-B).
+  (Array.isArray(receipt.nodes) ? receipt.nodes : []).forEach((node) => {
+    const nodeEl = document.createElement('div');
+    nodeEl.className = 'backtest-change-row backtest-change-node';
+    nodeEl.textContent = `${node.numeral} ${node.title} — ${node.text}`;
+    card.appendChild(nodeEl);
+  });
+
+  (Array.isArray(receipt.rows) ? receipt.rows : []).forEach((row) => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'backtest-change-row';
+    rowEl.textContent = backtestChangeRowText(row);
+    card.appendChild(rowEl);
+  });
+
+  // 반영된 변경에도 검증 오류가 남을 수 있다(빈 종목·날짜) — 그건 "실행 전에 채울 것"이지
+  // 반영 실패가 아니다(2026-09-02). 반영이 막힌 경우(모르는 프리셋 등)만 라벨 없이 보여준다.
+  const errorHost = document.createElement('div');
+  card.appendChild(errorHost);
+  const showErrors = (messages, label) => {
+    errorHost.textContent = '';
+    const list = Array.isArray(messages) ? messages : [];
+    if (label && list.length) {
+      const labelEl = document.createElement('div');
+      labelEl.className = 'backtest-change-error-label';
+      labelEl.textContent = label;
+      errorHost.appendChild(labelEl);
+    }
+    list.forEach((m) => {
+      const errEl = document.createElement('div');
+      errEl.className = 'backtest-change-error';
+      errEl.textContent = String(m);
+      errorHost.appendChild(errEl);
+    });
+  };
+  showErrors(receipt.errors, receipt.applied ? '실행 전에 채울 것' : null);
+
+  const actions = document.createElement('div');
+  actions.className = 'routine-approval-actions backtest-change-actions';
+  const status = document.createElement('span');
+  status.className = 'agent-mode';
+  const canvasApi = () => window.AthenaBacktestCanvas;
+
+  if (receipt.canUndo) {
+    const undo = _btn('되돌리기', 'routine-btn');
+    undo.addEventListener('click', () => {
+      const api = canvasApi();
+      if (!api || typeof api.undoChatAction !== 'function') return;
+      undo.disabled = true;
+      const res = api.undoChatAction(receipt.id);
+      if (res && res.ok) {
+        // 되돌린 카드에 남길 버튼이 없다 — 같은 지점을 두 번 되돌릴 수는 없다.
+        actions.textContent = '되돌렸습니다';
+        return;
+      }
+      undo.disabled = false;
+      status.textContent = (res && res.reason) || '되돌리지 못했습니다';
+    });
+    actions.appendChild(undo);
+  }
+
+  // 파일만 [적용]이 남아 있다 — 설정·코드와 달리 이건 디스크의 파일이라 사람이
+  // 누르기 전에는 한 글자도 쓰지 않는다(결정 D4). 누르는 순간 캔버스가 쓴다.
+  if (receipt.canApply) {
+    const applyThen = async (btn, thenRun) => {
+      const api = canvasApi();
+      if (!api || typeof api.applyFileDraft !== 'function') return;
+      btn.disabled = true;
+      status.textContent = '파일을 쓰는 중…';
+      let res;
+      try {
+        res = await api.applyFileDraft(receipt.id);
+      } catch (err) {
+        res = { ok: false, reason: String((err && err.message) || err) };
+      }
+      if (!res || !res.ok) {
+        btn.disabled = false;
+        showErrors([(res && res.reason) || '파일을 쓰지 못했습니다']);
+        status.textContent = '파일을 쓰지 못했습니다';
+        return;
+      }
+      showErrors([]);
+      let tail = '파일에 썼습니다';
+      if (thenRun && typeof api.runFromChat === 'function') {
+        const errors = api.runFromChat();
+        if (Array.isArray(errors) && errors.length) {
+          showErrors(errors);
+          tail = '파일에 썼습니다 — 실행 전에 고칠 게 있습니다';
+        } else {
+          tail = '파일에 썼습니다 — 결과는 캔버스에서 보세요';
+        }
+      }
+      // 같은 초안을 두 번 쓸 수는 없다 — 남은 버튼을 치운다([되돌리기]와 같은 규칙).
+      actions.textContent = tail;
+    };
+
+    const apply = _btn('적용', 'routine-btn routine-btn-approve');
+    apply.addEventListener('click', () => { void applyThen(apply, false); });
+    actions.appendChild(apply);
+
+    if (receipt.suggest_run) {
+      const applyRun = _btn('적용하고 실행', 'routine-btn routine-btn-approve');
+      applyRun.addEventListener('click', () => { void applyThen(applyRun, true); });
+      actions.appendChild(applyRun);
+    }
+
+    const drop = _btn('버리기', 'routine-btn');
+    drop.addEventListener('click', () => {
+      const api = canvasApi();
+      if (!api || typeof api.discardFileDraft !== 'function') return;
+      const res = api.discardFileDraft(receipt.id);
+      actions.textContent = res && res.ok
+        ? '버렸습니다 — 파일은 그대로입니다'
+        : ((res && res.reason) || '버리지 못했습니다');
+    });
+    actions.appendChild(drop);
+  }
+
+  if (receipt.applied && receipt.suggest_run) {
+    const run = _btn('실행', 'routine-btn routine-btn-approve');
+    run.addEventListener('click', () => {
+      const api = canvasApi();
+      if (!api || typeof api.runFromChat !== 'function') return;
+      const errors = api.runFromChat();
+      if (Array.isArray(errors) && errors.length) {
+        showErrors(errors);
+        status.textContent = '실행 전에 고칠 게 있습니다';
+        return;
+      }
+      showErrors([]);
+      run.disabled = true;
+      status.textContent = '실행을 시작했습니다 — 결과는 캔버스에서 보세요';
+    });
+    actions.appendChild(run);
+  }
+
+  if (receipt.applied && receipt.suggest_validate) {
+    const validate = _btn('검증', 'routine-btn');
+    validate.addEventListener('click', async () => {
+      const api = canvasApi();
+      if (!api || typeof api.validateFromChat !== 'function') return;
+      validate.disabled = true;
+      status.textContent = '검증 중…';
+      let res;
+      try {
+        res = await api.validateFromChat();
+      } catch (err) {
+        res = { ok: false, errors: [String((err && err.message) || err)] };
+      }
+      validate.disabled = false;
+      if (res && res.ok) {
+        showErrors([]);
+        status.textContent = '검증 통과';
+        return;
+      }
+      showErrors((res && res.errors) || ['검증에 실패했습니다']);
+      status.textContent = '검증 실패';
+    });
+    actions.appendChild(validate);
+  }
+
+  // 반영되지 않은 영수증(실행 중 차단)에 살아 있는 버튼을 두지 않는다 — 카드는
+  // "반영 안 됨"이라 적어놓고 탐색만 시작되는 갈라짐을 막는다.
+  if (receipt.kind === 'optimize_request' && receipt.applied) {
+    const start = _btn('탐색 시작', 'routine-btn routine-btn-approve');
+    start.addEventListener('click', () => {
+      const api = canvasApi();
+      if (!api || typeof api.startOptimizeFromChat !== 'function') return;
+      api.startOptimizeFromChat();
+      start.disabled = true;
+      start.textContent = '탐색 시작됨';
+    });
+    actions.appendChild(start);
+  }
+
+  actions.appendChild(status);
+  card.appendChild(actions);
+
+  const notice = document.createElement('div');
+  notice.className = 'agent-source';
+  notice.textContent = '실행·수집·저장·활성화·배포는 버튼으로만 됩니다';
+  card.appendChild(notice);
+
+  _mountTurn(line, card);
+}
+
+window.athena.on('athena:backtest-chat-action', async (action) => {
+  const canvas = window.AthenaBacktestCanvas;
+  if (!canvas || typeof canvas.onChatAction !== 'function') return;
+  // file_draft만 Promise를 준다 — diff의 왼쪽(지금 파일)을 디스크에서 읽어야 한다.
+  // 나머지 셋은 예전처럼 그 자리에서 영수증을 돌려준다(await는 그냥 통과한다).
+  const receipt = await canvas.onChatAction(action);
+  renderBacktestChangeCard(receipt);
+});
+
+// 카드 버튼에서 시작한 왕복(answerVisualQuestion·applyVisualPatch·retryVisualPatch)은
+// main이 보낸 액션이 아니라 캔버스가 스스로 만든 영수증이다 — 위 채널로는 오지 않는다.
+// 캔버스가 document에 던지는 이 이벤트가 그 하나뿐인 통로다(backtest-canvas.js emitChatCard).
+document.addEventListener('athena:backtest-receipt', (event) => {
+  renderBacktestChangeCard(event && event.detail);
+});
+
+// 캔버스가 대화를 **시작**해야 하는 자리 — 백테스트 [+ 새 기법 만들기]가 던진다.
+// 입력창과 제출은 이 파일에만 있다(dispatchUserQuery). 캔버스는 첫 문장만 넘기고,
+// 보내는 길은 사람이 Enter를 눌렀을 때와 같다 — 위 영수증 통로와 같은 문법이다.
+document.addEventListener('athena:chat-submit', (event) => {
+  const text = String((event && event.detail && event.detail.text) || '').trim();
+  if (!text) return;
+  dispatchUserQuery(text);
+});
+
+// 노드를 눌러도 말은 나가지 않는다(보드 22) — 참조만 입력창에 들어가고, 무엇을 물을지는
+// 사람이 이어서 쓴다. 위 chat-submit과 짝이지만 정반대다: 저쪽은 보내고 이쪽은 넣기만 한다.
+// 선택 영역이 있으면 그것을 대신하고, 앞 글자가 공백이 아니면 공백 하나를 앞에 붙인다
+// (@전체가 앞말에 붙어 "청산흐름@전체"가 되면 참조로 읽히지 않는다).
+document.addEventListener('athena:chat-insert', (event) => {
+  const text = String((event && event.detail && event.detail.text) || '');
+  if (!text || !$input) return;
+  const value = $input.value;
+  const start = $input.selectionStart == null ? value.length : $input.selectionStart;
+  const end = $input.selectionEnd == null ? start : $input.selectionEnd;
+  const head = value.slice(0, start);
+  const chunk = `${head && !/\s$/.test(head) ? ' ' : ''}${text}`;
+  $input.value = `${head}${chunk}${value.slice(end)}`;
+  autoGrowInput();
+  const caret = start + chunk.length;
+  $input.setSelectionRange(caret, caret);
+  $input.focus();
+});
 
 // ---------- 주문 확인 모드 — #order (P4, 2026-08-19) ----------
 // 유일하게 미착수였던 모드의 실체(GLOSSARY §1). 온보딩·설정과 같은 형제 패널

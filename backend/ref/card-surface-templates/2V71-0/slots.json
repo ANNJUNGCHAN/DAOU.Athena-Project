@@ -6725,5 +6725,104 @@
       "note": "푸터 상태 표기 — 기준 시점·마지막 조회 시각"
     }
   ],
-  "unbound_fields": []
+  "unbound_fields": [],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "수급 — 순위",
+    "eyebrow": "CC-05 / 2V71-0",
+    "source_board": "CC-05 / R03-T6 · 수급 — 순위",
+    "elements": [
+      {
+        "source_slot_id": "s011",
+        "label": "프로그램순매수상위50",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "프로그램 순매수 상위 50"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "11.8%"
+      },
+      {
+        "source_slot_id": "s015",
+        "label": "보조 지표",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "순매수 1위"
+      },
+      {
+        "source_slot_id": "s013",
+        "label": "순매수대금합계",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1.24조원",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s017",
+        "label": "프로그램순매수금액",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,798억원",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 150,
+      "shown": 5,
+      "hidden": 145,
+      "scalars": 2,
+      "rows": 6
+    },
+    "fold_note": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T6 · 수급 — 순위",
+      "elements": "프로그램순매수상위50 · 변화 · 보조 지표 · 순매수대금합계 · 프로그램순매수금액",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

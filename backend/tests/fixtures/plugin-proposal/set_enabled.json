@@ -1,0 +1,37 @@
+{
+  "tool_input": {
+    "actions": [
+      {
+        "action": "set_enabled",
+        "target": "fetch",
+        "enabled": false
+      }
+    ],
+    "reason": "잠시 꺼두겠습니다"
+  },
+  "envelope": {
+    "proposal_id": "1c9ba4b3fbeaeb4e7bfa67f6cb21b598",
+    "source": "model",
+    "revision": 1,
+    "actions": [
+      {
+        "action": "set_enabled",
+        "target": "fetch",
+        "enabled": false
+      }
+    ],
+    "reason": "잠시 꺼두겠습니다",
+    "current": {
+      "servers": [
+        {
+          "alias": "fetch",
+          "approved": true,
+          "enabled": true,
+          "tools_allowed": [
+            "fetch"
+          ]
+        }
+      ]
+    }
+  }
+}

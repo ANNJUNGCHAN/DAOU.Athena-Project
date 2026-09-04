@@ -155,12 +155,6 @@ def surprising_connections(
         for source, target in graph.edges
         if assignment.get(source) != assignment.get(target)
     ]
-    crossings.sort(
-        key=lambda pair: (
-            str(graph.nodes[pair[0]].get("name", "")),
-            str(graph.nodes[pair[1]].get("name", "")),
-        )
-    )
     # 상대 놀라움 점수 — 차수가 낮은(평소 덜 언급되는) 쪽일수록 놀랍다. limit으로 자르기
     # **전** 전체 crossings에서 정규화해야 "이 목록 안에서의 상대 순위"라는 의미가
     # limit 값에 따라 흔들리지 않는다. 절대 스케일(Paper의 8.5류)은 흉내 내지 않는다.
@@ -176,6 +170,23 @@ def surprising_connections(
         )
     else:
         score_by_pair = {}
+    # 놀라운 순으로 정렬한 **뒤에** 자른다(2026-09-03 실사용 제보로 발견).
+    #
+    # 예전에는 이름순으로 정렬하고 그대로 crossings[:limit]을 잘랐다 — 그러면 "숨은
+    # 연관"이라는 이름을 달고 **가나다순으로 앞선 것**을 보여준다. 실제 화면에
+    # "반도체 대형주↔KODEX 반도체 · 반도체 대형주↔SK하이닉스 · 배당·인컴↔ACE…"가
+    # 뜬 것이 그 증거였다(정확히 가나다순). 점수를 계산해 놓고 순위에 안 쓰면
+    # 그 계산은 화면의 배지 하나를 채울 뿐 아무 일도 하지 않는다.
+    #
+    # 이름은 동점일 때의 결정적 tie-break로 남긴다 — 같은 그래프를 두 번 물으면
+    # 같은 목록이 나와야 한다(점수만으로 정렬하면 동점 순서가 dict 순회에 끌려간다).
+    crossings.sort(
+        key=lambda pair: (
+            -score_by_pair[pair],
+            str(graph.nodes[pair[0]].get("name", "")),
+            str(graph.nodes[pair[1]].get("name", "")),
+        )
+    )
     return tuple(
         SurprisingConnection(
             source_entity_id=source,

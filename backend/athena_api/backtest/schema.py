@@ -194,18 +194,44 @@ class StrategySpec(BaseModel):
     costs: CostsSpec | None = None
 
 
-def from_kis_yaml(text: str) -> StrategySpec:
+class _RelaxedConditionGroup(ConditionGroup):
+    """조건 개수 규칙 하나만 푼 파생 — 코드 경로 전용이다(§6.2).
+
+    코드 전략은 signals를 자기가 만든다. 그래서 폼의 진입/청산 조건은 애초에 읽히지
+    않는데도 "최소 1개" 규칙에 걸려 실행이 거부됐다(2026-09-02 실측). 파생으로 두는
+    이유는 기본 경로를 한 글자도 건드리지 않기 위해서다 — data/costs/risk/params/
+    indicators는 위와 똑같은 클래스가 그대로 검증한다.
+    """
+
+    conditions: list[ConditionSpec] = Field(default_factory=list)
+
+
+class _RelaxedStrategyBlock(StrategyBlock):
+    entry: _RelaxedConditionGroup
+    exit: _RelaxedConditionGroup
+
+
+class _RelaxedStrategySpec(StrategySpec):
+    strategy: _RelaxedStrategyBlock
+
+
+def from_kis_yaml(text: str, *, require_conditions: bool = True) -> StrategySpec:
     """KIS 원본 `.kis.yaml`(또는 우리 `.athena.yaml`) 텍스트를 `StrategySpec`으로 읽는다.
 
     두 포맷이 같은 함수로 읽히는 이유: `.athena.yaml`은 `.kis.yaml`의 상위집합이고
     차이는 Optional 블록(`data`/`costs`) 유무뿐이다. KIS 원본이 그 블록을 안 주면
     `None`으로 남는다 — 여기서 기본값을 지어내지 않는다(§4.2, D3 규율과 같은 이유:
     사람이 검토 없이 값이 채워지는 경로를 만들지 않는다).
+
+    `require_conditions=False`는 코드 경로가 부르는 완화판이다 — 진입/청산 조건이
+    비어 있어도 읽는다. 그 외 블록은 기본 경로와 똑같이 검증한다.
     """
     payload = yaml.safe_load(text)
     if not isinstance(payload, dict):
         raise ValueError("전략 yaml 문서는 매핑(딕셔너리)이어야 한다")
-    return StrategySpec.model_validate(payload)
+    if require_conditions:
+        return StrategySpec.model_validate(payload)
+    return _RelaxedStrategySpec.model_validate(payload)
 
 
 def resolve_params(

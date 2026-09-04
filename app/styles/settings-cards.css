@@ -149,7 +149,6 @@
 /* 유리화(2026-08-18) — 평면 rgba를 canvas 카드와 같은 재질로. 명령 문자열 가독은
    blur가 뒤를 뭉개므로 유지된다. */
 .uk-cmd-box { padding: 10px 12px; border-radius: 6px; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--color-k-line-soft); }
-.uk-spacer { flex: none; }
 
 /* 계좌 목록 컬럼 */
 .uk-col-alias { flex: 0 0 260px; display: flex; align-items: center; gap: 8px; min-width: 0; }
@@ -157,13 +156,6 @@
 .uk-col-orderapi { flex: 0 0 100px; }
 .uk-col-status { flex: 0 0 120px; }
 .uk-col-lastcheck { flex: 1; }
-
-/* MCP 목록 컬럼 */
-.uk-col-mcpalias { flex: 0 0 260px; min-width: 0; }
-.uk-col-mcpstatus { flex: 0 0 130px; }
-.uk-col-mcptools { flex: 0 0 100px; }
-.uk-col-mcpcmd { flex: 1; }
-.uk-mcp-warning { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-warn); margin-top: 2px; }
 
 /* 필(pill) — 상태 표시 공용, 색은 상태에만 쓴다 */
 .uk-pill { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-family: var(--font-body); font-size: var(--text-xs); white-space: nowrap; }
@@ -303,18 +295,6 @@
 .uk-staged-alias { font-family: var(--font-mono); font-size: var(--text-base); color: var(--color-k-text); }
 .uk-gate-target { display: flex; align-items: center; gap: 10px; padding: 6px 0 4px; }
 .uk-pill-list { display: flex; flex-wrap: wrap; gap: 8px; }
-.uk-warnbox { display: flex; gap: 10px; padding: 10px 12px; border-radius: 8px; background: rgb(255 152 56 / 12%); border: 1px solid rgb(255 152 56 / 32%); }
-.uk-warnbox-icon {
-  width: 20px; height: 20px; border-radius: 999px; background: var(--color-warn); color: #3A2200;
-  display: flex; align-items: center; justify-content: center; font-family: var(--font-strong); font-size: var(--text-sm); flex: none;
-}
-.uk-warnbox-body { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-dim); }
-
-/* probe 시트 닫기 확인 — .uk-warnbox 그대로 쓰되 본문을 늘리고 버튼을 오른쪽에
-   붙인다(D8). 새 색·새 형태를 만들지 않는다 — risks 경고와 같은 자리다. */
-.uk-close-warn { align-items: center; margin-bottom: 10px; }
-.uk-close-warn .uk-warnbox-body { flex: 1; }
-.uk-close-warn-btns { display: flex; gap: 8px; flex: none; }
 
 /* ---- probe · 툴 허용 시트 ---- */
 .uk-probe-head { display: flex; align-items: center; gap: 12px; padding-bottom: 6px; flex-wrap: wrap; }
@@ -330,14 +310,6 @@
 .uk-note-dim { color: var(--color-k-faint); font-family: var(--font-strong); }
 .uk-flex-spacer { flex: 1; }
 .uk-footer-count { flex: none; }
-
-.uk-check {
-  width: 16px; height: 16px; flex: none; border-radius: 2px; border: 1px solid #3A4150;
-  background: transparent; display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-strong); font-size: var(--text-xs); color: #12331A; cursor: pointer; padding: 0;
-}
-.uk-check.is-checked { background: var(--color-ok); border-color: var(--color-ok); }
-.uk-check.is-disabled { border-color: rgb(58 65 80 / 40%); color: #3A4150; cursor: default; }
 
 /* ---- 행 삭제 · 인라인 확인 (D3 — 계좌·MCP 목록 공용) ---- */
 .uk-col-actions { flex: 0 0 28px; display: flex; align-items: center; justify-content: flex-end; }

@@ -3185,5 +3185,100 @@
       "unbound_reason": "값의 ± 부호와 상승·하락색으로 그린다 — 별도 텍스트 슬롯이 없다(등락 슬롯 8개의 extra_fields로 병기 선언)"
     }
   ],
-  "authoring_notes": "표 감지 실패: 열 머리 '열 헤더'(35P1-0)와 본문 행이 형제가 아니라 'Watchlist Viewport'(35SP-0) 안에 들어 있어 detect_tables가 관심종목 표를 잡지 못한다. tables·column_bindings가 비어 있어 셀 슬롯을 직접 저작했다(--apply-columns 대상 없음). 레일 '누적거래대금 2.14조'는 ka10172에 없는 필드를 그린다 — s098 note 참조."
+  "authoring_notes": "표 감지 실패: 열 머리 '열 헤더'(35P1-0)와 본문 행이 형제가 아니라 'Watchlist Viewport'(35SP-0) 안에 들어 있어 detect_tables가 관심종목 표를 잡지 못한다. tables·column_bindings가 비어 있어 셀 슬롯을 직접 저작했다(--apply-columns 대상 없음). 레일 '누적거래대금 2.14조'는 ka10172에 없는 필드를 그린다 — s098 note 참조.",
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "facts",
+    "title": "관심종목·조건 신호",
+    "eyebrow": "CC-06 / 15L8-2",
+    "source_board": "CC-06 / R06 · 관심종목·조건 신호",
+    "elements": [
+      {
+        "source_slot_id": "s014",
+        "label": "종목코드",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "005930"
+      },
+      {
+        "source_slot_id": "s016",
+        "label": "현재가",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "150,850"
+      },
+      {
+        "source_slot_id": "s017",
+        "label": "전일대비",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,850"
+      },
+      {
+        "source_slot_id": "s018",
+        "label": "등락율",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+1.24%"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "시가",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "149,500"
+      }
+    ],
+    "fold_counts": {
+      "total": 72,
+      "shown": 5,
+      "hidden": 67
+    },
+    "fold_note": "외 67개 항목을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-06 / R06 · 관심종목·조건 신호",
+      "elements": "종목코드 · 현재가 · 전일대비 · 등락율 · 시가",
+      "grammar": "facts",
+      "folded": "외 67개 항목을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

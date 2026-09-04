@@ -4895,5 +4895,104 @@
       "static": true,
       "unbound_reason": "상태 표기 '전일 확정 기준 · 마지막 조회 09:42:18' — 대응 필드 없음"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "순위 — 신용융자 가능",
+    "eyebrow": "CC-05 / 31OF-0",
+    "source_board": "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "elements": [
+      {
+        "source_slot_id": "s019",
+        "label": "신용보증금율",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "40%"
+      },
+      {
+        "source_slot_id": "s017",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "증거금 100%"
+      },
+      {
+        "source_slot_id": "s016",
+        "label": "수량",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "214종목"
+      },
+      {
+        "source_slot_id": "s013",
+        "label": "수량",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "1,842종목",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s014",
+        "label": "수량",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "전체 2,056종목",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 95,
+      "shown": 5,
+      "hidden": 90,
+      "scalars": 2,
+      "rows": 6
+    },
+    "fold_note": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+      "elements": "신용보증금율 · 변화 · 수량",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 6개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

@@ -2250,5 +2250,104 @@
       "display_dup": true,
       "note": "산출 기준 3칸 중 3칸(무위험금리)"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "ELW 바스켓·만기평가",
+    "eyebrow": "CC-03 / 3DZ1-0",
+    "source_board": "CC-03 / R08-X · ELW 바스켓·만기평가",
+    "elements": [
+      {
+        "source_slot_id": "s017",
+        "label": "거래량",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "48만주"
+      },
+      {
+        "source_slot_id": "s022",
+        "label": "변화",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+1.24%"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "거래대금",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "5.9억원"
+      },
+      {
+        "source_slot_id": "s024",
+        "label": "기초자산1",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "삼성전자 100% · 바스켓 1종",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s032",
+        "label": "자산코드",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "005930",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 27,
+      "shown": 5,
+      "hidden": 22,
+      "scalars": 5,
+      "rows": 3
+    },
+    "fold_note": "스칼라 5개 · 행 3개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R08-X · ELW 바스켓·만기평가",
+      "elements": "거래량 · 변화 · 거래대금 · 기초자산1 · 자산코드",
+      "grammar": "compound",
+      "folded": "스칼라 5개 · 행 3개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

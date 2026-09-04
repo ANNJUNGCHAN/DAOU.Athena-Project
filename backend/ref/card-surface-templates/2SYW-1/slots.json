@@ -5991,5 +5991,104 @@
     "s039": "파생 — 체결 건수 / 주문 건수 재표시 (ka10076 cntr / kt00009 acnt_ord_cntr_prst_array)",
     "s161": "파생 — 현재가 − 주문가격 (ka10088 cur_prc − ka10088 ord_pric)",
     "s185": "H1 영값 묶음 머리 — 낱값 6항목은 펼침 보드 3LGC-0 레일 ②에 있다"
+  },
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "주문·체결 — 오늘 주문 현황",
+    "eyebrow": "CC-01 / 2SYW-1",
+    "source_board": "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "elements": [
+      {
+        "source_slot_id": "s012",
+        "label": "추정자산",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "124,580,240원"
+      },
+      {
+        "source_slot_id": "s013",
+        "label": "수익률",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "수익률 +4.96%"
+      },
+      {
+        "source_slot_id": "s019",
+        "label": "종목별계좌평가현황",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "8종목"
+      },
+      {
+        "source_slot_id": "s029",
+        "label": "계좌별주문체결현황배열",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "count",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "5건",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s030",
+        "label": "약정금액",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "약정 16,788,000원",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 93,
+      "shown": 5,
+      "hidden": 88,
+      "scalars": 2,
+      "rows": 3
+    },
+    "fold_note": "스칼라 2개 · 행 3개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+      "elements": "추정자산 · 수익률 · 종목별계좌평가현황 · 계좌별주문체결현황배열 · 약정금액",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 3개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
   }
 }

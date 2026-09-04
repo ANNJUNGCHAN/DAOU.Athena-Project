@@ -154,10 +154,39 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # strategies/{id}/activate·strategies/{id}/diff·optimize/plan·optimize·
     # deployments(GET/POST)·deployments/{id}/signals·deployments/{id}/evaluate.
     # DELETE /deployments/{id}는 위 DELETE /runs/{id}와 같은 이유로 카운트에 없다.
-    # 377 = 376 + 내부 보드 하이드레이션 endpoint 1개(canvas board-hydrate) — Paper
-    # 보드 1장의 read op들을 한 번에 읽어 표면 슬롯을 채운다(D2 보드 단위 fetch-set).
-    # realtime binding contract와 같은 신뢰 경계(bearer, LLM 비노출)다.
-    assert len(operation_ids) == 377
+    # 389 = 376 + 13. 백테스트·프로젝트 작업(345c891 "전략을 내 컴퓨터의 폴더에서
+    # 파이썬 파일로 다룬다" · 70ae90a "어느 출처든 글로 받고…")이 늘린 것이다:
+    # /api/v1/projects 계열(목록·생성·열기·tree·file GET/POST·rename·env GET/POST)과
+    # 백테스트의 youtube/brief·source/brief·user-strategies GET/POST. 이 핀은 그
+    # 작업에서 갱신되지 않아 이미 빨간 상태였고, 여기서 실측값으로 맞춘다.
+    # 390 = 389 + get_brain_entity_detail 1개(2026-09-03) — 채팅이 "이 노드
+    # 설명해줘"에 답할 수 있게 노드 하나의 관계·이력·대화 원문 발췌를 주는 조회.
+    # 393 = 390 + 3. 핀을 갱신하지 않고 들어온 셋이다: 흐름 지도(map)와 코드
+    # 생성(codegen) 2개(aab199f), 저장된 시각 묶음을 되읽는
+    # GET /strategies/{id}/versions/{id} 1개(e52c101). 여기서 실측값으로 맞춘다.
+    # 399 = 393 + 시각 설계 라우트 6개(/api/v1/backtest/visual의 registry·validate·
+    # compile·question·patch·from-spec) — 그래프를 검증·컴파일하고 질문·수정안을
+    # 계산할 뿐 저장·실행·활성화하지 않는다(별도 파일 api/backtest_visual.py).
+    # 401 = 399 + 기법 저작 라우트 2개(/api/v1/backtest/technique의 nodes·check) —
+    # 코드를 읽어 노드·흐름을 그리고 문법·계약·짧은 시험 실행을 검사할 뿐 저장하지도
+    # 실행 이력을 만들지도 않는다(별도 파일 api/backtest_technique.py).
+    # 404 = 401 + 사람의 직접 편집 입구 3개(/api/v1/brain/relations의 retractions·
+    # confirmations·manual, 2026-09-03) — 화면의 카드·패널이 부르는 쓰기라 전부
+    # x-athena-llm-exposed=False다(위 검사에 함께 잡힌다). 이 핀은 그 작업들에서
+    # 갱신되지 않아 이미 빨간 상태였고, 여기서 실측값으로 맞춘다.
+    # 405 = 404 + 내부 보드 하이드레이션 endpoint 1개(internal_canvas_board_hydrate,
+    # codex/kiumi-mini-cards-runtime 병합 2026-09-03) — Paper 보드 1장의 read op들을
+    # 한 번에 읽어 표면 슬롯을 채운다(D2 보드 단위 fetch-set). realtime binding
+    # contract와 같은 신뢰 경계(bearer, LLM 비노출)다.
+    # 408 = 405 + 루틴 3개(feat/agent-dual-control 병합 2026-09-03): 단건 조회
+    # GET /api/v1/routines/{id} · 수정 POST /api/v1/routines/{id}/update · 감시 소스
+    # 카탈로그 GET /api/v1/routines/source-catalog. 코드 알람 트랙의 wip 스냅샷에
+    # 들어온 것으로 그쪽 핀은 갱신되지 않았고, 병합 시 실측(404→408, 소실 0)으로 맞춘다.
+    # 409 = 408 + 감시 코드 착지 1개(save_watch_code_route: POST /api/v1/routines/watch/code,
+    # feat/agent-dual-control fac086e "Step 4" 병합 2026-09-04) — 사람이 승인한 감시 코드를
+    # 루틴에 붙인다. 켜진 알람의 코드는 409로 거부한다. 그 커밋도 핀을 갱신하지 않아
+    # 병합 시 실측(408→409, 소실 0)으로 맞춘다.
+    assert len(operation_ids) == 409
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
@@ -168,6 +197,7 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
         "get_brain_graph_diff",
         "get_brain_cluster_map",
         "get_brain_entity_timeline",
+        "get_brain_entity_detail",
         "retry_startup_brain_ingestion",
         "enqueue_brain_ingestion",
         "get_brain_ingestion_job",

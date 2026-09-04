@@ -6020,5 +6020,78 @@
       "unbound_reason": "LP 잔량 영값 묶음 rollup — 낱값은 3JZ3-0 LP 잔량 열(collapse_group 참조)"
     }
   ],
-  "unbound_fields": []
+  "unbound_fields": [],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "table",
+    "title": "삼성전자 실시간 호가·체결",
+    "eyebrow": "CC-04 / 13BC-2",
+    "source_board": "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "elements": [
+      {
+        "source_slot_id": "s030",
+        "label": "매도호가10",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "150,940",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s032",
+        "label": "매도호가수량10",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "2,160",
+        "rank": 2
+      },
+      {
+        "source_slot_id": "s033",
+        "label": "매도호가9",
+        "role": "row",
+        "band": "row",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "150,930",
+        "rank": 3
+      }
+    ],
+    "fold_counts": {
+      "total": 129,
+      "shown": 3,
+      "hidden": 126,
+      "rows": 17
+    },
+    "fold_note": "외 17개 행을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+      "elements": "매도호가10 · 매도호가수량10 · 매도호가9",
+      "grammar": "table",
+      "folded": "외 17개 행을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

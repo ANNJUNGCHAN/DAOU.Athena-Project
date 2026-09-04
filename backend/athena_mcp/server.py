@@ -35,7 +35,9 @@ from athena_mcp import (
     backtest_tools,
     brain_tools,
     canvas_data,
+    graph_view_tools,
     nudge_guard_tools,
+    plugin_tools,
     quirks,
     routine_tools,
     selector_tools,
@@ -398,6 +400,14 @@ class AthenaGateway:
                 "brain", brain_tools.BRAIN_TOOL, success=not result.isError
             )
             return result
+        if name == graph_view_tools.GRAPH_VIEW_TOOL:
+            # 같은 빌트인 우선순위. **http_client를 넘기지 않는다** — 이 도구는
+            # 백엔드를 타지 않고 렌더러로 갈 봉투만 만든다(graph_view_tools.py 참고).
+            result = await graph_view_tools.dispatch(arguments)
+            self._audit_log("graph-view").record(
+                "graph-view", graph_view_tools.GRAPH_VIEW_TOOL, success=not result.isError
+            )
+            return result
         if name == nudge_guard_tools.NUDGE_GUARD_TOOL:
             # 같은 빌트인 우선순위·같은 감사 최소 원칙(routine_tools와 동형).
             result = await nudge_guard_tools.dispatch(arguments, self.selector_http_client)
@@ -410,6 +420,15 @@ class AthenaGateway:
             result = await backtest_tools.dispatch(arguments, self.selector_http_client)
             self._audit_log("backtest").record(
                 "backtest", backtest_tools.BACKTEST_TOOL, success=not result.isError
+            )
+            return result
+        if name == plugin_tools.PLUGIN_TOOL:
+            # 같은 빌트인 우선순위·같은 감사 최소 원칙. 형제들과 달리 http
+            # 클라이언트가 아니라 레지스트리·승인 기록을 넘긴다 — 이 툴은
+            # 로컬 상태를 읽기만 하고 아무것도 바꾸지 않는다(plugin_tools.py 참고).
+            result = plugin_tools.dispatch(arguments, self.registry, self.consent_store)
+            self._audit_log("plugin").record(
+                "plugin", plugin_tools.PLUGIN_TOOL, success=not result.isError
             )
             return result
 
@@ -746,12 +765,17 @@ def _builtin_tool_defs() -> list[types.Tool]:
         # 것과 같은 이유).
         *selector_tools.builtin_tool_defs(),
         # 루틴 제안·조회 툴(능동 에이전트 P3) — 같은 "우리가 관리하는 툴"
-        # 범주. draft/list만 — 상태 변경은 사람 전용(routine_tools.py 참고).
+        # 범주. draft/list/propose만 — 상태 변경은 사람 전용(routine_tools.py 참고).
         *routine_tools.builtin_tool_defs(),
         # 투자의 뇌 조회 툴 — 읽기 전용 5액션. 쓰기 액션이 없는 것이 설계다
         # (brain_tools.py 참고): 모델이 그래프에 직접 쓸 수 있으면 대화 티어가
         # 자기 주장을 결정적 사실처럼 밀어 넣는 길이 생긴다.
         *brain_tools.builtin_tool_defs(),
+        # 그래프 화면 제어 툴(2026-09-03) — 백엔드를 타지 않고 렌더러로 갈 봉투만
+        # 만든다. brain_tools의 "읽기 전용" 계약을 흐리지 않으려고 별 도구로 뒀다:
+        # 그래프에 쓰지 않는 것과 화면을 바꾸지 않는 것은 다른 이야기다.
+        # propose_edit도 쓰기가 아니다 — 확정 카드를 띄우고 사람이 누른다.
+        *graph_view_tools.builtin_tool_defs(),
         # 말걸기 가드 설정 제안·조회 툴(F4) — routine_tools와 같은 범주.
         # propose/get만 — 저장은 사람 전용(nudge_guard_tools.py 참고).
         *nudge_guard_tools.builtin_tool_defs(),
@@ -759,6 +783,9 @@ def _builtin_tool_defs() -> list[types.Tool]:
         # 없다 — 쿼터를 태우거나 사람 검토가 필요한 상태 변경은 사람 전용
         # (backtest_tools.py 참고).
         *backtest_tools.builtin_tool_defs(),
+        # 플러그인 설치·권한·삭제 제안 툴 — routine_tools와 같은 범주. 6액션
+        # 전부 **제안일 뿐**이고 실행은 사람 클릭 전용이다(plugin_tools.py 참고).
+        *plugin_tools.builtin_tool_defs(),
     ]
 
 

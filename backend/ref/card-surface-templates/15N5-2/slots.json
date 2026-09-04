@@ -5860,5 +5860,104 @@
       "unbound_reason": "같은 값을 여러 op가 준다 — 대표 op를 슬롯 mapping으로 두고 also_from으로 선언"
     }
   ],
-  "authoring_notes": "2차 저작 잔여: 레일 블록 6개로 헌장 §2.3 예산(5개)을 넘어 로더가 막는다 — 블록을 합치거나 하나를 펼침으로 내리는 Paper 재설계가 필요해 슬롯 저작으로는 못 푼다. 갈음 매핑은 표 소속으로 갈랐다: 시간대별 표는 ka40006·ka40007·ka40010, 일별 표는 ka40003·ka40008만 받는다(열 alt_note 참조)."
+  "authoring_notes": "2차 저작 잔여: 레일 블록 6개로 헌장 §2.3 예산(5개)을 넘어 로더가 막는다 — 블록을 합치거나 하나를 펼침으로 내리는 Paper 재설계가 필요해 슬롯 저작으로는 못 푼다. 갈음 매핑은 표 소속으로 갈랐다: 시간대별 표는 ka40006·ka40007·ka40010, 일별 표는 ka40003·ka40008만 받는다(열 alt_note 참조).",
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "KODEX 200 ETF",
+    "eyebrow": "CC-03 / 15N5-2",
+    "source_board": "CC-03 / R07 · KODEX 200 ETF",
+    "elements": [
+      {
+        "source_slot_id": "s016",
+        "label": "NAV",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "48,318"
+      },
+      {
+        "source_slot_id": "s017",
+        "label": "NAV/ETF 괴리율",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "괴리 +0.09%"
+      },
+      {
+        "source_slot_id": "s024",
+        "label": "추적오차율",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "0.11%"
+      },
+      {
+        "source_slot_id": "s034",
+        "label": "NAV/지수괴리율",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": true,
+          "precision": 2,
+          "tone": "change"
+        },
+        "paper_text": "+0.09%",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s062",
+        "label": "ETF대상지수코드",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "대상지수 코스피200",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 103,
+      "shown": 5,
+      "hidden": 98,
+      "scalars": 1,
+      "rows": 1
+    },
+    "fold_note": "스칼라 1개 · 행 1개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R07 · KODEX 200 ETF",
+      "elements": "NAV · NAV/ETF 괴리율 · 추적오차율 · NAV/지수괴리율 · ETF대상지수코드",
+      "grammar": "compound",
+      "folded": "스칼라 1개 · 행 1개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

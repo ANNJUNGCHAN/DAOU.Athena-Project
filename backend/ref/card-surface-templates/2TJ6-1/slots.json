@@ -1925,5 +1925,87 @@
       "expanded_board": null
     }
   ],
-  "unbound_reason": null
+  "unbound_reason": null,
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "order_confirm",
+    "title": "신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "eyebrow": "CC-02 / 2TJ6-1",
+    "source_board": "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "elements": [
+      {
+        "source_slot_id": "s034",
+        "label": "주문가능금액",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "31,240,000원"
+      },
+      {
+        "source_slot_id": "s020",
+        "label": "금액",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "현재가 150,850원"
+      },
+      {
+        "source_slot_id": "s024",
+        "label": "수량",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "shares",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "10주"
+      },
+      {
+        "source_slot_id": "s028",
+        "label": "계좌",
+        "role": "fact",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "키움증권 01"
+      }
+    ],
+    "fold_counts": {
+      "total": 24,
+      "shown": 4,
+      "hidden": 20
+    },
+    "fold_note": "외 20개 항목을 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+      "elements": "주문가능금액 · 금액 · 수량 · 계좌",
+      "grammar": "order_confirm",
+      "folded": "외 20개 항목을 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }

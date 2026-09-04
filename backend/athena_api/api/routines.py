@@ -6,7 +6,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 
-from athena_api.routines.models import parse_schedule_value, source_spec
+from athena_api.routines.models import SOURCES, parse_schedule_value, source_spec
 from athena_api.routines.rules import validate_draft
 from athena_api.routines.runtime import RoutinesRuntime
 from athena_api.routines.scheduler import record_scheduled_fire
@@ -142,6 +142,42 @@ def _view(
     }
 
 
+# 편집(POST /{id}/update)이 만질 수 있는 필드 — symbol·condition.source는
+# 여기 없다(바꾸면 다른 루틴이다). 조건은 op·value·consecutive_ticks만.
+_UPDATABLE_FIELDS = ("note", "cooldown_s", "expires_days", "briefing_model", "briefing_effort")
+_UPDATABLE_CONDITION_FIELDS = ("op", "value", "consecutive_ticks")
+
+
+def _detail_view(spec: Any, runtime: RoutinesRuntime) -> dict[str, Any]:
+    """단일 루틴 상세 뷰 — 편집 폼이 필요한 조건 원문·소스 명세를 낸다.
+
+    _view()와 달리 발화·읽음·놓침 같은 운영 지표는 담지 않는다(목록의 몫).
+    ledger를 읽지 않으므로 편집 왕복이 원장 스캔을 유발하지 않는다."""
+    source = source_spec(spec.condition.source)
+    return {
+        "id": spec.id,
+        "symbol": spec.symbol,
+        "status": spec.status,
+        "mode": spec.mode,
+        "source_label": source.label,
+        "cooldown_s": spec.cooldown_s,
+        "expires_at": spec.expires_at.isoformat(),
+        "note": spec.note,
+        "briefing_model": spec.briefing_model,
+        "briefing_effort": spec.briefing_effort,
+        "activation_blocker": runtime.can_activate(spec),
+        "experimental_source": source.experimental,
+        "goal": spec.goal,
+        "condition": spec.condition.to_dict(),
+        "source_spec": {
+            "ops": list(source.ops),
+            "value_type": source.value_type,
+            "transport": source.transport,
+            "label": source.label,
+        },
+    }
+
+
 @router.post("/draft")
 async def create_draft(request: Request, body: dict[str, Any]) -> dict[str, Any]:
     runtime = _runtime(request)
@@ -206,6 +242,138 @@ async def briefing_budget(request: Request) -> dict[str, Any]:
         "used_today": used_today,
         "remaining": max(0, limit - used_today),
     }
+
+
+@router.get("/source-catalog")
+async def source_catalog(request: Request) -> dict[str, Any]:
+    """조건 소스 카탈로그 — 06 설정 폼이 소스별 분기(허용 연산자·값 타입·
+    연속 틱 가능 여부)를 이 응답 하나로 세운다. 레거시(앱 플러그인 전용)
+    소스는 새 조건에 못 쓰므로 나가지 않는다."""
+    _runtime(request)
+    return {
+        source: {
+            "ops": list(spec.ops),
+            "value_type": spec.value_type,
+            "transport": spec.transport,
+            "label": spec.label,
+            "experimental": spec.experimental,
+        }
+        for source, spec in SOURCES.items()
+    }
+
+
+@router.post("/watch/code")
+async def save_watch_code_route(request: Request, body: dict[str, Any]) -> dict[str, Any]:
+    """감시 코드 착지 — 모델이 쓴 감시 함수를 프로젝트 폴더 안 `watch/<이름>.py`에 쓴다.
+
+    선언 위치가 계약이다 — `/{routine_id}`보다 **앞**에 있어야 'watch'가 루틴 id로
+    잡히지 않는다(`/source-catalog`과 같은 이유).
+
+    백테스트 표·등록부에는 아무 행도 만들지 않는다(R5·R9). 활성·일시중지 알람이
+    가리키는 파일은 409로 막는다(R10) — 이 문구는 화면이 그대로 보여주지 않는다.
+    """
+    from athena_api.watch.store_code import CodeLocked, save_watch_code
+
+    runtime = _runtime(request)
+    project_id = body.get("project_id")
+    if not isinstance(project_id, str) or not project_id.strip():
+        raise HTTPException(status_code=422, detail="프로젝트를 고르지 않음")
+    labels = body.get("labels")
+    if labels is not None and not isinstance(labels, dict):
+        raise HTTPException(status_code=422, detail="노드 제목 묶음은 이름-제목 짝이어야 한다")
+    try:
+        return save_watch_code(
+            project_id.strip(),
+            body.get("path"),
+            body.get("source"),
+            labels,
+            routine_store=runtime.store,
+        )
+    except KeyError:
+        raise HTTPException(status_code=404, detail="프로젝트 없음") from None
+    except CodeLocked:
+        raise HTTPException(
+            status_code=409,
+            detail="켜져 있는 알람의 코드는 못 바꿈 — 먼저 일시중지하거나 새로 만들기",
+        ) from None
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+
+
+@router.get("/{routine_id}")
+async def get_routine(request: Request, routine_id: str) -> dict[str, Any]:
+    """단일 루틴 상세 — 목록(_view)과 달리 **조건 원문**을 낸다.
+
+    목록은 사람이 읽는 해석문만 노출한다는 규율을 유지하고, 편집 폼이 필요한
+    술어(source/op/value/consecutive_ticks)는 이 라우트에서만 나간다. 발화·
+    읽음 같은 운영 지표는 목록의 몫이라 여기 없다."""
+    runtime = _runtime(request)
+    spec = runtime.store.get(routine_id)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    return _detail_view(spec, runtime)
+
+
+@router.post("/{routine_id}/update")
+async def update_routine(
+    request: Request, routine_id: str, body: dict[str, Any]
+) -> dict[str, Any]:
+    """설정 편집 — 저장된 스펙에 허용 필드만 덮어쓰고 **전량 재검증**한다.
+
+    symbol과 condition.source는 바꿀 수 없다(다른 루틴이 되고 구독·모드가
+    함께 흔들린다) — 새로 만들어야 한다. 재검증은 draft와 같은 rules를 쓰므로
+    소스별 연산자·값 타입·연속 틱 규칙이 편집 경로에서도 똑같이 선다."""
+    runtime = _runtime(request)
+    spec = runtime.store.get(routine_id)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    if spec.status == "cancelled":
+        raise HTTPException(status_code=409, detail="취소된 작업 — 수정 불가")
+    if spec.condition.source not in SOURCES:
+        # 레거시 소스는 새 조건 검증을 통과할 수 없다 — 편집이 아니라 재생성이다.
+        raise HTTPException(
+            status_code=409, detail="지원하지 않는 조건 — 취소 후 새로 만들기"
+        )
+
+    body_condition = body.get("condition")
+    if body_condition is not None and not isinstance(body_condition, dict):
+        raise HTTPException(status_code=422, detail="condition은 객체여야 한다")
+    body_condition = body_condition or {}
+    if "symbol" in body and body["symbol"] != spec.symbol:
+        raise HTTPException(status_code=422, detail="종목 — 변경 불가 · 취소 후 새로 만들기")
+    if (
+        "source" in body_condition
+        and body_condition["source"] != spec.condition.source
+    ):
+        raise HTTPException(status_code=422, detail="조건 소스 — 변경 불가 · 취소 후 새로 만들기")
+
+    merged = spec.to_dict()
+    condition = dict(merged["condition"])
+    for key in _UPDATABLE_CONDITION_FIELDS:
+        if key in body_condition:
+            condition[key] = body_condition[key]
+    merged["condition"] = condition
+    for key in _UPDATABLE_FIELDS:
+        if key in body:
+            merged[key] = body[key]
+    condition_changed = condition != spec.condition.to_dict()
+    # note 신선도: 자동 생성문이었고 조건이 실제로 바뀌었고 새 note가 없으면
+    # 비워서 재생성시킨다 — 사람이 쓴 note는 어떤 경우에도 덮어쓰지 않는다.
+    if condition_changed and "note" not in body and spec.note == spec.human_summary():
+        merged["note"] = ""
+
+    updated = validate_draft(merged)  # RoutineValidationError → 422 (errors.py)
+    updated.id = spec.id
+    updated.status = spec.status
+    updated.created_at = spec.created_at
+    updated.approved_at = spec.approved_at
+    if "expires_days" not in body:
+        updated.expires_at = spec.expires_at  # 편집이 만료를 몰래 연장하지 않는다
+    runtime.store.upsert(updated)
+    if condition_changed:
+        # 옛 조건의 연속 틱·쿨다운 누적을 버린다 — 새 조건은 새로 센다.
+        runtime.engine.reset_state(routine_id)
+    return _detail_view(updated, runtime)
 
 
 @router.post("/{routine_id}/confirm")

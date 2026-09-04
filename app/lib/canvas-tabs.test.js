@@ -340,7 +340,9 @@ test('surface_contract가 있으면 보드 마운트로, 없으면 기존 경로
     CANVAS.indexOf('function renderPrimaryEnvelope'),
     CANVAS.indexOf('function surfaceContractOf'),
   );
-  assert.match(primary, /const boardCard = renderBoardSurfaceCard\(envelope\);\n\s*if \(boardCard\) return boardCard;/);
+  // D1의 예외 — 앱 렌더러(AITS 차트·호가 래더·주문 초안)가 primary인 recipe는 보드가
+  // 가로채지 않는다. 판정은 paper-card-routing.preservesAppPrimary가 든다(2026-09-04).
+  assert.match(primary, /const boardCard = paperCardRouting\.preservesAppPrimary\(envelope\) \? null : renderBoardSurfaceCard\(envelope\);\n\s*if \(boardCard\) return boardCard;/);
   assert.match(primary, /canvas_type === 'table' && !envelope\.fell_back\) return renderMcpTable/);
   const board = CANVAS.slice(CANVAS.indexOf('function renderBoardSurfaceCard'), CANVAS.indexOf('async function renderTaskCanvasEnvelope'));
   assert.match(board, /if \(!contract \|\| !boardMount\) return null;/);
@@ -414,4 +416,16 @@ test('미결 슬롯이 있으면 하이드레이션을 부르고, 못 받으면 
   const main = fs.readFileSync(path.join(__dirname, '..', 'main.js'), 'utf8');
   assert.match(main, /ipcMain\.handle\('athena:canvas-board-hydrate'/);
   assert.match(main, /boardHydrate\.hydrateBoard\(\{/);
+});
+
+test('덱 엘리먼트가 밖에서 떨어져 나갔으면 탭을 닫고 덱을 새로 만든다', () => {
+  // grid.replaceChildren 류로 덱이 DOM에서 떨어졌는데 캐시만 살아 있으면 다음 카드가
+  // 떨어진 패널 속으로 사라진다(2026-09-04 실측 — verify-semantic-workspaces 두 번째
+  // recipe의 호가 카드가 통째로 증발). 남은 탭은 정식 close 경로로 닫아 리스를 풀고,
+  // 덱은 새로 만든다.
+  const helper = CANVAS.slice(CANVAS.indexOf('function ensureCanvasTabDeck'), CANVAS.indexOf('function adoptIntoCanvasTab'));
+  assert.match(helper, /if \(canvasTabDeck && !canvasTabDeck\.element\.isConnected\) \{/);
+  assert.match(helper, /for \(const key of canvasTabDeck\.keys\(\)\) canvasTabDeck\.close\(key\);\n\s*canvasTabDeck = null;/);
+  // 복구 분기 뒤에야 캐시를 돌려준다 — 순서가 바뀌면 복구가 죽은 코드가 된다.
+  assert.ok(helper.indexOf('isConnected') < helper.indexOf('if (canvasTabDeck) return canvasTabDeck;'));
 });

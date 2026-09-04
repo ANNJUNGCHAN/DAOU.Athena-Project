@@ -122,7 +122,9 @@ def test_source_kind_drops_research_and_adds_holding() -> None:
     values = {k.value for k in SourceKind}
     assert "research" not in values
     assert "holding" in values
-    assert values == {"chat_message", "conversation", "trade", "holding"}
+    # manual_edit(2026-09-03) — 사람이 그래프 화면에서 직접 고친 것. 추출 대상이
+    # 아니다: 캘 텍스트가 없고 이미 결론만 들어 있다(ontology.py 주석).
+    assert values == {"chat_message", "conversation", "trade", "holding", "manual_edit"}
 
 
 # ── 유도 id ─────────────────────────────────────────────────────────────────

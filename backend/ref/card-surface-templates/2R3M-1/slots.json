@@ -8044,5 +8044,104 @@
       "kor": "개인순매수",
       "unbound_reason": "오늘의 수급 개인 행 한 자리(s175) 공유 — also_from"
     }
-  ]
+  ],
+  "kiumi": {
+    "version": 1,
+    "width_px": 360,
+    "height_px": 420,
+    "grammar": "compound",
+    "title": "현재시세 — 체결·호가 문맥",
+    "eyebrow": "CC-03 / 2R3M-1",
+    "source_board": "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "elements": [
+      {
+        "source_slot_id": "s019",
+        "label": "누적거래대금",
+        "role": "primary",
+        "band": "scalar",
+        "format": {
+          "unit": "krw_ko",
+          "sign": false,
+          "precision": 2,
+          "tone": "neutral"
+        },
+        "paper_text": "2.14조원"
+      },
+      {
+        "source_slot_id": "s028",
+        "label": "ROE",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "percent",
+          "sign": false,
+          "precision": 1,
+          "tone": "change"
+        },
+        "paper_text": "8.4%"
+      },
+      {
+        "source_slot_id": "s022",
+        "label": "PER",
+        "role": "secondary",
+        "band": "scalar",
+        "format": {
+          "unit": "date",
+          "sign": false,
+          "precision": 1,
+          "tone": "neutral"
+        },
+        "paper_text": "21.2배"
+      },
+      {
+        "source_slot_id": "s031",
+        "label": "현재가",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": false,
+          "precision": 0,
+          "tone": "neutral"
+        },
+        "paper_text": "150,850",
+        "rank": 1
+      },
+      {
+        "source_slot_id": "s032",
+        "label": "전일대비",
+        "role": "row",
+        "band": "scalar",
+        "format": {
+          "unit": "text",
+          "sign": true,
+          "precision": 0,
+          "tone": "change"
+        },
+        "paper_text": "+1,850",
+        "rank": 2
+      }
+    ],
+    "fold_counts": {
+      "total": 152,
+      "shown": 5,
+      "hidden": 147,
+      "scalars": 2,
+      "rows": 7
+    },
+    "fold_note": "스칼라 2개 · 행 7개를 접었어요 · 원본에서 확인",
+    "annotation": {
+      "source_board": "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+      "elements": "누적거래대금 · ROE · PER · 현재가 · 전일대비",
+      "grammar": "compound",
+      "folded": "스칼라 2개 · 행 7개를 접었어요 · 원본에서 확인"
+    },
+    "structure_missing": false,
+    "fixed": true,
+    "reviewed_by": "user-approved-paper/H-1@2026-09-03",
+    "paper": {
+      "file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+      "page_id": "H-1"
+    }
+  }
 }
