@@ -287,6 +287,8 @@ async function main() {
   await wait(300);
 
   for (const query of LIVE_QUERIES) {
+    await evalJs(shellWin, `document.getElementById('sidebarNewChat').click()`, 2000, null);
+    await wait(250);
     const before = await evalJs(shellWin, `document.querySelectorAll('#grid > .card, #mosaic .card, .card').length`, 3000, 0);
     const startedAt = Date.now();
     let result = null;
@@ -300,7 +302,7 @@ async function main() {
     } catch (error) {
       result = { ok: false, error: String(error && error.message || error) };
     }
-    await wait(800);
+    await wait(2500);
     const after = await evalJs(shellWin, `(() => {
       const cards = Array.from(document.querySelectorAll('.card'));
       return {
