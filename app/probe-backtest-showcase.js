@@ -380,7 +380,7 @@ async function main() {
   // ── 01 백테스트 모드 진입 · 프리셋 목록 ────────────────────────────────────
   await js(shellWin, "(() => { const n = document.getElementById('modeNavBacktest'); if (n) n.click(); return true; })()");
   await wait(600);
-  // 프리셋 목록은 폼 하위탭에만 있다 — 모드에 들어가면 첫 프리셋이 이미 잡혀 지도가 뜬다.
+  // 보드 19: 첫 화면이 폼 탭의 기법 목록이다. goDesignForm은 멱등이다.
   await goDesignForm(shellWin);
   const presetList = await until(
     shellWin,

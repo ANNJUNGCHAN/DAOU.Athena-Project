@@ -69,6 +69,21 @@ async function main() {
   );
   record('01-프리셋 목록이 백엔드에서 온다', presets === 10, { presets });
 
+  // 보드 19: 첫 화면은 목록만. 폼 네 덩어리를 보려면 기법을 고른 다음이다.
+  await js(shellWin, `(() => {
+    const item = document.querySelector('#backtestCanvas .backtest-preset-item');
+    if (item) item.click();
+    return true;
+  })()`);
+  await wait(400);
+  await js(shellWin, `(() => {
+    const tabs = document.querySelectorAll('#backtestCanvas .backtest-subtab');
+    const formTab = Array.from(tabs).find((t) => t.textContent === '폼') || tabs[1];
+    if (formTab) formTab.click();
+    return true;
+  })()`);
+  await wait(200);
+
   // ---------- (2) 설계 폼이 Paper 보드 01의 네 덩어리를 다 그린다 ----------
   const form = await js(shellWin, `(() => {
     const q = (s) => document.querySelectorAll('#backtestCanvas ' + s).length;

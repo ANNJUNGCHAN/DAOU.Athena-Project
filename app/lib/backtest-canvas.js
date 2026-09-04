@@ -5,9 +5,9 @@
 // 41개가 화면에 없었다(docs/architecture/backtest-parity-audit.md). 이 파일은 그 41개를
 // 채운다 — 설계 폼 전체·코드 편집기·플로우 지도·오류 진단·자산곡선·이력 비교·최적화·배포.
 //
-// **표면 구조.** 상단 모드 탭 5개(설계·결과·이력·최적화·배포)가 큰 축이고, 설계 안에서만
-// 폼/코드/지도 3탭으로 다시 갈린다. 승인(보드 04)·진행·오류 진단(보드 09)은 탭이 아니라
-// 그때만 뜨는 상태다 — 사용자가 탭으로 오갈 수 있는 자리가 아니기 때문이다.
+// **표면 구조.** 보드 19 첫 화면의 상단 탭은 기법·결과·이력 셋이다. 기법을 고른 뒤에만
+// 최적화·배포가 붙고, 설계 안의 지도/폼/코드는 고른 뒤에 선다. 승인(보드 04)·진행·
+// 오류 진단(보드 09)은 탭이 아니라 그때만 뜨는 상태다.
 //
 // **왜 상태가 하나의 객체인가.** 화면이 여덟 개로 늘었지만 동시에 두 개가 뜨는 경우는
 // 없다. view 하나로 배타를 강제하면 "결과를 보면서 최적화가 도는" 같은 애매한 상태가
@@ -84,16 +84,16 @@ const SIDE_LABEL = { buy: '매수', sell: '매도' };
 const REASON_LABEL = { signal: '신호', stop_loss: '손절', take_profit: '익절' };
 
 const MODE_TABS = [
-  ['design', '설계'],
+  ['design', '기법'],
   ['result', '결과'],
   ['history', '이력'],
   ['optimize', '최적화'],
   ['deploy', '배포'],
 ];
+const MODE_TABS_LIST = MODE_TABS.slice(0, 3);
 
-// 지도가 첫 표면이다(사용자 확정 2026-09-03 "코드는 최후의 보루야. 대화를 하면서 코드
-// 플로우 지도를 수정해 나가는거고, 그 코드 플로우 지도 뒤에 코드가 있는거야"). 그래서
-// 순서가 지도 → 폼 → 코드이고, 코드 탭의 이름 자체가 그것이 마지막 수단임을 말한다.
+// 기법을 고른 뒤의 첫 표면은 지도다(사용자 확정 2026-09-03). 고르기 전 첫 화면은
+// 보드 19 기법 목록 — 프리셋 0번을 자동으로 열지 않는다. 탭 순서는 지도 → 폼 → 코드.
 const DESIGN_TABS = [
   ['flow', '지도'], ['form', '폼'], ['code', '코드 · 최후의 보루'], ['nodes', '노드·흐름'],
 ];
@@ -163,8 +163,9 @@ const OPTIMIZE_METHODS = [['grid', '그리드'], ['random', '랜덤']];
 // "프리셋"이라는 말은 화면에서 쓰지 않는다. 처음 주어진 10개도 그냥 **기법**이고,
 // 사람이 만든 것과 구분하지 않는다 — 목록은 하나다. 내부 이름(preset·userStrategy)과
 // 백엔드·MCP 액션 이름은 그대로다(계약이 그 말을 쓴다).
-const TECHNIQUE_NEW_LABEL = '+ 새 기법 만들기';
-const TECHNIQUE_NEW_SUB = '대화로 만듭니다 — AI가 코드를 쓰고 하나씩 묻습니다';
+const TECHNIQUE_NEW_LABEL = '새 기법 만들기';
+const TECHNIQUE_NEW_SUB = '코드창과 대화창이 열립니다 — AI가 한 번에 하나씩 물어보며 원하는 알고리즘을 코드로 씁니다';
+const TECHNIQUE_NEW_CHIP = '대화로 시작';
 const TECHNIQUE_NEW_NAME = '새 기법';
 // 첫 문장은 사람이 입력창에 친 것과 같은 길로 나간다(chat.js dispatchUserQuery).
 const TECHNIQUE_NEW_PROMPT = '새 기법을 만들고 싶어요. 어떤 전략인지 하나씩 물어봐 주세요.';
@@ -965,10 +966,9 @@ function createBacktestCanvas(options) {
     }
     if (rid !== loadRequestId) return;
     presets = Array.isArray(list) ? list : [];
-    if (presets.length && !spec) spec = SpecModel.presetToSpec(presets[0]);
-    // 전략이 서면 지도가 첫 화면이다 — 사람이 먼저 보는 것은 폼 칸이 아니라 흐름이다.
-    setState({ view: 'design', tab: 'design', designTab: 'flow', mapVersion: spec ? 1 : 0 });
-    if (spec) void loadMap();
+    // 보드 19: 고르기 전에는 목록만 선다. 0번을 자동으로 열면 심볼 없는 지도 요청이
+    // 영어 pydantic 배너가 된다. 고른 뒤에는 selectPreset이 지도를 연다.
+    setState({ view: 'design', tab: 'design', designTab: 'form', mapVersion: 0 });
     // 등록부는 부수 정보다 — 못 읽었다고 프리셋 화면까지 실패로 만들지 않는다.
     await loadUserStrategies();
   }
@@ -2447,11 +2447,28 @@ function createBacktestCanvas(options) {
     return wrap;
   }
 
+  function hasTechnique() {
+    return !!(spec || userStrategyId || techniqueDraft);
+  }
+
+  function listFirst() {
+    return !hasTechnique();
+  }
+
+  function visibleModeTabs() {
+    if (hasTechnique() || state.tab === 'optimize' || state.tab === 'deploy') return MODE_TABS;
+    return MODE_TABS_LIST;
+  }
+
   // 보드 01/03 헤더 — 전략 이름·버전, 모드 탭, 실행 버튼.
   function renderHeader() {
     const head = el('div', 'backtest-head');
     const title = el('div', 'backtest-head-title');
     title.appendChild(el('span', 'backtest-head-name', '백테스트'));
+    if (listFirst()) {
+      const n = presets.length + userStrategies.length;
+      title.appendChild(el('span', 'backtest-head-count', `기법 ${n}개`));
+    }
     if (spec) {
       title.appendChild(el('span', 'backtest-head-strategy', spec.name));
       if (activeVersionId) title.appendChild(el('span', 'backtest-head-version', '코드 버전 활성'));
@@ -2464,7 +2481,7 @@ function createBacktestCanvas(options) {
     head.appendChild(title);
 
     const tabs = el('div', 'backtest-tabs');
-    MODE_TABS.forEach(([key, label]) => {
+    visibleModeTabs().forEach(([key, label]) => {
       const isOn = state.tab === key;
       const tab = button(`backtest-tab${isOn ? ' is-on' : ''}`, label, () => {
         if (key === 'history') { void loadHistory(); return; }
@@ -2505,7 +2522,10 @@ function createBacktestCanvas(options) {
       head.appendChild(run);
       return head;
     }
-    head.appendChild(button('backtest-run-button', '실행', () => { void handleRun(false); }));
+    // 보드 19 목록 화면에는 실행이 없다 — 고른 뒤에만 선다.
+    if (spec || techniqueDraft) {
+      head.appendChild(button('backtest-run-button', '실행', () => { void handleRun(false); }));
+    }
     return head;
   }
 
@@ -2513,6 +2533,10 @@ function createBacktestCanvas(options) {
 
   function renderDesign() {
     const wrap = el('div', 'backtest-design');
+    if (listFirst()) {
+      wrap.appendChild(renderTechniqueList());
+      return wrap;
+    }
     const subtabs = el('div', 'backtest-subtabs');
     // 초안에서는 하위 탭이 둘뿐이다 — 지도도 폼도 아직 없다(보드 20). 초안인데 designTab이
     // 지도·폼이면(세션 복원·채팅 navigate) 코드로 본다: 없는 탭에 서 있을 수는 없다.
@@ -2551,6 +2575,7 @@ function createBacktestCanvas(options) {
     // 목록이 비어도 [+ 새 기법 만들기]는 서야 한다 — 하나도 없을 때가 만들기를 가장
     // 먼저 눌러야 하는 때다. 나머지 카드(대상·지표·조건)는 고른 기법이 있어야 뜻이 있다.
     wrap.appendChild(renderTechniqueList());
+    if (!spec && !userStrategyId && !techniqueDraft) return wrap;
     if (!presets.length && !userStrategies.length) return wrap;
     wrap.appendChild(renderTargetCard());
     // 내 전략은 지표·조건을 쓰지 않는다 — 신호를 만드는 것은 그 파일의 파이썬이다.
@@ -2589,9 +2614,15 @@ function createBacktestCanvas(options) {
   function renderTechniqueList() {
     const wrap = el('div', 'backtest-technique-wrap');
     const total = presets.length + userStrategies.length;
-    wrap.appendChild(el('div', 'backtest-card-title', `기법 — ${total}개`));
+    wrap.appendChild(renderNewTechniqueCard());
+    const head = el('div', 'backtest-technique-head');
+    head.appendChild(el('div', 'backtest-card-title', `기법 — ${total}개`));
+    head.appendChild(el(
+      'div', 'backtest-technique-note',
+      `처음 있던 ${presets.length}개와 내가 만든 ${userStrategies.length}개를 구분하지 않습니다`,
+    ));
+    wrap.appendChild(head);
     const list = el('div', 'backtest-technique-list');
-    list.appendChild(renderNewTechniqueCard());
     presets.forEach((preset) => {
       const isSelected = spec && !userStrategyId && preset.id === spec.presetId;
       const item = button(
@@ -2599,9 +2630,11 @@ function createBacktestCanvas(options) {
         () => selectPreset(preset.id),
       );
       item.setAttribute('aria-pressed', String(isSelected));
-      item.appendChild(el('div', 'backtest-preset-name', preset.name));
+      const row = el('div', 'backtest-technique-card-head');
+      row.appendChild(el('div', 'backtest-preset-name', preset.name));
       const category = techniqueCategoryKo(preset.category);
-      if (category) item.appendChild(el('div', 'backtest-preset-category', category));
+      if (category) row.appendChild(el('div', 'backtest-preset-category', category));
+      item.appendChild(row);
       const desc = techniqueDescription(preset);
       if (desc) item.appendChild(el('div', 'backtest-technique-desc', desc));
       list.appendChild(item);
@@ -2617,8 +2650,10 @@ function createBacktestCanvas(options) {
         () => { void selectUserStrategy(entry.id); },
       );
       item.setAttribute('aria-pressed', String(isSelected));
-      item.appendChild(el('div', 'backtest-user-strategy-name', entry.name));
-      item.appendChild(el('div', 'backtest-user-strategy-path', entry.path));
+      const head = el('div', 'backtest-technique-card-head');
+      head.appendChild(el('div', 'backtest-user-strategy-name', entry.name));
+      head.appendChild(el('div', 'backtest-user-strategy-path', entry.path));
+      item.appendChild(head);
       if (entry.exists === false) {
         item.appendChild(el('div', 'backtest-user-strategy-missing', '파일이 없습니다'));
       }
@@ -2636,11 +2671,17 @@ function createBacktestCanvas(options) {
   }
 
   function renderNewTechniqueCard() {
-    const card = button(
-      'backtest-technique-new backtest-technique-card', null, startNewTechnique,
-    );
-    card.appendChild(el('div', 'backtest-technique-new-label', TECHNIQUE_NEW_LABEL));
-    card.appendChild(el('div', 'backtest-technique-desc', TECHNIQUE_NEW_SUB));
+    const card = button('backtest-technique-new', null, startNewTechnique);
+    const plus = el('div', 'backtest-technique-new-plus', '+');
+    plus.setAttribute('aria-hidden', 'true');
+    card.appendChild(plus);
+    const copy = el('div', 'backtest-technique-new-copy');
+    copy.appendChild(el('div', 'backtest-technique-new-label', TECHNIQUE_NEW_LABEL));
+    copy.appendChild(el('div', 'backtest-technique-new-sub', TECHNIQUE_NEW_SUB));
+    card.appendChild(copy);
+    const chip = el('div', 'backtest-technique-new-chip', TECHNIQUE_NEW_CHIP);
+    chip.setAttribute('aria-hidden', 'true');
+    card.appendChild(chip);
     return card;
   }
 
@@ -5783,6 +5824,7 @@ const __exports = {
   specOverridesFromYaml,
   METRIC_TILES,
   MODE_TABS,
+  MODE_TABS_LIST,
   DESIGN_TABS,
   DEPLOY_MODES,
   SIGNAL_STAGES,

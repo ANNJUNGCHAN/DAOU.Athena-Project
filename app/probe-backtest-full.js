@@ -670,7 +670,7 @@ async function main() {
     })()`);
     await step('A02', '채팅 헤더가 백테스트 얼굴로 바뀐다', () => ({
       ok: !!chatHead && chatHead.hidden === false && chatHead.mode === 'backtest'
-            && chatHead.title === '전략에게 묻기' && chatHead.sub === '답이 설정과 코드를 바꿉니다',
+            && chatHead.title === '기법에게 묻기' && chatHead.sub === '고른 기법을 다룹니다',
       data: chatHead,
     }));
 
@@ -691,9 +691,9 @@ async function main() {
       ok: !!shell && shell.head === 1 && shell.body === 1 && shell.empty === 0,
       data: shell,
     }));
-    await step('A04', '모드 탭 5개가 계약 순서대로 있다', () => ({
-      ok: !!shell && JSON.stringify(shell.tabs) === JSON.stringify(['설계', '결과', '이력', '최적화', '배포'])
-            && shell.runButton === 1,
+    await step('A04', '보드 19 첫 화면 탭은 기법·결과·이력이다', () => ({
+      ok: !!shell && JSON.stringify(shell.tabs) === JSON.stringify(['기법', '결과', '이력'])
+            && shell.runButton === 0,
       data: shell ? { tabs: shell.tabs, runButton: shell.runButton } : null,
     }));
 
@@ -707,13 +707,8 @@ async function main() {
         mapVersion: c.map ? c.map.version : null,
       };
     })()`);
-    await step('A08', '설계 하위 탭은 지도·폼·코드·노드·흐름이고 기본은 지도다(코드는 최후의 보루)', () => ({
-      ok: !!subtabs
-            && JSON.stringify(subtabs.labels) === JSON.stringify(
-              ['지도', '폼', '코드 · 최후의 보루', '노드·흐름'],
-            )
-            && subtabs.designTab === 'flow' && subtabs.on === '지도'
-            && subtabs.mapVersion === 1,
+    await step('A08', '고르기 전에는 설계 하위 탭이 없다 — 목록이 첫 화면이다', () => ({
+      ok: !!subtabs && subtabs.labels.length === 0 && subtabs.designTab === 'form' && !subtabs.mapVersion,
       data: subtabs,
     }));
 
@@ -765,8 +760,8 @@ async function main() {
         version: root.querySelectorAll('.backtest-head-version').length,
       };
     })()`);
-    await step('A07', '헤더가 전략 이름을 적고 저장 전에는 버전 배지가 없다', () => ({
-      ok: headTitle.name === '백테스트' && !!headTitle.strategy && headTitle.version === 0,
+    await step('A07', '헤더는 백테스트이고 고르기 전에는 전략 이름이 없다', () => ({
+      ok: headTitle.name === '백테스트' && !headTitle.strategy && headTitle.version === 0,
       data: headTitle,
     }));
   });
@@ -2691,7 +2686,7 @@ async function main() {
       data: codeCard,
     }));
 
-    const tabExpect = [['design', '설계'], ['result', '결과'], ['history', '이력'], ['optimize', '최적화'], ['deploy', '배포']];
+    const tabExpect = [['design', '기법'], ['result', '결과'], ['history', '이력'], ['optimize', '최적화'], ['deploy', '배포']];
     for (let i = 0; i < tabExpect.length; i += 1) {
       const [key, label] = tabExpect[i];
       sendChat(shellWin, { kind: 'navigate', tab: key, designTab: null });
