@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
   applyRealtimeTick, canonicalCoveragePath, flattenSourceData, normalizeOccurrences, valueAtPath,
+  scalarText, isWireSentinel,
 } = require('./semantic-detail-sheet');
 
 test('full source data is flattened without dropping arrays or empty containers', () => {
@@ -142,4 +143,14 @@ test('accepted realtime tick visibly updates active section and matching raw det
   } finally {
     delete global.document;
   }
+});
+
+test('wire fixture sentinels never reach product detail text', () => {
+  assert.equal(isWireSentinel('fixture::detail:kt00017:other_assets_and_income::$.foo'), true);
+  assert.equal(isWireSentinel('sentinel::mapped'), true);
+  assert.equal(isWireSentinel('실제 잔고'), false);
+  assert.equal(scalarText('fixture::detail:kt00017:x::$.a'), '—');
+  assert.equal(scalarText('sentinel::x'), '—');
+  assert.equal(scalarText('12,345'), '12,345');
+  assert.equal(scalarText(null), '—');
 });
