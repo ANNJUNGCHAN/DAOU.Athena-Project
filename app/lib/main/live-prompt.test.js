@@ -167,6 +167,32 @@ test('buildLivePrompt: 주문·자동화 정책 v3b — 실행 툴 없음·루�
   assert.ok(p.includes('감시 방식'));
 });
 
+// v3f(2026-09-04 사용자 결정) — 같은 문단이 이제 두 주체를 말한다. 옛 문장 "주문은
+// 사용자가 앱의 주문 티켓에서 직접 실행한다"는 배포가 무장하면 거짓이 되므로 채팅 경로로
+// 좁혔다. 이 테스트가 재발을 막는 것은 두 방향이다 — 사실을 부정하는 답("자동 매매는 안
+// 됩니다")과 경계를 무너뜨리는 답("제가 넣어 드릴게요"). 둘 다 한 문단에서 갈라야 한다.
+test('buildLivePrompt: 주문·자동화 정책 v3f — 모델은 못 내지만 무장한 배포는 낸다', () => {
+  const p = buildLivePrompt('x');
+  // (가) 모델 경계 — 약해지면 안 되는 쪽.
+  assert.ok(p.includes('주체를 갈라서 읽어라'), '주체를 나눈다는 신호가 없다');
+  assert.ok(p.includes('이 대화에서 네가 넣는 주문은 없다 — 대신 실행하겠다고 말하지 마라'));
+  assert.ok(p.includes('채팅에서'));
+  assert.ok(p.includes('시작되는 주문은 사용자가 앱의 주문 티켓에서 직접 누른 것뿐이다'));
+  // (나) 새 사실 — 사람이 auto로 걸고 무장하면 클릭 없이 주문이 나간다.
+  assert.ok(p.includes('사람이 백테스트 화면에서 건 배포는 다르다'));
+  assert.ok(p.includes('주문합니다"(auto)이고 키우미 무장 스위치가 켜져 있고 그 배포가 활성이면'));
+  assert.ok(p.includes('사람 클릭 없이 한도 안에서 주문이 나간다(키움 모의투자 서버)'));
+  assert.ok(p.includes('되냐"고 물으면 된다고 답하고 이 조건 셋을 함께 말한다'));
+  assert.ok(p.includes('셋 중 하나라도 아니면 신호만'));
+  // 한도와 스위치의 소유자 — 모델이 못 바꾼다.
+  assert.ok(p.includes('배포를 만드는 것도 무장 스위치를 켜는 것도 사람이 누르는'));
+  assert.ok(p.includes('네가 바꾸거나 풀어 줄 수 없다'));
+  // 두 주체가 한 문장으로 다시 붙는 자리 — 이게 없으면 (가)와 (나)가 모순으로 읽힌다.
+  assert.ok(p.includes('자동으로 주문을 내는 것은 사람이 건 배포이지 네가 아니다'));
+  // 옛 무조건 단언은 사라져야 한다 — 남아 있으면 모델이 무장한 배포도 부정한다.
+  assert.ok(!p.includes('주문은 사용자가 앱의 주문 티켓에서 직접 실행한다'));
+});
+
 test('buildLivePrompt: 실행 환경 제약 v3c — Bash 없음·승인 절차 없음·잘린 결과 대응 (2026-08-19 실사용 결함)', () => {
   const p = buildLivePrompt('x');
   assert.ok(p.includes('실행 환경 제약'));
@@ -666,12 +692,55 @@ test('buildBacktestModePrefix: 패키지는 사람에게 [환경 만들기]를 �
 
 // 실매매를 물었을 때의 답 — 이 저장소는 키움 모의투자에 잠겨 있다(config.py가 다른
 // base URL을 거부한다). 모델이 그 사실을 모르면 실계좌를 약속한다.
-test('buildBacktestModePrefix: 실매매는 배포+사람 클릭이고 모의투자 서버뿐이라고 말한다', () => {
+//
+// 의도 갱신(2026-09-04 사용자 결정) — 예전 이 테스트의 제목은 "실매매는 배포+사람
+// 클릭"이었다. 그 문장은 이제 절반만 참이다: **배포를 거는 것**은 여전히 사람 클릭이지만,
+// 걸고 나서 auto 모드 + 무장이면 **주문 자체는 클릭 없이** 나간다(deploy_orders.py
+// is_armed_for_auto). 그래서 이 테스트가 잠그는 것은 셋이 됐다 — (1) 배포 버튼은 사람이
+// 누른다, (2) 붙는 곳은 모의투자 서버뿐이다, (3) 모델이 대신 주문을 넣어주겠다고 말하지
+// 않는다. 사람이 안 누르면 아무 주문도 없다는 옛 주장은 여기서 빼고, 그 자리의 새 사실은
+// 바로 아래 "자동 매매가 되냐" 테스트가 따로 잠근다.
+test('buildBacktestModePrefix: 배포를 거는 것은 사람 클릭이고, 붙는 곳은 모의투자 서버뿐이다', () => {
   const p = buildBacktestModePrefix(BT_PROJECT_CONTEXT, '20260902');
   assert.ok(p.includes('실매매 적용이 무엇이냐고 물으면'));
   assert.ok(p.includes('배포 버튼은 사람이 누른다'));
   assert.ok(p.includes('키움 모의투자 서버뿐이라 실계좌 주문은 여기서 나가지 않는다'));
   assert.ok(p.includes('대신 주문을 넣어주겠다고 말하지 마라'));
+  // 모드 이름은 화면(DEPLOY_MODES)·백엔드(deploy.py MODE_LABELS)와 같은 문구여야 한다 —
+  // 줄여 부르면 사용자가 화면에서 그 항목을 못 찾는다.
+  assert.ok(p.includes('기록만 합니다 · 승인을 받고 주문합니다 · 한도 안에서 자동으로 주문합니다'));
+});
+
+// 새 사실(2026-09-04 사용자 결정) — auto 모드로 배포하고 무장하면 사람 클릭 없이 주문이
+// 나간다. 접두가 이것을 안 실으면 모델은 "저에게는 주문 툴이 없습니다"를 앱 전체의
+// 능력으로 일반화해 "자동 매매는 안 됩니다"라고 답한다. 그러면 사용자는 방금 켜 둔 스위치가
+// 무엇인지 설명을 못 듣는다. 위 줄의 금지(모델 주체)와 이 줄의 가능(배포 주체)이 한 접두에
+// 함께 서 있어야 하고, 문장이 주체를 밝혀야 둘이 충돌로 읽히지 않는다.
+test('buildBacktestModePrefix: 자동 매매는 된다고 답하되 주체가 배포임을 밝힌다', () => {
+  const p = buildBacktestModePrefix(BT_PROJECT_CONTEXT, '20260902');
+  assert.ok(p.includes('"자동 매매가 되냐"고 물으면 된다고 답한다'), '가능하다는 사실이 없다');
+  assert.ok(p.includes('그것을 하는 것은 네가 아니라 사람이 건 배포다'), '주체 구분이 없다');
+  // 조건 셋 — 하나라도 빠지면 모델이 무장 안 한 배포를 자동 매매라고 말한다.
+  assert.ok(p.includes('"한도 안에서 자동으로 주문합니다"(auto)이고 키우미 무장 스위치가 켜져 있고 그 배포가 활성이면'));
+  assert.ok(p.includes('사람 클릭 없이 한도 안에서 주문이 나간다(모의서버)'));
+  assert.ok(p.includes('셋 중 하나라도 아니면 신호만 쌓이고 주문은 나가지 않는다'));
+  // 두 문장이 같은 뜻으로 뭉개지지 않게 못박는 자리.
+  assert.ok(p.includes('"배포가 자동으로 주문을 냅니다"와 "제가 주문을 넣어 드립니다"는 다른 말이니 섞지 마라'));
+});
+
+// 한도는 사람 것이다 — "하루 한도를 5건으로 올려줘"(Paper 보드 23의 예시 질문)에 모델이
+// 올렸다고 답하면 다음 신호가 조용히 막히고 사용자는 이유를 모른다.
+test('buildBacktestModePrefix: 배포·무장·한도는 사람이 정하고 모델이 못 바꾼다', () => {
+  const p = buildBacktestModePrefix(BT_PROJECT_CONTEXT, '20260902');
+  assert.ok(p.includes('배포를 만드는 것도 무장 스위치를 켜는 것도 사람이 누르고, 한도도 사람이 정한다'));
+  assert.ok(p.includes('1회 최대 주문 · 하루 최대 주문 수 · 유효 시작·종료 · 자동 정지 낙폭 · 자동 정지 연속 손절'));
+  assert.ok(p.includes('네가 바꾸거나 풀어 줄 수 없으니 올려 달라는 말에는 어디를 고쳐야 하는지만 안내한다'));
+  assert.ok(p.includes('수치를 지어내지 않는다'));
+  // 경계는 그대로다 — 새 사실이 들어와도 모델이 부를 수 있는 액션에 실행·배포는 없다.
+  const rules = p.split('현재 화면:')[0].split('\n').filter((line) => line.startsWith('- '));
+  for (const line of rules) {
+    assert.ok(!/action=(run|activate|backfill|deploy|register_strategy)\b/.test(line), line);
+  }
 });
 
 test('buildLiveTurnPrompt: 백테스트가 아닌 턴에는 프로젝트 블록이 새지 않는다', () => {
