@@ -750,7 +750,7 @@ test('탭 "일시중지"·"활성"에는 draft가 나타나지 않는다(draft�
   assert.equal(findByClass(container, 'agent-row').filter((r) => r.className.includes('is-draft')).length, 0);
 });
 
-// ── 9단계: 뷰 탭 3종(작업/알람/라이브) + 알람 센터·라이브 관제 ──
+// ── 9단계: 뷰 탭 4종(작업/알람/라이브/제안) + 알람 센터·라이브 관제 ──
 
 function alert1(overrides) {
   return { id: 'al1', title: '삼성전자 88,000 감시', sub: '005930 · 관측 88100', firedAt: Date.parse('2026-08-27T09:15:00Z'), read: false, ...overrides };

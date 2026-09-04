@@ -1431,8 +1431,8 @@ const BACKTEST_EXTRA_CHANNELS = {
   // 지도 뒤의 코드 생성 — 저장하지 않는다(소스만 돌려준다, §7.3).
   'athena:backtest-codegen': backtestBridge.fetchCodegen,
   // 새 기법 만들기(2026-09-03, 보드 20·21) — 코드 한 덩이를 노드로 자르는 길과
-  // 자동 검사 3개를 도는 길. 둘 다 저장하지 않는다(검사의 시험 실행도 이력을 남기지
-  // 않는다) — 그 경계는 백엔드가 진다.
+  // 자동 검사(차단 5 + 경고 2)를 도는 길. 둘 다 저장하지 않는다(검사의 시험 실행도
+  // 이력을 남기지 않는다) — 그 경계는 백엔드가 진다.
   'athena:backtest-technique-nodes': backtestBridge.fetchTechniqueNodes,
   'athena:backtest-technique-check': backtestBridge.fetchTechniqueCheck,
   // 시각 설계 ↔ 코드 왕복(2026-09-03) — 대화형 오류 수정 계약의 요청 표면이다.

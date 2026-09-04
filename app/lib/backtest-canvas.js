@@ -40,6 +40,7 @@ const VisualEditor = isNode
 const { formatNumeric, formatDatetime } = FactsCard;
 
 const POLL_INTERVAL_MS = 1000;
+function pad2(n) { return String(n).padStart(2, '0'); }
 
 // §6.4(체결 규칙)·§5.5(정직하게 못 하는 것) 그대로 — 접히지 않는다(보드 01·03 상시 표기).
 const ASSUMPTIONS_TEXT = '신호는 종가 확정 후 판정하고 체결은 다음 봉 시가입니다 · '
@@ -237,8 +238,9 @@ const TECHNIQUE_BAND_HAND = '직접 편집 중';
 // 검사는 전부 자동이다(사용자 확정). 한 자 칠 때마다 백엔드를 부르지 않도록 묶는 시간 —
 // 시각 편집기의 검증 디바운스와 같은 규칙이다.
 const TECHNIQUE_CHECK_DEBOUNCE_MS = 700;
-// 검사 3개(문법·계약·시험 실행) — 진행 표시의 분모다.
-const TECHNIQUE_CHECK_TOTAL = 5; // 차단 검사 수(문법·계약·시험 실행·룩어헤드·워밍업)
+// 응답이 없을 때만 쓰는 차단 검사 폴백 분모. 살아 있는 분모는 서버 checks에서
+// 차단만 센다(technique_check.CHECK_SEVERITY: 문법·계약·시험 실행·룩어헤드·워밍업).
+const TECHNIQUE_CHECK_TOTAL = 5;
 // 아직 아무것도 재지 않은 상태. 키는 계약(getContext().technique) 그대로 두고 값만 비운다 —
 // log만 화면 것이라 컨텍스트에 실리지 않는다(명령창 출력으로 컨텍스트가 부풀지 않게).
 const TECHNIQUE_EMPTY = Object.freeze({
@@ -378,8 +380,7 @@ function signalTimeText(sig) {
   if (!raw) return '';
   const d = new Date(raw);
   if (Number.isNaN(d.getTime())) return '';
-  const pad = (n) => String(n).padStart(2, '0');
-  return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
 }
 
 // 한 줄짜리 사람 말. 차단 사유가 있으면 그것이 이유를 대신한다 — 왜 안 나갔는지가
@@ -604,9 +605,8 @@ function diffCounts(before, after) {
 // 규칙(백엔드 is_safe_project_name)을 지키려 구분자·점·양끝 공백을 쓰지 않는다.
 function techniqueProjectName(now) {
   const d = (now instanceof Date) ? now : new Date();
-  const pad = (n) => String(n).padStart(2, '0');
-  const ymd = `${pad(d.getFullYear() % 100)}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
-  return `${TECHNIQUE_PROJECT_PREFIX}${ymd}-${pad(d.getHours())}${pad(d.getMinutes())}`;
+  const ymd = `${pad2(d.getFullYear() % 100)}${pad2(d.getMonth() + 1)}${pad2(d.getDate())}`;
+  return `${TECHNIQUE_PROJECT_PREFIX}${ymd}-${pad2(d.getHours())}${pad2(d.getMinutes())}`;
 }
 
 // 무엇을 해야 하는지를 말로 적는다 — 경고는 실패가 아니다(통과를 막지 않는다).
@@ -2814,9 +2814,9 @@ function createBacktestCanvas(options) {
   // ── 보드 20·21 · 새 기법 만들기(코드창 · 명령창 · 노드·흐름 창) ───────────
   //
   // 사용자 확정: 코드창은 편집 가능하지만 **AI가 제어한다**. AI가 질문 카드를 하나씩
-  // 던져 알고리즘을 정하고 코드를 직접 쓴다. 검사는 전부 자동이고(문법·계약·짧은 구간
-  // 시험 실행), 통과하면 노드·흐름 창이 자동으로 열린다. 노드는 범용 팔레트가 아니라
-  // **그 기법 파이썬의 함수 한 단위**다 — 기법마다 노드가 다르다.
+  // 던져 알고리즘을 정하고 코드를 직접 쓴다. 검사는 전부 자동이고(차단: 문법·계약·
+  // 시험 실행·룩어헤드·워밍업), 통과하면 노드·흐름 창이 자동으로 열린다. 노드는 범용
+  // 팔레트가 아니라 **그 기법 파이썬의 함수 한 단위**다 — 기법마다 노드가 다르다.
   //
   // 이 구역이 하지 않는 것: 저장·활성화·실행·배포. 검사의 시험 실행도 결과를 남기지
   // 않는다(그 경계는 백엔드가 진다).
@@ -2881,7 +2881,7 @@ function createBacktestCanvas(options) {
     });
   }
 
-  // 다음 턴 컨텍스트에 실리는 모양 — 계약 키 12개다. 빠지는 것 둘: 명령창 로그(화면
+  // 다음 턴 컨텍스트에 실리는 모양 — 계약 키 13개다. 빠지는 것 둘: 명령창 로그(화면
   // 것이라 컨텍스트가 부푼다)와 lastDiff(코드 원문 두 벌이라 code.source와 겹친다).
   // steps는 카드의 말만 싣는다 — action은 화면이 누를 손잡이지 모델이 읽을 사실이 아니다.
   function techniqueContext() {
@@ -2992,7 +2992,7 @@ function createBacktestCanvas(options) {
     let data;
     try { data = await deps.techniqueCheck(Object.assign({ source }, techniqueCheckTarget())); }
     catch (err) {
-      // 못 돌린 것과 실패한 것은 다르다 — 검사 3줄을 지어내지 않고 명령창에만 적는다.
+      // 못 돌린 것과 실패한 것은 다르다 — 검사 줄을 지어내지 않고 명령창에만 적는다.
       setTechnique({
         checks: [], passed: false, stats: null,
         log: [`$ 검사를 돌리지 못했습니다 — ${String((err && err.message) || err)}`],

@@ -7,7 +7,7 @@
 // UMD 헤드(2026-08-18 렌더러 격리) — ipcRenderer는 window.athena 다리로
 // 대체한다(preload.js). ui-kit require는 node --test/<script> 태그 겸용.
 const {
-  el, row, statusDot, badge, arrowIcon, button, progressDots, labeledRow,
+  el, row, statusDot, badge, button,
   sheet, secretMask, emptyState, errorNote, clear, removeCard,
 } = (typeof module !== 'undefined' && module.exports) ? require('./ui-kit') : window.AthenaLib.UiKit;
 
