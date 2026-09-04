@@ -330,11 +330,17 @@ def test_load_responsive_validates_and_normalizes_manifest(tmp_path):
     )
 
     assert pbe.load_responsive(manifest, {"A-0", "B-0"}) == [
-        {"node_id": "B-0", "traits": ("atomic",), "accessible_label": None},
+        {
+            "node_id": "B-0",
+            "traits": ("atomic",),
+            "accessible_label": None,
+            "header_row": None,
+        },
         {
             "node_id": "A-0",
             "traits": ("scroll",),
             "accessible_label": "Quote details",
+            "header_row": None,
         },
     ]
 
@@ -348,6 +354,11 @@ def test_load_responsive_validates_and_normalizes_manifest(tmp_path):
         '{"responsive": [{"node_id": "A-0", "traits": ["scroll"]}]}',
         '{"responsive": [{"node_id": "A-0", "traits": ["atomic"]}, '
         '{"node_id": "A-0", "traits": ["flow"]}]}',
+        # 저작 헤더 지목은 표 모드에서만, 존재하는 노드로, 소유자와 다르게.
+        '{"responsive": [{"node_id": "A-0", "traits": ["flow"], "header_row": "B-0"}]}',
+        '{"responsive": [{"node_id": "A-0", "traits": ["paired-table"], "header_row": "Z-9"}]}',
+        '{"responsive": [{"node_id": "A-0", "traits": ["paired-table"], "header_row": "A-0"}]}',
+        '{"responsive": [{"node_id": "A-0", "traits": ["paired-table"], "header_row": ""}]}',
         '{"responsive": [{"node_id": "A-0", "traits": ["atomic"]}], '
         '"responsive": []}',
     ],
@@ -964,7 +975,7 @@ def test_production_table_modes_use_scroll_fallback_after_interactive_cell_revie
         for item in manifest.get("responsive", []):
             if "paired-table" in item.get("traits", []):
                 paired_consumers.append((regions_path.parent.name, item["node_id"]))
-    assert paired_consumers == [("2R3M-1", "3CRW-0")]
+    assert sorted(paired_consumers) == [("2QFO-2", "2QH0-2"), ("2R3M-1", "3CRW-0")]
 
 
 def test_production_3crw_paired_table_generates_labeled_identity_free_body_mirrors():

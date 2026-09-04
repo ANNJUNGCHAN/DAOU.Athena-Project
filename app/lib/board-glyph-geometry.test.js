@@ -404,9 +404,13 @@ test('G5 production manifests declare only the measured responsive owners and at
   }
   assert.deepEqual(quote.get('3CRW-0'), ['paired-table']);
 
+  // 2QFO-2는 flow 소유자를 쓰지 않는다. `.bs-r-flow > * { flex-shrink: 0 }`이 선언된
+  // 세 행만 Paper 폭으로 얼려 헤더와 레인이 갈라졌다(960 실측). paired-table이
+  // 같은 금액에 nowrap을 주면서 접힌 값에는 열 라벨을 붙인다.
   const flow = traitsOf('2QFO-2');
-  for (const node of ['3751-0', '376G-0', '3789-0']) assert.deepEqual(flow.get(node), ['flow']);
+  for (const node of ['3751-0', '376G-0', '3789-0']) assert.equal(flow.get(node), undefined);
   for (const node of ['375E-0', '376R-0', '378K-0']) assert.deepEqual(flow.get(node), ['atomic']);
+  assert.deepEqual(flow.get('2QH0-2'), ['paired-table']);
 });
 
 test('a DOM-like 13K chip shrink mutation becomes a two-line atomic hard failure', () => {
