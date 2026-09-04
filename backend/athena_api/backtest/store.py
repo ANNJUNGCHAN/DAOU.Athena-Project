@@ -167,7 +167,8 @@ CREATE TABLE IF NOT EXISTS bt_deployment (
     limits_json         TEXT NOT NULL,
     status              TEXT NOT NULL,
     created_at          TEXT NOT NULL,
-    stopped_at          TEXT
+    stopped_at          TEXT,
+    armed               INTEGER
 );
 CREATE TABLE IF NOT EXISTS bt_signal (
     id             TEXT PRIMARY KEY,
@@ -179,7 +180,9 @@ CREATE TABLE IF NOT EXISTS bt_signal (
     basis          TEXT NOT NULL,
     blocked_reason TEXT,
     fill_price     REAL,
-    created_at     TEXT NOT NULL
+    created_at     TEXT NOT NULL,
+    order_no       TEXT,
+    qty            INTEGER
 );
 CREATE INDEX IF NOT EXISTS bt_signal_by_deployment
     ON bt_signal(deployment_id, dt DESC);
@@ -201,6 +204,23 @@ _BUNDLE_COLUMNS: Final = (
     ("compiler_version", "TEXT"),
     ("apply_receipt_json", "TEXT"),
 )
+
+
+# 자동 매매가 붙으며 나중에 생긴 열들. `armed`를 NULL 허용으로 두는 이유는 **옛 배포가
+# 조용히 무장되는 일을 만들지 않기 위해서**다 — NULL은 읽을 때 False가 되고, 무장은
+# 사람이 토글을 눌러 1을 쓸 때만 참이 된다.
+_DEPLOYMENT_COLUMNS: Final = (("armed", "INTEGER"),)
+# 자동 주문이 남기는 흔적. 주문번호가 없으면 "주문했다"고 말할 근거가 없다.
+_SIGNAL_COLUMNS: Final = (("order_no", "TEXT"), ("qty", "INTEGER"))
+
+
+def _add_missing_columns(
+    connection: sqlite3.Connection, table: str, columns: tuple[tuple[str, str], ...]
+) -> None:
+    have = {str(row["name"]) for row in connection.execute(f"PRAGMA table_info({table})")}
+    for name, sql_type in columns:
+        if name not in have:
+            connection.execute(f"ALTER TABLE {table} ADD COLUMN {name} {sql_type}")
 
 
 def _migrate_version_bundle(connection: sqlite3.Connection) -> None:
@@ -373,6 +393,7 @@ class DeploymentRow:
     status: str
     created_at: str
     stopped_at: str | None
+    armed: bool
 
 
 @dataclass(frozen=True, slots=True)
@@ -390,6 +411,8 @@ class SignalRow:
     blocked_reason: str | None
     fill_price: float | None
     created_at: str
+    order_no: str | None
+    qty: int | None
 
 
 @dataclass(frozen=True, slots=True)
@@ -420,6 +443,8 @@ class BacktestStore:
             connection = self._require()
             with atomic(connection, _BACKTEST_WRITE):
                 _migrate_version_bundle(connection)
+                _add_missing_columns(connection, "bt_deployment", _DEPLOYMENT_COLUMNS)
+                _add_missing_columns(connection, "bt_signal", _SIGNAL_COLUMNS)
 
         await self._owner.run(migrate)
 
@@ -975,6 +1000,26 @@ class BacktestStore:
 
         await self._owner.run(write)
 
+    async def arm_deployment(self, deployment_id: str, *, armed: bool) -> bool:
+        """자동 주문 무장 스위치. **멈춘 배포는 무장되지 않는다** — 중지가 먼저다.
+
+        돌려주는 값은 이 호출 뒤 실제로 무장 상태인지다(멈춘 배포에 켜기를 걸면 False).
+        """
+
+        def write() -> bool:
+            connection = self._require()
+            with atomic(connection, _BACKTEST_WRITE):
+                connection.execute(
+                    "UPDATE bt_deployment SET armed = ? WHERE id = ? AND status = 'active'",
+                    (1 if armed else 0, deployment_id),
+                )
+                row = connection.execute(
+                    "SELECT armed, status FROM bt_deployment WHERE id = ?", (deployment_id,)
+                ).fetchone()
+            return bool(row is not None and row["status"] == "active" and row["armed"])
+
+        return await self._owner.run(write)
+
     async def add_signal(
         self,
         signal_id: str,
@@ -988,16 +1033,19 @@ class BacktestStore:
         blocked_reason: str | None,
         created_at: datetime,
         fill_price: float | None = None,
+        order_no: str | None = None,
+        qty: int | None = None,
     ) -> str:
         def write() -> str:
             connection = self._require()
             with atomic(connection, _BACKTEST_WRITE):
                 connection.execute(
                     "INSERT INTO bt_signal(id, deployment_id, dt, side, stage, reason, basis,"
-                    " blocked_reason, fill_price, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)",
+                    " blocked_reason, fill_price, created_at, order_no, qty)"
+                    " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
                     (
                         signal_id, deployment_id, dt, side, stage, reason, basis,
-                        blocked_reason, fill_price, _ts(created_at),
+                        blocked_reason, fill_price, _ts(created_at), order_no, qty,
                     ),
                 )
             return signal_id
@@ -1018,17 +1066,29 @@ class BacktestStore:
         return await self._owner.run(read)
 
     async def update_signal_stage(
-        self, signal_id: str, stage: str, *, fill_price: float | None = None
+        self,
+        signal_id: str,
+        stage: str,
+        *,
+        fill_price: float | None = None,
+        order_no: str | None = None,
+        qty: int | None = None,
     ) -> None:
-        """승인·주문·체결로 단계를 올린다. 되돌리지는 않는다 — 이력은 앞으로만 간다."""
+        """승인·주문·체결로 단계를 올린다. 되돌리지는 않는다 — 이력은 앞으로만 간다.
+
+        주문번호·수량은 COALESCE로 덮어쓰지 않는다 — 한 번 받은 주문번호가 뒤따르는
+        체결 갱신에 지워지면 "무엇이 나갔는지"를 되짚을 수 없다.
+        """
 
         def write() -> None:
             connection = self._require()
             with atomic(connection, _BACKTEST_WRITE):
                 connection.execute(
                     "UPDATE bt_signal SET stage = ?,"
-                    " fill_price = COALESCE(?, fill_price) WHERE id = ?",
-                    (stage, fill_price, signal_id),
+                    " fill_price = COALESCE(?, fill_price),"
+                    " order_no = COALESCE(?, order_no),"
+                    " qty = COALESCE(?, qty) WHERE id = ?",
+                    (stage, fill_price, order_no, qty, signal_id),
                 )
 
         await self._owner.run(write)
@@ -1048,6 +1108,9 @@ def _deployment_from_row(row: sqlite3.Row) -> DeploymentRow:
         status=str(row["status"]),
         created_at=str(row["created_at"]),
         stopped_at=None if row["stopped_at"] is None else str(row["stopped_at"]),
+        # NULL(옛 배포)은 무장 해제다 — 없는 값을 "켜짐"으로 읽으면 사람이 누른 적 없는
+        # 배포가 주문을 내게 된다.
+        armed=bool(row["armed"]) if "armed" in row.keys() else False,
     )
 
 
@@ -1063,6 +1126,12 @@ def _signal_from_row(row: sqlite3.Row) -> SignalRow:
         blocked_reason=None if row["blocked_reason"] is None else str(row["blocked_reason"]),
         fill_price=None if row["fill_price"] is None else float(row["fill_price"]),
         created_at=str(row["created_at"]),
+        order_no=(
+            None
+            if "order_no" not in row.keys() or row["order_no"] is None
+            else str(row["order_no"])
+        ),
+        qty=None if "qty" not in row.keys() or row["qty"] is None else int(row["qty"]),
     )
 
 
