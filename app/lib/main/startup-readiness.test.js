@@ -272,6 +272,8 @@ test('LIFE-003 main source keeps one shell-to-orb visibility policy from boot th
   const handoff = source.slice(handoffStart, handoffEnd);
   const realtimeManager = source.slice(realtimeStart, realtimeEnd);
 
+  assert.match(source, /let createWindowsInflight = null;/);
+  assert.match(createWindows, /createWindows reused \(already in flight\)/);
   assert.doesNotMatch(createWindows, /\borbWin\.(?:show|showInactive)\s*\(/);
   assert.doesNotMatch(createWindows, /broadcastShellVisibility\(\)/);
   assert.match(createWindows, /for \(const ev of \['show', 'hide', 'minimize', 'restore'\]\) \{\s*shellWin\.on\(ev, broadcastShellVisibility\);\s*\}/);
