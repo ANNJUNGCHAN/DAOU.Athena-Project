@@ -684,6 +684,11 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                     },
                 )
                 _publish_brain(app, brain)
+            # 백테스트를 루틴보다 먼저 연다 — 코드 감시 알람이 백테스트의 일봉
+            # 캐시를 빌려 쓴다(정리 순서는 아래 phases 표가 따로 정한다).
+            if runtime_settings.backtest_enabled:
+                backtest = await _open_backtest(runtime_settings)
+                _publish_backtest(app, backtest)
             if runtime_settings.routines_enabled:
                 default_rt = runtimes.get(
                     runtime_settings.kiwoom_default_account or ""
@@ -691,11 +696,14 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                 routines = await open_routines(
                     runtime_settings,
                     ws_client=default_rt.ws_client if default_rt is not None else None,
+                    candle_store=app.state.backtest_store,
+                    kiwoom_client=(
+                        default_rt.data_client
+                        if default_rt is not None and default_rt.ready
+                        else None
+                    ),
                 )
                 _publish_routines(app, routines)
-            if runtime_settings.backtest_enabled:
-                backtest = await _open_backtest(runtime_settings)
-                _publish_backtest(app, backtest)
         except BaseException as primary_error:
             await _cleanup_lifespan_resources(
                 app,

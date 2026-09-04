@@ -4,8 +4,9 @@
 여기서 만지지 않는다(R5). 감시 코드는 등록된 프로젝트 폴더 안 `watch/<이름>.py`
 파일 하나가 원본이고, 루틴 JSON은 경로와 해시만 쥔다.
 
-활성·일시중지 알람이 가리키는 파일은 덮어쓸 수 없다(R10) — 그 문은 사람이
-알람을 멈춘 뒤에만 열린다.
+활성 알람이 가리키는 파일은 덮어쓸 수 없다(R10) — 그 문은 사람이 알람을 멈춘
+뒤에만 열린다. 일시중지 알람은 고쳐 쓸 수 있고, 그러면 해시가 어긋나 다시 검사를
+통과하기 전에는 재개가 막힌다.
 """
 
 from __future__ import annotations
@@ -25,14 +26,15 @@ _WATCH_DIR = "watch/"
 _DRIVE_PREFIX_RE = re.compile(r"^[A-Za-z]:")
 _LABELS_RE = re.compile(r"^NODE_LABELS\s*=", re.MULTILINE)
 
-# 코드를 못 바꾸는 상태 — 켜져 있거나 잠시 멈춘 알람이 그 파일을 쓰고 있다.
-LOCKED_STATUSES = frozenset({"active", "paused"})
+# 코드를 못 바꾸는 상태 — 켜져 있는 알람만 그 파일을 잠근다. 일시중지는 고쳐 쓰기
+# 통로다(R10) — 쓰고 나면 해시가 어긋나 재개 전에 다시 검사를 받게 된다.
+LOCKED_STATUSES = frozenset({"active"})
 
 _PATH_HINT = "감시 코드 경로는 watch/ 아래 .py 하나만"
 
 
 class CodeLocked(Exception):
-    """활성·일시중지 알람이 가리키는 파일을 덮어쓰려 했다(R10)."""
+    """켜져 있는 알람이 가리키는 파일을 덮어쓰려 했다(R10)."""
 
 
 def _validate_path(raw: Any) -> str:

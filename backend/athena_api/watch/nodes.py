@@ -71,7 +71,7 @@ def node_labels_from_source(tree: ast.Module) -> dict[str, str]:
             continue
         if not any(isinstance(t, ast.Name) and t.id == "NODE_LABELS" for t in targets):
             continue
-        value = node.value if isinstance(node, ast.Assign) else node.value
+        value = node.value
         try:
             raw = ast.literal_eval(value)
         except (ValueError, SyntaxError):

@@ -142,6 +142,8 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "list_strategies/read_code = 저장된 전략과 활성 버전 소스 조회(읽기 전용). "
                 "flow = 전략 코드를 단계 지도로 옮긴다(실행하지 않는다). "
                 "diagnose = 오류 문구와 소스로 원인·수정안을 만든다(적용하지 않는다). "
+                "에이전트 모드의 감시 함수(코드 알람)에는 diagnose까지만 쓴다 — 그 코드의 "
+                "저장은 athena_routine.propose_watch_code, 검사는 검사 라우트가 맡는다. "
                 "map = 폼(yaml)이나 코드(source)를 흐름 지도 한 장으로 옮긴다"
                 "(실행하지 않는다 — run_id를 주면 그 실행이 남긴 사실이 같이 실린다). "
                 "codegen = 지도(폼 yaml) 뒤에 놓을 전략 코드를 만든다(저장·활성화하지 않는다). "
