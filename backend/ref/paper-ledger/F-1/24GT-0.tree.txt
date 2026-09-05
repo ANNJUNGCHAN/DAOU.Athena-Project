@@ -1,0 +1,445 @@
+Frame "CC-04 / R02-X3 · 시간외·금현물·프로토콜 공식 원문 — 0E·ka10087·ka50101" (24GT-0) 1440×0
+  Frame "헤더" (24HI-0) 0×0
+    Frame "Frame" (24HJ-0) 0×0
+      Frame "Frame" (24HK-0) 0×0
+        Text "시간외·금현물·프로토콜 공식 원문" (24HL-0) 0×0 "시간외·금현물·프로토콜 공식 원문"
+        Frame "Frame" (24HM-0) 0×0
+          Text "0E · ka10087 · ka501…" (24HN-0) 0×0 "0E · ka10087 · ka50101"
+      Frame "Frame" (24HO-0) 0×0
+        Text "11 mapping · 67 fiel…" (24HP-0) 0×0 "11 mapping · 67 field destinations"
+    Frame "Frame" (24HQ-0) 0×0
+      Text "시간외 5단·금현물 체결·웹소켓 상태…" (24HR-0) 0×0 "시간외 5단·금현물 체결·웹소켓 상태를 공식 원문 그대로 배치합니다."
+      Text "삼성전자 · 005930 · 정규장 …" (24HS-0) 0×0 "삼성전자 · 005930 · 정규장 · 실시간 연결"
+  Frame "0E·ka10087 · 시간외 5단 · 51 raw" (25F0-0) 0×0
+    Frame "Frame" (25F1-0) 0×0
+      Frame "Frame" (25F2-0) 0×0
+        Text "시간외 단일가 5단 호가" (25F3-0) 0×0 "시간외 단일가 5단 호가"
+        Text "가격·잔량·증감 30개와 공식 합계·…" (25F4-0) 0×0 "가격·잔량·증감 30개와 공식 합계·시세 21개"
+      Frame "Frame" (25F5-0) 0×0
+        Text "ka10087 46 / 46 · 0E…" (25F6-0) 0×0 "ka10087 46 / 46 · 0E 5 / 5"
+    Frame "ka10087 · 시간외 5단" (25F7-0) 0×42
+      Frame "raw · ka10087 · response 시간외매도5차선호가 · ordinal 5" (25F8-0) 150×0
+        Text "매도 5" (25F9-0) 0×0 "매도 5"
+        Text "151,100" (25FA-0) 0×0 "151,100"
+      Frame "raw · ka10087 · response 시간외매도5차선잔량 · ordinal 5" (25FB-0) 160×0
+        Text "매도 잔량" (25FC-0) 0×0 "매도 잔량"
+        Text "14,250주" (25FD-0) 0×0 "14,250주"
+      Frame "raw · ka10087 · response 시간외매도5차선잔량대비 · ordinal 5" (25FE-0) 135×0
+        Text "매도 증감" (25FF-0) 0×0 "매도 증감"
+        Text "+510" (25FG-0) 0×0 "+510"
+      Rectangle "Rectangle" (25FH-0) 36×0
+      Frame "raw · ka10087 · response 시간외매수5차선호가 · ordinal 5" (25FI-0) 150×0
+        Text "매수 5" (25FJ-0) 0×0 "매수 5"
+        Text "150,600" (25FK-0) 0×0 "150,600"
+      Frame "raw · ka10087 · response 시간외매수5차선잔량 · ordinal 5" (25FL-0) 160×0
+        Text "매수 잔량" (25FM-0) 0×0 "매수 잔량"
+        Text "15,760주" (25FN-0) 0×0 "15,760주"
+      Frame "raw · ka10087 · response 시간외매수5차선잔량대비 · ordinal 5" (25FO-0) 135×0
+        Text "매수 증감" (25FP-0) 0×0 "매수 증감"
+        Text "-460" (25FQ-0) 0×0 "-460"
+    Frame "ka10087 · 시간외 4단" (25FR-0) 0×42
+      Frame "raw · ka10087 · response 시간외매도4차선호가 · ordinal 4" (25FS-0) 150×0
+        Text "매도 4" (25FT-0) 0×0 "매도 4"
+        Text "151,050" (25FU-0) 0×0 "151,050"
+      Frame "raw · ka10087 · response 시간외매도4차선잔량 · ordinal 4" (25FV-0) 160×0
+        Text "매도 잔량" (25FW-0) 0×0 "매도 잔량"
+        Text "16,100주" (25FX-0) 0×0 "16,100주"
+      Frame "raw · ka10087 · response 시간외매도4차선잔량대비 · ordinal 4" (25FY-0) 135×0
+        Text "매도 증감" (25FZ-0) 0×0 "매도 증감"
+        Text "+590" (25G0-0) 0×0 "+590"
+      Rectangle "Rectangle" (25G1-0) 36×0
+      Frame "raw · ka10087 · response 시간외매수4차선호가 · ordinal 4" (25G2-0) 150×0
+        Text "매수 4" (25G3-0) 0×0 "매수 4"
+        Text "150,650" (25G4-0) 0×0 "150,650"
+      Frame "raw · ka10087 · response 시간외매수4차선잔량 · ordinal 4" (25G5-0) 160×0
+        Text "매수 잔량" (25G6-0) 0×0 "매수 잔량"
+        Text "17,720주" (25G7-0) 0×0 "17,720주"
+      Frame "raw · ka10087 · response 시간외매수4차선잔량대비 · ordinal 4" (25G8-0) 135×0
+        Text "매수 증감" (25G9-0) 0×0 "매수 증감"
+        Text "-530" (25GA-0) 0×0 "-530"
+    Frame "ka10087 · 시간외 3단" (25GB-0) 0×42
+      Frame "raw · ka10087 · response 시간외매도3차선호가 · ordinal 3" (25GC-0) 150×0
+        Text "매도 3" (25GD-0) 0×0 "매도 3"
+        Text "151,000" (25GE-0) 0×0 "151,000"
+      Frame "raw · ka10087 · response 시간외매도3차선잔량 · ordinal 3" (25GF-0) 160×0
+        Text "매도 잔량" (25GG-0) 0×0 "매도 잔량"
+        Text "17,950주" (25GH-0) 0×0 "17,950주"
+      Frame "raw · ka10087 · response 시간외매도3차선잔량대비 · ordinal 3" (25GI-0) 135×0
+        Text "매도 증감" (25GJ-0) 0×0 "매도 증감"
+        Text "+670" (25GK-0) 0×0 "+670"
+      Rectangle "Rectangle" (25GL-0) 36×0
+      Frame "raw · ka10087 · response 시간외매수3차선호가 · ordinal 3" (25GM-0) 150×0
+        Text "매수 3" (25GN-0) 0×0 "매수 3"
+        Text "150,700" (25GO-0) 0×0 "150,700"
+      Frame "raw · ka10087 · response 시간외매수3차선잔량 · ordinal 3" (25GP-0) 160×0
+        Text "매수 잔량" (25GQ-0) 0×0 "매수 잔량"
+        Text "19,680주" (25GR-0) 0×0 "19,680주"
+      Frame "raw · ka10087 · response 시간외매수3차선잔량대비 · ordinal 3" (25GS-0) 135×0
+        Text "매수 증감" (25GT-0) 0×0 "매수 증감"
+        Text "-600" (25GU-0) 0×0 "-600"
+    Frame "ka10087 · 시간외 2단" (25GV-0) 0×42
+      Frame "raw · ka10087 · response 시간외매도2차선호가 · ordinal 2" (25GW-0) 150×0
+        Text "매도 2" (25GX-0) 0×0 "매도 2"
+        Text "150,950" (25GY-0) 0×0 "150,950"
+      Frame "raw · ka10087 · response 시간외매도2차선잔량 · ordinal 2" (25GZ-0) 160×0
+        Text "매도 잔량" (25H0-0) 0×0 "매도 잔량"
+        Text "19,800주" (25H1-0) 0×0 "19,800주"
+      Frame "raw · ka10087 · response 시간외매도2차선잔량대비 · ordinal 2" (25H2-0) 135×0
+        Text "매도 증감" (25H3-0) 0×0 "매도 증감"
+        Text "+750" (25H4-0) 0×0 "+750"
+      Rectangle "Rectangle" (25H5-0) 36×0
+      Frame "raw · ka10087 · response 시간외매수2차선호가 · ordinal 2" (25H6-0) 150×0
+        Text "매수 2" (25H7-0) 0×0 "매수 2"
+        Text "150,750" (25H8-0) 0×0 "150,750"
+      Frame "raw · ka10087 · response 시간외매수2차선잔량 · ordinal 2" (25H9-0) 160×0
+        Text "매수 잔량" (25HA-0) 0×0 "매수 잔량"
+        Text "21,640주" (25HB-0) 0×0 "21,640주"
+      Frame "raw · ka10087 · response 시간외매수2차선잔량대비 · ordinal 2" (25HC-0) 135×0
+        Text "매수 증감" (25HD-0) 0×0 "매수 증감"
+        Text "-670" (25HE-0) 0×0 "-670"
+    Frame "ka10087 · 시간외 1단" (25HF-0) 0×42
+      Frame "raw · ka10087 · response 시간외매도1차선호가 · ordinal 1" (25HG-0) 150×0
+        Text "매도 1" (25HH-0) 0×0 "매도 1"
+        Text "150,900" (25HI-0) 0×0 "150,900"
+      Frame "raw · ka10087 · response 시간외매도1차선잔량 · ordinal 1" (25HJ-0) 160×0
+        Text "매도 잔량" (25HK-0) 0×0 "매도 잔량"
+        Text "21,650주" (25HL-0) 0×0 "21,650주"
+      Frame "raw · ka10087 · response 시간외매도1차선잔량대비 · ordinal 1" (25HM-0) 135×0
+        Text "매도 증감" (25HN-0) 0×0 "매도 증감"
+        Text "+830" (25HO-0) 0×0 "+830"
+      Rectangle "Rectangle" (25HP-0) 36×0
+      Frame "raw · ka10087 · response 시간외매수1차선호가 · ordinal 1" (25HQ-0) 150×0
+        Text "매수 1" (25HR-0) 0×0 "매수 1"
+        Text "150,800" (25HS-0) 0×0 "150,800"
+      Frame "raw · ka10087 · response 시간외매수1차선잔량 · ordinal 1" (25HT-0) 160×0
+        Text "매수 잔량" (25HU-0) 0×0 "매수 잔량"
+        Text "23,600주" (25HV-0) 0×0 "23,600주"
+      Frame "raw · ka10087 · response 시간외매수1차선잔량대비 · ordinal 1" (25HW-0) 135×0
+        Text "매수 증감" (25HX-0) 0×0 "매수 증감"
+        Text "-740" (25HY-0) 0×0 "-740"
+    Frame "Frame" (25HZ-0) 0×0
+      Frame "raw · ka10087 · response 매도1차잔량합 · ordinal 1" (25I0-0) 180×0
+        Text "매도1차잔량합" (25I1-0) 0×0 "매도1차잔량합"
+        Text "42,510주" (25I2-0) 0×0 "42,510주"
+      Frame "raw · ka10087 · response 매도2차잔량합 · ordinal 1" (25I3-0) 180×0
+        Text "매도2차잔량합" (25I4-0) 0×0 "매도2차잔량합"
+        Text "38,440주" (25I5-0) 0×0 "38,440주"
+      Frame "raw · ka10087 · response 매도3차잔량합 · ordinal 1" (25I6-0) 180×0
+        Text "매도3차잔량합" (25I7-0) 0×0 "매도3차잔량합"
+        Text "31,280주" (25I8-0) 0×0 "31,280주"
+      Frame "raw · ka10087 · response 매도4차잔량합 · ordinal 1" (25I9-0) 180×0
+        Text "매도4차잔량합" (25IA-0) 0×0 "매도4차잔량합"
+        Text "24,950주" (25IB-0) 0×0 "24,950주"
+      Frame "raw · ka10087 · response 매도5차잔량합 · ordinal 1" (25IC-0) 180×0
+        Text "매도5차잔량합" (25ID-0) 0×0 "매도5차잔량합"
+        Text "56,320주" (25IE-0) 0×0 "56,320주"
+      Frame "raw · ka10087 · response 매수1차잔량합 · ordinal 1" (25IF-0) 180×0
+        Text "매수1차잔량합" (25IG-0) 0×0 "매수1차잔량합"
+        Text "61,780주" (25IH-0) 0×0 "61,780주"
+      Frame "raw · ka10087 · response 매수2차잔량합 · ordinal 1" (25II-0) 180×0
+        Text "매수2차잔량합" (25IJ-0) 0×0 "매수2차잔량합"
+        Text "34,210주" (25IK-0) 0×0 "34,210주"
+      Frame "raw · ka10087 · response 매수3차잔량합 · ordinal 1" (25IL-0) 180×0
+        Text "매수3차잔량합" (25IM-0) 0×0 "매수3차잔량합"
+        Text "28,670주" (25IN-0) 0×0 "28,670주"
+      Frame "raw · ka10087 · response 매수4차잔량합 · ordinal 1" (25IO-0) 180×0
+        Text "매수4차잔량합" (25IP-0) 0×0 "매수4차잔량합"
+        Text "22,540주" (25IQ-0) 0×0 "22,540주"
+      Frame "raw · ka10087 · response 매수5차잔량합 · ordinal 1" (25IR-0) 180×0
+        Text "매수5차잔량합" (25IS-0) 0×0 "매수5차잔량합"
+        Text "18,430주" (25IT-0) 0×0 "18,430주"
+      Frame "raw · ka10087 · response 시간외현재가 · ordinal 1" (25IU-0) 180×0
+        Text "시간외현재가" (25IV-0) 0×0 "시간외현재가"
+        Text "150,850원" (25IW-0) 0×0 "150,850원"
+      Frame "raw · ka10087 · response 시간외전일대비 · ordinal 1" (25IX-0) 180×0
+        Text "시간외전일대비" (25IY-0) 0×0 "시간외전일대비"
+        Text "+3,500원" (25IZ-0) 0×0 "+3,500원"
+      Frame "raw · ka10087 · response 시간외등락기호 · ordinal 1" (25J0-0) 180×0
+        Text "시간외등락기호" (25J1-0) 0×0 "시간외등락기호"
+        Text "▲" (25J2-0) 0×0 "▲"
+      Frame "raw · ka10087 · response 시간외등락률 · ordinal 1" (25J3-0) 180×0
+        Text "시간외등락률" (25J4-0) 0×0 "시간외등락률"
+        Text "+2.35%" (25J5-0) 0×0 "+2.35%"
+      Frame "raw · ka10087 · response 시간외누적거래량 · ordinal 1" (25J6-0) 180×0
+        Text "시간외누적거래량" (25J7-0) 0×0 "시간외누적거래량"
+        Text "237,585주" (25J8-0) 0×0 "237,585주"
+      Frame "raw · ka10087 · response 호가시간 · ordinal 1" (25J9-0) 180×0
+        Text "호가시간" (25JA-0) 0×0 "호가시간"
+        Text "16:12:41" (25JB-0) 0×0 "16:12:41"
+    Frame "Frame" (25JC-0) 0×0
+      Frame "raw · base:0E · $.data[].21 · ordinal 1" (25JD-0) 190×0
+        Text "시간외호가시간" (25JE-0) 0×0 "시간외호가시간"
+        Text "16:12:41" (25JF-0) 0×0 "16:12:41"
+      Frame "raw · base:0E · $.data[].131 · ordinal 1" (25JG-0) 190×0
+        Text "시간외매도총잔량" (25JH-0) 0×0 "시간외매도총잔량"
+        Text "193,500주" (25JI-0) 0×0 "193,500주"
+      Frame "raw · base:0E · $.data[].132 · ordinal 1" (25JJ-0) 190×0
+        Text "시간외매도총잔량대비" (25JK-0) 0×0 "시간외매도총잔량대비"
+        Text "+12,430주" (25JL-0) 0×0 "+12,430주"
+      Frame "raw · base:0E · $.data[].135 · ordinal 1" (25JM-0) 190×0
+        Text "시간외매수총잔량" (25JN-0) 0×0 "시간외매수총잔량"
+        Text "205,630주" (25JO-0) 0×0 "205,630주"
+      Frame "raw · base:0E · $.data[].136 · ordinal 1" (25JP-0) 190×0
+        Text "시간외매수총잔량대비" (25JQ-0) 0×0 "시간외매수총잔량대비"
+        Text "+9,870주" (25JR-0) 0×0 "+9,870주"
+  Frame "ka50101 · 금현물 1호가·체결 · 16 raw" (25JT-0) 0×0
+    Frame "Frame" (25JU-0) 0×0
+      Frame "Frame" (25JV-0) 0×0
+        Text "KRX 금현물 1호가·체결" (25JW-0) 0×0 "KRX 금현물 1호가·체결"
+        Text "금 99.99K · 1g · 가격·체…" (25JX-0) 0×0 "금 99.99K · 1g · 가격·체결·LP 원문 필드"
+      Frame "Frame" (25JY-0) 0×0
+        Text "ka50101 · 16 / 16" (25JZ-0) 0×0 "ka50101 · 16 / 16"
+    Frame "raw · base:ka50101 · $.gold_bid[] · ordinal 1" (25K0-0) 0×0
+      Frame "raw · base:ka50101 · $.gold_bid[].cntr_pric · ordinal 1" (25K1-0) 160×0
+        Text "체결가" (25K2-0) 0×0 "체결가"
+        Text "109,750원/g" (25K3-0) 0×0 "109,750원/g"
+      Frame "raw · base:ka50101 · $.gold_bid[].pred_pre · ordinal 1" (25K4-0) 160×0
+        Text "전일대비" (25K5-0) 0×0 "전일대비"
+        Text "+850원" (25K6-0) 0×0 "+850원"
+      Frame "raw · base:ka50101 · $.gold_bid[].flu_rt · ordinal 1" (25K7-0) 160×0
+        Text "등락률" (25K8-0) 0×0 "등락률"
+        Text "+0.78%" (25K9-0) 0×0 "+0.78%"
+      Frame "raw · base:ka50101 · $.gold_bid[].trde_qty · ordinal 1" (25KA-0) 160×0
+        Text "거래량" (25KB-0) 0×0 "거래량"
+        Text "1,842kg" (25KC-0) 0×0 "1,842kg"
+      Frame "raw · base:ka50101 · $.gold_bid[].acc_trde_prica · ordinal 1" (25KD-0) 160×0
+        Text "누적거래대금" (25KE-0) 0×0 "누적거래대금"
+        Text "382.4억원" (25KF-0) 0×0 "382.4억원"
+      Frame "raw · base:ka50101 · $.gold_bid[].cntr_trde_qty · ordinal 1" (25KG-0) 160×0
+        Text "체결량" (25KH-0) 0×0 "체결량"
+        Text "320g" (25KI-0) 0×0 "320g"
+      Frame "raw · base:ka50101 · $.gold_bid[].tm · ordinal 1" (25KJ-0) 160×0
+        Text "체결시간" (25KK-0) 0×0 "체결시간"
+        Text "14:31:08" (25KL-0) 0×0 "14:31:08"
+      Frame "raw · base:ka50101 · $.gold_bid[].pre_sig · ordinal 1" (25KM-0) 160×0
+        Text "전일대비기호" (25KN-0) 0×0 "전일대비기호"
+        Text "▲" (25KO-0) 0×0 "▲"
+      Frame "raw · base:ka50101 · $.gold_bid[].pri_sel_bid_unit · ordinal 1" (25KP-0) 160×0
+        Text "매도1호가" (25KQ-0) 0×0 "매도1호가"
+        Text "109,800원/g" (25KR-0) 0×0 "109,800원/g"
+      Frame "raw · base:ka50101 · $.gold_bid[].pri_buy_bid_unit · ordinal 1" (25KS-0) 160×0
+        Text "매수1호가" (25KT-0) 0×0 "매수1호가"
+        Text "109,700원/g" (25KU-0) 0×0 "109,700원/g"
+      Frame "raw · base:ka50101 · $.gold_bid[].trde_pre · ordinal 1" (25KV-0) 160×0
+        Text "전일거래량" (25KW-0) 0×0 "전일거래량"
+        Text "927g" (25KX-0) 0×0 "927g"
+      Frame "raw · base:ka50101 · $.gold_bid[].trde_tern_rt · ordinal 1" (25KY-0) 160×0
+        Text "거래회전율" (25KZ-0) 0×0 "거래회전율"
+        Text "0.14%" (25L0-0) 0×0 "0.14%"
+      Frame "raw · base:ka50101 · $.gold_bid[].cntr_str · ordinal 1" (25L1-0) 160×0
+        Text "체결강도" (25L2-0) 0×0 "체결강도"
+        Text "112.6" (25L3-0) 0×0 "112.6"
+      Frame "raw · base:ka50101 · $.gold_bid[].lpmmcm_nm_1 · ordinal 1" (25L4-0) 160×0
+        Text "LP회원사" (25L5-0) 0×0 "LP회원사"
+        Text "키움증권" (25L6-0) 0×0 "키움증권"
+      Frame "raw · base:ka50101 · $.gold_bid[].stex_tp · ordinal 1" (25L7-0) 160×0
+        Text "거래소구분" (25L8-0) 0×0 "거래소구분"
+        Text "KRX" (25L9-0) 0×0 "KRX"
+  Frame "실시간 프로토콜 · 24 transport" (25LB-0) 0×0
+    Frame "Frame" (25LC-0) 0×0
+      Frame "Frame" (25LD-0) 0×0
+        Text "실시간 등록·재연결·프레임 상태" (25LE-0) 0×0 "실시간 등록·재연결·프레임 상태"
+        Text "전송 구조는 사용자 동작과 상태로 표…" (25LF-0) 0×0 "전송 구조는 사용자 동작과 상태로 표현하고, business raw와 섞지 않습니다."
+      Frame "Frame" (25LG-0) 0×0
+        Text "24 / 24 transport·st…" (25LH-0) 0×0 "24 / 24 transport·structure"
+    Frame "Frame" (25LI-0) 0×0
+      Frame "0C · 프로토콜 8" (25LJ-0) 430×0
+        Frame "Frame" (25LK-0) 0×0
+          Text "0C 실시간 상태" (25LL-0) 0×0 "0C 실시간 상태"
+          Text "등록됨 · 자동 재연결" (25LM-0) 0×0 "등록됨 · 자동 재연결"
+        Frame "transport · base:0C · $.return_code · ordinal 1" (25LN-0) 0×30
+          Text "연결 결과" (25LO-0) 0×0 "연결 결과"
+          Text "0" (25LP-0) 0×0 "0"
+        Frame "transport · base:0C · $.return_msg · ordinal 1" (25LQ-0) 0×30
+          Text "연결 메시지" (25LR-0) 0×0 "연결 메시지"
+          Text "정상 처리" (25LS-0) 0×0 "정상 처리"
+        Frame "transport · base:0C · $.trnm · ordinal 1" (25LT-0) 0×30
+          Text "실시간 채널" (25LU-0) 0×0 "실시간 채널"
+          Text "REG" (25LV-0) 0×0 "REG"
+        Frame "transport · base:0C · $.data · ordinal 1" (25LW-0) 0×30
+          Text "수신 데이터" (25LX-0) 0×0 "수신 데이터"
+          Text "최신 프레임" (25LY-0) 0×0 "최신 프레임"
+        Frame "transport · base:0C · $.type · ordinal 1" (25LZ-0) 0×30
+          Text "등록 유형" (25M0-0) 0×0 "등록 유형"
+          Text "1" (25M1-0) 0×0 "1"
+        Frame "transport · base:0C · $.name · ordinal 1" (25M2-0) 0×30
+          Text "실시간 이름" (25M3-0) 0×0 "실시간 이름"
+          Text "호가" (25M4-0) 0×0 "호가"
+        Frame "transport · base:0C · $.item · ordinal 1" (25M5-0) 0×30
+          Text "구독 종목" (25M6-0) 0×0 "구독 종목"
+          Text "005930" (25M7-0) 0×0 "005930"
+        Frame "transport · base:0C · $.values · ordinal 1" (25M8-0) 0×30
+          Text "갱신 값" (25M9-0) 0×0 "갱신 값"
+          Text "변경 필드 반영" (25MA-0) 0×0 "변경 필드 반영"
+      Frame "0D · 프로토콜 8" (25MB-0) 430×0
+        Frame "Frame" (25MC-0) 0×0
+          Text "0D 실시간 상태" (25MD-0) 0×0 "0D 실시간 상태"
+          Text "등록됨 · 자동 재연결" (25ME-0) 0×0 "등록됨 · 자동 재연결"
+        Frame "transport · base:0D · $.return_code · ordinal 1" (25MF-0) 0×30
+          Text "연결 결과" (25MG-0) 0×0 "연결 결과"
+          Text "0" (25MH-0) 0×0 "0"
+        Frame "transport · base:0D · $.return_msg · ordinal 1" (25MI-0) 0×30
+          Text "연결 메시지" (25MJ-0) 0×0 "연결 메시지"
+          Text "정상 처리" (25MK-0) 0×0 "정상 처리"
+        Frame "transport · base:0D · $.trnm · ordinal 1" (25ML-0) 0×30
+          Text "실시간 채널" (25MM-0) 0×0 "실시간 채널"
+          Text "REG" (25MN-0) 0×0 "REG"
+        Frame "transport · base:0D · $.data · ordinal 1" (25MO-0) 0×30
+          Text "수신 데이터" (25MP-0) 0×0 "수신 데이터"
+          Text "최신 프레임" (25MQ-0) 0×0 "최신 프레임"
+        Frame "transport · base:0D · $.type · ordinal 1" (25MR-0) 0×30
+          Text "등록 유형" (25MS-0) 0×0 "등록 유형"
+          Text "1" (25MT-0) 0×0 "1"
+        Frame "transport · base:0D · $.name · ordinal 1" (25MU-0) 0×30
+          Text "실시간 이름" (25MV-0) 0×0 "실시간 이름"
+          Text "호가" (25MW-0) 0×0 "호가"
+        Frame "transport · base:0D · $.item · ordinal 1" (25MX-0) 0×30
+          Text "구독 종목" (25MY-0) 0×0 "구독 종목"
+          Text "005930" (25MZ-0) 0×0 "005930"
+        Frame "transport · base:0D · $.values · ordinal 1" (25N0-0) 0×30
+          Text "갱신 값" (25N1-0) 0×0 "갱신 값"
+          Text "변경 필드 반영" (25N2-0) 0×0 "변경 필드 반영"
+      Frame "0E · 프로토콜 8" (25N3-0) 430×0
+        Frame "Frame" (25N4-0) 0×0
+          Text "0E 실시간 상태" (25N5-0) 0×0 "0E 실시간 상태"
+          Text "등록됨 · 자동 재연결" (25N6-0) 0×0 "등록됨 · 자동 재연결"
+        Frame "transport · base:0E · $.return_code · ordinal 1" (25N7-0) 0×30
+          Text "연결 결과" (25N8-0) 0×0 "연결 결과"
+          Text "0" (25N9-0) 0×0 "0"
+        Frame "transport · base:0E · $.return_msg · ordinal 1" (25NA-0) 0×30
+          Text "연결 메시지" (25NB-0) 0×0 "연결 메시지"
+          Text "정상 처리" (25NC-0) 0×0 "정상 처리"
+        Frame "transport · base:0E · $.trnm · ordinal 1" (25ND-0) 0×30
+          Text "실시간 채널" (25NE-0) 0×0 "실시간 채널"
+          Text "REG" (25NF-0) 0×0 "REG"
+        Frame "transport · base:0E · $.data · ordinal 1" (25NG-0) 0×30
+          Text "수신 데이터" (25NH-0) 0×0 "수신 데이터"
+          Text "최신 프레임" (25NI-0) 0×0 "최신 프레임"
+        Frame "transport · base:0E · $.type · ordinal 1" (25NJ-0) 0×30
+          Text "등록 유형" (25NK-0) 0×0 "등록 유형"
+          Text "1" (25NL-0) 0×0 "1"
+        Frame "transport · base:0E · $.name · ordinal 1" (25NM-0) 0×30
+          Text "실시간 이름" (25NN-0) 0×0 "실시간 이름"
+          Text "호가" (25NO-0) 0×0 "호가"
+        Frame "transport · base:0E · $.item · ordinal 1" (25NP-0) 0×30
+          Text "구독 종목" (25NQ-0) 0×0 "구독 종목"
+          Text "005930" (25NR-0) 0×0 "005930"
+        Frame "transport · base:0E · $.values · ordinal 1" (25NS-0) 0×30
+          Text "갱신 값" (25NT-0) 0×0 "갱신 값"
+          Text "변경 필드 반영" (25NU-0) 0×0 "변경 필드 반영"
+  Frame "최근 체결 · 기본 10행 · 더보기" (25NW-0) 0×0
+    Frame "Frame" (25NX-0) 0×0
+      Frame "Frame" (25NY-0) 0×0
+        Text "최근 체결" (25NZ-0) 0×0 "최근 체결"
+        Text "기본 10행 · 더보기 후 내부 스크…" (25O0-0) 0×0 "기본 10행 · 더보기 후 내부 스크롤 · 접기로 복귀"
+      Frame "Frame" (25O1-0) 0×0
+        Frame "Frame" (25O2-0) 0×0
+          Text "20건" (25O3-0) 0×0 "20건"
+        Frame "Frame" (25O4-0) 0×0
+          Text "더보기 10건" (25O5-0) 0×0 "더보기 10건"
+    Frame "Frame" (25O6-0) 0×28
+      Text "시간" (25O7-0) 120×0 "시간"
+      Text "체결가" (25O8-0) 150×0 "체결가"
+      Text "체결량" (25O9-0) 140×0 "체결량"
+      Text "체결강도" (25OA-0) 140×0 "체결강도"
+      Text "매도체결량" (25OB-0) 140×0 "매도체결량"
+      Text "매수체결량" (25OC-0) 140×0 "매수체결량"
+      Text "매수비율" (25OD-0) 140×0 "매수비율"
+    Frame "Frame" (25OE-0) 0×0
+      Frame "0B · 체결 1" (25OF-0) 0×30
+        Text "raw · base:0B · $.data[].20 · ordinal 1" (25OG-0) 120×0 "14:31:08"
+        Text "raw · base:0B · $.data[].10 · ordinal 1" (25OH-0) 150×0 "150,850원"
+        Text "raw · base:0B · $.data[].15 · ordinal 1" (25OI-0) 140×0 "+320주"
+        Text "raw · base:0B · $.data[].228 · ordinal 1" (25OJ-0) 140×0 "112.6"
+        Text "raw · base:0B · $.data[].1030 · ordinal 1" (25OK-0) 140×0 "180주"
+        Text "raw · base:0B · $.data[].1031 · ordinal 1" (25OL-0) 140×0 "320주"
+        Text "raw · base:0B · $.data[].1032 · ordinal 1" (25OM-0) 140×0 "54.7%"
+      Frame "0B · 체결 2" (25ON-0) 0×30
+        Text "raw · base:0B · $.data[].20 · ordinal 2" (25OO-0) 120×0 "14:31:07"
+        Text "raw · base:0B · $.data[].10 · ordinal 2" (25OP-0) 150×0 "150,850원"
+        Text "raw · base:0B · $.data[].15 · ordinal 2" (25OQ-0) 140×0 "-180주"
+        Text "raw · base:0B · $.data[].228 · ordinal 2" (25OR-0) 140×0 "111.9"
+        Text "raw · base:0B · $.data[].1030 · ordinal 2" (25OS-0) 140×0 "197주"
+        Text "raw · base:0B · $.data[].1031 · ordinal 2" (25OT-0) 140×0 "339주"
+        Text "raw · base:0B · $.data[].1032 · ordinal 2" (25OU-0) 140×0 "54.4%"
+      Frame "0B · 체결 3" (25OV-0) 0×30
+        Text "raw · base:0B · $.data[].20 · ordinal 3" (25OW-0) 120×0 "14:31:06"
+        Text "raw · base:0B · $.data[].10 · ordinal 3" (25OX-0) 150×0 "150,840원"
+        Text "raw · base:0B · $.data[].15 · ordinal 3" (25OY-0) 140×0 "+96주"
+        Text "raw · base:0B · $.data[].228 · ordinal 3" (25OZ-0) 140×0 "111.2"
+        Text "raw · base:0B · $.data[].1030 · ordinal 3" (25P0-0) 140×0 "214주"
+        Text "raw · base:0B · $.data[].1031 · ordinal 3" (25P1-0) 140×0 "358주"
+        Text "raw · base:0B · $.data[].1032 · ordinal 3" (25P2-0) 140×0 "54.1%"
+      Frame "0B · 체결 4" (25P3-0) 0×30
+        Text "raw · base:0B · $.data[].20 · ordinal 4" (25P4-0) 120×0 "14:31:05"
+        Text "raw · base:0B · $.data[].10 · ordinal 4" (25P5-0) 150×0 "150,850원"
+        Text "raw · base:0B · $.data[].15 · ordinal 4" (25P6-0) 140×0 "+245주"
+        Text "raw · base:0B · $.data[].228 · ordinal 4" (25P7-0) 140×0 "110.5"
+        Text "raw · base:0B · $.data[].1030 · ordinal 4" (25P8-0) 140×0 "231주"
+        Text "raw · base:0B · $.data[].1031 · ordinal 4" (25P9-0) 140×0 "377주"
+        Text "raw · base:0B · $.data[].1032 · ordinal 4" (25PA-0) 140×0 "53.8%"
+      Frame "0B · 체결 5" (25PB-0) 0×30
+        Text "raw · base:0B · $.data[].20 · ordinal 5" (25PC-0) 120×0 "14:31:04"
+        Text "raw · base:0B · $.data[].10 · ordinal 5" (25PD-0) 150×0 "150,840원"
+        Text "raw · base:0B · $.data[].15 · ordinal 5" (25PE-0) 140×0 "-72주"
+        Text "raw · base:0B · $.data[].228 · ordinal 5" (25PF-0) 140×0 "109.8"
+        Text "raw · base:0B · $.data[].1030 · ordinal 5" (25PG-0) 140×0 "248주"
+        Text "raw · base:0B · $.data[].1031 · ordinal 5" (25PH-0) 140×0 "396주"
+        Text "raw · base:0B · $.data[].1032 · ordinal 5" (25PI-0) 140×0 "53.5%"
+      Frame "0B · 체결 6" (25PJ-0) 0×30
+        Text "raw · base:0B · $.data[].20 · ordinal 6" (25PK-0) 120×0 "14:31:03"
+        Text "raw · base:0B · $.data[].10 · ordinal 6" (25PL-0) 150×0 "150,830원"
+        Text "raw · base:0B · $.data[].15 · ordinal 6" (25PM-0) 140×0 "+134주"
+        Text "raw · base:0B · $.data[].228 · ordinal 6" (25PN-0) 140×0 "109.1"
+        Text "raw · base:0B · $.data[].1030 · ordinal 6" (25PO-0) 140×0 "265주"
+        Text "raw · base:0B · $.data[].1031 · ordinal 6" (25PP-0) 140×0 "415주"
+        Text "raw · base:0B · $.data[].1032 · ordinal 6" (25PQ-0) 140×0 "53.2%"
+      Frame "0B · 체결 7" (25PR-0) 0×30
+        Text "raw · base:0B · $.data[].20 · ordinal 7" (25PS-0) 120×0 "14:31:02"
+        Text "raw · base:0B · $.data[].10 · ordinal 7" (25PT-0) 150×0 "150,850원"
+        Text "raw · base:0B · $.data[].15 · ordinal 7" (25PU-0) 140×0 "+410주"
+        Text "raw · base:0B · $.data[].228 · ordinal 7" (25PV-0) 140×0 "108.4"
+        Text "raw · base:0B · $.data[].1030 · ordinal 7" (25PW-0) 140×0 "282주"
+        Text "raw · base:0B · $.data[].1031 · ordinal 7" (25PX-0) 140×0 "434주"
+        Text "raw · base:0B · $.data[].1032 · ordinal 7" (25PY-0) 140×0 "52.9%"
+      Frame "0B · 체결 8" (25PZ-0) 0×30
+        Text "raw · base:0B · $.data[].20 · ordinal 8" (25Q0-0) 120×0 "14:31:01"
+        Text "raw · base:0B · $.data[].10 · ordinal 8" (25Q1-0) 150×0 "150,850원"
+        Text "raw · base:0B · $.data[].15 · ordinal 8" (25Q2-0) 140×0 "-88주"
+        Text "raw · base:0B · $.data[].228 · ordinal 8" (25Q3-0) 140×0 "107.7"
+        Text "raw · base:0B · $.data[].1030 · ordinal 8" (25Q4-0) 140×0 "299주"
+        Text "raw · base:0B · $.data[].1031 · ordinal 8" (25Q5-0) 140×0 "453주"
+        Text "raw · base:0B · $.data[].1032 · ordinal 8" (25Q6-0) 140×0 "52.6%"
+      Frame "0B · 체결 9" (25Q7-0) 0×30
+        Text "raw · base:0B · $.data[].20 · ordinal 9" (25Q8-0) 120×0 "14:31:00"
+        Text "raw · base:0B · $.data[].10 · ordinal 9" (25Q9-0) 150×0 "150,840원"
+        Text "raw · base:0B · $.data[].15 · ordinal 9" (25QA-0) 140×0 "+156주"
+        Text "raw · base:0B · $.data[].228 · ordinal 9" (25QB-0) 140×0 "107.0"
+        Text "raw · base:0B · $.data[].1030 · ordinal 9" (25QC-0) 140×0 "316주"
+        Text "raw · base:0B · $.data[].1031 · ordinal 9" (25QD-0) 140×0 "472주"
+        Text "raw · base:0B · $.data[].1032 · ordinal 9" (25QE-0) 140×0 "52.3%"
+      Frame "0B · 체결 10" (25QF-0) 0×30
+        Text "raw · base:0B · $.data[].20 · ordinal 10" (25QG-0) 120×0 "14:31:-1"
+        Text "raw · base:0B · $.data[].10 · ordinal 10" (25QH-0) 150×0 "150,830원"
+        Text "raw · base:0B · $.data[].15 · ordinal 10" (25QI-0) 140×0 "+64주"
+        Text "raw · base:0B · $.data[].228 · ordinal 10" (25QJ-0) 140×0 "106.3"
+        Text "raw · base:0B · $.data[].1030 · ordinal 10" (25QK-0) 140×0 "333주"
+        Text "raw · base:0B · $.data[].1031 · ordinal 10" (25QL-0) 140×0 "491주"
+        Text "raw · base:0B · $.data[].1032 · ordinal 10" (25QM-0) 140×0 "52.0%"
+      Rectangle "Rectangle" (25QN-0) 4×88
+    Frame "Frame" (25QO-0) 0×0
+      Text "10행까지 표시 중 · 추가 행은 이…" (25QP-0) 0×0 "10행까지 표시 중 · 추가 행은 이 영역 안에서 스크롤"
+      Text "접기" (25QQ-0) 0×0 "접기"
+  Frame "호가 공식 원문 전수 증명" (25QS-0) 0×0
+    Frame "Frame" (25QT-0) 0×0
+      Text "호가 UI 공식 원문 전수 연결" (25QU-0) 0×0 "호가 UI 공식 원문 전수 연결"
+      Text "정규·통합·실시간·시간외·금현물 de…" (25QV-0) 0×0 "정규·통합·실시간·시간외·금현물 destination을 세 보드에 연결했습니다."
+    Frame "Frame" (25QW-0) 0×0
+      Frame "Frame" (25QX-0) 0×0
+        Text "31 mapping" (25QY-0) 0×0 "31 mapping"
+      Frame "Frame" (25QZ-0) 0×0
+        Text "425 / 425 business r…" (25R0-0) 0×0 "425 / 425 business raw"
+      Frame "Frame" (25R1-0) 0×0
+        Text "24 / 24 transport" (25R2-0) 0×0 "24 / 24 transport"
+      Frame "Frame" (25R3-0) 0×0
+        Text "missing 0 · invalid …" (25R4-0) 0×0 "missing 0 · invalid 0 · duplicate 0 · source-less 0"

@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥" (46TZ-0) 360×420
+  Frame "Header" (46UT-0) 0×0
+    Frame "Meta row" (46UV-0) 0×0
+      Text "Eyebrow" (46UX-0) 0×0
+      Text "As of" (46UW-0) 0×0 "기준 09:42"
+    Text "Title" (46UU-0) 0×0 "체결·호가 문맥"
+  Frame "Body" (46U2-0) 0×0
+    Frame "KPI band" (46UJ-0) 0×0
+      Frame "Frame" (46UQ-0) 0×0
+        Text "누적거래대금" (46US-0) 0×0 "누적거래대금"
+        Text "2.14조원" (46UR-0) 0×0 "2.14조원"
+      Frame "Frame" (46UN-0) 0×0
+        Text "ROE" (46UP-0) 0×0 "ROE"
+        Text "8.4%" (46UO-0) 0×0 "8.4%"
+      Frame "Frame" (46UK-0) 0×0
+        Text "PBR" (46UM-0) 0×0 "PBR"
+        Text "2.63배" (46UL-0) 0×0 "2.63배"
+    Frame "Table header" (46UF-0) 0×0
+      Text "항목" (46UI-0) 0×0 "항목"
+      Text "값" (46UH-0) 0×0 "값"
+      Text "비고" (46UG-0) 72×0 "비고"
+    Frame "Position 1" (46U9-0) 0×0
+      Frame "Frame" (46UC-0) 0×0
+        Text "(최우선)매수호가" (46UE-0) 0×0 "(최우선)매수호가"
+        Text "Text" (46UD-0) 0×0
+      Text "150,850" (46UB-0) 0×0 "150,850"
+      Text "Text" (46UA-0) 72×0
+    Frame "Position 2" (46U3-0) 0×0
+      Frame "Frame" (46U6-0) 0×0
+        Text "거래회전율" (46U8-0) 0×0 "거래회전율"
+        Text "Text" (46U7-0) 0×0
+      Text "0.24%" (46U5-0) 0×0 "0.24%"
+      Text "Text" (46U4-0) 72×0
+  Frame "Fold note" (46U0-0) 0×0
+    Text "스칼라 2개, 행 7개 접힘 · 원본…" (46U1-0) 0×0 "스칼라 2개, 행 7개 접힘 · 원본에서 확인"

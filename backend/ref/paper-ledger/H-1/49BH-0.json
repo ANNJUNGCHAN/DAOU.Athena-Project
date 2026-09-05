@@ -1,0 +1,92 @@
+{
+ "board_id": "49BH-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T1-X · 분봉 시세",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "49BJ-0",
+   "text": "원본 보드: CC-03 / R01-T1-X · 분봉 시세",
+   "path": [
+    "note/CC-03 / R01-T1-X · 분봉 시세",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49BL-0",
+   "text": "가져온 요소: 종가 · 대비 · 시가 · 거래대금 · 거래량",
+   "path": [
+    "note/CC-03 / R01-T1-X · 분봉 시세",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49BN-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T1-X · 분봉 시세",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49BP-0",
+   "text": "접은 개수: 스칼라 2개 · 행 11개",
+   "path": [
+    "note/CC-03 / R01-T1-X · 분봉 시세",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "49BH-0",
+   "name": "note/CC-03 / R01-T1-X · 분봉 시세",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "49BI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49BK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49BM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49BO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T1-X · 분봉 시세": 1,
+  "가져온 요소: 종가 · 대비 · 시가 · 거래대금 · 거래량": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 11개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "5315bc6566aba544266b21b305670cc05de9a01c14042fd89f6b62ae29f6a199"
+}

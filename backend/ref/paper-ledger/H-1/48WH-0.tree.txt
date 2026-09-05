@@ -1,0 +1,9 @@
+Frame "note/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도" (48WH-0) 360×92
+  Frame "Frame" (48WI-0) 334×0
+    Text "원본 보드: CC-02 / R11-T…" (48WJ-0) 0×0 "원본 보드: CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도"
+  Frame "Frame" (48WK-0) 334×0
+    Text "가져온 요소: 매매가능수량" (48WL-0) 0×0 "가져온 요소: 매매가능수량"
+  Frame "Frame" (48WM-0) 334×0
+    Text "문법: order_confirm" (48WN-0) 0×0 "문법: order_confirm"
+  Frame "Frame" (48WO-0) 334×0
+    Text "접은 개수: 항목 19개" (48WP-0) 0×0 "접은 개수: 항목 19개"

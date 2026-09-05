@@ -1,0 +1,68 @@
+{
+ "board_id": "16OD-2",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "02 · 부팅 — READY · 0–240ms",
+ "width": 1640,
+ "height": 900,
+ "texts": [
+  {
+   "id": "16OH-2",
+   "text": "|",
+   "path": [
+    "02 · 부팅 — READY · 0–240ms",
+    "BOOT CENTER · KIWOOM + READY",
+    "ATHENA · READY"
+   ]
+  },
+  {
+   "id": "16OG-2",
+   "text": "ATHENA",
+   "path": [
+    "02 · 부팅 — READY · 0–240ms",
+    "BOOT CENTER · KIWOOM + READY",
+    "ATHENA · READY"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "16OD-2",
+   "name": "02 · 부팅 — READY · 0–240ms",
+   "component": "Frame",
+   "w": 1640,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "16OE-2",
+   "name": "BOOT CENTER · KIWOOM + READY",
+   "component": "Frame",
+   "w": 457,
+   "h": 209,
+   "depth": 1
+  },
+  {
+   "id": "16OI-2",
+   "name": "키움증권 CI",
+   "component": "Frame",
+   "w": 220,
+   "h": 69,
+   "depth": 2
+  },
+  {
+   "id": "16OF-2",
+   "name": "ATHENA · READY",
+   "component": "Frame",
+   "w": 457,
+   "h": 112,
+   "depth": 2
+  }
+ ],
+ "text_multiset": {
+  "|": 1,
+  "ATHENA": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "95204486a9f6754403c2a44453dbfe7f0fb1640b486a14fcefbfa39361a22a07"
+}

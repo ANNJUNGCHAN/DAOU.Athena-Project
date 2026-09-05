@@ -1,0 +1,92 @@
+{
+ "board_id": "492B-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "492D-0",
+   "text": "원본 보드: CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+   "path": [
+    "note/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "492F-0",
+   "text": "가져온 요소: 호가잔량상위 · 종목코드 · 현재가 · 전일대비 · 전일대비기호",
+   "path": [
+    "note/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "492H-0",
+   "text": "문법: facts",
+   "path": [
+    "note/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "492J-0",
+   "text": "접은 개수: 항목 90개",
+   "path": [
+    "note/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "492B-0",
+   "name": "note/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "492C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "492E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "492G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "492I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위": 1,
+  "가져온 요소: 호가잔량상위 · 종목코드 · 현재가 · 전일대비 · 전일대비기호": 1,
+  "문법: facts": 1,
+  "접은 개수: 항목 90개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "eb4570ab5b711ca11913c93caef76671843eb3801325bcc210413b05cbf0fadc"
+}

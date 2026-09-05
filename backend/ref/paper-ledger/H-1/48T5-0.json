@@ -1,0 +1,92 @@
+{
+ "board_id": "48T5-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-04 / R02-T2 · 호가 — 시간외 단일가",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48T7-0",
+   "text": "원본 보드: CC-04 / R02-T2 · 호가 — 시간외 단일가",
+   "path": [
+    "note/CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48T9-0",
+   "text": "가져온 요소: 투자자별tic… · 시간외단일가_… · 호가잔량기준시간",
+   "path": [
+    "note/CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48TB-0",
+   "text": "문법: table",
+   "path": [
+    "note/CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48TD-0",
+   "text": "접은 개수: 행 0개",
+   "path": [
+    "note/CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48T5-0",
+   "name": "note/CC-04 / R02-T2 · 호가 — 시간외 단일가",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48T6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48T8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48TA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48TC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-04 / R02-T2 · 호가 — 시간외 단일가": 1,
+  "가져온 요소: 투자자별tic… · 시간외단일가_… · 호가잔량기준시간": 1,
+  "문법: table": 1,
+  "접은 개수: 행 0개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "05e31df583b2d121e72de667add917fbb08d0896665dac060e48f7afa33a9ae7"
+}

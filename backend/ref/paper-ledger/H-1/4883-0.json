@@ -1,0 +1,340 @@
+{
+ "board_id": "4883-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "4891-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "4890-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "488Y-0",
+   "text": "삼성전자 행 펼침",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Header"
+   ]
+  },
+  {
+   "id": "488W-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "488V-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "488U-0",
+   "text": "값",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "488T-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "488R-0",
+   "text": "01",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "488Q-0",
+   "text": "상한가",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "488P-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "488N-0",
+   "text": "193,700",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "488M-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "488K-0",
+   "text": "02",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "488J-0",
+   "text": "하한가",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "488I-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "488G-0",
+   "text": "104,300",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "488F-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "488D-0",
+   "text": "03",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "488C-0",
+   "text": "시가",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "488B-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4889-0",
+   "text": "149,200",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4888-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4885-0",
+   "text": "외 2개 행 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4883-0",
+   "name": "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "488X-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "488Z-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4886-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "488S-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "488L-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "488O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "488E-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "488H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4887-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "488A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4884-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "삼성전자 행 펼침": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "상한가": 1,
+  "193,700": 1,
+  "02": 1,
+  "하한가": 1,
+  "104,300": 1,
+  "03": 1,
+  "시가": 1,
+  "149,200": 1,
+  "외 2개 행 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "2fa0178560027bf23863d2b47d41b0127cae50ec0b205decbdc7cfa8b816c864"
+}

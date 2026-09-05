@@ -1,0 +1,9 @@
+Frame "note/CC-04 / R02-T3 · 호가 — KRX 금현물" (48TF-0) 360×92
+  Frame "Frame" (48TG-0) 334×0
+    Text "원본 보드: CC-04 / R02-T…" (48TH-0) 0×0 "원본 보드: CC-04 / R02-T3 · 호가 — KRX 금현물"
+  Frame "Frame" (48TI-0) 334×0
+    Text "가져온 요소: 거래소구분 · 체결가 …" (48TJ-0) 0×0 "가져온 요소: 거래소구분 · 체결가 · 등락율"
+  Frame "Frame" (48TK-0) 334×0
+    Text "문법: table" (48TL-0) 0×0 "문법: table"
+  Frame "Frame" (48TM-0) 334×0
+    Text "접은 개수: 행 5개" (48TN-0) 0×0 "접은 개수: 행 5개"

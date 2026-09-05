@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체" (486G-0) 360×420
+  Frame "Header" (487A-0) 0×0
+    Frame "Meta row" (487C-0) 0×0
+      Text "Eyebrow" (487E-0) 0×0
+      Text "As of" (487D-0) 0×0 "기준 09:42"
+    Text "Title" (487B-0) 0×0 "신주인수권 전체"
+  Frame "Body" (486J-0) 0×0
+    Frame "KPI band" (4870-0) 0×0
+      Frame "Frame" (4877-0) 0×0
+        Text "전일대비기호" (4879-0) 0×0 "전일대비기호"
+        Text "보합 0" (4878-0) 0×0 "보합 0"
+      Frame "Frame" (4874-0) 0×0
+        Text "등락율" (4876-0) 0×0 "등락율"
+        Text "+18.4%" (4875-0) 0×0 "+18.4%"
+      Frame "Frame" (4871-0) 0×0
+        Text "핵심" (4873-0) 0×0 "핵심"
+        Text "51억원" (4872-0) 0×0 "51억원"
+    Frame "Table header" (486W-0) 0×0
+      Text "항목" (486Z-0) 0×0 "항목"
+      Text "값" (486Y-0) 0×0 "값"
+      Text "비고" (486X-0) 72×0 "비고"
+    Frame "Position 1" (486Q-0) 0×0
+      Frame "Frame" (486T-0) 0×0
+        Text "전일대비기호" (486V-0) 0×0 "전일대비기호"
+        Text "Text" (486U-0) 0×0
+      Text "9 · 5" (486S-0) 0×0 "9 · 5"
+      Text "Text" (486R-0) 72×0
+    Frame "Position 2" (486K-0) 0×0
+      Frame "Frame" (486N-0) 0×0
+        Text "종목명" (486P-0) 0×0 "종목명"
+        Text "Text" (486O-0) 0×0
+      Text "삼성중공업 1WR" (486M-0) 0×0 "삼성중공업 1WR"
+      Text "Text" (486L-0) 72×0
+  Frame "Fold note" (486H-0) 0×0
+    Text "스칼라 2개, 행 12개 접힘 · 원…" (486I-0) 0×0 "스칼라 2개, 행 12개 접힘 · 원본에서 확인"

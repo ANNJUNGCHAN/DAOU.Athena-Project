@@ -1,0 +1,527 @@
+{
+ "board_id": "15Y5-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "C02 · 좁은 데스크톱 — 실시간 호가",
+ "width": 390,
+ "height": 844,
+ "texts": [
+  {
+   "id": "1684-2",
+   "text": "ATHENA",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Compact desktop title bar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1685-2",
+   "text": "좁은 창 · 실시간 호가",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Compact desktop title bar"
+   ]
+  },
+  {
+   "id": "15ZT-2",
+   "text": "삼성전자 · 005930 · 정규장",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15ZV-2",
+   "text": "실시간 등록 · 위 매도 / 아래 매수",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15ZX-2",
+   "text": "150,850",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15ZY-2",
+   "text": "+1.24%",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1601-2",
+   "text": "매도 호가 ↑",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1602-2",
+   "text": "잔량",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1604-2",
+   "text": "150,880",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1605-2",
+   "text": "16,224",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1607-2",
+   "text": "150,870",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1608-2",
+   "text": "12,841",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160A-2",
+   "text": "150,860",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160B-2",
+   "text": "8,402",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160E-2",
+   "text": "150,850",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160F-2",
+   "text": "10,773",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160H-2",
+   "text": "150,840",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160I-2",
+   "text": "14,602",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160K-2",
+   "text": "150,830",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160L-2",
+   "text": "11,381",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160O-2",
+   "text": "매수비율",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160Q-2",
+   "text": "54%",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160S-2",
+   "text": "체결강도",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "160U-2",
+   "text": "128",
+   "path": [
+    "C02 · 좁은 데스크톱 — 실시간 호가",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "15Y5-2",
+   "name": "C02 · 좁은 데스크톱 — 실시간 호가",
+   "component": "Frame",
+   "w": 390,
+   "h": 844,
+   "depth": 0
+  },
+  {
+   "id": "1681-2",
+   "name": "Compact desktop title bar",
+   "component": "Frame",
+   "w": 390,
+   "h": 62,
+   "depth": 1
+  },
+  {
+   "id": "1682-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1683-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 3
+  },
+  {
+   "id": "1686-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1687-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1688-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1689-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "168A-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "168B-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "168C-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "168D-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15ZQ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 390,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "15ZR-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "15ZS-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15ZU-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15ZW-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15ZZ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1600-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1603-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1606-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1609-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "160C-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 3
+  },
+  {
+   "id": "160D-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "160G-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "160J-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "160M-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "160N-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "160P-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "160R-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "160T-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "ATHENA": 1,
+  "좁은 창 · 실시간 호가": 1,
+  "삼성전자 · 005930 · 정규장": 1,
+  "실시간 등록 · 위 매도 / 아래 매수": 1,
+  "150,850": 2,
+  "+1.24%": 1,
+  "매도 호가 ↑": 1,
+  "잔량": 1,
+  "150,880": 1,
+  "16,224": 1,
+  "150,870": 1,
+  "12,841": 1,
+  "150,860": 1,
+  "8,402": 1,
+  "10,773": 1,
+  "150,840": 1,
+  "14,602": 1,
+  "150,830": 1,
+  "11,381": 1,
+  "매수비율": 1,
+  "54%": 1,
+  "체결강도": 1,
+  "128": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "8b8fd4bc5deeeb0ebe02af8e7f55b77f4312e0420932e6a29dd1e5f36ee796ce"
+}

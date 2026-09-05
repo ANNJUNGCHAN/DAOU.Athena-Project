@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세" (46VM-0) 360×420
+  Frame "Header" (46WG-0) 0×0
+    Frame "Meta row" (46WI-0) 0×0
+      Text "Eyebrow" (46WK-0) 0×0
+      Text "As of" (46WJ-0) 0×0 "기준 09:42"
+    Text "Title" (46WH-0) 0×0 "KRX 금시장 차트·시세"
+  Frame "Body" (46VP-0) 0×0
+    Frame "KPI band" (46W6-0) 0×0
+      Frame "Frame" (46WD-0) 0×0
+        Text "등락율" (46WF-0) 0×0 "등락율"
+        Text "등락률 +0.74%" (46WE-0) 0×0 "등락률 +0.74%"
+      Frame "Frame" (46WA-0) 0×0
+        Text "전일비" (46WC-0) 0×0 "전일비"
+        Text "전일비 100.74%" (46WB-0) 0×0 "전일비 100.74%"
+      Frame "Frame" (46W7-0) 0×0
+        Text "핵심" (46W9-0) 0×0 "핵심"
+        Text "1g" (46W8-0) 0×0 "1g"
+    Frame "Table header" (46W2-0) 0×0
+      Text "항목" (46W5-0) 0×0 "항목"
+      Text "값" (46W4-0) 0×0 "값"
+      Text "비고" (46W3-0) 72×0 "비고"
+    Frame "Position 1" (46VW-0) 0×0
+      Frame "Frame" (46VZ-0) 0×0
+        Text "전일대비기호" (46W1-0) 0×0 "전일대비기호"
+        Text "Text" (46W0-0) 0×0
+      Text "168,420 · +0.74%" (46VY-0) 0×0 "168,420 · +0.74%"
+      Text "Text" (46VX-0) 72×0
+    Frame "Position 2" (46VQ-0) 0×0
+      Frame "Frame" (46VT-0) 0×0
+        Text "누적거래량" (46VV-0) 0×0 "누적거래량"
+        Text "Text" (46VU-0) 0×0
+      Text "185.4kg" (46VS-0) 0×0 "185.4kg"
+      Text "Text" (46VR-0) 72×0
+  Frame "Fold note" (46VN-0) 0×0
+    Text "스칼라 2개, 행 2개 접힘 · 원본…" (46VO-0) 0×0 "스칼라 2개, 행 2개 접힘 · 원본에서 확인"

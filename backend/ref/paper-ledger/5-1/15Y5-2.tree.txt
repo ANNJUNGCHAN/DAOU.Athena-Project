@@ -1,0 +1,55 @@
+Frame "C02 · 좁은 데스크톱 — 실시간 호가" (15Y5-2) 390×844
+  Frame "Compact desktop title bar" (1681-2) 390×62
+    Frame "Frame" (1682-2) 110×0
+      Rectangle "Rectangle" (1683-2) 8×8
+      Text "ATHENA" (1684-2) 0×0 "ATHENA"
+    Text "좁은 창 · 실시간 호가" (1685-2) 0×0 "좁은 창 · 실시간 호가"
+    Frame "Frame" (1686-2) 110×0
+      SVG "SVG" (1687-2) 0×0
+        SVGVisualElement "Line" (1688-2) 0×0
+      SVG "SVG" (1689-2) 0×0
+        SVGVisualElement "Rect" (168A-2) 0×0
+      SVG "SVG" (168B-2) 0×0
+        SVGVisualElement "Line" (168C-2) 0×0
+        SVGVisualElement "Line" (168D-2) 0×0
+  Frame "Frame" (15ZQ-2) 390×0
+    Frame "Frame" (15ZR-2) 0×0
+      Frame "Frame" (15ZS-2) 230×0
+        Text "삼성전자 · 005930 · 정규장" (15ZT-2) 230×0 "삼성전자 · 005930 · 정규장"
+        Frame "Frame" (15ZU-2) 0×0
+          Text "실시간 등록 · 위 매도 / 아래 매…" (15ZV-2) 0×0 "실시간 등록 · 위 매도 / 아래 매수"
+      Frame "Frame" (15ZW-2) 0×0
+        Text "150,850" (15ZX-2) 0×0 "150,850"
+        Text "+1.24%" (15ZY-2) 0×0 "+1.24%"
+    Frame "Frame" (15ZZ-2) 0×0
+      Frame "Frame" (1600-2) 0×0
+        Text "매도 호가 ↑" (1601-2) 0×0 "매도 호가 ↑"
+        Text "잔량" (1602-2) 0×0 "잔량"
+      Frame "Frame" (1603-2) 0×0
+        Text "150,880" (1604-2) 0×0 "150,880"
+        Text "16,224" (1605-2) 0×0 "16,224"
+      Frame "Frame" (1606-2) 0×0
+        Text "150,870" (1607-2) 0×0 "150,870"
+        Text "12,841" (1608-2) 0×0 "12,841"
+      Frame "Frame" (1609-2) 0×0
+        Text "150,860" (160A-2) 0×0 "150,860"
+        Text "8,402" (160B-2) 0×0 "8,402"
+      Rectangle "Rectangle" (160C-2) 0×3
+      Frame "Frame" (160D-2) 0×0
+        Text "150,850" (160E-2) 0×0 "150,850"
+        Text "10,773" (160F-2) 0×0 "10,773"
+      Frame "Frame" (160G-2) 0×0
+        Text "150,840" (160H-2) 0×0 "150,840"
+        Text "14,602" (160I-2) 0×0 "14,602"
+      Frame "Frame" (160J-2) 0×0
+        Text "150,830" (160K-2) 0×0 "150,830"
+        Text "11,381" (160L-2) 0×0 "11,381"
+    Frame "Frame" (160M-2) 0×0
+      Frame "Frame" (160N-2) 0×0
+        Text "매수비율" (160O-2) 0×0 "매수비율"
+        Frame "Frame" (160P-2) 0×0
+          Text "54%" (160Q-2) 0×0 "54%"
+      Frame "Frame" (160R-2) 0×0
+        Text "체결강도" (160S-2) 0×0 "체결강도"
+        Frame "Frame" (160T-2) 0×0
+          Text "128" (160U-2) 0×0 "128"

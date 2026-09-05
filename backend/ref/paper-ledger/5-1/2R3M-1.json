@@ -1,0 +1,4838 @@
+{
+ "board_id": "2R3M-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "2R8S-1",
+   "text": "삼성전자",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8R-1",
+   "text": "005930 · KOSPI · KRX",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "358O-0",
+   "text": "정규장",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Session Chips",
+    "장구분 칩"
+   ]
+  },
+  {
+   "id": "358Q-0",
+   "text": "실시간",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Session Chips",
+    "실시간 칩"
+   ]
+  },
+  {
+   "id": "2R8N-1",
+   "text": "150,850원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8M-1",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8L-1",
+   "text": "09:42:18",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8I-1",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8G-1",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8E-1",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8C-1",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8A-1",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R88-1",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WFE-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R84-1",
+   "text": "시가 · 고가 · 저가",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R83-1",
+   "text": "149,200 · 152,400 · 148,100",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3592-0",
+   "text": "09:00:03 · 09:12:40 · 09:05:22",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R81-1",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R80-1",
+   "text": "2.14조원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R7Z-1",
+   "text": "거래량 1,420만주 · 전일 대비 120.3%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R7X-1",
+   "text": "PER",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R7W-1",
+   "text": "21.2배",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R7V-1",
+   "text": "업종 11.2배",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R7T-1",
+   "text": "PBR",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R7S-1",
+   "text": "2.63배",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R7R-1",
+   "text": "업종 1.61배",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R7P-1",
+   "text": "ROE",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R7O-1",
+   "text": "8.4%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R7N-1",
+   "text": "전년 7.9%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8V-1",
+   "text": "현재가 · 09:42:18 체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8X-1",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8Y-1",
+   "text": "+1,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R8Z-1",
+   "text": "+1.24%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R92-1",
+   "text": "최우선 매도호가",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R93-1",
+   "text": "150,900",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R95-1",
+   "text": "최우선 매수호가",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R96-1",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R98-1",
+   "text": "호가 스프레드",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R99-1",
+   "text": "50원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CRY-0",
+   "text": "체결 흐름",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 흐름 제목"
+   ]
+  },
+  {
+   "id": "3CS2-0",
+   "text": "당일 체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 흐름 제목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CS4-0",
+   "text": "전일 체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 흐름 제목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CS6-0",
+   "text": "KRX",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 흐름 제목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CS7-0",
+   "text": "09:42:18",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 흐름 제목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CS9-0",
+   "text": "시각",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3CSA-0",
+   "text": "체결가",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3CSB-0",
+   "text": "전일대비",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3CSC-0",
+   "text": "체결량",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3CSD-0",
+   "text": "구분",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3CSE-0",
+   "text": "체결강도",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3CSG-0",
+   "text": "09:42:18",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3CSI-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:18",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CSJ-0",
+   "text": "매도 150,900 · 매수 150,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:18",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CSL-0",
+   "text": "+1,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:18",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CSM-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:18",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CSN-0",
+   "text": "1,284주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3S74-0",
+   "text": "매수체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:18",
+    "구분"
+   ]
+  },
+  {
+   "id": "3S75-0",
+   "text": "KRX",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:18",
+    "구분"
+   ]
+  },
+  {
+   "id": "3CSP-0",
+   "text": "108.4%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3CSR-0",
+   "text": "09:42:15",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3CSS-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3CSU-0",
+   "text": "+1,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:15",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CSV-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:15",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CSW-0",
+   "text": "560주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3S78-0",
+   "text": "매수체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:15",
+    "구분"
+   ]
+  },
+  {
+   "id": "3S79-0",
+   "text": "KRX",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:15",
+    "구분"
+   ]
+  },
+  {
+   "id": "3CSY-0",
+   "text": "118.1%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3CT0-0",
+   "text": "09:42:13",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:13 · 기세"
+   ]
+  },
+  {
+   "id": "3CT1-0",
+   "text": "150,900",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:13 · 기세"
+   ]
+  },
+  {
+   "id": "3CT3-0",
+   "text": "+1,900",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:13 · 기세",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CT4-0",
+   "text": "+1.28%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:13 · 기세",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CT5-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:13 · 기세"
+   ]
+  },
+  {
+   "id": "3S7C-0",
+   "text": "기세",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:13 · 기세",
+    "구분"
+   ]
+  },
+  {
+   "id": "3S7D-0",
+   "text": "KRX",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:13 · 기세",
+    "구분"
+   ]
+  },
+  {
+   "id": "3CT7-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:13 · 기세"
+   ]
+  },
+  {
+   "id": "3CT9-0",
+   "text": "09:42:11",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:11"
+   ]
+  },
+  {
+   "id": "3CTA-0",
+   "text": "150,800",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:11"
+   ]
+  },
+  {
+   "id": "3CTC-0",
+   "text": "+1,800",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:11",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CTD-0",
+   "text": "+1.21%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:11",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CTE-0",
+   "text": "2,410주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:11"
+   ]
+  },
+  {
+   "id": "3S7L-0",
+   "text": "매도체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:11",
+    "구분"
+   ]
+  },
+  {
+   "id": "3S7M-0",
+   "text": "KRX",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:11",
+    "구분"
+   ]
+  },
+  {
+   "id": "3CTG-0",
+   "text": "116.7%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:11"
+   ]
+  },
+  {
+   "id": "3CTI-0",
+   "text": "09:42:08",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:08"
+   ]
+  },
+  {
+   "id": "3CTJ-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:08"
+   ]
+  },
+  {
+   "id": "3CTL-0",
+   "text": "+1,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:08",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CTM-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:08",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CTN-0",
+   "text": "890주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:08"
+   ]
+  },
+  {
+   "id": "3S7T-0",
+   "text": "매수체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:08",
+    "구분"
+   ]
+  },
+  {
+   "id": "3S7U-0",
+   "text": "KRX",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:08",
+    "구분"
+   ]
+  },
+  {
+   "id": "3CTP-0",
+   "text": "121.3%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:08"
+   ]
+  },
+  {
+   "id": "3CTR-0",
+   "text": "09:42:03",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:03"
+   ]
+  },
+  {
+   "id": "3CTS-0",
+   "text": "150,800",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:03"
+   ]
+  },
+  {
+   "id": "3CTU-0",
+   "text": "+1,800",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:03",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CTV-0",
+   "text": "+1.21%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:03",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CTW-0",
+   "text": "1,120주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:03"
+   ]
+  },
+  {
+   "id": "3S8D-0",
+   "text": "매도체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:03",
+    "구분"
+   ]
+  },
+  {
+   "id": "3S8E-0",
+   "text": "KRX",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:03",
+    "구분"
+   ]
+  },
+  {
+   "id": "3CTY-0",
+   "text": "112.4%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:42:03"
+   ]
+  },
+  {
+   "id": "3CU0-0",
+   "text": "09:41:57",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:57"
+   ]
+  },
+  {
+   "id": "3CU1-0",
+   "text": "150,900",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:57"
+   ]
+  },
+  {
+   "id": "3CU3-0",
+   "text": "+1,900",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:57",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CU4-0",
+   "text": "+1.28%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:57",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CU5-0",
+   "text": "3,050주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:57"
+   ]
+  },
+  {
+   "id": "3S8H-0",
+   "text": "매수체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:57",
+    "구분"
+   ]
+  },
+  {
+   "id": "3S8I-0",
+   "text": "NXT",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:57",
+    "구분"
+   ]
+  },
+  {
+   "id": "3CU7-0",
+   "text": "124.8%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:57"
+   ]
+  },
+  {
+   "id": "3CU9-0",
+   "text": "09:41:52",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:52"
+   ]
+  },
+  {
+   "id": "3CUA-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:52"
+   ]
+  },
+  {
+   "id": "3CUC-0",
+   "text": "+1,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:52",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CUD-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:52",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CUE-0",
+   "text": "760주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:52"
+   ]
+  },
+  {
+   "id": "3S91-0",
+   "text": "매수체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:52",
+    "구분"
+   ]
+  },
+  {
+   "id": "3S92-0",
+   "text": "KRX",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:52",
+    "구분"
+   ]
+  },
+  {
+   "id": "3CUG-0",
+   "text": "119.6%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:52"
+   ]
+  },
+  {
+   "id": "3CUI-0",
+   "text": "09:41:49",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:49"
+   ]
+  },
+  {
+   "id": "3CUJ-0",
+   "text": "150,800",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:49"
+   ]
+  },
+  {
+   "id": "3CUL-0",
+   "text": "+1,800",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:49",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CUM-0",
+   "text": "+1.21%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:49",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CUN-0",
+   "text": "1,980주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:49"
+   ]
+  },
+  {
+   "id": "3S9N-0",
+   "text": "매도체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:49",
+    "구분"
+   ]
+  },
+  {
+   "id": "3S9O-0",
+   "text": "KRX",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:49",
+    "구분"
+   ]
+  },
+  {
+   "id": "3CUP-0",
+   "text": "115.2%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 09:41:49"
+   ]
+  },
+  {
+   "id": "3CUR-0",
+   "text": "순간 거래대금 1.94억원 · 매수 42,180건 · 매도 38,640건",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 상태 줄"
+   ]
+  },
+  {
+   "id": "3S9R-0",
+   "text": "당일 · 전일 체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 상태 줄",
+    "당일 · 전일 체결"
+   ]
+  },
+  {
+   "id": "3S9S-0",
+   "text": "1,420만주 · 1,180만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 상태 줄",
+    "당일 · 전일 체결"
+   ]
+  },
+  {
+   "id": "3S9T-0",
+   "text": "+20.3%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 흐름 표",
+    "체결 상태 줄",
+    "당일 · 전일 체결"
+   ]
+  },
+  {
+   "id": "36DT-0",
+   "text": "체결강도",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "체결강도"
+   ]
+  },
+  {
+   "id": "36DU-0",
+   "text": "108.4%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "체결강도"
+   ]
+  },
+  {
+   "id": "36DV-0",
+   "text": "5분 111.2%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "체결강도"
+   ]
+  },
+  {
+   "id": "36DW-0",
+   "text": "20분 109.0% · 60분 106.5%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "체결강도"
+   ]
+  },
+  {
+   "id": "36DY-0",
+   "text": "체결강도 일별",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "체결강도 일별"
+   ]
+  },
+  {
+   "id": "36DZ-0",
+   "text": "오늘 108.4% · 어제 102.1%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "체결강도 일별"
+   ]
+  },
+  {
+   "id": "36E0-0",
+   "text": "5일 99.8% · 20일 103.4%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "체결강도 일별"
+   ]
+  },
+  {
+   "id": "36E1-0",
+   "text": "60일 101.6% · 전일 동시간 +18%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "체결강도 일별"
+   ]
+  },
+  {
+   "id": "36E3-0",
+   "text": "당일거래평균가",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "당일거래평균가"
+   ]
+  },
+  {
+   "id": "36E4-0",
+   "text": "150,210",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "당일거래평균가"
+   ]
+  },
+  {
+   "id": "36E6-0",
+   "text": "거래회전율",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "거래회전율"
+   ]
+  },
+  {
+   "id": "36E7-0",
+   "text": "0.24%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "거래회전율"
+   ]
+  },
+  {
+   "id": "36E8-0",
+   "text": "주 1.12% · 월 4.36%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "거래회전율"
+   ]
+  },
+  {
+   "id": "36EA-0",
+   "text": "매수 · 매도 체결",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "매수·매도 체결"
+   ]
+  },
+  {
+   "id": "36EB-0",
+   "text": "769.6만주 · 650.4만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "매수·매도 체결"
+   ]
+  },
+  {
+   "id": "36EC-0",
+   "text": "순매수 +119.2만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "매수·매도 체결"
+   ]
+  },
+  {
+   "id": "3E96-0",
+   "text": "매수 비중 54.2%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "체결 지표 스트립",
+    "매수·매도 체결"
+   ]
+  },
+  {
+   "id": "36P2-0",
+   "text": "종목 요약",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36P3-0",
+   "text": "정상 거래",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36P5-0",
+   "text": "시가총액",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36P6-0",
+   "text": "900.4조원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36P8-0",
+   "text": "외국인 보유",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36P9-0",
+   "text": "52.41%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PB-0",
+   "text": "유통 주식",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PC-0",
+   "text": "44.4억주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PE-0",
+   "text": "장구분",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PF-0",
+   "text": "정규장",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PH-0",
+   "text": "가격 범위 · 기준",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준"
+   ]
+  },
+  {
+   "id": "36PJ-0",
+   "text": "52주 최저 67,700",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PK-0",
+   "text": "최고 153,400",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PP-0",
+   "text": "기준가",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PQ-0",
+   "text": "149,000",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PS-0",
+   "text": "상한가 · 하한가",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PU-0",
+   "text": "193,700",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PV-0",
+   "text": "·",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PW-0",
+   "text": "104,300",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PY-0",
+   "text": "상·하한 발생",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36PZ-0",
+   "text": "미발생",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36Q1-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36Q3-0",
+   "text": "2.14조원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36Q4-0",
+   "text": "전일 대비 +3,800억원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column A",
+    "가격 범위·기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36T3-0",
+   "text": "오늘의 수급",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "오늘의 수급"
+   ]
+  },
+  {
+   "id": "36T5-0",
+   "text": "외국인",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "오늘의 수급",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36T6-0",
+   "text": "+128억원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "오늘의 수급",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36T8-0",
+   "text": "기관",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "오늘의 수급",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36T9-0",
+   "text": "+196억원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "오늘의 수급",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TB-0",
+   "text": "개인",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "오늘의 수급",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TC-0",
+   "text": "−312억원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "오늘의 수급",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TE-0",
+   "text": "체결 비용 · 증거금",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금"
+   ]
+  },
+  {
+   "id": "36TG-0",
+   "text": "거래비용",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TH-0",
+   "text": "22원/주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TJ-0",
+   "text": "CFD증거금",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TK-0",
+   "text": "40%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TM-0",
+   "text": "유지증거금",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TN-0",
+   "text": "25%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TP-0",
+   "text": "CFD거래비용",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TQ-0",
+   "text": "30원/주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TS-0",
+   "text": "대주거래비용",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TT-0",
+   "text": "연 2.5%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TV-0",
+   "text": "K.O 접근도",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36TW-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Top Row",
+    "Rail Column B",
+    "체결·비용·증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFI-0",
+   "text": "일별 시세",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 시세 제목"
+   ]
+  },
+  {
+   "id": "3DFL-0",
+   "text": "분",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 시세 제목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFN-0",
+   "text": "일",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 시세 제목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFP-0",
+   "text": "주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 시세 제목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFR-0",
+   "text": "월",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 시세 제목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFU-0",
+   "text": "1분봉",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "기간 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFV-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "기간 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFW-0",
+   "text": "+0.03%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "기간 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFX-0",
+   "text": "▸",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "기간 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFY-0",
+   "text": "·",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "기간 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFZ-0",
+   "text": "주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "기간 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DG0-0",
+   "text": "+2.1%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "기간 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DG1-0",
+   "text": "·",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "기간 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DG2-0",
+   "text": "월",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "기간 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DG3-0",
+   "text": "+5.8%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "기간 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DG4-0",
+   "text": "전체 60건 · 3건 표시",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "기간 요약"
+   ]
+  },
+  {
+   "id": "3DG6-0",
+   "text": "일자",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 표 헤더"
+   ]
+  },
+  {
+   "id": "3DG7-0",
+   "text": "시가",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 표 헤더"
+   ]
+  },
+  {
+   "id": "3DG8-0",
+   "text": "고가",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 표 헤더"
+   ]
+  },
+  {
+   "id": "3DG9-0",
+   "text": "저가",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 표 헤더"
+   ]
+  },
+  {
+   "id": "3DGA-0",
+   "text": "종가",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 표 헤더"
+   ]
+  },
+  {
+   "id": "3DGC-0",
+   "text": "전일대비",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 표 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DGD-0",
+   "text": "등락률",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 표 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DGF-0",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 표 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DGG-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 표 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DGI-0",
+   "text": "외국계",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 표 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DGJ-0",
+   "text": "프로그램",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 표 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DGL-0",
+   "text": "09-01",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 09-01"
+   ]
+  },
+  {
+   "id": "3DGM-0",
+   "text": "149,200",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 09-01"
+   ]
+  },
+  {
+   "id": "3DGN-0",
+   "text": "152,400",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 09-01"
+   ]
+  },
+  {
+   "id": "3DGO-0",
+   "text": "148,100",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 09-01"
+   ]
+  },
+  {
+   "id": "3DGP-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 09-01"
+   ]
+  },
+  {
+   "id": "3DGR-0",
+   "text": "+1,850",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DGS-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DGU-0",
+   "text": "1,420만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DGV-0",
+   "text": "2.14조원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DGX-0",
+   "text": "+182만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DGY-0",
+   "text": "+64만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DH0-0",
+   "text": "08-31",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-31"
+   ]
+  },
+  {
+   "id": "3DH1-0",
+   "text": "148,200",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-31"
+   ]
+  },
+  {
+   "id": "3DH2-0",
+   "text": "149,400",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-31"
+   ]
+  },
+  {
+   "id": "3DH3-0",
+   "text": "148,000",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-31"
+   ]
+  },
+  {
+   "id": "3DH4-0",
+   "text": "149,000",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-31"
+   ]
+  },
+  {
+   "id": "3DH6-0",
+   "text": "+1,010",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DH7-0",
+   "text": "+0.68%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DH9-0",
+   "text": "1,180만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DHA-0",
+   "text": "1.76조원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DHC-0",
+   "text": "+95만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DHD-0",
+   "text": "+21만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DHF-0",
+   "text": "08-28",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-28"
+   ]
+  },
+  {
+   "id": "3DHG-0",
+   "text": "148,400",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-28"
+   ]
+  },
+  {
+   "id": "3DHH-0",
+   "text": "148,600",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-28"
+   ]
+  },
+  {
+   "id": "3DHI-0",
+   "text": "147,700",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-28"
+   ]
+  },
+  {
+   "id": "3DHJ-0",
+   "text": "147,990",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-28"
+   ]
+  },
+  {
+   "id": "3DHL-0",
+   "text": "−505",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DHM-0",
+   "text": "−0.34%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DHO-0",
+   "text": "980만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DHP-0",
+   "text": "1.45조원",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DHR-0",
+   "text": "−48만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DHS-0",
+   "text": "−12만주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "일별 행 08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DHU-0",
+   "text": "장전 예상",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "장전 예상 상태"
+   ]
+  },
+  {
+   "id": "3DHV-0",
+   "text": "150,900",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "장전 예상 상태"
+   ]
+  },
+  {
+   "id": "3DHW-0",
+   "text": "+1,900 · +1.28%",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "장전 예상 상태"
+   ]
+  },
+  {
+   "id": "3DHX-0",
+   "text": "·",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "장전 예상 상태"
+   ]
+  },
+  {
+   "id": "3DHY-0",
+   "text": "8,420주",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "장전 예상 상태"
+   ]
+  },
+  {
+   "id": "3DHZ-0",
+   "text": "·",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "장전 예상 상태"
+   ]
+  },
+  {
+   "id": "3DI0-0",
+   "text": "08:50",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "일별 시세",
+    "장전 예상 상태"
+   ]
+  },
+  {
+   "id": "36MU-0",
+   "text": "알림 설정",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36MW-0",
+   "text": "호가 열기",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R3R-1",
+   "text": "● 현재가·체결 실시간 갱신 중",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "2R3Q-1",
+   "text": "체결 9건 · 전일거래량 대비 +240만주 · 마지막 체결 09:42:18",
+   "path": [
+    "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2R3M-1",
+   "name": "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "2R3N-1",
+   "name": "Instrument Root · 현재시세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "2R3O-1",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "2R85-1",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "2R8J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2R8O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "358M-0",
+   "name": "Session Chips",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "358N-0",
+   "name": "장구분 칩",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "358P-0",
+   "name": "실시간 칩",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2R8K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R86-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2R8H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R8F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R8D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R8B-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R89-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R87-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2WFD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R7L-1",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "2R82-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2R7Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 286,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2R7U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2R7Q-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2R7M-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2R3S-1",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 594,
+   "depth": 3
+  },
+  {
+   "id": "2R4Y-1",
+   "name": "Quote Detail Mount",
+   "component": "Frame",
+   "w": 820,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "2R8T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R8U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2R8W-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2R90-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2R91-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2R94-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2R97-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CRW-0",
+   "name": "체결 흐름 표",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CRX-0",
+   "name": "체결 흐름 제목",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3CRZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CS0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3CS1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3CS3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3CS5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3CS8-0",
+   "name": "표 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3CSF-0",
+   "name": "체결 09:42:18",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "3CSH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 186,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CSK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S73-0",
+   "name": "구분",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CSQ-0",
+   "name": "체결 09:42:15",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3CST-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S77-0",
+   "name": "구분",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CSZ-0",
+   "name": "체결 09:42:13 · 기세",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3CT2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S7B-0",
+   "name": "구분",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CT8-0",
+   "name": "체결 09:42:11",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3CTB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S7K-0",
+   "name": "구분",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CTH-0",
+   "name": "체결 09:42:08",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3CTK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S7S-0",
+   "name": "구분",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CTQ-0",
+   "name": "체결 09:42:03",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3CTT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S8C-0",
+   "name": "구분",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CTZ-0",
+   "name": "체결 09:41:57",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3CU2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S8G-0",
+   "name": "구분",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CU8-0",
+   "name": "체결 09:41:52",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3CUB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S90-0",
+   "name": "구분",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CUH-0",
+   "name": "체결 09:41:49",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3CUK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S9M-0",
+   "name": "구분",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3CUQ-0",
+   "name": "체결 상태 줄",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3S9Q-0",
+   "name": "당일 · 전일 체결",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36DR-0",
+   "name": "체결 지표 스트립",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36DS-0",
+   "name": "체결강도",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "36DX-0",
+   "name": "체결강도 일별",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "36E2-0",
+   "name": "당일거래평균가",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "36E5-0",
+   "name": "거래회전율",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "36E9-0",
+   "name": "매수·매도 체결",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "36MN-0",
+   "name": "Instrument Context",
+   "component": "Frame",
+   "w": 538,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "36MO-0",
+   "name": "Rail Top Row",
+   "component": "Frame",
+   "w": 490,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36MP-0",
+   "name": "Rail Column A",
+   "component": "Frame",
+   "w": 237,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "36P0-0",
+   "name": "종목 요약",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36P1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "36P4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36P7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36PA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36PD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36PG-0",
+   "name": "가격 범위·기준",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36PI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "36PL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "36PM-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "36PN-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 9
+  },
+  {
+   "id": "36PO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 19,
+   "depth": 8
+  },
+  {
+   "id": "36PR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 19,
+   "depth": 8
+  },
+  {
+   "id": "36PT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "36PX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 19,
+   "depth": 8
+  },
+  {
+   "id": "36Q0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 8
+  },
+  {
+   "id": "36Q2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "36MQ-0",
+   "name": "Rail Column B",
+   "component": "Frame",
+   "w": 237,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "36T2-0",
+   "name": "오늘의 수급",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36T4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36T7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36TA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36TD-0",
+   "name": "체결·비용·증거금",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36TF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36TI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36TL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36TO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36TR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "36TU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "3DFG-0",
+   "name": "일별 시세",
+   "component": "Frame",
+   "w": 490,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DFH-0",
+   "name": "일별 시세 제목",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3DFJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DFK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3DFM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3DFO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3DFQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3DFS-0",
+   "name": "기간 요약",
+   "component": "Frame",
+   "w": 0,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3DFT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DG5-0",
+   "name": "일별 표 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3DGB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 64,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DGE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DGH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DGK-0",
+   "name": "일별 행 09-01",
+   "component": "Frame",
+   "w": 0,
+   "h": 29,
+   "depth": 6
+  },
+  {
+   "id": "3DGQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 64,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DGT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DGW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DGZ-0",
+   "name": "일별 행 08-31",
+   "component": "Frame",
+   "w": 0,
+   "h": 29,
+   "depth": 6
+  },
+  {
+   "id": "3DH5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 64,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DH8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DHB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DHE-0",
+   "name": "일별 행 08-28",
+   "component": "Frame",
+   "w": 0,
+   "h": 29,
+   "depth": 6
+  },
+  {
+   "id": "3DHK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 64,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DHN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DHQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DHT-0",
+   "name": "장전 예상 상태",
+   "component": "Frame",
+   "w": 0,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "36MS-0",
+   "name": "Chart Context Actions",
+   "component": "Frame",
+   "w": 490,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "36MT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "36MV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "2R3P-1",
+   "name": "Chart Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "삼성전자": 1,
+  "005930 · KOSPI · KRX": 1,
+  "정규장": 2,
+  "실시간": 1,
+  "150,850원": 1,
+  "+1,850 · +1.24%": 1,
+  "09:42:18": 3,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 1,
+  "ELW": 1,
+  "금현물": 1,
+  "순위": 1,
+  "시가 · 고가 · 저가": 1,
+  "149,200 · 152,400 · 148,100": 1,
+  "09:00:03 · 09:12:40 · 09:05:22": 1,
+  "거래대금": 3,
+  "2.14조원": 3,
+  "거래량 1,420만주 · 전일 대비 120.3%": 1,
+  "PER": 1,
+  "21.2배": 1,
+  "업종 11.2배": 1,
+  "PBR": 1,
+  "2.63배": 1,
+  "업종 1.61배": 1,
+  "ROE": 1,
+  "8.4%": 1,
+  "전년 7.9%": 1,
+  "현재가 · 09:42:18 체결": 1,
+  "150,850": 8,
+  "+1,850": 6,
+  "+1.24%": 6,
+  "최우선 매도호가": 1,
+  "150,900": 4,
+  "최우선 매수호가": 1,
+  "호가 스프레드": 1,
+  "50원": 1,
+  "체결 흐름": 1,
+  "당일 체결": 1,
+  "전일 체결": 1,
+  "KRX": 9,
+  "시각": 1,
+  "체결가": 1,
+  "전일대비": 2,
+  "체결량": 1,
+  "구분": 1,
+  "체결강도": 2,
+  "매도 150,900 · 매수 150,850": 1,
+  "1,284주": 1,
+  "매수체결": 5,
+  "108.4%": 2,
+  "09:42:15": 1,
+  "560주": 1,
+  "118.1%": 1,
+  "09:42:13": 1,
+  "+1,900": 2,
+  "+1.28%": 2,
+  "해당 없음": 3,
+  "기세": 1,
+  "09:42:11": 1,
+  "150,800": 3,
+  "+1,800": 3,
+  "+1.21%": 3,
+  "2,410주": 1,
+  "매도체결": 3,
+  "116.7%": 1,
+  "09:42:08": 1,
+  "890주": 1,
+  "121.3%": 1,
+  "09:42:03": 1,
+  "1,120주": 1,
+  "112.4%": 1,
+  "09:41:57": 1,
+  "3,050주": 1,
+  "NXT": 1,
+  "124.8%": 1,
+  "09:41:52": 1,
+  "760주": 1,
+  "119.6%": 1,
+  "09:41:49": 1,
+  "1,980주": 1,
+  "115.2%": 1,
+  "순간 거래대금 1.94억원 · 매수 42,180건 · 매도 38,640건": 1,
+  "당일 · 전일 체결": 1,
+  "1,420만주 · 1,180만주": 1,
+  "+20.3%": 1,
+  "5분 111.2%": 1,
+  "20분 109.0% · 60분 106.5%": 1,
+  "체결강도 일별": 1,
+  "오늘 108.4% · 어제 102.1%": 1,
+  "5일 99.8% · 20일 103.4%": 1,
+  "60일 101.6% · 전일 동시간 +18%": 1,
+  "당일거래평균가": 1,
+  "150,210": 1,
+  "거래회전율": 1,
+  "0.24%": 1,
+  "주 1.12% · 월 4.36%": 1,
+  "매수 · 매도 체결": 1,
+  "769.6만주 · 650.4만주": 1,
+  "순매수 +119.2만주": 1,
+  "매수 비중 54.2%": 1,
+  "종목 요약": 1,
+  "정상 거래": 1,
+  "시가총액": 1,
+  "900.4조원": 1,
+  "외국인 보유": 1,
+  "52.41%": 1,
+  "유통 주식": 1,
+  "44.4억주": 1,
+  "장구분": 1,
+  "가격 범위 · 기준": 1,
+  "52주 최저 67,700": 1,
+  "최고 153,400": 1,
+  "기준가": 1,
+  "149,000": 2,
+  "상한가 · 하한가": 1,
+  "193,700": 1,
+  "·": 5,
+  "104,300": 1,
+  "상·하한 발생": 1,
+  "미발생": 1,
+  "전일 대비 +3,800억원": 1,
+  "오늘의 수급": 1,
+  "외국인": 1,
+  "+128억원": 1,
+  "기관": 1,
+  "+196억원": 1,
+  "개인": 1,
+  "−312억원": 1,
+  "체결 비용 · 증거금": 1,
+  "거래비용": 1,
+  "22원/주": 1,
+  "CFD증거금": 1,
+  "40%": 1,
+  "유지증거금": 1,
+  "25%": 1,
+  "CFD거래비용": 1,
+  "30원/주": 1,
+  "대주거래비용": 1,
+  "연 2.5%": 1,
+  "K.O 접근도": 1,
+  "일별 시세": 1,
+  "분": 1,
+  "일": 1,
+  "주": 2,
+  "월": 2,
+  "1분봉": 1,
+  "+0.03%": 1,
+  "▸": 1,
+  "+2.1%": 1,
+  "+5.8%": 1,
+  "전체 60건 · 3건 표시": 1,
+  "일자": 1,
+  "시가": 1,
+  "고가": 1,
+  "저가": 1,
+  "종가": 1,
+  "등락률": 1,
+  "거래량": 1,
+  "외국계": 1,
+  "프로그램": 1,
+  "09-01": 1,
+  "149,200": 1,
+  "152,400": 1,
+  "148,100": 1,
+  "1,420만주": 1,
+  "+182만주": 1,
+  "+64만주": 1,
+  "08-31": 1,
+  "148,200": 1,
+  "149,400": 1,
+  "148,000": 1,
+  "+1,010": 1,
+  "+0.68%": 1,
+  "1,180만주": 1,
+  "1.76조원": 1,
+  "+95만주": 1,
+  "+21만주": 1,
+  "08-28": 1,
+  "148,400": 1,
+  "148,600": 1,
+  "147,700": 1,
+  "147,990": 1,
+  "−505": 1,
+  "−0.34%": 1,
+  "980만주": 1,
+  "1.45조원": 1,
+  "−48만주": 1,
+  "−12만주": 1,
+  "장전 예상": 1,
+  "+1,900 · +1.28%": 1,
+  "8,420주": 1,
+  "08:50": 1,
+  "알림 설정": 1,
+  "호가 열기": 1,
+  "● 현재가·체결 실시간 갱신 중": 1,
+  "체결 9건 · 전일거래량 대비 +240만주 · 마지막 체결 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "78037ea08f6613c3b10544687f84f877b5d4f3c346749c421fcf5fd70c16b688"
+}

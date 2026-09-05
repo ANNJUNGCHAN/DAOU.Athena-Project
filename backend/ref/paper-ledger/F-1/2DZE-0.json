@@ -1,0 +1,2235 @@
+{
+ "board_id": "2DZE-0",
+ "page": "F-1",
+ "page_name": "증명",
+ "name": "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+ "width": 1440,
+ "height": 900,
+ "texts": [
+  {
+   "id": "2F1H-0",
+   "text": "삼성전자",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Sticky Header",
+    "DV-2 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F1I-0",
+   "text": "005930 · KOSPI · 전기전자",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Sticky Header",
+    "DV-2 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F1K-0",
+   "text": "150,850원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Sticky Header",
+    "DV-2 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F1L-0",
+   "text": "+2.35%",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Sticky Header",
+    "DV-2 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F1M-0",
+   "text": "DESIGN FIXTURE · 12:34",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Sticky Header",
+    "DV-2 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F1Q-0",
+   "text": "기업정보",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Category Tabs",
+    "DV-2 User Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F1S-0",
+   "text": "가치지표",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Category Tabs",
+    "DV-2 User Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F1U-0",
+   "text": "재무",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Category Tabs",
+    "DV-2 User Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F1W-0",
+   "text": "시장규모·보유",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Category Tabs",
+    "DV-2 User Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F1Y-0",
+   "text": "가격범위",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Category Tabs",
+    "DV-2 User Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F23-0",
+   "text": "기준",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Context Toolbar",
+    "DV-2 Context Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F24-0",
+   "text": "최근 결산 ▾",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Context Toolbar",
+    "DV-2 Context Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F26-0",
+   "text": "표시",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Context Toolbar",
+    "DV-2 Context Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F27-0",
+   "text": "원 단위 ▾",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Context Toolbar",
+    "DV-2 Context Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F28-0",
+   "text": "기업·가치 공식 필드 39개",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Context Toolbar",
+    "DV-2 Context Controls · Chrome"
+   ]
+  },
+  {
+   "id": "2F2F-0",
+   "text": "기업·가치 공식 정보",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Company Facts Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F2G-0",
+   "text": "23개 필드",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Company Facts Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F2N-0",
+   "text": "종목 식별·자본",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact"
+   ]
+  },
+  {
+   "id": "2F2Q-0",
+   "text": "종목코드",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.stk_cd|1"
+   ]
+  },
+  {
+   "id": "2F2R-0",
+   "text": "005930",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.stk_cd|1"
+   ]
+  },
+  {
+   "id": "2F2T-0",
+   "text": "종목명",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.stk_nm|1"
+   ]
+  },
+  {
+   "id": "2F2U-0",
+   "text": "삼성전자",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.stk_nm|1"
+   ]
+  },
+  {
+   "id": "2F2X-0",
+   "text": "결산월",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.setl_mm|1"
+   ]
+  },
+  {
+   "id": "2F2Y-0",
+   "text": "12월",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.setl_mm|1"
+   ]
+  },
+  {
+   "id": "2F30-0",
+   "text": "액면가",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.fav|1"
+   ]
+  },
+  {
+   "id": "2F31-0",
+   "text": "150,850원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.fav|1"
+   ]
+  },
+  {
+   "id": "2F34-0",
+   "text": "자본금",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.cap|1"
+   ]
+  },
+  {
+   "id": "2F35-0",
+   "text": "9,005,210억원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.cap|1"
+   ]
+  },
+  {
+   "id": "2F37-0",
+   "text": "상장주식",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.flo_stk|1"
+   ]
+  },
+  {
+   "id": "2F38-0",
+   "text": "5,969,782주",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+    "Frame",
+    "detail:ka10001:identity_and_capital|$.flo_stk|1"
+   ]
+  },
+  {
+   "id": "2F3B-0",
+   "text": "시장 규모·보유",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact"
+   ]
+  },
+  {
+   "id": "2F3E-0",
+   "text": "신용비율",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.crd_rt|1"
+   ]
+  },
+  {
+   "id": "2F3F-0",
+   "text": "8.4%",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.crd_rt|1"
+   ]
+  },
+  {
+   "id": "2F3H-0",
+   "text": "시가총액",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.mac|1"
+   ]
+  },
+  {
+   "id": "2F3I-0",
+   "text": "9,005,210억원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.mac|1"
+   ]
+  },
+  {
+   "id": "2F3L-0",
+   "text": "시가총액비중",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.mac_wght|1"
+   ]
+  },
+  {
+   "id": "2F3M-0",
+   "text": "9,005,210억원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.mac_wght|1"
+   ]
+  },
+  {
+   "id": "2F3O-0",
+   "text": "외인소진률",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.for_exh_rt|1"
+   ]
+  },
+  {
+   "id": "2F3P-0",
+   "text": "8.4%",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.for_exh_rt|1"
+   ]
+  },
+  {
+   "id": "2F3S-0",
+   "text": "대용가",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.repl_pric|1"
+   ]
+  },
+  {
+   "id": "2F3T-0",
+   "text": "9,005,210억원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.repl_pric|1"
+   ]
+  },
+  {
+   "id": "2F3V-0",
+   "text": "액면가단위",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.fav_unit|1"
+   ]
+  },
+  {
+   "id": "2F3W-0",
+   "text": "150,850",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.fav_unit|1"
+   ]
+  },
+  {
+   "id": "2F3Z-0",
+   "text": "유통주식",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.dstr_stk|1"
+   ]
+  },
+  {
+   "id": "2F40-0",
+   "text": "5,969,782주",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.dstr_stk|1"
+   ]
+  },
+  {
+   "id": "2F42-0",
+   "text": "유통비율",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.dstr_rt|1"
+   ]
+  },
+  {
+   "id": "2F43-0",
+   "text": "8.4%",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+    "Frame",
+    "detail:ka10001:market_scale_and_ownership|$.dstr_rt|1"
+   ]
+  },
+  {
+   "id": "2F46-0",
+   "text": "가치지표",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact"
+   ]
+  },
+  {
+   "id": "2F49-0",
+   "text": "PER",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.per|1"
+   ]
+  },
+  {
+   "id": "2F4A-0",
+   "text": "18.6배",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.per|1"
+   ]
+  },
+  {
+   "id": "2F4C-0",
+   "text": "EPS",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.eps|1"
+   ]
+  },
+  {
+   "id": "2F4D-0",
+   "text": "8,110원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.eps|1"
+   ]
+  },
+  {
+   "id": "2F4G-0",
+   "text": "ROE",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.roe|1"
+   ]
+  },
+  {
+   "id": "2F4H-0",
+   "text": "8.4%",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.roe|1"
+   ]
+  },
+  {
+   "id": "2F4J-0",
+   "text": "PBR",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.pbr|1"
+   ]
+  },
+  {
+   "id": "2F4K-0",
+   "text": "18.6배",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.pbr|1"
+   ]
+  },
+  {
+   "id": "2F4N-0",
+   "text": "EV",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.ev|1"
+   ]
+  },
+  {
+   "id": "2F4O-0",
+   "text": "9,005,210억원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.ev|1"
+   ]
+  },
+  {
+   "id": "2F4Q-0",
+   "text": "BPS",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.bps|1"
+   ]
+  },
+  {
+   "id": "2F4R-0",
+   "text": "8,110원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:valuation · 6 exact",
+    "Frame",
+    "detail:ka10001:valuation|$.bps|1"
+   ]
+  },
+  {
+   "id": "2F4U-0",
+   "text": "재무 실적",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:financial_performance · 3 exact"
+   ]
+  },
+  {
+   "id": "2F4X-0",
+   "text": "매출액",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:financial_performance · 3 exact",
+    "Frame",
+    "detail:ka10001:financial_performance|$.sale_amt|1"
+   ]
+  },
+  {
+   "id": "2F4Y-0",
+   "text": "9,005,210억원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:financial_performance · 3 exact",
+    "Frame",
+    "detail:ka10001:financial_performance|$.sale_amt|1"
+   ]
+  },
+  {
+   "id": "2F50-0",
+   "text": "영업이익",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:financial_performance · 3 exact",
+    "Frame",
+    "detail:ka10001:financial_performance|$.bus_pro|1"
+   ]
+  },
+  {
+   "id": "2F51-0",
+   "text": "9,005,210억원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:financial_performance · 3 exact",
+    "Frame",
+    "detail:ka10001:financial_performance|$.bus_pro|1"
+   ]
+  },
+  {
+   "id": "2F54-0",
+   "text": "당기순이익",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:financial_performance · 3 exact",
+    "Frame",
+    "detail:ka10001:financial_performance|$.cup_nga|1"
+   ]
+  },
+  {
+   "id": "2F55-0",
+   "text": "9,005,210억원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Company Facts",
+    "DV-2 Group · detail:ka10001:financial_performance · 3 exact",
+    "Frame",
+    "detail:ka10001:financial_performance|$.cup_nga|1"
+   ]
+  },
+  {
+   "id": "2F2J-0",
+   "text": "가격 범위",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Price Facts Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F2K-0",
+   "text": "16개 필드",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Price Facts Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F58-0",
+   "text": "연중·250일 가격 범위",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact"
+   ]
+  },
+  {
+   "id": "2F5B-0",
+   "text": "연중최고",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.oyr_hgst|1"
+   ]
+  },
+  {
+   "id": "2F5C-0",
+   "text": "150,850",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.oyr_hgst|1"
+   ]
+  },
+  {
+   "id": "2F5E-0",
+   "text": "연중최저",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.oyr_lwst|1"
+   ]
+  },
+  {
+   "id": "2F5F-0",
+   "text": "150,850",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.oyr_lwst|1"
+   ]
+  },
+  {
+   "id": "2F5I-0",
+   "text": "250최고",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250hgst|1"
+   ]
+  },
+  {
+   "id": "2F5J-0",
+   "text": "150,850",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250hgst|1"
+   ]
+  },
+  {
+   "id": "2F5L-0",
+   "text": "250최저",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250lwst|1"
+   ]
+  },
+  {
+   "id": "2F5M-0",
+   "text": "150,850",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250lwst|1"
+   ]
+  },
+  {
+   "id": "2F5P-0",
+   "text": "250최고가일",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250hgst_pric_dt|1"
+   ]
+  },
+  {
+   "id": "2F5Q-0",
+   "text": "2026-08-28",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250hgst_pric_dt|1"
+   ]
+  },
+  {
+   "id": "2F5S-0",
+   "text": "250최고가대비율",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250hgst_pric_pre_rt|1"
+   ]
+  },
+  {
+   "id": "2F5T-0",
+   "text": "8.4%",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250hgst_pric_pre_rt|1"
+   ]
+  },
+  {
+   "id": "2F5W-0",
+   "text": "250최저가일",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250lwst_pric_dt|1"
+   ]
+  },
+  {
+   "id": "2F5X-0",
+   "text": "2026-08-28",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250lwst_pric_dt|1"
+   ]
+  },
+  {
+   "id": "2F5Z-0",
+   "text": "250최저가대비율",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250lwst_pric_pre_rt|1"
+   ]
+  },
+  {
+   "id": "2F60-0",
+   "text": "8.4%",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:price_range · 8 exact",
+    "Frame",
+    "detail:ka10001:price_range|$.250lwst_pric_pre_rt|1"
+   ]
+  },
+  {
+   "id": "2F63-0",
+   "text": "당일 가격 범위·예상체결",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact"
+   ]
+  },
+  {
+   "id": "2F66-0",
+   "text": "시가",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.open_pric|1"
+   ]
+  },
+  {
+   "id": "2F67-0",
+   "text": "150,850원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.open_pric|1"
+   ]
+  },
+  {
+   "id": "2F69-0",
+   "text": "고가",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.high_pric|1"
+   ]
+  },
+  {
+   "id": "2F6A-0",
+   "text": "150,850원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.high_pric|1"
+   ]
+  },
+  {
+   "id": "2F6D-0",
+   "text": "저가",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.low_pric|1"
+   ]
+  },
+  {
+   "id": "2F6E-0",
+   "text": "150,850원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.low_pric|1"
+   ]
+  },
+  {
+   "id": "2F6G-0",
+   "text": "상한가",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.upl_pric|1"
+   ]
+  },
+  {
+   "id": "2F6H-0",
+   "text": "150,850원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.upl_pric|1"
+   ]
+  },
+  {
+   "id": "2F6K-0",
+   "text": "하한가",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.lst_pric|1"
+   ]
+  },
+  {
+   "id": "2F6L-0",
+   "text": "150,850원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.lst_pric|1"
+   ]
+  },
+  {
+   "id": "2F6N-0",
+   "text": "기준가",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.base_pric|1"
+   ]
+  },
+  {
+   "id": "2F6O-0",
+   "text": "150,850원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.base_pric|1"
+   ]
+  },
+  {
+   "id": "2F6R-0",
+   "text": "예상체결가",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.exp_cntr_pric|1"
+   ]
+  },
+  {
+   "id": "2F6S-0",
+   "text": "150,850원",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.exp_cntr_pric|1"
+   ]
+  },
+  {
+   "id": "2F6U-0",
+   "text": "예상체결수량",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.exp_cntr_qty|1"
+   ]
+  },
+  {
+   "id": "2F6V-0",
+   "text": "5,969,782주",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Workspace",
+    "DV-2 Price Bands",
+    "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+    "Frame",
+    "detail:ka10001:daily_price_band|$.exp_cntr_qty|1"
+   ]
+  },
+  {
+   "id": "2F2B-0",
+   "text": "그룹 제목과 구분선으로 탐색 · 필드별 독립 카드 없음",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Footer",
+    "DV-2 Footer Controls · Chrome"
+   ]
+  },
+  {
+   "id": "2F2C-0",
+   "text": "39 / 39 공식 필드 연결",
+   "path": [
+    "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+    "DV-2 Root · valuation-profile 39/39 · workbench",
+    "DV-2 Workbench Surface",
+    "DV-2 Footer",
+    "DV-2 Footer Controls · Chrome"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2DZE-0",
+   "name": "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+   "component": "Frame",
+   "w": 1440,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "2F15-0",
+   "name": "DV-2 Root · valuation-profile 39/39 · workbench",
+   "component": "Frame",
+   "w": 1440,
+   "h": 900,
+   "depth": 1
+  },
+  {
+   "id": "2F16-0",
+   "name": "DV-2 Workbench Surface",
+   "component": "Frame",
+   "w": 1392,
+   "h": 860,
+   "depth": 2
+  },
+  {
+   "id": "2F17-0",
+   "name": "DV-2 Sticky Header",
+   "component": "Frame",
+   "w": 1390,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "2F1F-0",
+   "name": "DV-2 Identity Quote Strip · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 64,
+   "depth": 4
+  },
+  {
+   "id": "2F1G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F1J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F18-0",
+   "name": "DV-2 Category Tabs",
+   "component": "Frame",
+   "w": 1390,
+   "h": 42,
+   "depth": 3
+  },
+  {
+   "id": "2F1O-0",
+   "name": "DV-2 User Tabs · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 42,
+   "depth": 4
+  },
+  {
+   "id": "2F1P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2F1R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2F1T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2F1V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2F1X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2F19-0",
+   "name": "DV-2 Context Toolbar",
+   "component": "Frame",
+   "w": 1390,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "2F20-0",
+   "name": "DV-2 Context Controls · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 48,
+   "depth": 4
+  },
+  {
+   "id": "2F21-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F22-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "2F25-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "2F1A-0",
+   "name": "DV-2 Workspace",
+   "component": "Frame",
+   "w": 1390,
+   "h": 642,
+   "depth": 3
+  },
+  {
+   "id": "2F1B-0",
+   "name": "DV-2 Company Facts",
+   "component": "Frame",
+   "w": 914,
+   "h": 642,
+   "depth": 4
+  },
+  {
+   "id": "2F2E-0",
+   "name": "DV-2 Company Facts Header · Chrome",
+   "component": "Frame",
+   "w": 912,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "2F2M-0",
+   "name": "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact",
+   "component": "Frame",
+   "w": 912,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F2O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F2P-0",
+   "name": "detail:ka10001:identity_and_capital|$.stk_cd|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F2S-0",
+   "name": "detail:ka10001:identity_and_capital|$.stk_nm|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F2V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F2W-0",
+   "name": "detail:ka10001:identity_and_capital|$.setl_mm|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F2Z-0",
+   "name": "detail:ka10001:identity_and_capital|$.fav|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F32-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F33-0",
+   "name": "detail:ka10001:identity_and_capital|$.cap|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F36-0",
+   "name": "detail:ka10001:identity_and_capital|$.flo_stk|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F3A-0",
+   "name": "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact",
+   "component": "Frame",
+   "w": 912,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F3C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F3D-0",
+   "name": "detail:ka10001:market_scale_and_ownership|$.crd_rt|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F3G-0",
+   "name": "detail:ka10001:market_scale_and_ownership|$.mac|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F3J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F3K-0",
+   "name": "detail:ka10001:market_scale_and_ownership|$.mac_wght|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F3N-0",
+   "name": "detail:ka10001:market_scale_and_ownership|$.for_exh_rt|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F3Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F3R-0",
+   "name": "detail:ka10001:market_scale_and_ownership|$.repl_pric|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F3U-0",
+   "name": "detail:ka10001:market_scale_and_ownership|$.fav_unit|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F3X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F3Y-0",
+   "name": "detail:ka10001:market_scale_and_ownership|$.dstr_stk|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F41-0",
+   "name": "detail:ka10001:market_scale_and_ownership|$.dstr_rt|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F45-0",
+   "name": "DV-2 Group · detail:ka10001:valuation · 6 exact",
+   "component": "Frame",
+   "w": 912,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F47-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F48-0",
+   "name": "detail:ka10001:valuation|$.per|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F4B-0",
+   "name": "detail:ka10001:valuation|$.eps|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F4E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F4F-0",
+   "name": "detail:ka10001:valuation|$.roe|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F4I-0",
+   "name": "detail:ka10001:valuation|$.pbr|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F4L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F4M-0",
+   "name": "detail:ka10001:valuation|$.ev|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F4P-0",
+   "name": "detail:ka10001:valuation|$.bps|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F4T-0",
+   "name": "DV-2 Group · detail:ka10001:financial_performance · 3 exact",
+   "component": "Frame",
+   "w": 912,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F4V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F4W-0",
+   "name": "detail:ka10001:financial_performance|$.sale_amt|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F4Z-0",
+   "name": "detail:ka10001:financial_performance|$.bus_pro|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F52-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "2F53-0",
+   "name": "detail:ka10001:financial_performance|$.cup_nga|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "2F1C-0",
+   "name": "DV-2 Price Bands",
+   "component": "Frame",
+   "w": 422,
+   "h": 642,
+   "depth": 4
+  },
+  {
+   "id": "2F2I-0",
+   "name": "DV-2 Price Facts Header · Chrome",
+   "component": "Frame",
+   "w": 421,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "2F57-0",
+   "name": "DV-2 Group · detail:ka10001:price_range · 8 exact",
+   "component": "Frame",
+   "w": 421,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F59-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 389,
+   "h": 63,
+   "depth": 6
+  },
+  {
+   "id": "2F5A-0",
+   "name": "detail:ka10001:price_range|$.oyr_hgst|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F5D-0",
+   "name": "detail:ka10001:price_range|$.oyr_lwst|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F5G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 389,
+   "h": 63,
+   "depth": 6
+  },
+  {
+   "id": "2F5H-0",
+   "name": "detail:ka10001:price_range|$.250hgst|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F5K-0",
+   "name": "detail:ka10001:price_range|$.250lwst|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F5N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 389,
+   "h": 63,
+   "depth": 6
+  },
+  {
+   "id": "2F5O-0",
+   "name": "detail:ka10001:price_range|$.250hgst_pric_dt|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F5R-0",
+   "name": "detail:ka10001:price_range|$.250hgst_pric_pre_rt|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F5U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 389,
+   "h": 63,
+   "depth": 6
+  },
+  {
+   "id": "2F5V-0",
+   "name": "detail:ka10001:price_range|$.250lwst_pric_dt|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F5Y-0",
+   "name": "detail:ka10001:price_range|$.250lwst_pric_pre_rt|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F62-0",
+   "name": "DV-2 Group · detail:ka10001:daily_price_band · 8 exact",
+   "component": "Frame",
+   "w": 421,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F64-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 389,
+   "h": 63,
+   "depth": 6
+  },
+  {
+   "id": "2F65-0",
+   "name": "detail:ka10001:daily_price_band|$.open_pric|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F68-0",
+   "name": "detail:ka10001:daily_price_band|$.high_pric|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F6B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 389,
+   "h": 63,
+   "depth": 6
+  },
+  {
+   "id": "2F6C-0",
+   "name": "detail:ka10001:daily_price_band|$.low_pric|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F6F-0",
+   "name": "detail:ka10001:daily_price_band|$.upl_pric|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F6I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 389,
+   "h": 63,
+   "depth": 6
+  },
+  {
+   "id": "2F6J-0",
+   "name": "detail:ka10001:daily_price_band|$.lst_pric|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F6M-0",
+   "name": "detail:ka10001:daily_price_band|$.base_pric|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F6P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 389,
+   "h": 63,
+   "depth": 6
+  },
+  {
+   "id": "2F6Q-0",
+   "name": "detail:ka10001:daily_price_band|$.exp_cntr_pric|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F6T-0",
+   "name": "detail:ka10001:daily_price_band|$.exp_cntr_qty|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 63,
+   "depth": 7
+  },
+  {
+   "id": "2F1D-0",
+   "name": "DV-2 Footer",
+   "component": "Frame",
+   "w": 1390,
+   "h": 36,
+   "depth": 3
+  },
+  {
+   "id": "2F2A-0",
+   "name": "DV-2 Footer Controls · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 36,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "삼성전자": 2,
+  "005930 · KOSPI · 전기전자": 1,
+  "150,850원": 9,
+  "+2.35%": 1,
+  "DESIGN FIXTURE · 12:34": 1,
+  "기업정보": 1,
+  "가치지표": 2,
+  "재무": 1,
+  "시장규모·보유": 1,
+  "가격범위": 1,
+  "기준": 1,
+  "최근 결산 ▾": 1,
+  "표시": 1,
+  "원 단위 ▾": 1,
+  "기업·가치 공식 필드 39개": 1,
+  "기업·가치 공식 정보": 1,
+  "23개 필드": 1,
+  "종목 식별·자본": 1,
+  "종목코드": 1,
+  "005930": 1,
+  "종목명": 1,
+  "결산월": 1,
+  "12월": 1,
+  "액면가": 1,
+  "자본금": 1,
+  "9,005,210억원": 8,
+  "상장주식": 1,
+  "5,969,782주": 3,
+  "시장 규모·보유": 1,
+  "신용비율": 1,
+  "8.4%": 6,
+  "시가총액": 1,
+  "시가총액비중": 1,
+  "외인소진률": 1,
+  "대용가": 1,
+  "액면가단위": 1,
+  "150,850": 5,
+  "유통주식": 1,
+  "유통비율": 1,
+  "PER": 1,
+  "18.6배": 2,
+  "EPS": 1,
+  "8,110원": 2,
+  "ROE": 1,
+  "PBR": 1,
+  "EV": 1,
+  "BPS": 1,
+  "재무 실적": 1,
+  "매출액": 1,
+  "영업이익": 1,
+  "당기순이익": 1,
+  "가격 범위": 1,
+  "16개 필드": 1,
+  "연중·250일 가격 범위": 1,
+  "연중최고": 1,
+  "연중최저": 1,
+  "250최고": 1,
+  "250최저": 1,
+  "250최고가일": 1,
+  "2026-08-28": 2,
+  "250최고가대비율": 1,
+  "250최저가일": 1,
+  "250최저가대비율": 1,
+  "당일 가격 범위·예상체결": 1,
+  "시가": 1,
+  "고가": 1,
+  "저가": 1,
+  "상한가": 1,
+  "하한가": 1,
+  "기준가": 1,
+  "예상체결가": 1,
+  "예상체결수량": 1,
+  "그룹 제목과 구분선으로 탐색 · 필드별 독립 카드 없음": 1,
+  "39 / 39 공식 필드 연결": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "68e8420887ef15d93230651a05458f1264cd94af95aceb9fa8778a1f80647b85"
+}

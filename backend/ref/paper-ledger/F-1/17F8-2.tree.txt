@@ -1,0 +1,188 @@
+Frame "CC-01 / R10-B · 증거금·담보·금현물 잔고" (17F8-2) 1440×0
+  Frame "Account Mode Header" (17F9-2) 0×92
+    Frame "Frame" (17FA-2) 0×0
+      Text "내 증거금과 담보, 금현물 잔고를 같…" (17FB-2) 0×0 "내 증거금과 담보, 금현물 잔고를 같이 보여줘"
+      Text "주식 주문가능금액·신용담보비율·D+1…" (17FC-2) 0×0 "주식 주문가능금액·신용담보비율·D+1·D+2 결제와 금현물 수량을 한 계좌 문맥에서 봅니다."
+    Frame "Frame" (17FD-2) 0×0
+      Frame "Frame" (17FE-2) 0×34
+        Text "계좌 연결됨" (17FF-2) 0×0 "계좌 연결됨"
+      Frame "Frame" (17FG-2) 0×34
+        Text "결제 기준 D+2" (17FH-2) 0×0 "결제 기준 D+2"
+  Frame "Account Mode Workspace" (17FJ-2) 0×0
+    Frame "Margin Collateral Account" (17FL-2) 800×0
+      Frame "Frame" (17FM-2) 0×0
+        Frame "Frame" (17FN-2) 0×0
+          Frame "Frame" (17FO-2) 0×34
+            Text "요약" (17FP-2) 0×0 "요약"
+          Frame "Frame" (17FQ-2) 0×34
+            Text "보유" (17FR-2) 0×0 "보유"
+          Frame "Frame" (17FS-2) 0×34
+            Text "예수금" (17FT-2) 0×0 "예수금"
+          Frame "Frame" (17FU-2) 0×34
+            Text "증거금·담보" (17FV-2) 0×0 "증거금·담보"
+          Frame "Frame" (17FW-2) 0×34
+            Text "금현물" (17FX-2) 0×0 "금현물"
+        Text "종합계좌 · 끝 4721" (17FY-2) 0×0 "종합계좌 · 끝 4721"
+      Frame "Frame" (17FZ-2) 0×0
+        Frame "Frame" (17G0-2) 0×0
+          Text "주문 가능금액" (17G1-2) 0×0 "주문 가능금액"
+          Text "raw|kt00005|body|ord_alowa" (17G2-2) 0×0 "38,420,000원"
+          Text "현금 주문 기준" (17G3-2) 0×0 "현금 주문 기준"
+        Frame "Frame" (17G4-2) 0×0
+          Text "평가대용금액" (17G5-2) 0×0 "평가대용금액"
+          Text "raw|kt00013|body|evlt_repl_amt_spg_use_skip" (17G6-2) 0×0 "76,840,000원"
+          Text "대용 평가 원본" (17G7-2) 0×0 "대용 평가 원본"
+        Frame "Frame" (17G8-2) 0×0
+          Text "신용담보비율" (17G9-2) 0×0 "신용담보비율"
+          Text "raw|kt00005|body|crd_grnt_rt" (17GA-2) 0×0 "184.2%"
+          Text "키움 응답 원본" (17GB-2) 0×0 "키움 응답 원본"
+      Frame "주문재원 원본 응답" (2179-0) 800×94
+        Frame "Frame" (217A-0) 800×0
+          Text "주문재원 원본" (217B-0) 0×0 "주문재원 원본"
+          Text "키움 응답값" (217C-0) 0×0 "키움 응답값"
+        Frame "Frame" (217D-0) 800×0
+          Frame "Frame" (217E-0) 0×0
+            Text "예수금" (217F-0) 0×0 "예수금"
+            Text "raw|kt00011|body|entr" (217G-0) 0×0 "47,600,000원"
+          Frame "Frame" (217H-0) 0×0
+            Text "대용금액" (217I-0) 0×0 "대용금액"
+            Text "raw|kt00011|body|repl_amt" (217J-0) 0×0 "18,400,000원"
+          Frame "Frame" (217K-0) 0×0
+            Text "미수금" (217L-0) 0×0 "미수금"
+            Text "raw|kt00011|body|uncla" (217M-0) 0×0 "10,800,000원"
+      Frame "Frame" (17GO-2) 0×0
+        Text "결제와 증거금 변동" (17GP-2) 0×0 "결제와 증거금 변동"
+        Frame "Frame" (17GQ-2) 0×0
+          Frame "Frame" (17GR-2) 0×58
+            Text "오늘" (17GS-2) 110×0 "오늘"
+            Text "예수금" (17GT-2) 360×0 "예수금"
+            Text "raw|kt00001|body|entr" (17GU-2) 0×0 "34,820,000원"
+          Frame "Frame" (17GV-2) 0×58
+            Text "D+1" (17GW-2) 110×0 "D+1"
+            Text "D+1 예수금" (17GX-2) 360×0 "D+1 예수금"
+            Text "raw|kt00001|body|d1_entra" (17GY-2) 0×0 "33,184,400원"
+          Frame "Frame" (17GZ-2) 0×58
+            Text "D+2" (17H0-2) 110×0 "D+2"
+            Text "D+2 예수금" (17H1-2) 360×0 "D+2 예수금"
+            Text "raw|kt00001|body|d2_entra" (17H2-2) 0×0 "31,240,000원"
+      Frame "Frame" (17H3-2) 0×0
+        Rectangle "Rectangle" (17H4-2) 8×8
+        Text "증거금·담보 전체 항목 보기" (17H5-2) 0×0 "증거금·담보 전체 항목 보기"
+      Frame "계좌 원본 901 항목 접근" (217O-0) 800×0
+        Frame "Frame" (217P-0) 800×0
+          Text "ui|account-sections|more-title" (217Q-0) 0×0 "계좌 자료 더 보기"
+          Text "ui|account-sections|more-guidance" (217R-0) 0×0 "이름 있는 영역에서 10개씩 펼쳐봅니다."
+        Frame "Frame" (217S-0) 800×0
+          Frame "Frame" (217T-0) 0×0
+            Text "자산·현금" (217U-0) 0×0 "자산·현금"
+            Text "ui|account-sections|assets-positions" (217V-0) 0×0 "자산·보유 ›"
+          Frame "Frame" (217W-0) 0×0
+            Text "보유·성과" (217X-0) 0×0 "보유·성과"
+            Text "ui|account-sections|cash-settlement" (217Y-0) 0×0 "예수금·결제 ›"
+          Frame "Frame" (217Z-0) 0×0
+            Text "결제·증거금·담보" (2180-0) 0×0 "결제·증거금·담보"
+            Text "ui|account-sections|collateral-gold" (2181-0) 0×0 "담보·금현물 ›"
+      Frame "Frame" (2WL3-0) 0×0
+        Frame "Frame" (2WL4-0) 0×0
+          Text "증거금 구간별 주문가능 재원" (2WL5-0) 0×0 "증거금 구간별 주문가능 재원"
+          Text "kt00011 · kt00012 · …" (2WL6-0) 0×0 "kt00011 · kt00012 · kt00013"
+        Frame "Frame" (2WL7-0) 0×0
+          Frame "Frame" (2WL8-0) 0×0
+            Text "증거금율별 주문가능 (kt00011)" (2WL9-0) 0×0 "증거금율별 주문가능 (kt00011)"
+            Frame "Frame" (2WLA-0) 0×0
+              Text "20% · 30%" (2WLB-0) 0×0 "20% · 30%"
+              Text "156,200,000 · 104,10…" (2WLC-0) 0×0 "156,200,000 · 104,100,000"
+            Frame "Frame" (2WLD-0) 0×0
+              Text "40% · 50%" (2WLE-0) 0×0 "40% · 50%"
+              Text "78,000,000 · 62,400,…" (2WLF-0) 0×0 "78,000,000 · 62,400,000"
+            Frame "Frame" (2WLG-0) 0×0
+              Text "60% · 100%(현금)" (2WLH-0) 0×0 "60% · 100%(현금)"
+              Text "52,000,000 · 31,240,…" (2WLI-0) 0×0 "52,000,000 · 31,240,000"
+            Frame "Frame" (2WLJ-0) 0×0
+              Text "신용보증금율별 (kt00012)" (2WLK-0) 0×0 "신용보증금율별 (kt00012)"
+            Frame "Frame" (2WLL-0) 0×0
+              Text "45% · 50% · 60%" (2WLM-0) 0×0 "45% · 50% · 60%"
+              Text "69,400,000 · 62,480,…" (2WLN-0) 0×0 "69,400,000 · 62,480,000 · 52,060,000"
+            Frame "행 · 계좌·미수 재원" (33FM-0) 0×0
+              Text "계좌·미수 재원" (33FO-0) 0×0 "계좌·미수 재원"
+              Text "62,400,000" (33FN-0) 0×0 "62,400,000"
+          Frame "Frame" (2WLO-0) 0×0
+            Text "증거금 세부 재원 (kt00013)" (2WLP-0) 0×0 "증거금 세부 재원 (kt00013)"
+            Frame "Frame" (2WLQ-0) 0×0
+              Text "당일 · 전일 재사용" (2WLR-0) 0×0 "당일 · 전일 재사용"
+              Text "0원 · 0원" (2WLS-0) 0×0 "0원 · 0원"
+            Frame "Frame" (2WLT-0) 0×0
+              Text "현금 · 대용 재원" (2WLU-0) 0×0 "현금 · 대용 재원"
+              Text "31,240,000 · 12,800,…" (2WLV-0) 0×0 "31,240,000 · 12,800,000"
+            Frame "Frame" (2WLW-0) 0×0
+              Text "신용·대여 담보 · 변제손실" (2WLX-0) 0×0 "신용·대여 담보 · 변제손실"
+              Text "0원 · 0원" (2WLY-0) 0×0 "0원 · 0원"
+            Frame "Frame" (2WLZ-0) 0×0
+              Text "대용 평가·한도" (2WM0-0) 0×0 "대용 평가·한도"
+              Text "12,800,000 / 50,000,…" (2WM1-0) 0×0 "12,800,000 / 50,000,000"
+            Frame "Frame" (2WM2-0) 0×0
+              Text "D+2 재원" (2WM3-0) 0×0 "D+2 재원"
+              Text "29,850,000" (2WM4-0) 0×0 "29,850,000"
+        Text "값이 0이어도 행을 숨기지 않습니다.…" (2WM5-0) 0×0 "값이 0이어도 행을 숨기지 않습니다. 구간은 공식 응답의 증거금율 구간과 1:1입니다."
+    Frame "Account Gold Balance" (17H7-2) 492×0
+      Frame "Frame" (17H8-2) 0×0
+        Text "금현물 잔고" (17H9-2) 0×0 "금현물 잔고"
+        Text "KRX 금시장" (17HA-2) 0×0 "KRX 금시장"
+      Frame "Frame" (17HB-2) 0×0
+        Frame "Frame" (17HC-2) 0×0
+          Frame "Frame" (17HD-2) 0×0
+            Text "평가금액" (17HE-2) 0×0 "평가금액"
+            Text "raw|kt50020|body|tot_est_amt" (17HF-2) 0×0 "16,057,500원"
+          Text "raw|kt50020|gold_acnt_evlt_prst|est_ratio" (17HG-2) 0×0 "+4.85%"
+        Frame "Frame" (17HH-2) 0×0
+          Frame "Frame" (17HI-2) 0×0
+            Text "보유" (17HJ-2) 0×0 "보유"
+            Text "raw|kt50020|gold_acnt_evlt_prst|real_qty" (17HK-2) 0×0 "125주"
+          Frame "Frame" (17HL-2) 0×0
+            Text "매매 가능" (17HM-2) 0×0 "매매 가능"
+            Text "raw|kt50020|gold_acnt_evlt_prst|able_qty" (17HN-2) 0×0 "120주"
+          Frame "Frame" (17HO-2) 0×0
+            Text "매수수량" (17HP-2) 0×0 "매수수량"
+            Text "raw|kt50020|gold_acnt_evlt_prst|buy_qty" (17HQ-2) 0×0 "5주"
+        Frame "Frame" (17HR-2) 0×0
+          Text "raw|kt50020|gold_acnt_evlt_prst|avg_prc" (17HS-2) 0×0 "평균 122,520원"
+          Text "raw|kt50020|gold_acnt_evlt_prst|cur_prc" (17HT-2) 0×0 "현재 128,460원"
+      Frame "Frame" (17HU-2) 0×0
+        Text "거래 원본" (17HV-2) 0×0 "거래 원본"
+        Frame "Frame" (17HW-2) 0×52
+          Text "raw|kt50032|gold_trde_hist|cntr_dt" (17HX-2) 92×0 "09월 02일"
+          Text "raw|kt50020|gold_acnt_evlt_prst|buy_qty" (17HY-2) 0×0 "매수수량 5주"
+          Text "raw|kt50032|gold_trde_hist|deal_amt" (17HZ-2) 0×0 "체결금액 642,000원"
+        Frame "Frame" (17I0-2) 0×0
+          Text "raw|kt50032|gold_trde_hist|cmsn" (17I1-2) 0×0 "수수료 1,284원"
+          Text "raw|kt50032|gold_trde_hist|gold_spot_vat" (17I2-2) 0×0 "부가세 미적용"
+      Frame "Frame" (17I3-2) 0×0
+        Text "금계좌 원본 항목" (17I4-2) 0×0 "금계좌 원본 항목"
+        Frame "Frame" (17I5-2) 0×44
+          Text "현물잔고" (17I6-2) 0×0 "현물잔고"
+          Text "raw|kt50032|gold_trde_hist|spot_remn" (17I7-2) 0×0 "130주"
+        Frame "Frame" (17I8-2) 0×38
+          Text "거래내역 전체 보기" (17I9-2) 0×0 "거래내역 전체 보기"
+      Frame "Frame" (17IA-2) 0×0
+        Rectangle "Rectangle" (17IB-2) 8×8
+        Text "잔고·결제 정보가 정상 갱신됐습니다." (17IC-2) 0×0 "잔고·결제 정보가 정상 갱신됐습니다."
+      Frame "Frame" (17ID-2) 0×0
+        Text "마지막 갱신 14:31:09" (17IE-2) 0×0 "마지막 갱신 14:31:09"
+        Text "계좌번호는 마스킹 표시" (17IF-2) 0×0 "계좌번호는 마스킹 표시"
+      Frame "Frame" (2WM7-0) 0×0
+        Frame "Frame" (2WM8-0) 0×0
+          Text "금현물 예수금·주문·미체결" (2WM9-0) 0×0 "금현물 예수금·주문·미체결"
+          Text "kt50021 · 30 · 31 · …" (2WMA-0) 0×0 "kt50021 · 30 · 31 · 75"
+        Frame "Frame" (2WMB-0) 0×0
+          Text "금현물 예수금" (2WMC-0) 0×0 "금현물 예수금"
+          Text "4,820,000원" (2WMD-0) 0×0 "4,820,000원"
+        Frame "Frame" (2WME-0) 0×0
+          Text "D+1 · D+2 결제 예정" (2WMF-0) 0×0 "D+1 · D+2 결제 예정"
+          Text "0원 · 0원" (2WMG-0) 0×0 "0원 · 0원"
+        Frame "Frame" (2WMH-0) 0×0
+          Text "오늘 주문 · 체결" (2WMI-0) 0×0 "오늘 주문 · 체결"
+          Text "2건 · 1건" (2WMJ-0) 0×0 "2건 · 1건"
+        Frame "Frame" (2WMK-0) 0×0
+          Text "미체결" (2WML-0) 0×0 "미체결"
+          Text "1건 — 금 99.99K 5g 매수 …" (2WMM-0) 0×0 "1건 — 금 99.99K 5g 매수 168,000원"
+        Text "주문·체결 전체 목록은 계좌 카드 주…" (2WMN-0) 0×0 "주문·체결 전체 목록은 계좌 카드 주문·체결 탭과 같은 표 계약을 씁니다."

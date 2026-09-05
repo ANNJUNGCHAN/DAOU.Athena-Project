@@ -1,0 +1,1440 @@
+{
+ "board_id": "3VV9-1",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "38 · 펜 — 새 대화창 모드 선택",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "3VVD-1",
+   "text": "38",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VVF-1",
+   "text": "펜 — 새 대화창 모드 선택",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VVG-1",
+   "text": "펜은 창을 하나 더 엽니다. 어느 모드로 열지부터 묻습니다.",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VVI-1",
+   "text": "신규 · 승인 대기",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VW5-1",
+   "text": "ATHENA",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Titlebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VW7-1",
+   "text": "아테나",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Titlebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VX1-1",
+   "text": "프로젝트",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sidebar",
+    "Sidebar Label"
+   ]
+  },
+  {
+   "id": "3VX6-1",
+   "text": "아테나",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sidebar",
+    "Project Row · hover"
+   ]
+  },
+  {
+   "id": "3VXT-1",
+   "text": "추세추종 v3",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sidebar",
+    "Sessions",
+    "Session Row"
+   ]
+  },
+  {
+   "id": "3VXY-1",
+   "text": "반도체 수급 점검",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sidebar",
+    "Sessions",
+    "Session Row"
+   ]
+  },
+  {
+   "id": "3VY6-1",
+   "text": "성향 지도",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sidebar",
+    "Sessions",
+    "Session Row"
+   ]
+  },
+  {
+   "id": "3VYN-1",
+   "text": "어느 모드로 열까요?",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Sheet Title"
+   ]
+  },
+  {
+   "id": "3VYO-1",
+   "text": "아테나 프로젝트에 창이 하나 더 생깁니다. 지금 돌고 있는 창은 그대로 둡니다.",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Sheet Title"
+   ]
+  },
+  {
+   "id": "3VZA-1",
+   "text": "대화",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 대화"
+   ]
+  },
+  {
+   "id": "3VZB-1",
+   "text": "결과 카드가 쌓이는 기본 창",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 대화"
+   ]
+  },
+  {
+   "id": "3VZD-1",
+   "text": "현재 2개",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 대화",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W0G-1",
+   "text": "그래프",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 그래프"
+   ]
+  },
+  {
+   "id": "3W0H-1",
+   "text": "성향·엔티티·근거를 보는 지도",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 그래프"
+   ]
+  },
+  {
+   "id": "3W0J-1",
+   "text": "현재 1개",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 그래프",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W0P-1",
+   "text": "에이전트",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 에이전트"
+   ]
+  },
+  {
+   "id": "3W0Q-1",
+   "text": "감시·예약 작업을 관제",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 에이전트"
+   ]
+  },
+  {
+   "id": "3W0S-1",
+   "text": "없음",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 에이전트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W29-1",
+   "text": "플러그인",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 플러그인"
+   ]
+  },
+  {
+   "id": "3W2A-1",
+   "text": "설치·권한·MCP 캔버스",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 플러그인"
+   ]
+  },
+  {
+   "id": "3W2C-1",
+   "text": "없음",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 플러그인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W2H-1",
+   "text": "백테스트",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 백테스트 · 선택"
+   ]
+  },
+  {
+   "id": "3W2I-1",
+   "text": "전략 폼·코드·결과 캔버스",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 백테스트 · 선택"
+   ]
+  },
+  {
+   "id": "3W2K-1",
+   "text": "현재 1개",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Mode Cards",
+    "Card · 백테스트 · 선택",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W2U-1",
+   "text": "같은 모드로 여러 개를 열 수 있습니다",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Sheet Footer"
+   ]
+  },
+  {
+   "id": "3W2X-1",
+   "text": "취소",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Sheet Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W2Z-1",
+   "text": "백테스트 창 열기",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Stage",
+    "Stage Body",
+    "Sheet Area",
+    "Mode Sheet",
+    "Sheet Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W59-1",
+   "text": "펜과 ⋯ 는 다른 일을 한다",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "3W5A-1",
+   "text": "NEW WINDOW",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "3W61-1",
+   "text": "1",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W62-1",
+   "text": "펜 = 창 추가",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W63-1",
+   "text": "프로젝트 행의 펜은 새 대화창을 만듭니다. 누르면 곧바로 열지 않고, 어느 모드로 열지부터 묻습니다.",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Rule 1"
+   ]
+  },
+  {
+   "id": "3W67-1",
+   "text": "2",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W68-1",
+   "text": "⋯ = 프로젝트 관리",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W69-1",
+   "text": "고정, 탐색기에서 열기, 제거. 창을 만들지도 닫지도 않습니다. 37번 보드의 메뉴와 같은 것입니다.",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Rule 2"
+   ]
+  },
+  {
+   "id": "3W6D-1",
+   "text": "3",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W6E-1",
+   "text": "모드는 다섯이지만 창은 다섯이 아니다",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W6F-1",
+   "text": "한 프로젝트에 백테스트 창 3개와 대화 창 2개가 동시에 있을 수 있습니다. 창 수를 정하는 것은 모드가 아니라 자원입니다.",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Rule 3"
+   ]
+  },
+  {
+   "id": "3W6Y-1",
+   "text": "지금 코드에 없는 것",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W6Z-1",
+   "text": "상주 채팅 세션은 프로세스 전역에 하나뿐입니다. 실행 중인 질의 핸들도 하나만 유지하고, 새 턴이 오면 기존 턴을 인터럽트합니다. 창을 여러 개 여는 일은 이 구조를 바꾸는 것에서 시작합니다.",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Gap Note"
+   ]
+  },
+  {
+   "id": "3W70-1",
+   "text": "과거 대화를 여는 기능은 있지만 읽기 전용 스냅샷이고 입력이 잠깁니다. 사이드바의 새 대화 버튼은 모드를 실어 보내지만 메인이 그 값을 버립니다.",
+   "path": [
+    "38 · 펜 — 새 대화창 모드 선택",
+    "38 Content",
+    "Interaction Rail",
+    "Gap Note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3VV9-1",
+   "name": "38 · 펜 — 새 대화창 모드 선택",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "3VVA-1",
+   "name": "38 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 86,
+   "depth": 1
+  },
+  {
+   "id": "3VVB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 394,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "3VVC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "3VVE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 330,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "3VVH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 109,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "3VVV-1",
+   "name": "38 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 722,
+   "depth": 1
+  },
+  {
+   "id": "3VVW-1",
+   "name": "Stage",
+   "component": "Frame",
+   "w": 1150,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3VW3-1",
+   "name": "Titlebar",
+   "component": "Frame",
+   "w": 1148,
+   "h": 46,
+   "depth": 3
+  },
+  {
+   "id": "3VW4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3VW6-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 12,
+   "depth": 5
+  },
+  {
+   "id": "3VW8-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 46,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "3VW9-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 45,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "3VWL-1",
+   "name": "Stage Body",
+   "component": "Frame",
+   "w": 1148,
+   "h": 674,
+   "depth": 3
+  },
+  {
+   "id": "3VWM-1",
+   "name": "Sidebar",
+   "component": "Frame",
+   "w": 254,
+   "h": 674,
+   "depth": 4
+  },
+  {
+   "id": "3VX0-1",
+   "name": "Sidebar Label",
+   "component": "Frame",
+   "w": 229,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3VX2-1",
+   "name": "Project Row · hover",
+   "component": "Frame",
+   "w": 229,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3VX3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3VX4-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VX5-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3VX7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3VX8-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3VX9-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VXA-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VXB-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VXC-1",
+   "name": "Pen · focus",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3VXD-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VXE-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3VXO-1",
+   "name": "Sessions",
+   "component": "Frame",
+   "w": 229,
+   "h": 90,
+   "depth": 5
+  },
+  {
+   "id": "3VXP-1",
+   "name": "Session Row",
+   "component": "Frame",
+   "w": 229,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3VXQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3VXR-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3VXS-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "3VXU-1",
+   "name": "Session Row",
+   "component": "Frame",
+   "w": 229,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3VXV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3VXW-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3VXX-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3VXZ-1",
+   "name": "Session Row",
+   "component": "Frame",
+   "w": 229,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3VY0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3VY1-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3VY2-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 9
+  },
+  {
+   "id": "3VY3-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 9
+  },
+  {
+   "id": "3VY4-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 9
+  },
+  {
+   "id": "3VY5-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 9
+  },
+  {
+   "id": "3VWN-1",
+   "name": "Sheet Area",
+   "component": "Frame",
+   "w": 894,
+   "h": 674,
+   "depth": 4
+  },
+  {
+   "id": "3VYL-1",
+   "name": "Mode Sheet",
+   "component": "Frame",
+   "w": 700,
+   "h": 331,
+   "depth": 5
+  },
+  {
+   "id": "3VYM-1",
+   "name": "Sheet Title",
+   "component": "Frame",
+   "w": 650,
+   "h": 43,
+   "depth": 6
+  },
+  {
+   "id": "3VZ5-1",
+   "name": "Mode Cards",
+   "component": "Frame",
+   "w": 650,
+   "h": 168,
+   "depth": 6
+  },
+  {
+   "id": "3VZ6-1",
+   "name": "Card · 대화",
+   "component": "Frame",
+   "w": 122,
+   "h": 168,
+   "depth": 7
+  },
+  {
+   "id": "3VZ7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 36,
+   "depth": 8
+  },
+  {
+   "id": "3VZ8-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 18,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "3VZ9-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 12,
+   "h": 11,
+   "depth": 10
+  },
+  {
+   "id": "3VZC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 58,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "3W09-1",
+   "name": "Card · 그래프",
+   "component": "Frame",
+   "w": 122,
+   "h": 168,
+   "depth": 7
+  },
+  {
+   "id": "3W0A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 36,
+   "depth": 8
+  },
+  {
+   "id": "3W0B-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 18,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "3W0C-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 10
+  },
+  {
+   "id": "3W0D-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 10
+  },
+  {
+   "id": "3W0E-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 10
+  },
+  {
+   "id": "3W0F-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 10
+  },
+  {
+   "id": "3W0I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 58,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "3W0K-1",
+   "name": "Card · 에이전트",
+   "component": "Frame",
+   "w": 122,
+   "h": 168,
+   "depth": 7
+  },
+  {
+   "id": "3W0L-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 36,
+   "depth": 8
+  },
+  {
+   "id": "3W0M-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 18,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "3W0N-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 10
+  },
+  {
+   "id": "3W0O-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 5,
+   "depth": 10
+  },
+  {
+   "id": "3W0R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "3W24-1",
+   "name": "Card · 플러그인",
+   "component": "Frame",
+   "w": 122,
+   "h": 168,
+   "depth": 7
+  },
+  {
+   "id": "3W25-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 36,
+   "depth": 8
+  },
+  {
+   "id": "3W26-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 18,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "3W27-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 12,
+   "depth": 10
+  },
+  {
+   "id": "3W28-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 2,
+   "depth": 10
+  },
+  {
+   "id": "3W2B-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "3W2D-1",
+   "name": "Card · 백테스트 · 선택",
+   "component": "Frame",
+   "w": 122,
+   "h": 168,
+   "depth": 7
+  },
+  {
+   "id": "3W2E-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 36,
+   "depth": 8
+  },
+  {
+   "id": "3W2F-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 18,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "3W2G-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 14,
+   "h": 10,
+   "depth": 10
+  },
+  {
+   "id": "3W2J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 58,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "3W2L-1",
+   "name": "Check",
+   "component": "Frame",
+   "w": 18,
+   "h": 18,
+   "depth": 8
+  },
+  {
+   "id": "3W2M-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 9
+  },
+  {
+   "id": "3W2N-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 5,
+   "depth": 10
+  },
+  {
+   "id": "3W2T-1",
+   "name": "Sheet Footer",
+   "component": "Frame",
+   "w": 650,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "3W2V-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 173,
+   "h": 34,
+   "depth": 7
+  },
+  {
+   "id": "3W2W-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3W2Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 113,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3VVX-1",
+   "name": "Interaction Rail",
+   "component": "Frame",
+   "w": 426,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3W58-1",
+   "name": "Rail Header",
+   "component": "Frame",
+   "w": 388,
+   "h": 26,
+   "depth": 3
+  },
+  {
+   "id": "3W5Y-1",
+   "name": "Rule 1",
+   "component": "Frame",
+   "w": 388,
+   "h": 88,
+   "depth": 3
+  },
+  {
+   "id": "3W5Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3W60-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3W64-1",
+   "name": "Rule 2",
+   "component": "Frame",
+   "w": 388,
+   "h": 88,
+   "depth": 3
+  },
+  {
+   "id": "3W65-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3W66-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3W6A-1",
+   "name": "Rule 3",
+   "component": "Frame",
+   "w": 388,
+   "h": 88,
+   "depth": 3
+  },
+  {
+   "id": "3W6B-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3W6C-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3W6R-1",
+   "name": "Gap Note",
+   "component": "Frame",
+   "w": 388,
+   "h": 139,
+   "depth": 3
+  },
+  {
+   "id": "3W6S-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 18,
+   "depth": 4
+  },
+  {
+   "id": "3W6T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 18,
+   "h": 18,
+   "depth": 5
+  },
+  {
+   "id": "3W6U-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3W6V-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 7
+  },
+  {
+   "id": "3W6W-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "3W6X-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  }
+ ],
+ "text_multiset": {
+  "38": 1,
+  "펜 — 새 대화창 모드 선택": 1,
+  "펜은 창을 하나 더 엽니다. 어느 모드로 열지부터 묻습니다.": 1,
+  "신규 · 승인 대기": 1,
+  "ATHENA": 1,
+  "아테나": 2,
+  "프로젝트": 1,
+  "추세추종 v3": 1,
+  "반도체 수급 점검": 1,
+  "성향 지도": 1,
+  "어느 모드로 열까요?": 1,
+  "아테나 프로젝트에 창이 하나 더 생깁니다. 지금 돌고 있는 창은 그대로 둡니다.": 1,
+  "대화": 1,
+  "결과 카드가 쌓이는 기본 창": 1,
+  "현재 2개": 1,
+  "그래프": 1,
+  "성향·엔티티·근거를 보는 지도": 1,
+  "현재 1개": 2,
+  "에이전트": 1,
+  "감시·예약 작업을 관제": 1,
+  "없음": 2,
+  "플러그인": 1,
+  "설치·권한·MCP 캔버스": 1,
+  "백테스트": 1,
+  "전략 폼·코드·결과 캔버스": 1,
+  "같은 모드로 여러 개를 열 수 있습니다": 1,
+  "취소": 1,
+  "백테스트 창 열기": 1,
+  "펜과 ⋯ 는 다른 일을 한다": 1,
+  "NEW WINDOW": 1,
+  "1": 1,
+  "펜 = 창 추가": 1,
+  "프로젝트 행의 펜은 새 대화창을 만듭니다. 누르면 곧바로 열지 않고, 어느 모드로 열지부터 묻습니다.": 1,
+  "2": 1,
+  "⋯ = 프로젝트 관리": 1,
+  "고정, 탐색기에서 열기, 제거. 창을 만들지도 닫지도 않습니다. 37번 보드의 메뉴와 같은 것입니다.": 1,
+  "3": 1,
+  "모드는 다섯이지만 창은 다섯이 아니다": 1,
+  "한 프로젝트에 백테스트 창 3개와 대화 창 2개가 동시에 있을 수 있습니다. 창 수를 정하는 것은 모드가 아니라 자원입니다.": 1,
+  "지금 코드에 없는 것": 1,
+  "상주 채팅 세션은 프로세스 전역에 하나뿐입니다. 실행 중인 질의 핸들도 하나만 유지하고, 새 턴이 오면 기존 턴을 인터럽트합니다. 창을 여러 개 여는 일은 이 구조를 바꾸는 것에서 시작합니다.": 1,
+  "과거 대화를 여는 기능은 있지만 읽기 전용 스냅샷이고 입력이 잠깁니다. 사이드바의 새 대화 버튼은 모드를 실어 보내지만 메인이 그 값을 버립니다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "3eda351e512312aec9609585c0538279758ff04b24d92320da85f00d757bce34"
+}

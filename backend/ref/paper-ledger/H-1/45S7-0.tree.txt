@@ -1,0 +1,35 @@
+Frame "template/compound" (45S7-0) 360×420
+  Frame "Header" (45SI-0) 0×0
+    Frame "Meta row" (45SJ-0) 0×0
+      Text "Eyebrow" (45SK-0) 0×0 "복합형"
+      Text "As of" (45SL-0) 0×0 "기준 09:42"
+    Text "Title" (45SM-0) 0×0 "핵심 지표와 목록"
+  Frame "Body" (45UC-0) 0×0
+    Frame "KPI band" (45UY-0) 0×0
+      Frame "Frame" (45UZ-0) 0×0
+        Text "총 평가금액" (45V0-0) 0×0 "총 평가금액"
+        Text "124,580,240원" (45V1-0) 0×0 "124,580,240원"
+      Frame "Frame" (45V2-0) 76×0
+        Text "평가손익" (45V3-0) 0×0 "평가손익"
+        Text "+4.96%" (45V4-0) 0×0 "+4.96%"
+      Frame "Frame" (45V5-0) 48×0
+        Text "종목" (45V6-0) 0×0 "종목"
+        Text "8" (45V7-0) 0×0 "8"
+    Frame "Table header" (45V9-0) 0×0
+      Text "종목" (45VA-0) 124×0 "종목"
+      Text "평가금액" (45VB-0) 138×0 "평가금액"
+      Text "수익률" (45VC-0) 72×0 "수익률"
+    Frame "Position 1" (45VE-0) 0×0
+      Frame "Frame" (45VF-0) 124×0
+        Text "삼성전자" (45VG-0) 0×0 "삼성전자"
+        Text "005930" (45VH-0) 0×0 "005930"
+      Text "41,483,750" (45VI-0) 0×0 "41,483,750"
+      Text "+9.04%" (45VJ-0) 72×0 "+9.04%"
+    Frame "Position 2" (45VL-0) 0×0
+      Frame "Frame" (45VM-0) 124×0
+        Text "SK하이닉스" (45VN-0) 0×0 "SK하이닉스"
+        Text "000660" (45VO-0) 0×0 "000660"
+      Text "21,824,000" (45VP-0) 0×0 "21,824,000"
+      Text "+3.17%" (45VQ-0) 72×0 "+3.17%"
+  Frame "Fold note" (460O-0) 0×0
+    Text "상위 2건과 6건 접힘 · 원본에서 …" (460P-0) 0×0 "상위 2건과 6건 접힘 · 원본에서 확인"

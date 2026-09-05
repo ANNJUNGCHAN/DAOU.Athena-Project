@@ -1,0 +1,1858 @@
+{
+ "board_id": "3WXE-1",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "3WXI-1",
+   "text": "43",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WXK-1",
+   "text": "세션 저장 모델 — Open WebUI·Orca 참조",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WXL-1",
+   "text": "레코드 하나, 즉시 쓰기, 창과 분리된 데몬. 이미 검증된 오픈소스의 골격을 그대로 가져온다.",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WXN-1",
+   "text": "신규 · 승인 대기",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WXX-1",
+   "text": "세션 = 레코드 하나",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Session Record",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WXY-1",
+   "text": "SESSION RECORD",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Session Record",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WY0-1",
+   "text": "{\n  \"schemaVersion\": 1, \"id\": \"sess_01JC8QB4M2VT\",\n  \"mode\": \"backtest\",           // chat|graph|agent|plugin|backtest\n  \"projectId\": \"proj_athena\",   // = 폴더 하나\n  \"title\": \"추세추종 v3\", \"titleSource\": \"auto\",\n  \"pinned\": false, \"archived\": false, \"revision\": 212,\n  \"messages\": [ { \"id\", \"parentId\", \"role\", \"text\",\n                  \"thinking\", \"done\", \"toolSteps[]\",\n                  \"cardRefs[]\", \"attachments[]\" } ],\n  \"currentId\": \"msg_12\",        // 렌더 경로 말단\n  \"canvasCards\": [ { \"cardId\", \"seq\", \"kind\",\n                     \"envelope\", \"dataRef\", \"live\" } ],\n  \"workspace\": { \"kind\": \"backtest\",\n                 \"form\": {...}, \"openTabs\": [...],\n                 \"log\": { \"logRef\", \"tail[≤50]\" },\n                 \"result\": { \"runId\", \"metricsRef\" },\n                 \"filters\": {...} },\n  \"viewport\": { \"chat\": { \"anchorMessageId\" },\n                \"canvas\": { \"selectedCardId\" },\n                \"editor\": { \"path\", \"scrollTop\" } },\n  \"jobs\": [ { \"id\": \"job_bt_9f1a\", \"kind\": \"backtest.run\",\n              \"lastSeen\": { \"status\", \"pct\" } } ] }",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Session Record",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WY1-1",
+   "text": "Open WebUI의 chat(JSON) 한 컬럼과 같은 골격. 목록·검색은 인덱스 컬럼(id·mode·projectId·title·pinned·archived·updatedAt)만 읽고 블롭은 열지 않는다.",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Session Record"
+   ]
+  },
+  {
+   "id": "3WY4-1",
+   "text": "쓰기 파이프라인 — 이벤트가 곧 저장",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WY5-1",
+   "text": "WRITE PATH",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X2T-1",
+   "text": "메시지·카드",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 메시지·카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X2W-1",
+   "text": "발생",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 메시지·카드",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X30-1",
+   "text": "main 세션 모델 upsert",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 메시지·카드",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X34-1",
+   "text": "SQLite 커밋 ≤30ms",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 메시지·카드",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X37-1",
+   "text": "폼·코드·필터",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 폼·코드·필터",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X3A-1",
+   "text": "변경",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 폼·코드·필터",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X3E-1",
+   "text": "1s 디바운스 · 최대 5s",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 폼·코드·필터",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X3I-1",
+   "text": "tmp + fsync + rename",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 폼·코드·필터",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X3M-1",
+   "text": "백업 5개 회전",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 폼·코드·필터",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X3P-1",
+   "text": "스트리밍",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 스트리밍",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X3S-1",
+   "text": "델타 200ms",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 스트리밍",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X3W-1",
+   "text": "메모리 버퍼(TTL 10분)",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 스트리밍",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X40-1",
+   "text": "5s 또는 2KB마다 저널 커밋",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 스트리밍",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X44-1",
+   "text": "턴 종료 시 최종 1회",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 스트리밍",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X47-1",
+   "text": "실행 로그",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 실행 로그",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X4A-1",
+   "text": "append 로그",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 실행 로그",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X4E-1",
+   "text": "5s 체크포인트(dirty일 때만)",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 실행 로그",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X4I-1",
+   "text": "스냅샷 + 이후 append 재생",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path",
+    "Lanes",
+    "Lane 실행 로그",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WZZ-1",
+   "text": "디바운스·원자 쓰기·백업 회전은 Orca의 orca-data.json 경로(1s 디바운스, 해시 같으면 스킵, tmp→fsync→rename, .bak.0~4)와 같다. 스트리밍 저널은 Open WebUI가 response_streams를 Redis에 두어 워커가 죽어도 남기는 것과 같은 목적이다.",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Write Path"
+   ]
+  },
+  {
+   "id": "3X02-1",
+   "text": "실행은 데몬이 소유한다",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X03-1",
+   "text": "DAEMON",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X06-1",
+   "text": "셸 창 · 오브 창",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Stack",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X07-1",
+   "text": "보는 자리. 닫아도 아무 일도 없다",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Stack",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X0B-1",
+   "text": "Athena 데몬",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Stack",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X0E-1",
+   "text": "채팅 세션",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Stack",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X0G-1",
+   "text": "백테스트 job",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Stack",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X0I-1",
+   "text": "MCP 프로브",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Stack",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X0K-1",
+   "text": "루틴 실행",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Stack",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X0L-1",
+   "text": "pid·token으로 창이 다시 붙는다(warm reattach)",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Stack",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X0P-1",
+   "text": "백엔드 · SQLite · 프로젝트 폴더",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Stack",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X0Q-1",
+   "text": "job 테이블 · heartbeat · 부팅 시 reconcile",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon",
+    "Stack",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X0R-1",
+   "text": "Orca가 PTY를 데몬에 두어 창을 닫거나 앱이 죽어도 에이전트가 계속 도는 구조. 데몬이 없을 때만 세션 id로 콜드 재개(claude --resume)한다. 채팅 턴도 이 데몬으로 옮겨야 '창을 떠나도 계속'이 대화 모드에서 성립한다.",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Top Row",
+    "Card Daemon"
+   ]
+  },
+  {
+   "id": "3X0U-1",
+   "text": "참조 앱 대조 — 무엇을 가져오고 무엇을 바꾸는가",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X0V-1",
+   "text": "REFERENCES",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X0Y-1",
+   "text": "앱",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Header Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X10-1",
+   "text": "저장 단위",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Header Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X12-1",
+   "text": "저장 시점",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Header Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X14-1",
+   "text": "스트리밍 중",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Header Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X16-1",
+   "text": "재접속·복원",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Header Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X18-1",
+   "text": "프로젝트·삭제",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Header Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1B-1",
+   "text": "Open WebUI",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Open WebUI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1D-1",
+   "text": "chat JSON 한 레코드 + chat_message 정규화 이중 기록",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Open WebUI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1F-1",
+   "text": "사용자 메시지·assistant 자리표시자를 스트리밍 전에 먼저 커밋, 최종 1회 upsert",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Open WebUI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1H-1",
+   "text": "토큰은 Redis response_streams에만, DB엔 안 씀",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Open WebUI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1J-1",
+   "text": "GET /chats/{id}가 진행 중 스트림을 overlay, 살아있는 task 조회로 화해",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Open WebUI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1L-1",
+   "text": "folder_id 하나로 폴더 귀속, 핀·아카이브는 boolean",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Open WebUI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1O-1",
+   "text": "Orca",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Orca",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1Q-1",
+   "text": "orca-data.json 단일 스토어 + 워크트리별 meta",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Orca",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1S-1",
+   "text": "1s 디바운스·해시 스킵·원자 쓰기·백업 5개",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Orca",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1U-1",
+   "text": "터미널: 5s 체크포인트 + append 로그",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Orca",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1W-1",
+   "text": "데몬 warm reattach, 없으면 claude --resume",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Orca",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X1Y-1",
+   "text": "작업마다 git worktree, 삭제는 trash 폴더 경유",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Orca",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X21-1",
+   "text": "Claude Code · Codex",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Claude Code",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X23-1",
+   "text": "세션 JSONL(프로젝트 cwd별 폴더)",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Claude Code",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X25-1",
+   "text": "턴마다 append",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Claude Code",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X27-1",
+   "text": "부분 응답도 JSONL에 남음",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Claude Code",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X29-1",
+   "text": "--resume·--continue로 이어 붙임",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Claude Code",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X2B-1",
+   "text": "cwd가 곧 프로젝트",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Claude Code",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X2E-1",
+   "text": "Athena (이 설계)",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Athena",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X2G-1",
+   "text": "세션 레코드 하나(messages·cards·workspace·viewport·jobs) + 인덱스 컬럼",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Athena",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X2I-1",
+   "text": "메시지·카드 즉시, 폼·코드·필터 1s 디바운스, 원자 쓰기·백업 5",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Athena",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X2K-1",
+   "text": "200ms 버퍼 + 5s 저널 커밋, 최종 1회",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Athena",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X2M-1",
+   "text": "세션 로드 → jobs 화해 → 버퍼 overlay, 데몬 reattach",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Athena",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X2O-1",
+   "text": "projectId = 폴더 하나, 제거는 trash 경유 영구 삭제",
+   "path": [
+    "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+    "43 Content",
+    "Compare Table",
+    "Row Athena",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3WXE-1",
+   "name": "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "3WXF-1",
+   "name": "43 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 86,
+   "depth": 1
+  },
+  {
+   "id": "3WXG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 596,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "3WXH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "3WXJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 532,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "3WXM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 109,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "3WXT-1",
+   "name": "43 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 722,
+   "depth": 1
+  },
+  {
+   "id": "3WXU-1",
+   "name": "Top Row",
+   "component": "Frame",
+   "w": 1600,
+   "h": 440,
+   "depth": 2
+  },
+  {
+   "id": "3WXV-1",
+   "name": "Card Session Record",
+   "component": "Frame",
+   "w": 560,
+   "h": 440,
+   "depth": 3
+  },
+  {
+   "id": "3WXW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 522,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WXZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 522,
+   "h": 334,
+   "depth": 4
+  },
+  {
+   "id": "3WY2-1",
+   "name": "Card Write Path",
+   "component": "Frame",
+   "w": 608,
+   "h": 440,
+   "depth": 3
+  },
+  {
+   "id": "3WY3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 570,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3X2Q-1",
+   "name": "Lanes",
+   "component": "Frame",
+   "w": 570,
+   "h": 334,
+   "depth": 4
+  },
+  {
+   "id": "3X2R-1",
+   "name": "Lane 메시지·카드",
+   "component": "Frame",
+   "w": 570,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "3X2S-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3X2U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 472,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3X2V-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X2X-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3X2Y-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3X2Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X31-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3X32-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3X33-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X35-1",
+   "name": "Lane 폼·코드·필터",
+   "component": "Frame",
+   "w": 570,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "3X36-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3X38-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 472,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3X39-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X3B-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3X3C-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3X3D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X3F-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3X3G-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3X3H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X3J-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3X3K-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3X3L-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 79,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X3N-1",
+   "name": "Lane 스트리밍",
+   "component": "Frame",
+   "w": 570,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "3X3O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3X3Q-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 472,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3X3R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 70,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X3T-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3X3U-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3X3V-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X3X-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3X3Y-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3X3Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X41-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3X42-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3X43-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 106,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X45-1",
+   "name": "Lane 실행 로그",
+   "component": "Frame",
+   "w": 570,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "3X46-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3X48-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 472,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3X49-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 74,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X4B-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3X4C-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3X4D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X4F-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3X4G-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3X4H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 142,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3X00-1",
+   "name": "Card Daemon",
+   "component": "Frame",
+   "w": 400,
+   "h": 440,
+   "depth": 3
+  },
+  {
+   "id": "3X01-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3X04-1",
+   "name": "Stack",
+   "component": "Frame",
+   "w": 362,
+   "h": 320,
+   "depth": 4
+  },
+  {
+   "id": "3X05-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 60,
+   "depth": 5
+  },
+  {
+   "id": "3X08-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3X09-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3X0A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 88,
+   "depth": 5
+  },
+  {
+   "id": "3X0C-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 336,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3X0D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 60,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "3X0F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 74,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "3X0H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 71,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "3X0J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 60,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "3X0M-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3X0N-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3X0O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 60,
+   "depth": 5
+  },
+  {
+   "id": "3X0S-1",
+   "name": "Compare Table",
+   "component": "Frame",
+   "w": 1600,
+   "h": 266,
+   "depth": 2
+  },
+  {
+   "id": "3X0T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1566,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "3X0W-1",
+   "name": "Header Row",
+   "component": "Frame",
+   "w": 1566,
+   "h": 30,
+   "depth": 3
+  },
+  {
+   "id": "3X0X-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X0Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X11-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X13-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X15-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X17-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X19-1",
+   "name": "Row Open WebUI",
+   "component": "Frame",
+   "w": 1566,
+   "h": 45,
+   "depth": 3
+  },
+  {
+   "id": "3X1A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3X1C-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X1E-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "3X1G-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X1I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "3X1K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X1M-1",
+   "name": "Row Orca",
+   "component": "Frame",
+   "w": 1566,
+   "h": 45,
+   "depth": 3
+  },
+  {
+   "id": "3X1N-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3X1P-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X1R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X1T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X1V-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X1X-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X1Z-1",
+   "name": "Row Claude Code",
+   "component": "Frame",
+   "w": 1566,
+   "h": 45,
+   "depth": 3
+  },
+  {
+   "id": "3X20-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3X22-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X24-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X26-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X28-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X2A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X2C-1",
+   "name": "Row Athena",
+   "component": "Frame",
+   "w": 1566,
+   "h": 44,
+   "depth": 3
+  },
+  {
+   "id": "3X2D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3X2F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "3X2H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X2J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X2L-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3X2N-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 283,
+   "h": 14,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "43": 1,
+  "세션 저장 모델 — Open WebUI·Orca 참조": 1,
+  "레코드 하나, 즉시 쓰기, 창과 분리된 데몬. 이미 검증된 오픈소스의 골격을 그대로 가져온다.": 1,
+  "신규 · 승인 대기": 1,
+  "세션 = 레코드 하나": 1,
+  "SESSION RECORD": 1,
+  "{\n  \"schemaVersion\": 1, \"id\": \"sess_01JC8QB4M2VT\",\n  \"mode\": \"backtest\",           // chat|graph|agent|plugin|backtest\n  \"projectId\": \"proj_athena\",   // = 폴더 하나\n  \"title\": \"추세추종 v3\", \"titleSource\": \"auto\",\n  \"pinned\": false, \"archived\": false, \"revision\": 212,\n  \"messages\": [ { \"id\", \"parentId\", \"role\", \"text\",\n                  \"thinking\", \"done\", \"toolSteps[]\",\n                  \"cardRefs[]\", \"attachments[]\" } ],\n  \"currentId\": \"msg_12\",        // 렌더 경로 말단\n  \"canvasCards\": [ { \"cardId\", \"seq\", \"kind\",\n                     \"envelope\", \"dataRef\", \"live\" } ],\n  \"workspace\": { \"kind\": \"backtest\",\n                 \"form\": {...}, \"openTabs\": [...],\n                 \"log\": { \"logRef\", \"tail[≤50]\" },\n                 \"result\": { \"runId\", \"metricsRef\" },\n                 \"filters\": {...} },\n  \"viewport\": { \"chat\": { \"anchorMessageId\" },\n                \"canvas\": { \"selectedCardId\" },\n                \"editor\": { \"path\", \"scrollTop\" } },\n  \"jobs\": [ { \"id\": \"job_bt_9f1a\", \"kind\": \"backtest.run\",\n              \"lastSeen\": { \"status\", \"pct\" } } ] }": 1,
+  "Open WebUI의 chat(JSON) 한 컬럼과 같은 골격. 목록·검색은 인덱스 컬럼(id·mode·projectId·title·pinned·archived·updatedAt)만 읽고 블롭은 열지 않는다.": 1,
+  "쓰기 파이프라인 — 이벤트가 곧 저장": 1,
+  "WRITE PATH": 1,
+  "메시지·카드": 1,
+  "발생": 1,
+  "main 세션 모델 upsert": 1,
+  "SQLite 커밋 ≤30ms": 1,
+  "폼·코드·필터": 1,
+  "변경": 1,
+  "1s 디바운스 · 최대 5s": 1,
+  "tmp + fsync + rename": 1,
+  "백업 5개 회전": 1,
+  "스트리밍": 1,
+  "델타 200ms": 1,
+  "메모리 버퍼(TTL 10분)": 1,
+  "5s 또는 2KB마다 저널 커밋": 1,
+  "턴 종료 시 최종 1회": 1,
+  "실행 로그": 1,
+  "append 로그": 1,
+  "5s 체크포인트(dirty일 때만)": 1,
+  "스냅샷 + 이후 append 재생": 1,
+  "디바운스·원자 쓰기·백업 회전은 Orca의 orca-data.json 경로(1s 디바운스, 해시 같으면 스킵, tmp→fsync→rename, .bak.0~4)와 같다. 스트리밍 저널은 Open WebUI가 response_streams를 Redis에 두어 워커가 죽어도 남기는 것과 같은 목적이다.": 1,
+  "실행은 데몬이 소유한다": 1,
+  "DAEMON": 1,
+  "셸 창 · 오브 창": 1,
+  "보는 자리. 닫아도 아무 일도 없다": 1,
+  "Athena 데몬": 1,
+  "채팅 세션": 1,
+  "백테스트 job": 1,
+  "MCP 프로브": 1,
+  "루틴 실행": 1,
+  "pid·token으로 창이 다시 붙는다(warm reattach)": 1,
+  "백엔드 · SQLite · 프로젝트 폴더": 1,
+  "job 테이블 · heartbeat · 부팅 시 reconcile": 1,
+  "Orca가 PTY를 데몬에 두어 창을 닫거나 앱이 죽어도 에이전트가 계속 도는 구조. 데몬이 없을 때만 세션 id로 콜드 재개(claude --resume)한다. 채팅 턴도 이 데몬으로 옮겨야 '창을 떠나도 계속'이 대화 모드에서 성립한다.": 1,
+  "참조 앱 대조 — 무엇을 가져오고 무엇을 바꾸는가": 1,
+  "REFERENCES": 1,
+  "앱": 1,
+  "저장 단위": 1,
+  "저장 시점": 1,
+  "스트리밍 중": 1,
+  "재접속·복원": 1,
+  "프로젝트·삭제": 1,
+  "Open WebUI": 1,
+  "chat JSON 한 레코드 + chat_message 정규화 이중 기록": 1,
+  "사용자 메시지·assistant 자리표시자를 스트리밍 전에 먼저 커밋, 최종 1회 upsert": 1,
+  "토큰은 Redis response_streams에만, DB엔 안 씀": 1,
+  "GET /chats/{id}가 진행 중 스트림을 overlay, 살아있는 task 조회로 화해": 1,
+  "folder_id 하나로 폴더 귀속, 핀·아카이브는 boolean": 1,
+  "Orca": 1,
+  "orca-data.json 단일 스토어 + 워크트리별 meta": 1,
+  "1s 디바운스·해시 스킵·원자 쓰기·백업 5개": 1,
+  "터미널: 5s 체크포인트 + append 로그": 1,
+  "데몬 warm reattach, 없으면 claude --resume": 1,
+  "작업마다 git worktree, 삭제는 trash 폴더 경유": 1,
+  "Claude Code · Codex": 1,
+  "세션 JSONL(프로젝트 cwd별 폴더)": 1,
+  "턴마다 append": 1,
+  "부분 응답도 JSONL에 남음": 1,
+  "--resume·--continue로 이어 붙임": 1,
+  "cwd가 곧 프로젝트": 1,
+  "Athena (이 설계)": 1,
+  "세션 레코드 하나(messages·cards·workspace·viewport·jobs) + 인덱스 컬럼": 1,
+  "메시지·카드 즉시, 폼·코드·필터 1s 디바운스, 원자 쓰기·백업 5": 1,
+  "200ms 버퍼 + 5s 저널 커밋, 최종 1회": 1,
+  "세션 로드 → jobs 화해 → 버퍼 overlay, 데몬 reattach": 1,
+  "projectId = 폴더 하나, 제거는 trash 경유 영구 삭제": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "102aaa599421dbcdb9c09488f654921b97b3715267ce6d276d62bb61d5ce7ab5"
+}

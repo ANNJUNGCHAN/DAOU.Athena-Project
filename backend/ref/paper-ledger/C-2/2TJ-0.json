@@ -1,0 +1,942 @@
+{
+ "board_id": "2TJ-0",
+ "page": "C-2",
+ "page_name": "키우미",
+ "name": "02 · 키우미 — 표정 10종",
+ "width": 1000.0,
+ "height": 540.0,
+ "texts": [
+  {
+   "id": "2TL-0",
+   "text": "표정 10종은 눈 모양과 시선만으로 만든다",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "설명"
+   ]
+  },
+  {
+   "id": "2TM-0",
+   "text": "바이저 색·헬멧·링은 고정하고 흰 도형만 바꾼다. 앱이 가진 신호 상태 14가지는 전부 이 10종 안으로 들어온다.",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "설명"
+   ]
+  },
+  {
+   "id": "2TY-0",
+   "text": "기본",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 1행",
+    "① 기본 — 대기·듣는 중·경계",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TZ-0",
+   "text": "대기 · 듣는 중 · 경계",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 1행",
+    "① 기본 — 대기·듣는 중·경계",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U8-0",
+   "text": "웃음",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 1행",
+    "② 웃음 — 작업 완료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U9-0",
+   "text": "요청한 일이 끝남",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 1행",
+    "② 웃음 — 작업 완료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UI-0",
+   "text": "윙크",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 1행",
+    "③ 윙크 — 승인됨",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UJ-0",
+   "text": "승인 반영됨",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 1행",
+    "③ 윙크 — 승인됨",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UU-0",
+   "text": "즐거움",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 1행",
+    "④ 즐거움 — 목표 달성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UV-0",
+   "text": "목표가 도달",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 1행",
+    "④ 즐거움 — 목표 달성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V4-0",
+   "text": "놀람",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 1행",
+    "⑤ 놀람 — 발화·급변",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V5-0",
+   "text": "발화 · 변동성 급등",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 1행",
+    "⑤ 놀람 — 발화·급변",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2VG-0",
+   "text": "찡그림",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 2행",
+    "⑥ 찡그림 — 오류·연결 끊김",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2VH-0",
+   "text": "호출 실패 · 연결 끊김",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 2행",
+    "⑥ 찡그림 — 오류·연결 끊김",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2VR-0",
+   "text": "우는",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 2행",
+    "⑦ 우는 — 감시 복원 실패",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2VS-0",
+   "text": "감시 복원 실패",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 2행",
+    "⑦ 우는 — 감시 복원 실패",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2W3-0",
+   "text": "시무룩",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 2행",
+    "⑧ 시무룩 — 루틴 만료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2W4-0",
+   "text": "루틴 만료로 종료",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 2행",
+    "⑧ 시무룩 — 루틴 만료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WD-0",
+   "text": "졸림",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 2행",
+    "⑨ 졸림 — 잠듦·장 마감",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WE-0",
+   "text": "잠듦 · 장 마감",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 2행",
+    "⑨ 졸림 — 잠듦·장 마감",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WQ-0",
+   "text": "생각 중",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 2행",
+    "⑩ 생각 중 — 판단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WR-0",
+   "text": "판단 · 호출 중 — 모양은 기본, 시선이 위를 훑는다",
+   "path": [
+    "02 · 키우미 — 표정 10종",
+    "표정 2행",
+    "⑩ 생각 중 — 판단",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2TJ-0",
+   "name": "02 · 키우미 — 표정 10종",
+   "component": "Frame",
+   "w": 1000.0,
+   "h": 540.0,
+   "depth": 0
+  },
+  {
+   "id": "2TK-0",
+   "name": "설명",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "2TN-0",
+   "name": "표정 1행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "2TQ-0",
+   "name": "① 기본 — 대기·듣는 중·경계",
+   "component": "Frame",
+   "w": 164.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2TR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2TS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2TT-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2TU-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2TV-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2TW-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2TX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2U0-0",
+   "name": "② 웃음 — 작업 완료",
+   "component": "Frame",
+   "w": 164.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2U1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2U2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2U3-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2U4-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2U5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2U6-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2U7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2UA-0",
+   "name": "③ 윙크 — 승인됨",
+   "component": "Frame",
+   "w": 164.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2UB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2UC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2X4-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2X5-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2X6-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2UG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2UH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2UK-0",
+   "name": "④ 즐거움 — 목표 달성",
+   "component": "Frame",
+   "w": 164.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2UL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2UM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2UN-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2UO-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2UP-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2US-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2UT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2UW-0",
+   "name": "⑤ 놀람 — 발화·급변",
+   "component": "Frame",
+   "w": 164.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2UX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2UY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2UZ-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2V0-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2V1-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2V2-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2V3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2TO-0",
+   "name": "표정 2행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "2V7-0",
+   "name": "⑥ 찡그림 — 오류·연결 끊김",
+   "component": "Frame",
+   "w": 164.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2V8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2V9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2VA-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2VB-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2VC-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2VD-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2VE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16.0,
+   "h": 16.0,
+   "depth": 4
+  },
+  {
+   "id": "2VF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2VI-0",
+   "name": "⑦ 우는 — 감시 복원 실패",
+   "component": "Frame",
+   "w": 164.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2VJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2VK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2QCO-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2QCP-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2QCQ-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2QCR-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2VP-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2VQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2VT-0",
+   "name": "⑧ 시무룩 — 루틴 만료",
+   "component": "Frame",
+   "w": 164.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2VU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2VV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2QE2-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2QE3-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2QE4-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2W1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2W2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2W5-0",
+   "name": "⑨ 졸림 — 잠듦·장 마감",
+   "component": "Frame",
+   "w": 164.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2W6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2W7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2W8-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2W9-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2WA-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2WB-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2WC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2WF-0",
+   "name": "⑩ 생각 중 — 판단",
+   "component": "Frame",
+   "w": 164.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2WG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2WH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2QCX-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2QCY-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2QCZ-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2WO-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2WP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "표정 10종은 눈 모양과 시선만으로 만든다": 1,
+  "바이저 색·헬멧·링은 고정하고 흰 도형만 바꾼다. 앱이 가진 신호 상태 14가지는 전부 이 10종 안으로 들어온다.": 1,
+  "기본": 1,
+  "대기 · 듣는 중 · 경계": 1,
+  "웃음": 1,
+  "요청한 일이 끝남": 1,
+  "윙크": 1,
+  "승인 반영됨": 1,
+  "즐거움": 1,
+  "목표가 도달": 1,
+  "놀람": 1,
+  "발화 · 변동성 급등": 1,
+  "찡그림": 1,
+  "호출 실패 · 연결 끊김": 1,
+  "우는": 1,
+  "감시 복원 실패": 1,
+  "시무룩": 1,
+  "루틴 만료로 종료": 1,
+  "졸림": 1,
+  "잠듦 · 장 마감": 1,
+  "생각 중": 1,
+  "판단 · 호출 중 — 모양은 기본, 시선이 위를 훑는다": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "061999c4b6a978c2139ee83f57f01f701a109962d5f8ac4feb21f0adcb3ee273"
+}

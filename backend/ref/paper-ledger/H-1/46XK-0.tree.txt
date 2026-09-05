@@ -1,0 +1,35 @@
+Frame "mini/CC-05 / R03-T4 · 수급 — 신용·대차" (46XK-0) 360×420
+  Frame "Header" (46YE-0) 0×0
+    Frame "Meta row" (46YG-0) 0×0
+      Text "Eyebrow" (46YI-0) 0×0
+      Text "As of" (46YH-0) 0×0 "기준 09:42"
+    Text "Title" (46YF-0) 0×0 "신용·대차 수급"
+  Frame "Body" (46XN-0) 0×0
+    Frame "KPI band" (46Y4-0) 0×0
+      Frame "Frame" (46YB-0) 0×0
+        Text "금융투자" (46YD-0) 0×0 "금융투자"
+        Text "금융투자 -842억원" (46YC-0) 0×0 "금융투자 -842억원"
+      Frame "Frame" (46Y8-0) 0×0
+        Text "기관계" (46YA-0) 0×0 "기관계"
+        Text "-1,204억원" (46Y9-0) 0×0 "-1,204억원"
+      Frame "Frame" (46Y5-0) 0×0
+        Text "거래대금" (46Y7-0) 0×0 "거래대금"
+        Text "2.14조원" (46Y6-0) 0×0 "2.14조원"
+    Frame "Table header" (46Y0-0) 0×0
+      Text "항목" (46Y3-0) 0×0 "항목"
+      Text "값" (46Y2-0) 0×0 "값"
+      Text "비고" (46Y1-0) 72×0 "비고"
+    Frame "Position 1" (46XU-0) 0×0
+      Frame "Frame" (46XX-0) 0×0
+        Text "공매도량" (46XZ-0) 0×0 "공매도량"
+        Text "Text" (46XY-0) 0×0
+      Text "529,470주" (46XW-0) 0×0 "529,470주"
+      Text "Text" (46XV-0) 72×0
+    Frame "Position 2" (46XO-0) 0×0
+      Frame "Frame" (46XR-0) 0×0
+        Text "공매도거래대금" (46XT-0) 0×0 "공매도거래대금"
+        Text "Text" (46XS-0) 0×0
+      Text "781억원 · 누적 2,234만주" (46XQ-0) 0×0 "781억원 · 누적 2,234만주"
+      Text "Text" (46XP-0) 72×0
+  Frame "Fold note" (46XL-0) 0×0
+    Text "스칼라 2개, 행 3개 접힘 · 원본…" (46XM-0) 0×0 "스칼라 2개, 행 3개 접힘 · 원본에서 확인"

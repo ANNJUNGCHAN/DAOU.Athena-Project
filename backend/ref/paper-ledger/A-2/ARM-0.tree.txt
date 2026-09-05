@@ -1,0 +1,274 @@
+Frame "02 · 에이전트 — 알람 센터 · 라이브 관제" (ARM-0) 1680×900
+  Frame "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)" (ARN-0) 1520×760
+    Frame "타이틀바" (B26-0) 0×26
+    Frame "창 제어" (B1Y-0) 0×0
+      Frame "Frame" (B24-0) 30×24
+        Rectangle "Rectangle" (B25-0) 9×2
+      Frame "Frame" (B22-0) 30×24
+        Rectangle "Rectangle" (B23-0) 8×8
+      Frame "Frame" (B1Z-0) 30×24
+        SVG "SVG" (B20-0) 0×0
+          SVGVisualElement "Path" (B21-0) 0×0
+    Frame "① 이력 사이드바 268px (리프 1.2.2 · 미구현)" (B09-0) 268×0
+      Frame "사이드바 머리" (B1O-0) 0×0
+        Frame "새 대화" (B1U-0) 0×36
+          SVG "SVG" (B1W-0) 0×0
+            SVGVisualElement "Path" (B1X-0) 0×0
+          Text "새 대화" (B1V-0) 0×0 "새 대화"
+        Frame "검색" (B1P-0) 0×36
+          SVG "SVG" (B1R-0) 0×0
+            SVGVisualElement "Circle" (B1T-0) 0×0
+            SVGVisualElement "Path" (B1S-0) 0×0
+          Text "대화 검색" (B1Q-0) 0×0 "대화 검색"
+      Frame "Frame" (B14-0) 267×0
+        Frame "Frame" (B1M-0) 0×0
+        Frame "Frame" (B1I-0) 0×0
+          SVG "SVG" (B1K-0) 0×0
+            SVGVisualElement "Path" (B1L-0) 0×0
+          Text "대화" (B1J-0) 0×0 "대화"
+        Frame "Frame" (B1B-0) 0×0
+          SVG "SVG" (B1D-0) 0×0
+            SVGVisualElement "Circle" (B1H-0) 0×0
+            SVGVisualElement "Circle" (B1G-0) 0×0
+            SVGVisualElement "Circle" (B1F-0) 0×0
+            SVGVisualElement "Path" (B1E-0) 0×0
+          Text "그래프" (B1C-0) 0×0 "그래프"
+        Frame "Frame" (B15-0) 0×0
+          SVG "SVG" (B19-0) 0×0
+            SVGVisualElement "Path" (B1A-0) 0×0
+          Text "에이전트" (B18-0) 0×0 "에이전트"
+          Frame "Frame" (B16-0) 0×0
+            Text "3" (B17-0) 0×0 "3"
+        Frame "모드 · 플러그인" (2KN7-2) 0×0
+          SVG "SVG" (2KN8-2) 0×0
+            SVGVisualElement "Path" (2KN9-2) 0×0
+          Text "플러그인" (2KNA-2) 0×0 "플러그인"
+        Frame "모드 · 백테스트" (2KOL-2) 0×0
+          SVG "SVG" (2KOM-2) 0×0
+            SVGVisualElement "Path" (2KON-2) 0×0
+            SVGVisualElement "Path" (2KOO-2) 0×0
+          Text "백테스트" (2KOP-2) 0×0 "백테스트"
+      Frame "구분선" (B13-0) 0×1
+      Frame "이력 목록" (B0F-0) 0×0
+        Frame "섹션 · 오늘" (B11-0) 0×0
+          Text "오늘" (B12-0) 0×0 "오늘"
+        Frame "항목 · 선택됨" (B0Y-0) 0×34
+          Text "삼성전자 흐름·재무 같이 보기" (B10-0) 0×0 "삼성전자 흐름·재무 같이 보기"
+          Rectangle "Rectangle" (B0Z-0) 5×5
+        Frame "항목" (B0W-0) 0×34
+          Text "88,000 넘으면 알려줘" (B0X-0) 0×0 "88,000 넘으면 알려줘"
+        Frame "항목" (B0U-0) 0×34
+          Text "코스피 프로그램 매매 동향" (B0V-0) 0×0 "코스피 프로그램 매매 동향"
+        Frame "섹션 · 어제" (B0S-0) 0×0
+          Text "어제" (B0T-0) 0×0 "어제"
+        Frame "항목" (B0Q-0) 0×34
+          Text "SK하이닉스 유상증자 공시 읽기" (B0R-0) 0×0 "SK하이닉스 유상증자 공시 읽기"
+        Frame "항목" (B0O-0) 0×34
+          Text "모의 계좌 잔고 정리" (B0P-0) 0×0 "모의 계좌 잔고 정리"
+        Frame "섹션 · 지난 7일" (B0M-0) 0×0
+          Text "지난 7일" (B0N-0) 0×0 "지난 7일"
+        Frame "항목" (B0K-0) 0×34
+          Text "반도체 ETF 비교" (B0L-0) 0×0 "반도체 ETF 비교"
+        Frame "항목" (B0I-0) 0×34
+          Text "현대차 실적 발표 일정" (B0J-0) 0×0 "현대차 실적 발표 일정"
+        Frame "더 보기" (B0G-0) 0×34
+          Text "더 보기" (B0H-0) 0×0 "더 보기"
+      Frame "사이드바 발치 — 활성 계좌" (B0A-0) 0×48
+        Rectangle "Rectangle" (B0E-0) 7×7
+        Frame "Frame" (B0B-0) 0×0
+          Text "모의-주력" (B0D-0) 0×0 "모의-주력"
+          Text "토큰 5시간 42분 남음" (B0C-0) 0×0 "토큰 5시간 42분 남음"
+    Frame "② 캔버스 영역" (AVF-0) 0×0
+      Frame "Frame" (AVG-0) 811×717
+        Frame "Frame" (B27-0) 0×0
+          Text "에이전트" (B28-0) 0×0 "에이전트"
+          Frame "Frame" (B29-0) 0×0
+            Frame "Frame" (B2A-0) 0×0
+              Text "작업" (B2B-0) 0×0 "작업"
+            Frame "Frame" (B2C-0) 0×0
+              Text "알람 3" (B2D-0) 0×0 "알람 3"
+            Frame "Frame" (B2E-0) 0×0
+              Text "라이브" (B2F-0) 0×0 "라이브"
+            Frame "탭 · 제안 2" (2HQL-2) 0×0
+              Text "제안 2" (2HQM-2) 0×0 "제안 2"
+          Text "모두 읽음으로" (B2G-0) 0×0 "모두 읽음으로"
+        Frame "Frame" (B2H-0) 0×0
+          Frame "Frame" (B2I-0) 390×0
+            Frame "Frame" (B2J-0) 0×0
+              Text "알람" (B2K-0) 0×0 "알람"
+            Frame "Frame" (B2O-0) 0×0
+              Rectangle "Rectangle" (B2P-0) 3×30
+              Text "◆" (B2Q-0) 0×0 "◆"
+              Frame "Frame" (B2R-0) 0×0
+                Text "조건 도달 — 삼성 88,000 돌파" (B2S-0) 0×0 "조건 도달 — 삼성 88,000 돌파"
+                Text "관측 88,100 · 감시 계속 · …" (B2T-0) 0×0 "관측 88,100 · 감시 계속 · 채팅으로"
+              Frame "행 액션 · 읽음" (42RK-1) 0×0
+                Text "읽음" (42RL-1) 0×0 "읽음"
+              Text "15:30" (B2U-0) 0×0 "15:30"
+            Frame "Frame" (B2V-0) 0×0
+              Rectangle "Rectangle" (B2W-0) 3×30
+              Text "◆" (B2X-0) 0×0 "◆"
+              Frame "Frame" (B2Y-0) 0×0
+                Text "성향 제안 — 손익 요약" (B2Z-0) 0×0 "성향 제안 — 손익 요약"
+                Text "보강 21 — 루틴로 만들까요?" (B30-0) 0×0 "보강 21 — 루틴로 만들까요?"
+              Frame "행 액션 · 읽음" (42RN-1) 0×0
+                Text "읽음" (42RO-1) 0×0 "읽음"
+              Text "11:02" (B31-0) 0×0 "11:02"
+            Frame "Frame" (B32-0) 0×0
+              Rectangle "Rectangle" (B33-0) 3×30
+              Text "●" (B34-0) 0×0 "●"
+              Frame "Frame" (B35-0) 0×0
+                Text "브리핑 카드 생성" (B36-0) 0×0 "브리핑 카드 생성"
+                Text "핵심 3건 · 캔버스 2" (B37-0) 0×0 "핵심 3건 · 캔버스 2"
+              Text "09:12" (B38-0) 0×0 "09:12"
+            Frame "Frame" (B39-0) 0×0
+              Rectangle "Rectangle" (B3A-0) 3×30
+              Text "●" (B3B-0) 0×0 "●"
+              Frame "Frame" (B3C-0) 0×0
+                Text "실행 완료 — 아침 브리핑" (B3D-0) 0×0 "실행 완료 — 아침 브리핑"
+                Text "소스 3개 · 8.2s" (B3E-0) 0×0 "소스 3개 · 8.2s"
+              Text "07:30" (B3F-0) 0×0 "07:30"
+            Frame "Frame" (B3G-0) 0×0
+              Rectangle "Rectangle" (B3H-0) 3×30
+              Text "●" (B3I-0) 0×0 "●"
+              Frame "Frame" (B3J-0) 0×0
+                Text "실행 완료 — 시계열 연구 브리핑" (B3K-0) 0×0 "실행 완료 — 시계열 연구 브리핑"
+                Text "소스 4개 · 6.1s" (B3L-0) 0×0 "소스 4개 · 6.1s"
+              Text "어제" (B3M-0) 0×0 "어제"
+            Frame "Frame" (B3N-0) 0×0
+              Rectangle "Rectangle" (B3O-0) 3×30
+              Text "◆" (B3P-0) 0×0 "◆"
+              Frame "Frame" (B3Q-0) 0×0
+                Text "조건 도달 — 코스피 프로그램 매매" (B3R-0) 0×0 "조건 도달 — 코스피 프로그램 매매"
+                Text "관측 순매수 +1,240억 · 감시 …" (B3S-0) 0×0 "관측 순매수 +1,240억 · 감시 계속"
+              Text "어제" (B3T-0) 0×0 "어제"
+            Frame "Frame" (B3U-0) 0×0
+              Text "지난 알람 24건 더" (B3V-0) 0×0 "지난 알람 24건 더"
+          Frame "Frame" (B2L-0) 0×0
+            Text "라이브" (B2M-0) 0×0 "라이브"
+            Frame "Frame" (B3X-0) 0×0
+              Frame "Frame" (B3Y-0) 0×0
+                Text "●" (B3Z-0) 0×0 "●"
+                Text "시세 수집 — 삼성전자" (B40-0) 0×0 "시세 수집 — 삼성전자"
+                Text "실시간" (B41-0) 0×0 "실시간"
+              Text "조건 2/3 · 12초 전 확인" (B42-0) 0×0 "조건 2/3 · 12초 전 확인"
+              Frame "Frame" (B43-0) 0×3
+                Rectangle "Rectangle" (B44-0) 0×3
+            Frame "Frame" (B45-0) 0×0
+              Frame "Frame" (B46-0) 0×0
+                Text "●" (B47-0) 0×0 "●"
+                Text "평일 아침 브리핑" (B48-0) 0×0 "평일 아침 브리핑"
+                Text "대기 → 07:30" (B49-0) 0×0 "대기 → 07:30"
+              Text "49분 후 · 소스 예열됨" (B4A-0) 0×0 "49분 후 · 소스 예열됨"
+              Frame "Frame" (B4B-0) 0×3
+                Rectangle "Rectangle" (B4C-0) 0×3
+            Text "다음 24시간" (B4D-0) 0×0 "다음 24시간"
+            Frame "Frame" (B4E-0) 0×0
+              Frame "Frame" (B4F-0) 0×0
+                Frame "Frame" (B4G-0) 48×0
+                  Text "07:30" (B4H-0) 0×0 "07:30"
+                Text "●" (B4I-0) 0×0 "●"
+                Text "아침 브리핑" (B4J-0) 0×0 "아침 브리핑"
+                Text "기존 채팅" (B4K-0) 0×0 "기존 채팅"
+              Frame "Frame" (B4L-0) 0×0
+                Frame "Frame" (B4M-0) 48×0
+                  Text "08:55" (B4N-0) 0×0 "08:55"
+                Text "●" (B4O-0) 0×0 "●"
+                Text "장 시작 전 말걸기" (B4P-0) 0×0 "장 시작 전 말걸기"
+                Text "프로액티브" (B4Q-0) 0×0 "프로액티브"
+              Frame "Frame" (B4R-0) 0×0
+                Frame "Frame" (B4S-0) 48×0
+                  Text "15:30" (B4T-0) 0×0 "15:30"
+                Text "●" (B4U-0) 0×0 "●"
+                Text "감시 마감 확인" (B4V-0) 0×0 "감시 마감 확인"
+                Text "삼성 88,000" (B4W-0) 0×0 "삼성 88,000"
+              Frame "Frame" (B4X-0) 0×0
+                Frame "Frame" (B4Y-0) 48×0
+                  Text "16:00" (B4Z-0) 0×0 "16:00"
+                Text "●" (B50-0) 0×0 "●"
+                Text "성향 제안 검토" (B51-0) 0×0 "성향 제안 검토"
+                Text "그래프 반영" (B52-0) 0×0 "그래프 반영"
+            Frame "Frame" (B53-0) 0×0
+              Text "● WS 연결됨" (B54-0) 0×0 "● WS 연결됨"
+              Text "발화는 채팅으로 도착 — 여긴 관제만" (B55-0) 0×0 "발화는 채팅으로 도착 — 여긴 관제만"
+    Frame "③ 대화 영역 400px" (ARO-0) 400×0
+      Frame "대화 머리 — 아테나 · 에이전트 대화" (42R2-1) 0×0
+        Rectangle "Rectangle" (42R3-1) 6×6
+        Text "아테나 · 에이전트 대화" (42R4-1) 0×0 "아테나 · 에이전트 대화"
+        Rectangle "Rectangle" (42R5-1) 0×0
+        Text "관제 창 1 · 루틴 · 알람 · 제…" (42R6-1) 0×0 "관제 창 1 · 루틴 · 알람 · 제안"
+      Frame "④ 결과물 · 하위 에이전트 · 출처 도크" (AUO-0) 0×0
+        Frame "결과물" (AVA-0) 0×0
+          Frame "Frame" (AVC-0) 0×0
+            Text "결과물" (AVE-0) 0×0 "결과물"
+            Text "캔버스 2" (AVD-0) 0×0 "캔버스 2"
+          Text "네이버 뉴스 · 삼성전자 일봉" (AVB-0) 0×0 "네이버 뉴스 · 삼성전자 일봉"
+        Frame "하위 에이전트" (AV0-0) 0×0
+          Frame "Frame" (AV7-0) 0×0
+            Text "하위 에이전트" (AV9-0) 0×0 "하위 에이전트"
+            Text "1 / 2" (AV8-0) 0×0 "1 / 2"
+          Frame "Frame" (AV4-0) 0×0
+            Rectangle "Rectangle" (AV6-0) 7×7
+            Text "재무 해석 · 작업 중" (AV5-0) 0×0 "재무 해석 · 작업 중"
+          Frame "Frame" (AV1-0) 0×0
+            Rectangle "Rectangle" (AV3-0) 7×7
+            Text "시세 수집 · 완료" (AV2-0) 0×0 "시세 수집 · 완료"
+        Frame "출처" (AUP-0) 0×0
+          Frame "Frame" (AUX-0) 0×0
+            Text "출처" (AUZ-0) 0×0 "출처"
+            Text "3" (AUY-0) 0×0 "3"
+          Frame "Frame" (AUQ-0) 0×0
+            Frame "Frame" (AUV-0) 0×0
+              Text "일봉 차트" (AUW-0) 0×0 "일봉 차트"
+            Frame "Frame" (AUT-0) 0×0
+              Text "DART 재무제표" (AUU-0) 0×0 "DART 재무제표"
+            Frame "Frame" (AUR-0) 0×0
+              Text "네이버 뉴스" (AUS-0) 0×0 "네이버 뉴스"
+      Frame "history" (AS8-0) 0×0
+        Frame "사용자 턴 · 88,000 알람은 읽음으로" (42RQ-1) 0×0
+          Frame "Frame" (42RR-1) 0×0
+            Text "88,000 알람은 읽음으로" (42RS-1) 0×0 "88,000 알람은 읽음으로"
+        Frame "결과 턴 · 읽음 1건 반영" (42RU-1) 0×0
+          Frame "Frame" (42RV-1) 0×0
+            Frame "Frame" (42RW-1) 0×0
+              Text "알람" (42RX-1) 0×0 "알람"
+            Frame "Frame" (42RY-1) 0×0
+              Text "완료" (42RZ-1) 0×0 "완료"
+            Frame "Frame" (42S0-1) 0×0
+              Text "대화 경로" (42S1-1) 0×0 "대화 경로"
+          Text "읽음 1건 반영 — 조건 도달 · 삼…" (42S2-1) 0×0 "읽음 1건 반영 — 조건 도달 · 삼성 88,000 돌파"
+          Text "남은 알람 3건 · 15:31" (42S3-1) 0×0 "남은 알람 3건 · 15:31"
+        Frame "제안 턴 B · 읽지 않은 알람 3건 — 모두 읽음" (42S5-1) 0×0
+          Frame "Frame" (42S6-1) 0×0
+            Frame "Frame" (42S7-1) 0×0
+              Text "알람" (42S8-1) 0×0 "알람"
+            Frame "Frame" (42S9-1) 0×0
+              Text "제안" (42SA-1) 0×0 "제안"
+            Frame "Frame" (42SB-1) 0×0
+              Text "대화 경로" (42SC-1) 0×0 "대화 경로"
+          Text "읽지 않은 알람 3건 — 모두 읽음" (42SD-1) 0×0 "읽지 않은 알람 3건 — 모두 읽음"
+          Text "근거: 가장 오래된 알람 2시간 전" (42SE-1) 0×0 "근거: 가장 오래된 알람 2시간 전"
+          Frame "칩 행" (42SF-1) 0×0
+            Frame "칩 · 모두 읽음" (42SG-1) 0×0
+              Text "모두 읽음" (42SH-1) 0×0 "모두 읽음"
+            Frame "칩 · 그대로 둘게" (42SI-1) 0×0
+              Text "그대로 둘게" (42SJ-1) 0×0 "그대로 둘게"
+      Frame "input-stack" (ARP-0) 0×0
+        Frame "input-row · 실행 중 (ESC 중단)" (AS2-0) 0×44
+          Text "무엇이든 물어보세요" (AS7-0) 0×0 "무엇이든 물어보세요"
+          Frame "Frame" (AS3-0) 0×0
+            Text "29s" (AS6-0) 0×0 "29s"
+            Frame "Frame" (AS4-0) 0×0
+              Text "ESC 중단" (AS5-0) 0×0 "ESC 중단"
+        Frame "control-strip" (ARQ-0) 0×40
+          Frame "키우미 (#dot 대체) · 호출 중 — 얼굴 열림" (ARY-0) 18×18
+            Frame "visor" (ARZ-0) 11×11
+              Rectangle "Rectangle" (AS1-0) 2×4
+              Rectangle "Rectangle" (AS0-0) 2×4
+          Frame "Frame" (ARW-0) 0×28
+            Text "CLAUDE" (ARX-0) 0×0 "CLAUDE"
+          Frame "Frame" (ARU-0) 0×0
+            Text "감시 2" (ARV-0) 0×0 "감시 2"
+          Rectangle "Rectangle" (ART-0) 0×0
+          Frame "Frame" (ARR-0) 0×28
+            Text "OPUS · HIGH" (ARS-0) 0×0 "OPUS · HIGH"

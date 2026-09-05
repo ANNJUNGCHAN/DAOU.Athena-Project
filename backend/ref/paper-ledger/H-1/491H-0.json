@@ -1,0 +1,92 @@
+{
+ "board_id": "491H-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "491J-0",
+   "text": "원본 보드: CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+   "path": [
+    "note/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "491L-0",
+   "text": "가져온 요소: 전일거래량상위 · 종목코드 · 현재가 · 전일대비 · 거래량",
+   "path": [
+    "note/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "491N-0",
+   "text": "문법: facts",
+   "path": [
+    "note/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "491P-0",
+   "text": "접은 개수: 항목 85개",
+   "path": [
+    "note/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "491H-0",
+   "name": "note/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "491I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "491K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "491M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "491O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-06 / R04-S3 · 종목찾기 — 전일 거래량": 1,
+  "가져온 요소: 전일거래량상위 · 종목코드 · 현재가 · 전일대비 · 거래량": 1,
+  "문법: facts": 1,
+  "접은 개수: 항목 85개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a2e7f9a2fab4772cb399ff7ac9156582e9fb64c2009a1e802e6042060ee292e4"
+}

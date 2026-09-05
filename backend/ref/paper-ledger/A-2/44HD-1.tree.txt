@@ -1,0 +1,316 @@
+Frame "11 · 에이전트 — 노드에서 ‘이상해요’ → AI가 고치고 다시 검사" (44HD-1) 1680×900
+  Frame "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)" (44IX-1) 1520×760
+    Frame "타이틀바" (44RU-1) 0×26
+    Frame "창 제어" (44RM-1) 0×0
+      Frame "Frame" (44RS-1) 30×24
+        Rectangle "Rectangle" (44RT-1) 9×2
+      Frame "Frame" (44RQ-1) 30×24
+        Rectangle "Rectangle" (44RR-1) 8×8
+      Frame "Frame" (44RN-1) 30×24
+        SVG "SVG" (44RO-1) 0×0
+          SVGVisualElement "Path" (44RP-1) 0×0
+    Frame "① 이력 사이드바 268px (리프 1.2.2 · 미구현)" (44PP-1) 268×0
+      Frame "사이드바 머리" (44RC-1) 0×0
+        Frame "새 대화" (44RI-1) 0×36
+          SVG "SVG" (44RK-1) 0×0
+            SVGVisualElement "Path" (44RL-1) 0×0
+          Text "새 대화" (44RJ-1) 0×0 "새 대화"
+        Frame "검색" (44RD-1) 0×36
+          SVG "SVG" (44RF-1) 0×0
+            SVGVisualElement "Circle" (44RH-1) 0×0
+            SVGVisualElement "Path" (44RG-1) 0×0
+          Text "대화 검색" (44RE-1) 0×0 "대화 검색"
+      Frame "Frame" (44QK-1) 267×0
+        Frame "Frame" (44RB-1) 0×0
+        Frame "Frame" (44R7-1) 0×0
+          SVG "SVG" (44R9-1) 0×0
+            SVGVisualElement "Path" (44RA-1) 0×0
+          Text "대화" (44R8-1) 0×0 "대화"
+        Frame "Frame" (44R0-1) 0×0
+          SVG "SVG" (44R2-1) 0×0
+            SVGVisualElement "Circle" (44R6-1) 0×0
+            SVGVisualElement "Circle" (44R5-1) 0×0
+            SVGVisualElement "Circle" (44R4-1) 0×0
+            SVGVisualElement "Path" (44R3-1) 0×0
+          Text "그래프" (44R1-1) 0×0 "그래프"
+        Frame "Frame" (44QU-1) 0×0
+          SVG "SVG" (44QY-1) 0×0
+            SVGVisualElement "Path" (44QZ-1) 0×0
+          Text "에이전트" (44QX-1) 0×0 "에이전트"
+          Frame "Frame" (44QV-1) 0×0
+            Text "3" (44QW-1) 0×0 "3"
+        Frame "모드 · 플러그인" (44QQ-1) 0×0
+          SVG "SVG" (44QS-1) 0×0
+            SVGVisualElement "Path" (44QT-1) 0×0
+          Text "플러그인" (44QR-1) 0×0 "플러그인"
+        Frame "모드 · 백테스트" (44QL-1) 0×0
+          SVG "SVG" (44QN-1) 0×0
+            SVGVisualElement "Path" (44QP-1) 0×0
+            SVGVisualElement "Path" (44QO-1) 0×0
+          Text "백테스트" (44QM-1) 0×0 "백테스트"
+      Frame "구분선" (44QJ-1) 0×1
+      Frame "이력 목록" (44PV-1) 0×0
+        Frame "섹션 · 오늘" (44QH-1) 0×0
+          Text "오늘" (44QI-1) 0×0 "오늘"
+        Frame "항목 · 선택됨" (44QE-1) 0×34
+          Text "삼성전자 흐름·재무 같이 보기" (44QG-1) 0×0 "삼성전자 흐름·재무 같이 보기"
+          Rectangle "Rectangle" (44QF-1) 5×5
+        Frame "항목" (44QC-1) 0×34
+          Text "88,000 넘으면 알려줘" (44QD-1) 0×0 "88,000 넘으면 알려줘"
+        Frame "항목" (44QA-1) 0×34
+          Text "코스피 프로그램 매매 동향" (44QB-1) 0×0 "코스피 프로그램 매매 동향"
+        Frame "섹션 · 어제" (44Q8-1) 0×0
+          Text "어제" (44Q9-1) 0×0 "어제"
+        Frame "항목" (44Q6-1) 0×34
+          Text "SK하이닉스 유상증자 공시 읽기" (44Q7-1) 0×0 "SK하이닉스 유상증자 공시 읽기"
+        Frame "항목" (44Q4-1) 0×34
+          Text "모의 계좌 잔고 정리" (44Q5-1) 0×0 "모의 계좌 잔고 정리"
+        Frame "섹션 · 지난 7일" (44Q2-1) 0×0
+          Text "지난 7일" (44Q3-1) 0×0 "지난 7일"
+        Frame "항목" (44Q0-1) 0×34
+          Text "반도체 ETF 비교" (44Q1-1) 0×0 "반도체 ETF 비교"
+        Frame "항목" (44PY-1) 0×34
+          Text "현대차 실적 발표 일정" (44PZ-1) 0×0 "현대차 실적 발표 일정"
+        Frame "더 보기" (44PW-1) 0×34
+          Text "더 보기" (44PX-1) 0×0 "더 보기"
+      Frame "사이드바 발치 — 활성 계좌" (44PQ-1) 0×48
+        Rectangle "Rectangle" (44PU-1) 7×7
+        Frame "Frame" (44PR-1) 0×0
+          Text "모의-주력" (44PT-1) 0×0 "모의-주력"
+          Text "토큰 5시간 42분 남음" (44PS-1) 0×0 "토큰 5시간 42분 남음"
+    Frame "② 캔버스 영역" (44L3-1) 0×0
+      Frame "Frame" (44L4-1) 811×717
+        Frame "Frame" (44PE-1) 0×0
+          Text "에이전트" (44PO-1) 0×0 "에이전트"
+          Frame "Frame" (44PF-1) 0×0
+            Frame "탭 · 작업 (활성)" (44PM-1) 0×0
+              Text "작업" (44PN-1) 0×0 "작업"
+            Frame "탭 · 알람 3" (44PK-1) 0×0
+              Text "알람 3" (44PL-1) 0×0 "알람 3"
+            Frame "탭 · 라이브" (44PI-1) 0×0
+              Text "라이브" (44PJ-1) 0×0 "라이브"
+            Frame "탭 · 제안 2" (44PG-1) 0×0
+              Text "제안 2" (44PH-1) 0×0 "제안 2"
+        Frame "상태 띠 — 2번째 고침" (45J0-1) 0×0
+          Rectangle "Rectangle" (45J1-1) 6×6
+          Text "새 알람 · 거래량 급증 감시" (45J2-1) 0×0 "새 알람 · 거래량 급증 감시"
+          Text "삼성전자 · 초안 v2 · 2번째 고…" (45J3-1) 0×0 "삼성전자 · 초안 v2 · 2번째 고침 · 다시 검사 3/3 통과"
+          Rectangle "Rectangle" (45J4-1) 0×0
+          Frame "Frame" (45J5-1) 0×0
+            Frame "Frame" (45J6-1) 0×0
+              Text "순환" (45J7-1) 0×0 "순환"
+            Text "물어봄 → 고침 → 검사 → 다시 그…" (45J8-1) 0×0 "물어봄 → 고침 → 검사 → 다시 그림 · 한 바퀴 끝"
+        Frame "노드 · 흐름 (다시 그려짐)" (45JW-1) 0×0
+          Frame "Frame" (45JX-1) 0×0
+            Text "노드 · 흐름" (45JY-1) 0×0 "노드 · 흐름"
+            Text "바뀐 칸 2개에 「방금 바뀜」 · 값…" (45JZ-1) 0×0 "바뀐 칸 2개에 「방금 바뀜」 · 값은 오늘 15:31 기준"
+          Frame "노드 행" (45K0-1) 0×0
+            Frame "노드 · 일봉 불러오기" (45K1-1) 160×0
+              Text "일봉 불러오기" (45K2-1) 0×0 "일봉 불러오기"
+              Text "load_bars · 참고" (45K3-1) 0×0 "load_bars · 참고"
+              Frame "Frame" (45K4-1) 0×0
+                Text "들어감" (45K5-1) 0×0 "들어감"
+              Frame "Frame" (45K6-1) 0×0
+                Text "종목" (45K7-1) 0×0 "종목"
+                Text "삼성전자" (45K8-1) 0×0 "삼성전자"
+              Frame "Frame" (45K9-1) 0×0
+                Text "기간" (45KA-1) 0×0 "기간"
+                Text "최근 60일" (45KB-1) 0×0 "최근 60일"
+              Rectangle "Rectangle" (45KC-1) 0×1
+              Text "나옴" (45KD-1) 0×0 "나옴"
+              Text "봉 60개 + 오늘 봉" (45KE-1) 0×0 "봉 60개 + 오늘 봉"
+            Frame "Frame" (45KF-1) 26×0
+              Text "→" (45KG-1) 0×0 "→"
+            Frame "노드 · 5일 거래량 평균 (방금 바뀜)" (45KH-1) 160×0
+              Frame "Frame" (45KI-1) 0×0
+                Text "5일 거래량 평균" (45KJ-1) 0×0 "5일 거래량 평균"
+                Frame "Frame" (45KK-1) 0×0
+                  Text "방금 바뀜" (45KL-1) 0×0 "방금 바뀜"
+              Text "avg_volume · 참고" (45KM-1) 0×0 "avg_volume · 참고"
+              Frame "Frame" (45KN-1) 0×0
+                Text "들어감" (45KO-1) 0×0 "들어감"
+              Frame "Frame" (45KP-1) 0×0
+                Text "봉" (45KQ-1) 0×0 "봉"
+                Text "60개" (45KR-1) 0×0 "60개"
+              Frame "Frame" (45KS-1) 0×0
+                Text "일수" (45KT-1) 0×0 "일수"
+                Text "3일 → 5일" (45KU-1) 0×0 "3일 → 5일"
+              Rectangle "Rectangle" (45KV-1) 0×1
+              Text "나옴" (45KW-1) 0×0 "나옴"
+              Text "1,300만주" (45KX-1) 0×0 "1,300만주"
+            Frame "Frame" (45KY-1) 26×0
+              Text "→" (45KZ-1) 0×0 "→"
+            Frame "노드 · 배수 비교 (선택 · 이상해요)" (45L0-1) 160×0
+              Frame "Frame" (45L1-1) 0×0
+                Text "배수 비교" (45L2-1) 0×0 "배수 비교"
+                Frame "Frame" (45L3-1) 0×0
+                  Text "방금 바뀜" (45L4-1) 0×0 "방금 바뀜"
+              Text "volume_ratio · 참고" (45L5-1) 0×0 "volume_ratio · 참고"
+              Frame "Frame" (45L6-1) 0×0
+                Text "들어감" (45L7-1) 0×0 "들어감"
+              Frame "Frame" (45L8-1) 0×0
+                Text "오늘 거래량" (45L9-1) 0×0 "오늘 거래량"
+                Text "1,650만주" (45LA-1) 0×0 "1,650만주"
+              Frame "Frame" (45LB-1) 0×0
+                Text "배수" (45LC-1) 0×0 "배수"
+                Text "1.5배 → 2.0배" (45LD-1) 0×0 "1.5배 → 2.0배"
+              Rectangle "Rectangle" (45LE-1) 0×1
+              Text "나옴" (45LF-1) 0×0 "나옴"
+              Text "1.27배 · 안 넘음" (45LG-1) 0×0 "1.27배 · 안 넘음"
+              Frame "칩 · 이상해요" (45LH-1) 0×0
+                Frame "Frame" (45LI-1) 0×0
+                  Text "이상해요" (45LJ-1) 0×0 "이상해요"
+                Frame "Frame" (45LK-1) 0×0
+                  Text "물어볼게요" (45LL-1) 0×0 "물어볼게요"
+            Frame "Frame" (45LM-1) 26×0
+              Text "→" (45LN-1) 0×0 "→"
+            Frame "노드 · 알림" (45LO-1) 160×0
+              Text "알림" (45LP-1) 0×0 "알림"
+              Text "fire · 참고" (45LQ-1) 0×0 "fire · 참고"
+              Frame "Frame" (45LR-1) 0×0
+                Text "들어감" (45LS-1) 0×0 "들어감"
+              Frame "Frame" (45LT-1) 0×0
+                Text "넘음" (45LU-1) 0×0 "넘음"
+                Text "거짓" (45LV-1) 0×0 "거짓"
+              Frame "Frame" (45LW-1) 0×0
+                Text "쿨다운" (45LX-1) 0×0 "쿨다운"
+                Text "1일" (45LY-1) 0×0 "1일"
+              Rectangle "Rectangle" (45LZ-1) 0×1
+              Text "나옴" (45M0-1) 0×0 "나옴"
+              Text "오늘은 조용" (45M1-1) 0×0 "오늘은 조용"
+        Frame "다시 검사 결과 + 한 바퀴 영수증" (45MB-1) 0×0
+          Frame "다시 검사 · 지난 30일" (45MC-1) 0×0
+            Frame "Frame" (45MD-1) 0×0
+              Text "다시 검사 · 지난 30일" (45ME-1) 0×0 "다시 검사 · 지난 30일"
+              Rectangle "Rectangle" (45MF-1) 0×0
+              Text "자동 · 9초" (45MG-1) 0×0 "자동 · 9초"
+            Frame "Frame" (45MH-1) 0×0
+              Text "4번" (45MI-1) 0×0 "4번"
+              Text "→" (45MJ-1) 0×0 "→"
+              Text "2번 울림" (45MK-1) 0×0 "2번 울림"
+              Text "8/12 · 2.3배 · 8/26 ·…" (45ML-1) 0×0 "8/12 · 2.3배 · 8/26 · 2.1배"
+            Frame "30일 점 띠" (45MM-1) 0×0
+              Rectangle "Rectangle" (45MN-1) 10×10
+              Rectangle "Rectangle" (45MO-1) 10×10
+              Rectangle "Rectangle" (45MP-1) 10×10
+              Rectangle "Rectangle" (45MQ-1) 10×10
+              Rectangle "Rectangle" (45MR-1) 10×10
+              Rectangle "Rectangle" (45MS-1) 10×10
+              Rectangle "Rectangle" (45MT-1) 10×10
+              Rectangle "Rectangle" (45MU-1) 10×10
+              Rectangle "Rectangle" (45MV-1) 10×10
+              Rectangle "Rectangle" (45MW-1) 10×10
+              Rectangle "Rectangle" (45MX-1) 10×10
+              Rectangle "Rectangle" (45MY-1) 10×10
+              Rectangle "Rectangle" (45MZ-1) 10×10
+              Rectangle "Rectangle" (45N0-1) 10×10
+              Rectangle "Rectangle" (45N1-1) 10×10
+              Rectangle "Rectangle" (45N2-1) 10×10
+              Rectangle "Rectangle" (45N3-1) 10×10
+              Rectangle "Rectangle" (45N4-1) 10×10
+              Rectangle "Rectangle" (45N5-1) 10×10
+              Rectangle "Rectangle" (45N6-1) 10×10
+              Rectangle "Rectangle" (45N7-1) 10×10
+              Rectangle "Rectangle" (45N8-1) 10×10
+              Rectangle "Rectangle" (45N9-1) 10×10
+              Rectangle "Rectangle" (45NA-1) 10×10
+              Rectangle "Rectangle" (45NB-1) 10×10
+              Rectangle "Rectangle" (45NC-1) 10×10
+              Rectangle "Rectangle" (45ND-1) 10×10
+              Rectangle "Rectangle" (45NE-1) 10×10
+              Rectangle "Rectangle" (45NF-1) 10×10
+              Rectangle "Rectangle" (45NG-1) 10×10
+            Text "회색 두 칸은 고치기 전에 울렸던 날…" (45NH-1) 0×0 "회색 두 칸은 고치기 전에 울렸던 날 · 이제는 안 울림"
+          Frame "한 바퀴 영수증" (45NI-1) 300×0
+            Text "한 바퀴 영수증 · 2번째 고침" (45NJ-1) 0×0 "한 바퀴 영수증 · 2번째 고침"
+            Frame "Frame" (45NK-1) 0×0
+              Text "1" (45NL-1) 14×0 "1"
+              Text "평균 일수 3일 → 5일" (45NM-1) 0×0 "평균 일수 3일 → 5일"
+            Frame "Frame" (45NN-1) 0×0
+              Text "2" (45NO-1) 14×0 "2"
+              Text "배수 1.5배 → 2.0배" (45NP-1) 0×0 "배수 1.5배 → 2.0배"
+            Frame "Frame" (45NQ-1) 0×0
+              Text "✓" (45NR-1) 14×0 "✓"
+              Text "자동 검사 3/3 · 노드 2개 다시…" (45NS-1) 0×0 "자동 검사 3/3 · 노드 2개 다시 그림"
+            Rectangle "Rectangle" (45NT-1) 0×1
+            Frame "Frame" (45NU-1) 0×0
+              Frame "Frame" (45NV-1) 0×32
+                Text "되돌리기" (45NW-1) 0×0 "되돌리기"
+              Frame "Frame" (45NX-1) 0×32
+                Text "지난 고침 1건" (45NY-1) 0×0 "지난 고침 1건"
+            Rectangle "Rectangle" (45NZ-1) 0×0
+            Text "코드는 AI가, 판단은 사람이 · 승…" (45O0-1) 0×0 "코드는 AI가, 판단은 사람이 · 승인 전까지 실행 없음"
+    Frame "③ 대화 영역 400px" (44IY-1) 400×0
+      Frame "대화 머리 — 아테나 · 에이전트 대화" (44KY-1) 0×0
+        Rectangle "Rectangle" (44L2-1) 6×6
+        Text "아테나 · 에이전트 대화" (44L1-1) 0×0 "아테나 · 에이전트 대화"
+        Rectangle "Rectangle" (44L0-1) 0×0
+        Text "관제 창 1 · 루틴 · 알람 · 제…" (44KZ-1) 0×0 "관제 창 1 · 루틴 · 알람 · 제안"
+      Frame "④ 결과물 · 하위 에이전트 · 출처 도크" (44K7-1) 0×0
+        Frame "결과물" (44KT-1) 0×0
+          Frame "Frame" (44KV-1) 0×0
+            Text "결과물" (44KX-1) 0×0 "결과물"
+            Text "캔버스 2" (44KW-1) 0×0 "캔버스 2"
+          Text "네이버 뉴스 · 삼성전자 일봉" (44KU-1) 0×0 "네이버 뉴스 · 삼성전자 일봉"
+        Frame "하위 에이전트" (44KJ-1) 0×0
+          Frame "Frame" (44KQ-1) 0×0
+            Text "하위 에이전트" (44KS-1) 0×0 "하위 에이전트"
+            Text "1 / 2" (44KR-1) 0×0 "1 / 2"
+          Frame "Frame" (44KN-1) 0×0
+            Rectangle "Rectangle" (44KP-1) 7×7
+            Text "재무 해석 · 작업 중" (44KO-1) 0×0 "재무 해석 · 작업 중"
+          Frame "Frame" (44KK-1) 0×0
+            Rectangle "Rectangle" (44KM-1) 7×7
+            Text "시세 수집 · 완료" (44KL-1) 0×0 "시세 수집 · 완료"
+        Frame "출처" (44K8-1) 0×0
+          Frame "Frame" (44KG-1) 0×0
+            Text "출처" (44KI-1) 0×0 "출처"
+            Text "3" (44KH-1) 0×0 "3"
+          Frame "Frame" (44K9-1) 0×0
+            Frame "Frame" (44KE-1) 0×0
+              Text "일봉 차트" (44KF-1) 0×0 "일봉 차트"
+            Frame "Frame" (44KC-1) 0×0
+              Text "DART 재무제표" (44KD-1) 0×0 "DART 재무제표"
+            Frame "Frame" (44KA-1) 0×0
+              Text "네이버 뉴스" (44KB-1) 0×0 "네이버 뉴스"
+      Frame "history" (454P-1) 0×0
+        Frame "어디서 왔는지" (45O2-1) 0×0
+          Text "배수 비교" (45O3-1) 0×0 "배수 비교"
+          Text "칸에서 [이상해요]" (45O4-1) 0×0 "칸에서 [이상해요]"
+        Frame "사용자 턴" (45O6-1) 0×0
+          Frame "Frame" (45O7-1) 0×0
+            Text "너무 자주 울려. 진짜 급증만 알려줘" (45O8-1) 0×0 "너무 자주 울려. 진짜 급증만 알려줘"
+        Frame "영수증 카드 · 고침 결과" (45OA-1) 0×0
+          Frame "Frame" (45OB-1) 0×0
+            Frame "Frame" (45OC-1) 0×0
+              Text "고침" (45OD-1) 0×0 "고침"
+            Frame "Frame" (45OE-1) 0×0
+              Text "다시 검사 통과" (45OF-1) 0×0 "다시 검사 통과"
+          Text "평균을 5일로, 기준을 2.0배로 —…" (45OG-1) 0×0 "평균을 5일로, 기준을 2.0배로 — 지난 30일 4번 → 2번"
+          Text "바뀐 칸: 5일 거래량 평균 · 배수…" (45OH-1) 0×0 "바뀐 칸: 5일 거래량 평균 · 배수 비교 · 오늘 값이면 조용(1.27배)"
+          Frame "칩 행" (45OI-1) 0×0
+            Frame "Frame" (45OJ-1) 0×0
+              Text "이대로 승인" (45OK-1) 0×0 "이대로 승인"
+            Frame "Frame" (45OL-1) 0×0
+              Text "아직 이상해" (45OM-1) 0×0 "아직 이상해"
+            Frame "Frame" (45ON-1) 0×0
+              Text "되돌리기" (45OO-1) 0×0 "되돌리기"
+      Frame "input-stack" (44IZ-1) 0×0
+        Frame "input-row · 실행 중 (ESC 중단)" (44JC-1) 0×44
+          Text "무엇이든 물어보세요" (44JH-1) 0×0 "무엇이든 물어보세요"
+          Frame "Frame" (44JD-1) 0×0
+            Text "29s" (44JG-1) 0×0 "29s"
+            Frame "Frame" (44JE-1) 0×0
+              Text "ESC 중단" (44JF-1) 0×0 "ESC 중단"
+        Frame "control-strip" (44J0-1) 0×40
+          Frame "키우미 (#dot 대체) · 호출 중 — 얼굴 열림" (44J8-1) 18×18
+            Frame "visor" (44J9-1) 11×11
+              Rectangle "Rectangle" (44JB-1) 2×4
+              Rectangle "Rectangle" (44JA-1) 2×4
+          Frame "Frame" (44J6-1) 0×28
+            Text "CLAUDE" (44J7-1) 0×0 "CLAUDE"
+          Frame "Frame" (44J4-1) 0×0
+            Text "감시 2" (44J5-1) 0×0 "감시 2"
+          Rectangle "Rectangle" (44J3-1) 0×0
+          Frame "Frame" (44J1-1) 0×28
+            Text "OPUS · HIGH" (44J2-1) 0×0 "OPUS · HIGH"

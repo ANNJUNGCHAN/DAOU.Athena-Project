@@ -1,0 +1,3977 @@
+{
+ "board_id": "2SKU-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+ "width": 1440,
+ "height": 1110,
+ "texts": [
+  {
+   "id": "2SPQ-1",
+   "text": "내 계좌",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SPP-1",
+   "text": "실시간",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SPM-1",
+   "text": "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SPK-1",
+   "text": "자산 종합",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SPI-1",
+   "text": "보유종목",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SPG-1",
+   "text": "예수금·결제",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SPE-1",
+   "text": "손익·성과",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SPC-1",
+   "text": "주문·체결",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SPA-1",
+   "text": "증거금·담보",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SP8-1",
+   "text": "금현물",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SP4-1",
+   "text": "총자산",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SP3-1",
+   "text": "124,580,240원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SP2-1",
+   "text": "수익률 +4.96%",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SP0-1",
+   "text": "주문가능금액",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SOZ-1",
+   "text": "31,240,000원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SOY-1",
+   "text": "출금가능 28,940,000원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SOW-1",
+   "text": "주식 평가액",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SOV-1",
+   "text": "89,760,240원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SOU-1",
+   "text": "8종목",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SOS-1",
+   "text": "평가손익",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SOR-1",
+   "text": "+4,240,900원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SOQ-1",
+   "text": "매입 85,519,340원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SOO-1",
+   "text": "현금 비중",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SON-1",
+   "text": "28.0%",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SOM-1",
+   "text": "보유종목 8종",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39PM-0",
+   "text": "예수금·결제",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "섹션 헤더"
+   ]
+  },
+  {
+   "id": "39PN-0",
+   "text": "09/01 09:42 기준 · D+2 결제",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "섹션 헤더"
+   ]
+  },
+  {
+   "id": "39QN-0",
+   "text": "현재 예수금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "현재 예수금"
+   ]
+  },
+  {
+   "id": "39QO-0",
+   "text": "34,820,000",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "현재 예수금"
+   ]
+  },
+  {
+   "id": "39QP-0",
+   "text": "랩 출금가능 0원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "현재 예수금"
+   ]
+  },
+  {
+   "id": "39QR-0",
+   "text": "D+1 예상",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "D+1 예상"
+   ]
+  },
+  {
+   "id": "39QS-0",
+   "text": "33,184,400",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "D+1 예상"
+   ]
+  },
+  {
+   "id": "39QT-0",
+   "text": "정산 -1,635,600",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "D+1 예상"
+   ]
+  },
+  {
+   "id": "39QV-0",
+   "text": "D+2 예상",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "D+2 예상"
+   ]
+  },
+  {
+   "id": "39QW-0",
+   "text": "42,263,800",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "D+2 예상"
+   ]
+  },
+  {
+   "id": "39QX-0",
+   "text": "정산 +9,079,400",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "D+2 예상"
+   ]
+  },
+  {
+   "id": "39QZ-0",
+   "text": "출금가능",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "출금가능"
+   ]
+  },
+  {
+   "id": "39R0-0",
+   "text": "28,940,000",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "출금가능"
+   ]
+  },
+  {
+   "id": "39R1-0",
+   "text": "익일 인출 28,940,000원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "예수금 KPI 4칸",
+    "출금가능"
+   ]
+  },
+  {
+   "id": "39SY-0",
+   "text": "결제 예정",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "39SZ-0",
+   "text": "매도 정산",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "39T0-0",
+   "text": "매수 정산",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "39T1-0",
+   "text": "정산 합계",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "39T2-0",
+   "text": "미수 변제소요",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "39T3-0",
+   "text": "출금가능",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "39T4-0",
+   "text": "예수금 예상",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "39T6-0",
+   "text": "오늘 09/01",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "오늘 09/01"
+   ]
+  },
+  {
+   "id": "39T7-0",
+   "text": "0",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "오늘 09/01"
+   ]
+  },
+  {
+   "id": "39T8-0",
+   "text": "0",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "오늘 09/01"
+   ]
+  },
+  {
+   "id": "39T9-0",
+   "text": "0",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "오늘 09/01"
+   ]
+  },
+  {
+   "id": "39TA-0",
+   "text": "0",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "오늘 09/01"
+   ]
+  },
+  {
+   "id": "39TB-0",
+   "text": "28,940,000",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "오늘 09/01"
+   ]
+  },
+  {
+   "id": "39TC-0",
+   "text": "34,820,000",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "오늘 09/01"
+   ]
+  },
+  {
+   "id": "39TE-0",
+   "text": "D+1 09/02",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+1 09/02"
+   ]
+  },
+  {
+   "id": "39TF-0",
+   "text": "0",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+1 09/02"
+   ]
+  },
+  {
+   "id": "39TG-0",
+   "text": "-1,635,600",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+1 09/02"
+   ]
+  },
+  {
+   "id": "39TH-0",
+   "text": "-1,635,600",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+1 09/02"
+   ]
+  },
+  {
+   "id": "39TI-0",
+   "text": "0",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+1 09/02"
+   ]
+  },
+  {
+   "id": "39TJ-0",
+   "text": "27,304,400",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+1 09/02"
+   ]
+  },
+  {
+   "id": "39TK-0",
+   "text": "33,184,400",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+1 09/02"
+   ]
+  },
+  {
+   "id": "39TM-0",
+   "text": "D+2 09/03",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+2 09/03"
+   ]
+  },
+  {
+   "id": "39TN-0",
+   "text": "+12,946,000",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+2 09/03"
+   ]
+  },
+  {
+   "id": "39TO-0",
+   "text": "-3,842,000",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+2 09/03"
+   ]
+  },
+  {
+   "id": "39TQ-0",
+   "text": "+9,079,400",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+2 09/03",
+    "정산 합계 셀"
+   ]
+  },
+  {
+   "id": "39TR-0",
+   "text": "비용 -24,600",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+2 09/03",
+    "정산 합계 셀"
+   ]
+  },
+  {
+   "id": "39TS-0",
+   "text": "0",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+2 09/03"
+   ]
+  },
+  {
+   "id": "39TT-0",
+   "text": "36,383,800",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+2 09/03"
+   ]
+  },
+  {
+   "id": "3GL9-0",
+   "text": "42,263,800",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+2 09/03",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3GLA-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "결제 예정 표",
+    "D+2 09/03",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A4H-0",
+   "text": "일자",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3A4I-0",
+   "text": "구분",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3A4J-0",
+   "text": "내용",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3A4K-0",
+   "text": "금액",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3A4L-0",
+   "text": "상태",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3A4O-0",
+   "text": "09/01",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A4P-0",
+   "text": "결제 09/03",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A4R-0",
+   "text": "매도 결제",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A4U-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A4V-0",
+   "text": "순번 142",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A4X-0",
+   "text": "KODEX 200 250주 · NAVER 4주",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A4Y-0",
+   "text": "대출일 해당 없음",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A4Z-0",
+   "text": "+12,946,000",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제"
+   ]
+  },
+  {
+   "id": "3A50-0",
+   "text": "D+2 예정",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제"
+   ]
+  },
+  {
+   "id": "3A53-0",
+   "text": "09/01",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A54-0",
+   "text": "결제 09/03",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A56-0",
+   "text": "매수 결제",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A59-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5A-0",
+   "text": "순번 141",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5C-0",
+   "text": "SK하이닉스 매수 20주 · 192,100원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5D-0",
+   "text": "대출일 해당 없음",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5E-0",
+   "text": "-3,842,000",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제"
+   ]
+  },
+  {
+   "id": "3A5F-0",
+   "text": "D+2 차감",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제"
+   ]
+  },
+  {
+   "id": "3A5I-0",
+   "text": "09/01",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "수수료·제세금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5J-0",
+   "text": "결제 09/03",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "수수료·제세금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5L-0",
+   "text": "수수료·제세금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "수수료·제세금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5O-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "수수료·제세금",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5P-0",
+   "text": "순번 140",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "수수료·제세금",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5R-0",
+   "text": "매도 거래 비용 합계",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "수수료·제세금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5S-0",
+   "text": "거래세 -5,180 · 농특세 -15,540",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "수수료·제세금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5U-0",
+   "text": "-24,600",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "수수료·제세금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5V-0",
+   "text": "세금 -20,720 · 수수료 -3,880",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "수수료·제세금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A5W-0",
+   "text": "D+2 차감",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "수수료·제세금"
+   ]
+  },
+  {
+   "id": "3G1U-0",
+   "text": "08/31",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제 08/31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G1V-0",
+   "text": "결제 09/02",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제 08/31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G1X-0",
+   "text": "매수 결제",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제 08/31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G20-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제 08/31",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G21-0",
+   "text": "순번 139",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제 08/31",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G23-0",
+   "text": "카카오 매수 40주 · 40,890원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제 08/31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G24-0",
+   "text": "대출일 해당 없음",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제 08/31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G26-0",
+   "text": "-1,635,600",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제 08/31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G28-0",
+   "text": "D+1 예정",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매수 결제 08/31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2C-0",
+   "text": "08/28",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제 08/28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2D-0",
+   "text": "체결 08/26",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제 08/28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2F-0",
+   "text": "매도 결제",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제 08/28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2I-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제 08/28",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2J-0",
+   "text": "순번 138",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제 08/28",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2L-0",
+   "text": "삼성전자 매도 235주 · 152,660원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제 08/28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2M-0",
+   "text": "대출일 해당 없음",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제 08/28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2O-0",
+   "text": "+35,809,090",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제 08/28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2P-0",
+   "text": "비용 -66,010",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제 08/28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2R-0",
+   "text": "완료",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "매도 결제 08/28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2V-0",
+   "text": "08/27",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "배당금 입금 08/27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2W-0",
+   "text": "결제 08/27",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "배당금 입금 08/27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G2Y-0",
+   "text": "배당금 입금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "배당금 입금 08/27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G31-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "배당금 입금 08/27",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G32-0",
+   "text": "순번 137",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "배당금 입금 08/27",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G34-0",
+   "text": "삼성전자 분기 배당 · 세후",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "배당금 입금 08/27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G35-0",
+   "text": "대출일 해당 없음",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "배당금 입금 08/27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G37-0",
+   "text": "+54,300",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "배당금 입금 08/27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G39-0",
+   "text": "완료",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "배당금 입금 08/27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3GKS-0",
+   "text": "08/26",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "이체 입금 08/26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3GKT-0",
+   "text": "결제 08/26",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "이체 입금 08/26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3GKV-0",
+   "text": "이체 입금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "이체 입금 08/26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3GKY-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "이체 입금 08/26",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3GKZ-0",
+   "text": "순번 136",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "이체 입금 08/26",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3GL1-0",
+   "text": "연결 은행계좌에서 이체",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "이체 입금 08/26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3GL2-0",
+   "text": "대출일 해당 없음",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "이체 입금 08/26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3GL4-0",
+   "text": "+5,000,000",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "이체 입금 08/26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3GL6-0",
+   "text": "완료",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "이체 입금 08/26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A7N-0",
+   "text": "최근 7건 표시 · 미수금 0원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금·결제 본문",
+    "거래내역 표",
+    "표 꼬리"
+   ]
+  },
+  {
+   "id": "3U8O-0",
+   "text": "인출·주문 한도",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U8Q-0",
+   "text": "미수 미사용",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U8R-0",
+   "text": "09/01 기준",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U8U-0",
+   "text": "주문가능금액",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "주문가능금액",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U8V-0",
+   "text": "31,240,000원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "주문가능금액",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U8X-0",
+   "text": "현금주문 31,240,000원 · 207주",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "주문가능금액",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U90-0",
+   "text": "출금가능금액",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "출금가능금액",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U91-0",
+   "text": "28,940,000원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "출금가능금액",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U93-0",
+   "text": "추정 28,940,000원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "출금가능금액",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U95-0",
+   "text": "대용금액",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "대용금액"
+   ]
+  },
+  {
+   "id": "3U96-0",
+   "text": "63,280,000원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "대용금액"
+   ]
+  },
+  {
+   "id": "3U99-0",
+   "text": "주문증거금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "주문증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U9C-0",
+   "text": "감면 미적용",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "주문증거금",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U9D-0",
+   "text": "6,240,000원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "주문증거금",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U9F-0",
+   "text": "증거금율 종목 20% · 계좌·적용 40%",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "주문증거금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U9I-0",
+   "text": "증거금 현금·대용",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "증거금 현금·대용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U9K-0",
+   "text": "3,120,000 · 3,120,000원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "증거금 현금·대용",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U9L-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "증거금 현금·대용",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U9N-0",
+   "text": "보증금율 45% · 등급 45%구간",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "증거금 현금·대용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U9P-0",
+   "text": "미수확보금·미수가능·최소 주문가능·수익증권 매수가능·권리대용금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "영값 묶음"
+   ]
+  },
+  {
+   "id": "3U9R-0",
+   "text": "0원 4항목 · 0주 1항목",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U9S-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "인출·주문 한도",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U9U-0",
+   "text": "부채·미수",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "부채·미수"
+   ]
+  },
+  {
+   "id": "3U9W-0",
+   "text": "신용융자·대주담보·담보대출·현금미수·이자미납·기타대여",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "부채·미수",
+    "영값 묶음"
+   ]
+  },
+  {
+   "id": "3U9Y-0",
+   "text": "0원 6항목",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "부채·미수",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U9Z-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "부채·미수",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UA1-0",
+   "text": "기타 자산·수익",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "기타 자산·수익"
+   ]
+  },
+  {
+   "id": "3UA3-0",
+   "text": "외화예수금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "기타 자산·수익",
+    "외화예수금"
+   ]
+  },
+  {
+   "id": "3UA5-0",
+   "text": "0달러",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "기타 자산·수익",
+    "외화예수금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UA6-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "기타 자산·수익",
+    "외화예수금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UA8-0",
+   "text": "RP·채권·ELS 평가·매도담보 이자·신용이자·중도이용료",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "기타 자산·수익",
+    "영값 묶음"
+   ]
+  },
+  {
+   "id": "3UAA-0",
+   "text": "0원 6항목",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "기타 자산·수익",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAB-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "기타 자산·수익",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAD-0",
+   "text": "최근 현금 흐름",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름"
+   ]
+  },
+  {
+   "id": "3UAG-0",
+   "text": "입금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "입금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAH-0",
+   "text": "+5,054,300원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "입금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAJ-0",
+   "text": "이체 08/26 500만 · 배당 08/27 54,300",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "입금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAM-0",
+   "text": "출금",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "출금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAN-0",
+   "text": "-1,502,000원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "출금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAP-0",
+   "text": "매수 결제 08/27",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "출금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAS-0",
+   "text": "매매 순유입",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "매매 순유입",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAT-0",
+   "text": "+9,079,400원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "매매 순유입",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAV-0",
+   "text": "09/01 체결 · 비용 -24,600",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "매매 순유입",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAY-0",
+   "text": "기타 수익",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "기타 수익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UAZ-0",
+   "text": "+55,540원",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "기타 수익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UB1-0",
+   "text": "배당 54,300 · 이용료 1,240",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "기타 수익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UB3-0",
+   "text": "수표 입금·증권 입고·증권 출고",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "영값 묶음"
+   ]
+  },
+  {
+   "id": "3UB5-0",
+   "text": "0원 3항목",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UB6-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "최근 현금 흐름",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UB8-0",
+   "text": "예탁자산 추이",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "예탁자산 추이"
+   ]
+  },
+  {
+   "id": "3UBB-0",
+   "text": "09-01",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "예탁자산 추이",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBC-0",
+   "text": "1억 2,458만",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "예탁자산 추이",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBD-0",
+   "text": "수익증권 제외 1억 2,458만",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "예탁자산 추이",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBF-0",
+   "text": "08-31",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "예탁자산 추이",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBG-0",
+   "text": "1억 2,180만",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "예탁자산 추이",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBI-0",
+   "text": "08-28",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "예탁자산 추이",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBJ-0",
+   "text": "1억 2,043만",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Workspace",
+    "예수금 레일",
+    "예탁자산 추이",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SKZ-1",
+   "text": "● 예수금·결제 실시간 반영 중",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Status Footer"
+   ]
+  },
+  {
+   "id": "2SKY-1",
+   "text": "결제 전체 내역 보기",
+   "path": [
+    "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Account Root · 예수금·결제",
+    "Account Card Surface",
+    "Account Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2SKU-1",
+   "name": "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1110,
+   "depth": 0
+  },
+  {
+   "id": "2SKV-1",
+   "name": "Account Root · 예수금·결제",
+   "component": "Frame",
+   "w": 1440,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "2SKW-1",
+   "name": "Account Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2SP5-1",
+   "name": "Account Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "2SPL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SPN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SPO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2SP6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SPJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SPH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SPF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SPD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SPB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SP9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SP7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SOK-1",
+   "name": "Account Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "2SP1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 340,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SOX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 265,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SOT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SOP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SOL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SL0-1",
+   "name": "Account Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "39PK-0",
+   "name": "예수금·결제 본문",
+   "component": "Frame",
+   "w": 900,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "39PL-0",
+   "name": "섹션 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "39QL-0",
+   "name": "예수금 KPI 4칸",
+   "component": "Frame",
+   "w": 0,
+   "h": 96,
+   "depth": 5
+  },
+  {
+   "id": "39QM-0",
+   "name": "현재 예수금",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39QQ-0",
+   "name": "D+1 예상",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39QU-0",
+   "name": "D+2 예상",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39QY-0",
+   "name": "출금가능",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39SW-0",
+   "name": "결제 예정 표",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "39SX-0",
+   "name": "열 머리",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "39T5-0",
+   "name": "오늘 09/01",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "39TD-0",
+   "name": "D+1 09/02",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "39TL-0",
+   "name": "D+2 09/03",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "39TP-0",
+   "name": "정산 합계 셀",
+   "component": "Frame",
+   "w": 126,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3GL8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A4F-0",
+   "name": "거래내역 표",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3A4G-0",
+   "name": "열 머리",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3A4M-0",
+   "name": "매도 결제",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3A4N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A4Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A4S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3A4T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3A4W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A51-0",
+   "name": "매수 결제",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3A52-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A55-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A57-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3A58-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3A5B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A5G-0",
+   "name": "수수료·제세금",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3A5H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A5K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A5M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3A5N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3A5Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A5T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 178,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G1S-0",
+   "name": "매수 결제 08/31",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3G1T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G1W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G1Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3G1Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3G22-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G25-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 178,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G27-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G2A-0",
+   "name": "매도 결제 08/28",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3G2B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G2E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G2G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3G2H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3G2K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G2N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 178,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G2Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G2T-0",
+   "name": "배당금 입금 08/27",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3G2U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G2X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G2Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3G30-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3G33-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G36-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 178,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G38-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3GKQ-0",
+   "name": "이체 입금 08/26",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3GKR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3GKU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3GKW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3GKX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3GL0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3GL3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 178,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3GL5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A7M-0",
+   "name": "표 꼬리",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3U8K-0",
+   "name": "예수금 레일",
+   "component": "Frame",
+   "w": 460,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3U8L-0",
+   "name": "인출·주문 한도",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3U8M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3U8N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U8P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3U8S-0",
+   "name": "주문가능금액",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3U8T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U8W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U8Y-0",
+   "name": "출금가능금액",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3U8Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U92-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U94-0",
+   "name": "대용금액",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3U97-0",
+   "name": "주문증거금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3U98-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U9A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3U9B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3U9E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U9G-0",
+   "name": "증거금 현금·대용",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3U9H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U9J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3U9M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U9O-0",
+   "name": "영값 묶음",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3U9Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U9T-0",
+   "name": "부채·미수",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3U9V-0",
+   "name": "영값 묶음",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3U9X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UA0-0",
+   "name": "기타 자산·수익",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UA2-0",
+   "name": "외화예수금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UA4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UA7-0",
+   "name": "영값 묶음",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UA9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UAC-0",
+   "name": "최근 현금 흐름",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UAE-0",
+   "name": "입금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UAF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UAI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UAK-0",
+   "name": "출금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UAL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UAO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UAQ-0",
+   "name": "매매 순유입",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UAR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UAU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UAW-0",
+   "name": "기타 수익",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UAX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UB0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UB2-0",
+   "name": "영값 묶음",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UB4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UB7-0",
+   "name": "예탁자산 추이",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UB9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UBA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UBE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UBH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2SKX-1",
+   "name": "Account Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "내 계좌": 1,
+  "실시간": 1,
+  "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18": 1,
+  "자산 종합": 1,
+  "보유종목": 1,
+  "예수금·결제": 2,
+  "손익·성과": 1,
+  "주문·체결": 1,
+  "증거금·담보": 1,
+  "금현물": 1,
+  "총자산": 1,
+  "124,580,240원": 1,
+  "수익률 +4.96%": 1,
+  "주문가능금액": 2,
+  "31,240,000원": 2,
+  "출금가능 28,940,000원": 1,
+  "주식 평가액": 1,
+  "89,760,240원": 1,
+  "8종목": 1,
+  "평가손익": 1,
+  "+4,240,900원": 1,
+  "매입 85,519,340원": 1,
+  "현금 비중": 1,
+  "28.0%": 1,
+  "보유종목 8종": 1,
+  "09/01 09:42 기준 · D+2 결제": 1,
+  "현재 예수금": 1,
+  "34,820,000": 2,
+  "랩 출금가능 0원": 1,
+  "D+1 예상": 1,
+  "33,184,400": 2,
+  "정산 -1,635,600": 1,
+  "D+2 예상": 1,
+  "42,263,800": 2,
+  "정산 +9,079,400": 1,
+  "출금가능": 2,
+  "28,940,000": 2,
+  "익일 인출 28,940,000원": 1,
+  "결제 예정": 1,
+  "매도 정산": 1,
+  "매수 정산": 1,
+  "정산 합계": 1,
+  "미수 변제소요": 1,
+  "예수금 예상": 1,
+  "오늘 09/01": 1,
+  "0": 7,
+  "D+1 09/02": 1,
+  "-1,635,600": 3,
+  "27,304,400": 1,
+  "D+2 09/03": 1,
+  "+12,946,000": 2,
+  "-3,842,000": 2,
+  "+9,079,400": 1,
+  "비용 -24,600": 1,
+  "36,383,800": 1,
+  "▸": 7,
+  "일자": 1,
+  "구분": 1,
+  "내용": 1,
+  "금액": 1,
+  "상태": 1,
+  "09/01": 3,
+  "결제 09/03": 3,
+  "매도 결제": 2,
+  "현금": 7,
+  "순번 142": 1,
+  "KODEX 200 250주 · NAVER 4주": 1,
+  "대출일 해당 없음": 6,
+  "D+2 예정": 1,
+  "매수 결제": 2,
+  "순번 141": 1,
+  "SK하이닉스 매수 20주 · 192,100원": 1,
+  "D+2 차감": 2,
+  "수수료·제세금": 1,
+  "순번 140": 1,
+  "매도 거래 비용 합계": 1,
+  "거래세 -5,180 · 농특세 -15,540": 1,
+  "-24,600": 1,
+  "세금 -20,720 · 수수료 -3,880": 1,
+  "08/31": 1,
+  "결제 09/02": 1,
+  "순번 139": 1,
+  "카카오 매수 40주 · 40,890원": 1,
+  "D+1 예정": 1,
+  "08/28": 1,
+  "체결 08/26": 1,
+  "순번 138": 1,
+  "삼성전자 매도 235주 · 152,660원": 1,
+  "+35,809,090": 1,
+  "비용 -66,010": 1,
+  "완료": 3,
+  "08/27": 1,
+  "결제 08/27": 1,
+  "배당금 입금": 1,
+  "순번 137": 1,
+  "삼성전자 분기 배당 · 세후": 1,
+  "+54,300": 1,
+  "08/26": 1,
+  "결제 08/26": 1,
+  "이체 입금": 1,
+  "순번 136": 1,
+  "연결 은행계좌에서 이체": 1,
+  "+5,000,000": 1,
+  "최근 7건 표시 · 미수금 0원": 1,
+  "인출·주문 한도": 1,
+  "미수 미사용": 1,
+  "09/01 기준": 1,
+  "현금주문 31,240,000원 · 207주": 1,
+  "출금가능금액": 1,
+  "28,940,000원": 1,
+  "추정 28,940,000원": 1,
+  "대용금액": 1,
+  "63,280,000원": 1,
+  "주문증거금": 1,
+  "감면 미적용": 1,
+  "6,240,000원": 1,
+  "증거금율 종목 20% · 계좌·적용 40%": 1,
+  "증거금 현금·대용": 1,
+  "3,120,000 · 3,120,000원": 1,
+  "보증금율 45% · 등급 45%구간": 1,
+  "미수확보금·미수가능·최소 주문가능·수익증권 매수가능·권리대용금": 1,
+  "0원 4항목 · 0주 1항목": 1,
+  "부채·미수": 1,
+  "신용융자·대주담보·담보대출·현금미수·이자미납·기타대여": 1,
+  "0원 6항목": 2,
+  "기타 자산·수익": 1,
+  "외화예수금": 1,
+  "0달러": 1,
+  "RP·채권·ELS 평가·매도담보 이자·신용이자·중도이용료": 1,
+  "최근 현금 흐름": 1,
+  "입금": 1,
+  "+5,054,300원": 1,
+  "이체 08/26 500만 · 배당 08/27 54,300": 1,
+  "출금": 1,
+  "-1,502,000원": 1,
+  "매수 결제 08/27": 1,
+  "매매 순유입": 1,
+  "+9,079,400원": 1,
+  "09/01 체결 · 비용 -24,600": 1,
+  "기타 수익": 1,
+  "+55,540원": 1,
+  "배당 54,300 · 이용료 1,240": 1,
+  "수표 입금·증권 입고·증권 출고": 1,
+  "0원 3항목": 1,
+  "예탁자산 추이": 1,
+  "09-01": 1,
+  "1억 2,458만": 1,
+  "수익증권 제외 1억 2,458만": 1,
+  "08-31": 1,
+  "1억 2,180만": 1,
+  "08-28": 1,
+  "1억 2,043만": 1,
+  "● 예수금·결제 실시간 반영 중": 1,
+  "결제 전체 내역 보기": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "2d384745517ed5d5da41e88303d4b9a1fc792742bbd939ee24a6299e704095e5"
+}

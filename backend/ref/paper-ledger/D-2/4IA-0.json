@@ -1,0 +1,1739 @@
+{
+ "board_id": "4IA-0",
+ "page": "D-2",
+ "page_name": "그래프",
+ "name": "03 · 그래프 — 기본 군집 지도",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "4IF-0",
+   "text": "+",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 상단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4IG-0",
+   "text": "새 대화",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 상단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4II-0",
+   "text": "⌕",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 상단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4IJ-0",
+   "text": "대화 검색",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 상단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4IM-0",
+   "text": "오늘",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4IO-0",
+   "text": "삼성전자 흐름·재무 같이 보기",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4IR-0",
+   "text": "88,000 넘으면 알려줘",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4IT-0",
+   "text": "코스피 프로그램 매매 동향",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4IV-0",
+   "text": "어제",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4IX-0",
+   "text": "SK하이닉스 유상증자 공시 읽기",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4IZ-0",
+   "text": "모의 계좌 잔고 정리",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4J1-0",
+   "text": "지난 7일",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4J3-0",
+   "text": "반도체 ETF 비교",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4J5-0",
+   "text": "현대차 실적 발표 일정",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4J7-0",
+   "text": "더 보기",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "이력 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4JB-0",
+   "text": "모의–주력",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "계정 행 — 설정 진입",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4JC-0",
+   "text": "토큰 5시간 42분 남음",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "계정 행 — 설정 진입",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4JD-0",
+   "text": "⌃",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "계정 행 — 설정 진입"
+   ]
+  },
+  {
+   "id": "4KK-0",
+   "text": "요약",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "그래프 헤더",
+    "Frame",
+    "뷰 토글",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4KM-0",
+   "text": "그래프",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "그래프 헤더",
+    "Frame",
+    "뷰 토글",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VCP-1",
+   "text": "수집·노출",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "그래프 헤더",
+    "Frame",
+    "뷰 토글",
+    "수집·노출"
+   ]
+  },
+  {
+   "id": "4KN-0",
+   "text": "군집 7개 · 엔티티 312 · 미분류 18",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "그래프 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4KQ-0",
+   "text": "최근 90일",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "그래프 헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4KS-0",
+   "text": "연결 전체",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "그래프 헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4KU-0",
+   "text": "테마 지도",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 안내"
+   ]
+  },
+  {
+   "id": "4KV-0",
+   "text": "노드를 끌어 옮길 수 있습니다 · 휠 또는 Ctrl+휠로 확대 · 채팅으로 물어도 같은 곳이 열립니다",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 안내"
+   ]
+  },
+  {
+   "id": "3VB4-1",
+   "text": "배당·인컴",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "배당·인컴"
+   ]
+  },
+  {
+   "id": "3VB6-1",
+   "text": "금융·지주",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "금융·지주"
+   ]
+  },
+  {
+   "id": "3VB8-1",
+   "text": "KB금융",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "KB금융"
+   ]
+  },
+  {
+   "id": "3VBA-1",
+   "text": "삼성화재",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "삼성화재"
+   ]
+  },
+  {
+   "id": "3VBC-1",
+   "text": "자동차·산업",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "자동차·산업"
+   ]
+  },
+  {
+   "id": "3VBE-1",
+   "text": "기아",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "기아"
+   ]
+  },
+  {
+   "id": "3VBG-1",
+   "text": "반도체 대형주",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "반도체 대형주"
+   ]
+  },
+  {
+   "id": "3VBI-1",
+   "text": "SK하이닉스",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "SK하이닉스"
+   ]
+  },
+  {
+   "id": "3VBK-1",
+   "text": "KODEX 반도체",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "KODEX 반도체"
+   ]
+  },
+  {
+   "id": "3VBM-1",
+   "text": "KODEX 배당…",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "KODEX 배당…"
+   ]
+  },
+  {
+   "id": "3VBO-1",
+   "text": "인터넷·플랫폼",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "인터넷·플랫폼"
+   ]
+  },
+  {
+   "id": "3VBQ-1",
+   "text": "ACE 미국…",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "ACE 미국배당…"
+   ]
+  },
+  {
+   "id": "3VBS-1",
+   "text": "헬스케어",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "지도 플롯",
+    "네모 창 — 화면 고정 프레임",
+    "엔티티 노드",
+    "헬스케어"
+   ]
+  },
+  {
+   "id": "3VC1-1",
+   "text": "색 = 군집",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "범례",
+    "색 = 군집"
+   ]
+  },
+  {
+   "id": "3VC6-1",
+   "text": "원 크기 = 연결 수",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "범례",
+    "원 크기 = 연결 수"
+   ]
+  },
+  {
+   "id": "3VCA-1",
+   "text": "사실",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "범례",
+    "사실"
+   ]
+  },
+  {
+   "id": "3VCE-1",
+   "text": "추론",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "범례",
+    "추론"
+   ]
+  },
+  {
+   "id": "3VCI-1",
+   "text": "불확실",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "범례",
+    "불확실"
+   ]
+  },
+  {
+   "id": "3VCM-1",
+   "text": "숨은 연관 — 군집을 넘는 연결",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "캔버스 — 군집 지도",
+    "범례",
+    "숨은 연관"
+   ]
+  },
+  {
+   "id": "4JH-0",
+   "text": "그래프에게 묻기",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "채팅 헤더"
+   ]
+  },
+  {
+   "id": "4JI-0",
+   "text": "답이 캔버스를 바꿉니다",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "채팅 헤더"
+   ]
+  },
+  {
+   "id": "4JM-0",
+   "text": "한미반도체가 배당주랑 왜 엮여 있어?",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "대화 본문",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4JQ-0",
+   "text": "경로 탐색",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "대화 본문",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4JR-0",
+   "text": "한미반도체 → 배당 방어 바스켓",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "대화 본문",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4JU-0",
+   "text": "이웃 조회",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "대화 본문",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4JV-0",
+   "text": "7건",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "대화 본문",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4JW-0",
+   "text": "직접 말씀하신 적은 없습니다. 그래프가 스스로 이은 추론 연결이고, 근거는 두 가지입니다 — 두 군집을 잇는 유일한 통로이고, 연결이 적은 노드에서 허브로 향합니다.",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "대화 본문"
+   ]
+  },
+  {
+   "id": "4JX-0",
+   "text": "캔버스에 경로를 표시했습니다. 아니라고 하시면 이 연결을 지우겠습니다.",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "대화 본문"
+   ]
+  },
+  {
+   "id": "4K0-0",
+   "text": "그래프에 대해 물어보세요",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "입력 스택",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4K1-0",
+   "text": "29s",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "입력 스택",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4K7-0",
+   "text": "그래프",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "입력 스택",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4K9-0",
+   "text": "CLAUDE",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "입력 스택",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4KB-0",
+   "text": "감시 2",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "입력 스택",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4KE-0",
+   "text": "OPUS · HIGH",
+   "path": [
+    "03 · 그래프 — 기본 군집 지도",
+    "셸 창",
+    "Frame",
+    "입력 스택",
+    "control-strip",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4IA-0",
+   "name": "03 · 그래프 — 기본 군집 지도",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "4IB-0",
+   "name": "셸 창",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4IC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 268,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4ID-0",
+   "name": "이력 상단",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4IE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4IH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4IK-0",
+   "name": "이력 목록",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4IL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4IN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4IP-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5,
+   "h": 5,
+   "depth": 5
+  },
+  {
+   "id": "4IQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4IS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4IU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4IW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4IY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4J0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4J2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4J4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4J6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4J8-0",
+   "name": "계정 행 — 설정 진입",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4J9-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5,
+   "h": 5,
+   "depth": 4
+  },
+  {
+   "id": "4JA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4JE-0",
+   "name": "캔버스 — 군집 지도",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4KG-0",
+   "name": "그래프 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4KH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4KI-0",
+   "name": "뷰 토글",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4KJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4KL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3VCO-1",
+   "name": "수집·노출",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4KO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4KP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4KR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4KT-0",
+   "name": "지도 안내",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3V7T-1",
+   "name": "지도 플롯",
+   "component": "Frame",
+   "w": 849,
+   "h": 657,
+   "depth": 3
+  },
+  {
+   "id": "3V7U-1",
+   "name": "네모 창 — 화면 고정 프레임",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3VA9-1",
+   "name": "관계선",
+   "component": "Frame",
+   "w": 813,
+   "h": 627,
+   "depth": 5
+  },
+  {
+   "id": "3VAA-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3VAB-1",
+   "name": "Group",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3VAC-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAD-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAE-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAF-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAG-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAH-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAI-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAJ-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAK-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAL-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAM-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAN-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAO-1",
+   "name": "Group",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3VAP-1",
+   "name": "belongs_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAQ-1",
+   "name": "belongs_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAR-1",
+   "name": "belongs_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAS-1",
+   "name": "belongs_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAT-1",
+   "name": "belongs_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAU-1",
+   "name": "belongs_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAV-1",
+   "name": "belongs_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAW-1",
+   "name": "belongs_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAX-1",
+   "name": "relates_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAY-1",
+   "name": "belongs_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VAZ-1",
+   "name": "exposed_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VB0-1",
+   "name": "belongs_to",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VB2-1",
+   "name": "엔티티 노드",
+   "component": "Frame",
+   "w": 813,
+   "h": 627,
+   "depth": 5
+  },
+  {
+   "id": "3VB3-1",
+   "name": "배당·인컴",
+   "component": "Frame",
+   "w": 72,
+   "h": 72,
+   "depth": 6
+  },
+  {
+   "id": "3VB5-1",
+   "name": "금융·지주",
+   "component": "Frame",
+   "w": 52,
+   "h": 52,
+   "depth": 6
+  },
+  {
+   "id": "3VB7-1",
+   "name": "KB금융",
+   "component": "Frame",
+   "w": 56,
+   "h": 56,
+   "depth": 6
+  },
+  {
+   "id": "3VB9-1",
+   "name": "삼성화재",
+   "component": "Frame",
+   "w": 44,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3VBB-1",
+   "name": "자동차·산업",
+   "component": "Frame",
+   "w": 58,
+   "h": 58,
+   "depth": 6
+  },
+  {
+   "id": "3VBD-1",
+   "name": "기아",
+   "component": "Frame",
+   "w": 44,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3VBF-1",
+   "name": "반도체 대형주",
+   "component": "Frame",
+   "w": 68,
+   "h": 68,
+   "depth": 6
+  },
+  {
+   "id": "3VBH-1",
+   "name": "SK하이닉스",
+   "component": "Frame",
+   "w": 50,
+   "h": 50,
+   "depth": 6
+  },
+  {
+   "id": "3VBJ-1",
+   "name": "KODEX 반도체",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "3VBL-1",
+   "name": "KODEX 배당…",
+   "component": "Frame",
+   "w": 46,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3VBN-1",
+   "name": "인터넷·플랫폼",
+   "component": "Frame",
+   "w": 46,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3VBP-1",
+   "name": "ACE 미국배당…",
+   "component": "Frame",
+   "w": 54,
+   "h": 54,
+   "depth": 6
+  },
+  {
+   "id": "3VBR-1",
+   "name": "헬스케어",
+   "component": "Frame",
+   "w": 44,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3VBU-1",
+   "name": "범례",
+   "component": "Frame",
+   "w": 849,
+   "h": 37,
+   "depth": 3
+  },
+  {
+   "id": "3VBV-1",
+   "name": "색 = 군집",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3VBW-1",
+   "name": "군집 색",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3VBX-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 6
+  },
+  {
+   "id": "3VBY-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 6
+  },
+  {
+   "id": "3VBZ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 6
+  },
+  {
+   "id": "3VC0-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 6
+  },
+  {
+   "id": "3VC2-1",
+   "name": "원 크기 = 연결 수",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3VC3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3VC4-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "3VC5-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 13,
+   "h": 13,
+   "depth": 6
+  },
+  {
+   "id": "3VC7-1",
+   "name": "사실",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3VC8-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3VC9-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3VCB-1",
+   "name": "추론",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3VCC-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3VCD-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3VCF-1",
+   "name": "불확실",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3VCG-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3VCH-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3VCJ-1",
+   "name": "숨은 연관",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3VCK-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3VCL-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4JF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4JG-0",
+   "name": "채팅 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4JJ-0",
+   "name": "대화 본문",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4JK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4JL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4JN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4JO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4JP-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5,
+   "h": 5,
+   "depth": 6
+  },
+  {
+   "id": "4JS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4JT-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5,
+   "h": 5,
+   "depth": 6
+  },
+  {
+   "id": "4JY-0",
+   "name": "입력 스택",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4JZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4K2-0",
+   "name": "control-strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4K3-0",
+   "name": "키우미 점 — 모드 전환",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "4K4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 3,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "4K5-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 3,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "4K6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4K8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4KA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4KC-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4KD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "+": 1,
+  "새 대화": 1,
+  "⌕": 1,
+  "대화 검색": 1,
+  "오늘": 1,
+  "삼성전자 흐름·재무 같이 보기": 1,
+  "88,000 넘으면 알려줘": 1,
+  "코스피 프로그램 매매 동향": 1,
+  "어제": 1,
+  "SK하이닉스 유상증자 공시 읽기": 1,
+  "모의 계좌 잔고 정리": 1,
+  "지난 7일": 1,
+  "반도체 ETF 비교": 1,
+  "현대차 실적 발표 일정": 1,
+  "더 보기": 1,
+  "모의–주력": 1,
+  "토큰 5시간 42분 남음": 1,
+  "⌃": 1,
+  "요약": 1,
+  "그래프": 2,
+  "수집·노출": 1,
+  "군집 7개 · 엔티티 312 · 미분류 18": 1,
+  "최근 90일": 1,
+  "연결 전체": 1,
+  "테마 지도": 1,
+  "노드를 끌어 옮길 수 있습니다 · 휠 또는 Ctrl+휠로 확대 · 채팅으로 물어도 같은 곳이 열립니다": 1,
+  "배당·인컴": 1,
+  "금융·지주": 1,
+  "KB금융": 1,
+  "삼성화재": 1,
+  "자동차·산업": 1,
+  "기아": 1,
+  "반도체 대형주": 1,
+  "SK하이닉스": 1,
+  "KODEX 반도체": 1,
+  "KODEX 배당…": 1,
+  "인터넷·플랫폼": 1,
+  "ACE 미국…": 1,
+  "헬스케어": 1,
+  "색 = 군집": 1,
+  "원 크기 = 연결 수": 1,
+  "사실": 1,
+  "추론": 1,
+  "불확실": 1,
+  "숨은 연관 — 군집을 넘는 연결": 1,
+  "그래프에게 묻기": 1,
+  "답이 캔버스를 바꿉니다": 1,
+  "한미반도체가 배당주랑 왜 엮여 있어?": 1,
+  "경로 탐색": 1,
+  "한미반도체 → 배당 방어 바스켓": 1,
+  "이웃 조회": 1,
+  "7건": 1,
+  "직접 말씀하신 적은 없습니다. 그래프가 스스로 이은 추론 연결이고, 근거는 두 가지입니다 — 두 군집을 잇는 유일한 통로이고, 연결이 적은 노드에서 허브로 향합니다.": 1,
+  "캔버스에 경로를 표시했습니다. 아니라고 하시면 이 연결을 지우겠습니다.": 1,
+  "그래프에 대해 물어보세요": 1,
+  "29s": 1,
+  "CLAUDE": 1,
+  "감시 2": 1,
+  "OPUS · HIGH": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "cd39d9cdf302c663d65a452303741be6db39b82acb228171fed514ac53a59aa3"
+}

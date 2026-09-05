@@ -1,0 +1,97 @@
+Frame "C01 · 좁은 데스크톱 — 차트" (15XT-2) 390×844
+  Frame "Compact desktop title bar" (167N-2) 390×62
+    Frame "Frame" (167O-2) 110×0
+      Rectangle "Rectangle" (167P-2) 8×8
+      Text "ATHENA" (167Q-2) 0×0 "ATHENA"
+    Text "좁은 창 · 차트" (167R-2) 0×0 "좁은 창 · 차트"
+    Frame "Frame" (167S-2) 110×0
+      SVG "SVG" (167T-2) 0×0
+        SVGVisualElement "Line" (167U-2) 0×0
+      SVG "SVG" (167V-2) 0×0
+        SVGVisualElement "Rect" (167W-2) 0×0
+      SVG "SVG" (167X-2) 0×0
+        SVGVisualElement "Line" (167Y-2) 0×0
+        SVGVisualElement "Line" (167Z-2) 0×0
+  Frame "Frame" (15YT-2) 390×0
+    Frame "Frame" (15YU-2) 0×0
+      Frame "Frame" (15YV-2) 0×0
+        Text "삼성전자 · 005930" (15YW-2) 0×0 "삼성전자 · 005930"
+        Frame "Frame" (15YX-2) 0×0
+          Text "최근 3개월" (15YY-2) 0×0 "최근 3개월"
+      Frame "Frame" (15YZ-2) 0×0
+        Text "150,850" (15Z0-2) 0×0 "150,850"
+        Text "+1.24%" (15Z1-2) 0×0 "+1.24%"
+    Frame "Frame" (15Z2-2) 0×0
+      Frame "Frame" (15Z3-2) 0×0
+        Text "3개월" (15Z4-2) 0×0 "3개월"
+      Frame "Frame" (15Z5-2) 0×0
+        Text "1개월" (15Z6-2) 0×0 "1개월"
+      Frame "Frame" (15Z7-2) 0×0
+        Text "1년" (15Z8-2) 0×0 "1년"
+    Frame "Frame" (15Z9-2) 0×260
+      SVG "Compact candlestick chart" (16XD-2) 0×260
+        SVGVisualElement "Line" (16XE-2) 0×0
+        SVGVisualElement "Line" (16XF-2) 0×0
+        SVGVisualElement "Line" (16XG-2) 0×0
+        SVGVisualElement "Line" (16XH-2) 0×0
+        SVGVisualElement "153K" (16XI-2) 0×0
+        SVGVisualElement "149K" (16XJ-2) 0×0
+        SVGVisualElement "145K" (16XK-2) 0×0
+        SVGVisualElement "141K" (16XL-2) 0×0
+        SVGVisualElement "Group" (16XM-2) 0×0
+          SVGVisualElement "Line" (16XN-2) 0×0
+          SVGVisualElement "Rect" (16XO-2) 0×0
+          SVGVisualElement "Line" (16XP-2) 0×0
+          SVGVisualElement "Rect" (16XQ-2) 0×0
+          SVGVisualElement "Line" (16XR-2) 0×0
+          SVGVisualElement "Rect" (16XS-2) 0×0
+          SVGVisualElement "Line" (16XT-2) 0×0
+          SVGVisualElement "Rect" (16XU-2) 0×0
+          SVGVisualElement "Line" (16XV-2) 0×0
+          SVGVisualElement "Rect" (16XW-2) 0×0
+          SVGVisualElement "Line" (16XX-2) 0×0
+          SVGVisualElement "Rect" (16XY-2) 0×0
+          SVGVisualElement "Line" (16XZ-2) 0×0
+          SVGVisualElement "Rect" (16Y0-2) 0×0
+          SVGVisualElement "Line" (16Y1-2) 0×0
+          SVGVisualElement "Rect" (16Y2-2) 0×0
+          SVGVisualElement "Line" (16Y3-2) 0×0
+          SVGVisualElement "Rect" (16Y4-2) 0×0
+          SVGVisualElement "Line" (16Y5-2) 0×0
+          SVGVisualElement "Rect" (16Y6-2) 0×0
+          SVGVisualElement "Line" (16Y7-2) 0×0
+          SVGVisualElement "Rect" (16Y8-2) 0×0
+          SVGVisualElement "Line" (16Y9-2) 0×0
+          SVGVisualElement "Rect" (16YA-2) 0×0
+        SVGVisualElement "Line" (16YB-2) 0×0
+        SVGVisualElement "Group" (16YC-2) 0×0
+          SVGVisualElement "Rect" (16YD-2) 0×0
+          SVGVisualElement "Rect" (16YE-2) 0×0
+          SVGVisualElement "Rect" (16YF-2) 0×0
+          SVGVisualElement "Rect" (16YG-2) 0×0
+          SVGVisualElement "Rect" (16YH-2) 0×0
+          SVGVisualElement "Rect" (16YI-2) 0×0
+          SVGVisualElement "Rect" (16YJ-2) 0×0
+          SVGVisualElement "Rect" (16YK-2) 0×0
+          SVGVisualElement "Rect" (16YL-2) 0×0
+          SVGVisualElement "Rect" (16YM-2) 0×0
+          SVGVisualElement "Rect" (16YN-2) 0×0
+          SVGVisualElement "Rect" (16YO-2) 0×0
+        SVGVisualElement "6/03" (16YP-2) 0×0
+        SVGVisualElement "7/01" (16YQ-2) 0×0
+        SVGVisualElement "8/01" (16YR-2) 0×0
+        SVGVisualElement "8/30" (16YS-2) 0×0
+        SVGVisualElement "거래량" (16YT-2) 0×0
+    Frame "Frame" (15ZC-2) 0×0
+      Frame "Frame" (15ZD-2) 0×0
+        Text "거래대금" (15ZE-2) 0×0 "거래대금"
+        Frame "Frame" (15ZF-2) 0×0
+          Text "2.14조" (15ZG-2) 0×0 "2.14조"
+      Frame "Frame" (15ZH-2) 0×0
+        Text "외국인" (15ZI-2) 0×0 "외국인"
+        Frame "Frame" (15ZJ-2) 0×0
+          Text "+1,248억" (15ZK-2) 0×0 "+1,248억"
+    Frame "Frame" (15ZL-2) 0×0
+      Frame "Frame" (15ZM-2) 0×0
+        Text "거래 요약" (15ZN-2) 0×0 "거래 요약"
+      Text "거래량 1,420만주 · 전일 대비 …" (15ZO-2) 0×0 "거래량 1,420만주 · 전일 대비 1.2배"

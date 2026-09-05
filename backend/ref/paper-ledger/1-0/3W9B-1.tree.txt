@@ -1,0 +1,238 @@
+Frame "39 · 동시 실행 — 상태 4종 · 스피너" (3W9B-1) 1680×900
+  Frame "39 Header" (3W9C-1) 1600×86
+    Frame "Frame" (3W9D-1) 520×56
+      Frame "Frame" (3W9E-1) 48×48
+        Text "39" (3W9F-1) 17×20 "39"
+      Frame "Frame" (3W9G-1) 456×56
+        Text "동시 실행 — 스피너의 의미" (3W9H-1) 456×36 "동시 실행 — 스피너의 의미"
+        Text "백테스트가 도는 동안 다른 창에서 대…" (3W9I-1) 456×18 "백테스트가 도는 동안 다른 창에서 대화합니다. 스피너는 지금 돌고 있다는 뜻입니다."
+    Frame "Frame" (3W9J-1) 109×32
+      Text "신규 · 승인 대기" (3W9K-1) 81×16 "신규 · 승인 대기"
+  Frame "39 Content" (3WA3-1) 1600×722
+    Frame "Stage" (3WA4-1) 1150×722
+      Frame "Upper Zone" (3WA7-1) 1148×544
+        Frame "Sidebar" (3WA8-1) 254×544
+          Frame "Summary Pill" (3WAM-1) 121×24
+            SVG "Spinner" (3XWV-1) 12×12
+              SVGVisualElement "Circle" (3XWW-1) 9×9
+              SVGVisualElement "Path" (3XWX-1) 4×4
+            Text "실행 중 3 · 대기 1" (3WAO-1) 81×14 "실행 중 3 · 대기 1"
+          Frame "Project Row" (3WAP-1) 229×30
+            Frame "Frame" (3WAQ-1) 16×16
+              SVG "SVG" (3WAR-1) 15×15
+                SVGVisualElement "Path" (3WAS-1) 11×8
+            Text "아테나" (3WAT-1) 159×16 "아테나"
+            Rectangle "Rectangle" (3WAU-1) 22×16
+          Frame "Sessions" (3WBB-1) 229×190
+            Frame "Row · 추세추종 v3 · 열림" (3WBC-1) 229×30
+              Frame "Frame" (3WBD-1) 16×16
+                SVG "SVG" (3WBE-1) 14×14
+                  SVGVisualElement "Path" (3WBF-1) 11×8
+              Text "추세추종 v3" (3WBG-1) 145×16 "추세추종 v3"
+              Frame "Frame" (3WBH-1) 22×16
+                SVG "Spinner" (3XWZ-1) 12×12
+                  SVGVisualElement "Circle" (3XX0-1) 9×9
+                  SVGVisualElement "Path" (3XX1-1) 4×4
+            Frame "Row · 변동성 돌파" (3WBJ-1) 229×30
+              Frame "Frame" (3WBK-1) 16×16
+                SVG "SVG" (3WBL-1) 14×14
+                  SVGVisualElement "Path" (3WBM-1) 11×8
+              Text "변동성 돌파" (3WBN-1) 145×16 "변동성 돌파"
+              Frame "Frame" (3WBO-1) 22×16
+                SVG "Spinner" (3XX3-1) 12×12
+                  SVGVisualElement "Circle" (3XX4-1) 9×9
+                  SVGVisualElement "Path" (3XX5-1) 4×4
+            Frame "Row · 아침 브리핑 감시" (3WBQ-1) 229×30
+              Frame "Frame" (3WBR-1) 16×16
+                SVG "SVG" (3WBS-1) 14×14
+                  SVGVisualElement "Circle" (3WBT-1) 4×4
+                  SVGVisualElement "Path" (3WBU-1) 8×4
+              Text "아침 브리핑 감시" (3WBV-1) 145×16 "아침 브리핑 감시"
+              Frame "Frame" (3WBW-1) 22×16
+                SVG "Spinner" (3XX7-1) 12×12
+                  SVGVisualElement "Circle" (3XX8-1) 9×9
+                  SVGVisualElement "Path" (3XX9-1) 4×4
+            Frame "Row · 반도체 수급" (3WC0-1) 229×30
+              Frame "Frame" (3WC1-1) 16×16
+                SVG "SVG" (3WC2-1) 14×14
+                  SVGVisualElement "Path" (3WC3-1) 9×9
+              Text "반도체 수급" (3WC4-1) 145×16 "반도체 수급"
+              Frame "Frame" (3WC5-1) 22×16
+                Rectangle "Rectangle" (3WC6-1) 8×8
+            Frame "Row · 성향 지도" (3WC7-1) 229×30
+              Frame "Frame" (3WC8-1) 16×16
+                SVG "SVG" (3WC9-1) 14×14
+                  SVGVisualElement "Circle" (3WCA-1) 2×2
+                  SVGVisualElement "Circle" (3WCB-1) 2×2
+                  SVGVisualElement "Circle" (3WCC-1) 2×2
+                  SVGVisualElement "Path" (3WCD-1) 5×5
+              Text "성향 지도" (3WCE-1) 145×16 "성향 지도"
+              Frame "Frame" (3WCF-1) 22×16
+                Rectangle "Rectangle" (3WCG-1) 8×8
+            Frame "Row · 야간 스캔" (3WCH-1) 229×30
+              Frame "Frame" (3WCI-1) 16×16
+                SVG "SVG" (3WCJ-1) 14×14
+                  SVGVisualElement "Path" (3WCK-1) 11×8
+              Text "야간 스캔" (3WCL-1) 145×16 "야간 스캔"
+              Frame "Frame" (3WCM-1) 22×16
+                Rectangle "Rectangle" (3WCN-1) 8×8
+        Frame "Run Board" (3WA9-1) 894×544
+          Frame "Board Title" (3WDI-1) 846×20
+            Text "지금 도는 것" (3WDJ-1) 75×18 "지금 도는 것"
+            Text "동시 3개까지" (3WDK-1) 60×14 "동시 3개까지"
+          Frame "Run Cards" (3WDL-1) 846×150
+            Frame "Run · 추세추종 v3" (3WDS-1) 274×150
+              Frame "Frame" (3WDT-1) 75×22
+                SVG "SVG" (3WDU-1) 12×12
+                  SVGVisualElement "Path" (3WDV-1) 10×7
+                Text "백테스트" (3WDW-1) 40×14 "백테스트"
+              Text "추세추종 v3" (3WDX-1) 65×16 "추세추종 v3"
+              Frame "Frame" (3WDY-1) 244×14
+                Text "신호 계산 중" (3WDZ-1) 58×14 "신호 계산 중"
+                Text "82%" (3WE0-1) 18×14 "82%"
+              Frame "Frame" (3WE1-1) 244×6
+                Rectangle "Rectangle" (3WE2-1) 200×6
+              Frame "Frame" (3WE3-1) 244×14
+                Text "12:41 경과" (3WE4-1) 56×14 "12:41 경과"
+                Text "백그라운드" (3WE5-1) 50×14 "백그라운드"
+            Frame "Run · 변동성 돌파" (3WE7-1) 274×150
+              Frame "Frame" (3WE8-1) 75×22
+                SVG "SVG" (3WE9-1) 12×12
+                  SVGVisualElement "Path" (3WEA-1) 10×7
+                Text "백테스트" (3WEB-1) 40×14 "백테스트"
+              Text "변동성 돌파" (3WEC-1) 65×16 "변동성 돌파"
+              Frame "Frame" (3WED-1) 244×14
+                Text "봉 데이터 적재 중" (3WEE-1) 81×14 "봉 데이터 적재 중"
+                Text "41%" (3WEF-1) 18×14 "41%"
+              Frame "Frame" (3WEG-1) 244×6
+                Rectangle "Rectangle" (3WEH-1) 100×6
+              Frame "Frame" (3WEI-1) 244×14
+                Text "05:08 경과" (3WEJ-1) 56×14 "05:08 경과"
+                Text "백그라운드" (3WEK-1) 50×14 "백그라운드"
+            Frame "Run · 아침 브리핑" (3WFS-1) 274×150
+              Frame "Frame" (3WFT-1) 75×22
+                SVG "SVG" (3WFU-1) 12×12
+                  SVGVisualElement "Circle" (3WFV-1) 3×3
+                  SVGVisualElement "Path" (3WFW-1) 7×3
+                Text "에이전트" (3WFX-1) 40×14 "에이전트"
+              Text "아침 브리핑 감시" (3WFY-1) 93×16 "아침 브리핑 감시"
+              Frame "Frame" (3WFZ-1) 244×14
+                Text "조건이 맞을 때까지" (3WG0-1) 88×14 "조건이 맞을 때까지"
+                Text "감시 중" (3WG1-1) 36×14 "감시 중"
+              Frame "Indeterminate" (3WG2-1) 244×6
+                Rectangle "Rectangle" (3WG3-1) 37×6
+                Rectangle "Rectangle" (3WG4-1) 37×6
+                Rectangle "Rectangle" (3WG5-1) 37×6
+                Rectangle "Rectangle" (3WG6-1) 37×6
+                Rectangle "Rectangle" (3WG7-1) 37×6
+                Rectangle "Rectangle" (3WG8-1) 37×6
+              Frame "Frame" (3WG9-1) 244×14
+                Text "03:02:11 경과" (3WGA-1) 74×14 "03:02:11 경과"
+                Text "백그라운드" (3WGB-1) 50×14 "백그라운드"
+          Frame "Queue Card" (3WGD-1) 846×66
+            Frame "Frame" (3WGE-1) 16×16
+              Rectangle "Rectangle" (3WGF-1) 8×8
+            Frame "Frame" (3WGG-1) 141×33
+              Text "대기 1 — 반도체 수급 점검" (3WGH-1) 136×16 "대기 1 — 반도체 수급 점검"
+              Text "앞의 실행이 끝나면 시작합니다" (3WGI-1) 141×14 "앞의 실행이 끝나면 시작합니다"
+          Frame "Side by side" (3WLA-1) 846×212
+            Frame "Frame" (3WLB-1) 846×16
+              Text "같은 순간, 두 창" (3WLC-1) 88×16 "같은 순간, 두 창"
+              Text "왼쪽은 돌고, 오른쪽은 대화 중" (3WLD-1) 137×12 "왼쪽은 돌고, 오른쪽은 대화 중"
+            Frame "Frame" (3WLE-1) 846×188
+              Frame "Window A running" (3WLF-1) 428×188
+                Frame "Frame" (3WLG-1) 402×14
+                  Frame "Frame" (3WLH-1) 79×14
+                    SVG "SVG" (3WLI-1) 13×13
+                      SVGVisualElement "Path" (3WLJ-1) 10×7
+                    Text "추세추종 v3" (3WLK-1) 60×14 "추세추종 v3"
+                  Frame "Frame" (3WLL-1) 127×12
+                    SVG "Spinner" (3Y34-1) 12×12
+                      SVGVisualElement "Circle" (3Y35-1) 9×9
+                      SVGVisualElement "Path" (3Y36-1) 4×4
+                    Text "계산 중 · 창을 떠나 있음" (3WLN-1) 110×12 "계산 중 · 창을 떠나 있음"
+                Frame "Frame" (3WLO-1) 402×120
+                  SVG "SVG" (3WLP-1) 400×90
+                    SVGVisualElement "Path" (3WLQ-1) 328×58
+                    SVGVisualElement "Path" (3WLR-1) 72×12
+                    SVGVisualElement "Path" (3WLS-1) 400×30
+                Frame "Frame" (3WLT-1) 402×12
+                  Text "2025-03 → 계산 중" (3WLU-1) 100×12 "2025-03 → 계산 중"
+                  Text "82%" (3WLV-1) 18×12 "82%"
+              Frame "Window B chatting" (3WLW-1) 406×188
+                Frame "Frame" (3WLX-1) 380×14
+                  Frame "Frame" (3WLY-1) 104×14
+                    SVG "SVG" (3WLZ-1) 13×13
+                      SVGVisualElement "Path" (3WM0-1) 9×8
+                    Text "반도체 수급 점검" (3WM1-1) 85×14 "반도체 수급 점검"
+                  Text "지금 보는 창" (3WM2-1) 58×12 "지금 보는 창"
+                Frame "Frame" (3WM3-1) 380×102
+                  Frame "Frame" (3WM4-1) 380×26
+                    Frame "Frame" (3WM5-1) 160×26
+                      Text "외국인 순매수 상위 5개 보여줘" (3WM6-1) 140×14 "외국인 순매수 상위 5개 보여줘"
+                  Frame "Frame" (3WM7-1) 380×28
+                    Text "오늘 기준 SK하이닉스, 삼성전자, …" (3WM8-1) 260×28 "오늘 기준 SK하이닉스, 삼성전자, 한미반도체 순입니다. 카드로 정리했습니다."
+                Frame "Frame" (3WM9-1) 380×30
+                  Text "무엇이든 요청하세요" (3WMA-1) 94×12 "무엇이든 요청하세요"
+      Frame "Status Legend" (3WAA-1) 1148×176
+        Frame "Legend Title" (3WGV-1) 1100×18
+          Text "표시 하나로 읽는 네 가지 상태" (3WGW-1) 166×16 "표시 하나로 읽는 네 가지 상태"
+        Frame "Legend Cards" (3WGX-1) 1100×97
+          Frame "State · 실행 중" (3WGZ-1) 266×97
+            Frame "Frame" (3WH0-1) 236×16
+              Frame "Frame" (3WH1-1) 10×10
+                SVG "Spinner" (3XXB-1) 12×12
+                  SVGVisualElement "Circle" (3XXC-1) 9×9
+                  SVGVisualElement "Path" (3XXD-1) 4×4
+              Text "실행 중" (3WH3-1) 37×16 "실행 중"
+            Text "지금 계산·감시가 돌고 있습니다. 이…" (3WH4-1) 236×30 "지금 계산·감시가 돌고 있습니다. 이력 행에는 스피너가 돕니다. 창을 닫아도 계속됩니다."
+          Frame "State · 대기" (3WH5-1) 266×97
+            Frame "Frame" (3WH6-1) 236×16
+              Frame "Frame" (3WH7-1) 10×10
+                Rectangle "Rectangle" (3WH8-1) 8×8
+              Text "대기" (3WH9-1) 22×16 "대기"
+            Text "자리가 나면 시작합니다. 순서는 요청…" (3WHA-1) 236×15 "자리가 나면 시작합니다. 순서는 요청한 차례입니다."
+          Frame "State · 완료" (3WHP-1) 266×97
+            Frame "Frame" (3WHQ-1) 236×16
+              Frame "Frame" (3WHR-1) 10×10
+                Rectangle "Rectangle" (3WHS-1) 8×8
+              Text "완료" (3WHT-1) 22×16 "완료"
+            Text "결과가 남아 있습니다. 열면 그대로 …" (3WHU-1) 236×15 "결과가 남아 있습니다. 열면 그대로 복원됩니다."
+          Frame "State · 실패" (3WHV-1) 266×97
+            Frame "Frame" (3WHW-1) 236×16
+              Frame "Frame" (3WHX-1) 10×10
+                Rectangle "Rectangle" (3WHY-1) 8×8
+              Text "실패" (3WHZ-1) 22×16 "실패"
+            Text "이유가 세션에 남습니다. 같은 자리에…" (3WI0-1) 236×30 "이유가 세션에 남습니다. 같은 자리에서 다시 돌릴 수 있습니다."
+    Frame "Interaction Rail" (3WA5-1) 426×722
+      Frame "Rail Header" (3WIT-1) 388×26
+        Text "스피너는 지금 돌고 있다" (3WIU-1) 144×18 "스피너는 지금 돌고 있다"
+        Text "CONCURRENCY" (3WIV-1) 77×14 "CONCURRENCY"
+      Frame "Rule 1" (3WIW-1) 388×103
+        Frame "Frame" (3WIX-1) 358×20
+          Frame "Frame" (3WIY-1) 20×20
+            Text "1" (3WIZ-1) 6×12 "1"
+          Text "창을 닫아도 실행은 계속" (3WJ0-1) 133×16 "창을 닫아도 실행은 계속"
+        Text "결과는 그 세션에 쌓입니다. 끝나면 …" (3WJ1-1) 358×45 "결과는 그 세션에 쌓입니다. 끝나면 알립니다. 실행은 창이 아니라 창과 분리된 데몬이 소유합니다 — Orca"
+      Frame "Rule 2" (3WJ2-1) 388×88
+        Frame "Frame" (3WJ3-1) 358×20
+          Frame "Frame" (3WJ4-1) 20×20
+            Text "2" (3WJ5-1) 6×12 "2"
+          Text "기다리는 동안 다른 창에서 대화" (3WJ6-1) 173×16 "기다리는 동안 다른 창에서 대화"
+        Text "백테스트 계산과 채팅은 서로를 막지 …" (3WJ7-1) 358×30 "백테스트 계산과 채팅은 서로를 막지 않습니다. 한쪽이 도는 동안 다른 쪽에 물어볼 수 있습니다."
+      Frame "Rule 3" (3WJ8-1) 388×73
+        Frame "Frame" (3WJ9-1) 358×20
+          Frame "Frame" (3WJA-1) 20×20
+            Text "3" (3WJB-1) 6×12 "3"
+          Text "동시 한도를 넘으면 대기열" (3WJC-1) 145×16 "동시 한도를 넘으면 대기열"
+        Text "한도는 감추지 않고 표시합니다. 순서…" (3WJD-1) 358×15 "한도는 감추지 않고 표시합니다. 순서는 요청한 순서이고, 새치기는 없습니다."
+      Frame "Gap Note" (3WJF-1) 388×139
+        Frame "Frame" (3WJG-1) 358×18
+          Frame "Frame" (3WJH-1) 18×18
+            SVG "SVG" (3WJI-1) 16×16
+              SVGVisualElement "Circle" (3WJJ-1) 11×11
+              SVGVisualElement "Path" (3WJK-1) 0×4
+              SVGVisualElement "Path" (3WJL-1) 0×0
+          Text "지금 코드에 없는 것" (3WJM-1) 100×16 "지금 코드에 없는 것"
+        Text "지금은 상주 채팅 세션이 프로세스 전…" (3WJN-1) 358×45 "지금은 상주 채팅 세션이 프로세스 전역에 하나뿐입니다. 실행 중인 질의 핸들도 하나만 유지하고, 새 턴이 오"
+        Text "동시 실행·대기열·완료 알림은 모두 …" (3WJO-1) 358×30 "동시 실행·대기열·완료 알림은 모두 새로 만들어야 하는 것입니다. 상태 점 네 가지는 그 뒤에 붙는 표시입니"

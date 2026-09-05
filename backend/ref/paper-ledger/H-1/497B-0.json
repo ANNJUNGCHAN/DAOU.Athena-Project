@@ -1,0 +1,92 @@
+{
+ "board_id": "497B-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "497D-0",
+   "text": "원본 보드: CC-03 / R01-T4-6 · 순위 — 매물대집중",
+   "path": [
+    "note/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "497F-0",
+   "text": "가져온 요소: 매물비 · 매물대집중 · 종목코드 · 현재가 · 전일대비",
+   "path": [
+    "note/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "497H-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "497J-0",
+   "text": "접은 개수: 스칼라 2개 · 행 17개",
+   "path": [
+    "note/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "497B-0",
+   "name": "note/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "497C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "497E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "497G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "497I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T4-6 · 순위 — 매물대집중": 1,
+  "가져온 요소: 매물비 · 매물대집중 · 종목코드 · 현재가 · 전일대비": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 17개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "0afbdf205cb983e1fb4013d1f8d7a84bba1195de5be541cfad735611cddf7bed"
+}

@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T4-9 · 순위 — VI 발동" (482Z-0) 360×420
+  Frame "Header" (483T-0) 0×0
+    Frame "Meta row" (483V-0) 0×0
+      Text "Eyebrow" (483X-0) 0×0
+      Text "As of" (483W-0) 0×0 "기준 09:42"
+    Text "Title" (483U-0) 0×0 "VI 발동"
+  Frame "Body" (4832-0) 0×0
+    Frame "KPI band" (483J-0) 0×0
+      Frame "Frame" (483Q-0) 0×0
+        Text "VI적용구분" (483S-0) 0×0 "VI적용구분"
+        Text "4건" (483R-0) 0×0 "4건"
+      Frame "Frame" (483N-0) 0×0
+        Text "발동종목" (483P-0) 0×0 "발동종목"
+        Text "12건" (483O-0) 0×0 "12건"
+      Frame "Frame" (483K-0) 0×0
+        Text "핵심" (483M-0) 0×0 "핵심"
+        Text "1건" (483L-0) 0×0 "1건"
+    Frame "Table header" (483F-0) 0×0
+      Text "항목" (483I-0) 0×0 "항목"
+      Text "값" (483H-0) 0×0 "값"
+      Text "비고" (483G-0) 72×0 "비고"
+    Frame "Position 1" (4839-0) 0×0
+      Frame "Frame" (483C-0) 0×0
+        Text "매매체결처리시각" (483E-0) 0×0 "매매체결처리시각"
+        Text "Text" (483D-0) 0×0
+      Text "09:41~" (483B-0) 0×0 "09:41~"
+      Text "Text" (483A-0) 72×0
+    Frame "Position 2" (4833-0) 0×0
+      Frame "Frame" (4836-0) 0×0
+        Text "VI해제시각" (4838-0) 0×0 "VI해제시각"
+        Text "Text" (4837-0) 0×0
+      Text "09:43" (4835-0) 0×0 "09:43"
+      Text "Text" (4834-0) 72×0
+  Frame "Fold note" (4830-0) 0×0
+    Text "스칼라 2개, 행 4개 접힘 · 원본…" (4831-0) 0×0 "스칼라 2개, 행 4개 접힘 · 원본에서 확인"

@@ -1,0 +1,78 @@
+{
+ "board_id": "16OQ-2",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "04 · 부팅 — TYPE ATH→ATHE · 560–880ms",
+ "width": 1640,
+ "height": 900,
+ "texts": [
+  {
+   "id": "16OV-2",
+   "text": "ATHE",
+   "path": [
+    "04 · 부팅 — TYPE ATH→ATHE · 560–880ms",
+    "BOOT CENTER · KIWOOM + TYPE ATHE",
+    "ATHENA · TYPE ATH–ATHE"
+   ]
+  },
+  {
+   "id": "16OU-2",
+   "text": "|",
+   "path": [
+    "04 · 부팅 — TYPE ATH→ATHE · 560–880ms",
+    "BOOT CENTER · KIWOOM + TYPE ATHE",
+    "ATHENA · TYPE ATH–ATHE"
+   ]
+  },
+  {
+   "id": "16OT-2",
+   "text": "NA",
+   "path": [
+    "04 · 부팅 — TYPE ATH→ATHE · 560–880ms",
+    "BOOT CENTER · KIWOOM + TYPE ATHE",
+    "ATHENA · TYPE ATH–ATHE"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "16OQ-2",
+   "name": "04 · 부팅 — TYPE ATH→ATHE · 560–880ms",
+   "component": "Frame",
+   "w": 1640,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "16OR-2",
+   "name": "BOOT CENTER · KIWOOM + TYPE ATHE",
+   "component": "Frame",
+   "w": 460,
+   "h": 209,
+   "depth": 1
+  },
+  {
+   "id": "16OW-2",
+   "name": "키움증권 CI",
+   "component": "Frame",
+   "w": 220,
+   "h": 69,
+   "depth": 2
+  },
+  {
+   "id": "16OS-2",
+   "name": "ATHENA · TYPE ATH–ATHE",
+   "component": "Frame",
+   "w": 460,
+   "h": 112,
+   "depth": 2
+  }
+ ],
+ "text_multiset": {
+  "ATHE": 1,
+  "|": 1,
+  "NA": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "eb9155583227e36120dbca89f4045aca7c44ced189f3b1068d2c88601105440a"
+}

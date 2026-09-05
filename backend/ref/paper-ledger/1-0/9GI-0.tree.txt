@@ -1,0 +1,17 @@
+Frame "27 · 접근성 — 투명도·모션 감소" (9GI-0) 1680×352
+  Frame "Frame" (9GK-0) 1600×54
+    Text "접근성 — 2종 폴백" (9GL-0) 1600×34 "접근성 — 2종 폴백"
+    Text "투명도 감소와 모션 감소를 별도 폴백…" (9GM-0) 1600×14 "투명도 감소와 모션 감소를 별도 폴백으로 유지합니다. 공식 접근성 폴백은 이 두 가지로 고정합니다."
+  Frame "Frame" (9GN-0) 1600×194
+    Frame "Frame" (9GO-0) 788×194
+      Text "투명도 감소 · prefers-red…" (9GP-0) 746×18 "투명도 감소 · prefers-reduced-transparency"
+      Text "모든 유리 표면이 완전 불투명 패널이…" (9GQ-0) 746×36 "모든 유리 표면이 완전 불투명 패널이 된다 — .glass는 panel2, 카드·시트·cmd-box·온보딩 "
+      Frame "Frame" (9GR-0) 746×48
+        Text "불투명 카드 샘플 — 레이아웃은 유리…" (9GS-0) 716×18 "불투명 카드 샘플 — 레이아웃은 유리와 동일"
+      Text "Apple 규범(liquid-glas…" (9GT-0) 746×14 "Apple 규범(liquid-glass.md §4)은 frostier를 말하지만 Athena는 완전 불투명을"
+    Frame "Frame" (9H7-0) 788×194
+      Text "모션 감소 · prefers-redu…" (9H8-0) 746×18 "모션 감소 · prefers-reduced-motion"
+      Text "모든 애니메이션·전환을 0.001ms…" (9H9-0) 746×18 "모든 애니메이션·전환을 0.001ms로 강제, 반복 1회, scroll-behavior auto. 오브의 깜"
+      Frame "Frame" (9HA-0) 746×48
+        Text "정지 상태 샘플 — 상태 변화는 즉시…" (9HB-0) 716×18 "정지 상태 샘플 — 상태 변화는 즉시 반영, 궤적 없음"
+      Text "animation/transition…" (9HC-0) 746×14 "animation/transition-duration 0.001ms !important — 전역 별표 선택자"

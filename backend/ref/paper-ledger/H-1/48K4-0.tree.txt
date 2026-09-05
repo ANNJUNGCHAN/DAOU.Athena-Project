@@ -1,0 +1,35 @@
+Frame "mini/CC-01 / R10-B-X1 · 금현물 잔고·거래내역" (48K4-0) 360×420
+  Frame "Header" (48KY-0) 0×0
+    Frame "Meta row" (48L0-0) 0×0
+      Text "Eyebrow" (48L2-0) 0×0
+      Text "As of" (48L1-0) 0×0 "기준 09:42"
+    Text "Title" (48KZ-0) 0×0 "금현물 잔고·거래내역"
+  Frame "Body" (48K7-0) 0×0
+    Frame "KPI band" (48KO-0) 0×0
+      Frame "Frame" (48KV-0) 0×0
+        Text "결제잔고" (48KX-0) 0×0 "결제잔고"
+        Text "결제잔고 120g" (48KW-0) 0×0 "결제잔고 120g"
+      Frame "Frame" (48KS-0) 0×0
+        Text "손익율" (48KU-0) 0×0 "손익율"
+        Text "+4.82%" (48KT-0) 0×0 "+4.82%"
+      Frame "Frame" (48KP-0) 0×0
+        Text "보유수량" (48KR-0) 0×0 "보유수량"
+        Text "125g" (48KQ-0) 0×0 "125g"
+    Frame "Table header" (48KK-0) 0×0
+      Text "항목" (48KN-0) 0×0 "항목"
+      Text "값" (48KM-0) 0×0 "값"
+      Text "비고" (48KL-0) 72×0 "비고"
+    Frame "Position 1" (48KE-0) 0×0
+      Frame "Frame" (48KH-0) 0×0
+        Text "총매입금액" (48KJ-0) 0×0 "총매입금액"
+        Text "Text" (48KI-0) 0×0
+      Text "15,312,000원" (48KG-0) 0×0 "15,312,000원"
+      Text "Text" (48KF-0) 72×0
+    Frame "Position 2" (48K8-0) 0×0
+      Frame "Frame" (48KB-0) 0×0
+        Text "추정예탁자산" (48KD-0) 0×0 "추정예탁자산"
+        Text "Text" (48KC-0) 0×0
+      Text "20,870,000원" (48KA-0) 0×0 "20,870,000원"
+      Text "Text" (48K9-0) 72×0
+  Frame "Fold note" (48K5-0) 0×0
+    Text "스칼라 2개, 행 1개 접힘 · 원본…" (48K6-0) 0×0 "스칼라 2개, 행 1개 접힘 · 원본에서 확인"

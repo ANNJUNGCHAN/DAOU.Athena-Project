@@ -1,0 +1,189 @@
+Frame "43 · 세션 저장 모델 — Open WebUI·Orca 참조" (3WXE-1) 1680×900
+  Frame "43 Header" (3WXF-1) 1600×86
+    Frame "Frame" (3WXG-1) 596×56
+      Frame "Frame" (3WXH-1) 48×48
+        Text "43" (3WXI-1) 17×20 "43"
+      Frame "Frame" (3WXJ-1) 532×56
+        Text "세션 저장 모델 — Open WebU…" (3WXK-1) 532×36 "세션 저장 모델 — Open WebUI·Orca 참조"
+        Text "레코드 하나, 즉시 쓰기, 창과 분리…" (3WXL-1) 532×18 "레코드 하나, 즉시 쓰기, 창과 분리된 데몬. 이미 검증된 오픈소스의 골격을 그대로 가져온다."
+    Frame "Frame" (3WXM-1) 109×32
+      Text "신규 · 승인 대기" (3WXN-1) 81×16 "신규 · 승인 대기"
+  Frame "43 Content" (3WXT-1) 1600×722
+    Frame "Top Row" (3WXU-1) 1600×440
+      Frame "Card Session Record" (3WXV-1) 560×440
+        Frame "Frame" (3WXW-1) 522×16
+          Text "세션 = 레코드 하나" (3WXX-1) 97×16 "세션 = 레코드 하나"
+          Text "SESSION RECORD" (3WXY-1) 98×14 "SESSION RECORD"
+        Frame "Frame" (3WXZ-1) 522×334
+          Text "{
+  "schemaVersion":…" (3WY0-1) 402×308 "{
+  "schemaVersion": 1, "id": "sess_01JC8QB4M2VT",
+  "mode":"
+        Text "Open WebUI의 chat(JSO…" (3WY1-1) 522×28 "Open WebUI의 chat(JSON) 한 컬럼과 같은 골격. 목록·검색은 인덱스 컬럼(id·mode·pr"
+      Frame "Card Write Path" (3WY2-1) 608×440
+        Frame "Frame" (3WY3-1) 570×16
+          Text "쓰기 파이프라인 — 이벤트가 곧 저장" (3WY4-1) 185×16 "쓰기 파이프라인 — 이벤트가 곧 저장"
+          Text "WRITE PATH" (3WY5-1) 70×14 "WRITE PATH"
+        Frame "Lanes" (3X2Q-1) 570×334
+          Frame "Lane 메시지·카드" (3X2R-1) 570×30
+            Frame "Frame" (3X2S-1) 92×30
+              Text "메시지·카드" (3X2T-1) 53×14 "메시지·카드"
+            Frame "Frame" (3X2U-1) 472×30
+              Frame "Frame" (3X2V-1) 36×30
+                Text "발생" (3X2W-1) 20×14 "발생"
+              SVG "SVG" (3X2X-1) 8×8
+                SVGVisualElement "Path" (3X2Y-1) 5×4
+              Frame "Frame" (3X2Z-1) 118×30
+                Text "main 세션 모델 upsert" (3X30-1) 102×14 "main 세션 모델 upsert"
+              SVG "SVG" (3X31-1) 8×8
+                SVGVisualElement "Path" (3X32-1) 5×4
+              Frame "Frame" (3X33-1) 104×30
+                Text "SQLite 커밋 ≤30ms" (3X34-1) 88×14 "SQLite 커밋 ≤30ms"
+          Frame "Lane 폼·코드·필터" (3X35-1) 570×30
+            Frame "Frame" (3X36-1) 92×30
+              Text "폼·코드·필터" (3X37-1) 55×14 "폼·코드·필터"
+            Frame "Frame" (3X38-1) 472×30
+              Frame "Frame" (3X39-1) 36×30
+                Text "변경" (3X3A-1) 20×14 "변경"
+              SVG "SVG" (3X3B-1) 8×8
+                SVGVisualElement "Path" (3X3C-1) 5×4
+              Frame "Frame" (3X3D-1) 112×30
+                Text "1s 디바운스 · 최대 5s" (3X3E-1) 96×14 "1s 디바운스 · 최대 5s"
+              SVG "SVG" (3X3F-1) 8×8
+                SVGVisualElement "Path" (3X3G-1) 5×4
+              Frame "Frame" (3X3H-1) 120×30
+                Text "tmp + fsync + rename" (3X3I-1) 104×14 "tmp + fsync + rename"
+              SVG "SVG" (3X3J-1) 8×8
+                SVGVisualElement "Path" (3X3K-1) 5×4
+              Frame "Frame" (3X3L-1) 79×30
+                Text "백업 5개 회전" (3X3M-1) 63×14 "백업 5개 회전"
+          Frame "Lane 스트리밍" (3X3N-1) 570×30
+            Frame "Frame" (3X3O-1) 92×30
+              Text "스트리밍" (3X3P-1) 40×14 "스트리밍"
+            Frame "Frame" (3X3Q-1) 472×30
+              Frame "Frame" (3X3R-1) 70×30
+                Text "델타 200ms" (3X3S-1) 54×14 "델타 200ms"
+              SVG "SVG" (3X3T-1) 8×8
+                SVGVisualElement "Path" (3X3U-1) 5×4
+              Frame "Frame" (3X3V-1) 116×30
+                Text "메모리 버퍼(TTL 10분)" (3X3W-1) 100×14 "메모리 버퍼(TTL 10분)"
+              SVG "SVG" (3X3X-1) 8×8
+                SVGVisualElement "Path" (3X3Y-1) 5×4
+              Frame "Frame" (3X3Z-1) 138×30
+                Text "5s 또는 2KB마다 저널 커밋" (3X40-1) 122×14 "5s 또는 2KB마다 저널 커밋"
+              SVG "SVG" (3X41-1) 8×8
+                SVGVisualElement "Path" (3X42-1) 5×4
+              Frame "Frame" (3X43-1) 106×30
+                Text "턴 종료 시 최종 1회" (3X44-1) 90×14 "턴 종료 시 최종 1회"
+          Frame "Lane 실행 로그" (3X45-1) 570×30
+            Frame "Frame" (3X46-1) 92×30
+              Text "실행 로그" (3X47-1) 44×14 "실행 로그"
+            Frame "Frame" (3X48-1) 472×30
+              Frame "Frame" (3X49-1) 74×30
+                Text "append 로그" (3X4A-1) 58×14 "append 로그"
+              SVG "SVG" (3X4B-1) 8×8
+                SVGVisualElement "Path" (3X4C-1) 5×4
+              Frame "Frame" (3X4D-1) 140×30
+                Text "5s 체크포인트(dirty일 때만)" (3X4E-1) 124×14 "5s 체크포인트(dirty일 때만)"
+              SVG "SVG" (3X4F-1) 8×8
+                SVGVisualElement "Path" (3X4G-1) 5×4
+              Frame "Frame" (3X4H-1) 142×30
+                Text "스냅샷 + 이후 append 재생" (3X4I-1) 126×14 "스냅샷 + 이후 append 재생"
+        Text "디바운스·원자 쓰기·백업 회전은 Or…" (3WZZ-1) 570×28 "디바운스·원자 쓰기·백업 회전은 Orca의 orca-data.json 경로(1s 디바운스, 해시 같으면 스킵"
+      Frame "Card Daemon" (3X00-1) 400×440
+        Frame "Frame" (3X01-1) 362×16
+          Text "실행은 데몬이 소유한다" (3X02-1) 118×16 "실행은 데몬이 소유한다"
+          Text "DAEMON" (3X03-1) 42×14 "DAEMON"
+        Frame "Stack" (3X04-1) 362×320
+          Frame "Frame" (3X05-1) 362×60
+            Text "셸 창 · 오브 창" (3X06-1) 336×16 "셸 창 · 오브 창"
+            Text "보는 자리. 닫아도 아무 일도 없다" (3X07-1) 336×14 "보는 자리. 닫아도 아무 일도 없다"
+          SVG "SVG" (3X08-1) 12×16
+            SVGVisualElement "Path" (3X09-1) 6×8
+          Frame "Frame" (3X0A-1) 362×88
+            Text "Athena 데몬" (3X0B-1) 336×16 "Athena 데몬"
+            Frame "Frame" (3X0C-1) 336×20
+              Frame "Frame" (3X0D-1) 60×20
+                Text "채팅 세션" (3X0E-1) 44×14 "채팅 세션"
+              Frame "Frame" (3X0F-1) 74×20
+                Text "백테스트 job" (3X0G-1) 58×14 "백테스트 job"
+              Frame "Frame" (3X0H-1) 71×20
+                Text "MCP 프로브" (3X0I-1) 55×14 "MCP 프로브"
+              Frame "Frame" (3X0J-1) 60×20
+                Text "루틴 실행" (3X0K-1) 44×14 "루틴 실행"
+            Text "pid·token으로 창이 다시 붙는…" (3X0L-1) 336×14 "pid·token으로 창이 다시 붙는다(warm reattach)"
+          SVG "SVG" (3X0M-1) 12×16
+            SVGVisualElement "Path" (3X0N-1) 6×8
+          Frame "Frame" (3X0O-1) 362×60
+            Text "백엔드 · SQLite · 프로젝트 …" (3X0P-1) 336×16 "백엔드 · SQLite · 프로젝트 폴더"
+            Text "job 테이블 · heartbeat …" (3X0Q-1) 336×14 "job 테이블 · heartbeat · 부팅 시 reconcile"
+        Text "Orca가 PTY를 데몬에 두어 창을…" (3X0R-1) 362×42 "Orca가 PTY를 데몬에 두어 창을 닫거나 앱이 죽어도 에이전트가 계속 도는 구조. 데몬이 없을 때만 세션"
+    Frame "Compare Table" (3X0S-1) 1600×266
+      Frame "Frame" (3X0T-1) 1566×24
+        Text "참조 앱 대조 — 무엇을 가져오고 무…" (3X0U-1) 248×16 "참조 앱 대조 — 무엇을 가져오고 무엇을 바꾸는가"
+        Text "REFERENCES" (3X0V-1) 70×14 "REFERENCES"
+      Frame "Header Row" (3X0W-1) 1566×30
+        Frame "Frame" (3X0X-1) 150×14
+          Text "앱" (3X0Y-1) 10×14 "앱"
+        Frame "Frame" (3X0Z-1) 283×14
+          Text "저장 단위" (3X10-1) 44×14 "저장 단위"
+        Frame "Frame" (3X11-1) 283×14
+          Text "저장 시점" (3X12-1) 44×14 "저장 시점"
+        Frame "Frame" (3X13-1) 283×14
+          Text "스트리밍 중" (3X14-1) 54×14 "스트리밍 중"
+        Frame "Frame" (3X15-1) 283×14
+          Text "재접속·복원" (3X16-1) 53×14 "재접속·복원"
+        Frame "Frame" (3X17-1) 283×14
+          Text "프로젝트·삭제" (3X18-1) 63×14 "프로젝트·삭제"
+      Frame "Row Open WebUI" (3X19-1) 1566×45
+        Frame "Frame" (3X1A-1) 150×16
+          Text "Open WebUI" (3X1B-1) 140×16 "Open WebUI"
+        Frame "Frame" (3X1C-1) 283×14
+          Text "chat JSON 한 레코드 + ch…" (3X1D-1) 273×14 "chat JSON 한 레코드 + chat_message 정규화 이중 기록"
+        Frame "Frame" (3X1E-1) 283×28
+          Text "사용자 메시지·assistant 자리…" (3X1F-1) 273×28 "사용자 메시지·assistant 자리표시자를 스트리밍 전에 먼저 커밋, 최종 1회 upsert"
+        Frame "Frame" (3X1G-1) 283×14
+          Text "토큰은 Redis response_s…" (3X1H-1) 273×14 "토큰은 Redis response_streams에만, DB엔 안 씀"
+        Frame "Frame" (3X1I-1) 283×28
+          Text "GET /chats/{id}가 진행 …" (3X1J-1) 273×28 "GET /chats/{id}가 진행 중 스트림을 overlay, 살아있는 task 조회로 화해"
+        Frame "Frame" (3X1K-1) 283×14
+          Text "folder_id 하나로 폴더 귀속,…" (3X1L-1) 273×14 "folder_id 하나로 폴더 귀속, 핀·아카이브는 boolean"
+      Frame "Row Orca" (3X1M-1) 1566×45
+        Frame "Frame" (3X1N-1) 150×16
+          Text "Orca" (3X1O-1) 140×16 "Orca"
+        Frame "Frame" (3X1P-1) 283×14
+          Text "orca-data.json 단일 스토…" (3X1Q-1) 273×14 "orca-data.json 단일 스토어 + 워크트리별 meta"
+        Frame "Frame" (3X1R-1) 283×14
+          Text "1s 디바운스·해시 스킵·원자 쓰기·…" (3X1S-1) 273×14 "1s 디바운스·해시 스킵·원자 쓰기·백업 5개"
+        Frame "Frame" (3X1T-1) 283×14
+          Text "터미널: 5s 체크포인트 + appe…" (3X1U-1) 273×14 "터미널: 5s 체크포인트 + append 로그"
+        Frame "Frame" (3X1V-1) 283×14
+          Text "데몬 warm reattach, 없으…" (3X1W-1) 273×14 "데몬 warm reattach, 없으면 claude --resume"
+        Frame "Frame" (3X1X-1) 283×14
+          Text "작업마다 git worktree, 삭…" (3X1Y-1) 273×14 "작업마다 git worktree, 삭제는 trash 폴더 경유"
+      Frame "Row Claude Code" (3X1Z-1) 1566×45
+        Frame "Frame" (3X20-1) 150×16
+          Text "Claude Code · Codex" (3X21-1) 140×16 "Claude Code · Codex"
+        Frame "Frame" (3X22-1) 283×14
+          Text "세션 JSONL(프로젝트 cwd별 폴…" (3X23-1) 273×14 "세션 JSONL(프로젝트 cwd별 폴더)"
+        Frame "Frame" (3X24-1) 283×14
+          Text "턴마다 append" (3X25-1) 273×14 "턴마다 append"
+        Frame "Frame" (3X26-1) 283×14
+          Text "부분 응답도 JSONL에 남음" (3X27-1) 273×14 "부분 응답도 JSONL에 남음"
+        Frame "Frame" (3X28-1) 283×14
+          Text "--resume·--continue로…" (3X29-1) 273×14 "--resume·--continue로 이어 붙임"
+        Frame "Frame" (3X2A-1) 283×14
+          Text "cwd가 곧 프로젝트" (3X2B-1) 273×14 "cwd가 곧 프로젝트"
+      Frame "Row Athena" (3X2C-1) 1566×44
+        Frame "Frame" (3X2D-1) 150×16
+          Text "Athena (이 설계)" (3X2E-1) 140×16 "Athena (이 설계)"
+        Frame "Frame" (3X2F-1) 283×28
+          Text "세션 레코드 하나(messages·c…" (3X2G-1) 273×28 "세션 레코드 하나(messages·cards·workspace·viewport·jobs) + 인덱스 컬럼"
+        Frame "Frame" (3X2H-1) 283×14
+          Text "메시지·카드 즉시, 폼·코드·필터 1…" (3X2I-1) 273×14 "메시지·카드 즉시, 폼·코드·필터 1s 디바운스, 원자 쓰기·백업 5"
+        Frame "Frame" (3X2J-1) 283×14
+          Text "200ms 버퍼 + 5s 저널 커밋,…" (3X2K-1) 273×14 "200ms 버퍼 + 5s 저널 커밋, 최종 1회"
+        Frame "Frame" (3X2L-1) 283×14
+          Text "세션 로드 → jobs 화해 → 버퍼…" (3X2M-1) 273×14 "세션 로드 → jobs 화해 → 버퍼 overlay, 데몬 reattach"
+        Frame "Frame" (3X2N-1) 283×14
+          Text "projectId = 폴더 하나, 제…" (3X2O-1) 273×14 "projectId = 폴더 하나, 제거는 trash 경유 영구 삭제"

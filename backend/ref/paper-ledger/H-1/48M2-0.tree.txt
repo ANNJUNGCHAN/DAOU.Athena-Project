@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건" (48M2-0) 360×420
+  Frame "Header" (48MW-0) 0×0
+    Frame "Meta row" (48MY-0) 0×0
+      Text "Eyebrow" (48N0-0) 0×0
+      Text "As of" (48MZ-0) 0×0 "기준 09:42"
+    Text "Title" (48MX-0) 0×0 "VI 발동 전체 12건"
+  Frame "Body" (48M5-0) 0×0
+    Frame "KPI band" (48MM-0) 0×0
+      Frame "Frame" (48MT-0) 0×0
+        Text "발동종목" (48MV-0) 0×0 "발동종목"
+        Text "12건" (48MU-0) 0×0 "12건"
+      Frame "Frame" (48MQ-0) 0×0
+        Text "VI적용구분" (48MS-0) 0×0 "VI적용구분"
+        Text "8건" (48MR-0) 0×0 "8건"
+      Frame "Frame" (48MN-0) 0×0
+        Text "핵심" (48MP-0) 0×0 "핵심"
+        Text "1건" (48MO-0) 0×0 "1건"
+    Frame "Table header" (48MI-0) 0×0
+      Text "항목" (48ML-0) 0×0 "항목"
+      Text "값" (48MK-0) 0×0 "값"
+      Text "비고" (48MJ-0) 72×0 "비고"
+    Frame "Position 1" (48MC-0) 0×0
+      Frame "Frame" (48MF-0) 0×0
+        Text "VI적용구분" (48MH-0) 0×0 "VI적용구분"
+        Text "Text" (48MG-0) 0×0
+      Text "4건" (48ME-0) 0×0 "4건"
+      Text "Text" (48MD-0) 72×0
+    Frame "Position 2" (48M6-0) 0×0
+      Frame "Frame" (48M9-0) 0×0
+        Text "발동종목" (48MB-0) 0×0 "발동종목"
+        Text "Text" (48MA-0) 0×0
+      Text "전체 12건 · 12건 표시" (48M8-0) 0×0 "전체 12건 · 12건 표시"
+      Text "Text" (48M7-0) 72×0
+  Frame "Fold note" (48M3-0) 0×0
+    Text "스칼라 2개, 행 10개 접힘 · 원…" (48M4-0) 0×0 "스칼라 2개, 행 10개 접힘 · 원본에서 확인"

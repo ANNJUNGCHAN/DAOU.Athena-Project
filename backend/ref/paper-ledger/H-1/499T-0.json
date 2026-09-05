@@ -1,0 +1,92 @@
+{
+ "board_id": "499T-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "499V-0",
+   "text": "원본 보드: CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+   "path": [
+    "note/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "499X-0",
+   "text": "가져온 요소: 신주인수권시세 · 전일대비기호 · 등락율 · 종목명 · 종목코드",
+   "path": [
+    "note/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "499Z-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49A1-0",
+   "text": "접은 개수: 스칼라 2개 · 행 12개",
+   "path": [
+    "note/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "499T-0",
+   "name": "note/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "499U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "499W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "499Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49A0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T8 · 순위 — 신주인수권 전체": 1,
+  "가져온 요소: 신주인수권시세 · 전일대비기호 · 등락율 · 종목명 · 종목코드": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 12개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "629c4ed6f0155a64151cce219f5c7139174189f89092d1a51f986a3db3d02f6c"
+}

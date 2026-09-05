@@ -1,0 +1,342 @@
+{
+ "board_id": "46YJ-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46ZH-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46ZG-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46ZE-0",
+   "text": "종목 동향 수급",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Header"
+   ]
+  },
+  {
+   "id": "46ZC-0",
+   "text": "개인투자자",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46ZB-0",
+   "text": "-638억원",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46Z9-0",
+   "text": "금융투자",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46Z8-0",
+   "text": "금융투자 -842억원",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46Z6-0",
+   "text": "누적거래대금",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46Z5-0",
+   "text": "2.14조원",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46Z2-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46Z1-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46Z0-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46YY-0",
+   "text": "외인일별순매매수량",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46YX-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46YV-0",
+   "text": "+15.4만주",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46YU-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46YS-0",
+   "text": "기관계",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46YR-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46YP-0",
+   "text": "-142",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46YO-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46YL-0",
+   "text": "스칼라 2개, 행 3개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46YJ-0",
+   "name": "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46ZD-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46ZF-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46YM-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46Z3-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46ZA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46Z7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46Z4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46YZ-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46YT-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46YW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46YN-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46YQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46YK-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "종목 동향 수급": 1,
+  "개인투자자": 1,
+  "-638억원": 1,
+  "금융투자": 1,
+  "금융투자 -842억원": 1,
+  "누적거래대금": 1,
+  "2.14조원": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "외인일별순매매수량": 1,
+  "+15.4만주": 1,
+  "기관계": 1,
+  "-142": 1,
+  "스칼라 2개, 행 3개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "61d01d62d4de7f778ed9bb737f83676cbe3e01a43e96fe5904ffdf7be2527fec"
+}

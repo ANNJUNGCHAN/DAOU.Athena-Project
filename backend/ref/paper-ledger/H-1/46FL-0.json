@@ -1,0 +1,345 @@
+{
+ "board_id": "46FL-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46GJ-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46GI-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46GG-0",
+   "text": "삼성전자 실시간 호가·체결",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Header"
+   ]
+  },
+  {
+   "id": "46GE-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46GD-0",
+   "text": "단계",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46GC-0",
+   "text": "가격",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46GB-0",
+   "text": "잔량",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46G9-0",
+   "text": "01",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46G8-0",
+   "text": "매도 1호가",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46G7-0",
+   "text": "정규장",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46G5-0",
+   "text": "150,850",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46G4-0",
+   "text": "3,420주",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46G2-0",
+   "text": "02",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46G1-0",
+   "text": "매수 1호가",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46G0-0",
+   "text": "정규장",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46FY-0",
+   "text": "150,840",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46FX-0",
+   "text": "4,180주",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46FV-0",
+   "text": "03",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46FU-0",
+   "text": "총잔량",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46FT-0",
+   "text": "09:42:21",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46FR-0",
+   "text": "—",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46FQ-0",
+   "text": "81,160주",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46FN-0",
+   "text": "외 17개 행 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46FL-0",
+   "name": "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46GF-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46GH-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46FO-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46GA-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46G3-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46G6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46FW-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46FZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46FP-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46FS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46FM-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "삼성전자 실시간 호가·체결": 1,
+  "순서": 1,
+  "단계": 1,
+  "가격": 1,
+  "잔량": 1,
+  "01": 1,
+  "매도 1호가": 1,
+  "정규장": 2,
+  "150,850": 1,
+  "3,420주": 1,
+  "02": 1,
+  "매수 1호가": 1,
+  "150,840": 1,
+  "4,180주": 1,
+  "03": 1,
+  "총잔량": 1,
+  "09:42:21": 1,
+  "—": 1,
+  "81,160주": 1,
+  "외 17개 행 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "4a45a10e816f8ca236e0b05cf4c5df78696d0dac4a047569d176310d0dd9c2f5"
+}

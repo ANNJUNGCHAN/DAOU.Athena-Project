@@ -1,0 +1,234 @@
+{
+ "board_id": "46QP-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46RC-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46RB-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46R9-0",
+   "text": "투자자별 수급",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Header"
+   ]
+  },
+  {
+   "id": "46R7-0",
+   "text": "금융투자",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46R6-0",
+   "text": "금융투자 -842억원",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46R4-0",
+   "text": "기관계",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46R3-0",
+   "text": "-1,204억원",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46R1-0",
+   "text": "차익거래당일",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46R0-0",
+   "text": "+368억원",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46QY-0",
+   "text": "개인투자자",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46QX-0",
+   "text": "-638억원",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46QV-0",
+   "text": "누적거래량",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46QU-0",
+   "text": "거래량 1,420만주 · 체결강도 108.4",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46QR-0",
+   "text": "외 115개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46QP-0",
+   "name": "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46R8-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46RA-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46QS-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46R5-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46R2-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46QZ-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46QW-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46QT-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46QQ-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "투자자별 수급": 1,
+  "금융투자": 1,
+  "금융투자 -842억원": 1,
+  "기관계": 1,
+  "-1,204억원": 1,
+  "차익거래당일": 1,
+  "+368억원": 1,
+  "개인투자자": 1,
+  "-638억원": 1,
+  "누적거래량": 1,
+  "거래량 1,420만주 · 체결강도 108.4": 1,
+  "외 115개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "35fd47d683800da6e71839deeb7be40a1b0674c4104c4e5c63756180eb0a8986"
+}

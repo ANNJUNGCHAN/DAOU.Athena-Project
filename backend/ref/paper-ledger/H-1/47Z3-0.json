@@ -1,0 +1,341 @@
+{
+ "board_id": "47Z3-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "4801-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "4800-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47ZY-0",
+   "text": "증권사별 상위",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Header"
+   ]
+  },
+  {
+   "id": "47ZW-0",
+   "text": "순매수금액",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47ZV-0",
+   "text": "+1,272억원",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47ZT-0",
+   "text": "기준 시각",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47ZS-0",
+   "text": "당일 09:40",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47ZQ-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47ZP-0",
+   "text": "3종목",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47ZM-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47ZL-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47ZK-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47ZI-0",
+   "text": "기준 시각",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47ZH-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47ZF-0",
+   "text": "09:42 조회",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47ZE-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47ZC-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47ZB-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47Z9-0",
+   "text": "상위 3종목 89.6%",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47Z8-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47Z5-0",
+   "text": "스칼라 2개, 행 6개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47Z3-0",
+   "name": "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47ZX-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47ZZ-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47Z6-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47ZN-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47ZU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47ZR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47ZO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47ZJ-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47ZD-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47ZG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47Z7-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47ZA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47Z4-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "증권사별 상위": 1,
+  "순매수금액": 1,
+  "+1,272억원": 1,
+  "기준 시각": 2,
+  "당일 09:40": 1,
+  "핵심": 1,
+  "3종목": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "09:42 조회": 1,
+  "변화": 1,
+  "상위 3종목 89.6%": 1,
+  "스칼라 2개, 행 6개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "88b394aa4e46e25b616a0bb4c7f78eb4d3b525b1d5365c95f3ad060e396f5abb"
+}

@@ -1,0 +1,340 @@
+{
+ "board_id": "48AP-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48BN-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48BM-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48BK-0",
+   "text": "ELW 행 펼침",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Header"
+   ]
+  },
+  {
+   "id": "48BI-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48BH-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48BG-0",
+   "text": "값",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48BF-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48BD-0",
+   "text": "01",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "48BC-0",
+   "text": "호가시간",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48BB-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48B9-0",
+   "text": "09:42:18 기준",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "48B8-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "48B6-0",
+   "text": "02",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "48B5-0",
+   "text": "이론가",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48B4-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48B2-0",
+   "text": "1,210원",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "48B1-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "48AZ-0",
+   "text": "03",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "48AY-0",
+   "text": "로",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48AX-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48AV-0",
+   "text": "0.07",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "48AU-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "48AR-0",
+   "text": "외 2개 행 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48AP-0",
+   "name": "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48BJ-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48BL-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48AS-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48BE-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48B7-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48BA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48B0-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48B3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48AT-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48AW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48AQ-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "ELW 행 펼침": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "호가시간": 1,
+  "09:42:18 기준": 1,
+  "02": 1,
+  "이론가": 1,
+  "1,210원": 1,
+  "03": 1,
+  "로": 1,
+  "0.07": 1,
+  "외 2개 행 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "cec82ee7e37a6c2fdb3c279ae5dd43671879fbe23a8661868a4f3c712dc8b70d"
+}

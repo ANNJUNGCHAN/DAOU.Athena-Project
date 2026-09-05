@@ -1,0 +1,63 @@
+Frame "10 · 그래프 — "이 노드 설명해줘" (관계·근거·이력·대화 원문)" (3ZAA-1) 1680×0
+  Frame "보드 제목" (3ZAB-1) 1600×0
+    Text ""이 노드 설명해줘" — 이력을 뒤져…" (3ZAC-1) 0×0 ""이 노드 설명해줘" — 이력을 뒤져 자료로 답한다"
+    Text "화면의 이름을 되풀이하는 것이 아니라…" (3ZAD-1) 0×0 "화면의 이름을 되풀이하는 것이 아니라 athena_brain action=entity가 준 자료로 답한다. "
+  Frame "응답의 재료와 답변" (3ZAE-1) 1600×0
+    Frame "entity 응답" (3ZAF-1) 760×0
+      Frame "Frame" (3ZAG-1) 0×0
+        Text "action=entity" (3ZAH-1) 0×0 "action=entity"
+        Text "entity = 이름 또는 entit…" (3ZAI-1) 0×0 "entity = 이름 또는 entity_id"
+      Frame "노드 머리" (3ZAJ-1) 0×0
+        Text "한미반도체" (3ZAK-1) 0×0 "한미반도체"
+        Text "security · 연결 7" (3ZAL-1) 0×0 "security · 연결 7"
+      Text "관계 제목" (3ZAM-1) 0×0 "관계 — 방향 · 확정성 · 티어 · 보강"
+      Frame "관계 행 1" (3ZAN-1) 0×0
+        Frame "Frame" (3ZAO-1) 0×0
+          Text "in" (3ZAP-1) 0×0 "in"
+          Text "관심" (3ZAQ-1) 0×0 "관심"
+          Text "← 투자자" (3ZAR-1) 0×0 "← 투자자"
+          Text "사실 · 대화 · 4회" (3ZAS-1) 0×0 "사실 · 대화 · 4회"
+        Text "근거 — HBM 장비 질문 반복" (3ZAT-1) 0×0 "근거 — HBM 장비 질문 반복"
+        Frame "원문 발췌" (3ZAU-1) 0×0
+          Text ""HBM 장비주가 궁금해서 한미반도체…" (3ZAV-1) 0×0 ""HBM 장비주가 궁금해서 한미반도체를 계속 보고 있어""
+          Text "chat_message · conv-…" (3ZAW-1) 0×0 "chat_message · conv-1#3 · 08-04 · 전문 43자"
+      Frame "관계 행 2" (3ZAX-1) 0×0
+        Frame "Frame" (3ZAY-1) 0×0
+          Text "out" (3ZAZ-1) 0×0 "out"
+          Text "속함" (3ZB0-1) 0×0 "속함"
+          Text "→ 반도체 대형주" (3ZB1-1) 0×0 "→ 반도체 대형주"
+          Text "추론 · 대화 · 2회" (3ZB2-1) 0×0 "추론 · 대화 · 2회"
+        Frame "원문 발췌" (3ZB3-1) 0×0
+          Text ""반도체 대형주 중심으로 가되 장비주…" (3ZB4-1) 0×0 ""반도체 대형주 중심으로 가되 장비주도 조금 섞고 싶어. 지금 비중은…""
+          Text "잘린 발췌 — 600 / 1,240자" (3ZB5-1) 0×0 "잘린 발췌 — 600 / 1,240자"
+      Text "이력 제목" (3ZB6-1) 0×0 "변경 이력 — 최신 먼저"
+      Frame "이력" (3ZB7-1) 0×0
+        Frame "Frame" (3ZB8-1) 0×0
+          Text "08-23" (3ZB9-1) 0×0 "08-23"
+          Text "edge_added — 배당 방어 바…" (3ZBA-1) 0×0 "edge_added — 배당 방어 바스켓으로 연결 생김"
+        Frame "Frame" (3ZBB-1) 0×0
+          Text "08-19" (3ZBC-1) 0×0 "08-19"
+          Text "edge_changed — 관심 관계…" (3ZBD-1) 0×0 "edge_changed — 관심 관계 AMBIGUOUS → EXTRACTED"
+        Frame "Frame" (3ZBE-1) 0×0
+          Text "08-04" (3ZBF-1) 0×0 "08-04"
+          Text "entity_added — 대화 "H…" (3ZBG-1) 0×0 "entity_added — 대화 "HBM 장비주"에서 처음 생김"
+    Frame "채팅 답변" (3ZBH-1) 400×0
+      Frame "Frame" (3ZBI-1) 0×0
+        Text "그래프에게 묻기" (3ZBJ-1) 0×0 "그래프에게 묻기"
+        Text "답이 캔버스를 바꿉니다" (3ZBK-1) 0×0 "답이 캔버스를 바꿉니다"
+      Frame "Frame" (3ZBL-1) 0×0
+        Frame "Frame" (3ZBM-1) 0×0
+          Text "한미반도체 이 노드 설명해줘" (3ZBN-1) 0×0 "한미반도체 이 노드 설명해줘"
+        Frame "Frame" (3ZBO-1) 0×0
+          Rectangle "Rectangle" (3ZBP-1) 5×5
+          Text "노드 조회" (3ZBQ-1) 0×0 "노드 조회"
+          Text "한미반도체 · 관계 7 · 이력 3" (3ZBR-1) 0×0 "한미반도체 · 관계 7 · 이력 3"
+        Text "연결 7개 중 가장 강한 것은 관심입…" (3ZBS-1) 0×0 "연결 7개 중 가장 강한 것은 관심입니다 — 대화에서 4번 확인됐고, 08-04에 "HBM 장비주가 궁금해서"
+        Text "반도체 대형주에 속한다는 것은 추론입…" (3ZBT-1) 0×0 "반도체 대형주에 속한다는 것은 추론입니다(직접 말씀하신 적 없음). 근거가 된 대화는 발췌가 잘려 있어 전문"
+        Text "08-19에 관심 관계가 불확실 → …" (3ZBU-1) 0×0 "08-19에 관심 관계가 불확실 → 사실로 올라갔습니다."
+    Frame "정직성 규칙" (3ZBV-1) 0×0
+      Text "이 답이 지켜야 하는 것" (3ZBW-1) 0×0 "이 답이 지켜야 하는 것"
+      Text "사실과 추론을 섞지 않는다. 관계마다…" (3ZBX-1) 0×0 "사실과 추론을 섞지 않는다. 관계마다 confidence(사실·추론·불확실)와 tier(체결·잔고 = 행동 "
+      Text "잘린 발췌를 전문처럼 인용하지 않는다…" (3ZBY-1) 0×0 "잘린 발췌를 전문처럼 인용하지 않는다. truncated·full_chars가 함께 오므로 "원문에 그렇게 "
+      Text "이름이 여럿에 걸리면 고르지 않는다.…" (3ZBZ-1) 0×0 "이름이 여럿에 걸리면 고르지 않는다. resolved=false와 candidates가 오면 어느 것인지 되"
+      Text "노출이 꺼져 있으면 나가지 않는다. …" (3ZC0-1) 0×0 "노출이 꺼져 있으면 나가지 않는다. 이 조회는 모델 노출 게이트를 탄다 — 노드 원문이 나가는 경로다. 50"

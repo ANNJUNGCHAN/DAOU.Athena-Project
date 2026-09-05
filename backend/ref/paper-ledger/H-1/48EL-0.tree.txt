@@ -1,0 +1,35 @@
+Frame "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값" (48EL-0) 360×420
+  Frame "Header" (48FF-0) 0×0
+    Frame "Meta row" (48FH-0) 0×0
+      Text "Eyebrow" (48FJ-0) 0×0
+      Text "As of" (48FI-0) 0×0 "기준 09:42"
+    Text "Title" (48FG-0) 0×0 "시간외 단일가 단계별 낱값 호가"
+  Frame "Body" (48EO-0) 0×0
+    Frame "Table header" (48FA-0) 0×0
+      Text "순서" (48FE-0) 34×0 "순서"
+      Text "항목" (48FD-0) 0×0 "항목"
+      Text "값" (48FC-0) 0×0 "값"
+      Text "비고" (48FB-0) 64×0 "비고"
+    Frame "Rank 1" (48F3-0) 0×0
+      Text "01" (48F9-0) 34×0 "01"
+      Frame "Frame" (48F6-0) 0×0
+        Text "매도호가총잔량직전대비" (48F8-0) 0×0 "매도호가총잔량직전대비"
+        Text "Text" (48F7-0) 0×0
+      Text "+2,140" (48F5-0) 0×0 "+2,140"
+      Text "Text" (48F4-0) 64×0
+    Frame "Rank 2" (48EW-0) 0×0
+      Text "02" (48F2-0) 34×0 "02"
+      Frame "Frame" (48EZ-0) 0×0
+        Text "매수호가총잔량직전대비" (48F1-0) 0×0 "매수호가총잔량직전대비"
+        Text "Text" (48F0-0) 0×0
+      Text "−1,380" (48EY-0) 0×0 "−1,380"
+      Text "Text" (48EX-0) 64×0
+    Frame "Rank 3" (48EP-0) 0×0
+      Text "03" (48EV-0) 34×0 "03"
+      Frame "Frame" (48ES-0) 0×0
+        Text "시간외단일가_매도호가총잔량" (48EU-0) 0×0 "시간외단일가_매도호가총잔량"
+        Text "Text" (48ET-0) 0×0
+      Text "113,820 / 79,760" (48ER-0) 0×0 "113,820 / 79,760"
+      Text "Text" (48EQ-0) 64×0
+  Frame "Fold note" (48EM-0) 0×0
+    Text "외 1개 행 접힘 · 원본에서 확인" (48EN-0) 0×0 "외 1개 행 접힘 · 원본에서 확인"

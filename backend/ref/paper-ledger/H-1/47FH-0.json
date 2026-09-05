@@ -1,0 +1,342 @@
+{
+ "board_id": "47FH-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47GF-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47GE-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47GC-0",
+   "text": "ELW 등락률",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Header"
+   ]
+  },
+  {
+   "id": "47GA-0",
+   "text": "등락률",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47G9-0",
+   "text": "+12.16%",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47G7-0",
+   "text": "근접율",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47G6-0",
+   "text": "98.6%",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47G4-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47G3-0",
+   "text": "2건",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47G0-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47FZ-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47FY-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47FW-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47FV-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47FT-0",
+   "text": "12건",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47FS-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47FQ-0",
+   "text": "ELW등락율순위",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47FP-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47FN-0",
+   "text": "전체 3,482건 · 20건 표시",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47FM-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47FJ-0",
+   "text": "스칼라 2개, 행 18개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47FH-0",
+   "name": "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47GB-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47GD-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47FK-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47G1-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47G8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47G5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47G2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47FX-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47FR-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47FU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47FL-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47FO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47FI-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "ELW 등락률": 1,
+  "등락률": 1,
+  "+12.16%": 1,
+  "근접율": 1,
+  "98.6%": 1,
+  "핵심": 1,
+  "2건": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "수량": 1,
+  "12건": 1,
+  "ELW등락율순위": 1,
+  "전체 3,482건 · 20건 표시": 1,
+  "스칼라 2개, 행 18개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "d406ae975a1bb6727d42ee2863747f47d19624b877a7ce6a453a734f144ab5f9"
+}

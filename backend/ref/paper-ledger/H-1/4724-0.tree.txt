@@ -1,0 +1,24 @@
+Frame "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소" (4724-0) 360×420
+  Frame "Header" (472N-0) 0×0
+    Frame "Meta row" (472P-0) 0×0
+      Text "Eyebrow" (472R-0) 0×0
+      Text "As of" (472Q-0) 0×0 "기준 09:42"
+    Text "Title" (472O-0) 0×0 "삼성전자 원주문 취소"
+  Frame "Body" (4725-0) 0×0
+    Frame "Status" (472K-0) 0×0
+      Rectangle "Rectangle" (472M-0) 7×7
+      Text "주문 정보를 확인했어요" (472L-0) 0×0 "주문 정보를 확인했어요"
+    Frame "Confirm facts" (472D-0) 0×0
+      Frame "Frame" (472H-0) 0×0
+        Text "주문가능금액" (472J-0) 0×0 "주문가능금액"
+        Text "31,240,000원" (472I-0) 0×0 "31,240,000원"
+      Frame "Frame" (472E-0) 0×0
+        Text "수량" (472G-0) 0×0 "수량"
+        Text "10주" (472F-0) 0×0 "10주"
+    Frame "Confirm values" (4726-0) 0×0
+      Frame "Frame" (472A-0) 0×0
+        Text "계좌" (472C-0) 0×0 "계좌"
+        Text "키움증권 01" (472B-0) 0×0 "키움증권 01"
+      Frame "Frame" (4727-0) 0×0
+        Text "변화" (4729-0) 0×0 "변화"
+        Text "25%" (4728-0) 0×0 "25%"

@@ -1,0 +1,24 @@
+Frame "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률" (47DU-0) 360×420
+  Frame "Header" (47ED-0) 0×0
+    Frame "Meta row" (47EF-0) 0×0
+      Text "Eyebrow" (47EH-0) 0×0
+      Text "As of" (47EG-0) 0×0 "기준 09:42"
+    Text "Title" (47EE-0) 0×0 "ETF 기간 수익률"
+  Frame "Body" (47DX-0) 0×0
+    Frame "Fact 1" (47EA-0) 0×0
+      Text "종목명" (47EC-0) 120×0 "종목명"
+      Text "KODEX 2차전지산업" (47EB-0) 0×0 "KODEX 2차전지산업"
+    Frame "Fact 2" (47E7-0) 0×0
+      Text "종목명" (47E9-0) 120×0 "종목명"
+      Text "TIGER 2차전지테마" (47E8-0) 0×0 "TIGER 2차전지테마"
+    Frame "Fact 3" (47E4-0) 0×0
+      Text "ETF수익률" (47E6-0) 120×0 "ETF수익률"
+      Text "+42.1%" (47E5-0) 0×0 "+42.1%"
+    Frame "Fact 4" (47E1-0) 0×0
+      Text "ETF수익률" (47E3-0) 120×0 "ETF수익률"
+      Text "+88.4%" (47E2-0) 0×0 "+88.4%"
+    Frame "Fact 5" (47DY-0) 0×0
+      Text "ETF전체시세" (47E0-0) 120×0 "ETF전체시세"
+      Text "전체 1,024 종목" (47DZ-0) 0×0 "전체 1,024 종목"
+  Frame "Fold note" (47DV-0) 0×0
+    Text "외 196개 항목 접힘 · 원본에서 …" (47DW-0) 0×0 "외 196개 항목 접힘 · 원본에서 확인"

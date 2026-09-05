@@ -1,0 +1,3537 @@
+{
+ "board_id": "137X-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01 · 삼성전자 3개월 차트",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "14O1-2",
+   "text": "삼성전자",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14O2-2",
+   "text": "005930 · KOSPI · KRX",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3964-0",
+   "text": "정규장",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Session Chips",
+    "장구분 칩"
+   ]
+  },
+  {
+   "id": "3966-0",
+   "text": "실시간",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Session Chips",
+    "실시간 칩"
+   ]
+  },
+  {
+   "id": "14O6-2",
+   "text": "150,850원",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14O7-2",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14O8-2",
+   "text": "09:42:18",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OB-2",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OD-2",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OF-2",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OH-2",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OJ-2",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OL-2",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WFB-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OP-2",
+   "text": "시가 · 고가 · 저가",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OQ-2",
+   "text": "149,200 · 152,400 · 148,100",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OS-2",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OT-2",
+   "text": "1,420만주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OU-2",
+   "text": "거래대금 2.14조원",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OW-2",
+   "text": "PER",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OX-2",
+   "text": "21.2배",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14OY-2",
+   "text": "업종 11.2배",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14P0-2",
+   "text": "PBR",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14P1-2",
+   "text": "2.63배",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14P2-2",
+   "text": "업종 1.61배",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14P4-2",
+   "text": "ROE",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14P5-2",
+   "text": "8.4%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14P6-2",
+   "text": "전년 7.9%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14PF-2",
+   "text": "일",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14PH-2",
+   "text": "주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14PJ-2",
+   "text": "월",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WKQ-0",
+   "text": "틱",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WKS-0",
+   "text": "분",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WKU-0",
+   "text": "년",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14PM-2",
+   "text": "1개월",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14PO-2",
+   "text": "3개월",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14PQ-2",
+   "text": "1년",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14PS-2",
+   "text": "시세·거래량",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14PT-2",
+   "text": "지표",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14PU-2",
+   "text": "그리기",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14PV-2",
+   "text": "초기화",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "395Z-0",
+   "text": "거래회전율",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "거래회전율"
+   ]
+  },
+  {
+   "id": "3960-0",
+   "text": "일 0.24% · 주 1.12% · 월 4.36%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "거래회전율"
+   ]
+  },
+  {
+   "id": "33FX-0",
+   "text": "150,850 · +1.24%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module"
+   ]
+  },
+  {
+   "id": "38KK-0",
+   "text": "종목 요약",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38KL-0",
+   "text": "정상 거래",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38KN-0",
+   "text": "시가총액",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38KO-0",
+   "text": "900.4조",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AOU-0",
+   "text": "외국인 보유",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "외국인 보유"
+   ]
+  },
+  {
+   "id": "3AOW-0",
+   "text": "52.41%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "외국인 보유",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AOX-0",
+   "text": "외인수량 31.3억주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "외국인 보유",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38KT-0",
+   "text": "유통 주식",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38KU-0",
+   "text": "44.4억주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38KW-0",
+   "text": "52주 최저 67,700 · 11/03",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "52주 레인지",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38KX-0",
+   "text": "최고 153,400 · 08/21",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "52주 레인지",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38L2-0",
+   "text": "250일 고·저 대비",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38L4-0",
+   "text": "−1.66%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38L5-0",
+   "text": "·",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38L6-0",
+   "text": "+122.8%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38L8-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38L9-0",
+   "text": "2.14조",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "종목 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14SR-2",
+   "text": "오늘의 수급",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot"
+   ]
+  },
+  {
+   "id": "14ST-2",
+   "text": "외국인",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14SU-2",
+   "text": "+128억원",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14SW-2",
+   "text": "기관",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C3F-0",
+   "text": "+196억원",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame",
+    "기관 합계 · 펼침"
+   ]
+  },
+  {
+   "id": "3C3G-0",
+   "text": "▸",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame",
+    "기관 합계 · 펼침"
+   ]
+  },
+  {
+   "id": "14SZ-2",
+   "text": "개인",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14T0-2",
+   "text": "−312억원",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C3J-0",
+   "text": "30분 누적",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "30분 누적 머리"
+   ]
+  },
+  {
+   "id": "3C3L-0",
+   "text": "기관 12주체",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "30분 누적 머리",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C3M-0",
+   "text": "▸",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "30분 누적 머리",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33CG-0",
+   "text": "외",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "09:30",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33CH-0",
+   "text": "기",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "09:30",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33CI-0",
+   "text": "개",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "09:30",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33CJ-0",
+   "text": "09:00",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "09:30"
+   ]
+  },
+  {
+   "id": "33CV-0",
+   "text": "외",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "10:00",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33CW-0",
+   "text": "기",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "10:00",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33CX-0",
+   "text": "개",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "10:00",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33CY-0",
+   "text": "09:30",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "10:00"
+   ]
+  },
+  {
+   "id": "33DA-0",
+   "text": "외",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "10:30",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33DB-0",
+   "text": "기",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "10:30",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33DC-0",
+   "text": "개",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "10:30",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33DD-0",
+   "text": "09:42",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "30분 누적",
+    "Bars",
+    "10:30"
+   ]
+  },
+  {
+   "id": "33DG-0",
+   "text": "5일 누적",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "5일 누적"
+   ]
+  },
+  {
+   "id": "33DI-0",
+   "text": "외국인",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "5일 누적",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33DJ-0",
+   "text": "+2,410억",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "5일 누적",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33DK-0",
+   "text": "·",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "5일 누적",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33DL-0",
+   "text": "기관",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "5일 누적",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33DM-0",
+   "text": "+820억",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "5일 누적",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33DN-0",
+   "text": "·",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "5일 누적",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33DO-0",
+   "text": "개인",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "5일 누적",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33DP-0",
+   "text": "−3,180억",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "5일 누적",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14T4-2",
+   "text": "알림 설정",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14T6-2",
+   "text": "호가 열기",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKX-0",
+   "text": "세션별 거래",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션별 거래"
+   ]
+  },
+  {
+   "id": "3SKY-0",
+   "text": "거래량 · 거래대금",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션별 거래"
+   ]
+  },
+  {
+   "id": "38LI-0",
+   "text": "장전",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38LK-0",
+   "text": "42만주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38LL-0",
+   "text": "3.0%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38LN-0",
+   "text": "620억원",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38LO-0",
+   "text": "2.9%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38LQ-0",
+   "text": "장중",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38LS-0",
+   "text": "1,368만주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38LT-0",
+   "text": "96.3%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38LV-0",
+   "text": "2조 700억원",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38LW-0",
+   "text": "96.7%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38LY-0",
+   "text": "장후",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38M0-0",
+   "text": "10만주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38M1-0",
+   "text": "0.7%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38M3-0",
+   "text": "80억원",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38M4-0",
+   "text": "0.4%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38M6-0",
+   "text": "합계",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38M7-0",
+   "text": "1,420만주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38M8-0",
+   "text": "2.14조원",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38MA-0",
+   "text": "기간중 5일",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38MB-0",
+   "text": "5,860만주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38MC-0",
+   "text": "체결강도",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38MD-0",
+   "text": "108.4%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C2V-0",
+   "text": "외인",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션 부가 지표",
+    "1행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C2W-0",
+   "text": "52.41%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션 부가 지표",
+    "1행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C2Y-0",
+   "text": "외국계",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션 부가 지표",
+    "1행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C2Z-0",
+   "text": "+182만주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션 부가 지표",
+    "1행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C31-0",
+   "text": "신용비율",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션 부가 지표",
+    "1행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C32-0",
+   "text": "0.86%",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션 부가 지표",
+    "1행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C35-0",
+   "text": "프로그램",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션 부가 지표",
+    "2행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C36-0",
+   "text": "+64만주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션 부가 지표",
+    "2행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C38-0",
+   "text": "전일대비",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션 부가 지표",
+    "2행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3C39-0",
+   "text": "+1,850원",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "세션별 거래",
+    "세션 부가 지표",
+    "2행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14T9-2",
+   "text": "● 차트 실시간 갱신 중",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "14TA-2",
+   "text": "일봉 · 거래량 · 마지막 틱 30건 · 마지막 체결 09:42:18",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "3926-0",
+   "text": "증거금율 20% · 통화단위 원 · 임의연장 없음 · 장전임의연장 없음 · 장후임의연장 없음 · 조기종료ELW 해당 없음",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "137X-2",
+   "name": "CC-03 / R01 · 삼성전자 3개월 차트",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "14NU-2",
+   "name": "Instrument Root · 차트",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 1
+  },
+  {
+   "id": "14NW-2",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1040,
+   "depth": 2
+  },
+  {
+   "id": "14NY-2",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "14NZ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "14O0-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3962-0",
+   "name": "Session Chips",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3963-0",
+   "name": "장구분 칩",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3965-0",
+   "name": "실시간 칩",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14O5-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14O9-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "14OA-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14OC-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14OE-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14OG-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14OI-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14OK-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2WFA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14ON-2",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "14OO-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "14OR-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "14OV-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "14OZ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "14P3-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "14P8-2",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 754,
+   "depth": 3
+  },
+  {
+   "id": "14P9-2",
+   "name": "Athena Chart Module Mount",
+   "component": "Frame",
+   "w": 1000,
+   "h": 754,
+   "depth": 4
+  },
+  {
+   "id": "14PC-2",
+   "name": "Chart Toolbar",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 5
+  },
+  {
+   "id": "14PD-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "14PE-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14PG-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14PI-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14PK-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "2WKP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2WKR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2WKT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14PL-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14PN-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14PP-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14PR-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "395Y-0",
+   "name": "거래회전율",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "14PX-2",
+   "name": "Existing Athena Chart Module",
+   "component": "Frame",
+   "w": 944,
+   "h": 620,
+   "depth": 5
+  },
+  {
+   "id": "3SI0-0",
+   "name": "Athena Chart Preview",
+   "component": "SVG",
+   "w": 944,
+   "h": 620,
+   "depth": 6
+  },
+  {
+   "id": "3SI1-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SI2-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SI3-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SI4-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SI5-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SI6-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SI7-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SI8-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SI9-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIA-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIB-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIC-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SID-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIE-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIF-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIG-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIH-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SII-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIJ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIK-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIL-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIM-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIN-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIO-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIP-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIQ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIR-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIS-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIT-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIU-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIV-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIW-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIX-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIY-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SIZ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJ0-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJ1-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJ2-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJ3-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJ4-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJ5-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJ6-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJ7-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJ8-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJ9-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJA-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJB-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJC-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJD-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJE-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJF-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJG-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJH-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJI-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJJ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJK-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJL-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJM-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJN-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJO-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJP-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJQ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJR-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJS-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJT-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJU-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJV-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJW-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJX-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJY-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SJZ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SK0-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SK1-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SK2-0",
+   "name": "1,420만",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SK3-0",
+   "name": "1,065만",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SK4-0",
+   "name": "710만",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SK5-0",
+   "name": "355만",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SK6-0",
+   "name": "0",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SK7-0",
+   "name": "거래량 · 주",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14PA-2",
+   "name": "Instrument Context",
+   "component": "Frame",
+   "w": 360,
+   "h": 754,
+   "depth": 4
+  },
+  {
+   "id": "38KI-0",
+   "name": "종목 요약",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "38KJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "38KM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "3AOT-0",
+   "name": "외국인 보유",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3AOV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38KS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "3T58-0",
+   "name": "52주 레인지",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "38KV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38KY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "38KZ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "38L0-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 8
+  },
+  {
+   "id": "38L1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "38L3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38L7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "14SQ-2",
+   "name": "Investor Snapshot",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14SS-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "14SV-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "3C3E-0",
+   "name": "기관 합계 · 펼침",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14SY-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "33C2-0",
+   "name": "30분 누적",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3C3I-0",
+   "name": "30분 누적 머리",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3C3K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "33C4-0",
+   "name": "Bars",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "33C5-0",
+   "name": "09:30",
+   "component": "Frame",
+   "w": 46,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "33C6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 46,
+   "h": 24,
+   "depth": 9
+  },
+  {
+   "id": "33C7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 14,
+   "depth": 10
+  },
+  {
+   "id": "33C8-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "33C9-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 10
+  },
+  {
+   "id": "33CA-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 46,
+   "h": 1,
+   "depth": 9
+  },
+  {
+   "id": "33CB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 46,
+   "h": 15,
+   "depth": 9
+  },
+  {
+   "id": "33CC-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 10
+  },
+  {
+   "id": "33CD-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 10
+  },
+  {
+   "id": "33CE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 11,
+   "depth": 10
+  },
+  {
+   "id": "33CF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 46,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "33CK-0",
+   "name": "10:00",
+   "component": "Frame",
+   "w": 46,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "33CL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 46,
+   "h": 24,
+   "depth": 9
+  },
+  {
+   "id": "33CM-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 20,
+   "depth": 10
+  },
+  {
+   "id": "33CN-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 11,
+   "depth": 10
+  },
+  {
+   "id": "33CO-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 10
+  },
+  {
+   "id": "33CP-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 46,
+   "h": 1,
+   "depth": 9
+  },
+  {
+   "id": "33CQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 46,
+   "h": 15,
+   "depth": 9
+  },
+  {
+   "id": "33CR-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 10
+  },
+  {
+   "id": "33CS-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 10
+  },
+  {
+   "id": "33CT-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 15,
+   "depth": 10
+  },
+  {
+   "id": "33CU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 46,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "33CZ-0",
+   "name": "10:30",
+   "component": "Frame",
+   "w": 46,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "33D0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 46,
+   "h": 24,
+   "depth": 9
+  },
+  {
+   "id": "33D1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 24,
+   "depth": 10
+  },
+  {
+   "id": "33D2-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 10
+  },
+  {
+   "id": "33D3-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 10
+  },
+  {
+   "id": "33D4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 46,
+   "h": 1,
+   "depth": 9
+  },
+  {
+   "id": "33D5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 46,
+   "h": 15,
+   "depth": 9
+  },
+  {
+   "id": "33D6-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 10
+  },
+  {
+   "id": "33D7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 5,
+   "depth": 10
+  },
+  {
+   "id": "33D8-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 13,
+   "depth": 10
+  },
+  {
+   "id": "33D9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 46,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "33DF-0",
+   "name": "5일 누적",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33DH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14T2-2",
+   "name": "Chart Context Actions",
+   "component": "Frame",
+   "w": 312,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "14T3-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "14T5-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "38LB-0",
+   "name": "세션별 거래",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SKW-0",
+   "name": "세션별 거래",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "38LH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 19,
+   "depth": 6
+  },
+  {
+   "id": "38LJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 133,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38LM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 133,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38LP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 19,
+   "depth": 6
+  },
+  {
+   "id": "38LR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 133,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38LU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 133,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38LX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 19,
+   "depth": 6
+  },
+  {
+   "id": "38LZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 133,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38M2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 133,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38M5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 19,
+   "depth": 6
+  },
+  {
+   "id": "38M9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3C2S-0",
+   "name": "세션 부가 지표",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3C2T-0",
+   "name": "1행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3C2U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 98,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3C2X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 98,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3C30-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 98,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3C33-0",
+   "name": "2행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3C34-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 98,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3C37-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 98,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "14T8-2",
+   "name": "Chart Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "삼성전자": 1,
+  "005930 · KOSPI · KRX": 1,
+  "정규장": 1,
+  "실시간": 1,
+  "150,850원": 1,
+  "+1,850 · +1.24%": 1,
+  "09:42:18": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 1,
+  "ELW": 1,
+  "금현물": 1,
+  "순위": 1,
+  "시가 · 고가 · 저가": 1,
+  "149,200 · 152,400 · 148,100": 1,
+  "거래량": 1,
+  "1,420만주": 2,
+  "거래대금 2.14조원": 1,
+  "PER": 1,
+  "21.2배": 1,
+  "업종 11.2배": 1,
+  "PBR": 1,
+  "2.63배": 1,
+  "업종 1.61배": 1,
+  "ROE": 1,
+  "8.4%": 1,
+  "전년 7.9%": 1,
+  "일": 1,
+  "주": 1,
+  "월": 1,
+  "틱": 1,
+  "분": 1,
+  "년": 1,
+  "1개월": 1,
+  "3개월": 1,
+  "1년": 1,
+  "시세·거래량": 1,
+  "지표": 1,
+  "그리기": 1,
+  "초기화": 1,
+  "거래회전율": 1,
+  "일 0.24% · 주 1.12% · 월 4.36%": 1,
+  "150,850 · +1.24%": 1,
+  "종목 요약": 1,
+  "정상 거래": 1,
+  "시가총액": 1,
+  "900.4조": 1,
+  "외국인 보유": 1,
+  "52.41%": 2,
+  "외인수량 31.3억주": 1,
+  "유통 주식": 1,
+  "44.4억주": 1,
+  "52주 최저 67,700 · 11/03": 1,
+  "최고 153,400 · 08/21": 1,
+  "250일 고·저 대비": 1,
+  "−1.66%": 1,
+  "·": 3,
+  "+122.8%": 1,
+  "거래대금": 1,
+  "2.14조": 1,
+  "오늘의 수급": 1,
+  "외국인": 2,
+  "+128억원": 1,
+  "기관": 2,
+  "+196억원": 1,
+  "▸": 2,
+  "개인": 2,
+  "−312억원": 1,
+  "30분 누적": 1,
+  "기관 12주체": 1,
+  "외": 3,
+  "기": 3,
+  "개": 3,
+  "09:00": 1,
+  "09:30": 1,
+  "09:42": 1,
+  "5일 누적": 1,
+  "+2,410억": 1,
+  "+820억": 1,
+  "−3,180억": 1,
+  "알림 설정": 1,
+  "호가 열기": 1,
+  "세션별 거래": 1,
+  "거래량 · 거래대금": 1,
+  "장전": 1,
+  "42만주": 1,
+  "3.0%": 1,
+  "620억원": 1,
+  "2.9%": 1,
+  "장중": 1,
+  "1,368만주": 1,
+  "96.3%": 1,
+  "2조 700억원": 1,
+  "96.7%": 1,
+  "장후": 1,
+  "10만주": 1,
+  "0.7%": 1,
+  "80억원": 1,
+  "0.4%": 1,
+  "합계": 1,
+  "2.14조원": 1,
+  "기간중 5일": 1,
+  "5,860만주": 1,
+  "체결강도": 1,
+  "108.4%": 1,
+  "외인": 1,
+  "외국계": 1,
+  "+182만주": 1,
+  "신용비율": 1,
+  "0.86%": 1,
+  "프로그램": 1,
+  "+64만주": 1,
+  "전일대비": 1,
+  "+1,850원": 1,
+  "● 차트 실시간 갱신 중": 1,
+  "일봉 · 거래량 · 마지막 틱 30건 · 마지막 체결 09:42:18": 1,
+  "증거금율 20% · 통화단위 원 · 임의연장 없음 · 장전임의연장 없음 · 장후임의연장 없음 · 조기종료ELW 해당 없음": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "fcabc09ed88dd34fac8016b018fcfb519e7cb9e445024d772f29090d1a1e3895"
+}

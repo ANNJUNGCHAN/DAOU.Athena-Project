@@ -1,0 +1,369 @@
+Frame "DV-1 · 종목 탐색 결과 — 공식 128개 필드" (1XGW-0) 1440×900
+  Frame "DV-1 Root · ranked-results 128/128 · workbench" (2ENC-0) 1440×900
+    Frame "DV-1 Workbench Surface" (2END-0) 1392×860
+      Frame "DV-1 Sticky Header" (2ENE-0) 1390×64
+        Frame "DV-1 Identity Quote Strip · Chrome" (2ENN-0) 1390×64
+          Frame "Frame" (2ENO-0) 0×0
+            Frame "Frame" (2ENP-0) 222×0
+              Text "종목 탐색" (2ENQ-0) 0×0 "종목 탐색"
+              Text "KOSPI · 전체 종목 2,842" (2ENR-0) 0×0 "KOSPI · 전체 종목 2,842"
+            Frame "Frame" (2ENS-0) 360×36
+              SVG "SVG" (2ENT-0) 0×0
+                SVGVisualElement "Circle" (2ENU-0) 0×0
+                SVGVisualElement "Path" (2ENV-0) 0×0
+              Text "종목명 또는 코드 검색" (2ENW-0) 0×0 "종목명 또는 코드 검색"
+          Frame "Frame" (2ENX-0) 0×0
+            Text "삼성전자 005930" (2ENY-0) 0×0 "삼성전자 005930"
+            Text "150,850원" (2ENZ-0) 0×0 "150,850원"
+            Text "+2.35%" (2EO0-0) 0×0 "+2.35%"
+            Text "DESIGN FIXTURE · 12:…" (2EO1-0) 0×0 "DESIGN FIXTURE · 12:34"
+      Frame "DV-1 Category Tabs" (2ENF-0) 1390×42
+        Frame "DV-1 User Category Tabs · Chrome" (2EO3-0) 1390×42
+          Frame "Frame" (2EO4-0) 0×30
+            Text "거래량" (2EO5-0) 0×0 "거래량"
+          Frame "Frame" (2EO6-0) 0×30
+            Text "가격" (2EO7-0) 0×0 "가격"
+          Frame "Frame" (2EO8-0) 0×30
+            Text "등락" (2EO9-0) 0×0 "등락"
+          Frame "Frame" (2EOA-0) 0×30
+            Text "시가총액" (2EOB-0) 0×0 "시가총액"
+          Frame "Frame" (2EOC-0) 0×30
+            Text "거래원" (2EOD-0) 0×0 "거래원"
+          Frame "Frame" (2EOE-0) 0×30
+            Text "투자자" (2EOF-0) 0×0 "투자자"
+          Frame "Frame" (2EOG-0) 0×30
+            Text "예상체결" (2EOH-0) 0×0 "예상체결"
+          Frame "Frame" (2EOI-0) 0×30
+            Text "시간외" (2EOJ-0) 0×0 "시간외"
+      Frame "DV-1 Filter Sort Toolbar" (2ENG-0) 1390×48
+        Frame "DV-1 Filter Sort Controls · Chrome" (2EOL-0) 1390×48
+          Frame "Frame" (2EOM-0) 0×0
+            Frame "Frame" (2EON-0) 0×32
+              Text "시장" (2EOO-0) 0×0 "시장"
+              Text "KOSPI ▾" (2EOP-0) 0×0 "KOSPI ▾"
+            Frame "Frame" (2EOQ-0) 0×32
+              Text "정렬" (2EOR-0) 0×0 "정렬"
+              Text "거래량 높은 순 ▾" (2EOS-0) 0×0 "거래량 높은 순 ▾"
+            Frame "Frame" (2EOT-0) 0×32
+              Text "상승 종목만" (2EOU-0) 0×0 "상승 종목만"
+          Frame "Frame" (2EOV-0) 0×0
+            Text "● 실시간 갱신" (2EOW-0) 0×0 "● 실시간 갱신"
+            Text "100개 결과" (2EOX-0) 0×0 "100개 결과"
+      Frame "DV-1 Workspace" (2ENH-0) 1390×642
+        Frame "DV-1 Compare Table" (2ENI-0) 914×642
+          Frame "DV-1 Table Preset Strip · Chrome" (2EP3-0) 912×36
+            Text "거래량 상위 · 현재 열" (2EP4-0) 0×0 "거래량 상위 · 현재 열"
+            Text "열 설정: 시세 · 거래 · 호가" (2EP5-0) 0×0 "열 설정: 시세 · 거래 · 호가"
+          Frame "DV-1 Table Header · Chrome" (2EP6-0) 912×38
+            Text "순위" (2EP7-0) 44×0 "순위"
+            Text "종목" (2EP8-0) 190×0 "종목"
+            Text "현재가" (2EP9-0) 105×0 "현재가"
+            Text "등락률" (2EPA-0) 85×0 "등락률"
+            Text "거래량" (2EPB-0) 120×0 "거래량"
+            Text "거래대금" (2EPC-0) 125×0 "거래대금"
+            Text "매수호가" (2EPD-0) 105×0 "매수호가"
+            Text "매도호가" (2EPE-0) 105×0 "매도호가"
+          Frame "DV-1 Result Rows · 10 visible" (2EPF-0) 912×480
+            Frame "DV-1 Result Row 1" (2EPG-0) 912×48
+              Text "01" (2EPH-0) 44×0 "01"
+              Frame "Frame" (2EPI-0) 190×0
+                Text "삼성전자" (2EPJ-0) 0×0 "삼성전자"
+                Text "005930" (2EPK-0) 0×0 "005930"
+              Text "150,850" (2EPL-0) 105×0 "150,850"
+              Text "+2.35%" (2EPM-0) 85×0 "+2.35%"
+              Text "18,420,135" (2EPN-0) 120×0 "18,420,135"
+              Text "1.42조" (2EPO-0) 125×0 "1.42조"
+              Text "150,850" (2EPP-0) 105×0 "150,850"
+              Text "150,900" (2EPQ-0) 105×0 "150,900"
+            Frame "DV-1 Result Row 2" (2EPR-0) 912×48
+              Text "02" (2EPS-0) 44×0 "02"
+              Frame "Frame" (2EPT-0) 190×0
+                Text "SK하이닉스" (2EPU-0) 0×0 "SK하이닉스"
+                Text "000660" (2EPV-0) 0×0 "000660"
+              Text "214,500" (2EPW-0) 105×0 "214,500"
+              Text "+2.14%" (2EPX-0) 85×0 "+2.14%"
+              Text "9,840,521" (2EPY-0) 120×0 "9,840,521"
+              Text "9860억" (2EPZ-0) 125×0 "9860억"
+              Text "214,500" (2EQ0-0) 105×0 "214,500"
+              Text "214,550" (2EQ1-0) 105×0 "214,550"
+            Frame "DV-1 Result Row 3" (2EQ2-0) 912×48
+              Text "03" (2EQ3-0) 44×0 "03"
+              Frame "Frame" (2EQ4-0) 190×0
+                Text "현대차" (2EQ5-0) 0×0 "현대차"
+                Text "005380" (2EQ6-0) 0×0 "005380"
+              Text "286,000" (2EQ7-0) 105×0 "286,000"
+              Text "-0.52%" (2EQ8-0) 85×0 "-0.52%"
+              Text "4,702,188" (2EQ9-0) 120×0 "4,702,188"
+              Text "7420억" (2EQA-0) 125×0 "7420억"
+              Text "285,500" (2EQB-0) 105×0 "285,500"
+              Text "286,000" (2EQC-0) 105×0 "286,000"
+            Frame "DV-1 Result Row 4" (2EQD-0) 912×48
+              Text "04" (2EQE-0) 44×0 "04"
+              Frame "Frame" (2EQF-0) 190×0
+                Text "NAVER" (2EQG-0) 0×0 "NAVER"
+                Text "035420" (2EQH-0) 0×0 "035420"
+              Text "238,500" (2EQI-0) 105×0 "238,500"
+              Text "+0.85%" (2EQJ-0) 85×0 "+0.85%"
+              Text "3,181,402" (2EQK-0) 120×0 "3,181,402"
+              Text "6810억" (2EQL-0) 125×0 "6810억"
+              Text "238,500" (2EQM-0) 105×0 "238,500"
+              Text "239,000" (2EQN-0) 105×0 "239,000"
+            Frame "DV-1 Result Row 5" (2EQO-0) 912×48
+              Text "05" (2EQP-0) 44×0 "05"
+              Frame "Frame" (2EQQ-0) 190×0
+                Text "한화에어로스페이스" (2EQR-0) 0×0 "한화에어로스페이스"
+                Text "012450" (2EQS-0) 0×0 "012450"
+              Text "811,000" (2EQT-0) 105×0 "811,000"
+              Text "+3.02%" (2EQU-0) 85×0 "+3.02%"
+              Text "1,245,180" (2EQV-0) 120×0 "1,245,180"
+              Text "5980억" (2EQW-0) 125×0 "5980억"
+              Text "810,000" (2EQX-0) 105×0 "810,000"
+              Text "811,000" (2EQY-0) 105×0 "811,000"
+            Frame "DV-1 Result Row 6" (2EQZ-0) 912×48
+              Text "06" (2ER0-0) 44×0 "06"
+              Frame "Frame" (2ER1-0) 190×0
+                Text "LG에너지솔루션" (2ER2-0) 0×0 "LG에너지솔루션"
+                Text "373220" (2ER3-0) 0×0 "373220"
+              Text "398,500" (2ER4-0) 105×0 "398,500"
+              Text "-0.50%" (2ER5-0) 85×0 "-0.50%"
+              Text "1,902,445" (2ER6-0) 120×0 "1,902,445"
+              Text "5220억" (2ER7-0) 125×0 "5220억"
+              Text "398,500" (2ER8-0) 105×0 "398,500"
+              Text "399,000" (2ER9-0) 105×0 "399,000"
+            Frame "DV-1 Result Row 7" (2ERA-0) 912×48
+              Text "07" (2ERB-0) 44×0 "07"
+              Frame "Frame" (2ERC-0) 190×0
+                Text "기아" (2ERD-0) 0×0 "기아"
+                Text "000270" (2ERE-0) 0×0 "000270"
+              Text "136,200" (2ERF-0) 105×0 "136,200"
+              Text "+1.04%" (2ERG-0) 85×0 "+1.04%"
+              Text "2,988,310" (2ERH-0) 120×0 "2,988,310"
+              Text "4110억" (2ERI-0) 125×0 "4110억"
+              Text "136,200" (2ERJ-0) 105×0 "136,200"
+              Text "136,300" (2ERK-0) 105×0 "136,300"
+            Frame "DV-1 Result Row 8" (2ERL-0) 912×48
+              Text "08" (2ERM-0) 44×0 "08"
+              Frame "Frame" (2ERN-0) 190×0
+                Text "KB금융" (2ERO-0) 0×0 "KB금융"
+                Text "105560" (2ERP-0) 0×0 "105560"
+              Text "91,600" (2ERQ-0) 105×0 "91,600"
+              Text "+0.55%" (2ERR-0) 85×0 "+0.55%"
+              Text "3,102,800" (2ERS-0) 120×0 "3,102,800"
+              Text "2860억" (2ERT-0) 125×0 "2860억"
+              Text "91,600" (2ERU-0) 105×0 "91,600"
+              Text "91,700" (2ERV-0) 105×0 "91,700"
+            Frame "DV-1 Result Row 9" (2ERW-0) 912×48
+              Text "09" (2ERX-0) 44×0 "09"
+              Frame "Frame" (2ERY-0) 190×0
+                Text "두산에너빌리티" (2ERZ-0) 0×0 "두산에너빌리티"
+                Text "034020" (2ES0-0) 0×0 "034020"
+              Text "27,850" (2ES1-0) 105×0 "27,850"
+              Text "+3.53%" (2ES2-0) 85×0 "+3.53%"
+              Text "12,881,241" (2ES3-0) 120×0 "12,881,241"
+              Text "2410억" (2ES4-0) 125×0 "2410억"
+              Text "27,850" (2ES5-0) 105×0 "27,850"
+              Text "27,900" (2ES6-0) 105×0 "27,900"
+            Frame "DV-1 Result Row 10" (2ES7-0) 912×48
+              Text "10" (2ES8-0) 44×0 "10"
+              Frame "Frame" (2ES9-0) 190×0
+                Text "삼성바이오로직스" (2ESA-0) 0×0 "삼성바이오로직스"
+                Text "207940" (2ESB-0) 0×0 "207940"
+              Text "1,012,000" (2ESC-0) 105×0 "1,012,000"
+              Text "-0.39%" (2ESD-0) 85×0 "-0.39%"
+              Text "188,301" (2ESE-0) 120×0 "188,301"
+              Text "1980억" (2ESF-0) 125×0 "1980억"
+              Text "1,012,000" (2ESG-0) 105×0 "1,012,000"
+              Text "1,013,000" (2ESH-0) 105×0 "1,013,000"
+          Frame "DV-1 Table Expand Controls · Chrome" (2ESI-0) 912×48
+            Frame "Frame" (2ESJ-0) 0×0
+              Text "1–10 / 100" (2ESK-0) 0×0 "1–10 / 100"
+              Frame "Frame" (2ESL-0) 120×3
+                Rectangle "Rectangle" (2ESM-0) 28×3
+            Frame "Frame" (2ESN-0) 0×0
+              Frame "Frame" (2ESO-0) 0×30
+                Text "더보기" (2ESP-0) 0×0 "더보기"
+              Frame "Frame" (2ESQ-0) 0×30
+                Text "접기" (2ESR-0) 0×0 "접기"
+          Frame "DV-1 Table Status · Chrome" (2ESS-0) 912×40
+            Text "선택: 삼성전자 · 1위" (2EST-0) 0×0 "선택: 삼성전자 · 1위"
+            Text "표 안에서만 스크롤" (2ESU-0) 0×0 "표 안에서만 스크롤"
+        Frame "DV-1 Selected Detail" (2ENJ-0) 422×642
+          Frame "DV-1 Selected Header · Chrome" (2ESW-0) 421×70
+            Frame "Frame" (2ESX-0) 0×0
+              Text "삼성전자" (2ESY-0) 0×0 "삼성전자"
+              Text "005930 · KOSPI" (2ESZ-0) 0×0 "005930 · KOSPI"
+            Frame "Frame" (2ET0-0) 0×0
+              Text "150,850원" (2ET1-0) 0×0 "150,850원"
+              Text "+2.35%" (2ET2-0) 0×0 "+2.35%"
+          Frame "DV-1 Detail Tabs · Chrome" (2ET3-0) 421×42
+            Frame "Frame" (2ET4-0) 0×34
+              Text "시세" (2ET5-0) 0×0 "시세"
+            Frame "Frame" (2ET6-0) 0×34
+              Text "거래" (2ET7-0) 0×0 "거래"
+            Frame "Frame" (2ET8-0) 0×34
+              Text "수급" (2ET9-0) 0×0 "수급"
+            Frame "Frame" (2ETA-0) 0×34
+              Text "시장정보" (2ETB-0) 0×0 "시장정보"
+            Frame "Frame" (2ETC-0) 0×34
+              Text "기타 공식정보" (2ETD-0) 0×0 "기타 공식정보"
+          Frame "DV-1 Detail Sparse Rows" (2ETE-0) 421×485
+            Frame "Frame" (2ETF-0) 0×0
+              Text "선택 행 공식 정보" (2ETG-0) 0×0 "선택 행 공식 정보"
+            Frame "base:ka10020|$.bid_req_upper[].stk_nm|1" (2ETH-0) 0×36
+              Text "종목명" (2ETI-0) 0×0 "종목명"
+              Text "삼성전자" (2ETJ-0) 0×0 "삼성전자"
+            Frame "base:ka10020|$.bid_req_upper[].stk_cd|1" (2ETK-0) 0×36
+              Text "종목코드" (2ETL-0) 0×0 "종목코드"
+              Text "005930" (2ETM-0) 0×0 "005930"
+            Frame "base:ka10020|$.bid_req_upper[].cur_prc|1" (2ETN-0) 0×36
+              Text "현재가" (2ETO-0) 0×0 "현재가"
+              Text "150,850원" (2ETP-0) 0×0 "150,850원"
+            Frame "base:ka10020|$.bid_req_upper[].pred_pre|1" (2ETQ-0) 0×36
+              Text "전일대비" (2ETR-0) 0×0 "전일대비"
+              Text "+3,450원" (2ETS-0) 0×0 "+3,450원"
+            Frame "base:ka10023|$.trde_qty_sdnin[].flu_rt|1" (2ETT-0) 0×36
+              Text "등락률" (2ETU-0) 0×0 "등락률"
+              Text "+2.35%" (2ETV-0) 0×0 "+2.35%"
+            Frame "base:ka10020|$.bid_req_upper[].trde_qty|1" (2ETW-0) 0×36
+              Text "거래량" (2ETX-0) 0×0 "거래량"
+              Text "18,420,135주" (2ETY-0) 0×0 "18,420,135주"
+            Frame "base:ka10032|$.trde_prica_upper[].trde_prica|1" (2ETZ-0) 0×36
+              Text "거래대금" (2EU0-0) 0×0 "거래대금"
+              Text "1.42조원" (2EU1-0) 0×0 "1.42조원"
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].buy_bid|1" (2EU2-0) 0×36
+              Text "매수호가" (2EU3-0) 0×0 "매수호가"
+              Text "150,850원" (2EU4-0) 0×0 "150,850원"
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].sel_bid|1" (2EU5-0) 0×36
+              Text "매도호가" (2EU6-0) 0×0 "매도호가"
+              Text "150,850원" (2EU7-0) 0×0 "150,850원"
+            Frame "base:ka10032|$.trde_prica_upper[].now_rank|1" (2EU8-0) 0×36
+              Text "현재순위" (2EU9-0) 0×0 "현재순위"
+              Text "1위" (2EUA-0) 0×0 "1위"
+            Frame "Frame" (2EUB-0) 0×46
+              Text "탭 전환 시 열 preset과 상세 …" (2EUC-0) 0×0 "탭 전환 시 열 preset과 상세 필드가 함께 변경됩니다."
+          Frame "DV-1 Detail Footer · Chrome" (2EUD-0) 421×44
+            Text "10개 표시" (2EUE-0) 0×0 "10개 표시"
+            Text "더보기 · 접기" (2EUF-0) 0×0 "더보기 · 접기"
+          Frame "DV-1 Exact Metadata Remaining · 118" (2EXT-0) 421×1
+            Frame "base:ka10020|$.bid_req_upper|1" (2EXU-0) 1×1
+            Frame "base:ka10020|$.bid_req_upper[].pred_pre_sig|1" (2EXV-0) 1×1
+            Frame "base:ka10020|$.bid_req_upper[].tot_sel_req|1" (2EXW-0) 1×1
+            Frame "base:ka10020|$.bid_req_upper[].tot_buy_req|1" (2EXX-0) 1×1
+            Frame "base:ka10020|$.bid_req_upper[].netprps_req|1" (2EXY-0) 1×1
+            Frame "base:ka10020|$.bid_req_upper[].buy_rt|1" (2EXZ-0) 1×1
+            Frame "base:ka10021|$.bid_req_sdnin|1" (2EY0-0) 1×1
+            Frame "base:ka10021|$.bid_req_sdnin[].stk_cd|1" (2EY1-0) 1×1
+            Frame "base:ka10021|$.bid_req_sdnin[].stk_nm|1" (2EY2-0) 1×1
+            Frame "base:ka10021|$.bid_req_sdnin[].cur_prc|1" (2EY3-0) 1×1
+            Frame "base:ka10021|$.bid_req_sdnin[].pred_pre_sig|1" (2EY4-0) 1×1
+            Frame "base:ka10021|$.bid_req_sdnin[].pred_pre|1" (2EY5-0) 1×1
+            Frame "base:ka10021|$.bid_req_sdnin[].int|1" (2EY6-0) 1×1
+            Frame "base:ka10021|$.bid_req_sdnin[].now|1" (2EY7-0) 1×1
+            Frame "base:ka10021|$.bid_req_sdnin[].sdnin_qty|1" (2EY8-0) 1×1
+            Frame "base:ka10021|$.bid_req_sdnin[].sdnin_rt|1" (2EY9-0) 1×1
+            Frame "base:ka10021|$.bid_req_sdnin[].tot_buy_qty|1" (2EYA-0) 1×1
+            Frame "base:ka10022|$.req_rt_sdnin|1" (2EYB-0) 1×1
+            Frame "base:ka10022|$.req_rt_sdnin[].stk_cd|1" (2EYC-0) 1×1
+            Frame "base:ka10022|$.req_rt_sdnin[].stk_nm|1" (2EYD-0) 1×1
+            Frame "base:ka10022|$.req_rt_sdnin[].cur_prc|1" (2EYE-0) 1×1
+            Frame "base:ka10022|$.req_rt_sdnin[].pred_pre_sig|1" (2EYF-0) 1×1
+            Frame "base:ka10022|$.req_rt_sdnin[].pred_pre|1" (2EYG-0) 1×1
+            Frame "base:ka10022|$.req_rt_sdnin[].int|1" (2EYH-0) 1×1
+            Frame "base:ka10022|$.req_rt_sdnin[].now_rt|1" (2EYI-0) 1×1
+            Frame "base:ka10022|$.req_rt_sdnin[].sdnin_rt|1" (2EYJ-0) 1×1
+            Frame "base:ka10022|$.req_rt_sdnin[].tot_sel_req|1" (2EYK-0) 1×1
+            Frame "base:ka10022|$.req_rt_sdnin[].tot_buy_req|1" (2EYL-0) 1×1
+            Frame "base:ka10023|$.trde_qty_sdnin|1" (2EYM-0) 1×1
+            Frame "base:ka10023|$.trde_qty_sdnin[].stk_cd|1" (2EYN-0) 1×1
+            Frame "base:ka10023|$.trde_qty_sdnin[].stk_nm|1" (2EYO-0) 1×1
+            Frame "base:ka10023|$.trde_qty_sdnin[].cur_prc|1" (2EYP-0) 1×1
+            Frame "base:ka10023|$.trde_qty_sdnin[].pred_pre_sig|1" (2EYQ-0) 1×1
+            Frame "base:ka10023|$.trde_qty_sdnin[].pred_pre|1" (2EYR-0) 1×1
+            Frame "base:ka10023|$.trde_qty_sdnin[].prev_trde_qty|1" (2EYS-0) 1×1
+            Frame "base:ka10023|$.trde_qty_sdnin[].now_trde_qty|1" (2EYT-0) 1×1
+            Frame "base:ka10023|$.trde_qty_sdnin[].sdnin_qty|1" (2EYU-0) 1×1
+            Frame "base:ka10023|$.trde_qty_sdnin[].sdnin_rt|1" (2EYV-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper|1" (2EYW-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].stk_cls|1" (2EYX-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].stk_cd|1" (2EYY-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].stk_nm|1" (2EYZ-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].cur_prc|1" (2EZ0-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].pred_pre_sig|1" (2EZ1-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].pred_pre|1" (2EZ2-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].flu_rt|1" (2EZ3-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].sel_req|1" (2EZ4-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].buy_req|1" (2EZ5-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].now_trde_qty|1" (2EZ6-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].cntr_str|1" (2EZ7-0) 1×1
+            Frame "base:ka10027|$.pred_pre_flu_rt_upper[].cnt|1" (2EZ8-0) 1×1
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper|1" (2EZ9-0) 1×1
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].stk_cd|1" (2EZA-0) 1×1
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].stk_nm|1" (2EZB-0) 1×1
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].exp_cntr_pric|1" (2EZC-0) 1×1
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].base_pric|1" (2EZD-0) 1×1
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].pred_pre_sig|1" (2EZE-0) 1×1
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].pred_pre|1" (2EZF-0) 1×1
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].flu_rt|1" (2EZG-0) 1×1
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].exp_cntr_qty|1" (2EZH-0) 1×1
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].sel_req|1" (2EZI-0) 1×1
+            Frame "base:ka10029|$.exp_cntr_flu_rt_upper[].buy_req|1" (2EZJ-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper|1" (2EZK-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].stk_cd|1" (2EZL-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].stk_nm|1" (2EZM-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].cur_prc|1" (2EZN-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].pred_pre_sig|1" (2EZO-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].pred_pre|1" (2EZP-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].flu_rt|1" (2EZQ-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].trde_qty|1" (2EZR-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].pred_rt|1" (2EZS-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].trde_tern_rt|1" (2EZT-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].trde_amt|1" (2EZU-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].opmr_trde_qty|1" (2EZV-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].opmr_pred_rt|1" (2EZW-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].opmr_trde_rt|1" (2EZX-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].opmr_trde_amt|1" (2EZY-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].af_mkrt_trde_qty|1" (2EZZ-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].af_mkrt_pred_rt|1" (2F00-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].af_mkrt_trde_rt|1" (2F01-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].af_mkrt_trde_amt|1" (2F02-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].bf_mkrt_trde_qty|1" (2F03-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].bf_mkrt_pred_rt|1" (2F04-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].bf_mkrt_trde_rt|1" (2F05-0) 1×1
+            Frame "base:ka10030|$.tdy_trde_qty_upper[].bf_mkrt_trde_amt|1" (2F06-0) 1×1
+            Frame "base:ka10031|$.pred_trde_qty_upper|1" (2F07-0) 1×1
+            Frame "base:ka10031|$.pred_trde_qty_upper[].stk_cd|1" (2F08-0) 1×1
+            Frame "base:ka10031|$.pred_trde_qty_upper[].stk_nm|1" (2F09-0) 1×1
+            Frame "base:ka10031|$.pred_trde_qty_upper[].cur_prc|1" (2F0A-0) 1×1
+            Frame "base:ka10031|$.pred_trde_qty_upper[].pred_pre_sig|1" (2F0B-0) 1×1
+            Frame "base:ka10031|$.pred_trde_qty_upper[].pred_pre|1" (2F0C-0) 1×1
+            Frame "base:ka10031|$.pred_trde_qty_upper[].trde_qty|1" (2F0D-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper|1" (2F0E-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper[].stk_cd|1" (2F0F-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper[].pred_rank|1" (2F0G-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper[].stk_nm|1" (2F0H-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper[].cur_prc|1" (2F0I-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper[].pred_pre_sig|1" (2F0J-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper[].pred_pre|1" (2F0K-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper[].flu_rt|1" (2F0L-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper[].sel_bid|1" (2F0M-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper[].buy_bid|1" (2F0N-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper[].now_trde_qty|1" (2F0O-0) 1×1
+            Frame "base:ka10032|$.trde_prica_upper[].pred_trde_qty|1" (2F0P-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank|1" (2F0Q-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].rank|1" (2F0R-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].stk_cd|1" (2F0S-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].stk_nm|1" (2F0T-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].cur_prc|1" (2F0U-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].pred_pre_sig|1" (2F0V-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].pred_pre|1" (2F0W-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].flu_rt|1" (2F0X-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].sel_tot_req|1" (2F0Y-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].buy_tot_req|1" (2F0Z-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].acc_trde_qty|1" (2F10-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].acc_trde_prica|1" (2F11-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].tdy_close_pric|1" (2F12-0) 1×1
+            Frame "base:ka10098|$.ovt_sigpric_flu_rt_rank[].tdy_close_pric_flu_rt|1" (2F13-0) 1×1
+      Frame "DV-1 Footer" (2ENK-0) 1390×36
+        Frame "DV-1 Footer Controls · Chrome" (2EOZ-0) 1390×36
+          Text "상위 10개 표시 · 더보기 시 표 …" (2EP0-0) 0×0 "상위 10개 표시 · 더보기 시 표 내부 스크롤 · 접기"
+          Text "탐색 결과 · 공식 필드 128개 연…" (2EP1-0) 0×0 "탐색 결과 · 공식 필드 128개 연결"

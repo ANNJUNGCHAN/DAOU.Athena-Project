@@ -1,0 +1,92 @@
+{
+ "board_id": "4921-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "4923-0",
+   "text": "원본 보드: CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+   "path": [
+    "note/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4925-0",
+   "text": "가져온 요소: 예상체결등락률… · 종목코드 · 예상체결가 · 기준가 · 등락률",
+   "path": [
+    "note/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4927-0",
+   "text": "문법: facts",
+   "path": [
+    "note/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4929-0",
+   "text": "접은 개수: 항목 85개",
+   "path": [
+    "note/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4921-0",
+   "name": "note/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "4922-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4924-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4926-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4928-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률": 1,
+  "가져온 요소: 예상체결등락률… · 종목코드 · 예상체결가 · 기준가 · 등락률": 1,
+  "문법: facts": 1,
+  "접은 개수: 항목 85개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "b84c0c0bfb38ee28cc06470e979389e7d856a6ec8975c1680f923c7fc6be8b88"
+}

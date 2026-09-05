@@ -1,0 +1,92 @@
+{
+ "board_id": "49AX-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R08-X · ELW 바스켓·만기평가",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "49AZ-0",
+   "text": "원본 보드: CC-03 / R08-X · ELW 바스켓·만기평가",
+   "path": [
+    "note/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49B1-0",
+   "text": "가져온 요소: 종목명 · 종목코드 · 발행사명 · 현재가 · 전일대비",
+   "path": [
+    "note/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49B3-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49B5-0",
+   "text": "접은 개수: 스칼라 5개 · 행 3개",
+   "path": [
+    "note/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "49AX-0",
+   "name": "note/CC-03 / R08-X · ELW 바스켓·만기평가",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "49AY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49B0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49B2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49B4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R08-X · ELW 바스켓·만기평가": 1,
+  "가져온 요소: 종목명 · 종목코드 · 발행사명 · 현재가 · 전일대비": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 5개 · 행 3개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "d1e5cac0fed8bf05bd978fd660dd5865b22a6e5b8bb3dc37c5d2493fc4d361ca"
+}

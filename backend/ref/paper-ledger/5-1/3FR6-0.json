@@ -1,0 +1,3651 @@
+{
+ "board_id": "3FR6-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T1-X · 분봉 시세",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "3G1R-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G1Q-0",
+   "text": "005930 · KOSPI · KRX",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G1P-0",
+   "text": "정규장",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Session Chips",
+    "장구분 칩"
+   ]
+  },
+  {
+   "id": "3G1N-0",
+   "text": "실시간",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Session Chips",
+    "실시간 칩"
+   ]
+  },
+  {
+   "id": "3G1J-0",
+   "text": "150,850원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G1I-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G1H-0",
+   "text": "09:42:18",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G1E-0",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G1C-0",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G1A-0",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G18-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G16-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G14-0",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G12-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0Y-0",
+   "text": "시가 · 고가 · 저가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0X-0",
+   "text": "149,200 · 152,400 · 148,100",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0W-0",
+   "text": "09:00:03 · 09:12:40 · 09:05:22",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0U-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0T-0",
+   "text": "2.14조원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0S-0",
+   "text": "거래량 1,420만주 · 전일 대비 120.3%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0Q-0",
+   "text": "PER",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0P-0",
+   "text": "21.2배",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0O-0",
+   "text": "업종 11.2배",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0M-0",
+   "text": "PBR",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0L-0",
+   "text": "2.63배",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0K-0",
+   "text": "업종 1.61배",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0I-0",
+   "text": "ROE",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0H-0",
+   "text": "8.4%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3G0G-0",
+   "text": "전년 7.9%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8K-0",
+   "text": "09-01(화)",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "분봉 표 제목"
+   ]
+  },
+  {
+   "id": "3T8M-0",
+   "text": "1분봉",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "분봉 표 제목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8N-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "분봉 표 제목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8O-0",
+   "text": "+0.03%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "분봉 표 제목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8P-0",
+   "text": "▾",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "분봉 표 제목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8Q-0",
+   "text": "·",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "분봉 표 제목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8R-0",
+   "text": "전체 42건 · 13건 표시",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "분봉 표 제목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8T-0",
+   "text": "시각",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3T8U-0",
+   "text": "시가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3T8V-0",
+   "text": "고가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3T8W-0",
+   "text": "저가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3T8X-0",
+   "text": "종가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3T8Y-0",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3T8Z-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3T92-0",
+   "text": "09:42",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:42"
+   ]
+  },
+  {
+   "id": "3T93-0",
+   "text": "150,800",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:42"
+   ]
+  },
+  {
+   "id": "3T94-0",
+   "text": "150,900",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:42"
+   ]
+  },
+  {
+   "id": "3T95-0",
+   "text": "150,750",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:42"
+   ]
+  },
+  {
+   "id": "3T97-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:42",
+    "종가"
+   ]
+  },
+  {
+   "id": "3T98-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:42",
+    "종가"
+   ]
+  },
+  {
+   "id": "3T99-0",
+   "text": "38만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:42"
+   ]
+  },
+  {
+   "id": "3T9A-0",
+   "text": "573억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:42"
+   ]
+  },
+  {
+   "id": "3T9L-0",
+   "text": "09:41",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:41"
+   ]
+  },
+  {
+   "id": "3T9K-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:41"
+   ]
+  },
+  {
+   "id": "3T9J-0",
+   "text": "150,900",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:41"
+   ]
+  },
+  {
+   "id": "3T9I-0",
+   "text": "150,750",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:41"
+   ]
+  },
+  {
+   "id": "3T9H-0",
+   "text": "150,800",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:41",
+    "종가"
+   ]
+  },
+  {
+   "id": "3T9G-0",
+   "text": "+1,800 · +1.21%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:41",
+    "종가"
+   ]
+  },
+  {
+   "id": "3T9E-0",
+   "text": "42만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:41"
+   ]
+  },
+  {
+   "id": "3T9D-0",
+   "text": "633억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:41"
+   ]
+  },
+  {
+   "id": "3T9V-0",
+   "text": "09:40",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:40"
+   ]
+  },
+  {
+   "id": "3T9U-0",
+   "text": "150,750",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:40"
+   ]
+  },
+  {
+   "id": "3T9T-0",
+   "text": "150,900",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:40"
+   ]
+  },
+  {
+   "id": "3T9S-0",
+   "text": "150,700",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:40"
+   ]
+  },
+  {
+   "id": "3T9R-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:40",
+    "종가"
+   ]
+  },
+  {
+   "id": "3T9Q-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:40",
+    "종가"
+   ]
+  },
+  {
+   "id": "3T9O-0",
+   "text": "51만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:40"
+   ]
+  },
+  {
+   "id": "3T9N-0",
+   "text": "769억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:40"
+   ]
+  },
+  {
+   "id": "3TA5-0",
+   "text": "09:39",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:39"
+   ]
+  },
+  {
+   "id": "3TA4-0",
+   "text": "150,800",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:39"
+   ]
+  },
+  {
+   "id": "3TA3-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:39"
+   ]
+  },
+  {
+   "id": "3TA2-0",
+   "text": "150,700",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:39"
+   ]
+  },
+  {
+   "id": "3TA1-0",
+   "text": "150,750",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:39",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TA0-0",
+   "text": "+1,750 · +1.17%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:39",
+    "종가"
+   ]
+  },
+  {
+   "id": "3T9Y-0",
+   "text": "33만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:39"
+   ]
+  },
+  {
+   "id": "3T9X-0",
+   "text": "498억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:39"
+   ]
+  },
+  {
+   "id": "3TAF-0",
+   "text": "09:38",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:38"
+   ]
+  },
+  {
+   "id": "3TAE-0",
+   "text": "150,700",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:38"
+   ]
+  },
+  {
+   "id": "3TAD-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:38"
+   ]
+  },
+  {
+   "id": "3TAC-0",
+   "text": "150,700",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:38"
+   ]
+  },
+  {
+   "id": "3TAB-0",
+   "text": "150,800",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:38",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TAA-0",
+   "text": "+1,800 · +1.21%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:38",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TA8-0",
+   "text": "45만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:38"
+   ]
+  },
+  {
+   "id": "3TA7-0",
+   "text": "678억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:38"
+   ]
+  },
+  {
+   "id": "3TAP-0",
+   "text": "09:37",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:37"
+   ]
+  },
+  {
+   "id": "3TAO-0",
+   "text": "150,750",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:37"
+   ]
+  },
+  {
+   "id": "3TAN-0",
+   "text": "150,800",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:37"
+   ]
+  },
+  {
+   "id": "3TAM-0",
+   "text": "150,650",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:37"
+   ]
+  },
+  {
+   "id": "3TAL-0",
+   "text": "150,700",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:37",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TAK-0",
+   "text": "+1,700 · +1.14%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:37",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TAI-0",
+   "text": "29만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:37"
+   ]
+  },
+  {
+   "id": "3TAH-0",
+   "text": "437억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:37"
+   ]
+  },
+  {
+   "id": "3TAZ-0",
+   "text": "09:36",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:36"
+   ]
+  },
+  {
+   "id": "3TAY-0",
+   "text": "150,650",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:36"
+   ]
+  },
+  {
+   "id": "3TAX-0",
+   "text": "150,800",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:36"
+   ]
+  },
+  {
+   "id": "3TAW-0",
+   "text": "150,650",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:36"
+   ]
+  },
+  {
+   "id": "3TAV-0",
+   "text": "150,750",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:36",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TAU-0",
+   "text": "+1,750 · +1.17%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:36",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TAS-0",
+   "text": "36만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:36"
+   ]
+  },
+  {
+   "id": "3TAR-0",
+   "text": "543억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:36"
+   ]
+  },
+  {
+   "id": "3TB9-0",
+   "text": "09:35",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:35"
+   ]
+  },
+  {
+   "id": "3TB8-0",
+   "text": "150,700",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:35"
+   ]
+  },
+  {
+   "id": "3TB7-0",
+   "text": "150,750",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:35"
+   ]
+  },
+  {
+   "id": "3TB6-0",
+   "text": "150,600",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:35"
+   ]
+  },
+  {
+   "id": "3TB5-0",
+   "text": "150,650",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:35",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TB4-0",
+   "text": "+1,650 · +1.11%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:35",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TB2-0",
+   "text": "31만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:35"
+   ]
+  },
+  {
+   "id": "3TB1-0",
+   "text": "467억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:35"
+   ]
+  },
+  {
+   "id": "3TBJ-0",
+   "text": "09:34",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:34"
+   ]
+  },
+  {
+   "id": "3TBI-0",
+   "text": "150,650",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:34"
+   ]
+  },
+  {
+   "id": "3TBH-0",
+   "text": "150,750",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:34"
+   ]
+  },
+  {
+   "id": "3TBG-0",
+   "text": "150,600",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:34"
+   ]
+  },
+  {
+   "id": "3TBF-0",
+   "text": "150,700",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:34",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TBE-0",
+   "text": "+1,700 · +1.14%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:34",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TBC-0",
+   "text": "40만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:34"
+   ]
+  },
+  {
+   "id": "3TBB-0",
+   "text": "603억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:34"
+   ]
+  },
+  {
+   "id": "3TBT-0",
+   "text": "09:33",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:33"
+   ]
+  },
+  {
+   "id": "3TBS-0",
+   "text": "150,550",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:33"
+   ]
+  },
+  {
+   "id": "3TBR-0",
+   "text": "150,700",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:33"
+   ]
+  },
+  {
+   "id": "3TBQ-0",
+   "text": "150,550",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:33"
+   ]
+  },
+  {
+   "id": "3TBP-0",
+   "text": "150,650",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:33",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TBO-0",
+   "text": "+1,650 · +1.11%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:33",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TBM-0",
+   "text": "27만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:33"
+   ]
+  },
+  {
+   "id": "3TBL-0",
+   "text": "407억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:33"
+   ]
+  },
+  {
+   "id": "3TC3-0",
+   "text": "09:32",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:32"
+   ]
+  },
+  {
+   "id": "3TC2-0",
+   "text": "150,600",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:32"
+   ]
+  },
+  {
+   "id": "3TC1-0",
+   "text": "150,650",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:32"
+   ]
+  },
+  {
+   "id": "3TC0-0",
+   "text": "150,500",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:32"
+   ]
+  },
+  {
+   "id": "3TBZ-0",
+   "text": "150,550",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:32",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TBY-0",
+   "text": "+1,550 · +1.04%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:32",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TBW-0",
+   "text": "34만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:32"
+   ]
+  },
+  {
+   "id": "3TBV-0",
+   "text": "512억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:32"
+   ]
+  },
+  {
+   "id": "3TCD-0",
+   "text": "09:31",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:31"
+   ]
+  },
+  {
+   "id": "3TCC-0",
+   "text": "150,550",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:31"
+   ]
+  },
+  {
+   "id": "3TCB-0",
+   "text": "150,650",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:31"
+   ]
+  },
+  {
+   "id": "3TCA-0",
+   "text": "150,500",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:31"
+   ]
+  },
+  {
+   "id": "3TC9-0",
+   "text": "150,600",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:31",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TC8-0",
+   "text": "+1,600 · +1.07%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:31",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TC6-0",
+   "text": "38만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:31"
+   ]
+  },
+  {
+   "id": "3TC5-0",
+   "text": "572억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:31"
+   ]
+  },
+  {
+   "id": "3TCN-0",
+   "text": "09:30",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:30"
+   ]
+  },
+  {
+   "id": "3TCM-0",
+   "text": "150,500",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:30"
+   ]
+  },
+  {
+   "id": "3TCL-0",
+   "text": "150,600",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:30"
+   ]
+  },
+  {
+   "id": "3TCK-0",
+   "text": "150,450",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:30"
+   ]
+  },
+  {
+   "id": "3TCJ-0",
+   "text": "150,550",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:30",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TCI-0",
+   "text": "+1,550 · +1.04%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:30",
+    "종가"
+   ]
+  },
+  {
+   "id": "3TCG-0",
+   "text": "46만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:30"
+   ]
+  },
+  {
+   "id": "3TCF-0",
+   "text": "692억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "분봉 표",
+    "09:30"
+   ]
+  },
+  {
+   "id": "3SP4-0",
+   "text": "일자별 시세",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 시세 제목"
+   ]
+  },
+  {
+   "id": "3SP5-0",
+   "text": "전체 60건 · 3건 표시",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 시세 제목"
+   ]
+  },
+  {
+   "id": "3SP8-0",
+   "text": "일자",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 표 헤더"
+   ]
+  },
+  {
+   "id": "3SP9-0",
+   "text": "시가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 표 헤더"
+   ]
+  },
+  {
+   "id": "3SPA-0",
+   "text": "고가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 표 헤더"
+   ]
+  },
+  {
+   "id": "3SPB-0",
+   "text": "저가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 표 헤더"
+   ]
+  },
+  {
+   "id": "3SPC-0",
+   "text": "종가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 표 헤더"
+   ]
+  },
+  {
+   "id": "3SPD-0",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 표 헤더"
+   ]
+  },
+  {
+   "id": "3SPE-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 표 헤더"
+   ]
+  },
+  {
+   "id": "3SPH-0",
+   "text": "09-01",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 09-01"
+   ]
+  },
+  {
+   "id": "3SPI-0",
+   "text": "149,200",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 09-01"
+   ]
+  },
+  {
+   "id": "3SPJ-0",
+   "text": "152,400",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 09-01"
+   ]
+  },
+  {
+   "id": "3SPK-0",
+   "text": "148,100",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 09-01"
+   ]
+  },
+  {
+   "id": "3SPM-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 09-01",
+    "종가 · 대비"
+   ]
+  },
+  {
+   "id": "3SPN-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 09-01",
+    "종가 · 대비"
+   ]
+  },
+  {
+   "id": "3SPO-0",
+   "text": "1,420만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 09-01"
+   ]
+  },
+  {
+   "id": "3SPP-0",
+   "text": "2.14조원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 09-01"
+   ]
+  },
+  {
+   "id": "3SQ0-0",
+   "text": "08-31",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-31"
+   ]
+  },
+  {
+   "id": "3SPZ-0",
+   "text": "148,200",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-31"
+   ]
+  },
+  {
+   "id": "3SPY-0",
+   "text": "149,400",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-31"
+   ]
+  },
+  {
+   "id": "3SPX-0",
+   "text": "148,000",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-31"
+   ]
+  },
+  {
+   "id": "3SPW-0",
+   "text": "149,000",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-31",
+    "종가 · 대비"
+   ]
+  },
+  {
+   "id": "3SPV-0",
+   "text": "+1,010 · +0.68%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-31",
+    "종가 · 대비"
+   ]
+  },
+  {
+   "id": "3SPT-0",
+   "text": "1,180만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-31"
+   ]
+  },
+  {
+   "id": "3SPS-0",
+   "text": "1.76조원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-31"
+   ]
+  },
+  {
+   "id": "3SQA-0",
+   "text": "08-28",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-28"
+   ]
+  },
+  {
+   "id": "3SQ9-0",
+   "text": "148,400",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-28"
+   ]
+  },
+  {
+   "id": "3SQ8-0",
+   "text": "148,600",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-28"
+   ]
+  },
+  {
+   "id": "3SQ7-0",
+   "text": "147,700",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-28"
+   ]
+  },
+  {
+   "id": "3SQ6-0",
+   "text": "147,990",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-28",
+    "종가 · 대비"
+   ]
+  },
+  {
+   "id": "3SQ5-0",
+   "text": "−505 · −0.34%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-28",
+    "종가 · 대비"
+   ]
+  },
+  {
+   "id": "3SQ3-0",
+   "text": "980만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-28"
+   ]
+  },
+  {
+   "id": "3SQ2-0",
+   "text": "1.45조원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "일자별 시세",
+    "일자별 행 08-28"
+   ]
+  },
+  {
+   "id": "3HAP-0",
+   "text": "분 요약",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "분 요약"
+   ]
+  },
+  {
+   "id": "3HAR-0",
+   "text": "구간",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "분 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HAS-0",
+   "text": "09:30 ~ 09:42 · 13분",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "분 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HAU-0",
+   "text": "구간 대비",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "분 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HAV-0",
+   "text": "+300 · +0.20%",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "분 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HAX-0",
+   "text": "구간 고가 · 저가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "분 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HAY-0",
+   "text": "150,900 · 150,450",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "분 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HB0-0",
+   "text": "구간 거래량",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "분 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HB1-0",
+   "text": "490만주",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "분 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HB3-0",
+   "text": "구간 거래대금",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "분 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HB4-0",
+   "text": "7,384억원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "분 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HB6-0",
+   "text": "세션",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "세션"
+   ]
+  },
+  {
+   "id": "3HB8-0",
+   "text": "장구분",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "세션",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HB9-0",
+   "text": "정규장",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "세션",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBB-0",
+   "text": "주기",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "세션",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBC-0",
+   "text": "1분",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "세션",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBE-0",
+   "text": "거래소",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "세션",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBF-0",
+   "text": "KRX",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "세션",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBH-0",
+   "text": "경과",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "세션",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBI-0",
+   "text": "09:00 ~ 09:42",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "세션",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBN-0",
+   "text": "기준",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "기준"
+   ]
+  },
+  {
+   "id": "3HBP-0",
+   "text": "전일 종가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBQ-0",
+   "text": "149,000",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBV-0",
+   "text": "상한가 · 하한가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBX-0",
+   "text": "193,700",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBY-0",
+   "text": "·",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HBZ-0",
+   "text": "104,300",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HC1-0",
+   "text": "당일 고가 · 저가",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HC2-0",
+   "text": "152,400 · 148,100",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "분봉 레일",
+    "기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FRI-0",
+   "text": "알림 설정",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FRG-0",
+   "text": "호가 열기",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FRB-0",
+   "text": "● 분봉 실시간 갱신 중",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "3FRA-0",
+   "text": "09:00~09:42 누계 1,420만주 · 2.14조원",
+   "path": [
+    "CC-03 / R01-T1-X · 분봉 시세",
+    "Instrument Root · 분봉 시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3FR6-0",
+   "name": "CC-03 / R01-T1-X · 분봉 시세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "3FR7-0",
+   "name": "Instrument Root · 분봉 시세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "3FR8-0",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "3G0Z-0",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "3G1F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3G1K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3G1L-0",
+   "name": "Session Chips",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3G1O-0",
+   "name": "장구분 칩",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G1M-0",
+   "name": "실시간 칩",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3G1G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3G10-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3G1D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3G1B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3G19-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3G17-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3G15-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3G13-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3G11-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3G0E-0",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "3G0V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3G0R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 286,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3G0N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3G0J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3G0F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3FRC-0",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 594,
+   "depth": 3
+  },
+  {
+   "id": "3FW7-0",
+   "name": "Quote Detail Mount",
+   "component": "Frame",
+   "w": 820,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "3T8I-0",
+   "name": "분봉 표",
+   "component": "Frame",
+   "w": 763,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T8J-0",
+   "name": "분봉 표 제목",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3T8L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T8S-0",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 6
+  },
+  {
+   "id": "3T91-0",
+   "name": "09:42",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3T96-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T9C-0",
+   "name": "09:41",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3T9F-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T9M-0",
+   "name": "09:40",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3T9P-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T9W-0",
+   "name": "09:39",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3T9Z-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3TA6-0",
+   "name": "09:38",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3TA9-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3TAG-0",
+   "name": "09:37",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3TAJ-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3TAQ-0",
+   "name": "09:36",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3TAT-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3TB0-0",
+   "name": "09:35",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3TB3-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3TBA-0",
+   "name": "09:34",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3TBD-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3TBK-0",
+   "name": "09:33",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3TBN-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3TBU-0",
+   "name": "09:32",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3TBX-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3TC4-0",
+   "name": "09:31",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3TC7-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3TCE-0",
+   "name": "09:30",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3TCH-0",
+   "name": "종가",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SP2-0",
+   "name": "일자별 시세",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SP3-0",
+   "name": "일자별 시세 제목",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3SP7-0",
+   "name": "일자별 표 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 6
+  },
+  {
+   "id": "3SPG-0",
+   "name": "일자별 행 09-01",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3SPL-0",
+   "name": "종가 · 대비",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SPR-0",
+   "name": "일자별 행 08-31",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3SPU-0",
+   "name": "종가 · 대비",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SQ1-0",
+   "name": "일자별 행 08-28",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3SQ4-0",
+   "name": "종가 · 대비",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FRD-0",
+   "name": "Instrument Context",
+   "component": "Frame",
+   "w": 538,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "3HAN-0",
+   "name": "분봉 레일",
+   "component": "Frame",
+   "w": 490,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HAO-0",
+   "name": "분 요약",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3HAQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3HAT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3HAW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3HAZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3HB2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3HB5-0",
+   "name": "세션",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3HB7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3HBA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3HBD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3HBG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3HBM-0",
+   "name": "기준",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3HBO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3HBU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3HBW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3HC0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3FRE-0",
+   "name": "Chart Context Actions",
+   "component": "Frame",
+   "w": 490,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "3FRH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3FRF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3FR9-0",
+   "name": "Chart Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "삼성전자": 1,
+  "005930 · KOSPI · KRX": 1,
+  "정규장": 2,
+  "실시간": 1,
+  "150,850원": 1,
+  "+1,850 · +1.24%": 4,
+  "09:42:18": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 1,
+  "ELW": 1,
+  "금현물": 1,
+  "순위": 1,
+  "시가 · 고가 · 저가": 1,
+  "149,200 · 152,400 · 148,100": 1,
+  "09:00:03 · 09:12:40 · 09:05:22": 1,
+  "거래대금": 3,
+  "2.14조원": 2,
+  "거래량 1,420만주 · 전일 대비 120.3%": 1,
+  "PER": 1,
+  "21.2배": 1,
+  "업종 11.2배": 1,
+  "PBR": 1,
+  "2.63배": 1,
+  "업종 1.61배": 1,
+  "ROE": 1,
+  "8.4%": 1,
+  "전년 7.9%": 1,
+  "09-01(화)": 1,
+  "1분봉": 1,
+  "150,850": 7,
+  "+0.03%": 1,
+  "▾": 1,
+  "·": 2,
+  "전체 42건 · 13건 표시": 1,
+  "시각": 1,
+  "시가": 2,
+  "고가": 2,
+  "저가": 2,
+  "종가": 2,
+  "거래량": 2,
+  "09:42": 1,
+  "150,800": 6,
+  "150,900": 3,
+  "150,750": 8,
+  "38만주": 2,
+  "573억원": 1,
+  "09:41": 1,
+  "+1,800 · +1.21%": 2,
+  "42만주": 1,
+  "633억원": 1,
+  "09:40": 1,
+  "150,700": 8,
+  "51만주": 1,
+  "769억원": 1,
+  "09:39": 1,
+  "+1,750 · +1.17%": 2,
+  "33만주": 1,
+  "498억원": 1,
+  "09:38": 1,
+  "45만주": 1,
+  "678억원": 1,
+  "09:37": 1,
+  "150,650": 8,
+  "+1,700 · +1.14%": 2,
+  "29만주": 1,
+  "437억원": 1,
+  "09:36": 1,
+  "36만주": 1,
+  "543억원": 1,
+  "09:35": 1,
+  "150,600": 5,
+  "+1,650 · +1.11%": 2,
+  "31만주": 1,
+  "467억원": 1,
+  "09:34": 1,
+  "40만주": 1,
+  "603억원": 1,
+  "09:33": 1,
+  "150,550": 5,
+  "27만주": 1,
+  "407억원": 1,
+  "09:32": 1,
+  "150,500": 3,
+  "+1,550 · +1.04%": 2,
+  "34만주": 1,
+  "512억원": 1,
+  "09:31": 1,
+  "+1,600 · +1.07%": 1,
+  "572억원": 1,
+  "09:30": 1,
+  "150,450": 1,
+  "46만주": 1,
+  "692억원": 1,
+  "일자별 시세": 1,
+  "전체 60건 · 3건 표시": 1,
+  "일자": 1,
+  "09-01": 1,
+  "149,200": 1,
+  "152,400": 1,
+  "148,100": 1,
+  "1,420만주": 1,
+  "08-31": 1,
+  "148,200": 1,
+  "149,400": 1,
+  "148,000": 1,
+  "149,000": 2,
+  "+1,010 · +0.68%": 1,
+  "1,180만주": 1,
+  "1.76조원": 1,
+  "08-28": 1,
+  "148,400": 1,
+  "148,600": 1,
+  "147,700": 1,
+  "147,990": 1,
+  "−505 · −0.34%": 1,
+  "980만주": 1,
+  "1.45조원": 1,
+  "분 요약": 1,
+  "구간": 1,
+  "09:30 ~ 09:42 · 13분": 1,
+  "구간 대비": 1,
+  "+300 · +0.20%": 1,
+  "구간 고가 · 저가": 1,
+  "150,900 · 150,450": 1,
+  "구간 거래량": 1,
+  "490만주": 1,
+  "구간 거래대금": 1,
+  "7,384억원": 1,
+  "세션": 1,
+  "장구분": 1,
+  "주기": 1,
+  "1분": 1,
+  "거래소": 1,
+  "KRX": 1,
+  "경과": 1,
+  "09:00 ~ 09:42": 1,
+  "기준": 1,
+  "전일 종가": 1,
+  "상한가 · 하한가": 1,
+  "193,700": 1,
+  "104,300": 1,
+  "당일 고가 · 저가": 1,
+  "152,400 · 148,100": 1,
+  "알림 설정": 1,
+  "호가 열기": 1,
+  "● 분봉 실시간 갱신 중": 1,
+  "09:00~09:42 누계 1,420만주 · 2.14조원": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "e1fb58d47862576617dd0bb8cc8b4464a53a594df19184b4a9cfebd254bddf62"
+}

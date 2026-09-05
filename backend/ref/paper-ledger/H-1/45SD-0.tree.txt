@@ -1,0 +1,19 @@
+Frame "template/event" (45SD-0) 360×420
+  Frame "Header" (45TI-0) 0×0
+    Frame "Meta row" (45TJ-0) 0×0
+      Text "Eyebrow" (45TK-0) 0×0 "이벤트형"
+      Text "As of" (45TL-0) 0×0 "기준 오늘"
+    Text "Title" (45TM-0) 0×0 "체결 알림"
+  Frame "Body" (45UO-0) 0×0
+    Frame "Event 1" (45YK-0) 0×0
+      Text "09:42" (45YL-0) 48×0 "09:42"
+      Frame "Frame" (45YM-0) 0×0
+        Text "주문 체결" (45YN-0) 0×0 "주문 체결"
+        Text "삼성전자 매수 체결" (45YO-0) 0×0 "삼성전자 매수 체결"
+    Frame "Event 2" (45YQ-0) 0×0
+      Text "09:43" (45YR-0) 48×0 "09:43"
+      Frame "Frame" (45YS-0) 0×0
+        Text "입금 완료" (45YT-0) 0×0 "입금 완료"
+        Text "예수금 0원 / 처리 상태 완료" (45YU-0) 0×0 "예수금 0원 / 처리 상태 완료"
+  Frame "Fold note" (4610-0) 0×0
+    Text "이벤트 3건 접힘 · 원본에서 확인" (4611-0) 0×0 "이벤트 3건 접힘 · 원본에서 확인"

@@ -1,0 +1,2989 @@
+{
+ "board_id": "G5B-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "28 · Windows 반응형 창 · Snap",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "G5F-0",
+   "text": "50",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G5H-0",
+   "text": "Windows 반응형 창 · Snap 규격",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G5I-0",
+   "text": "창 크기에 맞춰 정보구조를 재배치하고 Windows의 기본 창 제어를 그대로 사용합니다.",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G5K-0",
+   "text": "승인됨 · Paper 규격 확정",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G5S-0",
+   "text": "한 셸, 네 가지 Windows 배치",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Preview Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G5T-0",
+   "text": "와이드·가로 2분할·세로 2분할·4분할로 전환해도 선택 상태는 그대로 유지합니다.",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Preview Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G5V-0",
+   "text": "최소 330px 지원",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Preview Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G62-0",
+   "text": "와이드",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G63-0",
+   "text": "1280px 이상 · 3열",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G64-0",
+   "text": "좌 268 · 우 400",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G69-0",
+   "text": "ATHENA",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G6B-0",
+   "text": "—",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G6E-0",
+   "text": "×",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H53-0",
+   "text": "ATHENA",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Wide Sidebar · Common Shell",
+    "ATHENA Header"
+   ]
+  },
+  {
+   "id": "H59-0",
+   "text": "새 대화",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Wide Sidebar · Common Shell",
+    "Function Navigation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H5G-0",
+   "text": "그래프",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Wide Sidebar · Common Shell",
+    "Function Navigation",
+    "Current Function · Graph"
+   ]
+  },
+  {
+   "id": "H5L-0",
+   "text": "에이전트",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Wide Sidebar · Common Shell",
+    "Function Navigation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H5Q-0",
+   "text": "플러그인",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Wide Sidebar · Common Shell",
+    "Function Navigation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H5T-0",
+   "text": "프로젝트",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Wide Sidebar · Common Shell",
+    "Projects · Active Conversation"
+   ]
+  },
+  {
+   "id": "H5X-0",
+   "text": "아테나",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Wide Sidebar · Common Shell",
+    "Projects · Active Conversation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H60-0",
+   "text": "창 규격 검수",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Wide Sidebar · Common Shell",
+    "Projects · Active Conversation",
+    "Current Conversation · Project",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H64-0",
+   "text": "최근",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Wide Sidebar · Common Shell",
+    "Recent · Active Conversation"
+   ]
+  },
+  {
+   "id": "H67-0",
+   "text": "창 규격 검수",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Wide Sidebar · Common Shell",
+    "Recent · Active Conversation",
+    "Current Conversation · Recent",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G6Y-0",
+   "text": "우측 채팅 유지",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Wide · Three Pane",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H8E-0",
+   "text": "2분할 Snap",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H8F-0",
+   "text": "가로·세로 두 방향",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H8G-0",
+   "text": "채팅 하단 전환",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Header"
+   ]
+  },
+  {
+   "id": "H8L-0",
+   "text": "가로 2분할",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H8M-0",
+   "text": "상·하 Snap · 넓고 낮은 창",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H8R-0",
+   "text": "ATHENA",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Native Title Bar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H8T-0",
+   "text": "—",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Native Title Bar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H8U-0",
+   "text": "□",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Native Title Bar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H8V-0",
+   "text": "×",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Native Title Bar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H8Y-0",
+   "text": "ATHENA",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Frame",
+    "Horizontal Sidebar"
+   ]
+  },
+  {
+   "id": "H8Z-0",
+   "text": "＋ 새 대화",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Frame",
+    "Horizontal Sidebar"
+   ]
+  },
+  {
+   "id": "H91-0",
+   "text": "그래프",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Frame",
+    "Horizontal Sidebar",
+    "Current Function · Graph"
+   ]
+  },
+  {
+   "id": "H92-0",
+   "text": "에이전트",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Frame",
+    "Horizontal Sidebar"
+   ]
+  },
+  {
+   "id": "H93-0",
+   "text": "플러그인",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Frame",
+    "Horizontal Sidebar"
+   ]
+  },
+  {
+   "id": "H95-0",
+   "text": "프로젝트 · 아테나",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Frame",
+    "Horizontal Sidebar"
+   ]
+  },
+  {
+   "id": "H97-0",
+   "text": "창 규격",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Frame",
+    "Horizontal Sidebar",
+    "Current Conversation · Project"
+   ]
+  },
+  {
+   "id": "H99-0",
+   "text": "최근",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Frame",
+    "Horizontal Sidebar"
+   ]
+  },
+  {
+   "id": "H9B-0",
+   "text": "창 규격",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Frame",
+    "Horizontal Sidebar",
+    "Current Conversation · Recent"
+   ]
+  },
+  {
+   "id": "H9J-0",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Horizontal",
+    "Horizontal Window",
+    "Frame",
+    "Horizontal Main",
+    "Bottom Composer"
+   ]
+  },
+  {
+   "id": "H9N-0",
+   "text": "세로 2분할",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H9O-0",
+   "text": "좌·우 Snap · 좁고 긴 창",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H9T-0",
+   "text": "—",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Native Title Bar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H9U-0",
+   "text": "□",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Native Title Bar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H9V-0",
+   "text": "×",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Native Title Bar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H9Y-0",
+   "text": "ATHENA",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Frame",
+    "Vertical Sidebar"
+   ]
+  },
+  {
+   "id": "H9Z-0",
+   "text": "＋ 새 대화",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Frame",
+    "Vertical Sidebar"
+   ]
+  },
+  {
+   "id": "HA1-0",
+   "text": "그래프",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Frame",
+    "Vertical Sidebar",
+    "Current Function · Graph"
+   ]
+  },
+  {
+   "id": "HA2-0",
+   "text": "에이전트",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Frame",
+    "Vertical Sidebar"
+   ]
+  },
+  {
+   "id": "HA3-0",
+   "text": "플러그인",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Frame",
+    "Vertical Sidebar"
+   ]
+  },
+  {
+   "id": "HA5-0",
+   "text": "프로젝트",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Frame",
+    "Vertical Sidebar"
+   ]
+  },
+  {
+   "id": "HA6-0",
+   "text": "아테나",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Frame",
+    "Vertical Sidebar"
+   ]
+  },
+  {
+   "id": "HA8-0",
+   "text": "창 규격",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Frame",
+    "Vertical Sidebar",
+    "Current Conversation · Project"
+   ]
+  },
+  {
+   "id": "HAB-0",
+   "text": "최근",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Frame",
+    "Vertical Sidebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "HAD-0",
+   "text": "창 규격",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Frame",
+    "Vertical Sidebar",
+    "Current Conversation · Recent"
+   ]
+  },
+  {
+   "id": "HAN-0",
+   "text": "채팅",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Half Snap · Horizontal and Vertical",
+    "2-Split Variants",
+    "2-Split · Vertical",
+    "Vertical Window",
+    "Frame",
+    "Vertical Main",
+    "Bottom Composer"
+   ]
+  },
+  {
+   "id": "G83-0",
+   "text": "4분할 Snap",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Quarter Snap · Compact",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G84-0",
+   "text": "330–699px · 1열",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Quarter Snap · Compact",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G89-0",
+   "text": "—",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Quarter Snap · Compact",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G8C-0",
+   "text": "×",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Quarter Snap · Compact",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G8P-0",
+   "text": "채팅",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Quarter Snap · Compact",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G8Q-0",
+   "text": "아이콘 레일 · 프로젝트·최근은 오버레이",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Window States",
+    "Quarter Snap · Compact"
+   ]
+  },
+  {
+   "id": "G8U-0",
+   "text": "늘어날 때",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Responsive Behavior Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G8V-0",
+   "text": "중앙 캔버스만 유연하게 확장합니다. 좌측은 최대 268px, 우측 채팅은 최대 400px을 넘지 않습니다.",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Responsive Behavior Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G8X-0",
+   "text": "줄어들 때",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Responsive Behavior Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G8Y-0",
+   "text": "2분할은 가로·세로 비율을 모두 지원하고, 700px 미만에서는 좌측을 44px 아이콘 레일로 접습니다.",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Responsive Behavior Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G90-0",
+   "text": "항상 유지",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Responsive Behavior Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G91-0",
+   "text": "기능 선택은 블루, 현재 대화는 흰 행·녹색 점으로 유지합니다. Snap 후에도 초안과 스크롤은 보존합니다.",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Responsive Window Previews",
+    "Responsive Behavior Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G96-0",
+   "text": "Windows 기본 동작 보장",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "Native Rules Header"
+   ]
+  },
+  {
+   "id": "G97-0",
+   "text": "앱 전용 제어가 아니라 OS가 가진 창 기능을 그대로 노출합니다.",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "Native Rules Header"
+   ]
+  },
+  {
+   "id": "G9A-0",
+   "text": "01 · 네이티브 제목 표시줄",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "01 · Native Title Bar"
+   ]
+  },
+  {
+   "id": "G9E-0",
+   "text": "ATHENA",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "01 · Native Title Bar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G9F-0",
+   "text": "드래그 영역",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "01 · Native Title Bar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G9H-0",
+   "text": "—",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "01 · Native Title Bar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G9K-0",
+   "text": "×",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "01 · Native Title Bar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G9L-0",
+   "text": "최소화·최대화/복원·닫기 버튼은 Windows가 그립니다. 최대화 버튼 Hover와 Win+Z는 같은 Snap Layouts를 엽니다.",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "01 · Native Title Bar"
+   ]
+  },
+  {
+   "id": "G9O-0",
+   "text": "02 · Windows 키 조합",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "02 · Windows Shortcuts"
+   ]
+  },
+  {
+   "id": "G9T-0",
+   "text": "Win + Z",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "02 · Windows Shortcuts",
+    "Shortcut Rows",
+    "Shortcut · Win+Z",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G9U-0",
+   "text": "Snap Layouts 열기",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "02 · Windows Shortcuts",
+    "Shortcut Rows",
+    "Shortcut · Win+Z"
+   ]
+  },
+  {
+   "id": "G9Y-0",
+   "text": "Win + ← / →",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "02 · Windows Shortcuts",
+    "Shortcut Rows",
+    "Shortcut · Win Arrow LR",
+    "Frame"
+   ]
+  },
+  {
+   "id": "G9Z-0",
+   "text": "좌·우 2분할 및 위치 이동",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "02 · Windows Shortcuts",
+    "Shortcut Rows",
+    "Shortcut · Win Arrow LR"
+   ]
+  },
+  {
+   "id": "GA3-0",
+   "text": "Win + ↑ / ↓",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "02 · Windows Shortcuts",
+    "Shortcut Rows",
+    "Shortcut · Win Arrow UD",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GA4-0",
+   "text": "최대화·복원·4분할 이동",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "02 · Windows Shortcuts",
+    "Shortcut Rows",
+    "Shortcut · Win Arrow UD"
+   ]
+  },
+  {
+   "id": "GA8-0",
+   "text": "Win+Shift+←/→",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "02 · Windows Shortcuts",
+    "Shortcut Rows",
+    "Shortcut · Move Monitor",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GA9-0",
+   "text": "다른 모니터로 이동",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "02 · Windows Shortcuts",
+    "Shortcut Rows",
+    "Shortcut · Move Monitor"
+   ]
+  },
+  {
+   "id": "GAD-0",
+   "text": "Alt+Space / F4",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "02 · Windows Shortcuts",
+    "Shortcut Rows",
+    "Shortcut · System Menu Close",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GAE-0",
+   "text": "시스템 메뉴 / 창 닫기",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "02 · Windows Shortcuts",
+    "Shortcut Rows",
+    "Shortcut · System Menu Close"
+   ]
+  },
+  {
+   "id": "GAH-0",
+   "text": "03 · 마우스·창 동작",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "03 · Mouse and Window Behavior"
+   ]
+  },
+  {
+   "id": "GAK-0",
+   "text": "빈 제목 영역 드래그",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "03 · Mouse and Window Behavior",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GAL-0",
+   "text": "창 이동 · 화면 모서리 Snap",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "03 · Mouse and Window Behavior",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GAM-0",
+   "text": "더블클릭 최대화/복원",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "03 · Mouse and Window Behavior",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GAO-0",
+   "text": "제목 표시줄 우클릭",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "03 · Mouse and Window Behavior",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GAP-0",
+   "text": "Windows 시스템 메뉴",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "03 · Mouse and Window Behavior",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GAQ-0",
+   "text": "모든 테두리·모서리 리사이즈",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "03 · Mouse and Window Behavior",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GAU-0",
+   "text": "04 · 적용 게이트",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "04 · Acceptance Gate",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GAV-0",
+   "text": "승인됨",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "04 · Acceptance Gate",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GAW-0",
+   "text": "• 최대화 Hover·Win+Z에서 가로·세로 2분할을 모두 사용할 것",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "04 · Acceptance Gate"
+   ]
+  },
+  {
+   "id": "GAX-0",
+   "text": "• 최소 폭 330px에서도 주요 기능과 채팅을 사용할 수 있을 것",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "04 · Acceptance Gate"
+   ]
+  },
+  {
+   "id": "GAY-0",
+   "text": "• Snap·복원·모니터 이동 후 선택·초안·스크롤을 유지할 것",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "04 · Acceptance Gate"
+   ]
+  },
+  {
+   "id": "GAZ-0",
+   "text": "Runtime 반영 완료 · 데스크톱 검증 통과",
+   "path": [
+    "28 · Windows 반응형 창 · Snap",
+    "53 Content",
+    "Windows Native Rules",
+    "04 · Acceptance Gate"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "G5B-0",
+   "name": "28 · Windows 반응형 창 · Snap",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "G5C-0",
+   "name": "53 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 86,
+   "depth": 1
+  },
+  {
+   "id": "G5D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 531,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "G5E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "G5G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 467,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "G5J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 151,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "G5M-0",
+   "name": "53 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 722,
+   "depth": 1
+  },
+  {
+   "id": "G5O-0",
+   "name": "Responsive Window Previews",
+   "component": "Frame",
+   "w": 1100,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "G5Q-0",
+   "name": "Preview Header",
+   "component": "Frame",
+   "w": 1056,
+   "h": 44,
+   "depth": 3
+  },
+  {
+   "id": "G5R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 396,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "G5U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 95,
+   "h": 26,
+   "depth": 4
+  },
+  {
+   "id": "G5X-0",
+   "name": "Window States",
+   "component": "Frame",
+   "w": 1056,
+   "h": 430,
+   "depth": 3
+  },
+  {
+   "id": "G5Z-0",
+   "name": "Wide · Three Pane",
+   "component": "Frame",
+   "w": 480,
+   "h": 400,
+   "depth": 4
+  },
+  {
+   "id": "G60-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 480,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "G61-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 73,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "G65-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 480,
+   "h": 362,
+   "depth": 5
+  },
+  {
+   "id": "G66-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 478,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "G67-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 53,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "G68-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "G6A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 90,
+   "h": 28,
+   "depth": 7
+  },
+  {
+   "id": "G6C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 28,
+   "depth": 8
+  },
+  {
+   "id": "G6D-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "G6F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 478,
+   "h": 332,
+   "depth": 6
+  },
+  {
+   "id": "H50-0",
+   "name": "Wide Sidebar · Common Shell",
+   "component": "Frame",
+   "w": 82,
+   "h": 332,
+   "depth": 7
+  },
+  {
+   "id": "H51-0",
+   "name": "ATHENA Header",
+   "component": "Frame",
+   "w": 69,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "H52-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 9
+  },
+  {
+   "id": "H55-0",
+   "name": "Function Navigation",
+   "component": "Frame",
+   "w": 70,
+   "h": 70,
+   "depth": 8
+  },
+  {
+   "id": "H56-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 70,
+   "h": 16,
+   "depth": 9
+  },
+  {
+   "id": "H57-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "H58-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 11
+  },
+  {
+   "id": "H5A-0",
+   "name": "Current Function · Graph",
+   "component": "Frame",
+   "w": 70,
+   "h": 16,
+   "depth": 9
+  },
+  {
+   "id": "H5B-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "H5C-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 11
+  },
+  {
+   "id": "H5D-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 11
+  },
+  {
+   "id": "H5E-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 11
+  },
+  {
+   "id": "H5F-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 11
+  },
+  {
+   "id": "H5H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 70,
+   "h": 16,
+   "depth": 9
+  },
+  {
+   "id": "H5I-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "H5J-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 11
+  },
+  {
+   "id": "H5K-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 2,
+   "depth": 11
+  },
+  {
+   "id": "H5M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 70,
+   "h": 16,
+   "depth": 9
+  },
+  {
+   "id": "H5N-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "H5O-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 5,
+   "depth": 11
+  },
+  {
+   "id": "H5P-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 1,
+   "depth": 11
+  },
+  {
+   "id": "H5S-0",
+   "name": "Projects · Active Conversation",
+   "component": "Frame",
+   "w": 70,
+   "h": 49,
+   "depth": 8
+  },
+  {
+   "id": "H5U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 70,
+   "h": 14,
+   "depth": 9
+  },
+  {
+   "id": "H5V-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 8,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "H5W-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 5,
+   "depth": 11
+  },
+  {
+   "id": "H5Y-0",
+   "name": "Current Conversation · Project",
+   "component": "Frame",
+   "w": 70,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "H5Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "H61-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4,
+   "h": 4,
+   "depth": 10
+  },
+  {
+   "id": "H63-0",
+   "name": "Recent · Active Conversation",
+   "component": "Frame",
+   "w": 70,
+   "h": 31,
+   "depth": 8
+  },
+  {
+   "id": "H65-0",
+   "name": "Current Conversation · Recent",
+   "component": "Frame",
+   "w": 70,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "H66-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "H68-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4,
+   "h": 4,
+   "depth": 10
+  },
+  {
+   "id": "G6Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 332,
+   "depth": 7
+  },
+  {
+   "id": "G6R-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 206,
+   "h": 18,
+   "depth": 8
+  },
+  {
+   "id": "G6S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 206,
+   "h": 92,
+   "depth": 8
+  },
+  {
+   "id": "G6T-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 99,
+   "h": 92,
+   "depth": 9
+  },
+  {
+   "id": "G6U-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 99,
+   "h": 92,
+   "depth": 9
+  },
+  {
+   "id": "G6V-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 206,
+   "h": 82,
+   "depth": 8
+  },
+  {
+   "id": "G6W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 166,
+   "h": 332,
+   "depth": 7
+  },
+  {
+   "id": "G6X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 145,
+   "h": 73,
+   "depth": 8
+  },
+  {
+   "id": "G6Z-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 144,
+   "h": 54,
+   "depth": 9
+  },
+  {
+   "id": "G70-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 144,
+   "h": 32,
+   "depth": 8
+  },
+  {
+   "id": "H8B-0",
+   "name": "Half Snap · Horizontal and Vertical",
+   "component": "Frame",
+   "w": 310,
+   "h": 380,
+   "depth": 4
+  },
+  {
+   "id": "H8C-0",
+   "name": "2-Split Header",
+   "component": "Frame",
+   "w": 310,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "H8D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "H8H-0",
+   "name": "2-Split Variants",
+   "component": "Frame",
+   "w": 310,
+   "h": 342,
+   "depth": 5
+  },
+  {
+   "id": "H8J-0",
+   "name": "2-Split · Horizontal",
+   "component": "Frame",
+   "w": 178,
+   "h": 224,
+   "depth": 6
+  },
+  {
+   "id": "H8K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 178,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "H8N-0",
+   "name": "Horizontal Window",
+   "component": "Frame",
+   "w": 178,
+   "h": 195,
+   "depth": 7
+  },
+  {
+   "id": "H8O-0",
+   "name": "Native Title Bar",
+   "component": "Frame",
+   "w": 176,
+   "h": 18,
+   "depth": 8
+  },
+  {
+   "id": "H8P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 29,
+   "h": 7,
+   "depth": 9
+  },
+  {
+   "id": "H8Q-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 10
+  },
+  {
+   "id": "H8S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "H8W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 176,
+   "h": 175,
+   "depth": 8
+  },
+  {
+   "id": "H8X-0",
+   "name": "Horizontal Sidebar",
+   "component": "Frame",
+   "w": 58,
+   "h": 175,
+   "depth": 9
+  },
+  {
+   "id": "H90-0",
+   "name": "Current Function · Graph",
+   "component": "Frame",
+   "w": 49,
+   "h": 10,
+   "depth": 10
+  },
+  {
+   "id": "H94-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 49,
+   "h": 1,
+   "depth": 10
+  },
+  {
+   "id": "H96-0",
+   "name": "Current Conversation · Project",
+   "component": "Frame",
+   "w": 49,
+   "h": 11,
+   "depth": 10
+  },
+  {
+   "id": "H98-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 3,
+   "h": 3,
+   "depth": 11
+  },
+  {
+   "id": "H9A-0",
+   "name": "Current Conversation · Recent",
+   "component": "Frame",
+   "w": 49,
+   "h": 11,
+   "depth": 10
+  },
+  {
+   "id": "H9C-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 3,
+   "h": 3,
+   "depth": 11
+  },
+  {
+   "id": "H9D-0",
+   "name": "Horizontal Main",
+   "component": "Frame",
+   "w": 118,
+   "h": 175,
+   "depth": 9
+  },
+  {
+   "id": "H9E-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 104,
+   "h": 10,
+   "depth": 10
+  },
+  {
+   "id": "H9F-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 104,
+   "h": 45,
+   "depth": 10
+  },
+  {
+   "id": "H9G-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 104,
+   "h": 34,
+   "depth": 10
+  },
+  {
+   "id": "H9H-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 104,
+   "h": 32,
+   "depth": 10
+  },
+  {
+   "id": "H9I-0",
+   "name": "Bottom Composer",
+   "component": "Frame",
+   "w": 104,
+   "h": 20,
+   "depth": 10
+  },
+  {
+   "id": "H9L-0",
+   "name": "2-Split · Vertical",
+   "component": "Frame",
+   "w": 124,
+   "h": 342,
+   "depth": 6
+  },
+  {
+   "id": "H9M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "H9P-0",
+   "name": "Vertical Window",
+   "component": "Frame",
+   "w": 124,
+   "h": 313,
+   "depth": 7
+  },
+  {
+   "id": "H9Q-0",
+   "name": "Native Title Bar",
+   "component": "Frame",
+   "w": 122,
+   "h": 18,
+   "depth": 8
+  },
+  {
+   "id": "H9R-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 9
+  },
+  {
+   "id": "H9S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 39,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "H9W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 293,
+   "depth": 8
+  },
+  {
+   "id": "H9X-0",
+   "name": "Vertical Sidebar",
+   "component": "Frame",
+   "w": 48,
+   "h": 293,
+   "depth": 9
+  },
+  {
+   "id": "HA0-0",
+   "name": "Current Function · Graph",
+   "component": "Frame",
+   "w": 39,
+   "h": 11,
+   "depth": 10
+  },
+  {
+   "id": "HA4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 39,
+   "h": 1,
+   "depth": 10
+  },
+  {
+   "id": "HA7-0",
+   "name": "Current Conversation · Project",
+   "component": "Frame",
+   "w": 39,
+   "h": 12,
+   "depth": 10
+  },
+  {
+   "id": "HA9-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 3,
+   "h": 3,
+   "depth": 11
+  },
+  {
+   "id": "HAA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 39,
+   "h": 9,
+   "depth": 10
+  },
+  {
+   "id": "HAC-0",
+   "name": "Current Conversation · Recent",
+   "component": "Frame",
+   "w": 39,
+   "h": 12,
+   "depth": 10
+  },
+  {
+   "id": "HAE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 3,
+   "h": 3,
+   "depth": 11
+  },
+  {
+   "id": "HAF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 39,
+   "h": 141,
+   "depth": 10
+  },
+  {
+   "id": "HAG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 13,
+   "h": 13,
+   "depth": 10
+  },
+  {
+   "id": "HAH-0",
+   "name": "Vertical Main",
+   "component": "Frame",
+   "w": 74,
+   "h": 293,
+   "depth": 9
+  },
+  {
+   "id": "HAI-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 62,
+   "h": 10,
+   "depth": 10
+  },
+  {
+   "id": "HAJ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 62,
+   "h": 72,
+   "depth": 10
+  },
+  {
+   "id": "HAK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 62,
+   "h": 60,
+   "depth": 10
+  },
+  {
+   "id": "HAL-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 62,
+   "h": 96,
+   "depth": 10
+  },
+  {
+   "id": "HAM-0",
+   "name": "Bottom Composer",
+   "component": "Frame",
+   "w": 62,
+   "h": 23,
+   "depth": 10
+  },
+  {
+   "id": "G81-0",
+   "name": "Quarter Snap · Compact",
+   "component": "Frame",
+   "w": 218,
+   "h": 360,
+   "depth": 4
+  },
+  {
+   "id": "G82-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 218,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "G85-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 218,
+   "h": 322,
+   "depth": 5
+  },
+  {
+   "id": "G86-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 216,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "G87-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 11,
+   "h": 11,
+   "depth": 7
+  },
+  {
+   "id": "G88-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 28,
+   "depth": 7
+  },
+  {
+   "id": "G8A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 24,
+   "h": 28,
+   "depth": 8
+  },
+  {
+   "id": "G8B-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "G8D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 216,
+   "h": 292,
+   "depth": 6
+  },
+  {
+   "id": "H7G-0",
+   "name": "Quarter Snap Icon Rail · Common State",
+   "component": "Frame",
+   "w": 44,
+   "h": 292,
+   "depth": 7
+  },
+  {
+   "id": "H7H-0",
+   "name": "ATHENA Mark",
+   "component": "Frame",
+   "w": 18,
+   "h": 18,
+   "depth": 8
+  },
+  {
+   "id": "H7I-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 22,
+   "h": 1,
+   "depth": 8
+  },
+  {
+   "id": "H7J-0",
+   "name": "New Chat",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "H7K-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 9
+  },
+  {
+   "id": "H7L-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 10
+  },
+  {
+   "id": "H7M-0",
+   "name": "Current Function · Graph",
+   "component": "Frame",
+   "w": 24,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "H7N-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 9
+  },
+  {
+   "id": "H7O-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 10
+  },
+  {
+   "id": "H7P-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 10
+  },
+  {
+   "id": "H7Q-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 10
+  },
+  {
+   "id": "H7R-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 10
+  },
+  {
+   "id": "H7S-0",
+   "name": "Agent",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "H7T-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 9
+  },
+  {
+   "id": "H7U-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 10
+  },
+  {
+   "id": "H7V-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 3,
+   "depth": 10
+  },
+  {
+   "id": "H7W-0",
+   "name": "Plugin",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "H7X-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 9
+  },
+  {
+   "id": "H7Y-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 7,
+   "depth": 10
+  },
+  {
+   "id": "H7Z-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 1,
+   "depth": 10
+  },
+  {
+   "id": "H80-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 22,
+   "h": 1,
+   "depth": 8
+  },
+  {
+   "id": "H81-0",
+   "name": "Project Overlay Trigger",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "H82-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 9
+  },
+  {
+   "id": "H83-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 7,
+   "depth": 10
+  },
+  {
+   "id": "H84-0",
+   "name": "Current Conversation · Compact",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "H85-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 9
+  },
+  {
+   "id": "H86-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 10
+  },
+  {
+   "id": "H87-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "H88-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 58,
+   "depth": 8
+  },
+  {
+   "id": "H89-0",
+   "name": "Account",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 8
+  },
+  {
+   "id": "G8J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 172,
+   "h": 292,
+   "depth": 7
+  },
+  {
+   "id": "G8K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 164,
+   "depth": 8
+  },
+  {
+   "id": "G8L-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 150,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "G8M-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 150,
+   "h": 72,
+   "depth": 9
+  },
+  {
+   "id": "G8N-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 150,
+   "h": 58,
+   "depth": 9
+  },
+  {
+   "id": "G8O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "G8S-0",
+   "name": "Responsive Behavior Summary",
+   "component": "Frame",
+   "w": 1056,
+   "h": 172,
+   "depth": 3
+  },
+  {
+   "id": "G8T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 342,
+   "h": 132,
+   "depth": 4
+  },
+  {
+   "id": "G8W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 342,
+   "h": 132,
+   "depth": 4
+  },
+  {
+   "id": "G8Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 342,
+   "h": 132,
+   "depth": 4
+  },
+  {
+   "id": "G93-0",
+   "name": "Windows Native Rules",
+   "component": "Frame",
+   "w": 476,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "G95-0",
+   "name": "Native Rules Header",
+   "component": "Frame",
+   "w": 434,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "G99-0",
+   "name": "01 · Native Title Bar",
+   "component": "Frame",
+   "w": 434,
+   "h": 144,
+   "depth": 3
+  },
+  {
+   "id": "G9B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "G9C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "G9D-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 13,
+   "h": 13,
+   "depth": 6
+  },
+  {
+   "id": "G9G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "G9I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "G9J-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 10,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "G9N-0",
+   "name": "02 · Windows Shortcuts",
+   "component": "Frame",
+   "w": 434,
+   "h": 174,
+   "depth": 3
+  },
+  {
+   "id": "G9P-0",
+   "name": "Shortcut Rows",
+   "component": "Frame",
+   "w": 400,
+   "h": 116,
+   "depth": 4
+  },
+  {
+   "id": "G9R-0",
+   "name": "Shortcut · Win+Z",
+   "component": "Frame",
+   "w": 400,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "G9S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "G9W-0",
+   "name": "Shortcut · Win Arrow LR",
+   "component": "Frame",
+   "w": 400,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "G9X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "GA1-0",
+   "name": "Shortcut · Win Arrow UD",
+   "component": "Frame",
+   "w": 400,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "GA2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "GA6-0",
+   "name": "Shortcut · Move Monitor",
+   "component": "Frame",
+   "w": 400,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "GA7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "GAB-0",
+   "name": "Shortcut · System Menu Close",
+   "component": "Frame",
+   "w": 400,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "GAC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "GAG-0",
+   "name": "03 · Mouse and Window Behavior",
+   "component": "Frame",
+   "w": 434,
+   "h": 130,
+   "depth": 3
+  },
+  {
+   "id": "GAI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "GAJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 194,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "GAN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 194,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "GAS-0",
+   "name": "04 · Acceptance Gate",
+   "component": "Frame",
+   "w": 434,
+   "h": 146,
+   "depth": 3
+  },
+  {
+   "id": "GAT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 402,
+   "h": 16,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "50": 1,
+  "Windows 반응형 창 · Snap 규격": 1,
+  "창 크기에 맞춰 정보구조를 재배치하고 Windows의 기본 창 제어를 그대로 사용합니다.": 1,
+  "승인됨 · Paper 규격 확정": 1,
+  "한 셸, 네 가지 Windows 배치": 1,
+  "와이드·가로 2분할·세로 2분할·4분할로 전환해도 선택 상태는 그대로 유지합니다.": 1,
+  "최소 330px 지원": 1,
+  "와이드": 1,
+  "1280px 이상 · 3열": 1,
+  "좌 268 · 우 400": 1,
+  "ATHENA": 6,
+  "—": 5,
+  "×": 5,
+  "새 대화": 1,
+  "그래프": 3,
+  "에이전트": 3,
+  "플러그인": 3,
+  "프로젝트": 2,
+  "아테나": 2,
+  "창 규격 검수": 2,
+  "최근": 3,
+  "우측 채팅 유지": 1,
+  "2분할 Snap": 1,
+  "가로·세로 두 방향": 1,
+  "채팅 하단 전환": 1,
+  "가로 2분할": 1,
+  "상·하 Snap · 넓고 낮은 창": 1,
+  "□": 2,
+  "＋ 새 대화": 2,
+  "프로젝트 · 아테나": 1,
+  "창 규격": 4,
+  "무엇이든 물어보세요": 1,
+  "세로 2분할": 1,
+  "좌·우 Snap · 좁고 긴 창": 1,
+  "채팅": 2,
+  "4분할 Snap": 1,
+  "330–699px · 1열": 1,
+  "아이콘 레일 · 프로젝트·최근은 오버레이": 1,
+  "늘어날 때": 1,
+  "중앙 캔버스만 유연하게 확장합니다. 좌측은 최대 268px, 우측 채팅은 최대 400px을 넘지 않습니다.": 1,
+  "줄어들 때": 1,
+  "2분할은 가로·세로 비율을 모두 지원하고, 700px 미만에서는 좌측을 44px 아이콘 레일로 접습니다.": 1,
+  "항상 유지": 1,
+  "기능 선택은 블루, 현재 대화는 흰 행·녹색 점으로 유지합니다. Snap 후에도 초안과 스크롤은 보존합니다.": 1,
+  "Windows 기본 동작 보장": 1,
+  "앱 전용 제어가 아니라 OS가 가진 창 기능을 그대로 노출합니다.": 1,
+  "01 · 네이티브 제목 표시줄": 1,
+  "드래그 영역": 1,
+  "최소화·최대화/복원·닫기 버튼은 Windows가 그립니다. 최대화 버튼 Hover와 Win+Z는 같은 Snap Layouts를 엽니다.": 1,
+  "02 · Windows 키 조합": 1,
+  "Win + Z": 1,
+  "Snap Layouts 열기": 1,
+  "Win + ← / →": 1,
+  "좌·우 2분할 및 위치 이동": 1,
+  "Win + ↑ / ↓": 1,
+  "최대화·복원·4분할 이동": 1,
+  "Win+Shift+←/→": 1,
+  "다른 모니터로 이동": 1,
+  "Alt+Space / F4": 1,
+  "시스템 메뉴 / 창 닫기": 1,
+  "03 · 마우스·창 동작": 1,
+  "빈 제목 영역 드래그": 1,
+  "창 이동 · 화면 모서리 Snap": 1,
+  "더블클릭 최대화/복원": 1,
+  "제목 표시줄 우클릭": 1,
+  "Windows 시스템 메뉴": 1,
+  "모든 테두리·모서리 리사이즈": 1,
+  "04 · 적용 게이트": 1,
+  "승인됨": 1,
+  "• 최대화 Hover·Win+Z에서 가로·세로 2분할을 모두 사용할 것": 1,
+  "• 최소 폭 330px에서도 주요 기능과 채팅을 사용할 수 있을 것": 1,
+  "• Snap·복원·모니터 이동 후 선택·초안·스크롤을 유지할 것": 1,
+  "Runtime 반영 완료 · 데스크톱 검증 통과": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "96f05953991e3a93c30a809194d5df2627d649aad32b2634d5f93f046892d9f4"
+}

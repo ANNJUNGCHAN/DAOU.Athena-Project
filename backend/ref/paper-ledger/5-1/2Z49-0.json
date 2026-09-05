@@ -1,0 +1,3523 @@
+{
+ "board_id": "2Z49-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "2ZA9-0",
+   "text": "ELW 순위",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ZA8-0",
+   "text": "전 창구 · 순매매 순",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ZA7-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ZA4-0",
+   "text": "상장 ELW 3,482 종목",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ZA3-0",
+   "text": "콜 2,146 · 풋 1,336",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ZA2-0",
+   "text": "09:42:18 조회",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9Z-0",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9X-0",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9V-0",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9T-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9R-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9P-0",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9N-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9J-0",
+   "text": "정렬 기준",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9I-0",
+   "text": "순매매 큰 창구순",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9G-0",
+   "text": "매수 1위",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9F-0",
+   "text": "+210만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9E-0",
+   "text": "키움증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9C-0",
+   "text": "매도 1위",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9B-0",
+   "text": "−90만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9A-0",
+   "text": "NH투자증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z98-0",
+   "text": "외국계 합계",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z97-0",
+   "text": "+40만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z96-0",
+   "text": "장중 누적",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z94-0",
+   "text": "집계 범위",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z93-0",
+   "text": "10창구",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z92-0",
+   "text": "상위 10창구 집계",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z8Z-0",
+   "text": "잔량",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z8X-0",
+   "text": "등락률",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z8V-0",
+   "text": "근접률",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z8T-0",
+   "text": "가격급등락",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z8R-0",
+   "text": "거래원별 순매매",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z8P-0",
+   "text": "조건검색",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z8M-0",
+   "text": "범위",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z8L-0",
+   "text": "주식",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z8J-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z8H-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T2T-0",
+   "text": "전체 10창구 · 6창구 표시 ▸",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AXH-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3AXI-0",
+   "text": "창구",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3AXJ-0",
+   "text": "종목 · 코드",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3AXK-0",
+   "text": "주가등락 · 등락률",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3AXL-0",
+   "text": "매도",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3AXM-0",
+   "text": "매수",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3AXN-0",
+   "text": "순매매 · 총거래량",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3AXO-0",
+   "text": "비중",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3AXQ-0",
+   "text": "1",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 1 · 키움증권"
+   ]
+  },
+  {
+   "id": "3AXR-0",
+   "text": "키움증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 1 · 키움증권"
+   ]
+  },
+  {
+   "id": "3AXT-0",
+   "text": "삼성전자 콜",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 1 · 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AXU-0",
+   "text": "58H219",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 1 · 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AXW-0",
+   "text": "▲ +45",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 1 · 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AXX-0",
+   "text": "+12.16%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 1 · 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AXY-0",
+   "text": "310만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 1 · 키움증권"
+   ]
+  },
+  {
+   "id": "3AXZ-0",
+   "text": "520만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 1 · 키움증권"
+   ]
+  },
+  {
+   "id": "3AY1-0",
+   "text": "+210만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 1 · 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AY2-0",
+   "text": "총 830만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 1 · 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AY3-0",
+   "text": "18.4%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 1 · 키움증권"
+   ]
+  },
+  {
+   "id": "3AY5-0",
+   "text": "2",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 2 · 미래에셋증권"
+   ]
+  },
+  {
+   "id": "3AY6-0",
+   "text": "미래에셋증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 2 · 미래에셋증권"
+   ]
+  },
+  {
+   "id": "3AY8-0",
+   "text": "SK하이닉스 콜",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 2 · 미래에셋증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AY9-0",
+   "text": "58J377",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 2 · 미래에셋증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AYB-0",
+   "text": "▲ +25",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 2 · 미래에셋증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AYC-0",
+   "text": "+9.62%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 2 · 미래에셋증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AYD-0",
+   "text": "260만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 2 · 미래에셋증권"
+   ]
+  },
+  {
+   "id": "3AYE-0",
+   "text": "420만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 2 · 미래에셋증권"
+   ]
+  },
+  {
+   "id": "3AYG-0",
+   "text": "+160만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 2 · 미래에셋증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AYH-0",
+   "text": "총 680만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 2 · 미래에셋증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AYI-0",
+   "text": "15.1%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 2 · 미래에셋증권"
+   ]
+  },
+  {
+   "id": "3AYK-0",
+   "text": "3",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 3 · KB증권"
+   ]
+  },
+  {
+   "id": "3AYL-0",
+   "text": "KB증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 3 · KB증권"
+   ]
+  },
+  {
+   "id": "3AYN-0",
+   "text": "현대차 콜",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 3 · KB증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AYO-0",
+   "text": "58M204",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 3 · KB증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AYQ-0",
+   "text": "▲ +25",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 3 · KB증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AYR-0",
+   "text": "+5.05%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 3 · KB증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AYS-0",
+   "text": "240만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 3 · KB증권"
+   ]
+  },
+  {
+   "id": "3AYT-0",
+   "text": "350만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 3 · KB증권"
+   ]
+  },
+  {
+   "id": "3AYV-0",
+   "text": "+110만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 3 · KB증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AYW-0",
+   "text": "총 590만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 3 · KB증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AYX-0",
+   "text": "13.1%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 3 · KB증권"
+   ]
+  },
+  {
+   "id": "3AYZ-0",
+   "text": "4",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 4 · 한국투자증권"
+   ]
+  },
+  {
+   "id": "3AZ0-0",
+   "text": "한국투자증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 4 · 한국투자증권"
+   ]
+  },
+  {
+   "id": "3AZ2-0",
+   "text": "KOSPI200 콜",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 4 · 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZ3-0",
+   "text": "58P630",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 4 · 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZ5-0",
+   "text": "▲ +10",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 4 · 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZ6-0",
+   "text": "+3.39%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 4 · 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZ7-0",
+   "text": "230만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 4 · 한국투자증권"
+   ]
+  },
+  {
+   "id": "3AZ8-0",
+   "text": "300만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 4 · 한국투자증권"
+   ]
+  },
+  {
+   "id": "3AZA-0",
+   "text": "+70만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 4 · 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZB-0",
+   "text": "총 530만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 4 · 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZC-0",
+   "text": "11.7%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 4 · 한국투자증권"
+   ]
+  },
+  {
+   "id": "3AZE-0",
+   "text": "7",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 5 · 신한투자증권"
+   ]
+  },
+  {
+   "id": "3AZF-0",
+   "text": "신한투자증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 5 · 신한투자증권"
+   ]
+  },
+  {
+   "id": "3AZH-0",
+   "text": "삼성전자 풋",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 5 · 신한투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZI-0",
+   "text": "58L118",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 5 · 신한투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZK-0",
+   "text": "▼ −10",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 5 · 신한투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZL-0",
+   "text": "−6.45%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 5 · 신한투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZM-0",
+   "text": "260만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 5 · 신한투자증권"
+   ]
+  },
+  {
+   "id": "3AZN-0",
+   "text": "190만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 5 · 신한투자증권"
+   ]
+  },
+  {
+   "id": "3AZP-0",
+   "text": "−70만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 5 · 신한투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZQ-0",
+   "text": "총 450만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 5 · 신한투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZR-0",
+   "text": "10.0%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 5 · 신한투자증권"
+   ]
+  },
+  {
+   "id": "3AZT-0",
+   "text": "10",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 6 · NH투자증권"
+   ]
+  },
+  {
+   "id": "3AZU-0",
+   "text": "NH투자증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 6 · NH투자증권"
+   ]
+  },
+  {
+   "id": "3AZW-0",
+   "text": "KOSPI200 풋",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 6 · NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZX-0",
+   "text": "58K902",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 6 · NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AZZ-0",
+   "text": "▼ −18",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 6 · NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3B00-0",
+   "text": "−8.65%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 6 · NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3B01-0",
+   "text": "230만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 6 · NH투자증권"
+   ]
+  },
+  {
+   "id": "3B02-0",
+   "text": "140만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 6 · NH투자증권"
+   ]
+  },
+  {
+   "id": "3B04-0",
+   "text": "−90만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 6 · NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3B05-0",
+   "text": "총 370만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 6 · NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3B06-0",
+   "text": "8.2%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "거래원별 순매매 표",
+    "행 6 · NH투자증권"
+   ]
+  },
+  {
+   "id": "3O8O-0",
+   "text": "ELW 순매수 상위 5종",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O8P-0",
+   "text": "상위 10창구 집계 · 5종 표시",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O8R-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3O8S-0",
+   "text": "종목 · 코드",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3O8T-0",
+   "text": "현재가 · 등락률",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3O8U-0",
+   "text": "순매수",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3O8V-0",
+   "text": "주매수 창구",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3O8W-0",
+   "text": "거래량 · 대금",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3OBV-0",
+   "text": "1",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 1 · 삼성전자 콜"
+   ]
+  },
+  {
+   "id": "3OBX-0",
+   "text": "삼성전자 콜",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OBY-0",
+   "text": "58H219",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OC0-0",
+   "text": "415",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OC1-0",
+   "text": "+12.16%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OC2-0",
+   "text": "+340만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 1 · 삼성전자 콜"
+   ]
+  },
+  {
+   "id": "3OC3-0",
+   "text": "키움증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 1 · 삼성전자 콜"
+   ]
+  },
+  {
+   "id": "3OC5-0",
+   "text": "620만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OC6-0",
+   "text": "25.7억원",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OC8-0",
+   "text": "2",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 2 · SK하이닉스 콜"
+   ]
+  },
+  {
+   "id": "3OCA-0",
+   "text": "SK하이닉스 콜",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCB-0",
+   "text": "58J377",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCD-0",
+   "text": "285",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCE-0",
+   "text": "+9.62%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCF-0",
+   "text": "+265만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 2 · SK하이닉스 콜"
+   ]
+  },
+  {
+   "id": "3OCG-0",
+   "text": "미래에셋증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 2 · SK하이닉스 콜"
+   ]
+  },
+  {
+   "id": "3OCI-0",
+   "text": "540만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCJ-0",
+   "text": "15.4억원",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCL-0",
+   "text": "3",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 3 · 현대차 콜"
+   ]
+  },
+  {
+   "id": "3OCN-0",
+   "text": "현대차 콜",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 3 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCO-0",
+   "text": "58M204",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 3 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCQ-0",
+   "text": "520",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 3 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCR-0",
+   "text": "+5.05%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 3 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCS-0",
+   "text": "+185만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 3 · 현대차 콜"
+   ]
+  },
+  {
+   "id": "3OCT-0",
+   "text": "KB증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 3 · 현대차 콜"
+   ]
+  },
+  {
+   "id": "3OCV-0",
+   "text": "390만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 3 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCW-0",
+   "text": "20.3억원",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 3 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OCY-0",
+   "text": "4",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 4 · KOSPI200 콜"
+   ]
+  },
+  {
+   "id": "3OD0-0",
+   "text": "KOSPI200 콜",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 4 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OD1-0",
+   "text": "58P630",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 4 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OD3-0",
+   "text": "305",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 4 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OD4-0",
+   "text": "+3.39%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 4 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OD5-0",
+   "text": "+120만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 4 · KOSPI200 콜"
+   ]
+  },
+  {
+   "id": "3OD6-0",
+   "text": "한국투자증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 4 · KOSPI200 콜"
+   ]
+  },
+  {
+   "id": "3OD8-0",
+   "text": "320만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 4 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OD9-0",
+   "text": "9.8억원",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 4 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ODB-0",
+   "text": "5",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 5 · 이수페타시스 콜"
+   ]
+  },
+  {
+   "id": "3ODD-0",
+   "text": "이수페타시스 콜",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 5 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ODE-0",
+   "text": "59V603",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 5 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ODG-0",
+   "text": "1,340",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 5 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ODH-0",
+   "text": "+10.83%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 5 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ODI-0",
+   "text": "+95만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 5 · 이수페타시스 콜"
+   ]
+  },
+  {
+   "id": "3ODJ-0",
+   "text": "한국투자증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 5 · 이수페타시스 콜"
+   ]
+  },
+  {
+   "id": "3ODL-0",
+   "text": "175만주",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 5 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ODM-0",
+   "text": "22.6억원",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "ELW 순매수 상위 5종",
+    "행 5 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z5N-0",
+   "text": "키움증권",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z5M-0",
+   "text": "순매매 1위 · 전체 창구",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z5K-0",
+   "text": "1위",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z5H-0",
+   "text": "+210만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z5G-0",
+   "text": "매수 520만 · 매도 310만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z5D-0",
+   "text": "매수",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z5C-0",
+   "text": "520만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z5A-0",
+   "text": "매도",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z59-0",
+   "text": "310만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z57-0",
+   "text": "비중",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z56-0",
+   "text": "18.4%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z54-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z53-0",
+   "text": "124억원",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z50-0",
+   "text": "창구 상세 열기",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z4Y-0",
+   "text": "차트 열기",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z4U-0",
+   "text": "창구 요약",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread"
+   ]
+  },
+  {
+   "id": "2Z4T-0",
+   "text": "매수 우위 6 · 매도 우위 4",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread"
+   ]
+  },
+  {
+   "id": "2Z4P-0",
+   "text": "매수 우위 60% · 매도 우위 40%",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread"
+   ]
+  },
+  {
+   "id": "2Z4N-0",
+   "text": "외국계 순매매",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z4M-0",
+   "text": "+40만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z4K-0",
+   "text": "기관 순매매",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z4J-0",
+   "text": "−20만",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z4E-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "2Z4D-0",
+   "text": "마지막 조회 09:42:18",
+   "path": [
+    "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2Z49-0",
+   "name": "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "2Z4A-0",
+   "name": "Instrument Root · 현재시세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 1
+  },
+  {
+   "id": "2Z4B-0",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1040,
+   "depth": 2
+  },
+  {
+   "id": "2Z9K-0",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 86,
+   "depth": 3
+  },
+  {
+   "id": "2ZA0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2ZA5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2ZA6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2ZA1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Z9L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2Z9Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Z9W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Z9U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Z9S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Z9Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Z9O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Z9M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Z90-0",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 3
+  },
+  {
+   "id": "2Z9H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Z9D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Z99-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Z95-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Z91-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Z4F-0",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 822,
+   "depth": 3
+  },
+  {
+   "id": "2Z5O-0",
+   "name": "Quote Detail Mount",
+   "component": "Frame",
+   "w": 1000,
+   "h": 822,
+   "depth": 4
+  },
+  {
+   "id": "2Z8E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "2Z8N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Z8Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z8W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z8U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z8S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z8Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z8O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z8F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Z8K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z8I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z8G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AXF-0",
+   "name": "거래원별 순매매 표",
+   "component": "Frame",
+   "w": 0,
+   "h": 380,
+   "depth": 5
+  },
+  {
+   "id": "3AXG-0",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3AXP-0",
+   "name": "행 1 · 키움증권",
+   "component": "Frame",
+   "w": 0,
+   "h": 58,
+   "depth": 6
+  },
+  {
+   "id": "3AXS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AXV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AY0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AY4-0",
+   "name": "행 2 · 미래에셋증권",
+   "component": "Frame",
+   "w": 0,
+   "h": 58,
+   "depth": 6
+  },
+  {
+   "id": "3AY7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AYA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AYF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AYJ-0",
+   "name": "행 3 · KB증권",
+   "component": "Frame",
+   "w": 0,
+   "h": 58,
+   "depth": 6
+  },
+  {
+   "id": "3AYM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AYP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AYU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AYY-0",
+   "name": "행 4 · 한국투자증권",
+   "component": "Frame",
+   "w": 0,
+   "h": 58,
+   "depth": 6
+  },
+  {
+   "id": "3AZ1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AZ4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AZ9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AZD-0",
+   "name": "행 5 · 신한투자증권",
+   "component": "Frame",
+   "w": 0,
+   "h": 58,
+   "depth": 6
+  },
+  {
+   "id": "3AZG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AZJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AZO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AZS-0",
+   "name": "행 6 · NH투자증권",
+   "component": "Frame",
+   "w": 0,
+   "h": 58,
+   "depth": 6
+  },
+  {
+   "id": "3AZV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AZY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3B03-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3O8M-0",
+   "name": "ELW 순매수 상위 5종",
+   "component": "Frame",
+   "w": 943,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3O8N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3O8Q-0",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3OBU-0",
+   "name": "행 1 · 삼성전자 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 54,
+   "depth": 6
+  },
+  {
+   "id": "3OBW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OBZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OC4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OC7-0",
+   "name": "행 2 · SK하이닉스 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 54,
+   "depth": 6
+  },
+  {
+   "id": "3OC9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OCC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OCH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OCK-0",
+   "name": "행 3 · 현대차 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 54,
+   "depth": 6
+  },
+  {
+   "id": "3OCM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OCP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OCU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OCX-0",
+   "name": "행 4 · KOSPI200 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 54,
+   "depth": 6
+  },
+  {
+   "id": "3OCZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OD2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OD7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ODA-0",
+   "name": "행 5 · 이수페타시스 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 54,
+   "depth": 6
+  },
+  {
+   "id": "3ODC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ODF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ODK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z4G-0",
+   "name": "Instrument Context",
+   "component": "Frame",
+   "w": 360,
+   "h": 822,
+   "depth": 4
+  },
+  {
+   "id": "2Z4V-0",
+   "name": "Selected Warrant",
+   "component": "Frame",
+   "w": 312,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Z5I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Z5L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z5J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z5F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Z5E-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2Z51-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Z5B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z58-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z55-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z52-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Z4W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Z4Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 7
+  },
+  {
+   "id": "2Z4X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 7
+  },
+  {
+   "id": "2Z4H-0",
+   "name": "Open Interest Spread",
+   "component": "Frame",
+   "w": 312,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Z4Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "2Z4S-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 164,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "2Z4R-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 108,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "2Z4O-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2Z4L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Z4I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Z4C-0",
+   "name": "Chart Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "ELW 순위": 1,
+  "전 창구 · 순매매 순": 1,
+  "조회 스냅샷": 2,
+  "상장 ELW 3,482 종목": 1,
+  "콜 2,146 · 풋 1,336": 1,
+  "09:42:18 조회": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 2,
+  "ELW": 2,
+  "금현물": 1,
+  "순위": 3,
+  "정렬 기준": 1,
+  "순매매 큰 창구순": 1,
+  "매수 1위": 1,
+  "+210만": 2,
+  "키움증권": 4,
+  "매도 1위": 1,
+  "−90만": 1,
+  "NH투자증권": 2,
+  "외국계 합계": 1,
+  "+40만": 2,
+  "장중 누적": 1,
+  "집계 범위": 1,
+  "10창구": 1,
+  "상위 10창구 집계": 1,
+  "잔량": 1,
+  "등락률": 1,
+  "근접률": 1,
+  "가격급등락": 1,
+  "거래원별 순매매": 1,
+  "조건검색": 1,
+  "범위": 1,
+  "주식": 1,
+  "전체 10창구 · 6창구 표시 ▸": 1,
+  "창구": 1,
+  "종목 · 코드": 2,
+  "주가등락 · 등락률": 1,
+  "매도": 2,
+  "매수": 2,
+  "순매매 · 총거래량": 1,
+  "비중": 2,
+  "1": 2,
+  "삼성전자 콜": 2,
+  "58H219": 2,
+  "▲ +45": 1,
+  "+12.16%": 2,
+  "310만": 2,
+  "520만": 2,
+  "+210만주": 1,
+  "총 830만주": 1,
+  "18.4%": 2,
+  "2": 2,
+  "미래에셋증권": 2,
+  "SK하이닉스 콜": 2,
+  "58J377": 2,
+  "▲ +25": 2,
+  "+9.62%": 2,
+  "260만": 2,
+  "420만": 1,
+  "+160만주": 1,
+  "총 680만주": 1,
+  "15.1%": 1,
+  "3": 2,
+  "KB증권": 2,
+  "현대차 콜": 2,
+  "58M204": 2,
+  "+5.05%": 2,
+  "240만": 1,
+  "350만": 1,
+  "+110만주": 1,
+  "총 590만주": 1,
+  "13.1%": 1,
+  "4": 2,
+  "한국투자증권": 3,
+  "KOSPI200 콜": 2,
+  "58P630": 2,
+  "▲ +10": 1,
+  "+3.39%": 2,
+  "230만": 2,
+  "300만": 1,
+  "+70만주": 1,
+  "총 530만주": 1,
+  "11.7%": 1,
+  "7": 1,
+  "신한투자증권": 1,
+  "삼성전자 풋": 1,
+  "58L118": 1,
+  "▼ −10": 1,
+  "−6.45%": 1,
+  "190만": 1,
+  "−70만주": 1,
+  "총 450만주": 1,
+  "10.0%": 1,
+  "10": 1,
+  "KOSPI200 풋": 1,
+  "58K902": 1,
+  "▼ −18": 1,
+  "−8.65%": 1,
+  "140만": 1,
+  "−90만주": 1,
+  "총 370만주": 1,
+  "8.2%": 1,
+  "ELW 순매수 상위 5종": 1,
+  "상위 10창구 집계 · 5종 표시": 1,
+  "현재가 · 등락률": 1,
+  "순매수": 1,
+  "주매수 창구": 1,
+  "거래량 · 대금": 1,
+  "415": 1,
+  "+340만주": 1,
+  "620만주": 1,
+  "25.7억원": 1,
+  "285": 1,
+  "+265만주": 1,
+  "540만주": 1,
+  "15.4억원": 1,
+  "520": 1,
+  "+185만주": 1,
+  "390만주": 1,
+  "20.3억원": 1,
+  "305": 1,
+  "+120만주": 1,
+  "320만주": 1,
+  "9.8억원": 1,
+  "5": 1,
+  "이수페타시스 콜": 1,
+  "59V603": 1,
+  "1,340": 1,
+  "+10.83%": 1,
+  "+95만주": 1,
+  "175만주": 1,
+  "22.6억원": 1,
+  "순매매 1위 · 전체 창구": 1,
+  "1위": 1,
+  "매수 520만 · 매도 310만": 1,
+  "거래대금": 1,
+  "124억원": 1,
+  "창구 상세 열기": 1,
+  "차트 열기": 1,
+  "창구 요약": 1,
+  "매수 우위 6 · 매도 우위 4": 1,
+  "매수 우위 60% · 매도 우위 40%": 1,
+  "외국계 순매매": 1,
+  "기관 순매매": 1,
+  "−20만": 1,
+  "마지막 조회 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "b624c2d9b262cfcf2a3274399a25635b70a8a457bdae98f72e0b7e72542c4c3f"
+}

@@ -1,0 +1,341 @@
+{
+ "board_id": "47Y4-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47Z2-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47Z1-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47YZ-0",
+   "text": "매물대집중",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Header"
+   ]
+  },
+  {
+   "id": "47YX-0",
+   "text": "매물비",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47YW-0",
+   "text": "18.4%",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47YU-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47YT-0",
+   "text": "11.0%",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47YR-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47YQ-0",
+   "text": "3개월",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47YN-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47YM-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47YL-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47YJ-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47YI-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47YG-0",
+   "text": "1위 종목",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47YF-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47YD-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47YC-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47YA-0",
+   "text": "상위 50",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47Y9-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47Y6-0",
+   "text": "스칼라 2개, 행 17개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47Y4-0",
+   "name": "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47YY-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47Z0-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47Y7-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47YO-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47YV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47YS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47YP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47YK-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47YE-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47YH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47Y8-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47YB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47Y5-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "매물대집중": 1,
+  "매물비": 1,
+  "18.4%": 1,
+  "변화": 1,
+  "11.0%": 1,
+  "핵심": 1,
+  "3개월": 1,
+  "항목": 1,
+  "값": 2,
+  "비고": 1,
+  "수량": 1,
+  "1위 종목": 1,
+  "상위 50": 1,
+  "스칼라 2개, 행 17개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "849d5c8bb33d232ded9234cec1fb769f690ed1166fb898c9842e48c396d69122"
+}

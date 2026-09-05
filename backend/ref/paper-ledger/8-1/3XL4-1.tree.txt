@@ -1,0 +1,238 @@
+Frame "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)" (3XL4-1) 1680×1080
+  Frame "타이틀" (3XQW-1) 1584×0
+    Text "셀 — 백테스트 · 출처에서 지도로 …" (3XQY-1) 0×0 "셀 — 백테스트 · 출처에서 지도로 — URL 하나가 지도가 되는 동안 사용자는 진행만 본다"
+    Text "유튜브 · 네이버 블로그 · 논문 P…" (3XQX-1) 0×0 "유튜브 · 네이버 블로그 · 논문 PDF 등 출처 URL을 채팅에 붙이면 앱이 읽고 → 규칙을 뽑고 → 지도"
+  Frame "셸" (3XL5-1) 1584×960
+    Frame "Frame" (3XOW-1) 268×819
+      Frame "Primary Actions" (3XPZ-1) 0×0
+        Frame "Frame" (3XQR-1) 0×28
+          Text "ATHENA" (3XQV-1) 0×0 "ATHENA"
+          SVG "SVG" (3XQS-1) 0×0
+            SVGVisualElement "Circle" (3XQU-1) 0×0
+            SVGVisualElement "Path" (3XQT-1) 0×0
+        Frame "Frame" (3XQM-1) 0×30
+          SVG "SVG" (3XQO-1) 0×0
+            SVGVisualElement "Path" (3XQQ-1) 0×0
+            SVGVisualElement "Path" (3XQP-1) 0×0
+          Text "새 채팅" (3XQN-1) 0×0 "새 채팅"
+        Frame "Frame" (3XQF-1) 0×30
+          SVG "SVG" (3XQH-1) 0×0
+            SVGVisualElement "Circle" (3XQL-1) 0×0
+            SVGVisualElement "Circle" (3XQK-1) 0×0
+            SVGVisualElement "Circle" (3XQJ-1) 0×0
+            SVGVisualElement "Path" (3XQI-1) 0×0
+          Text "그래프" (3XQG-1) 0×0 "그래프"
+        Frame "Frame" (3XQA-1) 0×30
+          SVG "SVG" (3XQC-1) 0×0
+            SVGVisualElement "Circle" (3XQE-1) 0×0
+            SVGVisualElement "Path" (3XQD-1) 0×0
+          Text "에이전트" (3XQB-1) 0×0 "에이전트"
+        Frame "Nav 플러그인" (3XQ5-1) 0×30
+          SVG "SVG" (3XQ7-1) 0×0
+            SVGVisualElement "Path" (3XQ9-1) 0×0
+            SVGVisualElement "Path" (3XQ8-1) 0×0
+          Text "플러그인" (3XQ6-1) 0×0 "플러그인"
+        Frame "Nav 백테스트 (active)" (3XQ0-1) 0×30
+          SVG "SVG" (3XQ2-1) 0×0
+            SVGVisualElement "Path" (3XQ4-1) 0×0
+            SVGVisualElement "Path" (3XQ3-1) 0×0
+          Text "백테스트" (3XQ1-1) 0×0 "백테스트"
+      Frame "Project Tree" (3XPF-1) 0×0
+        Frame "Frame" (3XPX-1) 0×0
+          Text "프로젝트" (3XPY-1) 0×0 "프로젝트"
+        Frame "Frame" (3XPL-1) 0×32
+          SVG "SVG" (3XPU-1) 0×0
+            SVGVisualElement "Path" (3XPW-1) 0×0
+            SVGVisualElement "Path" (3XPV-1) 0×0
+          Text "아테나" (3XPT-1) 0×0 "아테나"
+          SVG "SVG" (3XPP-1) 0×0
+            SVGVisualElement "Circle" (3XPS-1) 0×0
+            SVGVisualElement "Circle" (3XPR-1) 0×0
+            SVGVisualElement "Circle" (3XPQ-1) 0×0
+          SVG "SVG" (3XPM-1) 0×0
+            SVGVisualElement "Path" (3XPO-1) 0×0
+            SVGVisualElement "Path" (3XPN-1) 0×0
+        Frame "Frame" (3XPJ-1) 0×27
+          Text "백엔드 API 개수 확인" (3XPK-1) 0×0 "백엔드 API 개수 확인"
+        Frame "Frame" (3XPG-1) 0×29
+          Text "앱 전체 기능 검수" (3XPI-1) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (3XPH-1) 6×6
+      Frame "Recent Conversations" (3XP4-1) 0×0
+        Frame "Frame" (3XPC-1) 0×20
+          Text "최근" (3XPE-1) 0×0 "최근"
+          Text "전체" (3XPD-1) 0×0 "전체"
+        Frame "Frame" (3XP9-1) 0×27
+          Text "앱 전체 기능 검수" (3XPB-1) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (3XPA-1) 6×6
+        Frame "Frame" (3XP7-1) 0×27
+          Text "삼성전자 주요 변동 알림" (3XP8-1) 0×0 "삼성전자 주요 변동 알림"
+        Frame "Frame" (3XP5-1) 0×27
+          Text "ETF 자금 흐름" (3XP6-1) 0×0 "ETF 자금 흐름"
+      Frame "Account Footer" (3XOX-1) 0×0
+        Frame "Frame" (3XOY-1) 0×38
+          Frame "Frame" (3XP2-1) 22×22
+            Text "AN" (3XP3-1) 0×0 "AN"
+          Text "모의-주력" (3XP1-1) 0×0 "모의-주력"
+          SVG "SVG" (3XOZ-1) 0×0
+            SVGVisualElement "Path" (3XP0-1) 0×0
+    Frame "메인 · 지도 만드는 중" (3XQZ-1) 0×0
+      Frame "헤더" (3XR0-1) 0×0
+        Text "백테스트" (3XR1-1) 0×0 "백테스트"
+        Text "새 전략 · 출처에서 만드는 중 · …" (3XR2-1) 0×0 "새 전략 · 출처에서 만드는 중 · 지도 v0"
+        Rectangle "Rectangle" (3XR3-1) 0×0
+        Frame "Frame" (3XR4-1) 0×0
+          Frame "Frame" (3XR5-1) 0×0
+            Text "지도" (3XR6-1) 0×0 "지도"
+          Frame "Frame" (3XR7-1) 0×0
+            Text "폼" (3XR8-1) 0×0 "폼"
+          Frame "Frame" (3XR9-1) 0×0
+            Text "코드 · 최후의 보루" (3XRA-1) 0×0 "코드 · 최후의 보루"
+        Frame "Frame" (3XRB-1) 0×0
+          Text "실행" (3XRC-1) 0×0 "실행"
+      Frame "대상 한 줄" (3XRD-1) 0×0
+        Text "출처가 말한 대상" (3XRE-1) 0×0 "출처가 말한 대상"
+        Text "KOSPI 대형주 · 일봉 · 3년" (3XRF-1) 0×0 "KOSPI 대형주 · 일봉 · 3년"
+        Frame "Frame" (3XRG-1) 0×0
+          Text "확인 필요" (3XRH-1) 0×0 "확인 필요"
+        Rectangle "Rectangle" (3XRI-1) 0×0
+        Text "지도가 끝나면 채팅이 대상·기간부터 …" (3XRJ-1) 0×0 "지도가 끝나면 채팅이 대상·기간부터 하나씩 묻습니다"
+      Frame "진행 띠" (3XRK-1) 0×0
+        Frame "Frame" (3XRL-1) 0×0
+          Rectangle "Rectangle" (3XRM-1) 10×10
+          Text "출처를 지도로 만드는 중 — 3/5 …" (3XRN-1) 0×0 "출처를 지도로 만드는 중 — 3/5 단계 · 약 20초 남음"
+          Rectangle "Rectangle" (3XRO-1) 0×0
+          Text "멈추기" (3XRP-1) 0×0 "멈추기"
+        Frame "Frame" (3XRQ-1) 0×0
+          Frame "Frame" (3XRR-1) 0×0
+            Text "✓ 출처 읽음" (3XRS-1) 0×0 "✓ 출처 읽음"
+            Text "유튜브 자막 14,200자 · 12분" (3XRT-1) 0×0 "유튜브 자막 14,200자 · 12분"
+          Frame "Frame" (3XRU-1) 0×0
+            Text "✓ 규칙 뽑음" (3XRV-1) 0×0 "✓ 규칙 뽑음"
+            Text "진입 2 · 청산 1 · 손절 1" (3XRW-1) 0×0 "진입 2 · 청산 1 · 손절 1"
+          Frame "Frame" (3XRX-1) 0×0
+            Text "● 지도 그리는 중" (3XRY-1) 0×0 "● 지도 그리는 중"
+            Text "칸 3/6 · 지금 ③ 사고·파는 순…" (3XRZ-1) 0×0 "칸 3/6 · 지금 ③ 사고·파는 순간"
+          Frame "Frame" (3XS0-1) 0×0
+            Text "○ 코드 만들기" (3XS1-1) 0×0 "○ 코드 만들기"
+            Text "지도 뒤에서 자동" (3XS2-1) 0×0 "지도 뒤에서 자동"
+          Frame "Frame" (3XS3-1) 0×0
+            Text "○ 자체 검사" (3XS4-1) 0×0 "○ 자체 검사"
+            Text "가상환경 · 짧은 구간 시험 실행" (3XS5-1) 0×0 "가상환경 · 짧은 구간 시험 실행"
+      Frame "지도 헤더" (3XS6-1) 0×0
+        Text "이 전략은 이렇게 흐릅니다" (3XS7-1) 0×0 "이 전략은 이렇게 흐릅니다"
+        Text "칸이 하나씩 채워집니다 · 다 그려지…" (3XS8-1) 0×0 "칸이 하나씩 채워집니다 · 다 그려지면 대화로 고칠 수 있습니다"
+      Text "앱이 준비해서 건넵니다" (3XS9-1) 0×0 "앱이 준비해서 건넵니다"
+      Frame "노드 앱·봉" (3XSA-1) 0×0
+        Frame "Frame" (3XSB-1) 26×26
+          Text "앱" (3XSC-1) 0×0 "앱"
+        Frame "Frame" (3XSD-1) 0×0
+          Text "봉 데이터를 모읍니다" (3XSE-1) 0×0 "봉 데이터를 모읍니다"
+          Text "대상이 정해지면 캐시에서 일봉을 가져…" (3XSF-1) 0×0 "대상이 정해지면 캐시에서 일봉을 가져옵니다 — 이 칸은 고칠 수 없습니다"
+        Text "대상 확인 뒤" (3XSG-1) 0×0 "대상 확인 뒤"
+      Frame "Frame" (3XSH-1) 0×0
+        Text "여기부터 내 전략 — 출처에서 뽑은 …" (3XSI-1) 0×0 "여기부터 내 전략 — 출처에서 뽑은 칸들"
+        Rectangle "Rectangle" (3XSJ-1) 0×1
+      Frame "노드 1 조절할 값" (3XSK-1) 0×0
+        Frame "Frame" (3XSL-1) 26×26
+          Text "①" (3XSM-1) 0×0 "①"
+        Frame "Frame" (3XSN-1) 0×0
+          Text "조절할 값을 정합니다" (3XSO-1) 0×0 "조절할 값을 정합니다"
+          Frame "Frame" (3XSP-1) 0×0
+            Frame "Frame" (3XSQ-1) 0×0
+              Text "lookback 20 10-60" (3XSR-1) 0×0 "lookback 20 10-60"
+            Frame "Frame" (3XSS-1) 0×0
+              Text "vol_mult 1.5 1-3" (3XST-1) 0×0 "vol_mult 1.5 1-3"
+            Frame "Frame" (3XSU-1) 0×0
+              Text "stop_pct 5 3-10" (3XSV-1) 0×0 "stop_pct 5 3-10"
+        Text "값 3개 · 출처 12:40에서
+"2…" (3XSW-1) 0×0 "값 3개 · 출처 12:40에서
+"20일 신고가·거래량 1.5배""
+      Frame "노드 2 지표" (3XSX-1) 0×0
+        Frame "Frame" (3XSY-1) 26×26
+          Text "②" (3XSZ-1) 0×0 "②"
+        Frame "Frame" (3XT0-1) 0×0
+          Text "가격을 지표로 바꿉니다" (3XT1-1) 0×0 "가격을 지표로 바꿉니다"
+          Text "20봉 최고가(hh20), 20봉 평…" (3XT2-1) 0×0 "20봉 최고가(hh20), 20봉 평균 거래량(vol20)을 만듭니다"
+        Text "hh20 · vol20 — 2열
+앞 …" (3XT3-1) 0×0 "hh20 · vol20 — 2열
+앞 20봉은 빈칸(워밍업)"
+      Frame "노드 3 그리는 중" (3XT4-1) 0×0
+        Frame "Frame" (3XT5-1) 26×26
+          Text "③" (3XT6-1) 0×0 "③"
+        Frame "Frame" (3XT7-1) 0×0
+          Frame "Frame" (3XT8-1) 0×0
+            Text "사고·파는 순간을 찍습니다" (3XT9-1) 0×0 "사고·파는 순간을 찍습니다"
+            Frame "Frame" (3XTA-1) 0×0
+              Text "그리는 중" (3XTB-1) 0×0 "그리는 중"
+          Frame "Frame" (3XTC-1) 0×0
+            Text "진입" (3XTD-1) 28×0 "진입"
+            Text "종가가 hh20을 넘고 거래량이 vo…" (3XTE-1) 0×0 "종가가 hh20을 넘고 거래량이 vol20 × vol_mult 이상인 날"
+          Frame "Frame" (3XTF-1) 0×0
+            Text "청산" (3XTG-1) 28×0 "청산"
+            Rectangle "Rectangle" (3XTH-1) 360×12
+          Frame "Frame" (3XTI-1) 0×4
+            Rectangle "Rectangle" (3XTJ-1) 0×4
+        Text "출처 15:10 읽는 중
+"손절 5%…" (3XTK-1) 0×0 "출처 15:10 읽는 중
+"손절 5% · 20일선 이탈""
+      Frame "노드 4 빈칸" (3XTL-1) 0×0
+        Frame "Frame" (3XTM-1) 26×26
+          Text "④" (3XTN-1) 0×0 "④"
+        Frame "Frame" (3XTO-1) 0×0
+          Rectangle "Rectangle" (3XTP-1) 180×14
+          Rectangle "Rectangle" (3XTQ-1) 420×10
+        Text "다음" (3XTR-1) 0×0 "다음"
+      Frame "Frame" (3XTS-1) 0×0
+        Text "여기부터 다시 앱 — 전략이 손댈 수…" (3XTT-1) 0×0 "여기부터 다시 앱 — 전략이 손댈 수 없는 구간"
+        Rectangle "Rectangle" (3XTU-1) 0×1
+      Frame "Frame" (3XTV-1) 0×0
+        Frame "Frame" (3XTW-1) 0×0
+          Text "사고·파는 가격을 정합니다" (3XTX-1) 0×0 "사고·파는 가격을 정합니다"
+          Text "신호 다음 봉의 시가 — 미래를 본 …" (3XTY-1) 0×0 "신호 다음 봉의 시가 — 미래를 본 것 없이"
+        Frame "Frame" (3XTZ-1) 0×0
+          Text "비용을 뗍니다" (3XU0-1) 0×0 "비용을 뗍니다"
+          Text "수수료·거래세·슬리피지" (3XU1-1) 0×0 "수수료·거래세·슬리피지"
+        Frame "Frame" (3XU2-1) 0×0
+          Text "성과를 냅니다" (3XU3-1) 0×0 "성과를 냅니다"
+          Text "지표 6장 · 자산곡선 · 체결 표" (3XU4-1) 0×0 "지표 6장 · 자산곡선 · 체결 표"
+      Frame "코드 서랍" (3XU5-1) 0×0
+        Text "이 지도 뒤의 코드" (3XU6-1) 0×0 "이 지도 뒤의 코드"
+        Text "아직 없음 — 지도가 끝나면 자동으로…" (3XU7-1) 0×0 "아직 없음 — 지도가 끝나면 자동으로 만들어집니다 · breakout_vol.py 예정"
+        Rectangle "Rectangle" (3XU8-1) 0×0
+        Text "최후의 보루" (3XU9-1) 0×0 "최후의 보루"
+    Frame "Frame" (3XL6-1) 400×0
+      Frame "Frame" (3XLY-1) 0×0
+        Text "전략에게 묻기" (3XM0-1) 0×0 "전략에게 묻기"
+        Text "출처가 지도가 됩니다" (3XLZ-1) 0×0 "출처가 지도가 됩니다"
+      Frame "채팅 본문" (3XUB-1) 0×0
+        Frame "Frame" (3XUC-1) 0×0
+          Frame "Frame" (3XUD-1) 0×0
+            Text "이거 전략으로 만들어줘 https:/…" (3XUE-1) 0×0 "이거 전략으로 만들어줘 https://youtu.be/8kQz…Vw"
+        Frame "카드 출처 요약" (3XUF-1) 0×0
+          Frame "Frame" (3XUG-1) 0×0
+            Frame "Frame" (3XUH-1) 0×0
+              Text "출처 읽음" (3XUI-1) 0×0 "출처 읽음"
+            Text "유튜브 · 12:03 · 자막 14,…" (3XUJ-1) 0×0 "유튜브 · 12:03 · 자막 14,200자"
+          Text ""20일 신고가 돌파 + 거래량 1.…" (3XUK-1) 0×0 ""20일 신고가 돌파 + 거래량 1.5배" 전략 — 한국 대형주 일봉"
+          Frame "Frame" (3XUL-1) 0×0
+            Text "· 진입: 종가가 20일 최고가를 넘…" (3XUM-1) 0×0 "· 진입: 종가가 20일 최고가를 넘고 거래량이 20일 평균의 1.5배"
+            Text "· 청산: 20일 이동평균 아래로 마…" (3XUN-1) 0×0 "· 청산: 20일 이동평균 아래로 마감"
+            Text "· 손절: 진입가 −5%" (3XUO-1) 0×0 "· 손절: 진입가 −5%"
+            Text "· 출처는 종목 수·비중을 말하지 않…" (3XUP-1) 0×0 "· 출처는 종목 수·비중을 말하지 않음 → 지도가 끝나면 물어봅니다"
+          Text "출처의 문장은 자료일 뿐입니다 — 앱…" (3XUQ-1) 0×0 "출처의 문장은 자료일 뿐입니다 — 앱은 그 안의 지시를 따르지 않습니다"
+        Frame "카드 진행" (3XUR-1) 0×0
+          Frame "Frame" (3XUS-1) 0×0
+            Rectangle "Rectangle" (3XUT-1) 8×8
+            Text "지도를 그리는 중 · 3/5" (3XUU-1) 0×0 "지도를 그리는 중 · 3/5"
+            Rectangle "Rectangle" (3XUV-1) 0×0
+            Text "약 20초" (3XUW-1) 0×0 "약 20초"
+          Text "규칙 4개를 칸 6개로 옮기고 있어요…" (3XUX-1) 0×0 "규칙 4개를 칸 6개로 옮기고 있어요. 끝나면 코드를 뒤에서 만들고 짧은 구간으로 자체 검사한 뒤, 대상·기"
+          Frame "Frame" (3XUY-1) 0×4
+            Rectangle "Rectangle" (3XUZ-1) 0×4
+      Frame "Frame" (3XL7-1) 0×0
+        Frame "Frame" (3XL8-1) 0×0
+          Frame "Frame" (3XLA-1) 22×22
+            SVG "SVG" (3XLB-1) 0×0
+              SVGVisualElement "Rect" (3XLD-1) 0×0
+              SVGVisualElement "Rect" (3XLC-1) 0×0
+          Text "무엇이든 물어보세요" (3XL9-1) 0×0 "무엇이든 물어보세요"

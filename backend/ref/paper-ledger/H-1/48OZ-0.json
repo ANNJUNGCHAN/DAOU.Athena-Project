@@ -1,0 +1,92 @@
+{
+ "board_id": "48OZ-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48P1-0",
+   "text": "원본 보드: CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+   "path": [
+    "note/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48P3-0",
+   "text": "가져온 요소: 계좌명 · 예탁자산평가액 · 수익률 · 총재매수가능금액 · 인출가능금액",
+   "path": [
+    "note/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48P5-0",
+   "text": "문법: facts",
+   "path": [
+    "note/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48P7-0",
+   "text": "접은 개수: 항목 109개",
+   "path": [
+    "note/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48OZ-0",
+   "name": "note/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48P0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48P2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48P4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48P6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-01 / R10 · 내 계좌 — 손익·결제·위험": 1,
+  "가져온 요소: 계좌명 · 예탁자산평가액 · 수익률 · 총재매수가능금액 · 인출가능금액": 1,
+  "문법: facts": 1,
+  "접은 개수: 항목 109개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "9cae97b047b723eba0053590a71bc9f5d93a1a68138d3c18a74411cb42ddde40"
+}

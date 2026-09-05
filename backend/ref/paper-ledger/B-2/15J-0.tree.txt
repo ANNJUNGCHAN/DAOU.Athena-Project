@@ -1,0 +1,158 @@
+Frame "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)" (15J-0) 1680×900
+  Frame "플러그인 모드 창 · 관리 뷰" (4382-1) 1560×820
+    Frame "48 · Project Recent Sidebar" (4383-1) 268×819
+      Frame "Primary Actions" (4384-1) 0×0
+        Frame "Frame" (4385-1) 0×28
+          Text "ATHENA" (4386-1) 0×0 "ATHENA"
+          SVG "SVG" (4387-1) 0×0
+            SVGVisualElement "Circle" (4388-1) 0×0
+            SVGVisualElement "Path" (4389-1) 0×0
+        Frame "Frame" (438A-1) 0×30
+          SVG "SVG" (438B-1) 0×0
+            SVGVisualElement "Path" (438C-1) 0×0
+            SVGVisualElement "Path" (438D-1) 0×0
+          Text "새 채팅" (438E-1) 0×0 "새 채팅"
+        Frame "Frame" (438F-1) 0×30
+          SVG "SVG" (438G-1) 0×0
+            SVGVisualElement "Circle" (438H-1) 0×0
+            SVGVisualElement "Circle" (438I-1) 0×0
+            SVGVisualElement "Circle" (438J-1) 0×0
+            SVGVisualElement "Path" (438K-1) 0×0
+          Text "그래프" (438L-1) 0×0 "그래프"
+        Frame "Frame" (438M-1) 0×30
+          SVG "SVG" (438N-1) 0×0
+            SVGVisualElement "Circle" (438O-1) 0×0
+            SVGVisualElement "Path" (438P-1) 0×0
+          Text "에이전트" (438Q-1) 0×0 "에이전트"
+        Frame "Frame" (438R-1) 0×30
+          SVG "SVG" (438S-1) 0×0
+            SVGVisualElement "Path" (438T-1) 0×0
+            SVGVisualElement "Path" (438U-1) 0×0
+          Text "플러그인" (438V-1) 0×0 "플러그인"
+      Frame "Project Tree" (438W-1) 0×0
+        Frame "Frame" (438X-1) 0×0
+          Text "프로젝트" (438Y-1) 0×0 "프로젝트"
+        Frame "Frame" (438Z-1) 0×32
+          SVG "SVG" (4390-1) 0×0
+            SVGVisualElement "Path" (4391-1) 0×0
+            SVGVisualElement "Path" (4392-1) 0×0
+          Text "아테나" (4393-1) 0×0 "아테나"
+          SVG "SVG" (4394-1) 0×0
+            SVGVisualElement "Circle" (4395-1) 0×0
+            SVGVisualElement "Circle" (4396-1) 0×0
+            SVGVisualElement "Circle" (4397-1) 0×0
+          SVG "SVG" (4398-1) 0×0
+            SVGVisualElement "Path" (4399-1) 0×0
+            SVGVisualElement "Path" (439A-1) 0×0
+        Frame "Frame" (439B-1) 0×27
+          Text "백엔드 API 개수 확인" (439C-1) 0×0 "백엔드 API 개수 확인"
+        Frame "Frame" (439D-1) 0×29
+          Text "앱 전체 기능 검수" (439E-1) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (439F-1) 6×6
+      Frame "Recent Conversations" (439G-1) 0×0
+        Frame "Frame" (439H-1) 0×20
+          Text "최근" (439I-1) 0×0 "최근"
+          Text "전체" (439J-1) 0×0 "전체"
+        Frame "Frame" (439K-1) 0×27
+          Text "앱 전체 기능 검수" (439L-1) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (439M-1) 6×6
+        Frame "Frame" (439N-1) 0×27
+          Text "삼성전자 주요 변동 알림" (439O-1) 0×0 "삼성전자 주요 변동 알림"
+        Frame "Frame" (439P-1) 0×27
+          Text "ETF 자금 흐름" (439Q-1) 0×0 "ETF 자금 흐름"
+      Frame "Account Footer" (439R-1) 0×0
+        Frame "Frame" (439S-1) 0×38
+          Frame "Frame" (439T-1) 22×22
+            Text "AN" (439U-1) 0×0 "AN"
+          Text "모의-주력" (439V-1) 0×0 "모의-주력"
+          SVG "SVG" (439W-1) 0×0
+            SVGVisualElement "Path" (439X-1) 0×0
+    Frame "Frame" (439Y-1) 0×0
+      Frame "Frame" (439Z-1) 0×0
+        Frame "Frame" (43A0-1) 0×0
+          Text "플러그인 관리" (43A1-1) 0×0 "플러그인 관리"
+          Rectangle "Rectangle" (43A2-1) 0×0
+          Frame "pill-active" (43DF-1) 0×22
+            Text "플러그인 2" (43DG-1) 0×0 "플러그인 2"
+          Frame "pill" (43DH-1) 0×22
+            Text "기능 3" (43DI-1) 0×0 "기능 3"
+          Frame "pill" (43DJ-1) 0×22
+            Text "마켓플레이스 1" (43DK-1) 0×0 "마켓플레이스 1"
+        Frame "시트 · 서버 추가" (43BP-1) 838×0
+          Frame "sheet-head" (43BQ-1) 802×0
+            Text "서버 추가" (43BR-1) 0×0 "서버 추가"
+            Text "Claude 설정 형식의 스니펫을 붙…" (43BS-1) 0×0 "Claude 설정 형식의 스니펫을 붙여넣습니다"
+          Frame "textarea" (43BU-1) 802×0
+            Text "{
+  "mcpServers": {
+…" (43BV-1) 0×0 "{
+  "mcpServers": {
+    "time": { "command": "uvx", "args": "
+          Frame "warning" (43BW-1) 802×0
+            Text "승인 카드로 확정합니다" (43BX-1) 0×0 "승인 카드로 확정합니다"
+          Frame "btn-row" (43BY-1) 802×0
+            Frame "btn-ghost" (43BZ-1) 0×32
+              Text "닫기" (43C0-1) 0×0 "닫기"
+            Frame "btn-primary" (43C1-1) 0×32
+              Text "등록 제안" (43C2-1) 0×0 "등록 제안"
+          Frame "footnote" (43C3-1) 802×0
+            Text "채팅에서 등록을 제안해도 같은 승인 …" (43C4-1) 0×0 "채팅에서 등록을 제안해도 같은 승인 카드로 들어옵니다"
+        Frame "감사 로그" (43C6-1) 838×0
+          Frame "log-head" (43C7-1) 838×0
+            Text "감사 로그" (43C8-1) 0×0 "감사 로그"
+            Text "최근 3건" (43C9-1) 0×0 "최근 3건"
+          Frame "col-head" (43CA-1) 838×30
+            Frame "Frame" (43CB-1) 90×0
+              Text "시각" (43CC-1) 0×0 "시각"
+            Frame "Frame" (43CD-1) 180×0
+              Text "별칭" (43CE-1) 0×0 "별칭"
+            Frame "Frame" (43CF-1) 360×0
+              Text "도구" (43CG-1) 0×0 "도구"
+            Frame "Frame" (43CH-1) 120×0
+              Text "결과" (43CI-1) 0×0 "결과"
+          Frame "row" (43CK-1) 838×40
+            Frame "Frame" (43CL-1) 90×0
+              Text "09:14" (43CM-1) 0×0 "09:14"
+            Frame "Frame" (43CN-1) 180×0
+              Text "웹 문서 읽기" (43CO-1) 0×0 "웹 문서 읽기"
+            Frame "Frame" (43CP-1) 360×0
+              Text "fetch · 기능 허용 1개" (43CQ-1) 0×0 "fetch · 기능 허용 1개"
+            Frame "Frame" (43CR-1) 120×0
+              Frame "Frame" (43CS-1) 0×20
+                Text "성공" (43CT-1) 0×0 "성공"
+          Frame "row" (43CU-1) 838×40
+            Frame "Frame" (43CV-1) 90×0
+              Text "08:52" (43CW-1) 0×0 "08:52"
+            Frame "Frame" (43CX-1) 180×0
+              Text "시간·시간대" (43CY-1) 0×0 "시간·시간대"
+            Frame "Frame" (43CZ-1) 360×0
+              Text "get_current_time · 연…" (43D0-1) 0×0 "get_current_time · 연결 확인"
+            Frame "Frame" (43D1-1) 120×0
+              Frame "Frame" (43D2-1) 0×20
+                Text "성공" (43D3-1) 0×0 "성공"
+          Frame "row" (43D4-1) 838×40
+            Frame "Frame" (43D5-1) 90×0
+              Text "08:50" (43D6-1) 0×0 "08:50"
+            Frame "Frame" (43D7-1) 180×0
+              Text "time" (43D8-1) 0×0 "time"
+            Frame "Frame" (43D9-1) 360×0
+              Text "직접 등록 · 승인" (43DA-1) 0×0 "직접 등록 · 승인"
+            Frame "Frame" (43DB-1) 120×0
+              Frame "Frame" (43DC-1) 0×20
+                Text "실패" (43DD-1) 0×0 "실패"
+    Frame "Frame" (43B4-1) 400×0
+      Frame "Frame" (43B5-1) 0×0
+        Text "플러그인에게 묻기" (43B6-1) 0×0 "플러그인에게 묻기"
+        Text "설치·설정도 대화로 됩니다" (43B7-1) 0×0 "설치·설정도 대화로 됩니다"
+      Frame "Frame" (43B8-1) 0×0
+        Frame "Frame" (43B9-1) 0×0
+          Frame "user-bubble" (43DM-1) 0×34
+            Text "시간·시간대 왜 꺼져 있어?" (43DN-1) 0×0 "시간·시간대 왜 꺼져 있어?"
+        Text "현재 꺼져 있습니다. 끄기는 삭제가 …" (43BC-1) 0×0 "현재 꺼져 있습니다. 끄기는 삭제가 아니라 승인 철회입니다 — 등록은 남고 허용 도구 목록만 비워집니다. 다"
+      Frame "Frame" (43BD-1) 0×0
+        Frame "Frame" (43BE-1) 0×0
+          Frame "Frame" (43BF-1) 22×22
+            SVG "SVG" (43BG-1) 0×0
+              SVGVisualElement "Rect" (43BH-1) 0×0
+              SVGVisualElement "Rect" (43BI-1) 0×0
+          Text "무엇이든 물어보세요" (43BJ-1) 0×0 "무엇이든 물어보세요"

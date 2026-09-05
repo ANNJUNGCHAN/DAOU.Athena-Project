@@ -1,0 +1,3795 @@
+{
+ "board_id": "2S4E-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-05 / R03-T5 · 수급 — 종목 동향",
+ "width": 1440,
+ "height": 1119,
+ "texts": [
+  {
+   "id": "2SAM-1",
+   "text": "삼성전자 수급",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SAK-1",
+   "text": "실시간",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SAH-1",
+   "text": "005930 · KOSPI · 장중",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SAF-1",
+   "text": "투자자별",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SAD-1",
+   "text": "거래원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SAB-1",
+   "text": "프로그램",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SA9-1",
+   "text": "신용·대차",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SA7-1",
+   "text": "종목 동향",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WFZ-0",
+   "text": "순위",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SA3-1",
+   "text": "오늘 순매수 1위",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위"
+   ]
+  },
+  {
+   "id": "2SA2-1",
+   "text": "외국인",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SA1-1",
+   "text": "+1,842억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S9Z-1",
+   "text": "5거래일 연속 순매수 · 09:40 기준",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위"
+   ]
+  },
+  {
+   "id": "2S9X-1",
+   "text": "기관",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "기관"
+   ]
+  },
+  {
+   "id": "2S9W-1",
+   "text": "-1,204억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "기관"
+   ]
+  },
+  {
+   "id": "2S9V-1",
+   "text": "금융투자 -842억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "기관"
+   ]
+  },
+  {
+   "id": "2S9T-1",
+   "text": "개인",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "개인"
+   ]
+  },
+  {
+   "id": "2S9S-1",
+   "text": "-638억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "개인"
+   ]
+  },
+  {
+   "id": "2S9R-1",
+   "text": "4거래일 연속 순매도",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "개인"
+   ]
+  },
+  {
+   "id": "2S9P-1",
+   "text": "프로그램 차익",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "프로그램"
+   ]
+  },
+  {
+   "id": "2S9O-1",
+   "text": "+368억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "프로그램"
+   ]
+  },
+  {
+   "id": "2S9N-1",
+   "text": "비차익 +1,430억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "프로그램"
+   ]
+  },
+  {
+   "id": "2S9L-1",
+   "text": "거래대금",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "거래대금"
+   ]
+  },
+  {
+   "id": "2S9K-1",
+   "text": "2.14조원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "거래대금"
+   ]
+  },
+  {
+   "id": "2S9J-1",
+   "text": "거래량 1,420만주 · 체결강도 108.4",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "거래대금"
+   ]
+  },
+  {
+   "id": "2SAO-1",
+   "text": "종목 동향 — 일별 투자자 순매수",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SAP-1",
+   "text": "단위 억원 · 최근 5거래일",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F74-0",
+   "text": "외국인 5일 누적",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "5일 누적 스트립",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F75-0",
+   "text": "+3,214억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "5일 누적 스트립",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F78-0",
+   "text": "기관 5일 누적",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "5일 누적 스트립",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F79-0",
+   "text": "-1,842억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "5일 누적 스트립",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F7C-0",
+   "text": "개인 5일 누적",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "5일 누적 스트립",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F7D-0",
+   "text": "-1,306억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "5일 누적 스트립",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F7G-0",
+   "text": "연속 순매수",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "5일 누적 스트립",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F7H-0",
+   "text": "외국인 5일",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "5일 누적 스트립",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F7I-0",
+   "text": "기간 등락 +2.65%",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "5일 누적 스트립",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33M1-0",
+   "text": "일자",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "Daily Head"
+   ]
+  },
+  {
+   "id": "33M2-0",
+   "text": "종가",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "Daily Head"
+   ]
+  },
+  {
+   "id": "33M3-0",
+   "text": "거래량",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "Daily Head"
+   ]
+  },
+  {
+   "id": "33M4-0",
+   "text": "외국인",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "Daily Head"
+   ]
+  },
+  {
+   "id": "33M5-0",
+   "text": "기관",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "Daily Head"
+   ]
+  },
+  {
+   "id": "33M6-0",
+   "text": "개인",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "Daily Head"
+   ]
+  },
+  {
+   "id": "33M9-0",
+   "text": "09-01",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "09-01"
+   ]
+  },
+  {
+   "id": "33MB-0",
+   "text": "150,850",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33MC-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33ME-0",
+   "text": "1,420만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33MF-0",
+   "text": "2.14조원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33MH-0",
+   "text": "+1,842",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33MI-0",
+   "text": "+122.1만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33MK-0",
+   "text": "-1,204",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33ML-0",
+   "text": "-79.8만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33MM-0",
+   "text": "-638",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "09-01"
+   ]
+  },
+  {
+   "id": "33R2-0",
+   "text": "08-31",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-31"
+   ]
+  },
+  {
+   "id": "33R4-0",
+   "text": "149,000",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33R5-0",
+   "text": "+1,010 · +0.68%",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33R7-0",
+   "text": "1,422만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33R8-0",
+   "text": "2.12조원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RA-0",
+   "text": "+486",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RB-0",
+   "text": "+32.6만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RD-0",
+   "text": "-212",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RE-0",
+   "text": "-14.2만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RF-0",
+   "text": "-274",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-31"
+   ]
+  },
+  {
+   "id": "33RI-0",
+   "text": "08-28",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-28"
+   ]
+  },
+  {
+   "id": "33RK-0",
+   "text": "147,990",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RL-0",
+   "text": "-510 · -0.34%",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RN-0",
+   "text": "1,421만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RO-0",
+   "text": "2.10조원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RQ-0",
+   "text": "+512",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RR-0",
+   "text": "+34.6만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RT-0",
+   "text": "-186",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RU-0",
+   "text": "-12.6만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33RV-0",
+   "text": "-326",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-28"
+   ]
+  },
+  {
+   "id": "33S7-0",
+   "text": "08-27",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-27"
+   ]
+  },
+  {
+   "id": "33S9-0",
+   "text": "148,500",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33SA-0",
+   "text": "+1,550 · +1.05%",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33SC-0",
+   "text": "1,354만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33SD-0",
+   "text": "2.01조원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33SF-0",
+   "text": "+228",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33SG-0",
+   "text": "+15.4만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33SI-0",
+   "text": "-142",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33SJ-0",
+   "text": "-9.6만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-27",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33SK-0",
+   "text": "-86",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-27"
+   ]
+  },
+  {
+   "id": "33SY-0",
+   "text": "08-26",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-26"
+   ]
+  },
+  {
+   "id": "33T0-0",
+   "text": "146,950",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33T1-0",
+   "text": "-412 · -0.28%",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33T3-0",
+   "text": "1,389만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33T4-0",
+   "text": "2.04조원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33T6-0",
+   "text": "+146",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33T7-0",
+   "text": "+9.9만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33T9-0",
+   "text": "-98",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33TA-0",
+   "text": "-6.7만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-26",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33TB-0",
+   "text": "+18",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "08-26"
+   ]
+  },
+  {
+   "id": "2SCA-1",
+   "text": "5일 누적: 외국인 +3,214억원 · 기관 -1,842억원 · 개인 -1,306억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SCC-1",
+   "text": "더보기",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SL2-0",
+   "text": "일별 순매수 추이",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3SL3-0",
+   "text": "확정 4일 기준",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3SL6-0",
+   "text": "외국인",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "다이버징 3행",
+    "외국인 행"
+   ]
+  },
+  {
+   "id": "3SLO-0",
+   "text": "+1,842억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "다이버징 3행",
+    "외국인 행",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SLT-0",
+   "text": "+3,214억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "다이버징 3행",
+    "외국인 행"
+   ]
+  },
+  {
+   "id": "3SLV-0",
+   "text": "기관",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "다이버징 3행",
+    "기관 행"
+   ]
+  },
+  {
+   "id": "3SLZ-0",
+   "text": "-1,204억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "다이버징 3행",
+    "기관 행",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SMI-0",
+   "text": "-1,842억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "다이버징 3행",
+    "기관 행"
+   ]
+  },
+  {
+   "id": "3SMK-0",
+   "text": "개인",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "다이버징 3행",
+    "개인 행"
+   ]
+  },
+  {
+   "id": "3SMO-0",
+   "text": "-638억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "다이버징 3행",
+    "개인 행",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SN7-0",
+   "text": "-1,306억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "다이버징 3행",
+    "개인 행"
+   ]
+  },
+  {
+   "id": "3SNB-0",
+   "text": "09-01",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "시각 축",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SNC-0",
+   "text": "08-31",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "시각 축",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SND-0",
+   "text": "08-28",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "시각 축",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SNE-0",
+   "text": "08-27",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "시각 축",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SNF-0",
+   "text": "08-26",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Daily Trend Panel",
+    "일별 순매수 추이",
+    "시각 축",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S67-1",
+   "text": "거래원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S66-1",
+   "text": "오늘 상위 3",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S64-1",
+   "text": "매수 상위",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S63-1",
+   "text": "모건스탠리",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S62-1",
+   "text": "+842억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S60-1",
+   "text": "JP모간",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S5Z-1",
+   "text": "+516억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S5X-1",
+   "text": "CS증권",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S5W-1",
+   "text": "+308억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S5S-1",
+   "text": "매도 상위",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S5R-1",
+   "text": "키움증권",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S5Q-1",
+   "text": "-604억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S5O-1",
+   "text": "미래에셋",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S5N-1",
+   "text": "-428억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S5L-1",
+   "text": "삼성증권",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S5K-1",
+   "text": "-312억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347G-0",
+   "text": "신용·대차·공매도",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347H-0",
+   "text": "전일 종가 기준",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347L-0",
+   "text": "공매도 비중",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347M-0",
+   "text": "3.42%",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347O-0",
+   "text": "대차잔고",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347P-0",
+   "text": "1,284만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347T-0",
+   "text": "신용융자 잔고",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347U-0",
+   "text": "4,208억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347W-0",
+   "text": "신용잔고율",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347X-0",
+   "text": "0.86%",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S4Z-1",
+   "text": "프로그램 매매",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S4Y-1",
+   "text": "시간대별",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S4W-1",
+   "text": "차익 순매수",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S4V-1",
+   "text": "+368억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S4T-1",
+   "text": "비차익 순매수",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S4S-1",
+   "text": "+1,430억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S4Q-1",
+   "text": "차익잔고",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S4P-1",
+   "text": "8,640억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33VI-0",
+   "text": "외국인·기관 동향",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33VJ-0",
+   "text": "전일 종가 기준",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33VN-0",
+   "text": "보유",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33VO-0",
+   "text": "31.29억주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33VQ-0",
+   "text": "지분율",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33VR-0",
+   "text": "52.41%",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33VV-0",
+   "text": "한도 소진",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33VW-0",
+   "text": "65.5%",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33VY-0",
+   "text": "취득 가능",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33VZ-0",
+   "text": "16.47억주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33W1-0",
+   "text": "외인 추정평균가",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33W2-0",
+   "text": "149,820",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33W4-0",
+   "text": "기관 추정평균가",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33W5-0",
+   "text": "150,240",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33W7-0",
+   "text": "연속 순매매",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33W9-0",
+   "text": "외국인 5일 +214.6만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33WA-0",
+   "text": "기관 5일 -122.9만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Foreign Inst Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3481-0",
+   "text": "기관 순매수 상위",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Inst Top Buy Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3482-0",
+   "text": "전일",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Inst Top Buy Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3484-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Inst Top Buy Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3486-0",
+   "text": "+204억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Inst Top Buy Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3487-0",
+   "text": "10.3만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Inst Top Buy Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3489-0",
+   "text": "KB금융",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Inst Top Buy Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "348B-0",
+   "text": "+142억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Inst Top Buy Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "348C-0",
+   "text": "18.2만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Inst Top Buy Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "348E-0",
+   "text": "현대차",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Inst Top Buy Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "348G-0",
+   "text": "+102억원",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Inst Top Buy Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "348H-0",
+   "text": "4.4만주",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Inst Top Buy Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S4J-1",
+   "text": "일별 투자자 집계 · 장 마감 후 확정",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Status Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2S4H-1",
+   "text": "수급 전체 항목 보기",
+   "path": [
+    "CC-05 / R03-T5 · 수급 — 종목 동향",
+    "Flow Card Surface",
+    "Flow Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2S4E-1",
+   "name": "CC-05 / R03-T5 · 수급 — 종목 동향",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1119,
+   "depth": 0
+  },
+  {
+   "id": "2S4F-1",
+   "name": "Flow Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1039,
+   "depth": 1
+  },
+  {
+   "id": "2SA4-1",
+   "name": "Flow Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2SAG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2SAI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SAJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SAL-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "2SA5-1",
+   "name": "Flow Tabs",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2SAE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SAC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SAA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SA8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SA6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2WFY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2S9H-1",
+   "name": "Flow Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2S9Y-1",
+   "name": "Hero · 순매수 1위",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2SA0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2S9U-1",
+   "name": "기관",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2S9Q-1",
+   "name": "개인",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2S9M-1",
+   "name": "프로그램",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2S9I-1",
+   "name": "거래대금",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2S4L-1",
+   "name": "Flow Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 752,
+   "depth": 2
+  },
+  {
+   "id": "2S68-1",
+   "name": "Daily Trend Panel",
+   "component": "Frame",
+   "w": 880,
+   "h": 752,
+   "depth": 3
+  },
+  {
+   "id": "2SAN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3F72-0",
+   "name": "5일 누적 스트립",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3F73-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F76-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F77-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F7A-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F7B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F7E-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F7F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33M0-0",
+   "name": "Daily Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "33M8-0",
+   "name": "09-01",
+   "component": "Frame",
+   "w": 0,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "33MA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33MD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33MG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33MJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33R1-0",
+   "name": "08-31",
+   "component": "Frame",
+   "w": 0,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "33R3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33R6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33R9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33RC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33RH-0",
+   "name": "08-28",
+   "component": "Frame",
+   "w": 0,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "33RJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33RM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33RP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33RS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33S6-0",
+   "name": "08-27",
+   "component": "Frame",
+   "w": 0,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "33S8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33SB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33SE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33SH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33SX-0",
+   "name": "08-26",
+   "component": "Frame",
+   "w": 0,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "33SZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33T2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33T5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33T8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SC9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SCB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SL0-0",
+   "name": "일별 순매수 추이",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3SL1-0",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SL4-0",
+   "name": "다이버징 3행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SL5-0",
+   "name": "외국인 행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SL7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SL8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3SL9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SRC-0",
+   "name": "09-01 절단 막대",
+   "component": "Frame",
+   "w": 56,
+   "h": 34,
+   "depth": 10
+  },
+  {
+   "id": "3SRD-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 2,
+   "depth": 11
+  },
+  {
+   "id": "3SRE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 11
+  },
+  {
+   "id": "3SRF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 29,
+   "depth": 11
+  },
+  {
+   "id": "3SLD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SLE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 32,
+   "depth": 10
+  },
+  {
+   "id": "3SLF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SLG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 34,
+   "depth": 10
+  },
+  {
+   "id": "3SLH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SLI-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 15,
+   "depth": 10
+  },
+  {
+   "id": "3SLJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SLK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 10,
+   "depth": 10
+  },
+  {
+   "id": "3SLL-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 8
+  },
+  {
+   "id": "3SLM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3SLN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SLP-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SLQ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SLR-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SLS-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SLU-0",
+   "name": "기관 행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SLW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SLX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3SLY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SM0-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SM1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SM2-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SM3-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SM4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 8
+  },
+  {
+   "id": "3SM5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3SM6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SRH-0",
+   "name": "09-01 절단 막대",
+   "component": "Frame",
+   "w": 56,
+   "h": 34,
+   "depth": 10
+  },
+  {
+   "id": "3SRI-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 29,
+   "depth": 11
+  },
+  {
+   "id": "3SRJ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 11
+  },
+  {
+   "id": "3SRK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 2,
+   "depth": 11
+  },
+  {
+   "id": "3SMA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SMB-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 14,
+   "depth": 10
+  },
+  {
+   "id": "3SMC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SMD-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 12,
+   "depth": 10
+  },
+  {
+   "id": "3SME-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SMF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 9,
+   "depth": 10
+  },
+  {
+   "id": "3SMG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SMH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 7,
+   "depth": 10
+  },
+  {
+   "id": "3SMJ-0",
+   "name": "개인 행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SML-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SMM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3SMN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SMP-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SMQ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SMR-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SMS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SMT-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 2,
+   "depth": 10
+  },
+  {
+   "id": "3SMU-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 8
+  },
+  {
+   "id": "3SMV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3SMW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SRM-0",
+   "name": "09-01 절단 막대",
+   "component": "Frame",
+   "w": 56,
+   "h": 34,
+   "depth": 10
+  },
+  {
+   "id": "3SRN-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 29,
+   "depth": 11
+  },
+  {
+   "id": "3SRO-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 11
+  },
+  {
+   "id": "3SRP-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 2,
+   "depth": 11
+  },
+  {
+   "id": "3SN0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SN1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 18,
+   "depth": 10
+  },
+  {
+   "id": "3SN2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SN3-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 22,
+   "depth": 10
+  },
+  {
+   "id": "3SN4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SN5-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 6,
+   "depth": 10
+  },
+  {
+   "id": "3SN6-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3SN8-0",
+   "name": "시각 축",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SN9-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 40,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SNA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SNG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2S4M-1",
+   "name": "Side Panel",
+   "component": "Frame",
+   "w": 0,
+   "h": 752,
+   "depth": 3
+  },
+  {
+   "id": "2S5G-1",
+   "name": "Broker Block",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2S65-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2S5H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2S5U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2S61-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2S5Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2S5V-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2S5T-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2S5I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2S5P-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2S5M-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2S5J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "347E-0",
+   "name": "Credit Block",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "347F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "347I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "347J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "347K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "347N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "347Q-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "347R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "347S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "347V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2S4N-1",
+   "name": "Program Block",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2S4X-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2S4U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2S4R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2S4O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33VG-0",
+   "name": "Foreign Inst Block",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "33VH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33VK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33VL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33VM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "33VP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "33VS-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33VT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33VU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "33VX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "33W0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33W3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33W6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33W8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "347Z-0",
+   "name": "Inst Top Buy Block",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3480-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3483-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3485-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3488-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "348A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "348D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "348F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2S4G-1",
+   "name": "Flow Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2S4I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2S4K-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "삼성전자 수급": 1,
+  "실시간": 1,
+  "005930 · KOSPI · 장중": 1,
+  "투자자별": 1,
+  "거래원": 2,
+  "프로그램": 1,
+  "신용·대차": 1,
+  "종목 동향": 1,
+  "순위": 1,
+  "오늘 순매수 1위": 1,
+  "외국인": 3,
+  "+1,842억원": 2,
+  "5거래일 연속 순매수 · 09:40 기준": 1,
+  "기관": 3,
+  "-1,204억원": 2,
+  "금융투자 -842억원": 1,
+  "개인": 3,
+  "-638억원": 2,
+  "4거래일 연속 순매도": 1,
+  "프로그램 차익": 1,
+  "+368억원": 2,
+  "비차익 +1,430억원": 1,
+  "거래대금": 1,
+  "2.14조원": 2,
+  "거래량 1,420만주 · 체결강도 108.4": 1,
+  "종목 동향 — 일별 투자자 순매수": 1,
+  "단위 억원 · 최근 5거래일": 1,
+  "외국인 5일 누적": 1,
+  "+3,214억원": 2,
+  "기관 5일 누적": 1,
+  "-1,842억원": 2,
+  "개인 5일 누적": 1,
+  "-1,306억원": 2,
+  "연속 순매수": 1,
+  "외국인 5일": 1,
+  "기간 등락 +2.65%": 1,
+  "일자": 1,
+  "종가": 1,
+  "거래량": 1,
+  "09-01": 2,
+  "150,850": 1,
+  "+1,850 · +1.24%": 1,
+  "1,420만주": 1,
+  "+1,842": 1,
+  "+122.1만주": 1,
+  "-1,204": 1,
+  "-79.8만주": 1,
+  "-638": 1,
+  "08-31": 2,
+  "149,000": 1,
+  "+1,010 · +0.68%": 1,
+  "1,422만주": 1,
+  "2.12조원": 1,
+  "+486": 1,
+  "+32.6만주": 1,
+  "-212": 1,
+  "-14.2만주": 1,
+  "-274": 1,
+  "08-28": 2,
+  "147,990": 1,
+  "-510 · -0.34%": 1,
+  "1,421만주": 1,
+  "2.10조원": 1,
+  "+512": 1,
+  "+34.6만주": 1,
+  "-186": 1,
+  "-12.6만주": 1,
+  "-326": 1,
+  "08-27": 2,
+  "148,500": 1,
+  "+1,550 · +1.05%": 1,
+  "1,354만주": 1,
+  "2.01조원": 1,
+  "+228": 1,
+  "+15.4만주": 1,
+  "-142": 1,
+  "-9.6만주": 1,
+  "-86": 1,
+  "08-26": 2,
+  "146,950": 1,
+  "-412 · -0.28%": 1,
+  "1,389만주": 1,
+  "2.04조원": 1,
+  "+146": 1,
+  "+9.9만주": 1,
+  "-98": 1,
+  "-6.7만주": 1,
+  "+18": 1,
+  "5일 누적: 외국인 +3,214억원 · 기관 -1,842억원 · 개인 -1,306억원": 1,
+  "더보기": 1,
+  "일별 순매수 추이": 1,
+  "확정 4일 기준": 1,
+  "오늘 상위 3": 1,
+  "매수 상위": 1,
+  "모건스탠리": 1,
+  "+842억원": 1,
+  "JP모간": 1,
+  "+516억원": 1,
+  "CS증권": 1,
+  "+308억원": 1,
+  "매도 상위": 1,
+  "키움증권": 1,
+  "-604억원": 1,
+  "미래에셋": 1,
+  "-428억원": 1,
+  "삼성증권": 1,
+  "-312억원": 1,
+  "신용·대차·공매도": 1,
+  "전일 종가 기준": 2,
+  "공매도 비중": 1,
+  "3.42%": 1,
+  "대차잔고": 1,
+  "1,284만주": 1,
+  "신용융자 잔고": 1,
+  "4,208억원": 1,
+  "신용잔고율": 1,
+  "0.86%": 1,
+  "프로그램 매매": 1,
+  "시간대별": 1,
+  "차익 순매수": 1,
+  "비차익 순매수": 1,
+  "+1,430억원": 1,
+  "차익잔고": 1,
+  "8,640억원": 1,
+  "외국인·기관 동향": 1,
+  "보유": 1,
+  "31.29억주": 1,
+  "지분율": 1,
+  "52.41%": 1,
+  "한도 소진": 1,
+  "65.5%": 1,
+  "취득 가능": 1,
+  "16.47억주": 1,
+  "외인 추정평균가": 1,
+  "149,820": 1,
+  "기관 추정평균가": 1,
+  "150,240": 1,
+  "연속 순매매": 1,
+  "외국인 5일 +214.6만주": 1,
+  "기관 5일 -122.9만주": 1,
+  "기관 순매수 상위": 1,
+  "전일": 1,
+  "SK하이닉스": 1,
+  "+204억원": 1,
+  "10.3만주": 1,
+  "KB금융": 1,
+  "+142억원": 1,
+  "18.2만주": 1,
+  "현대차": 1,
+  "+102억원": 1,
+  "4.4만주": 1,
+  "일별 투자자 집계 · 장 마감 후 확정": 1,
+  "수급 전체 항목 보기": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "ec6bd157a7e6f195c450556ab399d1927a506a24b588bd16628ee601cd8905aa"
+}

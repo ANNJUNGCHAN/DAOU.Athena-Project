@@ -1,0 +1,529 @@
+Frame "CC-03 / R01-T6-3 · 순위 — ELW 근접율" (2XY6-0) 1440×1120
+  Frame "Instrument Root · 현재시세" (2XY7-0) 1440×1120
+    Frame "Instrument Card Surface" (2XY8-0) 1360×1040
+      Frame "Instrument Header" (2Y3H-0) 0×86
+        Frame "Frame" (2Y3X-0) 0×0
+          Frame "Frame" (2Y42-0) 0×0
+            Text "ELW 순위" (2Y46-0) 0×0 "ELW 순위"
+            Text "전 종목 · 근접률 순" (2Y45-0) 0×0 "전 종목 · 근접률 순"
+            Frame "Frame" (2Y43-0) 0×0
+              Text "조회 스냅샷" (2Y44-0) 0×0 "조회 스냅샷"
+          Frame "Frame" (2Y3Y-0) 0×0
+            Text "상장 ELW 3,482 종목" (2Y41-0) 0×0 "상장 ELW 3,482 종목"
+            Text "콜 2,146 · 풋 1,336" (2Y40-0) 0×0 "콜 2,146 · 풋 1,336"
+            Text "09:42:18 조회" (2Y3Z-0) 0×0 "09:42:18 조회"
+        Frame "Frame" (2Y3I-0) 0×0
+          Frame "Frame" (2Y3V-0) 0×0
+            Text "현재시세" (2Y3W-0) 0×0 "현재시세"
+          Frame "Frame" (2Y3T-0) 0×0
+            Text "차트" (2Y3U-0) 0×0 "차트"
+          Frame "Frame" (2Y3R-0) 0×0
+            Text "기업정보" (2Y3S-0) 0×0 "기업정보"
+          Frame "Frame" (2Y3P-0) 0×0
+            Text "ETF" (2Y3Q-0) 0×0 "ETF"
+          Frame "Frame" (2Y3N-0) 0×0
+            Text "ELW" (2Y3O-0) 0×0 "ELW"
+          Frame "Frame" (2Y3L-0) 0×0
+            Text "금현물" (2Y3M-0) 0×0 "금현물"
+          Frame "Frame" (2Y3J-0) 0×0
+            Text "순위" (2Y3K-0) 0×0 "순위"
+      Frame "Quote and Valuation Strip" (2Y2X-0) 0×92
+        Frame "Frame" (2Y3E-0) 0×78
+          Text "정렬 기준" (2Y3G-0) 0×0 "정렬 기준"
+          Text "근접률 높은 순" (2Y3F-0) 0×0 "근접률 높은 순"
+        Frame "Frame" (2Y3A-0) 190×78
+          Text "등락률 상위" (2Y3D-0) 0×0 "등락률 상위"
+          Text "+12.16%" (2Y3C-0) 0×0 "+12.16%"
+          Text "장중 갱신 기준" (2Y3B-0) 0×0 "장중 갱신 기준"
+        Frame "Frame" (2Y36-0) 150×78
+          Text "근접률 최고" (2Y39-0) 0×0 "근접률 최고"
+          Text "98.6%" (2Y38-0) 0×0 "98.6%"
+          Text "행사가 대비" (2Y37-0) 0×0 "행사가 대비"
+        Frame "Frame" (2Y32-0) 150×78
+          Text "급등락 감지" (2Y35-0) 0×0 "급등락 감지"
+          Text "12건" (2Y34-0) 0×0 "12건"
+          Text "오늘 누적" (2Y33-0) 0×0 "오늘 누적"
+        Frame "Frame" (2Y2Y-0) 150×78
+          Text "조건검색 저장" (2Y31-0) 0×0 "조건검색 저장"
+          Text "2건" (2Y30-0) 0×0 "2건"
+          Text "저장 조건 기준" (2Y2Z-0) 0×0 "저장 조건 기준"
+      Frame "Chart Workspace" (2XYC-0) 0×822
+        Frame "Quote Detail Mount" (2XZL-0) 1000×822
+          Frame "Frame" (2Y2B-0) 0×40
+            Frame "Frame" (2Y2K-0) 0×0
+              Frame "Frame" (2Y2V-0) 0×0
+                Text "잔량" (2Y2W-0) 0×0 "잔량"
+              Frame "Frame" (2Y2T-0) 0×0
+                Text "등락률" (2Y2U-0) 0×0 "등락률"
+              Frame "Frame" (2Y2R-0) 0×0
+                Text "근접률" (2Y2S-0) 0×0 "근접률"
+              Frame "Frame" (2Y2P-0) 0×0
+                Text "가격급등락" (2Y2Q-0) 0×0 "가격급등락"
+              Frame "Frame" (2Y2N-0) 0×0
+                Text "거래원별 순매매" (2Y2O-0) 0×0 "거래원별 순매매"
+              Frame "Frame" (2Y2L-0) 0×0
+                Text "조건검색" (2Y2M-0) 0×0 "조건검색"
+            Frame "Frame" (2Y2C-0) 0×0
+              Text "범위" (2Y2J-0) 0×0 "범위"
+              Frame "Frame" (2Y2H-0) 0×0
+                Text "주식" (2Y2I-0) 0×0 "주식"
+              Frame "Frame" (2Y2F-0) 0×0
+                Text "ETF" (2Y2G-0) 0×0 "ETF"
+              Frame "Frame" (2Y2D-0) 0×0
+                Text "ELW" (2Y2E-0) 0×0 "ELW"
+            Text "목록 상태" (3LDQ-0) 0×0 "전체 3,482건 · 20건 표시"
+          Frame "근접률 순위 표" (39V5-0) 0×748
+            Frame "헤더" (39V6-0) 0×28
+              Text "순위" (39V7-0) 44×0 "순위"
+              Text "종목 · 코드 · 발행사" (39V8-0) 0×0 "종목 · 코드 · 발행사"
+              Text "현재가 · 전일대비" (39V9-0) 100×0 "현재가 · 전일대비"
+              Text "등락률" (39VA-0) 90×0 "등락률"
+              Text "근접률 · 잔여" (39VB-0) 100×0 "근접률 · 잔여"
+              Text "거래량 · 대금" (39VC-0) 100×0 "거래량 · 대금"
+              Text "잔존일 · 행사가" (39VD-0) 100×0 "잔존일 · 행사가"
+              Text "LP" (39VE-0) 70×0 "LP"
+            Frame "행 1 · KOSPI200 콜" (39VF-0) 0×36
+              Text "1" (39VG-0) 44×0 "1"
+              Frame "Frame" (39VH-0) 0×0
+                Text "KOSPI200 콜" (39VI-0) 0×0 "KOSPI200 콜"
+                Text "58P630 · 한국투자증권 6B44…" (39VJ-0) 0×0 "58P630 · 한국투자증권 6B44회차"
+              Frame "Frame" (39VK-0) 100×0
+                Text "305" (39VL-0) 0×0 "305"
+                Text "▲ +10" (39VM-0) 0×0 "▲ +10"
+              Text "+3.39%" (39VN-0) 90×0 "+3.39%"
+              Frame "Frame" (39VO-0) 100×0
+                Text "98.6%" (39VP-0) 0×0 "98.6%"
+                Text "기초지수 448.62" (39VQ-0) 0×0 "기초지수 448.62"
+              Frame "Frame" (39VR-0) 100×0
+                Text "320만주" (39VS-0) 0×0 "320만주"
+                Text "9.8억원" (39VT-0) 0×0 "9.8억원"
+              Frame "Frame" (39VU-0) 100×0
+                Text "17일" (39VV-0) 0×0 "17일"
+                Text "행사가 442.50" (39VW-0) 0×0 "행사가 442.50"
+              Text "한투" (39VX-0) 70×0 "한투"
+            Frame "행 2 · 카카오 콜" (39VY-0) 0×36
+              Text "2" (39VZ-0) 44×0 "2"
+              Frame "Frame" (39W0-0) 0×0
+                Text "카카오 콜" (39W1-0) 0×0 "카카오 콜"
+                Text "58R210 · KB증권 4H27회차" (39W2-0) 0×0 "58R210 · KB증권 4H27회차"
+              Frame "Frame" (39W3-0) 100×0
+                Text "62" (39W4-0) 0×0 "62"
+                Text "▲ +5" (39W5-0) 0×0 "▲ +5"
+              Text "+8.77%" (39W6-0) 90×0 "+8.77%"
+              Frame "Frame" (39W7-0) 100×0
+                Text "97.3%" (39W8-0) 0×0 "97.3%"
+                Text "잔여 1,150원" (39W9-0) 0×0 "잔여 1,150원"
+              Frame "Frame" (39WA-0) 100×0
+                Text "260만주" (39WB-0) 0×0 "260만주"
+                Text "1.6억원" (39WC-0) 0×0 "1.6억원"
+              Frame "Frame" (39WD-0) 100×0
+                Text "21일" (39WE-0) 0×0 "21일"
+                Text "행사가 43,000" (39WF-0) 0×0 "행사가 43,000"
+              Text "키움" (39WG-0) 70×0 "키움"
+            Frame "행 3 · SK하이닉스 콜" (39WH-0) 0×36
+              Text "3" (39WI-0) 44×0 "3"
+              Frame "Frame" (39WJ-0) 0×0
+                Text "SK하이닉스 콜" (39WK-0) 0×0 "SK하이닉스 콜"
+                Text "58J377 · 미래에셋증권 7K55…" (39WL-0) 0×0 "58J377 · 미래에셋증권 7K55회차"
+              Frame "Frame" (39WM-0) 100×0
+                Text "285" (39WN-0) 0×0 "285"
+                Text "▲ +25" (39WO-0) 0×0 "▲ +25"
+              Text "+9.62%" (39WP-0) 90×0 "+9.62%"
+              Frame "Frame" (39WQ-0) 100×0
+                Text "94.5%" (39WR-0) 0×0 "94.5%"
+                Text "잔여 11,600원" (39WS-0) 0×0 "잔여 11,600원"
+              Frame "Frame" (39WT-0) 100×0
+                Text "540만주" (39WU-0) 0×0 "540만주"
+                Text "15.4억원" (39WV-0) 0×0 "15.4억원"
+              Frame "Frame" (39WW-0) 100×0
+                Text "38일" (39WX-0) 0×0 "38일"
+                Text "행사가 210,000" (39WY-0) 0×0 "행사가 210,000"
+              Text "미래" (39WZ-0) 70×0 "미래"
+            Frame "행 4 · 삼성전자 콜" (39X0-0) 0×36
+              Text "4" (39X1-0) 44×0 "4"
+              Frame "Frame" (39X2-0) 0×0
+                Text "삼성전자 콜" (39X3-0) 0×0 "삼성전자 콜"
+                Text "58H219 · KB증권 9C21회차" (39X4-0) 0×0 "58H219 · KB증권 9C21회차"
+              Frame "Frame" (39X5-0) 100×0
+                Text "415" (39X6-0) 0×0 "415"
+                Text "▲ +45" (39X7-0) 0×0 "▲ +45"
+              Text "+12.16%" (39X8-0) 90×0 "+12.16%"
+              Frame "Frame" (39X9-0) 100×0
+                Text "94.3%" (39XA-0) 0×0 "94.3%"
+                Text "잔여 9,150원" (39XB-0) 0×0 "잔여 9,150원"
+              Frame "Frame" (39XC-0) 100×0
+                Text "620만주" (39XD-0) 0×0 "620만주"
+                Text "25.7억원" (39XE-0) 0×0 "25.7억원"
+              Frame "Frame" (39XF-0) 100×0
+                Text "24일" (39XG-0) 0×0 "24일"
+                Text "행사가 160,000" (39XH-0) 0×0 "행사가 160,000"
+              Text "키움" (39XI-0) 70×0 "키움"
+            Frame "행 5 · 삼성전자 풋" (39Y2-0) 0×36
+              Text "5" (39Y3-0) 44×0 "5"
+              Frame "Frame" (39Y4-0) 0×0
+                Text "삼성전자 풋" (39Y5-0) 0×0 "삼성전자 풋"
+                Text "58L118 · 신한투자증권 5T31…" (39Y6-0) 0×0 "58L118 · 신한투자증권 5T31회차"
+              Frame "Frame" (39Y7-0) 100×0
+                Text "145" (39Y8-0) 0×0 "145"
+                Text "▼ −10" (39Y9-0) 0×0 "▼ −10"
+              Text "−6.45%" (39YA-0) 90×0 "−6.45%"
+              Frame "Frame" (39YB-0) 100×0
+                Text "92.8%" (39YC-0) 0×0 "92.8%"
+                Text "잔여 10,850원" (39YD-0) 0×0 "잔여 10,850원"
+              Frame "Frame" (39YE-0) 100×0
+                Text "420만주" (39YF-0) 0×0 "420만주"
+                Text "6.1억원" (39YG-0) 0×0 "6.1억원"
+              Frame "Frame" (39YH-0) 100×0
+                Text "31일" (39YI-0) 0×0 "31일"
+                Text "행사가 140,000" (39YJ-0) 0×0 "행사가 140,000"
+              Text "신한" (39YK-0) 70×0 "신한"
+            Frame "행 6 · LG에너지솔루션 콜" (39YL-0) 0×36
+              Text "6" (39YM-0) 44×0 "6"
+              Frame "Frame" (39YN-0) 0×0
+                Text "LG에너지솔루션 콜" (39YO-0) 0×0 "LG에너지솔루션 콜"
+                Text "58Q745 · 신한투자증권 9K12…" (39YP-0) 0×0 "58Q745 · 신한투자증권 9K12회차"
+              Frame "Frame" (39YQ-0) 100×0
+                Text "240" (39YR-0) 0×0 "240"
+                Text "▲ +5" (39YS-0) 0×0 "▲ +5"
+              Text "+2.13%" (39YT-0) 90×0 "+2.13%"
+              Frame "Frame" (39YU-0) 100×0
+                Text "91.7%" (39YV-0) 0×0 "91.7%"
+                Text "잔여 35,000원" (39YW-0) 0×0 "잔여 35,000원"
+              Frame "Frame" (39YX-0) 100×0
+                Text "280만주" (39YY-0) 0×0 "280만주"
+                Text "6.7억원" (39YZ-0) 0×0 "6.7억원"
+              Frame "Frame" (39Z0-0) 100×0
+                Text "52일" (39Z1-0) 0×0 "52일"
+                Text "행사가 420,000" (39Z2-0) 0×0 "행사가 420,000"
+              Text "신한" (39Z3-0) 70×0 "신한"
+            Frame "행 7 · POSCO홀딩스 콜" (39Z4-0) 0×36
+              Text "7" (39Z5-0) 44×0 "7"
+              Frame "Frame" (39Z6-0) 0×0
+                Text "POSCO홀딩스 콜" (39Z7-0) 0×0 "POSCO홀딩스 콜"
+                Text "58T933 · 한국투자증권 5N82…" (39Z8-0) 0×0 "58T933 · 한국투자증권 5N82회차"
+              Frame "Frame" (39Z9-0) 100×0
+                Text "96" (39ZA-0) 0×0 "96"
+                Text "▼ −4" (39ZB-0) 0×0 "▼ −4"
+              Text "−4.00%" (39ZC-0) 90×0 "−4.00%"
+              Frame "Frame" (39ZD-0) 100×0
+                Text "90.4%" (39ZE-0) 0×0 "90.4%"
+                Text "잔여 38,000원" (39ZF-0) 0×0 "잔여 38,000원"
+              Frame "Frame" (39ZG-0) 100×0
+                Text "240만주" (39ZH-0) 0×0 "240만주"
+                Text "2.3억원" (39ZI-0) 0×0 "2.3억원"
+              Frame "Frame" (39ZJ-0) 100×0
+                Text "33일" (39ZK-0) 0×0 "33일"
+                Text "행사가 396,000" (39ZL-0) 0×0 "행사가 396,000"
+              Text "한투" (39ZM-0) 70×0 "한투"
+            Frame "행 8 · 이수페타시스 콜" (3KGH-0) 0×36
+              Text "8" (3KGZ-0) 44×0 "8"
+              Frame "Frame" (3KGW-0) 0×0
+                Text "이수페타시스 콜" (3KGY-0) 0×0 "이수페타시스 콜"
+                Text "59F215 · 미래에셋증권 3C41…" (3KGX-0) 0×0 "59F215 · 미래에셋증권 3C41회차"
+              Frame "Frame" (3KGT-0) 100×0
+                Text "96" (3KGV-0) 0×0 "96"
+                Text "▲ +9" (3KGU-0) 0×0 "▲ +9"
+              Text "+10.34%" (3KGS-0) 90×0 "+10.34%"
+              Frame "Frame" (3KGP-0) 100×0
+                Text "89.9%" (3KGR-0) 0×0 "89.9%"
+                Text "잔여 7,200원" (3KGQ-0) 0×0 "잔여 7,200원"
+              Frame "Frame" (3KGM-0) 100×0
+                Text "84만주" (3KGO-0) 0×0 "84만주"
+                Text "0.8억원" (3KGN-0) 0×0 "0.8억원"
+              Frame "Frame" (3KGJ-0) 100×0
+                Text "28일" (3KGL-0) 0×0 "28일"
+                Text "행사가 71,700" (3KGK-0) 0×0 "행사가 71,700"
+              Text "미래" (3KGI-0) 70×0 "미래"
+            Frame "행 9 · 한미반도체 콜" (3KH0-0) 0×36
+              Text "9" (3KHI-0) 44×0 "9"
+              Frame "Frame" (3KHF-0) 0×0
+                Text "한미반도체 콜" (3KHH-0) 0×0 "한미반도체 콜"
+                Text "59G608 · KB증권 8L07회차" (3KHG-0) 0×0 "59G608 · KB증권 8L07회차"
+              Frame "Frame" (3KHC-0) 100×0
+                Text "52" (3KHE-0) 0×0 "52"
+                Text "▲ +4" (3KHD-0) 0×0 "▲ +4"
+              Text "+8.33%" (3KHB-0) 90×0 "+8.33%"
+              Frame "Frame" (3KH8-0) 100×0
+                Text "89.1%" (3KHA-0) 0×0 "89.1%"
+                Text "잔여 24,100원" (3KH9-0) 0×0 "잔여 24,100원"
+              Frame "Frame" (3KH5-0) 100×0
+                Text "78만주" (3KH7-0) 0×0 "78만주"
+                Text "0.4억원" (3KH6-0) 0×0 "0.4억원"
+              Frame "Frame" (3KH2-0) 100×0
+                Text "41일" (3KH4-0) 0×0 "41일"
+                Text "행사가 221,500" (3KH3-0) 0×0 "행사가 221,500"
+              Text "키움" (3KH1-0) 70×0 "키움"
+            Frame "행 10 · 기아 콜" (39XJ-0) 0×36
+              Text "10" (39XK-0) 44×0 "10"
+              Frame "Frame" (39XL-0) 0×0
+                Text "기아 콜" (39XM-0) 0×0 "기아 콜"
+                Text "58S408 · 미래에셋증권 1J60…" (39XN-0) 0×0 "58S408 · 미래에셋증권 1J60회차"
+              Frame "Frame" (39XO-0) 100×0
+                Text "110" (39XP-0) 0×0 "110"
+                Text "▼ −8" (39XQ-0) 0×0 "▼ −8"
+              Text "−6.78%" (39XR-0) 90×0 "−6.78%"
+              Frame "Frame" (39XS-0) 100×0
+                Text "88.8%" (39XT-0) 0×0 "88.8%"
+                Text "잔여 12,600원" (39XU-0) 0×0 "잔여 12,600원"
+              Frame "Frame" (39XV-0) 100×0
+                Text "310만주" (39XW-0) 0×0 "310만주"
+                Text "3.4억원" (39XX-0) 0×0 "3.4억원"
+              Frame "Frame" (39XY-0) 100×0
+                Text "29일" (39XZ-0) 0×0 "29일"
+                Text "행사가 112,000" (39Y0-0) 0×0 "행사가 112,000"
+              Text "미래" (39Y1-0) 70×0 "미래"
+            Frame "행 11 · 현대차 콜" (3KHJ-0) 0×36
+              Text "11" (3KI1-0) 44×0 "11"
+              Frame "Frame" (3KHY-0) 0×0
+                Text "현대차 콜" (3KI0-0) 0×0 "현대차 콜"
+                Text "59H172 · 한국투자증권 5D29…" (3KHZ-0) 0×0 "59H172 · 한국투자증권 5D29회차"
+              Frame "Frame" (3KHV-0) 100×0
+                Text "38" (3KHX-0) 0×0 "38"
+                Text "▲ +2" (3KHW-0) 0×0 "▲ +2"
+              Text "+5.56%" (3KHU-0) 90×0 "+5.56%"
+              Frame "Frame" (3KHR-0) 100×0
+                Text "88.4%" (3KHT-0) 0×0 "88.4%"
+                Text "잔여 30,500원" (3KHS-0) 0×0 "잔여 30,500원"
+              Frame "Frame" (3KHO-0) 100×0
+                Text "71만주" (3KHQ-0) 0×0 "71만주"
+                Text "0.3억원" (3KHP-0) 0×0 "0.3억원"
+              Frame "Frame" (3KHL-0) 100×0
+                Text "36일" (3KHN-0) 0×0 "36일"
+                Text "행사가 263,000" (3KHM-0) 0×0 "행사가 263,000"
+              Text "한투" (3KHK-0) 70×0 "한투"
+            Frame "행 12 · NAVER 콜" (3KI2-0) 0×36
+              Text "12" (3KIK-0) 44×0 "12"
+              Frame "Frame" (3KIH-0) 0×0
+                Text "NAVER 콜" (3KIJ-0) 0×0 "NAVER 콜"
+                Text "59J940 · 신한투자증권 2M63…" (3KII-0) 0×0 "59J940 · 신한투자증권 2M63회차"
+              Frame "Frame" (3KIE-0) 100×0
+                Text "24" (3KIG-0) 0×0 "24"
+                Text "▲ +1" (3KIF-0) 0×0 "▲ +1"
+              Text "+4.35%" (3KID-0) 90×0 "+4.35%"
+              Frame "Frame" (3KIA-0) 100×0
+                Text "87.6%" (3KIC-0) 0×0 "87.6%"
+                Text "잔여 30,300원" (3KIB-0) 0×0 "잔여 30,300원"
+              Frame "Frame" (3KI7-0) 100×0
+                Text "66만주" (3KI9-0) 0×0 "66만주"
+                Text "0.2억원" (3KI8-0) 0×0 "0.2억원"
+              Frame "Frame" (3KI4-0) 100×0
+                Text "47일" (3KI6-0) 0×0 "47일"
+                Text "행사가 244,300" (3KI5-0) 0×0 "행사가 244,300"
+              Text "신한" (3KI3-0) 70×0 "신한"
+            Frame "행 13 · SK하이닉스 풋" (3KIL-0) 0×36
+              Text "13" (3KJ3-0) 44×0 "13"
+              Frame "Frame" (3KJ0-0) 0×0
+                Text "SK하이닉스 풋" (3KJ2-0) 0×0 "SK하이닉스 풋"
+                Text "59K337 · KB증권 7B18회차" (3KJ1-0) 0×0 "59K337 · KB증권 7B18회차"
+              Frame "Frame" (3KIX-0) 100×0
+                Text "61" (3KIZ-0) 0×0 "61"
+                Text "▼ −4" (3KIY-0) 0×0 "▼ −4"
+              Text "−6.15%" (3KIW-0) 90×0 "−6.15%"
+              Frame "Frame" (3KIT-0) 100×0
+                Text "86.9%" (3KIV-0) 0×0 "86.9%"
+                Text "잔여 26,000원" (3KIU-0) 0×0 "잔여 26,000원"
+              Frame "Frame" (3KIQ-0) 100×0
+                Text "61만주" (3KIS-0) 0×0 "61만주"
+                Text "0.4억원" (3KIR-0) 0×0 "0.4억원"
+              Frame "Frame" (3KIN-0) 100×0
+                Text "22일" (3KIP-0) 0×0 "22일"
+                Text "행사가 172,400" (3KIO-0) 0×0 "행사가 172,400"
+              Text "키움" (3KIM-0) 70×0 "키움"
+            Frame "행 14 · KODEX 200 풋" (3KJ4-0) 0×36
+              Text "14" (3KJM-0) 44×0 "14"
+              Frame "Frame" (3KJJ-0) 0×0
+                Text "KODEX 200 풋" (3KJL-0) 0×0 "KODEX 200 풋"
+                Text "59L806 · 미래에셋증권 4F52…" (3KJK-0) 0×0 "59L806 · 미래에셋증권 4F52회차"
+              Frame "Frame" (3KJG-0) 100×0
+                Text "45" (3KJI-0) 0×0 "45"
+                Text "▼ −3" (3KJH-0) 0×0 "▼ −3"
+              Text "−6.25%" (3KJF-0) 90×0 "−6.25%"
+              Frame "Frame" (3KJC-0) 100×0
+                Text "86.1%" (3KJE-0) 0×0 "86.1%"
+                Text "잔여 6,720원" (3KJD-0) 0×0 "잔여 6,720원"
+              Frame "Frame" (3KJ9-0) 100×0
+                Text "57만주" (3KJB-0) 0×0 "57만주"
+                Text "0.3억원" (3KJA-0) 0×0 "0.3억원"
+              Frame "Frame" (3KJ6-0) 100×0
+                Text "39일" (3KJ8-0) 0×0 "39일"
+                Text "행사가 41,640" (3KJ7-0) 0×0 "행사가 41,640"
+              Text "미래" (3KJ5-0) 70×0 "미래"
+            Frame "행 15 · 카카오 풋" (3KJN-0) 0×36
+              Text "15" (3KK5-0) 44×0 "15"
+              Frame "Frame" (3KK2-0) 0×0
+                Text "카카오 풋" (3KK4-0) 0×0 "카카오 풋"
+                Text "59M429 · 한국투자증권 9R84…" (3KK3-0) 0×0 "59M429 · 한국투자증권 9R84회차"
+              Frame "Frame" (3KJZ-0) 100×0
+                Text "33" (3KK1-0) 0×0 "33"
+                Text "▼ −2" (3KK0-0) 0×0 "▼ −2"
+              Text "−5.71%" (3KJY-0) 90×0 "−5.71%"
+              Frame "Frame" (3KJV-0) 100×0
+                Text "85.3%" (3KJX-0) 0×0 "85.3%"
+                Text "잔여 6,150원" (3KJW-0) 0×0 "잔여 6,150원"
+              Frame "Frame" (3KJS-0) 100×0
+                Text "52만주" (3KJU-0) 0×0 "52만주"
+                Text "0.2억원" (3KJT-0) 0×0 "0.2억원"
+              Frame "Frame" (3KJP-0) 100×0
+                Text "31일" (3KJR-0) 0×0 "31일"
+                Text "행사가 35,700" (3KJQ-0) 0×0 "행사가 35,700"
+              Text "한투" (3KJO-0) 70×0 "한투"
+            Frame "행 16 · 삼성전자 콜 59N118" (3KK6-0) 0×36
+              Text "16" (3KKO-0) 44×0 "16"
+              Frame "Frame" (3KKL-0) 0×0
+                Text "삼성전자 콜" (3KKN-0) 0×0 "삼성전자 콜"
+                Text "59N118 · 신한투자증권 6T20…" (3KKM-0) 0×0 "59N118 · 신한투자증권 6T20회차"
+              Frame "Frame" (3KKI-0) 100×0
+                Text "28" (3KKK-0) 0×0 "28"
+                Text "▲ +2" (3KKJ-0) 0×0 "▲ +2"
+              Text "+7.69%" (3KKH-0) 90×0 "+7.69%"
+              Frame "Frame" (3KKE-0) 100×0
+                Text "84.5%" (3KKG-0) 0×0 "84.5%"
+                Text "잔여 27,650원" (3KKF-0) 0×0 "잔여 27,650원"
+              Frame "Frame" (3KKB-0) 100×0
+                Text "48만주" (3KKD-0) 0×0 "48만주"
+                Text "0.1억원" (3KKC-0) 0×0 "0.1억원"
+              Frame "Frame" (3KK8-0) 100×0
+                Text "44일" (3KKA-0) 0×0 "44일"
+                Text "행사가 178,500" (3KK9-0) 0×0 "행사가 178,500"
+              Text "신한" (3KK7-0) 70×0 "신한"
+            Frame "행 17 · 한미반도체 풋" (3KKP-0) 0×36
+              Text "17" (3KL7-0) 44×0 "17"
+              Frame "Frame" (3KL4-0) 0×0
+                Text "한미반도체 풋" (3KL6-0) 0×0 "한미반도체 풋"
+                Text "59P573 · KB증권 1V96회차" (3KL5-0) 0×0 "59P573 · KB증권 1V96회차"
+              Frame "Frame" (3KL1-0) 100×0
+                Text "41" (3KL3-0) 0×0 "41"
+                Text "▼ −3" (3KL2-0) 0×0 "▼ −3"
+              Text "−6.82%" (3KL0-0) 90×0 "−6.82%"
+              Frame "Frame" (3KKX-0) 100×0
+                Text "83.6%" (3KKZ-0) 0×0 "83.6%"
+                Text "잔여 32,400원" (3KKY-0) 0×0 "잔여 32,400원"
+              Frame "Frame" (3KKU-0) 100×0
+                Text "43만주" (3KKW-0) 0×0 "43만주"
+                Text "0.2억원" (3KKV-0) 0×0 "0.2억원"
+              Frame "Frame" (3KKR-0) 100×0
+                Text "25일" (3KKT-0) 0×0 "25일"
+                Text "행사가 165,000" (3KKS-0) 0×0 "행사가 165,000"
+              Text "키움" (3KKQ-0) 70×0 "키움"
+            Frame "행 18 · 현대차 풋" (3KL8-0) 0×36
+              Text "18" (3KLQ-0) 44×0 "18"
+              Frame "Frame" (3KLN-0) 0×0
+                Text "현대차 풋" (3KLP-0) 0×0 "현대차 풋"
+                Text "59Q264 · 미래에셋증권 8W35…" (3KLO-0) 0×0 "59Q264 · 미래에셋증권 8W35회차"
+              Frame "Frame" (3KLK-0) 100×0
+                Text "26" (3KLM-0) 0×0 "26"
+                Text "▼ −2" (3KLL-0) 0×0 "▼ −2"
+              Text "−7.14%" (3KLJ-0) 90×0 "−7.14%"
+              Frame "Frame" (3KLG-0) 100×0
+                Text "82.7%" (3KLI-0) 0×0 "82.7%"
+                Text "잔여 40,200원" (3KLH-0) 0×0 "잔여 40,200원"
+              Frame "Frame" (3KLD-0) 100×0
+                Text "39만주" (3KLF-0) 0×0 "39만주"
+                Text "0.1억원" (3KLE-0) 0×0 "0.1억원"
+              Frame "Frame" (3KLA-0) 100×0
+                Text "33일" (3KLC-0) 0×0 "33일"
+                Text "행사가 192,300" (3KLB-0) 0×0 "행사가 192,300"
+              Text "미래" (3KL9-0) 70×0 "미래"
+            Frame "행 19 · KOSPI200 콜 59R850" (3KLR-0) 0×36
+              Text "19" (3KM9-0) 44×0 "19"
+              Frame "Frame" (3KM6-0) 0×0
+                Text "KOSPI200 콜" (3KM8-0) 0×0 "KOSPI200 콜"
+                Text "59R850 · 한국투자증권 3Y47…" (3KM7-0) 0×0 "59R850 · 한국투자증권 3Y47회차"
+              Frame "Frame" (3KM3-0) 100×0
+                Text "19" (3KM5-0) 0×0 "19"
+                Text "▲ +1" (3KM4-0) 0×0 "▲ +1"
+              Text "+5.56%" (3KM2-0) 90×0 "+5.56%"
+              Frame "Frame" (3KLZ-0) 100×0
+                Text "81.9%" (3KM1-0) 0×0 "81.9%"
+                Text "잔여 98.88p" (3KM0-0) 0×0 "잔여 98.88p"
+              Frame "Frame" (3KLW-0) 100×0
+                Text "34만주" (3KLY-0) 0×0 "34만주"
+                Text "0.1억원" (3KLX-0) 0×0 "0.1억원"
+              Frame "Frame" (3KLT-0) 100×0
+                Text "50일" (3KLV-0) 0×0 "50일"
+                Text "행사가 547.50" (3KLU-0) 0×0 "행사가 547.50"
+              Text "한투" (3KLS-0) 70×0 "한투"
+            Frame "행 20 · NAVER 풋" (3KMA-0) 0×36
+              Text "20" (3KMS-0) 44×0 "20"
+              Frame "Frame" (3KMP-0) 0×0
+                Text "NAVER 풋" (3KMR-0) 0×0 "NAVER 풋"
+                Text "59S391 · 신한투자증권 5H62…" (3KMQ-0) 0×0 "59S391 · 신한투자증권 5H62회차"
+              Frame "Frame" (3KMM-0) 100×0
+                Text "15" (3KMO-0) 0×0 "15"
+                Text "▼ −1" (3KMN-0) 0×0 "▼ −1"
+              Text "−6.25%" (3KML-0) 90×0 "−6.25%"
+              Frame "Frame" (3KMI-0) 100×0
+                Text "80.8%" (3KMK-0) 0×0 "80.8%"
+                Text "잔여 41,100원" (3KMJ-0) 0×0 "잔여 41,100원"
+              Frame "Frame" (3KMF-0) 100×0
+                Text "29만주" (3KMH-0) 0×0 "29만주"
+                Text "0.1억원" (3KMG-0) 0×0 "0.1억원"
+              Frame "Frame" (3KMC-0) 100×0
+                Text "29일" (3KME-0) 0×0 "29일"
+                Text "행사가 172,900" (3KMD-0) 0×0 "행사가 172,900"
+              Text "신한" (3KMB-0) 70×0 "신한"
+        Frame "Instrument Context" (2XYD-0) 360×822
+          Frame "Selected Warrant" (2XYS-0) 312×0
+            Frame "Frame" (2XZF-0) 0×0
+              Frame "Frame" (2XZI-0) 0×0
+                Text "KB 9C21 삼성전자 콜" (2XZK-0) 0×0 "KB 9C21 삼성전자 콜"
+                Text "58H219 · 근접률 4위" (2XZJ-0) 0×0 "58H219 · 근접률 4위"
+              Frame "Frame" (2XZG-0) 0×0
+                Text "4위" (2XZH-0) 0×0 "4위"
+            Frame "Frame" (2XZC-0) 0×0
+              Text "415" (2XZE-0) 0×0 "415"
+              Text "+45 · +12.16%" (2XZD-0) 0×0 "+45 · +12.16%"
+            Rectangle "Rectangle" (2XZB-0) 0×1
+            Frame "Frame" (2XYY-0) 0×0
+              Frame "Frame" (2XZ8-0) 0×0
+                Text "근접률" (2XZA-0) 0×0 "근접률"
+                Text "94.3%" (2XZ9-0) 0×0 "94.3%"
+              Frame "Frame" (2XZ5-0) 0×0
+                Text "행사가" (2XZ7-0) 0×0 "행사가"
+                Text "160,000" (2XZ6-0) 0×0 "160,000"
+              Frame "Frame" (2XZ2-0) 0×0
+                Text "기어링" (2XZ4-0) 0×0 "기어링"
+                Text "18.2배" (2XZ3-0) 0×0 "18.2배"
+              Frame "Frame" (2XYZ-0) 0×0
+                Text "잔존" (2XZ1-0) 0×0 "잔존"
+                Text "24일" (2XZ0-0) 0×0 "24일"
+            Frame "Frame" (2XYT-0) 0×0
+              Frame "Frame" (2XYW-0) 0×34
+                Text "ELW 상세 열기" (2XYX-0) 0×0 "ELW 상세 열기"
+              Frame "Frame" (2XYU-0) 0×34
+                Text "차트 열기" (2XYV-0) 0×0 "차트 열기"
+          Frame "Open Interest Spread" (2XYE-0) 312×0
+            Text "근접 요약" (2XYR-0) 0×0 "근접 요약"
+            Text "95% 이상 2종목 · 평균 잔존 1…" (2XYQ-0) 0×0 "95% 이상 2종목 · 평균 잔존 19일"
+            Frame "Frame" (2XYN-0) 0×8
+              Rectangle "Rectangle" (2XYP-0) 177×8
+              Rectangle "Rectangle" (2XYO-0) 95×8
+            Text "콜 65% · 풋 35%" (2XYM-0) 0×0 "콜 65% · 풋 35%"
+            Rectangle "Rectangle" (2XYL-0) 0×1
+            Frame "Frame" (2XYI-0) 0×0
+              Text "평균 근접률" (2XYK-0) 0×0 "평균 근접률"
+              Text "98.0%" (2XYJ-0) 0×0 "98.0%"
+            Frame "Frame" (2XYF-0) 0×0
+              Text "행사가 도달 임박" (2XYH-0) 0×0 "행사가 도달 임박"
+              Text "1종목" (2XYG-0) 0×0 "1종목"
+          Frame "근접 구간별" (3LFT-0) 312×0
+            Text "근접 구간별" (3LFU-0) 0×0 "근접 구간별"
+            Frame "Frame" (3LFV-0) 0×0
+              Frame "Frame" (3LFW-0) 0×0
+                Text "95% 이상" (3LFX-0) 0×0 "95% 이상"
+                Text "2종목" (3LFY-0) 0×0 "2종목"
+              Frame "Frame" (3LFZ-0) 0×0
+                Text "90 ~ 95%" (3LG0-0) 0×0 "90 ~ 95%"
+                Text "5종목" (3LG1-0) 0×0 "5종목"
+              Frame "Frame" (3LG2-0) 0×0
+                Text "85 ~ 90%" (3LG3-0) 0×0 "85 ~ 90%"
+                Text "8종목" (3LG4-0) 0×0 "8종목"
+              Frame "Frame" (3LG5-0) 0×0
+                Text "80 ~ 85%" (3LG6-0) 0×0 "80 ~ 85%"
+                Text "12종목" (3LG7-0) 0×0 "12종목"
+              Frame "Frame" (3LG8-0) 0×0
+                Text "80% 미만" (3LG9-0) 0×0 "80% 미만"
+                Text "3,455종목" (3LGA-0) 0×0 "3,455종목"
+      Frame "Chart Status Footer" (2XY9-0) 0×40
+        Text "조회 스냅샷" (2XYB-0) 0×0 "조회 스냅샷"
+        Text "마지막 조회 09:42:18" (2XYA-0) 0×0 "마지막 조회 09:42:18"

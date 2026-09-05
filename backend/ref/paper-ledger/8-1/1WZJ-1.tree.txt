@@ -1,0 +1,78 @@
+Frame "06 · 백테스트 — 최적화" (1WZJ-1) 1680×820
+  Frame "타이틀" (1WZK-1) 0×0
+    Text "백테스트 — 파라미터 최적화" (1WZL-1) 0×0 "백테스트 — 파라미터 최적화"
+    Text "그리드·랜덤 서치로 조합을 훑습니다.…" (1WZM-1) 0×0 "그리드·랜덤 서치로 조합을 훑습니다. 가장 좋은 조합이 곧 미래에 좋은 조합은 아닙니다 — 이웃 조합과 성과"
+  Frame "본문 행" (1WZN-1) 0×0
+    Frame "설정" (1WZO-1) 400×0
+      Text "탐색 설정" (1WZP-1) 0×0 "탐색 설정"
+      Frame "Frame" (1WZQ-1) 200×0
+        Frame "Frame" (1WZR-1) 0×0
+          Text "그리드" (1WZS-1) 0×0 "그리드"
+        Frame "Frame" (1WZT-1) 0×0
+          Text "랜덤" (1WZU-1) 0×0 "랜덤"
+      Frame "Frame" (1WZV-1) 0×0
+        Frame "Frame" (1WZW-1) 0×32
+          Text "fast" (1WZX-1) 60×0 "fast"
+          Text "5 → 60 · step 5" (1WZY-1) 0×0 "5 → 60 · step 5"
+          Text "12값" (1WZZ-1) 0×0 "12값"
+        Frame "Frame" (1X00-1) 0×32
+          Text "slow" (1X01-1) 60×0 "slow"
+          Text "20 → 240 · step 10" (1X02-1) 0×0 "20 → 240 · step 10"
+          Text "23값" (1X03-1) 0×0 "23값"
+      Frame "Frame" (1X04-1) 0×0
+        Text "조합 276개 (fast<slow만)…" (1X05-1) 0×0 "조합 276개 (fast<slow만) · 캐시만 사용"
+        Text "예상 ~2초" (1X06-1) 0×0 "예상 ~2초"
+      Frame "Frame" (1X07-1) 0×0
+        Frame "Frame" (1X08-1) 0×0
+          Text "탐색 시작" (1X09-1) 0×0 "탐색 시작"
+        Text "추가 TR 호출 없음 — 캐시 밖 구…" (1X0A-1) 0×0 "추가 TR 호출 없음 — 캐시 밖 구간은 먼저 수집 승인"
+    Frame "히트맵" (1X0B-1) 0×0
+      Frame "Frame" (1X0C-1) 0×0
+        Text "Sharpe 히트맵 — fast × …" (1X0D-1) 0×0 "Sharpe 히트맵 — fast × slow"
+        Frame "Frame" (1X0E-1) 0×0
+          Frame "Frame" (1X0F-1) 0×0
+            Text "과최적화 의심" (1X0G-1) 0×0 "과최적화 의심"
+          Text "최고점이 이웃보다 0.4 이상 튑니다…" (1X0H-1) 0×0 "최고점이 이웃보다 0.4 이상 튑니다 — 넓은 언덕을 고르세요"
+      SVG "SVG" (1X0I-1) 0×0
+        SVGVisualElement "Group" (1X0J-1) 0×0
+          SVGVisualElement "Rect" (1X0K-1) 0×0
+          SVGVisualElement "Rect" (1X0L-1) 0×0
+          SVGVisualElement "Rect" (1X0M-1) 0×0
+          SVGVisualElement "Rect" (1X0N-1) 0×0
+          SVGVisualElement "Rect" (1X0O-1) 0×0
+          SVGVisualElement "Rect" (1X0P-1) 0×0
+          SVGVisualElement "Rect" (1X0Q-1) 0×0
+          SVGVisualElement "Rect" (1X0R-1) 0×0
+          SVGVisualElement "Rect" (1X0S-1) 0×0
+          SVGVisualElement "Rect" (1X0T-1) 0×0
+          SVGVisualElement "Rect" (1X0U-1) 0×0
+          SVGVisualElement "Rect" (1X0V-1) 0×0
+          SVGVisualElement "Rect" (1X0W-1) 0×0
+          SVGVisualElement "Rect" (1X0X-1) 0×0
+          SVGVisualElement "Rect" (1X0Y-1) 0×0
+          SVGVisualElement "Rect" (1X0Z-1) 0×0
+          SVGVisualElement "Rect" (1X10-1) 0×0
+          SVGVisualElement "Rect" (1X11-1) 0×0
+          SVGVisualElement "Rect" (1X12-1) 0×0
+          SVGVisualElement "Rect" (1X13-1) 0×0
+          SVGVisualElement "Rect" (1X14-1) 0×0
+          SVGVisualElement "Rect" (1X15-1) 0×0
+          SVGVisualElement "Rect" (1X16-1) 0×0
+          SVGVisualElement "Rect" (1X17-1) 0×0
+          SVGVisualElement "Rect" (1X18-1) 0×0
+          SVGVisualElement "Rect" (1X19-1) 0×0
+          SVGVisualElement "Rect" (1X1A-1) 0×0
+          SVGVisualElement "Rect" (1X1B-1) 0×0
+          SVGVisualElement "Rect" (1X1C-1) 0×0
+          SVGVisualElement "Rect" (1X1D-1) 0×0
+          SVGVisualElement "Rect" (1X1E-1) 0×0
+        SVGVisualElement "240" (1X1F-1) 0×0
+        SVGVisualElement "120" (1X1G-1) 0×0
+        SVGVisualElement "40" (1X1H-1) 0×0
+        SVGVisualElement "5" (1X1I-1) 0×0
+        SVGVisualElement "25" (1X1J-1) 0×0
+        SVGVisualElement "60" (1X1K-1) 0×0
+        SVGVisualElement "최고 Sharpe 1.31 (fast…" (1X1L-1) 0×0
+        SVGVisualElement "이웃 평균 0.72 — 급락. 외딴 …" (1X1M-1) 0×0
+        SVGVisualElement "넓은 언덕: fast 20-30 · …" (1X1N-1) 0×0
+        SVGVisualElement "→ 권장은 봉우리가 아니라 언덕의 중…" (1X1O-1) 0×0

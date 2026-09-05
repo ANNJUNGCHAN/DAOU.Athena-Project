@@ -1,0 +1,239 @@
+{
+ "board_id": "46DE-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46E1-0",
+   "text": "",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46E0-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46DY-0",
+   "text": "삼성전자 10주 시장가 매도",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Header"
+   ]
+  },
+  {
+   "id": "46DV-0",
+   "text": "주문을 확인했어요",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Body",
+    "Status"
+   ]
+  },
+  {
+   "id": "46DT-0",
+   "text": "종목",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46DS-0",
+   "text": "삼성전자 / 005930",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46DQ-0",
+   "text": "유형",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46DP-0",
+   "text": "매도",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46DM-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46DL-0",
+   "text": "10주",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46DJ-0",
+   "text": "가격",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46DI-0",
+   "text": "150,840원",
+   "path": [
+    "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46DE-0",
+   "name": "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46DX-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46DZ-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46DF-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46DU-0",
+   "name": "Status",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46DW-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 3
+  },
+  {
+   "id": "46DN-0",
+   "name": "Confirm facts",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46DR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46DO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46DG-0",
+   "name": "Confirm values",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46DK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46DH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "삼성전자 10주 시장가 매도": 1,
+  "주문을 확인했어요": 1,
+  "종목": 1,
+  "삼성전자 / 005930": 1,
+  "유형": 1,
+  "매도": 1,
+  "수량": 1,
+  "10주": 1,
+  "가격": 1,
+  "150,840원": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a6d594795d119c6a61f2e8c19b4f42daa7551952ccee3764f53985fe5734ac31"
+}

@@ -1,0 +1,92 @@
+{
+ "board_id": "49BR-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "49BT-0",
+   "text": "원본 보드: CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+   "path": [
+    "note/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49BV-0",
+   "text": "가져온 요소: 계좌번호 · 추정자산 · 수익률 · d+2출금가능… · 출금가능금액",
+   "path": [
+    "note/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49BX-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49BZ-0",
+   "text": "접은 개수: 스칼라 2개 · 행 5개",
+   "path": [
+    "note/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "49BR-0",
+   "name": "note/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "49BS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49BU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49BW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49BY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-01 / R10-T2-X1 · 증거금·보증금 구간별": 1,
+  "가져온 요소: 계좌번호 · 추정자산 · 수익률 · d+2출금가능… · 출금가능금액": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 5개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "09ca22042aa462081779c51b4c8c0d397276cc73e94e41f92fdc51c0b703b288"
+}

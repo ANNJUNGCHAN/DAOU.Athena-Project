@@ -1,0 +1,297 @@
+Frame "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률" (2SRV-1) 1440×1090
+  Frame "Account Root · 손익·성과" (2SRW-1) 1440×0
+    Frame "Account Card Surface" (2SRX-1) 1360×0
+      Frame "Account Header" (2SW6-1) 0×106
+        Frame "Frame" (2SWM-1) 0×0
+          Frame "Frame" (2SWO-1) 0×0
+            Text "내 계좌" (2SWR-1) 0×0 "내 계좌"
+            Frame "Frame" (2SWP-1) 0×0
+              Text "실시간" (2SWQ-1) 0×0 "실시간"
+          Text "키움증권 종합계좌 ****4721 ·…" (2SWN-1) 0×0 "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18"
+        Frame "Frame" (2SW7-1) 0×0
+          Frame "Frame" (2SWK-1) 0×0
+            Text "자산 종합" (2SWL-1) 0×0 "자산 종합"
+          Frame "Frame" (2SWI-1) 0×0
+            Text "보유종목" (2SWJ-1) 0×0 "보유종목"
+          Frame "Frame" (2SWG-1) 0×0
+            Text "예수금·결제" (2SWH-1) 0×0 "예수금·결제"
+          Frame "Frame" (2SWE-1) 0×0
+            Text "손익·성과" (2SWF-1) 0×0 "손익·성과"
+          Frame "Frame" (2SWC-1) 0×0
+            Text "주문·체결" (2SWD-1) 0×0 "주문·체결"
+          Frame "Frame" (2SWA-1) 0×0
+            Text "증거금·담보" (2SWB-1) 0×0 "증거금·담보"
+          Frame "Frame" (2SW8-1) 0×0
+            Text "금현물" (2SW9-1) 0×0 "금현물"
+      Frame "Account Summary Strip" (2SVL-1) 0×116
+        Frame "Frame" (2SW2-1) 340×78
+          Text "총자산" (2SW5-1) 0×0 "총자산"
+          Text "raw|ka01690|body|tot_evlt_amt" (2SW4-1) 0×0 "124,580,240원"
+          Text "raw|ka01690|body|tot_prft_rt" (2SW3-1) 0×0 "수익률 +4.96%"
+        Frame "Frame" (2SVY-1) 265×78
+          Text "주문가능금액" (2SW1-1) 0×0 "주문가능금액"
+          Text "raw|kt00001|body|d2_pymn_alow_amt" (2SW0-1) 0×0 "31,240,000원"
+          Text "raw|kt00005|body|pymn_alow_amt" (2SVZ-1) 0×0 "출금가능 28,940,000원"
+        Frame "Frame" (2SVU-1) 245×78
+          Text "주식 평가액" (2SVX-1) 0×0 "주식 평가액"
+          Text "raw|kt00004|body|aset_evlt_amt" (2SVW-1) 0×0 "89,760,240원"
+          Text "structure|kt00004|stk_acnt_evlt_prst|count" (2SVV-1) 0×0 "8종목"
+        Frame "Frame" (2SVQ-1) 245×78
+          Text "평가손익" (2SVT-1) 0×0 "평가손익"
+          Text "raw|ka01690|body|tot_evltv_prft" (2SVS-1) 0×0 "+4,240,900원"
+          Text "raw|ka01690|body|tot_prft_rt" (2SVR-1) 0×0 "매입 85,519,340원"
+        Frame "Frame" (2SVM-1) 0×78
+          Text "현금 비중" (2SVP-1) 0×0 "현금 비중"
+          Text "raw|ka01690|body|buy_wght" (2SVO-1) 0×0 "28.0%"
+          Text "보유종목 8종" (2SVN-1) 0×0 "보유종목 8종"
+      Frame "Account Workspace" (2SS1-1) 0×0
+        Frame "Realized PL Column" (3IFY-0) 900×0
+          Frame "Section Title" (3IFZ-0) 0×0
+            Text "실현손익" (3IG0-0) 0×0 "실현손익"
+            Text "매도 확정 기준 · 세후" (3IG1-0) 0×0 "매도 확정 기준 · 세후"
+          Frame "Realized KPI Row" (3IG2-0) 0×0
+            Frame "Frame" (3IG3-0) 0×0
+              Text "당일 실현손익" (3IG4-0) 0×0 "당일 실현손익"
+              Text "+1,082,400" (3IG5-0) 0×0 "+1,082,400"
+              Text "당일 투자원금 11,839,000원" (3IG6-0) 0×0 "당일 투자원금 11,839,000원"
+            Frame "Frame" (3IG7-0) 0×0
+              Text "이번 달 누적" (3IG8-0) 0×0 "이번 달 누적"
+              Text "+1,082,400" (3IG9-0) 0×0 "+1,082,400"
+              Text "원금 1억 1,975만 · +0.90…" (3IGA-0) 0×0 "원금 1억 1,975만 · +0.90%"
+            Frame "Frame" (3IGB-0) 0×0
+              Text "올해 누적" (3IGC-0) 0×0 "올해 누적"
+              Text "+8,899,520" (3IGD-0) 0×0 "+8,899,520"
+              Text "원금 1억 1,200만 · +7.95…" (3IGE-0) 0×0 "원금 1억 1,200만 · +7.95%"
+            Frame "Frame" (3IGF-0) 0×0
+              Text "당일 수수료·세금" (3IGG-0) 0×0 "당일 수수료·세금"
+              Text "-24,600" (3IGH-0) 0×0 "-24,600"
+              Text "수수료 -3,880·세금 -20,72…" (3IGI-0) 0×0 "수수료 -3,880·세금 -20,720"
+          Frame "Table Head" (3IGJ-0) 0×40
+            Text "일자" (3IGK-0) 55×0 "일자"
+            Text "매도 종목" (3IGL-0) 156×0 "매도 종목"
+            Text "실현손익" (3IGM-0) 136×0 "실현손익"
+            Text "수익률" (3IGN-0) 63×0 "수익률"
+            Text "수수료" (3IGO-0) 205×0 "수수료"
+            Text "세금" (3IGP-0) 228×0 "세금"
+          Frame "Row 09/01 KODEX 200 외 1건" (3JDD-0) 0×56
+            Frame "Frame" (3JDE-0) 55×0
+              Text "09/01" (3JDF-0) 0×0 "09/01"
+            Frame "Frame" (3JDG-0) 156×0
+              Text "KODEX 200 외 1건" (3JDH-0) 0×0 "KODEX 200 외 1건"
+              Frame "Frame" (3JDI-0) 0×0
+                Text "069500 · 035420" (3JDJ-0) 0×0 "069500 · 035420"
+                Frame "Frame" (3JDK-0) 0×0
+                  Text "현금" (3JDL-0) 0×0 "현금"
+            Frame "Frame" (3JDN-0) 136×0
+              Text "+1,082,400" (3JDO-0) 0×0 "+1,082,400"
+              Text "매도손익 +1,107,000" (3JDP-0) 0×0 "매도손익 +1,107,000"
+            Frame "Frame" (3JDQ-0) 63×0
+              Text "+9.14%" (3JDR-0) 0×0 "+9.14%"
+            Frame "Frame" (3JDS-0) 205×0
+              Text "-3,880" (3JDT-0) 0×0 "-3,880"
+              Text "HTS 매도 -3,110 · 매수 -…" (3JDU-0) 0×0 "HTS 매도 -3,110 · 매수 -770"
+            Frame "Frame" (3JDV-0) 228×0
+              Text "-20,720" (3JDW-0) 0×0 "-20,720"
+              Text "거래세 -5,180 · 농특세 -15…" (3JDX-0) 0×0 "거래세 -5,180 · 농특세 -15,540"
+          Frame "Row 08/28 NAVER" (3JDY-0) 0×56
+            Frame "Frame" (3JDZ-0) 55×0
+              Text "08/28" (3JE0-0) 0×0 "08/28"
+            Frame "Frame" (3JE1-0) 156×0
+              Text "NAVER" (3JE2-0) 0×0 "NAVER"
+              Frame "Frame" (3JE3-0) 0×0
+                Text "035420" (3JE4-0) 0×0 "035420"
+                Frame "Frame" (3JE5-0) 0×0
+                  Text "현금" (3JE6-0) 0×0 "현금"
+            Frame "Frame" (3JE8-0) 136×0
+              Text "-132,300" (3JE9-0) 0×0 "-132,300"
+              Text "매도손익 -108,000" (3JEA-0) 0×0 "매도손익 -108,000"
+            Frame "Frame" (3JEB-0) 63×0
+              Text "-0.99%" (3JEC-0) 0×0 "-0.99%"
+            Frame "Frame" (3JED-0) 205×0
+              Text "-3,170" (3JEE-0) 0×0 "-3,170"
+              Text "HTS 매도 -3,170" (3JEF-0) 0×0 "HTS 매도 -3,170"
+            Frame "Frame" (3JEG-0) 228×0
+              Text "-21,130" (3JEH-0) 0×0 "-21,130"
+              Text "거래세 -5,280 · 농특세 -15…" (3JEI-0) 0×0 "거래세 -5,280 · 농특세 -15,850"
+          Frame "Row 08/27 SK하이닉스" (3JEJ-0) 0×56
+            Frame "Frame" (3JEK-0) 55×0
+              Text "08/27" (3JEL-0) 0×0 "08/27"
+            Frame "Frame" (3JEM-0) 156×0
+              Text "SK하이닉스" (3JEN-0) 0×0 "SK하이닉스"
+              Frame "Frame" (3JEO-0) 0×0
+                Text "000660" (3JEP-0) 0×0 "000660"
+                Frame "Frame" (3JEQ-0) 0×0
+                  Text "현금" (3JER-0) 0×0 "현금"
+            Frame "Frame" (3JET-0) 136×0
+              Text "+413,380" (3JEU-0) 0×0 "+413,380"
+              Text "매도손익 +450,000" (3JEV-0) 0×0 "매도손익 +450,000"
+            Frame "Frame" (3JEW-0) 63×0
+              Text "+2.13%" (3JEX-0) 0×0 "+2.13%"
+            Frame "Frame" (3JEY-0) 205×0
+              Text "-4,780" (3JEZ-0) 0×0 "-4,780"
+              Text "HTS 매도 -4,780" (3JF0-0) 0×0 "HTS 매도 -4,780"
+            Frame "Frame" (3JF1-0) 228×0
+              Text "-31,840" (3JF2-0) 0×0 "-31,840"
+              Text "거래세 -7,960 · 농특세 -23…" (3JF3-0) 0×0 "거래세 -7,960 · 농특세 -23,880"
+          Frame "Row 08/26 삼성전자" (3JF4-0) 0×56
+            Frame "Frame" (3JF5-0) 55×0
+              Text "08/26" (3JF6-0) 0×0 "08/26"
+            Frame "Frame" (3JF7-0) 156×0
+              Text "삼성전자" (3JF8-0) 0×0 "삼성전자"
+              Frame "Frame" (3JF9-0) 0×0
+                Text "005930" (3JFA-0) 0×0 "005930"
+                Frame "Frame" (3JFB-0) 0×0
+                  Text "현금" (3JFC-0) 0×0 "현금"
+            Frame "Frame" (3JFE-0) 136×0
+              Text "+582,590" (3JFF-0) 0×0 "+582,590"
+              Text "매도손익 +648,600" (3JFG-0) 0×0 "매도손익 +648,600"
+            Frame "Frame" (3JFH-0) 63×0
+              Text "+1.65%" (3JFI-0) 0×0 "+1.65%"
+            Frame "Frame" (3JFJ-0) 205×0
+              Text "-8,610" (3JFK-0) 0×0 "-8,610"
+              Text "HTS 매도 -8,610" (3JFL-0) 0×0 "HTS 매도 -8,610"
+            Frame "Frame" (3JFM-0) 228×0
+              Text "-57,400" (3JFN-0) 0×0 "-57,400"
+              Text "거래세 -14,350 · 농특세 -4…" (3JFO-0) 0×0 "거래세 -14,350 · 농특세 -43,050"
+          Frame "Row 08/26 현대차" (3JGA-0) 0×56
+            Frame "Frame" (3JGB-0) 55×0
+              Text "08/26" (3JGC-0) 0×0 "08/26"
+            Frame "Frame" (3JGD-0) 156×0
+              Text "현대차" (3JGE-0) 0×0 "현대차"
+              Frame "Frame" (3JGF-0) 0×0
+                Text "005380" (3JGG-0) 0×0 "005380"
+                Frame "Frame" (3JGH-0) 0×0
+                  Text "현금" (3JGI-0) 0×0 "현금"
+            Frame "Frame" (3JGK-0) 136×0
+              Text "+600,580" (3JGL-0) 0×0 "+600,580"
+              Text "매도손익 +639,000" (3JGM-0) 0×0 "매도손익 +639,000"
+            Frame "Frame" (3JGN-0) 63×0
+              Text "+2.97%" (3JGO-0) 0×0 "+2.97%"
+            Frame "Frame" (3JGP-0) 205×0
+              Text "-5,010" (3JGQ-0) 0×0 "-5,010"
+              Text "HTS 매도 -5,010" (3JGR-0) 0×0 "HTS 매도 -5,010"
+            Frame "Frame" (3JGS-0) 228×0
+              Text "-33,410" (3JGT-0) 0×0 "-33,410"
+              Text "거래세 -8,350 · 농특세 -25…" (3JGU-0) 0×0 "거래세 -8,350 · 농특세 -25,060"
+          Frame "Row 08/25 삼성전자" (3JGV-0) 0×56
+            Frame "Frame" (3JGW-0) 55×0
+              Text "08/25" (3JGX-0) 0×0 "08/25"
+            Frame "Frame" (3JGY-0) 156×0
+              Text "삼성전자" (3JGZ-0) 0×0 "삼성전자"
+              Frame "Frame" (3JH0-0) 0×0
+                Text "005930" (3JH1-0) 0×0 "005930"
+                Frame "Frame" (3JH2-0) 0×0
+                  Text "현금" (3JH3-0) 0×0 "현금"
+            Frame "Frame" (3JH5-0) 136×0
+              Text "+212,370" (3JH6-0) 0×0 "+212,370"
+              Text "매도손익 +240,000" (3JH7-0) 0×0 "매도손익 +240,000"
+            Frame "Frame" (3JH8-0) 63×0
+              Text "+1.44%" (3JH9-0) 0×0 "+1.44%"
+            Frame "Frame" (3JHA-0) 205×0
+              Text "-3,600" (3JHB-0) 0×0 "-3,600"
+              Text "HTS 매도 -3,600" (3JHC-0) 0×0 "HTS 매도 -3,600"
+            Frame "Frame" (3JHD-0) 228×0
+              Text "-24,030" (3JHE-0) 0×0 "-24,030"
+              Text "거래세 -6,010 · 농특세 -18…" (3JHF-0) 0×0 "거래세 -6,010 · 농특세 -18,020"
+          Frame "Row 08/21 KODEX 200" (3JHG-0) 0×56
+            Frame "Frame" (3JHH-0) 55×0
+              Text "08/21" (3JHI-0) 0×0 "08/21"
+            Frame "Frame" (3JHJ-0) 156×0
+              Text "KODEX 200" (3JHK-0) 0×0 "KODEX 200"
+              Frame "Frame" (3JHL-0) 0×0
+                Text "069500" (3JHM-0) 0×0 "069500"
+                Frame "Frame" (3JHN-0) 0×0
+                  Text "현금" (3JHO-0) 0×0 "현금"
+            Frame "Frame" (3JHQ-0) 136×0
+              Text "-50,500" (3JHR-0) 0×0 "-50,500"
+              Text "매도손익 -24,000" (3JHS-0) 0×0 "매도손익 -24,000"
+            Frame "Frame" (3JHT-0) 63×0
+              Text "-0.35%" (3JHU-0) 0×0 "-0.35%"
+            Frame "Frame" (3JHV-0) 205×0
+              Text "-3,460" (3JHW-0) 0×0 "-3,460"
+              Text "HTS 매도 -3,460" (3JHX-0) 0×0 "HTS 매도 -3,460"
+            Frame "Frame" (3JHY-0) 228×0
+              Text "-23,040" (3JHZ-0) 0×0 "-23,040"
+              Text "거래세 -5,760 · 농특세 -17…" (3JI0-0) 0×0 "거래세 -5,760 · 농특세 -17,280"
+          Frame "Table Foot" (3JI1-0) 0×0
+            Text "최근 7건 표시 · 표시 합 +2,7…" (3JI2-0) 0×0 "최근 7건 표시 · 표시 합 +2,708,520원 · 대출일 해당 없음"
+            Text "매도수수료 0.024% · 거래세 0…" (3JI3-0) 0×0 "매도수수료 0.024% · 거래세 0.04% · 농특세 0.12% · 매수수수료 0.02%"
+        Frame "Performance Rail" (3UGS-0) 460×0
+          Frame "성과 요약" (3UGT-0) 0×0
+            Frame "Frame" (3UGU-0) 0×0
+              Text "성과 요약" (3UGV-0) 0×0 "성과 요약"
+              Text "실현 + 평가" (3UGW-0) 0×0 "실현 + 평가"
+            Frame "평가손익" (3UGX-0) 0×32
+              Text "평가손익 (미실현)" (3UGY-0) 0×0 "평가손익 (미실현)"
+              Text "+4,240,900원" (3UGZ-0) 0×0 "+4,240,900원"
+            Frame "최근 5일 승률" (3UH0-0) 0×32
+              Text "최근 5일 승률" (3UH1-0) 0×0 "최근 5일 승률"
+              Text "4승 1패" (3UH2-0) 0×0 "4승 1패"
+            Frame "투자원금 평잔" (3UH3-0) 0×32
+              Text "투자원금 평잔" (3UH4-0) 0×0 "투자원금 평잔"
+              Text "1억 1,975만원" (3UH5-0) 0×0 "1억 1,975만원"
+            Frame "회전율" (3UH6-0) 0×32
+              Text "회전율" (3UH7-0) 0×0 "회전율"
+              Text "14.0%" (3UH8-0) 0×0 "14.0%"
+            Frame "영값 묶음" (3UH9-0) 0×32
+              Text "기간 총입고·총출고·위탁대용 매도·선…" (3UHA-0) 0×0 "기간 총입고·총출고·위탁대용 매도·선물대용 매도"
+              Frame "Frame" (3UHB-0) 0×0
+                Text "0원 4항목" (3UHC-0) 0×0 "0원 4항목"
+                Text "▸" (3UHD-0) 0×0 "▸"
+          Frame "오늘 실현 상세" (3UHE-0) 0×0
+            Frame "Frame" (3UHF-0) 0×0
+              Text "오늘 실현 상세" (3UHG-0) 0×0 "오늘 실현 상세"
+              Text "09월 01일" (3UHH-0) 0×0 "09월 01일"
+            Frame "KODEX 200" (3UHI-0) 0×32
+              Frame "Frame" (3UHJ-0) 0×0
+                Text "KODEX 200" (3UHK-0) 0×0 "KODEX 200"
+                Text "+1,135,000" (3UHL-0) 0×0 "+1,135,000"
+              Frame "Frame" (3UHM-0) 0×0
+                Text "250주 · 매입 43,820 → 4…" (3UHN-0) 0×0 "250주 · 매입 43,820 → 48,360"
+            Frame "NAVER" (3UHO-0) 0×32
+              Frame "Frame" (3UHP-0) 0×0
+                Text "NAVER" (3UHQ-0) 0×0 "NAVER"
+                Text "-28,000" (3UHR-0) 0×0 "-28,000"
+              Frame "Frame" (3UHS-0) 0×0
+                Text "4주 · 매입 221,000 → 21…" (3UHT-0) 0×0 "4주 · 매입 221,000 → 214,000"
+            Frame "매매 비용" (3UHU-0) 0×32
+              Text "매매 비용" (3UHV-0) 0×0 "매매 비용"
+              Text "-24,600" (3UHW-0) 0×0 "-24,600"
+            Frame "실현 합계" (3UHX-0) 0×32
+              Text "실현 합계" (3UHY-0) 0×0 "실현 합계"
+              Text "+1,082,400원" (3UHZ-0) 0×0 "+1,082,400원"
+          Frame "오늘 매매일지" (3UI0-0) 0×0
+            Frame "Frame" (3UI1-0) 0×0
+              Text "오늘 매매일지" (3UI2-0) 0×0 "오늘 매매일지"
+              Text "약정 16,788,000원" (3UI3-0) 0×0 "약정 16,788,000원"
+            Frame "매수 금액" (3UI4-0) 0×32
+              Text "매수 금액" (3UI5-0) 0×0 "매수 금액"
+              Text "3,842,000원" (3UI6-0) 0×0 "3,842,000원"
+            Frame "매도 금액" (3UI7-0) 0×32
+              Text "매도 금액" (3UI8-0) 0×0 "매도 금액"
+              Text "12,946,000원" (3UI9-0) 0×0 "12,946,000원"
+            Frame "매매 비용" (3UIA-0) 0×32
+              Text "매매 비용" (3UIB-0) 0×0 "매매 비용"
+              Text "-24,600원" (3UIC-0) 0×0 "-24,600원"
+            Frame "순손익" (3UID-0) 0×32
+              Text "순손익" (3UIE-0) 0×0 "순손익"
+              Text "+1,082,400원" (3UIF-0) 0×0 "+1,082,400원"
+          Frame "이달 잔고 증감" (3UIG-0) 0×0
+            Frame "Frame" (3UIH-0) 0×0
+              Text "이달 잔고 증감" (3UII-0) 0×0 "이달 잔고 증감"
+              Text "08/01 → 09/01" (3UIJ-0) 0×0 "08/01 → 09/01"
+            Frame "자산" (3UIK-0) 0×32
+              Text "자산" (3UIL-0) 0×0 "자산"
+              Frame "Frame" (3UIM-0) 0×0
+                Text "1억 1,975만 → 1억 2,458…" (3UIN-0) 0×0 "1억 1,975만 → 1억 2,458만 (+483만)"
+                Text "▸" (3UIO-0) 0×0 "▸"
+            Frame "부채" (3UIP-0) 0×32
+              Text "부채" (3UIQ-0) 0×0 "부채"
+              Frame "Frame" (3UIR-0) 0×0
+                Text "0원 → 0원" (3UIS-0) 0×0 "0원 → 0원"
+                Text "▸" (3UIT-0) 0×0 "▸"
+      Frame "Account Status Footer" (3B49-0) 0×64
+        Text "● 손익·성과 장 마감 후 확정" (3B4A-0) 0×0 "● 손익·성과 장 마감 후 확정"
+        Frame "Frame" (3B4B-0) 0×0
+          Text "영업부 · 담당자 미제공" (3B4C-0) 0×0 "영업부 · 담당자 미제공"
+          Text "손익 전체 내역 보기" (3B4D-0) 0×0 "손익 전체 내역 보기"

@@ -1,0 +1,96 @@
+Frame "13 · 설정 — 셸 오버레이" (AJ-0) 1680×900
+  Frame "Shell 창 · 설정 모드 (#settings)" (AK-0) 1520×760
+    Frame "settings-head" (AU-0) 1478×32
+      Text "settings-title" (AV-0) 29×18 "설정"
+      Text "settings-hint" (AW-0) 261×16 "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기"
+    Frame "settings-body" (AX-0) 1478×662
+      Frame "settings-nav" (AY-0) 236×662
+        Frame "nav-item is-selected" (B1-0) 218×40
+          Text "화면" (B2-0) 26×16 "화면"
+        Frame "nav-item" (B3-0) 218×40
+          Text "계좌" (B4-0) 26×16 "계좌"
+          Text "2개" (B5-0) 18×14 "2개"
+        Frame "nav-item" (B9-0) 218×40
+          Text "모델" (BA-0) 26×16 "모델"
+        Frame "nav-item" (BB-0) 218×40
+          Text "성향・이력" (BC-0) 65×16 "성향・이력"
+      Frame "settings-grid" (AZ-0) 1226×662
+        Frame "카드 · 화면 (.card.screen)" (BE-0) 1226×662
+          Frame "card-head" (BF-0) 1224×44
+            Frame "uk-settings-title" (BG-0) 225×19
+              Text "화면" (BH-0) 28×18 "화면"
+              Text "두 영역과 카드에 함께 적용된다" (BI-0) 185×16 "두 영역과 카드에 함께 적용된다"
+            Frame "uk-card-close" (BJ-0) 22×22
+              SVG "SVG" (BK-0) 9×9
+                SVGVisualElement "Path" (BL-0) 8×8
+          Frame "card-body · 내용 초과 시 세로 스크롤" (BM-0) 1224×616
+            Frame "uk-toggle-row · 자동 캔버스" (BO-0) 1188×57
+              Frame "Frame" (BP-0) 211×18
+                Text "질의하면 캔버스를 자동으로 연다" (BQ-0) 211×18 "질의하면 캔버스를 자동으로 연다"
+              Frame "uk-toggle is-on" (BS-0) 44×24
+                Rectangle "Rectangle" (BT-0) 18×18
+            Frame "uk-toggle-row · 자동 성장" (BU-0) 1188×57
+              Frame "Frame" (BV-0) 221×18
+                Text "답변 길이에 따라 대화 열이 자란다" (BW-0) 221×18 "답변 길이에 따라 대화 열이 자란다"
+              Frame "uk-toggle" (BY-0) 44×24
+                Rectangle "Rectangle" (BZ-0) 18×18
+            Frame "uk-toggle-row · 글자 크기 5단" (C1-0) 1188×63
+              Frame "Frame" (C2-0) 61×18
+                Text "글자 크기" (C3-0) 61×18 "글자 크기"
+              Frame "uk-chip-row" (C5-0) 316×30
+                Frame "Frame" (C6-0) 79×30
+                  Text "매우 작음" (C7-0) 53×16 "매우 작음"
+                Frame "Frame" (C8-0) 50×30
+                  Text "작음" (C9-0) 24×16 "작음"
+                Frame "is-pressed" (CA-0) 50×30
+                  Text "보통" (CB-0) 24×16 "보통"
+                Frame "Frame" (CC-0) 38×30
+                  Text "큼" (CD-0) 12×16 "큼"
+                Frame "Frame" (CE-0) 67×30
+                  Text "매우 큼" (CF-0) 41×16 "매우 큼"
+            Frame "uk-toggle-row · 글자 크기 5단" (CH-0) 1188×63
+              Frame "Frame" (CT-0) 75×18
+                Text "유리 투명도" (CV-0) 75×18 "유리 투명도"
+              Frame "uk-chip-row" (CI-0) 364×30
+                Frame "Frame" (CR-0) 79×30
+                  Text "가장 투명" (CS-0) 53×16 "가장 투명"
+                Frame "Frame" (CP-0) 50×30
+                  Text "투명" (CQ-0) 24×16 "투명"
+                Frame "is-pressed" (CN-0) 50×30
+                  Text "중간" (CO-0) 24×16 "중간"
+                Frame "Frame" (CL-0) 62×30
+                  Text "불투명" (CM-0) 36×16 "불투명"
+                Frame "Frame" (CJ-0) 91×30
+                  Text "가장 불투명" (CK-0) 65×16 "가장 불투명"
+            Frame "uk-toggle-row · UI 배율" (CW-0) 1188×63
+              Frame "Frame" (CX-0) 47×18
+                Text "UI 배율" (CY-0) 47×18 "UI 배율"
+              Frame "uk-zoom-controls" (D0-0) 137×30
+                Frame "Frame" (D1-0) 37×30
+                  Text "−" (D2-0) 7×14 "−"
+                Text "100%" (D3-0) 42×16 "100%"
+                Frame "Frame" (D4-0) 38×30
+                  Text "+" (D5-0) 8×14 "+"
+            Frame "uk-a11y-status" (D9-0) 1188×106
+              Text "uk-field-label" (DA-0) 1188×16 "접근성 — 이 컴퓨터의 OS 설정을 따른다"
+              Frame "uk-a11y-row" (DB-0) 1188×16
+                Rectangle "Rectangle" (DC-0) 7×7
+                Text "투명도 감소" (DD-0) 1137×16 "투명도 감소"
+                Text "꺼짐" (DE-0) 24×16 "꺼짐"
+              Frame "uk-a11y-row" (DF-0) 1188×16
+                Rectangle "Rectangle" (DG-0) 7×7
+                Text "고대비" (DH-0) 1137×16 "고대비"
+                Text "꺼짐" (DI-0) 24×16 "꺼짐"
+              Frame "uk-a11y-row" (DJ-0) 1188×16
+                Rectangle "Rectangle" (DK-0) 7×7
+                Text "모션 감소" (DL-0) 1137×16 "모션 감소"
+                Text "켜짐" (DM-0) 24×16 "켜짐"
+    Frame "타이틀바 (.titlebar)" (AL-0) 1518×26
+    Frame "창 제어 (.win-controls · 최대화 비활성)" (AM-0) 94×24
+      Frame "Frame" (AN-0) 30×24
+        Rectangle "Rectangle" (AO-0) 9×2
+      Frame "disabled" (AP-0) 30×24
+        Rectangle "Rectangle" (AQ-0) 8×8
+      Frame "Frame" (AR-0) 30×24
+        SVG "SVG" (AS-0) 10×10
+          SVGVisualElement "Path" (AT-0) 9×9

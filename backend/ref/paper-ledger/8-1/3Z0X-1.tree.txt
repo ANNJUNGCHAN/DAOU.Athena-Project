@@ -1,0 +1,295 @@
+Frame "14 · 백테스트 — 그래프·코드 동기화 완료 · 실행 전" (3Z0X-1) 1680×1080
+  Frame "Frame" (3Z0Y-1) 1680×938
+    Text "백테스트 — 그래프·코드 동기화 완료…" (3Z8T-1) 0×0 "백테스트 — 그래프·코드 동기화 완료 · 실행 전"
+    Text "대화에서 승인한 수정이 그래프와 생성…" (3Z8S-1) 0×0 "대화에서 승인한 수정이 그래프와 생성 코드에 같은 버전으로 반영되었습니다. 활성화와 실행은 아직 시작하지 않"
+    Frame "Frame" (3Z0Z-1) 1560×850
+      Frame "47 · Project Recent Sidebar" (3Z6S-1) 268×819
+        Frame "Primary Actions" (3Z7V-1) 0×0
+          Frame "Frame" (3Z8N-1) 0×28
+            Text "ATHENA" (3Z8R-1) 0×0 "ATHENA"
+            SVG "SVG" (3Z8O-1) 0×0
+              SVGVisualElement "Circle" (3Z8Q-1) 0×0
+              SVGVisualElement "Path" (3Z8P-1) 0×0
+          Frame "Frame" (3Z8I-1) 0×30
+            SVG "SVG" (3Z8K-1) 0×0
+              SVGVisualElement "Path" (3Z8M-1) 0×0
+              SVGVisualElement "Path" (3Z8L-1) 0×0
+            Text "새 채팅" (3Z8J-1) 0×0 "새 채팅"
+          Frame "Frame" (3Z8B-1) 0×30
+            SVG "SVG" (3Z8D-1) 0×0
+              SVGVisualElement "Circle" (3Z8H-1) 0×0
+              SVGVisualElement "Circle" (3Z8G-1) 0×0
+              SVGVisualElement "Circle" (3Z8F-1) 0×0
+              SVGVisualElement "Path" (3Z8E-1) 0×0
+            Text "그래프" (3Z8C-1) 0×0 "그래프"
+          Frame "Frame" (3Z86-1) 0×30
+            SVG "SVG" (3Z88-1) 0×0
+              SVGVisualElement "Circle" (3Z8A-1) 0×0
+              SVGVisualElement "Path" (3Z89-1) 0×0
+            Text "에이전트" (3Z87-1) 0×0 "에이전트"
+          Frame "Nav 플러그인" (3Z81-1) 0×30
+            SVG "SVG" (3Z83-1) 0×0
+              SVGVisualElement "Path" (3Z85-1) 0×0
+              SVGVisualElement "Path" (3Z84-1) 0×0
+            Text "플러그인" (3Z82-1) 0×0 "플러그인"
+          Frame "Nav 백테스트 (active)" (3Z7W-1) 0×30
+            SVG "SVG" (3Z7Y-1) 0×0
+              SVGVisualElement "Path" (3Z80-1) 0×0
+              SVGVisualElement "Path" (3Z7Z-1) 0×0
+            Text "백테스트" (3Z7X-1) 0×0 "백테스트"
+        Frame "Project Tree" (3Z7B-1) 0×0
+          Frame "Frame" (3Z7T-1) 0×0
+            Text "프로젝트" (3Z7U-1) 0×0 "프로젝트"
+          Frame "Frame" (3Z7H-1) 0×32
+            SVG "SVG" (3Z7Q-1) 0×0
+              SVGVisualElement "Path" (3Z7S-1) 0×0
+              SVGVisualElement "Path" (3Z7R-1) 0×0
+            Text "아테나" (3Z7P-1) 0×0 "아테나"
+            SVG "SVG" (3Z7L-1) 0×0
+              SVGVisualElement "Circle" (3Z7O-1) 0×0
+              SVGVisualElement "Circle" (3Z7N-1) 0×0
+              SVGVisualElement "Circle" (3Z7M-1) 0×0
+            SVG "SVG" (3Z7I-1) 0×0
+              SVGVisualElement "Path" (3Z7K-1) 0×0
+              SVGVisualElement "Path" (3Z7J-1) 0×0
+          Frame "Frame" (3Z7F-1) 0×27
+            Text "백엔드 API 개수 확인" (3Z7G-1) 0×0 "백엔드 API 개수 확인"
+          Frame "Frame" (3Z7C-1) 0×29
+            Text "앱 전체 기능 검수" (3Z7E-1) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (3Z7D-1) 6×6
+        Frame "Recent Conversations" (3Z70-1) 0×0
+          Frame "Frame" (3Z78-1) 0×20
+            Text "최근" (3Z7A-1) 0×0 "최근"
+            Text "전체" (3Z79-1) 0×0 "전체"
+          Frame "Frame" (3Z75-1) 0×27
+            Text "앱 전체 기능 검수" (3Z77-1) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (3Z76-1) 6×6
+          Frame "Frame" (3Z73-1) 0×27
+            Text "삼성전자 주요 변동 알림" (3Z74-1) 0×0 "삼성전자 주요 변동 알림"
+          Frame "Frame" (3Z71-1) 0×27
+            Text "ETF 자금 흐름" (3Z72-1) 0×0 "ETF 자금 흐름"
+        Frame "Account Footer" (3Z6T-1) 0×0
+          Frame "Frame" (3Z6U-1) 0×38
+            Frame "Frame" (3Z6Y-1) 22×22
+              Text "AN" (3Z6Z-1) 0×0 "AN"
+            Text "모의-주력" (3Z6X-1) 0×0 "모의-주력"
+            SVG "SVG" (3Z6V-1) 0×0
+              SVGVisualElement "Path" (3Z6W-1) 0×0
+      Frame "Frame" (3Z1W-1) 0×848
+        Frame "시각 전략 편집기" (3Z1X-1) 838×733
+          Frame "편집기 헤더" (3Z6J-1) 838×32
+            Frame "Frame" (3Z6P-1) 0×0
+              Text "백테스트" (3Z6R-1) 0×0 "백테스트"
+              Text "20–60 골든크로스 · v6 초안" (3Z6Q-1) 0×0 "20–60 골든크로스 · v6 초안"
+            Frame "Frame" (3Z6K-1) 128×0
+              Frame "Frame" (3Z6N-1) 48×30
+                Text "검증" (3Z6O-1) 0×0 "검증"
+              Frame "Frame" (3Z6L-1) 72×30
+                Text "실행 검토" (3Z6M-1) 0×0 "실행 검토"
+          Frame "설계 하위 탭" (3Z6A-1) 838×34
+            Text "폼" (3Z6I-1) 66×28 "폼"
+            Frame "Frame" (3Z6G-1) 82×28
+              Text "시각 설계" (3Z6H-1) 0×0 "시각 설계"
+            Text "코드" (3Z6F-1) 66×28 "코드"
+            Text "흐름" (3Z6E-1) 66×28 "흐름"
+            Frame "Frame" (3Z6B-1) 0×0
+              Rectangle "Rectangle" (3Z6D-1) 6×6
+              Text "그래프 · 코드 검증 완료" (3Z6C-1) 0×0 "그래프 · 코드 검증 완료"
+          Frame "시각 설계 본문" (3Z27-1) 838×580
+            Frame "노드 팔레트" (3Z55-1) 150×580
+              Frame "Frame" (3Z67-1) 0×0
+                Text "노드" (3Z69-1) 0×0 "노드"
+                Text "끌어서 전략에 놓기" (3Z68-1) 0×0 "끌어서 전략에 놓기"
+              Frame "Frame" (3Z62-1) 0×30
+                SVG "SVG" (3Z64-1) 0×0
+                  SVGVisualElement "Circle" (3Z66-1) 0×0
+                  SVGVisualElement "Path" (3Z65-1) 0×0
+                Text "노드 검색" (3Z63-1) 0×0 "노드 검색"
+              Frame "팔레트 데이터" (3Z5U-1) 0×0
+                Text "데이터" (3Z61-1) 0×0 "데이터"
+                Frame "Frame" (3Z5Y-1) 0×30
+                  Rectangle "Rectangle" (3Z60-1) 7×7
+                  Text "가격 데이터" (3Z5Z-1) 0×0 "가격 데이터"
+                Frame "Frame" (3Z5V-1) 0×30
+                  Rectangle "Rectangle" (3Z5X-1) 7×7
+                  Text "파라미터" (3Z5W-1) 0×0 "파라미터"
+              Frame "팔레트 지표" (3Z5M-1) 0×0
+                Text "지표" (3Z5T-1) 0×0 "지표"
+                Frame "Frame" (3Z5Q-1) 0×30
+                  Text "ƒx" (3Z5S-1) 0×0 "ƒx"
+                  Text "이동평균 SMA" (3Z5R-1) 0×0 "이동평균 SMA"
+                Frame "Frame" (3Z5N-1) 0×30
+                  Text "ƒx" (3Z5P-1) 0×0 "ƒx"
+                  Text "RSI · MACD" (3Z5O-1) 0×0 "RSI · MACD"
+              Frame "팔레트 조건" (3Z5E-1) 0×0
+                Text "조건" (3Z5L-1) 0×0 "조건"
+                Frame "Frame" (3Z5I-1) 0×30
+                  Text "↗" (3Z5K-1) 0×0 "↗"
+                  Text "교차 비교" (3Z5J-1) 0×0 "교차 비교"
+                Frame "Frame" (3Z5F-1) 0×30
+                  Text "∧" (3Z5H-1) 0×0 "∧"
+                  Text "AND · OR" (3Z5G-1) 0×0 "AND · OR"
+              Frame "팔레트 출력" (3Z56-1) 0×0
+                Text "출력" (3Z5D-1) 0×0 "출력"
+                Frame "Frame" (3Z5A-1) 0×30
+                  Rectangle "Rectangle" (3Z5C-1) 7×7
+                  Text "진입 신호" (3Z5B-1) 0×0 "진입 신호"
+                Frame "Frame" (3Z57-1) 0×30
+                  Rectangle "Rectangle" (3Z59-1) 7×7
+                  Text "청산 신호" (3Z58-1) 0×0 "청산 신호"
+            Frame "전략 캔버스" (3Z3D-1) 440×580
+              Frame "캔버스 도구막대" (3Z4T-1) 0×42
+                Frame "Frame" (3Z51-1) 0×0
+                  Text "진입·청산 흐름" (3Z54-1) 0×0 "진입·청산 흐름"
+                  Frame "Frame" (3Z52-1) 0×0
+                    Text "동기화" (3Z53-1) 0×0 "동기화"
+                Frame "Frame" (3Z4U-1) 0×0
+                  Frame "Frame" (3Z4Z-1) 0×0
+                    Text "↶" (3Z50-1) 0×0 "↶"
+                  Frame "Frame" (3Z4X-1) 0×0
+                    Text "↷" (3Z4Y-1) 0×0 "↷"
+                  Frame "Frame" (3Z4V-1) 0×0
+                    Text "맞춤" (3Z4W-1) 0×0 "맞춤"
+              Frame "그래프 작업면" (3Z3E-1) 438×536
+                SVG "전략 연결선" (3Z4K-1) 438×536
+                  SVGVisualElement "Path" (3Z4S-1) 0×0
+                  SVGVisualElement "Path" (3Z4R-1) 0×0
+                  SVGVisualElement "Path" (3Z4Q-1) 0×0
+                  SVGVisualElement "Path" (3Z4P-1) 0×0
+                  SVGVisualElement "Path" (3Z4O-1) 0×0
+                  SVGVisualElement "Path" (3Z4N-1) 0×0
+                  SVGVisualElement "Path" (3Z4M-1) 0×0
+                  SVGVisualElement "Path" (3Z4L-1) 0×0
+                Text "그래프 구역 라벨" (3Z4J-1) 410×278 "진입 · 청산 신호 경로"
+                Frame "노드 · 가격 데이터" (3Z4D-1) 92×84
+                  Frame "Frame" (3Z4G-1) 0×0
+                    Rectangle "Rectangle" (3Z4I-1) 8×8
+                    Text "가격 데이터" (3Z4H-1) 0×0 "가격 데이터"
+                  Text "삼성전자 · 일봉
+close 2,55…" (3Z4F-1) 0×0 "삼성전자 · 일봉
+close 2,559"
+                  Rectangle "Rectangle" (3Z4E-1) 9×9
+                Frame "노드 · 빠른 SMA" (3Z46-1) 100×86
+                  Frame "Frame" (3Z4A-1) 0×0
+                    Text "빠른 SMA" (3Z4C-1) 0×0 "빠른 SMA"
+                    Text "20" (3Z4B-1) 0×0 "20"
+                  Text "close → ma_fast
+Seri…" (3Z49-1) 0×0 "close → ma_fast
+Series<Number>"
+                  Rectangle "Rectangle" (3Z48-1) 9×9
+                  Rectangle "Rectangle" (3Z47-1) 9×9
+                Frame "노드 · 느린 SMA" (3Z3Z-1) 100×86
+                  Frame "Frame" (3Z43-1) 0×0
+                    Text "느린 SMA" (3Z45-1) 0×0 "느린 SMA"
+                    Text "60" (3Z44-1) 0×0 "60"
+                  Text "close → ma_slow
+Seri…" (3Z42-1) 0×0 "close → ma_slow
+Series<Number>"
+                  Rectangle "Rectangle" (3Z41-1) 9×9
+                  Rectangle "Rectangle" (3Z40-1) 9×9
+                Frame "노드 · 상향 돌파" (3Z3T-1) 100×86
+                  Text "상향 돌파" (3Z3Y-1) 0×0 "상향 돌파"
+                  Text "fast ↗ slow
+Series<B…" (3Z3X-1) 0×0 "fast ↗ slow
+Series<Bool>"
+                  Rectangle "Rectangle" (3Z3W-1) 9×9
+                  Rectangle "Rectangle" (3Z3V-1) 9×9
+                  Rectangle "Rectangle" (3Z3U-1) 9×9
+                Frame "노드 · 하향 돌파" (3Z3N-1) 100×86
+                  Text "하향 돌파" (3Z3S-1) 0×0 "하향 돌파"
+                  Text "fast ↘ slow
+Series<B…" (3Z3R-1) 0×0 "fast ↘ slow
+Series<Bool>"
+                  Rectangle "Rectangle" (3Z3Q-1) 9×9
+                  Rectangle "Rectangle" (3Z3P-1) 9×9
+                  Rectangle "Rectangle" (3Z3O-1) 9×9
+                Frame "노드 · 진입" (3Z3J-1) 62×56
+                  Rectangle "Rectangle" (3Z3M-1) 9×9
+                  Text "진입" (3Z3L-1) 0×0 "진입"
+                  Rectangle "Rectangle" (3Z3K-1) 9×9
+                Frame "노드 · 청산" (3Z3F-1) 62×56
+                  Rectangle "Rectangle" (3Z3I-1) 9×9
+                  Text "청산" (3Z3H-1) 0×0 "청산"
+                  Rectangle "Rectangle" (3Z3G-1) 9×9
+            Frame "선택 노드 설정" (3Z28-1) 228×580
+              Frame "Frame" (3Z37-1) 0×0
+                Frame "Frame" (3Z3A-1) 0×0
+                  Text "최근 수정한 노드" (3Z3C-1) 0×0 "최근 수정한 노드"
+                  Text "하향 돌파" (3Z3B-1) 0×0 "하향 돌파"
+                Frame "Frame" (3Z38-1) 50×0
+                  Text "수정됨" (3Z39-1) 0×0 "수정됨"
+              Frame "설정 · 입력 데이터" (3Z32-1) 0×0
+                Text "오른쪽 입력" (3Z36-1) 0×0 "오른쪽 입력"
+                Frame "Frame" (3Z33-1) 0×34
+                  Text "느린 SMA 60" (3Z35-1) 0×0 "느린 SMA 60"
+                  Text "⌄" (3Z34-1) 0×0 "⌄"
+              Frame "설정 · 기간" (3Z2R-1) 0×0
+                Frame "Frame" (3Z2Z-1) 0×0
+                  Text "입력 연결" (3Z31-1) 0×0 "입력 연결"
+                  Text "2 / 2" (3Z30-1) 0×0 "2 / 2"
+                Frame "Frame" (3Z2V-1) 0×18
+                  Frame "Frame" (3Z2W-1) 202×4
+                    Rectangle "Rectangle" (3Z2Y-1) 202×4
+                    Rectangle "Rectangle" (3Z2X-1) 14×14
+                Frame "Frame" (3Z2S-1) 0×0
+                  Text "fast ✓" (3Z2U-1) 0×0 "fast ✓"
+                  Text "slow ✓" (3Z2T-1) 0×0 "slow ✓"
+              Frame "설정 · 포트 계약" (3Z2H-1) 0×0
+                Frame "Frame" (3Z2O-1) 0×0
+                  Text "입력 A · B" (3Z2Q-1) 0×0 "입력 A · B"
+                  Text "Series<Number> × 2" (3Z2P-1) 110×0 "Series<Number> × 2"
+                Frame "Frame" (3Z2L-1) 0×0
+                  Text "출력" (3Z2N-1) 0×0 "출력"
+                  Text "Series<Bool>" (3Z2M-1) 80×0 "Series<Bool>"
+                Frame "Frame" (3Z2I-1) 0×0
+                  Rectangle "Rectangle" (3Z2K-1) 7×7
+                  Text "연결과 값이 유효합니다" (3Z2J-1) 0×0 "연결과 값이 유효합니다"
+              Frame "설정 · 설명" (3Z2C-1) 0×0
+                Text "이 노드는 무엇을 하나요?" (3Z2G-1) 0×0 "이 노드는 무엇을 하나요?"
+                Text "빠른 SMA 20이 느린 SMA 60…" (3Z2F-1) 0×0 "빠른 SMA 20이 느린 SMA 60 아래로 내려가는 봉을 청산 신호로 만듭니다. 이번 수정으로 비어 있던 "
+                Frame "Frame" (3Z2D-1) 0×30
+                  Text "코드 17행 열기" (3Z2E-1) 0×0 "코드 17행 열기"
+              Frame "설정 · 변경 안내" (3Z29-1) 0×0
+                Rectangle "Rectangle" (3Z2B-1) 7×7
+                Text "이 노드와 생성 코드가 같은 v6 초…" (3Z2A-1) 0×0 "이 노드와 생성 코드가 같은 v6 초안을 가리킵니다. 활성화하거나 실행하기 전까지 현재 v4에는 영향이 없습"
+          Frame "그래프 검증 요약" (3Z1Y-1) 838×57
+            Frame "Frame" (3Z21-1) 0×0
+              Frame "Frame" (3Z25-1) 22×22
+                Text "✓" (3Z26-1) 0×0 "✓"
+              Frame "Frame" (3Z22-1) 0×0
+                Text "그래프와 코드가 같은 버전입니다" (3Z24-1) 0×0 "그래프와 코드가 같은 버전입니다"
+                Text "그래프와 코드의 의미 일치 · 연결 …" (3Z23-1) 0×0 "그래프와 코드의 의미 일치 · 연결 7/7 · 컴파일러 v1 · 실행 전"
+            Frame "Frame" (3Z1Z-1) 96×28
+              Text "목록으로 보기" (3Z20-1) 0×0 "목록으로 보기"
+      Frame "Frame" (3Z10-1) 400×0
+        Frame "Frame" (3Z1T-1) 0×0
+          Text "전략에게 묻기" (3Z1V-1) 0×0 "전략에게 묻기"
+          Text "질문·수정·검증을 한 흐름에서 관리합…" (3Z1U-1) 0×0 "질문·수정·검증을 한 흐름에서 관리합니다"
+        Frame "시각 전략 채팅" (3Z18-1) 399×340
+          Frame "사용자 요청" (3Z1R-1) 0×0
+            Text "수정안을 적용하고 그래프랑 코드가 같…" (3Z1S-1) 0×0 "수정안을 적용하고 그래프랑 코드가 같은지 확인해줘."
+          Frame "AI 설명" (3Z1N-1) 0×0
+            Frame "Frame" (3Z1P-1) 22×22
+              Text "AI" (3Z1Q-1) 0×0 "AI"
+            Text "v6 초안에 적용했습니다. 그래프와 …" (3Z1O-1) 0×0 "v6 초안에 적용했습니다. 그래프와 생성 코드가 같은 의미로 검증됐습니다. 활성화와 실행은 아직 하지 않았습"
+          Frame "시각 전략 초안 카드" (3Z19-1) 0×0
+            Frame "Frame" (3Z1H-1) 0×0
+              Frame "Frame" (3Z1J-1) 124×0
+                Frame "Frame" (3Z1L-1) 76×0
+                  Text "동기화 완료" (3Z1M-1) 0×0 "동기화 완료"
+                Text "v5 → v6" (3Z1K-1) 0×0 "v5 → v6"
+              Text "그래프 ↔ 코드" (3Z1I-1) 0×0 "그래프 ↔ 코드"
+            Text "하향 돌파의 느린 입력 · slow(…" (3Z1G-1) 0×0 "하향 돌파의 느린 입력 · slow(SMA 60) · golden_cross.py:17"
+            Frame "Frame" (3Z1A-1) 0×0
+              Frame "Frame" (3Z1E-1) 74×28
+                Text "실행 전 검토" (3Z1F-1) 0×0 "실행 전 검토"
+              Frame "Frame" (3Z1C-1) 58×28
+                Text "차이 보기" (3Z1D-1) 0×0 "차이 보기"
+              Text "코드 열기" (3Z1B-1) 0×0 "코드 열기"
+        Frame "Frame" (3Z11-1) 0×0
+          Frame "Frame" (3Z12-1) 0×0
+            Frame "Frame" (3Z14-1) 22×22
+              SVG "SVG" (3Z15-1) 0×0
+                SVGVisualElement "Rect" (3Z17-1) 0×0
+                SVGVisualElement "Rect" (3Z16-1) 0×0
+            Text "무엇이든 물어보세요" (3Z13-1) 0×0 "무엇이든 물어보세요"

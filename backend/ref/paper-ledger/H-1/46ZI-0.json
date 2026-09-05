@@ -1,0 +1,340 @@
+{
+ "board_id": "46ZI-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "470G-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "470F-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "470D-0",
+   "text": "실현손익·수익률",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Header"
+   ]
+  },
+  {
+   "id": "470B-0",
+   "text": "종목별계좌평가현황",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "470A-0",
+   "text": "8종목",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4708-0",
+   "text": "매수비중",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4707-0",
+   "text": "28.0%",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4705-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4704-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4701-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "4700-0",
+   "text": "값",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46ZZ-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46ZX-0",
+   "text": "손익율",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46ZW-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46ZU-0",
+   "text": "+1.65%",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46ZT-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46ZR-0",
+   "text": "당일매도손익1",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46ZQ-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46ZO-0",
+   "text": "매도손익 +648,600",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46ZN-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46ZK-0",
+   "text": "스칼라 2개, 행 5개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46ZI-0",
+   "name": "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "470C-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "470E-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46ZL-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4702-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4709-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4706-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4703-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46ZY-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46ZS-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46ZV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46ZM-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46ZP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46ZJ-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "실현손익·수익률": 1,
+  "종목별계좌평가현황": 1,
+  "8종목": 1,
+  "매수비중": 1,
+  "28.0%": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "손익율": 1,
+  "+1.65%": 1,
+  "당일매도손익1": 1,
+  "매도손익 +648,600": 1,
+  "스칼라 2개, 행 5개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "1dfa7924ea7c01eb6840b6340db08248d794e718af0d57474d24b4979e98ae5b"
+}

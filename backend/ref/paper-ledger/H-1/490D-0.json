@@ -1,0 +1,92 @@
+{
+ "board_id": "490D-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T6 · 순위 — ELW 순위",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "490F-0",
+   "text": "원본 보드: CC-03 / R01-T6 · 순위 — ELW 순위",
+   "path": [
+    "note/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "490H-0",
+   "text": "가져온 요소: ELW잔량순위 · 등락률 · 순위 · 종목코드 · 현재가",
+   "path": [
+    "note/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "490J-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "490L-0",
+   "text": "접은 개수: 스칼라 2개 · 행 18개",
+   "path": [
+    "note/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "490D-0",
+   "name": "note/CC-03 / R01-T6 · 순위 — ELW 순위",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "490E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "490G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "490I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "490K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T6 · 순위 — ELW 순위": 1,
+  "가져온 요소: ELW잔량순위 · 등락률 · 순위 · 종목코드 · 현재가": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 18개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "31d9fc4f53f89333045a1fbfdf5f0fa8b3924ee2d07b7c7427e29953865c274a"
+}

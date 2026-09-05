@@ -1,0 +1,1148 @@
+{
+ "board_id": "FT6-0",
+ "page": "B-2",
+ "page_name": "플러그인",
+ "name": "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+ "width": 1680,
+ "height": 986,
+ "texts": [
+  {
+   "id": "FWC-0",
+   "text": "셸 — 한국 주식 시세 플러그인 · 기능 허용",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)"
+   ]
+  },
+  {
+   "id": "FWB-0",
+   "text": "설치한 플러그인에 노출할 도구만 선택합니다. 목록은 승인 뒤 probe가 서버에게 직접 물어 받아온 실제 도구 이름입니다.",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)"
+   ]
+  },
+  {
+   "id": "FWA-0",
+   "text": "＋ 새 대화",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FW8-0",
+   "text": "⌕ 대화 검색",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FW4-0",
+   "text": "💬",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FW3-0",
+   "text": "대화",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FW1-0",
+   "text": "🕸",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FW0-0",
+   "text": "그래프",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVY-0",
+   "text": "✦",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVX-0",
+   "text": "에이전트",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVW-0",
+   "text": "3",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVT-0",
+   "text": "◫",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVS-0",
+   "text": "플러그인",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVP-0",
+   "text": "오늘",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVN-0",
+   "text": "삼성전자 흐름·재무 같이 보기",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVL-0",
+   "text": "88,000 넘으면 알려줘",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVJ-0",
+   "text": "코스피 프로그램 매매 동향",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVG-0",
+   "text": "● 모의-주력 · 토큰 5시간 42분 남음",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVD-0",
+   "text": "한국 주식 시세",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FVB-0",
+   "text": "설치됨",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FV9-0",
+   "text": "기능 6",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FV7-0",
+   "text": "허용 4",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FV5-0",
+   "text": "연결 확인됨",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FV2-0",
+   "text": "기능 허용은 한국 주식 시세 플러그인에만 적용됩니다. Athena 내장 API는 이 목록에 나타나지 않습니다.",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZEL-0",
+   "text": "권한 초안",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "권한 초안 머리",
+    "제목 묶음"
+   ]
+  },
+  {
+   "id": "3ZEM-0",
+   "text": "승인 카드로 확정합니다",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "권한 초안 머리",
+    "제목 묶음"
+   ]
+  },
+  {
+   "id": "3ZEP-0",
+   "text": "채팅: 시세 조회만 허용",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "권한 초안 머리",
+    "진입 표시"
+   ]
+  },
+  {
+   "id": "FV1-0",
+   "text": "search_stock_code",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FV0-0",
+   "text": "종목명으로 종목 코드를 찾습니다",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FUV-0",
+   "text": "get_stock_price_by_code",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FUU-0",
+   "text": "종목 코드로 현재가를 조회합니다",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FUP-0",
+   "text": "get_market_cap_stocks",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FUO-0",
+   "text": "시가총액 상위 종목을 가져옵니다",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NUB-2",
+   "text": "get_dividend_yield_stocks",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NUA-2",
+   "text": "배당수익률 상위 종목을 가져옵니다",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FUH-0",
+   "text": "get_themes_with_leaders",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FUG-0",
+   "text": "테마와 주도주를 가져옵니다 · 현재 꺼짐",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NUH-2",
+   "text": "get_etfs_by_market_cap",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NUG-2",
+   "text": "시총 기준 ETF 목록을 가져옵니다 · 현재 꺼짐",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FTX-0",
+   "text": "허용 4 / 6",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FTW-0",
+   "text": "선택한 기능만 한국 주식 시세 플러그인에 노출됩니다",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FWE-0",
+   "text": "선택 저장",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "선택 저장"
+   ]
+  },
+  {
+   "id": "FTQ-0",
+   "text": "Kiwoom 시세·주문·계좌와 brain은 Athena 내장 API이므로 플러그인 권한 목록에 표시하지 않습니다.",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FTN-0",
+   "text": "한국 주식 시세에게 묻기",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FTM-0",
+   "text": "권한도 대화로 확인합니다",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FTK-0",
+   "text": "지금 어떤 도구까지 쓸 수 있어?",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FTH-0",
+   "text": "종목 검색·시세·시총·배당 네 가지가 허용돼 있습니다. 테마와 ETF는 꺼져 있으며 이 화면에서 따로 허용합니다.",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FTB-0",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "FT6-0",
+   "name": "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+   "component": "Frame",
+   "w": 1680,
+   "h": 986,
+   "depth": 0
+  },
+  {
+   "id": "FT7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1560,
+   "h": 906,
+   "depth": 1
+  },
+  {
+   "id": "FVE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 268,
+   "h": 904,
+   "depth": 2
+  },
+  {
+   "id": "FW9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FW7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FW5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FW2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FVZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FVU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FVV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "FVR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FVQ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 3
+  },
+  {
+   "id": "FVO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FVM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FVK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FVI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FVH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FVF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FTO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 904,
+   "depth": 2
+  },
+  {
+   "id": "FTP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 860,
+   "depth": 3
+  },
+  {
+   "id": "FV3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "FVC-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "FVA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "FV8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "FV6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "FV4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZEJ-0",
+   "name": "권한 초안 머리",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZEK-0",
+   "name": "제목 묶음",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZEN-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZEO-0",
+   "name": "진입 표시",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "FUJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 260,
+   "depth": 4
+  },
+  {
+   "id": "FUW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "FUZ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "FUX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "FUY-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "FUQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "FUT-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "FUR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "FUS-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "FUK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "FUN-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "FUL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "FUM-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "2NU6-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2NU9-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2NU7-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "2NU8-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "FUC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "FUF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "FUD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "FUE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "2NUC-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2NUF-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2NUD-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "2NUE-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "FTR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "FTS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "FTV-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "FWD-0",
+   "name": "선택 저장",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "FT8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 904,
+   "depth": 2
+  },
+  {
+   "id": "FTL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FTG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FTI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "FTJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "FT9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "FTA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "FTC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "FTD-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "FTF-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "FTE-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  }
+ ],
+ "text_multiset": {
+  "셸 — 한국 주식 시세 플러그인 · 기능 허용": 1,
+  "설치한 플러그인에 노출할 도구만 선택합니다. 목록은 승인 뒤 probe가 서버에게 직접 물어 받아온 실제 도구 이름입니다.": 1,
+  "＋ 새 대화": 1,
+  "⌕ 대화 검색": 1,
+  "💬": 1,
+  "대화": 1,
+  "🕸": 1,
+  "그래프": 1,
+  "✦": 1,
+  "에이전트": 1,
+  "3": 1,
+  "◫": 1,
+  "플러그인": 1,
+  "오늘": 1,
+  "삼성전자 흐름·재무 같이 보기": 1,
+  "88,000 넘으면 알려줘": 1,
+  "코스피 프로그램 매매 동향": 1,
+  "● 모의-주력 · 토큰 5시간 42분 남음": 1,
+  "한국 주식 시세": 1,
+  "설치됨": 1,
+  "기능 6": 1,
+  "허용 4": 1,
+  "연결 확인됨": 1,
+  "기능 허용은 한국 주식 시세 플러그인에만 적용됩니다. Athena 내장 API는 이 목록에 나타나지 않습니다.": 1,
+  "권한 초안": 1,
+  "승인 카드로 확정합니다": 1,
+  "채팅: 시세 조회만 허용": 1,
+  "search_stock_code": 1,
+  "종목명으로 종목 코드를 찾습니다": 1,
+  "get_stock_price_by_code": 1,
+  "종목 코드로 현재가를 조회합니다": 1,
+  "get_market_cap_stocks": 1,
+  "시가총액 상위 종목을 가져옵니다": 1,
+  "get_dividend_yield_stocks": 1,
+  "배당수익률 상위 종목을 가져옵니다": 1,
+  "get_themes_with_leaders": 1,
+  "테마와 주도주를 가져옵니다 · 현재 꺼짐": 1,
+  "get_etfs_by_market_cap": 1,
+  "시총 기준 ETF 목록을 가져옵니다 · 현재 꺼짐": 1,
+  "허용 4 / 6": 1,
+  "선택한 기능만 한국 주식 시세 플러그인에 노출됩니다": 1,
+  "선택 저장": 1,
+  "Kiwoom 시세·주문·계좌와 brain은 Athena 내장 API이므로 플러그인 권한 목록에 표시하지 않습니다.": 1,
+  "한국 주식 시세에게 묻기": 1,
+  "권한도 대화로 확인합니다": 1,
+  "지금 어떤 도구까지 쓸 수 있어?": 1,
+  "종목 검색·시세·시총·배당 네 가지가 허용돼 있습니다. 테마와 ETF는 꺼져 있으며 이 화면에서 따로 허용합니다.": 1,
+  "무엇이든 물어보세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "c00a1e26417c4ac975e2c22103d7bcc15355ec9d075db97d829a80087fb92258"
+}

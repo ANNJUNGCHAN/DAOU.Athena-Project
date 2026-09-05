@@ -1,0 +1,92 @@
+{
+ "board_id": "491R-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-06 / R04-S4 · 종목찾기 — 등락률",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "491T-0",
+   "text": "원본 보드: CC-06 / R04-S4 · 종목찾기 — 등락률",
+   "path": [
+    "note/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "491V-0",
+   "text": "가져온 요소: 전일대비등락률… · 종목코드 · 현재가 · 전일대비 · 등락률",
+   "path": [
+    "note/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "491X-0",
+   "text": "문법: facts",
+   "path": [
+    "note/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "491Z-0",
+   "text": "접은 개수: 항목 84개",
+   "path": [
+    "note/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "491R-0",
+   "name": "note/CC-06 / R04-S4 · 종목찾기 — 등락률",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "491S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "491U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "491W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "491Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-06 / R04-S4 · 종목찾기 — 등락률": 1,
+  "가져온 요소: 전일대비등락률… · 종목코드 · 현재가 · 전일대비 · 등락률": 1,
+  "문법: facts": 1,
+  "접은 개수: 항목 84개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "17efc23ff545a137963979bd1f10916e4df5425af6c08cc12e69d745f15725df"
+}

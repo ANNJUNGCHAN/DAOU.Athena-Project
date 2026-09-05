@@ -1,0 +1,3903 @@
+{
+ "board_id": "1XGW-0",
+ "page": "F-1",
+ "page_name": "증명",
+ "name": "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+ "width": 1440,
+ "height": 900,
+ "texts": [
+  {
+   "id": "2ENQ-0",
+   "text": "종목 탐색",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Sticky Header",
+    "DV-1 Identity Quote Strip · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ENR-0",
+   "text": "KOSPI · 전체 종목 2,842",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Sticky Header",
+    "DV-1 Identity Quote Strip · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ENW-0",
+   "text": "종목명 또는 코드 검색",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Sticky Header",
+    "DV-1 Identity Quote Strip · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ENY-0",
+   "text": "삼성전자 005930",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Sticky Header",
+    "DV-1 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ENZ-0",
+   "text": "150,850원",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Sticky Header",
+    "DV-1 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EO0-0",
+   "text": "+2.35%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Sticky Header",
+    "DV-1 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EO1-0",
+   "text": "DESIGN FIXTURE · 12:34",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Sticky Header",
+    "DV-1 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EO5-0",
+   "text": "거래량",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Category Tabs",
+    "DV-1 User Category Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EO7-0",
+   "text": "가격",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Category Tabs",
+    "DV-1 User Category Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EO9-0",
+   "text": "등락",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Category Tabs",
+    "DV-1 User Category Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOB-0",
+   "text": "시가총액",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Category Tabs",
+    "DV-1 User Category Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOD-0",
+   "text": "거래원",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Category Tabs",
+    "DV-1 User Category Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOF-0",
+   "text": "투자자",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Category Tabs",
+    "DV-1 User Category Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOH-0",
+   "text": "예상체결",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Category Tabs",
+    "DV-1 User Category Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOJ-0",
+   "text": "시간외",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Category Tabs",
+    "DV-1 User Category Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOO-0",
+   "text": "시장",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Filter Sort Toolbar",
+    "DV-1 Filter Sort Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOP-0",
+   "text": "KOSPI ▾",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Filter Sort Toolbar",
+    "DV-1 Filter Sort Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOR-0",
+   "text": "정렬",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Filter Sort Toolbar",
+    "DV-1 Filter Sort Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOS-0",
+   "text": "거래량 높은 순 ▾",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Filter Sort Toolbar",
+    "DV-1 Filter Sort Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOU-0",
+   "text": "상승 종목만",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Filter Sort Toolbar",
+    "DV-1 Filter Sort Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOW-0",
+   "text": "● 실시간 갱신",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Filter Sort Toolbar",
+    "DV-1 Filter Sort Controls · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EOX-0",
+   "text": "100개 결과",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Filter Sort Toolbar",
+    "DV-1 Filter Sort Controls · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EP4-0",
+   "text": "거래량 상위 · 현재 열",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Preset Strip · Chrome"
+   ]
+  },
+  {
+   "id": "2EP5-0",
+   "text": "열 설정: 시세 · 거래 · 호가",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Preset Strip · Chrome"
+   ]
+  },
+  {
+   "id": "2EP7-0",
+   "text": "순위",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2EP8-0",
+   "text": "종목",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2EP9-0",
+   "text": "현재가",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2EPA-0",
+   "text": "등락률",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2EPB-0",
+   "text": "거래량",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2EPC-0",
+   "text": "거래대금",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2EPD-0",
+   "text": "매수호가",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2EPE-0",
+   "text": "매도호가",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2EPH-0",
+   "text": "01",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 1"
+   ]
+  },
+  {
+   "id": "2EPJ-0",
+   "text": "삼성전자",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EPK-0",
+   "text": "005930",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EPL-0",
+   "text": "150,850",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 1"
+   ]
+  },
+  {
+   "id": "2EPM-0",
+   "text": "+2.35%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 1"
+   ]
+  },
+  {
+   "id": "2EPN-0",
+   "text": "18,420,135",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 1"
+   ]
+  },
+  {
+   "id": "2EPO-0",
+   "text": "1.42조",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 1"
+   ]
+  },
+  {
+   "id": "2EPP-0",
+   "text": "150,850",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 1"
+   ]
+  },
+  {
+   "id": "2EPQ-0",
+   "text": "150,900",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 1"
+   ]
+  },
+  {
+   "id": "2EPS-0",
+   "text": "02",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 2"
+   ]
+  },
+  {
+   "id": "2EPU-0",
+   "text": "SK하이닉스",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EPV-0",
+   "text": "000660",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EPW-0",
+   "text": "214,500",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 2"
+   ]
+  },
+  {
+   "id": "2EPX-0",
+   "text": "+2.14%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 2"
+   ]
+  },
+  {
+   "id": "2EPY-0",
+   "text": "9,840,521",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 2"
+   ]
+  },
+  {
+   "id": "2EPZ-0",
+   "text": "9860억",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 2"
+   ]
+  },
+  {
+   "id": "2EQ0-0",
+   "text": "214,500",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 2"
+   ]
+  },
+  {
+   "id": "2EQ1-0",
+   "text": "214,550",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 2"
+   ]
+  },
+  {
+   "id": "2EQ3-0",
+   "text": "03",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 3"
+   ]
+  },
+  {
+   "id": "2EQ5-0",
+   "text": "현대차",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EQ6-0",
+   "text": "005380",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EQ7-0",
+   "text": "286,000",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 3"
+   ]
+  },
+  {
+   "id": "2EQ8-0",
+   "text": "-0.52%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 3"
+   ]
+  },
+  {
+   "id": "2EQ9-0",
+   "text": "4,702,188",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 3"
+   ]
+  },
+  {
+   "id": "2EQA-0",
+   "text": "7420억",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 3"
+   ]
+  },
+  {
+   "id": "2EQB-0",
+   "text": "285,500",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 3"
+   ]
+  },
+  {
+   "id": "2EQC-0",
+   "text": "286,000",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 3"
+   ]
+  },
+  {
+   "id": "2EQE-0",
+   "text": "04",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 4"
+   ]
+  },
+  {
+   "id": "2EQG-0",
+   "text": "NAVER",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EQH-0",
+   "text": "035420",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EQI-0",
+   "text": "238,500",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 4"
+   ]
+  },
+  {
+   "id": "2EQJ-0",
+   "text": "+0.85%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 4"
+   ]
+  },
+  {
+   "id": "2EQK-0",
+   "text": "3,181,402",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 4"
+   ]
+  },
+  {
+   "id": "2EQL-0",
+   "text": "6810억",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 4"
+   ]
+  },
+  {
+   "id": "2EQM-0",
+   "text": "238,500",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 4"
+   ]
+  },
+  {
+   "id": "2EQN-0",
+   "text": "239,000",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 4"
+   ]
+  },
+  {
+   "id": "2EQP-0",
+   "text": "05",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 5"
+   ]
+  },
+  {
+   "id": "2EQR-0",
+   "text": "한화에어로스페이스",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 5",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EQS-0",
+   "text": "012450",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 5",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EQT-0",
+   "text": "811,000",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 5"
+   ]
+  },
+  {
+   "id": "2EQU-0",
+   "text": "+3.02%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 5"
+   ]
+  },
+  {
+   "id": "2EQV-0",
+   "text": "1,245,180",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 5"
+   ]
+  },
+  {
+   "id": "2EQW-0",
+   "text": "5980억",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 5"
+   ]
+  },
+  {
+   "id": "2EQX-0",
+   "text": "810,000",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 5"
+   ]
+  },
+  {
+   "id": "2EQY-0",
+   "text": "811,000",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 5"
+   ]
+  },
+  {
+   "id": "2ER0-0",
+   "text": "06",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 6"
+   ]
+  },
+  {
+   "id": "2ER2-0",
+   "text": "LG에너지솔루션",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 6",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ER3-0",
+   "text": "373220",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 6",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ER4-0",
+   "text": "398,500",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 6"
+   ]
+  },
+  {
+   "id": "2ER5-0",
+   "text": "-0.50%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 6"
+   ]
+  },
+  {
+   "id": "2ER6-0",
+   "text": "1,902,445",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 6"
+   ]
+  },
+  {
+   "id": "2ER7-0",
+   "text": "5220억",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 6"
+   ]
+  },
+  {
+   "id": "2ER8-0",
+   "text": "398,500",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 6"
+   ]
+  },
+  {
+   "id": "2ER9-0",
+   "text": "399,000",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 6"
+   ]
+  },
+  {
+   "id": "2ERB-0",
+   "text": "07",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 7"
+   ]
+  },
+  {
+   "id": "2ERD-0",
+   "text": "기아",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 7",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ERE-0",
+   "text": "000270",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 7",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ERF-0",
+   "text": "136,200",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 7"
+   ]
+  },
+  {
+   "id": "2ERG-0",
+   "text": "+1.04%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 7"
+   ]
+  },
+  {
+   "id": "2ERH-0",
+   "text": "2,988,310",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 7"
+   ]
+  },
+  {
+   "id": "2ERI-0",
+   "text": "4110억",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 7"
+   ]
+  },
+  {
+   "id": "2ERJ-0",
+   "text": "136,200",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 7"
+   ]
+  },
+  {
+   "id": "2ERK-0",
+   "text": "136,300",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 7"
+   ]
+  },
+  {
+   "id": "2ERM-0",
+   "text": "08",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 8"
+   ]
+  },
+  {
+   "id": "2ERO-0",
+   "text": "KB금융",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 8",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ERP-0",
+   "text": "105560",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 8",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ERQ-0",
+   "text": "91,600",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 8"
+   ]
+  },
+  {
+   "id": "2ERR-0",
+   "text": "+0.55%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 8"
+   ]
+  },
+  {
+   "id": "2ERS-0",
+   "text": "3,102,800",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 8"
+   ]
+  },
+  {
+   "id": "2ERT-0",
+   "text": "2860억",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 8"
+   ]
+  },
+  {
+   "id": "2ERU-0",
+   "text": "91,600",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 8"
+   ]
+  },
+  {
+   "id": "2ERV-0",
+   "text": "91,700",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 8"
+   ]
+  },
+  {
+   "id": "2ERX-0",
+   "text": "09",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 9"
+   ]
+  },
+  {
+   "id": "2ERZ-0",
+   "text": "두산에너빌리티",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 9",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ES0-0",
+   "text": "034020",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 9",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ES1-0",
+   "text": "27,850",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 9"
+   ]
+  },
+  {
+   "id": "2ES2-0",
+   "text": "+3.53%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 9"
+   ]
+  },
+  {
+   "id": "2ES3-0",
+   "text": "12,881,241",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 9"
+   ]
+  },
+  {
+   "id": "2ES4-0",
+   "text": "2410억",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 9"
+   ]
+  },
+  {
+   "id": "2ES5-0",
+   "text": "27,850",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 9"
+   ]
+  },
+  {
+   "id": "2ES6-0",
+   "text": "27,900",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 9"
+   ]
+  },
+  {
+   "id": "2ES8-0",
+   "text": "10",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 10"
+   ]
+  },
+  {
+   "id": "2ESA-0",
+   "text": "삼성바이오로직스",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 10",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ESB-0",
+   "text": "207940",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 10",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ESC-0",
+   "text": "1,012,000",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 10"
+   ]
+  },
+  {
+   "id": "2ESD-0",
+   "text": "-0.39%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 10"
+   ]
+  },
+  {
+   "id": "2ESE-0",
+   "text": "188,301",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 10"
+   ]
+  },
+  {
+   "id": "2ESF-0",
+   "text": "1980억",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 10"
+   ]
+  },
+  {
+   "id": "2ESG-0",
+   "text": "1,012,000",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 10"
+   ]
+  },
+  {
+   "id": "2ESH-0",
+   "text": "1,013,000",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Result Rows · 10 visible",
+    "DV-1 Result Row 10"
+   ]
+  },
+  {
+   "id": "2ESK-0",
+   "text": "1–10 / 100",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Expand Controls · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ESP-0",
+   "text": "더보기",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Expand Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ESR-0",
+   "text": "접기",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Expand Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EST-0",
+   "text": "선택: 삼성전자 · 1위",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Status · Chrome"
+   ]
+  },
+  {
+   "id": "2ESU-0",
+   "text": "표 안에서만 스크롤",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Compare Table",
+    "DV-1 Table Status · Chrome"
+   ]
+  },
+  {
+   "id": "2ESY-0",
+   "text": "삼성전자",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Selected Header · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ESZ-0",
+   "text": "005930 · KOSPI",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Selected Header · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ET1-0",
+   "text": "150,850원",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Selected Header · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ET2-0",
+   "text": "+2.35%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Selected Header · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ET5-0",
+   "text": "시세",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ET7-0",
+   "text": "거래",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ET9-0",
+   "text": "수급",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ETB-0",
+   "text": "시장정보",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ETD-0",
+   "text": "기타 공식정보",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ETG-0",
+   "text": "선택 행 공식 정보",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ETI-0",
+   "text": "종목명",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10020|$.bid_req_upper[].stk_nm|1"
+   ]
+  },
+  {
+   "id": "2ETJ-0",
+   "text": "삼성전자",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10020|$.bid_req_upper[].stk_nm|1"
+   ]
+  },
+  {
+   "id": "2ETL-0",
+   "text": "종목코드",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10020|$.bid_req_upper[].stk_cd|1"
+   ]
+  },
+  {
+   "id": "2ETM-0",
+   "text": "005930",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10020|$.bid_req_upper[].stk_cd|1"
+   ]
+  },
+  {
+   "id": "2ETO-0",
+   "text": "현재가",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10020|$.bid_req_upper[].cur_prc|1"
+   ]
+  },
+  {
+   "id": "2ETP-0",
+   "text": "150,850원",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10020|$.bid_req_upper[].cur_prc|1"
+   ]
+  },
+  {
+   "id": "2ETR-0",
+   "text": "전일대비",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10020|$.bid_req_upper[].pred_pre|1"
+   ]
+  },
+  {
+   "id": "2ETS-0",
+   "text": "+3,450원",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10020|$.bid_req_upper[].pred_pre|1"
+   ]
+  },
+  {
+   "id": "2ETU-0",
+   "text": "등락률",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10023|$.trde_qty_sdnin[].flu_rt|1"
+   ]
+  },
+  {
+   "id": "2ETV-0",
+   "text": "+2.35%",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10023|$.trde_qty_sdnin[].flu_rt|1"
+   ]
+  },
+  {
+   "id": "2ETX-0",
+   "text": "거래량",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10020|$.bid_req_upper[].trde_qty|1"
+   ]
+  },
+  {
+   "id": "2ETY-0",
+   "text": "18,420,135주",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10020|$.bid_req_upper[].trde_qty|1"
+   ]
+  },
+  {
+   "id": "2EU0-0",
+   "text": "거래대금",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10032|$.trde_prica_upper[].trde_prica|1"
+   ]
+  },
+  {
+   "id": "2EU1-0",
+   "text": "1.42조원",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10032|$.trde_prica_upper[].trde_prica|1"
+   ]
+  },
+  {
+   "id": "2EU3-0",
+   "text": "매수호가",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10029|$.exp_cntr_flu_rt_upper[].buy_bid|1"
+   ]
+  },
+  {
+   "id": "2EU4-0",
+   "text": "150,850원",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10029|$.exp_cntr_flu_rt_upper[].buy_bid|1"
+   ]
+  },
+  {
+   "id": "2EU6-0",
+   "text": "매도호가",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10029|$.exp_cntr_flu_rt_upper[].sel_bid|1"
+   ]
+  },
+  {
+   "id": "2EU7-0",
+   "text": "150,850원",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10029|$.exp_cntr_flu_rt_upper[].sel_bid|1"
+   ]
+  },
+  {
+   "id": "2EU9-0",
+   "text": "현재순위",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10032|$.trde_prica_upper[].now_rank|1"
+   ]
+  },
+  {
+   "id": "2EUA-0",
+   "text": "1위",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "base:ka10032|$.trde_prica_upper[].now_rank|1"
+   ]
+  },
+  {
+   "id": "2EUC-0",
+   "text": "탭 전환 시 열 preset과 상세 필드가 함께 변경됩니다.",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Sparse Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2EUE-0",
+   "text": "10개 표시",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Footer · Chrome"
+   ]
+  },
+  {
+   "id": "2EUF-0",
+   "text": "더보기 · 접기",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Workspace",
+    "DV-1 Selected Detail",
+    "DV-1 Detail Footer · Chrome"
+   ]
+  },
+  {
+   "id": "2EP0-0",
+   "text": "상위 10개 표시 · 더보기 시 표 내부 스크롤 · 접기",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Footer",
+    "DV-1 Footer Controls · Chrome"
+   ]
+  },
+  {
+   "id": "2EP1-0",
+   "text": "탐색 결과 · 공식 필드 128개 연결",
+   "path": [
+    "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+    "DV-1 Root · ranked-results 128/128 · workbench",
+    "DV-1 Workbench Surface",
+    "DV-1 Footer",
+    "DV-1 Footer Controls · Chrome"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1XGW-0",
+   "name": "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+   "component": "Frame",
+   "w": 1440,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "2ENC-0",
+   "name": "DV-1 Root · ranked-results 128/128 · workbench",
+   "component": "Frame",
+   "w": 1440,
+   "h": 900,
+   "depth": 1
+  },
+  {
+   "id": "2END-0",
+   "name": "DV-1 Workbench Surface",
+   "component": "Frame",
+   "w": 1392,
+   "h": 860,
+   "depth": 2
+  },
+  {
+   "id": "2ENE-0",
+   "name": "DV-1 Sticky Header",
+   "component": "Frame",
+   "w": 1390,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "2ENN-0",
+   "name": "DV-1 Identity Quote Strip · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 64,
+   "depth": 4
+  },
+  {
+   "id": "2ENO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2ENP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 222,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2ENS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 360,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2ENT-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2ENU-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "2ENV-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "2ENX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2ENF-0",
+   "name": "DV-1 Category Tabs",
+   "component": "Frame",
+   "w": 1390,
+   "h": 42,
+   "depth": 3
+  },
+  {
+   "id": "2EO3-0",
+   "name": "DV-1 User Category Tabs · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 42,
+   "depth": 4
+  },
+  {
+   "id": "2EO4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2EO6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2EO8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2EOA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2EOC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2EOE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2EOG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2EOI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2ENG-0",
+   "name": "DV-1 Filter Sort Toolbar",
+   "component": "Frame",
+   "w": 1390,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "2EOL-0",
+   "name": "DV-1 Filter Sort Controls · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 48,
+   "depth": 4
+  },
+  {
+   "id": "2EOM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2EON-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "2EOQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "2EOT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "2EOV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2ENH-0",
+   "name": "DV-1 Workspace",
+   "component": "Frame",
+   "w": 1390,
+   "h": 642,
+   "depth": 3
+  },
+  {
+   "id": "2ENI-0",
+   "name": "DV-1 Compare Table",
+   "component": "Frame",
+   "w": 914,
+   "h": 642,
+   "depth": 4
+  },
+  {
+   "id": "2EP3-0",
+   "name": "DV-1 Table Preset Strip · Chrome",
+   "component": "Frame",
+   "w": 912,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "2EP6-0",
+   "name": "DV-1 Table Header · Chrome",
+   "component": "Frame",
+   "w": 912,
+   "h": 38,
+   "depth": 5
+  },
+  {
+   "id": "2EPF-0",
+   "name": "DV-1 Result Rows · 10 visible",
+   "component": "Frame",
+   "w": 912,
+   "h": 480,
+   "depth": 5
+  },
+  {
+   "id": "2EPG-0",
+   "name": "DV-1 Result Row 1",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2EPI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2EPR-0",
+   "name": "DV-1 Result Row 2",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2EPT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2EQ2-0",
+   "name": "DV-1 Result Row 3",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2EQ4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2EQD-0",
+   "name": "DV-1 Result Row 4",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2EQF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2EQO-0",
+   "name": "DV-1 Result Row 5",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2EQQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2EQZ-0",
+   "name": "DV-1 Result Row 6",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2ER1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2ERA-0",
+   "name": "DV-1 Result Row 7",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2ERC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2ERL-0",
+   "name": "DV-1 Result Row 8",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2ERN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2ERW-0",
+   "name": "DV-1 Result Row 9",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2ERY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2ES7-0",
+   "name": "DV-1 Result Row 10",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2ES9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2ESI-0",
+   "name": "DV-1 Table Expand Controls · Chrome",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "2ESJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2ESL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "2ESM-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 28,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "2ESN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2ESO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "2ESQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "2ESS-0",
+   "name": "DV-1 Table Status · Chrome",
+   "component": "Frame",
+   "w": 912,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "2ENJ-0",
+   "name": "DV-1 Selected Detail",
+   "component": "Frame",
+   "w": 422,
+   "h": 642,
+   "depth": 4
+  },
+  {
+   "id": "2ESW-0",
+   "name": "DV-1 Selected Header · Chrome",
+   "component": "Frame",
+   "w": 421,
+   "h": 70,
+   "depth": 5
+  },
+  {
+   "id": "2ESX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2ET0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2ET3-0",
+   "name": "DV-1 Detail Tabs · Chrome",
+   "component": "Frame",
+   "w": 421,
+   "h": 42,
+   "depth": 5
+  },
+  {
+   "id": "2ET4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "2ET6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "2ET8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "2ETA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "2ETC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "2ETE-0",
+   "name": "DV-1 Detail Sparse Rows",
+   "component": "Frame",
+   "w": 421,
+   "h": 485,
+   "depth": 5
+  },
+  {
+   "id": "2ETF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2ETH-0",
+   "name": "base:ka10020|$.bid_req_upper[].stk_nm|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2ETK-0",
+   "name": "base:ka10020|$.bid_req_upper[].stk_cd|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2ETN-0",
+   "name": "base:ka10020|$.bid_req_upper[].cur_prc|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2ETQ-0",
+   "name": "base:ka10020|$.bid_req_upper[].pred_pre|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2ETT-0",
+   "name": "base:ka10023|$.trde_qty_sdnin[].flu_rt|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2ETW-0",
+   "name": "base:ka10020|$.bid_req_upper[].trde_qty|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2ETZ-0",
+   "name": "base:ka10032|$.trde_prica_upper[].trde_prica|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2EU2-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].buy_bid|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2EU5-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].sel_bid|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2EU8-0",
+   "name": "base:ka10032|$.trde_prica_upper[].now_rank|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2EUB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "2EUD-0",
+   "name": "DV-1 Detail Footer · Chrome",
+   "component": "Frame",
+   "w": 421,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "2EXT-0",
+   "name": "DV-1 Exact Metadata Remaining · 118",
+   "component": "Frame",
+   "w": 421,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "2EXU-0",
+   "name": "base:ka10020|$.bid_req_upper|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EXV-0",
+   "name": "base:ka10020|$.bid_req_upper[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EXW-0",
+   "name": "base:ka10020|$.bid_req_upper[].tot_sel_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EXX-0",
+   "name": "base:ka10020|$.bid_req_upper[].tot_buy_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EXY-0",
+   "name": "base:ka10020|$.bid_req_upper[].netprps_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EXZ-0",
+   "name": "base:ka10020|$.bid_req_upper[].buy_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EY0-0",
+   "name": "base:ka10021|$.bid_req_sdnin|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EY1-0",
+   "name": "base:ka10021|$.bid_req_sdnin[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EY2-0",
+   "name": "base:ka10021|$.bid_req_sdnin[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EY3-0",
+   "name": "base:ka10021|$.bid_req_sdnin[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EY4-0",
+   "name": "base:ka10021|$.bid_req_sdnin[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EY5-0",
+   "name": "base:ka10021|$.bid_req_sdnin[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EY6-0",
+   "name": "base:ka10021|$.bid_req_sdnin[].int|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EY7-0",
+   "name": "base:ka10021|$.bid_req_sdnin[].now|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EY8-0",
+   "name": "base:ka10021|$.bid_req_sdnin[].sdnin_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EY9-0",
+   "name": "base:ka10021|$.bid_req_sdnin[].sdnin_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYA-0",
+   "name": "base:ka10021|$.bid_req_sdnin[].tot_buy_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYB-0",
+   "name": "base:ka10022|$.req_rt_sdnin|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYC-0",
+   "name": "base:ka10022|$.req_rt_sdnin[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYD-0",
+   "name": "base:ka10022|$.req_rt_sdnin[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYE-0",
+   "name": "base:ka10022|$.req_rt_sdnin[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYF-0",
+   "name": "base:ka10022|$.req_rt_sdnin[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYG-0",
+   "name": "base:ka10022|$.req_rt_sdnin[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYH-0",
+   "name": "base:ka10022|$.req_rt_sdnin[].int|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYI-0",
+   "name": "base:ka10022|$.req_rt_sdnin[].now_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYJ-0",
+   "name": "base:ka10022|$.req_rt_sdnin[].sdnin_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYK-0",
+   "name": "base:ka10022|$.req_rt_sdnin[].tot_sel_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYL-0",
+   "name": "base:ka10022|$.req_rt_sdnin[].tot_buy_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYM-0",
+   "name": "base:ka10023|$.trde_qty_sdnin|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYN-0",
+   "name": "base:ka10023|$.trde_qty_sdnin[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYO-0",
+   "name": "base:ka10023|$.trde_qty_sdnin[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYP-0",
+   "name": "base:ka10023|$.trde_qty_sdnin[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYQ-0",
+   "name": "base:ka10023|$.trde_qty_sdnin[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYR-0",
+   "name": "base:ka10023|$.trde_qty_sdnin[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYS-0",
+   "name": "base:ka10023|$.trde_qty_sdnin[].prev_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYT-0",
+   "name": "base:ka10023|$.trde_qty_sdnin[].now_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYU-0",
+   "name": "base:ka10023|$.trde_qty_sdnin[].sdnin_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYV-0",
+   "name": "base:ka10023|$.trde_qty_sdnin[].sdnin_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYW-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYX-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].stk_cls|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYY-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EYZ-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZ0-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZ1-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZ2-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZ3-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZ4-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].sel_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZ5-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].buy_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZ6-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].now_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZ7-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].cntr_str|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZ8-0",
+   "name": "base:ka10027|$.pred_pre_flu_rt_upper[].cnt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZ9-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZA-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZB-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZC-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].exp_cntr_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZD-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].base_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZE-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZF-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZG-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZH-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].exp_cntr_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZI-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].sel_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZJ-0",
+   "name": "base:ka10029|$.exp_cntr_flu_rt_upper[].buy_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZK-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZL-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZM-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZN-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZO-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZP-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZQ-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZR-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZS-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].pred_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZT-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].trde_tern_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZU-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].trde_amt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZV-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].opmr_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZW-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].opmr_pred_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZX-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].opmr_trde_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZY-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].opmr_trde_amt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2EZZ-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].af_mkrt_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F00-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].af_mkrt_pred_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F01-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].af_mkrt_trde_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F02-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].af_mkrt_trde_amt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F03-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].bf_mkrt_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F04-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].bf_mkrt_pred_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F05-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].bf_mkrt_trde_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F06-0",
+   "name": "base:ka10030|$.tdy_trde_qty_upper[].bf_mkrt_trde_amt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F07-0",
+   "name": "base:ka10031|$.pred_trde_qty_upper|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F08-0",
+   "name": "base:ka10031|$.pred_trde_qty_upper[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F09-0",
+   "name": "base:ka10031|$.pred_trde_qty_upper[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0A-0",
+   "name": "base:ka10031|$.pred_trde_qty_upper[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0B-0",
+   "name": "base:ka10031|$.pred_trde_qty_upper[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0C-0",
+   "name": "base:ka10031|$.pred_trde_qty_upper[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0D-0",
+   "name": "base:ka10031|$.pred_trde_qty_upper[].trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0E-0",
+   "name": "base:ka10032|$.trde_prica_upper|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0F-0",
+   "name": "base:ka10032|$.trde_prica_upper[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0G-0",
+   "name": "base:ka10032|$.trde_prica_upper[].pred_rank|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0H-0",
+   "name": "base:ka10032|$.trde_prica_upper[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0I-0",
+   "name": "base:ka10032|$.trde_prica_upper[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0J-0",
+   "name": "base:ka10032|$.trde_prica_upper[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0K-0",
+   "name": "base:ka10032|$.trde_prica_upper[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0L-0",
+   "name": "base:ka10032|$.trde_prica_upper[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0M-0",
+   "name": "base:ka10032|$.trde_prica_upper[].sel_bid|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0N-0",
+   "name": "base:ka10032|$.trde_prica_upper[].buy_bid|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0O-0",
+   "name": "base:ka10032|$.trde_prica_upper[].now_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0P-0",
+   "name": "base:ka10032|$.trde_prica_upper[].pred_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0Q-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0R-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].rank|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0S-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0T-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0U-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0V-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0W-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0X-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0Y-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].sel_tot_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F0Z-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].buy_tot_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F10-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].acc_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F11-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].acc_trde_prica|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F12-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].tdy_close_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F13-0",
+   "name": "base:ka10098|$.ovt_sigpric_flu_rt_rank[].tdy_close_pric_flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2ENK-0",
+   "name": "DV-1 Footer",
+   "component": "Frame",
+   "w": 1390,
+   "h": 36,
+   "depth": 3
+  },
+  {
+   "id": "2EOZ-0",
+   "name": "DV-1 Footer Controls · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 36,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "종목 탐색": 1,
+  "KOSPI · 전체 종목 2,842": 1,
+  "종목명 또는 코드 검색": 1,
+  "삼성전자 005930": 1,
+  "150,850원": 5,
+  "+2.35%": 4,
+  "DESIGN FIXTURE · 12:34": 1,
+  "거래량": 3,
+  "가격": 1,
+  "등락": 1,
+  "시가총액": 1,
+  "거래원": 1,
+  "투자자": 1,
+  "예상체결": 1,
+  "시간외": 1,
+  "시장": 1,
+  "KOSPI ▾": 1,
+  "정렬": 1,
+  "거래량 높은 순 ▾": 1,
+  "상승 종목만": 1,
+  "● 실시간 갱신": 1,
+  "100개 결과": 1,
+  "거래량 상위 · 현재 열": 1,
+  "열 설정: 시세 · 거래 · 호가": 1,
+  "순위": 1,
+  "종목": 1,
+  "현재가": 2,
+  "등락률": 2,
+  "거래대금": 2,
+  "매수호가": 2,
+  "매도호가": 2,
+  "01": 1,
+  "삼성전자": 3,
+  "005930": 2,
+  "150,850": 2,
+  "18,420,135": 1,
+  "1.42조": 1,
+  "150,900": 1,
+  "02": 1,
+  "SK하이닉스": 1,
+  "000660": 1,
+  "214,500": 2,
+  "+2.14%": 1,
+  "9,840,521": 1,
+  "9860억": 1,
+  "214,550": 1,
+  "03": 1,
+  "현대차": 1,
+  "005380": 1,
+  "286,000": 2,
+  "-0.52%": 1,
+  "4,702,188": 1,
+  "7420억": 1,
+  "285,500": 1,
+  "04": 1,
+  "NAVER": 1,
+  "035420": 1,
+  "238,500": 2,
+  "+0.85%": 1,
+  "3,181,402": 1,
+  "6810억": 1,
+  "239,000": 1,
+  "05": 1,
+  "한화에어로스페이스": 1,
+  "012450": 1,
+  "811,000": 2,
+  "+3.02%": 1,
+  "1,245,180": 1,
+  "5980억": 1,
+  "810,000": 1,
+  "06": 1,
+  "LG에너지솔루션": 1,
+  "373220": 1,
+  "398,500": 2,
+  "-0.50%": 1,
+  "1,902,445": 1,
+  "5220억": 1,
+  "399,000": 1,
+  "07": 1,
+  "기아": 1,
+  "000270": 1,
+  "136,200": 2,
+  "+1.04%": 1,
+  "2,988,310": 1,
+  "4110억": 1,
+  "136,300": 1,
+  "08": 1,
+  "KB금융": 1,
+  "105560": 1,
+  "91,600": 2,
+  "+0.55%": 1,
+  "3,102,800": 1,
+  "2860억": 1,
+  "91,700": 1,
+  "09": 1,
+  "두산에너빌리티": 1,
+  "034020": 1,
+  "27,850": 2,
+  "+3.53%": 1,
+  "12,881,241": 1,
+  "2410억": 1,
+  "27,900": 1,
+  "10": 1,
+  "삼성바이오로직스": 1,
+  "207940": 1,
+  "1,012,000": 2,
+  "-0.39%": 1,
+  "188,301": 1,
+  "1980억": 1,
+  "1,013,000": 1,
+  "1–10 / 100": 1,
+  "더보기": 1,
+  "접기": 1,
+  "선택: 삼성전자 · 1위": 1,
+  "표 안에서만 스크롤": 1,
+  "005930 · KOSPI": 1,
+  "시세": 1,
+  "거래": 1,
+  "수급": 1,
+  "시장정보": 1,
+  "기타 공식정보": 1,
+  "선택 행 공식 정보": 1,
+  "종목명": 1,
+  "종목코드": 1,
+  "전일대비": 1,
+  "+3,450원": 1,
+  "18,420,135주": 1,
+  "1.42조원": 1,
+  "현재순위": 1,
+  "1위": 1,
+  "탭 전환 시 열 preset과 상세 필드가 함께 변경됩니다.": 1,
+  "10개 표시": 1,
+  "더보기 · 접기": 1,
+  "상위 10개 표시 · 더보기 시 표 내부 스크롤 · 접기": 1,
+  "탐색 결과 · 공식 필드 128개 연결": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "d9af8b1b2927c564cccbb1f0ec2d00d63dda103571e36c45fc4b7bc4ba483aa0"
+}
