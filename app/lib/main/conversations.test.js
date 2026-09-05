@@ -275,7 +275,7 @@ test('setProjectPinned는 프로젝트를 맨 앞으로 올리고, 해제하면 
 
 test('updateProject는 이름·설명만 고치고, 빈 이름은 거절한다', async () => {
   await withTempState({
-    projects: [{ id: 'p1', label: '하나', path: 'C:\athena', pinned: true }],
+    projects: [{ id: 'p1', label: '하나', path: 'C:\\athena', pinned: true }],
     currentProjectId: 'p1',
     conversations: [],
   }, () => {
@@ -284,7 +284,7 @@ test('updateProject는 이름·설명만 고치고, 빈 이름은 거절한다',
     assert.equal(updated.project.label, '아테나');
     assert.equal(updated.project.description, '연구 노트');
     assert.equal(updated.project.pinned, true);      // 고정·폴더는 그대로다.
-    assert.equal(updated.project.path, 'C:\athena');
+    assert.equal(updated.project.path, 'C:\\athena');
     assert.equal(updated.state.projects[0].label, '아테나');
 
     const cleared = conversations.updateProject({ id: 'p1', label: '아테나', description: '   ' });
