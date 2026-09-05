@@ -473,7 +473,7 @@ html.is-boot-expanding #winControls { opacity: 0; }
   color: var(--color-k-text);
 }
 .turn-a {
-  /* (과거 대화 배너 스타일은 이 규칙 아래 .past-banner에 있다) */
+  /* (과거 대화의 빈 상태 스타일은 아래 .past-empty에 있다) */
   /* 답변 쪽도 같은 규칙이 필요하다(2026-09-02 실측 — .turn-q만 고친 뒤 재 보니
    * .turn-a는 overflows:true, wrap:normal이었다). 긴 URL·해시·공백 없는 토큰이
    * 대화 폭을 뚫고 나간다. 사용자 말풍선과 같은 이유로 anywhere를 쓴다. */
@@ -1825,27 +1825,9 @@ html.is-boot-expanding #winControls { opacity: 0; }
 .ticket-value { font-family: var(--font-mono); font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); }
 .ticket-qty { width: 120px; font-family: var(--font-mono); font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); background: rgba(16, 19, 26, 0.5); border: 1px solid rgba(230, 232, 238, 0.25); border-radius: 8px; padding: 6px 10px; }
 
-/* ---------- 과거 대화 읽기 전용 뷰(2026-09-02) ---------- */
-/* 사이드바에서 과거 대화를 누르면 채팅 화면이 그 대화로 갈아치워진다. 살아 있는
- * 대화와 구별돼야 하지만 새 색·새 유리 층을 만들지 않는다 — 기존 잉크 위계와
- * 선 색만 쓴다(soul.md §7). */
-.past-banner {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  padding: 10px 14px; margin-bottom: 6px;
-  border: 1px solid var(--color-k-line); border-radius: var(--radius-lg);
-  background: var(--color-k-panel2);
-}
-.past-banner-title {
-  font-family: var(--font-strong); font-size: var(--text-sm); color: var(--color-k-bright);
-}
-.past-banner-note { font-size: var(--text-sm); color: var(--color-k-dim); }
-.past-banner-back {
-  margin-left: auto; padding: 4px 12px;
-  border: 1px solid var(--color-k-line); border-radius: 999px;
-  background: transparent; color: var(--color-k-text);
-  font-family: var(--font-body); font-size: var(--text-sm); cursor: pointer;
-}
-.past-banner-back:hover { background: var(--color-k-panel3); }
+/* ---------- 과거 대화 복원(2026-09-02 · 2026-09-05 개정) ---------- */
+/* 사이드바에서 과거 대화를 누르면 채팅 화면이 그 대화로 조용히 갈아치워진다 — '복원됨'
+ * 배너는 없다(41번 보드). 남는 건 메시지가 0건일 때의 정직한 빈 상태 하나다. */
 .past-empty { padding: 18px 4px; font-size: var(--text-base); color: var(--color-k-dim); }
 
 /* ---------- 되물을 것들 카드(2026-09-02) ---------- */

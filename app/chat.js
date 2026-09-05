@@ -2140,20 +2140,10 @@ function restoreConversation(conv, switched, messages, snapshot) {
     window.AthenaModeNav.setActive(view);
   }
 
-  const banner = document.createElement('div');
-  banner.className = 'past-banner';
-  const title = document.createElement('span');
-  title.className = 'past-banner-title';
-  title.textContent = conv.title ? `복원됨 · ${conv.title}` : '복원됨';
-  banner.appendChild(title);
-  const note = document.createElement('span');
-  note.className = 'past-banner-note';
-  // 문맥이 이어지는지는 커서가 있었느냐에 달렸다 — 있는 그대로 적는다.
-  note.textContent = switched.resumed
-    ? '이어서 말할 수 있습니다 — 모델 문맥까지 이어집니다'
-    : '이어서 말할 수 있습니다 — 모델은 이 대화의 문맥 없이 새로 시작합니다';
-  banner.appendChild(note);
-  $history.appendChild(banner);
+  // 배너는 없다(2026-09-05 사용자 정정 "복원됨이 아니라 그냥 자동으로 복원되어야"). 전에는
+  // '복원됨 · 제목'과 '이어서 말할 수 있습니다 …' 줄을 맨 위에 그렸는데, 복원이 계약이면
+  // 말할 게 없다(41번 보드 "전부 돌아왔으면 아무 말도 하지 않는다"). 문맥이 이어지는지
+  // (switched.resumed)는 main의 커서가 정하고, 화면은 그것을 따로 알리지 않는다.
 
   if (!messages.length) {
     // 못 읽은 것과 없는 것은 다르다 — 조회는 됐고 메시지가 0건인 경우다

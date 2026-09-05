@@ -1521,7 +1521,15 @@ Object.keys(PROJECT_CHANNELS).forEach((channel) => {
 ipcMain.handle('athena:project-open-dialog', async () => {
   try {
     const res = await dialog.showOpenDialog(shellWin, { properties: ['openDirectory'] });
+    const picked = (res.filePaths || [])[0] || null;
+    return { ok: true, data: { canceled: res.canceled || !picked, path: picked } };
+  } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
 
+// 아래 다섯 핸들러(add·pin·update·reveal·remove)는 35409b8에서 위 project-open-dialog
+// 핸들러의 본문 *안*에 들어가 있었다 — 백테스트의 폴더 대화상자를 한 번 열기 전에는
+// 등록조차 되지 않아 사이드바의 폴더 추가·고정·제거가 "No handler registered"로 죽었다
+// (2026-09-05 프로브 실측). 최상위로 꺼낸다.
 // 사이드바 프로젝트(36·37번 보드) — 프로젝트는 폴더 하나다. 폴더는 대화상자로 사람이
 // 고르고, 백엔드 레지스트리가 등록하며(같은 폴더 두 번 등록은 백엔드가 409로 막는다),
 // 사이드바 레코드는 백엔드 id로 이어진다. 두 목록이 다른 id를 들면 같은 폴더가 두 얼굴이 된다.
@@ -1550,6 +1558,8 @@ ipcMain.handle('athena:project-add', async () => {
   return { ...added, path: picked, backendRegistered: Boolean(registered) };
 });
 ipcMain.handle('athena:project-pin', (_e, { id, pinned } = {}) => conversations.setProjectPinned(id, Boolean(pinned)));
+// '프로젝트 수정'(29번 보드) — 이름·설명만. 폴더는 건드리지 않는다.
+ipcMain.handle('athena:project-update', (_e, { id, label, description } = {}) => conversations.updateProject({ id, label, description }));
 ipcMain.handle('athena:project-reveal', async (_e, { id } = {}) => {
   const project = conversations.projectById(id);
   if (!project || !project.path) return { ok: false, reason: 'no_path' };
@@ -1577,10 +1587,6 @@ ipcMain.handle('athena:project-remove', async (_e, { id, confirmName } = {}) => 
     if (bridge && bridge.store) for (const conversationId of removed.removed.conversationIds) bridge.store.deleteSession(conversationId);
   }
   return removed;
-});
-    const picked = (res.filePaths || [])[0] || null;
-    return { ok: true, data: { canceled: res.canceled || !picked, path: picked } };
-  } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------

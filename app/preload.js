@@ -176,6 +176,7 @@ const INVOKE_CHANNELS = new Set([
   'athena:project-open-dialog',
   'athena:project-add',
   'athena:project-pin',
+  'athena:project-update',
   'athena:project-reveal',
   'athena:project-remove',
   'athena:project-open',
@@ -255,7 +256,7 @@ const ON_CHANNELS = new Set([
   'athena:window-state',
   'athena:boot-readiness',
   'athena:app-notification',
-  // 8XX  \ ‰â ¡‹(39à Ù‹)  ¨t‹ âX §<∑.
+  // 8XX  \ ÔøΩ ÔøΩÔøΩ(39ÔøΩ ÔøΩÔøΩ)  ÔøΩtÔøΩ ÔøΩX ÔøΩ<ÔøΩ.
   'athena:session-run-state',
   'athena:add-canvas',
   'athena:add-canvas-live',
