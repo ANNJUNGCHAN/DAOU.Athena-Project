@@ -158,11 +158,14 @@
   let currentProjectId = null;
   let activeConversationId = null;
   let openProjectMenuId = null;
-  // 프로젝트 행이 여는 것은 셋(⋯ 메뉴·모드 선택·삭제 확인)이고 한 번에 하나만 열린다.
+  // 프로젝트 행이 여는 것은 넷(⋯ 메뉴·모드 선택·삭제 확인·프로젝트 수정)이고 한 번에 하나만 열린다.
   let openModePickerId = null;
   let openRemoveProjectId = null;
   let projectRemoveDraft = '';  // 5초 폴링 재렌더가 입력을 지우지 않게 초안을 밖에 둔다.
   let projectRemoveHint = '';   // IPC가 거절한 이유(name_mismatch 등) 한 줄.
+  let openEditProjectId = null; // '프로젝트 수정' 패널(29번 보드) — 삭제 확인과 같은 렌더 상태.
+  let projectEditDraft = null;  // { label, description } — 재렌더가 타이핑을 지우지 않게 밖에 둔다.
+  let projectEditHint = '';     // IPC가 거절한 이유(invalid_label 등) 한 줄.
   let selectedNotifyId = null;
   let showOlder = false;
   let searchQuery = '';
@@ -197,6 +200,32 @@
     return label;
   }
 
+  // 대화 행 앞의 모드 아이콘(35번 보드 "모드 아이콘 · 제목 · 실행 점"의 첫 레인). 목록이
+  // 더는 모드로 걸러지지 않으므로(renderList) 이 아이콘이 그 대화의 모드를 말하는 유일한
+  // 표시다. 모드 네비(#sidebarModeNav)의 SVG를 그대로 복제한다 — 아이콘 원본이 둘이면
+  // 한쪽만 바뀌는 날이 온다. 네비에 없는 모드는 빈 슬롯으로 자리만 지켜 제목 레인이
+  // 흔들리지 않는다.
+  function makeModeIcon(mode) {
+    const slot = el('span', 'sidebar-item-mode-ic');
+    const snapshot = window.AthenaLib && window.AthenaLib.SessionSnapshot;
+    const historyView = window.AthenaLib && window.AthenaLib.SessionHistoryView;
+    const view = snapshot ? snapshot.modeToView(mode) : 'summary';
+    const source = document.querySelector(
+      `#sidebarModeNav .sidebar-mode-item[data-view="${view}"] .sidebar-mode-item-ic`,
+    );
+    if (source) slot.appendChild(source.cloneNode(true));
+    const label = snapshot && historyView && historyView.MODE_LABELS
+      ? historyView.MODE_LABELS[snapshot.viewToMode(mode)]
+      : null;
+    if (label) {
+      slot.setAttribute('role', 'img');
+      slot.setAttribute('aria-label', `${label} 모드`);
+    } else {
+      slot.setAttribute('aria-hidden', 'true');
+    }
+    return slot;
+  }
+
   function makeConversationItem(conv, projection) {
     const btn = el('button', projection === 'project'
       ? 'sidebar-item sidebar-project-conversation'
@@ -207,6 +236,7 @@
     btn.dataset.projectId = conv.projectId || '';
     const isSelected = conv.id === activeConversationId && !selectedNotifyId;
     if (isSelected) btn.classList.add('is-selected', 'is-current-conversation');
+    btn.appendChild(makeModeIcon(conv.mode));
     const label = el('span', 'sidebar-item-label');
     label.textContent = conv.title;
     btn.appendChild(label);
@@ -243,11 +273,14 @@
   // 않는다) — 상태를 지운 뒤 다시 그려야 사라진다. 무언가 열려 있었는지를
   // 돌려줘서 호출자가 불필요한 재렌더를 피한다.
   function resetProjectPopovers() {
-    const had = Boolean(openModePickerId || openRemoveProjectId);
+    const had = Boolean(openModePickerId || openRemoveProjectId || openEditProjectId);
     openModePickerId = null;
     openRemoveProjectId = null;
     projectRemoveDraft = '';
     projectRemoveHint = '';
+    openEditProjectId = null;
+    projectEditDraft = null;
+    projectEditHint = '';
     return had;
   }
 
@@ -256,7 +289,9 @@
   // click이 사라진 노드 위에서 죽는다(+ 폴더 추가·더 보기가 한 번에 안 눌린다).
   function closeProjectPopovers() {
     resetProjectPopovers();
-    for (const node of $list.querySelectorAll('.sidebar-mode-picker, .sidebar-project-remove')) {
+    for (const node of $list.querySelectorAll(
+      '.sidebar-mode-picker, .sidebar-project-remove, .sidebar-project-edit, .sidebar-project-description',
+    )) {
       node.hidden = true;
     }
     for (const btn of $list.querySelectorAll('.sidebar-project-new-chat')) {
@@ -423,6 +458,98 @@
     return panel;
   }
 
+  const EDIT_FAIL_HINT = {
+    invalid_label: '이름은 비울 수 없습니다.',
+    unknown_project: '이미 없는 프로젝트입니다.',
+  };
+
+  // '프로젝트 수정'(29번 보드) — 이름·설명만 main에 보낸다. 폴더·고정은 ⋯ 메뉴의 몫이다.
+  async function updateProject(project, label, description) {
+    let res = null;
+    try {
+      res = await window.athena.invoke('athena:project-update', { id: project.id, label, description });
+    } catch (e) {
+      console.warn('프로젝트 수정 실패', e);
+      res = null;
+    }
+    if (res && res.ok) {
+      closeProjectPopovers();
+      // 응답 스냅샷이 이름의 진실이다 — 다음 5초 폴링을 기다리지 않고 바로 갈아끼운다.
+      if (res.state && Array.isArray(res.state.projects)) projectsCache = res.state.projects;
+      renderList();
+      return;
+    }
+    projectEditHint = (res && EDIT_FAIL_HINT[res.reason]) || '프로젝트를 고치지 못했습니다.';
+    renderList();
+  }
+
+  // 설명 카드의 '프로젝트 수정'이 연다(29번 보드). 삭제 확인과 같은 자리·같은 방식이다 —
+  // 렌더 상태로만 살고, 초안은 projectEditDraft가 지켜 5초 폴링 재렌더를 견딘다.
+  // 이름은 비울 수 없다(사이드바 행과 삭제 확인이 이름으로 사람을 붙잡는다).
+  function makeProjectEditPanel(project) {
+    const panel = el('div', 'sidebar-project-edit');
+    panel.setAttribute('role', 'group');
+    panel.setAttribute('aria-label', `${project.label} 수정`);
+    const draft = projectEditDraft || { label: project.label, description: project.description || '' };
+
+    const makeField = (field, caption, value, placeholder) => {
+      const wrapper = el('label', 'sidebar-project-edit-field');
+      wrapper.appendChild(el('span', 'sidebar-project-edit-label', caption));
+      const input = el('input', 'sidebar-project-edit-input');
+      input.type = 'text';
+      input.dataset.field = field;
+      input.value = value;
+      if (placeholder) input.placeholder = placeholder;
+      wrapper.appendChild(input);
+      panel.appendChild(wrapper);
+      return input;
+    };
+    const labelInput = makeField('label', '이름', draft.label);
+    const descriptionInput = makeField('description', '설명', draft.description, '이 프로젝트에 속한 대화와 작업');
+
+    const hint = el('p', 'sidebar-project-edit-hint');
+    panel.appendChild(hint);
+    const actions = el('div', 'sidebar-project-edit-actions');
+    const cancel = el('button', 'sidebar-project-edit-cancel', '취소');
+    cancel.type = 'button';
+    const save = el('button', 'sidebar-project-edit-save', '저장');
+    save.type = 'button';
+    const sync = () => {
+      save.disabled = !labelInput.value.trim();
+      hint.textContent = projectEditHint;
+    };
+    const onInput = () => {
+      projectEditDraft = { label: labelInput.value, description: descriptionInput.value };
+      projectEditHint = ''; // 다시 치기 시작하면 지난 거절 이유는 낡은 말이 된다.
+      sync();
+    };
+    labelInput.addEventListener('input', onInput);
+    descriptionInput.addEventListener('input', onInput);
+    const submit = () => {
+      if (save.disabled) return;
+      updateProject(project, labelInput.value, descriptionInput.value);
+    };
+    panel.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      submit();
+    });
+    cancel.addEventListener('click', (event) => {
+      event.stopPropagation();
+      closeProjectPopovers();
+      renderList();
+    });
+    save.addEventListener('click', (event) => {
+      event.stopPropagation();
+      submit();
+    });
+    sync();
+    actions.appendChild(cancel);
+    actions.appendChild(save);
+    panel.appendChild(actions);
+    return panel;
+  }
+
   function makeProjectRow(project, conversations) {
     const wrap = el('div', 'sidebar-project');
     wrap.dataset.projectId = project.id;
@@ -434,11 +561,28 @@
     const main = el('button', 'sidebar-project-main');
     main.type = 'button';
     const descriptionText = project.description || '이 프로젝트에 속한 대화와 작업';
-    main.title = descriptionText;
+    // title 툴팁은 달지 않는다 — 설명 카드와 같은 문장이 툴팁으로도 떠서 카드의 버튼을
+    // 가렸다(2026-09-05 제보). 설명은 카드 하나가 말한다.
     const name = el('span', 'sidebar-project-name');
     name.textContent = project.label;
     main.appendChild(name);
-    const description = el('span', 'sidebar-project-description');
+    main.addEventListener('click', () => {
+      currentProjectId = project.id;
+      closeProjectPopovers();
+      renderList();
+    });
+    row.appendChild(main);
+
+    // 설명 카드(29번 보드). 버튼(main) 안이 아니라 행 묶음(wrap)의 형제로 둔다 — 버튼 안에
+    // 있으면 카드의 '프로젝트 수정'을 눌러도 버튼 클릭으로 새어 나가 프로젝트 선택·재렌더로
+    // 끝났고, 포인터가 행을 벗어나는 순간 mouseleave로 꺼져 버튼에 닿을 수가 없었다
+    // (2026-09-05 제보 "클릭하려는 순간에 꺼져버려서"). 지금은 행이나 카드 위에 머무는
+    // 동안 남고, 둘 다 벗어난 뒤 잠깐 있다가 닫힌다. 자리는 행 오른쪽 바깥이라 펜·⋯을
+    // 덮지 않는다. 문서 mousedown 판정은 .sidebar-project 안이면 닫지 않으므로 카드 안
+    // 클릭도 안전하다.
+    const description = el('div', 'sidebar-project-description');
+    description.setAttribute('role', 'group');
+    description.setAttribute('aria-label', `${project.label} 설명`);
     description.appendChild(el('span', 'sidebar-project-description-name', project.label));
     description.appendChild(el(
       'span',
@@ -447,26 +591,45 @@
     ));
     description.appendChild(el('span', 'sidebar-project-description-id', project.id));
     description.appendChild(el('span', 'sidebar-project-description-copy', descriptionText));
-    description.appendChild(el('span', 'sidebar-project-description-action', '프로젝트 수정'));
+    const editAction = el('button', 'sidebar-project-description-action');
+    editAction.type = 'button';
+    const editIcon = pencilIcon();
+    editIcon.setAttribute('width', '12');
+    editIcon.setAttribute('height', '12');
+    editAction.appendChild(editIcon);
+    editAction.appendChild(el('span', undefined, '프로젝트 수정'));
+    editAction.addEventListener('click', (event) => {
+      event.stopPropagation();
+      resetProjectPopovers();
+      openEditProjectId = project.id;
+      renderList();
+    });
+    description.appendChild(editAction);
     description.hidden = true;
-    main.appendChild(description);
+    let hideTimer = null;
     const showDescription = () => {
-      const rect = main.getBoundingClientRect();
+      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+      // 이 행의 다른 팝오버(⋯ 메뉴·모드 선택·삭제 확인·수정 패널)가 열려 있으면 겹치지 않는다.
+      if (openProjectMenuId === project.id || openModePickerId === project.id
+          || openRemoveProjectId === project.id || openEditProjectId === project.id) return;
+      const rect = row.getBoundingClientRect();
       description.style.left = `${Math.round(rect.right + 8)}px`;
       description.style.top = `${Math.round(rect.top)}px`;
       description.hidden = false;
     };
-    const hideDescription = () => { description.hidden = true; };
-    main.addEventListener('mouseenter', showDescription);
-    main.addEventListener('mouseleave', hideDescription);
-    main.addEventListener('focus', showDescription);
-    main.addEventListener('blur', hideDescription);
-    main.addEventListener('click', () => {
-      currentProjectId = project.id;
-      closeProjectPopovers();
-      renderList();
-    });
-    row.appendChild(main);
+    const hideDescriptionSoon = () => {
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => { hideTimer = null; description.hidden = true; }, 160);
+    };
+    const keepsFocus = (target) => Boolean(target && (row.contains(target) || description.contains(target)));
+    for (const node of [row, description]) {
+      node.addEventListener('mouseenter', showDescription);
+      node.addEventListener('mouseleave', hideDescriptionSoon);
+      node.addEventListener('focusin', showDescription);
+      node.addEventListener('focusout', (event) => {
+        if (!keepsFocus(event.relatedTarget)) hideDescriptionSoon();
+      });
+    }
 
     const actions = el('div', 'sidebar-project-actions');
     if (openProjectMenuId === project.id) actions.classList.add('is-open');
@@ -547,8 +710,10 @@
 
     row.appendChild(actions);
     wrap.appendChild(row);
+    wrap.appendChild(description);
     if (openModePickerId === project.id) wrap.appendChild(makeModePicker(project));
     if (openRemoveProjectId === project.id) wrap.appendChild(makeProjectRemovePanel(project));
+    if (openEditProjectId === project.id) wrap.appendChild(makeProjectEditPanel(project));
     if (project.id === currentProjectId) {
       for (const conversation of conversations) {
         wrap.appendChild(makeConversationItem(conversation, 'project'));
@@ -609,6 +774,12 @@
     const focusedRemoveInput = Boolean(document.activeElement
       && document.activeElement.classList
       && document.activeElement.classList.contains('sidebar-project-remove-input'));
+    // 수정 패널의 두 입력도 같은 이유로 커서를 되돌린다 — 어느 칸이었는지는 data-field가 말한다.
+    const focusedEditField = document.activeElement
+      && document.activeElement.classList
+      && document.activeElement.classList.contains('sidebar-project-edit-input')
+      ? document.activeElement.dataset.field
+      : null;
     while ($list.firstChild) $list.removeChild($list.firstChild);
 
     // 에이전트모드 우선 노출(원칙3, Paper 보드 39 보강본) — 대화 이력보다
@@ -619,27 +790,16 @@
       for (const row of agentRoutinesCache) $list.appendChild(makeRoutineItem(row));
     }
 
-    // 모드가 대화의 경계이므로 목록도 그 경계를 따른다(2026-09-03 사용자 확정:
-    // "'최근'과 프로젝트 둘 다 현재 모드만"). 이 필터가 없어서 그래프 모드에
-    // 백테스트·대화 이력이 통째로 섞여 나왔다 — 모드 네비가 이미 그리고 있는
-    // 모드별 대화 수 배지(updateModeCounts)와도 어긋나 있었다.
-    //
-    // viewToMode로 양쪽을 정규화해서 비교한다: currentMode()는 화면의 view id
-    // ('summary')이고 저장된 행은 mode('chat')라 문자열이 서로 다르다. 모르는
-    // 값은 그 함수가 'chat'으로 떨어뜨리므로 모드 개념 이전에 만들어진 옛 대화도
-    // 대화 모드에서 보인다(사라지지 않는다).
-    //
-    // 검색도 이 안에서 한다 — 목록에 없는 것이 검색으로만 튀어나오면 "지금 어느
-    // 모드를 보고 있는가"가 다시 흐려진다.
-    const sessionSnapshot = window.AthenaLib && window.AthenaLib.SessionSnapshot;
-    const inMode = sessionSnapshot
-      ? conversationsCache.filter(
-        (c) => sessionSnapshot.viewToMode(c.mode) === sessionSnapshot.viewToMode(currentMode()))
-      : conversationsCache;
+    // 모드는 목록을 거르지 않는다(2026-09-05 사용자 정정: "모드 창을 누르면 목록이 확확
+    // 바뀌는데 이건 내가 원한 게 아니다"). 2026-09-03에 넣었던 "현재 모드만" 필터는 모드를
+    // 누를 때마다 프로젝트·최근이 통째로 갈리는 사고로 읽혔다 — 지금은 어느 모드에 있든
+    // 같은 행을 보이고, 행 앞의 모드 아이콘(makeModeIcon)이 그 대화의 모드를 말한다.
+    // 모드 클릭이 하는 일은 캔버스 전환과 그 프로젝트의 새 대화뿐이다(모드 네비 onSelect,
+    // 35·40번 보드 2026-09-05 개정). 검색은 그대로 여기서 한다.
     const q = searchQuery.trim().toLowerCase();
     const filtered = q
-      ? inMode.filter((c) => c.title.toLowerCase().includes(q))
-      : inMode;
+      ? conversationsCache.filter((c) => c.title.toLowerCase().includes(q))
+      : conversationsCache;
 
     if (notifyRooms.length && !q) {
       $list.appendChild(makeSectionLabel('알림에서'));
@@ -686,6 +846,15 @@
 
     if (openRemoveProjectId && focusedRemoveInput) {
       const input = $list.querySelector('.sidebar-project-remove-input');
+      if (input) {
+        input.focus();
+        const end = input.value.length;
+        if (typeof input.setSelectionRange === 'function') input.setSelectionRange(end, end);
+      }
+    }
+
+    if (openEditProjectId && focusedEditField) {
+      const input = $list.querySelector(`.sidebar-project-edit-input[data-field="${focusedEditField}"]`);
       if (input) {
         input.focus();
         const end = input.value.length;

@@ -273,6 +273,30 @@ test('setProjectPinned는 프로젝트를 맨 앞으로 올리고, 해제하면 
   });
 });
 
+test('updateProject는 이름·설명만 고치고, 빈 이름은 거절한다', async () => {
+  await withTempState({
+    projects: [{ id: 'p1', label: '하나', path: 'C:\athena', pinned: true }],
+    currentProjectId: 'p1',
+    conversations: [],
+  }, () => {
+    const updated = conversations.updateProject({ id: 'p1', label: ' 아테나 ', description: '연구 노트' });
+    assert.equal(updated.ok, true);
+    assert.equal(updated.project.label, '아테나');
+    assert.equal(updated.project.description, '연구 노트');
+    assert.equal(updated.project.pinned, true);      // 고정·폴더는 그대로다.
+    assert.equal(updated.project.path, 'C:\athena');
+    assert.equal(updated.state.projects[0].label, '아테나');
+
+    const cleared = conversations.updateProject({ id: 'p1', label: '아테나', description: '   ' });
+    assert.equal(cleared.ok, true);
+    assert.equal('description' in cleared.project, false); // 빈 설명은 필드를 지운다.
+
+    assert.deepEqual(conversations.updateProject({ id: 'p1', label: '  ' }), { ok: false, reason: 'invalid_label' });
+    assert.deepEqual(conversations.updateProject({ id: '없음', label: 'x' }), { ok: false, reason: 'unknown_project' });
+    assert.equal(conversations.list().projects[0].label, '아테나'); // 거절은 아무것도 바꾸지 않는다.
+  });
+});
+
 test('removeProject는 프로젝트와 그 대화들을 지우고 현재 프로젝트·활성 대화를 정리한다', async () => {
   await withTempState({
     projects: [{ id: 'p1', label: '하나' }, { id: 'p2', label: '둘', path: 'C:/quant/two' }],
