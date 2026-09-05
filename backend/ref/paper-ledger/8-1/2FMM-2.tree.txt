@@ -1,0 +1,152 @@
+Frame "07 · 백테스트 — 전략 배포 · 실전 적용" (2FMM-2) 1680×0
+  Frame "타이틀" (2FMN-2) 0×0
+    Text "백테스트 — 전략 배포 · 실전 적용" (2FMO-2) 0×0 "백테스트 — 전략 배포 · 실전 적용"
+    Text "검증한 그 버전 그대로 실전에 겁니다…" (2FMP-2) 0×0 "검증한 그 버전 그대로 실전에 겁니다. 배포는 신호까지만 만들고 주문은 기존 주문 게이트를 통과합니다 — 백"
+  Frame "본문 행 1" (2FMR-2) 0×0
+    Frame "배포 설정" (2FMS-2) 420×0
+      Frame "헤더" (2FMX-2) 0×0
+        Text "배포 설정" (2FMY-2) 0×0 "배포 설정"
+        Frame "Frame" (2FMZ-2) 0×0
+          Rectangle "Rectangle" (2FN0-2) 6×6
+          Text "가동 중" (2FN1-2) 0×0 "가동 중"
+      Frame "결속" (2FN2-2) 0×0
+        Text "이 배포에 묶인 실행" (2FN3-2) 0×0 "이 배포에 묶인 실행"
+        Text "20-60 골든크로스 · v4 · 실…" (2FN4-2) 0×0 "20-60 골든크로스 · v4 · 실행 #41"
+        Text "fast 20 · slow 60 · …" (2FN5-2) 0×0 "fast 20 · slow 60 · 손절 ATR×2.0 · 005930 · 일봉"
+      Frame "실행 모드" (2FN7-2) 0×0
+        Text "신호가 나오면" (2FN8-2) 0×0 "신호가 나오면"
+        Frame "Frame" (2FN9-2) 0×0
+          Rectangle "Rectangle" (2FNA-2) 16×16
+          Frame "Frame" (2FNB-2) 0×0
+            Text "기록만 합니다" (2FNC-2) 0×0 "기록만 합니다"
+            Text "주문은 내지 않습니다. 전략이 실전에…" (2FND-2) 0×0 "주문은 내지 않습니다. 전략이 실전에서 어떻게 움직이는지만 봅니다."
+        Frame "Frame" (2FNF-2) 0×0
+          Rectangle "Rectangle" (2FNJ-2) 16×16
+          Frame "Frame" (2FNG-2) 0×0
+            Text "승인을 받고 주문합니다" (2FNI-2) 0×0 "승인을 받고 주문합니다"
+            Text "신호마다 주문 티켓이 뜨고, 사람이 …" (2FNH-2) 0×0 "신호마다 주문 티켓이 뜨고, 사람이 누르면 나갑니다. 기본값입니다."
+        Frame "Frame" (2FNK-2) 0×0
+          Rectangle "Rectangle" (2FNO-2) 16×16
+          Frame "Frame" (2FNL-2) 0×0
+            Text "한도 안에서 자동으로 주문합니다" (2FNN-2) 0×0 "한도 안에서 자동으로 주문합니다"
+            Text "아래 한도를 미리 승인한 범위에서만 …" (2FNM-2) 0×0 "아래 한도를 미리 승인한 범위에서만 자동 집행합니다. 한도를 넘는 신호는 승인 대기로 내려갑니다."
+      Frame "한도" (2FNP-2) 0×0
+        Text "사람이 미리 정하는 한도 — 모델은 …" (2FNQ-2) 0×0 "사람이 미리 정하는 한도 — 모델은 못 바꿉니다"
+        Frame "Frame" (2FNR-2) 0×0
+          Text "1회 최대 주문" (2FNS-2) 0×0 "1회 최대 주문"
+          Text "2,000,000원" (2FNT-2) 0×0 "2,000,000원"
+        Frame "Frame" (2FNV-2) 0×0
+          Text "하루 최대 주문 수" (2FNX-2) 0×0 "하루 최대 주문 수"
+          Text "2건" (2FNW-2) 0×0 "2건"
+        Frame "Frame" (2FNY-2) 0×0
+          Text "배포 유효기간" (2FO0-2) 0×0 "배포 유효기간"
+          Text "2026-09-01 → 2026-12…" (2FNZ-2) 0×0 "2026-09-01 → 2026-12-01"
+        Frame "Frame" (2FO1-2) 0×0
+          Text "자동 정지 조건" (2FO3-2) 0×0 "자동 정지 조건"
+          Text "누적 낙폭 -15% 또는 연속 손절 …" (2FO2-2) 0×0 "누적 낙폭 -15% 또는 연속 손절 3회"
+      Frame "푸터" (2FO4-2) 0×0
+        Frame "Frame" (2FO5-2) 0×0
+          Text "배포 중지" (2FO6-2) 0×0 "배포 중지"
+        Text "중지해도 이미 나간 주문은 취소되지 …" (2FO7-2) 0×0 "중지해도 이미 나간 주문은 취소되지 않습니다"
+    Frame "신호 파이프라인" (2FMT-2) 0×0
+      Frame "헤더" (2FO9-2) 0×0
+        Text "신호 → 주문 — 실전에서 벌어진 일" (2FOA-2) 0×0 "신호 → 주문 — 실전에서 벌어진 일"
+        Text "신호는 종가 확정 후, 주문은 다음 …" (2FOB-2) 0×0 "신호는 종가 확정 후, 주문은 다음 영업일 시가 — 백테스트와 같은 규칙입니다"
+      Frame "표 머리" (2FOD-2) 0×0
+        Text "신호일" (2FOE-2) 86×0 "신호일"
+        Text "방향" (2FOF-2) 44×0 "방향"
+        Text "근거 — 코드가 낸 조건" (2FOG-2) 0×0 "근거 — 코드가 낸 조건"
+        Text "단계" (2FOH-2) 296×0 "단계"
+        Text "체결 · 백테스트 대비" (2FOI-2) 132×0 "체결 · 백테스트 대비"
+      Frame "행1" (2FOK-2) 0×0
+        Text "2026-08-28" (2FOL-2) 86×0 "2026-08-28"
+        Text "매수" (2FOM-2) 44×0 "매수"
+        Text "ma_fast(20) cross_ab…" (2FON-2) 0×0 "ma_fast(20) cross_above ma_slow(60)"
+        Frame "단계" (2FOO-2) 296×0
+          Frame "Frame" (2FOP-2) 0×0
+            Text "신호" (2FOQ-2) 0×0 "신호"
+          Rectangle "Rectangle" (2FOR-2) 10×1
+          Frame "Frame" (2FOS-2) 0×0
+            Text "승인" (2FOT-2) 0×0 "승인"
+          Rectangle "Rectangle" (2FOU-2) 10×1
+          Frame "Frame" (2FOV-2) 0×0
+            Text "주문" (2FOW-2) 0×0 "주문"
+          Rectangle "Rectangle" (2FOX-2) 10×1
+          Frame "Frame" (2FOY-2) 0×0
+            Text "체결" (2FOZ-2) 0×0 "체결"
+        Frame "Frame" (2FP0-2) 132×0
+          Text "71,400" (2FP1-2) 0×0 "71,400"
+          Text "+100 (0.14%)" (2FP2-2) 0×0 "+100 (0.14%)"
+      Frame "행1" (2FP4-2) 0×0
+        Text "2026-08-21" (2FPM-2) 86×0 "2026-08-21"
+        Text "매도" (2FPL-2) 44×0 "매도"
+        Text "ma_fast(20) cross_be…" (2FPK-2) 0×0 "ma_fast(20) cross_below ma_slow(60)"
+        Frame "단계" (2FP8-2) 296×0
+          Frame "Frame" (2FPI-2) 0×0
+            Text "신호" (2FPJ-2) 0×0 "신호"
+          Rectangle "Rectangle" (2FPH-2) 10×1
+          Frame "Frame" (2FPF-2) 0×0
+            Text "승인" (2FPG-2) 0×0 "승인"
+          Rectangle "Rectangle" (2FPE-2) 10×1
+          Frame "Frame" (2FPC-2) 0×0
+            Text "주문" (2FPD-2) 0×0 "주문"
+          Rectangle "Rectangle" (2FPB-2) 10×1
+          Frame "Frame" (2FP9-2) 0×0
+            Text "체결" (2FPA-2) 0×0 "체결"
+        Frame "Frame" (2FP5-2) 132×0
+          Text "76,750" (2FP7-2) 0×0 "76,750"
+          Text "-50 (-0.07%)" (2FP6-2) 0×0 "-50 (-0.07%)"
+      Frame "행1" (2FPN-2) 0×0
+        Text "2026-09-01" (2FQ5-2) 86×0 "2026-09-01"
+        Text "매수" (2FQ4-2) 44×0 "매수"
+        Text "ma_fast(20) cross_ab…" (2FQ3-2) 0×0 "ma_fast(20) cross_above ma_slow(60)"
+        Frame "단계" (2FPR-2) 296×0
+          Frame "Frame" (2FQ1-2) 0×0
+            Text "신호" (2FQ2-2) 0×0 "신호"
+          Rectangle "Rectangle" (2FQ0-2) 10×1
+          Frame "Frame" (2FPY-2) 0×0
+            Text "승인 대기" (2FPZ-2) 0×0 "승인 대기"
+          Rectangle "Rectangle" (2FPX-2) 10×1
+          Frame "Frame" (2FPV-2) 0×0
+            Text "주문" (2FPW-2) 0×0 "주문"
+          Rectangle "Rectangle" (2FPU-2) 10×1
+          Frame "Frame" (2FPS-2) 0×0
+            Text "체결" (2FPT-2) 0×0 "체결"
+        Frame "Frame" (2FPO-2) 132×0
+          Text "—" (2FPQ-2) 0×0 "—"
+          Text "다음 시가 체결 예정" (2FPP-2) 0×0 "다음 시가 체결 예정"
+      Frame "행1" (2FQ6-2) 0×0
+        Text "2026-09-01" (2FQO-2) 86×0 "2026-09-01"
+        Text "매수" (2FQN-2) 44×0 "매수"
+        Text "000660 · ma_fast(20)…" (2FQM-2) 0×0 "000660 · ma_fast(20) cross_above ma_slow(60)"
+        Frame "단계" (2FQA-2) 296×0
+          Frame "Frame" (2FQK-2) 0×0
+            Text "신호" (2FQL-2) 0×0 "신호"
+          Rectangle "Rectangle" (2FQJ-2) 10×1
+          Frame "Frame" (2FQH-2) 0×0
+            Text "한도 초과" (2FQI-2) 0×0 "한도 초과"
+          Rectangle "Rectangle" (2FQG-2) 10×1
+          Frame "Frame" (2FQE-2) 0×0
+            Text "주문" (2FQF-2) 0×0 "주문"
+          Rectangle "Rectangle" (2FQD-2) 10×1
+          Frame "Frame" (2FQB-2) 0×0
+            Text "체결" (2FQC-2) 0×0 "체결"
+        Frame "Frame" (2FQ7-2) 132×0
+          Text "—" (2FQ9-2) 0×0 "—"
+          Text "하루 2건 소진" (2FQ8-2) 0×0 "하루 2건 소진"
+      Frame "대조" (2FQS-2) 0×0
+        Text "배포 후 — 실전이 백테스트와 어디서…" (2FQT-2) 0×0 "배포 후 — 실전이 백테스트와 어디서 갈라졌나"
+        Frame "Frame" (2FQU-2) 0×0
+          Frame "Frame" (2FQV-2) 0×0
+            Text "실전 누적" (2FQW-2) 0×0 "실전 누적"
+            Text "+6.2%" (2FQX-2) 0×0 "+6.2%"
+            Text "2026-09-01부터 · 체결 4건" (2FQY-2) 0×0 "2026-09-01부터 · 체결 4건"
+          Frame "Frame" (2FQZ-2) 0×0
+            Text "같은 구간 백테스트" (2FR0-2) 0×0 "같은 구간 백테스트"
+            Text "+6.9%" (2FR1-2) 0×0 "+6.9%"
+            Text "같은 v4 · 같은 파라미터로 재계산" (2FR2-2) 0×0 "같은 v4 · 같은 파라미터로 재계산"
+          Frame "Frame" (2FR3-2) 0×0
+            Text "괴리" (2FR4-2) 0×0 "괴리"
+            Text "-0.7%p" (2FR5-2) 0×0 "-0.7%p"
+            Text "시가 슬리피지 4건 · 미체결 1건" (2FR6-2) 0×0 "시가 슬리피지 4건 · 미체결 1건"
+        Text "괴리가 0이 되지는 않습니다 — 백테…" (2FR7-2) 0×0 "괴리가 0이 되지는 않습니다 — 백테스트는 다음 봉 시가에 원하는 수량이 전부 체결된다고 가정하고, 실전은 "

@@ -1,0 +1,92 @@
+{
+ "board_id": "48VD-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48VF-0",
+   "text": "원본 보드: CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+   "path": [
+    "note/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48VH-0",
+   "text": "가져온 요소: 계좌번호 · 총 평가금액 · 총수익률(%) · 종목별계좌평가… · 총 평가손익",
+   "path": [
+    "note/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48VJ-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48VL-0",
+   "text": "접은 개수: 스칼라 2개 · 행 6개",
+   "path": [
+    "note/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48VD-0",
+   "name": "note/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48VE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48VG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48VI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48VK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중": 1,
+  "가져온 요소: 계좌번호 · 총 평가금액 · 총수익률(%) · 종목별계좌평가… · 총 평가손익": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 6개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "63c49f42e706d093fec1315d5626c10916b01a96441a65a3d2edefce2d3be4a4"
+}

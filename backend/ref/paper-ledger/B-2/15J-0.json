@@ -1,0 +1,1494 @@
+{
+ "board_id": "15J-0",
+ "page": "B-2",
+ "page_name": "플러그인",
+ "name": "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "4386-1",
+   "text": "ATHENA",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "438E-1",
+   "text": "새 채팅",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "438L-1",
+   "text": "그래프",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "438Q-1",
+   "text": "에이전트",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "438V-1",
+   "text": "플러그인",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "438Y-1",
+   "text": "프로젝트",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4393-1",
+   "text": "아테나",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "439C-1",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "439E-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "439I-1",
+   "text": "최근",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "439J-1",
+   "text": "전체",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "439L-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "439O-1",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "439Q-1",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "439U-1",
+   "text": "AN",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "439V-1",
+   "text": "모의-주력",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "48 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43A1-1",
+   "text": "플러그인 관리",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43DG-1",
+   "text": "플러그인 2",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "Frame",
+    "pill-active"
+   ]
+  },
+  {
+   "id": "43DI-1",
+   "text": "기능 3",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "Frame",
+    "pill"
+   ]
+  },
+  {
+   "id": "43DK-1",
+   "text": "마켓플레이스 1",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "Frame",
+    "pill"
+   ]
+  },
+  {
+   "id": "43BR-1",
+   "text": "서버 추가",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "시트 · 서버 추가",
+    "sheet-head"
+   ]
+  },
+  {
+   "id": "43BS-1",
+   "text": "Claude 설정 형식의 스니펫을 붙여넣습니다",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "시트 · 서버 추가",
+    "sheet-head"
+   ]
+  },
+  {
+   "id": "43BV-1",
+   "text": "{\n  \"mcpServers\": {\n    \"time\": { \"command\": \"uvx\", \"args\": [\"mcp-server-time\"] }\n  }\n}",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "시트 · 서버 추가",
+    "textarea"
+   ]
+  },
+  {
+   "id": "43BX-1",
+   "text": "승인 카드로 확정합니다",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "시트 · 서버 추가",
+    "warning"
+   ]
+  },
+  {
+   "id": "43C0-1",
+   "text": "닫기",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "시트 · 서버 추가",
+    "btn-row",
+    "btn-ghost"
+   ]
+  },
+  {
+   "id": "43C2-1",
+   "text": "등록 제안",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "시트 · 서버 추가",
+    "btn-row",
+    "btn-primary"
+   ]
+  },
+  {
+   "id": "43C4-1",
+   "text": "채팅에서 등록을 제안해도 같은 승인 카드로 들어옵니다",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "시트 · 서버 추가",
+    "footnote"
+   ]
+  },
+  {
+   "id": "43C8-1",
+   "text": "감사 로그",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "log-head"
+   ]
+  },
+  {
+   "id": "43C9-1",
+   "text": "최근 3건",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "log-head"
+   ]
+  },
+  {
+   "id": "43CC-1",
+   "text": "시각",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "col-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43CE-1",
+   "text": "별칭",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "col-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43CG-1",
+   "text": "도구",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "col-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43CI-1",
+   "text": "결과",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "col-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43CM-1",
+   "text": "09:14",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43CO-1",
+   "text": "웹 문서 읽기",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43CQ-1",
+   "text": "fetch · 기능 허용 1개",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43CT-1",
+   "text": "성공",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43CW-1",
+   "text": "08:52",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43CY-1",
+   "text": "시간·시간대",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43D0-1",
+   "text": "get_current_time · 연결 확인",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43D3-1",
+   "text": "성공",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43D6-1",
+   "text": "08:50",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43D8-1",
+   "text": "time",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43DA-1",
+   "text": "직접 등록 · 승인",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43DD-1",
+   "text": "실패",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "감사 로그",
+    "row",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43B6-1",
+   "text": "플러그인에게 묻기",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43B7-1",
+   "text": "설치·설정도 대화로 됩니다",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43DN-1",
+   "text": "시간·시간대 왜 꺼져 있어?",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "Frame",
+    "user-bubble"
+   ]
+  },
+  {
+   "id": "43BC-1",
+   "text": "현재 꺼져 있습니다. 끄기는 삭제가 아니라 승인 철회입니다 — 등록은 남고 허용 도구 목록만 비워집니다. 다시 켜면 기능을 다시 허용하면 됩니다.",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "43BJ-1",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+    "플러그인 모드 창 · 관리 뷰",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "15J-0",
+   "name": "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "4382-1",
+   "name": "플러그인 모드 창 · 관리 뷰",
+   "component": "Frame",
+   "w": 1560,
+   "h": 820,
+   "depth": 1
+  },
+  {
+   "id": "4383-1",
+   "name": "48 · Project Recent Sidebar",
+   "component": "Frame",
+   "w": 268,
+   "h": 819,
+   "depth": 2
+  },
+  {
+   "id": "4384-1",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4385-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "4387-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4388-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4389-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "438A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "438B-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "438C-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "438D-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "438F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "438G-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "438H-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "438I-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "438J-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "438K-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "438M-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "438N-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "438O-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "438P-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "438R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "438S-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "438T-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "438U-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "438W-1",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "438X-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "438Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "4390-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4391-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4392-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4394-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4395-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4396-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4397-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4398-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4399-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "439A-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "439B-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "439D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 29,
+   "depth": 4
+  },
+  {
+   "id": "439F-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "439G-1",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "439H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "439K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "439M-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "439N-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "439P-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "439R-1",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "439S-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 4
+  },
+  {
+   "id": "439T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "439W-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "439X-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "439Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "439Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "43A0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "43A2-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "43DF-1",
+   "name": "pill-active",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "43DH-1",
+   "name": "pill",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "43DJ-1",
+   "name": "pill",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "43BP-1",
+   "name": "시트 · 서버 추가",
+   "component": "Frame",
+   "w": 838,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "43BQ-1",
+   "name": "sheet-head",
+   "component": "Frame",
+   "w": 802,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "43BU-1",
+   "name": "textarea",
+   "component": "Frame",
+   "w": 802,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "43BW-1",
+   "name": "warning",
+   "component": "Frame",
+   "w": 802,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "43BY-1",
+   "name": "btn-row",
+   "component": "Frame",
+   "w": 802,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "43BZ-1",
+   "name": "btn-ghost",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "43C1-1",
+   "name": "btn-primary",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "43C3-1",
+   "name": "footnote",
+   "component": "Frame",
+   "w": 802,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "43C6-1",
+   "name": "감사 로그",
+   "component": "Frame",
+   "w": 838,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "43C7-1",
+   "name": "log-head",
+   "component": "Frame",
+   "w": 838,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "43CA-1",
+   "name": "col-head",
+   "component": "Frame",
+   "w": 838,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "43CB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 90,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43CD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 180,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43CF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 360,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43CH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43CK-1",
+   "name": "row",
+   "component": "Frame",
+   "w": 838,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "43CL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 90,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43CN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 180,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43CP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 360,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43CR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43CS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "43CU-1",
+   "name": "row",
+   "component": "Frame",
+   "w": 838,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "43CV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 90,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43CX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 180,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43CZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 360,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43D1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43D2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "43D4-1",
+   "name": "row",
+   "component": "Frame",
+   "w": 838,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "43D5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 90,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43D7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 180,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43D9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 360,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43DB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43DC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "43B4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "43B5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "43B8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "43B9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "43DM-1",
+   "name": "user-bubble",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "43BD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "43BE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "43BF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "43BG-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "43BH-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "43BI-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  }
+ ],
+ "text_multiset": {
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "플러그인 관리": 1,
+  "플러그인 2": 1,
+  "기능 3": 1,
+  "마켓플레이스 1": 1,
+  "서버 추가": 1,
+  "Claude 설정 형식의 스니펫을 붙여넣습니다": 1,
+  "{\n  \"mcpServers\": {\n    \"time\": { \"command\": \"uvx\", \"args\": [\"mcp-server-time\"] }\n  }\n}": 1,
+  "승인 카드로 확정합니다": 1,
+  "닫기": 1,
+  "등록 제안": 1,
+  "채팅에서 등록을 제안해도 같은 승인 카드로 들어옵니다": 1,
+  "감사 로그": 1,
+  "최근 3건": 1,
+  "시각": 1,
+  "별칭": 1,
+  "도구": 1,
+  "결과": 1,
+  "09:14": 1,
+  "웹 문서 읽기": 1,
+  "fetch · 기능 허용 1개": 1,
+  "성공": 2,
+  "08:52": 1,
+  "시간·시간대": 1,
+  "get_current_time · 연결 확인": 1,
+  "08:50": 1,
+  "time": 1,
+  "직접 등록 · 승인": 1,
+  "실패": 1,
+  "플러그인에게 묻기": 1,
+  "설치·설정도 대화로 됩니다": 1,
+  "시간·시간대 왜 꺼져 있어?": 1,
+  "현재 꺼져 있습니다. 끄기는 삭제가 아니라 승인 철회입니다 — 등록은 남고 허용 도구 목록만 비워집니다. 다시 켜면 기능을 다시 허용하면 됩니다.": 1,
+  "무엇이든 물어보세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "bad5464ffaebf66c116ba4215e58e2cc6532a8951bef340503cb176d99cd6b06"
+}

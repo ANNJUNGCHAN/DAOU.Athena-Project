@@ -1,0 +1,92 @@
+{
+ "board_id": "49CB-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "49CD-0",
+   "text": "원본 보드: CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+   "path": [
+    "note/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49CF-0",
+   "text": "가져온 요소: 투자자별tic… · 시간외단일가_… · 호가잔량기준시간",
+   "path": [
+    "note/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49CH-0",
+   "text": "문법: table",
+   "path": [
+    "note/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49CJ-0",
+   "text": "접은 개수: 행 1개",
+   "path": [
+    "note/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "49CB-0",
+   "name": "note/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "49CC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49CE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49CG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49CI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값": 1,
+  "가져온 요소: 투자자별tic… · 시간외단일가_… · 호가잔량기준시간": 1,
+  "문법: table": 1,
+  "접은 개수: 행 1개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "b5cfa9e87da71421e82ba9c47de0245396ac4a91d979f2170b5c590a72ca7c1f"
+}

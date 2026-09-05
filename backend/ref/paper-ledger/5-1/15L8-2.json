@@ -1,0 +1,1964 @@
+{
+ "board_id": "15L8-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-06 / R06 · 관심종목·조건 신호",
+ "width": 1440,
+ "height": 932,
+ "texts": [
+  {
+   "id": "15LB-2",
+   "text": "내 관심종목 중 지금 조건에 걸린 종목은?",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15LC-2",
+   "text": "단기 관찰 8종목 · 활성 조건 2건",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15LE-2",
+   "text": "관심 · 조건 신호",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15LF-2",
+   "text": "2개 신호 활성",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15LM-2",
+   "text": "관심종목 · 단기 관찰",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15LN-2",
+   "text": "8종목",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35P2-0",
+   "text": "종목",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "35P3-0",
+   "text": "현재가",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "35P4-0",
+   "text": "등락",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "35P5-0",
+   "text": "시가",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "35P6-0",
+   "text": "고가 · 저가",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "35P7-0",
+   "text": "오늘 신호",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "35SS-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35SU-0",
+   "text": "005930",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "삼성전자",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35SV-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "삼성전자",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35SX-0",
+   "text": "150,850",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35SY-0",
+   "text": "+1,850",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35SZ-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "삼성전자"
+   ]
+  },
+  {
+   "id": "35T0-0",
+   "text": "149,500",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "삼성전자"
+   ]
+  },
+  {
+   "id": "35T2-0",
+   "text": "고 152,400",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35T3-0",
+   "text": "저 149,100",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35T4-0",
+   "text": "조건 충족",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "삼성전자"
+   ]
+  },
+  {
+   "id": "35T7-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35T9-0",
+   "text": "000660",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "SK하이닉스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TA-0",
+   "text": "20일 신고가",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "SK하이닉스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TC-0",
+   "text": "198,400",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TD-0",
+   "text": "+3,990",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TE-0",
+   "text": "+2.05%",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "SK하이닉스"
+   ]
+  },
+  {
+   "id": "35TF-0",
+   "text": "195,000",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "SK하이닉스"
+   ]
+  },
+  {
+   "id": "35TH-0",
+   "text": "고 199,100",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TI-0",
+   "text": "저 194,800",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TJ-0",
+   "text": "조건 충족",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "SK하이닉스"
+   ]
+  },
+  {
+   "id": "35TM-0",
+   "text": "한미반도체",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TO-0",
+   "text": "042700",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TP-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TR-0",
+   "text": "197,400",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TS-0",
+   "text": "+7,900",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TT-0",
+   "text": "+4.18%",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "35TU-0",
+   "text": "190,200",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "35TW-0",
+   "text": "고 198,000",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TX-0",
+   "text": "저 189,800",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35TY-0",
+   "text": "조건 충족",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3ICN-0",
+   "text": "KODEX 200",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICM-0",
+   "text": "069500",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICL-0",
+   "text": "관찰 중",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICI-0",
+   "text": "48,360",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICH-0",
+   "text": "+410",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICF-0",
+   "text": "+0.86%",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3ICE-0",
+   "text": "48,000",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3ICD-0",
+   "text": "고 48,420",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICC-0",
+   "text": "저 47,980",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICA-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3ID2-0",
+   "text": "현대차",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ID1-0",
+   "text": "005380",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ID0-0",
+   "text": "관찰 중",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICX-0",
+   "text": "232,500",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICW-0",
+   "text": "-1,220",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICU-0",
+   "text": "-0.52%",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3ICT-0",
+   "text": "233,500",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3ICS-0",
+   "text": "고 234,000",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICR-0",
+   "text": "저 232,000",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ICP-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3IDH-0",
+   "text": "NAVER",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDG-0",
+   "text": "035420",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDF-0",
+   "text": "관찰 중",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDC-0",
+   "text": "214,000",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDB-0",
+   "text": "+1,800",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ID9-0",
+   "text": "+0.85%",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3ID8-0",
+   "text": "212,500",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3ID7-0",
+   "text": "고 214,800",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ID6-0",
+   "text": "저 212,300",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ID4-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3IDW-0",
+   "text": "카카오",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDV-0",
+   "text": "035720",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDU-0",
+   "text": "관찰 중",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDR-0",
+   "text": "41,850",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDQ-0",
+   "text": "-350",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDO-0",
+   "text": "-0.83%",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3IDN-0",
+   "text": "42,150",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3IDM-0",
+   "text": "고 42,300",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDL-0",
+   "text": "저 41,750",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDJ-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3IEB-0",
+   "text": "기아",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IEA-0",
+   "text": "000270",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IE9-0",
+   "text": "관찰 중",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IE6-0",
+   "text": "99,400",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IE5-0",
+   "text": "-700",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IE3-0",
+   "text": "-0.70%",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3IE2-0",
+   "text": "100,000",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3IE1-0",
+   "text": "고 100,300",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IE0-0",
+   "text": "저 99,300",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IDY-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "Watchlist Viewport",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "1VAP-1",
+   "text": "전체 8종목 표시",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "List Footer · Complete"
+   ]
+  },
+  {
+   "id": "3TOK-0",
+   "text": "09-01 장중 09:42",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Watchlist",
+    "List Footer · Complete"
+   ]
+  },
+  {
+   "id": "15MM-2",
+   "text": "조건 감시",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals"
+   ]
+  },
+  {
+   "id": "15MP-2",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3INE-0",
+   "text": "감시 중",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame",
+    "감시 중"
+   ]
+  },
+  {
+   "id": "15MR-2",
+   "text": "누적거래대금 2.14조",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15MS-2",
+   "text": "삼성전자 · 09:38 감지",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IFA-0",
+   "text": "오늘 감지",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IFB-0",
+   "text": "4건",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15MV-2",
+   "text": "20일 신고가",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3INI-0",
+   "text": "감시 중",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame",
+    "감시 중"
+   ]
+  },
+  {
+   "id": "15MX-2",
+   "text": "20일 최고가 194,300 · 돌파 +2.11%",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15MY-2",
+   "text": "SK하이닉스 · 09:28 감지",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IFE-0",
+   "text": "오늘 감지",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IFF-0",
+   "text": "2건",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IMP-0",
+   "text": "골든크로스 5·20",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3INB-0",
+   "text": "중지",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IMM-0",
+   "text": "장 마감 후 판정",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IML-0",
+   "text": "해당 종목 없음",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IMK-0",
+   "text": "오늘 감지",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IMJ-0",
+   "text": "0건",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IOT-0",
+   "text": "조건 수정",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "조건 동작",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IOV-0",
+   "text": "알림 받기",
+   "path": [
+    "CC-06 / R06 · 관심종목·조건 신호",
+    "Workspace",
+    "Signals",
+    "조건 동작",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "15L8-2",
+   "name": "CC-06 / R06 · 관심종목·조건 신호",
+   "component": "Frame",
+   "w": 1440,
+   "h": 932,
+   "depth": 0
+  },
+  {
+   "id": "15L9-2",
+   "name": "Header",
+   "component": "Frame",
+   "w": 1360,
+   "h": 122,
+   "depth": 1
+  },
+  {
+   "id": "15LA-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "15LD-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "15LH-2",
+   "name": "Workspace",
+   "component": "Frame",
+   "w": 1360,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "15LI-2",
+   "name": "Watchlist",
+   "component": "Frame",
+   "w": 870,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "15LL-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "35P1-0",
+   "name": "열 헤더",
+   "component": "Frame",
+   "w": 814,
+   "h": 44,
+   "depth": 3
+  },
+  {
+   "id": "35SP-0",
+   "name": "Watchlist Viewport",
+   "component": "Frame",
+   "w": 814,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "35SQ-0",
+   "name": "삼성전자",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 4
+  },
+  {
+   "id": "35SR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "35ST-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35SW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "35T1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "35T5-0",
+   "name": "SK하이닉스",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 4
+  },
+  {
+   "id": "35T6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "35T8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35TB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "35TG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "35TK-0",
+   "name": "NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 4
+  },
+  {
+   "id": "35TL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "35TN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35TQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "35TV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IC9-0",
+   "name": "NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 4
+  },
+  {
+   "id": "3ICJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ICK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ICG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ICB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ICO-0",
+   "name": "NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 4
+  },
+  {
+   "id": "3ICY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ICZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ICV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ICQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ID3-0",
+   "name": "NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 4
+  },
+  {
+   "id": "3IDD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IDE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IDA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ID5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IDI-0",
+   "name": "NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 4
+  },
+  {
+   "id": "3IDS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IDT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IDP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IDK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IDX-0",
+   "name": "NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 4
+  },
+  {
+   "id": "3IE7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IE8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IE4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IDZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1VAO-1",
+   "name": "List Footer · Complete",
+   "component": "Frame",
+   "w": 814,
+   "h": 38,
+   "depth": 3
+  },
+  {
+   "id": "15LJ-2",
+   "name": "Signals",
+   "component": "Frame",
+   "w": 470,
+   "h": 710,
+   "depth": 2
+  },
+  {
+   "id": "15MN-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15MO-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3IND-0",
+   "name": "감시 중",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3INF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 10,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "3IF9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15MT-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15MU-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3INH-0",
+   "name": "감시 중",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3INJ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 10,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "3IFD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3IMH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3IMN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3IMI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3IOR-0",
+   "name": "조건 동작",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3IOS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 4
+  },
+  {
+   "id": "3IOU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "내 관심종목 중 지금 조건에 걸린 종목은?": 1,
+  "단기 관찰 8종목 · 활성 조건 2건": 1,
+  "관심 · 조건 신호": 1,
+  "2개 신호 활성": 1,
+  "관심종목 · 단기 관찰": 1,
+  "8종목": 1,
+  "종목": 1,
+  "현재가": 1,
+  "등락": 1,
+  "시가": 1,
+  "고가 · 저가": 1,
+  "오늘 신호": 1,
+  "삼성전자": 1,
+  "005930": 1,
+  "거래대금 급증": 3,
+  "150,850": 1,
+  "+1,850": 1,
+  "+1.24%": 1,
+  "149,500": 1,
+  "고 152,400": 1,
+  "저 149,100": 1,
+  "조건 충족": 3,
+  "SK하이닉스": 1,
+  "000660": 1,
+  "20일 신고가": 2,
+  "198,400": 1,
+  "+3,990": 1,
+  "+2.05%": 1,
+  "195,000": 1,
+  "고 199,100": 1,
+  "저 194,800": 1,
+  "한미반도체": 1,
+  "042700": 1,
+  "197,400": 1,
+  "+7,900": 1,
+  "+4.18%": 1,
+  "190,200": 1,
+  "고 198,000": 1,
+  "저 189,800": 1,
+  "KODEX 200": 1,
+  "069500": 1,
+  "관찰 중": 5,
+  "48,360": 1,
+  "+410": 1,
+  "+0.86%": 1,
+  "48,000": 1,
+  "고 48,420": 1,
+  "저 47,980": 1,
+  "해당 없음": 5,
+  "현대차": 1,
+  "005380": 1,
+  "232,500": 1,
+  "-1,220": 1,
+  "-0.52%": 1,
+  "233,500": 1,
+  "고 234,000": 1,
+  "저 232,000": 1,
+  "NAVER": 1,
+  "035420": 1,
+  "214,000": 1,
+  "+1,800": 1,
+  "+0.85%": 1,
+  "212,500": 1,
+  "고 214,800": 1,
+  "저 212,300": 1,
+  "카카오": 1,
+  "035720": 1,
+  "41,850": 1,
+  "-350": 1,
+  "-0.83%": 1,
+  "42,150": 1,
+  "고 42,300": 1,
+  "저 41,750": 1,
+  "기아": 1,
+  "000270": 1,
+  "99,400": 1,
+  "-700": 1,
+  "-0.70%": 1,
+  "100,000": 1,
+  "고 100,300": 1,
+  "저 99,300": 1,
+  "전체 8종목 표시": 1,
+  "09-01 장중 09:42": 1,
+  "조건 감시": 1,
+  "감시 중": 2,
+  "누적거래대금 2.14조": 1,
+  "삼성전자 · 09:38 감지": 1,
+  "오늘 감지": 3,
+  "4건": 1,
+  "20일 최고가 194,300 · 돌파 +2.11%": 1,
+  "SK하이닉스 · 09:28 감지": 1,
+  "2건": 1,
+  "골든크로스 5·20": 1,
+  "중지": 1,
+  "장 마감 후 판정": 1,
+  "해당 종목 없음": 1,
+  "0건": 1,
+  "조건 수정": 1,
+  "알림 받기": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "304fa4acc890b59fb5d82955065aa9995bc84990da2bdbd4a4b3d6649554d791"
+}

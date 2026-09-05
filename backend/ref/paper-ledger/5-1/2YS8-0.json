@@ -1,0 +1,3781 @@
+{
+ "board_id": "2YS8-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+ "width": 1440,
+ "height": 1014,
+ "texts": [
+  {
+   "id": "2YXR-0",
+   "text": "수급 순위",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YXQ-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YXN-0",
+   "text": "시장 전체 · 상위 50종목",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YXL-0",
+   "text": "투자자별",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YXJ-0",
+   "text": "거래원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YXH-0",
+   "text": "프로그램",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YXF-0",
+   "text": "신용·대차",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YXD-0",
+   "text": "종목 동향",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YXB-0",
+   "text": "순위",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YX7-0",
+   "text": "정렬 기준",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YX6-0",
+   "text": "신용비율 높은 순",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YX4-0",
+   "text": "신용비율 최고",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YX3-0",
+   "text": "11.8%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YX2-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YX0-0",
+   "text": "융자잔고 1위",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWZ-0",
+   "text": "4,208억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWY-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWW-0",
+   "text": "신용비율 10% 초과",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWV-0",
+   "text": "6종목",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWU-0",
+   "text": "상위 50 기준",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWS-0",
+   "text": "기준 시점",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWR-0",
+   "text": "전일 확정",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWQ-0",
+   "text": "09:42 조회",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWN-0",
+   "text": "프로그램 순매수",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWL-0",
+   "text": "신용비율 상위",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWJ-0",
+   "text": "대차 상위",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWH-0",
+   "text": "한도소진율 증가",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWF-0",
+   "text": "장중 투자자 상위",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWC-0",
+   "text": "외국인·기관 상위",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YWA-0",
+   "text": "증권사별 상위",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YW8-0",
+   "text": "동일순매매",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YW6-0",
+   "text": "신용융자 가능종목",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39D8-0",
+   "text": "순위",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "39D9-0",
+   "text": "종목",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "39DA-0",
+   "text": "현재가",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "39DB-0",
+   "text": "신용비율",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "39DC-0",
+   "text": "융자 잔고",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "39DD-0",
+   "text": "신규 / 상환",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "39DE-0",
+   "text": "공여율",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "39DF-0",
+   "text": "거래량",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "39DH-0",
+   "text": "1",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자"
+   ]
+  },
+  {
+   "id": "39DJ-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39DL-0",
+   "text": "005930",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39DN-0",
+   "text": "증거금 20%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39DP-0",
+   "text": "150,850",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39DQ-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39DS-0",
+   "text": "11.8%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39DT-0",
+   "text": "전일 +0.4%p",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39DV-0",
+   "text": "279만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39DW-0",
+   "text": "4,208억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39DY-0",
+   "text": "신규 42만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39DZ-0",
+   "text": "상환 31만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39E0-0",
+   "text": "2.14%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자"
+   ]
+  },
+  {
+   "id": "39E2-0",
+   "text": "1,420만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39E3-0",
+   "text": "2.14조원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39E5-0",
+   "text": "2",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스"
+   ]
+  },
+  {
+   "id": "39E7-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39E9-0",
+   "text": "000660",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39EB-0",
+   "text": "증거금 20%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ED-0",
+   "text": "198,400",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39EE-0",
+   "text": "+3,985 · +2.05%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39EG-0",
+   "text": "10.9%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39EH-0",
+   "text": "전일 +0.2%p",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39EJ-0",
+   "text": "192만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39EK-0",
+   "text": "3,812억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39EM-0",
+   "text": "신규 29만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39EN-0",
+   "text": "상환 21만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39EO-0",
+   "text": "2.06%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스"
+   ]
+  },
+  {
+   "id": "39EQ-0",
+   "text": "620만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ER-0",
+   "text": "1.23조원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ET-0",
+   "text": "3",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차"
+   ]
+  },
+  {
+   "id": "39EV-0",
+   "text": "현대차",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39EX-0",
+   "text": "005380",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39EZ-0",
+   "text": "증거금 30%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39F1-0",
+   "text": "232,500",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39F2-0",
+   "text": "+1,985 · +0.86%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39F4-0",
+   "text": "10.4%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39F5-0",
+   "text": "전일 -0.1%p",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39F7-0",
+   "text": "126만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39F8-0",
+   "text": "2,940억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39FA-0",
+   "text": "신규 18만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39FB-0",
+   "text": "상환 20만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39FC-0",
+   "text": "1.84%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차"
+   ]
+  },
+  {
+   "id": "39FE-0",
+   "text": "284만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39FF-0",
+   "text": "6,600억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39M8-0",
+   "text": "4",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융"
+   ]
+  },
+  {
+   "id": "39MA-0",
+   "text": "KB금융",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MC-0",
+   "text": "105560",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ME-0",
+   "text": "증거금 30%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MG-0",
+   "text": "78,200",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MH-0",
+   "text": "+865 · +1.12%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MJ-0",
+   "text": "10.1%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MK-0",
+   "text": "전일 +0.3%p",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MM-0",
+   "text": "238만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MN-0",
+   "text": "1,860억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MP-0",
+   "text": "신규 34만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MQ-0",
+   "text": "상환 25만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MR-0",
+   "text": "2.42%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융"
+   ]
+  },
+  {
+   "id": "39MT-0",
+   "text": "412만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MU-0",
+   "text": "3,222억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39MW-0",
+   "text": "5",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER"
+   ]
+  },
+  {
+   "id": "39MY-0",
+   "text": "NAVER",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39N0-0",
+   "text": "035420",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39N2-0",
+   "text": "증거금 20%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39N4-0",
+   "text": "214,000",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39N5-0",
+   "text": "-1,010 · -0.47%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39N7-0",
+   "text": "9.6%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39N8-0",
+   "text": "전일 -0.2%p",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NA-0",
+   "text": "103만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NB-0",
+   "text": "2,214억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ND-0",
+   "text": "신규 14만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NE-0",
+   "text": "상환 17만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NF-0",
+   "text": "1.96%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER"
+   ]
+  },
+  {
+   "id": "39NH-0",
+   "text": "186만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NI-0",
+   "text": "3,980억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NK-0",
+   "text": "6",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스"
+   ]
+  },
+  {
+   "id": "39NM-0",
+   "text": "POSCO홀딩스",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NO-0",
+   "text": "005490",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NQ-0",
+   "text": "증거금 30%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NS-0",
+   "text": "389,500",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NT-0",
+   "text": "+2,515 · +0.65%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NV-0",
+   "text": "9.2%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NW-0",
+   "text": "전일 +0.1%p",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NY-0",
+   "text": "45만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39NZ-0",
+   "text": "1,742억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39O1-0",
+   "text": "신규 7만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39O2-0",
+   "text": "상환 6만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39O3-0",
+   "text": "1.72%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스"
+   ]
+  },
+  {
+   "id": "39O5-0",
+   "text": "68만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39O6-0",
+   "text": "2,649억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKA-0",
+   "text": "7~48위 42종목",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "7~48위 생략"
+   ]
+  },
+  {
+   "id": "3SKC-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "7~48위 생략"
+   ]
+  },
+  {
+   "id": "39O8-0",
+   "text": "49",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학"
+   ]
+  },
+  {
+   "id": "39OA-0",
+   "text": "LG화학",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OC-0",
+   "text": "051910",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OE-0",
+   "text": "증거금 40%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OG-0",
+   "text": "312,000",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OH-0",
+   "text": "-3,470 · -1.10%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OJ-0",
+   "text": "3.1%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OK-0",
+   "text": "전일 -0.3%p",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OM-0",
+   "text": "21만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ON-0",
+   "text": "640억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OP-0",
+   "text": "신규 3만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OQ-0",
+   "text": "상환 5만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OR-0",
+   "text": "0.94%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학"
+   ]
+  },
+  {
+   "id": "39OT-0",
+   "text": "96만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OU-0",
+   "text": "2,995억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39OW-0",
+   "text": "50",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오"
+   ]
+  },
+  {
+   "id": "39OY-0",
+   "text": "카카오",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39P0-0",
+   "text": "035720",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39P2-0",
+   "text": "증거금 40%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39P4-0",
+   "text": "41,850",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39P5-0",
+   "text": "-350 · -0.83%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39P7-0",
+   "text": "2.8%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39P8-0",
+   "text": "전일 0.0%p",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39PA-0",
+   "text": "122만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39PB-0",
+   "text": "512억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39PD-0",
+   "text": "신규 16만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39PE-0",
+   "text": "상환 16만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39PF-0",
+   "text": "1.28%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오"
+   ]
+  },
+  {
+   "id": "39PH-0",
+   "text": "1,240만주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39PI-0",
+   "text": "5,189억원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YTS-0",
+   "text": "전체 50개 · 상위 6 + 하위 2 표시",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YTR-0",
+   "text": "20개 더 보기",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YTP-0",
+   "text": "접기",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F43-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Selected Stock Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F44-0",
+   "text": "순위 1위 · 005930",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Selected Stock Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F46-0",
+   "text": "담보비율",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Selected Stock Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F47-0",
+   "text": "45%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Selected Stock Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F49-0",
+   "text": "매도잔량",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Selected Stock Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4A-0",
+   "text": "428,600주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Selected Stock Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4C-0",
+   "text": "매수잔량",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Selected Stock Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4D-0",
+   "text": "512,400주",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Selected Stock Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4F-0",
+   "text": "거래대금 비중",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Selected Stock Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4G-0",
+   "text": "18.2%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Selected Stock Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4J-0",
+   "text": "신용 요약",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4K-0",
+   "text": "시장 전체",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4N-0",
+   "text": "융자잔고",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Summary",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4O-0",
+   "text": "18.2조원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Summary",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4T-0",
+   "text": "대주잔고",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Summary",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4U-0",
+   "text": "1.4조원",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Summary",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F4Z-0",
+   "text": "신용비율 상승 · 하락",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F50-0",
+   "text": "214종목 · 86종목",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F52-0",
+   "text": "신용비율 최고 · 삼성전자",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F53-0",
+   "text": "11.8%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKH-0",
+   "text": "표시 구성 · 상위 50종목",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKI-0",
+   "text": "신용비율순",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKK-0",
+   "text": "표시 종목",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKL-0",
+   "text": "8종목",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKN-0",
+   "text": "생략 종목",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKO-0",
+   "text": "42종목",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKQ-0",
+   "text": "표시 신용비율",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKR-0",
+   "text": "11.8% ~ 2.8%",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKT-0",
+   "text": "신용비율 10% 초과",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SKU-0",
+   "text": "표시 4 · 생략 2",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YSC-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Status Footer"
+   ]
+  },
+  {
+   "id": "2YSB-0",
+   "text": "잔고성 항목 전일 확정 기준 · 마지막 조회 09:42:18",
+   "path": [
+    "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Flow Card Surface",
+    "Flow Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2YS8-0",
+   "name": "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1014,
+   "depth": 0
+  },
+  {
+   "id": "2YS9-0",
+   "name": "Flow Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 934,
+   "depth": 1
+  },
+  {
+   "id": "2YX8-0",
+   "name": "Flow Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2YXM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2YXO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YXP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YX9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2YXK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YXI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YXG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YXE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YXC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YXA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YWO-0",
+   "name": "Flow Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2YX5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "2YX1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "2YWX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 170,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "2YWT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "2YWP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 170,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "2YSD-0",
+   "name": "Flow Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2YTM-0",
+   "name": "Investor Panel",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2YW3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YWD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YWM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YWK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YWI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YWG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YWE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YW4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YWB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YW9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YW7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YW5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39D6-0",
+   "name": "Rank Table",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "39D7-0",
+   "name": "Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "39DG-0",
+   "name": "1 삼성전자",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "39DI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39DK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39DM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39DO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39DR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39DU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39DX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39E1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39E4-0",
+   "name": "2 SK하이닉스",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "39E6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39E8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39EA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39EC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39EF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39EI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39EL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39EP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39ES-0",
+   "name": "3 현대차",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "39EU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39EW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39EY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39F0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39F3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39F6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39F9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39FD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39M7-0",
+   "name": "4 KB금융",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "39M9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39MB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39MD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39MF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39MI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39ML-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39MO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39MS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39MV-0",
+   "name": "5 NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "39MX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39MZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39N1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39N3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39N6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39N9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39NC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39NG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39NJ-0",
+   "name": "6 POSCO홀딩스",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "39NL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39NN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39NP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39NR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39NU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39NX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39O0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39O4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SK9-0",
+   "name": "7~48위 생략",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3SKB-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 112,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3SKD-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 372,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "39O7-0",
+   "name": "49 LG화학",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "39O9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39OB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39OD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39OF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39OI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39OL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39OO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39OS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39OV-0",
+   "name": "50 카카오",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "39OX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39OZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39P1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39P3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39P6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39P9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39PC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39PG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YTN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YTO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YTQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YSE-0",
+   "name": "Side Panel",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3F41-0",
+   "name": "Selected Stock Flow",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3F42-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F45-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F48-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F4B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F4E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F4H-0",
+   "name": "Credit Summary",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3F4I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F4L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F4M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3F4P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3F4Q-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3F4R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F4S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3F4V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3F4W-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3F4X-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "3F4Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F51-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SKF-0",
+   "name": "Display Composition",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3SKG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SKJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SKM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SKP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SKS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YSA-0",
+   "name": "Flow Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  }
+ ],
+ "text_multiset": {
+  "수급 순위": 1,
+  "조회 스냅샷": 2,
+  "시장 전체 · 상위 50종목": 1,
+  "투자자별": 1,
+  "거래원": 1,
+  "프로그램": 1,
+  "신용·대차": 1,
+  "종목 동향": 1,
+  "순위": 2,
+  "정렬 기준": 1,
+  "신용비율 높은 순": 1,
+  "신용비율 최고": 1,
+  "11.8%": 3,
+  "삼성전자": 4,
+  "융자잔고 1위": 1,
+  "4,208억원": 2,
+  "신용비율 10% 초과": 2,
+  "6종목": 1,
+  "상위 50 기준": 1,
+  "기준 시점": 1,
+  "전일 확정": 1,
+  "09:42 조회": 1,
+  "프로그램 순매수": 1,
+  "신용비율 상위": 1,
+  "대차 상위": 1,
+  "한도소진율 증가": 1,
+  "장중 투자자 상위": 1,
+  "외국인·기관 상위": 1,
+  "증권사별 상위": 1,
+  "동일순매매": 1,
+  "신용융자 가능종목": 1,
+  "종목": 1,
+  "현재가": 1,
+  "신용비율": 1,
+  "융자 잔고": 1,
+  "신규 / 상환": 1,
+  "공여율": 1,
+  "거래량": 1,
+  "1": 1,
+  "005930": 1,
+  "증거금 20%": 3,
+  "150,850": 1,
+  "+1,850 · +1.24%": 1,
+  "전일 +0.4%p": 1,
+  "279만주": 1,
+  "신규 42만주": 1,
+  "상환 31만주": 1,
+  "2.14%": 1,
+  "1,420만주": 1,
+  "2.14조원": 1,
+  "2": 1,
+  "SK하이닉스": 1,
+  "000660": 1,
+  "198,400": 1,
+  "+3,985 · +2.05%": 1,
+  "10.9%": 1,
+  "전일 +0.2%p": 1,
+  "192만주": 1,
+  "3,812억원": 1,
+  "신규 29만주": 1,
+  "상환 21만주": 1,
+  "2.06%": 1,
+  "620만주": 1,
+  "1.23조원": 1,
+  "3": 1,
+  "현대차": 1,
+  "005380": 1,
+  "증거금 30%": 3,
+  "232,500": 1,
+  "+1,985 · +0.86%": 1,
+  "10.4%": 1,
+  "전일 -0.1%p": 1,
+  "126만주": 1,
+  "2,940억원": 1,
+  "신규 18만주": 1,
+  "상환 20만주": 1,
+  "1.84%": 1,
+  "284만주": 1,
+  "6,600억원": 1,
+  "4": 1,
+  "KB금융": 1,
+  "105560": 1,
+  "78,200": 1,
+  "+865 · +1.12%": 1,
+  "10.1%": 1,
+  "전일 +0.3%p": 1,
+  "238만주": 1,
+  "1,860억원": 1,
+  "신규 34만주": 1,
+  "상환 25만주": 1,
+  "2.42%": 1,
+  "412만주": 1,
+  "3,222억원": 1,
+  "5": 1,
+  "NAVER": 1,
+  "035420": 1,
+  "214,000": 1,
+  "-1,010 · -0.47%": 1,
+  "9.6%": 1,
+  "전일 -0.2%p": 1,
+  "103만주": 1,
+  "2,214억원": 1,
+  "신규 14만주": 1,
+  "상환 17만주": 1,
+  "1.96%": 1,
+  "186만주": 1,
+  "3,980억원": 1,
+  "6": 1,
+  "POSCO홀딩스": 1,
+  "005490": 1,
+  "389,500": 1,
+  "+2,515 · +0.65%": 1,
+  "9.2%": 1,
+  "전일 +0.1%p": 1,
+  "45만주": 1,
+  "1,742억원": 1,
+  "신규 7만주": 1,
+  "상환 6만주": 1,
+  "1.72%": 1,
+  "68만주": 1,
+  "2,649억원": 1,
+  "7~48위 42종목": 1,
+  "해당 없음": 1,
+  "49": 1,
+  "LG화학": 1,
+  "051910": 1,
+  "증거금 40%": 2,
+  "312,000": 1,
+  "-3,470 · -1.10%": 1,
+  "3.1%": 1,
+  "전일 -0.3%p": 1,
+  "21만주": 1,
+  "640억원": 1,
+  "신규 3만주": 1,
+  "상환 5만주": 1,
+  "0.94%": 1,
+  "96만주": 1,
+  "2,995억원": 1,
+  "50": 1,
+  "카카오": 1,
+  "035720": 1,
+  "41,850": 1,
+  "-350 · -0.83%": 1,
+  "2.8%": 1,
+  "전일 0.0%p": 1,
+  "122만주": 1,
+  "512억원": 1,
+  "신규 16만주": 1,
+  "상환 16만주": 1,
+  "1.28%": 1,
+  "1,240만주": 1,
+  "5,189억원": 1,
+  "전체 50개 · 상위 6 + 하위 2 표시": 1,
+  "20개 더 보기": 1,
+  "접기": 1,
+  "순위 1위 · 005930": 1,
+  "담보비율": 1,
+  "45%": 1,
+  "매도잔량": 1,
+  "428,600주": 1,
+  "매수잔량": 1,
+  "512,400주": 1,
+  "거래대금 비중": 1,
+  "18.2%": 1,
+  "신용 요약": 1,
+  "시장 전체": 1,
+  "융자잔고": 1,
+  "18.2조원": 1,
+  "대주잔고": 1,
+  "1.4조원": 1,
+  "신용비율 상승 · 하락": 1,
+  "214종목 · 86종목": 1,
+  "신용비율 최고 · 삼성전자": 1,
+  "표시 구성 · 상위 50종목": 1,
+  "신용비율순": 1,
+  "표시 종목": 1,
+  "8종목": 1,
+  "생략 종목": 1,
+  "42종목": 1,
+  "표시 신용비율": 1,
+  "11.8% ~ 2.8%": 1,
+  "표시 4 · 생략 2": 1,
+  "잔고성 항목 전일 확정 기준 · 마지막 조회 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "c016e3b63cd0bc5be79902095a3f05ffce78da0afe3e56c14e972f183a3e4343"
+}

@@ -1,0 +1,148 @@
+Frame "38 · 펜 — 새 대화창 모드 선택" (3VV9-1) 1680×900
+  Frame "38 Header" (3VVA-1) 1600×86
+    Frame "Frame" (3VVB-1) 394×56
+      Frame "Frame" (3VVC-1) 48×48
+        Text "38" (3VVD-1) 17×20 "38"
+      Frame "Frame" (3VVE-1) 330×56
+        Text "펜 — 새 대화창 모드 선택" (3VVF-1) 330×36 "펜 — 새 대화창 모드 선택"
+        Text "펜은 창을 하나 더 엽니다. 어느 모…" (3VVG-1) 330×18 "펜은 창을 하나 더 엽니다. 어느 모드로 열지부터 묻습니다."
+    Frame "Frame" (3VVH-1) 109×32
+      Text "신규 · 승인 대기" (3VVI-1) 81×16 "신규 · 승인 대기"
+  Frame "38 Content" (3VVV-1) 1600×722
+    Frame "Stage" (3VVW-1) 1150×722
+      Frame "Titlebar" (3VW3-1) 1148×46
+        Frame "Frame" (3VW4-1) 96×16
+          Text "ATHENA" (3VW5-1) 42×14 "ATHENA"
+          Rectangle "Rectangle" (3VW6-1) 1×12
+          Text "아테나" (3VW7-1) 33×16 "아테나"
+        SVG "SVG" (3VW8-1) 46×10
+          SVGVisualElement "Path" (3VW9-1) 45×8
+      Frame "Stage Body" (3VWL-1) 1148×674
+        Frame "Sidebar" (3VWM-1) 254×674
+          Frame "Sidebar Label" (3VX0-1) 229×22
+            Text "프로젝트" (3VX1-1) 44×14 "프로젝트"
+          Frame "Project Row · hover" (3VX2-1) 229×32
+            Frame "Frame" (3VX3-1) 16×16
+              SVG "SVG" (3VX4-1) 15×15
+                SVGVisualElement "Path" (3VX5-1) 11×8
+            Text "아테나" (3VX6-1) 133×16 "아테나"
+            Frame "Frame" (3VX7-1) 20×20
+              SVG "SVG" (3VX8-1) 16×16
+                SVGVisualElement "Circle" (3VX9-1) 2×2
+                SVGVisualElement "Circle" (3VXA-1) 2×2
+                SVGVisualElement "Circle" (3VXB-1) 2×2
+            Frame "Pen · focus" (3VXC-1) 20×20
+              SVG "SVG" (3VXD-1) 14×14
+                SVGVisualElement "Path" (3VXE-1) 9×9
+          Frame "Sessions" (3VXO-1) 229×90
+            Frame "Session Row" (3VXP-1) 229×28
+              Frame "Frame" (3VXQ-1) 16×16
+                SVG "SVG" (3VXR-1) 14×14
+                  SVGVisualElement "Path" (3VXS-1) 11×8
+              Text "추세추종 v3" (3VXT-1) 177×16 "추세추종 v3"
+            Frame "Session Row" (3VXU-1) 229×28
+              Frame "Frame" (3VXV-1) 16×16
+                SVG "SVG" (3VXW-1) 14×14
+                  SVGVisualElement "Path" (3VXX-1) 9×9
+              Text "반도체 수급 점검" (3VXY-1) 177×16 "반도체 수급 점검"
+            Frame "Session Row" (3VXZ-1) 229×28
+              Frame "Frame" (3VY0-1) 16×16
+                SVG "SVG" (3VY1-1) 14×14
+                  SVGVisualElement "Circle" (3VY2-1) 2×2
+                  SVGVisualElement "Circle" (3VY3-1) 2×2
+                  SVGVisualElement "Circle" (3VY4-1) 2×2
+                  SVGVisualElement "Path" (3VY5-1) 5×5
+              Text "성향 지도" (3VY6-1) 177×16 "성향 지도"
+        Frame "Sheet Area" (3VWN-1) 894×674
+          Frame "Mode Sheet" (3VYL-1) 700×331
+            Frame "Sheet Title" (3VYM-1) 650×43
+              Text "어느 모드로 열까요?" (3VYN-1) 650×22 "어느 모드로 열까요?"
+              Text "아테나 프로젝트에 창이 하나 더 생깁…" (3VYO-1) 650×16 "아테나 프로젝트에 창이 하나 더 생깁니다. 지금 돌고 있는 창은 그대로 둡니다."
+            Frame "Mode Cards" (3VZ5-1) 650×168
+              Frame "Card · 대화" (3VZ6-1) 122×168
+                Frame "Frame" (3VZ7-1) 36×36
+                  SVG "SVG" (3VZ8-1) 18×18
+                    SVGVisualElement "Path" (3VZ9-1) 12×11
+                Text "대화" (3VZA-1) 92×16 "대화"
+                Text "결과 카드가 쌓이는 기본 창" (3VZB-1) 92×28 "결과 카드가 쌓이는 기본 창"
+                Frame "Frame" (3VZC-1) 58×22
+                  Text "현재 2개" (3VZD-1) 40×14 "현재 2개"
+              Frame "Card · 그래프" (3W09-1) 122×168
+                Frame "Frame" (3W0A-1) 36×36
+                  SVG "SVG" (3W0B-1) 18×18
+                    SVGVisualElement "Circle" (3W0C-1) 3×3
+                    SVGVisualElement "Circle" (3W0D-1) 3×3
+                    SVGVisualElement "Circle" (3W0E-1) 3×3
+                    SVGVisualElement "Path" (3W0F-1) 6×6
+                Text "그래프" (3W0G-1) 92×16 "그래프"
+                Text "성향·엔티티·근거를 보는 지도" (3W0H-1) 92×28 "성향·엔티티·근거를 보는 지도"
+                Frame "Frame" (3W0I-1) 58×22
+                  Text "현재 1개" (3W0J-1) 40×14 "현재 1개"
+              Frame "Card · 에이전트" (3W0K-1) 122×168
+                Frame "Frame" (3W0L-1) 36×36
+                  SVG "SVG" (3W0M-1) 18×18
+                    SVGVisualElement "Circle" (3W0N-1) 5×5
+                    SVGVisualElement "Path" (3W0O-1) 10×5
+                Text "에이전트" (3W0P-1) 92×16 "에이전트"
+                Text "감시·예약 작업을 관제" (3W0Q-1) 92×28 "감시·예약 작업을 관제"
+                Frame "Frame" (3W0R-1) 38×22
+                  Text "없음" (3W0S-1) 20×14 "없음"
+              Frame "Card · 플러그인" (3W24-1) 122×168
+                Frame "Frame" (3W25-1) 36×36
+                  SVG "SVG" (3W26-1) 18×18
+                    SVGVisualElement "Path" (3W27-1) 11×12
+                    SVGVisualElement "Path" (3W28-1) 0×2
+                Text "플러그인" (3W29-1) 92×16 "플러그인"
+                Text "설치·권한·MCP 캔버스" (3W2A-1) 92×28 "설치·권한·MCP 캔버스"
+                Frame "Frame" (3W2B-1) 38×22
+                  Text "없음" (3W2C-1) 20×14 "없음"
+              Frame "Card · 백테스트 · 선택" (3W2D-1) 122×168
+                Frame "Frame" (3W2E-1) 36×36
+                  SVG "SVG" (3W2F-1) 18×18
+                    SVGVisualElement "Path" (3W2G-1) 14×10
+                Text "백테스트" (3W2H-1) 92×16 "백테스트"
+                Text "전략 폼·코드·결과 캔버스" (3W2I-1) 92×28 "전략 폼·코드·결과 캔버스"
+                Frame "Frame" (3W2J-1) 58×22
+                  Text "현재 1개" (3W2K-1) 40×14 "현재 1개"
+                Frame "Check" (3W2L-1) 18×18
+                  SVG "SVG" (3W2M-1) 11×11
+                    SVGVisualElement "Path" (3W2N-1) 6×5
+            Frame "Sheet Footer" (3W2T-1) 650×34
+              Text "같은 모드로 여러 개를 열 수 있습니…" (3W2U-1) 172×14 "같은 모드로 여러 개를 열 수 있습니다"
+              Frame "Frame" (3W2V-1) 173×34
+                Frame "Frame" (3W2W-1) 52×34
+                  Text "취소" (3W2X-1) 22×16 "취소"
+                Frame "Frame" (3W2Y-1) 113×34
+                  Text "백테스트 창 열기" (3W2Z-1) 85×16 "백테스트 창 열기"
+    Frame "Interaction Rail" (3VVX-1) 426×722
+      Frame "Rail Header" (3W58-1) 388×26
+        Text "펜과 ⋯ 는 다른 일을 한다" (3W59-1) 153×18 "펜과 ⋯ 는 다른 일을 한다"
+        Text "NEW WINDOW" (3W5A-1) 70×14 "NEW WINDOW"
+      Frame "Rule 1" (3W5Y-1) 388×88
+        Frame "Frame" (3W5Z-1) 358×20
+          Frame "Frame" (3W60-1) 20×20
+            Text "1" (3W61-1) 6×12 "1"
+          Text "펜 = 창 추가" (3W62-1) 70×16 "펜 = 창 추가"
+        Text "프로젝트 행의 펜은 새 대화창을 만듭…" (3W63-1) 358×30 "프로젝트 행의 펜은 새 대화창을 만듭니다. 누르면 곧바로 열지 않고, 어느 모드로 열지부터 묻습니다."
+      Frame "Rule 2" (3W64-1) 388×88
+        Frame "Frame" (3W65-1) 358×20
+          Frame "Frame" (3W66-1) 20×20
+            Text "2" (3W67-1) 6×12 "2"
+          Text "⋯ = 프로젝트 관리" (3W68-1) 106×16 "⋯ = 프로젝트 관리"
+        Text "고정, 탐색기에서 열기, 제거. 창을…" (3W69-1) 358×30 "고정, 탐색기에서 열기, 제거. 창을 만들지도 닫지도 않습니다. 37번 보드의 메뉴와 같은 것입니다."
+      Frame "Rule 3" (3W6A-1) 388×88
+        Frame "Frame" (3W6B-1) 358×20
+          Frame "Frame" (3W6C-1) 20×20
+            Text "3" (3W6D-1) 6×12 "3"
+          Text "모드는 다섯이지만 창은 다섯이 아니다" (3W6E-1) 209×16 "모드는 다섯이지만 창은 다섯이 아니다"
+        Text "한 프로젝트에 백테스트 창 3개와 대…" (3W6F-1) 358×30 "한 프로젝트에 백테스트 창 3개와 대화 창 2개가 동시에 있을 수 있습니다. 창 수를 정하는 것은 모드가 아"
+      Frame "Gap Note" (3W6R-1) 388×139
+        Frame "Frame" (3W6S-1) 358×18
+          Frame "Frame" (3W6T-1) 18×18
+            SVG "SVG" (3W6U-1) 16×16
+              SVGVisualElement "Circle" (3W6V-1) 11×11
+              SVGVisualElement "Path" (3W6W-1) 0×4
+              SVGVisualElement "Path" (3W6X-1) 0×0
+          Text "지금 코드에 없는 것" (3W6Y-1) 100×16 "지금 코드에 없는 것"
+        Text "상주 채팅 세션은 프로세스 전역에 하…" (3W6Z-1) 358×45 "상주 채팅 세션은 프로세스 전역에 하나뿐입니다. 실행 중인 질의 핸들도 하나만 유지하고, 새 턴이 오면 기존"
+        Text "과거 대화를 여는 기능은 있지만 읽기…" (3W70-1) 358×30 "과거 대화를 여는 기능은 있지만 읽기 전용 스냅샷이고 입력이 잠깁니다. 사이드바의 새 대화 버튼은 모드를 실"

@@ -1,0 +1,342 @@
+{
+ "board_id": "47J4-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47K2-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47K1-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47JZ-0",
+   "text": "ELW 근접율",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Header"
+   ]
+  },
+  {
+   "id": "47JX-0",
+   "text": "등락률",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47JW-0",
+   "text": "+12.16%",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47JU-0",
+   "text": "근접율",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47JT-0",
+   "text": "98.6%",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47JR-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47JQ-0",
+   "text": "2건",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47JN-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47JM-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47JL-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47JJ-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47JI-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47JG-0",
+   "text": "12건",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47JF-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47JD-0",
+   "text": "ELW근접율",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47JC-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47JA-0",
+   "text": "전체 3,482건 · 20건 표시",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47J9-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47J6-0",
+   "text": "스칼라 2개, 행 18개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47J4-0",
+   "name": "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47JY-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47K0-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47J7-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47JO-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47JV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47JS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47JP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47JK-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47JE-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47JH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47J8-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47JB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47J5-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "ELW 근접율": 1,
+  "등락률": 1,
+  "+12.16%": 1,
+  "근접율": 1,
+  "98.6%": 1,
+  "핵심": 1,
+  "2건": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "수량": 1,
+  "12건": 1,
+  "ELW근접율": 1,
+  "전체 3,482건 · 20건 표시": 1,
+  "스칼라 2개, 행 18개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "cef1c1e38a42b31a47ba6a6e35662bcf2b4b5f8bc2cc420197b3c01f83ac4991"
+}

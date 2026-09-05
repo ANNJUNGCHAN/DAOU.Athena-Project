@@ -1,0 +1,6431 @@
+{
+ "board_id": "2Y47-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "2YA7-0",
+   "text": "ELW 순위",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YA6-0",
+   "text": "전 종목 · 기준가 대비 등락 큰 순",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YA5-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YA2-0",
+   "text": "상장 ELW 3,482 종목",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YA1-0",
+   "text": "콜 2,146 · 풋 1,336",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YA0-0",
+   "text": "09:42:18 조회",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9X-0",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9V-0",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9T-0",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9R-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9P-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9N-0",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9L-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9H-0",
+   "text": "정렬 기준",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9G-0",
+   "text": "기준가 대비 등락 큰 순",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9E-0",
+   "text": "등락률 상위",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9D-0",
+   "text": "+12.16%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9C-0",
+   "text": "장중 갱신 기준",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y9A-0",
+   "text": "근접률 최고",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y99-0",
+   "text": "98.6%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y98-0",
+   "text": "행사가 대비",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y96-0",
+   "text": "급등락 감지",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y95-0",
+   "text": "12건",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y94-0",
+   "text": "오늘 누적",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y92-0",
+   "text": "조건검색 저장",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y91-0",
+   "text": "2건",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y90-0",
+   "text": "저장 조건 기준",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y8X-0",
+   "text": "잔량",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y8V-0",
+   "text": "등락률",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y8T-0",
+   "text": "근접률",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y8R-0",
+   "text": "가격급등락",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y8P-0",
+   "text": "거래원별 순매매",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y8N-0",
+   "text": "조건검색",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y8K-0",
+   "text": "범위",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y8J-0",
+   "text": "주식",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y8H-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y8F-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPD-0",
+   "text": "전체 3,482건 · 20건 표시",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A9O-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3A9P-0",
+   "text": "종목 · 코드 · 발행사",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3A9Q-0",
+   "text": "현재가 · 전일대비",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3A9R-0",
+   "text": "기준가 대비",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3A9S-0",
+   "text": "거래종료 기준가",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3A9T-0",
+   "text": "거래량 · 대금",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3A9U-0",
+   "text": "잔존일 · 행사가",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3A9V-0",
+   "text": "LP",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3A9X-0",
+   "text": "1",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜"
+   ]
+  },
+  {
+   "id": "3A9Z-0",
+   "text": "삼성전자 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AA0-0",
+   "text": "58H219 · KB증권 9C21회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AA2-0",
+   "text": "415",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AA3-0",
+   "text": "▲ +45 · +12.16%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AA4-0",
+   "text": "+18.6%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜"
+   ]
+  },
+  {
+   "id": "3AA6-0",
+   "text": "350",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AA7-0",
+   "text": "기준대비 +65",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AA9-0",
+   "text": "620만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAA-0",
+   "text": "25.7억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAC-0",
+   "text": "24일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAD-0",
+   "text": "행사가 160,000",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAE-0",
+   "text": "키움",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 1 · 삼성전자 콜"
+   ]
+  },
+  {
+   "id": "3AAG-0",
+   "text": "2",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜"
+   ]
+  },
+  {
+   "id": "3AAI-0",
+   "text": "SK하이닉스 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAJ-0",
+   "text": "58J377 · 미래에셋증권 7K55회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAL-0",
+   "text": "285",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAM-0",
+   "text": "▲ +25 · +9.62%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAN-0",
+   "text": "+14.0%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜"
+   ]
+  },
+  {
+   "id": "3AAP-0",
+   "text": "250",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAQ-0",
+   "text": "기준대비 +35",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAS-0",
+   "text": "540만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAT-0",
+   "text": "15.4억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAV-0",
+   "text": "38일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAW-0",
+   "text": "행사가 210,000",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AAX-0",
+   "text": "미래",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 2 · SK하이닉스 콜"
+   ]
+  },
+  {
+   "id": "3AAZ-0",
+   "text": "3",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜"
+   ]
+  },
+  {
+   "id": "3AB1-0",
+   "text": "카카오 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AB2-0",
+   "text": "58R210 · KB증권 4H27회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AB4-0",
+   "text": "62",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AB5-0",
+   "text": "▲ +5 · +8.8%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AB6-0",
+   "text": "+12.7%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜"
+   ]
+  },
+  {
+   "id": "3AB8-0",
+   "text": "55",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AB9-0",
+   "text": "기준대비 +7",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABB-0",
+   "text": "260만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABC-0",
+   "text": "1.6억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABE-0",
+   "text": "21일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABF-0",
+   "text": "행사가 43,000",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABG-0",
+   "text": "키움",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 3 · 카카오 콜"
+   ]
+  },
+  {
+   "id": "3ABI-0",
+   "text": "4",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋"
+   ]
+  },
+  {
+   "id": "3ABK-0",
+   "text": "KOSPI200 풋",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABL-0",
+   "text": "58K902 · 한국투자증권 3F09회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABN-0",
+   "text": "190",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABO-0",
+   "text": "▼ −18 · −8.65%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABP-0",
+   "text": "+11.8%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋"
+   ]
+  },
+  {
+   "id": "3ABR-0",
+   "text": "170",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABS-0",
+   "text": "기준대비 +20",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABU-0",
+   "text": "480만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABV-0",
+   "text": "9.1억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABX-0",
+   "text": "17일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABY-0",
+   "text": "행사가 457.50",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ABZ-0",
+   "text": "한투",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 4 · KOSPI200 풋"
+   ]
+  },
+  {
+   "id": "3AC1-0",
+   "text": "5",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜"
+   ]
+  },
+  {
+   "id": "3AC3-0",
+   "text": "현대차 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AC4-0",
+   "text": "58M204 · KB증권 8Q02회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AC6-0",
+   "text": "520",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AC7-0",
+   "text": "▲ +25 · +5.05%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AC8-0",
+   "text": "+8.3%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜"
+   ]
+  },
+  {
+   "id": "3ACA-0",
+   "text": "480",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACB-0",
+   "text": "기준대비 +40",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACD-0",
+   "text": "390만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACE-0",
+   "text": "20.3억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACG-0",
+   "text": "45일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACH-0",
+   "text": "행사가 230,000",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACI-0",
+   "text": "키움",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 5 · 현대차 콜"
+   ]
+  },
+  {
+   "id": "3ACK-0",
+   "text": "6",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜"
+   ]
+  },
+  {
+   "id": "3ACM-0",
+   "text": "NAVER 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACN-0",
+   "text": "58N551 · 미래에셋증권 2W18회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACP-0",
+   "text": "88",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACQ-0",
+   "text": "▲ +4 · +4.76%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACR-0",
+   "text": "+7.3%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜"
+   ]
+  },
+  {
+   "id": "3ACT-0",
+   "text": "82",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACU-0",
+   "text": "기준대비 +6",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACW-0",
+   "text": "350만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACX-0",
+   "text": "3.1억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ACZ-0",
+   "text": "24일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AD0-0",
+   "text": "행사가 210,000",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AD1-0",
+   "text": "미래",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 6 · NAVER 콜"
+   ]
+  },
+  {
+   "id": "3AD3-0",
+   "text": "7",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜"
+   ]
+  },
+  {
+   "id": "3AD5-0",
+   "text": "POSCO홀딩스 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AD6-0",
+   "text": "58T933 · 한국투자증권 5N82회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AD8-0",
+   "text": "96",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AD9-0",
+   "text": "▼ −4 · −4.0%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADA-0",
+   "text": "−9.4%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜"
+   ]
+  },
+  {
+   "id": "3ADC-0",
+   "text": "106",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADD-0",
+   "text": "기준대비 −10",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADF-0",
+   "text": "240만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADG-0",
+   "text": "2.3억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADI-0",
+   "text": "33일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADJ-0",
+   "text": "행사가 396,000",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADK-0",
+   "text": "한투",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 7 · POSCO홀딩스 콜"
+   ]
+  },
+  {
+   "id": "3ADM-0",
+   "text": "8",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3ADO-0",
+   "text": "LG에너지솔루션 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADP-0",
+   "text": "58Q745 · 신한투자증권 9K12회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADR-0",
+   "text": "240",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADS-0",
+   "text": "▲ +5 · +2.13%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADT-0",
+   "text": "−12.7%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3ADV-0",
+   "text": "275",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADW-0",
+   "text": "기준대비 −35",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADY-0",
+   "text": "280만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ADZ-0",
+   "text": "6.7억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AE1-0",
+   "text": "52일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AE2-0",
+   "text": "행사가 420,000",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AE3-0",
+   "text": "신한",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MBX-0",
+   "text": "9",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MBW-0",
+   "text": "이수페타시스 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MBV-0",
+   "text": "59F215 · 미래에셋증권 3C41회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MBT-0",
+   "text": "96",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MBS-0",
+   "text": "▲ +9 · +10.34%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MBQ-0",
+   "text": "−13.5%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MBP-0",
+   "text": "111",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MBO-0",
+   "text": "기준대비 −15",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MBM-0",
+   "text": "84만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MBL-0",
+   "text": "0.8억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MBJ-0",
+   "text": "28일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MBI-0",
+   "text": "행사가 71,700",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MBG-0",
+   "text": "미래",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MCG-0",
+   "text": "10",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MCF-0",
+   "text": "한미반도체 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCE-0",
+   "text": "59G608 · KB증권 8L07회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCC-0",
+   "text": "52",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCB-0",
+   "text": "▲ +4 · +8.33%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MC9-0",
+   "text": "−14.8%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MC8-0",
+   "text": "61",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MC7-0",
+   "text": "기준대비 −9",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MC5-0",
+   "text": "78만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MC4-0",
+   "text": "0.4억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MC2-0",
+   "text": "41일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MC1-0",
+   "text": "행사가 221,500",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MBZ-0",
+   "text": "키움",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MCZ-0",
+   "text": "11",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MCY-0",
+   "text": "현대차 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCX-0",
+   "text": "59H172 · 한국투자증권 5D29회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCV-0",
+   "text": "38",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCU-0",
+   "text": "▲ +2 · +5.56%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCS-0",
+   "text": "−15.6%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MCR-0",
+   "text": "45",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCQ-0",
+   "text": "기준대비 −7",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCO-0",
+   "text": "71만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCN-0",
+   "text": "0.3억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCL-0",
+   "text": "36일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCK-0",
+   "text": "행사가 263,000",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MCI-0",
+   "text": "한투",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MDI-0",
+   "text": "12",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MDH-0",
+   "text": "NAVER 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDG-0",
+   "text": "59J940 · 신한투자증권 2M63회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDE-0",
+   "text": "24",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDD-0",
+   "text": "▲ +1 · +4.35%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDB-0",
+   "text": "−17.2%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MDA-0",
+   "text": "29",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MD9-0",
+   "text": "기준대비 −5",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MD7-0",
+   "text": "66만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MD6-0",
+   "text": "0.2억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MD4-0",
+   "text": "47일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MD3-0",
+   "text": "행사가 244,300",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MD1-0",
+   "text": "신한",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3ME1-0",
+   "text": "13",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3ME0-0",
+   "text": "SK하이닉스 풋",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDZ-0",
+   "text": "59K337 · KB증권 7B18회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDX-0",
+   "text": "61",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDW-0",
+   "text": "▼ −4 · −6.15%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDU-0",
+   "text": "−18.7%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MDT-0",
+   "text": "75",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDS-0",
+   "text": "기준대비 −14",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDQ-0",
+   "text": "61만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDP-0",
+   "text": "0.4억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDN-0",
+   "text": "22일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDM-0",
+   "text": "행사가 172,400",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MDK-0",
+   "text": "키움",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MEK-0",
+   "text": "14",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MEJ-0",
+   "text": "KODEX 200 풋",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MEI-0",
+   "text": "59L806 · 미래에셋증권 4F52회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MEG-0",
+   "text": "45",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MEF-0",
+   "text": "▼ −3 · −6.25%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MED-0",
+   "text": "−19.6%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MEC-0",
+   "text": "56",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MEB-0",
+   "text": "기준대비 −11",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ME9-0",
+   "text": "57만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ME8-0",
+   "text": "0.3억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ME6-0",
+   "text": "39일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ME5-0",
+   "text": "행사가 41,640",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ME3-0",
+   "text": "미래",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MF3-0",
+   "text": "15",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MF2-0",
+   "text": "카카오 풋",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MF1-0",
+   "text": "59M429 · 한국투자증권 9R84회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MEZ-0",
+   "text": "33",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MEY-0",
+   "text": "▼ −2 · −5.71%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MEW-0",
+   "text": "−21.4%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MEV-0",
+   "text": "42",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MEU-0",
+   "text": "기준대비 −9",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MES-0",
+   "text": "52만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MER-0",
+   "text": "0.2억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MEP-0",
+   "text": "31일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MEO-0",
+   "text": "행사가 35,700",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MEM-0",
+   "text": "한투",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MFM-0",
+   "text": "16",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MFL-0",
+   "text": "삼성전자 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFK-0",
+   "text": "59N118 · 신한투자증권 6T20회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFI-0",
+   "text": "28",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFH-0",
+   "text": "▲ +2 · +7.69%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFF-0",
+   "text": "−22.2%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MFE-0",
+   "text": "36",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFD-0",
+   "text": "기준대비 −8",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFB-0",
+   "text": "48만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFA-0",
+   "text": "0.1억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MF8-0",
+   "text": "44일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MF7-0",
+   "text": "행사가 178,500",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MF5-0",
+   "text": "신한",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MG5-0",
+   "text": "17",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MG4-0",
+   "text": "한미반도체 풋",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MG3-0",
+   "text": "59P573 · KB증권 1V96회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MG1-0",
+   "text": "41",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MG0-0",
+   "text": "▼ −3 · −6.82%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFY-0",
+   "text": "−24.1%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MFX-0",
+   "text": "54",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFW-0",
+   "text": "기준대비 −13",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFU-0",
+   "text": "43만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFT-0",
+   "text": "0.2억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFR-0",
+   "text": "25일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFQ-0",
+   "text": "행사가 165,000",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MFO-0",
+   "text": "키움",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MGO-0",
+   "text": "18",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MGN-0",
+   "text": "현대차 풋",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGM-0",
+   "text": "59Q264 · 미래에셋증권 8W35회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGK-0",
+   "text": "26",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGJ-0",
+   "text": "▼ −2 · −7.14%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGH-0",
+   "text": "−25.7%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MGG-0",
+   "text": "35",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGF-0",
+   "text": "기준대비 −9",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGD-0",
+   "text": "39만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGC-0",
+   "text": "0.1억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGA-0",
+   "text": "33일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MG9-0",
+   "text": "행사가 192,300",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MG7-0",
+   "text": "미래",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MH7-0",
+   "text": "19",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MH6-0",
+   "text": "KOSPI200 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MH5-0",
+   "text": "59R850 · 한국투자증권 3Y47회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MH3-0",
+   "text": "19",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MH2-0",
+   "text": "▲ +1 · +5.56%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MH0-0",
+   "text": "−26.9%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MGZ-0",
+   "text": "26",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGY-0",
+   "text": "기준대비 −7",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGW-0",
+   "text": "34만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGV-0",
+   "text": "0.1억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGT-0",
+   "text": "50일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGS-0",
+   "text": "행사가 547.50",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MGQ-0",
+   "text": "한투",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MHQ-0",
+   "text": "20",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MHP-0",
+   "text": "NAVER 풋",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MHO-0",
+   "text": "59S391 · 신한투자증권 5H62회차",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MHM-0",
+   "text": "15",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MHL-0",
+   "text": "▼ −1 · −6.25%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MHJ-0",
+   "text": "−28.6%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "3MHI-0",
+   "text": "21",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MHH-0",
+   "text": "기준대비 −6",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MHF-0",
+   "text": "29만주",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MHE-0",
+   "text": "0.1억원",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MHC-0",
+   "text": "29일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MHB-0",
+   "text": "행사가 172,900",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MH9-0",
+   "text": "신한",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "가격급등락 순위 표",
+    "행 8 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "2Y5L-0",
+   "text": "KB 9C21 삼성전자 콜",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y5K-0",
+   "text": "58H219 · 급등 1위",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y5I-0",
+   "text": "1위",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y5F-0",
+   "text": "415",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y5E-0",
+   "text": "+45 · +12.16%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y5B-0",
+   "text": "구간 등락률",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y5A-0",
+   "text": "+18.6%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y58-0",
+   "text": "행사가",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y57-0",
+   "text": "160,000",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y55-0",
+   "text": "기어링",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y54-0",
+   "text": "18.2배",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y52-0",
+   "text": "잔존",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y51-0",
+   "text": "24일",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y4Y-0",
+   "text": "ELW 상세 열기",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y4W-0",
+   "text": "차트 열기",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y4S-0",
+   "text": "감지 현황",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread"
+   ]
+  },
+  {
+   "id": "2Y4R-0",
+   "text": "오늘 12건 · 최근 09:41",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread"
+   ]
+  },
+  {
+   "id": "2Y4N-0",
+   "text": "급등 67% · 급락 33%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread"
+   ]
+  },
+  {
+   "id": "2Y4L-0",
+   "text": "급등 감지",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y4K-0",
+   "text": "8건",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y4I-0",
+   "text": "급락 감지",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y4H-0",
+   "text": "4건",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPG-0",
+   "text": "기준가 대비 구간별",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "기준가 대비 구간별"
+   ]
+  },
+  {
+   "id": "3MPJ-0",
+   "text": "+15% 이상",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "기준가 대비 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPK-0",
+   "text": "64종목",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "기준가 대비 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPM-0",
+   "text": "+5 ~ +15%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "기준가 대비 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPN-0",
+   "text": "407종목",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "기준가 대비 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPP-0",
+   "text": "−5 ~ +5%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "기준가 대비 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPQ-0",
+   "text": "1,682종목",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "기준가 대비 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPS-0",
+   "text": "−15 ~ −5%",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "기준가 대비 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPT-0",
+   "text": "958종목",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "기준가 대비 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPV-0",
+   "text": "−15% 미만",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "기준가 대비 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPW-0",
+   "text": "371종목",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "기준가 대비 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y4C-0",
+   "text": "기준가 09:00 · 09:42 기준",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "2Y4B-0",
+   "text": "마지막 조회 09:42:18",
+   "path": [
+    "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2Y47-0",
+   "name": "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "2Y48-0",
+   "name": "Instrument Root · 현재시세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 1
+  },
+  {
+   "id": "2Y49-0",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1040,
+   "depth": 2
+  },
+  {
+   "id": "2Y9I-0",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 86,
+   "depth": 3
+  },
+  {
+   "id": "2Y9Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YA3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YA4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Y9Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y9J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2Y9W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y9U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y9S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y9Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y9O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y9M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y9K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y8Y-0",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 3
+  },
+  {
+   "id": "2Y9F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Y9B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Y97-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Y93-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Y8Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Y4D-0",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 822,
+   "depth": 3
+  },
+  {
+   "id": "2Y5M-0",
+   "name": "Quote Detail Mount",
+   "component": "Frame",
+   "w": 1000,
+   "h": 822,
+   "depth": 4
+  },
+  {
+   "id": "2Y8C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "2Y8L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Y8W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y8U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y8S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y8Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y8O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y8M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y8D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Y8I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y8G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y8E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A9M-0",
+   "name": "가격급등락 순위 표",
+   "component": "Frame",
+   "w": 0,
+   "h": 748,
+   "depth": 5
+  },
+  {
+   "id": "3A9N-0",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3A9W-0",
+   "name": "행 1 · 삼성전자 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3A9Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AA1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AA5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AA8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AAB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AAF-0",
+   "name": "행 2 · SK하이닉스 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3AAH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AAK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AAO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AAR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AAU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AAY-0",
+   "name": "행 3 · 카카오 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3AB0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AB3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AB7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ABA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ABD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ABH-0",
+   "name": "행 4 · KOSPI200 풋",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3ABJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ABM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ABQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ABT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ABW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AC0-0",
+   "name": "행 5 · 현대차 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3AC2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AC5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AC9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ACC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ACF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ACJ-0",
+   "name": "행 6 · NAVER 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3ACL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ACO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ACS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ACV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ACY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AD2-0",
+   "name": "행 7 · POSCO홀딩스 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3AD4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AD7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ADB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ADE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ADH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ADL-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3ADN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ADQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ADU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ADX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AE0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MBF-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MBU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MBR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MBN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MBK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MBH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MBY-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MCD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MCA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MC6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MC3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MC0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MCH-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MCW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MCT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MCP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MCM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MCJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MD0-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MDF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MDC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MD8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MD5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MD2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MDJ-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MDY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MDV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MDR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MDO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MDL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ME2-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MEH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MEE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MEA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ME7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ME4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MEL-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MF0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MEX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MET-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MEQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MEN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MF4-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MFJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MFG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MFC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MF9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MF6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MFN-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MG2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MFZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MFV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MFS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MFP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MG6-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MGL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MGI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MGE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MGB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MG8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MGP-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MH4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MH1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MGX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MGU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MGR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MH8-0",
+   "name": "행 8 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3MHN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MHK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MHG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MHD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MHA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y4E-0",
+   "name": "Instrument Context",
+   "component": "Frame",
+   "w": 360,
+   "h": 822,
+   "depth": 4
+  },
+  {
+   "id": "2Y4T-0",
+   "name": "Selected Warrant",
+   "component": "Frame",
+   "w": 312,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y5G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Y5J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y5H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y5D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Y5C-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2Y4Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Y59-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y56-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y53-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y50-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y4U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Y4X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 7
+  },
+  {
+   "id": "2Y4V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 7
+  },
+  {
+   "id": "2Y4F-0",
+   "name": "Open Interest Spread",
+   "component": "Frame",
+   "w": 312,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y4O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "2Y4Q-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 183,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "2Y4P-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 89,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "2Y4M-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2Y4J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Y4G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MPF-0",
+   "name": "기준가 대비 구간별",
+   "component": "Frame",
+   "w": 312,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MPH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MPI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MPL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MPO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MPR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3MPU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y4A-0",
+   "name": "Chart Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "ELW 순위": 1,
+  "전 종목 · 기준가 대비 등락 큰 순": 1,
+  "조회 스냅샷": 1,
+  "상장 ELW 3,482 종목": 1,
+  "콜 2,146 · 풋 1,336": 1,
+  "09:42:18 조회": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 2,
+  "ELW": 2,
+  "금현물": 1,
+  "순위": 2,
+  "정렬 기준": 1,
+  "기준가 대비 등락 큰 순": 1,
+  "등락률 상위": 1,
+  "+12.16%": 1,
+  "장중 갱신 기준": 1,
+  "근접률 최고": 1,
+  "98.6%": 1,
+  "행사가 대비": 1,
+  "급등락 감지": 1,
+  "12건": 1,
+  "오늘 누적": 1,
+  "조건검색 저장": 1,
+  "2건": 1,
+  "저장 조건 기준": 1,
+  "잔량": 1,
+  "등락률": 1,
+  "근접률": 1,
+  "가격급등락": 1,
+  "거래원별 순매매": 1,
+  "조건검색": 1,
+  "범위": 1,
+  "주식": 1,
+  "전체 3,482건 · 20건 표시": 1,
+  "종목 · 코드 · 발행사": 1,
+  "현재가 · 전일대비": 1,
+  "기준가 대비": 1,
+  "거래종료 기준가": 1,
+  "거래량 · 대금": 1,
+  "잔존일 · 행사가": 1,
+  "LP": 1,
+  "1": 1,
+  "삼성전자 콜": 2,
+  "58H219 · KB증권 9C21회차": 1,
+  "415": 2,
+  "▲ +45 · +12.16%": 1,
+  "+18.6%": 2,
+  "350": 1,
+  "기준대비 +65": 1,
+  "620만주": 1,
+  "25.7억원": 1,
+  "24일": 3,
+  "행사가 160,000": 1,
+  "키움": 6,
+  "2": 1,
+  "SK하이닉스 콜": 1,
+  "58J377 · 미래에셋증권 7K55회차": 1,
+  "285": 1,
+  "▲ +25 · +9.62%": 1,
+  "+14.0%": 1,
+  "250": 1,
+  "기준대비 +35": 1,
+  "540만주": 1,
+  "15.4억원": 1,
+  "38일": 1,
+  "행사가 210,000": 2,
+  "미래": 5,
+  "3": 1,
+  "카카오 콜": 1,
+  "58R210 · KB증권 4H27회차": 1,
+  "62": 1,
+  "▲ +5 · +8.8%": 1,
+  "+12.7%": 1,
+  "55": 1,
+  "기준대비 +7": 1,
+  "260만주": 1,
+  "1.6억원": 1,
+  "21일": 1,
+  "행사가 43,000": 1,
+  "4": 1,
+  "KOSPI200 풋": 1,
+  "58K902 · 한국투자증권 3F09회차": 1,
+  "190": 1,
+  "▼ −18 · −8.65%": 1,
+  "+11.8%": 1,
+  "170": 1,
+  "기준대비 +20": 1,
+  "480만주": 1,
+  "9.1억원": 1,
+  "17일": 1,
+  "행사가 457.50": 1,
+  "한투": 5,
+  "5": 1,
+  "현대차 콜": 2,
+  "58M204 · KB증권 8Q02회차": 1,
+  "520": 1,
+  "▲ +25 · +5.05%": 1,
+  "+8.3%": 1,
+  "480": 1,
+  "기준대비 +40": 1,
+  "390만주": 1,
+  "20.3억원": 1,
+  "45일": 1,
+  "행사가 230,000": 1,
+  "6": 1,
+  "NAVER 콜": 2,
+  "58N551 · 미래에셋증권 2W18회차": 1,
+  "88": 1,
+  "▲ +4 · +4.76%": 1,
+  "+7.3%": 1,
+  "82": 1,
+  "기준대비 +6": 1,
+  "350만주": 1,
+  "3.1억원": 1,
+  "7": 1,
+  "POSCO홀딩스 콜": 1,
+  "58T933 · 한국투자증권 5N82회차": 1,
+  "96": 2,
+  "▼ −4 · −4.0%": 1,
+  "−9.4%": 1,
+  "106": 1,
+  "기준대비 −10": 1,
+  "240만주": 1,
+  "2.3억원": 1,
+  "33일": 2,
+  "행사가 396,000": 1,
+  "8": 1,
+  "LG에너지솔루션 콜": 1,
+  "58Q745 · 신한투자증권 9K12회차": 1,
+  "240": 1,
+  "▲ +5 · +2.13%": 1,
+  "−12.7%": 1,
+  "275": 1,
+  "기준대비 −35": 1,
+  "280만주": 1,
+  "6.7억원": 1,
+  "52일": 1,
+  "행사가 420,000": 1,
+  "신한": 4,
+  "9": 1,
+  "이수페타시스 콜": 1,
+  "59F215 · 미래에셋증권 3C41회차": 1,
+  "▲ +9 · +10.34%": 1,
+  "−13.5%": 1,
+  "111": 1,
+  "기준대비 −15": 1,
+  "84만주": 1,
+  "0.8억원": 1,
+  "28일": 1,
+  "행사가 71,700": 1,
+  "10": 1,
+  "한미반도체 콜": 1,
+  "59G608 · KB증권 8L07회차": 1,
+  "52": 1,
+  "▲ +4 · +8.33%": 1,
+  "−14.8%": 1,
+  "61": 2,
+  "기준대비 −9": 3,
+  "78만주": 1,
+  "0.4억원": 2,
+  "41일": 1,
+  "행사가 221,500": 1,
+  "11": 1,
+  "59H172 · 한국투자증권 5D29회차": 1,
+  "38": 1,
+  "▲ +2 · +5.56%": 1,
+  "−15.6%": 1,
+  "45": 2,
+  "기준대비 −7": 2,
+  "71만주": 1,
+  "0.3억원": 2,
+  "36일": 1,
+  "행사가 263,000": 1,
+  "12": 1,
+  "59J940 · 신한투자증권 2M63회차": 1,
+  "24": 1,
+  "▲ +1 · +4.35%": 1,
+  "−17.2%": 1,
+  "29": 1,
+  "기준대비 −5": 1,
+  "66만주": 1,
+  "0.2억원": 3,
+  "47일": 1,
+  "행사가 244,300": 1,
+  "13": 1,
+  "SK하이닉스 풋": 1,
+  "59K337 · KB증권 7B18회차": 1,
+  "▼ −4 · −6.15%": 1,
+  "−18.7%": 1,
+  "75": 1,
+  "기준대비 −14": 1,
+  "61만주": 1,
+  "22일": 1,
+  "행사가 172,400": 1,
+  "14": 1,
+  "KODEX 200 풋": 1,
+  "59L806 · 미래에셋증권 4F52회차": 1,
+  "▼ −3 · −6.25%": 1,
+  "−19.6%": 1,
+  "56": 1,
+  "기준대비 −11": 1,
+  "57만주": 1,
+  "39일": 1,
+  "행사가 41,640": 1,
+  "15": 2,
+  "카카오 풋": 1,
+  "59M429 · 한국투자증권 9R84회차": 1,
+  "33": 1,
+  "▼ −2 · −5.71%": 1,
+  "−21.4%": 1,
+  "42": 1,
+  "52만주": 1,
+  "31일": 1,
+  "행사가 35,700": 1,
+  "16": 1,
+  "59N118 · 신한투자증권 6T20회차": 1,
+  "28": 1,
+  "▲ +2 · +7.69%": 1,
+  "−22.2%": 1,
+  "36": 1,
+  "기준대비 −8": 1,
+  "48만주": 1,
+  "0.1억원": 4,
+  "44일": 1,
+  "행사가 178,500": 1,
+  "17": 1,
+  "한미반도체 풋": 1,
+  "59P573 · KB증권 1V96회차": 1,
+  "41": 1,
+  "▼ −3 · −6.82%": 1,
+  "−24.1%": 1,
+  "54": 1,
+  "기준대비 −13": 1,
+  "43만주": 1,
+  "25일": 1,
+  "행사가 165,000": 1,
+  "18": 1,
+  "현대차 풋": 1,
+  "59Q264 · 미래에셋증권 8W35회차": 1,
+  "26": 2,
+  "▼ −2 · −7.14%": 1,
+  "−25.7%": 1,
+  "35": 1,
+  "39만주": 1,
+  "행사가 192,300": 1,
+  "19": 2,
+  "KOSPI200 콜": 1,
+  "59R850 · 한국투자증권 3Y47회차": 1,
+  "▲ +1 · +5.56%": 1,
+  "−26.9%": 1,
+  "34만주": 1,
+  "50일": 1,
+  "행사가 547.50": 1,
+  "20": 1,
+  "NAVER 풋": 1,
+  "59S391 · 신한투자증권 5H62회차": 1,
+  "▼ −1 · −6.25%": 1,
+  "−28.6%": 1,
+  "21": 1,
+  "기준대비 −6": 1,
+  "29만주": 1,
+  "29일": 1,
+  "행사가 172,900": 1,
+  "KB 9C21 삼성전자 콜": 1,
+  "58H219 · 급등 1위": 1,
+  "1위": 1,
+  "+45 · +12.16%": 1,
+  "구간 등락률": 1,
+  "행사가": 1,
+  "160,000": 1,
+  "기어링": 1,
+  "18.2배": 1,
+  "잔존": 1,
+  "ELW 상세 열기": 1,
+  "차트 열기": 1,
+  "감지 현황": 1,
+  "오늘 12건 · 최근 09:41": 1,
+  "급등 67% · 급락 33%": 1,
+  "급등 감지": 1,
+  "8건": 1,
+  "급락 감지": 1,
+  "4건": 1,
+  "기준가 대비 구간별": 1,
+  "+15% 이상": 1,
+  "64종목": 1,
+  "+5 ~ +15%": 1,
+  "407종목": 1,
+  "−5 ~ +5%": 1,
+  "1,682종목": 1,
+  "−15 ~ −5%": 1,
+  "958종목": 1,
+  "−15% 미만": 1,
+  "371종목": 1,
+  "기준가 09:00 · 09:42 기준": 1,
+  "마지막 조회 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "74a85bf855434c00a4aae7b12ff521073d9b4de01db37fba1f1dd221292da197"
+}

@@ -1,0 +1,234 @@
+{
+ "board_id": "47HS-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47IF-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47IE-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47IC-0",
+   "text": "예상체결 등락률",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Header"
+   ]
+  },
+  {
+   "id": "47IA-0",
+   "text": "예상체결등락률상위",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47I9-0",
+   "text": "상위 5개 표시 · 전체 100개",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47I7-0",
+   "text": "종목코드",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47I6-0",
+   "text": "007660",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47I4-0",
+   "text": "매도잔량",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47I3-0",
+   "text": "매도 9.8만",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47I1-0",
+   "text": "매수잔량",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47I0-0",
+   "text": "매수 14.6만",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47HY-0",
+   "text": "등락률",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47HX-0",
+   "text": "+9.77%",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47HU-0",
+   "text": "외 85개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47HS-0",
+   "name": "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47IB-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47ID-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47HV-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47I8-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47I5-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47I2-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47HZ-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47HW-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47HT-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "예상체결 등락률": 1,
+  "예상체결등락률상위": 1,
+  "상위 5개 표시 · 전체 100개": 1,
+  "종목코드": 1,
+  "007660": 1,
+  "매도잔량": 1,
+  "매도 9.8만": 1,
+  "매수잔량": 1,
+  "매수 14.6만": 1,
+  "등락률": 1,
+  "+9.77%": 1,
+  "외 85개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "54f30e8ef407d865a4b23dfd89c16a14adf5a6175f1669aeb80bb8a3fa4977c0"
+}

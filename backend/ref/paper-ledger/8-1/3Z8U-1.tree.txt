@@ -1,0 +1,51 @@
+Frame "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)" (3Z8U-1) 1680×0
+  Frame "보드 제목" (3Z8V-1) 1600×0
+    Text "채팅이 화면을 몬다 — 말한 것이 화…" (3Z8W-1) 0×0 "채팅이 화면을 몬다 — 말한 것이 화면에서 실제로 일어난다"
+    Text "모델은 athena_graph_vie…" (3Z8X-1) 0×0 "모델은 athena_graph_view를 부르고, 그 결과가 delivered:"canvas" 봉투로 렌더러"
+  Frame "세 액션의 전후" (3Z8Y-1) 1600×0
+    Frame "navigate" (3Z8Z-1) 0×0
+      Frame "Frame" (3Z90-1) 0×0
+        Text "navigate" (3Z91-1) 0×0 "navigate"
+        Text "surface = summary · …" (3Z92-1) 0×0 "surface = summary · map · settings"
+      Text "사람의 말" (3Z93-1) 0×0 ""수집·노출 탭 보여줘""
+      Frame "전" (3Z94-1) 0×0
+        Text "전" (3Z95-1) 0×0 "전"
+        Frame "Frame" (3Z96-1) 0×0
+          Frame "Frame" (3Z97-1) 0×0
+            Text "요약" (3Z98-1) 0×0 "요약"
+          Frame "Frame" (3Z99-1) 0×0
+            Text "그래프" (3Z9A-1) 0×0 "그래프"
+          Frame "Frame" (3Z9B-1) 0×0
+            Text "수집·노출" (3Z9C-1) 0×0 "수집·노출"
+      Frame "후" (3Z9D-1) 0×0
+        Text "후" (3Z9E-1) 0×0 "후"
+        Frame "Frame" (3Z9F-1) 0×0
+          Frame "Frame" (3Z9G-1) 0×0
+            Text "요약" (3Z9H-1) 0×0 "요약"
+          Frame "Frame" (3Z9I-1) 0×0
+            Text "그래프" (3Z9J-1) 0×0 "그래프"
+          Frame "Frame" (3Z9K-1) 0×0
+            Text "수집·노출" (3Z9L-1) 0×0 "수집·노출"
+      Text "계약" (3Z9M-1) 0×0 "탭 활성 표시까지 함께 따라온다. 그래프 기능 밖이면 아무 일도 안 한다 — 다른 모드를 보고 있는데 화면이"
+    Frame "select" (3Z9N-1) 0×0
+      Frame "Frame" (3Z9O-1) 0×0
+        Text "select" (3Z9P-1) 0×0 "select"
+        Text "entity = entity_id" (3Z9Q-1) 0×0 "entity = entity_id"
+      Text "사람의 말" (3Z9R-1) 0×0 ""한미반도체 골라줘""
+      Frame "일어나는 일" (3Z9S-1) 0×0
+        Text "① 지도를 안 보고 있으면 지도로 옮…" (3Z9T-1) 0×0 "① 지도를 안 보고 있으면 지도로 옮긴다"
+        Text "② 공통 패널이 그 노드로 열린다" (3Z9U-1) 0×0 "② 공통 패널이 그 노드로 열린다"
+        Text "③ 지도 카메라가 그 노드로 옮겨간다" (3Z9V-1) 0×0 "③ 지도 카메라가 그 노드로 옮겨간다"
+      Text "계약" (3Z9W-1) 0×0 "이름이 아니라 id가 필요하다. 성향 신호에 entityId가 함께 실려 오고, 모르면 athena_brai"
+    Frame "filter" (3Z9X-1) 0×0
+      Frame "Frame" (3Z9Y-1) 0×0
+        Text "filter" (3Z9Z-1) 0×0 "filter"
+        Text "기간 · 연결 수 · 정렬" (3ZA0-1) 0×0 "기간 · 연결 수 · 정렬"
+      Text "사람의 말" (3ZA1-1) 0×0 ""최근 1년으로 넓혀줘""
+      Frame "전후 칩" (3ZA2-1) 0×0
+        Frame "Frame" (3ZA3-1) 0×0
+          Text "최근 90일" (3ZA4-1) 0×0 "최근 90일"
+        Text "→" (3ZA5-1) 0×0 "→"
+        Frame "Frame" (3ZA6-1) 0×0
+          Text "최근 365일" (3ZA7-1) 0×0 "최근 365일"
+      Text "계약" (3ZA8-1) 0×0 "칩만 바뀌는 것이 아니라 백엔드를 그 창으로 다시 조회한다. 값은 localStorage에 남아 다음에 열어"

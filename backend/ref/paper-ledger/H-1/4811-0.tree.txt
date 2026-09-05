@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T4-8 · 순위 — 시가대비 등락" (4811-0) 360×420
+  Frame "Header" (481V-0) 0×0
+    Frame "Meta row" (481X-0) 0×0
+      Text "Eyebrow" (481Z-0) 0×0
+      Text "As of" (481Y-0) 0×0 "기준 09:42"
+    Text "Title" (481W-0) 0×0 "시가대비 등락"
+  Frame "Body" (4814-0) 0×0
+    Frame "KPI band" (481L-0) 0×0
+      Frame "Frame" (481S-0) 0×0
+        Text "시가대비" (481U-0) 0×0 "시가대비"
+        Text "+8.4%" (481T-0) 0×0 "+8.4%"
+      Frame "Frame" (481P-0) 0×0
+        Text "값" (481R-0) 0×0 "값"
+        Text "512" (481Q-0) 0×0 "512"
+      Frame "Frame" (481M-0) 0×0
+        Text "핵심" (481O-0) 0×0 "핵심"
+        Text "318" (481N-0) 0×0 "318"
+    Frame "Table header" (481H-0) 0×0
+      Text "항목" (481K-0) 0×0 "항목"
+      Text "값" (481J-0) 0×0 "값"
+      Text "비고" (481I-0) 72×0 "비고"
+    Frame "Position 1" (481B-0) 0×0
+      Frame "Frame" (481E-0) 0×0
+        Text "수량" (481G-0) 0×0 "수량"
+        Text "Text" (481F-0) 0×0
+      Text "1위 종목" (481D-0) 0×0 "1위 종목"
+      Text "Text" (481C-0) 72×0
+    Frame "Position 2" (4815-0) 0×0
+      Frame "Frame" (4818-0) 0×0
+        Text "시가대비" (481A-0) 0×0 "시가대비"
+        Text "Text" (4819-0) 0×0
+      Text "최대 +8.4%" (4817-0) 0×0 "최대 +8.4%"
+      Text "Text" (4816-0) 72×0
+  Frame "Fold note" (4812-0) 0×0
+    Text "스칼라 2개, 행 18개 접힘 · 원…" (4813-0) 0×0 "스칼라 2개, 행 18개 접힘 · 원본에서 확인"

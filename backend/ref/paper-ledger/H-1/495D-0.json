@@ -1,0 +1,92 @@
+{
+ "board_id": "495D-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "495F-0",
+   "text": "원본 보드: CC-03 / R01-T4-3 · 순위 — 고저가근접",
+   "path": [
+    "note/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Frame"
+   ]
+  },
+  {
+   "id": "495H-0",
+   "text": "가져온 요소: 고저가근접 · 종목코드 · 현재가 · 전일대비 · 당일고가",
+   "path": [
+    "note/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Frame"
+   ]
+  },
+  {
+   "id": "495J-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Frame"
+   ]
+  },
+  {
+   "id": "495L-0",
+   "text": "접은 개수: 스칼라 2개 · 행 18개",
+   "path": [
+    "note/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "495D-0",
+   "name": "note/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "495E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "495G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "495I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "495K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T4-3 · 순위 — 고저가근접": 1,
+  "가져온 요소: 고저가근접 · 종목코드 · 현재가 · 전일대비 · 당일고가": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 18개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "0927a82a41e0b967e5b75ef5f77c8253b30512052e077bca302bee59f4163dec"
+}

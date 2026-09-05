@@ -1,0 +1,233 @@
+{
+ "board_id": "47XG-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47Y3-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47Y2-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47Y0-0",
+   "text": "외국인·기관 상위",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Header"
+   ]
+  },
+  {
+   "id": "47XY-0",
+   "text": "외인순매수금액",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47XX-0",
+   "text": "+518억원",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47XV-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47XU-0",
+   "text": "08-31 확정",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47XS-0",
+   "text": "기준 시각",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47XR-0",
+   "text": "09:42 조회",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47XP-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47XO-0",
+   "text": "외국인 순매수 1위",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47XM-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47XL-0",
+   "text": "18종목",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47XI-0",
+   "text": "외 128개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47XG-0",
+   "name": "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47XZ-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47Y1-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47XJ-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47XW-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47XT-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47XQ-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47XN-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47XK-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47XH-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "외국인·기관 상위": 1,
+  "외인순매수금액": 1,
+  "+518억원": 1,
+  "값": 2,
+  "08-31 확정": 1,
+  "기준 시각": 1,
+  "09:42 조회": 1,
+  "외국인 순매수 1위": 1,
+  "수량": 1,
+  "18종목": 1,
+  "외 128개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "fea9983a2f5c7b5c9e678cc9088076ca5a4fbea9d0d74e61544dade5ed518be6"
+}

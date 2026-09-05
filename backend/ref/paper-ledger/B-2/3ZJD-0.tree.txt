@@ -1,0 +1,87 @@
+Frame "07 · 플러그인 대화 — 제안 턴 5동작" (3ZJD-0) 1680×986
+  Frame "board-head" (3ZJE-0) 0×0
+    Text "제안 턴 5동작" (3ZJF-0) 0×0 "제안 턴 5동작"
+    Text "채팅이 제안하고 캔버스가 승인합니다" (3ZJG-0) 0×0 "채팅이 제안하고 캔버스가 승인합니다"
+  Frame "columns" (3ZJI-0) 0×0
+    Frame "col-install" (3ZJK-0) 304×0
+      Text "col-label" (3ZJL-0) 0×0 "설치"
+      Frame "chat-turn" (3ZJM-0) 0×0
+        Frame "제안 필" (3ZJN-0) 0×0
+          Text "제안" (3ZJO-0) 0×0 "제안"
+        Text "제안 문장" (3ZJP-0) 0×0 "한국 주식 시세를 설치할까요"
+      Frame "approval-card" (3ZJQ-0) 0×0
+        Text "카드 제목" (3ZJR-0) 0×0 "한국 주식 시세 설치"
+        Frame "필드" (3ZJS-0) 0×0
+          Text "제공: athena-official" (3ZJT-0) 0×0 "제공: athena-official"
+          Text "실행 명령: npx -y @drfir…" (3ZJU-0) 0×0 "실행 명령: npx -y @drfirst/korea-stock-mcp"
+          Text "권한 6개 요청" (3ZJV-0) 0×0 "권한 6개 요청"
+        Frame "buttons" (3ZJW-0) 0×0
+          Frame "Frame" (3ZJX-0) 0×0
+            Text "거부" (3ZJY-0) 0×0 "거부"
+          Frame "Frame" (3ZJZ-0) 0×0
+            Text "승인" (3ZK0-0) 0×0 "승인"
+    Frame "col-install" (3ZK2-0) 304×0
+      Text "col-label" (3ZKI-0) 0×0 "기능 허용"
+      Frame "chat-turn" (3ZKE-0) 0×0
+        Frame "제안 필" (3ZKG-0) 0×0
+          Text "제안" (3ZKH-0) 0×0 "제안"
+        Text "제안 문장" (3ZKF-0) 0×0 "시세 조회만 허용할까요"
+      Frame "approval-card" (3ZK3-0) 0×0
+        Text "카드 제목" (3ZKD-0) 0×0 "한국 주식 시세 · 기능 허용"
+        Frame "필드" (3ZK9-0) 0×0
+          Text "허용 4 / 6" (3ZKC-0) 0×0 "허용 4 / 6"
+          Text "켤 기능: 종목 검색 · 시세 조회 …" (3ZKB-0) 0×0 "켤 기능: 종목 검색 · 시세 조회 · 시총 상위 · 배당 상위"
+          Text "끌 기능: 테마주 · ETF" (3ZKA-0) 0×0 "끌 기능: 테마주 · ETF"
+        Frame "buttons" (3ZK4-0) 0×0
+          Frame "Frame" (3ZK7-0) 0×0
+            Text "거부" (3ZK8-0) 0×0 "거부"
+          Frame "Frame" (3ZK5-0) 0×0
+            Text "승인" (3ZK6-0) 0×0 "승인"
+    Frame "col-toggle" (3ZKJ-0) 304×0
+      Text "col-label" (3ZKK-0) 0×0 "켜기·끄기"
+      Frame "chat-turn" (3ZKL-0) 0×0
+        Frame "제안 필" (3ZKM-0) 0×0
+          Text "제안" (3ZKN-0) 0×0 "제안"
+        Text "제안 문장" (3ZKO-0) 0×0 "웹 문서 읽기를 끌까요"
+      Frame "approval-card" (3ZKP-0) 0×0
+        Text "카드 제목" (3ZKQ-0) 0×0 "웹 문서 읽기 끄기"
+        Frame "필드" (3ZKR-0) 0×0
+          Text "승인 철회" (3ZKS-0) 0×0 "승인 철회"
+          Text "기능 1개가 함께 멈춥니다" (3ZKT-0) 0×0 "기능 1개가 함께 멈춥니다"
+        Frame "buttons" (3ZKU-0) 0×0
+          Frame "Frame" (3ZKV-0) 0×0
+            Text "거부" (3ZKW-0) 0×0 "거부"
+          Frame "Frame" (3ZKX-0) 0×0
+            Text "승인" (3ZKY-0) 0×0 "승인"
+    Frame "col-toggle" (3ZL0-0) 304×0
+      Text "col-label" (3ZLF-0) 0×0 "삭제"
+      Frame "chat-turn" (3ZLB-0) 0×0
+        Frame "제안 필" (3ZLD-0) 0×0
+          Text "제안" (3ZLE-0) 0×0 "제안"
+        Text "제안 문장" (3ZLC-0) 0×0 "시간·시간대를 지울까요"
+      Frame "approval-card" (3ZL1-0) 0×0
+        Text "카드 제목" (3ZLA-0) 0×0 "시간·시간대 삭제"
+        Frame "필드" (3ZL7-0) 0×0
+          Text "등록과 승인 기록을 함께 지웁니다" (3ZL9-0) 0×0 "등록과 승인 기록을 함께 지웁니다"
+          Text "되돌리려면 다시 설치합니다" (3ZL8-0) 0×0 "되돌리려면 다시 설치합니다"
+        Frame "buttons" (3ZL2-0) 0×0
+          Frame "Frame" (3ZL5-0) 0×0
+            Text "거부" (3ZL6-0) 0×0 "거부"
+          Frame "Frame" (3ZL3-0) 0×0
+            Text "승인" (3ZL4-0) 0×0 "승인"
+    Frame "col-toggle" (3ZLG-0) 304×0
+      Text "col-label" (3ZLV-0) 0×0 "스니펫 등록"
+      Frame "chat-turn" (3ZLR-0) 0×0
+        Frame "제안 필" (3ZLT-0) 0×0
+          Text "제안" (3ZLU-0) 0×0 "제안"
+        Text "제안 문장" (3ZLS-0) 0×0 "이 서버를 등록할까요"
+      Frame "approval-card" (3ZLH-0) 0×0
+        Text "카드 제목" (3ZLQ-0) 0×0 "직접 등록"
+        Frame "필드" (3ZLN-0) 0×0
+          Text "실행 명령: uvx mcp-serve…" (3ZLP-0) 0×0 "실행 명령: uvx mcp-server-time"
+          Text "등록만으로는 실행되지 않습니다" (3ZLO-0) 0×0 "등록만으로는 실행되지 않습니다"
+        Frame "buttons" (3ZLI-0) 0×0
+          Frame "Frame" (3ZLL-0) 0×0
+            Text "거부" (3ZLM-0) 0×0 "거부"
+          Frame "Frame" (3ZLJ-0) 0×0
+            Text "승인" (3ZLK-0) 0×0 "승인"

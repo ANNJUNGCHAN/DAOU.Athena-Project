@@ -1,0 +1,2645 @@
+{
+ "board_id": "5H3-0",
+ "page": "C-2",
+ "page_name": "키우미",
+ "name": "03 · 키우미 — 시선·시간 루프",
+ "width": 1900.0,
+ "height": 0.0,
+ "texts": [
+  {
+   "id": "5H5-0",
+   "text": "흰 도형의 위치와 시간으로 살아난다",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "설명"
+   ]
+  },
+  {
+   "id": "5H6-0",
+   "text": "표정은 보드 02의 10종만 사용한다. 시선 9방향과 시간 루프 3종을 별도 축으로 조합한다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "설명"
+   ]
+  },
+  {
+   "id": "5S6-0",
+   "text": "시선 9방향 — 두 도형이 함께 옮겨간다",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선 9방향",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5S7-0",
+   "text": "눈동자를 새로 그리지 않는다. 흰 알약 두 개가 바이저 안에서 ±10px 옮겨 앉을 뿐이다. 도형 수는 그대로 둘.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선 9방향",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WX-0",
+   "text": "아래",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WY-0",
+   "text": "듣는 중 — 입력줄을 내려다본다",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5X0-0",
+   "text": "위·옆",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5X1-0",
+   "text": "생각 중 — 답을 더듬는다. 스피너 대신이다",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5X3-0",
+   "text": "한쪽 고정",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5X4-0",
+   "text": "경계 — 임계에 붙은 종목 쪽을 붙박는다",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5X6-0",
+   "text": "커서 쪽",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5X7-0",
+   "text": "반경 320px 안의 커서를 곁눈질한다 — 기본 표정에서만",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5X9-0",
+   "text": "사용자",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5XA-0",
+   "text": "오브를 끌 때 — 끌리는 방향 반대로 밀린다(관성)",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FQR-2",
+   "text": "정면",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FQQ-2",
+   "text": "그 밖 전부 — 시선은 0,0으로 돌아온다",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5XC-0",
+   "text": "시선은 정보가 아니라 태도다. 틀려도 사용자가 손해 보지 않는 유일한 표현이라, 마음껏 움직여도 정직성 계약에 걸리지 않는다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시선 9방향",
+    "시선이 쓰이는 곳",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5N9-0",
+   "text": "상황별 표현 매핑 — 신호 상태 14가지",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NA-0",
+   "text": "감정은 지어내지 않는다 — 전부 앱에 이미 있는 신호에 붙는다. 14가지 상태가 보드 02의 표정 10종으로 모인다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NG-0",
+   "text": "잠듦",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 잠듦",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NH-0",
+   "text": "idle > 5min",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 잠듦",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NI-0",
+   "text": "바이저가 거의 닫힌다. 5분 이상 입력이 없을 때의 휴식 표현이다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 잠듦",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NL-0",
+   "text": "대기",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 대기",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NM-0",
+   "text": "idle — 기본값",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 대기",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NN-0",
+   "text": "말 걸 수 있는 상태. 가끔 두리번거린다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 대기",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NQ-0",
+   "text": "듣는 중",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 듣는 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NR-0",
+   "text": "input:focus",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 듣는 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NS-0",
+   "text": "눈이 입력줄을 내려다본다. 딴 데 안 본다는 신호.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 듣는 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NV-0",
+   "text": "생각 중",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 생각 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NW-0",
+   "text": "query running",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 생각 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5NX-0",
+   "text": "흰 도형이 위를 훑는다. 스피너를 대신한다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 생각 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5O0-0",
+   "text": "완료",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 완료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5O1-0",
+   "text": "result ok",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 완료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5O2-0",
+   "text": "웃고 나서 2초 뒤 대기로 돌아간다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "1행",
+    "셀 · 완료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5O6-0",
+   "text": "경계",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 경계",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5O7-0",
+   "text": "임계 90% 근접",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 경계",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5O8-0",
+   "text": "좁아지며 한쪽을 붙박한다. 아직 발화는 아니다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 경계",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5OB-0",
+   "text": "발화",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 발화",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5OC-0",
+   "text": "routine-event",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 발화",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5OD-0",
+   "text": "두 도형이 동그래진다. 화면당 신호는 여기 하나.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 발화",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5OG-0",
+   "text": "신남",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 신남",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5OH-0",
+   "text": "goal 플래그 발화",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 신남",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5OI-0",
+   "text": "사용자가 명시한 목표가 도달. 가장 큰 아치.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 신남",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5OL-0",
+   "text": "시무룩",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 시무룩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5OM-0",
+   "text": "routine expired",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 시무룩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5ON-0",
+   "text": "루틴이 만료로 끝났다. 평평한 가로 막대.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 시무룩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5OQ-0",
+   "text": "졸림",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 졸림",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5OR-0",
+   "text": "market closed",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 졸림",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5OS-0",
+   "text": "장 밖 시간대. 바이저는 그대로고 눈만 무겁게 처진다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "2행",
+    "셀 · 졸림",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FMG-2",
+   "text": "승인됨",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 승인됨",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FMF-2",
+   "text": "routine confirmed",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 승인됨",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FME-2",
+   "text": "감시 등록이 반영됐다. 표정 중 유일한 좌우 비대칭.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 승인됨",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FM6-2",
+   "text": "놀람",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 놀람",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FM5-2",
+   "text": "exceed ratio ≥ 1.5",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 놀람",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FM4-2",
+   "text": "발화 중 급변. 발화보다 더 크고 둥근 원.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 놀람",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FLM-2",
+   "text": "찡그림",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 찡그림",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FLL-2",
+   "text": "error · timeout · feed down",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 찡그림",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FLK-2",
+   "text": "사선으로 부딪는 두 막대. 재연결까지 지속된다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 찡그림",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FLC-2",
+   "text": "우는",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 우는",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FLB-2",
+   "text": "restore failed",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 우는",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FLA-2",
+   "text": "감시 복원 실패. 시무룩 눈에 눈물 한 방울만 더한다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "상황별 표현 매핑",
+    "3행",
+    "셀 · 우는",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5V2-0",
+   "text": "시간 루프 3종 — 깜빡임 · 두리번 · 숨",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5V3-0",
+   "text": "표정을 늘리는 것보다 이쪽이 크다. 같은 얼굴이라도 깜빡이고 두리번거리면 다른 생물이 된다. 셋 다 흰 도형만 움직인다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5V8-0",
+   "text": "깜빡임",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "깜빡임",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5V9-0",
+   "text": "4~7s 간격 · 랜덤",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "깜빡임",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5VK-0",
+   "text": "감는 데 90ms, 뜨는 데 130ms — 뜨는 쪽이 느려야 기계가 아니다. 가끔(15%) 두 번 연속으로 깜빡인다. 그 불규칙이 생물이라는 증거다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "깜빡임"
+   ]
+  },
+  {
+   "id": "5VO-0",
+   "text": "두리번",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "두리번",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5VP-0",
+   "text": "8~20s 간격 · 대기에서만",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "두리번",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5VR-0",
+   "text": "가운데",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "두리번",
+    "궤적"
+   ]
+  },
+  {
+   "id": "5VU-0",
+   "text": "한쪽 260ms",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "두리번",
+    "궤적"
+   ]
+  },
+  {
+   "id": "5VX-0",
+   "text": "머묾 1.2s",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "두리번",
+    "궤적"
+   ]
+  },
+  {
+   "id": "5W0-0",
+   "text": "복귀 340ms",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "두리번",
+    "궤적"
+   ]
+  },
+  {
+   "id": "5W1-0",
+   "text": "갈 때는 빠르고 돌아올 때는 느리다 — 사람 눈이 그렇다. 목적지는 9방향 중 무작위지만 아래는 뺀다. 아래를 보면 시무룩해 보인다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "두리번"
+   ]
+  },
+  {
+   "id": "5W4-0",
+   "text": "숨",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "숨",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5W5-0",
+   "text": "4.2s 주기 · 상시",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "숨",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5W9-0",
+   "text": "바이저가 scale 1.000 ↔ 1.018 로 아주 조금 부푼다. 알아채면 실패다 — 없으면 허전한 정도가 맞다. 유일하게 흰 도형이 아닌 것이 움직이는 루프다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "시간 루프 3종",
+    "루프 3종",
+    "숨"
+   ]
+  },
+  {
+   "id": "5WC-0",
+   "text": "늘려도 깨면 안 되는 것 — 코드가 이미 강제하고 있다",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것"
+   ]
+  },
+  {
+   "id": "5WF-0",
+   "text": "GATE · check-orb.mjs:223",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WG-0",
+   "text": "페이드로 나타나면 빌드가 죽는다",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WH-0",
+   "text": "바이저 전이에 opacity만 있으면 게이트가 막는다. 새 루프도 clip-path · transform 같은 기하 변조여야 한다. PNG 프레임 애니메이션도 금지.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WJ-0",
+   "text": "A11Y · access.css:83",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WK-0",
+   "text": "멈춘 프레임도 상태를 말해야 한다",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WL-0",
+   "text": "reduced-motion에서 전역 규칙이 반복을 1회로 깎는다. 깜빡임이 감은 채 멈추면 “잠듦”으로 오독된다 — 루프의 정지 프레임은 반드시 뜬 눈이어야 한다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WN-0",
+   "text": "WINDOW · orb-window.js:36",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WO-0",
+   "text": "창 밖으로는 못 튄다",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WP-0",
+   "text": "창 크기가 오브 크기와 딱 같아 여백이 0이다. 튀어오르게 하려면 창을 여백째 키워야 한다. 매 프레임 setBounds는 setResizable 토글 비용 때문에 불가.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WR-0",
+   "text": "BUDGET · 선례 없음",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WS-0",
+   "text": "상시 애니메이션은 이번이 처음이다",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "5WT-0",
+   "text": "지금 코드에 무한 루프도 requestAnimationFrame도 0건이다. alwaysOnTop · backgroundThrottling:false 창에서 도는 첫 상시 모션이라 프레임 예산에 가드레일이 없다.",
+   "path": [
+    "03 · 키우미 — 시선·시간 루프",
+    "E · 지켜야 하는 것",
+    "제약 카드",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "5H3-0",
+   "name": "03 · 키우미 — 시선·시간 루프",
+   "component": "Frame",
+   "w": 1900.0,
+   "h": 0.0,
+   "depth": 0
+  },
+  {
+   "id": "5H4-0",
+   "name": "설명",
+   "component": "Frame",
+   "w": 1180.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "5RW-0",
+   "name": "시선 9방향",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "5S4-0",
+   "name": "시선 9방향",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "5S5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5S8-0",
+   "name": "3x3",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5S9-0",
+   "name": "행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5SD-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 5
+  },
+  {
+   "id": "5SE-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 6
+  },
+  {
+   "id": "5SF-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "5SH-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5SG-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5SI-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 5
+  },
+  {
+   "id": "5SJ-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 6
+  },
+  {
+   "id": "5SK-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "5SM-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5SL-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5SN-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 5
+  },
+  {
+   "id": "5SO-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 6
+  },
+  {
+   "id": "5SP-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "5SR-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5SQ-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5SA-0",
+   "name": "행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5SS-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 5
+  },
+  {
+   "id": "5ST-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 6
+  },
+  {
+   "id": "5SU-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "5SW-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5SV-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5SX-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 5
+  },
+  {
+   "id": "5SY-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 6
+  },
+  {
+   "id": "5SZ-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "5T1-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5T0-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5T2-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 5
+  },
+  {
+   "id": "5T3-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 6
+  },
+  {
+   "id": "5T4-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "5T6-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5T5-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5SB-0",
+   "name": "행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5T7-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 5
+  },
+  {
+   "id": "5T8-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 6
+  },
+  {
+   "id": "5T9-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "5TB-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5TA-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5TC-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 5
+  },
+  {
+   "id": "5TD-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 6
+  },
+  {
+   "id": "5TE-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "5TG-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5TF-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5TH-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 5
+  },
+  {
+   "id": "5TI-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 6
+  },
+  {
+   "id": "5TJ-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "5TL-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5TK-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 8
+  },
+  {
+   "id": "5WV-0",
+   "name": "시선이 쓰이는 곳",
+   "component": "Frame",
+   "w": 520.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "5WW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5WZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5X2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5X5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5X8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2FQP-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5XB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 460.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5N7-0",
+   "name": "상황별 표현 매핑",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "5N8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "5NB-0",
+   "name": "1행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "5NE-0",
+   "name": "셀 · 잠듦",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5TM-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "5TN-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "5TO-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5TQ-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 4.0,
+   "depth": 7
+  },
+  {
+   "id": "5TP-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 4.0,
+   "depth": 7
+  },
+  {
+   "id": "5NF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5NJ-0",
+   "name": "셀 · 대기",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5TR-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "5TS-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "5TT-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5TV-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 7
+  },
+  {
+   "id": "5TU-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 7
+  },
+  {
+   "id": "5NK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5NO-0",
+   "name": "셀 · 듣는 중",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5TW-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "5TX-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "5TY-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5U0-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 18.0,
+   "depth": 7
+  },
+  {
+   "id": "5TZ-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 18.0,
+   "depth": 7
+  },
+  {
+   "id": "5NP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5NT-0",
+   "name": "셀 · 생각 중",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5U1-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "5U2-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "5U3-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5U5-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 7
+  },
+  {
+   "id": "5U4-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 21.0,
+   "depth": 7
+  },
+  {
+   "id": "5NU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5NY-0",
+   "name": "셀 · 완료",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5U6-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "5U7-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "5U8-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5UA-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 14.0,
+   "h": 8.0,
+   "depth": 7
+  },
+  {
+   "id": "5U9-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 14.0,
+   "h": 8.0,
+   "depth": 7
+  },
+  {
+   "id": "5NZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5NC-0",
+   "name": "2행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "5O4-0",
+   "name": "셀 · 경계",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5UB-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "5UC-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "5UD-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5UF-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 7.0,
+   "h": 17.0,
+   "depth": 7
+  },
+  {
+   "id": "5UE-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 7.0,
+   "h": 17.0,
+   "depth": 7
+  },
+  {
+   "id": "5O5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5O9-0",
+   "name": "셀 · 발화",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5UG-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "5UH-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "5UI-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5UK-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 14.0,
+   "h": 14.0,
+   "depth": 7
+  },
+  {
+   "id": "5UJ-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 14.0,
+   "h": 14.0,
+   "depth": 7
+  },
+  {
+   "id": "5OA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5OE-0",
+   "name": "셀 · 신남",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5UL-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "5UM-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "5UN-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5UP-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 17.0,
+   "h": 10.0,
+   "depth": 7
+  },
+  {
+   "id": "5UO-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 17.0,
+   "h": 10.0,
+   "depth": 7
+  },
+  {
+   "id": "5OF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5OJ-0",
+   "name": "셀 · 시무룩",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5UQ-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "5UR-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "5US-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5UU-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 14.0,
+   "h": 7.0,
+   "depth": 7
+  },
+  {
+   "id": "5UT-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 14.0,
+   "h": 7.0,
+   "depth": 7
+  },
+  {
+   "id": "5OK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5OO-0",
+   "name": "셀 · 졸림",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5UV-0",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "5UW-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "5UX-0",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5UZ-0",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 14.0,
+   "h": 4.0,
+   "depth": 7
+  },
+  {
+   "id": "5UY-0",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 14.0,
+   "h": 4.0,
+   "depth": 7
+  },
+  {
+   "id": "5OP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "2FL7-2",
+   "name": "3행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2FMC-2",
+   "name": "셀 · 승인됨",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2FMH-2",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "2FMI-2",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "2FMJ-2",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2FML-2",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 9.0,
+   "h": 4.0,
+   "depth": 7
+  },
+  {
+   "id": "2FMK-2",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 15.0,
+   "h": 9.0,
+   "depth": 7
+  },
+  {
+   "id": "2FMD-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "2FM2-2",
+   "name": "셀 · 놀람",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2FM7-2",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "2FM8-2",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "2FM9-2",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2FMB-2",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 16.0,
+   "h": 16.0,
+   "depth": 7
+  },
+  {
+   "id": "2FMA-2",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 16.0,
+   "h": 16.0,
+   "depth": 7
+  },
+  {
+   "id": "2FM3-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "2FLI-2",
+   "name": "셀 · 찡그림",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2FLN-2",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "2FLO-2",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "2FLP-2",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2FLR-2",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 8.0,
+   "h": 18.0,
+   "depth": 7
+  },
+  {
+   "id": "2FLQ-2",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 8.0,
+   "h": 18.0,
+   "depth": 7
+  },
+  {
+   "id": "2FLJ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "2FL8-2",
+   "name": "셀 · 우는",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2FLD-2",
+   "name": "orb 100 · 기본",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 100.0,
+   "depth": 4
+  },
+  {
+   "id": "2FLE-2",
+   "name": "visor",
+   "component": "Frame",
+   "w": 81.0,
+   "h": 80.0,
+   "depth": 5
+  },
+  {
+   "id": "2FLF-2",
+   "name": "eyes",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2FLH-2",
+   "name": "eye-l",
+   "component": "Frame",
+   "w": 14.0,
+   "h": 7.0,
+   "depth": 7
+  },
+  {
+   "id": "2FLG-2",
+   "name": "eye-r",
+   "component": "Frame",
+   "w": 14.0,
+   "h": 7.0,
+   "depth": 7
+  },
+  {
+   "id": "2FMV-2",
+   "name": "눈물",
+   "component": "Frame",
+   "w": 4.0,
+   "h": 8.0,
+   "depth": 8
+  },
+  {
+   "id": "2FL9-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5V0-0",
+   "name": "시간 루프 3종",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "5V1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "5V4-0",
+   "name": "루프 3종",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "5V6-0",
+   "name": "깜빡임",
+   "component": "Frame",
+   "w": 560.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5V7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5VA-0",
+   "name": "타임라인",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 34.0,
+   "depth": 4
+  },
+  {
+   "id": "5VB-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 96.0,
+   "h": 2.0,
+   "depth": 5
+  },
+  {
+   "id": "5VC-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 26.0,
+   "depth": 5
+  },
+  {
+   "id": "5VD-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 118.0,
+   "h": 2.0,
+   "depth": 5
+  },
+  {
+   "id": "5VE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 26.0,
+   "depth": 5
+  },
+  {
+   "id": "5VF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "5VG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 26.0,
+   "depth": 5
+  },
+  {
+   "id": "5VH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 152.0,
+   "h": 2.0,
+   "depth": 5
+  },
+  {
+   "id": "5VI-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 26.0,
+   "depth": 5
+  },
+  {
+   "id": "5VJ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 2.0,
+   "depth": 5
+  },
+  {
+   "id": "5VM-0",
+   "name": "두리번",
+   "component": "Frame",
+   "w": 560.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5VN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5VQ-0",
+   "name": "궤적",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 34.0,
+   "depth": 4
+  },
+  {
+   "id": "5VS-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "5VT-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5VV-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "5VW-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5VY-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "5VZ-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5W2-0",
+   "name": "숨",
+   "component": "Frame",
+   "w": 560.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5W3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "5W6-0",
+   "name": "사인파",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 34.0,
+   "depth": 4
+  },
+  {
+   "id": "5W7-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "5W8-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "5WB-0",
+   "name": "E · 지켜야 하는 것",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "5WD-0",
+   "name": "제약 카드",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "5WE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 415.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5WI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 415.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5WM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 415.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "5WQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 415.0,
+   "h": 0.0,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "흰 도형의 위치와 시간으로 살아난다": 1,
+  "표정은 보드 02의 10종만 사용한다. 시선 9방향과 시간 루프 3종을 별도 축으로 조합한다.": 1,
+  "시선 9방향 — 두 도형이 함께 옮겨간다": 1,
+  "눈동자를 새로 그리지 않는다. 흰 알약 두 개가 바이저 안에서 ±10px 옮겨 앉을 뿐이다. 도형 수는 그대로 둘.": 1,
+  "아래": 1,
+  "듣는 중 — 입력줄을 내려다본다": 1,
+  "위·옆": 1,
+  "생각 중 — 답을 더듬는다. 스피너 대신이다": 1,
+  "한쪽 고정": 1,
+  "경계 — 임계에 붙은 종목 쪽을 붙박는다": 1,
+  "커서 쪽": 1,
+  "반경 320px 안의 커서를 곁눈질한다 — 기본 표정에서만": 1,
+  "사용자": 1,
+  "오브를 끌 때 — 끌리는 방향 반대로 밀린다(관성)": 1,
+  "정면": 1,
+  "그 밖 전부 — 시선은 0,0으로 돌아온다": 1,
+  "시선은 정보가 아니라 태도다. 틀려도 사용자가 손해 보지 않는 유일한 표현이라, 마음껏 움직여도 정직성 계약에 걸리지 않는다.": 1,
+  "상황별 표현 매핑 — 신호 상태 14가지": 1,
+  "감정은 지어내지 않는다 — 전부 앱에 이미 있는 신호에 붙는다. 14가지 상태가 보드 02의 표정 10종으로 모인다.": 1,
+  "잠듦": 1,
+  "idle > 5min": 1,
+  "바이저가 거의 닫힌다. 5분 이상 입력이 없을 때의 휴식 표현이다.": 1,
+  "대기": 1,
+  "idle — 기본값": 1,
+  "말 걸 수 있는 상태. 가끔 두리번거린다.": 1,
+  "듣는 중": 1,
+  "input:focus": 1,
+  "눈이 입력줄을 내려다본다. 딴 데 안 본다는 신호.": 1,
+  "생각 중": 1,
+  "query running": 1,
+  "흰 도형이 위를 훑는다. 스피너를 대신한다.": 1,
+  "완료": 1,
+  "result ok": 1,
+  "웃고 나서 2초 뒤 대기로 돌아간다.": 1,
+  "경계": 1,
+  "임계 90% 근접": 1,
+  "좁아지며 한쪽을 붙박한다. 아직 발화는 아니다.": 1,
+  "발화": 1,
+  "routine-event": 1,
+  "두 도형이 동그래진다. 화면당 신호는 여기 하나.": 1,
+  "신남": 1,
+  "goal 플래그 발화": 1,
+  "사용자가 명시한 목표가 도달. 가장 큰 아치.": 1,
+  "시무룩": 1,
+  "routine expired": 1,
+  "루틴이 만료로 끝났다. 평평한 가로 막대.": 1,
+  "졸림": 1,
+  "market closed": 1,
+  "장 밖 시간대. 바이저는 그대로고 눈만 무겁게 처진다.": 1,
+  "승인됨": 1,
+  "routine confirmed": 1,
+  "감시 등록이 반영됐다. 표정 중 유일한 좌우 비대칭.": 1,
+  "놀람": 1,
+  "exceed ratio ≥ 1.5": 1,
+  "발화 중 급변. 발화보다 더 크고 둥근 원.": 1,
+  "찡그림": 1,
+  "error · timeout · feed down": 1,
+  "사선으로 부딪는 두 막대. 재연결까지 지속된다.": 1,
+  "우는": 1,
+  "restore failed": 1,
+  "감시 복원 실패. 시무룩 눈에 눈물 한 방울만 더한다.": 1,
+  "시간 루프 3종 — 깜빡임 · 두리번 · 숨": 1,
+  "표정을 늘리는 것보다 이쪽이 크다. 같은 얼굴이라도 깜빡이고 두리번거리면 다른 생물이 된다. 셋 다 흰 도형만 움직인다.": 1,
+  "깜빡임": 1,
+  "4~7s 간격 · 랜덤": 1,
+  "감는 데 90ms, 뜨는 데 130ms — 뜨는 쪽이 느려야 기계가 아니다. 가끔(15%) 두 번 연속으로 깜빡인다. 그 불규칙이 생물이라는 증거다.": 1,
+  "두리번": 1,
+  "8~20s 간격 · 대기에서만": 1,
+  "가운데": 1,
+  "한쪽 260ms": 1,
+  "머묾 1.2s": 1,
+  "복귀 340ms": 1,
+  "갈 때는 빠르고 돌아올 때는 느리다 — 사람 눈이 그렇다. 목적지는 9방향 중 무작위지만 아래는 뺀다. 아래를 보면 시무룩해 보인다.": 1,
+  "숨": 1,
+  "4.2s 주기 · 상시": 1,
+  "바이저가 scale 1.000 ↔ 1.018 로 아주 조금 부푼다. 알아채면 실패다 — 없으면 허전한 정도가 맞다. 유일하게 흰 도형이 아닌 것이 움직이는 루프다.": 1,
+  "늘려도 깨면 안 되는 것 — 코드가 이미 강제하고 있다": 1,
+  "GATE · check-orb.mjs:223": 1,
+  "페이드로 나타나면 빌드가 죽는다": 1,
+  "바이저 전이에 opacity만 있으면 게이트가 막는다. 새 루프도 clip-path · transform 같은 기하 변조여야 한다. PNG 프레임 애니메이션도 금지.": 1,
+  "A11Y · access.css:83": 1,
+  "멈춘 프레임도 상태를 말해야 한다": 1,
+  "reduced-motion에서 전역 규칙이 반복을 1회로 깎는다. 깜빡임이 감은 채 멈추면 “잠듦”으로 오독된다 — 루프의 정지 프레임은 반드시 뜬 눈이어야 한다.": 1,
+  "WINDOW · orb-window.js:36": 1,
+  "창 밖으로는 못 튄다": 1,
+  "창 크기가 오브 크기와 딱 같아 여백이 0이다. 튀어오르게 하려면 창을 여백째 키워야 한다. 매 프레임 setBounds는 setResizable 토글 비용 때문에 불가.": 1,
+  "BUDGET · 선례 없음": 1,
+  "상시 애니메이션은 이번이 처음이다": 1,
+  "지금 코드에 무한 루프도 requestAnimationFrame도 0건이다. alwaysOnTop · backgroundThrottling:false 창에서 도는 첫 상시 모션이라 프레임 예산에 가드레일이 없다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "4f66f2126f888110ba4cdcbba85311b00e551388c67c8f50b3033645c40e2932"
+}

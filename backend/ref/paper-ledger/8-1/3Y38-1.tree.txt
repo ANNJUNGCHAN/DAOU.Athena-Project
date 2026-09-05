@@ -1,0 +1,295 @@
+Frame "11 · 백테스트 — 시각 전략 설계 · 편집 가능" (3Y38-1) 1680×1080
+  Frame "Frame" (3Y39-1) 1680×938
+    Text "백테스트 — 시각 전략 설계 · 편집…" (3Y9L-1) 0×0 "백테스트 — 시각 전략 설계 · 편집 가능"
+    Text "Python 그림이 아니라 검증 가능…" (3Y9K-1) 0×0 "Python 그림이 아니라 검증 가능한 전략을 노드로 조립합니다. 폼·코드·읽기 전용 흐름은 유지합니다."
+    Frame "Frame" (3Y3A-1) 1560×850
+      Frame "47 · Project Recent Sidebar" (3Y7K-1) 268×819
+        Frame "Primary Actions" (3Y8N-1) 0×0
+          Frame "Frame" (3Y9F-1) 0×28
+            Text "ATHENA" (3Y9J-1) 0×0 "ATHENA"
+            SVG "SVG" (3Y9G-1) 0×0
+              SVGVisualElement "Circle" (3Y9I-1) 0×0
+              SVGVisualElement "Path" (3Y9H-1) 0×0
+          Frame "Frame" (3Y9A-1) 0×30
+            SVG "SVG" (3Y9C-1) 0×0
+              SVGVisualElement "Path" (3Y9E-1) 0×0
+              SVGVisualElement "Path" (3Y9D-1) 0×0
+            Text "새 채팅" (3Y9B-1) 0×0 "새 채팅"
+          Frame "Frame" (3Y93-1) 0×30
+            SVG "SVG" (3Y95-1) 0×0
+              SVGVisualElement "Circle" (3Y99-1) 0×0
+              SVGVisualElement "Circle" (3Y98-1) 0×0
+              SVGVisualElement "Circle" (3Y97-1) 0×0
+              SVGVisualElement "Path" (3Y96-1) 0×0
+            Text "그래프" (3Y94-1) 0×0 "그래프"
+          Frame "Frame" (3Y8Y-1) 0×30
+            SVG "SVG" (3Y90-1) 0×0
+              SVGVisualElement "Circle" (3Y92-1) 0×0
+              SVGVisualElement "Path" (3Y91-1) 0×0
+            Text "에이전트" (3Y8Z-1) 0×0 "에이전트"
+          Frame "Nav 플러그인" (3Y8T-1) 0×30
+            SVG "SVG" (3Y8V-1) 0×0
+              SVGVisualElement "Path" (3Y8X-1) 0×0
+              SVGVisualElement "Path" (3Y8W-1) 0×0
+            Text "플러그인" (3Y8U-1) 0×0 "플러그인"
+          Frame "Nav 백테스트 (active)" (3Y8O-1) 0×30
+            SVG "SVG" (3Y8Q-1) 0×0
+              SVGVisualElement "Path" (3Y8S-1) 0×0
+              SVGVisualElement "Path" (3Y8R-1) 0×0
+            Text "백테스트" (3Y8P-1) 0×0 "백테스트"
+        Frame "Project Tree" (3Y83-1) 0×0
+          Frame "Frame" (3Y8L-1) 0×0
+            Text "프로젝트" (3Y8M-1) 0×0 "프로젝트"
+          Frame "Frame" (3Y89-1) 0×32
+            SVG "SVG" (3Y8I-1) 0×0
+              SVGVisualElement "Path" (3Y8K-1) 0×0
+              SVGVisualElement "Path" (3Y8J-1) 0×0
+            Text "아테나" (3Y8H-1) 0×0 "아테나"
+            SVG "SVG" (3Y8D-1) 0×0
+              SVGVisualElement "Circle" (3Y8G-1) 0×0
+              SVGVisualElement "Circle" (3Y8F-1) 0×0
+              SVGVisualElement "Circle" (3Y8E-1) 0×0
+            SVG "SVG" (3Y8A-1) 0×0
+              SVGVisualElement "Path" (3Y8C-1) 0×0
+              SVGVisualElement "Path" (3Y8B-1) 0×0
+          Frame "Frame" (3Y87-1) 0×27
+            Text "백엔드 API 개수 확인" (3Y88-1) 0×0 "백엔드 API 개수 확인"
+          Frame "Frame" (3Y84-1) 0×29
+            Text "앱 전체 기능 검수" (3Y86-1) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (3Y85-1) 6×6
+        Frame "Recent Conversations" (3Y7S-1) 0×0
+          Frame "Frame" (3Y80-1) 0×20
+            Text "최근" (3Y82-1) 0×0 "최근"
+            Text "전체" (3Y81-1) 0×0 "전체"
+          Frame "Frame" (3Y7X-1) 0×27
+            Text "앱 전체 기능 검수" (3Y7Z-1) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (3Y7Y-1) 6×6
+          Frame "Frame" (3Y7V-1) 0×27
+            Text "삼성전자 주요 변동 알림" (3Y7W-1) 0×0 "삼성전자 주요 변동 알림"
+          Frame "Frame" (3Y7T-1) 0×27
+            Text "ETF 자금 흐름" (3Y7U-1) 0×0 "ETF 자금 흐름"
+        Frame "Account Footer" (3Y7L-1) 0×0
+          Frame "Frame" (3Y7M-1) 0×38
+            Frame "Frame" (3Y7Q-1) 22×22
+              Text "AN" (3Y7R-1) 0×0 "AN"
+            Text "모의-주력" (3Y7P-1) 0×0 "모의-주력"
+            SVG "SVG" (3Y7N-1) 0×0
+              SVGVisualElement "Path" (3Y7O-1) 0×0
+      Frame "Frame" (3Y42-1) 0×848
+        Frame "시각 전략 편집기" (3Y9M-1) 838×733
+          Frame "편집기 헤더" (3Y9N-1) 838×32
+            Frame "Frame" (3Y9O-1) 0×0
+              Text "백테스트" (3Y9P-1) 0×0 "백테스트"
+              Text "20–60 골든크로스 · v5 초안" (3Y9Q-1) 0×0 "20–60 골든크로스 · v5 초안"
+            Frame "Frame" (3Y9R-1) 128×0
+              Frame "Frame" (3Y9S-1) 48×30
+                Text "검증" (3Y9T-1) 0×0 "검증"
+              Frame "Frame" (3Y9U-1) 72×30
+                Text "실행 검토" (3Y9V-1) 0×0 "실행 검토"
+          Frame "설계 하위 탭" (3Y9X-1) 838×34
+            Text "폼" (3Y9Y-1) 66×28 "폼"
+            Frame "Frame" (3Y9Z-1) 82×28
+              Text "시각 설계" (3YA0-1) 0×0 "시각 설계"
+            Text "코드" (3YA1-1) 66×28 "코드"
+            Text "흐름" (3YA2-1) 66×28 "흐름"
+            Frame "Frame" (3YA3-1) 0×0
+              Rectangle "Rectangle" (3YA4-1) 6×6
+              Text "서버 검증 가능" (3YA5-1) 0×0 "서버 검증 가능"
+          Frame "시각 설계 본문" (3YA7-1) 838×580
+            Frame "노드 팔레트" (3YA9-1) 150×580
+              Frame "Frame" (3YAA-1) 0×0
+                Text "노드" (3YAB-1) 0×0 "노드"
+                Text "끌어서 전략에 놓기" (3YAC-1) 0×0 "끌어서 전략에 놓기"
+              Frame "Frame" (3YAD-1) 0×30
+                SVG "SVG" (3YAE-1) 0×0
+                  SVGVisualElement "Circle" (3YAF-1) 0×0
+                  SVGVisualElement "Path" (3YAG-1) 0×0
+                Text "노드 검색" (3YAH-1) 0×0 "노드 검색"
+              Frame "팔레트 데이터" (3YAJ-1) 0×0
+                Text "데이터" (3YAK-1) 0×0 "데이터"
+                Frame "Frame" (3YAL-1) 0×30
+                  Rectangle "Rectangle" (3YAM-1) 7×7
+                  Text "가격 데이터" (3YAN-1) 0×0 "가격 데이터"
+                Frame "Frame" (3YAO-1) 0×30
+                  Rectangle "Rectangle" (3YAP-1) 7×7
+                  Text "파라미터" (3YAQ-1) 0×0 "파라미터"
+              Frame "팔레트 지표" (3YAS-1) 0×0
+                Text "지표" (3YAT-1) 0×0 "지표"
+                Frame "Frame" (3YAU-1) 0×30
+                  Text "ƒx" (3YAV-1) 0×0 "ƒx"
+                  Text "이동평균 SMA" (3YAW-1) 0×0 "이동평균 SMA"
+                Frame "Frame" (3YAX-1) 0×30
+                  Text "ƒx" (3YAY-1) 0×0 "ƒx"
+                  Text "RSI · MACD" (3YAZ-1) 0×0 "RSI · MACD"
+              Frame "팔레트 조건" (3YB1-1) 0×0
+                Text "조건" (3YB2-1) 0×0 "조건"
+                Frame "Frame" (3YB3-1) 0×30
+                  Text "↗" (3YB4-1) 0×0 "↗"
+                  Text "교차 비교" (3YB5-1) 0×0 "교차 비교"
+                Frame "Frame" (3YB6-1) 0×30
+                  Text "∧" (3YB7-1) 0×0 "∧"
+                  Text "AND · OR" (3YB8-1) 0×0 "AND · OR"
+              Frame "팔레트 출력" (3YBA-1) 0×0
+                Text "출력" (3YBB-1) 0×0 "출력"
+                Frame "Frame" (3YBC-1) 0×30
+                  Rectangle "Rectangle" (3YBD-1) 7×7
+                  Text "진입 신호" (3YBE-1) 0×0 "진입 신호"
+                Frame "Frame" (3YBF-1) 0×30
+                  Rectangle "Rectangle" (3YBG-1) 7×7
+                  Text "청산 신호" (3YBH-1) 0×0 "청산 신호"
+            Frame "전략 캔버스" (3YBJ-1) 440×580
+              Frame "캔버스 도구막대" (3YBK-1) 0×42
+                Frame "Frame" (3YBL-1) 0×0
+                  Text "진입·청산 흐름" (3YBM-1) 0×0 "진입·청산 흐름"
+                  Frame "Frame" (3YBN-1) 0×0
+                    Text "연결 정상" (3YBO-1) 0×0 "연결 정상"
+                Frame "Frame" (3YBP-1) 0×0
+                  Frame "Frame" (3YBQ-1) 0×0
+                    Text "↶" (3YBR-1) 0×0 "↶"
+                  Frame "Frame" (3YBS-1) 0×0
+                    Text "↷" (3YBT-1) 0×0 "↷"
+                  Frame "Frame" (3YBU-1) 0×0
+                    Text "맞춤" (3YBV-1) 0×0 "맞춤"
+              Frame "그래프 작업면" (3YBW-1) 438×536
+                SVG "전략 연결선" (3YBY-1) 438×536
+                  SVGVisualElement "Path" (3YBZ-1) 0×0
+                  SVGVisualElement "Path" (3YC0-1) 0×0
+                  SVGVisualElement "Path" (3YC1-1) 0×0
+                  SVGVisualElement "Path" (3YC2-1) 0×0
+                  SVGVisualElement "Path" (3YC3-1) 0×0
+                  SVGVisualElement "Path" (3YC4-1) 0×0
+                  SVGVisualElement "Path" (3YC5-1) 0×0
+                  SVGVisualElement "Path" (3YC6-1) 0×0
+                Text "그래프 구역 라벨" (3YC8-1) 410×278 "진입 · 청산 신호 경로"
+                Frame "노드 · 가격 데이터" (3YCA-1) 92×84
+                  Frame "Frame" (3YCB-1) 0×0
+                    Rectangle "Rectangle" (3YCC-1) 8×8
+                    Text "가격 데이터" (3YCD-1) 0×0 "가격 데이터"
+                  Text "삼성전자 · 일봉
+close 2,55…" (3YCE-1) 0×0 "삼성전자 · 일봉
+close 2,559"
+                  Rectangle "Rectangle" (3YCF-1) 9×9
+                Frame "노드 · 빠른 SMA" (3YCH-1) 100×86
+                  Frame "Frame" (3YCI-1) 0×0
+                    Text "빠른 SMA" (3YCJ-1) 0×0 "빠른 SMA"
+                    Text "20" (3YCK-1) 0×0 "20"
+                  Text "close → ma_fast
+Seri…" (3YCL-1) 0×0 "close → ma_fast
+Series<Number>"
+                  Rectangle "Rectangle" (3YCM-1) 9×9
+                  Rectangle "Rectangle" (3YCN-1) 9×9
+                Frame "노드 · 느린 SMA" (3YCP-1) 100×86
+                  Frame "Frame" (3YCQ-1) 0×0
+                    Text "느린 SMA" (3YCR-1) 0×0 "느린 SMA"
+                    Text "60" (3YCS-1) 0×0 "60"
+                  Text "close → ma_slow
+Seri…" (3YCT-1) 0×0 "close → ma_slow
+Series<Number>"
+                  Rectangle "Rectangle" (3YCU-1) 9×9
+                  Rectangle "Rectangle" (3YCV-1) 9×9
+                Frame "노드 · 상향 돌파" (3YCX-1) 100×86
+                  Text "상향 돌파" (3YCY-1) 0×0 "상향 돌파"
+                  Text "fast ↗ slow
+Series<B…" (3YCZ-1) 0×0 "fast ↗ slow
+Series<Bool>"
+                  Rectangle "Rectangle" (3YD0-1) 9×9
+                  Rectangle "Rectangle" (3YD1-1) 9×9
+                  Rectangle "Rectangle" (3YD2-1) 9×9
+                Frame "노드 · 하향 돌파" (3YD4-1) 100×86
+                  Text "하향 돌파" (3YD5-1) 0×0 "하향 돌파"
+                  Text "fast ↘ slow
+Series<B…" (3YD6-1) 0×0 "fast ↘ slow
+Series<Bool>"
+                  Rectangle "Rectangle" (3YD7-1) 9×9
+                  Rectangle "Rectangle" (3YD8-1) 9×9
+                  Rectangle "Rectangle" (3YD9-1) 9×9
+                Frame "노드 · 진입" (3YDB-1) 62×56
+                  Rectangle "Rectangle" (3YDC-1) 9×9
+                  Text "진입" (3YDD-1) 0×0 "진입"
+                  Rectangle "Rectangle" (3YDE-1) 9×9
+                Frame "노드 · 청산" (3YDG-1) 62×56
+                  Rectangle "Rectangle" (3YDH-1) 9×9
+                  Text "청산" (3YDI-1) 0×0 "청산"
+                  Rectangle "Rectangle" (3YDJ-1) 9×9
+            Frame "선택 노드 설정" (3YDL-1) 228×580
+              Frame "Frame" (3YDM-1) 0×0
+                Frame "Frame" (3YDN-1) 0×0
+                  Text "선택한 노드" (3YDO-1) 0×0 "선택한 노드"
+                  Text "빠른 이동평균" (3YDP-1) 0×0 "빠른 이동평균"
+                Frame "Frame" (3YDQ-1) 0×0
+                  Text "SMA" (3YDR-1) 0×0 "SMA"
+              Frame "설정 · 입력 데이터" (3YDT-1) 0×0
+                Text "입력 데이터" (3YDU-1) 0×0 "입력 데이터"
+                Frame "Frame" (3YDV-1) 0×34
+                  Text "종가 close" (3YDW-1) 0×0 "종가 close"
+                  Text "⌄" (3YDX-1) 0×0 "⌄"
+              Frame "설정 · 기간" (3YDZ-1) 0×0
+                Frame "Frame" (3YE0-1) 0×0
+                  Text "기간" (3YE1-1) 0×0 "기간"
+                  Text "20" (3YE2-1) 0×0 "20"
+                Frame "Frame" (3YE3-1) 0×18
+                  Frame "Frame" (3YE4-1) 202×4
+                    Rectangle "Rectangle" (3YE5-1) 58×4
+                    Rectangle "Rectangle" (3YE6-1) 14×14
+                Frame "Frame" (3YE7-1) 0×0
+                  Text "최소 5" (3YE8-1) 0×0 "최소 5"
+                  Text "최대 60" (3YE9-1) 0×0 "최대 60"
+              Frame "설정 · 포트 계약" (3YEB-1) 0×0
+                Frame "Frame" (3YEC-1) 0×0
+                  Text "입력" (3YED-1) 0×0 "입력"
+                  Text "Series<Number>" (3YEE-1) 0×0 "Series<Number>"
+                Frame "Frame" (3YEF-1) 0×0
+                  Text "출력" (3YEG-1) 0×0 "출력"
+                  Text "Series<Number>" (3YEH-1) 0×0 "Series<Number>"
+                Frame "Frame" (3YEI-1) 0×0
+                  Rectangle "Rectangle" (3YEJ-1) 7×7
+                  Text "연결과 값이 유효합니다" (3YEK-1) 0×0 "연결과 값이 유효합니다"
+              Frame "설정 · 설명" (3YEM-1) 0×0
+                Text "이 노드는 무엇을 하나요?" (3YEN-1) 0×0 "이 노드는 무엇을 하나요?"
+                Text "최근 20개 종가의 평균을 매 봉마다…" (3YEO-1) 0×0 "최근 20개 종가의 평균을 매 봉마다 계산합니다. 첫 19개 봉은 워밍업 구간이라 신호를 만들지 않습니다."
+                Frame "Frame" (3YEP-1) 0×30
+                  Text "생성될 StrategySpec 보기" (3YEQ-1) 0×0 "생성될 StrategySpec 보기"
+              Frame "설정 · 변경 안내" (3YES-1) 0×0
+                Rectangle "Rectangle" (3YET-1) 7×7
+                Text "값을 바꾸면 새 초안이 됩니다. 저장…" (3YEU-1) 0×0 "값을 바꾸면 새 초안이 됩니다. 저장하거나 실행하기 전까지 현재 v4에는 영향이 없습니다."
+          Frame "그래프 검증 요약" (3YEW-1) 838×57
+            Frame "Frame" (3YEX-1) 0×0
+              Frame "Frame" (3YEY-1) 22×22
+                Text "✓" (3YEZ-1) 0×0 "✓"
+              Frame "Frame" (3YF0-1) 0×0
+                Text "StrategySpec으로 변환할 수…" (3YF1-1) 0×0 "StrategySpec으로 변환할 수 있습니다"
+                Text "7개 노드 · 8개 연결 · 진입 1…" (3YF2-1) 0×0 "7개 노드 · 8개 연결 · 진입 1 · 청산 1 · 워밍업 59봉"
+            Frame "Frame" (3YF3-1) 96×28
+              Text "목록으로 보기" (3YF4-1) 0×0 "목록으로 보기"
+      Frame "Frame" (3Y3B-1) 400×0
+        Frame "Frame" (3Y3Z-1) 0×0
+          Text "전략에게 묻기" (3Y41-1) 0×0 "전략에게 묻기"
+          Text "답이 시각 전략 초안으로 도착합니다" (3Y40-1) 0×0 "답이 시각 전략 초안으로 도착합니다"
+        Frame "시각 전략 채팅" (3YF6-1) 399×340
+          Frame "사용자 요청" (3YF8-1) 0×0
+            Text "20일선이 60일선을 위로 넘으면 사…" (3YF9-1) 0×0 "20일선이 60일선을 위로 넘으면 사고, 아래로 내려가면 팔게 만들어줘."
+          Frame "AI 설명" (3YFB-1) 0×0
+            Frame "Frame" (3YFC-1) 22×22
+              Text "AI" (3YFD-1) 0×0 "AI"
+            Text "7개 노드로 시각 전략 초안을 만들었…" (3YFE-1) 0×0 "7개 노드로 시각 전략 초안을 만들었습니다. 현재 활성 버전은 바뀌지 않았고, 검토 후 적용할 수 있습니다."
+          Frame "시각 전략 초안 카드" (3YFG-1) 0×0
+            Frame "Frame" (3YFH-1) 0×0
+              Frame "Frame" (3YFI-1) 0×0
+                Frame "Frame" (3YFJ-1) 0×0
+                  Text "시각 초안" (3YFK-1) 0×0 "시각 초안"
+                Text "v4 → v5" (3YFL-1) 0×0 "v4 → v5"
+              Text "7 nodes · 8 edges" (3YFM-1) 0×0 "7 nodes · 8 edges"
+            Text "빠른 SMA 20 · 느린 SMA 6…" (3YFN-1) 0×0 "빠른 SMA 20 · 느린 SMA 60 · 상향 돌파 진입 · 하향 돌파 청산"
+            Frame "Frame" (3YFO-1) 0×0
+              Frame "Frame" (3YFP-1) 74×28
+                Text "초안에 적용" (3YFQ-1) 0×0 "초안에 적용"
+              Frame "Frame" (3YFR-1) 58×28
+                Text "차이 보기" (3YFS-1) 0×0 "차이 보기"
+              Text "버리기" (3YFT-1) 0×0 "버리기"
+        Frame "Frame" (3Y3C-1) 0×0
+          Frame "Frame" (3Y3D-1) 0×0
+            Frame "Frame" (3Y3F-1) 22×22
+              SVG "SVG" (3Y3G-1) 0×0
+                SVGVisualElement "Rect" (3Y3I-1) 0×0
+                SVGVisualElement "Rect" (3Y3H-1) 0×0
+            Text "무엇이든 물어보세요" (3Y3E-1) 0×0 "무엇이든 물어보세요"

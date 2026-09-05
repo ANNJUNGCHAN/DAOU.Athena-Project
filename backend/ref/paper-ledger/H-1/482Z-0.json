@@ -1,0 +1,342 @@
+{
+ "board_id": "482Z-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "483X-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "483W-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "483U-0",
+   "text": "VI 발동",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Header"
+   ]
+  },
+  {
+   "id": "483S-0",
+   "text": "VI적용구분",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "483R-0",
+   "text": "4건",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "483P-0",
+   "text": "발동종목",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "483O-0",
+   "text": "12건",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "483M-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "483L-0",
+   "text": "1건",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "483I-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "483H-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "483G-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "483E-0",
+   "text": "매매체결처리시각",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "483D-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "483B-0",
+   "text": "09:41~",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "483A-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "4838-0",
+   "text": "VI해제시각",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4837-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4835-0",
+   "text": "09:43",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "4834-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "4831-0",
+   "text": "스칼라 2개, 행 4개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "482Z-0",
+   "name": "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "483T-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "483V-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4832-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "483J-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "483Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "483N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "483K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "483F-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4839-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "483C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4833-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4836-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4830-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "VI 발동": 1,
+  "VI적용구분": 1,
+  "4건": 1,
+  "발동종목": 1,
+  "12건": 1,
+  "핵심": 1,
+  "1건": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "매매체결처리시각": 1,
+  "09:41~": 1,
+  "VI해제시각": 1,
+  "09:43": 1,
+  "스칼라 2개, 행 4개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "f15f38e4657d9e015fa94116236a13ac8e2732e2821cf119cdf1c900a46cff03"
+}

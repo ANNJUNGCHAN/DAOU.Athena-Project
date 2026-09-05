@@ -1,0 +1,76 @@
+Frame "09 · 백테스트 — 오류 진단 · 자동 수정 승인" (2FY9-2) 1680×0
+  Frame "타이틀" (2FYV-2) 0×0
+    Text "백테스트 — 오류 진단 · 자동 수정…" (2FYW-2) 0×0 "백테스트 — 오류 진단 · 자동 수정 (초기 안 · 보드 12가 현행)"
+    Text "이 보드는 진단을 코드 줄에 붙인 초…" (2FYX-2) 0×0 "이 보드는 진단을 코드 줄에 붙인 초기 안입니다. 현행에서는 오류·의심·실제 값이 지도의 칸에 붙고, 수정안"
+  Frame "본문 행" (2FYZ-2) 0×0
+    Frame "단계" (2FZ0-2) 380×0
+      Text "헤더" (2FZ3-2) 0×0 "확정 후 앱이 하는 일"
+      Frame "단계1" (2FZ4-2) 0×0
+        Frame "Frame" (2FZ5-2) 20×20
+          Text "1" (2FZ6-2) 0×0 "1"
+        Frame "Frame" (2FZ7-2) 0×0
+          Text "문법부터 봅니다" (2FZ8-2) 0×0 "문법부터 봅니다"
+          Text "돌리기 전에 파싱만 — 오타는 여기서…" (2FZ9-2) 0×0 "돌리기 전에 파싱만 — 오타는 여기서 잡힙니다"
+        Text "통과" (2FZA-2) 0×0 "통과"
+      Frame "단계1" (2FZK-2) 0×0
+        Frame "Frame" (2FZP-2) 20×20
+          Text "2" (2FZQ-2) 0×0 "2"
+        Frame "Frame" (2FZM-2) 0×0
+          Text "계약을 봅니다" (2FZO-2) 0×0 "계약을 봅니다"
+          Text "PARAMS와 signals(df, …" (2FZN-2) 0×0 "PARAMS와 signals(df, p)가 있는지, 반환이 두 열인지"
+        Text "통과" (2FZL-2) 0×0 "통과"
+      Frame "단계1" (2FZR-2) 0×0
+        Frame "Frame" (2FZW-2) 20×20
+          Text "3" (2FZX-2) 0×0 "3"
+        Frame "Frame" (2FZT-2) 0×0
+          Text "짧게 한번 돌려봅니다" (2FZV-2) 0×0 "짧게 한번 돌려봅니다"
+          Text "캐시 맨 뒤 300봉만 — 수집도 주…" (2FZU-2) 0×0 "캐시 맨 뒤 300봉만 — 수집도 주문도 없습니다"
+        Text "터짐" (2FZS-2) 0×0 "터짐"
+      Frame "단계1" (2FZY-2) 0×0
+        Frame "Frame" (2G03-2) 20×20
+          Text "4" (2G04-2) 0×0 "4"
+        Frame "Frame" (2G00-2) 0×0
+          Text "오른쪽에 진단을 냅니다" (2G02-2) 0×0 "오른쪽에 진단을 냅니다"
+          Text "사람이 [적용]을 누를 때까지 코드는…" (2G01-2) 0×0 "사람이 [적용]을 누를 때까지 코드는 그대로입니다"
+        Text "대기" (2FZZ-2) 0×0 "대기"
+    Frame "진단 카드" (2FZ1-2) 0×0
+      Frame "배너" (2G2F-2) 0×0
+        Frame "Frame" (2G2G-2) 20×20
+          Text "!" (2G2H-2) 0×0 "!"
+        Frame "Frame" (2G2I-2) 0×0
+          Text "20번째 줄에서 멈췄습니다 — 아직 …" (2G2J-2) 0×0 "20번째 줄에서 멈췄습니다 — 아직 값이 없는 칸을 계산에 썼습니다"
+          Text "신호를 한 개도 만들지 못했습니다. …" (2G2K-2) 0×0 "신호를 한 개도 만들지 못했습니다. 백테스트는 실행되지 않았고 저장된 결과도 없습니다."
+        Frame "Frame" (2G2L-2) 0×0
+          Text "파이썬 원문 보기" (2G2M-2) 0×0 "파이썬 원문 보기"
+      Frame "어디서" (2G3Q-2) 0×0
+        Text "어디서 — golden_cross.p…" (2GBK-2) 0×0 "어디서 — golden_cross.py 18–21줄"
+        Frame "코드 18-19" (2GRH-2) 0×0
+          Text "18    atr  = bt.atr(…" (2GRI-2) 0×0 "18    atr  = bt.atr(df, 14)
+19    entry = bt.cross_above(fas"
+        Frame "코드 20 터진 줄" (2GSH-2) 0×0
+          Text "20    stop = df.clos…" (2GSI-2) 0×0 "20    stop = df.close - atr * p["atr_mult"]"
+        Frame "코드 21" (2GTK-2) 0×0
+          Text "21    exit_ = bt.cro…" (2GTL-2) 0×0 "21    exit_ = bt.cross_below(fast, slow) | (df.low <= stop)"
+      Frame "왜" (2G3R-2) 0×0
+        Text "왜 — 초심자가 가장 자주 밟는 곳입…" (2GDE-2) 0×0 "왜 — 초심자가 가장 자주 밟는 곳입니다"
+          SVGVisualElement "Path" (2GDG-2) 0×0
+        Text "ATR(14)은 앞 14봉이 모여야 …" (2GDF-2) 0×0 "ATR(14)은 앞 14봉이 모여야 첫 값이 나옵니다. 그전 칸은 빈칸(NaN)이라 df.close - at"
+      Frame "어떻게" (2G5A-2) 0×0
+        Frame "Frame" (2G5B-2) 0×0
+          Text "어떻게 고칠지 — 20줄 하나만 바꿉…" (2G5C-2) 0×0 "어떻게 고칠지 — 20줄 하나만 바꿉니다"
+          Text "v4 → v5 초안 · 1줄 삭제 ·…" (2G5D-2) 0×0 "v4 → v5 초안 · 1줄 삭제 · 2줄 추가"
+        Frame "Frame" (2G5E-2) 0×0
+          Frame "Frame" (2G5F-2) 0×0
+            Text "- 20    stop = df.cl…" (2G5G-2) 0×0 "- 20    stop = df.close - atr * p["atr_mult"]"
+          Frame "Frame" (2G5H-2) 0×0
+            Text "+ 20    stop = (df.c…" (2G5I-2) 0×0 "+ 20    stop = (df.close - atr * p["atr_mult"]) \
++ 21      "
+        Text ".where(entry)는 진입한 날…" (2G5J-2) 0×0 ".where(entry)는 진입한 날에만 손절선을 남기고, .ffill()은 그 값을 다음 진입 전까지 끌고"
+      Frame "액션" (2G67-2) 0×0
+        Frame "Frame" (2G68-2) 0×0
+          Text "적용하고 다시 실행" (2G69-2) 0×0 "적용하고 다시 실행"
+        Frame "Frame" (2G6A-2) 0×0
+          Text "적용만 하고 편집기로" (2G6B-2) 0×0 "적용만 하고 편집기로"
+        Frame "Frame" (2G6C-2) 0×0
+          Text "버리기" (2G6D-2) 0×0 "버리기"
+        Text "적용하면 v5가 새 버전으로 저장되고…" (2G6E-2) 0×0 "적용하면 v5가 새 버전으로 저장되고 v4는 이력에 남습니다 — 되돌릴 수 있습니다"

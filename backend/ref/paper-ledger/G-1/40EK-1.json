@@ -1,0 +1,94 @@
+{
+ "board_id": "40EK-1",
+ "page": "G-1",
+ "page_name": "백테스트 구현 현황",
+ "name": "15 · 창 폭 860px — 지도 탭",
+ "width": 1680.0,
+ "height": 1240.0,
+ "texts": [
+  {
+   "id": "40EN-1",
+   "text": "15",
+   "path": [
+    "15 · 창 폭 860px — 지도 탭",
+    "설명",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40EO-1",
+   "text": "창 폭 860px — 지도 탭",
+   "path": [
+    "15 · 창 폭 860px — 지도 탭",
+    "설명",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40EP-1",
+   "text": "창을 860px로 줄이면 셸이 세로로 접혀 캔버스 아래에 채팅이 붙고, 지도 탭은 요약 지도 ①~④를 그대로 그린다. ②·③ 오른쪽에는 지난 실행이 만든 사실(df — 606행 × 5열 / 앞 59봉은 빈칸, entry 3개 · exit 0개)이 붙어 지도가 지어낸 숫자가 아님을 보인다. 시각 편집기는 이 폭에서도 요약 지도 아래에 그대로 있다.",
+   "path": [
+    "15 · 창 폭 860px — 지도 탭",
+    "설명"
+   ]
+  },
+  {
+   "id": "40EQ-1",
+   "text": "주석 · 요청받은 '팔레트/검사기 drawer 상태'는 이 폭에서 나오지 않는다 — 실측 rootClass는 'backtest-vis is-synced'(is-narrow 없음)이고 서랍 토글은 0개다. 편집기에 is-narrow 레이아웃과 [노드]·[검사기] 서랍이 구현돼 있지만(app/lib/backtest-visual-editor.js의 setNarrow), 앱 전체에서 setNarrow()를 부르는 호출부가 없어 창 폭과 배선돼 있지 않다(grep 결과 정의 1곳뿐). 지어내지 않고 실제 화면을 그대로 찍었다.",
+   "path": [
+    "15 · 창 폭 860px — 지도 탭",
+    "설명"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "40EK-1",
+   "name": "15 · 창 폭 860px — 지도 탭",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 1240.0,
+   "depth": 0
+  },
+  {
+   "id": "40EL-1",
+   "name": "설명",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "40EM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "40ES-1",
+   "name": "화면",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "40ET-1",
+   "name": "Korean webpage",
+   "component": "Rectangle",
+   "w": 1600.0,
+   "h": 1000.0,
+   "depth": 2
+  }
+ ],
+ "text_multiset": {
+  "15": 1,
+  "창 폭 860px — 지도 탭": 1,
+  "창을 860px로 줄이면 셸이 세로로 접혀 캔버스 아래에 채팅이 붙고, 지도 탭은 요약 지도 ①~④를 그대로 그린다. ②·③ 오른쪽에는 지난 실행이 만든 사실(df — 606행 × 5열 / 앞 59봉은 빈칸, entry 3개 · exit 0개)이 붙어 지도가 지어낸 숫자가 아님을 보인다. 시각 편집기는 이 폭에서도 요약 지도 아래에 그대로 있다.": 1,
+  "주석 · 요청받은 '팔레트/검사기 drawer 상태'는 이 폭에서 나오지 않는다 — 실측 rootClass는 'backtest-vis is-synced'(is-narrow 없음)이고 서랍 토글은 0개다. 편집기에 is-narrow 레이아웃과 [노드]·[검사기] 서랍이 구현돼 있지만(app/lib/backtest-visual-editor.js의 setNarrow), 앱 전체에서 setNarrow()를 부르는 호출부가 없어 창 폭과 배선돼 있지 않다(grep 결과 정의 1곳뿐). 지어내지 않고 실제 화면을 그대로 찍었다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "7770847ce1c87344700534f990d373398f9e6936dd6aa203c9c9bbfda52db54b"
+}

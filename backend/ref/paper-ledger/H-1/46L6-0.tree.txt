@@ -1,0 +1,35 @@
+Frame "mini/CC-06 / R05 · 반도체 업종·AI 테마" (46L6-0) 360×420
+  Frame "Header" (46M0-0) 0×0
+    Frame "Meta row" (46M2-0) 0×0
+      Text "Eyebrow" (46M4-0) 0×0
+      Text "As of" (46M3-0) 0×0 "기준 09:42"
+    Text "Title" (46M1-0) 0×0 "반도체 업종·AI 테마"
+  Frame "Body" (46L9-0) 0×0
+    Frame "Table header" (46LV-0) 0×0
+      Text "순서" (46LZ-0) 34×0 "순서"
+      Text "항목" (46LY-0) 0×0 "항목"
+      Text "값" (46LX-0) 0×0 "값"
+      Text "비고" (46LW-0) 64×0 "비고"
+    Frame "Rank 1" (46LO-0) 0×0
+      Text "01" (46LU-0) 34×0 "01"
+      Frame "Frame" (46LR-0) 0×0
+        Text "변화" (46LT-0) 0×0 "변화"
+        Text "Text" (46LS-0) 0×0
+      Text "+2.84%" (46LQ-0) 0×0 "+2.84%"
+      Text "Text" (46LP-0) 64×0
+    Frame "Rank 2" (46LH-0) 0×0
+      Text "02" (46LN-0) 34×0 "02"
+      Frame "Frame" (46LK-0) 0×0
+        Text "기준 시각" (46LM-0) 0×0 "기준 시각"
+        Text "Text" (46LL-0) 0×0
+      Text "09:42 기준" (46LJ-0) 0×0 "09:42 기준"
+      Text "Text" (46LI-0) 64×0
+    Frame "Rank 3" (46LA-0) 0×0
+      Text "03" (46LG-0) 34×0 "03"
+      Frame "Frame" (46LD-0) 0×0
+        Text "변화" (46LF-0) 0×0 "변화"
+        Text "Text" (46LE-0) 0×0
+      Text "상위 4%" (46LC-0) 0×0 "상위 4%"
+      Text "Text" (46LB-0) 64×0
+  Frame "Fold note" (46L7-0) 0×0
+    Text "추가 항목은 원본에서 확인" (46L8-0) 0×0 "추가 항목은 원본에서 확인"

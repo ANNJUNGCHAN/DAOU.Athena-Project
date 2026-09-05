@@ -1,0 +1,200 @@
+Frame "CC-01 / R10-B-X2 · 금현물 주문·체결" (3OIM-0) 1440×926
+  Frame "Account Root · 금현물 주문·체결" (3OIN-0) 1440×926
+    Frame "Account Card Surface" (3OIO-0) 1360×846
+      Frame "Account Header" (3OMU-0) 0×106
+        Frame "Frame" (3ONE-0) 0×0
+          Frame "Frame" (3ONG-0) 0×0
+            Text "내 계좌" (3ONJ-0) 0×0 "내 계좌"
+            Frame "Frame" (3ONH-0) 0×0
+              Text "실시간" (3ONI-0) 0×0 "실시간"
+          Text "키움증권 종합계좌 ****4721 ·…" (3ONF-0) 0×0 "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18"
+        Frame "Header Right" (3PCE-0) 0×0
+          Frame "Tabs" (3PCF-0) 0×0
+            Frame "Frame" (3PCG-0) 0×0
+              Text "자산 종합" (3PCH-0) 0×0 "자산 종합"
+            Frame "Frame" (3PCI-0) 0×0
+              Text "보유종목" (3PCJ-0) 0×0 "보유종목"
+            Frame "Frame" (3PCK-0) 0×0
+              Text "예수금·결제" (3PCL-0) 0×0 "예수금·결제"
+            Frame "Frame" (3PCM-0) 0×0
+              Text "손익·성과" (3PCN-0) 0×0 "손익·성과"
+            Frame "Frame" (3PCO-0) 0×0
+              Text "주문·체결" (3PCP-0) 0×0 "주문·체결"
+            Frame "Frame" (3PCQ-0) 0×0
+              Text "증거금·담보" (3PCR-0) 0×0 "증거금·담보"
+            Frame "Frame" (3PCS-0) 0×0
+              Text "금현물" (3PCT-0) 0×0 "금현물"
+          Frame "Board State" (3PCU-0) 0×0
+            Frame "Frame" (3PCV-0) 0×0
+              Text "▸" (3PCW-0) 0×0 "▸"
+              Text "금현물 잔고·거래내역" (3PCX-0) 0×0 "금현물 잔고·거래내역"
+            Frame "Frame" (3PCY-0) 0×0
+              Text "▾" (3PCZ-0) 0×0 "▾"
+              Text "금현물 주문·체결" (3PD0-0) 0×0 "금현물 주문·체결"
+      Frame "Account Summary Strip" (3PEA-0) 0×116
+        Frame "Frame" (3PEB-0) 340×78
+          Text "미체결" (3PEC-0) 0×0 "미체결"
+          Text "10g" (3PED-0) 0×0 "10g"
+          Text "지정가 127,900원 · 1건" (3PEE-0) 0×0 "지정가 127,900원 · 1건"
+        Frame "Frame" (3PEF-0) 265×78
+          Text "당일 체결" (3PEG-0) 0×0 "당일 체결"
+          Text "5g" (3PEH-0) 0×0 "5g"
+          Text "시장가 128,400원 · 1건" (3PEI-0) 0×0 "시장가 128,400원 · 1건"
+        Frame "Frame" (3PEJ-0) 245×78
+          Text "체결금액" (3PEK-0) 0×0 "체결금액"
+          Text "642,000원" (3PEL-0) 0×0 "642,000원"
+          Text "수수료 1,284원" (3PEM-0) 0×0 "수수료 1,284원"
+        Frame "Frame" (3PEN-0) 245×78
+          Text "오늘 주문" (3PEO-0) 0×0 "오늘 주문"
+          Text "2건" (3PEP-0) 0×0 "2건"
+          Text "미체결 1건 · 체결 1건" (3PEQ-0) 0×0 "미체결 1건 · 체결 1건"
+        Frame "Frame" (3PER-0) 0×78
+          Text "금현물 예수금" (3PES-0) 0×0 "금현물 예수금"
+          Text "4,820,000원" (3PET-0) 0×0 "4,820,000원"
+          Text "출금가능 4,820,000원" (3PEU-0) 0×0 "출금가능 4,820,000원"
+      Frame "Account Workspace" (3SUI-0) 0×560
+        Frame "Gold Order Ledger" (3SUJ-0) 900×560
+          Frame "Section Title" (3SUK-0) 0×0
+            Frame "Frame" (3SUL-0) 0×0
+              Text "주문내역" (3SUM-0) 0×0 "주문내역"
+              Frame "Frame" (3SUN-0) 0×0
+                Text "KRX 금시장" (3SUO-0) 0×0 "KRX 금시장"
+            Text "3건 · 09/01 · 08/31" (3SUP-0) 0×0 "3건 · 09/01 · 08/31"
+          Frame "Table Head" (3SUQ-0) 0×34
+            Text "주문일 · 주문번호" (3SUR-0) 130×0 "주문일 · 주문번호"
+            Text "종목" (3SUS-0) 170×0 "종목"
+            Text "주문유형 · 구분" (3SUT-0) 110×0 "주문유형 · 구분"
+            Text "수량" (3SUU-0) 110×0 "수량"
+            Text "주문가" (3SUV-0) 120×0 "주문가"
+            Text "신용거래구분" (3SUW-0) 100×0 "신용거래구분"
+            Text "상태" (3SUX-0) 104×0 "상태"
+          Frame "Row 09/01 0000512 미체결" (3SUY-0) 0×72
+            Frame "Frame" (3SUZ-0) 130×0
+              Text "09/01" (3SV0-0) 0×0 "09/01"
+              Text "0000512" (3SV1-0) 0×0 "0000512"
+            Frame "Frame" (3SV2-0) 170×0
+              Text "금 99.99K 1g" (3SV3-0) 0×0 "금 99.99K 1g"
+              Text "04020000 · 금현물" (3SV4-0) 0×0 "04020000 · 금현물"
+            Frame "Frame" (3SV5-0) 110×0
+              Text "지정가" (3SV6-0) 0×0 "지정가"
+              Text "매수" (3SV7-0) 0×0 "매수"
+            Frame "Frame" (3SV8-0) 110×0
+              Text "10g" (3SV9-0) 0×0 "10g"
+              Text "확인수량 0g" (3SVA-0) 0×0 "확인수량 0g"
+            Frame "Frame" (3SVB-0) 120×0
+              Text "127,900원" (3SVC-0) 0×0 "127,900원"
+              Text "스톱가 0원" (3SVD-0) 0×0 "스톱가 0원"
+            Frame "Frame" (3SVE-0) 100×0
+              Text "현금" (3SVF-0) 0×0 "현금"
+              Text "통신 HTS" (3SVG-0) 0×0 "통신 HTS"
+            Frame "Frame" (3SVH-0) 104×0
+              Text "미체결" (3SVI-0) 0×0 "미체결"
+          Frame "Row 09/01 0000508 체결" (3SVJ-0) 0×72
+            Frame "Frame" (3SVK-0) 130×0
+              Text "09/01" (3SVL-0) 0×0 "09/01"
+              Text "0000508" (3SVM-0) 0×0 "0000508"
+            Frame "Frame" (3SVN-0) 170×0
+              Text "금 99.99K 1g" (3SVO-0) 0×0 "금 99.99K 1g"
+              Text "04020000 · 금현물" (3SVP-0) 0×0 "04020000 · 금현물"
+            Frame "Frame" (3SVQ-0) 110×0
+              Text "시장가" (3SVR-0) 0×0 "시장가"
+              Text "매수" (3SVS-0) 0×0 "매수"
+            Frame "Frame" (3SVT-0) 110×0
+              Text "5g" (3SVU-0) 0×0 "5g"
+              Text "확인수량 5g" (3SVV-0) 0×0 "확인수량 5g"
+            Frame "Frame" (3SVW-0) 120×0
+              Text "128,400원" (3SVX-0) 0×0 "128,400원"
+              Text "스톱가 0원" (3SVY-0) 0×0 "스톱가 0원"
+            Frame "Frame" (3SVZ-0) 100×0
+              Text "현금" (3SW0-0) 0×0 "현금"
+              Text "통신 HTS" (3SW1-0) 0×0 "통신 HTS"
+            Frame "Frame" (3SW2-0) 104×0
+              Text "체결" (3SW3-0) 0×0 "체결"
+              Text "09:21:07" (3SW4-0) 0×0 "09:21:07"
+          Frame "Row 08/31 0000497 체결" (3SW5-0) 0×72
+            Frame "Frame" (3SW6-0) 130×0
+              Text "08/31" (3SW7-0) 0×0 "08/31"
+              Text "0000497" (3SW8-0) 0×0 "0000497"
+            Frame "Frame" (3SW9-0) 170×0
+              Text "금 99.99K 1g" (3SWA-0) 0×0 "금 99.99K 1g"
+              Text "04020000 · 금현물" (3SWB-0) 0×0 "04020000 · 금현물"
+            Frame "Frame" (3SWC-0) 110×0
+              Text "지정가" (3SWD-0) 0×0 "지정가"
+              Text "매수" (3SWE-0) 0×0 "매수"
+            Frame "Frame" (3SWF-0) 110×0
+              Text "20g" (3SWG-0) 0×0 "20g"
+              Text "확인수량 20g" (3SWH-0) 0×0 "확인수량 20g"
+            Frame "Frame" (3SWI-0) 120×0
+              Text "124,500원" (3SWJ-0) 0×0 "124,500원"
+              Text "스톱가 0원" (3SWK-0) 0×0 "스톱가 0원"
+            Frame "Frame" (3SWL-0) 100×0
+              Text "현금" (3SWM-0) 0×0 "현금"
+              Text "통신 HTS" (3SWN-0) 0×0 "통신 HTS"
+            Frame "Frame" (3SWO-0) 104×0
+              Text "체결" (3SWP-0) 0×0 "체결"
+          Frame "오늘 주문 합계 섹션" (3UNW-0) 0×0
+            Frame "Frame" (3UNX-0) 0×0
+              Text "오늘 주문 합계" (3UNY-0) 0×0 "오늘 주문 합계"
+              Text "09/01 09:42 기준 · 2건" (3UNZ-0) 0×0 "09/01 09:42 기준 · 2건"
+            Frame "Frame" (3UO0-0) 0×0
+              Frame "Frame" (3UO1-0) 0×0
+                Text "미체결 잔량" (3UO2-0) 0×0 "미체결 잔량"
+                Text "10g" (3UO3-0) 0×0 "10g"
+              Frame "Frame" (3UO4-0) 0×0
+                Text "체결 수량" (3UO5-0) 0×0 "체결 수량"
+                Text "5g" (3UO6-0) 0×0 "5g"
+              Frame "Frame" (3UO7-0) 0×0
+                Text "체결금액" (3UO8-0) 0×0 "체결금액"
+                Text "642,000원" (3UO9-0) 0×0 "642,000원"
+              Frame "Frame" (3UOA-0) 0×0
+                Text "수수료" (3UOB-0) 0×0 "수수료"
+                Text "1,284원" (3UOC-0) 0×0 "1,284원"
+              Frame "Frame" (3UOD-0) 0×0
+                Text "정산금액" (3UOE-0) 0×0 "정산금액"
+                Text "643,284원" (3UOF-0) 0×0 "643,284원"
+        Frame "금현물 주문 레일" (3SWQ-0) 460×560
+          Frame "Rail Block · 미체결 주문 0000512" (3SWR-0) 408×0
+            Text "미체결 주문 0000512" (3SWS-0) 0×0 "미체결 주문 0000512"
+            Frame "Frame" (3SWT-0) 0×25
+              Text "원주문" (3SWU-0) 0×0 "원주문"
+              Text "해당 없음" (3SWV-0) 0×0 "해당 없음"
+            Frame "Frame" (3SWW-0) 0×25
+              Text "확인수량" (3SWX-0) 0×0 "확인수량"
+              Text "0g" (3SWY-0) 0×0 "0g"
+            Frame "Frame" (3SWZ-0) 0×25
+              Text "스톱가" (3SX0-0) 0×0 "스톱가"
+              Text "0원" (3SX1-0) 0×0 "0원"
+            Frame "Frame" (3SX2-0) 0×25
+              Text "정정취소" (3SX3-0) 0×0 "정정취소"
+              Text "해당 없음" (3SX4-0) 0×0 "해당 없음"
+            Frame "Frame" (3SX5-0) 0×25
+              Text "예약 · 반대" (3SX6-0) 0×0 "예약 · 반대"
+              Text "해당 없음" (3SX7-0) 0×0 "해당 없음"
+            Frame "Frame" (3SX8-0) 0×25
+              Text "통신" (3SX9-0) 0×0 "통신"
+              Text "HTS" (3SXA-0) 0×0 "HTS"
+          Frame "Rail Block · 당일 체결 0000508" (3SXB-0) 408×0
+            Text "당일 체결 0000508" (3SXC-0) 0×0 "당일 체결 0000508"
+            Frame "Frame" (3SXD-0) 0×25
+              Text "체결가" (3SXE-0) 0×0 "체결가"
+              Text "128,400원" (3SXF-0) 0×0 "128,400원"
+            Frame "Frame" (3SXG-0) 0×25
+              Text "체결수량" (3SXH-0) 0×0 "체결수량"
+              Text "5g" (3SXI-0) 0×0 "5g"
+            Frame "Frame" (3SXJ-0) 0×25
+              Text "확인시간" (3SXK-0) 0×0 "확인시간"
+              Text "09:21:07" (3SXL-0) 0×0 "09:21:07"
+            Frame "Frame" (3SXM-0) 0×25
+              Text "대출일" (3SXN-0) 0×0 "대출일"
+              Text "해당 없음" (3SXO-0) 0×0 "해당 없음"
+            Frame "Frame" (3SXP-0) 0×25
+              Text "통신" (3SXQ-0) 0×0 "통신"
+              Text "HTS" (3SXR-0) 0×0 "HTS"
+            Frame "Frame" (3SXS-0) 0×25
+              Text "정정취소 · 반대" (3SXT-0) 0×0 "정정취소 · 반대"
+              Text "해당 없음" (3SXU-0) 0×0 "해당 없음"
+      Frame "Account Status Footer" (3OIP-0) 0×64
+        Text "● 금현물 주문 실시간 반영 중" (3OIT-0) 0×0 "● 금현물 주문 실시간 반영 중"
+        Frame "Frame" (3OIQ-0) 0×0
+          Text "영업부 · 담당자 미제공" (3OIS-0) 0×0 "영업부 · 담당자 미제공"
+          Text "금현물 주문 전체 내역 보기" (3OIR-0) 0×0 "금현물 주문 전체 내역 보기"

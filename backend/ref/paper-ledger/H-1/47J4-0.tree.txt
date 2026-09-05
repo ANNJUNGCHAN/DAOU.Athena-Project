@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율" (47J4-0) 360×420
+  Frame "Header" (47JY-0) 0×0
+    Frame "Meta row" (47K0-0) 0×0
+      Text "Eyebrow" (47K2-0) 0×0
+      Text "As of" (47K1-0) 0×0 "기준 09:42"
+    Text "Title" (47JZ-0) 0×0 "ELW 근접율"
+  Frame "Body" (47J7-0) 0×0
+    Frame "KPI band" (47JO-0) 0×0
+      Frame "Frame" (47JV-0) 0×0
+        Text "등락률" (47JX-0) 0×0 "등락률"
+        Text "+12.16%" (47JW-0) 0×0 "+12.16%"
+      Frame "Frame" (47JS-0) 0×0
+        Text "근접율" (47JU-0) 0×0 "근접율"
+        Text "98.6%" (47JT-0) 0×0 "98.6%"
+      Frame "Frame" (47JP-0) 0×0
+        Text "핵심" (47JR-0) 0×0 "핵심"
+        Text "2건" (47JQ-0) 0×0 "2건"
+    Frame "Table header" (47JK-0) 0×0
+      Text "항목" (47JN-0) 0×0 "항목"
+      Text "값" (47JM-0) 0×0 "값"
+      Text "비고" (47JL-0) 72×0 "비고"
+    Frame "Position 1" (47JE-0) 0×0
+      Frame "Frame" (47JH-0) 0×0
+        Text "수량" (47JJ-0) 0×0 "수량"
+        Text "Text" (47JI-0) 0×0
+      Text "12건" (47JG-0) 0×0 "12건"
+      Text "Text" (47JF-0) 72×0
+    Frame "Position 2" (47J8-0) 0×0
+      Frame "Frame" (47JB-0) 0×0
+        Text "ELW근접율" (47JD-0) 0×0 "ELW근접율"
+        Text "Text" (47JC-0) 0×0
+      Text "전체 3,482건 · 20건 표시" (47JA-0) 0×0 "전체 3,482건 · 20건 표시"
+      Text "Text" (47J9-0) 72×0
+  Frame "Fold note" (47J5-0) 0×0
+    Text "스칼라 2개, 행 18개 접힘 · 원…" (47J6-0) 0×0 "스칼라 2개, 행 18개 접힘 · 원본에서 확인"

@@ -1,0 +1,3399 @@
+{
+ "board_id": "2YJ8-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+ "width": 1440,
+ "height": 980,
+ "texts": [
+  {
+   "id": "2YNP-0",
+   "text": "종목 찾기",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YNO-0",
+   "text": "장중 · 09:42",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YNL-0",
+   "text": "거래량 급증 · KOSPI",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YNJ-0",
+   "text": "업종",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YNH-0",
+   "text": "종목찾기",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YNF-0",
+   "text": "관심",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YND-0",
+   "text": "테마",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YNB-0",
+   "text": "시장·VI",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YN9-0",
+   "text": "조건검색",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YN5-0",
+   "text": "정렬",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YN3-0",
+   "text": "거래대금",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YN1-0",
+   "text": "당일 거래량",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YMZ-0",
+   "text": "전일 거래량",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YMX-0",
+   "text": "등락률",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YMV-0",
+   "text": "예상체결 등락률",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YMT-0",
+   "text": "호가잔량",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YMR-0",
+   "text": "잔량 급증",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YMP-0",
+   "text": "잔량률 급증",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32BG-0",
+   "text": "거래량 급증",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "거래량 급증"
+   ]
+  },
+  {
+   "id": "2YMM-0",
+   "text": "● 실시간 갱신",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YML-0",
+   "text": "100개 결과",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YMI-0",
+   "text": "필터",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YMG-0",
+   "text": "KOSPI",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YME-0",
+   "text": "등락 전체",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YMC-0",
+   "text": "시가총액 전체",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YMA-0",
+   "text": "유동성 정상",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YM7-0",
+   "text": "세션",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YM6-0",
+   "text": "정규장",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YM4-0",
+   "text": "시간외 단일가",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36QF-0",
+   "text": "거래량 급증",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36QG-0",
+   "text": "업데이트 09:42:18",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36QI-0",
+   "text": "순위",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "36QJ-0",
+   "text": "종목",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "36QK-0",
+   "text": "현재가",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "36QL-0",
+   "text": "등락률",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "36QM-0",
+   "text": "거래량 배율(5분)",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "36QN-0",
+   "text": "급증량",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "36QO-0",
+   "text": "체결강도",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "36QQ-0",
+   "text": "01",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자"
+   ]
+  },
+  {
+   "id": "36QS-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36QT-0",
+   "text": "005930",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36QV-0",
+   "text": "150,850",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36QW-0",
+   "text": "+1,850",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36QX-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자"
+   ]
+  },
+  {
+   "id": "36QZ-0",
+   "text": "6.4배",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36R0-0",
+   "text": "22만 → 141만",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36R2-0",
+   "text": "+119만주",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36R3-0",
+   "text": "누적 1,420만주",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36R4-0",
+   "text": "108.4%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자"
+   ]
+  },
+  {
+   "id": "36R6-0",
+   "text": "02",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스"
+   ]
+  },
+  {
+   "id": "36R8-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36R9-0",
+   "text": "000660",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RB-0",
+   "text": "198,400",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RC-0",
+   "text": "+3,990",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RD-0",
+   "text": "+2.05%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스"
+   ]
+  },
+  {
+   "id": "36RF-0",
+   "text": "5.2배",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RG-0",
+   "text": "9.8만 → 51만",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RI-0",
+   "text": "+41.2만주",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RJ-0",
+   "text": "누적 497만주",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RK-0",
+   "text": "116.2%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스"
+   ]
+  },
+  {
+   "id": "36RM-0",
+   "text": "03",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차"
+   ]
+  },
+  {
+   "id": "36RO-0",
+   "text": "현대차",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RP-0",
+   "text": "005380",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RR-0",
+   "text": "232,500",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RS-0",
+   "text": "-1,220",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RT-0",
+   "text": "-0.52%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차"
+   ]
+  },
+  {
+   "id": "36RV-0",
+   "text": "4.1배",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RW-0",
+   "text": "7.2만 → 29.5만",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RY-0",
+   "text": "+22.3만주",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36RZ-0",
+   "text": "누적 319만주",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36S0-0",
+   "text": "93.8%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차"
+   ]
+  },
+  {
+   "id": "36S2-0",
+   "text": "04",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER"
+   ]
+  },
+  {
+   "id": "36S4-0",
+   "text": "NAVER",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36S5-0",
+   "text": "035420",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36S7-0",
+   "text": "214,000",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36S8-0",
+   "text": "+1,800",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36S9-0",
+   "text": "+0.85%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER"
+   ]
+  },
+  {
+   "id": "36SB-0",
+   "text": "3.6배",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SC-0",
+   "text": "6.4만 → 23만",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SE-0",
+   "text": "+16.6만주",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SF-0",
+   "text": "누적 318만주",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SG-0",
+   "text": "104.1%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER"
+   ]
+  },
+  {
+   "id": "36SI-0",
+   "text": "05",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스"
+   ]
+  },
+  {
+   "id": "36SK-0",
+   "text": "한화에어로스페이스",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SL-0",
+   "text": "012450",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SN-0",
+   "text": "810,000",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SO-0",
+   "text": "+23,700",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SP-0",
+   "text": "+3.01%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스"
+   ]
+  },
+  {
+   "id": "36SR-0",
+   "text": "2.8배",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SS-0",
+   "text": "1.5만 → 4.2만",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SU-0",
+   "text": "+2.7만주",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SV-0",
+   "text": "누적 73.8만주",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36SW-0",
+   "text": "127.5%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스"
+   ]
+  },
+  {
+   "id": "36SY-0",
+   "text": "상위 5개 표시 · 전체 100개",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 푸터"
+   ]
+  },
+  {
+   "id": "36T0-0",
+   "text": "더보기",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 푸터",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMN-0",
+   "text": "조회 대상",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Head"
+   ]
+  },
+  {
+   "id": "3EMM-0",
+   "text": "전체 100개 중 12개 · 09:42 기준",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Head"
+   ]
+  },
+  {
+   "id": "3EMK-0",
+   "text": "이수페타시스",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMJ-0",
+   "text": "007660",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMH-0",
+   "text": "+29.90%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMF-0",
+   "text": "한미반도체",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EME-0",
+   "text": "042700",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMC-0",
+   "text": "+4.18%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMA-0",
+   "text": "한화에어로스페이스",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EM9-0",
+   "text": "012450",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EM7-0",
+   "text": "+3.01%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EM4-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EM3-0",
+   "text": "000660",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EM1-0",
+   "text": "+2.05%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELZ-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELY-0",
+   "text": "005930",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELW-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELU-0",
+   "text": "KODEX 200",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELT-0",
+   "text": "069500",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELR-0",
+   "text": "+0.86%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELO-0",
+   "text": "NAVER",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELN-0",
+   "text": "035420",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELL-0",
+   "text": "+0.85%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELJ-0",
+   "text": "DB하이텍",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELI-0",
+   "text": "000990",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELG-0",
+   "text": "-0.34%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELE-0",
+   "text": "현대차",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELD-0",
+   "text": "005380",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ELB-0",
+   "text": "-0.52%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EL8-0",
+   "text": "기아",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EL7-0",
+   "text": "000270",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EL5-0",
+   "text": "-0.70%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EL3-0",
+   "text": "카카오",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EL2-0",
+   "text": "035720",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EL0-0",
+   "text": "-0.83%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EKY-0",
+   "text": "삼성SDI",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EKX-0",
+   "text": "006400",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EKV-0",
+   "text": "-1.12%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "Query Universe · 조회 대상",
+    "Universe Grid",
+    "Row 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YK9-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Identity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YK8-0",
+   "text": "005930 · KOSPI",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Identity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YK6-0",
+   "text": "선택됨",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Identity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YK3-0",
+   "text": "150,850",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Identity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YK2-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Identity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJY-0",
+   "text": "같이 비교해볼 종목",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJX-0",
+   "text": "반도체",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJV-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJU-0",
+   "text": "+2.05%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJS-0",
+   "text": "DB하이텍",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJR-0",
+   "text": "-0.34%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJP-0",
+   "text": "한미반도체",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJO-0",
+   "text": "+4.18%",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SE0-0",
+   "text": "호가와 종목 정보",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing"
+   ]
+  },
+  {
+   "id": "3SDZ-0",
+   "text": "호가",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "호가"
+   ]
+  },
+  {
+   "id": "3SDY-0",
+   "text": "매도 150,900 · 매수 150,850",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "호가"
+   ]
+  },
+  {
+   "id": "3SDW-0",
+   "text": "전일 종가",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "전일 종가"
+   ]
+  },
+  {
+   "id": "3SDV-0",
+   "text": "149,000",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "전일 종가"
+   ]
+  },
+  {
+   "id": "3SDT-0",
+   "text": "상장주식수 · 상장일",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상장주식수와 상장일"
+   ]
+  },
+  {
+   "id": "3SDS-0",
+   "text": "59.7억주 · 1975.06.11",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상장주식수와 상장일"
+   ]
+  },
+  {
+   "id": "3SDQ-0",
+   "text": "정상",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상태 칩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SDO-0",
+   "text": "감리 없음",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상태 칩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SDM-0",
+   "text": "투자유의 아님",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상태 칩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SDK-0",
+   "text": "VI 미발동",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상태 칩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJK-0",
+   "text": "비교에 추가",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJI-0",
+   "text": "종목 상세 열기",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJD-0",
+   "text": "● 실시간 갱신 중 · 마지막 반영 09:42:18",
+   "path": [
+    "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2YJ8-0",
+   "name": "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+   "component": "Frame",
+   "w": 1440,
+   "h": 980,
+   "depth": 0
+  },
+  {
+   "id": "2YJ9-0",
+   "name": "Discovery Root · 종목 찾기",
+   "component": "Frame",
+   "w": 1440,
+   "h": 980,
+   "depth": 1
+  },
+  {
+   "id": "2YJA-0",
+   "name": "Explorer Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 900,
+   "depth": 2
+  },
+  {
+   "id": "2YN6-0",
+   "name": "Header and Capability Navigation",
+   "component": "Frame",
+   "w": 0,
+   "h": 112,
+   "depth": 3
+  },
+  {
+   "id": "2YNK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YNM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YNN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YN7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YNI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YNG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YNE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YNC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YNA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YN8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YM0-0",
+   "name": "Ranking Query Controls",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2YMJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YMN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YN4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YN2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YN0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YMY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YMW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YMU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YMS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YMQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YMO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "32BF-0",
+   "name": "거래량 급증",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YMK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YM1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2YM8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YMH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YMF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YMD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YMB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YM9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YM2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YM5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YM3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YJE-0",
+   "name": "Ranking Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 612,
+   "depth": 3
+  },
+  {
+   "id": "36QB-0",
+   "name": "Ranking Result Table",
+   "component": "Frame",
+   "w": 880,
+   "h": 612,
+   "depth": 4
+  },
+  {
+   "id": "36QC-0",
+   "name": "순위표",
+   "component": "Frame",
+   "w": 824,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36QD-0",
+   "name": "표 헤더블록",
+   "component": "Frame",
+   "w": 824,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "36QE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "36QH-0",
+   "name": "열 이름",
+   "component": "Frame",
+   "w": 824,
+   "h": 34,
+   "depth": 7
+  },
+  {
+   "id": "36QP-0",
+   "name": "1위 삼성전자",
+   "component": "Frame",
+   "w": 824,
+   "h": 56,
+   "depth": 6
+  },
+  {
+   "id": "36QR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36QU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36QY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36R1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36R5-0",
+   "name": "2위 SK하이닉스",
+   "component": "Frame",
+   "w": 824,
+   "h": 56,
+   "depth": 6
+  },
+  {
+   "id": "36R7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36RA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36RE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36RH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36RL-0",
+   "name": "3위 현대차",
+   "component": "Frame",
+   "w": 824,
+   "h": 56,
+   "depth": 6
+  },
+  {
+   "id": "36RN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36RQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36RU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36RX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36S1-0",
+   "name": "4위 NAVER",
+   "component": "Frame",
+   "w": 824,
+   "h": 56,
+   "depth": 6
+  },
+  {
+   "id": "36S3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36S6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36SA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36SD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36SH-0",
+   "name": "5위 한화에어로스페이스",
+   "component": "Frame",
+   "w": 824,
+   "h": 56,
+   "depth": 6
+  },
+  {
+   "id": "36SJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36SM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36SQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36ST-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "36SX-0",
+   "name": "표 푸터",
+   "component": "Frame",
+   "w": 824,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "36SZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 7
+  },
+  {
+   "id": "3EKR-0",
+   "name": "Query Universe · 조회 대상",
+   "component": "Frame",
+   "w": 824,
+   "h": 172,
+   "depth": 5
+  },
+  {
+   "id": "3EML-0",
+   "name": "Universe Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3EKS-0",
+   "name": "Universe Grid",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3EM5-0",
+   "name": "Row 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3EMG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3EMI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EMB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3EMD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EM6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3EM8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3ELP-0",
+   "name": "Row 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3EM0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3EM2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3ELV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3ELX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3ELQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3ELS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EL9-0",
+   "name": "Row 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3ELK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3ELM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3ELF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3ELH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3ELA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3ELC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EKT-0",
+   "name": "Row 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3EL4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3EL6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EKZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3EL1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EKU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 264,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3EKW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "2YJF-0",
+   "name": "Selected Stock Detail",
+   "component": "Frame",
+   "w": 480,
+   "h": 612,
+   "depth": 4
+  },
+  {
+   "id": "2YJZ-0",
+   "name": "Selected Stock Identity",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YK4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YK7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2YK5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2YK0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YK1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2YJL-0",
+   "name": "Peer Comparison",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YJW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YJM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2YJT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 7
+  },
+  {
+   "id": "2YJQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 7
+  },
+  {
+   "id": "2YJN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 7
+  },
+  {
+   "id": "3SDH-0",
+   "name": "Quote and Listing",
+   "component": "Frame",
+   "w": 424,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SDX-0",
+   "name": "호가",
+   "component": "Frame",
+   "w": 424,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3SDU-0",
+   "name": "전일 종가",
+   "component": "Frame",
+   "w": 424,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3SDR-0",
+   "name": "상장주식수와 상장일",
+   "component": "Frame",
+   "w": 424,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3SDI-0",
+   "name": "상태 칩",
+   "component": "Frame",
+   "w": 424,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SDP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SDN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SDL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SDJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2YJG-0",
+   "name": "Selected Stock Actions",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2YJJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "2YJH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "2YJB-0",
+   "name": "User Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "종목 찾기": 1,
+  "장중 · 09:42": 1,
+  "거래량 급증 · KOSPI": 1,
+  "업종": 1,
+  "종목찾기": 1,
+  "관심": 1,
+  "테마": 1,
+  "시장·VI": 1,
+  "조건검색": 1,
+  "정렬": 1,
+  "거래대금": 1,
+  "당일 거래량": 1,
+  "전일 거래량": 1,
+  "등락률": 2,
+  "예상체결 등락률": 1,
+  "호가잔량": 1,
+  "잔량 급증": 1,
+  "잔량률 급증": 1,
+  "거래량 급증": 2,
+  "● 실시간 갱신": 1,
+  "100개 결과": 1,
+  "필터": 1,
+  "KOSPI": 1,
+  "등락 전체": 1,
+  "시가총액 전체": 1,
+  "유동성 정상": 1,
+  "세션": 1,
+  "정규장": 1,
+  "시간외 단일가": 1,
+  "업데이트 09:42:18": 1,
+  "순위": 1,
+  "종목": 1,
+  "현재가": 1,
+  "거래량 배율(5분)": 1,
+  "급증량": 1,
+  "체결강도": 1,
+  "01": 1,
+  "삼성전자": 3,
+  "005930": 2,
+  "150,850": 2,
+  "+1,850": 1,
+  "+1.24%": 2,
+  "6.4배": 1,
+  "22만 → 141만": 1,
+  "+119만주": 1,
+  "누적 1,420만주": 1,
+  "108.4%": 1,
+  "02": 1,
+  "SK하이닉스": 3,
+  "000660": 2,
+  "198,400": 1,
+  "+3,990": 1,
+  "+2.05%": 3,
+  "5.2배": 1,
+  "9.8만 → 51만": 1,
+  "+41.2만주": 1,
+  "누적 497만주": 1,
+  "116.2%": 1,
+  "03": 1,
+  "현대차": 2,
+  "005380": 2,
+  "232,500": 1,
+  "-1,220": 1,
+  "-0.52%": 2,
+  "4.1배": 1,
+  "7.2만 → 29.5만": 1,
+  "+22.3만주": 1,
+  "누적 319만주": 1,
+  "93.8%": 1,
+  "04": 1,
+  "NAVER": 2,
+  "035420": 2,
+  "214,000": 1,
+  "+1,800": 1,
+  "+0.85%": 2,
+  "3.6배": 1,
+  "6.4만 → 23만": 1,
+  "+16.6만주": 1,
+  "누적 318만주": 1,
+  "104.1%": 1,
+  "05": 1,
+  "한화에어로스페이스": 2,
+  "012450": 2,
+  "810,000": 1,
+  "+23,700": 1,
+  "+3.01%": 2,
+  "2.8배": 1,
+  "1.5만 → 4.2만": 1,
+  "+2.7만주": 1,
+  "누적 73.8만주": 1,
+  "127.5%": 1,
+  "상위 5개 표시 · 전체 100개": 1,
+  "더보기": 1,
+  "조회 대상": 1,
+  "전체 100개 중 12개 · 09:42 기준": 1,
+  "이수페타시스": 1,
+  "007660": 1,
+  "+29.90%": 1,
+  "한미반도체": 2,
+  "042700": 1,
+  "+4.18%": 2,
+  "KODEX 200": 1,
+  "069500": 1,
+  "+0.86%": 1,
+  "DB하이텍": 2,
+  "000990": 1,
+  "-0.34%": 2,
+  "기아": 1,
+  "000270": 1,
+  "-0.70%": 1,
+  "카카오": 1,
+  "035720": 1,
+  "-0.83%": 1,
+  "삼성SDI": 1,
+  "006400": 1,
+  "-1.12%": 1,
+  "005930 · KOSPI": 1,
+  "선택됨": 1,
+  "+1,850 · +1.24%": 1,
+  "같이 비교해볼 종목": 1,
+  "반도체": 1,
+  "호가와 종목 정보": 1,
+  "호가": 1,
+  "매도 150,900 · 매수 150,850": 1,
+  "전일 종가": 1,
+  "149,000": 1,
+  "상장주식수 · 상장일": 1,
+  "59.7억주 · 1975.06.11": 1,
+  "정상": 1,
+  "감리 없음": 1,
+  "투자유의 아님": 1,
+  "VI 미발동": 1,
+  "비교에 추가": 1,
+  "종목 상세 열기": 1,
+  "● 실시간 갱신 중 · 마지막 반영 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "9da2d39a03f36763d4e4003d189571e188d210446ec58f063d5554e11366603d"
+}

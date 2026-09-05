@@ -1,0 +1,196 @@
+Frame "40 · 모드 전환 — 조용한 전환 · 새 대화" (3VVU-1) 1680×900
+  Frame "40 Header" (3VWB-1) 1600×86
+    Frame "Frame" (3VWC-1) 650×56
+      Frame "Frame" (3VWD-1) 48×48
+        Text "40" (3VWE-1) 17×20 "40"
+      Frame "Frame" (3VWF-1) 586×56
+        Text "모드 전환 — 조용한 전환 · 새 대…" (3VWG-1) 586×36 "모드 전환 — 조용한 전환 · 새 대화"
+        Text "백테스트에서 그래프로 넘어가는 순간.…" (3VWH-1) 586×18 "백테스트에서 그래프로 넘어가는 순간. 묻지도 알리지도 않는다. 앞 창은 뒤에서 계속 돌고, 새 대화가 열린다"
+    Frame "Frame" (3VWI-1) 109×32
+      Text "신규 · 승인 대기" (3VWJ-1) 81×16 "신규 · 승인 대기"
+  Frame "40 Content" (3VWP-1) 1600×722
+    Frame "Stage" (3VWQ-1) 1150×722
+      Frame "Flow Zone" (3VWT-1) 1148×504
+        Frame "Frame" (3VWU-1) 1104×18
+          Text "백테스트 → 그래프" (3VWV-1) 113×18 "백테스트 → 그래프"
+          Text "QUIET SWITCH · NEW C…" (3VWW-1) 217×14 "QUIET SWITCH · NEW CONVERSATION"
+        Frame "Flow Row" (3VWX-1) 1104×428
+          Frame "Step 1 · 전환 직전" (3VY8-1) 339×428
+            Frame "Frame" (3VY9-1) 309×22
+              Frame "Frame" (3VYA-1) 75×22
+                SVG "SVG" (3VYB-1) 12×12
+                  SVGVisualElement "Path" (3VYC-1) 10×7
+                Text "백테스트" (3VYD-1) 40×14 "백테스트"
+              Text "전환 직전" (3VYE-1) 46×14 "전환 직전"
+            Text "추세추종 v3" (3VYF-1) 309×18 "추세추종 v3"
+            Frame "Mini Screen" (3VYG-1) 309×313
+              Frame "Form Row" (3VZQ-1) 287×41
+                Frame "Frame" (3VZR-1) 92×41
+                  Text "종목" (3VZS-1) 20×13 "종목"
+                  Text "005930" (3VZT-1) 34×14 "005930"
+                Frame "Frame" (3VZU-1) 92×41
+                  Text "기간" (3VZV-1) 20×13 "기간"
+                  Text "3년" (3VZW-1) 16×14 "3년"
+                Frame "Frame" (3VZX-1) 92×41
+                  Text "이평" (3VZY-1) 20×13 "이평"
+                  Text "20 / 60" (3VZZ-1) 34×14 "20 / 60"
+              Frame "Curve" (3W01-1) 287×189
+                SVG "SVG" (3W02-1) 264×70
+                  SVGVisualElement "Path" (3W03-1) 260×54
+                  SVGVisualElement "Path" (3W04-1) 260×24
+              Frame "Log" (3W05-1) 287×45
+                Text "bar 412/500 · pnl +1…" (3W06-1) 144×14 "bar 412/500 · pnl +18.4%"
+                Text "trade 37 · mdd -7.2%" (3W07-1) 120×14 "trade 37 · mdd -7.2%"
+            Frame "Frame" (3VYH-1) 309×15
+              Rectangle "Rectangle" (3VYI-1) 7×7
+              Text "실행 중 82%" (3VYJ-1) 57×15 "실행 중 82%"
+          Frame "Arrow 1" (3W13-1) 20×20
+            SVG "SVG" (3W14-1) 20×20
+              SVGVisualElement "Path" (3W15-1) 13×10
+          Frame "Step 2 · 전환 순간" (3W1R-1) 339×428
+            Frame "Frame" (3W1S-1) 309×22
+              Frame "Frame" (3W1T-1) 62×22
+                Text "전환 순간" (3W1U-1) 44×14 "전환 순간"
+              Text "0.4s" (3W1V-1) 24×14 "0.4s"
+            Frame "Frame" (3XKP-1) 44×44
+              SVG "SVG" (3XKQ-1) 22×22
+                SVGVisualElement "Circle" (3XKR-1) 15×15
+                SVGVisualElement "Path" (3XKS-1) 7×7
+            Text "아무것도 묻지 않습니다" (3W21-1) 129×17 "아무것도 묻지 않습니다"
+            Frame "Saved List" (3W22-1) 309×215
+              Frame "Frame" (3W3E-1) 289×15
+                Frame "Frame" (3W3F-1) 12×12
+                  SVG "SVG" (3W3G-1) 12×12
+                    SVGVisualElement "Path" (3W3H-1) 8×6
+                Text "대화 12턴" (3W3I-1) 45×15 "대화 12턴"
+              Frame "Frame" (3W3J-1) 289×15
+                Frame "Frame" (3W3K-1) 12×12
+                  SVG "SVG" (3W3L-1) 12×12
+                    SVGVisualElement "Path" (3W3M-1) 8×6
+                Text "전략 폼 값" (3W3N-1) 48×15 "전략 폼 값"
+              Frame "Frame" (3W3O-1) 289×15
+                Frame "Frame" (3W3P-1) 12×12
+                  SVG "SVG" (3W3Q-1) 12×12
+                    SVGVisualElement "Path" (3W3R-1) 8×6
+                Text "파이썬 코드 84줄" (3W3S-1) 79×15 "파이썬 코드 84줄"
+              Frame "Frame" (3W3T-1) 289×15
+                Frame "Frame" (3W3U-1) 12×12
+                  SVG "SVG" (3W3V-1) 12×12
+                    SVGVisualElement "Path" (3W3W-1) 8×6
+                Text "결과 카드 3장" (3W3X-1) 63×15 "결과 카드 3장"
+              Frame "Frame" (3W3Y-1) 289×15
+                Frame "Frame" (3W3Z-1) 12×12
+                  SVG "SVG" (3W40-1) 12×12
+                    SVGVisualElement "Path" (3W41-1) 8×6
+                Text "실행 로그 · 스크롤 위치" (3W42-1) 107×15 "실행 로그 · 스크롤 위치"
+            Frame "Sidebar Row Hint" (3XKU-1) 309×60
+              Frame "Frame" (3XKV-1) 309×28
+                SVG "SVG" (3XKW-1) 13×13
+                  SVGVisualElement "Path" (3XKX-1) 10×7
+                Text "추세추종 v3" (3XKY-1) 250×14 "추세추종 v3"
+                SVG "SVG" (3XKZ-1) 14×14
+                  SVGVisualElement "Circle" (3XL0-1) 9×9
+                  SVGVisualElement "Path" (3XL1-1) 5×5
+              Text "사이드바 이력 행에는 스피너만 돕니다…" (3XL2-1) 309×26 "사이드바 이력 행에는 스피너만 돕니다. 이 행이 곧 돌아가는 길입니다."
+          Frame "Arrow 2" (3W4O-1) 20×20
+            SVG "SVG" (3W4P-1) 20×20
+              SVGVisualElement "Path" (3W4Q-1) 13×10
+          Frame "Step 3 · 전환 후" (3W4R-1) 339×428
+            Frame "Frame" (3W4S-1) 309×24
+              Frame "Frame" (3W4T-1) 67×24
+                SVG "SVG" (3W4U-1) 12×12
+                  SVGVisualElement "Circle" (3W4V-1) 2×2
+                  SVGVisualElement "Circle" (3W4W-1) 2×2
+                  SVGVisualElement "Circle" (3W4X-1) 2×2
+                  SVGVisualElement "Path" (3W4Y-1) 4×4
+                Text "그래프" (3W4Z-1) 30×14 "그래프"
+              Text "전환 후" (3W50-1) 36×14 "전환 후"
+            Text "새 그래프 대화" (3W51-1) 309×18 "새 그래프 대화"
+            Frame "Empty Canvas" (3W52-1) 309×311
+              Text "무엇이 쌓였는지 지금 볼 수 있습니다" (3W53-1) 168×15 "무엇이 쌓였는지 지금 볼 수 있습니다"
+            Frame "Frame" (3W54-1) 309×15
+              Rectangle "Rectangle" (3W55-1) 7×7
+              Text "대화 0턴 · 방금 시작" (3W56-1) 92×15 "대화 0턴 · 방금 시작"
+      Frame "Failure Zone" (3VWY-1) 1148×216
+        Frame "Seal Failure" (3W5O-1) 712×171
+          Text "쓰기 지연·실패 — 사용자에게 무엇을…" (3W5P-1) 712×17 "쓰기 지연·실패 — 사용자에게 무엇을 말하는가 (작업은 언제도 잃지 않는다)"
+          Frame "Banners" (3W5Q-1) 712×144
+            Frame "Saving Banner" (3W72-1) 312×144
+              Frame "Frame" (3W73-1) 286×16
+                Frame "Frame" (3W74-1) 14×14
+                  SVG "SVG" (3W75-1) 14×14
+                    SVGVisualElement "Circle" (3W76-1) 10×10
+                    SVGVisualElement "Path" (3W77-1) 2×4
+                Text "마지막 변경분 쓰는 중 — 화면은 이…" (3W78-1) 259×16 "마지막 변경분 쓰는 중 — 화면은 이미 바뀌었습니다"
+              Text "백그라운드 쓰기. 사용자를 멈추게 하…" (3W79-1) 286×15 "백그라운드 쓰기. 사용자를 멈추게 하지 않습니다"
+            Frame "Fail Banner" (3W7A-1) 390×144
+              Frame "Frame" (3W7B-1) 364×16
+                Frame "Frame" (3W7C-1) 14×14
+                  SVG "SVG" (3W7D-1) 14×14
+                    SVGVisualElement "Path" (3W7E-1) 11×8
+                    SVGVisualElement "Path" (3W7F-1) 0×4
+                Text "디스크에 쓰지 못했습니다 — 재시도 …" (3W7G-1) 196×16 "디스크에 쓰지 못했습니다 — 재시도 중"
+              Text "작업은 메모리에 그대로 살아 있고 사…" (3W7H-1) 364×30 "작업은 메모리에 그대로 살아 있고 사라지지 않습니다. 쓰기가 성공할 때까지 재시도하고, 계속 실패하면 다른 "
+              Frame "Frame" (3W7I-1) 364×28
+                Frame "Frame" (3W7J-1) 100×26
+                  Text "다른 위치에 저장" (3W7K-1) 78×14 "다른 위치에 저장"
+                Frame "Frame" (3W7L-1) 54×28
+                  Text "자세히" (3W7M-1) 30×14 "자세히"
+        Frame "Supersedes 25" (3W5R-1) 380×171
+          Text "25번 보드를 대체합니다" (3W5S-1) 350×16 "25번 보드를 대체합니다"
+          Text "기존 규칙 ‘모드를 바꿔도 오른쪽 채…" (3W5T-1) 350×30 "기존 규칙 ‘모드를 바꿔도 오른쪽 채팅은 유지’는 더 이상 유효하지 않습니다. 모드가 대화의 경계입니다."
+          Frame "Frame" (3W5U-1) 350×15
+            Text "폐기" (3W5V-1) 20×14 "폐기"
+            Text "모드를 바꿔도 오른쪽 채팅은 유지" (3W5W-1) 155×15 "모드를 바꿔도 오른쪽 채팅은 유지"
+    Frame "Interaction Rail" (3VWR-1) 426×722
+      Frame "Rail Header" (3W80-1) 388×34
+        Text "모드를 넘으면 새 대화" (3W81-1) 151×21 "모드를 넘으면 새 대화"
+        Text "MODE SWITCH" (3W82-1) 77×14 "MODE SWITCH"
+      Frame "Rule 1" (3W8S-1) 388×133
+        Frame "Frame" (3W8T-1) 358×20
+          Frame "Frame" (3W8U-1) 20×20
+            Text "1" (3W8V-1) 6×12 "1"
+          Text "전환 순간 — 화면만 바뀐다" (3W8W-1) 150×16 "전환 순간 — 화면만 바뀐다"
+        Text "저장은 이미 되어 있습니다. 메시지는…" (3W8X-1) 358×75 "저장은 이미 되어 있습니다. 메시지는 발생 즉시, 폼·코드·필터는 바뀔 때마다 디바운스로 쓰고 있으니 모드를"
+      Frame "Rule 2" (3W8Y-1) 388×103
+        Frame "Frame" (3W8Z-1) 358×20
+          Frame "Frame" (3W90-1) 20×20
+            Text "2" (3W91-1) 6×12 "2"
+          Text "남는 것 — 대화가 아니라 작업 환경" (3W92-1) 194×16 "남는 것 — 대화가 아니라 작업 환경"
+        Text "메시지만 남기지 않습니다. 폼 값, …" (3W93-1) 358×45 "메시지만 남기지 않습니다. 폼 값, 사용자가 쓴 코드, 결과 카드, 실행 로그, 스크롤 위치까지 한 덩어리로"
+      Frame "Rule 3" (3W94-1) 388×103
+        Frame "Frame" (3W95-1) 358×20
+          Frame "Frame" (3W96-1) 20×20
+            Text "3" (3W97-1) 6×12 "3"
+          Text "되돌리기 — 실수는 한 번의 클릭으로" (3W98-1) 202×16 "되돌리기 — 실수는 한 번의 클릭으로"
+        Text "전환 직후 사이드바의 그 세션 행을 …" (3W99-1) 358×45 "전환 직후 사이드바의 그 세션 행을 누르면 41번 보드의 복원 계약대로 그대로 돌아옵니다. 별도 '돌아가기'"
+      Frame "Sequence" (3WAW-1) 388×84
+        Text "한 번의 클릭이 지나는 네 단계" (3WAX-1) 152×16 "한 번의 클릭이 지나는 네 단계"
+        Frame "Frame" (3WAY-1) 358×28
+          Frame "Frame" (3WAZ-1) 69×28
+            Text "모드 클릭" (3WB0-1) 44×14 "모드 클릭"
+          Text "›" (3WB1-1) 10×14 "›"
+          Frame "Frame" (3WB2-1) 69×28
+            Text "뒤에서 flush" (3WB3-1) 56×14 "뒤에서 flush"
+          Text "›" (3WB4-1) 10×14 "›"
+          Frame "Frame" (3WB5-1) 86×28
+            Text "사이드바 스피너" (3WB6-1) 74×14 "사이드바 스피너"
+          Text "›" (3WB7-1) 10×14 "›"
+          Frame "Frame" (3WB8-1) 69×28
+            Text "새 대화" (3WB9-1) 34×14 "새 대화"
+      Frame "Gap Note" (3W9M-1) 388×163
+        Frame "Frame" (3W9N-1) 358×16
+          Frame "Frame" (3W9O-1) 16×16
+            SVG "SVG" (3W9P-1) 16×16
+              SVGVisualElement "Circle" (3W9Q-1) 11×11
+              SVGVisualElement "Path" (3W9R-1) 0×6
+          Text "코드 현황 (2026-09-05)" (3W9S-1) 116×16 "코드 현황 (2026-09-05)"
+        Frame "Frame" (3W9T-1) 358×30
+          Text "01" (3W9U-1) 16×15 "01"
+          Text "대화 레코드는 mode를 가지고, 모…" (3W9V-1) 334×30 "대화 레코드는 mode를 가지고, 모드 전환은 그 프로젝트의 새 대화를 만듭니다 — 반영됨."
+        Frame "Frame" (3W9W-1) 358×30
+          Text "02" (3W9X-1) 16×15 "02"
+          Text "과거 대화 열기는 조용한 복원입니다 …" (3W9Y-1) 334×30 "과거 대화 열기는 조용한 복원입니다 — 배너 없이 메시지·모드 화면·커서가 돌아오고 입력은 열려 있습니다."
+        Frame "Frame" (3W9Z-1) 358×30
+          Text "03" (3WA0-1) 16×15 "03"
+          Text "활성 대화 전환 IPC는 요청한 id…" (3WA1-1) 334×30 "활성 대화 전환 IPC는 요청한 id로 기록 대상과 커서를 함께 바꿉니다 — 반영됨."

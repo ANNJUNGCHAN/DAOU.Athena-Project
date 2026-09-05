@@ -1,0 +1,9 @@
+Frame "note/CC-02 / R11 · 삼성전자 10주 시장가 매수" (48P9-0) 360×92
+  Frame "Frame" (48PA-0) 334×0
+    Text "원본 보드: CC-02 / R11 ·…" (48PB-0) 0×0 "원본 보드: CC-02 / R11 · 삼성전자 10주 시장가 매수"
+  Frame "Frame" (48PC-0) 334×0
+    Text "가져온 요소: 주문가능금액" (48PD-0) 0×0 "가져온 요소: 주문가능금액"
+  Frame "Frame" (48PE-0) 334×0
+    Text "문법: order_ticket" (48PF-0) 0×0 "문법: order_ticket"
+  Frame "Frame" (48PG-0) 334×0
+    Text "접은 개수: 항목 18개" (48PH-0) 0×0 "접은 개수: 항목 18개"

@@ -1,0 +1,2266 @@
+{
+ "board_id": "3OIM-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-01 / R10-B-X2 · 금현물 주문·체결",
+ "width": 1440,
+ "height": 926,
+ "texts": [
+  {
+   "id": "3ONJ-0",
+   "text": "내 계좌",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ONI-0",
+   "text": "실시간",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ONF-0",
+   "text": "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PCH-0",
+   "text": "자산 종합",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PCJ-0",
+   "text": "보유종목",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PCL-0",
+   "text": "예수금·결제",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PCN-0",
+   "text": "손익·성과",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PCP-0",
+   "text": "주문·체결",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PCR-0",
+   "text": "증거금·담보",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PCT-0",
+   "text": "금현물",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PCW-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Board State",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PCX-0",
+   "text": "금현물 잔고·거래내역",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Board State",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PCZ-0",
+   "text": "▾",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Board State",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PD0-0",
+   "text": "금현물 주문·체결",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Board State",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEC-0",
+   "text": "미체결",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PED-0",
+   "text": "10g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEE-0",
+   "text": "지정가 127,900원 · 1건",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEG-0",
+   "text": "당일 체결",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEH-0",
+   "text": "5g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEI-0",
+   "text": "시장가 128,400원 · 1건",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEK-0",
+   "text": "체결금액",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEL-0",
+   "text": "642,000원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEM-0",
+   "text": "수수료 1,284원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEO-0",
+   "text": "오늘 주문",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEP-0",
+   "text": "2건",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEQ-0",
+   "text": "미체결 1건 · 체결 1건",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PES-0",
+   "text": "금현물 예수금",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PET-0",
+   "text": "4,820,000원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3PEU-0",
+   "text": "출금가능 4,820,000원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SUM-0",
+   "text": "주문내역",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Section Title",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SUO-0",
+   "text": "KRX 금시장",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Section Title",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SUP-0",
+   "text": "3건 · 09/01 · 08/31",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Section Title"
+   ]
+  },
+  {
+   "id": "3SUR-0",
+   "text": "주문일 · 주문번호",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3SUS-0",
+   "text": "종목",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3SUT-0",
+   "text": "주문유형 · 구분",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3SUU-0",
+   "text": "수량",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3SUV-0",
+   "text": "주문가",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3SUW-0",
+   "text": "신용거래구분",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3SUX-0",
+   "text": "상태",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3SV0-0",
+   "text": "09/01",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SV1-0",
+   "text": "0000512",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SV3-0",
+   "text": "금 99.99K 1g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SV4-0",
+   "text": "04020000 · 금현물",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SV6-0",
+   "text": "지정가",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SV7-0",
+   "text": "매수",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SV9-0",
+   "text": "10g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVA-0",
+   "text": "확인수량 0g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVC-0",
+   "text": "127,900원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVD-0",
+   "text": "스톱가 0원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVF-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVG-0",
+   "text": "통신 HTS",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVI-0",
+   "text": "미체결",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000512 미체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVL-0",
+   "text": "09/01",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVM-0",
+   "text": "0000508",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVO-0",
+   "text": "금 99.99K 1g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVP-0",
+   "text": "04020000 · 금현물",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVR-0",
+   "text": "시장가",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVS-0",
+   "text": "매수",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVU-0",
+   "text": "5g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVV-0",
+   "text": "확인수량 5g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVX-0",
+   "text": "128,400원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SVY-0",
+   "text": "스톱가 0원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SW0-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SW1-0",
+   "text": "통신 HTS",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SW3-0",
+   "text": "체결",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SW4-0",
+   "text": "09:21:07",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 09/01 0000508 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SW7-0",
+   "text": "08/31",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SW8-0",
+   "text": "0000497",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWA-0",
+   "text": "금 99.99K 1g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWB-0",
+   "text": "04020000 · 금현물",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWD-0",
+   "text": "지정가",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWE-0",
+   "text": "매수",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWG-0",
+   "text": "20g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWH-0",
+   "text": "확인수량 20g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWJ-0",
+   "text": "124,500원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWK-0",
+   "text": "스톱가 0원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWM-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWN-0",
+   "text": "통신 HTS",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWP-0",
+   "text": "체결",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "Row 08/31 0000497 체결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UNY-0",
+   "text": "오늘 주문 합계",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UNZ-0",
+   "text": "09/01 09:42 기준 · 2건",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UO2-0",
+   "text": "미체결 잔량",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UO3-0",
+   "text": "10g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UO5-0",
+   "text": "체결 수량",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UO6-0",
+   "text": "5g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UO8-0",
+   "text": "체결금액",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UO9-0",
+   "text": "642,000원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UOB-0",
+   "text": "수수료",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UOC-0",
+   "text": "1,284원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UOE-0",
+   "text": "정산금액",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UOF-0",
+   "text": "643,284원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Gold Order Ledger",
+    "오늘 주문 합계 섹션",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWS-0",
+   "text": "미체결 주문 0000512",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512"
+   ]
+  },
+  {
+   "id": "3SWU-0",
+   "text": "원주문",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWV-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWX-0",
+   "text": "확인수량",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SWY-0",
+   "text": "0g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SX0-0",
+   "text": "스톱가",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SX1-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SX3-0",
+   "text": "정정취소",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SX4-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SX6-0",
+   "text": "예약 · 반대",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SX7-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SX9-0",
+   "text": "통신",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXA-0",
+   "text": "HTS",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 미체결 주문 0000512",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXC-0",
+   "text": "당일 체결 0000508",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508"
+   ]
+  },
+  {
+   "id": "3SXE-0",
+   "text": "체결가",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXF-0",
+   "text": "128,400원",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXH-0",
+   "text": "체결수량",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXI-0",
+   "text": "5g",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXK-0",
+   "text": "확인시간",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXL-0",
+   "text": "09:21:07",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXN-0",
+   "text": "대출일",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXO-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXQ-0",
+   "text": "통신",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXR-0",
+   "text": "HTS",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXT-0",
+   "text": "정정취소 · 반대",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SXU-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "금현물 주문 레일",
+    "Rail Block · 당일 체결 0000508",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OIT-0",
+   "text": "● 금현물 주문 실시간 반영 중",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Status Footer"
+   ]
+  },
+  {
+   "id": "3OIS-0",
+   "text": "영업부 · 담당자 미제공",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Status Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OIR-0",
+   "text": "금현물 주문 전체 내역 보기",
+   "path": [
+    "CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Account Root · 금현물 주문·체결",
+    "Account Card Surface",
+    "Account Status Footer",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3OIM-0",
+   "name": "CC-01 / R10-B-X2 · 금현물 주문·체결",
+   "component": "Frame",
+   "w": 1440,
+   "h": 926,
+   "depth": 0
+  },
+  {
+   "id": "3OIN-0",
+   "name": "Account Root · 금현물 주문·체결",
+   "component": "Frame",
+   "w": 1440,
+   "h": 926,
+   "depth": 1
+  },
+  {
+   "id": "3OIO-0",
+   "name": "Account Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 846,
+   "depth": 2
+  },
+  {
+   "id": "3OMU-0",
+   "name": "Account Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "3ONE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ONG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ONH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3PCE-0",
+   "name": "Header Right",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3PCF-0",
+   "name": "Tabs",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3PCG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3PCI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3PCK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3PCM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3PCO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3PCQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3PCS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3PCU-0",
+   "name": "Board State",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3PCV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3PCY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3PEA-0",
+   "name": "Account Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "3PEB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 340,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3PEF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 265,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3PEJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3PEN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3PER-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3SUI-0",
+   "name": "Account Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 560,
+   "depth": 3
+  },
+  {
+   "id": "3SUJ-0",
+   "name": "Gold Order Ledger",
+   "component": "Frame",
+   "w": 900,
+   "h": 560,
+   "depth": 4
+  },
+  {
+   "id": "3SUK-0",
+   "name": "Section Title",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SUL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SUN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SUQ-0",
+   "name": "Table Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3SUY-0",
+   "name": "Row 09/01 0000512 미체결",
+   "component": "Frame",
+   "w": 0,
+   "h": 72,
+   "depth": 5
+  },
+  {
+   "id": "3SUZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SV2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 170,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SV5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SV8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SVB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SVE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SVH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SVJ-0",
+   "name": "Row 09/01 0000508 체결",
+   "component": "Frame",
+   "w": 0,
+   "h": 72,
+   "depth": 5
+  },
+  {
+   "id": "3SVK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SVN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 170,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SVQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SVT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SVW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SVZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SW2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SW5-0",
+   "name": "Row 08/31 0000497 체결",
+   "component": "Frame",
+   "w": 0,
+   "h": 72,
+   "depth": 5
+  },
+  {
+   "id": "3SW6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SW9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 170,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SWC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SWF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SWI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SWL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3SWO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UNW-0",
+   "name": "오늘 주문 합계 섹션",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UNX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UO0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UO1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UO4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UO7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UOA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UOD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SWQ-0",
+   "name": "금현물 주문 레일",
+   "component": "Frame",
+   "w": 460,
+   "h": 560,
+   "depth": 4
+  },
+  {
+   "id": "3SWR-0",
+   "name": "Rail Block · 미체결 주문 0000512",
+   "component": "Frame",
+   "w": 408,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SWT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3SWW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3SWZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3SX2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3SX5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3SX8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3SXB-0",
+   "name": "Rail Block · 당일 체결 0000508",
+   "component": "Frame",
+   "w": 408,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SXD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3SXG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3SXJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3SXM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3SXP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3SXS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 25,
+   "depth": 6
+  },
+  {
+   "id": "3OIP-0",
+   "name": "Account Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "3OIQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "내 계좌": 1,
+  "실시간": 1,
+  "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18": 1,
+  "자산 종합": 1,
+  "보유종목": 1,
+  "예수금·결제": 1,
+  "손익·성과": 1,
+  "주문·체결": 1,
+  "증거금·담보": 1,
+  "금현물": 1,
+  "▸": 1,
+  "금현물 잔고·거래내역": 1,
+  "▾": 1,
+  "금현물 주문·체결": 1,
+  "미체결": 2,
+  "10g": 3,
+  "지정가 127,900원 · 1건": 1,
+  "당일 체결": 1,
+  "5g": 4,
+  "시장가 128,400원 · 1건": 1,
+  "체결금액": 2,
+  "642,000원": 2,
+  "수수료 1,284원": 1,
+  "오늘 주문": 1,
+  "2건": 1,
+  "미체결 1건 · 체결 1건": 1,
+  "금현물 예수금": 1,
+  "4,820,000원": 1,
+  "출금가능 4,820,000원": 1,
+  "주문내역": 1,
+  "KRX 금시장": 1,
+  "3건 · 09/01 · 08/31": 1,
+  "주문일 · 주문번호": 1,
+  "종목": 1,
+  "주문유형 · 구분": 1,
+  "수량": 1,
+  "주문가": 1,
+  "신용거래구분": 1,
+  "상태": 1,
+  "09/01": 2,
+  "0000512": 1,
+  "금 99.99K 1g": 3,
+  "04020000 · 금현물": 3,
+  "지정가": 2,
+  "매수": 3,
+  "확인수량 0g": 1,
+  "127,900원": 1,
+  "스톱가 0원": 3,
+  "현금": 3,
+  "통신 HTS": 3,
+  "0000508": 1,
+  "시장가": 1,
+  "확인수량 5g": 1,
+  "128,400원": 2,
+  "체결": 2,
+  "09:21:07": 2,
+  "08/31": 1,
+  "0000497": 1,
+  "20g": 1,
+  "확인수량 20g": 1,
+  "124,500원": 1,
+  "오늘 주문 합계": 1,
+  "09/01 09:42 기준 · 2건": 1,
+  "미체결 잔량": 1,
+  "체결 수량": 1,
+  "수수료": 1,
+  "1,284원": 1,
+  "정산금액": 1,
+  "643,284원": 1,
+  "미체결 주문 0000512": 1,
+  "원주문": 1,
+  "해당 없음": 5,
+  "확인수량": 1,
+  "0g": 1,
+  "스톱가": 1,
+  "0원": 1,
+  "정정취소": 1,
+  "예약 · 반대": 1,
+  "통신": 2,
+  "HTS": 2,
+  "당일 체결 0000508": 1,
+  "체결가": 1,
+  "체결수량": 1,
+  "확인시간": 1,
+  "대출일": 1,
+  "정정취소 · 반대": 1,
+  "● 금현물 주문 실시간 반영 중": 1,
+  "영업부 · 담당자 미제공": 1,
+  "금현물 주문 전체 내역 보기": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "62a7f25772ebcba273af9afff6acbf00f8cc8ad14a9792f99990e5072b99590b"
+}

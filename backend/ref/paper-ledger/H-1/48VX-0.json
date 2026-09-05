@@ -1,0 +1,92 @@
+{
+ "board_id": "48VX-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48VZ-0",
+   "text": "원본 보드: CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+   "path": [
+    "note/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48W1-0",
+   "text": "가져온 요소: 계좌번호 · 예탁자산평가액 · 수익률 · 주문가능금액 · 출금가능금액",
+   "path": [
+    "note/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48W3-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48W5-0",
+   "text": "접은 개수: 스칼라 2개 · 행 5개",
+   "path": [
+    "note/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48VX-0",
+   "name": "note/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48VY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48W0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48W2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48W4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률": 1,
+  "가져온 요소: 계좌번호 · 예탁자산평가액 · 수익률 · 주문가능금액 · 출금가능금액": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 5개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "13416384dedf23a43433dea971cc1aa4f00488347bc161bb2638ed045b9faefe"
+}

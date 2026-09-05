@@ -1,0 +1,128 @@
+Frame "08 · 백테스트 — 코드 플로우 지도" (2FR9-2) 1680×0
+  Frame "타이틀" (2FRA-2) 0×0
+    Text "백테스트 — 코드 플로우 지도 (초기…" (2FRB-2) 0×0 "백테스트 — 코드 플로우 지도 (초기 안 · 보드 11–14가 현행)"
+    Text "이 보드는 지도를 '코드를 설명하는 …" (2FRC-2) 0×0 "이 보드는 지도를 '코드를 설명하는 그림'으로 그린 초기 안입니다. 현행 위계는 반대입니다 — 지도가 전략의"
+  Frame "본문 행" (2FRE-2) 0×0
+    Frame "코드" (2FRF-2) 560×0
+      Frame "헤더" (2FRI-2) 0×0
+        Text "golden_cross.py" (2FRJ-2) 0×0 "golden_cross.py"
+        Text "4덩어리 · 23줄 · 이 파일 하나…" (2FRK-2) 0×0 "4덩어리 · 23줄 · 이 파일 하나면 돕니다"
+      Frame "블록1" (2FRL-2) 0×0
+        Rectangle "Rectangle" (2FRM-2) 3×0
+        Frame "Frame" (2FRN-2) 0×0
+          Frame "Frame" (2FRO-2) 0×0
+            Text "① 준비 — 무엇을 조절할지 정한다" (2FRP-2) 0×0 "① 준비 — 무엇을 조절할지 정한다"
+            Text "4–10줄" (2FRQ-2) 0×0 "4–10줄"
+          Text "import athena_bt as …" (2FRR-2) 0×0 "import athena_bt as bt
+
+PARAMS = {
+    "fast":     {"default""
+      Frame "블록1" (2FRT-2) 0×0
+        Rectangle "Rectangle" (2FRZ-2) 3×0
+        Frame "Frame" (2FRU-2) 0×0
+          Frame "Frame" (2FRW-2) 0×0
+            Text "② 지표 계산 — 가격을 숫자 세 줄…" (2FRY-2) 0×0 "② 지표 계산 — 가격을 숫자 세 줄로 바꾼다"
+            Text "12–15줄" (2FRX-2) 0×0 "12–15줄"
+          Text "def signals(df, p):
+…" (2FRV-2) 0×0 "def signals(df, p):
+    fast = bt.sma(df.close, p["fast"])
+ "
+      Frame "블록1" (2FS0-2) 0×0
+        Rectangle "Rectangle" (2FS6-2) 3×0
+        Frame "Frame" (2FS1-2) 0×0
+          Frame "Frame" (2FS3-2) 0×0
+            Text "③ 조건 만들기 — 언제 사고 언제 …" (2FS5-2) 0×0 "③ 조건 만들기 — 언제 사고 언제 파는가"
+            Text "17–21줄" (2FS4-2) 0×0 "17–21줄"
+          Text "    entry = bt.cross…" (2FS2-2) 0×0 "    entry = bt.cross_above(fast, slow)
+
+    stop = (df.close"
+      Frame "블록1" (2FS7-2) 0×0
+        Rectangle "Rectangle" (2FSD-2) 3×0
+        Frame "Frame" (2FS8-2) 0×0
+          Frame "Frame" (2FSA-2) 0×0
+            Text "④ 돌려주기 — 여기까지가 내 책임이…" (2FSC-2) 0×0 "④ 돌려주기 — 여기까지가 내 책임이다"
+            Text "23줄" (2FSB-2) 0×0 "23줄"
+          Text "    return df.assign…" (2FS9-2) 0×0 "    return df.assign(entry=entry, exit=exit_)[["entry", "exi"
+      Frame "단독 실행" (2FY3-2) 0×0
+        Text "이 파일 하나만 있으면 됩니다" (2FY4-2) 0×0 "이 파일 하나만 있으면 됩니다"
+        Text "전략은 파일 한 개 · 함수 한 개(…" (2FY5-2) 0×0 "전략은 파일 한 개 · 함수 한 개(signals)입니다. 클래스도, 폴더 구조도, 설정 파일도 없습니다. "
+        Frame "Frame" (2FY6-2) 0×0
+          Text "$ python golden_cros…" (2FY7-2) 0×0 "$ python golden_cross.py --self-check
+bars=2559  entry=41  e"
+    Frame "플로우 지도" (2FRG-2) 0×0
+      Frame "헤더" (2FSM-2) 0×0
+        Text "이 코드는 이렇게 흐릅니다" (2FSN-2) 0×0 "이 코드는 이렇게 흐릅니다"
+        Text "지난 실행(#41)의 실제 숫자입니다…" (2FSO-2) 0×0 "지난 실행(#41)의 실제 숫자입니다 — 예시가 아닙니다"
+      Frame "구역 라벨 앱" (2FSP-2) 0×0
+        Text "앱이 준비해서 건넵니다" (2FSQ-2) 0×0 "앱이 준비해서 건넵니다"
+        Rectangle "Rectangle" (2FSR-2) 0×1
+      Frame "노드 앱" (2FSS-2) 0×0
+        Frame "Frame" (2FST-2) 26×26
+          Text "앱" (2FSU-2) 0×0 "앱"
+        Frame "Frame" (2FSV-2) 0×0
+          Text "봉 데이터를 모읍니다" (2FSW-2) 0×0 "봉 데이터를 모읍니다"
+          Text "캐시에 있는 일봉을 날짜순으로 정리해…" (2FSX-2) 0×0 "캐시에 있는 일봉을 날짜순으로 정리해 표 하나로 만듭니다"
+        Text "df — 2,559행 × 5열 ope…" (2FSY-2) 230×0 "df — 2,559행 × 5열 open high low close volume"
+      Frame "구역 라벨 내코드" (2FT0-2) 0×0
+        Text "여기부터 내 코드 — golden_c…" (2FT1-2) 0×0 "여기부터 내 코드 — golden_cross.py"
+        Rectangle "Rectangle" (2FT2-2) 0×1
+      Frame "노드 내코드" (2FT3-2) 0×0
+        Frame "Frame" (2FT4-2) 26×26
+          Text "①" (2FT5-2) 0×0 "①"
+        Frame "Frame" (2FT6-2) 0×0
+          Text "조절할 값을 정합니다" (2FT7-2) 0×0 "조절할 값을 정합니다"
+          Text "PARAMS에 적은 이름이 설계 폼의…" (2FT8-2) 0×0 "PARAMS에 적은 이름이 설계 폼의 슬라이더가 되고, 최적화가 훑는 축이 됩니다"
+        Text "p — 3개 fast=20 slow=…" (2FT9-2) 230×0 "p — 3개 fast=20 slow=60 atr_mult=2.0"
+      Frame "노드 내코드" (2FTB-2) 0×0
+        Frame "Frame" (2FTG-2) 26×26
+          Text "②" (2FTH-2) 0×0 "②"
+        Frame "Frame" (2FTD-2) 0×0
+          Text "가격을 지표로 바꿉니다" (2FTF-2) 0×0 "가격을 지표로 바꿉니다"
+          Text "종가를 20봉·60봉 평균 내고, 변…" (2FTE-2) 0×0 "종가를 20봉·60봉 평균 내고, 변동폭(ATR)도 한 줄 만듭니다"
+        Text "fast · slow · atr — …" (2FTC-2) 230×0 "fast · slow · atr — 3열
+앞 60봉은 빈칸(워밍업)"
+      Frame "노드 내코드" (2FTI-2) 0×0
+        Frame "Frame" (2FTN-2) 26×26
+          Text "③" (2FTO-2) 0×0 "③"
+        Frame "Frame" (2FTK-2) 0×0
+          Text "사고·파는 순간을 찍습니다" (2FTM-2) 0×0 "사고·파는 순간을 찍습니다"
+          Text "fast가 slow를 위로 뚫은 날 …" (2FTL-2) 0×0 "fast가 slow를 위로 뚫은 날 ▶ 진입 · 아래로 뚫거나 손절선을 닿은 날 ▶ 청산"
+        Text "entry 41개 · exit 41개…" (2FTJ-2) 230×0 "entry 41개 · exit 41개
+같은 날 둘 다 True면 청산 우선"
+      Frame "노드 내코드" (2FTP-2) 0×0
+        Frame "Frame" (2FTU-2) 26×26
+          Text "④" (2FTV-2) 0×0 "④"
+        Frame "Frame" (2FTR-2) 0×0
+          Text "두 열만 돌려줍니다" (2FTT-2) 0×0 "두 열만 돌려줍니다"
+          Text "수익률을 코드가 직접 쓸 수 없게 하…" (2FTS-2) 0×0 "수익률을 코드가 직접 쓸 수 없게 하려고 반환값을 이 두 열로 제한합니다"
+        Text "entry · exit — 2열 불리…" (2FTQ-2) 230×0 "entry · exit — 2열 불리언
+NaN 없음 · 길이 2,559"
+      Frame "구역 라벨 앱2" (2FTW-2) 0×0
+        Text "여기부터 다시 앱 — 코드가 손댈 수…" (2FTX-2) 0×0 "여기부터 다시 앱 — 코드가 손댈 수 없는 구간"
+        Rectangle "Rectangle" (2FTY-2) 0×1
+      Frame "노드 앱" (2FU0-2) 0×0
+        Frame "Frame" (2FU5-2) 26×26
+          Text "앱" (2FU6-2) 0×0 "앱"
+        Frame "Frame" (2FU2-2) 0×0
+          Text "사고·파는 가격을 정합니다" (2FU4-2) 0×0 "사고·파는 가격을 정합니다"
+          Text "신호가 난 다음 봉의 시가로 체결합니…" (2FU3-2) 0×0 "신호가 난 다음 봉의 시가로 체결합니다 — 같은 봉 종가로 체결하면 미래를 본 것입니다"
+        Text "체결 41건
+상하한가·거래량 0봉 3…" (2FU1-2) 230×0 "체결 41건
+상하한가·거래량 0봉 3건 이월"
+      Frame "노드 앱" (2FU7-2) 0×0
+        Frame "Frame" (2FUC-2) 26×26
+          Text "앱" (2FUD-2) 0×0 "앱"
+        Frame "Frame" (2FU9-2) 0×0
+          Text "비용을 뗍니다" (2FUB-2) 0×0 "비용을 뗍니다"
+          Text "수수료·거래세·슬리피지를 뺀 다음 손…" (2FUA-2) 0×0 "수수료·거래세·슬리피지를 뺀 다음 손익을 씁니다"
+        Text "1.5bp · 매도 18.0bp · …" (2FU8-2) 230×0 "1.5bp · 매도 18.0bp · 5.0bp
+기본값일 뿐 사실 주장이 아닙니다"
+      Frame "노드 앱" (2FUE-2) 0×0
+        Frame "Frame" (2FUJ-2) 26×26
+          Text "앱" (2FUK-2) 0×0 "앱"
+        Frame "Frame" (2FUG-2) 0×0
+          Text "성과를 냅니다" (2FUI-2) 0×0 "성과를 냅니다"
+          Text "지표 6장·자산곡선·체결 표를 결과 …" (2FUH-2) 0×0 "지표 6장·자산곡선·체결 표를 결과 화면으로 보냅니다"
+        Text "총수익률 +184.2%
+Sharpe …" (2FUF-2) 230×0 "총수익률 +184.2%
+Sharpe 0.87 · MDD -27.9%"

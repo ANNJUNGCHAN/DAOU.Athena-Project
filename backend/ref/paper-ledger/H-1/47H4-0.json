@@ -1,0 +1,233 @@
+{
+ "board_id": "47H4-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47HR-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47HQ-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47HO-0",
+   "text": "등락률",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Header"
+   ]
+  },
+  {
+   "id": "47HM-0",
+   "text": "매도잔량",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47HL-0",
+   "text": "매도 8.2만",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47HJ-0",
+   "text": "매수잔량",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47HI-0",
+   "text": "매수 11.4만",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47HG-0",
+   "text": "등락률",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47HF-0",
+   "text": "+1.24%",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47HD-0",
+   "text": "현재거래량",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47HC-0",
+   "text": "1,420만주",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47HA-0",
+   "text": "체결강도",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47H9-0",
+   "text": "108.4%",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47H6-0",
+   "text": "외 84개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47H4-0",
+   "name": "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47HN-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47HP-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47H7-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47HK-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47HH-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47HE-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47HB-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47H8-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47H5-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "등락률": 2,
+  "매도잔량": 1,
+  "매도 8.2만": 1,
+  "매수잔량": 1,
+  "매수 11.4만": 1,
+  "+1.24%": 1,
+  "현재거래량": 1,
+  "1,420만주": 1,
+  "체결강도": 1,
+  "108.4%": 1,
+  "외 84개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "5f34d207bf64a5086bc0b051b853758a1e71c1bd827c20a7194b749d378fd4ee"
+}

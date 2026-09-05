@@ -1,0 +1,47 @@
+Frame "19 · 인증 — OAuth 토큰 ready" (1I0-0) 1680×900
+  Frame "Shell 창 · 온보딩 (#onboard)" (1I1-0) 1520×760
+    Frame "onb-col (800px)" (1IB-0) 800×734
+      Frame "onb-head" (1JJ-0) 800×134
+        Text "onb-kicker" (1JM-0) 716×16 "3 / 3"
+        Text "onb-title" (1JL-0) 716×34 "키움 인증이 연결되었습니다"
+        Text "onb-sub" (1JK-0) 716×22 "Athena는 토큰을 저장하지 않습니다. 만료 전에 자동으로 다시 받습니다."
+      Frame "onb-body · onb-auth-body" (1JN-0) 800×512
+        Frame "auth-timer-card" (1JO-0) 716×188
+          Text "auth-timer-label" (1JP-0) 658×18 "재발급까지 남은 시간"
+          Frame "auth-timer-row" (1JQ-0) 658×78
+            Text "auth-timer-digits" (1JR-0) 338×78 "05:42:18"
+            Text "auth-timer-units" (1JS-0) 52×20 "시 분 초"
+          Text "auth-timer-expiry" (1JT-0) 658×18 "2026-08-25 21:12:04 만료"
+        Frame "auth-status-rows" (1JU-0) 716×108
+          Frame "uk-lrow (클릭 → 계좌 전환)" (1JV-0) 716×36
+            Text "계좌" (1JW-0) 24×16 "계좌"
+            Text "모의-주력 · 등록됨" (1JX-0) 100×16 "모의-주력 · 등록됨"
+          Frame "uk-lrow" (1JY-0) 716×36
+            Text "자동 재발급" (1JZ-0) 65×16 "자동 재발급"
+            Text "남은 10분에" (1K0-0) 66×16 "남은 10분에"
+          Frame "uk-lrow" (1K1-0) 716×36
+            Text "확인 주기" (1K2-0) 53×16 "확인 주기"
+            Text "60초마다" (1K3-0) 50×16 "60초마다"
+        Text "onb-hint" (1K4-0) 716×18 "남은 시간이 10분 아래로 내려가면 자동으로 다시 받습니다. 직접 누를 필요는 없습니다."
+      Frame "onb-auth-foot" (1K6-0) 800×88
+        Frame "auth-status-left" (1K7-0) 91×20
+          Rectangle "Rectangle" (1K8-0) 7×7
+          Text "auth-status-label" (1K9-0) 75×20 "토큰 준비됨"
+        Frame "auth-btn-group" (1KA-0) 298×40
+          Frame "uk-btn-text" (1KB-0) 93×40
+            Text "연결 해제" (1KC-0) 53×16 "연결 해제"
+          Frame "uk-btn-ghost" (1KD-0) 101×40
+            Text "지금 재발급" (1KE-0) 59×14 "지금 재발급"
+          Frame "uk-btn-ghost · 계속" (1KF-0) 84×40
+            Text "계속" (1KG-0) 22×14 "계속"
+            SVG "SVG" (1KH-0) 12×10
+              SVGVisualElement "Path" (1KI-0) 10×7
+    Frame "타이틀바" (1IA-0) 1518×26
+    Frame "창 제어" (1I2-0) 94×24
+      Frame "Frame" (1I8-0) 30×24
+        Rectangle "Rectangle" (1I9-0) 9×2
+      Frame "Frame" (1I6-0) 30×24
+        Rectangle "Rectangle" (1I7-0) 8×8
+      Frame "Frame" (1I3-0) 30×24
+        SVG "SVG" (1I4-0) 10×10
+          SVGVisualElement "Path" (1I5-0) 9×9

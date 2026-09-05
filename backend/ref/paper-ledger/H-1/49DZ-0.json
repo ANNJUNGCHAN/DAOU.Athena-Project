@@ -1,0 +1,92 @@
+{
+ "board_id": "49DZ-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "49E1-0",
+   "text": "원본 보드: CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+   "path": [
+    "note/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49E3-0",
+   "text": "가져온 요소: 계좌번호 · 예탁자산평가액 · 수익률 · 주문가능금액 · 출금가능금액",
+   "path": [
+    "note/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49E5-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49E7-0",
+   "text": "접은 개수: 스칼라 2개 · 행 1개",
+   "path": [
+    "note/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "49DZ-0",
+   "name": "note/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "49E0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49E2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49E4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49E6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금": 1,
+  "가져온 요소: 계좌번호 · 예탁자산평가액 · 수익률 · 주문가능금액 · 출금가능금액": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 1개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "55f99da331b9820c0e6e0283f42a6ae50ee9cb5d10a612149e03ead20ec9c1a4"
+}

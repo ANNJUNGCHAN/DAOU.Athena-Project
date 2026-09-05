@@ -1,0 +1,196 @@
+Frame "DV-2 · 기업·가치 프로필 — 공식 39개 필드" (2DZE-0) 1440×900
+  Frame "DV-2 Root · valuation-profile 39/39 · workbench" (2F15-0) 1440×900
+    Frame "DV-2 Workbench Surface" (2F16-0) 1392×860
+      Frame "DV-2 Sticky Header" (2F17-0) 1390×64
+        Frame "DV-2 Identity Quote Strip · Chrome" (2F1F-0) 1390×64
+          Frame "Frame" (2F1G-0) 0×0
+            Text "삼성전자" (2F1H-0) 0×0 "삼성전자"
+            Text "005930 · KOSPI · 전기전…" (2F1I-0) 0×0 "005930 · KOSPI · 전기전자"
+          Frame "Frame" (2F1J-0) 0×0
+            Text "150,850원" (2F1K-0) 0×0 "150,850원"
+            Text "+2.35%" (2F1L-0) 0×0 "+2.35%"
+            Text "DESIGN FIXTURE · 12:…" (2F1M-0) 0×0 "DESIGN FIXTURE · 12:34"
+      Frame "DV-2 Category Tabs" (2F18-0) 1390×42
+        Frame "DV-2 User Tabs · Chrome" (2F1O-0) 1390×42
+          Frame "Frame" (2F1P-0) 0×30
+            Text "기업정보" (2F1Q-0) 0×0 "기업정보"
+          Frame "Frame" (2F1R-0) 0×30
+            Text "가치지표" (2F1S-0) 0×0 "가치지표"
+          Frame "Frame" (2F1T-0) 0×30
+            Text "재무" (2F1U-0) 0×0 "재무"
+          Frame "Frame" (2F1V-0) 0×30
+            Text "시장규모·보유" (2F1W-0) 0×0 "시장규모·보유"
+          Frame "Frame" (2F1X-0) 0×30
+            Text "가격범위" (2F1Y-0) 0×0 "가격범위"
+      Frame "DV-2 Context Toolbar" (2F19-0) 1390×48
+        Frame "DV-2 Context Controls · Chrome" (2F20-0) 1390×48
+          Frame "Frame" (2F21-0) 0×0
+            Frame "Frame" (2F22-0) 0×32
+              Text "기준" (2F23-0) 0×0 "기준"
+              Text "최근 결산 ▾" (2F24-0) 0×0 "최근 결산 ▾"
+            Frame "Frame" (2F25-0) 0×32
+              Text "표시" (2F26-0) 0×0 "표시"
+              Text "원 단위 ▾" (2F27-0) 0×0 "원 단위 ▾"
+          Text "기업·가치 공식 필드 39개" (2F28-0) 0×0 "기업·가치 공식 필드 39개"
+      Frame "DV-2 Workspace" (2F1A-0) 1390×642
+        Frame "DV-2 Company Facts" (2F1B-0) 914×642
+          Frame "DV-2 Company Facts Header · Chrome" (2F2E-0) 912×40
+            Text "기업·가치 공식 정보" (2F2F-0) 0×0 "기업·가치 공식 정보"
+            Text "23개 필드" (2F2G-0) 0×0 "23개 필드"
+          Frame "DV-2 Group · detail:ka10001:identity_and_capital · 6 exact" (2F2M-0) 912×0
+            Text "종목 식별·자본" (2F2N-0) 880×28 "종목 식별·자본"
+            Frame "Frame" (2F2O-0) 880×40
+              Frame "detail:ka10001:identity_and_capital|$.stk_cd|1" (2F2P-0) 0×40
+                Text "종목코드" (2F2Q-0) 0×0 "종목코드"
+                Text "005930" (2F2R-0) 0×0 "005930"
+              Frame "detail:ka10001:identity_and_capital|$.stk_nm|1" (2F2S-0) 0×40
+                Text "종목명" (2F2T-0) 0×0 "종목명"
+                Text "삼성전자" (2F2U-0) 0×0 "삼성전자"
+            Frame "Frame" (2F2V-0) 880×40
+              Frame "detail:ka10001:identity_and_capital|$.setl_mm|1" (2F2W-0) 0×40
+                Text "결산월" (2F2X-0) 0×0 "결산월"
+                Text "12월" (2F2Y-0) 0×0 "12월"
+              Frame "detail:ka10001:identity_and_capital|$.fav|1" (2F2Z-0) 0×40
+                Text "액면가" (2F30-0) 0×0 "액면가"
+                Text "150,850원" (2F31-0) 0×0 "150,850원"
+            Frame "Frame" (2F32-0) 880×40
+              Frame "detail:ka10001:identity_and_capital|$.cap|1" (2F33-0) 0×40
+                Text "자본금" (2F34-0) 0×0 "자본금"
+                Text "9,005,210억원" (2F35-0) 0×0 "9,005,210억원"
+              Frame "detail:ka10001:identity_and_capital|$.flo_stk|1" (2F36-0) 0×40
+                Text "상장주식" (2F37-0) 0×0 "상장주식"
+                Text "5,969,782주" (2F38-0) 0×0 "5,969,782주"
+          Frame "DV-2 Group · detail:ka10001:market_scale_and_ownership · 8 exact" (2F3A-0) 912×0
+            Text "시장 규모·보유" (2F3B-0) 880×28 "시장 규모·보유"
+            Frame "Frame" (2F3C-0) 880×40
+              Frame "detail:ka10001:market_scale_and_ownership|$.crd_rt|1" (2F3D-0) 0×40
+                Text "신용비율" (2F3E-0) 0×0 "신용비율"
+                Text "8.4%" (2F3F-0) 0×0 "8.4%"
+              Frame "detail:ka10001:market_scale_and_ownership|$.mac|1" (2F3G-0) 0×40
+                Text "시가총액" (2F3H-0) 0×0 "시가총액"
+                Text "9,005,210억원" (2F3I-0) 0×0 "9,005,210억원"
+            Frame "Frame" (2F3J-0) 880×40
+              Frame "detail:ka10001:market_scale_and_ownership|$.mac_wght|1" (2F3K-0) 0×40
+                Text "시가총액비중" (2F3L-0) 0×0 "시가총액비중"
+                Text "9,005,210억원" (2F3M-0) 0×0 "9,005,210억원"
+              Frame "detail:ka10001:market_scale_and_ownership|$.for_exh_rt|1" (2F3N-0) 0×40
+                Text "외인소진률" (2F3O-0) 0×0 "외인소진률"
+                Text "8.4%" (2F3P-0) 0×0 "8.4%"
+            Frame "Frame" (2F3Q-0) 880×40
+              Frame "detail:ka10001:market_scale_and_ownership|$.repl_pric|1" (2F3R-0) 0×40
+                Text "대용가" (2F3S-0) 0×0 "대용가"
+                Text "9,005,210억원" (2F3T-0) 0×0 "9,005,210억원"
+              Frame "detail:ka10001:market_scale_and_ownership|$.fav_unit|1" (2F3U-0) 0×40
+                Text "액면가단위" (2F3V-0) 0×0 "액면가단위"
+                Text "150,850" (2F3W-0) 0×0 "150,850"
+            Frame "Frame" (2F3X-0) 880×40
+              Frame "detail:ka10001:market_scale_and_ownership|$.dstr_stk|1" (2F3Y-0) 0×40
+                Text "유통주식" (2F3Z-0) 0×0 "유통주식"
+                Text "5,969,782주" (2F40-0) 0×0 "5,969,782주"
+              Frame "detail:ka10001:market_scale_and_ownership|$.dstr_rt|1" (2F41-0) 0×40
+                Text "유통비율" (2F42-0) 0×0 "유통비율"
+                Text "8.4%" (2F43-0) 0×0 "8.4%"
+          Frame "DV-2 Group · detail:ka10001:valuation · 6 exact" (2F45-0) 912×0
+            Text "가치지표" (2F46-0) 880×28 "가치지표"
+            Frame "Frame" (2F47-0) 880×40
+              Frame "detail:ka10001:valuation|$.per|1" (2F48-0) 0×40
+                Text "PER" (2F49-0) 0×0 "PER"
+                Text "18.6배" (2F4A-0) 0×0 "18.6배"
+              Frame "detail:ka10001:valuation|$.eps|1" (2F4B-0) 0×40
+                Text "EPS" (2F4C-0) 0×0 "EPS"
+                Text "8,110원" (2F4D-0) 0×0 "8,110원"
+            Frame "Frame" (2F4E-0) 880×40
+              Frame "detail:ka10001:valuation|$.roe|1" (2F4F-0) 0×40
+                Text "ROE" (2F4G-0) 0×0 "ROE"
+                Text "8.4%" (2F4H-0) 0×0 "8.4%"
+              Frame "detail:ka10001:valuation|$.pbr|1" (2F4I-0) 0×40
+                Text "PBR" (2F4J-0) 0×0 "PBR"
+                Text "18.6배" (2F4K-0) 0×0 "18.6배"
+            Frame "Frame" (2F4L-0) 880×40
+              Frame "detail:ka10001:valuation|$.ev|1" (2F4M-0) 0×40
+                Text "EV" (2F4N-0) 0×0 "EV"
+                Text "9,005,210억원" (2F4O-0) 0×0 "9,005,210억원"
+              Frame "detail:ka10001:valuation|$.bps|1" (2F4P-0) 0×40
+                Text "BPS" (2F4Q-0) 0×0 "BPS"
+                Text "8,110원" (2F4R-0) 0×0 "8,110원"
+          Frame "DV-2 Group · detail:ka10001:financial_performance · 3 exact" (2F4T-0) 912×0
+            Text "재무 실적" (2F4U-0) 880×28 "재무 실적"
+            Frame "Frame" (2F4V-0) 880×40
+              Frame "detail:ka10001:financial_performance|$.sale_amt|1" (2F4W-0) 0×40
+                Text "매출액" (2F4X-0) 0×0 "매출액"
+                Text "9,005,210억원" (2F4Y-0) 0×0 "9,005,210억원"
+              Frame "detail:ka10001:financial_performance|$.bus_pro|1" (2F4Z-0) 0×40
+                Text "영업이익" (2F50-0) 0×0 "영업이익"
+                Text "9,005,210억원" (2F51-0) 0×0 "9,005,210억원"
+            Frame "Frame" (2F52-0) 880×40
+              Frame "detail:ka10001:financial_performance|$.cup_nga|1" (2F53-0) 0×40
+                Text "당기순이익" (2F54-0) 0×0 "당기순이익"
+                Text "9,005,210억원" (2F55-0) 0×0 "9,005,210억원"
+        Frame "DV-2 Price Bands" (2F1C-0) 422×642
+          Frame "DV-2 Price Facts Header · Chrome" (2F2I-0) 421×40
+            Text "가격 범위" (2F2J-0) 0×0 "가격 범위"
+            Text "16개 필드" (2F2K-0) 0×0 "16개 필드"
+          Frame "DV-2 Group · detail:ka10001:price_range · 8 exact" (2F57-0) 421×0
+            Text "연중·250일 가격 범위" (2F58-0) 389×28 "연중·250일 가격 범위"
+            Frame "Frame" (2F59-0) 389×63
+              Frame "detail:ka10001:price_range|$.oyr_hgst|1" (2F5A-0) 0×63
+                Text "연중최고" (2F5B-0) 0×0 "연중최고"
+                Text "150,850" (2F5C-0) 0×0 "150,850"
+              Frame "detail:ka10001:price_range|$.oyr_lwst|1" (2F5D-0) 0×63
+                Text "연중최저" (2F5E-0) 0×0 "연중최저"
+                Text "150,850" (2F5F-0) 0×0 "150,850"
+            Frame "Frame" (2F5G-0) 389×63
+              Frame "detail:ka10001:price_range|$.250hgst|1" (2F5H-0) 0×63
+                Text "250최고" (2F5I-0) 0×0 "250최고"
+                Text "150,850" (2F5J-0) 0×0 "150,850"
+              Frame "detail:ka10001:price_range|$.250lwst|1" (2F5K-0) 0×63
+                Text "250최저" (2F5L-0) 0×0 "250최저"
+                Text "150,850" (2F5M-0) 0×0 "150,850"
+            Frame "Frame" (2F5N-0) 389×63
+              Frame "detail:ka10001:price_range|$.250hgst_pric_dt|1" (2F5O-0) 0×63
+                Text "250최고가일" (2F5P-0) 0×0 "250최고가일"
+                Text "2026-08-28" (2F5Q-0) 0×0 "2026-08-28"
+              Frame "detail:ka10001:price_range|$.250hgst_pric_pre_rt|1" (2F5R-0) 0×63
+                Text "250최고가대비율" (2F5S-0) 0×0 "250최고가대비율"
+                Text "8.4%" (2F5T-0) 0×0 "8.4%"
+            Frame "Frame" (2F5U-0) 389×63
+              Frame "detail:ka10001:price_range|$.250lwst_pric_dt|1" (2F5V-0) 0×63
+                Text "250최저가일" (2F5W-0) 0×0 "250최저가일"
+                Text "2026-08-28" (2F5X-0) 0×0 "2026-08-28"
+              Frame "detail:ka10001:price_range|$.250lwst_pric_pre_rt|1" (2F5Y-0) 0×63
+                Text "250최저가대비율" (2F5Z-0) 0×0 "250최저가대비율"
+                Text "8.4%" (2F60-0) 0×0 "8.4%"
+          Frame "DV-2 Group · detail:ka10001:daily_price_band · 8 exact" (2F62-0) 421×0
+            Text "당일 가격 범위·예상체결" (2F63-0) 389×28 "당일 가격 범위·예상체결"
+            Frame "Frame" (2F64-0) 389×63
+              Frame "detail:ka10001:daily_price_band|$.open_pric|1" (2F65-0) 0×63
+                Text "시가" (2F66-0) 0×0 "시가"
+                Text "150,850원" (2F67-0) 0×0 "150,850원"
+              Frame "detail:ka10001:daily_price_band|$.high_pric|1" (2F68-0) 0×63
+                Text "고가" (2F69-0) 0×0 "고가"
+                Text "150,850원" (2F6A-0) 0×0 "150,850원"
+            Frame "Frame" (2F6B-0) 389×63
+              Frame "detail:ka10001:daily_price_band|$.low_pric|1" (2F6C-0) 0×63
+                Text "저가" (2F6D-0) 0×0 "저가"
+                Text "150,850원" (2F6E-0) 0×0 "150,850원"
+              Frame "detail:ka10001:daily_price_band|$.upl_pric|1" (2F6F-0) 0×63
+                Text "상한가" (2F6G-0) 0×0 "상한가"
+                Text "150,850원" (2F6H-0) 0×0 "150,850원"
+            Frame "Frame" (2F6I-0) 389×63
+              Frame "detail:ka10001:daily_price_band|$.lst_pric|1" (2F6J-0) 0×63
+                Text "하한가" (2F6K-0) 0×0 "하한가"
+                Text "150,850원" (2F6L-0) 0×0 "150,850원"
+              Frame "detail:ka10001:daily_price_band|$.base_pric|1" (2F6M-0) 0×63
+                Text "기준가" (2F6N-0) 0×0 "기준가"
+                Text "150,850원" (2F6O-0) 0×0 "150,850원"
+            Frame "Frame" (2F6P-0) 389×63
+              Frame "detail:ka10001:daily_price_band|$.exp_cntr_pric|1" (2F6Q-0) 0×63
+                Text "예상체결가" (2F6R-0) 0×0 "예상체결가"
+                Text "150,850원" (2F6S-0) 0×0 "150,850원"
+              Frame "detail:ka10001:daily_price_band|$.exp_cntr_qty|1" (2F6T-0) 0×63
+                Text "예상체결수량" (2F6U-0) 0×0 "예상체결수량"
+                Text "5,969,782주" (2F6V-0) 0×0 "5,969,782주"
+      Frame "DV-2 Footer" (2F1D-0) 1390×36
+        Frame "DV-2 Footer Controls · Chrome" (2F2A-0) 1390×36
+          Text "그룹 제목과 구분선으로 탐색 · 필드…" (2F2B-0) 0×0 "그룹 제목과 구분선으로 탐색 · 필드별 독립 카드 없음"
+          Text "39 / 39 공식 필드 연결" (2F2C-0) 0×0 "39 / 39 공식 필드 연결"

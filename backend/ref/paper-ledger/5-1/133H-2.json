@@ -1,0 +1,3599 @@
+{
+ "board_id": "133H-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+ "width": 1440,
+ "height": 1032,
+ "texts": [
+  {
+   "id": "14TJ-2",
+   "text": "내 계좌",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14TL-2",
+   "text": "실시간",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14TM-2",
+   "text": "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14TP-2",
+   "text": "자산 종합",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14TR-2",
+   "text": "보유종목",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14TT-2",
+   "text": "예수금·결제",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14TV-2",
+   "text": "손익·성과",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14TX-2",
+   "text": "주문·체결",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14TZ-2",
+   "text": "증거금·담보",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14U1-2",
+   "text": "금현물",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14U5-2",
+   "text": "총자산",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14U6-2",
+   "text": "124,580,240원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14U7-2",
+   "text": "수익률 +4.96%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14U9-2",
+   "text": "주문가능금액",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14UA-2",
+   "text": "31,240,000원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14UB-2",
+   "text": "출금가능 28,940,000원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14UD-2",
+   "text": "주식 평가액",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14UE-2",
+   "text": "89,760,240원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14UF-2",
+   "text": "8종목",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14UH-2",
+   "text": "평가손익",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14UI-2",
+   "text": "+4,240,900원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14UJ-2",
+   "text": "매입 85,519,340원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14UL-2",
+   "text": "현금 비중",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14UM-2",
+   "text": "28.0%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14UN-2",
+   "text": "보유종목 8종",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFS-0",
+   "text": "보유종목",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings Table Heading",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFT-0",
+   "text": "8종목 · 평가액 순 · 09:42 기준",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings Table Heading",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFV-0",
+   "text": "종목",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings Table Heading",
+    "Column Header"
+   ]
+  },
+  {
+   "id": "3JFX-0",
+   "text": "수량",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings Table Heading",
+    "Column Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFZ-0",
+   "text": "평단",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings Table Heading",
+    "Column Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JG1-0",
+   "text": "현재가",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings Table Heading",
+    "Column Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JG3-0",
+   "text": "평가액",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings Table Heading",
+    "Column Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JG5-0",
+   "text": "손익",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings Table Heading",
+    "Column Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JG6-0",
+   "text": "비중",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings Table Heading",
+    "Column Header"
+   ]
+  },
+  {
+   "id": "3JL6-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JL8-0",
+   "text": "005930",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLA-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLC-0",
+   "text": "275",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLD-0",
+   "text": "가능 275",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLF-0",
+   "text": "138,344",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLG-0",
+   "text": "매입 38,044,600",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLI-0",
+   "text": "150,850",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLJ-0",
+   "text": "전일 149,000 · +1.24%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLL-0",
+   "text": "41,483,750",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLM-0",
+   "text": "비중 33.3%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLO-0",
+   "text": "+3,439,150",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLP-0",
+   "text": "+9.04%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLV-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLX-0",
+   "text": "000660",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JLZ-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JM1-0",
+   "text": "110",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JM2-0",
+   "text": "가능 110",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JM4-0",
+   "text": "192,300",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JM5-0",
+   "text": "매입 21,153,000",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JM7-0",
+   "text": "198,400",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JM8-0",
+   "text": "전일 194,410 · +2.05%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMA-0",
+   "text": "21,824,000",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMB-0",
+   "text": "비중 17.5%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMD-0",
+   "text": "+671,000",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JME-0",
+   "text": "+3.17%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMK-0",
+   "text": "KODEX 200",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMM-0",
+   "text": "069500",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMO-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMQ-0",
+   "text": "184",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMR-0",
+   "text": "가능 184",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMT-0",
+   "text": "48,655",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMU-0",
+   "text": "매입 8,952,520",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMW-0",
+   "text": "48,360",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMX-0",
+   "text": "전일 48,300 · +0.12%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JMZ-0",
+   "text": "8,898,240",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JN0-0",
+   "text": "비중 7.1%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JN2-0",
+   "text": "-54,280",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JN3-0",
+   "text": "-0.61%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JN9-0",
+   "text": "현대차",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNB-0",
+   "text": "005380",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JND-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNF-0",
+   "text": "25",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNG-0",
+   "text": "가능 25",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNI-0",
+   "text": "229,650",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNJ-0",
+   "text": "매입 5,741,250",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNL-0",
+   "text": "232,500",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNM-0",
+   "text": "전일 229,900 · +1.13%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNO-0",
+   "text": "5,812,500",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNP-0",
+   "text": "비중 4.7%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNR-0",
+   "text": "+71,250",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNS-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JNY-0",
+   "text": "NAVER",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JO0-0",
+   "text": "035420",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JO2-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JO4-0",
+   "text": "25",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JO5-0",
+   "text": "가능 25",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JO7-0",
+   "text": "209,760",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JO8-0",
+   "text": "매입 5,244,000",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOA-0",
+   "text": "214,000",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOB-0",
+   "text": "전일 209,700 · +2.05%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOD-0",
+   "text": "5,350,000",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOE-0",
+   "text": "비중 4.3%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOG-0",
+   "text": "+106,000",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOH-0",
+   "text": "+2.02%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JON-0",
+   "text": "삼성바이오로직스",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOP-0",
+   "text": "207940",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOR-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOT-0",
+   "text": "3",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOU-0",
+   "text": "가능 3",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOW-0",
+   "text": "1,036,540",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOX-0",
+   "text": "매입 3,109,620",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JOZ-0",
+   "text": "1,032,000",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JP0-0",
+   "text": "전일 1,036,000 · -0.39%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JP2-0",
+   "text": "3,096,000",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JP3-0",
+   "text": "비중 2.5%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JP5-0",
+   "text": "-13,620",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JP6-0",
+   "text": "-0.44%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPC-0",
+   "text": "카카오",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPE-0",
+   "text": "035720",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPG-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPI-0",
+   "text": "55",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPJ-0",
+   "text": "가능 55",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPL-0",
+   "text": "41,310",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPM-0",
+   "text": "매입 2,272,050",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPO-0",
+   "text": "41,850",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPP-0",
+   "text": "전일 41,300 · +1.33%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPR-0",
+   "text": "2,301,750",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPS-0",
+   "text": "비중 1.8%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPU-0",
+   "text": "+29,700",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JPV-0",
+   "text": "+1.31%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQ1-0",
+   "text": "기아",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQ3-0",
+   "text": "000270",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQ5-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQ7-0",
+   "text": "10",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQ8-0",
+   "text": "가능 10",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQA-0",
+   "text": "100,230",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQB-0",
+   "text": "매입 1,002,300",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQD-0",
+   "text": "99,400",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQE-0",
+   "text": "전일 100,100 · -0.70%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQG-0",
+   "text": "994,000",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQH-0",
+   "text": "비중 0.8%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQJ-0",
+   "text": "-8,300",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JQK-0",
+   "text": "-0.83%",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "Holdings List · 8행",
+    "raw|kt00004|stk_acnt_evlt_prst|기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VAH-1",
+   "text": "전체 8종목 표시",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings and Allocation",
+    "List Footer · Complete"
+   ]
+  },
+  {
+   "id": "14WM-2",
+   "text": "예수금·결제",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Settlement Forecast",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14WN-2",
+   "text": "오늘 기준",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Settlement Forecast",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14WP-2",
+   "text": "현재 예수금",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Settlement Forecast",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14WQ-2",
+   "text": "34,820,000원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Settlement Forecast",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14WS-2",
+   "text": "D+1 예상",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Settlement Forecast",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14WT-2",
+   "text": "33,184,400원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Settlement Forecast",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14WV-2",
+   "text": "D+2 예상",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Settlement Forecast",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14WW-2",
+   "text": "42,263,800원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Settlement Forecast",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14X0-2",
+   "text": "손익·비용",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Performance Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14X1-2",
+   "text": "오늘 기준",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Performance Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14X3-2",
+   "text": "실현손익",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Performance Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14X4-2",
+   "text": "+1,082,400원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Performance Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14X6-2",
+   "text": "평가손익",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Performance Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14X7-2",
+   "text": "+4,240,900원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Performance Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14X9-2",
+   "text": "거래수수료",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Performance Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14XA-2",
+   "text": "-24,600원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Performance Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14XE-2",
+   "text": "최근 주문",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Recent Orders",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14XF-2",
+   "text": "미체결 2건 · 최근 2건 표시",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Recent Orders",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14XI-2",
+   "text": "삼성전자 매수",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Recent Orders",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14XJ-2",
+   "text": "10주 · 시장가",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Recent Orders",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14XK-2",
+   "text": "접수",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Recent Orders",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14XN-2",
+   "text": "KODEX 200 매도",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Recent Orders",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14XO-2",
+   "text": "250주 · 48,360원",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Recent Orders",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14XP-2",
+   "text": "체결",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Workspace",
+    "Settlement and Performance",
+    "Recent Orders",
+    "Frame"
+   ]
+  },
+  {
+   "id": "14XS-2",
+   "text": "● 계좌·체결 실시간 반영 중",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Status Footer"
+   ]
+  },
+  {
+   "id": "338E-0",
+   "text": "영업부 · 담당자 미제공",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Status Footer",
+    "푸터 우측"
+   ]
+  },
+  {
+   "id": "338F-0",
+   "text": "계좌·결제 전체 항목 보기",
+   "path": [
+    "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Account Root · 자산 종합",
+    "Account Card Surface",
+    "Account Status Footer",
+    "푸터 우측"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "133H-2",
+   "name": "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1032,
+   "depth": 0
+  },
+  {
+   "id": "14TC-2",
+   "name": "Account Root · 자산 종합",
+   "component": "Frame",
+   "w": 1440,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "14TE-2",
+   "name": "Account Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "14TG-2",
+   "name": "Account Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "14TH-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "14TI-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14TK-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "14TN-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "14TO-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14TQ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14TS-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14TU-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14TW-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14TY-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14U0-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14U3-2",
+   "name": "Account Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "14U4-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 340,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "14U8-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 265,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "14UC-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "14UG-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "14UK-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "14UP-2",
+   "name": "Account Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "14UQ-2",
+   "name": "Holdings and Allocation",
+   "component": "Frame",
+   "w": 900,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3JFQ-0",
+   "name": "Holdings Table Heading",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3JFR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JFU-0",
+   "name": "Column Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "3JFW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JFY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JG0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JG2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JG4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JL3-0",
+   "name": "Holdings List · 8행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3JL4-0",
+   "name": "raw|kt00004|stk_acnt_evlt_prst|삼성전자",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "3JL5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 146,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JL7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JL9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3JLB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JLE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JLH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JLK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JLN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JLQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JLR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 74,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3JLS-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 74,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3JLT-0",
+   "name": "raw|kt00004|stk_acnt_evlt_prst|SK하이닉스",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "3JLU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 146,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JLW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JLY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3JM0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JM3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JM6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JM9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JMC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JMF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JMG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 74,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3JMH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 39,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3JMI-0",
+   "name": "raw|kt00004|stk_acnt_evlt_prst|KODEX 200",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "3JMJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 146,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JML-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JMN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3JMP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JMS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JMV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JMY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JN1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JN4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JN5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 74,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3JN6-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3JN7-0",
+   "name": "raw|kt00004|stk_acnt_evlt_prst|현대차",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "3JN8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 146,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JNA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JNC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3JNE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JNH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JNK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JNN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JNQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JNT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JNU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 74,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3JNV-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 10,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3JNW-0",
+   "name": "raw|kt00004|stk_acnt_evlt_prst|NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "3JNX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 146,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JNZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JO1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3JO3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JO6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JO9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JOC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JOF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JOI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JOJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 74,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3JOK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 10,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3JOL-0",
+   "name": "raw|kt00004|stk_acnt_evlt_prst|삼성바이오로직스",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "3JOM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 146,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JOO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JOQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3JOS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JOV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JOY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JP1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JP4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JP7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JP8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 74,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3JP9-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3JPA-0",
+   "name": "raw|kt00004|stk_acnt_evlt_prst|카카오",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "3JPB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 146,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JPD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JPF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3JPH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JPK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JPN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JPQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JPT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JPW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JPX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 74,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3JPY-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3JPZ-0",
+   "name": "raw|kt00004|stk_acnt_evlt_prst|기아",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "3JQ0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 146,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JQ2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JQ4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3JQ6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JQ9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JQC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JQF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JQI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JQL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JQM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 74,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3JQN-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 2,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "1VAG-1",
+   "name": "List Footer · Complete",
+   "component": "Frame",
+   "w": 843,
+   "h": 38,
+   "depth": 5
+  },
+  {
+   "id": "14UR-2",
+   "name": "Settlement and Performance",
+   "component": "Frame",
+   "w": 460,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "14WK-2",
+   "name": "Settlement Forecast",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14WL-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "14WO-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "14WR-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "14WU-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "14WY-2",
+   "name": "Performance Summary",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14WZ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "14X2-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "14X5-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "14X8-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "14XC-2",
+   "name": "Recent Orders",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "14XD-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "14XG-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 6
+  },
+  {
+   "id": "14XH-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14XL-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 6
+  },
+  {
+   "id": "14XM-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "14XR-2",
+   "name": "Account Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "338D-0",
+   "name": "푸터 우측",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "내 계좌": 1,
+  "실시간": 1,
+  "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18": 1,
+  "자산 종합": 1,
+  "보유종목": 2,
+  "예수금·결제": 2,
+  "손익·성과": 1,
+  "주문·체결": 1,
+  "증거금·담보": 1,
+  "금현물": 1,
+  "총자산": 1,
+  "124,580,240원": 1,
+  "수익률 +4.96%": 1,
+  "주문가능금액": 1,
+  "31,240,000원": 1,
+  "출금가능 28,940,000원": 1,
+  "주식 평가액": 1,
+  "89,760,240원": 1,
+  "8종목": 1,
+  "평가손익": 2,
+  "+4,240,900원": 2,
+  "매입 85,519,340원": 1,
+  "현금 비중": 1,
+  "28.0%": 1,
+  "보유종목 8종": 1,
+  "8종목 · 평가액 순 · 09:42 기준": 1,
+  "종목": 1,
+  "수량": 1,
+  "평단": 1,
+  "현재가": 1,
+  "평가액": 1,
+  "손익": 1,
+  "비중": 1,
+  "삼성전자": 1,
+  "005930": 1,
+  "현금": 8,
+  "275": 1,
+  "가능 275": 1,
+  "138,344": 1,
+  "매입 38,044,600": 1,
+  "150,850": 1,
+  "전일 149,000 · +1.24%": 1,
+  "41,483,750": 1,
+  "비중 33.3%": 1,
+  "+3,439,150": 1,
+  "+9.04%": 1,
+  "SK하이닉스": 1,
+  "000660": 1,
+  "110": 1,
+  "가능 110": 1,
+  "192,300": 1,
+  "매입 21,153,000": 1,
+  "198,400": 1,
+  "전일 194,410 · +2.05%": 1,
+  "21,824,000": 1,
+  "비중 17.5%": 1,
+  "+671,000": 1,
+  "+3.17%": 1,
+  "KODEX 200": 1,
+  "069500": 1,
+  "184": 1,
+  "가능 184": 1,
+  "48,655": 1,
+  "매입 8,952,520": 1,
+  "48,360": 1,
+  "전일 48,300 · +0.12%": 1,
+  "8,898,240": 1,
+  "비중 7.1%": 1,
+  "-54,280": 1,
+  "-0.61%": 1,
+  "현대차": 1,
+  "005380": 1,
+  "25": 2,
+  "가능 25": 2,
+  "229,650": 1,
+  "매입 5,741,250": 1,
+  "232,500": 1,
+  "전일 229,900 · +1.13%": 1,
+  "5,812,500": 1,
+  "비중 4.7%": 1,
+  "+71,250": 1,
+  "+1.24%": 1,
+  "NAVER": 1,
+  "035420": 1,
+  "209,760": 1,
+  "매입 5,244,000": 1,
+  "214,000": 1,
+  "전일 209,700 · +2.05%": 1,
+  "5,350,000": 1,
+  "비중 4.3%": 1,
+  "+106,000": 1,
+  "+2.02%": 1,
+  "삼성바이오로직스": 1,
+  "207940": 1,
+  "3": 1,
+  "가능 3": 1,
+  "1,036,540": 1,
+  "매입 3,109,620": 1,
+  "1,032,000": 1,
+  "전일 1,036,000 · -0.39%": 1,
+  "3,096,000": 1,
+  "비중 2.5%": 1,
+  "-13,620": 1,
+  "-0.44%": 1,
+  "카카오": 1,
+  "035720": 1,
+  "55": 1,
+  "가능 55": 1,
+  "41,310": 1,
+  "매입 2,272,050": 1,
+  "41,850": 1,
+  "전일 41,300 · +1.33%": 1,
+  "2,301,750": 1,
+  "비중 1.8%": 1,
+  "+29,700": 1,
+  "+1.31%": 1,
+  "기아": 1,
+  "000270": 1,
+  "10": 1,
+  "가능 10": 1,
+  "100,230": 1,
+  "매입 1,002,300": 1,
+  "99,400": 1,
+  "전일 100,100 · -0.70%": 1,
+  "994,000": 1,
+  "비중 0.8%": 1,
+  "-8,300": 1,
+  "-0.83%": 1,
+  "전체 8종목 표시": 1,
+  "오늘 기준": 2,
+  "현재 예수금": 1,
+  "34,820,000원": 1,
+  "D+1 예상": 1,
+  "33,184,400원": 1,
+  "D+2 예상": 1,
+  "42,263,800원": 1,
+  "손익·비용": 1,
+  "실현손익": 1,
+  "+1,082,400원": 1,
+  "거래수수료": 1,
+  "-24,600원": 1,
+  "최근 주문": 1,
+  "미체결 2건 · 최근 2건 표시": 1,
+  "삼성전자 매수": 1,
+  "10주 · 시장가": 1,
+  "접수": 1,
+  "KODEX 200 매도": 1,
+  "250주 · 48,360원": 1,
+  "체결": 1,
+  "● 계좌·체결 실시간 반영 중": 1,
+  "영업부 · 담당자 미제공": 1,
+  "계좌·결제 전체 항목 보기": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "404288566049558e0009416be6a895e8fd549ad8a542269c528f0516fee4a79c"
+}

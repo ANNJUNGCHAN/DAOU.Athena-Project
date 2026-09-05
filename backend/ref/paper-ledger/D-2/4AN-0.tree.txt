@@ -1,0 +1,266 @@
+Frame "02 · 셸 — 그래프 요약 · 행 선택" (4AN-0) 1680×900
+  Frame "셸 창" (4AO-0) 0×0
+    Frame "사이드바" (3VG5-1) 268×0
+      Frame "이력 상단" (3VH0-1) 0×0
+        Frame "Frame" (3VH4-1) 0×0
+          Text "+" (3VH6-1) 0×0 "+"
+          Text "새 대화" (3VH5-1) 0×0 "새 대화"
+        Frame "Frame" (3VH1-1) 0×0
+          Text "⌕" (3VH3-1) 0×0 "⌕"
+          Text "대화 검색" (3VH2-1) 0×0 "대화 검색"
+      Frame "이력 목록" (3VGC-1) 0×0
+        Frame "Frame" (3VGY-1) 0×0
+          Text "오늘" (3VGZ-1) 0×0 "오늘"
+        Frame "Frame" (3VGV-1) 0×0
+          Text "삼성전자 흐름·재무 같이 보기" (3VGX-1) 0×0 "삼성전자 흐름·재무 같이 보기"
+          Rectangle "Rectangle" (3VGW-1) 5×5
+        Frame "Frame" (3VGT-1) 0×0
+          Text "88,000 넘으면 알려줘" (3VGU-1) 0×0 "88,000 넘으면 알려줘"
+        Frame "Frame" (3VGR-1) 0×0
+          Text "코스피 프로그램 매매 동향" (3VGS-1) 0×0 "코스피 프로그램 매매 동향"
+        Frame "Frame" (3VGP-1) 0×0
+          Text "어제" (3VGQ-1) 0×0 "어제"
+        Frame "Frame" (3VGN-1) 0×0
+          Text "SK하이닉스 유상증자 공시 읽기" (3VGO-1) 0×0 "SK하이닉스 유상증자 공시 읽기"
+        Frame "Frame" (3VGL-1) 0×0
+          Text "모의 계좌 잔고 정리" (3VGM-1) 0×0 "모의 계좌 잔고 정리"
+        Frame "Frame" (3VGJ-1) 0×0
+          Text "지난 7일" (3VGK-1) 0×0 "지난 7일"
+        Frame "Frame" (3VGH-1) 0×0
+          Text "반도체 ETF 비교" (3VGI-1) 0×0 "반도체 ETF 비교"
+        Frame "Frame" (3VGF-1) 0×0
+          Text "현대차 실적 발표 일정" (3VGG-1) 0×0 "현대차 실적 발표 일정"
+        Frame "Frame" (3VGD-1) 0×0
+          Text "더 보기" (3VGE-1) 0×0 "더 보기"
+      Frame "계정 행 — 설정 진입" (3VG6-1) 0×0
+        Rectangle "Rectangle" (3VGB-1) 5×5
+        Frame "Frame" (3VG8-1) 0×0
+          Text "모의–주력" (3VGA-1) 0×0 "모의–주력"
+          Text "토큰 5시간 42분 남음" (3VG9-1) 0×0 "토큰 5시간 42분 남음"
+        Text "⌃" (3VG7-1) 0×0 "⌃"
+    Frame "캔버스 — 요약 뷰 + 선택" (4BR-0) 0×0
+      Frame "표 영역" (4BS-0) 0×0
+        Frame "요약 헤더" (4CV-0) 0×0
+          Frame "뷰 토글" (4CW-0) 0×0
+            Frame "Frame" (4CX-0) 0×0
+              Text "요약" (4CY-0) 0×0 "요약"
+            Frame "Frame" (4CZ-0) 0×0
+              Text "그래프" (4D0-0) 0×0 "그래프"
+            Frame "수집·노출" (3VHA-1) 0×0
+              Text "수집·노출" (3VHB-1) 0×0 "수집·노출"
+          Frame "Frame" (4D1-0) 0×0
+            Frame "Frame" (4D2-0) 0×0
+              Text "최근 90일" (4D3-0) 0×0 "최근 90일"
+            Frame "Frame" (4D4-0) 0×0
+              Text "보강 순" (4D5-0) 0×0 "보강 순"
+        Frame "히어로 축약" (4D6-0) 0×0
+          Frame "Frame" (4D7-0) 0×0
+            Text "지금 읽히는 성향" (4D8-0) 0×0 "지금 읽히는 성향"
+            Text "반도체 대형주 중심, 배당으로 방어" (4D9-0) 0×0 "반도체 대형주 중심, 배당으로 방어"
+          Frame "Frame" (4DA-0) 0×0
+            Frame "Frame" (4DB-0) 44×0
+              Text "34%" (4DC-0) 0×0 "34%"
+              Text "사실" (4DD-0) 0×0 "사실"
+            Frame "Frame" (4DE-0) 44×0
+              Text "58%" (4DF-0) 0×0 "58%"
+              Text "추론" (4DG-0) 0×0 "추론"
+            Frame "Frame" (4DH-0) 44×0
+              Text "8%" (4DI-0) 0×0 "8%"
+              Text "불확실" (4DJ-0) 0×0 "불확실"
+        Frame "성향 신호 섹션" (4DL-0) 0×0
+          Frame "Frame" (4DM-0) 0×0
+            Frame "Frame" (4DN-0) 0×0
+              Text "성향 신호" (4DO-0) 0×0 "성향 신호"
+              Text "상위 5" (4DP-0) 0×0 "상위 5"
+            Text "전체 312개" (4DQ-0) 0×0 "전체 312개"
+          Frame "열 머리" (4DR-0) 0×0
+            Rectangle "Rectangle" (4DS-0) 16×0
+            Text "대상" (4DT-0) 126×0 "대상"
+            Text "관계" (4DU-0) 60×0 "관계"
+            Text "근거" (4DV-0) 0×0 "근거"
+            Text "보강" (4DW-0) 36×0 "보강"
+          Frame "행 삼성전자" (4DY-0) 0×0
+            Frame "Frame" (4DZ-0) 16×0
+              Rectangle "Rectangle" (4E0-0) 7×7
+            Frame "Frame" (4E1-0) 126×0
+              Text "삼성전자" (4E2-0) 0×0 "삼성전자"
+              Text "005930" (4E3-0) 0×0 "005930"
+            Frame "Frame" (4E4-0) 60×0
+              Frame "Frame" (4E5-0) 0×0
+                Text "보유" (4E6-0) 0×0 "보유"
+            Text "체결 4건 · 평균 71,200원" (4E7-0) 0×0 "체결 4건 · 평균 71,200원"
+            Text "12" (4E8-0) 36×0 "12"
+          Frame "행 고배당주" (4E9-0) 0×0
+            Frame "Frame" (4EA-0) 16×0
+              Rectangle "Rectangle" (4EB-0) 7×7
+            Frame "Frame" (4EC-0) 126×0
+              Text "고배당주" (4ED-0) 0×0 "고배당주"
+              Text "테마" (4EE-0) 0×0 "테마"
+            Frame "Frame" (4EF-0) 60×0
+              Frame "Frame" (4EG-0) 0×0
+                Text "선호" (4EH-0) 0×0 "선호"
+            Text "“현금흐름은 나와야 편하다”" (4EI-0) 0×0 "“현금흐름은 나와야 편하다”"
+            Text "8" (4EJ-0) 36×0 "8"
+          Frame "행 하이닉스" (4EK-0) 0×0
+            Frame "Frame" (4EL-0) 16×0
+              Rectangle "Rectangle" (4EM-0) 7×7
+            Frame "Frame" (4EN-0) 126×0
+              Text "SK하이닉스" (4EO-0) 0×0 "SK하이닉스"
+              Text "000660" (4EP-0) 0×0 "000660"
+            Frame "Frame" (4EQ-0) 60×0
+              Frame "Frame" (4ER-0) 0×0
+                Text "관심" (4ES-0) 0×0 "관심"
+            Text "HBM 질문 6개 대화 반복" (4ET-0) 0×0 "HBM 질문 6개 대화 반복"
+            Text "6" (4EU-0) 36×0 "6"
+          Frame "행 단기회전 — 선택됨" (4EW-0) 0×0
+            Frame "Frame" (4EX-0) 16×0
+              Rectangle "Rectangle" (4EY-0) 7×7
+            Frame "Frame" (4EZ-0) 126×0
+              Text "단기 회전" (4F0-0) 0×0 "단기 회전"
+              Text "성향" (4F1-0) 0×0 "성향"
+            Frame "Frame" (4F2-0) 60×0
+              Frame "Frame" (4F3-0) 0×0
+                Text "매매" (4F4-0) 0×0 "매매"
+            Text "평균 보유 3.2일 — 말은 “장기”" (4F5-0) 0×0 "평균 보유 3.2일 — 말은 “장기”"
+            Text "21" (4F6-0) 36×0 "21"
+          Frame "행 2차전지" (4F7-0) 0×0
+            Frame "Frame" (4F8-0) 16×0
+              Rectangle "Rectangle" (4F9-0) 7×7
+            Frame "Frame" (4FA-0) 126×0
+              Text "2차전지" (4FB-0) 0×0 "2차전지"
+              Text "테마" (4FC-0) 0×0 "테마"
+            Frame "Frame" (4FD-0) 60×0
+              Frame "Frame" (4FE-0) 0×0
+                Text "회피" (4FF-0) 0×0 "회피"
+            Text "3주 전 “이제 별로”가 한 번" (4FG-0) 0×0 "3주 전 “이제 별로”가 한 번"
+            Text "1" (4FH-0) 36×0 "1"
+        Frame "테마 군집 가로" (4GZ-0) 0×0
+          Frame "Frame" (4H0-0) 0×0
+            Text "테마 군집" (4H1-0) 0×0 "테마 군집"
+            Text "7개 중 3개" (4H2-0) 0×0 "7개 중 3개"
+          Frame "Frame" (4H3-0) 0×0
+            Frame "Frame" (4H4-0) 0×0
+              Text "반도체 대형주" (4H5-0) 0×0 "반도체 대형주"
+              Frame "Frame" (4H6-0) 0×0
+                Frame "Frame" (4H7-0) 0×3
+                  Rectangle "Rectangle" (4H8-0) 0×3
+                Text "9" (4H9-0) 0×0 "9"
+            Frame "Frame" (4HA-0) 0×0
+              Text "배당 방어 바스켓" (4HB-0) 0×0 "배당 방어 바스켓"
+              Frame "Frame" (4HC-0) 0×0
+                Frame "Frame" (4HD-0) 0×3
+                  Rectangle "Rectangle" (4HE-0) 0×3
+                Text "6" (4HF-0) 0×0 "6"
+            Frame "Frame" (4HG-0) 0×0
+              Text "이름 없는 군집" (4HH-0) 0×0 "이름 없는 군집"
+              Frame "Frame" (4HI-0) 0×0
+                Frame "Frame" (4HJ-0) 0×3
+                  Rectangle "Rectangle" (4HK-0) 0×3
+                Text "4" (4HL-0) 0×0 "4"
+        Frame "숨은 연관" (4HN-0) 0×0
+          Frame "Frame" (4HO-0) 0×0
+            Text "숨은 연관" (4HP-0) 0×0 "숨은 연관"
+            Text "본인이 말한 적 없는 연결" (4HQ-0) 0×0 "본인이 말한 적 없는 연결"
+          Frame "Frame" (4HR-0) 0×0
+            Text "한미반도체" (4HS-0) 0×0 "한미반도체"
+            Text "↔" (4HT-0) 0×0 "↔"
+            Text "배당 방어 바스켓" (4HU-0) 0×0 "배당 방어 바스켓"
+            Text "두 군집을 잇는 유일한 연결" (4HV-0) 0×0 "두 군집을 잇는 유일한 연결"
+            Text "8.5" (4HW-0) 0×0 "8.5"
+          Frame "Frame" (4HX-0) 0×0
+            Text "금리 인하" (4HY-0) 0×0 "금리 인하"
+            Text "↔" (4HZ-0) 0×0 "↔"
+            Text "한국항공우주" (4I0-0) 0×0 "한국항공우주"
+            Text "타입 교차 · 군집 교차" (4I1-0) 0×0 "타입 교차 · 군집 교차"
+            Text "6.0" (4I2-0) 0×0 "6.0"
+          Frame "Frame" (4I3-0) 0×0
+            Text "원/달러 환율" (4I4-0) 0×0 "원/달러 환율"
+            Text "↔" (4I5-0) 0×0 "↔"
+            Text "SK하이닉스" (4I6-0) 0×0 "SK하이닉스"
+            Text "3개 대화에서 나란히 등장" (4I7-0) 0×0 "3개 대화에서 나란히 등장"
+            Text "5.5" (4I8-0) 0×0 "5.5"
+      Frame "공통 패널" (4BT-0) 320×0
+        Frame "패널 탭" (4FJ-0) 0×0
+          Frame "Frame" (4FK-0) 0×0
+            Text "성향" (4FL-0) 0×0 "성향"
+          Frame "Frame" (4FM-0) 0×0
+            Text "이력" (4FN-0) 0×0 "이력"
+          Rectangle "Rectangle" (4FO-0) 0×0
+          Text "선택 해제" (4FP-0) 0×0 "선택 해제"
+        Frame "선택 헤더" (4FQ-0) 0×0
+          Frame "Frame" (4FR-0) 0×0
+            Rectangle "Rectangle" (4FS-0) 10×10
+            Text "단기 회전" (4FT-0) 0×0 "단기 회전"
+            Frame "Frame" (4FU-0) 0×0
+              Text "성향" (4FV-0) 0×0 "성향"
+          Text "보강 21회로 그래프에서 가장 강한 …" (4FW-0) 0×0 "보강 21회로 그래프에서 가장 강한 신호 · 최근 1일 전"
+        Frame "티어 대조" (4FX-0) 0×0
+          Frame "Frame" (4FY-0) 0×0
+            Text "두 출처가 다르게 말합니다" (4FZ-0) 0×0 "두 출처가 다르게 말합니다"
+          Frame "Frame" (4G0-0) 0×0
+            Frame "Frame" (4G1-0) 0×0
+              Rectangle "Rectangle" (4G2-0) 6×6
+              Text "체결 · 잔고" (4G3-0) 0×0 "체결 · 잔고"
+              Frame "Frame" (4G4-0) 0×0
+                Text "사실" (4G5-0) 0×0 "사실"
+            Text "체결 21건 · 평균 보유 3.2일 …" (4G6-0) 0×0 "체결 21건 · 평균 보유 3.2일 · 최장 9일"
+          Frame "Frame" (4G7-0) 0×0
+            Text "↕ 어긋남" (4G8-0) 0×0 "↕ 어긋남"
+          Frame "Frame" (4G9-0) 0×0
+            Frame "Frame" (4GA-0) 0×0
+              Rectangle "Rectangle" (4GB-0) 6×6
+              Text "대화" (4GC-0) 0×0 "대화"
+              Frame "Frame" (4GD-0) 0×0
+                Text "추론" (4GE-0) 0×0 "추론"
+            Text "5개 대화에서 “장기로 간다” · 최…" (4GF-0) 0×0 "5개 대화에서 “장기로 간다” · 최근 08-21"
+        Frame "최근 변화" (4GH-0) 0×0
+          Text "최근 변화" (4GI-0) 0×0 "최근 변화"
+          Frame "Frame" (4GJ-0) 0×0
+            Text "08-24" (4GK-0) 44×0 "08-24"
+            Text "체결 3건 추가 — 평균 보유 4.1…" (4GL-0) 0×0 "체결 3건 추가 — 평균 보유 4.1일 → 3.2일"
+          Frame "Frame" (4GM-0) 0×0
+            Text "08-21" (4GN-0) 44×0 "08-21"
+            Text "대화에서 “장기로 간다” 5번째" (4GO-0) 0×0 "대화에서 “장기로 간다” 5번째"
+          Frame "Frame" (4GP-0) 0×0
+            Text "07-30" (4GQ-0) 44×0 "07-30"
+            Text "어긋남 처음 감지" (4GR-0) 0×0 "어긋남 처음 감지"
+        Frame "패널 CTA" (4GS-0) 0×0
+          Text "어느 쪽이 실제에 가까운지 아직 답하…" (4GT-0) 0×0 "어느 쪽이 실제에 가까운지 아직 답하지 않으셨습니다."
+          Frame "Frame" (4GU-0) 0×0
+            Text "채팅에서 답하기" (4GV-0) 0×0 "채팅에서 답하기"
+    Frame "Frame" (4BU-0) 400×0
+      Frame "채팅 헤더" (4BV-0) 0×0
+        Text "그래프에게 묻기" (4BW-0) 0×0 "그래프에게 묻기"
+        Text "답이 캔버스를 바꿉니다" (4BX-0) 0×0 "답이 캔버스를 바꿉니다"
+      Frame "대화 본문" (4BY-0) 0×0
+        Frame "Frame" (4BZ-0) 0×0
+          Frame "Frame" (4C0-0) 0×0
+            Text "한미반도체가 배당주랑 왜 엮여 있어?" (4C1-0) 0×0 "한미반도체가 배당주랑 왜 엮여 있어?"
+        Frame "Frame" (4C2-0) 0×0
+          Frame "Frame" (4C3-0) 0×0
+            Rectangle "Rectangle" (4C4-0) 5×5
+            Text "경로 탐색" (4C5-0) 0×0 "경로 탐색"
+            Text "한미반도체 → 배당 방어 바스켓" (4C6-0) 0×0 "한미반도체 → 배당 방어 바스켓"
+          Frame "Frame" (4C7-0) 0×0
+            Rectangle "Rectangle" (4C8-0) 5×5
+            Text "이웃 조회" (4C9-0) 0×0 "이웃 조회"
+            Text "7건" (4CA-0) 0×0 "7건"
+        Text "직접 말씀하신 적은 없습니다. 그래프…" (4CB-0) 0×0 "직접 말씀하신 적은 없습니다. 그래프가 스스로 이은 추론 연결이고, 근거는 두 가지입니다 — 두 군집을 잇는"
+        Text "캔버스에 경로를 표시했습니다. 아니라…" (4CC-0) 0×0 "캔버스에 경로를 표시했습니다. 아니라고 하시면 이 연결을 지우겠습니다."
+      Frame "입력 스택" (4CD-0) 0×0
+        Frame "Frame" (4CE-0) 0×0
+          Text "그래프에 대해 물어보세요" (4CF-0) 0×0 "그래프에 대해 물어보세요"
+          Text "29s" (4CG-0) 0×0 "29s"
+        Frame "control-strip" (4CH-0) 0×0
+          Frame "키우미 점 — 모드 전환" (4CI-0) 22×22
+            Rectangle "Rectangle" (4CJ-0) 3×7
+            Rectangle "Rectangle" (4CK-0) 3×7
+          Frame "Frame" (4CL-0) 0×0
+            Text "그래프" (4CM-0) 0×0 "그래프"
+          Frame "Frame" (4CN-0) 0×0
+            Text "CLAUDE" (4CO-0) 0×0 "CLAUDE"
+          Frame "Frame" (4CP-0) 0×0
+            Text "감시 2" (4CQ-0) 0×0 "감시 2"
+          Rectangle "Rectangle" (4CR-0) 0×0
+          Frame "Frame" (4CS-0) 0×0
+            Text "OPUS · HIGH" (4CT-0) 0×0 "OPUS · HIGH"

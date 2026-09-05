@@ -1,0 +1,92 @@
+{
+ "board_id": "48Z9-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48ZB-0",
+   "text": "원본 보드: CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+   "path": [
+    "note/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ZD-0",
+   "text": "가져온 요소: 조건검색식 일… · 조건검색식 명 · 일련번호",
+   "path": [
+    "note/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ZF-0",
+   "text": "문법: table",
+   "path": [
+    "note/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ZH-0",
+   "text": "접은 개수: 행 3개",
+   "path": [
+    "note/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48Z9-0",
+   "name": "note/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48ZA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48ZC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48ZE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48ZG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과": 1,
+  "가져온 요소: 조건검색식 일… · 조건검색식 명 · 일련번호": 1,
+  "문법: table": 1,
+  "접은 개수: 행 3개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "24758d2b1d3bcaf541dff2b1e86bfbc423aa3fabdafd11ac233df4d5d94d4917"
+}

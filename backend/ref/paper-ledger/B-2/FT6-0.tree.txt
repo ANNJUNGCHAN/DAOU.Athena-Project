@@ -1,0 +1,118 @@
+Frame "01 · 플러그인 — 기능 허용 (AT-ST-006)" (FT6-0) 1680×986
+  Text "셸 — 한국 주식 시세 플러그인 · …" (FWC-0) 0×0 "셸 — 한국 주식 시세 플러그인 · 기능 허용"
+  Text "설치한 플러그인에 노출할 도구만 선택…" (FWB-0) 0×0 "설치한 플러그인에 노출할 도구만 선택합니다. 목록은 승인 뒤 probe가 서버에게 직접 물어 받아온 실제 도"
+  Frame "Frame" (FT7-0) 1560×906
+    Frame "Frame" (FVE-0) 268×904
+      Frame "Frame" (FW9-0) 0×0
+        Text "＋ 새 대화" (FWA-0) 0×0 "＋ 새 대화"
+      Frame "Frame" (FW7-0) 0×0
+        Text "⌕ 대화 검색" (FW8-0) 0×0 "⌕ 대화 검색"
+      Frame "Frame" (FW5-0) 0×0
+      Frame "Frame" (FW2-0) 0×0
+        Text "💬" (FW4-0) 14×0 "💬"
+        Text "대화" (FW3-0) 0×0 "대화"
+      Frame "Frame" (FVZ-0) 0×0
+        Text "🕸" (FW1-0) 14×0 "🕸"
+        Text "그래프" (FW0-0) 0×0 "그래프"
+      Frame "Frame" (FVU-0) 0×0
+        Text "✦" (FVY-0) 14×0 "✦"
+        Text "에이전트" (FVX-0) 0×0 "에이전트"
+        Frame "Frame" (FVV-0) 0×16
+          Text "3" (FVW-0) 0×0 "3"
+      Frame "Frame" (FVR-0) 0×0
+        Text "◫" (FVT-0) 14×0 "◫"
+        Text "플러그인" (FVS-0) 0×0 "플러그인"
+      Rectangle "Rectangle" (FVQ-0) 0×1
+      Frame "Frame" (FVO-0) 0×0
+        Text "오늘" (FVP-0) 0×0 "오늘"
+      Frame "Frame" (FVM-0) 0×0
+        Text "삼성전자 흐름·재무 같이 보기" (FVN-0) 0×0 "삼성전자 흐름·재무 같이 보기"
+      Frame "Frame" (FVK-0) 0×0
+        Text "88,000 넘으면 알려줘" (FVL-0) 0×0 "88,000 넘으면 알려줘"
+      Frame "Frame" (FVI-0) 0×0
+        Text "코스피 프로그램 매매 동향" (FVJ-0) 0×0 "코스피 프로그램 매매 동향"
+      Rectangle "Rectangle" (FVH-0) 0×0
+      Frame "Frame" (FVF-0) 0×0
+        Text "● 모의-주력 · 토큰 5시간 42분…" (FVG-0) 0×0 "● 모의-주력 · 토큰 5시간 42분 남음"
+    Frame "Frame" (FTO-0) 0×904
+      Frame "Frame" (FTP-0) 0×860
+        Frame "Frame" (FV3-0) 0×0
+          Text "한국 주식 시세" (FVD-0) 0×0 "한국 주식 시세"
+          Rectangle "Rectangle" (FVC-0) 0×0
+          Frame "Frame" (FVA-0) 0×0
+            Text "설치됨" (FVB-0) 0×0 "설치됨"
+          Frame "Frame" (FV8-0) 0×0
+            Text "기능 6" (FV9-0) 0×0 "기능 6"
+          Frame "Frame" (FV6-0) 0×0
+            Text "허용 4" (FV7-0) 0×0 "허용 4"
+          Frame "Frame" (FV4-0) 0×0
+            Text "연결 확인됨" (FV5-0) 0×0 "연결 확인됨"
+        Text "기능 허용은 한국 주식 시세 플러그인…" (FV2-0) 0×0 "기능 허용은 한국 주식 시세 플러그인에만 적용됩니다. Athena 내장 API는 이 목록에 나타나지 않습니다"
+        Frame "권한 초안 머리" (3ZEJ-0) 0×0
+          Frame "제목 묶음" (3ZEK-0) 0×0
+            Text "목록 제목" (3ZEL-0) 0×0 "권한 초안"
+            Text "보조 1줄" (3ZEM-0) 0×0 "승인 카드로 확정합니다"
+          Rectangle "Rectangle" (3ZEN-0) 0×0
+          Frame "진입 표시" (3ZEO-0) 0×0
+            Text "채팅: 시세 조회만 허용" (3ZEP-0) 0×0 "채팅: 시세 조회만 허용"
+        Frame "Frame" (FUJ-0) 0×260
+          Frame "Frame" (FUW-0) 0×0
+            Text "search_stock_code" (FV1-0) 0×0 "search_stock_code"
+            Text "종목명으로 종목 코드를 찾습니다" (FV0-0) 0×0 "종목명으로 종목 코드를 찾습니다"
+            Rectangle "Rectangle" (FUZ-0) 0×0
+            Frame "Frame" (FUX-0) 34×20
+              Rectangle "Rectangle" (FUY-0) 16×16
+          Frame "Frame" (FUQ-0) 0×0
+            Text "get_stock_price_by_c…" (FUV-0) 0×0 "get_stock_price_by_code"
+            Text "종목 코드로 현재가를 조회합니다" (FUU-0) 0×0 "종목 코드로 현재가를 조회합니다"
+            Rectangle "Rectangle" (FUT-0) 0×0
+            Frame "Frame" (FUR-0) 34×20
+              Rectangle "Rectangle" (FUS-0) 16×16
+          Frame "Frame" (FUK-0) 0×0
+            Text "get_market_cap_stock…" (FUP-0) 0×0 "get_market_cap_stocks"
+            Text "시가총액 상위 종목을 가져옵니다" (FUO-0) 0×0 "시가총액 상위 종목을 가져옵니다"
+            Rectangle "Rectangle" (FUN-0) 0×0
+            Frame "Frame" (FUL-0) 34×20
+              Rectangle "Rectangle" (FUM-0) 16×16
+          Frame "Frame" (2NU6-2) 0×0
+            Text "get_dividend_yield_s…" (2NUB-2) 0×0 "get_dividend_yield_stocks"
+            Text "배당수익률 상위 종목을 가져옵니다" (2NUA-2) 0×0 "배당수익률 상위 종목을 가져옵니다"
+            Rectangle "Rectangle" (2NU9-2) 0×0
+            Frame "Frame" (2NU7-2) 34×20
+              Rectangle "Rectangle" (2NU8-2) 16×16
+          Frame "Frame" (FUC-0) 0×0
+            Text "get_themes_with_lead…" (FUH-0) 0×0 "get_themes_with_leaders"
+            Text "테마와 주도주를 가져옵니다 · 현재 …" (FUG-0) 0×0 "테마와 주도주를 가져옵니다 · 현재 꺼짐"
+            Rectangle "Rectangle" (FUF-0) 0×0
+            Frame "Frame" (FUD-0) 34×20
+              Rectangle "Rectangle" (FUE-0) 16×16
+          Frame "Frame" (2NUC-2) 0×0
+            Text "get_etfs_by_market_c…" (2NUH-2) 0×0 "get_etfs_by_market_cap"
+            Text "시총 기준 ETF 목록을 가져옵니다 …" (2NUG-2) 0×0 "시총 기준 ETF 목록을 가져옵니다 · 현재 꺼짐"
+            Rectangle "Rectangle" (2NUF-2) 0×0
+            Frame "Frame" (2NUD-2) 34×20
+              Rectangle "Rectangle" (2NUE-2) 16×16
+        Frame "Frame" (FTR-0) 0×0
+          Frame "Frame" (FTS-0) 0×0
+            Text "허용 4 / 6" (FTX-0) 0×0 "허용 4 / 6"
+            Text "선택한 기능만 한국 주식 시세 플러그…" (FTW-0) 0×0 "선택한 기능만 한국 주식 시세 플러그인에 노출됩니다"
+            Rectangle "Rectangle" (FTV-0) 0×0
+            Frame "선택 저장" (FWD-0) 0×0
+              Text "선택 저장" (FWE-0) 0×0 "선택 저장"
+        Text "Kiwoom 시세·주문·계좌와 bra…" (FTQ-0) 0×0 "Kiwoom 시세·주문·계좌와 brain은 Athena 내장 API이므로 플러그인 권한 목록에 표시하지 않습"
+    Frame "Frame" (FT8-0) 400×904
+      Frame "Frame" (FTL-0) 0×0
+        Text "한국 주식 시세에게 묻기" (FTN-0) 0×0 "한국 주식 시세에게 묻기"
+        Text "권한도 대화로 확인합니다" (FTM-0) 0×0 "권한도 대화로 확인합니다"
+      Frame "Frame" (FTG-0) 0×0
+        Frame "Frame" (FTI-0) 0×0
+          Frame "Frame" (FTJ-0) 0×0
+            Text "지금 어떤 도구까지 쓸 수 있어?" (FTK-0) 0×0 "지금 어떤 도구까지 쓸 수 있어?"
+        Text "종목 검색·시세·시총·배당 네 가지가…" (FTH-0) 0×0 "종목 검색·시세·시총·배당 네 가지가 허용돼 있습니다. 테마와 ETF는 꺼져 있으며 이 화면에서 따로 허용합"
+      Frame "Frame" (FT9-0) 0×0
+        Frame "Frame" (FTA-0) 0×0
+          Frame "Frame" (FTC-0) 22×22
+            SVG "SVG" (FTD-0) 0×0
+              SVGVisualElement "Rect" (FTF-0) 0×0
+              SVGVisualElement "Rect" (FTE-0) 0×0
+          Text "무엇이든 물어보세요" (FTB-0) 0×0 "무엇이든 물어보세요"

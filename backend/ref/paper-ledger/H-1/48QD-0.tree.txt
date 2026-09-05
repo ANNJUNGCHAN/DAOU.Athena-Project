@@ -1,0 +1,9 @@
+Frame "note/CC-06 / R05 · 반도체 업종·AI 테마" (48QD-0) 360×92
+  Frame "Frame" (48QE-0) 334×0
+    Text "원본 보드: CC-06 / R05 ·…" (48QF-0) 0×0 "원본 보드: CC-06 / R05 · 반도체 업종·AI 테마"
+  Frame "Frame" (48QG-0) 334×0
+    Text "가져온 요소: 종목코드 · 전일대비 …" (48QH-0) 0×0 "가져온 요소: 종목코드 · 전일대비 · 고가"
+  Frame "Frame" (48QI-0) 334×0
+    Text "문법: table" (48QJ-0) 0×0 "문법: table"
+  Frame "Frame" (48QK-0) 334×0
+    Text "접은 개수: 행 0개" (48QL-0) 0×0 "접은 개수: 행 0개"

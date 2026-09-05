@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T4-2 · 순위 — 상하한가" (47OP-0) 360×420
+  Frame "Header" (47PJ-0) 0×0
+    Frame "Meta row" (47PL-0) 0×0
+      Text "Eyebrow" (47PN-0) 0×0
+      Text "As of" (47PM-0) 0×0 "기준 09:42"
+    Text "Title" (47PK-0) 0×0 "상하한가"
+  Frame "Body" (47OS-0) 0×0
+    Frame "KPI band" (47P9-0) 0×0
+      Frame "Frame" (47PG-0) 0×0
+        Text "값" (47PI-0) 0×0 "값"
+        Text "14" (47PH-0) 0×0 "14"
+      Frame "Frame" (47PD-0) 0×0
+        Text "변화" (47PF-0) 0×0 "변화"
+        Text "±1% 이내" (47PE-0) 0×0 "±1% 이내"
+      Frame "Frame" (47PA-0) 0×0
+        Text "핵심" (47PC-0) 0×0 "핵심"
+        Text "0" (47PB-0) 0×0 "0"
+    Frame "Table header" (47P5-0) 0×0
+      Text "항목" (47P8-0) 0×0 "항목"
+      Text "값" (47P7-0) 0×0 "값"
+      Text "비고" (47P6-0) 72×0 "비고"
+    Frame "Position 1" (47OZ-0) 0×0
+      Frame "Frame" (47P2-0) 0×0
+        Text "값" (47P4-0) 0×0 "값"
+        Text "Text" (47P3-0) 0×0
+      Text "2" (47P1-0) 0×0 "2"
+      Text "Text" (47P0-0) 72×0
+    Frame "Position 2" (47OT-0) 0×0
+      Frame "Frame" (47OW-0) 0×0
+        Text "기준 시각" (47OY-0) 0×0 "기준 시각"
+        Text "Text" (47OX-0) 0×0
+      Text "09:02" (47OV-0) 0×0 "09:02"
+      Text "Text" (47OU-0) 72×0
+  Frame "Fold note" (47OQ-0) 0×0
+    Text "스칼라 2개, 행 17개 접힘 · 원…" (47OR-0) 0×0 "스칼라 2개, 행 17개 접힘 · 원본에서 확인"

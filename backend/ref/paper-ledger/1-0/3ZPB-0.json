@@ -1,0 +1,4405 @@
+{
+ "board_id": "3ZPB-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "3ZXB-0",
+   "text": "ATHENA",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZX3-0",
+   "text": "새 채팅",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZWW-0",
+   "text": "그래프",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZWR-0",
+   "text": "에이전트",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZWM-0",
+   "text": "플러그인",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZWJ-0",
+   "text": "프로젝트",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZWE-0",
+   "text": "아테나",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZW5-0",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZW3-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZVZ-0",
+   "text": "최근",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZVY-0",
+   "text": "전체",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZVW-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZVT-0",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZVR-0",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZVO-0",
+   "text": "AN",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZVM-0",
+   "text": "모의-주력",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZXN-0",
+   "text": "시세 · 삼성전자",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-strip",
+    "canvas-tab · 시세 · 삼성전자 (is-active)"
+   ]
+  },
+  {
+   "id": "3ZXP-0",
+   "text": "×",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-strip",
+    "canvas-tab · 시세 · 삼성전자 (is-active)",
+    "canvas-tab-close"
+   ]
+  },
+  {
+   "id": "3ZXS-0",
+   "text": "계좌 · ****4721",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-strip",
+    "canvas-tab · 계좌 · ****4721"
+   ]
+  },
+  {
+   "id": "3ZXU-0",
+   "text": "×",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-strip",
+    "canvas-tab · 계좌 · ****4721",
+    "canvas-tab-close"
+   ]
+  },
+  {
+   "id": "3ZXZ-0",
+   "text": "호가 · 삼성전자",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-strip",
+    "canvas-tab · 호가 · 삼성전자"
+   ]
+  },
+  {
+   "id": "3ZXY-0",
+   "text": "×",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-strip",
+    "canvas-tab · 호가 · 삼성전자",
+    "canvas-tab-close"
+   ]
+  },
+  {
+   "id": "3ZY3-0",
+   "text": "수급 · 삼성전자",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-strip",
+    "canvas-tab · 수급 · 삼성전자"
+   ]
+  },
+  {
+   "id": "3ZY2-0",
+   "text": "×",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-strip",
+    "canvas-tab · 수급 · 삼성전자",
+    "canvas-tab-close"
+   ]
+  },
+  {
+   "id": "3ZYA-0",
+   "text": "삼성전자",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Header",
+    "종목"
+   ]
+  },
+  {
+   "id": "3ZYB-0",
+   "text": "005930 · KOSPI · KRX",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Header",
+    "종목"
+   ]
+  },
+  {
+   "id": "3ZYD-0",
+   "text": "150,850원",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Header",
+    "현재가"
+   ]
+  },
+  {
+   "id": "3ZYF-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Header",
+    "현재가",
+    "대비"
+   ]
+  },
+  {
+   "id": "3ZYG-0",
+   "text": "09:42:18",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Header",
+    "현재가",
+    "대비"
+   ]
+  },
+  {
+   "id": "3ZYK-0",
+   "text": "시가 · 고가 · 저가",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · 시가 고가 저가"
+   ]
+  },
+  {
+   "id": "3ZYL-0",
+   "text": "149,200 · 152,400 · 148,100",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · 시가 고가 저가"
+   ]
+  },
+  {
+   "id": "3ZYM-0",
+   "text": "09:00:03 · 09:12:40 · 09:05:22",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · 시가 고가 저가"
+   ]
+  },
+  {
+   "id": "3ZYO-0",
+   "text": "거래대금",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · 거래대금"
+   ]
+  },
+  {
+   "id": "3ZYP-0",
+   "text": "2.14조원",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · 거래대금"
+   ]
+  },
+  {
+   "id": "3ZYQ-0",
+   "text": "거래량 1,420만주 · 전일 대비 120.3%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · 거래대금"
+   ]
+  },
+  {
+   "id": "3ZYS-0",
+   "text": "PER",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · PER"
+   ]
+  },
+  {
+   "id": "3ZYT-0",
+   "text": "21.2배",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · PER"
+   ]
+  },
+  {
+   "id": "3ZYU-0",
+   "text": "업종 11.2배",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · PER"
+   ]
+  },
+  {
+   "id": "3ZYZ-0",
+   "text": "PBR",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · PBR"
+   ]
+  },
+  {
+   "id": "3ZYY-0",
+   "text": "2.63배",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · PBR"
+   ]
+  },
+  {
+   "id": "3ZYX-0",
+   "text": "업종 1.61배",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · PBR"
+   ]
+  },
+  {
+   "id": "3ZZ3-0",
+   "text": "ROE",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · ROE"
+   ]
+  },
+  {
+   "id": "3ZZ2-0",
+   "text": "8.4%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · ROE"
+   ]
+  },
+  {
+   "id": "3ZZ1-0",
+   "text": "전년 7.9%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Quote and Valuation Strip — M: 3칸×2줄",
+    "KPI · ROE"
+   ]
+  },
+  {
+   "id": "3ZZ6-0",
+   "text": "체결 흐름",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 흐름 제목"
+   ]
+  },
+  {
+   "id": "3ZZ7-0",
+   "text": "09:42:18",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 흐름 제목"
+   ]
+  },
+  {
+   "id": "3ZZ9-0",
+   "text": "시각",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3ZZA-0",
+   "text": "체결가 · 구분",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3ZZB-0",
+   "text": "전일대비",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3ZZC-0",
+   "text": "체결량",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3ZZD-0",
+   "text": "체결강도",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3ZZG-0",
+   "text": "09:42:18",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3ZZI-0",
+   "text": "150,850",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:18",
+    "체결가 · 구분"
+   ]
+  },
+  {
+   "id": "3ZZJ-0",
+   "text": "매수체결 · KRX",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:18",
+    "체결가 · 구분"
+   ]
+  },
+  {
+   "id": "3ZZK-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3ZZL-0",
+   "text": "1,284주",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3ZZM-0",
+   "text": "108.4%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3ZZV-0",
+   "text": "09:42:15",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3ZZU-0",
+   "text": "150,850",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:15",
+    "체결가 · 구분"
+   ]
+  },
+  {
+   "id": "3ZZT-0",
+   "text": "매수체결 · KRX",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:15",
+    "체결가 · 구분"
+   ]
+  },
+  {
+   "id": "3ZZR-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3ZZQ-0",
+   "text": "560주",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3ZZP-0",
+   "text": "118.1%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "4003-0",
+   "text": "09:42:13",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:13 · 기세"
+   ]
+  },
+  {
+   "id": "4002-0",
+   "text": "150,900",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:13 · 기세",
+    "체결가 · 구분"
+   ]
+  },
+  {
+   "id": "4001-0",
+   "text": "기세 · KRX",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:13 · 기세",
+    "체결가 · 구분"
+   ]
+  },
+  {
+   "id": "3ZZZ-0",
+   "text": "+1,900 · +1.28%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:13 · 기세"
+   ]
+  },
+  {
+   "id": "3ZZY-0",
+   "text": "해당 없음",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:13 · 기세"
+   ]
+  },
+  {
+   "id": "3ZZX-0",
+   "text": "해당 없음",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:13 · 기세"
+   ]
+  },
+  {
+   "id": "400B-0",
+   "text": "09:42:11",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:11"
+   ]
+  },
+  {
+   "id": "400A-0",
+   "text": "150,800",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:11",
+    "체결가 · 구분"
+   ]
+  },
+  {
+   "id": "4009-0",
+   "text": "매도체결 · KRX",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:11",
+    "체결가 · 구분"
+   ]
+  },
+  {
+   "id": "4007-0",
+   "text": "+1,800 · +1.21%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:11"
+   ]
+  },
+  {
+   "id": "4006-0",
+   "text": "2,410주",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:11"
+   ]
+  },
+  {
+   "id": "4005-0",
+   "text": "116.7%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:11"
+   ]
+  },
+  {
+   "id": "400J-0",
+   "text": "09:42:08",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:08"
+   ]
+  },
+  {
+   "id": "400I-0",
+   "text": "150,850",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:08",
+    "체결가 · 구분"
+   ]
+  },
+  {
+   "id": "400H-0",
+   "text": "매수체결 · KRX",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:08",
+    "체결가 · 구분"
+   ]
+  },
+  {
+   "id": "400F-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:08"
+   ]
+  },
+  {
+   "id": "400E-0",
+   "text": "890주",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:08"
+   ]
+  },
+  {
+   "id": "400D-0",
+   "text": "121.3%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 09:42:08"
+   ]
+  },
+  {
+   "id": "400L-0",
+   "text": "순간 거래대금 1.94억원 · 매수 42,180건 · 매도 38,640건",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 상태 줄"
+   ]
+  },
+  {
+   "id": "400N-0",
+   "text": "당일 · 전일 체결",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 상태 줄",
+    "당일 · 전일 체결"
+   ]
+  },
+  {
+   "id": "400O-0",
+   "text": "1,420만주 · 1,180만주",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 상태 줄",
+    "당일 · 전일 체결"
+   ]
+  },
+  {
+   "id": "400P-0",
+   "text": "+20.3%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+    "체결 상태 줄",
+    "당일 · 전일 체결"
+   ]
+  },
+  {
+   "id": "400V-0",
+   "text": "종목 요약",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "종목 요약",
+    "제목"
+   ]
+  },
+  {
+   "id": "400W-0",
+   "text": "정상 거래",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "종목 요약",
+    "제목"
+   ]
+  },
+  {
+   "id": "400Y-0",
+   "text": "시가총액",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "종목 요약",
+    "시가총액"
+   ]
+  },
+  {
+   "id": "400Z-0",
+   "text": "900.4조원",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "종목 요약",
+    "시가총액"
+   ]
+  },
+  {
+   "id": "4011-0",
+   "text": "외국인 보유",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "종목 요약",
+    "외국인 보유"
+   ]
+  },
+  {
+   "id": "4012-0",
+   "text": "52.41%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "종목 요약",
+    "외국인 보유"
+   ]
+  },
+  {
+   "id": "4014-0",
+   "text": "유통 주식",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "종목 요약",
+    "유통 주식"
+   ]
+  },
+  {
+   "id": "4015-0",
+   "text": "44.4억주",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "종목 요약",
+    "유통 주식"
+   ]
+  },
+  {
+   "id": "401J-0",
+   "text": "오늘의 수급",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "오늘의 수급",
+    "제목"
+   ]
+  },
+  {
+   "id": "401I-0",
+   "text": "순매수 기준",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "오늘의 수급",
+    "제목"
+   ]
+  },
+  {
+   "id": "401G-0",
+   "text": "외국인",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "오늘의 수급",
+    "시가총액"
+   ]
+  },
+  {
+   "id": "401F-0",
+   "text": "+128억원",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "오늘의 수급",
+    "시가총액"
+   ]
+  },
+  {
+   "id": "401D-0",
+   "text": "기관",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "오늘의 수급",
+    "외국인 보유"
+   ]
+  },
+  {
+   "id": "401C-0",
+   "text": "+196억원",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "오늘의 수급",
+    "외국인 보유"
+   ]
+  },
+  {
+   "id": "401A-0",
+   "text": "개인",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "오늘의 수급",
+    "유통 주식"
+   ]
+  },
+  {
+   "id": "4019-0",
+   "text": "−312억원",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "오늘의 수급",
+    "유통 주식"
+   ]
+  },
+  {
+   "id": "401W-0",
+   "text": "체결 비용 · 증거금",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "체결 비용 · 증거금",
+    "제목"
+   ]
+  },
+  {
+   "id": "401V-0",
+   "text": "K.O 접근도 해당 없음",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "체결 비용 · 증거금",
+    "제목"
+   ]
+  },
+  {
+   "id": "401T-0",
+   "text": "거래비용",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "체결 비용 · 증거금",
+    "시가총액"
+   ]
+  },
+  {
+   "id": "401S-0",
+   "text": "22원/주",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "체결 비용 · 증거금",
+    "시가총액"
+   ]
+  },
+  {
+   "id": "401Q-0",
+   "text": "CFD증거금",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "체결 비용 · 증거금",
+    "외국인 보유"
+   ]
+  },
+  {
+   "id": "401P-0",
+   "text": "40%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "체결 비용 · 증거금",
+    "외국인 보유"
+   ]
+  },
+  {
+   "id": "401N-0",
+   "text": "유지증거금",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "체결 비용 · 증거금",
+    "유통 주식"
+   ]
+  },
+  {
+   "id": "401M-0",
+   "text": "25%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "Rail Top Row — 3열",
+    "체결 비용 · 증거금",
+    "유통 주식"
+   ]
+  },
+  {
+   "id": "401Z-0",
+   "text": "일별 시세",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 시세 제목"
+   ]
+  },
+  {
+   "id": "4020-0",
+   "text": "전체 60건 · 3건 표시",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 시세 제목"
+   ]
+  },
+  {
+   "id": "4022-0",
+   "text": "일자",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 표 헤더"
+   ]
+  },
+  {
+   "id": "4023-0",
+   "text": "시가 · 고가 · 저가",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 표 헤더"
+   ]
+  },
+  {
+   "id": "4024-0",
+   "text": "종가 · 전일대비",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 표 헤더"
+   ]
+  },
+  {
+   "id": "4025-0",
+   "text": "거래량 · 거래대금",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 표 헤더"
+   ]
+  },
+  {
+   "id": "4026-0",
+   "text": "외국계 · 프로그램",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 표 헤더"
+   ]
+  },
+  {
+   "id": "4029-0",
+   "text": "09-01",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 행 09-01"
+   ]
+  },
+  {
+   "id": "402A-0",
+   "text": "149,200 · 152,400 · 148,100",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 행 09-01"
+   ]
+  },
+  {
+   "id": "402B-0",
+   "text": "150,850 · +1.24%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 행 09-01"
+   ]
+  },
+  {
+   "id": "402C-0",
+   "text": "1,420만주 · 2.14조원",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 행 09-01"
+   ]
+  },
+  {
+   "id": "402D-0",
+   "text": "+182만주 · +64만주",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 행 09-01"
+   ]
+  },
+  {
+   "id": "402K-0",
+   "text": "08-31",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 행 08-31"
+   ]
+  },
+  {
+   "id": "402J-0",
+   "text": "148,200 · 149,400 · 148,000",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 행 08-31"
+   ]
+  },
+  {
+   "id": "402I-0",
+   "text": "149,000 · +0.68%",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 행 08-31"
+   ]
+  },
+  {
+   "id": "402H-0",
+   "text": "1,180만주 · 1.76조원",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 행 08-31"
+   ]
+  },
+  {
+   "id": "402G-0",
+   "text": "+95만주 · +21만주",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+    "canvas-tab-deck",
+    "canvas-tab-viewport",
+    "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+    "카드 · 현재시세 (.card — 뷰포트 100%)",
+    "Instrument Context — 레일 (M: primary 아래 100%)",
+    "일별 시세",
+    "일별 행 08-31"
+   ]
+  },
+  {
+   "id": "3ZT4-0",
+   "text": "결과물",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "결과물",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZT3-0",
+   "text": "캔버스 2",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "결과물",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZT1-0",
+   "text": "네이버 뉴스 · 삼성전자 일봉",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "결과물"
+   ]
+  },
+  {
+   "id": "3ZSZ-0",
+   "text": "출처",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "출처",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZSY-0",
+   "text": "3",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "출처",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZSW-0",
+   "text": "일봉 차트",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "출처",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZSU-0",
+   "text": "DART 재무제표",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "출처",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZSS-0",
+   "text": "네이버 뉴스",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "출처",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZSO-0",
+   "text": "하위 에이전트",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZSN-0",
+   "text": "1",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZSL-0",
+   "text": "재무 해석",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "agent-row",
+    "row-top"
+   ]
+  },
+  {
+   "id": "3ZSK-0",
+   "text": "진행 중",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "agent-row",
+    "row-top"
+   ]
+  },
+  {
+   "id": "3ZSI-0",
+   "text": "8.4s",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "agent-row",
+    "row-bottom"
+   ]
+  },
+  {
+   "id": "3ZSH-0",
+   "text": "현재가 조회",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "agent-row",
+    "row-bottom"
+   ]
+  },
+  {
+   "id": "3ZSC-0",
+   "text": "삼성전자 흐름이랑 재무 같이 보여줘",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "완료 턴",
+    "⑤ 사용자 말풍선 (우측 정렬)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZS9-0",
+   "text": "38초 동안 작업함",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "완료 턴",
+    "⑥ 경과 헤더 — 접힌 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZS3-0",
+   "text": "일봉 60개를 폈습니다. 5월 하순부터 20일선이 60일선을 위로 뚫고 그대로 벌어졌고, 종가 88,100원이 구간 최고 부근입니다.",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "완료 턴"
+   ]
+  },
+  {
+   "id": "3ZS1-0",
+   "text": "재무 쪽은 하위 에이전트한테 맡겨서 정리해줘",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "사용자 말풍선",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZRY-0",
+   "text": "29초 동안 작업 중입니다",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑥ 경과 헤더 — 진행 중"
+   ]
+  },
+  {
+   "id": "3ZRV-0",
+   "text": "재무 해석은 읽기 전용 하위 에이전트에게 맡기겠습니다. 2025 연결 재무상태표에서 유동비율·현금성자산 비중만 계산하고 주문은 건드리지 않습니다.",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴"
+   ]
+  },
+  {
+   "id": "3ZRT-0",
+   "text": "재무 해석",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑦ 하위 에이전트 블록",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZRR-0",
+   "text": "작업 시작됨",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑦ 하위 에이전트 블록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZRP-0",
+   "text": "유동비율 계산",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑦ 하위 에이전트 블록",
+    "사고 문구 — 앞은 진하고 뒤로 옅어진다"
+   ]
+  },
+  {
+   "id": "3ZRO-0",
+   "text": "— 유동자산 ÷",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑦ 하위 에이전트 블록",
+    "사고 문구 — 앞은 진하고 뒤로 옅어진다"
+   ]
+  },
+  {
+   "id": "3ZRN-0",
+   "text": "유동부채 확인 중",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑦ 하위 에이전트 블록",
+    "사고 문구 — 앞은 진하고 뒤로 옅어진다"
+   ]
+  },
+  {
+   "id": "3ZRH-0",
+   "text": "재무제표 조회 · 삼성전자 2025 연결",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑧ 실행 라인 — 지금 부르고 있는 것",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZRG-0",
+   "text": "1.2s",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑧ 실행 라인 — 지금 부르고 있는 것",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZRB-0",
+   "text": "현재가 조회 · 삼성전자",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑧ 실행 라인 — 지금 부르고 있는 것",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZRA-0",
+   "text": "0.4s",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑧ 실행 라인 — 지금 부르고 있는 것",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZR5-0",
+   "text": "일별 주가 조회 · 대기 중",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑧ 실행 라인 — 지금 부르고 있는 것",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZR1-0",
+   "text": "15:30 발화",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "agent-head",
+    "agent-badge"
+   ]
+  },
+  {
+   "id": "3ZQZ-0",
+   "text": "주기 확인",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "agent-head"
+   ]
+  },
+  {
+   "id": "3ZQX-0",
+   "text": "2분 전",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "agent-head"
+   ]
+  },
+  {
+   "id": "3ZQV-0",
+   "text": null,
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "본문 — 인라인 칩을 문장에 섞는다"
+   ]
+  },
+  {
+   "id": "3ZQU-0",
+   "text": "삼성전자 005930",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "본문 — 인라인 칩을 문장에 섞는다",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZQS-0",
+   "text": " 조건 도달 — 관측값 88,100 (임계 88,000)",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "본문 — 인라인 칩을 문장에 섞는다"
+   ]
+  },
+  {
+   "id": "3ZQR-0",
+   "text": "값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "본문 — 인라인 칩을 문장에 섞는다",
+    "시점 단서 (템플릿 고정 문구)"
+   ]
+  },
+  {
+   "id": "3ZQO-0",
+   "text": "감시 조건",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 머리 바"
+   ]
+  },
+  {
+   "id": "3ZQE-0",
+   "text": "삼성전자 005930",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문"
+   ]
+  },
+  {
+   "id": "3ZQD-0",
+   "text": "✓",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "3ZQC-0",
+   "text": "종가 88,000 이상",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "3ZQB-0",
+   "text": "88,100",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "3ZQ9-0",
+   "text": "✓",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "3ZQ8-0",
+   "text": "거래량 1,000만주 이상",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "3ZQ7-0",
+   "text": "11,689,068",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "3ZQ5-0",
+   "text": "△",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 참고"
+   ]
+  },
+  {
+   "id": "3ZQ4-0",
+   "text": "장중에만 확인",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 참고"
+   ]
+  },
+  {
+   "id": "3ZQ3-0",
+   "text": "15:30 마감",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 참고"
+   ]
+  },
+  {
+   "id": "3ZPZ-0",
+   "text": "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식"
+   ]
+  },
+  {
+   "id": "3ZPW-0",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "input-row · 실행 중 (ESC 중단)"
+   ]
+  },
+  {
+   "id": "3ZPV-0",
+   "text": "29s",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "input-row · 실행 중 (ESC 중단)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZPU-0",
+   "text": "ESC 중단",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "input-row · 실행 중 (ESC 중단)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZPM-0",
+   "text": "CLAUDE",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZPK-0",
+   "text": "감시 2",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZPH-0",
+   "text": "OPUS · HIGH",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "402L-0",
+   "text": "탭 = 카드 인스턴스 · 뷰포트 1개 · 컨테이너 쿼리 XL/L/M/S/XS",
+   "path": [
+    "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3ZPB-0",
+   "name": "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "3ZPC-0",
+   "name": "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "3ZXK-0",
+   "name": "타이틀바",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "3ZXC-0",
+   "name": "창 제어",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "3ZXI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "3ZXJ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "3ZXG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "3ZXH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "3ZXD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "3ZXE-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "3ZXF-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  },
+  {
+   "id": "3ZVH-0",
+   "name": "04 · Project Recent Sidebar",
+   "component": "Frame",
+   "w": 268,
+   "h": 717,
+   "depth": 2
+  },
+  {
+   "id": "3ZWK-0",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 242,
+   "h": 164,
+   "depth": 3
+  },
+  {
+   "id": "3ZX7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "3ZX8-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3ZXA-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3ZX9-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "3ZX2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3ZX4-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3ZX6-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZX5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "3ZWV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3ZWX-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3ZX1-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "3ZX0-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "3ZWZ-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "3ZWY-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 6
+  },
+  {
+   "id": "3ZWQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3ZWS-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3ZWU-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 6
+  },
+  {
+   "id": "3ZWT-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 4,
+   "depth": 6
+  },
+  {
+   "id": "3ZWL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3ZWN-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3ZWP-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "3ZWO-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "3ZW0-0",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 242,
+   "h": 129,
+   "depth": 3
+  },
+  {
+   "id": "3ZWI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3ZW6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "3ZWF-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3ZWH-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3ZWG-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "3ZWA-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 17,
+   "h": 17,
+   "depth": 5
+  },
+  {
+   "id": "3ZWD-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 6
+  },
+  {
+   "id": "3ZWC-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 6
+  },
+  {
+   "id": "3ZWB-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 6
+  },
+  {
+   "id": "3ZW7-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 17,
+   "h": 17,
+   "depth": 5
+  },
+  {
+   "id": "3ZW9-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZW8-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 6
+  },
+  {
+   "id": "3ZW4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "3ZW1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 29,
+   "depth": 4
+  },
+  {
+   "id": "3ZW2-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "3ZVP-0",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 242,
+   "h": 126,
+   "depth": 3
+  },
+  {
+   "id": "3ZVX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3ZVU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "3ZVV-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "3ZVS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "3ZVQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "3ZVI-0",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 242,
+   "h": 232,
+   "depth": 3
+  },
+  {
+   "id": "3ZVJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 38,
+   "depth": 4
+  },
+  {
+   "id": "3ZVN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3ZVK-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 5
+  },
+  {
+   "id": "3ZVL-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "3ZT5-0",
+   "name": "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개",
+   "component": "Frame",
+   "w": 810,
+   "h": 716,
+   "depth": 2
+  },
+  {
+   "id": "3ZT6-0",
+   "name": "canvas-tab-deck",
+   "component": "Frame",
+   "w": 810,
+   "h": 716,
+   "depth": 3
+  },
+  {
+   "id": "3ZXL-0",
+   "name": "canvas-tab-strip",
+   "component": "Frame",
+   "w": 786,
+   "h": 36,
+   "depth": 4
+  },
+  {
+   "id": "3ZXM-0",
+   "name": "canvas-tab · 시세 · 삼성전자 (is-active)",
+   "component": "Frame",
+   "w": 132,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3ZXO-0",
+   "name": "canvas-tab-close",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3ZXR-0",
+   "name": "canvas-tab · 계좌 · ****4721",
+   "component": "Frame",
+   "w": 128,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3ZXT-0",
+   "name": "canvas-tab-close",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3ZXW-0",
+   "name": "canvas-tab · 호가 · 삼성전자",
+   "component": "Frame",
+   "w": 132,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3ZXX-0",
+   "name": "canvas-tab-close",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3ZY0-0",
+   "name": "canvas-tab · 수급 · 삼성전자",
+   "component": "Frame",
+   "w": 132,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3ZY1-0",
+   "name": "canvas-tab-close",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3ZY4-0",
+   "name": "canvas-tab-viewport",
+   "component": "Frame",
+   "w": 786,
+   "h": 648,
+   "depth": 4
+  },
+  {
+   "id": "3ZY5-0",
+   "name": "canvas-tab-panel (is-active) · 시세 · 삼성전자",
+   "component": "Frame",
+   "w": 786,
+   "h": 648,
+   "depth": 5
+  },
+  {
+   "id": "3ZY6-0",
+   "name": "카드 · 현재시세 (.card — 뷰포트 100%)",
+   "component": "Frame",
+   "w": 786,
+   "h": 648,
+   "depth": 6
+  },
+  {
+   "id": "3ZY8-0",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 752,
+   "h": 53,
+   "depth": 7
+  },
+  {
+   "id": "3ZY9-0",
+   "name": "종목",
+   "component": "Frame",
+   "w": 132,
+   "h": 42,
+   "depth": 8
+  },
+  {
+   "id": "3ZYC-0",
+   "name": "현재가",
+   "component": "Frame",
+   "w": 160,
+   "h": 42,
+   "depth": 8
+  },
+  {
+   "id": "3ZYE-0",
+   "name": "대비",
+   "component": "Frame",
+   "w": 160,
+   "h": 14,
+   "depth": 9
+  },
+  {
+   "id": "3ZYI-0",
+   "name": "Quote and Valuation Strip — M: 3칸×2줄",
+   "component": "Frame",
+   "w": 752,
+   "h": 132,
+   "depth": 7
+  },
+  {
+   "id": "3ZYJ-0",
+   "name": "KPI · 시가 고가 저가",
+   "component": "Frame",
+   "w": 244,
+   "h": 61,
+   "depth": 8
+  },
+  {
+   "id": "3ZYN-0",
+   "name": "KPI · 거래대금",
+   "component": "Frame",
+   "w": 244,
+   "h": 61,
+   "depth": 8
+  },
+  {
+   "id": "3ZYR-0",
+   "name": "KPI · PER",
+   "component": "Frame",
+   "w": 244,
+   "h": 61,
+   "depth": 8
+  },
+  {
+   "id": "3ZYW-0",
+   "name": "KPI · PBR",
+   "component": "Frame",
+   "w": 244,
+   "h": 61,
+   "depth": 8
+  },
+  {
+   "id": "3ZZ0-0",
+   "name": "KPI · ROE",
+   "component": "Frame",
+   "w": 244,
+   "h": 61,
+   "depth": 8
+  },
+  {
+   "id": "3ZZ4-0",
+   "name": "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)",
+   "component": "Frame",
+   "w": 752,
+   "h": 228,
+   "depth": 7
+  },
+  {
+   "id": "3ZZ5-0",
+   "name": "체결 흐름 제목",
+   "component": "Frame",
+   "w": 752,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "3ZZ8-0",
+   "name": "표 헤더",
+   "component": "Frame",
+   "w": 752,
+   "h": 24,
+   "depth": 8
+  },
+  {
+   "id": "3ZZF-0",
+   "name": "체결 09:42:18",
+   "component": "Frame",
+   "w": 752,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3ZZH-0",
+   "name": "체결가 · 구분",
+   "component": "Frame",
+   "w": 316,
+   "h": 15,
+   "depth": 9
+  },
+  {
+   "id": "3ZZO-0",
+   "name": "체결 09:42:15",
+   "component": "Frame",
+   "w": 752,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3ZZS-0",
+   "name": "체결가 · 구분",
+   "component": "Frame",
+   "w": 316,
+   "h": 15,
+   "depth": 9
+  },
+  {
+   "id": "3ZZW-0",
+   "name": "체결 09:42:13 · 기세",
+   "component": "Frame",
+   "w": 752,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "4000-0",
+   "name": "체결가 · 구분",
+   "component": "Frame",
+   "w": 316,
+   "h": 15,
+   "depth": 9
+  },
+  {
+   "id": "4004-0",
+   "name": "체결 09:42:11",
+   "component": "Frame",
+   "w": 752,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "4008-0",
+   "name": "체결가 · 구분",
+   "component": "Frame",
+   "w": 316,
+   "h": 15,
+   "depth": 9
+  },
+  {
+   "id": "400C-0",
+   "name": "체결 09:42:08",
+   "component": "Frame",
+   "w": 752,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "400G-0",
+   "name": "체결가 · 구분",
+   "component": "Frame",
+   "w": 316,
+   "h": 15,
+   "depth": 9
+  },
+  {
+   "id": "400K-0",
+   "name": "체결 상태 줄",
+   "component": "Frame",
+   "w": 752,
+   "h": 24,
+   "depth": 8
+  },
+  {
+   "id": "400M-0",
+   "name": "당일 · 전일 체결",
+   "component": "Frame",
+   "w": 237,
+   "h": 12,
+   "depth": 9
+  },
+  {
+   "id": "400R-0",
+   "name": "Instrument Context — 레일 (M: primary 아래 100%)",
+   "component": "Frame",
+   "w": 752,
+   "h": 175,
+   "depth": 7
+  },
+  {
+   "id": "400S-0",
+   "name": "Rail Top Row — 3열",
+   "component": "Frame",
+   "w": 752,
+   "h": 78,
+   "depth": 8
+  },
+  {
+   "id": "400T-0",
+   "name": "종목 요약",
+   "component": "Frame",
+   "w": 243,
+   "h": 78,
+   "depth": 9
+  },
+  {
+   "id": "400U-0",
+   "name": "제목",
+   "component": "Frame",
+   "w": 243,
+   "h": 15,
+   "depth": 10
+  },
+  {
+   "id": "400X-0",
+   "name": "시가총액",
+   "component": "Frame",
+   "w": 243,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "4010-0",
+   "name": "외국인 보유",
+   "component": "Frame",
+   "w": 243,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "4013-0",
+   "name": "유통 주식",
+   "component": "Frame",
+   "w": 243,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "4017-0",
+   "name": "오늘의 수급",
+   "component": "Frame",
+   "w": 243,
+   "h": 78,
+   "depth": 9
+  },
+  {
+   "id": "401H-0",
+   "name": "제목",
+   "component": "Frame",
+   "w": 243,
+   "h": 15,
+   "depth": 10
+  },
+  {
+   "id": "401E-0",
+   "name": "시가총액",
+   "component": "Frame",
+   "w": 243,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "401B-0",
+   "name": "외국인 보유",
+   "component": "Frame",
+   "w": 243,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "4018-0",
+   "name": "유통 주식",
+   "component": "Frame",
+   "w": 243,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "401K-0",
+   "name": "체결 비용 · 증거금",
+   "component": "Frame",
+   "w": 243,
+   "h": 78,
+   "depth": 9
+  },
+  {
+   "id": "401U-0",
+   "name": "제목",
+   "component": "Frame",
+   "w": 243,
+   "h": 15,
+   "depth": 10
+  },
+  {
+   "id": "401R-0",
+   "name": "시가총액",
+   "component": "Frame",
+   "w": 243,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "401O-0",
+   "name": "외국인 보유",
+   "component": "Frame",
+   "w": 243,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "401L-0",
+   "name": "유통 주식",
+   "component": "Frame",
+   "w": 243,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "401X-0",
+   "name": "일별 시세",
+   "component": "Frame",
+   "w": 752,
+   "h": 80,
+   "depth": 8
+  },
+  {
+   "id": "401Y-0",
+   "name": "일별 시세 제목",
+   "component": "Frame",
+   "w": 752,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "4021-0",
+   "name": "일별 표 헤더",
+   "component": "Frame",
+   "w": 752,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "4028-0",
+   "name": "일별 행 09-01",
+   "component": "Frame",
+   "w": 752,
+   "h": 19,
+   "depth": 9
+  },
+  {
+   "id": "402F-0",
+   "name": "일별 행 08-31",
+   "component": "Frame",
+   "w": 752,
+   "h": 19,
+   "depth": 9
+  },
+  {
+   "id": "3ZPD-0",
+   "name": "③ 대화 영역 400px",
+   "component": "Frame",
+   "w": 400,
+   "h": 716,
+   "depth": 2
+  },
+  {
+   "id": "3ZSD-0",
+   "name": "④ 결과물 · 출처 도크",
+   "component": "Frame",
+   "w": 392,
+   "h": 196,
+   "depth": 3
+  },
+  {
+   "id": "3ZT0-0",
+   "name": "결과물",
+   "component": "Frame",
+   "w": 390,
+   "h": 55,
+   "depth": 4
+  },
+  {
+   "id": "3ZT2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3ZSP-0",
+   "name": "출처",
+   "component": "Frame",
+   "w": 390,
+   "h": 63,
+   "depth": 4
+  },
+  {
+   "id": "3ZSX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3ZSQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3ZSV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 71,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "3ZST-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "3ZSR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 83,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "3ZSE-0",
+   "name": "하위 에이전트",
+   "component": "Frame",
+   "w": 390,
+   "h": 76,
+   "depth": 4
+  },
+  {
+   "id": "3ZSM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3ZSF-0",
+   "name": "agent-row",
+   "component": "Frame",
+   "w": 362,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3ZSJ-0",
+   "name": "row-top",
+   "component": "Frame",
+   "w": 362,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3ZSG-0",
+   "name": "row-bottom",
+   "component": "Frame",
+   "w": 362,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3ZPX-0",
+   "name": "history",
+   "component": "Frame",
+   "w": 400,
+   "h": 428,
+   "depth": 3
+  },
+  {
+   "id": "3ZS2-0",
+   "name": "완료 턴",
+   "component": "Frame",
+   "w": 368,
+   "h": 143,
+   "depth": 4
+  },
+  {
+   "id": "3ZSA-0",
+   "name": "⑤ 사용자 말풍선 (우측 정렬)",
+   "component": "Frame",
+   "w": 368,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "3ZSB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3ZS4-0",
+   "name": "⑥ 경과 헤더 — 접힌 상태",
+   "component": "Frame",
+   "w": 368,
+   "h": 25,
+   "depth": 5
+  },
+  {
+   "id": "3ZS6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 368,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3ZS7-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3ZS8-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3ZS5-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 368,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "3ZR2-0",
+   "name": "진행 중 턴",
+   "component": "Frame",
+   "w": 368,
+   "h": 263,
+   "depth": 4
+  },
+  {
+   "id": "3ZRZ-0",
+   "name": "사용자 말풍선",
+   "component": "Frame",
+   "w": 368,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "3ZS0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 298,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3ZRW-0",
+   "name": "⑥ 경과 헤더 — 진행 중",
+   "component": "Frame",
+   "w": 368,
+   "h": 25,
+   "depth": 5
+  },
+  {
+   "id": "3ZRX-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 368,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "3ZRL-0",
+   "name": "⑦ 하위 에이전트 블록",
+   "component": "Frame",
+   "w": 368,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "3ZRQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 368,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "3ZRS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "3ZRU-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3ZRM-0",
+   "name": "사고 문구 — 앞은 진하고 뒤로 옅어진다",
+   "component": "Frame",
+   "w": 368,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3ZR3-0",
+   "name": "⑧ 실행 라인 — 지금 부르고 있는 것",
+   "component": "Frame",
+   "w": 368,
+   "h": 58,
+   "depth": 5
+  },
+  {
+   "id": "3ZRF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 368,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3ZRI-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3ZRK-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3ZRJ-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3ZR9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 368,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3ZRC-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3ZRE-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3ZRD-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3ZR4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 368,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3ZR6-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3ZR8-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3ZR7-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3ZPY-0",
+   "name": "turn-agent (능동 턴) — 조건 패널 형식",
+   "component": "Frame",
+   "w": 368,
+   "h": 300,
+   "depth": 4
+  },
+  {
+   "id": "3ZQW-0",
+   "name": "agent-head",
+   "component": "Frame",
+   "w": 368,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3ZR0-0",
+   "name": "agent-badge",
+   "component": "Frame",
+   "w": 74,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3ZQY-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 178,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZQP-0",
+   "name": "본문 — 인라인 칩을 문장에 섞는다",
+   "component": "Frame",
+   "w": 368,
+   "h": 90,
+   "depth": 5
+  },
+  {
+   "id": "3ZQT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 119,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "3ZQQ-0",
+   "name": "시점 단서 (템플릿 고정 문구)",
+   "component": "Frame",
+   "w": 368,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "3ZQ0-0",
+   "name": "조건 패널",
+   "component": "Frame",
+   "w": 368,
+   "h": 142,
+   "depth": 5
+  },
+  {
+   "id": "3ZQF-0",
+   "name": "패널 머리 바",
+   "component": "Frame",
+   "w": 366,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3ZQK-0",
+   "name": "캔버스로 보내기",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3ZQL-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 8
+  },
+  {
+   "id": "3ZQN-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3ZQM-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "3ZQG-0",
+   "name": "복사",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3ZQH-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 8
+  },
+  {
+   "id": "3ZQJ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 9
+  },
+  {
+   "id": "3ZQI-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3ZQ1-0",
+   "name": "패널 본문",
+   "component": "Frame",
+   "w": 366,
+   "h": 110,
+   "depth": 6
+  },
+  {
+   "id": "3ZQA-0",
+   "name": "조건 행 · 충족",
+   "component": "Frame",
+   "w": 344,
+   "h": 17,
+   "depth": 7
+  },
+  {
+   "id": "3ZQ6-0",
+   "name": "조건 행 · 충족",
+   "component": "Frame",
+   "w": 344,
+   "h": 17,
+   "depth": 7
+  },
+  {
+   "id": "3ZQ2-0",
+   "name": "조건 행 · 참고",
+   "component": "Frame",
+   "w": 344,
+   "h": 17,
+   "depth": 7
+  },
+  {
+   "id": "3ZPE-0",
+   "name": "input-stack",
+   "component": "Frame",
+   "w": 400,
+   "h": 84,
+   "depth": 3
+  },
+  {
+   "id": "3ZPR-0",
+   "name": "input-row · 실행 중 (ESC 중단)",
+   "component": "Frame",
+   "w": 392,
+   "h": 44,
+   "depth": 4
+  },
+  {
+   "id": "3ZPS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 99,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3ZPT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 67,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3ZPF-0",
+   "name": "control-strip",
+   "component": "Frame",
+   "w": 392,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "3ZPN-0",
+   "name": "키우미 (#dot 대체) · 호출 중 — 얼굴 열림",
+   "component": "Frame",
+   "w": 18,
+   "h": 18,
+   "depth": 5
+  },
+  {
+   "id": "3ZPO-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 11,
+   "h": 11,
+   "depth": 6
+  },
+  {
+   "id": "3ZPQ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 2,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "3ZPP-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 2,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "3ZPL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 73,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "3ZPJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3ZPI-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZPG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 111,
+   "h": 28,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "시세 · 삼성전자": 1,
+  "×": 4,
+  "계좌 · ****4721": 1,
+  "호가 · 삼성전자": 1,
+  "수급 · 삼성전자": 1,
+  "삼성전자": 1,
+  "005930 · KOSPI · KRX": 1,
+  "150,850원": 1,
+  "+1,850 · +1.24%": 4,
+  "09:42:18": 3,
+  "시가 · 고가 · 저가": 2,
+  "149,200 · 152,400 · 148,100": 2,
+  "09:00:03 · 09:12:40 · 09:05:22": 1,
+  "거래대금": 1,
+  "2.14조원": 1,
+  "거래량 1,420만주 · 전일 대비 120.3%": 1,
+  "PER": 1,
+  "21.2배": 1,
+  "업종 11.2배": 1,
+  "PBR": 1,
+  "2.63배": 1,
+  "업종 1.61배": 1,
+  "ROE": 1,
+  "8.4%": 1,
+  "전년 7.9%": 1,
+  "체결 흐름": 1,
+  "시각": 1,
+  "체결가 · 구분": 1,
+  "전일대비": 1,
+  "체결량": 1,
+  "체결강도": 1,
+  "150,850": 3,
+  "매수체결 · KRX": 3,
+  "1,284주": 1,
+  "108.4%": 1,
+  "09:42:15": 1,
+  "560주": 1,
+  "118.1%": 1,
+  "09:42:13": 1,
+  "150,900": 1,
+  "기세 · KRX": 1,
+  "+1,900 · +1.28%": 1,
+  "해당 없음": 2,
+  "09:42:11": 1,
+  "150,800": 1,
+  "매도체결 · KRX": 1,
+  "+1,800 · +1.21%": 1,
+  "2,410주": 1,
+  "116.7%": 1,
+  "09:42:08": 1,
+  "890주": 1,
+  "121.3%": 1,
+  "순간 거래대금 1.94억원 · 매수 42,180건 · 매도 38,640건": 1,
+  "당일 · 전일 체결": 1,
+  "1,420만주 · 1,180만주": 1,
+  "+20.3%": 1,
+  "종목 요약": 1,
+  "정상 거래": 1,
+  "시가총액": 1,
+  "900.4조원": 1,
+  "외국인 보유": 1,
+  "52.41%": 1,
+  "유통 주식": 1,
+  "44.4억주": 1,
+  "오늘의 수급": 1,
+  "순매수 기준": 1,
+  "외국인": 1,
+  "+128억원": 1,
+  "기관": 1,
+  "+196억원": 1,
+  "개인": 1,
+  "−312억원": 1,
+  "체결 비용 · 증거금": 1,
+  "K.O 접근도 해당 없음": 1,
+  "거래비용": 1,
+  "22원/주": 1,
+  "CFD증거금": 1,
+  "40%": 1,
+  "유지증거금": 1,
+  "25%": 1,
+  "일별 시세": 1,
+  "전체 60건 · 3건 표시": 1,
+  "일자": 1,
+  "종가 · 전일대비": 1,
+  "거래량 · 거래대금": 1,
+  "외국계 · 프로그램": 1,
+  "09-01": 1,
+  "150,850 · +1.24%": 1,
+  "1,420만주 · 2.14조원": 1,
+  "+182만주 · +64만주": 1,
+  "08-31": 1,
+  "148,200 · 149,400 · 148,000": 1,
+  "149,000 · +0.68%": 1,
+  "1,180만주 · 1.76조원": 1,
+  "+95만주 · +21만주": 1,
+  "결과물": 1,
+  "캔버스 2": 1,
+  "네이버 뉴스 · 삼성전자 일봉": 1,
+  "출처": 1,
+  "3": 1,
+  "일봉 차트": 1,
+  "DART 재무제표": 1,
+  "네이버 뉴스": 1,
+  "하위 에이전트": 1,
+  "1": 1,
+  "재무 해석": 2,
+  "진행 중": 1,
+  "8.4s": 1,
+  "현재가 조회": 1,
+  "삼성전자 흐름이랑 재무 같이 보여줘": 1,
+  "38초 동안 작업함": 1,
+  "일봉 60개를 폈습니다. 5월 하순부터 20일선이 60일선을 위로 뚫고 그대로 벌어졌고, 종가 88,100원이 구간 최고 부근입니다.": 1,
+  "재무 쪽은 하위 에이전트한테 맡겨서 정리해줘": 1,
+  "29초 동안 작업 중입니다": 1,
+  "재무 해석은 읽기 전용 하위 에이전트에게 맡기겠습니다. 2025 연결 재무상태표에서 유동비율·현금성자산 비중만 계산하고 주문은 건드리지 않습니다.": 1,
+  "작업 시작됨": 1,
+  "유동비율 계산": 1,
+  "— 유동자산 ÷": 1,
+  "유동부채 확인 중": 1,
+  "재무제표 조회 · 삼성전자 2025 연결": 1,
+  "1.2s": 1,
+  "현재가 조회 · 삼성전자": 1,
+  "0.4s": 1,
+  "일별 주가 조회 · 대기 중": 1,
+  "15:30 발화": 1,
+  "주기 확인": 1,
+  "2분 전": 1,
+  "null": 1,
+  "삼성전자 005930": 2,
+  " 조건 도달 — 관측값 88,100 (임계 88,000)": 1,
+  "값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.": 1,
+  "감시 조건": 1,
+  "✓": 2,
+  "종가 88,000 이상": 1,
+  "88,100": 1,
+  "거래량 1,000만주 이상": 1,
+  "11,689,068": 1,
+  "△": 1,
+  "장중에만 확인": 1,
+  "15:30 마감": 1,
+  "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다": 1,
+  "무엇이든 물어보세요": 1,
+  "29s": 1,
+  "ESC 중단": 1,
+  "CLAUDE": 1,
+  "감시 2": 1,
+  "OPUS · HIGH": 1,
+  "탭 = 카드 인스턴스 · 뷰포트 1개 · 컨테이너 쿼리 XL/L/M/S/XS": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a26d51402880cf3989f42336e072368a5f4798216cc3266e87fbaf9f5cdcf862"
+}

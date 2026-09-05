@@ -1,0 +1,629 @@
+{
+ "board_id": "1IG3-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "S01 · 시간 초과·취소·인증 만료·장 마감",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "1ISL-0",
+   "text": "중단돼도 질문과 이미 확인한 값은 사라지지 않습니다",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ISM-0",
+   "text": "시간 초과 · 사용자 취소 · 인증 만료 · 장 마감의 실제 Canvas 상태",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ISN-0",
+   "text": "S01 · 4 states",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Header"
+   ]
+  },
+  {
+   "id": "1SU9-0",
+   "text": "중단·시장 상태",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "State list header"
+   ]
+  },
+  {
+   "id": "1SUA-0",
+   "text": "4개 상태",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "State list header"
+   ]
+  },
+  {
+   "id": "1SUE-0",
+   "text": "시간 초과",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "시간 초과",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SUF-0",
+   "text": "삼성전자 3개월 차트 · 2026-08-31 09:42",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "시간 초과",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SUG-0",
+   "text": "삼성전자 005930 · 최근 3개월 · 현재가 150,850원",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "시간 초과",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SUH-0",
+   "text": "다시 시도",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "시간 초과"
+   ]
+  },
+  {
+   "id": "1SUL-0",
+   "text": "사용자 취소",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "사용자 취소",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SUM-0",
+   "text": "거래대금 상위 저평가 종목 · 2026-08-31 09:40",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "사용자 취소",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SUN-0",
+   "text": "삼성전자 2.14조 · SK하이닉스 0.94조 · 현대차 0.53조 · KOSPI · 거래대금 상위 · PER 20배 이하 · 자동 재실행 안 함",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "사용자 취소",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SUO-0",
+   "text": "결과 유지 · 다시 검색",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "사용자 취소"
+   ]
+  },
+  {
+   "id": "1SUS-0",
+   "text": "인증 만료",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "인증 만료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SUT-0",
+   "text": "내 계좌 · 보유종목 · 2026-08-31 09:33",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "인증 만료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SUU-0",
+   "text": "평가금액 89,760,240원 · 8종목 · 키움증권 끝 4721 · 이전 값 읽기 전용 유지 · 주문과 새 조회는 재연결 후 가능",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "인증 만료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SUV-0",
+   "text": "계좌 다시 연결",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "인증 만료"
+   ]
+  },
+  {
+   "id": "1SUZ-0",
+   "text": "장 마감",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "장 마감",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SV0-0",
+   "text": "삼성전자 호가 · 005930 · 정규장 최종",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "장 마감",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SV1-0",
+   "text": "종가 150,850원 · 매도 150,900/12,430주 · 매수 150,850/10,240주 · 실시간 중지 · 시간외 종가 선택 가능",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "장 마감",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SV2-0",
+   "text": "시간외 호가 보기",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Runtime state selector",
+    "장 마감"
+   ]
+  },
+  {
+   "id": "1SV5-0",
+   "text": "선택 상태 · 시간 초과",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Selected runtime state detail",
+    "Selected state header"
+   ]
+  },
+  {
+   "id": "1SV6-0",
+   "text": "2026-08-31 09:42",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Selected runtime state detail",
+    "Selected state header"
+   ]
+  },
+  {
+   "id": "1SV9-0",
+   "text": "응답 시간이 초과됐습니다",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Selected runtime state detail",
+    "Timeout hero"
+   ]
+  },
+  {
+   "id": "1SVA-0",
+   "text": "이미 확인한 현재가와 기간은 유지했습니다. 같은 조회를 다시 요청할 수 있습니다.",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Selected runtime state detail",
+    "Timeout hero"
+   ]
+  },
+  {
+   "id": "1SVO-0",
+   "text": "종목",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Selected runtime state detail",
+    "Preserved query facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SVP-0",
+   "text": "삼성전자 005930",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Selected runtime state detail",
+    "Preserved query facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SVR-0",
+   "text": "기간",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Selected runtime state detail",
+    "Preserved query facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SVS-0",
+   "text": "최근 3개월",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Selected runtime state detail",
+    "Preserved query facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SVU-0",
+   "text": "보존된 값",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Selected runtime state detail",
+    "Preserved query facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SVV-0",
+   "text": "현재가 150,850원",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Selected runtime state detail",
+    "Preserved query facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SVY-0",
+   "text": "다시 시도",
+   "path": [
+    "S01 · 시간 초과·취소·인증 만료·장 마감",
+    "Compact runtime state workspace",
+    "Selected runtime state detail",
+    "Timeout action"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1IG3-0",
+   "name": "S01 · 시간 초과·취소·인증 만료·장 마감",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "1ISJ-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 1
+  },
+  {
+   "id": "1ISK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1SU2-0",
+   "name": "Compact runtime state workspace",
+   "component": "Frame",
+   "w": 1344,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "1SU4-0",
+   "name": "Runtime state selector",
+   "component": "Frame",
+   "w": 470,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1SU8-0",
+   "name": "State list header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SUC-0",
+   "name": "시간 초과",
+   "component": "Frame",
+   "w": 430,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SUD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SUJ-0",
+   "name": "사용자 취소",
+   "component": "Frame",
+   "w": 430,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SUK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SUQ-0",
+   "name": "인증 만료",
+   "component": "Frame",
+   "w": 430,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SUR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SUX-0",
+   "name": "장 마감",
+   "component": "Frame",
+   "w": 430,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SUY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SU6-0",
+   "name": "Selected runtime state detail",
+   "component": "Frame",
+   "w": 854,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1SV4-0",
+   "name": "Selected state header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SV8-0",
+   "name": "Timeout hero",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SVC-0",
+   "name": "Preserved chart",
+   "component": "Frame",
+   "w": 0,
+   "h": 128,
+   "depth": 3
+  },
+  {
+   "id": "1SVD-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 26,
+   "h": 44,
+   "depth": 4
+  },
+  {
+   "id": "1SVE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 26,
+   "h": 76,
+   "depth": 4
+  },
+  {
+   "id": "1SVF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 26,
+   "h": 62,
+   "depth": 4
+  },
+  {
+   "id": "1SVG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 26,
+   "h": 96,
+   "depth": 4
+  },
+  {
+   "id": "1SVH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 26,
+   "h": 80,
+   "depth": 4
+  },
+  {
+   "id": "1SVI-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 26,
+   "h": 110,
+   "depth": 4
+  },
+  {
+   "id": "1SVJ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 26,
+   "h": 90,
+   "depth": 4
+  },
+  {
+   "id": "1SVK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 26,
+   "h": 118,
+   "depth": 4
+  },
+  {
+   "id": "1SVM-0",
+   "name": "Preserved query facts",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SVN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 250,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SVQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 250,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SVT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 250,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SVX-0",
+   "name": "Timeout action",
+   "component": "Frame",
+   "w": 0,
+   "h": 50,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "중단돼도 질문과 이미 확인한 값은 사라지지 않습니다": 1,
+  "시간 초과 · 사용자 취소 · 인증 만료 · 장 마감의 실제 Canvas 상태": 1,
+  "S01 · 4 states": 1,
+  "중단·시장 상태": 1,
+  "4개 상태": 1,
+  "시간 초과": 1,
+  "삼성전자 3개월 차트 · 2026-08-31 09:42": 1,
+  "삼성전자 005930 · 최근 3개월 · 현재가 150,850원": 1,
+  "다시 시도": 2,
+  "사용자 취소": 1,
+  "거래대금 상위 저평가 종목 · 2026-08-31 09:40": 1,
+  "삼성전자 2.14조 · SK하이닉스 0.94조 · 현대차 0.53조 · KOSPI · 거래대금 상위 · PER 20배 이하 · 자동 재실행 안 함": 1,
+  "결과 유지 · 다시 검색": 1,
+  "인증 만료": 1,
+  "내 계좌 · 보유종목 · 2026-08-31 09:33": 1,
+  "평가금액 89,760,240원 · 8종목 · 키움증권 끝 4721 · 이전 값 읽기 전용 유지 · 주문과 새 조회는 재연결 후 가능": 1,
+  "계좌 다시 연결": 1,
+  "장 마감": 1,
+  "삼성전자 호가 · 005930 · 정규장 최종": 1,
+  "종가 150,850원 · 매도 150,900/12,430주 · 매수 150,850/10,240주 · 실시간 중지 · 시간외 종가 선택 가능": 1,
+  "시간외 호가 보기": 1,
+  "선택 상태 · 시간 초과": 1,
+  "2026-08-31 09:42": 1,
+  "응답 시간이 초과됐습니다": 1,
+  "이미 확인한 현재가와 기간은 유지했습니다. 같은 조회를 다시 요청할 수 있습니다.": 1,
+  "종목": 1,
+  "삼성전자 005930": 1,
+  "기간": 1,
+  "최근 3개월": 1,
+  "보존된 값": 1,
+  "현재가 150,850원": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "55e569276b2794027ca9b8b46a4970259eb123f8a24c738b091bd97d61ae69d0"
+}

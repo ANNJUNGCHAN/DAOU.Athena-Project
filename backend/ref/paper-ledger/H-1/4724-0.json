@@ -1,0 +1,239 @@
+{
+ "board_id": "4724-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "472R-0",
+   "text": "",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "472Q-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "472O-0",
+   "text": "삼성전자 원주문 취소",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Header"
+   ]
+  },
+  {
+   "id": "472L-0",
+   "text": "주문 정보를 확인했어요",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Body",
+    "Status"
+   ]
+  },
+  {
+   "id": "472J-0",
+   "text": "주문가능금액",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "472I-0",
+   "text": "31,240,000원",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "472G-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "472F-0",
+   "text": "10주",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "472C-0",
+   "text": "계좌",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  },
+  {
+   "id": "472B-0",
+   "text": "키움증권 01",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4729-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4728-0",
+   "text": "25%",
+   "path": [
+    "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4724-0",
+   "name": "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "472N-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "472P-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4725-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "472K-0",
+   "name": "Status",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "472M-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 3
+  },
+  {
+   "id": "472D-0",
+   "name": "Confirm facts",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "472H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "472E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4726-0",
+   "name": "Confirm values",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "472A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4727-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "삼성전자 원주문 취소": 1,
+  "주문 정보를 확인했어요": 1,
+  "주문가능금액": 1,
+  "31,240,000원": 1,
+  "수량": 1,
+  "10주": 1,
+  "계좌": 1,
+  "키움증권 01": 1,
+  "변화": 1,
+  "25%": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "59029c363ab2b0706b84324014c77c28226320eb76ff5d99e170c77c0b542a70"
+}

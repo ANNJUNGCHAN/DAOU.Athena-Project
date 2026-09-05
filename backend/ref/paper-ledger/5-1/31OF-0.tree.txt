@@ -1,0 +1,284 @@
+Frame "CC-05 / R03-T6-9 · 순위 — 신용융자 가능" (31OF-0) 1440×1014
+  Frame "Flow Card Surface" (31OG-0) 1360×934
+    Frame "Flow Header" (31TF-0) 0×0
+      Frame "Frame" (31TT-0) 0×0
+        Frame "Frame" (31TV-0) 0×0
+          Text "수급 순위" (31TY-0) 0×0 "수급 순위"
+          Frame "Frame" (31TW-0) 0×0
+            Text "조회 스냅샷" (31TX-0) 0×0 "조회 스냅샷"
+        Text "시장 전체 · 상위 50종목" (31TU-0) 0×0 "시장 전체 · 상위 50종목"
+      Frame "Frame" (31TG-0) 0×0
+        Frame "Frame" (31TR-0) 0×0
+          Text "투자자별" (31TS-0) 0×0 "투자자별"
+        Frame "Frame" (31TP-0) 0×0
+          Text "거래원" (31TQ-0) 0×0 "거래원"
+        Frame "Frame" (31TN-0) 0×0
+          Text "프로그램" (31TO-0) 0×0 "프로그램"
+        Frame "Frame" (31TL-0) 0×0
+          Text "신용·대차" (31TM-0) 0×0 "신용·대차"
+        Frame "Frame" (31TJ-0) 0×0
+          Text "종목 동향" (31TK-0) 0×0 "종목 동향"
+        Frame "Frame" (31TH-0) 0×0
+          Text "순위" (31TI-0) 0×0 "순위"
+    Frame "Flow Summary Strip" (31SV-0) 0×0
+      Frame "Frame" (31TC-0) 0×78
+        Text "정렬 기준" (31TE-0) 0×0 "정렬 기준"
+        Text "보증금률 낮은 순" (31TD-0) 0×0 "보증금률 낮은 순"
+      Frame "Frame" (31T8-0) 190×78
+        Text "융자 가능" (31TB-0) 0×0 "융자 가능"
+        Text "1,842종목" (31TA-0) 0×0 "1,842종목"
+        Text "전체 2,056종목" (31T9-0) 0×0 "전체 2,056종목"
+      Frame "Frame" (31T4-0) 170×78
+        Text "융자 불가" (31T7-0) 0×0 "융자 불가"
+        Text "214종목" (31T6-0) 0×0 "214종목"
+        Text "증거금 100%" (31T5-0) 0×0 "증거금 100%"
+      Frame "Frame" (31T0-0) 150×78
+        Text "최저 보증금률" (31T3-0) 0×0 "최저 보증금률"
+        Text "40%" (31T2-0) 0×0 "40%"
+        Text "가능 종목 기준" (31T1-0) 0×0 "가능 종목 기준"
+      Frame "Frame" (31SW-0) 170×78
+        Text "기준 시점" (31SZ-0) 0×0 "기준 시점"
+        Text "전일 확정" (31SY-0) 0×0 "전일 확정"
+        Text "09:42 조회" (31SX-0) 0×0 "09:42 조회"
+    Frame "Flow Workspace" (31OK-0) 0×0
+      Frame "Investor Panel" (31PT-0) 880×0
+        Frame "Frame" (31SA-0) 0×0
+          Frame "Frame" (31SK-0) 0×0
+            Frame "Frame" (31ST-0) 0×0
+              Text "프로그램 순매수" (31SU-0) 0×0 "프로그램 순매수"
+            Frame "Frame" (31SR-0) 0×0
+              Text "신용비율 상위" (31SS-0) 0×0 "신용비율 상위"
+            Frame "Frame" (31SP-0) 0×0
+              Text "대차 상위" (31SQ-0) 0×0 "대차 상위"
+            Frame "Frame" (31SN-0) 0×0
+              Text "한도소진율 증가" (31SO-0) 0×0 "한도소진율 증가"
+            Frame "Frame" (31SL-0) 0×0
+              Text "장중 투자자 상위" (31SM-0) 0×0 "장중 투자자 상위"
+          Frame "Frame" (31SB-0) 0×0
+            Frame "Frame" (31SI-0) 0×0
+              Text "외국인·기관 상위" (31SJ-0) 0×0 "외국인·기관 상위"
+            Frame "Frame" (31SG-0) 0×0
+              Text "증권사별 상위" (31SH-0) 0×0 "증권사별 상위"
+            Frame "Frame" (31SE-0) 0×0
+              Text "동일순매매" (31SF-0) 0×0 "동일순매매"
+            Frame "Frame" (31SC-0) 0×0
+              Text "신용융자 가능종목" (31SD-0) 0×0 "신용융자 가능종목"
+        Frame "Rank Table" (3A7P-0) 0×0
+          Frame "Head" (3A7Q-0) 0×36
+            Text "순위" (3A7R-0) 34×0 "순위"
+            Text "종목" (3A7S-0) 0×0 "종목"
+            Text "현재가" (3A7T-0) 112×0 "현재가"
+            Text "대용가" (3A7U-0) 96×0 "대용가"
+            Text "가능 여부" (3A7V-0) 100×0 "가능 여부"
+            Text "보증금률" (3A7W-0) 88×0 "보증금률"
+            Text "한도 소진" (3A7X-0) 88×0 "한도 소진"
+            Text "융자잔고" (3A7Y-0) 96×0 "융자잔고"
+          Frame "1 삼성전자" (3A7Z-0) 0×52
+            Text "1" (3A80-0) 34×0 "1"
+            Frame "Frame" (3A81-0) 0×0
+              Text "삼성전자" (3A82-0) 0×0 "삼성전자"
+              Text "005930" (3A83-0) 0×0 "005930"
+            Frame "Frame" (3A84-0) 112×0
+              Text "150,850" (3A85-0) 0×0 "150,850"
+              Text "+1,850 · +1.24%" (3A86-0) 0×0 "+1,850 · +1.24%"
+            Text "120,680" (3A87-0) 96×0 "120,680"
+            Frame "Frame" (3A88-0) 100×0
+              Frame "Frame" (3A89-0) 0×0
+                Text "가능" (3A8A-0) 0×0 "가능"
+            Text "40%" (3A8B-0) 88×0 "40%"
+            Text "62%" (3A8C-0) 88×0 "62%"
+            Text "4,208억원" (3A8D-0) 96×0 "4,208억원"
+          Frame "2 SK하이닉스" (3A8E-0) 0×52
+            Text "2" (3A8F-0) 34×0 "2"
+            Frame "Frame" (3A8G-0) 0×0
+              Text "SK하이닉스" (3A8H-0) 0×0 "SK하이닉스"
+              Text "000660" (3A8I-0) 0×0 "000660"
+            Frame "Frame" (3A8J-0) 112×0
+              Text "198,400" (3A8K-0) 0×0 "198,400"
+              Text "+3,985 · +2.05%" (3A8L-0) 0×0 "+3,985 · +2.05%"
+            Text "158,720" (3A8M-0) 96×0 "158,720"
+            Frame "Frame" (3A8N-0) 100×0
+              Frame "Frame" (3A8O-0) 0×0
+                Text "가능" (3A8P-0) 0×0 "가능"
+            Text "40%" (3A8Q-0) 88×0 "40%"
+            Text "58%" (3A8R-0) 88×0 "58%"
+            Text "3,812억원" (3A8S-0) 96×0 "3,812억원"
+          Frame "3 현대차" (3A8T-0) 0×52
+            Text "3" (3A8U-0) 34×0 "3"
+            Frame "Frame" (3A8V-0) 0×0
+              Text "현대차" (3A8W-0) 0×0 "현대차"
+              Text "005380" (3A8X-0) 0×0 "005380"
+            Frame "Frame" (3A8Y-0) 112×0
+              Text "232,500" (3A8Z-0) 0×0 "232,500"
+              Text "+1,985 · +0.86%" (3A90-0) 0×0 "+1,985 · +0.86%"
+            Text "186,000" (3A91-0) 96×0 "186,000"
+            Frame "Frame" (3A92-0) 100×0
+              Frame "Frame" (3A93-0) 0×0
+                Text "가능" (3A94-0) 0×0 "가능"
+            Text "45%" (3A95-0) 88×0 "45%"
+            Text "47%" (3A96-0) 88×0 "47%"
+            Text "2,940억원" (3A97-0) 96×0 "2,940억원"
+          Frame "4 KB금융" (3AF3-0) 0×52
+            Text "4" (3AF4-0) 34×0 "4"
+            Frame "Frame" (3AF5-0) 0×0
+              Text "KB금융" (3AF6-0) 0×0 "KB금융"
+              Text "105560" (3AF7-0) 0×0 "105560"
+            Frame "Frame" (3AF8-0) 112×0
+              Text "78,200" (3AF9-0) 0×0 "78,200"
+              Text "+865 · +1.12%" (3AFA-0) 0×0 "+865 · +1.12%"
+            Text "62,560" (3AFB-0) 96×0 "62,560"
+            Frame "Frame" (3AFC-0) 100×0
+              Frame "Frame" (3AFD-0) 0×0
+                Text "가능" (3AFE-0) 0×0 "가능"
+            Text "45%" (3AFF-0) 88×0 "45%"
+            Text "38%" (3AFG-0) 88×0 "38%"
+            Text "1,860억원" (3AFH-0) 96×0 "1,860억원"
+          Frame "5 NAVER" (3AFI-0) 0×52
+            Text "5" (3AFJ-0) 34×0 "5"
+            Frame "Frame" (3AFK-0) 0×0
+              Text "NAVER" (3AFL-0) 0×0 "NAVER"
+              Text "035420" (3AFM-0) 0×0 "035420"
+            Frame "Frame" (3AFN-0) 112×0
+              Text "214,000" (3AFO-0) 0×0 "214,000"
+              Text "-1,010 · -0.47%" (3AFP-0) 0×0 "-1,010 · -0.47%"
+            Text "171,200" (3AFQ-0) 96×0 "171,200"
+            Frame "Frame" (3AFR-0) 100×0
+              Frame "Frame" (3AFS-0) 0×0
+                Text "가능" (3AFT-0) 0×0 "가능"
+            Text "50%" (3AFU-0) 88×0 "50%"
+            Text "71%" (3AFV-0) 88×0 "71%"
+            Text "2,214억원" (3AFW-0) 96×0 "2,214억원"
+          Frame "6 POSCO홀딩스" (3AFX-0) 0×52
+            Text "6" (3AFY-0) 34×0 "6"
+            Frame "Frame" (3AFZ-0) 0×0
+              Text "POSCO홀딩스" (3AG0-0) 0×0 "POSCO홀딩스"
+              Text "005490" (3AG1-0) 0×0 "005490"
+            Frame "Frame" (3AG2-0) 112×0
+              Text "389,500" (3AG3-0) 0×0 "389,500"
+              Text "+2,515 · +0.65%" (3AG4-0) 0×0 "+2,515 · +0.65%"
+            Text "311,600" (3AG5-0) 96×0 "311,600"
+            Frame "Frame" (3AG6-0) 100×0
+              Frame "Frame" (3AG7-0) 0×0
+                Text "가능" (3AG8-0) 0×0 "가능"
+            Text "50%" (3AG9-0) 88×0 "50%"
+            Text "44%" (3AGA-0) 88×0 "44%"
+            Text "1,742억원" (3AGB-0) 96×0 "1,742억원"
+          Frame "7~48위 생략" (3T2N-0) 0×34
+            Text "7~48위 42종목" (3T2O-0) 0×0 "7~48위 42종목"
+            Rectangle "Rectangle" (3T2P-0) 308×16
+            Text "50% ~ 60%" (3T2Q-0) 88×0 "50% ~ 60%"
+            Rectangle "Rectangle" (3T2R-0) 184×16
+          Frame "49 LG화학" (3AGC-0) 0×52
+            Text "49" (3AGD-0) 34×0 "49"
+            Frame "Frame" (3AGE-0) 0×0
+              Text "LG화학" (3AGF-0) 0×0 "LG화학"
+              Text "051910" (3AGG-0) 0×0 "051910"
+            Frame "Frame" (3AGH-0) 112×0
+              Text "312,000" (3AGI-0) 0×0 "312,000"
+              Text "-3,470 · -1.10%" (3AGJ-0) 0×0 "-3,470 · -1.10%"
+            Text "249,600" (3AGK-0) 96×0 "249,600"
+            Frame "Frame" (3AGL-0) 100×0
+              Frame "Frame" (3AGM-0) 0×0
+                Text "가능" (3AGN-0) 0×0 "가능"
+            Text "60%" (3AGO-0) 88×0 "60%"
+            Text "22%" (3AGP-0) 88×0 "22%"
+            Text "640억원" (3AGQ-0) 96×0 "640억원"
+          Frame "50 카카오" (3AGR-0) 0×52
+            Text "50" (3AGS-0) 34×0 "50"
+            Frame "Frame" (3AGT-0) 0×0
+              Text "카카오" (3AGU-0) 0×0 "카카오"
+              Text "035720" (3AGV-0) 0×0 "035720"
+            Frame "Frame" (3AGW-0) 112×0
+              Text "41,850" (3AGX-0) 0×0 "41,850"
+              Text "-350 · -0.83%" (3AGY-0) 0×0 "-350 · -0.83%"
+            Text "33,480" (3AGZ-0) 96×0 "33,480"
+            Frame "Frame" (3AH0-0) 100×0
+              Frame "Frame" (3AH1-0) 0×0
+                Text "한도 초과" (3AH2-0) 0×0 "한도 초과"
+              Text "증거금 100% 적용" (3AH3-0) 0×0 "증거금 100% 적용"
+            Text "100%" (3AH4-0) 88×0 "100%"
+            Text "100%" (3AH5-0) 88×0 "100%"
+            Text "512억원" (3AH6-0) 96×0 "512억원"
+        Frame "Frame" (31PU-0) 0×0
+          Text "전체 50개 · 상위 6 + 하위 2…" (31PZ-0) 0×0 "전체 50개 · 상위 6 + 하위 2 표시"
+          Frame "Frame" (31PV-0) 0×0
+            Frame "Frame" (31PX-0) 0×0
+              Text "20개 더 보기" (31PY-0) 0×0 "20개 더 보기"
+            Text "접기" (31PW-0) 0×0 "접기"
+      Frame "Side Panel" (31OL-0) 0×0
+        Frame "Loanable Summary" (3IEC-0) 0×0
+          Frame "Frame" (3IED-0) 0×0
+            Text "가능 요약" (3IEE-0) 0×0 "가능 요약"
+            Text "전체 2,056종목" (3IEF-0) 0×0 "전체 2,056종목"
+          Frame "Frame" (3IEG-0) 0×0
+            Frame "Frame" (3IEH-0) 0×0
+              Text "가능" (3IEI-0) 0×0 "가능"
+              Text "1,842종목" (3IEJ-0) 0×0 "1,842종목"
+            Frame "Frame" (3IEK-0) 0×8
+              Rectangle "Rectangle" (3IEL-0) 0×8
+          Frame "Frame" (3IEM-0) 0×0
+            Frame "Frame" (3IEN-0) 0×0
+              Text "불가" (3IEO-0) 0×0 "불가"
+              Text "214종목" (3IEP-0) 0×0 "214종목"
+            Frame "Frame" (3IEQ-0) 0×8
+              Rectangle "Rectangle" (3IER-0) 0×8
+          Rectangle "Rectangle" (3IES-0) 0×1
+          Frame "Frame" (3IET-0) 0×0
+            Text "보증금률 40% 적용" (3IEU-0) 0×0 "보증금률 40% 적용"
+            Text "412종목" (3IEV-0) 0×0 "412종목"
+          Frame "Frame" (3IEW-0) 0×0
+            Text "최저 보증금률" (3IEX-0) 0×0 "최저 보증금률"
+            Text "40%" (3IEY-0) 0×0 "40%"
+        Frame "Loan Balance Bars" (3T2V-0) 0×0
+          Frame "Frame" (3T2W-0) 0×0
+            Text "융자잔고 상위 6" (3T2X-0) 0×0 "융자잔고 상위 6"
+            Text "최대 대비" (3T2Y-0) 0×0 "최대 대비"
+          Frame "삼성전자" (3T2Z-0) 0×0
+            Text "삼성전자" (3T30-0) 92×0 "삼성전자"
+            Frame "Frame" (3T31-0) 0×8
+              Rectangle "Rectangle" (3T32-0) 0×8
+            Text "4,208억원" (3T33-0) 76×0 "4,208억원"
+          Frame "SK하이닉스" (3T34-0) 0×0
+            Text "SK하이닉스" (3T35-0) 92×0 "SK하이닉스"
+            Frame "Frame" (3T36-0) 0×8
+              Rectangle "Rectangle" (3T37-0) 0×8
+            Text "3,812억원" (3T38-0) 76×0 "3,812억원"
+          Frame "현대차" (3T39-0) 0×0
+            Text "현대차" (3T3A-0) 92×0 "현대차"
+            Frame "Frame" (3T3B-0) 0×8
+              Rectangle "Rectangle" (3T3C-0) 0×8
+            Text "2,940억원" (3T3D-0) 76×0 "2,940억원"
+          Frame "NAVER" (3T3F-0) 0×0
+            Text "NAVER" (3T3G-0) 92×0 "NAVER"
+            Frame "Frame" (3T3H-0) 0×8
+              Rectangle "Rectangle" (3T3I-0) 0×8
+            Text "2,214억원" (3T3J-0) 76×0 "2,214억원"
+          Frame "KB금융" (3T3K-0) 0×0
+            Text "KB금융" (3T3L-0) 92×0 "KB금융"
+            Frame "Frame" (3T3M-0) 0×8
+              Rectangle "Rectangle" (3T3N-0) 0×8
+            Text "1,860억원" (3T3O-0) 76×0 "1,860억원"
+          Frame "POSCO홀딩스" (3T3P-0) 0×0
+            Text "POSCO홀딩스" (3T3Q-0) 92×0 "POSCO홀딩스"
+            Frame "Frame" (3T3R-0) 0×8
+              Rectangle "Rectangle" (3T3S-0) 0×8
+            Text "1,742억원" (3T3T-0) 76×0 "1,742억원"
+        Frame "Display Composition" (3T3V-0) 0×0
+          Frame "Frame" (3T3W-0) 0×0
+            Text "표시 구성 · 상위 50종목" (3T3X-0) 0×0 "표시 구성 · 상위 50종목"
+            Text "보증금률순" (3T3Y-0) 0×0 "보증금률순"
+          Frame "Frame" (3T3Z-0) 0×0
+            Text "표시 종목" (3T40-0) 0×0 "표시 종목"
+            Text "8종목" (3T41-0) 0×0 "8종목"
+          Frame "Frame" (3T42-0) 0×0
+            Text "생략 종목" (3T43-0) 0×0 "생략 종목"
+            Text "42종목" (3T44-0) 0×0 "42종목"
+          Frame "Frame" (3T45-0) 0×0
+            Text "표시 보증금률" (3T46-0) 0×0 "표시 보증금률"
+            Text "40% ~ 100%" (3T47-0) 0×0 "40% ~ 100%"
+          Frame "Frame" (3T48-0) 0×0
+            Text "생략 보증금률" (3T49-0) 0×0 "생략 보증금률"
+            Text "50% ~ 60%" (3T4A-0) 0×0 "50% ~ 60%"
+    Frame "Flow Status Footer" (31OH-0) 0×0
+      Text "조회 스냅샷" (31OJ-0) 0×0 "조회 스냅샷"
+      Text "융자 가능 여부 전일 확정 기준 · …" (31OI-0) 0×0 "융자 가능 여부 전일 확정 기준 · 마지막 조회 09:42:18"

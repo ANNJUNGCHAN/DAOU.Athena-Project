@@ -1,0 +1,339 @@
+{
+ "board_id": "46L6-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46M4-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46M3-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46M1-0",
+   "text": "반도체 업종·AI 테마",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Header"
+   ]
+  },
+  {
+   "id": "46LZ-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46LY-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46LX-0",
+   "text": "값",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46LW-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46LU-0",
+   "text": "01",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46LT-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46LS-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46LQ-0",
+   "text": "+2.84%",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46LP-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46LN-0",
+   "text": "02",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46LM-0",
+   "text": "기준 시각",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46LL-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46LJ-0",
+   "text": "09:42 기준",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46LI-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46LG-0",
+   "text": "03",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46LF-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46LE-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46LC-0",
+   "text": "상위 4%",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46LB-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46L8-0",
+   "text": "추가 항목은 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46L6-0",
+   "name": "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46M0-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46M2-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46L9-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46LV-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46LO-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46LR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46LH-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46LK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46LA-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46LD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46L7-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "반도체 업종·AI 테마": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "변화": 2,
+  "+2.84%": 1,
+  "02": 1,
+  "기준 시각": 1,
+  "09:42 기준": 1,
+  "03": 1,
+  "상위 4%": 1,
+  "추가 항목은 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "4a329d73bb777525ae00c1f917f03775a7b40b5dee3dec80eae034440bb9240c"
+}

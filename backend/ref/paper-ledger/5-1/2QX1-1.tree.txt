@@ -1,0 +1,259 @@
+Frame "CC-04 / R02-T3 · 호가 — KRX 금현물" (2QX1-1) 1440×1040
+  Frame "Gold Card Surface" (2QX2-1) 1360×960
+    Frame "Gold Header" (2QX3-1) 0×0
+      Frame "Frame" (2QX4-1) 0×0
+        Frame "Frame" (2QX5-1) 0×0
+          Text "금 99.99K 통합 호가" (2QX6-1) 0×0 "금 99.99K 통합 호가"
+          Frame "Frame" (2QX7-1) 0×0
+            Rectangle "Rectangle" (2QX8-1) 6×6
+            Text "실시간" (2QX9-1) 0×0 "실시간"
+        Text "KRX 금시장 · 1g 단위 · 09…" (2QXA-1) 0×0 "KRX 금시장 · 1g 단위 · 09:00~15:30"
+      Frame "Frame" (2QXB-1) 0×0
+        Frame "정규장" (32HS-0) 0×0
+          Text "정규장" (32HT-0) 0×0 "정규장"
+        Frame "시간외" (32HU-0) 0×0
+          Text "시간외" (32HV-0) 0×0 "시간외"
+        Frame "금현물" (32HW-0) 0×0
+          Text "금현물" (32HX-0) 0×0 "금현물"
+        Frame "Divider" (32HY-0) 1×24
+        Frame "5단" (32HZ-0) 0×0
+          Text "5단" (32I0-0) 0×0 "5단"
+        Frame "10단" (32I1-0) 0×0
+          Text "10단" (32I2-0) 0×0 "10단"
+    Frame "Gold Summary Strip" (2QXI-1) 0×0
+      Frame "Frame" (2QXJ-1) 0×0
+        Text "현재가" (2QXK-1) 0×0 "현재가"
+        Frame "Frame" (2QXL-1) 0×0
+          Text "109,750" (2QXM-1) 0×0 "109,750"
+          Text "+850 · +0.78%" (2QXN-1) 0×0 "+850 · +0.78%"
+        Text "원/g · 09:42:21 기준" (2QXO-1) 0×0 "원/g · 09:42:21 기준"
+      Frame "Frame" (2QXP-1) 0×0
+        Text "최우선 매도호가" (2QXQ-1) 0×0 "최우선 매도호가"
+        Text "109,800" (2QXR-1) 0×0 "109,800"
+        Text "잔량 92g" (2QXS-1) 0×0 "잔량 92g"
+      Frame "Frame" (2QXT-1) 0×0
+        Text "최우선 매수호가" (2QXU-1) 0×0 "최우선 매수호가"
+        Text "109,700" (2QXV-1) 0×0 "109,700"
+        Text "잔량 320g" (2QXW-1) 0×0 "잔량 320g"
+      Frame "KPI Volume" (343K-0) 0×0
+        Text "누적 거래량" (343L-0) 0×0 "누적 거래량"
+        Text "348kg" (343M-0) 0×0 "348kg"
+        Text "거래대금 382.4억" (343N-0) 0×0 "거래대금 382.4억"
+      Frame "KPI Volume Ratio" (343O-0) 0×0
+        Text "전일 거래량 대비" (343P-0) 0×0 "전일 거래량 대비"
+        Text "108.4%" (343Q-0) 0×0 "108.4%"
+        Text "거래회전율 2.7%" (343R-0) 0×0 "거래회전율 2.7%"
+      Frame "Frame" (2QY1-1) 0×0
+        Frame "Frame" (2QY2-1) 0×0
+          Text "매수비율" (2QY3-1) 0×0 "매수비율"
+          Text "68.4%" (2QY4-1) 0×0 "68.4%"
+        Frame "Frame" (2QY5-1) 0×8
+          Rectangle "Rectangle" (2QY6-1) 0×8
+          Rectangle "Rectangle" (2QY7-1) 0×8
+        Text "체결강도 121.5 · 총 잔량 4,…" (2QY8-1) 0×0 "체결강도 121.5 · 총 잔량 4,180g"
+    Frame "Gold Workspace" (2QY9-1) 0×0
+      Frame "Gold Ladder" (2QYA-1) 880×0
+        Frame "Ladder Head" (2QYI-1) 0×0
+          Text "호가 (원/g)" (2QYK-1) 130×0 "호가 (원/g)"
+          Text "등락" (2QYL-1) 110×0 "등락"
+          Text "잔량 (g)" (2QYM-1) 120×0 "잔량 (g)"
+          Frame "Frame" (2QYN-1) 0×0
+            Text "잔량 분포" (2QYO-1) 0×0 "잔량 분포"
+        Frame "Gold Ask Rows" (2QYP-1) 0×0
+          Frame "Frame" (2QYQ-1) 0×0
+            Text "110,000" (2QYS-1) 130×0 "110,000"
+            Text "+250" (2QYT-1) 110×0 "+250"
+            Text "369" (2QYU-1) 120×0 "369"
+            Frame "Frame" (2QYV-1) 0×0
+              Rectangle "Rectangle" (2QYW-1) 0×14
+          Frame "Frame" (2QYX-1) 0×0
+            Text "109,950" (2QYZ-1) 130×0 "109,950"
+            Text "+200" (2QZ0-1) 110×0 "+200"
+            Text "310" (2QZ1-1) 120×0 "310"
+            Frame "Frame" (2QZ2-1) 0×0
+              Rectangle "Rectangle" (2QZ3-1) 0×14
+          Frame "Frame" (2QZ4-1) 0×0
+            Text "109,900" (2QZ6-1) 130×0 "109,900"
+            Text "+150" (2QZ7-1) 110×0 "+150"
+            Text "286" (2QZ8-1) 120×0 "286"
+            Frame "Frame" (2QZ9-1) 0×0
+              Rectangle "Rectangle" (2QZA-1) 0×14
+          Frame "Frame" (2QZB-1) 0×0
+            Text "109,850" (2QZD-1) 130×0 "109,850"
+            Text "+100" (2QZE-1) 110×0 "+100"
+            Text "264" (2QZF-1) 120×0 "264"
+            Frame "Frame" (2QZG-1) 0×0
+              Rectangle "Rectangle" (2QZH-1) 0×14
+          Frame "Frame" (2QZI-1) 0×0
+            Text "109,800" (2QZK-1) 130×0 "109,800"
+            Text "+50" (2QZL-1) 110×0 "+50"
+            Text "92" (2QZM-1) 120×0 "92"
+            Frame "Frame" (2QZN-1) 0×0
+              Rectangle "Rectangle" (2QZO-1) 0×14
+        Frame "Gold Current Row" (2QZP-1) 0×0
+          Frame "Frame" (2QZQ-1) 0×0
+            Text "현재가" (2QZR-1) 0×0 "현재가"
+            Text "109,750" (2QZS-1) 0×0 "109,750"
+            Text "▲ 850 · +0.78%" (2QZT-1) 0×0 "▲ 850 · +0.78%"
+          Text "체결강도 121.5 · 09:42:2…" (2QZU-1) 0×0 "체결강도 121.5 · 09:42:21"
+        Frame "Gold Bid Rows" (2QZV-1) 0×0
+          Frame "Frame" (2QZW-1) 0×0
+            Text "109,700" (2QZY-1) 130×0 "109,700"
+            Text "−50" (2QZZ-1) 110×0 "−50"
+            Text "320" (2R00-1) 120×0 "320"
+            Frame "Frame" (2R01-1) 0×0
+              Rectangle "Rectangle" (2R02-1) 0×14
+          Frame "Frame" (2R03-1) 0×0
+            Text "109,650" (2R05-1) 130×0 "109,650"
+            Text "−100" (2R06-1) 110×0 "−100"
+            Text "412" (2R07-1) 120×0 "412"
+            Frame "Frame" (2R08-1) 0×0
+              Rectangle "Rectangle" (2R09-1) 0×14
+          Frame "Frame" (2R0A-1) 0×0
+            Text "109,600" (2R0C-1) 130×0 "109,600"
+            Text "−150" (2R0D-1) 110×0 "−150"
+            Text "586" (2R0E-1) 120×0 "586"
+            Frame "Frame" (2R0F-1) 0×0
+              Rectangle "Rectangle" (2R0G-1) 0×14
+          Frame "Frame" (2R0H-1) 0×0
+            Text "109,550" (2R0J-1) 130×0 "109,550"
+            Text "−200" (2R0K-1) 110×0 "−200"
+            Text "680" (2R0L-1) 120×0 "680"
+            Frame "Frame" (2R0M-1) 0×0
+              Rectangle "Rectangle" (2R0N-1) 0×14
+          Frame "Frame" (2R0O-1) 0×0
+            Text "109,500" (2R0Q-1) 130×0 "109,500"
+            Text "−250" (2R0R-1) 110×0 "−250"
+            Text "861" (2R0S-1) 120×0 "861"
+            Frame "Frame" (2R0T-1) 0×0
+              Rectangle "Rectangle" (2R0U-1) 0×14
+        Frame "Gold Totals" (2R0V-1) 0×0
+          Text "매도 잔량 1,321g" (2R0W-1) 0×0 "매도 잔량 1,321g"
+          Text "총 4,180g" (2R0X-1) 0×0 "총 4,180g"
+          Text "매수 잔량 2,859g" (2R0Y-1) 0×0 "매수 잔량 2,859g"
+        Frame "Gold Spec Band" (3MM0-0) 0×0
+          Frame "Band Head" (3MM1-0) 0×0
+            Text "거래 규격" (3MM2-0) 0×0 "거래 규격"
+          Frame "Band Cells" (3MM4-0) 0×0
+            Frame "Cell 거래 단위" (3MM5-0) 0×0
+              Text "거래 단위" (3MM6-0) 0×0 "거래 단위"
+              Text "1g" (3MM7-0) 0×0 "1g"
+            Frame "Cell 결제" (3MM8-0) 0×0
+              Text "결제" (3MM9-0) 0×0 "결제"
+              Text "T+1 · 현금" (3MMA-0) 0×0 "T+1 · 현금"
+            Frame "Cell 실물 인출" (3MMB-0) 0×0
+              Text "실물 인출" (3MMC-0) 0×0 "실물 인출"
+              Text "100g · 1kg 단위" (3MMD-0) 0×0 "100g · 1kg 단위"
+      Frame "Gold Side" (2QYB-1) 0×0
+        Frame "Gold Trade Head" (320N-0) 0×54
+          Text "실시간 체결" (320O-0) 0×0 "실시간 체결"
+          Frame "Frame" (320P-0) 0×0
+            Text "체결" (320Q-0) 0×0 "체결"
+            Text "잔량 추이" (320R-0) 0×0 "잔량 추이"
+        Frame "Gold Strength" (320S-0) 0×78
+          Frame "Frame" (320T-0) 0×0
+            Text "체결강도" (320U-0) 0×0 "체결강도"
+            Text "121.5" (320V-0) 0×0 "121.5"
+          Frame "Frame" (320W-0) 0×0
+            Text "최근 1분" (320X-0) 0×0 "최근 1분"
+            Text "매수 +181g" (320Y-0) 0×0 "매수 +181g"
+        Frame "Gold Trade Head Row" (3MON-0) 0×34
+          Text "시각" (3MOO-0) 60×0 "시각"
+          Text "체결가" (3MOP-0) 78×0 "체결가"
+          Text "전일대비" (3MOQ-0) 64×0 "전일대비"
+          Text "체결량" (3MOR-0) 62×0 "체결량"
+          Text "구분" (3MOS-0) 56×0 "구분"
+          Text "체결강도" (3MOT-0) 0×0 "체결강도"
+        Frame "Gold Trade Row 1" (3MOU-0) 0×40
+          Text "09:42:21" (3MOV-0) 60×0 "09:42:21"
+          Text "109,750" (3MOW-0) 78×0 "109,750"
+          Text "+850" (3MOX-0) 64×0 "+850"
+          Text "42g" (3MOY-0) 62×0 "42g"
+          Frame "Frame" (3MOZ-0) 56×0
+            Frame "Frame" (3MP0-0) 0×0
+              Text "매수" (3MP1-0) 0×0 "매수"
+          Text "121.5" (3MP2-0) 0×0 "121.5"
+        Frame "Gold Trade Row 2" (3MP3-0) 0×40
+          Text "09:42:18" (3MP4-0) 60×0 "09:42:18"
+          Text "109,700" (3MP5-0) 78×0 "109,700"
+          Text "+800" (3MP6-0) 64×0 "+800"
+          Text "18g" (3MP7-0) 62×0 "18g"
+          Frame "Frame" (3MP8-0) 56×0
+            Frame "Frame" (3MP9-0) 0×0
+              Text "매도" (3MPA-0) 0×0 "매도"
+          Text "121.4" (3MPB-0) 0×0 "121.4"
+        Frame "Gold Trade Row 3" (3MRP-0) 0×40
+          Text "09:42:14" (3MRQ-0) 60×0 "09:42:14"
+          Text "109,800" (3MRR-0) 78×0 "109,800"
+          Text "+900" (3MRS-0) 64×0 "+900"
+          Text "65g" (3MRT-0) 62×0 "65g"
+          Frame "Frame" (3MRU-0) 56×0
+            Frame "Frame" (3MRV-0) 0×0
+              Text "매수" (3MRW-0) 0×0 "매수"
+          Text "121.4" (3MRX-0) 0×0 "121.4"
+        Frame "Gold Trade Row 4" (3MRY-0) 0×40
+          Text "09:42:10" (3MRZ-0) 60×0 "09:42:10"
+          Text "109,750" (3MS0-0) 78×0 "109,750"
+          Text "+850" (3MS1-0) 64×0 "+850"
+          Text "24g" (3MS2-0) 62×0 "24g"
+          Frame "Frame" (3MS3-0) 56×0
+            Frame "Frame" (3MS4-0) 0×0
+              Text "매수" (3MS5-0) 0×0 "매수"
+          Text "121.3" (3MS6-0) 0×0 "121.3"
+        Frame "Gold Trade Row 5" (3MS7-0) 0×40
+          Text "09:42:05" (3MS8-0) 60×0 "09:42:05"
+          Text "109,700" (3MS9-0) 78×0 "109,700"
+          Text "+800" (3MSA-0) 64×0 "+800"
+          Text "31g" (3MSB-0) 62×0 "31g"
+          Frame "Frame" (3MSC-0) 56×0
+            Frame "Frame" (3MSD-0) 0×0
+              Text "매도" (3MSE-0) 0×0 "매도"
+          Text "121.2" (3MSF-0) 0×0 "121.2"
+        Frame "Gold Trade Row 6" (3MSH-0) 0×40
+          Text "09:41:59" (3MSI-0) 60×0 "09:41:59"
+          Text "109,800" (3MSJ-0) 78×0 "109,800"
+          Text "+900" (3MSK-0) 64×0 "+900"
+          Text "12g" (3MSL-0) 62×0 "12g"
+          Frame "Frame" (3MSM-0) 56×0
+            Frame "Frame" (3MSN-0) 0×0
+              Text "매수" (3MSO-0) 0×0 "매수"
+          Text "121.3" (3MSP-0) 0×0 "121.3"
+        Frame "Gold Trade Row 7" (3MSQ-0) 0×40
+          Text "09:41:54" (3MSR-0) 60×0 "09:41:54"
+          Text "109,750" (3MSS-0) 78×0 "109,750"
+          Text "+850" (3MST-0) 64×0 "+850"
+          Text "38g" (3MSU-0) 62×0 "38g"
+          Frame "Frame" (3MSV-0) 56×0
+            Frame "Frame" (3MSW-0) 0×0
+              Text "매수" (3MSX-0) 0×0 "매수"
+          Text "121.2" (3MSY-0) 0×0 "121.2"
+        Frame "Gold Trade Row 8" (3MSZ-0) 0×40
+          Text "09:41:48" (3MT0-0) 60×0 "09:41:48"
+          Text "109,700" (3MT1-0) 78×0 "109,700"
+          Text "+800" (3MT2-0) 64×0 "+800"
+          Text "27g" (3MT3-0) 62×0 "27g"
+          Frame "Frame" (3MT4-0) 56×0
+            Frame "Frame" (3MT5-0) 0×0
+              Text "매도" (3MT6-0) 0×0 "매도"
+          Text "121.1" (3MT7-0) 0×0 "121.1"
+        Frame "Gold Trade Count" (3MT8-0) 0×32
+          Text "8 / 20건 · 최신순" (3MT9-0) 0×0 "8 / 20건 · 최신순"
+        Frame "금현물 정보" (3UK6-0) 0×156
+          Frame "Frame" (3UK7-0) 0×22
+            Text "금현물 정보" (3UK8-0) 0×0 "금현물 정보"
+            Text "KRX 금시장" (3UK9-0) 0×0 "KRX 금시장"
+          Frame "Frame" (3UKA-0) 0×0
+            Frame "Frame" (3UKB-0) 0×32
+              Text "전일 종가" (3UKC-0) 0×0 "전일 종가"
+              Text "108,900" (3UKD-0) 0×0 "108,900"
+            Frame "Frame" (3UKE-0) 0×32
+              Text "가격 제한" (3UKF-0) 0×0 "가격 제한"
+              Text "98,010 ~ 119,790" (3UKG-0) 0×0 "98,010 ~ 119,790"
+            Frame "Frame" (3UKH-0) 0×32
+              Text "LP 회원사" (3UKI-0) 0×0 "LP 회원사"
+              Text "해당 없음" (3UKJ-0) 0×0 "해당 없음"
+    Frame "Gold Footer" (2QYC-1) 0×0
+      Frame "Frame" (2QYD-1) 0×0
+        Rectangle "Rectangle" (2QYE-1) 6×6
+        Text "장중 실시간 · 갱신 중" (2QYF-1) 0×0 "장중 실시간 · 갱신 중"
+      Text "KRX 금시장 · 09:42:21 기…" (2QYG-1) 0×0 "KRX 금시장 · 09:42:21 기준"

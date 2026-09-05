@@ -1,0 +1,323 @@
+Frame "CC-05 / R03-T6-4 · 순위 — 한도소진율 증가" (2ZTA-0) 1440×1014
+  Frame "Flow Card Surface" (2ZTB-0) 1360×934
+    Frame "Flow Header" (2ZYA-0) 0×0
+      Frame "Frame" (2ZYO-0) 0×0
+        Frame "Frame" (2ZYQ-0) 0×0
+          Text "수급 순위" (2ZYT-0) 0×0 "수급 순위"
+          Frame "Frame" (2ZYR-0) 0×0
+            Text "조회 스냅샷" (2ZYS-0) 0×0 "조회 스냅샷"
+        Text "시장 전체 · 상위 50종목" (2ZYP-0) 0×0 "시장 전체 · 상위 50종목"
+      Frame "Frame" (2ZYB-0) 0×0
+        Frame "Frame" (2ZYM-0) 0×0
+          Text "투자자별" (2ZYN-0) 0×0 "투자자별"
+        Frame "Frame" (2ZYK-0) 0×0
+          Text "거래원" (2ZYL-0) 0×0 "거래원"
+        Frame "Frame" (2ZYI-0) 0×0
+          Text "프로그램" (2ZYJ-0) 0×0 "프로그램"
+        Frame "Frame" (2ZYG-0) 0×0
+          Text "신용·대차" (2ZYH-0) 0×0 "신용·대차"
+        Frame "Frame" (2ZYE-0) 0×0
+          Text "종목 동향" (2ZYF-0) 0×0 "종목 동향"
+        Frame "Frame" (2ZYC-0) 0×0
+          Text "순위" (2ZYD-0) 0×0 "순위"
+    Frame "Flow Summary Strip" (2ZXQ-0) 0×0
+      Frame "Frame" (2ZY7-0) 0×78
+        Text "정렬 기준" (2ZY9-0) 0×0 "정렬 기준"
+        Text "소진율 증가 큰 순" (2ZY8-0) 0×0 "소진율 증가 큰 순"
+      Frame "Frame" (2ZY3-0) 190×78
+        Text "소진율 증가 1위" (2ZY6-0) 0×0 "소진율 증가 1위"
+        Text "+2.9%p" (2ZY5-0) 0×0 "+2.9%p"
+        Text "SK하이닉스" (2ZY4-0) 0×0 "SK하이닉스"
+      Frame "Frame" (2ZXZ-0) 170×78
+        Text "소진율 최고" (2ZY2-0) 0×0 "소진율 최고"
+        Text "94.2%" (2ZY1-0) 0×0 "94.2%"
+        Text "현대차" (2ZY0-0) 0×0 "현대차"
+      Frame "Frame" (2ZXV-0) 150×78
+        Text "소진율 상승" (2ZXY-0) 0×0 "소진율 상승"
+        Text "128종목" (2ZXX-0) 0×0 "128종목"
+        Text "전일 대비" (2ZXW-0) 0×0 "전일 대비"
+      Frame "Frame" (2ZXR-0) 170×78
+        Text "기준 시점" (2ZXU-0) 0×0 "기준 시점"
+        Text "전일 확정" (2ZXT-0) 0×0 "전일 확정"
+        Text "09:42 조회" (2ZXS-0) 0×0 "09:42 조회"
+    Frame "Flow Workspace" (2ZTF-0) 0×0
+      Frame "Investor Panel" (2ZUO-0) 880×0
+        Frame "Frame" (2ZX5-0) 0×0
+          Frame "Frame" (2ZXF-0) 0×0
+            Frame "Frame" (2ZXO-0) 0×0
+              Text "프로그램 순매수" (2ZXP-0) 0×0 "프로그램 순매수"
+            Frame "Frame" (2ZXM-0) 0×0
+              Text "신용비율 상위" (2ZXN-0) 0×0 "신용비율 상위"
+            Frame "Frame" (2ZXK-0) 0×0
+              Text "대차 상위" (2ZXL-0) 0×0 "대차 상위"
+            Frame "Frame" (2ZXI-0) 0×0
+              Text "한도소진율 증가" (2ZXJ-0) 0×0 "한도소진율 증가"
+            Frame "Frame" (2ZXG-0) 0×0
+              Text "장중 투자자 상위" (2ZXH-0) 0×0 "장중 투자자 상위"
+          Frame "Frame" (2ZX6-0) 0×0
+            Frame "Frame" (2ZXD-0) 0×0
+              Text "외국인·기관 상위" (2ZXE-0) 0×0 "외국인·기관 상위"
+            Frame "Frame" (2ZXB-0) 0×0
+              Text "증권사별 상위" (2ZXC-0) 0×0 "증권사별 상위"
+            Frame "Frame" (2ZX9-0) 0×0
+              Text "동일순매매" (2ZXA-0) 0×0 "동일순매매"
+            Frame "Frame" (2ZX7-0) 0×0
+              Text "신용융자 가능종목" (2ZX8-0) 0×0 "신용융자 가능종목"
+        Frame "Rank Table" (38MX-0) 0×0
+          Frame "Head" (38MY-0) 0×36
+            Text "순위" (38MZ-0) 34×0 "순위"
+            Text "종목" (38N0-0) 0×0 "종목"
+            Text "현재가" (38N1-0) 112×0 "현재가"
+            Text "소진율" (38N2-0) 84×0 "소진율"
+            Text "증감" (38N3-0) 68×0 "증감"
+            Text "외국인 보유" (38N4-0) 116×0 "외국인 보유"
+            Text "한도" (38N5-0) 100×0 "한도"
+            Text "거래량" (38N6-0) 96×0 "거래량"
+          Frame "2 SK하이닉스" (38NS-0) 0×52
+            Text "1" (38NT-0) 34×0 "1"
+            Frame "Frame" (38NU-0) 0×0
+              Text "SK하이닉스" (38NV-0) 0×0 "SK하이닉스"
+              Text "000660" (38NW-0) 0×0 "000660"
+            Frame "Frame" (38NX-0) 112×0
+              Text "198,400" (38NY-0) 0×0 "198,400"
+              Text "+3,985 · +2.05%" (38NZ-0) 0×0 "+3,985 · +2.05%"
+            Frame "Frame" (38O0-0) 84×0
+              Text "51.2%" (38O1-0) 0×0 "51.2%"
+              Text "기준 48.3%" (38O2-0) 0×0 "기준 48.3%"
+            Text "+2.9%p" (38O3-0) 68×0 "+2.9%p"
+            Frame "Frame" (38O4-0) 116×0
+              Text "3,724만주" (38O5-0) 0×0 "3,724만주"
+              Text "변동 +212만주" (38O6-0) 0×0 "변동 +212만주"
+            Frame "Frame" (38O7-0) 100×0
+              Text "7,272만주" (38O8-0) 0×0 "7,272만주"
+              Text "증감 미제공" (38O9-0) 0×0 "증감 미제공"
+            Frame "Frame" (38OA-0) 96×0
+              Text "620만주" (38OB-0) 0×0 "620만주"
+              Text "1.23조원" (38OC-0) 0×0 "1.23조원"
+          Frame "3 현대차" (38OD-0) 0×52
+            Text "2" (38OE-0) 34×0 "2"
+            Frame "Frame" (38OF-0) 0×0
+              Text "현대차" (38OG-0) 0×0 "현대차"
+              Text "005380" (38OH-0) 0×0 "005380"
+            Frame "Frame" (38OI-0) 112×0
+              Text "232,500" (38OJ-0) 0×0 "232,500"
+              Text "+1,985 · +0.86%" (38OK-0) 0×0 "+1,985 · +0.86%"
+            Frame "Frame" (38OL-0) 84×0
+              Text "94.2%" (38OM-0) 0×0 "94.2%"
+              Text "기준 92.1%" (38ON-0) 0×0 "기준 92.1%"
+            Text "+2.1%p" (38OO-0) 68×0 "+2.1%p"
+            Frame "Frame" (38OP-0) 116×0
+              Text "1,962만주" (38OQ-0) 0×0 "1,962만주"
+              Text "변동 +44만주" (38OR-0) 0×0 "변동 +44만주"
+            Frame "Frame" (38OS-0) 100×0
+              Text "2,083만주" (38OT-0) 0×0 "2,083만주"
+              Text "증감 미제공" (38OU-0) 0×0 "증감 미제공"
+            Frame "Frame" (38OV-0) 96×0
+              Text "284만주" (38OW-0) 0×0 "284만주"
+              Text "6,600억원" (38OX-0) 0×0 "6,600억원"
+          Frame "4 KB금융" (38Y7-0) 0×52
+            Text "3" (38Y8-0) 34×0 "3"
+            Frame "Frame" (38Y9-0) 0×0
+              Text "KB금융" (38YA-0) 0×0 "KB금융"
+              Text "105560" (38YB-0) 0×0 "105560"
+            Frame "Frame" (38YC-0) 112×0
+              Text "78,200" (38YD-0) 0×0 "78,200"
+              Text "+865 · +1.12%" (38YE-0) 0×0 "+865 · +1.12%"
+            Frame "Frame" (38YF-0) 84×0
+              Text "78.6%" (38YG-0) 0×0 "78.6%"
+              Text "기준 76.9%" (38YH-0) 0×0 "기준 76.9%"
+            Text "+1.7%p" (38YI-0) 68×0 "+1.7%p"
+            Frame "Frame" (38YJ-0) 116×0
+              Text "3,014만주" (38YK-0) 0×0 "3,014만주"
+              Text "변동 +66만주" (38YL-0) 0×0 "변동 +66만주"
+            Frame "Frame" (38YM-0) 100×0
+              Text "3,834만주" (38YN-0) 0×0 "3,834만주"
+              Text "증감 미제공" (38YO-0) 0×0 "증감 미제공"
+            Frame "Frame" (38YP-0) 96×0
+              Text "412만주" (38YQ-0) 0×0 "412만주"
+              Text "3,222억원" (38YR-0) 0×0 "3,222억원"
+          Frame "5 NAVER" (38YS-0) 0×52
+            Text "4" (38YT-0) 34×0 "4"
+            Frame "Frame" (38YU-0) 0×0
+              Text "NAVER" (38YV-0) 0×0 "NAVER"
+              Text "035420" (38YW-0) 0×0 "035420"
+            Frame "Frame" (38YX-0) 112×0
+              Text "214,000" (38YY-0) 0×0 "214,000"
+              Text "-1,010 · -0.47%" (38YZ-0) 0×0 "-1,010 · -0.47%"
+            Frame "Frame" (38Z0-0) 84×0
+              Text "44.8%" (38Z1-0) 0×0 "44.8%"
+              Text "기준 43.6%" (38Z2-0) 0×0 "기준 43.6%"
+            Text "+1.2%p" (38Z3-0) 68×0 "+1.2%p"
+            Frame "Frame" (38Z4-0) 116×0
+              Text "736만주" (38Z5-0) 0×0 "736만주"
+              Text "변동 +20만주" (38Z6-0) 0×0 "변동 +20만주"
+            Frame "Frame" (38Z7-0) 100×0
+              Text "1,643만주" (38Z8-0) 0×0 "1,643만주"
+              Text "증감 미제공" (38Z9-0) 0×0 "증감 미제공"
+            Frame "Frame" (38ZA-0) 96×0
+              Text "186만주" (38ZB-0) 0×0 "186만주"
+              Text "3,980억원" (38ZC-0) 0×0 "3,980억원"
+          Frame "6 POSCO홀딩스" (38ZD-0) 0×52
+            Text "5" (38ZE-0) 34×0 "5"
+            Frame "Frame" (38ZF-0) 0×0
+              Text "POSCO홀딩스" (38ZG-0) 0×0 "POSCO홀딩스"
+              Text "005490" (38ZH-0) 0×0 "005490"
+            Frame "Frame" (38ZI-0) 112×0
+              Text "389,500" (38ZJ-0) 0×0 "389,500"
+              Text "+2,515 · +0.65%" (38ZK-0) 0×0 "+2,515 · +0.65%"
+            Frame "Frame" (38ZL-0) 84×0
+              Text "38.4%" (38ZM-0) 0×0 "38.4%"
+              Text "기준 37.5%" (38ZN-0) 0×0 "기준 37.5%"
+            Text "+0.9%p" (38ZO-0) 68×0 "+0.9%p"
+            Frame "Frame" (38ZP-0) 116×0
+              Text "324만주" (38ZQ-0) 0×0 "324만주"
+              Text "변동 +7만주" (38ZR-0) 0×0 "변동 +7만주"
+            Frame "Frame" (38ZS-0) 100×0
+              Text "844만주" (38ZT-0) 0×0 "844만주"
+              Text "증감 미제공" (38ZU-0) 0×0 "증감 미제공"
+            Frame "Frame" (38ZV-0) 96×0
+              Text "68만주" (38ZW-0) 0×0 "68만주"
+              Text "2,649억원" (38ZX-0) 0×0 "2,649억원"
+          Frame "6~47위 생략" (3SQB-0) 0×34
+            Text "6~47위 42종목" (3SQC-0) 0×0 "6~47위 42종목"
+            Rectangle "Rectangle" (3SQD-0) 196×16
+            Text "해당 없음" (3SQE-0) 68×0 "해당 없음"
+            Rectangle "Rectangle" (3SQF-0) 312×16
+          Frame "49 LG화학" (38ZY-0) 0×52
+            Text "48" (38ZZ-0) 34×0 "48"
+            Frame "Frame" (3900-0) 0×0
+              Text "LG화학" (3901-0) 0×0 "LG화학"
+              Text "051910" (3902-0) 0×0 "051910"
+            Frame "Frame" (3903-0) 112×0
+              Text "312,000" (3904-0) 0×0 "312,000"
+              Text "-3,470 · -1.10%" (3905-0) 0×0 "-3,470 · -1.10%"
+            Frame "Frame" (3906-0) 84×0
+              Text "22.6%" (3907-0) 0×0 "22.6%"
+              Text "기준 22.5%" (3908-0) 0×0 "기준 22.5%"
+            Text "+0.1%p" (3909-0) 68×0 "+0.1%p"
+            Frame "Frame" (390A-0) 116×0
+              Text "159만주" (390B-0) 0×0 "159만주"
+              Text "변동 +1만주" (390C-0) 0×0 "변동 +1만주"
+            Frame "Frame" (390D-0) 100×0
+              Text "704만주" (390E-0) 0×0 "704만주"
+              Text "증감 미제공" (390F-0) 0×0 "증감 미제공"
+            Frame "Frame" (390G-0) 96×0
+              Text "96만주" (390H-0) 0×0 "96만주"
+              Text "2,995억원" (390I-0) 0×0 "2,995억원"
+          Frame "1 삼성전자" (38N7-0) 0×52
+            Text "49" (38N8-0) 34×0 "49"
+            Frame "Frame" (38N9-0) 0×0
+              Text "삼성전자" (38NA-0) 0×0 "삼성전자"
+              Text "005930" (38NB-0) 0×0 "005930"
+            Frame "Frame" (38NC-0) 112×0
+              Text "150,850" (38ND-0) 0×0 "150,850"
+              Text "+1,850 · +1.24%" (38NE-0) 0×0 "+1,850 · +1.24%"
+            Frame "Frame" (38NF-0) 84×0
+              Text "65.5%" (38NG-0) 0×0 "65.5%"
+              Text "기준 65.5%" (38NH-0) 0×0 "기준 65.5%"
+            Text "+0.01%p" (38NI-0) 68×0 "+0.01%p"
+            Frame "Frame" (38NJ-0) 116×0
+              Text "31.29억주" (38NK-0) 0×0 "31.29억주"
+              Text "변동 +32.6만주" (38NL-0) 0×0 "변동 +32.6만주"
+            Frame "Frame" (38NM-0) 100×0
+              Text "47.76억주" (38NN-0) 0×0 "47.76억주"
+              Text "증감 미제공" (38NO-0) 0×0 "증감 미제공"
+            Frame "Frame" (38NP-0) 96×0
+              Text "1,420만주" (38NQ-0) 0×0 "1,420만주"
+              Text "2.14조원" (38NR-0) 0×0 "2.14조원"
+          Frame "50 카카오" (390J-0) 0×52
+            Text "50" (390K-0) 34×0 "50"
+            Frame "Frame" (390L-0) 0×0
+              Text "카카오" (390M-0) 0×0 "카카오"
+              Text "035720" (390N-0) 0×0 "035720"
+            Frame "Frame" (390O-0) 112×0
+              Text "41,850" (390P-0) 0×0 "41,850"
+              Text "-350 · -0.83%" (390Q-0) 0×0 "-350 · -0.83%"
+            Frame "Frame" (390R-0) 84×0
+              Text "18.4%" (390S-0) 0×0 "18.4%"
+              Text "기준 18.4%" (390T-0) 0×0 "기준 18.4%"
+            Text "0.0%p" (390U-0) 68×0 "0.0%p"
+            Frame "Frame" (390V-0) 116×0
+              Text "812만주" (390W-0) 0×0 "812만주"
+              Text "변동 0만주" (390X-0) 0×0 "변동 0만주"
+            Frame "Frame" (390Y-0) 100×0
+              Text "4,414만주" (390Z-0) 0×0 "4,414만주"
+              Text "증감 미제공" (3910-0) 0×0 "증감 미제공"
+            Frame "Frame" (3911-0) 96×0
+              Text "1,240만주" (3912-0) 0×0 "1,240만주"
+              Text "5,189억원" (3913-0) 0×0 "5,189억원"
+        Frame "Frame" (2ZUP-0) 0×0
+          Text "전체 50개 · 상위 5 + 하위 3…" (2ZUU-0) 0×0 "전체 50개 · 상위 5 + 하위 3 표시"
+          Frame "Frame" (2ZUQ-0) 0×0
+            Frame "Frame" (2ZUS-0) 0×0
+              Text "20개 더 보기" (2ZUT-0) 0×0 "20개 더 보기"
+            Text "접기" (2ZUR-0) 0×0 "접기"
+      Frame "Side Panel" (2ZTG-0) 0×0
+        Frame "Selected Stock Flow" (3H8X-0) 0×0
+          Frame "Frame" (3H8Y-0) 0×0
+            Text "삼성전자" (3H8Z-0) 0×0 "삼성전자"
+            Text "순위 49위 · 005930" (3H90-0) 0×0 "순위 49위 · 005930"
+          Frame "Frame" (3H91-0) 0×0
+            Text "상장주식수" (3H92-0) 0×0 "상장주식수"
+            Text "59.70억주" (3H93-0) 0×0 "59.70억주"
+          Frame "Frame" (3H94-0) 0×0
+            Text "외국인 지분율" (3H95-0) 0×0 "외국인 지분율"
+            Text "52.41%" (3H96-0) 0×0 "52.41%"
+          Frame "Frame" (3H97-0) 0×0
+            Text "잔여 한도" (3H98-0) 0×0 "잔여 한도"
+            Text "16.47억주" (3H99-0) 0×0 "16.47억주"
+        Frame "Limit Summary" (3H9A-0) 0×0
+          Frame "Frame" (3H9B-0) 0×0
+            Text "한도 요약" (3H9C-0) 0×0 "한도 요약"
+            Text "시장 전체" (3H9D-0) 0×0 "시장 전체"
+          Frame "Frame" (3H9E-0) 0×0
+            Frame "Frame" (3H9F-0) 0×0
+              Text "소진율 상승" (3H9G-0) 0×0 "소진율 상승"
+              Text "128종목" (3H9H-0) 0×0 "128종목"
+            Frame "Frame" (3H9I-0) 0×8
+              Rectangle "Rectangle" (3H9J-0) 0×8
+          Frame "Frame" (3H9K-0) 0×0
+            Frame "Frame" (3H9L-0) 0×0
+              Text "소진율 하락" (3H9M-0) 0×0 "소진율 하락"
+              Text "62종목" (3H9N-0) 0×0 "62종목"
+            Frame "Frame" (3H9O-0) 0×8
+              Rectangle "Rectangle" (3H9P-0) 0×8
+          Rectangle "Rectangle" (3H9Q-0) 0×1
+          Frame "Frame" (3H9R-0) 0×0
+            Text "소진율 90% 초과" (3H9S-0) 0×0 "소진율 90% 초과"
+            Text "4종목" (3H9T-0) 0×0 "4종목"
+          Frame "Frame" (3H9U-0) 0×0
+            Text "평균 소진율" (3H9V-0) 0×0 "평균 소진율"
+            Text "41%" (3H9W-0) 0×0 "41%"
+        Frame "Limit Delta Bars" (3SQH-0) 0×0
+          Frame "Frame" (3SQI-0) 0×0
+            Text "소진율 증가 상위 5" (3SQJ-0) 0×0 "소진율 증가 상위 5"
+            Text "1위 대비" (3SQK-0) 0×0 "1위 대비"
+          Frame "SK하이닉스" (3SQL-0) 0×0
+            Text "SK하이닉스" (3SQM-0) 92×0 "SK하이닉스"
+            Frame "Frame" (3SQN-0) 0×8
+              Rectangle "Rectangle" (3SQO-0) 0×8
+            Text "+2.9%p" (3SQP-0) 76×0 "+2.9%p"
+          Frame "현대차" (3SQQ-0) 0×0
+            Text "현대차" (3SQR-0) 92×0 "현대차"
+            Frame "Frame" (3SQS-0) 0×8
+              Rectangle "Rectangle" (3SQT-0) 0×8
+            Text "+2.1%p" (3SQU-0) 76×0 "+2.1%p"
+          Frame "KB금융" (3SQW-0) 0×0
+            Text "KB금융" (3SQX-0) 92×0 "KB금융"
+            Frame "Frame" (3SQY-0) 0×8
+              Rectangle "Rectangle" (3SQZ-0) 0×8
+            Text "+1.7%p" (3SR0-0) 76×0 "+1.7%p"
+          Frame "NAVER" (3SR1-0) 0×0
+            Text "NAVER" (3SR2-0) 92×0 "NAVER"
+            Frame "Frame" (3SR3-0) 0×8
+              Rectangle "Rectangle" (3SR4-0) 0×8
+            Text "+1.2%p" (3SR5-0) 76×0 "+1.2%p"
+          Frame "POSCO홀딩스" (3SR6-0) 0×0
+            Text "POSCO홀딩스" (3SR7-0) 92×0 "POSCO홀딩스"
+            Frame "Frame" (3SR8-0) 0×8
+              Rectangle "Rectangle" (3SR9-0) 0×8
+            Text "+0.9%p" (3SRA-0) 76×0 "+0.9%p"
+    Frame "Flow Status Footer" (2ZTC-0) 0×0
+      Text "조회 스냅샷" (2ZTE-0) 0×0 "조회 스냅샷"
+      Text "한도 전일 확정 기준 · 마지막 조회…" (2ZTD-0) 0×0 "한도 전일 확정 기준 · 마지막 조회 09:42:18"

@@ -1,0 +1,72 @@
+Frame "31 · 설정 — 플러그인 (스니펫 등록·감사 로그)" (2USX-1) 1680×900
+  Frame "Shell 창 · 설정 모드 (#settings)" (2USY-1) 1520×760
+    Frame "settings-head" (2UVL-1) 1478×32
+      Text "settings-title" (2UVN-1) 29×18 "설정"
+      Text "settings-hint" (2UVM-1) 261×16 "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기"
+    Frame "settings-body" (2UT8-1) 1478×662
+      Frame "settings-nav" (2UV8-1) 236×662
+        Frame "nav-item is-selected" (2UVJ-1) 218×40
+          Text "화면" (2UVK-1) 26×16 "화면"
+        Frame "nav-item" (2UVG-1) 218×40
+          Text "계좌" (2UVI-1) 26×16 "계좌"
+          Text "2개" (2UVH-1) 18×14 "2개"
+        Frame "nav-item" (2UVD-1) 218×40
+          Text "플러그인" (2UVF-1) 52×16 "플러그인"
+          Text "2개" (2UVE-1) 18×14 "2개"
+        Frame "nav-item" (2UVB-1) 218×40
+          Text "모델" (2UVC-1) 26×16 "모델"
+        Frame "nav-item" (2UV9-1) 218×40
+          Text "성향・이력" (2UVA-1) 65×16 "성향・이력"
+      Frame "settings-grid" (2UT9-1) 1226×662
+        Frame "Frame" (2UVO-1) 1226×662
+          Frame "Frame" (2UVP-1) 1224×44
+            Text "플러그인" (2UVQ-1) 56×18 "플러그인"
+            Text "2개 연결 · 허브·추천 설치는 플러…" (2UVR-1) 234×12 "2개 연결 · 허브·추천 설치는 플러그인 모드에서"
+          Frame "Frame" (2UVS-1) 1224×400
+            Frame "Frame" (2UVT-1) 1188×132
+              Text "등록된 플러그인" (2UVU-1) 1188×12 "등록된 플러그인"
+              Frame "Frame" (2UVV-1) 1188×52
+                Frame "Frame" (2UVW-1) 188×30
+                  Text "DART 전자공시" (2UVX-1) 188×16 "DART 전자공시"
+                  Text "도구 6개 허용 · 마지막 probe…" (2UVY-1) 188×12 "도구 6개 허용 · 마지막 probe 09:14"
+                Frame "Frame" (2UVZ-1) 45×14
+                  Rectangle "Rectangle" (2UW0-1) 6×6
+                  Text "연결됨" (2UW1-1) 33×14 "연결됨"
+              Frame "Frame" (2UW2-1) 1188×52
+                Frame "Frame" (2UW3-1) 188×30
+                  Text "Google Sheets" (2UW4-1) 188×16 "Google Sheets"
+                  Text "도구 4개 허용 · 마지막 probe…" (2UW5-1) 188×12 "도구 4개 허용 · 마지막 probe 08:52"
+                Frame "Frame" (2UW6-1) 45×14
+                  Rectangle "Rectangle" (2UW7-1) 6×6
+                  Text "연결됨" (2UW8-1) 33×14 "연결됨"
+            Frame "Frame" (2UW9-1) 1188×82
+              Text "스니펫 직접 등록" (2UWA-1) 1188×12 "스니펫 직접 등록"
+              Frame "Frame" (2UWB-1) 1188×40
+                Frame "Frame" (2UWC-1) 1118×40
+                  Text "{"command":"npx","ar…" (2UWD-1) 304×14 "{"command":"npx","args":["-y","@example/mcp"]}"
+                Frame "Frame" (2UWE-1) 60×40
+                  Text "등록" (2UWF-1) 24×16 "등록"
+              Text "등록 후 승인·probe를 통과해야 …" (2UWG-1) 1188×14 "등록 후 승인·probe를 통과해야 도구가 허용됩니다"
+            Frame "Frame" (2UWH-1) 1188×126
+              Text "감사 로그" (2UWI-1) 1188×12 "감사 로그"
+              Frame "Frame" (2UWJ-1) 1188×30
+                Text "09:14 · DART 승인 · 도구…" (2UWK-1) 203×14 "09:14 · DART 승인 · 도구 6개 허용"
+                Text "사용자" (2UWL-1) 30×12 "사용자"
+              Frame "Frame" (2UWM-1) 1188×30
+                Text "08:52 · Google Sheet…" (2UWN-1) 207×14 "08:52 · Google Sheets probe 성공"
+                Text "시스템" (2UWO-1) 30×12 "시스템"
+              Frame "Frame" (2UWP-1) 1188×30
+                Text "08:50 · 스니펫 등록 · 검증 …" (2UWQ-1) 185×14 "08:50 · 스니펫 등록 · 검증 통과"
+                Text "사용자" (2UWR-1) 30×12 "사용자"
+    Frame "타이틀바 (.titlebar)" (2UT7-1) 1518×26
+    Frame "창 제어 (.win-controls · 최대화 비활성)" (2USZ-1) 94×24
+      Frame "Frame" (2UT5-1) 30×24
+        Rectangle "Rectangle" (2UT6-1) 9×2
+      Frame "disabled" (2UT3-1) 30×24
+        Rectangle "Rectangle" (2UT4-1) 8×8
+      Frame "Frame" (2UT0-1) 30×24
+        SVG "SVG" (2UT1-1) 10×10
+          SVGVisualElement "Path" (2UT2-1) 9×9
+  Frame "폐기 각주" (43BL-1) 262×30
+    Text "폐기" (43BM-1) 24×16 "폐기"
+    Text "플러그인 모드 02로 이동(2026-…" (43BN-1) 204×16 "플러그인 모드 02로 이동(2026-09-03)"

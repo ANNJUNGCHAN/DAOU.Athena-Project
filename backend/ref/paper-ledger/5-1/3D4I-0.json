@@ -1,0 +1,2710 @@
+{
+ "board_id": "3D4I-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "3DFF-0",
+   "text": "관심종목",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFE-0",
+   "text": "장중 · 09:42",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DFB-0",
+   "text": "단기 관찰 그룹 · 8종목",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DF9-0",
+   "text": "업종",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DF7-0",
+   "text": "종목찾기",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DF5-0",
+   "text": "관심",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DF3-0",
+   "text": "테마",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DF1-0",
+   "text": "시장·VI",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DEZ-0",
+   "text": "조건검색",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DEV-0",
+   "text": "그룹",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DET-0",
+   "text": "단기 관찰",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "단기 관찰"
+   ]
+  },
+  {
+   "id": "3DER-0",
+   "text": "배당주",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "배당주"
+   ]
+  },
+  {
+   "id": "3DEP-0",
+   "text": "ETF 모음",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "ETF 모음"
+   ]
+  },
+  {
+   "id": "3DEN-0",
+   "text": "ELW 관찰",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DEL-0",
+   "text": "등락률 순",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DEJ-0",
+   "text": "신호 표시",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DEH-0",
+   "text": "알림 켜짐",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DEE-0",
+   "text": "● 실시간 갱신",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DED-0",
+   "text": "8종목",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DEC-0",
+   "text": "그룹 4개",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3E8T-0",
+   "text": "▾",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자"
+   ]
+  },
+  {
+   "id": "3E8W-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3E8X-0",
+   "text": "005930",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3E8Z-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3E91-0",
+   "text": "150,850",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3E92-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3E94-0",
+   "text": "8종목 중 1행 펼침 · 09-01",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자"
+   ]
+  },
+  {
+   "id": "3EB1-0",
+   "text": "오늘 가격",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EB2-0",
+   "text": "기준가 149,000",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EB6-0",
+   "text": "시가",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EB7-0",
+   "text": "149,200",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EB9-0",
+   "text": "저가",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBA-0",
+   "text": "148,100",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBC-0",
+   "text": "상한가",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBD-0",
+   "text": "193,700",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBG-0",
+   "text": "고가",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBH-0",
+   "text": "152,400",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBJ-0",
+   "text": "종가",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBK-0",
+   "text": "집계 전",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBM-0",
+   "text": "하한가",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBN-0",
+   "text": "104,300",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBQ-0",
+   "text": "5단계 호가",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBR-0",
+   "text": "09:42:18 기준",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBU-0",
+   "text": "단계",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBV-0",
+   "text": "매도호가",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBW-0",
+   "text": "매수호가",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBY-0",
+   "text": "1차",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EBZ-0",
+   "text": "150,900",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EC0-0",
+   "text": "150,850",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EC2-0",
+   "text": "2차",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EC3-0",
+   "text": "150,950",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EC4-0",
+   "text": "150,800",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EC6-0",
+   "text": "3차",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EC7-0",
+   "text": "151,000",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EC8-0",
+   "text": "150,750",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ECA-0",
+   "text": "4차",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ECB-0",
+   "text": "151,050",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ECC-0",
+   "text": "150,700",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ECE-0",
+   "text": "5차",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ECF-0",
+   "text": "151,100",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ECG-0",
+   "text": "150,650",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMR-0",
+   "text": "잔량·건수",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMS-0",
+   "text": "매수비율 58.2%",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMV-0",
+   "text": "구분",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMW-0",
+   "text": "매도",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMX-0",
+   "text": "매수",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EMZ-0",
+   "text": "우선잔량",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EN0-0",
+   "text": "1.7만주",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EN1-0",
+   "text": "2.4만주",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EN3-0",
+   "text": "우선건수",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EN4-0",
+   "text": "298건",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EN5-0",
+   "text": "412건",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EN7-0",
+   "text": "총잔량",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EN8-0",
+   "text": "8.2만주",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EN9-0",
+   "text": "11.4만주",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENB-0",
+   "text": "총건수",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENC-0",
+   "text": "2,410건",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3END-0",
+   "text": "3,180건",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "잔량·건수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENG-0",
+   "text": "체결·종목 기본",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENH-0",
+   "text": "정규장 진행",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENL-0",
+   "text": "체결",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENN-0",
+   "text": "체결량",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENO-0",
+   "text": "3,200주",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENQ-0",
+   "text": "체결강도",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENR-0",
+   "text": "108.4%",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENT-0",
+   "text": "예상체결가",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENU-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENW-0",
+   "text": "예상체결량",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ENX-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EO0-0",
+   "text": "종목 기본",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EO2-0",
+   "text": "시가총액",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EO3-0",
+   "text": "900.6조",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EO5-0",
+   "text": "상장주식수",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EO6-0",
+   "text": "59.7억주",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EO8-0",
+   "text": "자본금",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EO9-0",
+   "text": "7,780억",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EOB-0",
+   "text": "액면가",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EOC-0",
+   "text": "100원",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "체결·종목 기본",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5Z-0",
+   "text": "삼성전자 — 선택",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5Y-0",
+   "text": "신호 1건",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5W-0",
+   "text": "현재가 · 등락",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5V-0",
+   "text": "150,850 · +1.24%",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5T-0",
+   "text": "거래량 · 전일 대비",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5S-0",
+   "text": "1,420만주 · 1.2배",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5Q-0",
+   "text": "그룹 편입일",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5P-0",
+   "text": "2026.07.03",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5N-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5M-0",
+   "text": "09:38 감지",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5K-0",
+   "text": "거래대금 2.14조 · 전일 대비 1.6배",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5I-0",
+   "text": "차트 열기",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5G-0",
+   "text": "호가 열기",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5D-0",
+   "text": "그룹 요약",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5C-0",
+   "text": "전체 4그룹 · 29종목",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D5A-0",
+   "text": "단기 관찰",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D59-0",
+   "text": "G001",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D57-0",
+   "text": "8종목",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D55-0",
+   "text": "배당주",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D54-0",
+   "text": "G002",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D52-0",
+   "text": "12종목",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D50-0",
+   "text": "ETF 모음",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D4Z-0",
+   "text": "G003",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D4X-0",
+   "text": "5종목",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D4V-0",
+   "text": "ELW 관찰",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "ELW 관찰",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D4U-0",
+   "text": "G004",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "ELW 관찰",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D4S-0",
+   "text": "4종목",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "그룹 요약",
+    "ELW 관찰"
+   ]
+  },
+  {
+   "id": "3D4N-0",
+   "text": "● 관심종목 시세 실시간 갱신 중",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  },
+  {
+   "id": "3D4M-0",
+   "text": "그룹 조회 정상 · 09:42:18",
+   "path": [
+    "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3D4I-0",
+   "name": "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "3D4J-0",
+   "name": "Discovery Root · 관심",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "3D4K-0",
+   "name": "Explorer Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "3DEW-0",
+   "name": "Header and Capability Navigation",
+   "component": "Frame",
+   "w": 0,
+   "h": 112,
+   "depth": 3
+  },
+  {
+   "id": "3DFA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3DFC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DFD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3DEX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3DF8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DF6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DF4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DF2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DF0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DEY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DEA-0",
+   "name": "Ranking Query Controls",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 3
+  },
+  {
+   "id": "3DEF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3DEU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DES-0",
+   "name": "단기 관찰",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DEQ-0",
+   "name": "배당주",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DEO-0",
+   "name": "ETF 모음",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DEM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DEK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DEI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DEG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DEB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3D4O-0",
+   "name": "Ranking Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 612,
+   "depth": 3
+  },
+  {
+   "id": "3E8R-0",
+   "name": "행 펼침 본문",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3E8S-0",
+   "name": "펼친 행 · 삼성전자",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "3E8U-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "3E8V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3E8Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3E90-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3E93-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3EAY-0",
+   "name": "펼침 상단",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3EAZ-0",
+   "name": "오늘 가격",
+   "component": "Frame",
+   "w": 402,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3EB0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3EB3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3EB4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3EB5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EB8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EBB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EBE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3EBF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EBI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EBL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EBO-0",
+   "name": "5단계 호가",
+   "component": "Frame",
+   "w": 402,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3EBP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3EBS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3EBT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "3EBX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3EC1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3EC5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3EC9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3ECD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3EMO-0",
+   "name": "펼침 하단",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3EMP-0",
+   "name": "잔량·건수",
+   "component": "Frame",
+   "w": 402,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3EMQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3EMT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3EMU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "3EMY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "3EN2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "3EN6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "3ENA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "3ENE-0",
+   "name": "체결·종목 기본",
+   "component": "Frame",
+   "w": 402,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ENF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ENI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ENJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3ENK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 9
+  },
+  {
+   "id": "3ENM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "3ENP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "3ENS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "3ENV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "3ENY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3ENZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 9
+  },
+  {
+   "id": "3EO1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "3EO4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "3EO7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "3EOA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "3D4P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 478,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3D5X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3D5U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3D5R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3D5O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3D5J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3D5L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3D5E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3D5H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "3D5F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "3D4Q-0",
+   "name": "그룹 요약",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3D5B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3D56-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3D58-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3D51-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3D53-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3D4W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3D4Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3D4R-0",
+   "name": "ELW 관찰",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3D4T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3D4L-0",
+   "name": "User Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "관심종목": 1,
+  "장중 · 09:42": 1,
+  "단기 관찰 그룹 · 8종목": 1,
+  "업종": 1,
+  "종목찾기": 1,
+  "관심": 1,
+  "테마": 1,
+  "시장·VI": 1,
+  "조건검색": 1,
+  "그룹": 1,
+  "단기 관찰": 2,
+  "배당주": 2,
+  "ETF 모음": 2,
+  "ELW 관찰": 2,
+  "등락률 순": 1,
+  "신호 표시": 1,
+  "알림 켜짐": 1,
+  "● 실시간 갱신": 1,
+  "8종목": 2,
+  "그룹 4개": 1,
+  "▾": 1,
+  "삼성전자": 1,
+  "005930": 1,
+  "거래대금 급증": 2,
+  "150,850": 2,
+  "+1,850 · +1.24%": 1,
+  "8종목 중 1행 펼침 · 09-01": 1,
+  "오늘 가격": 1,
+  "기준가 149,000": 1,
+  "시가": 1,
+  "149,200": 1,
+  "저가": 1,
+  "148,100": 1,
+  "상한가": 1,
+  "193,700": 1,
+  "고가": 1,
+  "152,400": 1,
+  "종가": 1,
+  "집계 전": 1,
+  "하한가": 1,
+  "104,300": 1,
+  "5단계 호가": 1,
+  "09:42:18 기준": 1,
+  "단계": 1,
+  "매도호가": 1,
+  "매수호가": 1,
+  "1차": 1,
+  "150,900": 1,
+  "2차": 1,
+  "150,950": 1,
+  "150,800": 1,
+  "3차": 1,
+  "151,000": 1,
+  "150,750": 1,
+  "4차": 1,
+  "151,050": 1,
+  "150,700": 1,
+  "5차": 1,
+  "151,100": 1,
+  "150,650": 1,
+  "잔량·건수": 1,
+  "매수비율 58.2%": 1,
+  "구분": 1,
+  "매도": 1,
+  "매수": 1,
+  "우선잔량": 1,
+  "1.7만주": 1,
+  "2.4만주": 1,
+  "우선건수": 1,
+  "298건": 1,
+  "412건": 1,
+  "총잔량": 1,
+  "8.2만주": 1,
+  "11.4만주": 1,
+  "총건수": 1,
+  "2,410건": 1,
+  "3,180건": 1,
+  "체결·종목 기본": 1,
+  "정규장 진행": 1,
+  "체결": 1,
+  "체결량": 1,
+  "3,200주": 1,
+  "체결강도": 1,
+  "108.4%": 1,
+  "예상체결가": 1,
+  "해당 없음": 2,
+  "예상체결량": 1,
+  "종목 기본": 1,
+  "시가총액": 1,
+  "900.6조": 1,
+  "상장주식수": 1,
+  "59.7억주": 1,
+  "자본금": 1,
+  "7,780억": 1,
+  "액면가": 1,
+  "100원": 1,
+  "삼성전자 — 선택": 1,
+  "신호 1건": 1,
+  "현재가 · 등락": 1,
+  "150,850 · +1.24%": 1,
+  "거래량 · 전일 대비": 1,
+  "1,420만주 · 1.2배": 1,
+  "그룹 편입일": 1,
+  "2026.07.03": 1,
+  "09:38 감지": 1,
+  "거래대금 2.14조 · 전일 대비 1.6배": 1,
+  "차트 열기": 1,
+  "호가 열기": 1,
+  "그룹 요약": 1,
+  "전체 4그룹 · 29종목": 1,
+  "G001": 1,
+  "G002": 1,
+  "12종목": 1,
+  "G003": 1,
+  "5종목": 1,
+  "G004": 1,
+  "4종목": 1,
+  "● 관심종목 시세 실시간 갱신 중": 1,
+  "그룹 조회 정상 · 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "6f26cbccdaaae5c258a0e415708c45b8d8ddb07a6af32c4192c5b423b52f2d7e"
+}

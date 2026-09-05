@@ -1,0 +1,203 @@
+Frame "CC-03 / R01-T7 · 차트 — 업종 지수" (32S7-0) 1440×960
+  Frame "Instrument Root · 차트" (32S8-0) 1440×960
+    Frame "Instrument Card Surface" (32S9-0) 1360×880
+      Frame "Instrument Header" (32WW-0) 0×106
+        Frame "Frame" (32XC-0) 0×0
+          Frame "Frame" (32XH-0) 0×0
+            Text "KOSPI 반도체" (32XL-0) 0×0 "KOSPI 반도체"
+            Text "업종 013 · KRX" (32XK-0) 0×0 "업종 013 · KRX"
+            Frame "Frame" (32XI-0) 0×0
+              Text "실시간" (32XJ-0) 0×0 "실시간"
+          Frame "Frame" (32XD-0) 0×0
+            Text "3,184.52" (32XG-0) 0×0 "3,184.52"
+            Text "+87.96 · +2.84%" (32XF-0) 0×0 "+87.96 · +2.84%"
+            Text "09:42:18" (32XE-0) 0×0 "09:42:18"
+        Frame "Frame" (32WX-0) 0×0
+          Frame "Frame" (32XA-0) 0×0
+            Text "현재시세" (32XB-0) 0×0 "현재시세"
+          Frame "Frame" (32X8-0) 0×0
+            Text "차트" (32X9-0) 0×0 "차트"
+          Frame "Frame" (32X6-0) 0×0
+            Text "기업정보" (32X7-0) 0×0 "기업정보"
+          Frame "Frame" (32X4-0) 0×0
+            Text "ETF" (32X5-0) 0×0 "ETF"
+          Frame "Frame" (32X2-0) 0×0
+            Text "ELW" (32X3-0) 0×0 "ELW"
+          Frame "Frame" (32X0-0) 0×0
+            Text "금현물" (32X1-0) 0×0 "금현물"
+          Frame "Frame" (32WY-0) 0×0
+            Text "순위" (32WZ-0) 0×0 "순위"
+      Frame "Quote and Valuation Strip" (32WC-0) 0×116
+        Frame "Frame" (32WT-0) 0×78
+          Text "시가 · 고가 · 저가" (32WV-0) 0×0 "시가 · 고가 · 저가"
+          Text "3,102.11 · 3,198.40 …" (32WU-0) 0×0 "3,102.11 · 3,198.40 · 3,096.85"
+        Frame "Frame" (32WP-0) 190×78
+          Text "거래대금" (32WS-0) 0×0 "거래대금"
+          Text "4.2조" (32WR-0) 0×0 "4.2조"
+          Text "보조 지표" (32WQ-0) 0×0 "전일 2.6조"
+        Frame "Frame" (32WL-0) 150×78
+          Text "상승 · 하락" (32WO-0) 0×0 "상승 · 하락"
+          Text "71 · 23" (32WN-0) 0×0 "71 · 23"
+          Text "보합 8" (32WM-0) 0×0 "보합 8"
+        Frame "Frame" (32WH-0) 150×78
+          Text "거래량" (32WK-0) 0×0 "거래량"
+          Text "8.4억주" (32WJ-0) 0×0 "8.4억주"
+          Text "전일 5.3억주" (32WI-0) 0×0 "전일 5.3억주"
+        Frame "Frame" (32WD-0) 150×78
+          Text "전일 대비" (32WG-0) 0×0 "전일 대비"
+          Text "1.6배" (32WF-0) 0×0 "1.6배"
+          Text "거래량 기준" (32WE-0) 0×0 "거래량 기준"
+      Frame "Chart Workspace" (32SD-0) 0×594
+        Frame "Athena Chart Module Mount" (32TJ-0) 1000×594
+          Frame "Chart Toolbar" (32VM-0) 0×46
+            Frame "Frame" (32VS-0) 0×0
+              Frame "Frame" (32WA-0) 0×0
+                Text "일" (32WB-0) 0×0 "일"
+              Frame "Frame" (32W8-0) 0×0
+                Text "주" (32W9-0) 0×0 "주"
+              Frame "Frame" (32W6-0) 0×0
+                Text "월" (32W7-0) 0×0 "월"
+              Rectangle "Rectangle" (32W5-0) 1×20
+              Frame "Frame" (32W3-0) 0×0
+                Text "틱" (32W4-0) 0×0 "틱"
+              Frame "Frame" (32W1-0) 0×0
+                Text "분" (32W2-0) 0×0 "분"
+              Frame "Frame" (32VZ-0) 0×0
+                Text "년" (32W0-0) 0×0 "년"
+              Frame "Frame" (32VX-0) 0×0
+                Text "1개월" (32VY-0) 0×0 "1개월"
+              Frame "Frame" (32VV-0) 0×0
+                Text "3개월" (32VW-0) 0×0 "3개월"
+              Frame "Frame" (32VT-0) 0×0
+                Text "1년" (32VU-0) 0×0 "1년"
+            Frame "Frame" (32VN-0) 0×0
+              Text "시세·거래량" (32VR-0) 0×0 "시세·거래량"
+              Text "지표" (32VQ-0) 0×0 "지표"
+              Text "그리기" (32VP-0) 0×0 "그리기"
+              Text "초기화" (32VO-0) 0×0 "초기화"
+          Frame "Existing Athena Chart Module" (32TK-0) 944×420
+            SVG "Athena Chart Preview" (3SRR-0) 944×420
+              SVGVisualElement "Line" (3SRS-0) 0×0
+              SVGVisualElement "Line" (3SRT-0) 0×0
+              SVGVisualElement "Line" (3SRU-0) 0×0
+              SVGVisualElement "Line" (3SRV-0) 0×0
+              SVGVisualElement "Line" (3SRW-0) 0×0
+              SVGVisualElement "Line" (3SRX-0) 0×0
+              SVGVisualElement "Line" (3SRY-0) 0×0
+              SVGVisualElement "Line" (3SRZ-0) 0×0
+              SVGVisualElement "Line" (3SS0-0) 0×0
+              SVGVisualElement "Line" (3SS1-0) 0×0
+              SVGVisualElement "Line" (3SS2-0) 0×0
+              SVGVisualElement "Rect" (3SS3-0) 0×0
+              SVGVisualElement "Rect" (3SS4-0) 0×0
+              SVGVisualElement "Line" (3SS5-0) 0×0
+              SVGVisualElement "Rect" (3SS6-0) 0×0
+              SVGVisualElement "Rect" (3SS7-0) 0×0
+              SVGVisualElement "Line" (3SS8-0) 0×0
+              SVGVisualElement "Rect" (3SS9-0) 0×0
+              SVGVisualElement "Rect" (3SSA-0) 0×0
+              SVGVisualElement "Line" (3SSB-0) 0×0
+              SVGVisualElement "Rect" (3SSC-0) 0×0
+              SVGVisualElement "Rect" (3SSD-0) 0×0
+              SVGVisualElement "Line" (3SSE-0) 0×0
+              SVGVisualElement "Rect" (3SSF-0) 0×0
+              SVGVisualElement "Rect" (3SSG-0) 0×0
+              SVGVisualElement "Line" (3SSH-0) 0×0
+              SVGVisualElement "Rect" (3SSI-0) 0×0
+              SVGVisualElement "Rect" (3SSJ-0) 0×0
+              SVGVisualElement "Line" (3SSK-0) 0×0
+              SVGVisualElement "Rect" (3SSL-0) 0×0
+              SVGVisualElement "Rect" (3SSM-0) 0×0
+              SVGVisualElement "Line" (3SSN-0) 0×0
+              SVGVisualElement "Rect" (3SSO-0) 0×0
+              SVGVisualElement "Rect" (3SSP-0) 0×0
+              SVGVisualElement "Line" (3SSQ-0) 0×0
+              SVGVisualElement "Rect" (3SSR-0) 0×0
+              SVGVisualElement "Rect" (3SSS-0) 0×0
+              SVGVisualElement "Line" (3SST-0) 0×0
+              SVGVisualElement "Rect" (3SSU-0) 0×0
+              SVGVisualElement "Rect" (3SSV-0) 0×0
+              SVGVisualElement "Line" (3SSW-0) 0×0
+              SVGVisualElement "Rect" (3SSX-0) 0×0
+              SVGVisualElement "Rect" (3SSY-0) 0×0
+              SVGVisualElement "Line" (3SSZ-0) 0×0
+              SVGVisualElement "Rect" (3ST0-0) 0×0
+              SVGVisualElement "Rect" (3ST1-0) 0×0
+              SVGVisualElement "Line" (3ST2-0) 0×0
+              SVGVisualElement "Rect" (3ST3-0) 0×0
+              SVGVisualElement "Rect" (3ST4-0) 0×0
+              SVGVisualElement "Line" (3ST5-0) 0×0
+              SVGVisualElement "Rect" (3ST6-0) 0×0
+              SVGVisualElement "Rect" (3ST7-0) 0×0
+              SVGVisualElement "Line" (3ST8-0) 0×0
+              SVGVisualElement "Rect" (3ST9-0) 0×0
+              SVGVisualElement "Rect" (3STA-0) 0×0
+              SVGVisualElement "Line" (3STB-0) 0×0
+              SVGVisualElement "Rect" (3STC-0) 0×0
+              SVGVisualElement "Rect" (3STD-0) 0×0
+              SVGVisualElement "Line" (3STE-0) 0×0
+              SVGVisualElement "Rect" (3STF-0) 0×0
+              SVGVisualElement "Rect" (3STG-0) 0×0
+              SVGVisualElement "Line" (3STH-0) 0×0
+              SVGVisualElement "Rect" (3STI-0) 0×0
+              SVGVisualElement "Rect" (3STJ-0) 0×0
+              SVGVisualElement "Line" (3STK-0) 0×0
+              SVGVisualElement "Rect" (3STL-0) 0×0
+              SVGVisualElement "Rect" (3STM-0) 0×0
+              SVGVisualElement "Line" (3STN-0) 0×0
+              SVGVisualElement "Rect" (3STO-0) 0×0
+              SVGVisualElement "Rect" (3STP-0) 0×0
+              SVGVisualElement "Line" (3STQ-0) 0×0
+              SVGVisualElement "Circle" (3STR-0) 0×0
+              SVGVisualElement "Rect" (3STS-0) 0×0
+              SVGVisualElement "3,184.52 · +2.84%" (3STT-0) 0×0
+              SVGVisualElement "8.39억" (3STU-0) 0×0
+              SVGVisualElement "6.29억" (3STV-0) 0×0
+              SVGVisualElement "4.20억" (3STW-0) 0×0
+              SVGVisualElement "2.10억" (3STX-0) 0×0
+              SVGVisualElement "0" (3STY-0) 0×0
+              SVGVisualElement "거래량 · 주" (3STZ-0) 0×0
+        Frame "Instrument Context" (32SE-0) 360×594
+          Frame "Market Profile" (32T6-0) 0×0
+            Frame "Frame" (32TG-0) 0×0
+              Text "업종 요약" (32TI-0) 0×0 "업종 요약"
+              Text "정규장" (32TH-0) 0×0 "정규장"
+            Frame "Frame" (32TD-0) 0×32
+              Text "구성" (32TF-0) 0×0 "구성"
+              Text "102종목" (32TE-0) 0×0 "102종목"
+            Frame "Frame" (32TA-0) 0×32
+              Text "시가총액" (32TC-0) 0×0 "시가총액"
+              Text "1,462조" (32TB-0) 0×0 "1,462조"
+            Frame "Frame" (32T7-0) 0×32
+              Text "주도" (32T9-0) 0×0 "주도"
+              Text "SK하이닉스 +2.05%" (32T8-0) 0×0 "SK하이닉스 +2.05%"
+          Frame "Range and Liquidity" (32SV-0) 0×0
+            Text "52주 범위" (32T5-0) 0×0 "52주 범위"
+            Frame "Frame" (32T2-0) 0×0
+              Text "52주 최저 2,410" (32T4-0) 0×0 "52주 최저 2,410"
+              Text "최고 3,214" (32T3-0) 0×0 "최고 3,214"
+            Frame "Frame" (32SZ-0) 0×8
+              Rectangle "Rectangle" (32T1-0) 0×8
+              Rectangle "Rectangle" (32T0-0) 16×16
+            Frame "Frame" (32SW-0) 0×0
+              Text "거래대금" (32SY-0) 0×0 "거래대금"
+              Text "4.2조" (32SX-0) 0×0 "4.2조"
+          Frame "Investor Snapshot" (32SK-0) 0×0
+            Text "일별 지수" (32SU-0) 0×0 "일별 지수"
+            Frame "Frame" (32SR-0) 0×32
+              Text "09-01" (32ST-0) 0×0 "09-01"
+              Text "3,184.52 · +2.84% · …" (32SS-0) 0×0 "3,184.52 · +2.84% · 71/23"
+            Frame "Frame" (32SO-0) 0×32
+              Text "08-31" (32SQ-0) 0×0 "08-31"
+              Text "3,096.56 · +0.42% · …" (32SP-0) 0×0 "3,096.56 · +0.42% · 58/39"
+            Frame "Frame" (32SL-0) 0×32
+              Text "08-28" (32SN-0) 0×0 "08-28"
+              Text "3,083.62 · −0.35% · …" (32SM-0) 0×0 "3,083.62 · −0.35% · 41/55"
+          Frame "Chart Context Actions" (32SF-0) 312×44
+            Frame "Frame" (32SI-0) 0×44
+              Text "알림 설정" (32SJ-0) 0×0 "알림 설정"
+            Frame "Frame" (32SG-0) 0×44
+              Text "구성 종목" (32SH-0) 0×0 "구성 종목"
+      Frame "Chart Status Footer" (32SA-0) 0×64
+        Text "● 실시간 갱신 중" (32SC-0) 0×0 "● 실시간 갱신 중"
+        Text "일봉 · 거래량 · 마지막 갱신 09…" (32SB-0) 0×0 "일봉 · 거래량 · 마지막 갱신 09:42:18"

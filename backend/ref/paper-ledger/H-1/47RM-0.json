@@ -1,0 +1,339 @@
+{
+ "board_id": "47RM-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47SK-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47SJ-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47SH-0",
+   "text": "고저가근접",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Header"
+   ]
+  },
+  {
+   "id": "47SF-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47SE-0",
+   "text": "41",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47SC-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47SB-0",
+   "text": "0.6%",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47S9-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47S8-0",
+   "text": "9",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47S5-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47S4-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47S3-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47S1-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47S0-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47RY-0",
+   "text": "52주 저가 대비",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47RX-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47RV-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47RU-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47RS-0",
+   "text": "52주 고가 대비",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47RR-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47RO-0",
+   "text": "스칼라 2개, 행 18개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47RM-0",
+   "name": "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47SG-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47SI-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47RP-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47S6-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47SD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47SA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47S7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47S2-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47RW-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47RZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47RQ-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47RT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47RN-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "고저가근접": 1,
+  "값": 4,
+  "41": 1,
+  "변화": 1,
+  "0.6%": 1,
+  "핵심": 1,
+  "9": 1,
+  "항목": 1,
+  "비고": 1,
+  "52주 저가 대비": 1,
+  "52주 고가 대비": 1,
+  "스칼라 2개, 행 18개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a283583d64d1ab0e88b3a3f4bb94cf855fe8d5322735d5bdeebf535038fb4ebd"
+}

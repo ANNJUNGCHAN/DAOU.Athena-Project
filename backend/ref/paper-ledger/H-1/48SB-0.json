@@ -1,0 +1,92 @@
+{
+ "board_id": "48SB-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48SD-0",
+   "text": "원본 보드: A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+   "path": [
+    "note/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48SF-0",
+   "text": "가져온 요소: 조회일자 · 외인기간별매매… · 합계 · 순위 · 순매수량",
+   "path": [
+    "note/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48SH-0",
+   "text": "문법: facts",
+   "path": [
+    "note/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48SJ-0",
+   "text": "접은 개수: 항목 222개",
+   "path": [
+    "note/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48SB-0",
+   "name": "note/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48SC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48SE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48SG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48SI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위": 1,
+  "가져온 요소: 조회일자 · 외인기간별매매… · 합계 · 순위 · 순매수량": 1,
+  "문법: facts": 1,
+  "접은 개수: 항목 222개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "7eb37284b9662de7660766a2bf480314297018908a05b0e483cdad3ab835576a"
+}

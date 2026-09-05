@@ -1,0 +1,575 @@
+{
+ "board_id": "3ZLW-0",
+ "page": "B-2",
+ "page_name": "플러그인",
+ "name": "08 · 플러그인 대화 — 결과 턴",
+ "width": 1680,
+ "height": 986,
+ "texts": [
+  {
+   "id": "3ZLY-0",
+   "text": "결과 턴",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "board-head"
+   ]
+  },
+  {
+   "id": "3ZLZ-0",
+   "text": "승인한 뒤 무엇이 일어났는지 남깁니다",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "board-head"
+   ]
+  },
+  {
+   "id": "3ZM3-0",
+   "text": "성공",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-success"
+   ]
+  },
+  {
+   "id": "3ZM5-0",
+   "text": "등록했습니다",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-success",
+    "result-turn"
+   ]
+  },
+  {
+   "id": "3ZM6-0",
+   "text": "연결을 확인했습니다",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-success",
+    "result-turn"
+   ]
+  },
+  {
+   "id": "3ZM7-0",
+   "text": "기능 6개를 찾았습니다",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-success",
+    "result-turn"
+   ]
+  },
+  {
+   "id": "3ZM9-0",
+   "text": "한국 주식 시세",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-success",
+    "canvas-row"
+   ]
+  },
+  {
+   "id": "3ZMC-0",
+   "text": "설치됨",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-success",
+    "canvas-row",
+    "badges",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZME-0",
+   "text": "기능 6",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-success",
+    "canvas-row",
+    "badges",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZMG-0",
+   "text": "허용 0",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-success",
+    "canvas-row",
+    "badges",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZMI-0",
+   "text": "연결 확인됨",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-success",
+    "canvas-row",
+    "badges",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZML-0",
+   "text": "거부",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-reject"
+   ]
+  },
+  {
+   "id": "3ZMO-0",
+   "text": "거부됨",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-reject",
+    "card-locked",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZMP-0",
+   "text": "웹 문서 읽기 설치",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-reject",
+    "card-locked"
+   ]
+  },
+  {
+   "id": "3ZMR-0",
+   "text": "그대로 뒀습니다",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-reject",
+    "result-turn"
+   ]
+  },
+  {
+   "id": "3ZMT-0",
+   "text": "플러그인 목록",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-reject",
+    "registry-row"
+   ]
+  },
+  {
+   "id": "3ZMV-0",
+   "text": "변화 없음",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-reject",
+    "registry-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZMY-0",
+   "text": "실패·재시도",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-retry"
+   ]
+  },
+  {
+   "id": "3ZN0-0",
+   "text": "등록되지 않은 별칭입니다",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-retry",
+    "result-turn"
+   ]
+  },
+  {
+   "id": "3ZN2-0",
+   "text": "아직 설치되지 않았습니다",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-retry",
+    "retry-banner"
+   ]
+  },
+  {
+   "id": "3ZN4-0",
+   "text": "다시 시도",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-retry",
+    "retry-banner",
+    "chip-retry"
+   ]
+  },
+  {
+   "id": "3ZN7-0",
+   "text": "재시작 반영",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-restart"
+   ]
+  },
+  {
+   "id": "3ZN9-0",
+   "text": "런타임 켜짐",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-restart",
+    "변형 · 런타임 켜짐"
+   ]
+  },
+  {
+   "id": "3ZNA-0",
+   "text": "플러그인이 바뀌어 대화를 다시 시작했습니다",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-restart",
+    "변형 · 런타임 켜짐"
+   ]
+  },
+  {
+   "id": "3ZNB-0",
+   "text": "방금 승인한 내용은 반영됐습니다",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-restart",
+    "변형 · 런타임 켜짐"
+   ]
+  },
+  {
+   "id": "3ZND-0",
+   "text": "런타임 꺼짐 · 기본",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-restart",
+    "변형 · 런타임 꺼짐"
+   ]
+  },
+  {
+   "id": "3ZNE-0",
+   "text": "다음 실행부터 반영됩니다",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-restart",
+    "변형 · 런타임 꺼짐"
+   ]
+  },
+  {
+   "id": "3ZNH-0",
+   "text": "모드 밖 폐기",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-discarded"
+   ]
+  },
+  {
+   "id": "3ZNJ-0",
+   "text": "대화 모드 채팅",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-discarded",
+    "result-turn"
+   ]
+  },
+  {
+   "id": "3ZNK-0",
+   "text": "플러그인 모드에서 다시 요청합니다",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-discarded",
+    "result-turn"
+   ]
+  },
+  {
+   "id": "3ZNM-0",
+   "text": "카드 0건",
+   "path": [
+    "08 · 플러그인 대화 — 결과 턴",
+    "columns",
+    "col-discarded",
+    "canvas-empty"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3ZLW-0",
+   "name": "08 · 플러그인 대화 — 결과 턴",
+   "component": "Frame",
+   "w": 1680,
+   "h": 986,
+   "depth": 0
+  },
+  {
+   "id": "3ZLX-0",
+   "name": "board-head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "3ZM0-0",
+   "name": "columns",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "3ZM2-0",
+   "name": "col-success",
+   "component": "Frame",
+   "w": 304,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZM4-0",
+   "name": "result-turn",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZM8-0",
+   "name": "canvas-row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZMA-0",
+   "name": "badges",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZMB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZMD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZMF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZMH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZMK-0",
+   "name": "col-reject",
+   "component": "Frame",
+   "w": 304,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZMM-0",
+   "name": "card-locked",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZMN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZMQ-0",
+   "name": "result-turn",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZMS-0",
+   "name": "registry-row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZMU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZMX-0",
+   "name": "col-retry",
+   "component": "Frame",
+   "w": 304,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZMZ-0",
+   "name": "result-turn",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZN1-0",
+   "name": "retry-banner",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZN3-0",
+   "name": "chip-retry",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZN6-0",
+   "name": "col-restart",
+   "component": "Frame",
+   "w": 304,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZN8-0",
+   "name": "변형 · 런타임 켜짐",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZNC-0",
+   "name": "변형 · 런타임 꺼짐",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZNG-0",
+   "name": "col-discarded",
+   "component": "Frame",
+   "w": 304,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZNI-0",
+   "name": "result-turn",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZNL-0",
+   "name": "canvas-empty",
+   "component": "Frame",
+   "w": 0,
+   "h": 120,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "결과 턴": 1,
+  "승인한 뒤 무엇이 일어났는지 남깁니다": 1,
+  "성공": 1,
+  "등록했습니다": 1,
+  "연결을 확인했습니다": 1,
+  "기능 6개를 찾았습니다": 1,
+  "한국 주식 시세": 1,
+  "설치됨": 1,
+  "기능 6": 1,
+  "허용 0": 1,
+  "연결 확인됨": 1,
+  "거부": 1,
+  "거부됨": 1,
+  "웹 문서 읽기 설치": 1,
+  "그대로 뒀습니다": 1,
+  "플러그인 목록": 1,
+  "변화 없음": 1,
+  "실패·재시도": 1,
+  "등록되지 않은 별칭입니다": 1,
+  "아직 설치되지 않았습니다": 1,
+  "다시 시도": 1,
+  "재시작 반영": 1,
+  "런타임 켜짐": 1,
+  "플러그인이 바뀌어 대화를 다시 시작했습니다": 1,
+  "방금 승인한 내용은 반영됐습니다": 1,
+  "런타임 꺼짐 · 기본": 1,
+  "다음 실행부터 반영됩니다": 1,
+  "모드 밖 폐기": 1,
+  "대화 모드 채팅": 1,
+  "플러그인 모드에서 다시 요청합니다": 1,
+  "카드 0건": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "e23b6942c8e537a5087e884061a2e0c258b635a9b1984ea25d6b34c9ab394090"
+}

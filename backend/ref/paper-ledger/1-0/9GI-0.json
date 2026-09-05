@@ -1,0 +1,172 @@
+{
+ "board_id": "9GI-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "27 · 접근성 — 투명도·모션 감소",
+ "width": 1680,
+ "height": 352,
+ "texts": [
+  {
+   "id": "9GL-0",
+   "text": "접근성 — 2종 폴백",
+   "path": [
+    "27 · 접근성 — 투명도·모션 감소",
+    "Frame"
+   ]
+  },
+  {
+   "id": "9GM-0",
+   "text": "투명도 감소와 모션 감소를 별도 폴백으로 유지합니다. 공식 접근성 폴백은 이 두 가지로 고정합니다.",
+   "path": [
+    "27 · 접근성 — 투명도·모션 감소",
+    "Frame"
+   ]
+  },
+  {
+   "id": "9GP-0",
+   "text": "투명도 감소 · prefers-reduced-transparency",
+   "path": [
+    "27 · 접근성 — 투명도·모션 감소",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "9GQ-0",
+   "text": "모든 유리 표면이 완전 불투명 패널이 된다 — .glass는 panel2, 카드·시트·cmd-box·온보딩 CLI·인증 타이머·코치마크는 panel3. 굴절(backdrop-filter)도 함께 끈다.",
+   "path": [
+    "27 · 접근성 — 투명도·모션 감소",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "9GS-0",
+   "text": "불투명 카드 샘플 — 레이아웃은 유리와 동일",
+   "path": [
+    "27 · 접근성 — 투명도·모션 감소",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "9GT-0",
+   "text": "Apple 규범(liquid-glass.md §4)은 frostier를 말하지만 Athena는 완전 불투명을 택한다 — 가독이 유리 물성보다 위다 (soul.md §8 정보 정직성)",
+   "path": [
+    "27 · 접근성 — 투명도·모션 감소",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "9H8-0",
+   "text": "모션 감소 · prefers-reduced-motion",
+   "path": [
+    "27 · 접근성 — 투명도·모션 감소",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "9H9-0",
+   "text": "모든 애니메이션·전환을 0.001ms로 강제, 반복 1회, scroll-behavior auto. 오브의 깜빡임·두리번·숨쉬기도 함께 멎는다.",
+   "path": [
+    "27 · 접근성 — 투명도·모션 감소",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "9HB-0",
+   "text": "정지 상태 샘플 — 상태 변화는 즉시 반영, 궤적 없음",
+   "path": [
+    "27 · 접근성 — 투명도·모션 감소",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "9HC-0",
+   "text": "animation/transition-duration 0.001ms !important — 전역 별표 선택자",
+   "path": [
+    "27 · 접근성 — 투명도·모션 감소",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "9GI-0",
+   "name": "27 · 접근성 — 투명도·모션 감소",
+   "component": "Frame",
+   "w": 1680,
+   "h": 352,
+   "depth": 0
+  },
+  {
+   "id": "9GK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1600,
+   "h": 54,
+   "depth": 1
+  },
+  {
+   "id": "9GN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1600,
+   "h": 194,
+   "depth": 1
+  },
+  {
+   "id": "9GO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 788,
+   "h": 194,
+   "depth": 2
+  },
+  {
+   "id": "9GR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 746,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "9H7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 788,
+   "h": 194,
+   "depth": 2
+  },
+  {
+   "id": "9HA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 746,
+   "h": 48,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "접근성 — 2종 폴백": 1,
+  "투명도 감소와 모션 감소를 별도 폴백으로 유지합니다. 공식 접근성 폴백은 이 두 가지로 고정합니다.": 1,
+  "투명도 감소 · prefers-reduced-transparency": 1,
+  "모든 유리 표면이 완전 불투명 패널이 된다 — .glass는 panel2, 카드·시트·cmd-box·온보딩 CLI·인증 타이머·코치마크는 panel3. 굴절(backdrop-filter)도 함께 끈다.": 1,
+  "불투명 카드 샘플 — 레이아웃은 유리와 동일": 1,
+  "Apple 규범(liquid-glass.md §4)은 frostier를 말하지만 Athena는 완전 불투명을 택한다 — 가독이 유리 물성보다 위다 (soul.md §8 정보 정직성)": 1,
+  "모션 감소 · prefers-reduced-motion": 1,
+  "모든 애니메이션·전환을 0.001ms로 강제, 반복 1회, scroll-behavior auto. 오브의 깜빡임·두리번·숨쉬기도 함께 멎는다.": 1,
+  "정지 상태 샘플 — 상태 변화는 즉시 반영, 궤적 없음": 1,
+  "animation/transition-duration 0.001ms !important — 전역 별표 선택자": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "7610b699f5607319e1753ff703b4131263feb09c53404e65829521d3bbb72189"
+}

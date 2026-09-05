@@ -1,0 +1,92 @@
+{
+ "board_id": "4999-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "499B-0",
+   "text": "원본 보드: CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+   "path": [
+    "note/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "499D-0",
+   "text": "가져온 요소: 당일전일체결량 · 체결가 · 전일대비 · 체결시간 · 체결량",
+   "path": [
+    "note/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "499F-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "499H-0",
+   "text": "접은 개수: 스칼라 2개 · 행 17개",
+   "path": [
+    "note/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4999-0",
+   "name": "note/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "499A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "499C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "499E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "499G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량": 1,
+  "가져온 요소: 당일전일체결량 · 체결가 · 전일대비 · 체결시간 · 체결량": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 17개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "bbdc48ca2a3916126022fbda177d0ed2ecc85dee5a87ef52d1616817112a95db"
+}

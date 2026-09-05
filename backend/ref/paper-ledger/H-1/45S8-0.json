@@ -1,0 +1,346 @@
+{
+ "board_id": "45S8-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "template/table",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "45SQ-0",
+   "text": "표형",
+   "path": [
+    "template/table",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45SR-0",
+   "text": "기준 09:42",
+   "path": [
+    "template/table",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45SS-0",
+   "text": "거래대금 순위",
+   "path": [
+    "template/table",
+    "Header"
+   ]
+  },
+  {
+   "id": "45VT-0",
+   "text": "순위",
+   "path": [
+    "template/table",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "45VU-0",
+   "text": "종목",
+   "path": [
+    "template/table",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "45VV-0",
+   "text": "현재가",
+   "path": [
+    "template/table",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "45VW-0",
+   "text": "등락",
+   "path": [
+    "template/table",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "45VZ-0",
+   "text": "01",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "45W1-0",
+   "text": "삼성전자",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45W2-0",
+   "text": "005930",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45W3-0",
+   "text": "149,000",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "45W4-0",
+   "text": "+1.24%",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "45W7-0",
+   "text": "02",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "45W9-0",
+   "text": "SK하이닉스",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45WA-0",
+   "text": "000660",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45WB-0",
+   "text": "194,410",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "45WC-0",
+   "text": "+2.05%",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "45WF-0",
+   "text": "03",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "45WH-0",
+   "text": "한화에어로스페이스",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45WI-0",
+   "text": "012450",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45WJ-0",
+   "text": "786,300",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "45WK-0",
+   "text": "+3.01%",
+   "path": [
+    "template/table",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "460S-0",
+   "text": "외 47건 접힘 · 원본에서 확인",
+   "path": [
+    "template/table",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "45S8-0",
+   "name": "template/table",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "45SO-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45SP-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45UE-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45VS-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45VY-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45W0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "45W6-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45W8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "45WE-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45WG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "460R-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "표형": 1,
+  "기준 09:42": 1,
+  "거래대금 순위": 1,
+  "순위": 1,
+  "종목": 1,
+  "현재가": 1,
+  "등락": 1,
+  "01": 1,
+  "삼성전자": 1,
+  "005930": 1,
+  "149,000": 1,
+  "+1.24%": 1,
+  "02": 1,
+  "SK하이닉스": 1,
+  "000660": 1,
+  "194,410": 1,
+  "+2.05%": 1,
+  "03": 1,
+  "한화에어로스페이스": 1,
+  "012450": 1,
+  "786,300": 1,
+  "+3.01%": 1,
+  "외 47건 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "eb41642b453a49278ab128b40ae5306e1526b2821dc6fd9f2520cec0ee007489"
+}

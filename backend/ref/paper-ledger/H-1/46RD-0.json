@@ -1,0 +1,233 @@
+{
+ "board_id": "46RD-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T2 · 수급 — 거래원",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46S0-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46RZ-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46RX-0",
+   "text": "거래원 수급",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Header"
+   ]
+  },
+  {
+   "id": "46RV-0",
+   "text": "외국계순매수추정합",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46RU-0",
+   "text": "+1,666억원",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46RS-0",
+   "text": "누적순매수",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46RR-0",
+   "text": "+842억원",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46RP-0",
+   "text": "매도상위이탈원",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46RO-0",
+   "text": "전일 4위 → 오늘 9위",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46RM-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46RL-0",
+   "text": "상위 5곳 비중",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46RJ-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46RI-0",
+   "text": "창구 5곳 합계",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46RF-0",
+   "text": "외 130개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T2 · 수급 — 거래원",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46RD-0",
+   "name": "mini/CC-05 / R03-T2 · 수급 — 거래원",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46RW-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46RY-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46RG-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46RT-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46RQ-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46RN-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46RK-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46RH-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46RE-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "거래원 수급": 1,
+  "외국계순매수추정합": 1,
+  "+1,666억원": 1,
+  "누적순매수": 1,
+  "+842억원": 1,
+  "매도상위이탈원": 1,
+  "전일 4위 → 오늘 9위": 1,
+  "값": 2,
+  "상위 5곳 비중": 1,
+  "창구 5곳 합계": 1,
+  "외 130개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "14a7b5440c134bf47acf0c1bb86630144cb2988f21af9f26da710f9e9bb42ef2"
+}

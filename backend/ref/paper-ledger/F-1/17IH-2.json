@@ -1,0 +1,1397 @@
+{
+ "board_id": "17IH-2",
+ "page": "F-1",
+ "page_name": "증명",
+ "name": "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "17IK-2",
+   "text": "삼성전자 주문을 10주에서 6주로 정정해줘",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17IL-2",
+   "text": "현금·신용·금현물·정정·취소가 같은 안전 검토 단계를 공유합니다.",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17IO-2",
+   "text": "아직 주문 전",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17IQ-2",
+   "text": "검토 후 1회 확인",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17IY-2",
+   "text": "현금",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17J0-2",
+   "text": "신용",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17J2-2",
+   "text": "금현물",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17J4-2",
+   "text": "정정",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17J6-2",
+   "text": "취소",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17J7-2",
+   "text": "미체결 10주",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JA-2",
+   "text": "삼성전자 005930",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JB-2",
+   "text": "매수 · 지정가 · 원주문 접수 14:28:10",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JD-2",
+   "text": "150,800원",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JE-2",
+   "text": "현재가 150,850원",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JH-2",
+   "text": "원주문",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JJ-2",
+   "text": "수량",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JK-2",
+   "text": "10주",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JM-2",
+   "text": "가격",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JN-2",
+   "text": "150,800원",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JP-2",
+   "text": "원주문번호",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JQ-2",
+   "text": "선택된 원주문",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JS-2",
+   "text": "정정 후",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JU-2",
+   "text": "수량",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JV-2",
+   "text": "6주",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JX-2",
+   "text": "가격",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17JY-2",
+   "text": "150,800원",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17K0-2",
+   "text": "정정수량",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17K1-2",
+   "text": "6주",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17K4-2",
+   "text": "응답 정정수량",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17K5-2",
+   "text": "—",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17K7-2",
+   "text": "주문번호",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17K8-2",
+   "text": "—",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KA-2",
+   "text": "모주문번호",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KB-2",
+   "text": "—",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2176-0",
+   "text": "국내거래소구분",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "raw · base:kt10002 · $.dmst_stex_tp"
+   ]
+  },
+  {
+   "id": "2177-0",
+   "text": "—",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "raw · base:kt10002 · $.dmst_stex_tp"
+   ]
+  },
+  {
+   "id": "17KD-2",
+   "text": "정정 가능 수량 확인",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KE-2",
+   "text": "현재 미체결 10주 중 6주를 정정 요청합니다.",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KH-2",
+   "text": "변경 취소",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KJ-2",
+   "text": "정정 내용 검토",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Amend Cancel Order Ticket",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KN-2",
+   "text": "유형별 추가 확인",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KO-2",
+   "text": "실행 전 필수",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KR-2",
+   "text": "신용 매수",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KS-2",
+   "text": "융자형",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KV-2",
+   "text": "신용거래구분",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KW-2",
+   "text": "33 · 융자",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KY-2",
+   "text": "대출일",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17KZ-2",
+   "text": "2026.07.15",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17L1-2",
+   "text": "주문수량 6주",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17L2-2",
+   "text": "주문단가 150,800원",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17L5-2",
+   "text": "금현물 매수",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17L6-2",
+   "text": "10주",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17L9-2",
+   "text": "종목코드",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LA-2",
+   "text": "M04020000",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LC-2",
+   "text": "주문수량",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LD-2",
+   "text": "10주",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LF-2",
+   "text": "주문단가 128,460원",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LG-2",
+   "text": "매매구분 00 · 보통",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LJ-2",
+   "text": "주문 취소",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LK-2",
+   "text": "미체결만",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LN-2",
+   "text": "취소수량",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LO-2",
+   "text": "10주",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LQ-2",
+   "text": "원주문번호",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LR-2",
+   "text": "선택된 원주문",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LS-2",
+   "text": "접수 응답은 주문번호·모주문번호·취소수량으로 표시됩니다.",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LU-2",
+   "text": "안전 단계",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17LY-2",
+   "text": "작성 완료",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17M2-2",
+   "text": "검토 중",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17M6-2",
+   "text": "최종 확인",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17M9-2",
+   "text": "버튼을 눌러도 즉시 주문되지 않습니다. 최종 확인에서 한 번 더 검토합니다.",
+   "path": [
+    "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+    "Order Variant Workspace",
+    "Order Variant Requirements",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "17IH-2",
+   "name": "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "17II-2",
+   "name": "Order Variant Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 1
+  },
+  {
+   "id": "17IJ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "17IM-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "17IN-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 3
+  },
+  {
+   "id": "17IP-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 3
+  },
+  {
+   "id": "17IS-2",
+   "name": "Order Variant Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 770,
+   "depth": 1
+  },
+  {
+   "id": "17IU-2",
+   "name": "Amend Cancel Order Ticket",
+   "component": "Frame",
+   "w": 800,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "17IV-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17IW-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17IX-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "17IZ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "17J1-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "17J3-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "17J5-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "17J8-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17J9-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17JC-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17JF-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17JG-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17JI-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17JL-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17JO-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17JR-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17JT-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17JW-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17JZ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17K2-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17K3-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17K6-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17K9-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2175-0",
+   "name": "raw · base:kt10002 · $.dmst_stex_tp",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17KC-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17KF-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17KG-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 4
+  },
+  {
+   "id": "17KI-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 4
+  },
+  {
+   "id": "17KL-2",
+   "name": "Order Variant Requirements",
+   "component": "Frame",
+   "w": 492,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "17KM-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17KP-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17KQ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17KT-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17KU-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17KX-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17L0-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17L3-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17L4-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17L7-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17L8-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17LB-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17LE-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17LH-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17LI-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17LL-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17LM-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17LP-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17LT-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17LV-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17LW-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17LX-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 6
+  },
+  {
+   "id": "17LZ-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 20,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "17M0-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17M1-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 6
+  },
+  {
+   "id": "17M3-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 20,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "17M4-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17M5-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 6
+  },
+  {
+   "id": "17M7-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17M8-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "삼성전자 주문을 10주에서 6주로 정정해줘": 1,
+  "현금·신용·금현물·정정·취소가 같은 안전 검토 단계를 공유합니다.": 1,
+  "아직 주문 전": 1,
+  "검토 후 1회 확인": 1,
+  "현금": 1,
+  "신용": 1,
+  "금현물": 1,
+  "정정": 1,
+  "취소": 1,
+  "미체결 10주": 1,
+  "삼성전자 005930": 1,
+  "매수 · 지정가 · 원주문 접수 14:28:10": 1,
+  "150,800원": 3,
+  "현재가 150,850원": 1,
+  "원주문": 1,
+  "수량": 2,
+  "10주": 4,
+  "가격": 2,
+  "원주문번호": 2,
+  "선택된 원주문": 2,
+  "정정 후": 1,
+  "6주": 2,
+  "정정수량": 1,
+  "응답 정정수량": 1,
+  "—": 4,
+  "주문번호": 1,
+  "모주문번호": 1,
+  "국내거래소구분": 1,
+  "정정 가능 수량 확인": 1,
+  "현재 미체결 10주 중 6주를 정정 요청합니다.": 1,
+  "변경 취소": 1,
+  "정정 내용 검토": 1,
+  "유형별 추가 확인": 1,
+  "실행 전 필수": 1,
+  "신용 매수": 1,
+  "융자형": 1,
+  "신용거래구분": 1,
+  "33 · 융자": 1,
+  "대출일": 1,
+  "2026.07.15": 1,
+  "주문수량 6주": 1,
+  "주문단가 150,800원": 1,
+  "금현물 매수": 1,
+  "종목코드": 1,
+  "M04020000": 1,
+  "주문수량": 1,
+  "주문단가 128,460원": 1,
+  "매매구분 00 · 보통": 1,
+  "주문 취소": 1,
+  "미체결만": 1,
+  "취소수량": 1,
+  "접수 응답은 주문번호·모주문번호·취소수량으로 표시됩니다.": 1,
+  "안전 단계": 1,
+  "작성 완료": 1,
+  "검토 중": 1,
+  "최종 확인": 1,
+  "버튼을 눌러도 즉시 주문되지 않습니다. 최종 확인에서 한 번 더 검토합니다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "412ecc20baa240207a366446ac5cd9804d1ad095bd0677d41ab22a5286e1bc51"
+}

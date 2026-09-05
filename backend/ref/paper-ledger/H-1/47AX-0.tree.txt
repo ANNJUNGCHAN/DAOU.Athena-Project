@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위" (47AX-0) 360×420
+  Frame "Header" (47BR-0) 0×0
+    Frame "Meta row" (47BT-0) 0×0
+      Text "Eyebrow" (47BV-0) 0×0
+      Text "As of" (47BU-0) 0×0 "기준 09:42"
+    Text "Title" (47BS-0) 0×0 "주식 신호·순위"
+  Frame "Body" (47B0-0) 0×0
+    Frame "KPI band" (47BH-0) 0×0
+      Frame "Frame" (47BO-0) 0×0
+        Text "수량" (47BQ-0) 0×0 "수량"
+        Text "어제 89종목" (47BP-0) 0×0 "어제 89종목"
+      Frame "Frame" (47BL-0) 0×0
+        Text "값" (47BN-0) 0×0 "값"
+        Text "114" (47BM-0) 0×0 "114"
+      Frame "Frame" (47BI-0) 0×0
+        Text "핵심" (47BK-0) 0×0 "핵심"
+        Text "23" (47BJ-0) 0×0 "23"
+    Frame "Table header" (47BD-0) 0×0
+      Text "항목" (47BG-0) 0×0 "항목"
+      Text "값" (47BF-0) 0×0 "값"
+      Text "비고" (47BE-0) 72×0 "비고"
+    Frame "Position 1" (47B7-0) 0×0
+      Frame "Frame" (47BA-0) 0×0
+        Text "수량" (47BC-0) 0×0 "수량"
+        Text "Text" (47BB-0) 0×0
+      Text "어제 31종목" (47B9-0) 0×0 "어제 31종목"
+      Text "Text" (47B8-0) 72×0
+    Frame "Position 2" (47B1-0) 0×0
+      Frame "Frame" (47B4-0) 0×0
+        Text "값" (47B6-0) 0×0 "값"
+        Text "Text" (47B5-0) 0×0
+      Text "신고저가 · 52주 기준" (47B3-0) 0×0 "신고저가 · 52주 기준"
+      Text "Text" (47B2-0) 72×0
+  Frame "Fold note" (47AY-0) 0×0
+    Text "스칼라 2개, 행 18개 접힘 · 원…" (47AZ-0) 0×0 "스칼라 2개, 행 18개 접힘 · 원본에서 확인"

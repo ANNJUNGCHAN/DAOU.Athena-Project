@@ -1,0 +1,762 @@
+{
+ "board_id": "161Q-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "S00 · 공통 상태·재시도",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "161T-2",
+   "text": "답이 오는 동안에도 맥락을 잃지 않습니다",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "161U-2",
+   "text": "모든 상태는 같은 질문·종목·기간을 유지하고, 사용자가 할 수 있는 다음 행동을 직접 보여줍니다.",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "161V-2",
+   "text": "공통 상태",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Header"
+   ]
+  },
+  {
+   "id": "1SRX-0",
+   "text": "상태 선택",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "Selector header"
+   ]
+  },
+  {
+   "id": "1SRY-0",
+   "text": "7개 공통 상태",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "Selector header"
+   ]
+  },
+  {
+   "id": "1SS2-0",
+   "text": "불러오는 중",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "불러오는 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SS3-0",
+   "text": "삼성전자 3개월 흐름을 준비하고 있어요",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "불러오는 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SS4-0",
+   "text": "질문과 종목은 그대로 유지됩니다.",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "불러오는 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SS5-0",
+   "text": "준비 중",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "불러오는 중"
+   ]
+  },
+  {
+   "id": "1SS9-0",
+   "text": "결과 없음",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "결과 없음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSA-0",
+   "text": "거래대금 상위 · PER 12배 이하 · ROE 10% 이상",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "결과 없음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSB-0",
+   "text": "조건을 넓히거나 다시 고를 수 있습니다.",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "결과 없음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSC-0",
+   "text": "PER 15배 · ROE 제외 · 조건 다시 고르기",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "결과 없음"
+   ]
+  },
+  {
+   "id": "1SSG-0",
+   "text": "일부 확인",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "일부 확인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSH-0",
+   "text": "현재가 150,850 · 외국인 +1,248억",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "일부 확인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSI-0",
+   "text": "확인된 정보부터 먼저 표시 · 관련 근거 확인 중",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "일부 확인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSJ-0",
+   "text": "근거 확인 중",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "일부 확인"
+   ]
+  },
+  {
+   "id": "1SSN-0",
+   "text": "오래된 값",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "오래된 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSO-0",
+   "text": "마지막 확인 6분 전 · 삼성전자 150,850",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "오래된 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSP-0",
+   "text": "현재 연결이 느려 이전 값을 유지하고 있습니다.",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "오래된 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSQ-0",
+   "text": "다시 확인",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "오래된 값"
+   ]
+  },
+  {
+   "id": "1SSU-0",
+   "text": "불러오기 실패",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "불러오기 실패",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSV-0",
+   "text": "질문을 보존했습니다.",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "불러오기 실패",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSW-0",
+   "text": "같은 조건으로 다시 시도하거나 질문을 수정할 수 있습니다.",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "불러오기 실패",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SSX-0",
+   "text": "다시 시도 · 질문 수정",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "불러오기 실패"
+   ]
+  },
+  {
+   "id": "1ST1-0",
+   "text": "다시 연결 중",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "다시 연결 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ST2-0",
+   "text": "150,860 / 8,402 · 150,850 / 10,773",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "다시 연결 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ST3-0",
+   "text": "호가의 마지막 값을 유지 · 자동 재연결 2초 후",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "다시 연결 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ST4-0",
+   "text": "복구 중",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "다시 연결 중"
+   ]
+  },
+  {
+   "id": "1ST8-0",
+   "text": "주문 최종 확인",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "주문 최종 확인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ST9-0",
+   "text": "삼성전자 10주 시장가 매수 · 약 150만원",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "주문 최종 확인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1STA-0",
+   "text": "아직 주문되지 않았습니다.",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "주문 최종 확인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1STB-0",
+   "text": "취소 · 주문 확인",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "State selector list",
+    "주문 최종 확인"
+   ]
+  },
+  {
+   "id": "1STE-0",
+   "text": "선택 상태 · 주문 최종 확인",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "Selected state detail",
+    "Selected state header"
+   ]
+  },
+  {
+   "id": "1STF-0",
+   "text": "주문 전",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "Selected state detail",
+    "Selected state header"
+   ]
+  },
+  {
+   "id": "1STI-0",
+   "text": "삼성전자 10주 시장가 매수",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "Selected state detail",
+    "Order confirmation hero"
+   ]
+  },
+  {
+   "id": "1STJ-0",
+   "text": "아직 주문되지 않았습니다.",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "Selected state detail",
+    "Order confirmation hero"
+   ]
+  },
+  {
+   "id": "1STN-0",
+   "text": "예상 금액",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "Selected state detail",
+    "Order summary pair",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1STO-0",
+   "text": "약 150만원",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "Selected state detail",
+    "Order summary pair",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1STQ-0",
+   "text": "가격 변동",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "Selected state detail",
+    "Order summary pair",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1STR-0",
+   "text": "가능",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "Selected state detail",
+    "Order summary pair",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1STU-0",
+   "text": "시장가는 체결 순간 가격이 달라질 수 있습니다.",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "Selected state detail",
+    "Market order warning"
+   ]
+  },
+  {
+   "id": "1STY-0",
+   "text": "취소",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "Selected state detail",
+    "Order actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1SU0-0",
+   "text": "주문 확인",
+   "path": [
+    "S00 · 공통 상태·재시도",
+    "Compact state selector workspace",
+    "Selected state detail",
+    "Order actions",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "161Q-2",
+   "name": "S00 · 공통 상태·재시도",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "161R-2",
+   "name": "Header",
+   "component": "Frame",
+   "w": 1360,
+   "h": 120,
+   "depth": 1
+  },
+  {
+   "id": "161S-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1SRQ-0",
+   "name": "Compact state selector workspace",
+   "component": "Frame",
+   "w": 1360,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "1SRS-0",
+   "name": "State selector list",
+   "component": "Frame",
+   "w": 480,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1SRW-0",
+   "name": "Selector header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SS0-0",
+   "name": "불러오는 중",
+   "component": "Frame",
+   "w": 440,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SS1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SS7-0",
+   "name": "결과 없음",
+   "component": "Frame",
+   "w": 440,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SS8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SSE-0",
+   "name": "일부 확인",
+   "component": "Frame",
+   "w": 440,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SSF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SSL-0",
+   "name": "오래된 값",
+   "component": "Frame",
+   "w": 440,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SSM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SSS-0",
+   "name": "불러오기 실패",
+   "component": "Frame",
+   "w": 440,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1SST-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SSZ-0",
+   "name": "다시 연결 중",
+   "component": "Frame",
+   "w": 440,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1ST0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1ST6-0",
+   "name": "주문 최종 확인",
+   "component": "Frame",
+   "w": 440,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1ST7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1SRU-0",
+   "name": "Selected state detail",
+   "component": "Frame",
+   "w": 860,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1STD-0",
+   "name": "Selected state header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1STH-0",
+   "name": "Order confirmation hero",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1STL-0",
+   "name": "Order summary pair",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1STM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 396,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1STP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 396,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1STT-0",
+   "name": "Market order warning",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1STW-0",
+   "name": "Order actions",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1STX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 396,
+   "h": 48,
+   "depth": 4
+  },
+  {
+   "id": "1STZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 396,
+   "h": 48,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "답이 오는 동안에도 맥락을 잃지 않습니다": 1,
+  "모든 상태는 같은 질문·종목·기간을 유지하고, 사용자가 할 수 있는 다음 행동을 직접 보여줍니다.": 1,
+  "공통 상태": 1,
+  "상태 선택": 1,
+  "7개 공통 상태": 1,
+  "불러오는 중": 1,
+  "삼성전자 3개월 흐름을 준비하고 있어요": 1,
+  "질문과 종목은 그대로 유지됩니다.": 1,
+  "준비 중": 1,
+  "결과 없음": 1,
+  "거래대금 상위 · PER 12배 이하 · ROE 10% 이상": 1,
+  "조건을 넓히거나 다시 고를 수 있습니다.": 1,
+  "PER 15배 · ROE 제외 · 조건 다시 고르기": 1,
+  "일부 확인": 1,
+  "현재가 150,850 · 외국인 +1,248억": 1,
+  "확인된 정보부터 먼저 표시 · 관련 근거 확인 중": 1,
+  "근거 확인 중": 1,
+  "오래된 값": 1,
+  "마지막 확인 6분 전 · 삼성전자 150,850": 1,
+  "현재 연결이 느려 이전 값을 유지하고 있습니다.": 1,
+  "다시 확인": 1,
+  "불러오기 실패": 1,
+  "질문을 보존했습니다.": 1,
+  "같은 조건으로 다시 시도하거나 질문을 수정할 수 있습니다.": 1,
+  "다시 시도 · 질문 수정": 1,
+  "다시 연결 중": 1,
+  "150,860 / 8,402 · 150,850 / 10,773": 1,
+  "호가의 마지막 값을 유지 · 자동 재연결 2초 후": 1,
+  "복구 중": 1,
+  "주문 최종 확인": 1,
+  "삼성전자 10주 시장가 매수 · 약 150만원": 1,
+  "아직 주문되지 않았습니다.": 2,
+  "취소 · 주문 확인": 1,
+  "선택 상태 · 주문 최종 확인": 1,
+  "주문 전": 1,
+  "삼성전자 10주 시장가 매수": 1,
+  "예상 금액": 1,
+  "약 150만원": 1,
+  "가격 변동": 1,
+  "가능": 1,
+  "시장가는 체결 순간 가격이 달라질 수 있습니다.": 1,
+  "취소": 1,
+  "주문 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "30154578bda4590ec22845dbabb7a018a19e2892779580e1702fa4ccf30e2be7"
+}

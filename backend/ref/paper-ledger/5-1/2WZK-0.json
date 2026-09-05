@@ -1,0 +1,3989 @@
+{
+ "board_id": "2WZK-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "2X5M-0",
+   "text": "ETF 기간 수익률",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X5L-0",
+   "text": "전 종목 · 3달 수익률 순",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X5K-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X5H-0",
+   "text": "상장 ETF 1,024 종목",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X5G-0",
+   "text": "3달 플러스 810 · 마이너스 214",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X5F-0",
+   "text": "09:42:18 조회",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X5C-0",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X5A-0",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X58-0",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X56-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X54-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X52-0",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X50-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4W-0",
+   "text": "정렬 기준",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4V-0",
+   "text": "3달 수익률 높은 순",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4T-0",
+   "text": "3달 수익률 1위",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4S-0",
+   "text": "+42.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4R-0",
+   "text": "KODEX 2차전지산업",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4P-0",
+   "text": "1년 수익률 1위",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4O-0",
+   "text": "+88.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4N-0",
+   "text": "TIGER 2차전지테마",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4L-0",
+   "text": "3달 마이너스",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4K-0",
+   "text": "214 종목",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4J-0",
+   "text": "전체 1,024 종목",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4H-0",
+   "text": "기초지수 대비",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4G-0",
+   "text": "+2.1%p",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4F-0",
+   "text": "평균 초과수익",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4C-0",
+   "text": "등락률",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X4A-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X48-0",
+   "text": "괴리율",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X46-0",
+   "text": "추적오차",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X44-0",
+   "text": "기간 수익률",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X41-0",
+   "text": "범위",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X40-0",
+   "text": "주식",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X3Y-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2X3W-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3R2F-0",
+   "text": "전체 1,024건 · 20건 표시",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "목록 상태"
+   ]
+  },
+  {
+   "id": "3R2J-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3R2K-0",
+   "text": "종목",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3R2L-0",
+   "text": "현재가",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3R2M-0",
+   "text": "등락률",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3R2N-0",
+   "text": "1주",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3R2O-0",
+   "text": "1달",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3R2P-0",
+   "text": "3달",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3R2Q-0",
+   "text": "1년",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3R2S-0",
+   "text": "1",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "1 KODEX 2차전지산업"
+   ]
+  },
+  {
+   "id": "3R2T-0",
+   "text": "KODEX 2차전지산업",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "1 KODEX 2차전지산업"
+   ]
+  },
+  {
+   "id": "3R2U-0",
+   "text": "12,485",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "1 KODEX 2차전지산업"
+   ]
+  },
+  {
+   "id": "3R2V-0",
+   "text": "+3.12%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "1 KODEX 2차전지산업"
+   ]
+  },
+  {
+   "id": "3R2W-0",
+   "text": "+5.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "1 KODEX 2차전지산업"
+   ]
+  },
+  {
+   "id": "3R2X-0",
+   "text": "+18.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "1 KODEX 2차전지산업"
+   ]
+  },
+  {
+   "id": "3R2Y-0",
+   "text": "+42.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "1 KODEX 2차전지산업"
+   ]
+  },
+  {
+   "id": "3R2Z-0",
+   "text": "+76.5%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "1 KODEX 2차전지산업"
+   ]
+  },
+  {
+   "id": "3R31-0",
+   "text": "2",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "2 TIGER 2차전지테마"
+   ]
+  },
+  {
+   "id": "3R32-0",
+   "text": "TIGER 2차전지테마",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "2 TIGER 2차전지테마"
+   ]
+  },
+  {
+   "id": "3R33-0",
+   "text": "18,640",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "2 TIGER 2차전지테마"
+   ]
+  },
+  {
+   "id": "3R34-0",
+   "text": "+2.71%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "2 TIGER 2차전지테마"
+   ]
+  },
+  {
+   "id": "3R35-0",
+   "text": "+4.9%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "2 TIGER 2차전지테마"
+   ]
+  },
+  {
+   "id": "3R36-0",
+   "text": "+16.2%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "2 TIGER 2차전지테마"
+   ]
+  },
+  {
+   "id": "3R37-0",
+   "text": "+38.7%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "2 TIGER 2차전지테마"
+   ]
+  },
+  {
+   "id": "3R38-0",
+   "text": "+88.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "2 TIGER 2차전지테마"
+   ]
+  },
+  {
+   "id": "3R3A-0",
+   "text": "3",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "3 KODEX 반도체"
+   ]
+  },
+  {
+   "id": "3R3B-0",
+   "text": "KODEX 반도체",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "3 KODEX 반도체"
+   ]
+  },
+  {
+   "id": "3R3C-0",
+   "text": "45,620",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "3 KODEX 반도체"
+   ]
+  },
+  {
+   "id": "3R3D-0",
+   "text": "+2.41%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "3 KODEX 반도체"
+   ]
+  },
+  {
+   "id": "3R3E-0",
+   "text": "+4.2%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "3 KODEX 반도체"
+   ]
+  },
+  {
+   "id": "3R3F-0",
+   "text": "+14.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "3 KODEX 반도체"
+   ]
+  },
+  {
+   "id": "3R3G-0",
+   "text": "+33.5%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "3 KODEX 반도체"
+   ]
+  },
+  {
+   "id": "3R3H-0",
+   "text": "+61.2%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "3 KODEX 반도체"
+   ]
+  },
+  {
+   "id": "3R3J-0",
+   "text": "4",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "4 TIGER 반도체TOP10"
+   ]
+  },
+  {
+   "id": "3R3K-0",
+   "text": "TIGER 반도체TOP10",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "4 TIGER 반도체TOP10"
+   ]
+  },
+  {
+   "id": "3R3L-0",
+   "text": "15,930",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "4 TIGER 반도체TOP10"
+   ]
+  },
+  {
+   "id": "3R3M-0",
+   "text": "+2.84%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "4 TIGER 반도체TOP10"
+   ]
+  },
+  {
+   "id": "3R3N-0",
+   "text": "+3.7%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "4 TIGER 반도체TOP10"
+   ]
+  },
+  {
+   "id": "3R3O-0",
+   "text": "+12.9%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "4 TIGER 반도체TOP10"
+   ]
+  },
+  {
+   "id": "3R3P-0",
+   "text": "+29.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "4 TIGER 반도체TOP10"
+   ]
+  },
+  {
+   "id": "3R3Q-0",
+   "text": "+54.7%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "4 TIGER 반도체TOP10"
+   ]
+  },
+  {
+   "id": "3R3S-0",
+   "text": "5",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "5 ACE 2차전지소재"
+   ]
+  },
+  {
+   "id": "3R3T-0",
+   "text": "ACE 2차전지소재",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "5 ACE 2차전지소재"
+   ]
+  },
+  {
+   "id": "3R3U-0",
+   "text": "18,540",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "5 ACE 2차전지소재"
+   ]
+  },
+  {
+   "id": "3R3V-0",
+   "text": "+1.95%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "5 ACE 2차전지소재"
+   ]
+  },
+  {
+   "id": "3R3W-0",
+   "text": "+2.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "5 ACE 2차전지소재"
+   ]
+  },
+  {
+   "id": "3R3X-0",
+   "text": "+10.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "5 ACE 2차전지소재"
+   ]
+  },
+  {
+   "id": "3R3Y-0",
+   "text": "+24.3%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "5 ACE 2차전지소재"
+   ]
+  },
+  {
+   "id": "3R3Z-0",
+   "text": "+47.9%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "5 ACE 2차전지소재"
+   ]
+  },
+  {
+   "id": "3R41-0",
+   "text": "6",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "6 KODEX AI반도체핵심"
+   ]
+  },
+  {
+   "id": "3R42-0",
+   "text": "KODEX AI반도체핵심",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "6 KODEX AI반도체핵심"
+   ]
+  },
+  {
+   "id": "3R43-0",
+   "text": "13,780",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "6 KODEX AI반도체핵심"
+   ]
+  },
+  {
+   "id": "3R44-0",
+   "text": "+1.42%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "6 KODEX AI반도체핵심"
+   ]
+  },
+  {
+   "id": "3R45-0",
+   "text": "+2.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "6 KODEX AI반도체핵심"
+   ]
+  },
+  {
+   "id": "3R46-0",
+   "text": "+8.6%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "6 KODEX AI반도체핵심"
+   ]
+  },
+  {
+   "id": "3R47-0",
+   "text": "+19.6%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "6 KODEX AI반도체핵심"
+   ]
+  },
+  {
+   "id": "3R48-0",
+   "text": "+35.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "6 KODEX AI반도체핵심"
+   ]
+  },
+  {
+   "id": "3R4A-0",
+   "text": "7",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "7 TIGER 미국필라델피아반도체"
+   ]
+  },
+  {
+   "id": "3R4B-0",
+   "text": "TIGER 미국필라델피아반도체",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "7 TIGER 미국필라델피아반도체"
+   ]
+  },
+  {
+   "id": "3R4C-0",
+   "text": "24,910",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "7 TIGER 미국필라델피아반도체"
+   ]
+  },
+  {
+   "id": "3R4D-0",
+   "text": "-0.62%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "7 TIGER 미국필라델피아반도체"
+   ]
+  },
+  {
+   "id": "3R4E-0",
+   "text": "-1.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "7 TIGER 미국필라델피아반도체"
+   ]
+  },
+  {
+   "id": "3R4F-0",
+   "text": "+3.2%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "7 TIGER 미국필라델피아반도체"
+   ]
+  },
+  {
+   "id": "3R4G-0",
+   "text": "+11.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "7 TIGER 미국필라델피아반도체"
+   ]
+  },
+  {
+   "id": "3R4H-0",
+   "text": "+28.6%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "7 TIGER 미국필라델피아반도체"
+   ]
+  },
+  {
+   "id": "3R4J-0",
+   "text": "8",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "8 TIGER 코스닥150"
+   ]
+  },
+  {
+   "id": "3R4K-0",
+   "text": "TIGER 코스닥150",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "8 TIGER 코스닥150"
+   ]
+  },
+  {
+   "id": "3R4L-0",
+   "text": "14,285",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "8 TIGER 코스닥150"
+   ]
+  },
+  {
+   "id": "3R4M-0",
+   "text": "+1.44%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "8 TIGER 코스닥150"
+   ]
+  },
+  {
+   "id": "3R4N-0",
+   "text": "+2.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "8 TIGER 코스닥150"
+   ]
+  },
+  {
+   "id": "3R4O-0",
+   "text": "+6.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "8 TIGER 코스닥150"
+   ]
+  },
+  {
+   "id": "3R4P-0",
+   "text": "+9.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "8 TIGER 코스닥150"
+   ]
+  },
+  {
+   "id": "3R4Q-0",
+   "text": "+18.2%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "8 TIGER 코스닥150"
+   ]
+  },
+  {
+   "id": "3R4S-0",
+   "text": "9",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "9 KODEX 자동차"
+   ]
+  },
+  {
+   "id": "3R4T-0",
+   "text": "KODEX 자동차",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "9 KODEX 자동차"
+   ]
+  },
+  {
+   "id": "3R4U-0",
+   "text": "22,410",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "9 KODEX 자동차"
+   ]
+  },
+  {
+   "id": "3R4V-0",
+   "text": "+1.28%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "9 KODEX 자동차"
+   ]
+  },
+  {
+   "id": "3R4W-0",
+   "text": "+1.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "9 KODEX 자동차"
+   ]
+  },
+  {
+   "id": "3R4X-0",
+   "text": "+5.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "9 KODEX 자동차"
+   ]
+  },
+  {
+   "id": "3R4Y-0",
+   "text": "+8.6%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "9 KODEX 자동차"
+   ]
+  },
+  {
+   "id": "3R4Z-0",
+   "text": "+14.7%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "9 KODEX 자동차"
+   ]
+  },
+  {
+   "id": "3R51-0",
+   "text": "10",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "10 TIGER 미국S&P500"
+   ]
+  },
+  {
+   "id": "3R52-0",
+   "text": "TIGER 미국S&P500",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "10 TIGER 미국S&P500"
+   ]
+  },
+  {
+   "id": "3R53-0",
+   "text": "19,875",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "10 TIGER 미국S&P500"
+   ]
+  },
+  {
+   "id": "3R54-0",
+   "text": "+0.92%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "10 TIGER 미국S&P500"
+   ]
+  },
+  {
+   "id": "3R55-0",
+   "text": "+1.2%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "10 TIGER 미국S&P500"
+   ]
+  },
+  {
+   "id": "3R56-0",
+   "text": "+3.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "10 TIGER 미국S&P500"
+   ]
+  },
+  {
+   "id": "3R57-0",
+   "text": "+7.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "10 TIGER 미국S&P500"
+   ]
+  },
+  {
+   "id": "3R58-0",
+   "text": "+22.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "10 TIGER 미국S&P500"
+   ]
+  },
+  {
+   "id": "3R5A-0",
+   "text": "11",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "11 ACE 미국나스닥100"
+   ]
+  },
+  {
+   "id": "3R5B-0",
+   "text": "ACE 미국나스닥100",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "11 ACE 미국나스닥100"
+   ]
+  },
+  {
+   "id": "3R5C-0",
+   "text": "18,240",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "11 ACE 미국나스닥100"
+   ]
+  },
+  {
+   "id": "3R5D-0",
+   "text": "+0.75%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "11 ACE 미국나스닥100"
+   ]
+  },
+  {
+   "id": "3R5E-0",
+   "text": "+1.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "11 ACE 미국나스닥100"
+   ]
+  },
+  {
+   "id": "3R5F-0",
+   "text": "+4.2%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "11 ACE 미국나스닥100"
+   ]
+  },
+  {
+   "id": "3R5G-0",
+   "text": "+6.9%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "11 ACE 미국나스닥100"
+   ]
+  },
+  {
+   "id": "3R5H-0",
+   "text": "+26.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "11 ACE 미국나스닥100"
+   ]
+  },
+  {
+   "id": "3R5J-0",
+   "text": "12",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "12 TIGER 은행고배당플러스TOP10"
+   ]
+  },
+  {
+   "id": "3R5K-0",
+   "text": "TIGER 은행고배당플러스TOP10",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "12 TIGER 은행고배당플러스TOP10"
+   ]
+  },
+  {
+   "id": "3R5L-0",
+   "text": "12,640",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "12 TIGER 은행고배당플러스TOP10"
+   ]
+  },
+  {
+   "id": "3R5M-0",
+   "text": "+0.42%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "12 TIGER 은행고배당플러스TOP10"
+   ]
+  },
+  {
+   "id": "3R5N-0",
+   "text": "+0.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "12 TIGER 은행고배당플러스TOP10"
+   ]
+  },
+  {
+   "id": "3R5O-0",
+   "text": "+2.6%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "12 TIGER 은행고배당플러스TOP10"
+   ]
+  },
+  {
+   "id": "3R5P-0",
+   "text": "+5.2%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "12 TIGER 은행고배당플러스TOP10"
+   ]
+  },
+  {
+   "id": "3R5Q-0",
+   "text": "+16.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "12 TIGER 은행고배당플러스TOP10"
+   ]
+  },
+  {
+   "id": "3R5S-0",
+   "text": "13",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "13 KODEX 배당가치"
+   ]
+  },
+  {
+   "id": "3R5T-0",
+   "text": "KODEX 배당가치",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "13 KODEX 배당가치"
+   ]
+  },
+  {
+   "id": "3R5U-0",
+   "text": "13,180",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "13 KODEX 배당가치"
+   ]
+  },
+  {
+   "id": "3R5V-0",
+   "text": "+0.61%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "13 KODEX 배당가치"
+   ]
+  },
+  {
+   "id": "3R5W-0",
+   "text": "+0.6%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "13 KODEX 배당가치"
+   ]
+  },
+  {
+   "id": "3R5X-0",
+   "text": "+2.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "13 KODEX 배당가치"
+   ]
+  },
+  {
+   "id": "3R5Y-0",
+   "text": "+4.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "13 KODEX 배당가치"
+   ]
+  },
+  {
+   "id": "3R5Z-0",
+   "text": "+11.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "13 KODEX 배당가치"
+   ]
+  },
+  {
+   "id": "3R61-0",
+   "text": "14",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "14 TIGER 원유선물"
+   ]
+  },
+  {
+   "id": "3R62-0",
+   "text": "TIGER 원유선물",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "14 TIGER 원유선물"
+   ]
+  },
+  {
+   "id": "3R63-0",
+   "text": "4,180",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "14 TIGER 원유선물"
+   ]
+  },
+  {
+   "id": "3R64-0",
+   "text": "-0.38%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "14 TIGER 원유선물"
+   ]
+  },
+  {
+   "id": "3R65-0",
+   "text": "-2.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "14 TIGER 원유선물"
+   ]
+  },
+  {
+   "id": "3R66-0",
+   "text": "-4.6%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "14 TIGER 원유선물"
+   ]
+  },
+  {
+   "id": "3R67-0",
+   "text": "+2.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "14 TIGER 원유선물"
+   ]
+  },
+  {
+   "id": "3R68-0",
+   "text": "-18.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "14 TIGER 원유선물"
+   ]
+  },
+  {
+   "id": "3R6A-0",
+   "text": "15",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "15 KODEX 종합채권"
+   ]
+  },
+  {
+   "id": "3R6B-0",
+   "text": "KODEX 종합채권",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "15 KODEX 종합채권"
+   ]
+  },
+  {
+   "id": "3R6C-0",
+   "text": "107,850",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "15 KODEX 종합채권"
+   ]
+  },
+  {
+   "id": "3R6D-0",
+   "text": "+0.14%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "15 KODEX 종합채권"
+   ]
+  },
+  {
+   "id": "3R6E-0",
+   "text": "+0.2%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "15 KODEX 종합채권"
+   ]
+  },
+  {
+   "id": "3R6F-0",
+   "text": "+0.6%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "15 KODEX 종합채권"
+   ]
+  },
+  {
+   "id": "3R6G-0",
+   "text": "+1.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "15 KODEX 종합채권"
+   ]
+  },
+  {
+   "id": "3R6H-0",
+   "text": "+3.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "15 KODEX 종합채권"
+   ]
+  },
+  {
+   "id": "3R6J-0",
+   "text": "16",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "16 TIGER 미국채10년선물"
+   ]
+  },
+  {
+   "id": "3R6K-0",
+   "text": "TIGER 미국채10년선물",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "16 TIGER 미국채10년선물"
+   ]
+  },
+  {
+   "id": "3R6L-0",
+   "text": "11,640",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "16 TIGER 미국채10년선물"
+   ]
+  },
+  {
+   "id": "3R6M-0",
+   "text": "+0.06%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "16 TIGER 미국채10년선물"
+   ]
+  },
+  {
+   "id": "3R6N-0",
+   "text": "+0.3%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "16 TIGER 미국채10년선물"
+   ]
+  },
+  {
+   "id": "3R6O-0",
+   "text": "+0.9%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "16 TIGER 미국채10년선물"
+   ]
+  },
+  {
+   "id": "3R6P-0",
+   "text": "+0.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "16 TIGER 미국채10년선물"
+   ]
+  },
+  {
+   "id": "3R6Q-0",
+   "text": "+2.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "16 TIGER 미국채10년선물"
+   ]
+  },
+  {
+   "id": "3R6S-0",
+   "text": "17",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "17 KODEX 골드선물"
+   ]
+  },
+  {
+   "id": "3R6T-0",
+   "text": "KODEX 골드선물",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "17 KODEX 골드선물"
+   ]
+  },
+  {
+   "id": "3R6U-0",
+   "text": "19,420",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "17 KODEX 골드선물"
+   ]
+  },
+  {
+   "id": "3R6V-0",
+   "text": "-0.22%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "17 KODEX 골드선물"
+   ]
+  },
+  {
+   "id": "3R6W-0",
+   "text": "-0.6%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "17 KODEX 골드선물"
+   ]
+  },
+  {
+   "id": "3R6X-0",
+   "text": "+1.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "17 KODEX 골드선물"
+   ]
+  },
+  {
+   "id": "3R6Y-0",
+   "text": "+0.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "17 KODEX 골드선물"
+   ]
+  },
+  {
+   "id": "3R6Z-0",
+   "text": "+12.6%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "17 KODEX 골드선물"
+   ]
+  },
+  {
+   "id": "3R71-0",
+   "text": "18",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "18 KODEX 헬스케어"
+   ]
+  },
+  {
+   "id": "3R72-0",
+   "text": "KODEX 헬스케어",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "18 KODEX 헬스케어"
+   ]
+  },
+  {
+   "id": "3R73-0",
+   "text": "32,640",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "18 KODEX 헬스케어"
+   ]
+  },
+  {
+   "id": "3R74-0",
+   "text": "-0.54%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "18 KODEX 헬스케어"
+   ]
+  },
+  {
+   "id": "3R75-0",
+   "text": "-1.2%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "18 KODEX 헬스케어"
+   ]
+  },
+  {
+   "id": "3R76-0",
+   "text": "-2.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "18 KODEX 헬스케어"
+   ]
+  },
+  {
+   "id": "3R77-0",
+   "text": "-3.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "18 KODEX 헬스케어"
+   ]
+  },
+  {
+   "id": "3R78-0",
+   "text": "+4.2%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "18 KODEX 헬스케어"
+   ]
+  },
+  {
+   "id": "3R7A-0",
+   "text": "19",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "19 KODEX 200"
+   ]
+  },
+  {
+   "id": "3R7B-0",
+   "text": "KODEX 200",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "19 KODEX 200"
+   ]
+  },
+  {
+   "id": "3R7C-0",
+   "text": "48,360",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "19 KODEX 200"
+   ]
+  },
+  {
+   "id": "3R7D-0",
+   "text": "+0.84%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "19 KODEX 200"
+   ]
+  },
+  {
+   "id": "3R7E-0",
+   "text": "+0.9%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "19 KODEX 200"
+   ]
+  },
+  {
+   "id": "3R7F-0",
+   "text": "+2.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "19 KODEX 200"
+   ]
+  },
+  {
+   "id": "3R7G-0",
+   "text": "-4.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "19 KODEX 200"
+   ]
+  },
+  {
+   "id": "3R7H-0",
+   "text": "-9.3%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "19 KODEX 200"
+   ]
+  },
+  {
+   "id": "3R7J-0",
+   "text": "20",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "20 TIGER 200"
+   ]
+  },
+  {
+   "id": "3R7K-0",
+   "text": "TIGER 200",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "20 TIGER 200"
+   ]
+  },
+  {
+   "id": "3R7L-0",
+   "text": "48,290",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "20 TIGER 200"
+   ]
+  },
+  {
+   "id": "3R7M-0",
+   "text": "+0.82%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "20 TIGER 200"
+   ]
+  },
+  {
+   "id": "3R7N-0",
+   "text": "+0.9%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "20 TIGER 200"
+   ]
+  },
+  {
+   "id": "3R7O-0",
+   "text": "+2.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "20 TIGER 200"
+   ]
+  },
+  {
+   "id": "3R7P-0",
+   "text": "-4.9%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "20 TIGER 200"
+   ]
+  },
+  {
+   "id": "3R7Q-0",
+   "text": "-9.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "기간 수익률 표",
+    "20 TIGER 200"
+   ]
+  },
+  {
+   "id": "3O95-0",
+   "text": "기간 성과 요약",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 기간 성과 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O96-0",
+   "text": "3달 · ETF 1,024종목",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 기간 성과 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9C-0",
+   "text": "플러스 810종목",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 기간 성과 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9D-0",
+   "text": "마이너스 214종목",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 기간 성과 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9F-0",
+   "text": "기초지수 대비 초과",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 기간 성과 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9G-0",
+   "text": "312종목",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 기간 성과 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9I-0",
+   "text": "3달 1위",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 기간 성과 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9K-0",
+   "text": "+42.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 기간 성과 요약",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9L-0",
+   "text": "KODEX 2차전지산업",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 기간 성과 요약",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9N-0",
+   "text": "기간별 1위",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위"
+   ]
+  },
+  {
+   "id": "3O9Q-0",
+   "text": "1주",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9R-0",
+   "text": "KODEX 2차전지산업",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9S-0",
+   "text": "+5.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9U-0",
+   "text": "1달",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9V-0",
+   "text": "KODEX 2차전지산업",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9W-0",
+   "text": "+18.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9Y-0",
+   "text": "3달",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3O9Z-0",
+   "text": "KODEX 2차전지산업",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OA0-0",
+   "text": "+42.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OA2-0",
+   "text": "1년",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OA3-0",
+   "text": "TIGER 2차전지테마",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OA4-0",
+   "text": "+88.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 기간별 1위",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OA7-0",
+   "text": "KODEX 2차전지산업 기간 수익률",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OAA-0",
+   "text": "1주",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OAB-0",
+   "text": "+5.8%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OAD-0",
+   "text": "1달",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OAE-0",
+   "text": "+18.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OAG-0",
+   "text": "3달",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OAH-0",
+   "text": "+42.1%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OAJ-0",
+   "text": "1년",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OAK-0",
+   "text": "+76.5%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OAM-0",
+   "text": "과세",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OAO-0",
+   "text": "ETF 배당소득세 15.4%",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OAP-0",
+   "text": "ETN 해당 없음 · 원주가격 해당 없음",
+   "path": [
+    "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 3 · 1위 종목 기간 수익률",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2WZK-0",
+   "name": "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "2WZL-0",
+   "name": "Instrument Root · 현재시세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "2WZM-0",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1040,
+   "depth": 2
+  },
+  {
+   "id": "2X4X-0",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 96,
+   "depth": 3
+  },
+  {
+   "id": "2X5D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2X5I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2X5J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2X5E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2X4Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2X5B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2X59-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2X57-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2X55-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2X53-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2X51-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2X4Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2X4D-0",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 96,
+   "depth": 3
+  },
+  {
+   "id": "2X4U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2X4Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 214,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2X4M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 176,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2X4I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 182,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2X4E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2WZQ-0",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 848,
+   "depth": 3
+  },
+  {
+   "id": "2X1C-0",
+   "name": "Quote Detail Mount",
+   "component": "Frame",
+   "w": 1000,
+   "h": 848,
+   "depth": 4
+  },
+  {
+   "id": "2X3T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2X42-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2X4B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2X49-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2X47-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2X45-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2X43-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2X3U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2X3Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2X3X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2X3V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3R2E-0",
+   "name": "목록 상태",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3R2H-0",
+   "name": "기간 수익률 표",
+   "component": "Frame",
+   "w": 943,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3R2I-0",
+   "name": "열 머리",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3R2R-0",
+   "name": "1 KODEX 2차전지산업",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R30-0",
+   "name": "2 TIGER 2차전지테마",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R39-0",
+   "name": "3 KODEX 반도체",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R3I-0",
+   "name": "4 TIGER 반도체TOP10",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R3R-0",
+   "name": "5 ACE 2차전지소재",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R40-0",
+   "name": "6 KODEX AI반도체핵심",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R49-0",
+   "name": "7 TIGER 미국필라델피아반도체",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R4I-0",
+   "name": "8 TIGER 코스닥150",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R4R-0",
+   "name": "9 KODEX 자동차",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R50-0",
+   "name": "10 TIGER 미국S&P500",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R59-0",
+   "name": "11 ACE 미국나스닥100",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R5I-0",
+   "name": "12 TIGER 은행고배당플러스TOP10",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R5R-0",
+   "name": "13 KODEX 배당가치",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R60-0",
+   "name": "14 TIGER 원유선물",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R69-0",
+   "name": "15 KODEX 종합채권",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R6I-0",
+   "name": "16 TIGER 미국채10년선물",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R6R-0",
+   "name": "17 KODEX 골드선물",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R70-0",
+   "name": "18 KODEX 헬스케어",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R79-0",
+   "name": "19 KODEX 200",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3R7I-0",
+   "name": "20 TIGER 200",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3O92-0",
+   "name": "Rail",
+   "component": "Frame",
+   "w": 360,
+   "h": 848,
+   "depth": 4
+  },
+  {
+   "id": "3O93-0",
+   "name": "Block 1 · 기간 성과 요약",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3O94-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3O97-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3O98-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3O99-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 216,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3O9A-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3O9B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3O9E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3O9H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3O9J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3O9M-0",
+   "name": "Block 2 · 기간별 1위",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3O9O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3O9P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3O9T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3O9X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OA1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OA5-0",
+   "name": "Block 3 · 1위 종목 기간 수익률",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3OA6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3OA8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3OA9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OAC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OAF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OAI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OAL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3OAN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  }
+ ],
+ "text_multiset": {
+  "ETF 기간 수익률": 1,
+  "전 종목 · 3달 수익률 순": 1,
+  "조회 스냅샷": 1,
+  "상장 ETF 1,024 종목": 1,
+  "3달 플러스 810 · 마이너스 214": 1,
+  "09:42:18 조회": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 2,
+  "ELW": 2,
+  "금현물": 1,
+  "순위": 2,
+  "정렬 기준": 1,
+  "3달 수익률 높은 순": 1,
+  "3달 수익률 1위": 1,
+  "+42.1%": 5,
+  "KODEX 2차전지산업": 6,
+  "1년 수익률 1위": 1,
+  "+88.4%": 3,
+  "TIGER 2차전지테마": 3,
+  "3달 마이너스": 1,
+  "214 종목": 1,
+  "전체 1,024 종목": 1,
+  "기초지수 대비": 1,
+  "+2.1%p": 1,
+  "평균 초과수익": 1,
+  "등락률": 2,
+  "거래대금": 1,
+  "괴리율": 1,
+  "추적오차": 1,
+  "기간 수익률": 1,
+  "범위": 1,
+  "주식": 1,
+  "전체 1,024건 · 20건 표시": 1,
+  "종목": 1,
+  "현재가": 1,
+  "1주": 3,
+  "1달": 3,
+  "3달": 3,
+  "1년": 3,
+  "1": 1,
+  "12,485": 1,
+  "+3.12%": 1,
+  "+5.8%": 3,
+  "+18.4%": 3,
+  "+76.5%": 2,
+  "2": 1,
+  "18,640": 1,
+  "+2.71%": 1,
+  "+4.9%": 1,
+  "+16.2%": 1,
+  "+38.7%": 1,
+  "3": 1,
+  "KODEX 반도체": 1,
+  "45,620": 1,
+  "+2.41%": 1,
+  "+4.2%": 3,
+  "+14.8%": 1,
+  "+33.5%": 1,
+  "+61.2%": 1,
+  "4": 1,
+  "TIGER 반도체TOP10": 1,
+  "15,930": 1,
+  "+2.84%": 1,
+  "+3.7%": 1,
+  "+12.9%": 1,
+  "+29.8%": 1,
+  "+54.7%": 1,
+  "5": 1,
+  "ACE 2차전지소재": 1,
+  "18,540": 1,
+  "+1.95%": 1,
+  "+2.8%": 2,
+  "+10.4%": 1,
+  "+24.3%": 1,
+  "+47.9%": 1,
+  "6": 1,
+  "KODEX AI반도체핵심": 1,
+  "13,780": 1,
+  "+1.42%": 1,
+  "+2.1%": 2,
+  "+8.6%": 2,
+  "+19.6%": 1,
+  "+35.1%": 1,
+  "7": 1,
+  "TIGER 미국필라델피아반도체": 1,
+  "24,910": 1,
+  "-0.62%": 1,
+  "-1.4%": 1,
+  "+3.2%": 1,
+  "+11.4%": 1,
+  "+28.6%": 1,
+  "8": 1,
+  "TIGER 코스닥150": 1,
+  "14,285": 1,
+  "+1.44%": 1,
+  "+2.4%": 4,
+  "+6.1%": 1,
+  "+9.8%": 1,
+  "+18.2%": 1,
+  "9": 1,
+  "KODEX 자동차": 1,
+  "22,410": 1,
+  "+1.28%": 1,
+  "+1.8%": 1,
+  "+5.4%": 1,
+  "+14.7%": 1,
+  "10": 1,
+  "TIGER 미국S&P500": 1,
+  "19,875": 1,
+  "+0.92%": 1,
+  "+1.2%": 1,
+  "+3.8%": 2,
+  "+7.4%": 1,
+  "+22.4%": 1,
+  "11": 1,
+  "ACE 미국나스닥100": 1,
+  "18,240": 1,
+  "+0.75%": 1,
+  "+1.4%": 2,
+  "+6.9%": 1,
+  "+26.8%": 1,
+  "12": 1,
+  "TIGER 은행고배당플러스TOP10": 1,
+  "12,640": 1,
+  "+0.42%": 1,
+  "+0.8%": 2,
+  "+2.6%": 1,
+  "+5.2%": 1,
+  "+16.4%": 1,
+  "13": 1,
+  "KODEX 배당가치": 1,
+  "13,180": 1,
+  "+0.61%": 1,
+  "+0.6%": 2,
+  "+4.1%": 1,
+  "+11.8%": 1,
+  "14": 1,
+  "TIGER 원유선물": 1,
+  "4,180": 1,
+  "-0.38%": 1,
+  "-2.1%": 1,
+  "-4.6%": 1,
+  "-18.4%": 1,
+  "15": 1,
+  "KODEX 종합채권": 1,
+  "107,850": 1,
+  "+0.14%": 1,
+  "+0.2%": 1,
+  "+1.1%": 1,
+  "16": 1,
+  "TIGER 미국채10년선물": 1,
+  "11,640": 1,
+  "+0.06%": 1,
+  "+0.3%": 1,
+  "+0.9%": 3,
+  "17": 1,
+  "KODEX 골드선물": 1,
+  "19,420": 1,
+  "-0.22%": 1,
+  "-0.6%": 1,
+  "+0.4%": 1,
+  "+12.6%": 1,
+  "18": 1,
+  "KODEX 헬스케어": 1,
+  "32,640": 1,
+  "-0.54%": 1,
+  "-1.2%": 1,
+  "-2.4%": 1,
+  "-3.1%": 1,
+  "19": 1,
+  "KODEX 200": 1,
+  "48,360": 1,
+  "+0.84%": 1,
+  "-4.8%": 1,
+  "-9.3%": 1,
+  "20": 1,
+  "TIGER 200": 1,
+  "48,290": 1,
+  "+0.82%": 1,
+  "-4.9%": 1,
+  "-9.4%": 1,
+  "기간 성과 요약": 1,
+  "3달 · ETF 1,024종목": 1,
+  "플러스 810종목": 1,
+  "마이너스 214종목": 1,
+  "기초지수 대비 초과": 1,
+  "312종목": 1,
+  "3달 1위": 1,
+  "기간별 1위": 1,
+  "KODEX 2차전지산업 기간 수익률": 1,
+  "과세": 1,
+  "ETF 배당소득세 15.4%": 1,
+  "ETN 해당 없음 · 원주가격 해당 없음": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "c90e1acb74484e9498d54b2921713f2d9cb6e76fee612bca2d338343e66dfe59"
+}

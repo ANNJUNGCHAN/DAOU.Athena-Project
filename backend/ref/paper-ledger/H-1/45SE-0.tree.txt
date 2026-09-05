@@ -1,0 +1,18 @@
+Frame "template/auth" (45SE-0) 360×420
+  Frame "Header" (45TO-0) 0×0
+    Frame "Meta row" (45TP-0) 0×0
+      Text "Eyebrow" (45TQ-0) 0×0 "인증형"
+      Text "As of" (45TR-0) 0×0 "기준 09:42"
+    Text "Title" (45TS-0) 0×0 "인증 상태"
+  Frame "Body" (45UQ-0) 0×0
+    Frame "Auth status" (45YW-0) 0×0
+      Rectangle "Rectangle" (45YX-0) 7×7
+      Text "인증됨" (45YY-0) 0×0 "인증됨"
+    Frame "Auth identity" (45Z0-0) 0×0
+      Text "계정" (45Z1-0) 0×0 "계정"
+      Text "****4721" (45Z2-0) 0×0 "****4721"
+    Frame "Auth permission" (45Z4-0) 0×0
+      Text "권한" (45Z5-0) 0×0 "권한"
+      Text "주문 조회" (45Z6-0) 0×0 "주문 조회"
+    Frame "Auth note" (45Z8-0) 0×0
+      Text "만료 0일 / 안전하게 다시 인증해주…" (45Z9-0) 0×0 "만료 0일 / 안전하게 다시 인증해주세요"

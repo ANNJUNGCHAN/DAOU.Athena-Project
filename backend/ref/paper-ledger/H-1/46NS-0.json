@@ -1,0 +1,342 @@
+{
+ "board_id": "46NS-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R08 · ELW 위험·만기",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46OQ-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46OP-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46ON-0",
+   "text": "ELW 위험·만기",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Header"
+   ]
+  },
+  {
+   "id": "46OL-0",
+   "text": "거래량",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46OK-0",
+   "text": "48만주",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46OI-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46OH-0",
+   "text": "+1.24%",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46OF-0",
+   "text": "거래대금",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46OE-0",
+   "text": "5.9억원",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46OB-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46OA-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46O9-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46O7-0",
+   "text": "대비기호",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46O6-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46O4-0",
+   "text": "+77원",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46O3-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46O1-0",
+   "text": "전일대비",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46O0-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46NY-0",
+   "text": "+10 (+0.82%)",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46NX-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46NU-0",
+   "text": "스칼라 5개, 행 2개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R08 · ELW 위험·만기",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46NS-0",
+   "name": "mini/CC-03 / R08 · ELW 위험·만기",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46OM-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46OO-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46NV-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46OC-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46OJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46OG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46OD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46O8-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46O2-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46O5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46NW-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46NZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46NT-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "ELW 위험·만기": 1,
+  "거래량": 1,
+  "48만주": 1,
+  "변화": 1,
+  "+1.24%": 1,
+  "거래대금": 1,
+  "5.9억원": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "대비기호": 1,
+  "+77원": 1,
+  "전일대비": 1,
+  "+10 (+0.82%)": 1,
+  "스칼라 5개, 행 2개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "78d656a3d10a664afcada29bdb819d26b78a366a241125c1e5933f193be45938"
+}

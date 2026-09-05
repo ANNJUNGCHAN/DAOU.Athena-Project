@@ -1,0 +1,2304 @@
+{
+ "board_id": "3W9B-1",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "39 · 동시 실행 — 상태 4종 · 스피너",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "3W9F-1",
+   "text": "39",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W9H-1",
+   "text": "동시 실행 — 스피너의 의미",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W9I-1",
+   "text": "백테스트가 도는 동안 다른 창에서 대화합니다. 스피너는 지금 돌고 있다는 뜻입니다.",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W9K-1",
+   "text": "신규 · 승인 대기",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WAO-1",
+   "text": "실행 중 3 · 대기 1",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Sidebar",
+    "Summary Pill"
+   ]
+  },
+  {
+   "id": "3WAT-1",
+   "text": "아테나",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Sidebar",
+    "Project Row"
+   ]
+  },
+  {
+   "id": "3WBG-1",
+   "text": "추세추종 v3",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Sidebar",
+    "Sessions",
+    "Row · 추세추종 v3 · 열림"
+   ]
+  },
+  {
+   "id": "3WBN-1",
+   "text": "변동성 돌파",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Sidebar",
+    "Sessions",
+    "Row · 변동성 돌파"
+   ]
+  },
+  {
+   "id": "3WBV-1",
+   "text": "아침 브리핑 감시",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Sidebar",
+    "Sessions",
+    "Row · 아침 브리핑 감시"
+   ]
+  },
+  {
+   "id": "3WC4-1",
+   "text": "반도체 수급",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Sidebar",
+    "Sessions",
+    "Row · 반도체 수급"
+   ]
+  },
+  {
+   "id": "3WCE-1",
+   "text": "성향 지도",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Sidebar",
+    "Sessions",
+    "Row · 성향 지도"
+   ]
+  },
+  {
+   "id": "3WCL-1",
+   "text": "야간 스캔",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Sidebar",
+    "Sessions",
+    "Row · 야간 스캔"
+   ]
+  },
+  {
+   "id": "3WDJ-1",
+   "text": "지금 도는 것",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Board Title"
+   ]
+  },
+  {
+   "id": "3WDK-1",
+   "text": "동시 3개까지",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Board Title"
+   ]
+  },
+  {
+   "id": "3WDW-1",
+   "text": "백테스트",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 추세추종 v3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WDX-1",
+   "text": "추세추종 v3",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 추세추종 v3"
+   ]
+  },
+  {
+   "id": "3WDZ-1",
+   "text": "신호 계산 중",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 추세추종 v3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WE0-1",
+   "text": "82%",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 추세추종 v3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WE4-1",
+   "text": "12:41 경과",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 추세추종 v3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WE5-1",
+   "text": "백그라운드",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 추세추종 v3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WEB-1",
+   "text": "백테스트",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 변동성 돌파",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WEC-1",
+   "text": "변동성 돌파",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 변동성 돌파"
+   ]
+  },
+  {
+   "id": "3WEE-1",
+   "text": "봉 데이터 적재 중",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 변동성 돌파",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WEF-1",
+   "text": "41%",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 변동성 돌파",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WEJ-1",
+   "text": "05:08 경과",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 변동성 돌파",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WEK-1",
+   "text": "백그라운드",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 변동성 돌파",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WFX-1",
+   "text": "에이전트",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 아침 브리핑",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WFY-1",
+   "text": "아침 브리핑 감시",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 아침 브리핑"
+   ]
+  },
+  {
+   "id": "3WG0-1",
+   "text": "조건이 맞을 때까지",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 아침 브리핑",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WG1-1",
+   "text": "감시 중",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 아침 브리핑",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WGA-1",
+   "text": "03:02:11 경과",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 아침 브리핑",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WGB-1",
+   "text": "백그라운드",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Run Cards",
+    "Run · 아침 브리핑",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WGH-1",
+   "text": "대기 1 — 반도체 수급 점검",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Queue Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WGI-1",
+   "text": "앞의 실행이 끝나면 시작합니다",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Queue Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WLC-1",
+   "text": "같은 순간, 두 창",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Side by side",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WLD-1",
+   "text": "왼쪽은 돌고, 오른쪽은 대화 중",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Side by side",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WLK-1",
+   "text": "추세추종 v3",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Side by side",
+    "Frame",
+    "Window A running",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WLN-1",
+   "text": "계산 중 · 창을 떠나 있음",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Side by side",
+    "Frame",
+    "Window A running",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WLU-1",
+   "text": "2025-03 → 계산 중",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Side by side",
+    "Frame",
+    "Window A running",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WLV-1",
+   "text": "82%",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Side by side",
+    "Frame",
+    "Window A running",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WM1-1",
+   "text": "반도체 수급 점검",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Side by side",
+    "Frame",
+    "Window B chatting",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WM2-1",
+   "text": "지금 보는 창",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Side by side",
+    "Frame",
+    "Window B chatting",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WM6-1",
+   "text": "외국인 순매수 상위 5개 보여줘",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Side by side",
+    "Frame",
+    "Window B chatting",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WM8-1",
+   "text": "오늘 기준 SK하이닉스, 삼성전자, 한미반도체 순입니다. 카드로 정리했습니다.",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Side by side",
+    "Frame",
+    "Window B chatting",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WMA-1",
+   "text": "무엇이든 요청하세요",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Upper Zone",
+    "Run Board",
+    "Side by side",
+    "Frame",
+    "Window B chatting",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WGW-1",
+   "text": "표시 하나로 읽는 네 가지 상태",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Status Legend",
+    "Legend Title"
+   ]
+  },
+  {
+   "id": "3WH3-1",
+   "text": "실행 중",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Status Legend",
+    "Legend Cards",
+    "State · 실행 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WH4-1",
+   "text": "지금 계산·감시가 돌고 있습니다. 이력 행에는 스피너가 돕니다. 창을 닫아도 계속됩니다.",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Status Legend",
+    "Legend Cards",
+    "State · 실행 중"
+   ]
+  },
+  {
+   "id": "3WH9-1",
+   "text": "대기",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Status Legend",
+    "Legend Cards",
+    "State · 대기",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WHA-1",
+   "text": "자리가 나면 시작합니다. 순서는 요청한 차례입니다.",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Status Legend",
+    "Legend Cards",
+    "State · 대기"
+   ]
+  },
+  {
+   "id": "3WHT-1",
+   "text": "완료",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Status Legend",
+    "Legend Cards",
+    "State · 완료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WHU-1",
+   "text": "결과가 남아 있습니다. 열면 그대로 복원됩니다.",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Status Legend",
+    "Legend Cards",
+    "State · 완료"
+   ]
+  },
+  {
+   "id": "3WHZ-1",
+   "text": "실패",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Status Legend",
+    "Legend Cards",
+    "State · 실패",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WI0-1",
+   "text": "이유가 세션에 남습니다. 같은 자리에서 다시 돌릴 수 있습니다.",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Stage",
+    "Status Legend",
+    "Legend Cards",
+    "State · 실패"
+   ]
+  },
+  {
+   "id": "3WIU-1",
+   "text": "스피너는 지금 돌고 있다",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "3WIV-1",
+   "text": "CONCURRENCY",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "3WIZ-1",
+   "text": "1",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJ0-1",
+   "text": "창을 닫아도 실행은 계속",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJ1-1",
+   "text": "결과는 그 세션에 쌓입니다. 끝나면 알립니다. 실행은 창이 아니라 창과 분리된 데몬이 소유합니다 — Orca가 PTY를 데몬에 두고 창은 다시 붙기만 하는 것과 같습니다(43번).",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Rule 1"
+   ]
+  },
+  {
+   "id": "3WJ5-1",
+   "text": "2",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJ6-1",
+   "text": "기다리는 동안 다른 창에서 대화",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJ7-1",
+   "text": "백테스트 계산과 채팅은 서로를 막지 않습니다. 한쪽이 도는 동안 다른 쪽에 물어볼 수 있습니다.",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Rule 2"
+   ]
+  },
+  {
+   "id": "3WJB-1",
+   "text": "3",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJC-1",
+   "text": "동시 한도를 넘으면 대기열",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJD-1",
+   "text": "한도는 감추지 않고 표시합니다. 순서는 요청한 순서이고, 새치기는 없습니다.",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Rule 3"
+   ]
+  },
+  {
+   "id": "3WJM-1",
+   "text": "지금 코드에 없는 것",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJN-1",
+   "text": "지금은 상주 채팅 세션이 프로세스 전역에 하나뿐입니다. 실행 중인 질의 핸들도 하나만 유지하고, 새 턴이 오면 기존 턴을 인터럽트합니다. 스피너 셋이 동시에 도는 이 화면은 그 구조 위에 없습니다.",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Gap Note"
+   ]
+  },
+  {
+   "id": "3WJO-1",
+   "text": "동시 실행·대기열·완료 알림은 모두 새로 만들어야 하는 것입니다. 상태 점 네 가지는 그 뒤에 붙는 표시입니다.",
+   "path": [
+    "39 · 동시 실행 — 상태 4종 · 스피너",
+    "39 Content",
+    "Interaction Rail",
+    "Gap Note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3W9B-1",
+   "name": "39 · 동시 실행 — 상태 4종 · 스피너",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "3W9C-1",
+   "name": "39 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 86,
+   "depth": 1
+  },
+  {
+   "id": "3W9D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 520,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "3W9E-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "3W9G-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 456,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "3W9J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 109,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "3WA3-1",
+   "name": "39 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 722,
+   "depth": 1
+  },
+  {
+   "id": "3WA4-1",
+   "name": "Stage",
+   "component": "Frame",
+   "w": 1150,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3WA7-1",
+   "name": "Upper Zone",
+   "component": "Frame",
+   "w": 1148,
+   "h": 544,
+   "depth": 3
+  },
+  {
+   "id": "3WA8-1",
+   "name": "Sidebar",
+   "component": "Frame",
+   "w": 254,
+   "h": 544,
+   "depth": 4
+  },
+  {
+   "id": "3WAM-1",
+   "name": "Summary Pill",
+   "component": "Frame",
+   "w": 121,
+   "h": 24,
+   "depth": 5
+  },
+  {
+   "id": "3XWV-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "3XWW-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3XWX-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "3WAP-1",
+   "name": "Project Row",
+   "component": "Frame",
+   "w": 229,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "3WAQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WAR-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3WAS-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3WAU-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 22,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WBB-1",
+   "name": "Sessions",
+   "component": "Frame",
+   "w": 229,
+   "h": 190,
+   "depth": 5
+  },
+  {
+   "id": "3WBC-1",
+   "name": "Row · 추세추종 v3 · 열림",
+   "component": "Frame",
+   "w": 229,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3WBD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3WBE-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3WBF-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "3WBH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3XWZ-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3XX0-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3XX1-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3WBJ-1",
+   "name": "Row · 변동성 돌파",
+   "component": "Frame",
+   "w": 229,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3WBK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3WBL-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3WBM-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "3WBO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3XX3-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3XX4-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3XX5-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3WBQ-1",
+   "name": "Row · 아침 브리핑 감시",
+   "component": "Frame",
+   "w": 229,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3WBR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3WBS-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3WBT-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3WBU-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3WBW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3XX7-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3XX8-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3XX9-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3WC0-1",
+   "name": "Row · 반도체 수급",
+   "component": "Frame",
+   "w": 229,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3WC1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3WC2-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3WC3-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3WC5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3WC6-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3WC7-1",
+   "name": "Row · 성향 지도",
+   "component": "Frame",
+   "w": 229,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3WC8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3WC9-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3WCA-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 9
+  },
+  {
+   "id": "3WCB-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 9
+  },
+  {
+   "id": "3WCC-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 9
+  },
+  {
+   "id": "3WCD-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 9
+  },
+  {
+   "id": "3WCF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3WCG-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3WCH-1",
+   "name": "Row · 야간 스캔",
+   "component": "Frame",
+   "w": 229,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3WCI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3WCJ-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3WCK-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "3WCM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3WCN-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3WA9-1",
+   "name": "Run Board",
+   "component": "Frame",
+   "w": 894,
+   "h": 544,
+   "depth": 4
+  },
+  {
+   "id": "3WDI-1",
+   "name": "Board Title",
+   "component": "Frame",
+   "w": 846,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3WDL-1",
+   "name": "Run Cards",
+   "component": "Frame",
+   "w": 846,
+   "h": 150,
+   "depth": 5
+  },
+  {
+   "id": "3WDS-1",
+   "name": "Run · 추세추종 v3",
+   "component": "Frame",
+   "w": 274,
+   "h": 150,
+   "depth": 6
+  },
+  {
+   "id": "3WDT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 75,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "3WDU-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3WDV-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 7,
+   "depth": 9
+  },
+  {
+   "id": "3WDY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 244,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WE1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 244,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WE2-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 200,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WE3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 244,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WE7-1",
+   "name": "Run · 변동성 돌파",
+   "component": "Frame",
+   "w": 274,
+   "h": 150,
+   "depth": 6
+  },
+  {
+   "id": "3WE8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 75,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "3WE9-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3WEA-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 7,
+   "depth": 9
+  },
+  {
+   "id": "3WED-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 244,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WEG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 244,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WEH-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 100,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WEI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 244,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WFS-1",
+   "name": "Run · 아침 브리핑",
+   "component": "Frame",
+   "w": 274,
+   "h": 150,
+   "depth": 6
+  },
+  {
+   "id": "3WFT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 75,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "3WFU-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3WFV-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 9
+  },
+  {
+   "id": "3WFW-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 3,
+   "depth": 9
+  },
+  {
+   "id": "3WFZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 244,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WG2-1",
+   "name": "Indeterminate",
+   "component": "Frame",
+   "w": 244,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WG3-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 37,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WG4-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 37,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WG5-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 37,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WG6-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 37,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WG7-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 37,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WG8-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 37,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WG9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 244,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WGD-1",
+   "name": "Queue Card",
+   "component": "Frame",
+   "w": 846,
+   "h": 66,
+   "depth": 5
+  },
+  {
+   "id": "3WGE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WGF-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3WGG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 141,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "3WLA-1",
+   "name": "Side by side",
+   "component": "Frame",
+   "w": 846,
+   "h": 212,
+   "depth": 5
+  },
+  {
+   "id": "3WLB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 846,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WLE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 846,
+   "h": 188,
+   "depth": 6
+  },
+  {
+   "id": "3WLF-1",
+   "name": "Window A running",
+   "component": "Frame",
+   "w": 428,
+   "h": 188,
+   "depth": 7
+  },
+  {
+   "id": "3WLG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 402,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3WLH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 79,
+   "h": 14,
+   "depth": 9
+  },
+  {
+   "id": "3WLI-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 10
+  },
+  {
+   "id": "3WLJ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 7,
+   "depth": 11
+  },
+  {
+   "id": "3WLL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 127,
+   "h": 12,
+   "depth": 9
+  },
+  {
+   "id": "3Y34-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 10
+  },
+  {
+   "id": "3Y35-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 11
+  },
+  {
+   "id": "3Y36-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 11
+  },
+  {
+   "id": "3WLO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 402,
+   "h": 120,
+   "depth": 8
+  },
+  {
+   "id": "3WLP-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 400,
+   "h": 90,
+   "depth": 9
+  },
+  {
+   "id": "3WLQ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 328,
+   "h": 58,
+   "depth": 10
+  },
+  {
+   "id": "3WLR-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 72,
+   "h": 12,
+   "depth": 10
+  },
+  {
+   "id": "3WLS-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 400,
+   "h": 30,
+   "depth": 10
+  },
+  {
+   "id": "3WLT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 402,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3WLW-1",
+   "name": "Window B chatting",
+   "component": "Frame",
+   "w": 406,
+   "h": 188,
+   "depth": 7
+  },
+  {
+   "id": "3WLX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 380,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3WLY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 14,
+   "depth": 9
+  },
+  {
+   "id": "3WLZ-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 10
+  },
+  {
+   "id": "3WM0-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 8,
+   "depth": 11
+  },
+  {
+   "id": "3WM3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 380,
+   "h": 102,
+   "depth": 8
+  },
+  {
+   "id": "3WM4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 380,
+   "h": 26,
+   "depth": 9
+  },
+  {
+   "id": "3WM5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 26,
+   "depth": 10
+  },
+  {
+   "id": "3WM7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 380,
+   "h": 28,
+   "depth": 9
+  },
+  {
+   "id": "3WM9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 380,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "3WAA-1",
+   "name": "Status Legend",
+   "component": "Frame",
+   "w": 1148,
+   "h": 176,
+   "depth": 3
+  },
+  {
+   "id": "3WGV-1",
+   "name": "Legend Title",
+   "component": "Frame",
+   "w": 1100,
+   "h": 18,
+   "depth": 4
+  },
+  {
+   "id": "3WGX-1",
+   "name": "Legend Cards",
+   "component": "Frame",
+   "w": 1100,
+   "h": 97,
+   "depth": 4
+  },
+  {
+   "id": "3WGZ-1",
+   "name": "State · 실행 중",
+   "component": "Frame",
+   "w": 266,
+   "h": 97,
+   "depth": 5
+  },
+  {
+   "id": "3WH0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 236,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WH1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 10,
+   "h": 10,
+   "depth": 7
+  },
+  {
+   "id": "3XXB-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3XXC-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3XXD-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3WH5-1",
+   "name": "State · 대기",
+   "component": "Frame",
+   "w": 266,
+   "h": 97,
+   "depth": 5
+  },
+  {
+   "id": "3WH6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 236,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WH7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 10,
+   "h": 10,
+   "depth": 7
+  },
+  {
+   "id": "3WH8-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3WHP-1",
+   "name": "State · 완료",
+   "component": "Frame",
+   "w": 266,
+   "h": 97,
+   "depth": 5
+  },
+  {
+   "id": "3WHQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 236,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WHR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 10,
+   "h": 10,
+   "depth": 7
+  },
+  {
+   "id": "3WHS-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3WHV-1",
+   "name": "State · 실패",
+   "component": "Frame",
+   "w": 266,
+   "h": 97,
+   "depth": 5
+  },
+  {
+   "id": "3WHW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 236,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WHX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 10,
+   "h": 10,
+   "depth": 7
+  },
+  {
+   "id": "3WHY-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3WA5-1",
+   "name": "Interaction Rail",
+   "component": "Frame",
+   "w": 426,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3WIT-1",
+   "name": "Rail Header",
+   "component": "Frame",
+   "w": 388,
+   "h": 26,
+   "depth": 3
+  },
+  {
+   "id": "3WIW-1",
+   "name": "Rule 1",
+   "component": "Frame",
+   "w": 388,
+   "h": 103,
+   "depth": 3
+  },
+  {
+   "id": "3WIX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3WIY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3WJ2-1",
+   "name": "Rule 2",
+   "component": "Frame",
+   "w": 388,
+   "h": 88,
+   "depth": 3
+  },
+  {
+   "id": "3WJ3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3WJ4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3WJ8-1",
+   "name": "Rule 3",
+   "component": "Frame",
+   "w": 388,
+   "h": 73,
+   "depth": 3
+  },
+  {
+   "id": "3WJ9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3WJA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3WJF-1",
+   "name": "Gap Note",
+   "component": "Frame",
+   "w": 388,
+   "h": 139,
+   "depth": 3
+  },
+  {
+   "id": "3WJG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 18,
+   "depth": 4
+  },
+  {
+   "id": "3WJH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 18,
+   "h": 18,
+   "depth": 5
+  },
+  {
+   "id": "3WJI-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WJJ-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 7
+  },
+  {
+   "id": "3WJK-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "3WJL-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  }
+ ],
+ "text_multiset": {
+  "39": 1,
+  "동시 실행 — 스피너의 의미": 1,
+  "백테스트가 도는 동안 다른 창에서 대화합니다. 스피너는 지금 돌고 있다는 뜻입니다.": 1,
+  "신규 · 승인 대기": 1,
+  "실행 중 3 · 대기 1": 1,
+  "아테나": 1,
+  "추세추종 v3": 3,
+  "변동성 돌파": 2,
+  "아침 브리핑 감시": 2,
+  "반도체 수급": 1,
+  "성향 지도": 1,
+  "야간 스캔": 1,
+  "지금 도는 것": 1,
+  "동시 3개까지": 1,
+  "백테스트": 2,
+  "신호 계산 중": 1,
+  "82%": 2,
+  "12:41 경과": 1,
+  "백그라운드": 3,
+  "봉 데이터 적재 중": 1,
+  "41%": 1,
+  "05:08 경과": 1,
+  "에이전트": 1,
+  "조건이 맞을 때까지": 1,
+  "감시 중": 1,
+  "03:02:11 경과": 1,
+  "대기 1 — 반도체 수급 점검": 1,
+  "앞의 실행이 끝나면 시작합니다": 1,
+  "같은 순간, 두 창": 1,
+  "왼쪽은 돌고, 오른쪽은 대화 중": 1,
+  "계산 중 · 창을 떠나 있음": 1,
+  "2025-03 → 계산 중": 1,
+  "반도체 수급 점검": 1,
+  "지금 보는 창": 1,
+  "외국인 순매수 상위 5개 보여줘": 1,
+  "오늘 기준 SK하이닉스, 삼성전자, 한미반도체 순입니다. 카드로 정리했습니다.": 1,
+  "무엇이든 요청하세요": 1,
+  "표시 하나로 읽는 네 가지 상태": 1,
+  "실행 중": 1,
+  "지금 계산·감시가 돌고 있습니다. 이력 행에는 스피너가 돕니다. 창을 닫아도 계속됩니다.": 1,
+  "대기": 1,
+  "자리가 나면 시작합니다. 순서는 요청한 차례입니다.": 1,
+  "완료": 1,
+  "결과가 남아 있습니다. 열면 그대로 복원됩니다.": 1,
+  "실패": 1,
+  "이유가 세션에 남습니다. 같은 자리에서 다시 돌릴 수 있습니다.": 1,
+  "스피너는 지금 돌고 있다": 1,
+  "CONCURRENCY": 1,
+  "1": 1,
+  "창을 닫아도 실행은 계속": 1,
+  "결과는 그 세션에 쌓입니다. 끝나면 알립니다. 실행은 창이 아니라 창과 분리된 데몬이 소유합니다 — Orca가 PTY를 데몬에 두고 창은 다시 붙기만 하는 것과 같습니다(43번).": 1,
+  "2": 1,
+  "기다리는 동안 다른 창에서 대화": 1,
+  "백테스트 계산과 채팅은 서로를 막지 않습니다. 한쪽이 도는 동안 다른 쪽에 물어볼 수 있습니다.": 1,
+  "3": 1,
+  "동시 한도를 넘으면 대기열": 1,
+  "한도는 감추지 않고 표시합니다. 순서는 요청한 순서이고, 새치기는 없습니다.": 1,
+  "지금 코드에 없는 것": 1,
+  "지금은 상주 채팅 세션이 프로세스 전역에 하나뿐입니다. 실행 중인 질의 핸들도 하나만 유지하고, 새 턴이 오면 기존 턴을 인터럽트합니다. 스피너 셋이 동시에 도는 이 화면은 그 구조 위에 없습니다.": 1,
+  "동시 실행·대기열·완료 알림은 모두 새로 만들어야 하는 것입니다. 상태 점 네 가지는 그 뒤에 붙는 표시입니다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "c2ed257dbc0fdd9d63cd8c1493310463c4f6614a0d28f6333069715fc90cfc5c"
+}

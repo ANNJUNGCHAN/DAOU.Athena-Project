@@ -1,0 +1,188 @@
+{
+ "board_id": "45SG-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "template/stream",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "45U2-0",
+   "text": "스트림형",
+   "path": [
+    "template/stream",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45U3-0",
+   "text": "기준 LIVE",
+   "path": [
+    "template/stream",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45U4-0",
+   "text": "시장 속보",
+   "path": [
+    "template/stream",
+    "Header"
+   ]
+  },
+  {
+   "id": "45ZJ-0",
+   "text": "코스피 장중 상승폭 확대",
+   "path": [
+    "template/stream",
+    "Body",
+    "Stream item 1"
+   ]
+  },
+  {
+   "id": "45ZL-0",
+   "text": "시장 속보",
+   "path": [
+    "template/stream",
+    "Body",
+    "Stream item 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45ZM-0",
+   "text": "09:42",
+   "path": [
+    "template/stream",
+    "Body",
+    "Stream item 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45ZP-0",
+   "text": "외국인 순매수 규모 증가",
+   "path": [
+    "template/stream",
+    "Body",
+    "Stream item 2"
+   ]
+  },
+  {
+   "id": "45ZR-0",
+   "text": "시장 속보",
+   "path": [
+    "template/stream",
+    "Body",
+    "Stream item 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45ZS-0",
+   "text": "09:40",
+   "path": [
+    "template/stream",
+    "Body",
+    "Stream item 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4617-0",
+   "text": "외 18건 접힘 · 원본에서 확인",
+   "path": [
+    "template/stream",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "45SG-0",
+   "name": "template/stream",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "45U0-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45U1-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45UU-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45ZI-0",
+   "name": "Stream item 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45ZK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "45ZO-0",
+   "name": "Stream item 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45ZQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4616-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "스트림형": 1,
+  "기준 LIVE": 1,
+  "시장 속보": 3,
+  "코스피 장중 상승폭 확대": 1,
+  "09:42": 1,
+  "외국인 순매수 규모 증가": 1,
+  "09:40": 1,
+  "외 18건 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "87fa32b2a774da7e274ad3b817113bfacd3700e9928f99634b532b279cadd407"
+}

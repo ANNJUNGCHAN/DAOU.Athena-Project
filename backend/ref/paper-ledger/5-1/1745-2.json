@@ -1,0 +1,1352 @@
+{
+ "board_id": "1745-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "D01 · 문맥형 상세·이어보기 정본",
+ "width": 1440,
+ "height": 1080,
+ "texts": [
+  {
+   "id": "1748-2",
+   "text": "문맥형 상세 · 이어보기",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1749-2",
+   "text": "핵심 표는 짧게, 선택한 행의 모든 의미 정보는 옆 패널에서 읽습니다.",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "174C-2",
+   "text": "1,647개 행 상세 · 5개 명명 상세",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "174E-2",
+   "text": "원본 필드 노출 없음",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "174L-2",
+   "text": "거래대금 상위 · 저평가 종목",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "174M-2",
+   "text": "2026년 08월 31일 장중 기준 · 총 86종목",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "174P-2",
+   "text": "저평가순",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "174R-2",
+   "text": "거래대금순",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "174U-2",
+   "text": "순위",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "174V-2",
+   "text": "종목",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "174W-2",
+   "text": "현재가",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "174X-2",
+   "text": "등락률",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "174Y-2",
+   "text": "거래대금",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1750-2",
+   "text": "1",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1752-2",
+   "text": "삼성전자",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1753-2",
+   "text": "005930 · KOSPI",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1754-2",
+   "text": "150,850원",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1755-2",
+   "text": "+1.24%",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1756-2",
+   "text": "2.14조원",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1758-2",
+   "text": "2",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175A-2",
+   "text": "SK하이닉스",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175B-2",
+   "text": "000660 · KOSPI",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175C-2",
+   "text": "198,400원",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175D-2",
+   "text": "+2.05%",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175E-2",
+   "text": "9,860억원",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175G-2",
+   "text": "3",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175I-2",
+   "text": "현대차",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175J-2",
+   "text": "005380 · KOSPI",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175K-2",
+   "text": "267,000원",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175L-2",
+   "text": "−0.56%",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175M-2",
+   "text": "7,310억원",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175O-2",
+   "text": "4",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175Q-2",
+   "text": "POSCO홀딩스",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175R-2",
+   "text": "005490 · KOSPI",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175S-2",
+   "text": "341,500원",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175T-2",
+   "text": "+0.82%",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "175U-2",
+   "text": "4,950억원",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VGN-1",
+   "text": "펼친 상태 · 전체 86종목",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "List Footer · Expanded"
+   ]
+  },
+  {
+   "id": "1VGP-1",
+   "text": "접기",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "List Footer · Expanded",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1764-2",
+   "text": "필터·정렬 유지 · 중복 없음",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Semantic Result List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1769-2",
+   "text": "삼성전자",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176A-2",
+   "text": "005930 · KOSPI · 전기전자",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176C-2",
+   "text": "선택 행 상세",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176F-2",
+   "text": "재무·가치",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176H-2",
+   "text": "수급·거래",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176J-2",
+   "text": "기업 정보",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176L-2",
+   "text": "가치와 수익성",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176O-2",
+   "text": "PER",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176P-2",
+   "text": "18.7배",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176Q-2",
+   "text": "업종 21.2배",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176S-2",
+   "text": "PBR",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176T-2",
+   "text": "1.42배",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176U-2",
+   "text": "업종 1.61배",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176W-2",
+   "text": "ROE",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176X-2",
+   "text": "8.4%",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "176Y-2",
+   "text": "전년 7.9%",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1771-2",
+   "text": "시가총액",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1772-2",
+   "text": "900.4조원",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1774-2",
+   "text": "영업이익률",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1775-2",
+   "text": "12.7%",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1777-2",
+   "text": "외국인 보유율",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1778-2",
+   "text": "55.4%",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "177B-2",
+   "text": "최근 맥락",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "177C-2",
+   "text": "최근 3개",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "177G-2",
+   "text": "외국인 3거래일 연속 순매수",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "177H-2",
+   "text": "누적 +3,180억원 · 08월 31일",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "177L-2",
+   "text": "52주 신고가 갱신",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "177M-2",
+   "text": "장중 151,300원 · 09:38",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "177Q-2",
+   "text": "실적 발표 예정",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "177R-2",
+   "text": "2026년 10월 28일",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "177T-2",
+   "text": "숫자 기준 2026.08.31 09:41",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame"
+   ]
+  },
+  {
+   "id": "177U-2",
+   "text": "항목별 기준 시각 표시",
+   "path": [
+    "D01 · 문맥형 상세·이어보기 정본",
+    "Detail Pattern Workspace",
+    "Contextual Detail Sheet",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1745-2",
+   "name": "D01 · 문맥형 상세·이어보기 정본",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1080,
+   "depth": 0
+  },
+  {
+   "id": "1746-2",
+   "name": "Detail Pattern Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 1
+  },
+  {
+   "id": "1747-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "174A-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "174B-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 3
+  },
+  {
+   "id": "174D-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 3
+  },
+  {
+   "id": "174G-2",
+   "name": "Detail Pattern Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "174I-2",
+   "name": "Semantic Result List",
+   "component": "Frame",
+   "w": 800,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "174J-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "174K-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "174N-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "174O-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "174Q-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "174T-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 3
+  },
+  {
+   "id": "174S-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 250,
+   "depth": 3
+  },
+  {
+   "id": "174Z-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 86,
+   "depth": 4
+  },
+  {
+   "id": "1751-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 246,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1757-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 82,
+   "depth": 4
+  },
+  {
+   "id": "1759-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 246,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "175F-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 82,
+   "depth": 4
+  },
+  {
+   "id": "175H-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 246,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "175N-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 82,
+   "depth": 4
+  },
+  {
+   "id": "175P-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 246,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1WGL-1",
+   "name": "Scroll Indicator",
+   "component": "Frame",
+   "w": 6,
+   "h": 226,
+   "depth": 4
+  },
+  {
+   "id": "1WGM-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 72,
+   "depth": 5
+  },
+  {
+   "id": "1VGM-1",
+   "name": "List Footer · Expanded",
+   "component": "Frame",
+   "w": 800,
+   "h": 38,
+   "depth": 3
+  },
+  {
+   "id": "1VGO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "1762-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1763-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "1766-2",
+   "name": "Contextual Detail Sheet",
+   "component": "Frame",
+   "w": 492,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1767-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1768-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "176B-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "176D-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "176E-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "176G-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "176I-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "176K-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "176M-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "176N-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "176R-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "176V-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "176Z-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1770-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 4
+  },
+  {
+   "id": "1773-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 4
+  },
+  {
+   "id": "1776-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 4
+  },
+  {
+   "id": "1779-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "177A-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "177D-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "177E-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "177F-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "177I-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "177J-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "177K-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "177N-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "177O-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "177P-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "177S-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "문맥형 상세 · 이어보기": 1,
+  "핵심 표는 짧게, 선택한 행의 모든 의미 정보는 옆 패널에서 읽습니다.": 1,
+  "1,647개 행 상세 · 5개 명명 상세": 1,
+  "원본 필드 노출 없음": 1,
+  "거래대금 상위 · 저평가 종목": 1,
+  "2026년 08월 31일 장중 기준 · 총 86종목": 1,
+  "저평가순": 1,
+  "거래대금순": 1,
+  "순위": 1,
+  "종목": 1,
+  "현재가": 1,
+  "등락률": 1,
+  "거래대금": 1,
+  "1": 1,
+  "삼성전자": 2,
+  "005930 · KOSPI": 1,
+  "150,850원": 1,
+  "+1.24%": 1,
+  "2.14조원": 1,
+  "2": 1,
+  "SK하이닉스": 1,
+  "000660 · KOSPI": 1,
+  "198,400원": 1,
+  "+2.05%": 1,
+  "9,860억원": 1,
+  "3": 1,
+  "현대차": 1,
+  "005380 · KOSPI": 1,
+  "267,000원": 1,
+  "−0.56%": 1,
+  "7,310억원": 1,
+  "4": 1,
+  "POSCO홀딩스": 1,
+  "005490 · KOSPI": 1,
+  "341,500원": 1,
+  "+0.82%": 1,
+  "4,950억원": 1,
+  "펼친 상태 · 전체 86종목": 1,
+  "접기": 1,
+  "필터·정렬 유지 · 중복 없음": 1,
+  "005930 · KOSPI · 전기전자": 1,
+  "선택 행 상세": 1,
+  "재무·가치": 1,
+  "수급·거래": 1,
+  "기업 정보": 1,
+  "가치와 수익성": 1,
+  "PER": 1,
+  "18.7배": 1,
+  "업종 21.2배": 1,
+  "PBR": 1,
+  "1.42배": 1,
+  "업종 1.61배": 1,
+  "ROE": 1,
+  "8.4%": 1,
+  "전년 7.9%": 1,
+  "시가총액": 1,
+  "900.4조원": 1,
+  "영업이익률": 1,
+  "12.7%": 1,
+  "외국인 보유율": 1,
+  "55.4%": 1,
+  "최근 맥락": 1,
+  "최근 3개": 1,
+  "외국인 3거래일 연속 순매수": 1,
+  "누적 +3,180억원 · 08월 31일": 1,
+  "52주 신고가 갱신": 1,
+  "장중 151,300원 · 09:38": 1,
+  "실적 발표 예정": 1,
+  "2026년 10월 28일": 1,
+  "숫자 기준 2026.08.31 09:41": 1,
+  "항목별 기준 시각 표시": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "79e8ddc1d1a647a0749d44e77616f5d2b335e580e6d6339f90b43d75e50aea66"
+}

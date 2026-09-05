@@ -1,0 +1,53 @@
+Frame "20 · 인증 — 토큰 4상태" (1KK-0) 1560×560
+  Frame "설명" (1KL-0) 1440×46
+    Text "토큰 4상태 — 같은 카드, 값과 상…" (1KM-0) 1440×24 "토큰 4상태 — 같은 카드, 값과 상태등만 다르다"
+    Text "auth-screen.js STATE…" (1KN-0) 1440×16 "auth-screen.js STATE_META. 72px 자리에 숫자가 없을 때는 8자 대시(--:--:--"
+  Frame "4상태 행" (1KO-0) 1440×186
+    Frame "상태 · 인증 필요 (needed)" (1KQ-0) 342×186
+      Frame "Frame" (1KR-0) 342×144
+        Text "토큰이 없다" (1KS-0) 296×16 "토큰이 없다"
+        Frame "Frame" (1KT-0) 296×52
+          Text "--:--:--" (1KU-0) 204×52 "--:--:--"
+          Text "시 분 초" (1KV-0) 45×16 "시 분 초"
+        Frame "Frame" (1KW-0) 296×18
+      Frame "Frame" (1KX-0) 342×28
+        Rectangle "Rectangle" (1KY-0) 7×7
+        Text "인증 필요" (1KZ-0) 267×18 "인증 필요"
+        Frame "Frame" (1L0-0) 50×28
+          Text "발급" (1L1-0) 22×14 "발급"
+    Frame "상태 · 토큰 준비됨 (ready)" (1L2-0) 342×186
+      Frame "Frame" (1L3-0) 342×144
+        Text "재발급까지 남은 시간" (1L4-0) 296×16 "재발급까지 남은 시간"
+        Frame "Frame" (1L5-0) 296×52
+          Text "05:42:18" (1L6-0) 204×52 "05:42:18"
+          Text "시 분 초" (1L7-0) 45×16 "시 분 초"
+        Text "2026-08-25 21:12:04 …" (1L8-0) 296×18 "2026-08-25 21:12:04 만료"
+      Frame "Frame" (1L9-0) 342×30
+        Rectangle "Rectangle" (1LA-0) 7×7
+        Text "토큰 준비됨" (1LB-0) 228×18 "토큰 준비됨"
+        Frame "Frame" (1LC-0) 89×30
+          Text "지금 재발급" (1LD-0) 59×14 "지금 재발급"
+    Frame "상태 · 재발급 중 (refreshing)" (1LE-0) 342×186
+      Frame "Frame" (1LF-0) 342×144
+        Text "재발급까지 남은 시간" (1LG-0) 296×16 "재발급까지 남은 시간"
+        Frame "Frame" (1LH-0) 296×52
+          Text "00:08:31" (1LI-0) 204×52 "00:08:31"
+          Text "시 분 초" (1LJ-0) 45×16 "시 분 초"
+        Text "2026-08-25 21:12:04 …" (1LK-0) 296×18 "2026-08-25 21:12:04 만료"
+      Frame "Frame" (1LL-0) 342×30
+        Rectangle "Rectangle" (1LM-0) 7×7
+        Text "재발급 중" (1LN-0) 250×18 "재발급 중"
+        Frame "Frame" (1LO-0) 67×30
+          Text "발급 중" (1LP-0) 37×14 "발급 중"
+    Frame "상태 · 만료됨 (expired)" (1LQ-0) 342×186
+      Frame "Frame" (1LR-0) 342×144
+        Text "재발급까지 남은 시간" (1LS-0) 296×16 "재발급까지 남은 시간"
+        Frame "Frame" (1LT-0) 296×52
+          Text "00:00:00" (1LU-0) 204×52 "00:00:00"
+          Text "시 분 초" (1LV-0) 45×16 "시 분 초"
+        Text "2026-08-25 21:12:04 …" (1LW-0) 296×18 "2026-08-25 21:12:04 만료"
+      Frame "Frame" (1LX-0) 342×30
+        Rectangle "Rectangle" (1LY-0) 7×7
+        Text "만료됨" (1LZ-0) 265×18 "만료됨"
+        Frame "Frame" (1M0-0) 52×30
+          Text "발급" (1M1-0) 22×14 "발급"
