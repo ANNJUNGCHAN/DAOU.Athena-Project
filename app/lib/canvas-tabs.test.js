@@ -385,6 +385,27 @@ test('상태 링크는 마운트마다 색인에서 다시 계산한다', () => 
   assert.match(mount, /if \(links\.length\) state\.links = links;/);
 });
 
+test('계약이 갈아탈 탭을 지정하면 기본 보드를 세운 뒤 그리로 간다', () => {
+  const open = CANVAS.slice(CANVAS.indexOf('function openBoardSurface'), CANVAS.indexOf('function realtimeBindingsOf'));
+  // 기본 보드가 먼저다 — 형제 탭 레일이 거기서 나온다.
+  assert.match(open, /mountBoardState\(host, contract\.board_id, envelope\)\.then\(/);
+  assert.match(open, /const initial = String\(contract\.initial_state_board \|\| ''\);/);
+  // 전환은 사람이 탭을 누른 것과 같은 함수로 들어간다(링크에 없으면 아무 일도 없다).
+  assert.match(open, /switchStateBoard\(host, initial, envelope\)/);
+  // 갈아타다 실패해도 이미 선 기본 보드는 지우지 않는다(사람이 탭을 눌렀을 때와 같다).
+  assert.match(open, /switched \? switched\.catch\(\(\) => mounted\) : mounted/);
+  // 기준 보드를 갈아치우지 않는다 — 봉투가 준 board_id로 마운트한다.
+  assert.doesNotMatch(open, /mountBoardState\(host, initial/);
+
+  const board = CANVAS.slice(CANVAS.indexOf('function renderBoardSurfaceCard'), CANVAS.indexOf('async function renderTaskCanvasEnvelope'));
+  // 마운트 전 높이 0이면 페인트 확인이 카드가 안 선 것으로 읽는다 — 인라인으로만 준다.
+  assert.match(board, /host\.style\.minHeight = '120px';/);
+  assert.match(board, /host\.style\.minHeight = '';/);
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8');
+  const hostRule = css.slice(css.indexOf('.board-surface-host {'), css.indexOf('}', css.indexOf('.board-surface-host {')));
+  assert.doesNotMatch(hostRule, /min-height/, '전역 CSS에 두면 마운트를 끝낸 보드까지 건드린다');
+});
+
 test('상태 보드 키보드 의미는 flow/scroll/scroll-table 안의 plain leaf에만 보강한다', () => {
   const controls = CANVAS.slice(
     CANVAS.indexOf('function findStateControl'),

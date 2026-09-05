@@ -368,6 +368,25 @@ def test_a_row_the_payload_never_sent_stays_unbound(registry) -> None:
     assert "t1_stk_nm_r1" in contract["unbound_slots"]
 
 
+def test_quote_operation_contract_lands_on_the_current_trading_tab() -> None:
+    """시세 op는 CC-03 기본 보드 계약을 받고, 갈아탈 탭으로 현재시세를 싣는다.
+
+    기준 보드는 그대로 137X-2다 — 형제 탭 레일이 거기서 나온다.
+    """
+
+    registry = load_registry(TEMPLATE_ROOT, strict=False)
+
+    contract = build_surface_contract(
+        "detail:ka10001:current_trading", {}, registry
+    )
+
+    assert contract["board_id"] == "137X-2"
+    assert contract["initial_state_board"] == "2R3M-1"
+    # 보드를 직접 지정한 계약에는 갈아탈 보드가 없다 — 이미 그 보드에 있다.
+    board_contract = build_board_surface_contract("137X-2", {}, registry)
+    assert board_contract["initial_state_board"] is None
+
+
 def test_same_response_composite_part_is_not_an_alternate_surface_value() -> None:
     """동시 응답의 둘째 part는 첫째 part를 대체해 전체 leaf를 차지하지 않는다."""
 
