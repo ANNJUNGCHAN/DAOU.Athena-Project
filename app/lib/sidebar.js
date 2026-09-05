@@ -1243,7 +1243,7 @@
     switchValue.textContent = `${accountCount}개`;
     switcher.appendChild(switchLabel);
     switcher.appendChild(switchValue);
-    switcher.addEventListener('click', () => { closeAccountMenu(); openSettingsBridge(); });
+    switcher.addEventListener('click', () => { closeAccountMenu(); openAccountSwitchBridge(); });
     $accountMenu.appendChild(switcher);
 
     const settings = el('button', 'sidebar-menu-item');
@@ -1261,6 +1261,15 @@
   function openSettingsBridge() {
     if (window.AthenaShell && typeof window.AthenaShell.openSettings === 'function') {
       window.AthenaShell.openSettings();
+    }
+  }
+
+  // 「계좌 전환」은 설정 창이 아니라 계좌 전환 화면(Paper 1M3-0)으로 간다 — 그
+  // 화면이 경고·4단계 흐름·[전환하고 다시 인증]을 그리는 유일한 자리다.
+  function openAccountSwitchBridge() {
+    if (!activeAccountCache) return;
+    if (window.AthenaShell && typeof window.AthenaShell.openAccountSwitch === 'function') {
+      window.AthenaShell.openAccountSwitch(activeAccountCache.id);
     }
   }
 

@@ -63,3 +63,34 @@ test('프로젝트 설명 카드는 버튼 밖에 살고, 프로젝트 수정은
   assert.ok(descriptionRule, '.sidebar-project-description 규칙이 없다');
   assert.ok(!/pointer-events:\s*none/.test(descriptionRule[1]), '카드가 포인터를 막으면 버튼을 누를 수 없다');
 });
+
+test('계정 메뉴의 「계좌 전환」은 설정이 아니라 계좌 전환 화면(Paper 1M3-0)을 연다', () => {
+  const start = sidebar.indexOf('function buildAccountMenu(');
+  assert.ok(start >= 0, 'buildAccountMenu가 없다');
+  const body = sidebar.slice(start, sidebar.indexOf('\n  function ', start + 1));
+  const switcherStart = body.indexOf("switchLabel.textContent = '계좌 전환'");
+  const switcher = body.slice(switcherStart, body.indexOf('$accountMenu.appendChild(switcher);', switcherStart));
+  assert.match(switcher, /switcher\.addEventListener\('click', \(\) => \{ closeAccountMenu\(\); openAccountSwitchBridge\(\); \}\)/);
+  assert.ok(!switcher.includes('openSettingsBridge'), '계좌 전환이 설정 창을 여는 옛 배선이 남았다');
+
+  assert.match(sidebar, /window\.AthenaShell\.openAccountSwitch\(/, '버스로 넘긴다');
+  // 나머지 두 항목은 그대로 설정으로 간다.
+  assert.match(body, /usage\.addEventListener\('click', \(\) => \{ closeAccountMenu\(\); openSettingsBridge\(\); \}\)/);
+  assert.match(body, /settings\.addEventListener\('click', \(\) => \{ closeAccountMenu\(\); openSettingsBridge\(\); \}\)/);
+});
+
+test('계좌 전환 화면은 embedded가 아니고 온보딩 3 / 3 호출자는 그대로 embedded다', () => {
+  const shellJs = read('shell.js');
+  assert.match(shellJs, /registerOpenAccountSwitch\(fn\)/);
+  assert.match(shellJs, /openAccountSwitch\(accountId\)/);
+
+  const open = chat.match(/function openAccountSwitchScreen\(accountId\)\s*\{([\s\S]*?)\n\}/);
+  assert.ok(open, 'chat.js에 계좌 전환 진입 함수가 있다');
+  assert.match(open[1], /embedded: false/);
+  assert.match(open[1], /initialView: 'switch'/);
+  // 온보딩 3/3(showAuthConfirm)은 여전히 embedded: true다 — 새 호출자를 더한 것이지
+  // 기존 값을 뒤집은 것이 아니다.
+  const confirm = chat.match(/function showAuthConfirm\(accountId\)\s*\{([\s\S]*?)\n\}/);
+  assert.ok(confirm);
+  assert.match(confirm[1], /embedded: true/);
+});
