@@ -134,16 +134,45 @@ test('렌더러 신호 없는 recipe는 보드 표면 판정을 막지 않는다
   }
 });
 
-test('호가·주문 카드종은 보드가 마운트 지점을 갖출 때까지 앱 primary로 남는다', () => {
-  for (const title of ['호가', '주문']) {
+test('호가 사다리·주문 티켓 op는 보드가 마운트 지점을 갖출 때까지 앱 primary로 남는다', () => {
+  for (const ref of ['detail:ka10004:buy_bid_prices', 'detail:ka10087:trading_summary',
+    'base:kt10000', 'base:kt10008']) {
     assert.strictEqual(routing.preservesAppPrimary({
-      operation_ref: 'detail:ka10004:buy_bid_prices', canvas_type: 'table', card_title: title,
-      surface_contract: { board_id: '13BC-2' },
-    }), true, title);
+      operation_ref: ref, canvas_type: 'table', surface_contract: { board_id: '13BC-2' },
+    }), true, ref);
   }
+});
+
+test('호가·주문 예외는 op 목록이지 카드 이름이 아니다', () => {
+  // card_title로 판정하면 실시간 접수 통보(base:00, 계좌 카드)가 '주문'이라는
+  // 이름만으로 133H-2 보드를 잃는다 — 이번 작업이 없애려던 손실 그 자체다.
   assert.strictEqual(routing.preservesAppPrimary({
-    operation_ref: 'base:ka10001', canvas_type: 'table', card_title: '종목정보',
+    operation_ref: 'base:00', canvas_type: 'event', card_title: '주문',
+    presentation_contract: { recipe_id: 'account-risk', sections: [] },
+    surface_contract: { board_id: '133H-2' },
   }), false);
+  // 반대로 이름이 '신용거래'·'시세'인 주문·호가 op는 예외 안에 남는다.
+  assert.strictEqual(routing.preservesAppPrimary({
+    operation_ref: 'base:kt10006', canvas_type: 'action', card_title: '신용거래',
+    surface_contract: { board_id: '2TJ6-1' },
+  }), true);
+  assert.strictEqual(routing.preservesAppPrimary({
+    operation_ref: 'detail:ka10007:session', canvas_type: 'facts', card_title: '시세',
+    surface_contract: { board_id: '1JPU-0' },
+  }), true);
+});
+
+test('호가·주문 op 목록은 capability 배정 원장과 정확히 같다', () => {
+  // 정본은 backend/ref/kiwoom-capability-assignment.json이다(view_recipe_registry가
+  // live-orderbook·order-safe-ticket recipe를 여기서 만든다). 드리프트하면 깨진다.
+  const assignment = JSON.parse(fs.readFileSync(
+    path.join(__dirname, '..', '..', 'backend', 'ref', 'kiwoom-capability-assignment.json'),
+    'utf8',
+  ));
+  const opsOf = (capabilityId) => assignment.capabilities
+    .find((entry) => entry.capability_id === capabilityId).mapping_ids.slice().sort();
+  assert.deepStrictEqual([...routing.APP_PRIMARY_ORDERBOOK_OPS].sort(), opsOf('orderbook'));
+  assert.deepStrictEqual([...routing.APP_PRIMARY_ORDER_OPS].sort(), opsOf('order'));
 });
 
 test('그 외 recipe·계약 없는 봉투는 보드 표면 판정을 막지 않는다', () => {
