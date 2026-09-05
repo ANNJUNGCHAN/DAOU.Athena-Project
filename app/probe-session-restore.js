@@ -259,7 +259,7 @@ async function main() {
     check('완료: 스피너가 회색 점이 되고 모드 옆 스피너·머리 알약이 사라진다',
       /sidebar-item-run-done/.test(finished.bt || '') && finished.navRunning === false && finished.pill === null, finished);
 
-    // 11) 2026-09-05 정정 — 모드 클릭은 목록을 거르지 않고 새 대화만 연다(35·40번), 대화 행 앞
+    // 10) 2026-09-05 정정 — 모드 클릭은 목록을 거르지 않고 새 대화만 연다(35·40번), 대화 행 앞
     //     모드 아이콘(35번), 설명 카드가 머물고 '프로젝트 수정'이 눌린다(29번). 조용한 복원은
     //     위 5번이 잰다. ATHENA_PROBE_SHOT이 있으면 각 장면을 PNG로도 남긴다.
     const shotTen = async (suffix) => {
@@ -386,7 +386,7 @@ async function main() {
     const rejected = await wc.executeJavaScript(`window.athena.invoke('athena:project-update', { id: 'proj-athena', label: '' })`);
     check('프로젝트 수정 IPC: 빈 이름은 invalid_label로 거절한다', rejected && rejected.ok === false && rejected.reason === 'invalid_label', rejected);
 
-    // 10) 그래프 워크스페이스(42번 보드) — 서브뷰(지도)가 세션에 남고, 돌아오면 그대로 지도다.
+    // 11) 그래프 워크스페이스(42번 보드) — 서브뷰(지도)가 세션에 남고, 돌아오면 그대로 지도다.
     //     브레인 백엔드가 없어 지도 그리기는 실패하지만 서브뷰 상태 자체는 남아야 한다.
     const graphOpened = await wc.executeJavaScript(`(async () => {
       const ok = await window.AthenaShell.openConversation({ id: 'conv-graph', title: '성향 지도' });

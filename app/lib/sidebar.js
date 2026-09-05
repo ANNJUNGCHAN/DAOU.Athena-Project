@@ -508,6 +508,7 @@
     const descriptionInput = makeField('description', '설명', draft.description, '이 프로젝트에 속한 대화와 작업');
 
     const hint = el('p', 'sidebar-project-edit-hint');
+    hint.setAttribute('role', 'alert'); // 저장 거절 이유는 보조기기에도 읽혀야 한다.
     panel.appendChild(hint);
     const actions = el('div', 'sidebar-project-edit-actions');
     const cancel = el('button', 'sidebar-project-edit-cancel', '취소');
@@ -529,11 +530,15 @@
       if (save.disabled) return;
       updateProject(project, labelInput.value, descriptionInput.value);
     };
-    panel.addEventListener('keydown', (event) => {
-      if (event.key !== 'Enter') return;
-      event.preventDefault();
-      submit();
-    });
+    // Enter는 입력 칸에서만 저장이다 — 패널 전체에 걸면 '취소'에 포커스를 두고 누른 Enter까지
+    // 저장으로 새어 버린다(2026-09-05 리뷰).
+    for (const input of [labelInput, descriptionInput]) {
+      input.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter') return;
+        event.preventDefault();
+        submit();
+      });
+    }
     cancel.addEventListener('click', (event) => {
       event.stopPropagation();
       closeProjectPopovers();
@@ -581,8 +586,10 @@
     // 덮지 않는다. 문서 mousedown 판정은 .sidebar-project 안이면 닫지 않으므로 카드 안
     // 클릭도 안전하다.
     const description = el('div', 'sidebar-project-description');
+    description.id = `sidebarProjectDescription-${project.id}`;
     description.setAttribute('role', 'group');
     description.setAttribute('aria-label', `${project.label} 설명`);
+    main.setAttribute('aria-describedby', description.id);
     description.appendChild(el('span', 'sidebar-project-description-name', project.label));
     description.appendChild(el(
       'span',
@@ -603,6 +610,9 @@
       resetProjectPopovers();
       openEditProjectId = project.id;
       renderList();
+      // 방금 누른 버튼은 재렌더로 사라졌다 — 포커스를 새 패널의 이름 칸(커서는 끝)으로 옮겨
+      // 키보드가 길을 잃지 않게 한다.
+      restoreCaret('.sidebar-project-edit-input[data-field="label"]');
     });
     description.appendChild(editAction);
     description.hidden = true;
@@ -697,6 +707,7 @@
       // 재계산해도 첫 클릭이 닫기 동작으로 뒤집히지 않아야 한다.
       const opening = menuTrigger.getAttribute('aria-expanded') !== 'true';
       const hadPopover = resetProjectPopovers();
+      description.hidden = true; // 설명 카드 위에 메뉴를 겹치지 않는다 — showDescription의 계약과 같은 것.
       openProjectMenuId = opening ? project.id : null;
       closeProjectMenus(menu);
       menu.hidden = !opening;
@@ -844,23 +855,19 @@
       if (firstAction) firstAction.focus();
     }
 
-    if (openRemoveProjectId && focusedRemoveInput) {
-      const input = $list.querySelector('.sidebar-project-remove-input');
-      if (input) {
-        input.focus();
-        const end = input.value.length;
-        if (typeof input.setSelectionRange === 'function') input.setSelectionRange(end, end);
-      }
-    }
-
+    if (openRemoveProjectId && focusedRemoveInput) restoreCaret('.sidebar-project-remove-input');
     if (openEditProjectId && focusedEditField) {
-      const input = $list.querySelector(`.sidebar-project-edit-input[data-field="${focusedEditField}"]`);
-      if (input) {
-        input.focus();
-        const end = input.value.length;
-        if (typeof input.setSelectionRange === 'function') input.setSelectionRange(end, end);
-      }
+      restoreCaret(`.sidebar-project-edit-input[data-field="${focusedEditField}"]`);
     }
+  }
+
+  // 재렌더로 새로 만들어진 입력에 포커스와 커서(끝)를 되돌린다 — 삭제 확인·수정 패널이 같이 쓴다.
+  function restoreCaret(selector) {
+    const input = $list.querySelector(selector);
+    if (!input) return;
+    input.focus();
+    const end = input.value.length;
+    if (typeof input.setSelectionRange === 'function') input.setSelectionRange(end, end);
   }
 
   // 이력의 머리는 다섯 모드(세션 명세 §3-1) — 대화 목록을 새로 받을 때마다
@@ -940,16 +947,30 @@
     renderList();
   }
 
+  // 마지막으로 main이 준 목록 그대로의 문자열 — 5초 폴링이 같은 답을 돌려주면 다시 그리지 않는다.
+  let lastListSnapshot = null;
+
   async function loadConversations() {
+    let res = null;
     try {
-      const res = await window.athena.invoke('athena:conversations-list');
-      conversationsCache = (res && Array.isArray(res.conversations)) ? res.conversations : [];
-      projectsCache = (res && Array.isArray(res.projects)) ? res.projects : [];
-      currentProjectId = (res && res.currentProjectId)
+      res = await window.athena.invoke('athena:conversations-list');
+    } catch {
+      res = null;
+    }
+    // 바뀐 게 없으면 손대지 않는다(2026-09-05 리뷰). 폴링마다 목록을 통째로 다시 그리면 사람이
+    // 설명 카드 위에 머무는 동안 카드가 사라지고(고치려던 바로 그 결함), 행에 있던 키보드
+    // 포커스도 5초마다 떨어진다. 실행 상태·새 대화·프로젝트 변경은 답이 달라지므로 그대로 그린다.
+    const snapshotText = res ? JSON.stringify(res) : null;
+    if (snapshotText !== null && snapshotText === lastListSnapshot) return;
+    lastListSnapshot = snapshotText;
+    if (res) {
+      conversationsCache = Array.isArray(res.conversations) ? res.conversations : [];
+      projectsCache = Array.isArray(res.projects) ? res.projects : [];
+      currentProjectId = res.currentProjectId
         || (projectsCache[0] && projectsCache[0].id)
         || null;
-      activeConversationId = res && res.activeId ? res.activeId : null;
-    } catch {
+      activeConversationId = res.activeId ? res.activeId : null;
+    } else {
       conversationsCache = [];
       projectsCache = [];
     }
