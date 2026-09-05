@@ -1338,24 +1338,42 @@ test('말걸기 가드: fetchNudgeGuard가 실패해도 지어낸 값으로 채�
   assert.equal(findByClass(guard, 'agent-list-empty')[0].textContent, '가드 설정을 불러오는 중입니다');
 });
 
-// ---------- 동선 규칙(Paper 에이전트 보드 05 하단) ----------
+// ---------- 이중 제어 규칙(Paper 에이전트 보드 05 하단 C6U-0~C6X-0) ----------
 
-test('동선 규칙: 작업 뷰에 Paper 원문 3줄이 그대로 렌더된다', () => {
+test('이중 제어 규칙: 작업 뷰 하단 캡션은 「이중 제어 규칙」이다', () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
   canvas.mount();
 
   const panel = findByClass(container, 'agent-route-rules')[0];
-  assert.ok(panel, '동선 규칙 패널이 있어야 한다');
-  assert.equal(findByClass(panel, 'agent-panel-caption')[0].textContent, '동선 규칙');
+  assert.ok(panel, '규칙 패널이 있어야 한다');
+  assert.equal(findByClass(panel, 'agent-panel-caption')[0].textContent, '이중 제어 규칙');
+});
+
+test('이중 제어 규칙: 3줄이 Paper C6V-0~C6X-0 원문 그대로다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+
+  const panel = findByClass(container, 'agent-route-rules')[0];
   assert.deepEqual(findByClass(panel, 'agent-route-rule').map((n) => n.textContent), [
-    '① ＋ 새 작업 버튼은 시트를 열지 않는다 — 채팅 입력창에 시작 문장을 넣고 커서를 옮긴다.',
-    '② 편집도 채팅으로 — 행을 고르고 "이거 고쳐줘". 상세 패널은 보기 전용.',
-    '③ 확정(미리보기·활성화)은 채팅 카드의 칩 — 캔버스는 결과가 비치는 곳.',
+    '① 새 작업 — 채팅 문장으로도, 시트로도.',
+    '② 편집 — "이거 고쳐줘"로도, 폼으로도.',
+    '③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트.',
   ]);
 });
 
-test('동선 규칙: 화면 자신의 계약이라 data-source 표기를 달지 않는다', () => {
+test('이중 제어 규칙: 문구가 GUI 입구를 부정하지 않는다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+
+  const lines = findByClass(container, 'agent-route-rule').map((n) => n.textContent).join(' ');
+  assert.ok(!/시트를 열지 않는다/.test(lines), 'Paper는 시트 입구를 요구한다');
+  assert.ok(!/보기 전용/.test(lines), 'Paper는 폼 입구를 요구한다');
+});
+
+test('이중 제어 규칙: 화면 자신의 계약이라 data-source 표기를 달지 않는다', () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
   canvas.mount();
@@ -1363,7 +1381,7 @@ test('동선 규칙: 화면 자신의 계약이라 data-source 표기를 달지 
   assert.equal(findByClass(container, 'agent-route-rules')[0].getAttribute('data-source'), null);
 });
 
-test('동선 규칙: 알람·라이브·제안 뷰로 가면 작업 뷰와 함께 숨는다', () => {
+test('이중 제어 규칙: 알람·라이브·제안 뷰로 가면 작업 뷰와 함께 숨는다', () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
   canvas.mount();
@@ -1372,7 +1390,7 @@ test('동선 규칙: 알람·라이브·제안 뷰로 가면 작업 뷰와 함�
   assert.equal(body.hidden, false);
   for (const view of ['alerts', 'live', 'proactive']) {
     canvas.setActiveView(view);
-    assert.equal(body.hidden, true, `${view} 뷰에서는 동선 규칙이 든 작업 본문이 숨어야 한다`);
+    assert.equal(body.hidden, true, `${view} 뷰에서는 이중 제어 규칙이 든 작업 본문이 숨어야 한다`);
     canvas.setActiveView('tasks');
     assert.equal(body.hidden, false);
   }
