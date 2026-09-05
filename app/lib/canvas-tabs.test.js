@@ -377,6 +377,14 @@ test('상태 보드 전환은 계약이 준 링크 안에서만 일어나고 값
   );
 });
 
+test('상태 링크는 마운트마다 색인에서 다시 계산한다', () => {
+  const mount = CANVAS.slice(CANVAS.indexOf('function mountBoardState'), CANVAS.indexOf('function switchStateBoard'));
+  // 정본은 색인이다 — 봉투는 마운트한 보드의 직계 자식만 나른다(전환하면 부모 레일이 죽는다).
+  assert.match(mount, /boardTemplateRegistry\.stateLinksFor\(state\.boardId\)/);
+  // 색인이 모르는 보드(픽스처 계약)는 봉투가 실어온 목록을 그대로 쓴다.
+  assert.match(mount, /if \(links\.length\) state\.links = links;/);
+});
+
 test('상태 보드 키보드 의미는 flow/scroll/scroll-table 안의 plain leaf에만 보강한다', () => {
   const controls = CANVAS.slice(
     CANVAS.indexOf('function findStateControl'),
