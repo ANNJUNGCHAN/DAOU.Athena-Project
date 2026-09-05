@@ -1,0 +1,340 @@
+{
+ "board_id": "4744-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "4752-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "4751-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "474Z-0",
+   "text": "정규장 5단 호가",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Header"
+   ]
+  },
+  {
+   "id": "474X-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "474W-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "474V-0",
+   "text": "값",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "474U-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "474S-0",
+   "text": "01",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "474R-0",
+   "text": "매수호가수량2",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "474Q-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "474O-0",
+   "text": "5,760",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "474N-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "474L-0",
+   "text": "02",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "474K-0",
+   "text": "매수호가4",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "474J-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "474H-0",
+   "text": "150,810",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "474G-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "474E-0",
+   "text": "03",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "474D-0",
+   "text": "매수호가3",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "474C-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "474A-0",
+   "text": "150,820",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4749-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4746-0",
+   "text": "외 8개 행 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4744-0",
+   "name": "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "474Y-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4750-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4747-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "474T-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "474M-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "474P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "474F-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "474I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4748-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "474B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4745-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "정규장 5단 호가": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "매수호가수량2": 1,
+  "5,760": 1,
+  "02": 1,
+  "매수호가4": 1,
+  "150,810": 1,
+  "03": 1,
+  "매수호가3": 1,
+  "150,820": 1,
+  "외 8개 행 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "8b10e5624341ae69878bb70cdfa335a56d6b97f16edec2ff25fa878a4ceb5b7b"
+}

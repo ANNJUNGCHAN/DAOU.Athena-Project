@@ -1,0 +1,339 @@
+{
+ "board_id": "478Z-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "479X-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "479W-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "479U-0",
+   "text": "저장 조건식과 결과",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Header"
+   ]
+  },
+  {
+   "id": "479S-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "479R-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "479Q-0",
+   "text": "값",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "479P-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "479N-0",
+   "text": "01",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "479M-0",
+   "text": "일련번호",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "479L-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "479J-0",
+   "text": "오늘 2번째",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "479I-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "479G-0",
+   "text": "02",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "479F-0",
+   "text": "일련번호",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "479E-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "479C-0",
+   "text": "오늘 5번째",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "479B-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "4799-0",
+   "text": "03",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4798-0",
+   "text": "종목코드",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4797-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4795-0",
+   "text": "005930",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4794-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4791-0",
+   "text": "외 3개 행 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "478Z-0",
+   "name": "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "479T-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "479V-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4792-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "479O-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "479H-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "479K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "479A-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "479D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4793-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4796-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4790-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "저장 조건식과 결과": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "일련번호": 2,
+  "오늘 2번째": 1,
+  "02": 1,
+  "오늘 5번째": 1,
+  "03": 1,
+  "종목코드": 1,
+  "005930": 1,
+  "외 3개 행 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "788df531d956a989c7e7094c78a48efb8b8edbbe77c0c7a77254d2c46f8ddbb1"
+}

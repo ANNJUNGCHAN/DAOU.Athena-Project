@@ -1,0 +1,342 @@
+{
+ "board_id": "46VM-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46WK-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46WJ-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46WH-0",
+   "text": "KRX 금시장 차트·시세",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Header"
+   ]
+  },
+  {
+   "id": "46WF-0",
+   "text": "등락율",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46WE-0",
+   "text": "등락률 +0.74%",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46WC-0",
+   "text": "전일비",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46WB-0",
+   "text": "전일비 100.74%",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46W9-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46W8-0",
+   "text": "1g",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46W5-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46W4-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46W3-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46W1-0",
+   "text": "전일대비기호",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46W0-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46VY-0",
+   "text": "168,420 · +0.74%",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46VX-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46VV-0",
+   "text": "누적거래량",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46VU-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46VS-0",
+   "text": "185.4kg",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46VR-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46VO-0",
+   "text": "스칼라 2개, 행 2개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46VM-0",
+   "name": "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46WG-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46WI-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46VP-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46W6-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46WD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46WA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46W7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46W2-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46VW-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46VZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46VQ-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46VT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46VN-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "KRX 금시장 차트·시세": 1,
+  "등락율": 1,
+  "등락률 +0.74%": 1,
+  "전일비": 1,
+  "전일비 100.74%": 1,
+  "핵심": 1,
+  "1g": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "전일대비기호": 1,
+  "168,420 · +0.74%": 1,
+  "누적거래량": 1,
+  "185.4kg": 1,
+  "스칼라 2개, 행 2개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "4dffa2eb585e49b66a2399450a17d2dfd8b8c6d48e423f0ac9b92135374556a0"
+}

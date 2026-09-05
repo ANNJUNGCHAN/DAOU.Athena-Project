@@ -1,0 +1,35 @@
+Frame "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색" (4771-0) 360×420
+  Frame "Header" (477V-0) 0×0
+    Frame "Meta row" (477X-0) 0×0
+      Text "Eyebrow" (477Z-0) 0×0
+      Text "As of" (477Y-0) 0×0 "기준 09:42"
+    Text "Title" (477W-0) 0×0 "테마 등락·확산 탐색"
+  Frame "Body" (4774-0) 0×0
+    Frame "Table header" (477Q-0) 0×0
+      Text "순서" (477U-0) 34×0 "순서"
+      Text "항목" (477T-0) 0×0 "항목"
+      Text "값" (477S-0) 0×0 "값"
+      Text "비고" (477R-0) 64×0 "비고"
+    Frame "Rank 1" (477J-0) 0×0
+      Text "01" (477P-0) 34×0 "01"
+      Frame "Frame" (477M-0) 0×0
+        Text "등락율" (477O-0) 0×0 "등락율"
+        Text "Text" (477N-0) 0×0
+      Text "+0.86%" (477L-0) 0×0 "+0.86%"
+      Text "Text" (477K-0) 64×0
+    Frame "Rank 2" (477C-0) 0×0
+      Text "02" (477I-0) 34×0 "02"
+      Frame "Frame" (477F-0) 0×0
+        Text "테마그룹코드" (477H-0) 0×0 "테마그룹코드"
+        Text "Text" (477G-0) 0×0
+      Text "T0119" (477E-0) 0×0 "T0119"
+      Text "Text" (477D-0) 64×0
+    Frame "Rank 3" (4775-0) 0×0
+      Text "03" (477B-0) 34×0 "03"
+      Frame "Frame" (4778-0) 0×0
+        Text "하락종목수" (477A-0) 0×0 "하락종목수"
+        Text "Text" (4779-0) 0×0
+      Text "하락 9" (4777-0) 0×0 "하락 9"
+      Text "Text" (4776-0) 64×0
+  Frame "Fold note" (4772-0) 0×0
+    Text "추가 항목은 원본에서 확인" (4773-0) 0×0 "추가 항목은 원본에서 확인"

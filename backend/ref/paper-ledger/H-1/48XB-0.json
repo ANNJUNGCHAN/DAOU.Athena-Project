@@ -1,0 +1,92 @@
+{
+ "board_id": "48XB-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48XD-0",
+   "text": "원본 보드: CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+   "path": [
+    "note/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48XF-0",
+   "text": "가져온 요소: 주문가능금액",
+   "path": [
+    "note/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48XH-0",
+   "text": "문법: order_confirm",
+   "path": [
+    "note/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48XJ-0",
+   "text": "접은 개수: 항목 20개",
+   "path": [
+    "note/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48XB-0",
+   "name": "note/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48XC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48XE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48XG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48XI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자": 1,
+  "가져온 요소: 주문가능금액": 1,
+  "문법: order_confirm": 1,
+  "접은 개수: 항목 20개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "7f9008a84e92e430071684ededda2b3d2446ffbddfe64233d1f05fb85d80c675"
+}

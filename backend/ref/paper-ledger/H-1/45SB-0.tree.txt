@@ -1,0 +1,19 @@
+Frame "template/order_ticket" (45SB-0) 360×420
+  Frame "Header" (45T6-0) 0×0
+    Frame "Meta row" (45T7-0) 0×0
+      Text "Eyebrow" (45T8-0) 0×0 "주문 요약형"
+      Text "As of" (45T9-0) 0×0 "기준 09:42"
+    Text "Title" (45TA-0) 0×0 "주문 요약"
+  Frame "Body" (45UK-0) 0×0
+    Frame "Order lead" (45XQ-0) 0×0
+      Text "삼성전자" (45XR-0) 0×0 "삼성전자"
+      Text "005930 / 유가증권 01" (45XS-0) 0×0 "005930 / 유가증권 01"
+    Frame "Order side" (45XU-0) 0×0
+      Text "주문 구분" (45XV-0) 0×0 "주문 구분"
+      Text "매수" (45XW-0) 0×0 "매수"
+    Frame "Order quantity" (45XY-0) 0×0
+      Text "수량" (45XZ-0) 0×0 "수량"
+      Text "10주" (45Y0-0) 0×0 "10주"
+    Frame "Order price" (45Y2-0) 0×0
+      Text "가격" (45Y3-0) 0×0 "가격"
+      Text "시장가" (45Y4-0) 0×0 "시장가"

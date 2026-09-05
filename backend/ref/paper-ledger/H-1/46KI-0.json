@@ -1,0 +1,234 @@
+{
+ "board_id": "46KI-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46L5-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46L4-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46L2-0",
+   "text": "계좌 손익·결제 및 위험",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Header"
+   ]
+  },
+  {
+   "id": "46L0-0",
+   "text": "종목별계좌평가현황",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46KZ-0",
+   "text": "8종목",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46KX-0",
+   "text": "유가잔고평가액",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46KW-0",
+   "text": "89,760,240원",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46KU-0",
+   "text": "총 평가손익",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46KT-0",
+   "text": "+4,240,900원",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46KR-0",
+   "text": "매수비중",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46KQ-0",
+   "text": "28.0%",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46KO-0",
+   "text": "총 매입가",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46KN-0",
+   "text": "매입 85,519,340원",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46KK-0",
+   "text": "외 109개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46KI-0",
+   "name": "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46L1-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46L3-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46KL-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46KY-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46KV-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46KS-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46KP-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46KM-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46KJ-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "계좌 손익·결제 및 위험": 1,
+  "종목별계좌평가현황": 1,
+  "8종목": 1,
+  "유가잔고평가액": 1,
+  "89,760,240원": 1,
+  "총 평가손익": 1,
+  "+4,240,900원": 1,
+  "매수비중": 1,
+  "28.0%": 1,
+  "총 매입가": 1,
+  "매입 85,519,340원": 1,
+  "외 109개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a53fbc3d314de736243bdeaa76bcb4e984da032bcb9692b62bb49823ea281985"
+}

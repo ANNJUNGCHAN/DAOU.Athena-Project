@@ -1,0 +1,44 @@
+Frame "C03 · 좁은 데스크톱 — 주문 확인" (15YH-2) 390×844
+  Frame "Compact desktop title bar" (168F-2) 390×62
+    Frame "Frame" (168G-2) 110×0
+      Rectangle "Rectangle" (168H-2) 8×8
+      Text "ATHENA" (168I-2) 0×0 "ATHENA"
+    Text "좁은 창 · 주문 확인" (168J-2) 0×0 "좁은 창 · 주문 확인"
+    Frame "Frame" (168K-2) 110×0
+      SVG "SVG" (168L-2) 0×0
+        SVGVisualElement "Line" (168M-2) 0×0
+      SVG "SVG" (168N-2) 0×0
+        SVGVisualElement "Rect" (168O-2) 0×0
+      SVG "SVG" (168P-2) 0×0
+        SVGVisualElement "Line" (168Q-2) 0×0
+        SVGVisualElement "Line" (168R-2) 0×0
+  Frame "Frame" (160W-2) 390×0
+    Frame "Frame" (160X-2) 0×0
+      Text "주문 내용을 확인해주세요" (160Y-2) 0×0 "주문 내용을
+확인해주세요"
+      Frame "Frame" (160Z-2) 0×0
+        Text "아직 주문되지 않았습니다." (1610-2) 0×0 "아직 주문되지 않았습니다."
+    Frame "Frame" (1611-2) 0×0
+      Frame "Frame" (1612-2) 0×0
+        Text "종목" (1613-2) 0×0 "종목"
+        Text "삼성전자 · 005930" (1614-2) 0×0 "삼성전자 · 005930"
+      Frame "Frame" (1615-2) 0×0
+        Text "방향" (1616-2) 0×0 "방향"
+        Text "매수" (1617-2) 0×0 "매수"
+      Frame "Frame" (1618-2) 0×0
+        Text "수량" (1619-2) 0×0 "수량"
+        Text "10주" (161A-2) 0×0 "10주"
+      Frame "Frame" (161B-2) 0×0
+        Text "유형" (161C-2) 0×0 "유형"
+        Text "시장가" (161D-2) 0×0 "시장가"
+      Rectangle "Rectangle" (161E-2) 0×1
+      Frame "Frame" (161F-2) 0×0
+        Text "예상 금액" (161G-2) 0×0 "예상 금액"
+        Text "약 1,508,500원" (161H-2) 0×0 "약 1,508,500원"
+    Frame "Frame" (161I-2) 0×0
+      Text "시장가는 체결 순간 가격이 달라질 수…" (161J-2) 0×0 "시장가는 체결 순간 가격이 달라질 수 있습니다. 주문 후 현금은 약 8,491,500원입니다."
+    Frame "Frame" (161K-2) 0×0
+      Frame "Frame" (161L-2) 0×52
+        Text "매수 주문 확인" (161M-2) 0×0 "매수 주문 확인"
+      Frame "Frame" (161N-2) 0×48
+        Text "취소" (161O-2) 0×0 "취소"

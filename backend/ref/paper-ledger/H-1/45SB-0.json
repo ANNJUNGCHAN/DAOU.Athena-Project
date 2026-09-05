@@ -1,0 +1,189 @@
+{
+ "board_id": "45SB-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "template/order_ticket",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "45T8-0",
+   "text": "주문 요약형",
+   "path": [
+    "template/order_ticket",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45T9-0",
+   "text": "기준 09:42",
+   "path": [
+    "template/order_ticket",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45TA-0",
+   "text": "주문 요약",
+   "path": [
+    "template/order_ticket",
+    "Header"
+   ]
+  },
+  {
+   "id": "45XR-0",
+   "text": "삼성전자",
+   "path": [
+    "template/order_ticket",
+    "Body",
+    "Order lead"
+   ]
+  },
+  {
+   "id": "45XS-0",
+   "text": "005930 / 유가증권 01",
+   "path": [
+    "template/order_ticket",
+    "Body",
+    "Order lead"
+   ]
+  },
+  {
+   "id": "45XV-0",
+   "text": "주문 구분",
+   "path": [
+    "template/order_ticket",
+    "Body",
+    "Order side"
+   ]
+  },
+  {
+   "id": "45XW-0",
+   "text": "매수",
+   "path": [
+    "template/order_ticket",
+    "Body",
+    "Order side"
+   ]
+  },
+  {
+   "id": "45XZ-0",
+   "text": "수량",
+   "path": [
+    "template/order_ticket",
+    "Body",
+    "Order quantity"
+   ]
+  },
+  {
+   "id": "45Y0-0",
+   "text": "10주",
+   "path": [
+    "template/order_ticket",
+    "Body",
+    "Order quantity"
+   ]
+  },
+  {
+   "id": "45Y3-0",
+   "text": "가격",
+   "path": [
+    "template/order_ticket",
+    "Body",
+    "Order price"
+   ]
+  },
+  {
+   "id": "45Y4-0",
+   "text": "시장가",
+   "path": [
+    "template/order_ticket",
+    "Body",
+    "Order price"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "45SB-0",
+   "name": "template/order_ticket",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "45T6-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45T7-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45UK-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45XQ-0",
+   "name": "Order lead",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45XU-0",
+   "name": "Order side",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45XY-0",
+   "name": "Order quantity",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45Y2-0",
+   "name": "Order price",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  }
+ ],
+ "text_multiset": {
+  "주문 요약형": 1,
+  "기준 09:42": 1,
+  "주문 요약": 1,
+  "삼성전자": 1,
+  "005930 / 유가증권 01": 1,
+  "주문 구분": 1,
+  "매수": 1,
+  "수량": 1,
+  "10주": 1,
+  "가격": 1,
+  "시장가": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "4b713dd7c9f72ce1b0fb0e78d13c35eeada5c3edddddd8d6485e27a3aa542314"
+}

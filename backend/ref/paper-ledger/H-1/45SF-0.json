@@ -1,0 +1,140 @@
+{
+ "board_id": "45SF-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "template/reader",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "45TW-0",
+   "text": "읽기형",
+   "path": [
+    "template/reader",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45TX-0",
+   "text": "기준 오늘",
+   "path": [
+    "template/reader",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45TY-0",
+   "text": "문서 요약",
+   "path": [
+    "template/reader",
+    "Header"
+   ]
+  },
+  {
+   "id": "45ZC-0",
+   "text": "투자 유의 안내",
+   "path": [
+    "template/reader",
+    "Body",
+    "Reader title"
+   ]
+  },
+  {
+   "id": "45ZD-0",
+   "text": "작성 기관 / 오늘 기준",
+   "path": [
+    "template/reader",
+    "Body",
+    "Reader title"
+   ]
+  },
+  {
+   "id": "45ZG-0",
+   "text": "투자는 본인의 판단과 책임 아래 이루어집니다. 상품 설명과 위험을 확인하고, 투자 목적에 맞는지 검토해 주세요.",
+   "path": [
+    "template/reader",
+    "Body",
+    "Reader paragraph"
+   ]
+  },
+  {
+   "id": "4614-0",
+   "text": "이후 6문단 접힘 · 원본에서 확인",
+   "path": [
+    "template/reader",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "45SF-0",
+   "name": "template/reader",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "45TU-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45TV-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45US-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45ZB-0",
+   "name": "Reader title",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45ZF-0",
+   "name": "Reader paragraph",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4613-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "읽기형": 1,
+  "기준 오늘": 1,
+  "문서 요약": 1,
+  "투자 유의 안내": 1,
+  "작성 기관 / 오늘 기준": 1,
+  "투자는 본인의 판단과 책임 아래 이루어집니다. 상품 설명과 위험을 확인하고, 투자 목적에 맞는지 검토해 주세요.": 1,
+  "이후 6문단 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "4a05a7a71295327fa61dee1ba4c84794fd73ad29b6f8da178ac96970e57b6828"
+}

@@ -1,0 +1,35 @@
+Frame "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별" (48CN-0) 360×420
+  Frame "Header" (48DH-0) 0×0
+    Frame "Meta row" (48DJ-0) 0×0
+      Text "Eyebrow" (48DL-0) 0×0
+      Text "As of" (48DK-0) 0×0 "기준 09:42"
+    Text "Title" (48DI-0) 0×0 "증거금·보증금 구간별"
+  Frame "Body" (48CQ-0) 0×0
+    Frame "KPI band" (48D7-0) 0×0
+      Frame "Frame" (48DE-0) 0×0
+        Text "종목별계좌평가현황" (48DG-0) 0×0 "종목별계좌평가현황"
+        Text "8종목" (48DF-0) 0×0 "8종목"
+      Frame "Frame" (48DB-0) 0×0
+        Text "매수비중" (48DD-0) 0×0 "매수비중"
+        Text "28.0%" (48DC-0) 0×0 "28.0%"
+      Frame "Frame" (48D8-0) 0×0
+        Text "Text" (48DA-0) 0×0
+        Text "Text" (48D9-0) 0×0
+    Frame "Table header" (48D3-0) 0×0
+      Text "항목" (48D6-0) 0×0 "항목"
+      Text "값" (48D5-0) 0×0 "값"
+      Text "비고" (48D4-0) 72×0 "비고"
+    Frame "Position 1" (48CX-0) 0×0
+      Frame "Frame" (48D0-0) 0×0
+        Text "유가잔고평가액" (48D2-0) 0×0 "유가잔고평가액"
+        Text "Text" (48D1-0) 0×0
+      Text "89,760,240원" (48CZ-0) 0×0 "89,760,240원"
+      Text "Text" (48CY-0) 72×0
+    Frame "Position 2" (48CR-0) 0×0
+      Frame "Frame" (48CU-0) 0×0
+        Text "총 평가손익" (48CW-0) 0×0 "총 평가손익"
+        Text "Text" (48CV-0) 0×0
+      Text "+4,240,900원" (48CT-0) 0×0 "+4,240,900원"
+      Text "Text" (48CS-0) 72×0
+  Frame "Fold note" (48CO-0) 0×0
+    Text "스칼라 2개, 행 5개 접힘 · 원본…" (48CP-0) 0×0 "스칼라 2개, 행 5개 접힘 · 원본에서 확인"

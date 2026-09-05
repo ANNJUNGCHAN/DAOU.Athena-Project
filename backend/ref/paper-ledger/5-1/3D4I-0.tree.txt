@@ -1,0 +1,226 @@
+Frame "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침" (3D4I-0) 1440×960
+  Frame "Discovery Root · 관심" (3D4J-0) 1440×960
+    Frame "Explorer Card Surface" (3D4K-0) 1360×880
+      Frame "Header and Capability Navigation" (3DEW-0) 0×112
+        Frame "Frame" (3DFA-0) 0×0
+          Frame "Frame" (3DFC-0) 0×0
+            Text "관심종목" (3DFF-0) 0×0 "관심종목"
+            Frame "Frame" (3DFD-0) 0×0
+              Text "장중 · 09:42" (3DFE-0) 0×0 "장중 · 09:42"
+          Text "단기 관찰 그룹 · 8종목" (3DFB-0) 0×0 "단기 관찰 그룹 · 8종목"
+        Frame "Frame" (3DEX-0) 0×0
+          Frame "Frame" (3DF8-0) 0×0
+            Text "업종" (3DF9-0) 0×0 "업종"
+          Frame "Frame" (3DF6-0) 0×0
+            Text "종목찾기" (3DF7-0) 0×0 "종목찾기"
+          Frame "Frame" (3DF4-0) 0×0
+            Text "관심" (3DF5-0) 0×0 "관심"
+          Frame "Frame" (3DF2-0) 0×0
+            Text "테마" (3DF3-0) 0×0 "테마"
+          Frame "Frame" (3DF0-0) 0×0
+            Text "시장·VI" (3DF1-0) 0×0 "시장·VI"
+          Frame "Frame" (3DEY-0) 0×0
+            Text "조건검색" (3DEZ-0) 0×0 "조건검색"
+      Frame "Ranking Query Controls" (3DEA-0) 0×92
+        Frame "Frame" (3DEF-0) 0×0
+          Frame "Frame" (3DEU-0) 0×0
+            Text "그룹" (3DEV-0) 0×0 "그룹"
+          Frame "단기 관찰" (3DES-0) 0×0
+            Text "단기 관찰" (3DET-0) 0×0 "단기 관찰"
+          Frame "배당주" (3DEQ-0) 0×0
+            Text "배당주" (3DER-0) 0×0 "배당주"
+          Frame "ETF 모음" (3DEO-0) 0×0
+            Text "ETF 모음" (3DEP-0) 0×0 "ETF 모음"
+          Frame "Frame" (3DEM-0) 0×0
+            Text "ELW 관찰" (3DEN-0) 0×0 "ELW 관찰"
+          Frame "Frame" (3DEK-0) 0×0
+            Text "등락률 순" (3DEL-0) 0×0 "등락률 순"
+          Frame "Frame" (3DEI-0) 0×0
+            Text "신호 표시" (3DEJ-0) 0×0 "신호 표시"
+          Frame "Frame" (3DEG-0) 0×0
+            Text "알림 켜짐" (3DEH-0) 0×0 "알림 켜짐"
+        Frame "Frame" (3DEB-0) 0×0
+          Text "● 실시간 갱신" (3DEE-0) 0×0 "● 실시간 갱신"
+          Text "8종목" (3DED-0) 0×0 "8종목"
+          Text "그룹 4개" (3DEC-0) 0×0 "그룹 4개"
+      Frame "Ranking Workspace" (3D4O-0) 0×612
+        Frame "행 펼침 본문" (3E8R-0) 880×0
+          Frame "펼친 행 · 삼성전자" (3E8S-0) 0×56
+            Text "▾" (3E8T-0) 14×0 "▾"
+            Rectangle "Rectangle" (3E8U-0) 6×6
+            Frame "Frame" (3E8V-0) 92×0
+              Text "삼성전자" (3E8W-0) 0×0 "삼성전자"
+              Text "005930" (3E8X-0) 0×0 "005930"
+            Frame "Frame" (3E8Y-0) 0×0
+              Text "거래대금 급증" (3E8Z-0) 0×0 "거래대금 급증"
+            Frame "Frame" (3E90-0) 0×0
+              Text "150,850" (3E91-0) 0×0 "150,850"
+              Text "+1,850 · +1.24%" (3E92-0) 0×0 "+1,850 · +1.24%"
+            Rectangle "Rectangle" (3E93-0) 0×0
+            Text "8종목 중 1행 펼침 · 09-01" (3E94-0) 0×0 "8종목 중 1행 펼침 · 09-01"
+          Frame "펼침 상단" (3EAY-0) 0×0
+            Frame "오늘 가격" (3EAZ-0) 402×0
+              Frame "Frame" (3EB0-0) 0×0
+                Text "오늘 가격" (3EB1-0) 0×0 "오늘 가격"
+                Text "기준가 149,000" (3EB2-0) 0×0 "기준가 149,000"
+              Frame "Frame" (3EB3-0) 0×0
+                Frame "Frame" (3EB4-0) 191×0
+                  Frame "Frame" (3EB5-0) 0×0
+                    Text "시가" (3EB6-0) 0×0 "시가"
+                    Text "149,200" (3EB7-0) 0×0 "149,200"
+                  Frame "Frame" (3EB8-0) 0×0
+                    Text "저가" (3EB9-0) 0×0 "저가"
+                    Text "148,100" (3EBA-0) 0×0 "148,100"
+                  Frame "Frame" (3EBB-0) 0×0
+                    Text "상한가" (3EBC-0) 0×0 "상한가"
+                    Text "193,700" (3EBD-0) 0×0 "193,700"
+                Frame "Frame" (3EBE-0) 191×0
+                  Frame "Frame" (3EBF-0) 0×0
+                    Text "고가" (3EBG-0) 0×0 "고가"
+                    Text "152,400" (3EBH-0) 0×0 "152,400"
+                  Frame "Frame" (3EBI-0) 0×0
+                    Text "종가" (3EBJ-0) 0×0 "종가"
+                    Text "집계 전" (3EBK-0) 0×0 "집계 전"
+                  Frame "Frame" (3EBL-0) 0×0
+                    Text "하한가" (3EBM-0) 0×0 "하한가"
+                    Text "104,300" (3EBN-0) 0×0 "104,300"
+            Frame "5단계 호가" (3EBO-0) 402×0
+              Frame "Frame" (3EBP-0) 0×0
+                Text "5단계 호가" (3EBQ-0) 0×0 "5단계 호가"
+                Text "09:42:18 기준" (3EBR-0) 0×0 "09:42:18 기준"
+              Frame "Frame" (3EBS-0) 0×0
+                Frame "Frame" (3EBT-0) 0×20
+                  Text "단계" (3EBU-0) 62×0 "단계"
+                  Text "매도호가" (3EBV-0) 170×0 "매도호가"
+                  Text "매수호가" (3EBW-0) 170×0 "매수호가"
+                Frame "Frame" (3EBX-0) 0×26
+                  Text "1차" (3EBY-0) 62×0 "1차"
+                  Text "150,900" (3EBZ-0) 170×0 "150,900"
+                  Text "150,850" (3EC0-0) 170×0 "150,850"
+                Frame "Frame" (3EC1-0) 0×26
+                  Text "2차" (3EC2-0) 62×0 "2차"
+                  Text "150,950" (3EC3-0) 170×0 "150,950"
+                  Text "150,800" (3EC4-0) 170×0 "150,800"
+                Frame "Frame" (3EC5-0) 0×26
+                  Text "3차" (3EC6-0) 62×0 "3차"
+                  Text "151,000" (3EC7-0) 170×0 "151,000"
+                  Text "150,750" (3EC8-0) 170×0 "150,750"
+                Frame "Frame" (3EC9-0) 0×26
+                  Text "4차" (3ECA-0) 62×0 "4차"
+                  Text "151,050" (3ECB-0) 170×0 "151,050"
+                  Text "150,700" (3ECC-0) 170×0 "150,700"
+                Frame "Frame" (3ECD-0) 0×26
+                  Text "5차" (3ECE-0) 62×0 "5차"
+                  Text "151,100" (3ECF-0) 170×0 "151,100"
+                  Text "150,650" (3ECG-0) 170×0 "150,650"
+          Frame "펼침 하단" (3EMO-0) 0×0
+            Frame "잔량·건수" (3EMP-0) 402×0
+              Frame "Frame" (3EMQ-0) 0×0
+                Text "잔량·건수" (3EMR-0) 0×0 "잔량·건수"
+                Text "매수비율 58.2%" (3EMS-0) 0×0 "매수비율 58.2%"
+              Frame "Frame" (3EMT-0) 0×0
+                Frame "Frame" (3EMU-0) 0×20
+                  Text "구분" (3EMV-0) 100×0 "구분"
+                  Text "매도" (3EMW-0) 151×0 "매도"
+                  Text "매수" (3EMX-0) 151×0 "매수"
+                Frame "Frame" (3EMY-0) 0×30
+                  Text "우선잔량" (3EMZ-0) 100×0 "우선잔량"
+                  Text "1.7만주" (3EN0-0) 151×0 "1.7만주"
+                  Text "2.4만주" (3EN1-0) 151×0 "2.4만주"
+                Frame "Frame" (3EN2-0) 0×30
+                  Text "우선건수" (3EN3-0) 100×0 "우선건수"
+                  Text "298건" (3EN4-0) 151×0 "298건"
+                  Text "412건" (3EN5-0) 151×0 "412건"
+                Frame "Frame" (3EN6-0) 0×30
+                  Text "총잔량" (3EN7-0) 100×0 "총잔량"
+                  Text "8.2만주" (3EN8-0) 151×0 "8.2만주"
+                  Text "11.4만주" (3EN9-0) 151×0 "11.4만주"
+                Frame "Frame" (3ENA-0) 0×30
+                  Text "총건수" (3ENB-0) 100×0 "총건수"
+                  Text "2,410건" (3ENC-0) 151×0 "2,410건"
+                  Text "3,180건" (3END-0) 151×0 "3,180건"
+            Frame "체결·종목 기본" (3ENE-0) 402×0
+              Frame "Frame" (3ENF-0) 0×0
+                Text "체결·종목 기본" (3ENG-0) 0×0 "체결·종목 기본"
+                Text "정규장 진행" (3ENH-0) 0×0 "정규장 진행"
+              Frame "Frame" (3ENI-0) 0×0
+                Frame "Frame" (3ENJ-0) 191×0
+                  Frame "Frame" (3ENK-0) 0×20
+                    Text "체결" (3ENL-0) 0×0 "체결"
+                  Frame "Frame" (3ENM-0) 0×30
+                    Text "체결량" (3ENN-0) 0×0 "체결량"
+                    Text "3,200주" (3ENO-0) 0×0 "3,200주"
+                  Frame "Frame" (3ENP-0) 0×30
+                    Text "체결강도" (3ENQ-0) 0×0 "체결강도"
+                    Text "108.4%" (3ENR-0) 0×0 "108.4%"
+                  Frame "Frame" (3ENS-0) 0×30
+                    Text "예상체결가" (3ENT-0) 0×0 "예상체결가"
+                    Text "해당 없음" (3ENU-0) 0×0 "해당 없음"
+                  Frame "Frame" (3ENV-0) 0×30
+                    Text "예상체결량" (3ENW-0) 0×0 "예상체결량"
+                    Text "해당 없음" (3ENX-0) 0×0 "해당 없음"
+                Frame "Frame" (3ENY-0) 191×0
+                  Frame "Frame" (3ENZ-0) 0×20
+                    Text "종목 기본" (3EO0-0) 0×0 "종목 기본"
+                  Frame "Frame" (3EO1-0) 0×30
+                    Text "시가총액" (3EO2-0) 0×0 "시가총액"
+                    Text "900.6조" (3EO3-0) 0×0 "900.6조"
+                  Frame "Frame" (3EO4-0) 0×30
+                    Text "상장주식수" (3EO5-0) 0×0 "상장주식수"
+                    Text "59.7억주" (3EO6-0) 0×0 "59.7억주"
+                  Frame "Frame" (3EO7-0) 0×30
+                    Text "자본금" (3EO8-0) 0×0 "자본금"
+                    Text "7,780억" (3EO9-0) 0×0 "7,780억"
+                  Frame "Frame" (3EOA-0) 0×30
+                    Text "액면가" (3EOB-0) 0×0 "액면가"
+                    Text "100원" (3EOC-0) 0×0 "100원"
+        Frame "Frame" (3D4P-0) 478×0
+          Frame "Frame" (3D5X-0) 0×0
+            Text "삼성전자 — 선택" (3D5Z-0) 0×0 "삼성전자 — 선택"
+            Text "신호 1건" (3D5Y-0) 0×0 "신호 1건"
+          Frame "Frame" (3D5U-0) 0×34
+            Text "현재가 · 등락" (3D5W-0) 0×0 "현재가 · 등락"
+            Text "150,850 · +1.24%" (3D5V-0) 0×0 "150,850 · +1.24%"
+          Frame "Frame" (3D5R-0) 0×34
+            Text "거래량 · 전일 대비" (3D5T-0) 0×0 "거래량 · 전일 대비"
+            Text "1,420만주 · 1.2배" (3D5S-0) 0×0 "1,420만주 · 1.2배"
+          Frame "Frame" (3D5O-0) 0×34
+            Text "그룹 편입일" (3D5Q-0) 0×0 "그룹 편입일"
+            Text "2026.07.03" (3D5P-0) 0×0 "2026.07.03"
+          Frame "Frame" (3D5J-0) 0×0
+            Frame "Frame" (3D5L-0) 0×0
+              Text "거래대금 급증" (3D5N-0) 0×0 "거래대금 급증"
+              Text "09:38 감지" (3D5M-0) 0×0 "09:38 감지"
+            Text "거래대금 2.14조 · 전일 대비 1…" (3D5K-0) 0×0 "거래대금 2.14조 · 전일 대비 1.6배"
+          Frame "Frame" (3D5E-0) 0×0
+            Frame "Frame" (3D5H-0) 0×42
+              Text "차트 열기" (3D5I-0) 0×0 "차트 열기"
+            Frame "Frame" (3D5F-0) 0×42
+              Text "호가 열기" (3D5G-0) 0×0 "호가 열기"
+          Frame "그룹 요약" (3D4Q-0) 0×0
+            Frame "Frame" (3D5B-0) 0×0
+              Text "그룹 요약" (3D5D-0) 0×0 "그룹 요약"
+              Text "전체 4그룹 · 29종목" (3D5C-0) 0×0 "전체 4그룹 · 29종목"
+            Frame "Frame" (3D56-0) 0×32
+              Frame "Frame" (3D58-0) 0×0
+                Text "단기 관찰" (3D5A-0) 0×0 "단기 관찰"
+                Text "G001" (3D59-0) 0×0 "G001"
+              Text "8종목" (3D57-0) 0×0 "8종목"
+            Frame "Frame" (3D51-0) 0×32
+              Frame "Frame" (3D53-0) 0×0
+                Text "배당주" (3D55-0) 0×0 "배당주"
+                Text "G002" (3D54-0) 0×0 "G002"
+              Text "12종목" (3D52-0) 0×0 "12종목"
+            Frame "Frame" (3D4W-0) 0×32
+              Frame "Frame" (3D4Y-0) 0×0
+                Text "ETF 모음" (3D50-0) 0×0 "ETF 모음"
+                Text "G003" (3D4Z-0) 0×0 "G003"
+              Text "5종목" (3D4X-0) 0×0 "5종목"
+            Frame "ELW 관찰" (3D4R-0) 0×32
+              Frame "Frame" (3D4T-0) 0×0
+                Text "ELW 관찰" (3D4V-0) 0×0 "ELW 관찰"
+                Text "G004" (3D4U-0) 0×0 "G004"
+              Text "4종목" (3D4S-0) 0×0 "4종목"
+      Frame "User Status Footer" (3D4L-0) 0×64
+        Text "● 관심종목 시세 실시간 갱신 중" (3D4N-0) 0×0 "● 관심종목 시세 실시간 갱신 중"
+        Text "마지막 반영" (3D4M-0) 0×0 "그룹 조회 정상 · 09:42:18"

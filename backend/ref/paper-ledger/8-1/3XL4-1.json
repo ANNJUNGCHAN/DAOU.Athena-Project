@@ -1,0 +1,2218 @@
+{
+ "board_id": "3XL4-1",
+ "page": "8-1",
+ "page_name": "백테스트",
+ "name": "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+ "width": 1680.0,
+ "height": 1080.0,
+ "texts": [
+  {
+   "id": "3XQY-1",
+   "text": "셀 — 백테스트 · 출처에서 지도로 — URL 하나가 지도가 되는 동안 사용자는 진행만 본다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "타이틀"
+   ]
+  },
+  {
+   "id": "3XQX-1",
+   "text": "유튜브 · 네이버 블로그 · 논문 PDF 등 출처 URL을 채팅에 붙이면 앱이 읽고 → 규칙을 뽑고 → 지도를 그리고 → 코드를 만들고 → 자체 검사까지 합니다. 진행 띄가 단계마다 사람 말로 바뀝니다. 출처 내용은 자료일 뿐 지시가 아닙니다.",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "타이틀"
+   ]
+  },
+  {
+   "id": "3XQV-1",
+   "text": "ATHENA",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XQN-1",
+   "text": "새 채팅",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XQG-1",
+   "text": "그래프",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XQB-1",
+   "text": "에이전트",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XQ6-1",
+   "text": "플러그인",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Nav 플러그인"
+   ]
+  },
+  {
+   "id": "3XQ1-1",
+   "text": "백테스트",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Nav 백테스트 (active)"
+   ]
+  },
+  {
+   "id": "3XPY-1",
+   "text": "프로젝트",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XPT-1",
+   "text": "아테나",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XPK-1",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XPI-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XPE-1",
+   "text": "최근",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XPD-1",
+   "text": "전체",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XPB-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XP8-1",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XP6-1",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XP3-1",
+   "text": "AN",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XP1-1",
+   "text": "모의-주력",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XR1-1",
+   "text": "백테스트",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3XR2-1",
+   "text": "새 전략 · 출처에서 만드는 중 · 지도 v0",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3XR6-1",
+   "text": "지도",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XR8-1",
+   "text": "폼",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XRA-1",
+   "text": "코드 · 최후의 보루",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XRC-1",
+   "text": "실행",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XRE-1",
+   "text": "출처가 말한 대상",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "대상 한 줄"
+   ]
+  },
+  {
+   "id": "3XRF-1",
+   "text": "KOSPI 대형주 · 일봉 · 3년",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "대상 한 줄"
+   ]
+  },
+  {
+   "id": "3XRH-1",
+   "text": "확인 필요",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "대상 한 줄",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XRJ-1",
+   "text": "지도가 끝나면 채팅이 대상·기간부터 하나씩 묻습니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "대상 한 줄"
+   ]
+  },
+  {
+   "id": "3XRN-1",
+   "text": "출처를 지도로 만드는 중 — 3/5 단계 · 약 20초 남음",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XRP-1",
+   "text": "멈추기",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XRS-1",
+   "text": "✓ 출처 읽음",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XRT-1",
+   "text": "유튜브 자막 14,200자 · 12분",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XRV-1",
+   "text": "✓ 규칙 뽑음",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XRW-1",
+   "text": "진입 2 · 청산 1 · 손절 1",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XRY-1",
+   "text": "● 지도 그리는 중",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XRZ-1",
+   "text": "칸 3/6 · 지금 ③ 사고·파는 순간",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XS1-1",
+   "text": "○ 코드 만들기",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XS2-1",
+   "text": "지도 뒤에서 자동",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XS4-1",
+   "text": "○ 자체 검사",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XS5-1",
+   "text": "가상환경 · 짧은 구간 시험 실행",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "진행 띠",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XS7-1",
+   "text": "이 전략은 이렇게 흐릅니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "지도 헤더"
+   ]
+  },
+  {
+   "id": "3XS8-1",
+   "text": "칸이 하나씩 채워집니다 · 다 그려지면 대화로 고칠 수 있습니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "지도 헤더"
+   ]
+  },
+  {
+   "id": "3XS9-1",
+   "text": "앱이 준비해서 건넵니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중"
+   ]
+  },
+  {
+   "id": "3XSC-1",
+   "text": "앱",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 앱·봉",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XSE-1",
+   "text": "봉 데이터를 모읍니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 앱·봉",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XSF-1",
+   "text": "대상이 정해지면 캐시에서 일봉을 가져옵니다 — 이 칸은 고칠 수 없습니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 앱·봉",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XSG-1",
+   "text": "대상 확인 뒤",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 앱·봉"
+   ]
+  },
+  {
+   "id": "3XSI-1",
+   "text": "여기부터 내 전략 — 출처에서 뽑은 칸들",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XSM-1",
+   "text": "①",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 1 조절할 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XSO-1",
+   "text": "조절할 값을 정합니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 1 조절할 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XSR-1",
+   "text": "lookback 20 10-60",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 1 조절할 값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XST-1",
+   "text": "vol_mult 1.5 1-3",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 1 조절할 값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XSV-1",
+   "text": "stop_pct 5 3-10\"\\n        Text \"값 3개 · 출처 12:40에서\\n\"2…\" (3XSW-1) 0×0 \"값 3개 · 출처 12:40에서\\n\"20일 신고가·거래량 1.5배\"",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 1 조절할 값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XSZ-1",
+   "text": "②",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 2 지표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XT1-1",
+   "text": "가격을 지표로 바꿉니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 2 지표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XT2-1",
+   "text": "20봉 최고가(hh20), 20봉 평균 거래량(vol20)을 만듭니다\"\\n        Text \"hh20 · vol20 — 2열\\n앞 …\" (3XT3-1) 0×0 \"hh20 · vol20 — 2열\\n앞 20봉은 빈칸(워밍업)",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 2 지표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XT6-1",
+   "text": "③",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 3 그리는 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XT9-1",
+   "text": "사고·파는 순간을 찍습니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 3 그리는 중",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XTB-1",
+   "text": "그리는 중",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 3 그리는 중",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XTD-1",
+   "text": "진입",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 3 그리는 중",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XTE-1",
+   "text": "종가가 hh20을 넘고 거래량이 vol20 × vol_mult 이상인 날",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 3 그리는 중",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XTG-1",
+   "text": "청산",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 3 그리는 중",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XTN-1",
+   "text": "④",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 4 빈칸",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XTR-1",
+   "text": "다음",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "노드 4 빈칸"
+   ]
+  },
+  {
+   "id": "3XTT-1",
+   "text": "여기부터 다시 앱 — 전략이 손댈 수 없는 구간",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XTX-1",
+   "text": "사고·파는 가격을 정합니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XTY-1",
+   "text": "신호 다음 봉의 시가 — 미래를 본 것 없이",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XU0-1",
+   "text": "비용을 뗍니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XU1-1",
+   "text": "수수료·거래세·슬리피지",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XU3-1",
+   "text": "성과를 냅니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XU4-1",
+   "text": "지표 6장 · 자산곡선 · 체결 표",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XU6-1",
+   "text": "이 지도 뒤의 코드",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "코드 서랍"
+   ]
+  },
+  {
+   "id": "3XU7-1",
+   "text": "아직 없음 — 지도가 끝나면 자동으로 만들어집니다 · breakout_vol.py 예정",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "코드 서랍"
+   ]
+  },
+  {
+   "id": "3XU9-1",
+   "text": "최후의 보루",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "메인 · 지도 만드는 중",
+    "코드 서랍"
+   ]
+  },
+  {
+   "id": "3XM0-1",
+   "text": "전략에게 묻기",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XLZ-1",
+   "text": "출처가 지도가 됩니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XUE-1",
+   "text": "이거 전략으로 만들어줘 https://youtu.be/8kQz…Vw",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XUI-1",
+   "text": "출처 읽음",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "카드 출처 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XUJ-1",
+   "text": "유튜브 · 12:03 · 자막 14,200자",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "카드 출처 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XUK-1",
+   "text": "\"20일 신고가 돌파 + 거래량 1.5배\" 전략 — 한국 대형주 일봉",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "카드 출처 요약"
+   ]
+  },
+  {
+   "id": "3XUM-1",
+   "text": "· 진입: 종가가 20일 최고가를 넘고 거래량이 20일 평균의 1.5배",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "카드 출처 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XUN-1",
+   "text": "· 청산: 20일 이동평균 아래로 마감",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "카드 출처 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XUO-1",
+   "text": "· 손절: 진입가 −5%",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "카드 출처 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XUP-1",
+   "text": "· 출처는 종목 수·비중을 말하지 않음 → 지도가 끝나면 물어봅니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "카드 출처 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XUQ-1",
+   "text": "출처의 문장은 자료일 뿐입니다 — 앱은 그 안의 지시를 따르지 않습니다",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "카드 출처 요약"
+   ]
+  },
+  {
+   "id": "3XUU-1",
+   "text": "지도를 그리는 중 · 3/5",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "카드 진행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XUW-1",
+   "text": "약 20초",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "카드 진행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XUX-1",
+   "text": "규칙 4개를 칸 6개로 옮기고 있어요. 끝나면 코드를 뒤에서 만들고 짧은 구간으로 자체 검사한 뒤, 대상·기간부터 하나씩 확인받겠습니다.",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "채팅 본문",
+    "카드 진행"
+   ]
+  },
+  {
+   "id": "3XL9-1",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+    "셸",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3XL4-1",
+   "name": "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 1080.0,
+   "depth": 0
+  },
+  {
+   "id": "3XQW-1",
+   "name": "타이틀",
+   "component": "Frame",
+   "w": 1584.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "3XL5-1",
+   "name": "셸",
+   "component": "Frame",
+   "w": 1584.0,
+   "h": 960.0,
+   "depth": 1
+  },
+  {
+   "id": "3XOW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 268.0,
+   "h": 819.0,
+   "depth": 2
+  },
+  {
+   "id": "3XPZ-1",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XQR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 28.0,
+   "depth": 4
+  },
+  {
+   "id": "3XQS-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XQU-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQT-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "3XQO-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XQQ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQP-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "3XQH-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XQL-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQK-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQJ-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQI-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "3XQC-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XQE-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQD-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQ5-1",
+   "name": "Nav 플러그인",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "3XQ7-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XQ9-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQ8-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQ0-1",
+   "name": "Nav 백테스트 (active)",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "3XQ2-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XQ4-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQ3-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XPF-1",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XPX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XPL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 32.0,
+   "depth": 4
+  },
+  {
+   "id": "3XPU-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XPW-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XPV-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XPP-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XPS-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XPR-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XPQ-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XPM-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XPO-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XPN-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XPJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 4
+  },
+  {
+   "id": "3XPG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 29.0,
+   "depth": 4
+  },
+  {
+   "id": "3XPH-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 5
+  },
+  {
+   "id": "3XP4-1",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XPC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 20.0,
+   "depth": 4
+  },
+  {
+   "id": "3XP9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 4
+  },
+  {
+   "id": "3XPA-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 5
+  },
+  {
+   "id": "3XP7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 4
+  },
+  {
+   "id": "3XP5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 4
+  },
+  {
+   "id": "3XOX-1",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XOY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 38.0,
+   "depth": 4
+  },
+  {
+   "id": "3XP2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 5
+  },
+  {
+   "id": "3XOZ-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XP0-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XQZ-1",
+   "name": "메인 · 지도 만드는 중",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "3XR0-1",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XR3-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XR4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XR5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XR7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XR9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XRB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XRD-1",
+   "name": "대상 한 줄",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XRG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XRI-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XRK-1",
+   "name": "진행 띠",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XRL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XRM-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 10.0,
+   "h": 10.0,
+   "depth": 5
+  },
+  {
+   "id": "3XRO-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XRQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XRR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XRU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XRX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XS0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XS3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XS6-1",
+   "name": "지도 헤더",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XSA-1",
+   "name": "노드 앱·봉",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XSB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 26.0,
+   "h": 26.0,
+   "depth": 4
+  },
+  {
+   "id": "3XSD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XSH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XSJ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 1.0,
+   "depth": 4
+  },
+  {
+   "id": "3XSK-1",
+   "name": "노드 1 조절할 값",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XSL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 26.0,
+   "h": 26.0,
+   "depth": 4
+  },
+  {
+   "id": "3XSN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XSP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XSQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XSS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XSU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XSX-1",
+   "name": "노드 2 지표",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XSY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 26.0,
+   "h": 26.0,
+   "depth": 4
+  },
+  {
+   "id": "3XT0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XT4-1",
+   "name": "노드 3 그리는 중",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XT5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 26.0,
+   "h": 26.0,
+   "depth": 4
+  },
+  {
+   "id": "3XT7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XT8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XTA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XTC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XTF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XTH-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 360.0,
+   "h": 12.0,
+   "depth": 6
+  },
+  {
+   "id": "3XTI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 4.0,
+   "depth": 5
+  },
+  {
+   "id": "3XTK-1",
+   "name": "Rectangle\" (3XTJ-1) 0×4\\n        Text \"출처 15:10 읽는 중\\n\"손절 5%…",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XTL-1",
+   "name": "노드 4 빈칸",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XTM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 26.0,
+   "h": 26.0,
+   "depth": 4
+  },
+  {
+   "id": "3XTO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XTP-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 180.0,
+   "h": 14.0,
+   "depth": 5
+  },
+  {
+   "id": "3XTQ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 420.0,
+   "h": 10.0,
+   "depth": 5
+  },
+  {
+   "id": "3XTS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XTU-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 1.0,
+   "depth": 4
+  },
+  {
+   "id": "3XTV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XTW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XTZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XU2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XU5-1",
+   "name": "코드 서랍",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XU8-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XL6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "3XLY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XUB-1",
+   "name": "채팅 본문",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XUC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XUD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XUF-1",
+   "name": "카드 출처 요약",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XUG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XUH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XUL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XUR-1",
+   "name": "카드 진행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XUS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3XUT-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8.0,
+   "h": 8.0,
+   "depth": 6
+  },
+  {
+   "id": "3XUV-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XUY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 4.0,
+   "depth": 5
+  },
+  {
+   "id": "3XUZ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 4.0,
+   "depth": 6
+  },
+  {
+   "id": "3XL7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3XL8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3XLA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 5
+  },
+  {
+   "id": "3XLB-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3XLD-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3XLC-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  }
+ ],
+ "text_multiset": {
+  "셀 — 백테스트 · 출처에서 지도로 — URL 하나가 지도가 되는 동안 사용자는 진행만 본다": 1,
+  "유튜브 · 네이버 블로그 · 논문 PDF 등 출처 URL을 채팅에 붙이면 앱이 읽고 → 규칙을 뽑고 → 지도를 그리고 → 코드를 만들고 → 자체 검사까지 합니다. 진행 띄가 단계마다 사람 말로 바뀝니다. 출처 내용은 자료일 뿐 지시가 아닙니다.": 1,
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "백테스트": 2,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "새 전략 · 출처에서 만드는 중 · 지도 v0": 1,
+  "지도": 1,
+  "폼": 1,
+  "코드 · 최후의 보루": 1,
+  "실행": 1,
+  "출처가 말한 대상": 1,
+  "KOSPI 대형주 · 일봉 · 3년": 1,
+  "확인 필요": 1,
+  "지도가 끝나면 채팅이 대상·기간부터 하나씩 묻습니다": 1,
+  "출처를 지도로 만드는 중 — 3/5 단계 · 약 20초 남음": 1,
+  "멈추기": 1,
+  "✓ 출처 읽음": 1,
+  "유튜브 자막 14,200자 · 12분": 1,
+  "✓ 규칙 뽑음": 1,
+  "진입 2 · 청산 1 · 손절 1": 1,
+  "● 지도 그리는 중": 1,
+  "칸 3/6 · 지금 ③ 사고·파는 순간": 1,
+  "○ 코드 만들기": 1,
+  "지도 뒤에서 자동": 1,
+  "○ 자체 검사": 1,
+  "가상환경 · 짧은 구간 시험 실행": 1,
+  "이 전략은 이렇게 흐릅니다": 1,
+  "칸이 하나씩 채워집니다 · 다 그려지면 대화로 고칠 수 있습니다": 1,
+  "앱이 준비해서 건넵니다": 1,
+  "앱": 1,
+  "봉 데이터를 모읍니다": 1,
+  "대상이 정해지면 캐시에서 일봉을 가져옵니다 — 이 칸은 고칠 수 없습니다": 1,
+  "대상 확인 뒤": 1,
+  "여기부터 내 전략 — 출처에서 뽑은 칸들": 1,
+  "①": 1,
+  "조절할 값을 정합니다": 1,
+  "lookback 20 10-60": 1,
+  "vol_mult 1.5 1-3": 1,
+  "stop_pct 5 3-10\"\\n        Text \"값 3개 · 출처 12:40에서\\n\"2…\" (3XSW-1) 0×0 \"값 3개 · 출처 12:40에서\\n\"20일 신고가·거래량 1.5배\"": 1,
+  "②": 1,
+  "가격을 지표로 바꿉니다": 1,
+  "20봉 최고가(hh20), 20봉 평균 거래량(vol20)을 만듭니다\"\\n        Text \"hh20 · vol20 — 2열\\n앞 …\" (3XT3-1) 0×0 \"hh20 · vol20 — 2열\\n앞 20봉은 빈칸(워밍업)": 1,
+  "③": 1,
+  "사고·파는 순간을 찍습니다": 1,
+  "그리는 중": 1,
+  "진입": 1,
+  "종가가 hh20을 넘고 거래량이 vol20 × vol_mult 이상인 날": 1,
+  "청산": 1,
+  "④": 1,
+  "다음": 1,
+  "여기부터 다시 앱 — 전략이 손댈 수 없는 구간": 1,
+  "사고·파는 가격을 정합니다": 1,
+  "신호 다음 봉의 시가 — 미래를 본 것 없이": 1,
+  "비용을 뗍니다": 1,
+  "수수료·거래세·슬리피지": 1,
+  "성과를 냅니다": 1,
+  "지표 6장 · 자산곡선 · 체결 표": 1,
+  "이 지도 뒤의 코드": 1,
+  "아직 없음 — 지도가 끝나면 자동으로 만들어집니다 · breakout_vol.py 예정": 1,
+  "최후의 보루": 1,
+  "전략에게 묻기": 1,
+  "출처가 지도가 됩니다": 1,
+  "이거 전략으로 만들어줘 https://youtu.be/8kQz…Vw": 1,
+  "출처 읽음": 1,
+  "유튜브 · 12:03 · 자막 14,200자": 1,
+  "\"20일 신고가 돌파 + 거래량 1.5배\" 전략 — 한국 대형주 일봉": 1,
+  "· 진입: 종가가 20일 최고가를 넘고 거래량이 20일 평균의 1.5배": 1,
+  "· 청산: 20일 이동평균 아래로 마감": 1,
+  "· 손절: 진입가 −5%": 1,
+  "· 출처는 종목 수·비중을 말하지 않음 → 지도가 끝나면 물어봅니다": 1,
+  "출처의 문장은 자료일 뿐입니다 — 앱은 그 안의 지시를 따르지 않습니다": 1,
+  "지도를 그리는 중 · 3/5": 1,
+  "약 20초": 1,
+  "규칙 4개를 칸 6개로 옮기고 있어요. 끝나면 코드를 뒤에서 만들고 짧은 구간으로 자체 검사한 뒤, 대상·기간부터 하나씩 확인받겠습니다.": 1,
+  "무엇이든 물어보세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "c58b45ce26db4d5f122ee1c012fe216fe4c33e5c68cb7a7c3d811da6aa774967"
+}

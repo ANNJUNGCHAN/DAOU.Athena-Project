@@ -1,0 +1,4233 @@
+{
+ "board_id": "3JZ3-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+ "width": 1440,
+ "height": 1014,
+ "texts": [
+  {
+   "id": "3K7J-0",
+   "text": "삼성전자 통합 호가",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K7H-0",
+   "text": "실시간",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K7E-0",
+   "text": "005930 · KOSPI · 정규장",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K7C-0",
+   "text": "정규장",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K7A-0",
+   "text": "시간외",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K78-0",
+   "text": "금현물",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K75-0",
+   "text": "5단",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K73-0",
+   "text": "10단",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K6Z-0",
+   "text": "현재가",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 현재가"
+   ]
+  },
+  {
+   "id": "3K6Y-0",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 현재가"
+   ]
+  },
+  {
+   "id": "3K6X-0",
+   "text": "+1,850원 · +1.24%",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 현재가"
+   ]
+  },
+  {
+   "id": "3K6V-0",
+   "text": "최우선 매도호가",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K6U-0",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K6T-0",
+   "text": "3,420주",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K6Q-0",
+   "text": "최우선 매수호가",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K6P-0",
+   "text": "150,840",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K6O-0",
+   "text": "4,180주",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LVC-0",
+   "text": "매수비율",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 매수비율",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LVD-0",
+   "text": "53.0%",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 매수비율",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LVH-0",
+   "text": "10단 총잔량 81,160주 · 09:42:21",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 매수비율"
+   ]
+  },
+  {
+   "id": "3KFX-0",
+   "text": "단계",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3KFY-0",
+   "text": "호가",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3KFZ-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3KG0-0",
+   "text": "직전대비",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3KG1-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3KG2-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3KG3-0",
+   "text": "LP 잔량",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "표 헤더"
+   ]
+  },
+  {
+   "id": "3KG5-0",
+   "text": "매도 10단",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 그룹 헤더"
+   ]
+  },
+  {
+   "id": "3KG6-0",
+   "text": "합계 38,160주 · 직전대비 +2,140",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 그룹 헤더"
+   ]
+  },
+  {
+   "id": "3L2Z-0",
+   "text": "10",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 10"
+   ]
+  },
+  {
+   "id": "3L30-0",
+   "text": "150,940",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 10"
+   ]
+  },
+  {
+   "id": "3L32-0",
+   "text": "2,160",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 10",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L34-0",
+   "text": "+770",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 10"
+   ]
+  },
+  {
+   "id": "3L35-0",
+   "text": "1,510",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 10"
+   ]
+  },
+  {
+   "id": "3L36-0",
+   "text": "650",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 10"
+   ]
+  },
+  {
+   "id": "3L37-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 10"
+   ]
+  },
+  {
+   "id": "3L2P-0",
+   "text": "9",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 9"
+   ]
+  },
+  {
+   "id": "3L2Q-0",
+   "text": "150,930",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 9"
+   ]
+  },
+  {
+   "id": "3L2S-0",
+   "text": "3,840",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 9",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L2U-0",
+   "text": "+640",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 9"
+   ]
+  },
+  {
+   "id": "3L2V-0",
+   "text": "2,690",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 9"
+   ]
+  },
+  {
+   "id": "3L2W-0",
+   "text": "1,150",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 9"
+   ]
+  },
+  {
+   "id": "3L2X-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 9"
+   ]
+  },
+  {
+   "id": "3L2F-0",
+   "text": "8",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 8"
+   ]
+  },
+  {
+   "id": "3L2G-0",
+   "text": "150,920",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 8"
+   ]
+  },
+  {
+   "id": "3L2I-0",
+   "text": "1,760",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 8",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L2K-0",
+   "text": "+150",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 8"
+   ]
+  },
+  {
+   "id": "3L2L-0",
+   "text": "1,230",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 8"
+   ]
+  },
+  {
+   "id": "3L2M-0",
+   "text": "530",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 8"
+   ]
+  },
+  {
+   "id": "3L2N-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 8"
+   ]
+  },
+  {
+   "id": "3L25-0",
+   "text": "7",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 7"
+   ]
+  },
+  {
+   "id": "3L26-0",
+   "text": "150,910",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 7"
+   ]
+  },
+  {
+   "id": "3L28-0",
+   "text": "4,250",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 7",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L2A-0",
+   "text": "−220",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 7"
+   ]
+  },
+  {
+   "id": "3L2B-0",
+   "text": "2,980",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 7"
+   ]
+  },
+  {
+   "id": "3L2C-0",
+   "text": "1,270",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 7"
+   ]
+  },
+  {
+   "id": "3L2D-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 7"
+   ]
+  },
+  {
+   "id": "3L1V-0",
+   "text": "6",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 6"
+   ]
+  },
+  {
+   "id": "3L1W-0",
+   "text": "150,900",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 6"
+   ]
+  },
+  {
+   "id": "3L1Y-0",
+   "text": "5,130",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 6",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L20-0",
+   "text": "+410",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 6"
+   ]
+  },
+  {
+   "id": "3L21-0",
+   "text": "3,590",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 6"
+   ]
+  },
+  {
+   "id": "3L22-0",
+   "text": "1,540",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 6"
+   ]
+  },
+  {
+   "id": "3L23-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 6"
+   ]
+  },
+  {
+   "id": "3L0T-0",
+   "text": "5",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 5"
+   ]
+  },
+  {
+   "id": "3L0U-0",
+   "text": "150,890",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 5"
+   ]
+  },
+  {
+   "id": "3L0W-0",
+   "text": "2,940",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 5",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L0Y-0",
+   "text": "−60",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 5"
+   ]
+  },
+  {
+   "id": "3L0Z-0",
+   "text": "2,060",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 5"
+   ]
+  },
+  {
+   "id": "3L10-0",
+   "text": "880",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 5"
+   ]
+  },
+  {
+   "id": "3L11-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 5"
+   ]
+  },
+  {
+   "id": "3L0J-0",
+   "text": "4",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 4"
+   ]
+  },
+  {
+   "id": "3L0K-0",
+   "text": "150,880",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 4"
+   ]
+  },
+  {
+   "id": "3L0M-0",
+   "text": "3,610",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L0O-0",
+   "text": "+90",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 4"
+   ]
+  },
+  {
+   "id": "3L0P-0",
+   "text": "2,530",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 4"
+   ]
+  },
+  {
+   "id": "3L0Q-0",
+   "text": "1,080",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 4"
+   ]
+  },
+  {
+   "id": "3L0R-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 4"
+   ]
+  },
+  {
+   "id": "3L09-0",
+   "text": "3",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 3"
+   ]
+  },
+  {
+   "id": "3L0A-0",
+   "text": "150,870",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 3"
+   ]
+  },
+  {
+   "id": "3L0C-0",
+   "text": "6,280",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L0E-0",
+   "text": "+320",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 3"
+   ]
+  },
+  {
+   "id": "3L0F-0",
+   "text": "4,400",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 3"
+   ]
+  },
+  {
+   "id": "3L0G-0",
+   "text": "1,880",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 3"
+   ]
+  },
+  {
+   "id": "3L0H-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 3"
+   ]
+  },
+  {
+   "id": "3KZZ-0",
+   "text": "2",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 2"
+   ]
+  },
+  {
+   "id": "3L00-0",
+   "text": "150,860",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 2"
+   ]
+  },
+  {
+   "id": "3L02-0",
+   "text": "4,770",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L04-0",
+   "text": "−140",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 2"
+   ]
+  },
+  {
+   "id": "3L05-0",
+   "text": "3,340",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 2"
+   ]
+  },
+  {
+   "id": "3L06-0",
+   "text": "1,430",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 2"
+   ]
+  },
+  {
+   "id": "3L07-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 2"
+   ]
+  },
+  {
+   "id": "3KZP-0",
+   "text": "1",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 1"
+   ]
+  },
+  {
+   "id": "3KZQ-0",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 1"
+   ]
+  },
+  {
+   "id": "3KZS-0",
+   "text": "3,420",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KZU-0",
+   "text": "+180",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 1"
+   ]
+  },
+  {
+   "id": "3KZV-0",
+   "text": "2,390",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 1"
+   ]
+  },
+  {
+   "id": "3KZW-0",
+   "text": "1,030",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 1"
+   ]
+  },
+  {
+   "id": "3KZX-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 1"
+   ]
+  },
+  {
+   "id": "3L39-0",
+   "text": "합계",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 합계"
+   ]
+  },
+  {
+   "id": "3L3B-0",
+   "text": "38,160",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 합계"
+   ]
+  },
+  {
+   "id": "3L3C-0",
+   "text": "+2,140",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 합계"
+   ]
+  },
+  {
+   "id": "3L3D-0",
+   "text": "26,720",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 합계"
+   ]
+  },
+  {
+   "id": "3L3E-0",
+   "text": "11,440",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 합계"
+   ]
+  },
+  {
+   "id": "3L3F-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매도 합계"
+   ]
+  },
+  {
+   "id": "3L76-0",
+   "text": "현재가",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "현재가 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L77-0",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "현재가 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L78-0",
+   "text": "▲ 1,850 · +1.24%",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "현재가 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L79-0",
+   "text": "체결강도 112.6",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "현재가 밴드"
+   ]
+  },
+  {
+   "id": "3L7B-0",
+   "text": "매수 10단",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 그룹 헤더"
+   ]
+  },
+  {
+   "id": "3L7C-0",
+   "text": "합계 43,000주 · 직전대비 −1,380",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 그룹 헤더"
+   ]
+  },
+  {
+   "id": "3L7E-0",
+   "text": "1",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 1"
+   ]
+  },
+  {
+   "id": "3L7F-0",
+   "text": "150,840",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 1"
+   ]
+  },
+  {
+   "id": "3L7H-0",
+   "text": "4,180",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L7J-0",
+   "text": "−260",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 1"
+   ]
+  },
+  {
+   "id": "3L7K-0",
+   "text": "2,930",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 1"
+   ]
+  },
+  {
+   "id": "3L7L-0",
+   "text": "1,250",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 1"
+   ]
+  },
+  {
+   "id": "3L7M-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 1"
+   ]
+  },
+  {
+   "id": "3L7O-0",
+   "text": "2",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 2"
+   ]
+  },
+  {
+   "id": "3L7P-0",
+   "text": "150,830",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 2"
+   ]
+  },
+  {
+   "id": "3L7R-0",
+   "text": "5,760",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L7T-0",
+   "text": "+340",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 2"
+   ]
+  },
+  {
+   "id": "3L7U-0",
+   "text": "4,030",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 2"
+   ]
+  },
+  {
+   "id": "3L7V-0",
+   "text": "1,730",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 2"
+   ]
+  },
+  {
+   "id": "3L7W-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 2"
+   ]
+  },
+  {
+   "id": "3L7Y-0",
+   "text": "3",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 3"
+   ]
+  },
+  {
+   "id": "3L7Z-0",
+   "text": "150,820",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 3"
+   ]
+  },
+  {
+   "id": "3L81-0",
+   "text": "3,230",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L83-0",
+   "text": "−180",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 3"
+   ]
+  },
+  {
+   "id": "3L84-0",
+   "text": "2,260",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 3"
+   ]
+  },
+  {
+   "id": "3L85-0",
+   "text": "970",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 3"
+   ]
+  },
+  {
+   "id": "3L86-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 3"
+   ]
+  },
+  {
+   "id": "3L88-0",
+   "text": "4",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 4"
+   ]
+  },
+  {
+   "id": "3L89-0",
+   "text": "150,810",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 4"
+   ]
+  },
+  {
+   "id": "3L8B-0",
+   "text": "6,540",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L8D-0",
+   "text": "−520",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 4"
+   ]
+  },
+  {
+   "id": "3L8E-0",
+   "text": "4,580",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 4"
+   ]
+  },
+  {
+   "id": "3L8F-0",
+   "text": "1,960",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 4"
+   ]
+  },
+  {
+   "id": "3L8G-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 4"
+   ]
+  },
+  {
+   "id": "3L8I-0",
+   "text": "5",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 5"
+   ]
+  },
+  {
+   "id": "3L8J-0",
+   "text": "150,800",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 5"
+   ]
+  },
+  {
+   "id": "3L8L-0",
+   "text": "4,920",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 5",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L8N-0",
+   "text": "+210",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 5"
+   ]
+  },
+  {
+   "id": "3L8O-0",
+   "text": "3,440",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 5"
+   ]
+  },
+  {
+   "id": "3L8P-0",
+   "text": "1,480",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 5"
+   ]
+  },
+  {
+   "id": "3L8Q-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 5"
+   ]
+  },
+  {
+   "id": "3LAW-0",
+   "text": "6",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 6"
+   ]
+  },
+  {
+   "id": "3LAX-0",
+   "text": "150,790",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 6"
+   ]
+  },
+  {
+   "id": "3LAZ-0",
+   "text": "2,860",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 6",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LB1-0",
+   "text": "−90",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 6"
+   ]
+  },
+  {
+   "id": "3LB2-0",
+   "text": "2,000",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 6"
+   ]
+  },
+  {
+   "id": "3LB3-0",
+   "text": "860",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 6"
+   ]
+  },
+  {
+   "id": "3LB4-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 6"
+   ]
+  },
+  {
+   "id": "3LB6-0",
+   "text": "7",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 7"
+   ]
+  },
+  {
+   "id": "3LB7-0",
+   "text": "150,780",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 7"
+   ]
+  },
+  {
+   "id": "3LB9-0",
+   "text": "5,310",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 7",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LBB-0",
+   "text": "−410",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 7"
+   ]
+  },
+  {
+   "id": "3LBC-0",
+   "text": "3,720",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 7"
+   ]
+  },
+  {
+   "id": "3LBD-0",
+   "text": "1,590",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 7"
+   ]
+  },
+  {
+   "id": "3LBE-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 7"
+   ]
+  },
+  {
+   "id": "3LBG-0",
+   "text": "8",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 8"
+   ]
+  },
+  {
+   "id": "3LBH-0",
+   "text": "150,770",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 8"
+   ]
+  },
+  {
+   "id": "3LBJ-0",
+   "text": "3,670",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 8",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LBL-0",
+   "text": "+160",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 8"
+   ]
+  },
+  {
+   "id": "3LBM-0",
+   "text": "2,570",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 8"
+   ]
+  },
+  {
+   "id": "3LBN-0",
+   "text": "1,100",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 8"
+   ]
+  },
+  {
+   "id": "3LBO-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 8"
+   ]
+  },
+  {
+   "id": "3LBQ-0",
+   "text": "9",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 9"
+   ]
+  },
+  {
+   "id": "3LBR-0",
+   "text": "150,760",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 9"
+   ]
+  },
+  {
+   "id": "3LBT-0",
+   "text": "2,420",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 9",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LBV-0",
+   "text": "−330",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 9"
+   ]
+  },
+  {
+   "id": "3LBW-0",
+   "text": "1,690",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 9"
+   ]
+  },
+  {
+   "id": "3LBX-0",
+   "text": "730",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 9"
+   ]
+  },
+  {
+   "id": "3LBY-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 9"
+   ]
+  },
+  {
+   "id": "3LC0-0",
+   "text": "10",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 10"
+   ]
+  },
+  {
+   "id": "3LC1-0",
+   "text": "150,750",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 10"
+   ]
+  },
+  {
+   "id": "3LC3-0",
+   "text": "4,110",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 10",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LC5-0",
+   "text": "−300",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 10"
+   ]
+  },
+  {
+   "id": "3LC6-0",
+   "text": "2,880",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 10"
+   ]
+  },
+  {
+   "id": "3LC7-0",
+   "text": "1,230",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 10"
+   ]
+  },
+  {
+   "id": "3LC8-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 10"
+   ]
+  },
+  {
+   "id": "3LCA-0",
+   "text": "합계",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 합계"
+   ]
+  },
+  {
+   "id": "3LCC-0",
+   "text": "43,000",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 합계"
+   ]
+  },
+  {
+   "id": "3LCD-0",
+   "text": "−1,380",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 합계"
+   ]
+  },
+  {
+   "id": "3LCE-0",
+   "text": "30,100",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 합계"
+   ]
+  },
+  {
+   "id": "3LCF-0",
+   "text": "12,900",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 합계"
+   ]
+  },
+  {
+   "id": "3LCG-0",
+   "text": "—",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Step Detail Table",
+    "매수 합계"
+   ]
+  },
+  {
+   "id": "3U82-0",
+   "text": "호가 잔량",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "호가 잔량 · 펼침 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U83-0",
+   "text": "▾",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "호가 잔량 · 펼침 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U84-0",
+   "text": "실시간",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "호가 잔량 · 펼침 활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U87-0",
+   "text": "매도",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "호가 잔량 · 펼침 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U89-0",
+   "text": "38,160주",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "호가 잔량 · 펼침 활성",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U8A-0",
+   "text": "직전대비 +2,140",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "호가 잔량 · 펼침 활성",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U8C-0",
+   "text": "매수",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "호가 잔량 · 펼침 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U8E-0",
+   "text": "43,000주",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "호가 잔량 · 펼침 활성",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U8F-0",
+   "text": "직전대비 −1,380",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "호가 잔량 · 펼침 활성",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U8H-0",
+   "text": "총 잔량",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "호가 잔량 · 펼침 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U8I-0",
+   "text": "81,160주",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "호가 잔량 · 펼침 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBM-0",
+   "text": "잔량 균형",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "잔량 균형"
+   ]
+  },
+  {
+   "id": "3UBP-0",
+   "text": "순매수 잔량",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBQ-0",
+   "text": "+4,840주",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBS-0",
+   "text": "순매도 잔량",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBT-0",
+   "text": "−4,840주",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBV-0",
+   "text": "매도비율",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBW-0",
+   "text": "47.0%",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBY-0",
+   "text": "매수비율",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UBZ-0",
+   "text": "53.0%",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UC1-0",
+   "text": "전일 거래량 대비 예상체결",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UC2-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UC5-0",
+   "text": "거래소별",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별"
+   ]
+  },
+  {
+   "id": "3UC8-0",
+   "text": "거래소",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UC9-0",
+   "text": "중간가",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCA-0",
+   "text": "대비",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCB-0",
+   "text": "매도 총잔량",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCC-0",
+   "text": "매수 총잔량",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCE-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCF-0",
+   "text": "150,845",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCH-0",
+   "text": "▲ 1,845",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCI-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCK-0",
+   "text": "26,720",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCL-0",
+   "text": "직전대비 +1,500",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCN-0",
+   "text": "30,100",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCO-0",
+   "text": "직전대비 −1,240",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCQ-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCR-0",
+   "text": "150,840",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCT-0",
+   "text": "▲ 1,840",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCU-0",
+   "text": "+1.23%",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCW-0",
+   "text": "11,440",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCX-0",
+   "text": "직전대비 +640",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UCZ-0",
+   "text": "12,900",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UD0-0",
+   "text": "직전대비 −140",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "거래소별",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UD3-0",
+   "text": "LP 잔량",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "LP 잔량 · 영값 묶음"
+   ]
+  },
+  {
+   "id": "3UD6-0",
+   "text": "유동성공급자·매도 잔량·매수 잔량 — 해당 없음 3항목",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "LP 잔량 · 영값 묶음",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UD7-0",
+   "text": "▸",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Detail Rail",
+    "LP 잔량 · 영값 묶음",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LV1-0",
+   "text": "장중 실시간 · 갱신 중",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LV6-0",
+   "text": "상한 193,700",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LV7-0",
+   "text": "하한 104,300",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LV8-0",
+   "text": "기준가 149,000",
+   "path": [
+    "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Order Book Root · 단계별 낱값",
+    "Order Book Surface",
+    "Order Book Footer",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3JZ3-0",
+   "name": "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1014,
+   "depth": 0
+  },
+  {
+   "id": "3JZ4-0",
+   "name": "Order Book Root · 단계별 낱값",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1014,
+   "depth": 1
+  },
+  {
+   "id": "3JZ5-0",
+   "name": "Order Book Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 934,
+   "depth": 2
+  },
+  {
+   "id": "3K70-0",
+   "name": "Order Book Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "3K7D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3K7F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3K7G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3K7I-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "3K71-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3K7B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3K79-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3K77-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3K76-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 24,
+   "depth": 5
+  },
+  {
+   "id": "3K74-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3K72-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3K65-0",
+   "name": "Best Quote Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "3K6W-0",
+   "name": "KPI 현재가",
+   "component": "Frame",
+   "w": 310,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3K6R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 280,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3K6S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3K6M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 280,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3K6N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3LVA-0",
+   "name": "KPI 매수비율",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3LVB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3LVE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "3LVF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3LVG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3JZF-0",
+   "name": "Order Book Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 648,
+   "depth": 3
+  },
+  {
+   "id": "3KFV-0",
+   "name": "Step Detail Table",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3KFW-0",
+   "name": "표 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 5
+  },
+  {
+   "id": "3KG4-0",
+   "name": "매도 그룹 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "3L2Y-0",
+   "name": "매도 10",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L31-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L33-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L2O-0",
+   "name": "매도 9",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L2R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L2T-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L2E-0",
+   "name": "매도 8",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L2H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L2J-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L24-0",
+   "name": "매도 7",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L27-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L29-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L1U-0",
+   "name": "매도 6",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L1X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L1Z-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L0S-0",
+   "name": "매도 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L0V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L0X-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L0I-0",
+   "name": "매도 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L0L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L0N-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L08-0",
+   "name": "매도 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L0B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L0D-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3KZY-0",
+   "name": "매도 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L01-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L03-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3KZO-0",
+   "name": "매도 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3KZR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3KZT-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L38-0",
+   "name": "매도 합계",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "3L3A-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 148,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L74-0",
+   "name": "현재가 밴드",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "3L75-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L7A-0",
+   "name": "매수 그룹 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "3L7D-0",
+   "name": "매수 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L7G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L7I-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L7N-0",
+   "name": "매수 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L7Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L7S-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L7X-0",
+   "name": "매수 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L80-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L82-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L87-0",
+   "name": "매수 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L8A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L8C-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3L8H-0",
+   "name": "매수 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3L8K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L8M-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3LAV-0",
+   "name": "매수 6",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3LAY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LB0-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3LB5-0",
+   "name": "매수 7",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3LB8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LBA-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3LBF-0",
+   "name": "매수 8",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3LBI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LBK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3LBP-0",
+   "name": "매수 9",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3LBS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LBU-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3LBZ-0",
+   "name": "매수 10",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "3LC2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LC4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3LC9-0",
+   "name": "매수 합계",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "3LCB-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 148,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LSJ-0",
+   "name": "Detail Rail",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3U7Z-0",
+   "name": "호가 잔량 · 펼침 활성",
+   "component": "Frame",
+   "w": 0,
+   "h": 160,
+   "depth": 5
+  },
+  {
+   "id": "3U80-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "3U81-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U85-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3U86-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "3U88-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3U8B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "3U8D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3U8G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3UBL-0",
+   "name": "잔량 균형",
+   "component": "Frame",
+   "w": 0,
+   "h": 224,
+   "depth": 5
+  },
+  {
+   "id": "3UBN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UBO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3UBR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3UBU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3UBX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3UC0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3UC4-0",
+   "name": "거래소별",
+   "component": "Frame",
+   "w": 0,
+   "h": 166,
+   "depth": 5
+  },
+  {
+   "id": "3UC6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UC7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "3UCD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "3UCG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3UCJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3UCM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3UCP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "3UCS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3UCV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3UCY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3UD2-0",
+   "name": "LP 잔량 · 영값 묶음",
+   "component": "Frame",
+   "w": 0,
+   "h": 98,
+   "depth": 5
+  },
+  {
+   "id": "3UD4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UD5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3LUY-0",
+   "name": "Order Book Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "3LUZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3LV0-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 5
+  },
+  {
+   "id": "3LV5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "삼성전자 통합 호가": 1,
+  "실시간": 2,
+  "005930 · KOSPI · 정규장": 1,
+  "정규장": 1,
+  "시간외": 1,
+  "금현물": 1,
+  "5단": 1,
+  "10단": 1,
+  "현재가": 2,
+  "150,850": 4,
+  "+1,850원 · +1.24%": 1,
+  "최우선 매도호가": 1,
+  "3,420주": 1,
+  "최우선 매수호가": 1,
+  "150,840": 3,
+  "4,180주": 1,
+  "매수비율": 2,
+  "53.0%": 2,
+  "10단 총잔량 81,160주 · 09:42:21": 1,
+  "단계": 1,
+  "호가": 1,
+  "잔량": 1,
+  "직전대비": 1,
+  "KRX": 2,
+  "NXT": 2,
+  "LP 잔량": 2,
+  "매도 10단": 1,
+  "합계 38,160주 · 직전대비 +2,140": 1,
+  "10": 2,
+  "150,940": 1,
+  "2,160": 1,
+  "+770": 1,
+  "1,510": 1,
+  "650": 1,
+  "—": 22,
+  "9": 2,
+  "150,930": 1,
+  "3,840": 1,
+  "+640": 1,
+  "2,690": 1,
+  "1,150": 1,
+  "8": 2,
+  "150,920": 1,
+  "1,760": 1,
+  "+150": 1,
+  "1,230": 2,
+  "530": 1,
+  "7": 2,
+  "150,910": 1,
+  "4,250": 1,
+  "−220": 1,
+  "2,980": 1,
+  "1,270": 1,
+  "6": 2,
+  "150,900": 1,
+  "5,130": 1,
+  "+410": 1,
+  "3,590": 1,
+  "1,540": 1,
+  "5": 2,
+  "150,890": 1,
+  "2,940": 1,
+  "−60": 1,
+  "2,060": 1,
+  "880": 1,
+  "4": 2,
+  "150,880": 1,
+  "3,610": 1,
+  "+90": 1,
+  "2,530": 1,
+  "1,080": 1,
+  "3": 2,
+  "150,870": 1,
+  "6,280": 1,
+  "+320": 1,
+  "4,400": 1,
+  "1,880": 1,
+  "2": 2,
+  "150,860": 1,
+  "4,770": 1,
+  "−140": 1,
+  "3,340": 1,
+  "1,430": 1,
+  "1": 2,
+  "3,420": 1,
+  "+180": 1,
+  "2,390": 1,
+  "1,030": 1,
+  "합계": 2,
+  "38,160": 1,
+  "+2,140": 1,
+  "26,720": 2,
+  "11,440": 2,
+  "▲ 1,850 · +1.24%": 1,
+  "체결강도 112.6": 1,
+  "매수 10단": 1,
+  "합계 43,000주 · 직전대비 −1,380": 1,
+  "4,180": 1,
+  "−260": 1,
+  "2,930": 1,
+  "1,250": 1,
+  "150,830": 1,
+  "5,760": 1,
+  "+340": 1,
+  "4,030": 1,
+  "1,730": 1,
+  "150,820": 1,
+  "3,230": 1,
+  "−180": 1,
+  "2,260": 1,
+  "970": 1,
+  "150,810": 1,
+  "6,540": 1,
+  "−520": 1,
+  "4,580": 1,
+  "1,960": 1,
+  "150,800": 1,
+  "4,920": 1,
+  "+210": 1,
+  "3,440": 1,
+  "1,480": 1,
+  "150,790": 1,
+  "2,860": 1,
+  "−90": 1,
+  "2,000": 1,
+  "860": 1,
+  "150,780": 1,
+  "5,310": 1,
+  "−410": 1,
+  "3,720": 1,
+  "1,590": 1,
+  "150,770": 1,
+  "3,670": 1,
+  "+160": 1,
+  "2,570": 1,
+  "1,100": 1,
+  "150,760": 1,
+  "2,420": 1,
+  "−330": 1,
+  "1,690": 1,
+  "730": 1,
+  "150,750": 1,
+  "4,110": 1,
+  "−300": 1,
+  "2,880": 1,
+  "43,000": 1,
+  "−1,380": 1,
+  "30,100": 2,
+  "12,900": 2,
+  "호가 잔량": 1,
+  "▾": 1,
+  "매도": 1,
+  "38,160주": 1,
+  "직전대비 +2,140": 1,
+  "매수": 1,
+  "43,000주": 1,
+  "직전대비 −1,380": 1,
+  "총 잔량": 1,
+  "81,160주": 1,
+  "잔량 균형": 1,
+  "순매수 잔량": 1,
+  "+4,840주": 1,
+  "순매도 잔량": 1,
+  "−4,840주": 1,
+  "매도비율": 1,
+  "47.0%": 1,
+  "전일 거래량 대비 예상체결": 1,
+  "해당 없음": 1,
+  "거래소별": 1,
+  "거래소": 1,
+  "중간가": 1,
+  "대비": 1,
+  "매도 총잔량": 1,
+  "매수 총잔량": 1,
+  "150,845": 1,
+  "▲ 1,845": 1,
+  "+1.24%": 1,
+  "직전대비 +1,500": 1,
+  "직전대비 −1,240": 1,
+  "▲ 1,840": 1,
+  "+1.23%": 1,
+  "직전대비 +640": 1,
+  "직전대비 −140": 1,
+  "유동성공급자·매도 잔량·매수 잔량 — 해당 없음 3항목": 1,
+  "▸": 1,
+  "장중 실시간 · 갱신 중": 1,
+  "상한 193,700": 1,
+  "하한 104,300": 1,
+  "기준가 149,000": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "adf7e9e3c6cfdc6b5da5b9896708ab9e67865b5387a025cd084e725fce6b32f8"
+}

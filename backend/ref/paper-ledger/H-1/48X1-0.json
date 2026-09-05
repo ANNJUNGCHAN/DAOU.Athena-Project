@@ -1,0 +1,92 @@
+{
+ "board_id": "48X1-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48X3-0",
+   "text": "원본 보드: CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+   "path": [
+    "note/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48X5-0",
+   "text": "가져온 요소: 주문가능금액 · 취소수량 · 모주문번호",
+   "path": [
+    "note/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48X7-0",
+   "text": "문법: order_confirm",
+   "path": [
+    "note/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48X9-0",
+   "text": "접은 개수: 항목 21개",
+   "path": [
+    "note/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48X1-0",
+   "name": "note/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48X2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48X4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48X6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48X8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소": 1,
+  "가져온 요소: 주문가능금액 · 취소수량 · 모주문번호": 1,
+  "문법: order_confirm": 1,
+  "접은 개수: 항목 21개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "ab694c371d48829ea386ae811f89be2c86bb4d37a2115dd63eb7e042f961fdf4"
+}

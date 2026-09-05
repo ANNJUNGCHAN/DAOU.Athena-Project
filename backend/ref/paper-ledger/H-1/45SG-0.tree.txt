@@ -1,0 +1,19 @@
+Frame "template/stream" (45SG-0) 360×420
+  Frame "Header" (45U0-0) 0×0
+    Frame "Meta row" (45U1-0) 0×0
+      Text "Eyebrow" (45U2-0) 0×0 "스트림형"
+      Text "As of" (45U3-0) 0×0 "기준 LIVE"
+    Text "Title" (45U4-0) 0×0 "시장 속보"
+  Frame "Body" (45UU-0) 0×0
+    Frame "Stream item 1" (45ZI-0) 0×0
+      Text "코스피 장중 상승폭 확대" (45ZJ-0) 0×0 "코스피 장중 상승폭 확대"
+      Frame "Frame" (45ZK-0) 0×0
+        Text "시장 속보" (45ZL-0) 0×0 "시장 속보"
+        Text "09:42" (45ZM-0) 0×0 "09:42"
+    Frame "Stream item 2" (45ZO-0) 0×0
+      Text "외국인 순매수 규모 증가" (45ZP-0) 0×0 "외국인 순매수 규모 증가"
+      Frame "Frame" (45ZQ-0) 0×0
+        Text "시장 속보" (45ZR-0) 0×0 "시장 속보"
+        Text "09:40" (45ZS-0) 0×0 "09:40"
+  Frame "Fold note" (4616-0) 0×0
+    Text "외 18건 접힘 · 원본에서 확인" (4617-0) 0×0 "외 18건 접힘 · 원본에서 확인"

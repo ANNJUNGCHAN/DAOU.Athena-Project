@@ -1,0 +1,342 @@
+{
+ "board_id": "47CV-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47DT-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47DS-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47DQ-0",
+   "text": "ELW 순위",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Header"
+   ]
+  },
+  {
+   "id": "47DO-0",
+   "text": "등락률",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47DN-0",
+   "text": "+12.16%",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47DL-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47DK-0",
+   "text": "98.6%",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47DI-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47DH-0",
+   "text": "2건",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47DE-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47DD-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47DC-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47DA-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47D9-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47D7-0",
+   "text": "12건",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47D6-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47D4-0",
+   "text": "ELW잔량순위",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47D3-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47D1-0",
+   "text": "전체 3,482건 · 20건 표시",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47D0-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47CX-0",
+   "text": "스칼라 2개, 행 18개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47CV-0",
+   "name": "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47DP-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47DR-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47CY-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47DF-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47DM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47DJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47DG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47DB-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47D5-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47D8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47CZ-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47D2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47CW-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "ELW 순위": 1,
+  "등락률": 1,
+  "+12.16%": 1,
+  "변화": 1,
+  "98.6%": 1,
+  "핵심": 1,
+  "2건": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "수량": 1,
+  "12건": 1,
+  "ELW잔량순위": 1,
+  "전체 3,482건 · 20건 표시": 1,
+  "스칼라 2개, 행 18개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "d4d8e15be6aa9ddb3dcf0321ac8ecfce01671eda916083c701c1e8be05f7c8a5"
+}

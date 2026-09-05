@@ -1,0 +1,853 @@
+{
+ "board_id": "F9-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "14 · 설정 — 계좌 (AT-ST-001)",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "I7-0",
+   "text": "설정",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "I6-0",
+   "text": "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "I4-0",
+   "text": "화면",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item is-selected"
+   ]
+  },
+  {
+   "id": "I2-0",
+   "text": "계좌",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "I1-0",
+   "text": "2개",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "HZ-0",
+   "text": "MCP 서버",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "HY-0",
+   "text": "4개",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "HW-0",
+   "text": "모델",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "HU-0",
+   "text": "성향・이력",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "IB-0",
+   "text": "계좌",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "IC-0",
+   "text": "2개 등록",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "IF-0",
+   "text": "+ 계좌 등록",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-head",
+    "uk-settings-actions",
+    "uk-btn-ghost"
+   ]
+  },
+  {
+   "id": "IM-0",
+   "text": "별칭",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "IN-0",
+   "text": "앱키",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "IO-0",
+   "text": "주문 API",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "IP-0",
+   "text": "연결 상태",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "IQ-0",
+   "text": "마지막 검증",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "IU-0",
+   "text": "모의-주력",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "IW-0",
+   "text": "활성",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "IX-0",
+   "text": "저장됨 · 36자",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 활성"
+   ]
+  },
+  {
+   "id": "J0-0",
+   "text": "ON",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "J3-0",
+   "text": "정상",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "J4-0",
+   "text": "—",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 활성"
+   ]
+  },
+  {
+   "id": "J6-0",
+   "text": "×",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "J9-0",
+   "text": "모의-테스트",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 비활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "JB-0",
+   "text": "비활성",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 비활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "JC-0",
+   "text": "저장됨 · 36자",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 비활성"
+   ]
+  },
+  {
+   "id": "JF-0",
+   "text": "OFF",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 비활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "JI-0",
+   "text": "검증 필요",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 비활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "JJ-0",
+   "text": "—",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 비활성"
+   ]
+  },
+  {
+   "id": "JL-0",
+   "text": "×",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-row · 비활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "JN-0",
+   "text": "앱키·시크릿은 목록에 표시되지 않는다. 저장 위치는 OS 자격증명 저장소다.",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-settings-note"
+   ]
+  },
+  {
+   "id": "JO-0",
+   "text": "비활성 계좌를 누르면 활성으로 전환된다. 활성 계좌는 항상 하나다.",
+   "path": [
+    "14 · 설정 — 계좌 (AT-ST-001)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-settings-note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "F9-0",
+   "name": "14 · 설정 — 계좌 (AT-ST-001)",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "FA-0",
+   "name": "Shell 창 · 설정 모드 (#settings)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "I5-0",
+   "name": "settings-head",
+   "component": "Frame",
+   "w": 1478,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "FK-0",
+   "name": "settings-body",
+   "component": "Frame",
+   "w": 1478,
+   "h": 662,
+   "depth": 2
+  },
+  {
+   "id": "HS-0",
+   "name": "settings-nav",
+   "component": "Frame",
+   "w": 236,
+   "h": 662,
+   "depth": 3
+  },
+  {
+   "id": "I3-0",
+   "name": "nav-item is-selected",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "I0-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "HX-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "HV-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "HT-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "FL-0",
+   "name": "settings-grid",
+   "component": "Frame",
+   "w": 1226,
+   "h": 662,
+   "depth": 3
+  },
+  {
+   "id": "I8-0",
+   "name": "카드 · 계좌 (.card.accounts)",
+   "component": "Frame",
+   "w": 1226,
+   "h": 662,
+   "depth": 4
+  },
+  {
+   "id": "I9-0",
+   "name": "card-head",
+   "component": "Frame",
+   "w": 1224,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "IA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 91,
+   "h": 19,
+   "depth": 6
+  },
+  {
+   "id": "ID-0",
+   "name": "uk-settings-actions",
+   "component": "Frame",
+   "w": 128,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "IE-0",
+   "name": "uk-btn-ghost",
+   "component": "Frame",
+   "w": 90,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "IG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "IH-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "II-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "IJ-0",
+   "name": "card-body · 내용 초과 시 세로 스크롤",
+   "component": "Frame",
+   "w": 1224,
+   "h": 616,
+   "depth": 5
+  },
+  {
+   "id": "IL-0",
+   "name": "uk-col-head",
+   "component": "Frame",
+   "w": 1224,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "IR-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 28,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "IS-0",
+   "name": "uk-row · 활성",
+   "component": "Frame",
+   "w": 1224,
+   "h": 49,
+   "depth": 6
+  },
+  {
+   "id": "IT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "IV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 40,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "IY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "IZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 33,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "J1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "J2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "J5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 32,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "J7-0",
+   "name": "uk-row · 비활성",
+   "component": "Frame",
+   "w": 1224,
+   "h": 49,
+   "depth": 6
+  },
+  {
+   "id": "J8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "JA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "JD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "JE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "JG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "JH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 64,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "JK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 28,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "JM-0",
+   "name": "uk-settings-note",
+   "component": "Frame",
+   "w": 1224,
+   "h": 52,
+   "depth": 6
+  },
+  {
+   "id": "FJ-0",
+   "name": "타이틀바 (.titlebar)",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "FB-0",
+   "name": "창 제어 (.win-controls · 최대화 비활성)",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "FH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "FI-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "FF-0",
+   "name": "disabled",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "FG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "FC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "FD-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "FE-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "설정": 1,
+  "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기": 1,
+  "화면": 1,
+  "계좌": 2,
+  "2개": 1,
+  "MCP 서버": 1,
+  "4개": 1,
+  "모델": 1,
+  "성향・이력": 1,
+  "2개 등록": 1,
+  "+ 계좌 등록": 1,
+  "별칭": 1,
+  "앱키": 1,
+  "주문 API": 1,
+  "연결 상태": 1,
+  "마지막 검증": 1,
+  "모의-주력": 1,
+  "활성": 1,
+  "저장됨 · 36자": 2,
+  "ON": 1,
+  "정상": 1,
+  "—": 2,
+  "×": 2,
+  "모의-테스트": 1,
+  "비활성": 1,
+  "OFF": 1,
+  "검증 필요": 1,
+  "앱키·시크릿은 목록에 표시되지 않는다. 저장 위치는 OS 자격증명 저장소다.": 1,
+  "비활성 계좌를 누르면 활성으로 전환된다. 활성 계좌는 항상 하나다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "6afdf4d7ac18adad467fc3225935ff676b139ee7cec6c4b6f8b27e8decd0d7a3"
+}

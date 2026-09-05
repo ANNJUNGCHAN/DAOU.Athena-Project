@@ -1,0 +1,602 @@
+{
+ "board_id": "2NXS-2",
+ "page": "B-2",
+ "page_name": "플러그인",
+ "name": "06 · 플러그인 — 상태 모음 (6상태)",
+ "width": 1680,
+ "height": 830,
+ "texts": [
+  {
+   "id": "2NXU-2",
+   "text": "플러그인 — 비어 있음·실패·재시작·제안",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "board-head"
+   ]
+  },
+  {
+   "id": "2NXV-2",
+   "text": "화면이 비었을 때 이유를 뭉뚱그리지 않고, 실패했을 때 조용히 넘어가지 않는다. 여섯 상태 모두 사람이 다음에 할 일을 문장 안에 담는다.",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "board-head"
+   ]
+  },
+  {
+   "id": "2NXZ-2",
+   "text": "1 · 아직 아무것도 설치하지 않은 허브",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-1-empty"
+   ]
+  },
+  {
+   "id": "2NY0-2",
+   "text": "검색어가 없을 때는 “검색과 일치하는 …이 없습니다”라고 쓰지 않는다 — 검색어를 지우면 나올 것처럼 읽히기 때문이다.",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-1-empty"
+   ]
+  },
+  {
+   "id": "2NY2-2",
+   "text": "설치한 플러그인이 없습니다 · 아래 추천에서 설치합니다",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-1-empty",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NY4-2",
+   "text": "추천할 플러그인이 없습니다 · 마켓플레이스를 켜거나 서버를 직접 추가합니다",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-1-empty",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NY7-2",
+   "text": "2 · 기능 허용 화면에서 probe가 실패했을 때",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-2-probe-failure"
+   ]
+  },
+  {
+   "id": "2NY8-2",
+   "text": "이유를 숨기고 토글만 비워 두면 “허용했는데 안 된다”가 된다. 배너에 이유를 적고 재시도를 같은 줄에 둔다.",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-2-probe-failure"
+   ]
+  },
+  {
+   "id": "2NYA-2",
+   "text": "연결을 확인하지 못했습니다",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-2-probe-failure",
+    "error-banner"
+   ]
+  },
+  {
+   "id": "2NYC-2",
+   "text": "다시 확인",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-2-probe-failure",
+    "error-banner",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NYE-2",
+   "text": "노출 기능을 아직 확인하지 못했습니다 · 다시 확인을 누릅니다",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-2-probe-failure",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NYH-2",
+   "text": "3 · 켜기·끄기 제안이 승인 뒤 실패했을 때",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-3-toggle-revert"
+   ]
+  },
+  {
+   "id": "2NYI-2",
+   "text": "토글은 제안 카드를 만들 뿐이다. 승인 뒤 실패하면 스위치는 그대로 두고 이유를 같은 행 아래에 붙인다.",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-3-toggle-revert"
+   ]
+  },
+  {
+   "id": "2NYK-2",
+   "text": "웹 문서 읽기",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-3-toggle-revert",
+    "row"
+   ]
+  },
+  {
+   "id": "2NYL-2",
+   "text": "연결 확인됨",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-3-toggle-revert",
+    "row"
+   ]
+  },
+  {
+   "id": "2NYN-2",
+   "text": "삭제",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-3-toggle-revert",
+    "row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NYR-2",
+   "text": "승인 철회에 실패했습니다",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-3-toggle-revert",
+    "row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NYU-2",
+   "text": "4 · 이번 세션에서 레지스트리를 바꿨을 때",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-4-restart"
+   ]
+  },
+  {
+   "id": "2NYV-2",
+   "text": "게이트웨이는 기동 시점에 레지스트리를 읽는다. 이번에 설치·승인·삭제한 서버는 진행 중인 대화에 아직 없다 — 화면에서 먼저 말한다.",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-4-restart"
+   ]
+  },
+  {
+   "id": "2NYX-2",
+   "text": "이번에 바꾼 서버는 Athena를 다시 시작한 뒤의 대화부터 적용됩니다. 진행 중인 대화에는 아직 반영되지 않았습니다.",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-4-restart",
+    "restart-notice"
+   ]
+  },
+  {
+   "id": "2NYY-2",
+   "text": "허브 상단, 설명문 바로 아래에 붙는다. 바꾼 것이 없으면 나타나지 않는다.",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-4-restart"
+   ]
+  },
+  {
+   "id": "3ZIP-0",
+   "text": "5 · 승인을 아직 누르지 않았을 때",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-5-proposal-pending"
+   ]
+  },
+  {
+   "id": "3ZIQ-0",
+   "text": "카드는 살아 있고 두 버튼 모두 누를 수 있다. 화면은 아직 아무것도 바꾸지 않았다.",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-5-proposal-pending"
+   ]
+  },
+  {
+   "id": "3ZIT-0",
+   "text": "제안 대기",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-5-proposal-pending",
+    "card-pending",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZIU-0",
+   "text": "웹 문서 읽기 설치",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-5-proposal-pending",
+    "card-pending"
+   ]
+  },
+  {
+   "id": "3ZIW-0",
+   "text": "거부",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-5-proposal-pending",
+    "card-pending",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZIY-0",
+   "text": "승인",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-5-proposal-pending",
+    "card-pending",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZJ1-0",
+   "text": "6 · 거부를 눌렀을 때",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-6-rejected"
+   ]
+  },
+  {
+   "id": "3ZJ2-0",
+   "text": "카드는 잠기고 두 버튼 모두 눌리지 않는다. 레지스트리는 손대지 않았다.",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-6-rejected"
+   ]
+  },
+  {
+   "id": "3ZJ5-0",
+   "text": "거부됨",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-6-rejected",
+    "card-rejected",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZJ6-0",
+   "text": "웹 문서 읽기 설치",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-6-rejected",
+    "card-rejected"
+   ]
+  },
+  {
+   "id": "3ZJ8-0",
+   "text": "거부",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-6-rejected",
+    "card-rejected",
+    "btn-disabled"
+   ]
+  },
+  {
+   "id": "3ZJA-0",
+   "text": "승인",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-6-rejected",
+    "card-rejected",
+    "btn-disabled"
+   ]
+  },
+  {
+   "id": "3ZJB-0",
+   "text": "그대로 뒀습니다",
+   "path": [
+    "06 · 플러그인 — 상태 모음 (6상태)",
+    "grid",
+    "state-6-rejected"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2NXS-2",
+   "name": "06 · 플러그인 — 상태 모음 (6상태)",
+   "component": "Frame",
+   "w": 1680,
+   "h": 830,
+   "depth": 0
+  },
+  {
+   "id": "2NXT-2",
+   "name": "board-head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "2NXW-2",
+   "name": "grid",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "2NXY-2",
+   "name": "state-1-empty",
+   "component": "Frame",
+   "w": 762,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2NY1-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2NY3-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2NY6-2",
+   "name": "state-2-probe-failure",
+   "component": "Frame",
+   "w": 762,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2NY9-2",
+   "name": "error-banner",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2NYB-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2NYD-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2NYG-2",
+   "name": "state-3-toggle-revert",
+   "component": "Frame",
+   "w": 762,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2NYJ-2",
+   "name": "row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2NYM-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2NYO-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "2NYP-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "2NYQ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2NYT-2",
+   "name": "state-4-restart",
+   "component": "Frame",
+   "w": 762,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2NYW-2",
+   "name": "restart-notice",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZIO-0",
+   "name": "state-5-proposal-pending",
+   "component": "Frame",
+   "w": 762,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZIR-0",
+   "name": "card-pending",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZIS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZIV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZIX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZJ0-0",
+   "name": "state-6-rejected",
+   "component": "Frame",
+   "w": 762,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZJ3-0",
+   "name": "card-rejected",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZJ4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZJ7-0",
+   "name": "btn-disabled",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZJ9-0",
+   "name": "btn-disabled",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "플러그인 — 비어 있음·실패·재시작·제안": 1,
+  "화면이 비었을 때 이유를 뭉뚱그리지 않고, 실패했을 때 조용히 넘어가지 않는다. 여섯 상태 모두 사람이 다음에 할 일을 문장 안에 담는다.": 1,
+  "1 · 아직 아무것도 설치하지 않은 허브": 1,
+  "검색어가 없을 때는 “검색과 일치하는 …이 없습니다”라고 쓰지 않는다 — 검색어를 지우면 나올 것처럼 읽히기 때문이다.": 1,
+  "설치한 플러그인이 없습니다 · 아래 추천에서 설치합니다": 1,
+  "추천할 플러그인이 없습니다 · 마켓플레이스를 켜거나 서버를 직접 추가합니다": 1,
+  "2 · 기능 허용 화면에서 probe가 실패했을 때": 1,
+  "이유를 숨기고 토글만 비워 두면 “허용했는데 안 된다”가 된다. 배너에 이유를 적고 재시도를 같은 줄에 둔다.": 1,
+  "연결을 확인하지 못했습니다": 1,
+  "다시 확인": 1,
+  "노출 기능을 아직 확인하지 못했습니다 · 다시 확인을 누릅니다": 1,
+  "3 · 켜기·끄기 제안이 승인 뒤 실패했을 때": 1,
+  "토글은 제안 카드를 만들 뿐이다. 승인 뒤 실패하면 스위치는 그대로 두고 이유를 같은 행 아래에 붙인다.": 1,
+  "웹 문서 읽기": 1,
+  "연결 확인됨": 1,
+  "삭제": 1,
+  "승인 철회에 실패했습니다": 1,
+  "4 · 이번 세션에서 레지스트리를 바꿨을 때": 1,
+  "게이트웨이는 기동 시점에 레지스트리를 읽는다. 이번에 설치·승인·삭제한 서버는 진행 중인 대화에 아직 없다 — 화면에서 먼저 말한다.": 1,
+  "이번에 바꾼 서버는 Athena를 다시 시작한 뒤의 대화부터 적용됩니다. 진행 중인 대화에는 아직 반영되지 않았습니다.": 1,
+  "허브 상단, 설명문 바로 아래에 붙는다. 바꾼 것이 없으면 나타나지 않는다.": 1,
+  "5 · 승인을 아직 누르지 않았을 때": 1,
+  "카드는 살아 있고 두 버튼 모두 누를 수 있다. 화면은 아직 아무것도 바꾸지 않았다.": 1,
+  "제안 대기": 1,
+  "웹 문서 읽기 설치": 2,
+  "거부": 2,
+  "승인": 2,
+  "6 · 거부를 눌렀을 때": 1,
+  "카드는 잠기고 두 버튼 모두 눌리지 않는다. 레지스트리는 손대지 않았다.": 1,
+  "거부됨": 1,
+  "그대로 뒀습니다": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "712aaf62302e2a6f4b6fa19a1417798b3aaf67953c34087c48174799360d6191"
+}

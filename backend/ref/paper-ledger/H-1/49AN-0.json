@@ -1,0 +1,92 @@
+{
+ "board_id": "49AN-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-X · 투자자 12주체",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "49AP-0",
+   "text": "원본 보드: CC-03 / R01-X · 투자자 12주체",
+   "path": [
+    "note/CC-03 / R01-X · 투자자 12주체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49AR-0",
+   "text": "가져온 요소: 현재가 · 전일대비 · 누적거래대금 · 일자 · 기관계",
+   "path": [
+    "note/CC-03 / R01-X · 투자자 12주체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49AT-0",
+   "text": "문법: facts",
+   "path": [
+    "note/CC-03 / R01-X · 투자자 12주체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49AV-0",
+   "text": "접은 개수: 항목 149개",
+   "path": [
+    "note/CC-03 / R01-X · 투자자 12주체",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "49AN-0",
+   "name": "note/CC-03 / R01-X · 투자자 12주체",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "49AO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49AQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49AS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49AU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-X · 투자자 12주체": 1,
+  "가져온 요소: 현재가 · 전일대비 · 누적거래대금 · 일자 · 기관계": 1,
+  "문법: facts": 1,
+  "접은 개수: 항목 149개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "9f373aa6b6ed489973f4fe92398db7ba248555d7482cf093ecfa19590db1118f"
+}

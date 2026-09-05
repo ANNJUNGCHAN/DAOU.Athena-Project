@@ -1,0 +1,547 @@
+Frame "CC-03 / R01-T4-7 · 순위 — 고저 PER" (30ZW-0) 1440×1120
+  Frame "Instrument Root · 현재시세" (30ZX-0) 1440×960
+    Frame "Instrument Card Surface" (30ZY-0) 1360×1040
+      Frame "Instrument Header" (3153-0) 0×96
+        Frame "Frame" (315J-0) 0×0
+          Frame "Frame" (315O-0) 0×0
+            Text "주식 순위" (315S-0) 0×0 "주식 순위"
+            Text "KRX 전체 · PER 최고·최저" (315R-0) 0×0 "KRX 전체 · PER 최고·최저"
+            Frame "Frame" (315P-0) 0×0
+              Text "조회 스냅샷" (315Q-0) 0×0 "조회 스냅샷"
+          Frame "Frame" (315K-0) 0×0
+            Text "최저 3.1배 · 최고 214.0배" (315N-0) 0×0 "최저 3.1배 · 최고 214.0배"
+            Text "중앙값 14.2배" (315M-0) 0×0 "중앙값 14.2배"
+            Text "09:42:18 조회" (315L-0) 0×0 "09:42:18 조회"
+        Frame "Frame" (3154-0) 0×0
+          Frame "Frame" (315H-0) 0×0
+            Text "현재시세" (315I-0) 0×0 "현재시세"
+          Frame "Frame" (315F-0) 0×0
+            Text "차트" (315G-0) 0×0 "차트"
+          Frame "Frame" (315D-0) 0×0
+            Text "기업정보" (315E-0) 0×0 "기업정보"
+          Frame "Frame" (315B-0) 0×0
+            Text "ETF" (315C-0) 0×0 "ETF"
+          Frame "Frame" (3159-0) 0×0
+            Text "ELW" (315A-0) 0×0 "ELW"
+          Frame "Frame" (3157-0) 0×0
+            Text "금현물" (3158-0) 0×0 "금현물"
+          Frame "Frame" (3155-0) 0×0
+            Text "순위" (3156-0) 0×0 "순위"
+      Frame "Quote and Valuation Strip" (314J-0) 0×96
+        Frame "Frame" (3150-0) 0×78
+          Text "정렬 기준" (3152-0) 0×0 "정렬 기준"
+          Text "PER 낮은 순" (3151-0) 0×0 "PER 낮은 순"
+        Frame "Frame" (314W-0) 190×78
+          Text "최저 PER" (314Z-0) 0×0 "최저 PER"
+          Text "3.1배" (314Y-0) 0×0 "3.1배"
+          Text "1위 종목" (314X-0) 0×0 "1위 종목"
+        Frame "Frame" (314S-0) 150×78
+          Text "최고 PER" (314V-0) 0×0 "최고 PER"
+          Text "214.0배" (314U-0) 0×0 "214.0배"
+          Text "최고 구간" (314T-0) 0×0 "최고 구간"
+        Frame "Frame" (314O-0) 150×78
+          Text "중앙값" (314R-0) 0×0 "중앙값"
+          Text "14.2배" (314Q-0) 0×0 "14.2배"
+          Text "전체 종목" (314P-0) 0×0 "전체 종목"
+        Frame "Frame" (314K-0) 150×78
+          Text "집계 기준" (314N-0) 0×0 "집계 기준"
+          Text "흑자" (314M-0) 0×0 "흑자"
+          Text "적자 종목 제외" (314L-0) 0×0 "적자 종목 제외"
+      Frame "Chart Workspace" (3102-0) 0×848
+        Frame "Quote Detail Mount" (311F-0) 1000×848
+          Frame "Frame" (313N-0) 0×0
+            Frame "Frame" (313Z-0) 0×0
+              Frame "Frame" (3148-0) 0×0
+                Frame "Frame" (314H-0) 0×0
+                  Text "신고저가" (314I-0) 0×0 "신고저가"
+                Frame "Frame" (314F-0) 0×0
+                  Text "상하한가" (314G-0) 0×0 "상하한가"
+                Frame "Frame" (314D-0) 0×0
+                  Text "고저가근접" (314E-0) 0×0 "고저가근접"
+                Frame "Frame" (314B-0) 0×0
+                  Text "가격급등락" (314C-0) 0×0 "가격급등락"
+                Frame "Frame" (3149-0) 0×0
+                  Text "거래량갱신" (314A-0) 0×0 "거래량갱신"
+              Frame "Frame" (3140-0) 0×0
+                Text "범위" (3147-0) 0×0 "범위"
+                Frame "Frame" (3145-0) 0×0
+                  Text "주식" (3146-0) 0×0 "주식"
+                Frame "Frame" (3143-0) 0×0
+                  Text "ETF" (3144-0) 0×0 "ETF"
+                Frame "Frame" (3141-0) 0×0
+                  Text "ELW" (3142-0) 0×0 "ELW"
+            Frame "Frame" (313O-0) 0×0
+              Frame "Frame" (313X-0) 0×0
+                Text "매물대집중" (313Y-0) 0×0 "매물대집중"
+              Frame "Frame" (313V-0) 0×0
+                Text "고저 PER" (313W-0) 0×0 "고저 PER"
+              Frame "Frame" (313T-0) 0×0
+                Text "시가대비 등락" (313U-0) 0×0 "시가대비 등락"
+              Frame "Frame" (313R-0) 0×0
+                Text "VI 발동" (313S-0) 0×0 "VI 발동"
+              Frame "Frame" (313P-0) 0×0
+                Text "당일·전일 체결량" (313Q-0) 0×0 "당일·전일 체결량"
+              Text "목록 상태" (3R7S-0) 0×0 "전체 814건 · 19건 표시"
+          Frame "순위 표" (3R7U-0) 943×0
+            Frame "열 머리" (3R7V-0) 0×30
+              Text "순위" (3R7W-0) 40×0 "순위"
+              Text "종목" (3R7X-0) 0×0 "종목"
+              Text "현재가" (3R7Y-0) 120×0 "현재가"
+              Text "PER · 업종" (3R7Z-0) 88×0 "PER · 업종"
+              Text "구분" (3R80-0) 56×0 "구분"
+              Text "고가 · 저가" (3R81-0) 120×0 "고가 · 저가"
+              Text "거래량 · 거래대금" (3R82-0) 108×0 "거래량 · 거래대금"
+              Text "체결강도" (3R83-0) 68×0 "체결강도"
+            Frame "1 한미반도체" (3R84-0) 0×36
+              Text "1" (3R85-0) 40×0 "1"
+              Frame "Frame" (3R86-0) 0×0
+                Text "한미반도체" (3R87-0) 0×0 "한미반도체"
+                Text "042700 · 코스피" (3R88-0) 0×0 "042700 · 코스피"
+              Frame "Frame" (3R89-0) 120×0
+                Text "197,400" (3R8A-0) 0×0 "197,400"
+                Text "+7,900 · +4.18%" (3R8B-0) 0×0 "+7,900 · +4.18%"
+              Frame "Frame" (3R8C-0) 88×0
+                Text "3.1배" (3R8D-0) 0×0 "3.1배"
+                Text "업종 11.2배" (3R8E-0) 0×0 "업종 11.2배"
+              Frame "Frame" (3R8F-0) 56×0
+                Frame "Frame" (3R8G-0) 0×0
+                  Text "최저" (3R8H-0) 0×0 "최저"
+              Frame "Frame" (3R8I-0) 120×0
+                Text "고가 198,000" (3R8J-0) 0×0 "고가 198,000"
+                Text "저가 190,200" (3R8K-0) 0×0 "저가 190,200"
+              Frame "Frame" (3R8L-0) 108×0
+                Text "320만주" (3R8M-0) 0×0 "320만주"
+                Text "6,317억" (3R8N-0) 0×0 "6,317억"
+              Text "158%" (3R8O-0) 68×0 "158%"
+            Frame "2 HD현대일렉트릭" (3R8P-0) 0×36
+              Text "2" (3R8Q-0) 40×0 "2"
+              Frame "Frame" (3R8R-0) 0×0
+                Text "HD현대일렉트릭" (3R8S-0) 0×0 "HD현대일렉트릭"
+                Text "267260 · 코스피" (3R8T-0) 0×0 "267260 · 코스피"
+              Frame "Frame" (3R8U-0) 120×0
+                Text "412,500" (3R8V-0) 0×0 "412,500"
+                Text "+11,500 · +2.86%" (3R8W-0) 0×0 "+11,500 · +2.86%"
+              Frame "Frame" (3R8X-0) 88×0
+                Text "3.8배" (3R8Y-0) 0×0 "3.8배"
+                Text "업종 9.6배" (3R8Z-0) 0×0 "업종 9.6배"
+              Frame "Frame" (3R90-0) 56×0
+                Frame "Frame" (3R91-0) 0×0
+                  Text "최저" (3R92-0) 0×0 "최저"
+              Frame "Frame" (3R93-0) 120×0
+                Text "고가 413,000" (3R94-0) 0×0 "고가 413,000"
+                Text "저가 400,500" (3R95-0) 0×0 "저가 400,500"
+              Frame "Frame" (3R96-0) 108×0
+                Text "80만주" (3R97-0) 0×0 "80만주"
+                Text "3,300억" (3R98-0) 0×0 "3,300억"
+              Text "141%" (3R99-0) 68×0 "141%"
+            Frame "3 알테오젠" (3R9A-0) 0×36
+              Text "3" (3R9B-0) 40×0 "3"
+              Frame "Frame" (3R9C-0) 0×0
+                Text "알테오젠" (3R9D-0) 0×0 "알테오젠"
+                Text "196170 · 코스닥" (3R9E-0) 0×0 "196170 · 코스닥"
+              Frame "Frame" (3R9F-0) 120×0
+                Text "391,000" (3R9G-0) 0×0 "391,000"
+                Text "+88,200 · +29.12%" (3R9H-0) 0×0 "+88,200 · +29.12%"
+              Frame "Frame" (3R9I-0) 88×0
+                Text "4.2배" (3R9J-0) 0×0 "4.2배"
+                Text "업종 18.4배" (3R9K-0) 0×0 "업종 18.4배"
+              Frame "Frame" (3R9L-0) 56×0
+                Frame "Frame" (3R9M-0) 0×0
+                  Text "최저" (3R9N-0) 0×0 "최저"
+              Frame "Frame" (3R9O-0) 120×0
+                Text "고가 392,500" (3R9P-0) 0×0 "고가 392,500"
+                Text "저가 380,200" (3R9Q-0) 0×0 "저가 380,200"
+              Frame "Frame" (3R9R-0) 108×0
+                Text "110만주" (3R9S-0) 0×0 "110만주"
+                Text "4,301억" (3R9T-0) 0×0 "4,301억"
+              Text "147%" (3R9U-0) 68×0 "147%"
+            Frame "4 삼양식품" (3R9V-0) 0×36
+              Text "4" (3R9W-0) 40×0 "4"
+              Frame "Frame" (3R9X-0) 0×0
+                Text "삼양식품" (3R9Y-0) 0×0 "삼양식품"
+                Text "003230 · 코스피" (3R9Z-0) 0×0 "003230 · 코스피"
+              Frame "Frame" (3RA0-0) 120×0
+                Text "745,000" (3RA1-0) 0×0 "745,000"
+                Text "+167,600 · +29.03%" (3RA2-0) 0×0 "+167,600 · +29.03%"
+              Frame "Frame" (3RA3-0) 88×0
+                Text "4.9배" (3RA4-0) 0×0 "4.9배"
+                Text "업종 12.0배" (3RA5-0) 0×0 "업종 12.0배"
+              Frame "Frame" (3RA6-0) 56×0
+                Frame "Frame" (3RA7-0) 0×0
+                  Text "최저" (3RA8-0) 0×0 "최저"
+              Frame "Frame" (3RA9-0) 120×0
+                Text "고가 748,000" (3RAA-0) 0×0 "고가 748,000"
+                Text "저가 728,000" (3RAB-0) 0×0 "저가 728,000"
+              Frame "Frame" (3RAC-0) 108×0
+                Text "20만주" (3RAD-0) 0×0 "20만주"
+                Text "1,490억" (3RAE-0) 0×0 "1,490억"
+              Text "129%" (3RAF-0) 68×0 "129%"
+            Frame "5 현대로템" (3RAG-0) 0×36
+              Text "5" (3RAH-0) 40×0 "5"
+              Frame "Frame" (3RAI-0) 0×0
+                Text "현대로템" (3RAJ-0) 0×0 "현대로템"
+                Text "064350 · 코스피" (3RAK-0) 0×0 "064350 · 코스피"
+              Frame "Frame" (3RAL-0) 120×0
+                Text "128,900" (3RAM-0) 0×0 "128,900"
+                Text "+29,000 · +29.03%" (3RAN-0) 0×0 "+29,000 · +29.03%"
+              Frame "Frame" (3RAO-0) 88×0
+                Text "5.4배" (3RAP-0) 0×0 "5.4배"
+                Text "업종 8.7배" (3RAQ-0) 0×0 "업종 8.7배"
+              Frame "Frame" (3RAR-0) 56×0
+                Frame "Frame" (3RAS-0) 0×0
+                  Text "최저" (3RAT-0) 0×0 "최저"
+              Frame "Frame" (3RAU-0) 120×0
+                Text "고가 129,300" (3RAV-0) 0×0 "고가 129,300"
+                Text "저가 126,000" (3RAW-0) 0×0 "저가 126,000"
+              Frame "Frame" (3RAX-0) 108×0
+                Text "240만주" (3RAY-0) 0×0 "240만주"
+                Text "3,094억" (3RAZ-0) 0×0 "3,094억"
+              Text "133%" (3RB0-0) 68×0 "133%"
+            Frame "6 LS일렉트릭" (3RB1-0) 0×36
+              Text "6" (3RB2-0) 40×0 "6"
+              Frame "Frame" (3RB3-0) 0×0
+                Text "LS일렉트릭" (3RB4-0) 0×0 "LS일렉트릭"
+                Text "010120 · 코스피" (3RB5-0) 0×0 "010120 · 코스피"
+              Frame "Frame" (3RB6-0) 120×0
+                Text "289,500" (3RB7-0) 0×0 "289,500"
+                Text "+4,000 · +1.40%" (3RB8-0) 0×0 "+4,000 · +1.40%"
+              Frame "Frame" (3RB9-0) 88×0
+                Text "5.9배" (3RBA-0) 0×0 "5.9배"
+                Text "업종 14.5배" (3RBB-0) 0×0 "업종 14.5배"
+              Frame "Frame" (3RBC-0) 56×0
+                Frame "Frame" (3RBD-0) 0×0
+                  Text "최저" (3RBE-0) 0×0 "최저"
+              Frame "Frame" (3RBF-0) 120×0
+                Text "고가 291,000" (3RBG-0) 0×0 "고가 291,000"
+                Text "저가 284,500" (3RBH-0) 0×0 "저가 284,500"
+              Frame "Frame" (3RBI-0) 108×0
+                Text "60만주" (3RBJ-0) 0×0 "60만주"
+                Text "1,737억" (3RBK-0) 0×0 "1,737억"
+              Text "118%" (3RBL-0) 68×0 "118%"
+            Frame "7 기아" (3RBM-0) 0×36
+              Text "7" (3RBN-0) 40×0 "7"
+              Frame "Frame" (3RBO-0) 0×0
+                Text "기아" (3RBP-0) 0×0 "기아"
+                Text "000270 · 코스피" (3RBQ-0) 0×0 "000270 · 코스피"
+              Frame "Frame" (3RBR-0) 120×0
+                Text "99,400" (3RBS-0) 0×0 "99,400"
+                Text "−700 · −0.70%" (3RBT-0) 0×0 "−700 · −0.70%"
+              Frame "Frame" (3RBU-0) 88×0
+                Text "5.9배" (3RBV-0) 0×0 "5.9배"
+                Text "업종 8.4배" (3RBW-0) 0×0 "업종 8.4배"
+              Frame "Frame" (3RBX-0) 56×0
+                Frame "Frame" (3RBY-0) 0×0
+                  Text "최저" (3RBZ-0) 0×0 "최저"
+              Frame "Frame" (3RC0-0) 120×0
+                Text "고가 100,300" (3RC1-0) 0×0 "고가 100,300"
+                Text "저가 99,100" (3RC2-0) 0×0 "저가 99,100"
+              Frame "Frame" (3RC3-0) 108×0
+                Text "130만주" (3RC4-0) 0×0 "130만주"
+                Text "1,296억" (3RC5-0) 0×0 "1,296억"
+              Text "94%" (3RC6-0) 68×0 "94%"
+            Frame "8 동진쎄미켐" (3RC7-0) 0×36
+              Text "8" (3RC8-0) 40×0 "8"
+              Frame "Frame" (3RC9-0) 0×0
+                Text "동진쎄미켐" (3RCA-0) 0×0 "동진쎄미켐"
+                Text "005290 · 코스닥" (3RCB-0) 0×0 "005290 · 코스닥"
+              Frame "Frame" (3RCC-0) 120×0
+                Text "42,150" (3RCD-0) 0×0 "42,150"
+                Text "+9,530 · +29.22%" (3RCE-0) 0×0 "+9,530 · +29.22%"
+              Frame "Frame" (3RCF-0) 88×0
+                Text "6.8배" (3RCG-0) 0×0 "6.8배"
+                Text "업종 11.2배" (3RCH-0) 0×0 "업종 11.2배"
+              Frame "Frame" (3RCI-0) 56×0
+                Frame "Frame" (3RCJ-0) 0×0
+                  Text "최저" (3RCK-0) 0×0 "최저"
+              Frame "Frame" (3RCL-0) 120×0
+                Text "고가 42,150" (3RCM-0) 0×0 "고가 42,150"
+                Text "저가 40,000" (3RCN-0) 0×0 "저가 40,000"
+              Frame "Frame" (3RCO-0) 108×0
+                Text "214만주" (3RCP-0) 0×0 "214만주"
+                Text "902억" (3RCQ-0) 0×0 "902억"
+              Text "159%" (3RCR-0) 68×0 "159%"
+            Frame "9 대주전자재료" (3RCS-0) 0×36
+              Text "9" (3RCT-0) 40×0 "9"
+              Frame "Frame" (3RCU-0) 0×0
+                Text "대주전자재료" (3RCV-0) 0×0 "대주전자재료"
+                Text "078600 · 코스닥" (3RCW-0) 0×0 "078600 · 코스닥"
+              Frame "Frame" (3RCX-0) 120×0
+                Text "118,700" (3RCY-0) 0×0 "118,700"
+                Text "+27,120 · +29.61%" (3RCZ-0) 0×0 "+27,120 · +29.61%"
+              Frame "Frame" (3RD0-0) 88×0
+                Text "7.2배" (3RD1-0) 0×0 "7.2배"
+                Text "업종 11.2배" (3RD2-0) 0×0 "업종 11.2배"
+              Frame "Frame" (3RD3-0) 56×0
+                Frame "Frame" (3RD4-0) 0×0
+                  Text "최저" (3RD5-0) 0×0 "최저"
+              Frame "Frame" (3RD6-0) 120×0
+                Text "고가 118,700" (3RD7-0) 0×0 "고가 118,700"
+                Text "저가 112,000" (3RD8-0) 0×0 "저가 112,000"
+              Frame "Frame" (3RD9-0) 108×0
+                Text "58만주" (3RDA-0) 0×0 "58만주"
+                Text "688억" (3RDB-0) 0×0 "688억"
+              Text "168%" (3RDC-0) 68×0 "168%"
+            Frame "10 주성엔지니어링" (3RDD-0) 0×36
+              Text "10" (3RDE-0) 40×0 "10"
+              Frame "Frame" (3RDF-0) 0×0
+                Text "주성엔지니어링" (3RDG-0) 0×0 "주성엔지니어링"
+                Text "036930 · 코스닥" (3RDH-0) 0×0 "036930 · 코스닥"
+              Frame "Frame" (3RDI-0) 120×0
+                Text "38,700" (3RDJ-0) 0×0 "38,700"
+                Text "+8,730 · +29.13%" (3RDK-0) 0×0 "+8,730 · +29.13%"
+              Frame "Frame" (3RDL-0) 88×0
+                Text "7.6배" (3RDM-0) 0×0 "7.6배"
+                Text "업종 11.2배" (3RDN-0) 0×0 "업종 11.2배"
+              Frame "Frame" (3RDO-0) 56×0
+                Frame "Frame" (3RDP-0) 0×0
+                  Text "최저" (3RDQ-0) 0×0 "최저"
+              Frame "Frame" (3RDR-0) 120×0
+                Text "고가 38,700" (3RDS-0) 0×0 "고가 38,700"
+                Text "저가 36,900" (3RDT-0) 0×0 "저가 36,900"
+              Frame "Frame" (3RDU-0) 108×0
+                Text "176만주" (3RDV-0) 0×0 "176만주"
+                Text "681억" (3RDW-0) 0×0 "681억"
+              Text "154%" (3RDX-0) 68×0 "154%"
+            Frame "11 원익IPS" (3RDY-0) 0×36
+              Text "11" (3RDZ-0) 40×0 "11"
+              Frame "Frame" (3RE0-0) 0×0
+                Text "원익IPS" (3RE1-0) 0×0 "원익IPS"
+                Text "240810 · 코스닥" (3RE2-0) 0×0 "240810 · 코스닥"
+              Frame "Frame" (3RE3-0) 120×0
+                Text "41,300" (3RE4-0) 0×0 "41,300"
+                Text "+9,300 · +29.06%" (3RE5-0) 0×0 "+9,300 · +29.06%"
+              Frame "Frame" (3RE6-0) 88×0
+                Text "8.1배" (3RE7-0) 0×0 "8.1배"
+                Text "업종 11.2배" (3RE8-0) 0×0 "업종 11.2배"
+              Frame "Frame" (3RE9-0) 56×0
+                Frame "Frame" (3REA-0) 0×0
+                  Text "최저" (3REB-0) 0×0 "최저"
+              Frame "Frame" (3REC-0) 120×0
+                Text "고가 41,300" (3RED-0) 0×0 "고가 41,300"
+                Text "저가 39,600" (3REE-0) 0×0 "저가 39,600"
+              Frame "Frame" (3REF-0) 108×0
+                Text "148만주" (3REG-0) 0×0 "148만주"
+                Text "611억" (3REH-0) 0×0 "611억"
+              Text "151%" (3REI-0) 68×0 "151%"
+            Frame "12 하나마이크론" (3REJ-0) 0×36
+              Text "12" (3REK-0) 40×0 "12"
+              Frame "Frame" (3REL-0) 0×0
+                Text "하나마이크론" (3REM-0) 0×0 "하나마이크론"
+                Text "067310 · 코스닥" (3REN-0) 0×0 "067310 · 코스닥"
+              Frame "Frame" (3REO-0) 120×0
+                Text "27,850" (3REP-0) 0×0 "27,850"
+                Text "+6,320 · +29.35%" (3REQ-0) 0×0 "+6,320 · +29.35%"
+              Frame "Frame" (3RER-0) 88×0
+                Text "8.4배" (3RES-0) 0×0 "8.4배"
+                Text "업종 11.2배" (3RET-0) 0×0 "업종 11.2배"
+              Frame "Frame" (3REU-0) 56×0
+                Frame "Frame" (3REV-0) 0×0
+                  Text "최저" (3REW-0) 0×0 "최저"
+              Frame "Frame" (3REX-0) 120×0
+                Text "고가 27,850" (3REY-0) 0×0 "고가 27,850"
+                Text "저가 26,150" (3REZ-0) 0×0 "저가 26,150"
+              Frame "Frame" (3RF0-0) 108×0
+                Text "508만주" (3RF1-0) 0×0 "508만주"
+                Text "1,415억" (3RF2-0) 0×0 "1,415억"
+              Text "162%" (3RF3-0) 68×0 "162%"
+            Frame "13 실리콘투" (3RF4-0) 0×36
+              Text "13" (3RF5-0) 40×0 "13"
+              Frame "Frame" (3RF6-0) 0×0
+                Text "실리콘투" (3RF7-0) 0×0 "실리콘투"
+                Text "257720 · 코스닥" (3RF8-0) 0×0 "257720 · 코스닥"
+              Frame "Frame" (3RF9-0) 120×0
+                Text "58,900" (3RFA-0) 0×0 "58,900"
+                Text "+13,530 · +29.81%" (3RFB-0) 0×0 "+13,530 · +29.81%"
+              Frame "Frame" (3RFC-0) 88×0
+                Text "8.9배" (3RFD-0) 0×0 "8.9배"
+                Text "업종 12.0배" (3RFE-0) 0×0 "업종 12.0배"
+              Frame "Frame" (3RFF-0) 56×0
+                Frame "Frame" (3RFG-0) 0×0
+                  Text "최저" (3RFH-0) 0×0 "최저"
+              Frame "Frame" (3RFI-0) 120×0
+                Text "고가 58,900" (3RFJ-0) 0×0 "고가 58,900"
+                Text "저가 54,700" (3RFK-0) 0×0 "저가 54,700"
+              Frame "Frame" (3RFL-0) 108×0
+                Text "316만주" (3RFM-0) 0×0 "316만주"
+                Text "1,861억" (3RFN-0) 0×0 "1,861억"
+              Text "187%" (3RFO-0) 68×0 "187%"
+            Frame "14 티씨케이" (3RFP-0) 0×36
+              Text "14" (3RFQ-0) 40×0 "14"
+              Frame "Frame" (3RFR-0) 0×0
+                Text "티씨케이" (3RFS-0) 0×0 "티씨케이"
+                Text "064760 · 코스닥" (3RFT-0) 0×0 "064760 · 코스닥"
+              Frame "Frame" (3RFU-0) 120×0
+                Text "96,400" (3RFV-0) 0×0 "96,400"
+                Text "+21,700 · +29.05%" (3RFW-0) 0×0 "+21,700 · +29.05%"
+              Frame "Frame" (3RFX-0) 88×0
+                Text "9.2배" (3RFY-0) 0×0 "9.2배"
+                Text "업종 11.2배" (3RFZ-0) 0×0 "업종 11.2배"
+              Frame "Frame" (3RG0-0) 56×0
+                Frame "Frame" (3RG1-0) 0×0
+                  Text "최저" (3RG2-0) 0×0 "최저"
+              Frame "Frame" (3RG3-0) 120×0
+                Text "고가 96,400" (3RG4-0) 0×0 "고가 96,400"
+                Text "저가 93,200" (3RG5-0) 0×0 "저가 93,200"
+              Frame "Frame" (3RG6-0) 108×0
+                Text "44만주" (3RG7-0) 0×0 "44만주"
+                Text "424억" (3RG8-0) 0×0 "424억"
+              Text "149%" (3RG9-0) 68×0 "149%"
+            Frame "810 코스맥스" (3RGA-0) 0×36
+              Text "810" (3RGB-0) 40×0 "810"
+              Frame "Frame" (3RGC-0) 0×0
+                Text "코스맥스" (3RGD-0) 0×0 "코스맥스"
+                Text "192820 · 코스피" (3RGE-0) 0×0 "192820 · 코스피"
+              Frame "Frame" (3RGF-0) 120×0
+                Text "118,600" (3RGG-0) 0×0 "118,600"
+                Text "-48,600 · -29.07%" (3RGH-0) 0×0 "-48,600 · -29.07%"
+              Frame "Frame" (3RGI-0) 88×0
+                Text "96.4배" (3RGJ-0) 0×0 "96.4배"
+                Text "업종 22.4배" (3RGK-0) 0×0 "업종 22.4배"
+              Frame "Frame" (3RGL-0) 56×0
+                Frame "Frame" (3RGM-0) 0×0
+                  Text "최고" (3RGN-0) 0×0 "최고"
+              Frame "Frame" (3RGO-0) 120×0
+                Text "고가 152,000" (3RGP-0) 0×0 "고가 152,000"
+                Text "저가 118,200" (3RGQ-0) 0×0 "저가 118,200"
+              Frame "Frame" (3RGR-0) 108×0
+                Text "62만주" (3RGS-0) 0×0 "62만주"
+                Text "735억" (3RGT-0) 0×0 "735억"
+              Text "68%" (3RGU-0) 68×0 "68%"
+            Frame "811 덕산네오룩스" (3RGV-0) 0×36
+              Text "811" (3RGW-0) 40×0 "811"
+              Frame "Frame" (3RGX-0) 0×0
+                Text "덕산네오룩스" (3RGY-0) 0×0 "덕산네오룩스"
+                Text "213420 · 코스닥" (3RGZ-0) 0×0 "213420 · 코스닥"
+              Frame "Frame" (3RH0-0) 120×0
+                Text "26,150" (3RH1-0) 0×0 "26,150"
+                Text "-10,700 · -29.04%" (3RH2-0) 0×0 "-10,700 · -29.04%"
+              Frame "Frame" (3RH3-0) 88×0
+                Text "118.6배" (3RH4-0) 0×0 "118.6배"
+                Text "업종 18.4배" (3RH5-0) 0×0 "업종 18.4배"
+              Frame "Frame" (3RH6-0) 56×0
+                Frame "Frame" (3RH7-0) 0×0
+                  Text "최고" (3RH8-0) 0×0 "최고"
+              Frame "Frame" (3RH9-0) 120×0
+                Text "고가 27,500" (3RHA-0) 0×0 "고가 27,500"
+                Text "저가 26,050" (3RHB-0) 0×0 "저가 26,050"
+              Frame "Frame" (3RHC-0) 108×0
+                Text "88만주" (3RHD-0) 0×0 "88만주"
+                Text "230억" (3RHE-0) 0×0 "230억"
+              Text "71%" (3RHF-0) 68×0 "71%"
+            Frame "812 리가켐바이오" (3RHG-0) 0×36
+              Text "812" (3RHH-0) 40×0 "812"
+              Frame "Frame" (3RHI-0) 0×0
+                Text "리가켐바이오" (3RHJ-0) 0×0 "리가켐바이오"
+                Text "141080 · 코스닥" (3RHK-0) 0×0 "141080 · 코스닥"
+              Frame "Frame" (3RHL-0) 120×0
+                Text "172,300" (3RHM-0) 0×0 "172,300"
+                Text "+39,450 · +29.70%" (3RHN-0) 0×0 "+39,450 · +29.70%"
+              Frame "Frame" (3RHO-0) 88×0
+                Text "142.8배" (3RHP-0) 0×0 "142.8배"
+                Text "업종 18.4배" (3RHQ-0) 0×0 "업종 18.4배"
+              Frame "Frame" (3RHR-0) 56×0
+                Frame "Frame" (3RHS-0) 0×0
+                  Text "최고" (3RHT-0) 0×0 "최고"
+              Frame "Frame" (3RHU-0) 120×0
+                Text "고가 172,300" (3RHV-0) 0×0 "고가 172,300"
+                Text "저가 161,000" (3RHW-0) 0×0 "저가 161,000"
+              Frame "Frame" (3RHX-0) 108×0
+                Text "74만주" (3RHY-0) 0×0 "74만주"
+                Text "1,275억" (3RHZ-0) 0×0 "1,275억"
+              Text "176%" (3RI0-0) 68×0 "176%"
+            Frame "813 이마트" (3RI1-0) 0×36
+              Text "813" (3RI2-0) 40×0 "813"
+              Frame "Frame" (3RI3-0) 0×0
+                Text "이마트" (3RI4-0) 0×0 "이마트"
+                Text "139480 · 코스피" (3RI5-0) 0×0 "139480 · 코스피"
+              Frame "Frame" (3RI6-0) 120×0
+                Text "52,300" (3RI7-0) 0×0 "52,300"
+                Text "-21,400 · -29.04%" (3RI8-0) 0×0 "-21,400 · -29.04%"
+              Frame "Frame" (3RI9-0) 88×0
+                Text "168.2배" (3RIA-0) 0×0 "168.2배"
+                Text "업종 31.6배" (3RIB-0) 0×0 "업종 31.6배"
+              Frame "Frame" (3RIC-0) 56×0
+                Frame "Frame" (3RID-0) 0×0
+                  Text "최고" (3RIE-0) 0×0 "최고"
+              Frame "Frame" (3RIF-0) 120×0
+                Text "고가 55,000" (3RIG-0) 0×0 "고가 55,000"
+                Text "저가 52,200" (3RIH-0) 0×0 "저가 52,200"
+              Frame "Frame" (3RII-0) 108×0
+                Text "40만주" (3RIJ-0) 0×0 "40만주"
+                Text "209억" (3RIK-0) 0×0 "209억"
+              Text "81%" (3RIL-0) 68×0 "81%"
+            Frame "814 롯데케미칼" (3RIM-0) 0×36
+              Text "814" (3RIN-0) 40×0 "814"
+              Frame "Frame" (3RIO-0) 0×0
+                Text "롯데케미칼" (3RIP-0) 0×0 "롯데케미칼"
+                Text "011170 · 코스피" (3RIQ-0) 0×0 "011170 · 코스피"
+              Frame "Frame" (3RIR-0) 120×0
+                Text "61,200" (3RIS-0) 0×0 "61,200"
+                Text "-2,000 · -3.16%" (3RIT-0) 0×0 "-2,000 · -3.16%"
+              Frame "Frame" (3RIU-0) 88×0
+                Text "214.0배" (3RIV-0) 0×0 "214.0배"
+                Text "업종 22.4배" (3RIW-0) 0×0 "업종 22.4배"
+              Frame "Frame" (3RIX-0) 56×0
+                Frame "Frame" (3RIY-0) 0×0
+                  Text "최고" (3RIZ-0) 0×0 "최고"
+              Frame "Frame" (3RJ0-0) 120×0
+                Text "고가 63,400" (3RJ1-0) 0×0 "고가 63,400"
+                Text "저가 60,900" (3RJ2-0) 0×0 "저가 60,900"
+              Frame "Frame" (3RJ3-0) 108×0
+                Text "90만주" (3RJ4-0) 0×0 "90만주"
+                Text "551억" (3RJ5-0) 0×0 "551억"
+              Text "74%" (3RJ6-0) 68×0 "74%"
+        Frame "Rail" (3OU3-0) 360×848
+          Frame "Block 1 · PER 분포" (3OU4-0) 0×0
+            Frame "Frame" (3OU5-0) 0×0
+              Text "PER 분포" (3OU6-0) 0×0 "PER 분포"
+              Text "814종목" (3OU7-0) 0×0 "814종목"
+            Frame "Frame" (3OU8-0) 0×0
+              Frame "Frame" (3OU9-0) 0×0
+                Frame "Frame" (3OUA-0) 0×0
+                  Text "10배 미만" (3OUB-0) 0×0 "10배 미만"
+                  Text "84종목" (3OUC-0) 0×0 "84종목"
+                Rectangle "Rectangle" (3OUD-0) 56×6
+              Frame "Frame" (3OUE-0) 0×0
+                Frame "Frame" (3OUF-0) 0×0
+                  Text "10~20배" (3OUG-0) 0×0 "10~20배"
+                  Text "412종목" (3OUH-0) 0×0 "412종목"
+                Rectangle "Rectangle" (3OUI-0) 276×6
+              Frame "Frame" (3OUJ-0) 0×0
+                Frame "Frame" (3OUK-0) 0×0
+                  Text "20배 초과" (3OUL-0) 0×0 "20배 초과"
+                  Text "318종목" (3OUM-0) 0×0 "318종목"
+                Rectangle "Rectangle" (3OUN-0) 213×6
+          Frame "Block 2 · 업종 평균" (3OUO-0) 0×0
+            Frame "Frame" (3OUP-0) 0×0
+              Text "업종 평균 PER" (3OUQ-0) 0×0 "업종 평균 PER"
+              Text "직전 결산 · 적자 제외" (3OUR-0) 0×0 "직전 결산 · 적자 제외"
+            Frame "Frame" (3OUS-0) 0×0
+              Frame "Frame" (3OUT-0) 0×0
+                Text "반도체" (3OUU-0) 0×0 "반도체"
+                Text "11.2배" (3OUV-0) 0×0 "11.2배"
+              Frame "Frame" (3OUW-0) 0×0
+                Text "자동차" (3OUX-0) 0×0 "자동차"
+                Text "8.4배" (3OUY-0) 0×0 "8.4배"
+              Frame "Frame" (3OUZ-0) 0×0
+                Text "바이오" (3OV0-0) 0×0 "바이오"
+                Text "18.4배" (3OV1-0) 0×0 "18.4배"
+          Frame "Block 3 · 선택 종목" (3RJ8-0) 0×0
+            Frame "Frame" (3RJ9-0) 0×0
+              Text "선택 종목 · 삼성전자" (3RJA-0) 0×0 "선택 종목 · 삼성전자"
+              Text "005930 · 512위" (3RJB-0) 0×0 "005930 · 512위"
+            Frame "Frame" (3RJC-0) 0×0
+              Frame "Frame" (3RJD-0) 0×0
+                Text "PER" (3RJE-0) 0×0 "PER"
+                Text "21.2배" (3RJF-0) 0×0 "21.2배"
+              Frame "Frame" (3RJG-0) 0×0
+                Text "EPS" (3RJH-0) 0×0 "EPS"
+                Text "7,115원" (3RJI-0) 0×0 "7,115원"
+              Frame "Frame" (3RJJ-0) 0×0
+                Text "업종 반도체" (3RJK-0) 0×0 "업종 반도체"
+                Text "11.2배" (3RJL-0) 0×0 "11.2배"
+              Frame "Frame" (3RJM-0) 0×0
+                Text "현재가" (3RJN-0) 0×0 "현재가"
+                Frame "Frame" (3RJO-0) 0×0
+                  Text "150,850" (3RJP-0) 0×0 "150,850"
+                  Text "+1.24%" (3RJQ-0) 0×0 "+1.24%"

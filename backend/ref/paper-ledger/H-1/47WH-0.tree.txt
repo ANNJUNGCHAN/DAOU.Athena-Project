@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신" (47WH-0) 360×420
+  Frame "Header" (47XB-0) 0×0
+    Frame "Meta row" (47XD-0) 0×0
+      Text "Eyebrow" (47XF-0) 0×0
+      Text "As of" (47XE-0) 0×0 "기준 09:42"
+    Text "Title" (47XC-0) 0×0 "거래량갱신"
+  Frame "Body" (47WK-0) 0×0
+    Frame "KPI band" (47X1-0) 0×0
+      Frame "Frame" (47X8-0) 0×0
+        Text "값" (47XA-0) 0×0 "값"
+        Text "5.2배" (47X9-0) 0×0 "5.2배"
+      Frame "Frame" (47X5-0) 0×0
+        Text "값" (47X7-0) 0×0 "값"
+        Text "41" (47X6-0) 0×0 "41"
+      Frame "Frame" (47X2-0) 0×0
+        Text "핵심" (47X4-0) 0×0 "핵심"
+        Text "5일" (47X3-0) 0×0 "5일"
+    Frame "Table header" (47WX-0) 0×0
+      Text "항목" (47X0-0) 0×0 "항목"
+      Text "값" (47WZ-0) 0×0 "값"
+      Text "비고" (47WY-0) 72×0 "비고"
+    Frame "Position 1" (47WR-0) 0×0
+      Frame "Frame" (47WU-0) 0×0
+        Text "매수호가" (47WW-0) 0×0 "매수호가"
+        Text "Text" (47WV-0) 0×0
+      Text "매수 412,500" (47WT-0) 0×0 "매수 412,500"
+      Text "Text" (47WS-0) 72×0
+    Frame "Position 2" (47WL-0) 0×0
+      Frame "Frame" (47WO-0) 0×0
+        Text "현재거래량" (47WQ-0) 0×0 "현재거래량"
+        Text "Text" (47WP-0) 0×0
+      Text "80만주" (47WN-0) 0×0 "80만주"
+      Text "Text" (47WM-0) 72×0
+  Frame "Fold note" (47WI-0) 0×0
+    Text "스칼라 2개, 행 1개 접힘 · 원본…" (47WJ-0) 0×0 "스칼라 2개, 행 1개 접힘 · 원본에서 확인"

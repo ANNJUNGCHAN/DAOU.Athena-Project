@@ -1,0 +1,4054 @@
+{
+ "board_id": "2E4E-0",
+ "page": "F-1",
+ "page_name": "증명",
+ "name": "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+ "width": 1440,
+ "height": 900,
+ "texts": [
+  {
+   "id": "2F79-0",
+   "text": "삼성전자",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Sticky Header",
+    "DV-3 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7A-0",
+   "text": "005930 · KOSPI",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Sticky Header",
+    "DV-3 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7C-0",
+   "text": "150,850원",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Sticky Header",
+    "DV-3 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7D-0",
+   "text": "+2.35%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Sticky Header",
+    "DV-3 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7E-0",
+   "text": "DESIGN FIXTURE · 12:34",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Sticky Header",
+    "DV-3 Identity Quote Strip · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7I-0",
+   "text": "체결",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Category Tabs",
+    "DV-3 User Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7K-0",
+   "text": "일별 거래",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Category Tabs",
+    "DV-3 User Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7M-0",
+   "text": "가격 움직임",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Category Tabs",
+    "DV-3 User Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7O-0",
+   "text": "예상체결",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Category Tabs",
+    "DV-3 User Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7Q-0",
+   "text": "VI·시장 상태",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Category Tabs",
+    "DV-3 User Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7S-0",
+   "text": "시간외",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Category Tabs",
+    "DV-3 User Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7X-0",
+   "text": "기간",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Filter Sort Toolbar",
+    "DV-3 Filter Sort Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F7Y-0",
+   "text": "최근 20거래일 ▾",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Filter Sort Toolbar",
+    "DV-3 Filter Sort Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F80-0",
+   "text": "정렬",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Filter Sort Toolbar",
+    "DV-3 Filter Sort Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F81-0",
+   "text": "최신 순 ▾",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Filter Sort Toolbar",
+    "DV-3 Filter Sort Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F83-0",
+   "text": "정규장 포함",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Filter Sort Toolbar",
+    "DV-3 Filter Sort Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F85-0",
+   "text": "● 실시간 갱신",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Filter Sort Toolbar",
+    "DV-3 Filter Sort Controls · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F86-0",
+   "text": "선택 행 12:34:18",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Filter Sort Toolbar",
+    "DV-3 Filter Sort Controls · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F8D-0",
+   "text": "체결 이력 · 최신 순",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Preset Strip · Chrome"
+   ]
+  },
+  {
+   "id": "2F8E-0",
+   "text": "열 설정: 가격 · 거래량 · 체결강도",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Preset Strip · Chrome"
+   ]
+  },
+  {
+   "id": "2F8G-0",
+   "text": "일시",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F8H-0",
+   "text": "체결가",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F8I-0",
+   "text": "전일대비",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F8J-0",
+   "text": "등락률",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F8K-0",
+   "text": "체결량",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F8L-0",
+   "text": "누적거래량",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F8M-0",
+   "text": "누적대금",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F8N-0",
+   "text": "체결강도",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Header · Chrome"
+   ]
+  },
+  {
+   "id": "2F8Q-0",
+   "text": "12:34:18",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 1"
+   ]
+  },
+  {
+   "id": "2F8R-0",
+   "text": "150,850",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 1"
+   ]
+  },
+  {
+   "id": "2F8S-0",
+   "text": "+3,450",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 1"
+   ]
+  },
+  {
+   "id": "2F8T-0",
+   "text": "+2.35%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 1"
+   ]
+  },
+  {
+   "id": "2F8U-0",
+   "text": "12,480",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 1"
+   ]
+  },
+  {
+   "id": "2F8V-0",
+   "text": "18,420,135",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 1"
+   ]
+  },
+  {
+   "id": "2F8W-0",
+   "text": "1.42조",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 1"
+   ]
+  },
+  {
+   "id": "2F8X-0",
+   "text": "128.4",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 1"
+   ]
+  },
+  {
+   "id": "2F8Z-0",
+   "text": "12:34:12",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 2"
+   ]
+  },
+  {
+   "id": "2F90-0",
+   "text": "150,800",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 2"
+   ]
+  },
+  {
+   "id": "2F91-0",
+   "text": "+3,400",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 2"
+   ]
+  },
+  {
+   "id": "2F92-0",
+   "text": "+2.31%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 2"
+   ]
+  },
+  {
+   "id": "2F93-0",
+   "text": "8,250",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 2"
+   ]
+  },
+  {
+   "id": "2F94-0",
+   "text": "18,407,655",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 2"
+   ]
+  },
+  {
+   "id": "2F95-0",
+   "text": "1.42조",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 2"
+   ]
+  },
+  {
+   "id": "2F96-0",
+   "text": "127.9",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 2"
+   ]
+  },
+  {
+   "id": "2F98-0",
+   "text": "12:34:06",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 3"
+   ]
+  },
+  {
+   "id": "2F99-0",
+   "text": "150,850",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 3"
+   ]
+  },
+  {
+   "id": "2F9A-0",
+   "text": "+3,450",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 3"
+   ]
+  },
+  {
+   "id": "2F9B-0",
+   "text": "+2.35%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 3"
+   ]
+  },
+  {
+   "id": "2F9C-0",
+   "text": "6,140",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 3"
+   ]
+  },
+  {
+   "id": "2F9D-0",
+   "text": "18,399,405",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 3"
+   ]
+  },
+  {
+   "id": "2F9E-0",
+   "text": "1.41조",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 3"
+   ]
+  },
+  {
+   "id": "2F9F-0",
+   "text": "128.1",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 3"
+   ]
+  },
+  {
+   "id": "2F9H-0",
+   "text": "12:34:00",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 4"
+   ]
+  },
+  {
+   "id": "2F9I-0",
+   "text": "150,750",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 4"
+   ]
+  },
+  {
+   "id": "2F9J-0",
+   "text": "+3,350",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 4"
+   ]
+  },
+  {
+   "id": "2F9K-0",
+   "text": "+2.27%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 4"
+   ]
+  },
+  {
+   "id": "2F9L-0",
+   "text": "9,880",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 4"
+   ]
+  },
+  {
+   "id": "2F9M-0",
+   "text": "18,393,265",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 4"
+   ]
+  },
+  {
+   "id": "2F9N-0",
+   "text": "1.41조",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 4"
+   ]
+  },
+  {
+   "id": "2F9O-0",
+   "text": "127.4",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 4"
+   ]
+  },
+  {
+   "id": "2F9Q-0",
+   "text": "12:33:54",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 5"
+   ]
+  },
+  {
+   "id": "2F9R-0",
+   "text": "150,700",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 5"
+   ]
+  },
+  {
+   "id": "2F9S-0",
+   "text": "+3,300",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 5"
+   ]
+  },
+  {
+   "id": "2F9T-0",
+   "text": "+2.24%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 5"
+   ]
+  },
+  {
+   "id": "2F9U-0",
+   "text": "5,530",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 5"
+   ]
+  },
+  {
+   "id": "2F9V-0",
+   "text": "18,383,385",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 5"
+   ]
+  },
+  {
+   "id": "2F9W-0",
+   "text": "1.41조",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 5"
+   ]
+  },
+  {
+   "id": "2F9X-0",
+   "text": "126.8",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 5"
+   ]
+  },
+  {
+   "id": "2F9Z-0",
+   "text": "12:33:48",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 6"
+   ]
+  },
+  {
+   "id": "2FA0-0",
+   "text": "150,800",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 6"
+   ]
+  },
+  {
+   "id": "2FA1-0",
+   "text": "+3,400",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 6"
+   ]
+  },
+  {
+   "id": "2FA2-0",
+   "text": "+2.31%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 6"
+   ]
+  },
+  {
+   "id": "2FA3-0",
+   "text": "11,020",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 6"
+   ]
+  },
+  {
+   "id": "2FA4-0",
+   "text": "18,377,855",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 6"
+   ]
+  },
+  {
+   "id": "2FA5-0",
+   "text": "1.41조",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 6"
+   ]
+  },
+  {
+   "id": "2FA6-0",
+   "text": "127.6",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 6"
+   ]
+  },
+  {
+   "id": "2FA8-0",
+   "text": "12:33:42",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 7"
+   ]
+  },
+  {
+   "id": "2FA9-0",
+   "text": "150,750",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 7"
+   ]
+  },
+  {
+   "id": "2FAA-0",
+   "text": "+3,350",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 7"
+   ]
+  },
+  {
+   "id": "2FAB-0",
+   "text": "+2.27%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 7"
+   ]
+  },
+  {
+   "id": "2FAC-0",
+   "text": "7,310",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 7"
+   ]
+  },
+  {
+   "id": "2FAD-0",
+   "text": "18,366,835",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 7"
+   ]
+  },
+  {
+   "id": "2FAE-0",
+   "text": "1.40조",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 7"
+   ]
+  },
+  {
+   "id": "2FAF-0",
+   "text": "127.2",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 7"
+   ]
+  },
+  {
+   "id": "2FAH-0",
+   "text": "12:33:36",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 8"
+   ]
+  },
+  {
+   "id": "2FAI-0",
+   "text": "150,700",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 8"
+   ]
+  },
+  {
+   "id": "2FAJ-0",
+   "text": "+3,300",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 8"
+   ]
+  },
+  {
+   "id": "2FAK-0",
+   "text": "+2.24%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 8"
+   ]
+  },
+  {
+   "id": "2FAL-0",
+   "text": "4,860",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 8"
+   ]
+  },
+  {
+   "id": "2FAM-0",
+   "text": "18,359,525",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 8"
+   ]
+  },
+  {
+   "id": "2FAN-0",
+   "text": "1.40조",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 8"
+   ]
+  },
+  {
+   "id": "2FAO-0",
+   "text": "126.9",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 8"
+   ]
+  },
+  {
+   "id": "2FAQ-0",
+   "text": "12:33:30",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 9"
+   ]
+  },
+  {
+   "id": "2FAR-0",
+   "text": "150,650",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 9"
+   ]
+  },
+  {
+   "id": "2FAS-0",
+   "text": "+3,250",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 9"
+   ]
+  },
+  {
+   "id": "2FAT-0",
+   "text": "+2.20%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 9"
+   ]
+  },
+  {
+   "id": "2FAU-0",
+   "text": "10,340",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 9"
+   ]
+  },
+  {
+   "id": "2FAV-0",
+   "text": "18,354,665",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 9"
+   ]
+  },
+  {
+   "id": "2FAW-0",
+   "text": "1.40조",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 9"
+   ]
+  },
+  {
+   "id": "2FAX-0",
+   "text": "126.5",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 9"
+   ]
+  },
+  {
+   "id": "2FAZ-0",
+   "text": "12:33:24",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 10"
+   ]
+  },
+  {
+   "id": "2FB0-0",
+   "text": "150,700",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 10"
+   ]
+  },
+  {
+   "id": "2FB1-0",
+   "text": "+3,300",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 10"
+   ]
+  },
+  {
+   "id": "2FB2-0",
+   "text": "+2.24%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 10"
+   ]
+  },
+  {
+   "id": "2FB3-0",
+   "text": "6,920",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 10"
+   ]
+  },
+  {
+   "id": "2FB4-0",
+   "text": "18,344,325",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 10"
+   ]
+  },
+  {
+   "id": "2FB5-0",
+   "text": "1.39조",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 10"
+   ]
+  },
+  {
+   "id": "2FB6-0",
+   "text": "126.7",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 History Rows · 10 visible",
+    "DV-3 History Row 10"
+   ]
+  },
+  {
+   "id": "2FB9-0",
+   "text": "1–10 / 120",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Expand Controls · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FBE-0",
+   "text": "더보기",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Expand Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FBG-0",
+   "text": "접기",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Expand Controls · Chrome",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FBI-0",
+   "text": "선택: 12:34:18 · 150,850원",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Status · Chrome"
+   ]
+  },
+  {
+   "id": "2FBJ-0",
+   "text": "표 안에서만 스크롤",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 History Table",
+    "DV-3 Table Status · Chrome"
+   ]
+  },
+  {
+   "id": "2FBN-0",
+   "text": "선택 체결",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Selected Header · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FBO-0",
+   "text": "12:34:18 · 정규장",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Selected Header · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FBQ-0",
+   "text": "150,850원",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Selected Header · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FBR-0",
+   "text": "+2.35%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Selected Header · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FBU-0",
+   "text": "체결",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FBW-0",
+   "text": "일별",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FBY-0",
+   "text": "가격",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FC0-0",
+   "text": "예상",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FC2-0",
+   "text": "VI·시장",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FC4-0",
+   "text": "기타",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Tabs · Chrome",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FC7-0",
+   "text": "선택 행 공식 정보",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FC9-0",
+   "text": "체결시간",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10055|$.tdy_pred_cntr_qty[].cntr_tm|1"
+   ]
+  },
+  {
+   "id": "2FCA-0",
+   "text": "12:34:18",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10055|$.tdy_pred_cntr_qty[].cntr_tm|1"
+   ]
+  },
+  {
+   "id": "2FCC-0",
+   "text": "현재가",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].cur_prc|1"
+   ]
+  },
+  {
+   "id": "2FCD-0",
+   "text": "150,850원",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].cur_prc|1"
+   ]
+  },
+  {
+   "id": "2FCF-0",
+   "text": "전일대비",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].pred_pre|1"
+   ]
+  },
+  {
+   "id": "2FCG-0",
+   "text": "+3,450원",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].pred_pre|1"
+   ]
+  },
+  {
+   "id": "2FCI-0",
+   "text": "대비율",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].pre_rt|1"
+   ]
+  },
+  {
+   "id": "2FCJ-0",
+   "text": "+2.35%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].pre_rt|1"
+   ]
+  },
+  {
+   "id": "2FCL-0",
+   "text": "체결거래량",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].cntr_trde_qty|1"
+   ]
+  },
+  {
+   "id": "2FCM-0",
+   "text": "18,420,135주",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].cntr_trde_qty|1"
+   ]
+  },
+  {
+   "id": "2FCO-0",
+   "text": "누적거래량",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].acc_trde_qty|1"
+   ]
+  },
+  {
+   "id": "2FCP-0",
+   "text": "18,420,135주",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].acc_trde_qty|1"
+   ]
+  },
+  {
+   "id": "2FCR-0",
+   "text": "누적거래대금",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].acc_trde_prica|1"
+   ]
+  },
+  {
+   "id": "2FCS-0",
+   "text": "1.42조원",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].acc_trde_prica|1"
+   ]
+  },
+  {
+   "id": "2FCU-0",
+   "text": "체결강도",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].cntr_str|1"
+   ]
+  },
+  {
+   "id": "2FCV-0",
+   "text": "+2.35%",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10003|$.cntr_infr[].cntr_str|1"
+   ]
+  },
+  {
+   "id": "2FCX-0",
+   "text": "시가",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10028|$.open_pric_pre_flu_rt[].open_pric|1"
+   ]
+  },
+  {
+   "id": "2FCY-0",
+   "text": "150,850원",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10028|$.open_pric_pre_flu_rt[].open_pric|1"
+   ]
+  },
+  {
+   "id": "2FD0-0",
+   "text": "고가",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10016|$.ntl_pric[].high_pric|1"
+   ]
+  },
+  {
+   "id": "2FD1-0",
+   "text": "150,850원",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "base:ka10016|$.ntl_pric[].high_pric|1"
+   ]
+  },
+  {
+   "id": "2FD3-0",
+   "text": "탭 전환 시 같은 행의 공식 필드 묶음이 교체됩니다.",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Sparse Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FD5-0",
+   "text": "10개 표시",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Footer · Chrome"
+   ]
+  },
+  {
+   "id": "2FD6-0",
+   "text": "더보기 · 접기",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Workspace",
+    "DV-3 Selected Detail",
+    "DV-3 Detail Footer · Chrome"
+   ]
+  },
+  {
+   "id": "2F89-0",
+   "text": "10행 표시 · 더보기 시 표 내부 스크롤 · 접기",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Footer",
+    "DV-3 Footer Controls · Chrome"
+   ]
+  },
+  {
+   "id": "2F8A-0",
+   "text": "거래·가격 공식 필드 189개 연결",
+   "path": [
+    "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+    "DV-3 Root · trade-price-history 189/189 · workbench",
+    "DV-3 Workbench Surface",
+    "DV-3 Footer",
+    "DV-3 Footer Controls · Chrome"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2E4E-0",
+   "name": "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+   "component": "Frame",
+   "w": 1440,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "2F6X-0",
+   "name": "DV-3 Root · trade-price-history 189/189 · workbench",
+   "component": "Frame",
+   "w": 1440,
+   "h": 900,
+   "depth": 1
+  },
+  {
+   "id": "2F6Y-0",
+   "name": "DV-3 Workbench Surface",
+   "component": "Frame",
+   "w": 1392,
+   "h": 860,
+   "depth": 2
+  },
+  {
+   "id": "2F6Z-0",
+   "name": "DV-3 Sticky Header",
+   "component": "Frame",
+   "w": 1390,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "2F77-0",
+   "name": "DV-3 Identity Quote Strip · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 64,
+   "depth": 4
+  },
+  {
+   "id": "2F78-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F7B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F70-0",
+   "name": "DV-3 Category Tabs",
+   "component": "Frame",
+   "w": 1390,
+   "h": 42,
+   "depth": 3
+  },
+  {
+   "id": "2F7G-0",
+   "name": "DV-3 User Tabs · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 42,
+   "depth": 4
+  },
+  {
+   "id": "2F7H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2F7J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2F7L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2F7N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2F7P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2F7R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2F71-0",
+   "name": "DV-3 Filter Sort Toolbar",
+   "component": "Frame",
+   "w": 1390,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "2F7U-0",
+   "name": "DV-3 Filter Sort Controls · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 48,
+   "depth": 4
+  },
+  {
+   "id": "2F7V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F7W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "2F7Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "2F82-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "2F84-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2F72-0",
+   "name": "DV-3 Workspace",
+   "component": "Frame",
+   "w": 1390,
+   "h": 642,
+   "depth": 3
+  },
+  {
+   "id": "2F73-0",
+   "name": "DV-3 History Table",
+   "component": "Frame",
+   "w": 914,
+   "h": 642,
+   "depth": 4
+  },
+  {
+   "id": "2F8C-0",
+   "name": "DV-3 Table Preset Strip · Chrome",
+   "component": "Frame",
+   "w": 912,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "2F8F-0",
+   "name": "DV-3 Table Header · Chrome",
+   "component": "Frame",
+   "w": 912,
+   "h": 38,
+   "depth": 5
+  },
+  {
+   "id": "2F8O-0",
+   "name": "DV-3 History Rows · 10 visible",
+   "component": "Frame",
+   "w": 912,
+   "h": 480,
+   "depth": 5
+  },
+  {
+   "id": "2F8P-0",
+   "name": "DV-3 History Row 1",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2F8Y-0",
+   "name": "DV-3 History Row 2",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2F97-0",
+   "name": "DV-3 History Row 3",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2F9G-0",
+   "name": "DV-3 History Row 4",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2F9P-0",
+   "name": "DV-3 History Row 5",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2F9Y-0",
+   "name": "DV-3 History Row 6",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2FA7-0",
+   "name": "DV-3 History Row 7",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2FAG-0",
+   "name": "DV-3 History Row 8",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2FAP-0",
+   "name": "DV-3 History Row 9",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2FAY-0",
+   "name": "DV-3 History Row 10",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "2FB7-0",
+   "name": "DV-3 Table Expand Controls · Chrome",
+   "component": "Frame",
+   "w": 912,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "2FB8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2FBA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "2FBB-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 28,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "2FBC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2FBD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "2FBF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "2FBH-0",
+   "name": "DV-3 Table Status · Chrome",
+   "component": "Frame",
+   "w": 912,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "2F74-0",
+   "name": "DV-3 Selected Detail",
+   "component": "Frame",
+   "w": 422,
+   "h": 642,
+   "depth": 4
+  },
+  {
+   "id": "2FBL-0",
+   "name": "DV-3 Selected Header · Chrome",
+   "component": "Frame",
+   "w": 421,
+   "h": 70,
+   "depth": 5
+  },
+  {
+   "id": "2FBM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2FBP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2FBS-0",
+   "name": "DV-3 Detail Tabs · Chrome",
+   "component": "Frame",
+   "w": 421,
+   "h": 42,
+   "depth": 5
+  },
+  {
+   "id": "2FBT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "2FBV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "2FBX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "2FBZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "2FC1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "2FC3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "2FC5-0",
+   "name": "DV-3 Detail Sparse Rows",
+   "component": "Frame",
+   "w": 421,
+   "h": 485,
+   "depth": 5
+  },
+  {
+   "id": "2FC6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2FC8-0",
+   "name": "base:ka10055|$.tdy_pred_cntr_qty[].cntr_tm|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2FCB-0",
+   "name": "base:ka10003|$.cntr_infr[].cur_prc|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2FCE-0",
+   "name": "base:ka10003|$.cntr_infr[].pred_pre|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2FCH-0",
+   "name": "base:ka10003|$.cntr_infr[].pre_rt|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2FCK-0",
+   "name": "base:ka10003|$.cntr_infr[].cntr_trde_qty|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2FCN-0",
+   "name": "base:ka10003|$.cntr_infr[].acc_trde_qty|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2FCQ-0",
+   "name": "base:ka10003|$.cntr_infr[].acc_trde_prica|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2FCT-0",
+   "name": "base:ka10003|$.cntr_infr[].cntr_str|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2FCW-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].open_pric|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2FCZ-0",
+   "name": "base:ka10016|$.ntl_pric[].high_pric|1",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2FD2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "2FD4-0",
+   "name": "DV-3 Detail Footer · Chrome",
+   "component": "Frame",
+   "w": 421,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "2FD8-0",
+   "name": "DV-3 Exact Metadata Remaining · 179",
+   "component": "Frame",
+   "w": 421,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "2FD9-0",
+   "name": "base:0g|$.data[].297|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDA-0",
+   "name": "base:0g|$.data[].592|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDB-0",
+   "name": "base:0g|$.data[].593|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDC-0",
+   "name": "base:0g|$.data[].305|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDD-0",
+   "name": "base:0g|$.data[].306|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDE-0",
+   "name": "base:0g|$.data[].307|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDF-0",
+   "name": "base:0g|$.data[].689|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDG-0",
+   "name": "base:0g|$.data[].594|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDH-0",
+   "name": "base:0g|$.data[].382|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDI-0",
+   "name": "base:0g|$.data[].370|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDJ-0",
+   "name": "base:ka10003|$.cntr_infr|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDK-0",
+   "name": "base:ka10003|$.cntr_infr[].tm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDL-0",
+   "name": "base:ka10003|$.cntr_infr[].pri_sel_bid_unit|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDM-0",
+   "name": "base:ka10003|$.cntr_infr[].pri_buy_bid_unit|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDN-0",
+   "name": "base:ka10003|$.cntr_infr[].sign|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDO-0",
+   "name": "base:ka10003|$.cntr_infr[].stex_tp|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDP-0",
+   "name": "base:ka10015|$.daly_trde_dtl|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDQ-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].dt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDR-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].close_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDS-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDT-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDU-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDV-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDW-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].trde_prica|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDX-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].bf_mkrt_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDY-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].bf_mkrt_trde_wght|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FDZ-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].opmr_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FE0-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].opmr_trde_wght|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FE1-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].af_mkrt_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FE2-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].af_mkrt_trde_wght|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FE3-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].tot_3|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FE4-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].prid_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FE5-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].cntr_str|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FE6-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].for_poss|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FE7-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].for_wght|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FE8-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].for_netprps|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FE9-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].orgn_netprps|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEA-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].ind_netprps|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEB-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].frgn|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEC-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].crd_remn_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FED-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].prm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEE-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].bf_mkrt_trde_prica|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEF-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].bf_mkrt_trde_prica_wght|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEG-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].opmr_trde_prica|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEH-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].opmr_trde_prica_wght|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEI-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].af_mkrt_trde_prica|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEJ-0",
+   "name": "base:ka10015|$.daly_trde_dtl[].af_mkrt_trde_prica_wght|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEK-0",
+   "name": "base:ka10016|$.ntl_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEL-0",
+   "name": "base:ka10016|$.ntl_pric[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEM-0",
+   "name": "base:ka10016|$.ntl_pric[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEN-0",
+   "name": "base:ka10016|$.ntl_pric[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEO-0",
+   "name": "base:ka10016|$.ntl_pric[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEP-0",
+   "name": "base:ka10016|$.ntl_pric[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEQ-0",
+   "name": "base:ka10016|$.ntl_pric[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FER-0",
+   "name": "base:ka10016|$.ntl_pric[].trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FES-0",
+   "name": "base:ka10016|$.ntl_pric[].pred_trde_qty_pre_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FET-0",
+   "name": "base:ka10016|$.ntl_pric[].sel_bid|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEU-0",
+   "name": "base:ka10016|$.ntl_pric[].buy_bid|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEV-0",
+   "name": "base:ka10016|$.ntl_pric[].low_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEW-0",
+   "name": "base:ka10017|$.updown_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEX-0",
+   "name": "base:ka10017|$.updown_pric[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEY-0",
+   "name": "base:ka10017|$.updown_pric[].stk_infr|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FEZ-0",
+   "name": "base:ka10017|$.updown_pric[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FF0-0",
+   "name": "base:ka10017|$.updown_pric[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FF1-0",
+   "name": "base:ka10017|$.updown_pric[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FF2-0",
+   "name": "base:ka10017|$.updown_pric[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FF3-0",
+   "name": "base:ka10017|$.updown_pric[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FF4-0",
+   "name": "base:ka10017|$.updown_pric[].trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FF5-0",
+   "name": "base:ka10017|$.updown_pric[].pred_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FF6-0",
+   "name": "base:ka10017|$.updown_pric[].sel_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FF7-0",
+   "name": "base:ka10017|$.updown_pric[].sel_bid|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FF8-0",
+   "name": "base:ka10017|$.updown_pric[].buy_bid|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FF9-0",
+   "name": "base:ka10017|$.updown_pric[].buy_req|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFA-0",
+   "name": "base:ka10017|$.updown_pric[].cnt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFB-0",
+   "name": "base:ka10018|$.high_low_pric_alacc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFC-0",
+   "name": "base:ka10018|$.high_low_pric_alacc[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFD-0",
+   "name": "base:ka10018|$.high_low_pric_alacc[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFE-0",
+   "name": "base:ka10018|$.high_low_pric_alacc[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFF-0",
+   "name": "base:ka10018|$.high_low_pric_alacc[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFG-0",
+   "name": "base:ka10018|$.high_low_pric_alacc[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFH-0",
+   "name": "base:ka10018|$.high_low_pric_alacc[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFI-0",
+   "name": "base:ka10018|$.high_low_pric_alacc[].trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFJ-0",
+   "name": "base:ka10018|$.high_low_pric_alacc[].sel_bid|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFK-0",
+   "name": "base:ka10018|$.high_low_pric_alacc[].buy_bid|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFL-0",
+   "name": "base:ka10018|$.high_low_pric_alacc[].tdy_high_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFM-0",
+   "name": "base:ka10018|$.high_low_pric_alacc[].tdy_low_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFN-0",
+   "name": "base:ka10019|$.pric_jmpflu|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFO-0",
+   "name": "base:ka10019|$.pric_jmpflu[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFP-0",
+   "name": "base:ka10019|$.pric_jmpflu[].stk_cls|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFQ-0",
+   "name": "base:ka10019|$.pric_jmpflu[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFR-0",
+   "name": "base:ka10019|$.pric_jmpflu[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFS-0",
+   "name": "base:ka10019|$.pric_jmpflu[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFT-0",
+   "name": "base:ka10019|$.pric_jmpflu[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFU-0",
+   "name": "base:ka10019|$.pric_jmpflu[].base_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFV-0",
+   "name": "base:ka10019|$.pric_jmpflu[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFW-0",
+   "name": "base:ka10019|$.pric_jmpflu[].base_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFX-0",
+   "name": "base:ka10019|$.pric_jmpflu[].trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFY-0",
+   "name": "base:ka10019|$.pric_jmpflu[].jmp_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FFZ-0",
+   "name": "base:ka10024|$.trde_qty_updt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FG0-0",
+   "name": "base:ka10024|$.trde_qty_updt[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FG1-0",
+   "name": "base:ka10024|$.trde_qty_updt[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FG2-0",
+   "name": "base:ka10024|$.trde_qty_updt[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FG3-0",
+   "name": "base:ka10024|$.trde_qty_updt[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FG4-0",
+   "name": "base:ka10024|$.trde_qty_updt[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FG5-0",
+   "name": "base:ka10024|$.trde_qty_updt[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FG6-0",
+   "name": "base:ka10024|$.trde_qty_updt[].prev_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FG7-0",
+   "name": "base:ka10024|$.trde_qty_updt[].now_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FG8-0",
+   "name": "base:ka10024|$.trde_qty_updt[].sel_bid|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FG9-0",
+   "name": "base:ka10024|$.trde_qty_updt[].buy_bid|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGA-0",
+   "name": "base:ka10025|$.prps_cnctr|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGB-0",
+   "name": "base:ka10025|$.prps_cnctr[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGC-0",
+   "name": "base:ka10025|$.prps_cnctr[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGD-0",
+   "name": "base:ka10025|$.prps_cnctr[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGE-0",
+   "name": "base:ka10025|$.prps_cnctr[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGF-0",
+   "name": "base:ka10025|$.prps_cnctr[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGG-0",
+   "name": "base:ka10025|$.prps_cnctr[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGH-0",
+   "name": "base:ka10025|$.prps_cnctr[].now_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGI-0",
+   "name": "base:ka10025|$.prps_cnctr[].pric_strt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGJ-0",
+   "name": "base:ka10025|$.prps_cnctr[].pric_end|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGK-0",
+   "name": "base:ka10025|$.prps_cnctr[].prps_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGL-0",
+   "name": "base:ka10025|$.prps_cnctr[].prps_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGM-0",
+   "name": "base:ka10026|$.high_low_per|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGN-0",
+   "name": "base:ka10026|$.high_low_per[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGO-0",
+   "name": "base:ka10026|$.high_low_per[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGP-0",
+   "name": "base:ka10026|$.high_low_per[].per|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGQ-0",
+   "name": "base:ka10026|$.high_low_per[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGR-0",
+   "name": "base:ka10026|$.high_low_per[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGS-0",
+   "name": "base:ka10026|$.high_low_per[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGT-0",
+   "name": "base:ka10026|$.high_low_per[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGU-0",
+   "name": "base:ka10026|$.high_low_per[].now_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGV-0",
+   "name": "base:ka10026|$.high_low_per[].sel_bid|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGW-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGX-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGY-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FGZ-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FH0-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FH1-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FH2-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FH3-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].high_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FH4-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].low_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FH5-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].open_pric_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FH6-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].now_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FH7-0",
+   "name": "base:ka10028|$.open_pric_pre_flu_rt[].cntr_str|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FH8-0",
+   "name": "base:ka10054|$.motn_stk|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FH9-0",
+   "name": "base:ka10054|$.motn_stk[].stk_cd|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHA-0",
+   "name": "base:ka10054|$.motn_stk[].stk_nm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHB-0",
+   "name": "base:ka10054|$.motn_stk[].acc_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHC-0",
+   "name": "base:ka10054|$.motn_stk[].motn_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHD-0",
+   "name": "base:ka10054|$.motn_stk[].dynm_dispty_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHE-0",
+   "name": "base:ka10054|$.motn_stk[].trde_cntr_proc_time|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHF-0",
+   "name": "base:ka10054|$.motn_stk[].virelis_time|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHG-0",
+   "name": "base:ka10054|$.motn_stk[].viaplc_tp|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHH-0",
+   "name": "base:ka10054|$.motn_stk[].dynm_stdpc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHI-0",
+   "name": "base:ka10054|$.motn_stk[].static_stdpc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHJ-0",
+   "name": "base:ka10054|$.motn_stk[].static_dispty_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHK-0",
+   "name": "base:ka10054|$.motn_stk[].open_pric_pre_flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHL-0",
+   "name": "base:ka10054|$.motn_stk[].vimotn_cnt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHM-0",
+   "name": "base:ka10054|$.motn_stk[].stex_tp|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHN-0",
+   "name": "base:ka10055|$.tdy_pred_cntr_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHO-0",
+   "name": "base:ka10055|$.tdy_pred_cntr_qty[].cntr_pric|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHP-0",
+   "name": "base:ka10055|$.tdy_pred_cntr_qty[].pred_pre_sig|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHQ-0",
+   "name": "base:ka10055|$.tdy_pred_cntr_qty[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHR-0",
+   "name": "base:ka10055|$.tdy_pred_cntr_qty[].flu_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHS-0",
+   "name": "base:ka10055|$.tdy_pred_cntr_qty[].cntr_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHT-0",
+   "name": "base:ka10055|$.tdy_pred_cntr_qty[].acc_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHU-0",
+   "name": "base:ka10055|$.tdy_pred_cntr_qty[].acc_trde_prica|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHV-0",
+   "name": "base:ka10084|$.tdy_pred_cntr|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHW-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].tm|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHX-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].cur_prc|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHY-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].pred_pre|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FHZ-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].pre_rt|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FI0-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].pri_sel_bid_unit|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FI1-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].pri_buy_bid_unit|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FI2-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].cntr_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FI3-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].sign|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FI4-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].acc_trde_qty|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FI5-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].acc_trde_prica|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FI6-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].cntr_str|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2FI7-0",
+   "name": "base:ka10084|$.tdy_pred_cntr[].stex_tp|1",
+   "component": "Frame",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2F75-0",
+   "name": "DV-3 Footer",
+   "component": "Frame",
+   "w": 1390,
+   "h": 36,
+   "depth": 3
+  },
+  {
+   "id": "2F88-0",
+   "name": "DV-3 Footer Controls · Chrome",
+   "component": "Frame",
+   "w": 1390,
+   "h": 36,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "삼성전자": 1,
+  "005930 · KOSPI": 1,
+  "150,850원": 5,
+  "+2.35%": 6,
+  "DESIGN FIXTURE · 12:34": 1,
+  "체결": 2,
+  "일별 거래": 1,
+  "가격 움직임": 1,
+  "예상체결": 1,
+  "VI·시장 상태": 1,
+  "시간외": 1,
+  "기간": 1,
+  "최근 20거래일 ▾": 1,
+  "정렬": 1,
+  "최신 순 ▾": 1,
+  "정규장 포함": 1,
+  "● 실시간 갱신": 1,
+  "선택 행 12:34:18": 1,
+  "체결 이력 · 최신 순": 1,
+  "열 설정: 가격 · 거래량 · 체결강도": 1,
+  "일시": 1,
+  "체결가": 1,
+  "전일대비": 2,
+  "등락률": 1,
+  "체결량": 1,
+  "누적거래량": 2,
+  "누적대금": 1,
+  "체결강도": 2,
+  "12:34:18": 2,
+  "150,850": 2,
+  "+3,450": 2,
+  "12,480": 1,
+  "18,420,135": 1,
+  "1.42조": 2,
+  "128.4": 1,
+  "12:34:12": 1,
+  "150,800": 2,
+  "+3,400": 2,
+  "+2.31%": 2,
+  "8,250": 1,
+  "18,407,655": 1,
+  "127.9": 1,
+  "12:34:06": 1,
+  "6,140": 1,
+  "18,399,405": 1,
+  "1.41조": 4,
+  "128.1": 1,
+  "12:34:00": 1,
+  "150,750": 2,
+  "+3,350": 2,
+  "+2.27%": 2,
+  "9,880": 1,
+  "18,393,265": 1,
+  "127.4": 1,
+  "12:33:54": 1,
+  "150,700": 3,
+  "+3,300": 3,
+  "+2.24%": 3,
+  "5,530": 1,
+  "18,383,385": 1,
+  "126.8": 1,
+  "12:33:48": 1,
+  "11,020": 1,
+  "18,377,855": 1,
+  "127.6": 1,
+  "12:33:42": 1,
+  "7,310": 1,
+  "18,366,835": 1,
+  "1.40조": 3,
+  "127.2": 1,
+  "12:33:36": 1,
+  "4,860": 1,
+  "18,359,525": 1,
+  "126.9": 1,
+  "12:33:30": 1,
+  "150,650": 1,
+  "+3,250": 1,
+  "+2.20%": 1,
+  "10,340": 1,
+  "18,354,665": 1,
+  "126.5": 1,
+  "12:33:24": 1,
+  "6,920": 1,
+  "18,344,325": 1,
+  "1.39조": 1,
+  "126.7": 1,
+  "1–10 / 120": 1,
+  "더보기": 1,
+  "접기": 1,
+  "선택: 12:34:18 · 150,850원": 1,
+  "표 안에서만 스크롤": 1,
+  "선택 체결": 1,
+  "12:34:18 · 정규장": 1,
+  "일별": 1,
+  "가격": 1,
+  "예상": 1,
+  "VI·시장": 1,
+  "기타": 1,
+  "선택 행 공식 정보": 1,
+  "체결시간": 1,
+  "현재가": 1,
+  "+3,450원": 1,
+  "대비율": 1,
+  "체결거래량": 1,
+  "18,420,135주": 2,
+  "누적거래대금": 1,
+  "1.42조원": 1,
+  "시가": 1,
+  "고가": 1,
+  "탭 전환 시 같은 행의 공식 필드 묶음이 교체됩니다.": 1,
+  "10개 표시": 1,
+  "더보기 · 접기": 1,
+  "10행 표시 · 더보기 시 표 내부 스크롤 · 접기": 1,
+  "거래·가격 공식 필드 189개 연결": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "bf21496b927220bcd199b36a9474aedf3c1d45a2c60a9c0a0633e0eb313a379b"
+}

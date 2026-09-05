@@ -1,0 +1,696 @@
+{
+ "board_id": "2UWT-1",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "32 · 설정 — 성향·이력",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "2UZJ-1",
+   "text": "설정",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "2UZI-1",
+   "text": "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "2UZG-1",
+   "text": "화면",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item is-selected"
+   ]
+  },
+  {
+   "id": "2UZE-1",
+   "text": "계좌",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "2UZD-1",
+   "text": "2개",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "2UZB-1",
+   "text": "플러그인",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "2UZA-1",
+   "text": "2개",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "2UZ8-1",
+   "text": "모델",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "2UZ6-1",
+   "text": "성향・이력",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "2UZM-1",
+   "text": "성향·이력",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UZN-1",
+   "text": "로컬 보관 · 언제든 내보내기 가능",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UZQ-1",
+   "text": "투자 성향",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UZT-1",
+   "text": "장기 ETF 적립형",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UZU-1",
+   "text": "대화에서 학습됨",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UZV-1",
+   "text": "지수 ETF 위주로 장기 적립하고, 개별 종목은 반도체 대형주를 관찰합니다. 답변은 차분한 설명을 선호합니다.",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UZX-1",
+   "text": "위험 성향",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UZY-1",
+   "text": "안정 추구",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V00-1",
+   "text": "주요 관심",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V01-1",
+   "text": "지수 ETF · 반도체",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V03-1",
+   "text": "성향 반영",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V04-1",
+   "text": "켜짐 · 답변 어조에만 사용",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V06-1",
+   "text": "대화 이력",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V08-1",
+   "text": "보관 중",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V09-1",
+   "text": "대화 128건 · 42MB",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V0B-1",
+   "text": "보존 기간",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V0C-1",
+   "text": "90일 · 이후 자동 정리",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V0F-1",
+   "text": "이력 내보내기",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V0H-1",
+   "text": "전체 삭제",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V0I-1",
+   "text": "삭제는 확인 단계를 한 번 더 거치며 되돌릴 수 없습니다",
+   "path": [
+    "32 · 설정 — 성향·이력",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2UWT-1",
+   "name": "32 · 설정 — 성향·이력",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "2UWU-1",
+   "name": "Shell 창 · 설정 모드 (#settings)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "2UZH-1",
+   "name": "settings-head",
+   "component": "Frame",
+   "w": 1478,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "2UX4-1",
+   "name": "settings-body",
+   "component": "Frame",
+   "w": 1478,
+   "h": 662,
+   "depth": 2
+  },
+  {
+   "id": "2UZ4-1",
+   "name": "settings-nav",
+   "component": "Frame",
+   "w": 236,
+   "h": 662,
+   "depth": 3
+  },
+  {
+   "id": "2UZF-1",
+   "name": "nav-item is-selected",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "2UZC-1",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "2UZ9-1",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "2UZ7-1",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "2UZ5-1",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "2UX5-1",
+   "name": "settings-grid",
+   "component": "Frame",
+   "w": 1226,
+   "h": 662,
+   "depth": 3
+  },
+  {
+   "id": "2UZK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1226,
+   "h": 662,
+   "depth": 4
+  },
+  {
+   "id": "2UZL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1224,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "2UZO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1224,
+   "h": 408,
+   "depth": 5
+  },
+  {
+   "id": "2UZP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1188,
+   "h": 200,
+   "depth": 6
+  },
+  {
+   "id": "2UZR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1188,
+   "h": 66,
+   "depth": 7
+  },
+  {
+   "id": "2UZS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1160,
+   "h": 16,
+   "depth": 8
+  },
+  {
+   "id": "2UZW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1188,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "2UZZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1188,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "2V02-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1188,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "2V05-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1188,
+   "h": 162,
+   "depth": 6
+  },
+  {
+   "id": "2V07-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1188,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "2V0A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1188,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "2V0D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1188,
+   "h": 44,
+   "depth": 7
+  },
+  {
+   "id": "2V0E-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 589,
+   "h": 38,
+   "depth": 8
+  },
+  {
+   "id": "2V0G-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 589,
+   "h": 38,
+   "depth": 8
+  },
+  {
+   "id": "2UX3-1",
+   "name": "타이틀바 (.titlebar)",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "2UWV-1",
+   "name": "창 제어 (.win-controls · 최대화 비활성)",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "2UX1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "2UX2-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "2UWZ-1",
+   "name": "disabled",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "2UX0-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "2UWW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "2UWX-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "2UWY-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "설정": 1,
+  "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기": 1,
+  "화면": 1,
+  "계좌": 1,
+  "2개": 2,
+  "플러그인": 1,
+  "모델": 1,
+  "성향・이력": 1,
+  "성향·이력": 1,
+  "로컬 보관 · 언제든 내보내기 가능": 1,
+  "투자 성향": 1,
+  "장기 ETF 적립형": 1,
+  "대화에서 학습됨": 1,
+  "지수 ETF 위주로 장기 적립하고, 개별 종목은 반도체 대형주를 관찰합니다. 답변은 차분한 설명을 선호합니다.": 1,
+  "위험 성향": 1,
+  "안정 추구": 1,
+  "주요 관심": 1,
+  "지수 ETF · 반도체": 1,
+  "성향 반영": 1,
+  "켜짐 · 답변 어조에만 사용": 1,
+  "대화 이력": 1,
+  "보관 중": 1,
+  "대화 128건 · 42MB": 1,
+  "보존 기간": 1,
+  "90일 · 이후 자동 정리": 1,
+  "이력 내보내기": 1,
+  "전체 삭제": 1,
+  "삭제는 확인 단계를 한 번 더 거치며 되돌릴 수 없습니다": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "6a0a28e4b44fa7db9f317c9cf4642c8d79a10deb9c45a77d1d594d43e9544349"
+}

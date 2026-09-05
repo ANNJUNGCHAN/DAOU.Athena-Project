@@ -1,0 +1,552 @@
+{
+ "board_id": "COS-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "26 · 빈 작업공간 — 대화·그래프·백테스트",
+ "width": 1729,
+ "height": 789,
+ "texts": [
+  {
+   "id": "CR4-0",
+   "text": "빈 캔버스 v3 — 상징 삽화 한 벌, 문구는 살아 있다 (+백테스트)",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CR5-0",
+   "text": "대화 모드(3차 피드백): 그래프 별자리와 같은 어휘의 말풍선 라인아트 + 시간대·성향 따라 회전하는 문구. 성향 문구는 브레인 준비 시에만(없는 성향을 지어내지 않는다). 그래프 모드: 성향 축적 히어로 유지.",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CR8-0",
+   "text": "대화 모드 — 말풍선 별자리",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CRH-0",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CRI-0",
+   "text": "질문하면 답변 카드가 이 자리에 쌓입니다.",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CRK-0",
+   "text": "그래프 모드 — 요약 뷰 히어로",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CRY-0",
+   "text": "그동안 나눈 대화와 체결로 성향은 계속 쌓이고 있습니다",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CRZ-0",
+   "text": "엔티티 N · 테마 군집 N",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CS0-0",
+   "text": "확인이 필요한 것 N건이 기다리고 있습니다",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VQA-1",
+   "text": "백테스트 모드 — 전략 없음",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "백테스트 빈 상태"
+   ]
+  },
+  {
+   "id": "1VQG-1",
+   "text": "아직 전략이 없습니다",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "백테스트 빈 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VQH-1",
+   "text": "프리셋 10종에서 시작하거나, 채팅에 전략을 말로 설명해 보세요.\n과거는 미래를 보증하지 않습니다 — 결과에는 가정이 늘 함께 붙습니다.",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "백테스트 빈 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VQK-1",
+   "text": "프리셋에서 시작",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "백테스트 빈 상태",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VQM-1",
+   "text": ".kis.yaml 불러오기",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame",
+    "백테스트 빈 상태",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CS2-0",
+   "text": "회전 문구 풀 (45초 주기 · 시드 결정적 — lib/empty-canvas.js pickEmptyCopy)",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CS3-0",
+   "text": "기본 — \"무엇이든 물어보세요 / 질문하면 답변 카드가 이 자리에 쌓입니다.\"",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CS4-0",
+   "text": "06~09시 — \"장 시작 전, 궁금한 것부터 / 오늘 볼 종목을 물어보면 카드로 정리해드립니다.\"",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CS5-0",
+   "text": "09~16시 — \"지금 시장이 움직이고 있습니다 / 궁금한 종목을 물어보면 카드가 바로 쌓입니다.\"",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CS6-0",
+   "text": "16~20시 — \"오늘 장, 정리해볼까요? / 체결과 손익을 물어보면 카드로 정리합니다.\"",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CS7-0",
+   "text": "20~06시 — \"장은 닫혔지만 준비는 지금 / 내일 볼 종목을 물어보면 미리 정리해드립니다.\"",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CS8-0",
+   "text": "성향(브레인 상위 1건 이름, 준비 시에만) — \"〈이름〉 쪽, 요즘 자주 보시죠? / 이어서 물어보면 흐름까지 함께 정리합니다.\"",
+   "path": [
+    "26 · 빈 작업공간 — 대화·그래프·백테스트",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "COS-0",
+   "name": "26 · 빈 작업공간 — 대화·그래프·백테스트",
+   "component": "Frame",
+   "w": 1729,
+   "h": 789,
+   "depth": 0
+  },
+  {
+   "id": "CR2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1652,
+   "h": 778,
+   "depth": 1
+  },
+  {
+   "id": "CR3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1556,
+   "h": 61,
+   "depth": 2
+  },
+  {
+   "id": "CR6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1556,
+   "h": 372,
+   "depth": 2
+  },
+  {
+   "id": "CR7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 560,
+   "h": 372,
+   "depth": 3
+  },
+  {
+   "id": "CR9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 560,
+   "h": 340,
+   "depth": 4
+  },
+  {
+   "id": "CRA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 247,
+   "h": 134,
+   "depth": 5
+  },
+  {
+   "id": "CRB-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 120,
+   "h": 72,
+   "depth": 6
+  },
+  {
+   "id": "CRC-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 76,
+   "h": 44,
+   "depth": 7
+  },
+  {
+   "id": "CRD-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "CRE-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "CRF-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "CRG-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 42,
+   "h": 26,
+   "depth": 7
+  },
+  {
+   "id": "CRJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 560,
+   "h": 372,
+   "depth": 3
+  },
+  {
+   "id": "CRL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 560,
+   "h": 340,
+   "depth": 4
+  },
+  {
+   "id": "CRM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 433,
+   "h": 162,
+   "depth": 5
+  },
+  {
+   "id": "CRN-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 120,
+   "h": 72,
+   "depth": 6
+  },
+  {
+   "id": "CRO-0",
+   "name": "Group",
+   "component": "SVGVisualElement",
+   "w": 86,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "CRP-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 34,
+   "h": 24,
+   "depth": 8
+  },
+  {
+   "id": "CRQ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 34,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "CRR-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 18,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "CRS-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 18,
+   "h": 10,
+   "depth": 8
+  },
+  {
+   "id": "CRT-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "CRU-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 7
+  },
+  {
+   "id": "CRV-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "CRW-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "CRX-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "1VQ9-1",
+   "name": "백테스트 빈 상태",
+   "component": "Frame",
+   "w": 560,
+   "h": 368,
+   "depth": 3
+  },
+  {
+   "id": "1VQB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 560,
+   "h": 340,
+   "depth": 4
+  },
+  {
+   "id": "1VQC-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 120,
+   "h": 72,
+   "depth": 5
+  },
+  {
+   "id": "1VQD-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 104,
+   "h": 50,
+   "depth": 6
+  },
+  {
+   "id": "1VQE-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "1VQF-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "1VQI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 261,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "1VQJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 121,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "1VQL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "CS1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 460,
+   "h": 281,
+   "depth": 2
+  }
+ ],
+ "text_multiset": {
+  "빈 캔버스 v3 — 상징 삽화 한 벌, 문구는 살아 있다 (+백테스트)": 1,
+  "대화 모드(3차 피드백): 그래프 별자리와 같은 어휘의 말풍선 라인아트 + 시간대·성향 따라 회전하는 문구. 성향 문구는 브레인 준비 시에만(없는 성향을 지어내지 않는다). 그래프 모드: 성향 축적 히어로 유지.": 1,
+  "대화 모드 — 말풍선 별자리": 1,
+  "무엇이든 물어보세요": 1,
+  "질문하면 답변 카드가 이 자리에 쌓입니다.": 1,
+  "그래프 모드 — 요약 뷰 히어로": 1,
+  "그동안 나눈 대화와 체결로 성향은 계속 쌓이고 있습니다": 1,
+  "엔티티 N · 테마 군집 N": 1,
+  "확인이 필요한 것 N건이 기다리고 있습니다": 1,
+  "백테스트 모드 — 전략 없음": 1,
+  "아직 전략이 없습니다": 1,
+  "프리셋 10종에서 시작하거나, 채팅에 전략을 말로 설명해 보세요.\n과거는 미래를 보증하지 않습니다 — 결과에는 가정이 늘 함께 붙습니다.": 1,
+  "프리셋에서 시작": 1,
+  ".kis.yaml 불러오기": 1,
+  "회전 문구 풀 (45초 주기 · 시드 결정적 — lib/empty-canvas.js pickEmptyCopy)": 1,
+  "기본 — \"무엇이든 물어보세요 / 질문하면 답변 카드가 이 자리에 쌓입니다.\"": 1,
+  "06~09시 — \"장 시작 전, 궁금한 것부터 / 오늘 볼 종목을 물어보면 카드로 정리해드립니다.\"": 1,
+  "09~16시 — \"지금 시장이 움직이고 있습니다 / 궁금한 종목을 물어보면 카드가 바로 쌓입니다.\"": 1,
+  "16~20시 — \"오늘 장, 정리해볼까요? / 체결과 손익을 물어보면 카드로 정리합니다.\"": 1,
+  "20~06시 — \"장은 닫혔지만 준비는 지금 / 내일 볼 종목을 물어보면 미리 정리해드립니다.\"": 1,
+  "성향(브레인 상위 1건 이름, 준비 시에만) — \"〈이름〉 쪽, 요즘 자주 보시죠? / 이어서 물어보면 흐름까지 함께 정리합니다.\"": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "fb76c2bfe683b642c09d7a5ead63fbeda324b61d98678106acec2fb22b6ff162"
+}

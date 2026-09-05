@@ -1,0 +1,1215 @@
+{
+ "board_id": "2NW8-2",
+ "page": "B-2",
+ "page_name": "플러그인",
+ "name": "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+ "width": 1680,
+ "height": 986,
+ "texts": [
+  {
+   "id": "2NWA-2",
+   "text": "셸 — 플러그인 모드 · 설치 승인 카드",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "board-head"
+   ]
+  },
+  {
+   "id": "2NWB-2",
+   "text": "승인 카드는 플러그인 캔버스 안에 놓입니다. 허브의 설치 버튼과 채팅 제안이 같은 카드로 들어옵니다.",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "board-head"
+   ]
+  },
+  {
+   "id": "3ZF4-0",
+   "text": "ATHENA",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZFC-0",
+   "text": "새 채팅",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZFJ-0",
+   "text": "그래프",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZFO-0",
+   "text": "에이전트",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZFT-0",
+   "text": "플러그인",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZFW-0",
+   "text": "프로젝트",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZG1-0",
+   "text": "아테나",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZGA-0",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZGC-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZGG-0",
+   "text": "최근",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZGH-0",
+   "text": "전체",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZGJ-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZGM-0",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZGO-0",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZGS-0",
+   "text": "AN",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZGT-0",
+   "text": "모의-주력",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZHG-0",
+   "text": "플러그인",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "canvas-head"
+   ]
+  },
+  {
+   "id": "3ZHJ-0",
+   "text": "설치됨 2",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "canvas-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZHO-0",
+   "text": "아테나 제안",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-head",
+    "출처 라벨"
+   ]
+  },
+  {
+   "id": "3ZHP-0",
+   "text": "웹 문서 읽기 설치",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-head"
+   ]
+  },
+  {
+   "id": "3ZHS-0",
+   "text": "플러그인 정보",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body"
+   ]
+  },
+  {
+   "id": "3ZHU-0",
+   "text": "웹 문서 읽기",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body",
+    "info"
+   ]
+  },
+  {
+   "id": "3ZHV-0",
+   "text": "제공: athena-official · mcp-server-fetch",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body",
+    "info"
+   ]
+  },
+  {
+   "id": "3ZHW-0",
+   "text": "용도: 공시·리서치 웹 페이지를 마크다운으로 읽기",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body",
+    "info"
+   ]
+  },
+  {
+   "id": "3ZHY-0",
+   "text": "요청 기능",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body"
+   ]
+  },
+  {
+   "id": "3ZI1-0",
+   "text": "fetch — 웹 페이지를 마크다운으로 읽습니다",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body",
+    "features",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZI3-0",
+   "text": "요청",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body",
+    "features",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZI6-0",
+   "text": "실행 명령: uvx mcp-server-fetch",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body",
+    "command"
+   ]
+  },
+  {
+   "id": "3ZI8-0",
+   "text": "설치 위치 · 플러그인 모드 > 웹 문서 읽기",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body",
+    "location"
+   ]
+  },
+  {
+   "id": "3ZIC-0",
+   "text": "권한 1개 요청",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body",
+    "badges",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZIE-0",
+   "text": "설치형 플러그인",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body",
+    "badges",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZIH-0",
+   "text": "거부",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body",
+    "actions",
+    "btn-reject"
+   ]
+  },
+  {
+   "id": "3ZIJ-0",
+   "text": "승인",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "install-card",
+    "card-body",
+    "actions",
+    "btn-approve"
+   ]
+  },
+  {
+   "id": "3ZIM-0",
+   "text": "허브의 설치 버튼도 이 카드로 들어옵니다",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "플러그인 캔버스",
+    "card-footnote"
+   ]
+  },
+  {
+   "id": "3ZGZ-0",
+   "text": "아테나 · 플러그인 대화",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZH0-0",
+   "text": "설치와 권한을 여기서 정합니다",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZH4-0",
+   "text": "공시 웹 페이지를 그대로 읽고 싶어",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZH5-0",
+   "text": "웹 문서 읽기 플러그인이 맞겠습니다. 설치하면 공시·리서치 페이지를 마크다운으로 읽습니다.",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZH6-0",
+   "text": "설치를 제안했습니다. 캔버스의 승인 카드에서 실행 명령과 요청 기능을 확인하세요.",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZHD-0",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+    "Shell 창 · 플러그인 모드",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2NW8-2",
+   "name": "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+   "component": "Frame",
+   "w": 1680,
+   "h": 986,
+   "depth": 0
+  },
+  {
+   "id": "2NW9-2",
+   "name": "board-head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "3ZF0-0",
+   "name": "Shell 창 · 플러그인 모드",
+   "component": "Frame",
+   "w": 1560,
+   "h": 811,
+   "depth": 1
+  },
+  {
+   "id": "3ZF1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 268,
+   "h": 809,
+   "depth": 2
+  },
+  {
+   "id": "3ZF2-0",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZF3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "3ZF5-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZF6-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZF7-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZF8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3ZF9-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZFA-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZFB-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZFD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3ZFE-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZFF-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZFG-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZFH-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZFI-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZFK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3ZFL-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZFM-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZFN-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZFP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3ZFQ-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZFR-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZFS-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZFU-0",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZFV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZFX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "3ZFY-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZFZ-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZG0-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZG2-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZG3-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZG4-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZG5-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZG6-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZG7-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZG8-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZG9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "3ZGB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 29,
+   "depth": 4
+  },
+  {
+   "id": "3ZGD-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "3ZGE-0",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZGF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3ZGI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "3ZGK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "3ZGL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "3ZGN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "3ZGP-0",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZGQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 4
+  },
+  {
+   "id": "3ZGR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3ZGU-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZGV-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZGW-0",
+   "name": "플러그인 캔버스",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZHF-0",
+   "name": "canvas-head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZHH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZHI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZHL-0",
+   "name": "install-card",
+   "component": "Frame",
+   "w": 560,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZHM-0",
+   "name": "card-head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZHN-0",
+   "name": "출처 라벨",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZHR-0",
+   "name": "card-body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZHT-0",
+   "name": "info",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZHZ-0",
+   "name": "features",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZI0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZI2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ZI5-0",
+   "name": "command",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZI7-0",
+   "name": "location",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZIA-0",
+   "name": "badges",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZIB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZID-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZIF-0",
+   "name": "actions",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZIG-0",
+   "name": "btn-reject",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZII-0",
+   "name": "btn-approve",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZIL-0",
+   "name": "card-footnote",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZGX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 809,
+   "depth": 2
+  },
+  {
+   "id": "3ZGY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZH1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZH2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZH3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZH7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZH8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZH9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3ZHA-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ZHB-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ZHC-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  }
+ ],
+ "text_multiset": {
+  "셸 — 플러그인 모드 · 설치 승인 카드": 1,
+  "승인 카드는 플러그인 캔버스 안에 놓입니다. 허브의 설치 버튼과 채팅 제안이 같은 카드로 들어옵니다.": 1,
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 2,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "설치됨 2": 1,
+  "아테나 제안": 1,
+  "웹 문서 읽기 설치": 1,
+  "플러그인 정보": 1,
+  "웹 문서 읽기": 1,
+  "제공: athena-official · mcp-server-fetch": 1,
+  "용도: 공시·리서치 웹 페이지를 마크다운으로 읽기": 1,
+  "요청 기능": 1,
+  "fetch — 웹 페이지를 마크다운으로 읽습니다": 1,
+  "요청": 1,
+  "실행 명령: uvx mcp-server-fetch": 1,
+  "설치 위치 · 플러그인 모드 > 웹 문서 읽기": 1,
+  "권한 1개 요청": 1,
+  "설치형 플러그인": 1,
+  "거부": 1,
+  "승인": 1,
+  "허브의 설치 버튼도 이 카드로 들어옵니다": 1,
+  "아테나 · 플러그인 대화": 1,
+  "설치와 권한을 여기서 정합니다": 1,
+  "공시 웹 페이지를 그대로 읽고 싶어": 1,
+  "웹 문서 읽기 플러그인이 맞겠습니다. 설치하면 공시·리서치 페이지를 마크다운으로 읽습니다.": 1,
+  "설치를 제안했습니다. 캔버스의 승인 카드에서 실행 명령과 요청 기능을 확인하세요.": 1,
+  "무엇이든 물어보세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "849a025030a38c2daac221cc11d8c4214ed119fe1375ff359eaea3bc87d4a8e2"
+}

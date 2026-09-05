@@ -1,0 +1,9 @@
+Frame "note/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정" (48WR-0) 360×92
+  Frame "Frame" (48WS-0) 334×0
+    Text "원본 보드: CC-02 / R11-T…" (48WT-0) 0×0 "원본 보드: CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정"
+  Frame "Frame" (48WU-0) 334×0
+    Text "가져온 요소: 주문가능금액 · 정정수…" (48WV-0) 0×0 "가져온 요소: 주문가능금액 · 정정수량"
+  Frame "Frame" (48WW-0) 334×0
+    Text "문법: order_confirm" (48WX-0) 0×0 "문법: order_confirm"
+  Frame "Frame" (48WY-0) 334×0
+    Text "접은 개수: 항목 22개" (48WZ-0) 0×0 "접은 개수: 항목 22개"

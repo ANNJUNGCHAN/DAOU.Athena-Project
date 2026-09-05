@@ -1,0 +1,346 @@
+{
+ "board_id": "46BW-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46CU-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46CT-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46CR-0",
+   "text": "현금·결제 예정",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Header"
+   ]
+  },
+  {
+   "id": "46CP-0",
+   "text": "예탁자산",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46CO-0",
+   "text": "124,580,240원",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46CM-0",
+   "text": "수익률",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46CL-0",
+   "text": "+4.96%",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46CJ-0",
+   "text": "종목",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46CI-0",
+   "text": "8",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46CF-0",
+   "text": "일정",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46CE-0",
+   "text": "예상 예수금",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46CD-0",
+   "text": "정산",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46CB-0",
+   "text": "D+1 예상",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46CA-0",
+   "text": "09/02",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46C8-0",
+   "text": "33,184,400",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46C7-0",
+   "text": "-1,635,600",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46C5-0",
+   "text": "D+2 예상",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46C4-0",
+   "text": "09/03",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46C2-0",
+   "text": "42,263,800",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46C1-0",
+   "text": "+9,079,400",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46BY-0",
+   "text": "스칼라 2개, 행 5개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46BW-0",
+   "name": "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46CQ-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46CS-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46BZ-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46CG-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46CN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46CK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46CH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46CC-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46C6-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46C9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46C0-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46C3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46BX-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "현금·결제 예정": 1,
+  "예탁자산": 1,
+  "124,580,240원": 1,
+  "수익률": 1,
+  "+4.96%": 1,
+  "종목": 1,
+  "8": 1,
+  "일정": 1,
+  "예상 예수금": 1,
+  "정산": 1,
+  "D+1 예상": 1,
+  "09/02": 1,
+  "33,184,400": 1,
+  "-1,635,600": 1,
+  "D+2 예상": 1,
+  "09/03": 1,
+  "42,263,800": 1,
+  "+9,079,400": 1,
+  "스칼라 2개, 행 5개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "38732ab7a6d68786e0a4004467629477e9b6d473a1ba1c5695e5b81241d4dbc7"
+}

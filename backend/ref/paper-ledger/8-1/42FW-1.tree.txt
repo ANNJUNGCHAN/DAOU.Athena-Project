@@ -1,0 +1,325 @@
+Frame "23 · 백테스트 — 승인 → 기법 목록에 추가 → 실매매 적용(키우미가 켜지면 자동 매매)" (42FW-1) 1680×1120
+  Frame "타이틀" (42FX-1) 1584×0
+    Text "셸 — 백테스트 · 승인 — 목록에 …" (42FY-1) 0×0 "셸 — 백테스트 · 승인 — 목록에 들어가고, 실매매 적용은 한 번 더 확인한다"
+    Text "승인하면 처음 있던 기법과 똑같은 자…" (42FZ-1) 0×0 "승인하면 처음 있던 기법과 똑같은 자리에 들어갑니다(11 → 12). 실매매 적용은 별도 확인이고, 키우미를"
+  Frame "셸" (42G1-1) 1584×900
+    Frame "Frame" (42G3-1) 268×900
+      Frame "Primary Actions" (42G4-1) 0×0
+        Frame "Frame" (42G5-1) 0×28
+          Text "ATHENA" (42G6-1) 0×0 "ATHENA"
+          SVG "SVG" (42G7-1) 0×0
+            SVGVisualElement "Circle" (42G8-1) 0×0
+            SVGVisualElement "Path" (42G9-1) 0×0
+        Frame "Frame" (42GA-1) 0×30
+          SVG "SVG" (42GB-1) 0×0
+            SVGVisualElement "Path" (42GC-1) 0×0
+            SVGVisualElement "Path" (42GD-1) 0×0
+          Text "새 채팅" (42GE-1) 0×0 "새 채팅"
+        Frame "Frame" (42GF-1) 0×30
+          SVG "SVG" (42GG-1) 0×0
+            SVGVisualElement "Circle" (42GH-1) 0×0
+            SVGVisualElement "Circle" (42GI-1) 0×0
+            SVGVisualElement "Circle" (42GJ-1) 0×0
+            SVGVisualElement "Path" (42GK-1) 0×0
+          Text "그래프" (42GL-1) 0×0 "그래프"
+        Frame "Frame" (42GM-1) 0×30
+          SVG "SVG" (42GN-1) 0×0
+            SVGVisualElement "Circle" (42GO-1) 0×0
+            SVGVisualElement "Path" (42GP-1) 0×0
+          Text "에이전트" (42GQ-1) 0×0 "에이전트"
+        Frame "Nav 플러그인" (42GR-1) 0×30
+          SVG "SVG" (42GS-1) 0×0
+            SVGVisualElement "Path" (42GT-1) 0×0
+            SVGVisualElement "Path" (42GU-1) 0×0
+          Text "플러그인" (42GV-1) 0×0 "플러그인"
+        Frame "Nav 백테스트 (active)" (42GW-1) 0×30
+          SVG "SVG" (42GX-1) 0×0
+            SVGVisualElement "Path" (42GY-1) 0×0
+            SVGVisualElement "Path" (42GZ-1) 0×0
+          Text "백테스트" (42H0-1) 0×0 "백테스트"
+      Frame "Project Tree" (42H1-1) 0×0
+        Frame "Frame" (42H2-1) 0×0
+          Text "프로젝트" (42H3-1) 0×0 "프로젝트"
+        Frame "Frame" (42H4-1) 0×32
+          SVG "SVG" (42H5-1) 0×0
+            SVGVisualElement "Path" (42H6-1) 0×0
+            SVGVisualElement "Path" (42H7-1) 0×0
+          Text "아테나" (42H8-1) 0×0 "아테나"
+          SVG "SVG" (42H9-1) 0×0
+            SVGVisualElement "Circle" (42HA-1) 0×0
+            SVGVisualElement "Circle" (42HB-1) 0×0
+            SVGVisualElement "Circle" (42HC-1) 0×0
+          SVG "SVG" (42HD-1) 0×0
+            SVGVisualElement "Path" (42HE-1) 0×0
+            SVGVisualElement "Path" (42HF-1) 0×0
+        Frame "Frame" (42HG-1) 0×27
+          Text "백엔드 API 개수 확인" (42HH-1) 0×0 "백엔드 API 개수 확인"
+        Frame "Frame" (42HI-1) 0×29
+          Text "앱 전체 기능 검수" (42HJ-1) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (42HK-1) 6×6
+      Frame "Recent Conversations" (42HL-1) 0×0
+        Frame "Frame" (42HM-1) 0×20
+          Text "최근" (42HN-1) 0×0 "최근"
+          Text "전체" (42HO-1) 0×0 "전체"
+        Frame "Frame" (42HP-1) 0×27
+          Text "앱 전체 기능 검수" (42HQ-1) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (42HR-1) 6×6
+        Frame "Frame" (42HS-1) 0×27
+          Text "삼성전자 주요 변동 알림" (42HT-1) 0×0 "삼성전자 주요 변동 알림"
+        Frame "Frame" (42HU-1) 0×27
+          Text "ETF 자금 흐름" (42HV-1) 0×0 "ETF 자금 흐름"
+      Frame "Account Footer" (42HW-1) 0×0
+        Frame "Frame" (42HX-1) 0×38
+          Frame "Frame" (42HY-1) 22×22
+            Text "AN" (42HZ-1) 0×0 "AN"
+          Text "모의-주력" (42I0-1) 0×0 "모의-주력"
+          SVG "SVG" (42I1-1) 0×0
+            SVGVisualElement "Path" (42I2-1) 0×0
+    Frame "메인 · 기법 목록 + 상세" (42I4-1) 0×0
+      Frame "헤더" (42I8-1) 0×0
+        Frame "Frame" (42I9-1) 0×0
+          Text "백테스트" (42IA-1) 0×0 "백테스트"
+          Text "기법 12개 · 방금 1개 추가됨" (42IB-1) 0×0 "기법 12개 · 방금 1개 추가됨"
+        Frame "Frame" (42IC-1) 0×0
+          Frame "Frame" (42ID-1) 0×0
+            Text "기법" (42IE-1) 0×0 "기법"
+          Frame "Frame" (42IF-1) 0×0
+            Text "결과" (42IG-1) 0×0 "결과"
+          Frame "Frame" (42IH-1) 0×0
+            Text "이력" (42II-1) 0×0 "이력"
+      Frame "추가 안내" (42IK-1) 0×0
+        Frame "Frame" (42IL-1) 0×0
+          Text "승인됨 · 목록에 추가" (42IM-1) 0×0 "승인됨 · 목록에 추가"
+        Text "11개였던 목록이 12개가 되었습니다…" (42IN-1) 0×0 "11개였던 목록이 12개가 되었습니다 — 처음 있던 10개, 내가 만든 2개. 구분 없이 같은 자리입니다."
+        Rectangle "Rectangle" (42IO-1) 0×1
+        Text "분류 전체 · 상태 전체" (42IP-1) 0×0 "분류 전체 · 상태 전체"
+      Frame "본문" (42IR-1) 0×0
+        Frame "기법 목록" (42IT-1) 288×0
+          Frame "기법 1 · 내 ATR 돌파 + 손절(새로 추가됨)" (42IV-1) 0×0
+            Frame "Frame" (42IX-1) 0×0
+              Frame "Frame" (42IY-1) 0×0
+                Text "새로 추가됨" (42IZ-1) 0×0 "새로 추가됨"
+              Frame "Frame" (42J0-1) 0×0
+                Text "방금" (42J1-1) 0×0 "방금"
+              Rectangle "Rectangle" (42J2-1) 0×0
+              Frame "Frame" (42J3-1) 0×0
+                Text "펼침" (42J4-1) 0×0 "펼침"
+            Frame "Frame" (42J6-1) 0×0
+              Text "내 ATR 돌파 + 손절" (42J7-1) 0×0 "내 ATR 돌파 + 손절"
+              Frame "Frame" (42J8-1) 0×0
+                Text "돌파" (42J9-1) 0×0 "돌파"
+            Text "20일 신고가 돌파에 ATR 2배 손…" (42JA-1) 0×0 "20일 신고가 돌파에 ATR 2배 손절과 최소 보유 3봉을 붙인 내 기법."
+            Frame "Frame" (42JC-1) 0×0
+              Frame "Frame" (42JD-1) 0×0
+                Text "검증됨" (42JE-1) 0×0 "검증됨"
+              Text "v4 · 09-03 검증" (42JF-1) 0×0 "v4 · 09-03 검증"
+          Frame "Frame" (42JH-1) 0×0
+            Text "나머지 11개" (42JI-1) 0×0 "나머지 11개"
+            Rectangle "Rectangle" (42JJ-1) 0×1
+          Frame "나머지 목록" (42JL-1) 0×0
+            Frame "Frame" (42JN-1) 0×30
+              Text "20-60 골든크로스" (42JO-1) 0×0 "20-60 골든크로스"
+              Frame "Frame" (42JP-1) 0×0
+                Text "키우미" (42JQ-1) 0×0 "키우미"
+              Rectangle "Rectangle" (42JR-1) 5×5
+            Frame "Frame" (42JT-1) 0×30
+              Text "볼린저 하단 반등" (42JU-1) 0×0 "볼린저 하단 반등"
+              Rectangle "Rectangle" (42JV-1) 5×5
+            Frame "Frame" (42JX-1) 0×30
+              Text "20일 신고가 돌파" (42JY-1) 0×0 "20일 신고가 돌파"
+              Rectangle "Rectangle" (42JZ-1) 5×5
+            Frame "Frame" (42K1-1) 0×30
+              Text "RSI 과매도 반전" (42K2-1) 0×0 "RSI 과매도 반전"
+              Rectangle "Rectangle" (42K3-1) 5×5
+            Frame "Frame" (42K5-1) 0×30
+              Text "MACD 시그널 교차" (42K6-1) 0×0 "MACD 시그널 교차"
+              Rectangle "Rectangle" (42K7-1) 5×5
+            Frame "Frame" (42K9-1) 0×30
+              Text "이격도 회귀" (42KA-1) 0×0 "이격도 회귀"
+              Rectangle "Rectangle" (42KB-1) 5×5
+            Frame "Frame" (42KD-1) 0×30
+              Text "거래량 급증 추격" (42KE-1) 0×0 "거래량 급증 추격"
+              Rectangle "Rectangle" (42KF-1) 5×5
+            Frame "Frame" (42KH-1) 0×30
+              Text "갭 상승 눌림 매수" (42KI-1) 0×0 "갭 상승 눌림 매수"
+              Rectangle "Rectangle" (42KJ-1) 5×5
+            Frame "Frame" (42KL-1) 0×30
+              Text "5-20 단기 교차" (42KM-1) 0×0 "5-20 단기 교차"
+              Rectangle "Rectangle" (42KN-1) 5×5
+            Frame "Frame" (42KP-1) 0×30
+              Text "변동성 돌파" (42KQ-1) 0×0 "변동성 돌파"
+              Rectangle "Rectangle" (42KR-1) 5×5
+          Frame "Frame" (42KT-1) 0×28
+            Text "그 밖에 1개 더 · 수정 중" (42KU-1) 0×0 "그 밖에 1개 더 · 수정 중"
+          Frame "Frame" (42KW-1) 0×0
+            Text "12개의 상태" (42KX-1) 0×0 "12개의 상태"
+            Frame "Frame" (42KY-1) 0×0
+              Rectangle "Rectangle" (42KZ-1) 5×5
+              Text "검증됨" (42L0-1) 0×0 "검증됨"
+              Text "10개" (42L1-1) 0×0 "10개"
+            Frame "Frame" (42L2-1) 0×0
+              Rectangle "Rectangle" (42L3-1) 5×5
+              Text "실매매 적용 중" (42L4-1) 0×0 "실매매 적용 중"
+              Text "1개" (42L5-1) 0×0 "1개"
+            Frame "Frame" (42L6-1) 0×0
+              Rectangle "Rectangle" (42L7-1) 5×5
+              Text "수정 중" (42L8-1) 0×0 "수정 중"
+              Text "1개" (42L9-1) 0×0 "1개"
+            Frame "Frame" (42LA-1) 0×0
+              Text "내가 만든 기법도 처음 있던 기법과 …" (42LB-1) 0×0 "내가 만든 기법도 처음 있던 기법과 같은 목록입니다. 언제든 눌러 다시 고칠 수 있습니다."
+        Frame "상세 패널" (42LD-1) 0×0
+          Frame "상세 헤더" (42LF-1) 0×0
+            Text "내 ATR 돌파 + 손절" (42LG-1) 0×0 "내 ATR 돌파 + 손절"
+            Frame "Frame" (42LH-1) 0×0
+              Text "돌파" (42LI-1) 0×0 "돌파"
+            Frame "Frame" (42LJ-1) 0×0
+              Text "검증됨" (42LK-1) 0×0 "검증됨"
+            Rectangle "Rectangle" (42LL-1) 0×0
+            Frame "Frame" (42LM-1) 0×0
+              Text "수정" (42LN-1) 0×0 "수정"
+            Frame "Frame" (42LO-1) 0×0
+              Text "실매매 적용" (42LP-1) 0×0 "실매매 적용"
+          Frame "상태" (42LR-1) 0×0
+            Frame "Frame" (42LT-1) 0×0
+              Text "백테스트" (42LU-1) 0×0 "백테스트"
+              Text "#44" (42LV-1) 0×0 "#44"
+            Frame "Frame" (42LX-1) 0×0
+              Text "수익률" (42LY-1) 0×0 "수익률"
+              Text "+18.4%" (42LZ-1) 0×0 "+18.4%"
+            Frame "Frame" (42M1-1) 0×0
+              Text "거래" (42M2-1) 0×0 "거래"
+              Text "41건" (42M3-1) 0×0 "41건"
+            Frame "Frame" (42M5-1) 0×0
+              Text "코드 · 노드" (42M6-1) 0×0 "코드 · 노드"
+              Text "62줄 · 6개" (42M7-1) 0×0 "62줄 · 6개"
+          Frame "실매매 적용 카드" (42M9-1) 0×0
+            Frame "Frame" (42MB-1) 0×0
+              Text "전략 배포 · 실전 적용" (42MC-1) 0×0 "전략 배포 · 실전 적용"
+              Text "키우미를 켜면 미리 정한 한도 안에서…" (42MD-1) 0×0 "키우미를 켜면 미리 정한 한도 안에서 주문까지 자동으로 나갑니다 — 그 밖의 배포는 신호까지만 만듭니다"
+              Frame "Frame" (42ME-1) 0×0
+                Text "모의서버" (42MF-1) 0×0 "모의서버"
+            Frame "배포 행" (42MH-1) 0×0
+              Text "005930" (42MI-1) 0×0 "005930"
+              Text "한도 안에서 자동으로 주문합니다" (42MJ-1) 0×0 "한도 안에서 자동으로 주문합니다"
+              Rectangle "Rectangle" (42MK-1) 0×0
+              Text "계좌 모의-주력 · 일봉" (42ML-1) 0×0 "계좌 모의-주력 · 일봉"
+              Frame "Frame" (42MM-1) 0×0
+                Text "active" (42MN-1) 0×0 "active"
+              Frame "Frame" (42MO-1) 0×0
+                Text "배포 중지" (42MP-1) 0×0 "배포 중지"
+            Frame "모드" (42MR-1) 0×0
+              Frame "Frame" (42MT-1) 0×0
+                Frame "Frame" (42MU-1) 0×0
+                  Rectangle "Rectangle" (42MV-1) 11×11
+                  Text "기록만 합니다" (42MW-1) 0×0 "기록만 합니다"
+                Text "주문은 내지 않습니다. 전략이 실전에…" (42MX-1) 0×0 "주문은 내지 않습니다. 전략이 실전에서 어떻게 움직이는지만 봅니다."
+              Frame "Frame" (42MZ-1) 0×0
+                Frame "Frame" (42N0-1) 0×0
+                  Rectangle "Rectangle" (42N1-1) 11×11
+                  Text "승인을 받고 주문합니다" (42N2-1) 0×0 "승인을 받고 주문합니다"
+                Text "신호마다 주문 티켓이 뜨고, 사람이 …" (42N3-1) 0×0 "신호마다 주문 티켓이 뜨고, 사람이 누르면 나갑니다."
+              Frame "Frame" (42N5-1) 0×0
+                Frame "Frame" (42N6-1) 0×0
+                  Rectangle "Rectangle" (42N7-1) 11×11
+                  Text "한도 안에서 자동으로 주문합니다" (42N8-1) 0×0 "한도 안에서 자동으로 주문합니다"
+                Text "아래 한도를 미리 승인한 범위에서만 …" (42N9-1) 0×0 "아래 한도를 미리 승인한 범위에서만 자동 집행합니다."
+                Frame "Frame" (42NA-1) 0×0
+                  Text "키우미 켜짐" (42NB-1) 0×0 "키우미 켜짐"
+            Frame "Frame" (42ND-1) 0×0
+              Text "한도 — 미리 승인하는 범위" (42NE-1) 0×0 "한도 — 미리 승인하는 범위"
+              Text "비워둘 수 없습니다. 한도 없는 자동…" (42NF-1) 0×0 "비워둘 수 없습니다. 한도 없는 자동 주문은 이 화면이 약속한 것이 아닙니다."
+            Frame "한도" (42NH-1) 0×0
+              Frame "Frame" (42NJ-1) 0×0
+                Text "1회 최대 주문(원)" (42NK-1) 0×0 "1회 최대 주문(원)"
+                Text "3,000,000" (42NL-1) 0×0 "3,000,000"
+              Frame "Frame" (42NN-1) 0×0
+                Text "하루 최대 주문 수" (42NO-1) 0×0 "하루 최대 주문 수"
+                Text "3" (42NP-1) 0×0 "3"
+              Frame "Frame" (42NR-1) 0×0
+                Text "유효 시작(YYYYMMDD)" (42NS-1) 0×0 "유효 시작(YYYYMMDD)"
+                Text "20260903" (42NT-1) 0×0 "20260903"
+              Frame "Frame" (42NV-1) 0×0
+                Text "유효 종료(YYYYMMDD)" (42NW-1) 0×0 "유효 종료(YYYYMMDD)"
+                Text "20261231" (42NX-1) 0×0 "20261231"
+              Frame "Frame" (42NZ-1) 0×0
+                Text "자동 정지 낙폭(%)" (42O0-1) 0×0 "자동 정지 낙폭(%)"
+                Text "15" (42O1-1) 0×0 "15"
+              Frame "Frame" (42O3-1) 0×0
+                Text "자동 정지 연속 손절(회)" (42O4-1) 0×0 "자동 정지 연속 손절(회)"
+                Text "3" (42O5-1) 0×0 "3"
+            Frame "키우미" (42O7-1) 0×0
+              Frame "Frame" (42O8-1) 22×22
+                Text "키" (42O9-1) 0×0 "키"
+              Frame "Frame" (42OA-1) 0×0
+                Text "키우미 켜짐 = 자동 매매" (42OB-1) 0×0 "키우미 켜짐 = 자동 매매"
+                Text "신호가 나면 위 한도 안에서 주문까지…" (42OC-1) 0×0 "신호가 나면 위 한도 안에서 주문까지 자동으로 나갑니다. 한도를 넘거나 연속 손절 3회·낙폭 15%에 닿으면"
+              Frame "Frame" (42OD-1) 34×19
+                Rectangle "Rectangle" (42OE-1) 13×13
+            Frame "오늘 로그" (42OG-1) 0×0
+              Frame "Frame" (42OI-1) 0×0
+                Text "오늘 로그" (42OJ-1) 0×0 "오늘 로그"
+                Text "2026-09-03 · 모의서버" (42OK-1) 0×0 "2026-09-03 · 모의서버"
+                Rectangle "Rectangle" (42OL-1) 0×0
+                Text "오늘 1 / 3건" (42OM-1) 0×0 "오늘 1 / 3건"
+              Frame "Frame" (42OO-1) 0×0
+                Text "09:31" (42OP-1) 0×0 "09:31"
+                Frame "Frame" (42OQ-1) 0×0
+                  Text "신호" (42OR-1) 0×0 "신호"
+                Text "005930 종가 74,250원이 돌…" (42OS-1) 0×0 "005930 종가 74,250원이 돌파선 74,100원을 넘음"
+              Frame "Frame" (42OU-1) 0×0
+                Text "09:31" (42OV-1) 0×0 "09:31"
+                Frame "Frame" (42OW-1) 0×0
+                  Text "주문" (42OX-1) 0×0 "주문"
+                Text "005930 10주 · 742,500…" (42OY-1) 0×0 "005930 10주 · 742,500원 — 1회 한도 3,000,000원 안"
+              Frame "Frame" (42P0-1) 0×0
+                Text "09:31" (42P1-1) 0×0 "09:31"
+                Frame "Frame" (42P2-1) 0×0
+                  Text "체결" (42P3-1) 0×0 "체결"
+                Text "005930 10주 74,250원 체…" (42P4-1) 0×0 "005930 10주 74,250원 체결 — 사람 승인 없이 자동"
+            Frame "Frame" (42P6-1) 0×0
+              Frame "Frame" (42P7-1) 0×0
+                Text "이 전략을 실전에 겁니다" (42P8-1) 0×0 "이 전략을 실전에 겁니다"
+              Text "백테스트는 다음 봉 시가에 원하는 수…" (42P9-1) 0×0 "백테스트는 다음 봉 시가에 원하는 수량이 전부 체결된다고 가정하고, 실전은 그렇지 않습니다. 실전과 백테스트"
+    Frame "채팅" (42I6-1) 400×900
+      Frame "채팅 헤더" (42PB-1) 0×0
+        Text "기법에게 묻기" (42PC-1) 0×0 "기법에게 묻기"
+        Text "내 ATR 돌파 + 손절" (42PD-1) 0×0 "내 ATR 돌파 + 손절"
+      Frame "채팅 본문" (42PF-1) 0×0
+        Frame "승인 안내 카드" (42PH-1) 0×0
+          Frame "Frame" (42PJ-1) 0×0
+            Frame "Frame" (42PK-1) 0×0
+              Text "승인 안내" (42PL-1) 0×0 "승인 안내"
+            Text "3번 고치고 1번 실행했습니다" (42PM-1) 0×0 "3번 고치고 1번 실행했습니다"
+          Text "이제 목록에 올려도 될 것 같아요. …" (42PO-1) 0×0 "이제 목록에 올려도 될 것 같아요. 승인하면 처음 있던 기법과 같은 자리에 들어갑니다 — 실매매는 아직 켜지"
+          Frame "Frame" (42PQ-1) 0×0
+            Text "코드      62줄 · strate…" (42PR-1) 0×0 "코드      62줄 · strategy.py"
+            Text "노드      6개 · 진입 4 · …" (42PS-1) 0×0 "노드      6개 · 진입 4 · 청산 3(compute_atr 공유)"
+            Text "자동 실행  #44 · +18.4% …" (42PT-1) 0×0 "자동 실행  #44 · +18.4% · 거래 41"
+          Frame "Frame" (42PV-1) 0×0
+            Frame "Frame" (42PW-1) 0×0
+              Text "이 기법 승인" (42PX-1) 0×0 "이 기법 승인"
+            Text "✓ 눌렀습니다" (42PY-1) 0×0 "✓ 눌렀습니다"
+        Frame "사용자 말" (42Q0-1) 0×0
+          Frame "Frame" (42Q1-1) 0×0
+            Text "이 기법 승인" (42Q2-1) 0×0 "이 기법 승인"
+        Text "AI 말" (42Q4-1) 0×0 "목록에 넣었습니다. 이제 다른 기법과 똑같이 언제든 눌러 고칠 수 있어요. 고치면 다시 검사부터 돕니다."
+        Frame "실매매 확인 카드" (42Q6-1) 0×0
+          Frame "Frame" (42Q8-1) 0×0
+            Frame "Frame" (42Q9-1) 0×0
+              Text "한 번 더 확인" (42QA-1) 0×0 "한 번 더 확인"
+            Text "승인과는 별개입니다" (42QB-1) 0×0 "승인과는 별개입니다"
+          Text "실매매 적용은 별도 확인입니다 — 켜…" (42QD-1) 0×0 "실매매 적용은 별도 확인입니다 — 켜면 키우미가 이 기법대로 자동으로 사고팝니다(모의서버)."
+          Text "왼쪽 한도를 읽고 [이 전략을 실전에…" (42QF-1) 0×0 "왼쪽 한도를 읽고 [이 전략을 실전에 겁니다]를 누르면 그때부터입니다. 언제든 [배포 중지]로 끕니다."
+        Frame "오늘 요약" (42QH-1) 0×0
+          Text "1/3" (42QI-1) 0×0 "1/3"
+          Text "오늘 자동 주문 1건 체결 · 남은 …" (42QJ-1) 0×0 "오늘 자동 주문 1건 체결 · 남은 한도 2건"
+        Frame "다음 차례" (42QL-1) 0×0
+          Text "이렇게도 물어볼 수 있어요" (42QM-1) 0×0 "이렇게도 물어볼 수 있어요"
+          Text ""오늘 왜 한 번밖에 안 샀어?"" (42QN-1) 0×0 ""오늘 왜 한 번밖에 안 샀어?""
+          Text ""하루 한도를 5건으로 올려줘"" (42QO-1) 0×0 ""하루 한도를 5건으로 올려줘""
+          Text ""실매매 잠깐 꺼줘"" (42QP-1) 0×0 ""실매매 잠깐 꺼줘""
+      Frame "입력" (42QR-1) 0×0
+        Frame "Frame" (42QS-1) 0×0
+          Frame "Frame" (42QT-1) 22×22
+            Text "+" (42QU-1) 0×0 "+"
+          Text "이 기법에 대해 물어보세요" (42QV-1) 0×0 "이 기법에 대해 물어보세요"

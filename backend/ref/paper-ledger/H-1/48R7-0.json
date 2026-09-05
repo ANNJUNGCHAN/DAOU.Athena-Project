@@ -1,0 +1,92 @@
+{
+ "board_id": "48R7-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R08 · ELW 위험·만기",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48R9-0",
+   "text": "원본 보드: CC-03 / R08 · ELW 위험·만기",
+   "path": [
+    "note/CC-03 / R08 · ELW 위험·만기",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48RB-0",
+   "text": "가져온 요소: 종목명 · 종목코드 · ELW발행기관 · 현재가 · 전일대비",
+   "path": [
+    "note/CC-03 / R08 · ELW 위험·만기",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48RD-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R08 · ELW 위험·만기",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48RF-0",
+   "text": "접은 개수: 스칼라 5개 · 행 2개",
+   "path": [
+    "note/CC-03 / R08 · ELW 위험·만기",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48R7-0",
+   "name": "note/CC-03 / R08 · ELW 위험·만기",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48R8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48RA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48RC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48RE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R08 · ELW 위험·만기": 1,
+  "가져온 요소: 종목명 · 종목코드 · ELW발행기관 · 현재가 · 전일대비": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 5개 · 행 2개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "43c373e7d992e3684507e54395766525a6d309e6f935e1faea50437ccbda1e1a"
+}

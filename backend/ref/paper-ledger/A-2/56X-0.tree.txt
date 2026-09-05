@@ -1,0 +1,309 @@
+Frame "01 · 셸 — 알림 파생 방" (56X-0) 1680×900
+  Frame "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)" (56Y-0) 1520×760
+    Frame "타이틀바" (5E9-0) 0×26
+    Frame "창 제어" (5E1-0) 0×0
+      Frame "Frame" (5E7-0) 30×24
+        Rectangle "Rectangle" (5E8-0) 9×2
+      Frame "Frame" (5E5-0) 30×24
+        Rectangle "Rectangle" (5E6-0) 8×8
+      Frame "Frame" (5E2-0) 30×24
+        SVG "SVG" (5E3-0) 0×0
+          SVGVisualElement "Path" (5E4-0) 0×0
+    Frame "08 · Project Recent Sidebar" (GWJ-0) 268×717
+      Frame "Primary Actions" (GWK-0) 0×0
+        Frame "Frame" (GWL-0) 0×28
+          Text "ATHENA" (GWM-0) 0×0 "ATHENA"
+          SVG "SVG" (GWN-0) 0×0
+            SVGVisualElement "Circle" (GWO-0) 0×0
+            SVGVisualElement "Path" (GWP-0) 0×0
+        Frame "Frame" (GWQ-0) 0×30
+          SVG "SVG" (GWR-0) 0×0
+            SVGVisualElement "Path" (GWS-0) 0×0
+            SVGVisualElement "Path" (GWT-0) 0×0
+          Text "새 채팅" (GWU-0) 0×0 "새 채팅"
+        Frame "Frame" (GWV-0) 0×30
+          SVG "SVG" (GWW-0) 0×0
+            SVGVisualElement "Circle" (GWX-0) 0×0
+            SVGVisualElement "Circle" (GWY-0) 0×0
+            SVGVisualElement "Circle" (GWZ-0) 0×0
+            SVGVisualElement "Path" (GX0-0) 0×0
+          Text "그래프" (GX1-0) 0×0 "그래프"
+        Frame "Frame" (GX2-0) 0×30
+          SVG "SVG" (GX3-0) 0×0
+            SVGVisualElement "Circle" (GX4-0) 0×0
+            SVGVisualElement "Path" (GX5-0) 0×0
+          Text "에이전트" (GX6-0) 0×0 "에이전트"
+        Frame "Frame" (GX7-0) 0×30
+          SVG "SVG" (GX8-0) 0×0
+            SVGVisualElement "Path" (GX9-0) 0×0
+            SVGVisualElement "Path" (GXA-0) 0×0
+          Text "플러그인" (GXB-0) 0×0 "플러그인"
+      Frame "Project Tree" (GXC-0) 0×0
+        Frame "Frame" (GXD-0) 0×0
+          Text "프로젝트" (GXE-0) 0×0 "프로젝트"
+        Frame "Frame" (GXF-0) 0×32
+          SVG "SVG" (GXG-0) 0×0
+            SVGVisualElement "Path" (GXH-0) 0×0
+            SVGVisualElement "Path" (GXI-0) 0×0
+          Text "아테나" (GXJ-0) 0×0 "아테나"
+          SVG "SVG" (GXK-0) 0×0
+            SVGVisualElement "Circle" (GXL-0) 0×0
+            SVGVisualElement "Circle" (GXM-0) 0×0
+            SVGVisualElement "Circle" (GXN-0) 0×0
+          SVG "SVG" (GXO-0) 0×0
+            SVGVisualElement "Path" (GXP-0) 0×0
+            SVGVisualElement "Path" (GXQ-0) 0×0
+        Frame "Frame" (GXR-0) 0×27
+          Text "백엔드 API 개수 확인" (GXS-0) 0×0 "백엔드 API 개수 확인"
+        Frame "Frame" (GXT-0) 0×29
+          Text "앱 전체 기능 검수" (GXU-0) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (H40-0) 6×6
+      Frame "Recent Conversations" (GXV-0) 0×0
+        Frame "Frame" (GXW-0) 0×20
+          Text "최근" (GXX-0) 0×0 "최근"
+          Text "전체" (GXY-0) 0×0 "전체"
+        Frame "Frame" (GXZ-0) 0×27
+          Text "앱 전체 기능 검수" (GY0-0) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (GY1-0) 6×6
+        Frame "Frame" (GY2-0) 0×27
+          Text "삼성전자 주요 변동 알림" (GY3-0) 0×0 "삼성전자 주요 변동 알림"
+        Frame "Frame" (GY4-0) 0×27
+          Text "ETF 자금 흐름" (GY5-0) 0×0 "ETF 자금 흐름"
+      Frame "Account Footer" (GY6-0) 0×0
+        Frame "Frame" (GY7-0) 0×38
+          Frame "Frame" (GY8-0) 22×22
+            Text "AN" (GY9-0) 0×0 "AN"
+          Text "모의-주력" (GYA-0) 0×0 "모의-주력"
+          SVG "SVG" (GYB-0) 0×0
+            SVGVisualElement "Path" (GYC-0) 0×0
+    Frame "② 캔버스 영역" (5AQ-0) 0×0
+      Frame "grid" (5AR-0) 0×0
+        Frame "Frame" (5BR-0) 788×252
+          Frame "card-head" (5CP-0) 0×0
+            Text "card-title" (5CV-0) 0×0 "네이버 뉴스 — 삼성전자"
+            Frame "card-head-right" (5CQ-0) 0×0
+              Text "card-fresh" (5CU-0) 0×0 "00:43 갱신"
+              Frame "uk-card-close" (5CR-0) 22×22
+                SVG "SVG" (5CS-0) 0×0
+                  SVGVisualElement "Path" (5CT-0) 0×0
+          Frame "card-body · stream-list" (5BS-0) 0×0
+            Frame "stream-item" (5CK-0) 0×0
+              Text "00:43" (5CO-0) 76×0 "00:43"
+              Frame "Frame" (5CM-0) 92×0
+                Text "중앙일보" (5CN-0) 0×0 "중앙일보"
+              Text "은퇴 앞두고 파랗게 질린 5060 개…" (5CL-0) 0×0 "은퇴 앞두고 파랗게 질린 5060 개미들"
+            Frame "stream-item" (5CF-0) 0×0
+              Text "00:33" (5CJ-0) 76×0 "00:33"
+              Frame "Frame" (5CH-0) 92×0
+                Text "중앙SUNDAY" (5CI-0) 0×0 "중앙SUNDAY"
+              Text "[선데이 칼럼] 포츠담의 실험, 대학…" (5CG-0) 0×0 "[선데이 칼럼] 포츠담의 실험, 대학을 바꾸는…"
+            Frame "stream-item" (5CA-0) 0×0
+              Text "00:20" (5CE-0) 76×0 "00:20"
+              Frame "Frame" (5CC-0) 92×0
+                Text "한국경제" (5CD-0) 0×0 "한국경제"
+              Text "성인 5명 중 1명이 삼성전자 주주……" (5CB-0) 0×0 "성인 5명 중 1명이 삼성전자 주주…'800만 개미'"
+            Frame "stream-item" (5C5-0) 0×0
+              Text "00:11" (5C9-0) 76×0 "00:11"
+              Frame "Frame" (5C7-0) 92×0
+                Text "스포츠경향" (5C8-0) 0×0 "스포츠경향"
+              Text "김종국, 뜻밖의 삼성전자 저점매수…"…" (5C6-0) 0×0 "김종국, 뜻밖의 삼성전자 저점매수…"평단가 5만""
+            Frame "stream-item" (5C0-0) 0×0
+              Text "00:06" (5C4-0) 76×0 "00:06"
+              Frame "Frame" (5C2-0) 92×0
+                Text "KDF World" (5C3-0) 0×0 "KDF World"
+              Text "美 구글, 도쿄 오모테산도에 첫 해외…" (5C1-0) 0×0 "美 구글, 도쿄 오모테산도에 첫 해외 매장"
+            Frame "stream-item" (5BV-0) 0×0
+              Text "00:02" (5BZ-0) 76×0 "00:02"
+              Frame "Frame" (5BX-0) 92×0
+                Text "머니투데이" (5BY-0) 0×0 "머니투데이"
+              Text "반도체부터 우주까지…'미래 먹거리' …" (5BW-0) 0×0 "반도체부터 우주까지…'미래 먹거리' ETF 경쟁"
+            Frame "stream-more" (5BT-0) 0×0
+              Text "+ 24건 더" (5BU-0) 0×0 "+ 24건 더"
+          Frame "리사이즈 핸들" (FJ6-0) 18×18
+            SVG "SVG" (FJ7-0) 0×0
+              SVGVisualElement "Path" (FJ8-0) 0×0
+        Frame "카드 · 표 (.card)" (5AS-0) 788×252
+          Frame "card-head" (5BK-0) 0×0
+            Text "card-title" (5BQ-0) 0×0 "재무상태표 — 삼성전자 (연결)"
+            Frame "card-head-right" (5BL-0) 0×0
+              Text "card-fresh" (5BP-0) 0×0 "DART 2025 사업보고서"
+              Frame "uk-card-close" (5BM-0) 22×22
+                SVG "SVG" (5BN-0) 0×0
+                  SVGVisualElement "Path" (5BO-0) 0×0
+          Frame "fin-meta" (5BI-0) 0×0
+            Text "corp_code 00126380 ·…" (5BJ-0) 0×0 "corp_code 00126380 · CFS · 단위 백만원"
+          Frame "card-body · fin-table" (5AT-0) 0×0
+            Frame "thead" (5BE-0) 0×0
+              Text "계정" (5BH-0) 0×0 "계정"
+              Text "당기" (5BG-0) 130×0 "당기"
+              Text "전기" (5BF-0) 130×0 "전기"
+            Frame "row" (5BA-0) 0×0
+              Text "자산총계" (5BD-0) 0×0 "자산총계"
+              Text "566,942,110" (5BC-0) 130×0 "566,942,110"
+              Text "514,531,948" (5BB-0) 130×0 "514,531,948"
+            Frame "row" (5B6-0) 0×0
+              Text "유동자산" (5B9-0) 0×0 "유동자산"
+              Text "247,684,612" (5B8-0) 130×0 "247,684,612"
+              Text "227,062,266" (5B7-0) 130×0 "227,062,266"
+            Frame "row" (5B2-0) 0×0
+              Text "현금및현금성자산" (5B5-0) 0×0 "현금및현금성자산"
+              Text "57,856,378" (5B4-0) 130×0 "57,856,378"
+              Text "53,705,579" (5B3-0) 130×0 "53,705,579"
+            Frame "row" (5AY-0) 0×0
+              Text "미수금" (5B1-0) 0×0 "미수금"
+              Text "7,481,327" (5B0-0) 130×0 "7,481,327"
+              Text "9,622,974" (5AZ-0) 130×0 "9,622,974"
+            Frame "row" (5AU-0) 0×0
+              Text "선급비용" (5AX-0) 0×0 "선급비용"
+              Text "3,627,172" (5AW-0) 130×0 "3,627,172"
+              Text "3,362,824" (5AV-0) 130×0 "3,362,824"
+          Frame "리사이즈 핸들" (FJ9-0) 18×18
+            SVG "SVG" (FJA-0) 0×0
+              SVGVisualElement "Path" (FJB-0) 0×0
+    Frame "③ 대화 영역 400px" (56Z-0) 400×0
+      Frame "방 머리 — 알림에서 시작됨" (6X5-0) 0×0
+        Frame "Frame" (6X6-0) 0×0
+          Rectangle "Rectangle" (6X7-0) 6×6
+          Text "알림에서 시작된 방" (6X8-0) 0×0 "알림에서 시작된 방"
+          Rectangle "Rectangle" (6X9-0) 0×0
+          Text "15:30" (6XA-0) 0×0 "15:30"
+        Text "삼성전자 88,000 돌파" (6XB-0) 0×0 "삼성전자 88,000 돌파"
+        Text "오브에서 넘어온 예외 창 — 관제 창…" (6XC-0) 0×0 "오브에서 넘어온 예외 창 — 관제 창과 별개"
+        Frame "합류 행" (42QX-1) 0×0
+          Frame "버튼 · 관제 창으로" (42QY-1) 0×0
+            Text "관제 창으로 →" (42QZ-1) 0×0 "관제 창으로 →"
+          Text "이 감시 건 · 관제 대화 1개" (42R0-1) 0×0 "이 감시 건 · 관제 대화 1개"
+      Frame "④ 결과물 · 하위 에이전트 · 출처 도크" (59Z-0) 0×0
+        Frame "결과물" (5AL-0) 0×0
+          Frame "Frame" (5AN-0) 0×0
+            Text "결과물" (5AP-0) 0×0 "결과물"
+            Text "캔버스 2" (5AO-0) 0×0 "캔버스 2"
+          Text "네이버 뉴스 · 삼성전자 일봉" (5AM-0) 0×0 "네이버 뉴스 · 삼성전자 일봉"
+        Frame "하위 에이전트" (5AB-0) 0×0
+          Frame "Frame" (5AI-0) 0×0
+            Text "하위 에이전트" (5AK-0) 0×0 "하위 에이전트"
+            Text "1 / 2" (5AJ-0) 0×0 "1 / 2"
+          Frame "Frame" (5AF-0) 0×0
+            Rectangle "Rectangle" (5AH-0) 7×7
+            Text "재무 해석 · 작업 중" (5AG-0) 0×0 "재무 해석 · 작업 중"
+          Frame "Frame" (5AC-0) 0×0
+            Rectangle "Rectangle" (5AE-0) 7×7
+            Text "시세 수집 · 완료" (5AD-0) 0×0 "시세 수집 · 완료"
+        Frame "출처" (5A0-0) 0×0
+          Frame "Frame" (5A8-0) 0×0
+            Text "출처" (5AA-0) 0×0 "출처"
+            Text "3" (5A9-0) 0×0 "3"
+          Frame "Frame" (5A1-0) 0×0
+            Frame "Frame" (5A6-0) 0×0
+              Text "일봉 차트" (5A7-0) 0×0 "일봉 차트"
+            Frame "Frame" (5A4-0) 0×0
+              Text "DART 재무제표" (5A5-0) 0×0 "DART 재무제표"
+            Frame "Frame" (5A2-0) 0×0
+              Text "네이버 뉴스" (5A3-0) 0×0 "네이버 뉴스"
+      Frame "history" (57J-0) 0×0
+        Frame "완료 턴" (59O-0) 0×0
+          Frame "⑤ 사용자 말풍선 (우측 정렬)" (59W-0) 0×0
+            Frame "Frame" (59X-0) 0×0
+              Text "삼성전자 흐름이랑 재무 같이 보여줘" (59Y-0) 0×0 "삼성전자 흐름이랑 재무 같이 보여줘"
+          Frame "⑥ 경과 헤더 — 접힌 상태" (59Q-0) 0×0
+            Frame "Frame" (59S-0) 0×0
+              Text "38초 동안 작업함" (59V-0) 0×0 "38초 동안 작업함"
+              SVG "SVG" (59T-0) 0×0
+                SVGVisualElement "Path" (59U-0) 0×0
+            Rectangle "Rectangle" (59R-0) 0×1
+          Text "일봉 60개를 폈습니다. 5월 하순부…" (59P-0) 0×0 "일봉 60개를 폈습니다. 5월 하순부터 20일선이 60일선을 위로 뚫고 그대로 벌어졌고, 종가 88,100원"
+        Frame "진행 중 턴" (58O-0) 0×0
+          Frame "사용자 말풍선" (59L-0) 0×0
+            Frame "Frame" (59M-0) 0×0
+              Text "재무 쪽은 하위 에이전트한테 맡겨서 …" (59N-0) 0×0 "재무 쪽은 하위 에이전트한테 맡겨서 정리해줘"
+          Frame "⑥ 경과 헤더 — 진행 중" (59I-0) 0×0
+            Text "29초 동안 작업 중입니다" (59K-0) 0×0 "29초 동안 작업 중입니다"
+            Rectangle "Rectangle" (59J-0) 0×1
+          Text "재무 해석은 읽기 전용 하위 에이전트…" (59H-0) 0×0 "재무 해석은 읽기 전용 하위 에이전트에게 맡기겠습니다. 2025 연결 재무상태표에서 유동비율·현금성자산 비중"
+          Frame "⑦ 하위 에이전트 블록" (597-0) 0×0
+            Frame "Frame" (59C-0) 0×0
+              Frame "Frame" (59E-0) 0×0
+                Rectangle "Rectangle" (59G-0) 8×8
+                Text "재무 해석" (59F-0) 0×0 "재무 해석"
+              Text "작업 시작됨" (59D-0) 0×0 "작업 시작됨"
+            Frame "사고 문구 — 앞은 진하고 뒤로 옅어진다" (598-0) 0×0
+              Text "유동비율 계산" (59B-0) 0×0 "유동비율 계산"
+              Text "— 유동자산 ÷" (59A-0) 0×0 "— 유동자산 ÷"
+              Text "유동부채 확인 중" (599-0) 0×0 "유동부채 확인 중"
+          Frame "⑧ 실행 라인 — 지금 부르고 있는 것" (58P-0) 0×0
+            Frame "Frame" (591-0) 0×0
+              SVG "SVG" (594-0) 0×0
+                SVGVisualElement "Rect" (596-0) 0×0
+                SVGVisualElement "Path" (595-0) 0×0
+              Text "재무제표 조회 · 삼성전자 2025 …" (593-0) 0×0 "재무제표 조회 · 삼성전자 2025 연결"
+              Text "1.2s" (592-0) 0×0 "1.2s"
+            Frame "Frame" (58V-0) 0×0
+              SVG "SVG" (58Y-0) 0×0
+                SVGVisualElement "Rect" (590-0) 0×0
+                SVGVisualElement "Path" (58Z-0) 0×0
+              Text "현재가 조회 · 삼성전자" (58X-0) 0×0 "현재가 조회 · 삼성전자"
+              Text "0.4s" (58W-0) 0×0 "0.4s"
+            Frame "Frame" (58Q-0) 0×0
+              SVG "SVG" (58S-0) 0×0
+                SVGVisualElement "Rect" (58U-0) 0×0
+                SVGVisualElement "Path" (58T-0) 0×0
+              Text "일별 주가 조회 · 대기 중" (58R-0) 0×0 "일별 주가 조회 · 대기 중"
+        Frame "turn-agent (능동 턴) — 조건 패널 형식" (57K-0) 0×0
+          Frame "agent-head" (58I-0) 0×0
+            Frame "agent-badge" (58M-0) 0×0
+              Text "15:30 발화" (58N-0) 0×0 "15:30 발화"
+            Text "주기 확인" (58L-0) 0×0 "주기 확인"
+            Rectangle "Rectangle" (58K-0) 0×0
+            Text "2분 전" (58J-0) 0×0 "2분 전"
+          Frame "본문 — 인라인 칩을 문장에 섞는다" (58B-0) 0×0
+            Text "Text" (58H-0) 0×0
+            Frame "Frame" (58F-0) 0×0
+              Text "삼성전자 005930" (58G-0) 0×0 "삼성전자 005930"
+            Text " 조건 도달 — 관측값 88,100 …" (58E-0) 0×0 " 조건 도달 — 관측값 88,100 (임계 88,000)"
+            Frame "시점 단서 (템플릿 고정 문구)" (58C-0) 0×0
+              Text "값은 발화 시점 기준입니다 — 최신 …" (58D-0) 0×0 "값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요."
+          Frame "조건 패널" (57M-0) 0×0
+            Frame "패널 머리 바" (581-0) 0×30
+              Text "감시 조건" (58A-0) 0×0 "감시 조건"
+              Frame "캔버스로 보내기" (586-0) 16×16
+                SVG "SVG" (587-0) 0×0
+                  SVGVisualElement "Path" (589-0) 0×0
+                  SVGVisualElement "Path" (588-0) 0×0
+              Frame "복사" (582-0) 16×16
+                SVG "SVG" (583-0) 0×0
+                  SVGVisualElement "Rect" (585-0) 0×0
+                  SVGVisualElement "Path" (584-0) 0×0
+            Frame "패널 본문" (57N-0) 0×0
+              Text "대상" (580-0) 0×0 "삼성전자 005930"
+              Frame "조건 행 · 충족" (57W-0) 0×0
+                Text "✓" (57Z-0) 11×0 "✓"
+                Text "종가 88,000 이상" (57Y-0) 0×0 "종가 88,000 이상"
+                Text "88,100" (57X-0) 0×0 "88,100"
+              Frame "조건 행 · 충족" (57S-0) 0×0
+                Text "✓" (57V-0) 11×0 "✓"
+                Text "거래량 1,000만주 이상" (57U-0) 0×0 "거래량 1,000만주 이상"
+                Text "11,689,068" (57T-0) 0×0 "11,689,068"
+              Frame "조건 행 · 참고" (57O-0) 0×0
+                Text "△" (57R-0) 11×0 "△"
+                Text "장중에만 확인" (57Q-0) 0×0 "장중에만 확인"
+                Text "15:30 마감" (57P-0) 0×0 "15:30 마감"
+          Text "agent-source (각주)" (57L-0) 0×0 "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다"
+      Frame "input-stack" (570-0) 0×0
+        Frame "input-row · 실행 중 (ESC 중단)" (57D-0) 0×44
+          Text "무엇이든 물어보세요" (57I-0) 0×0 "무엇이든 물어보세요"
+          Frame "Frame" (57E-0) 0×0
+            Text "29s" (57H-0) 0×0 "29s"
+            Frame "Frame" (57F-0) 0×0
+              Text "ESC 중단" (57G-0) 0×0 "ESC 중단"
+        Frame "control-strip" (571-0) 0×40
+          Frame "키우미 (#dot 대체) · 호출 중 — 얼굴 열림" (579-0) 18×18
+            Frame "visor" (57A-0) 11×11
+              Rectangle "Rectangle" (57C-0) 2×4
+              Rectangle "Rectangle" (57B-0) 2×4
+          Frame "Frame" (577-0) 0×28
+            Text "CLAUDE" (578-0) 0×0 "CLAUDE"
+          Frame "Frame" (575-0) 0×0
+            Text "감시 2" (576-0) 0×0 "감시 2"
+          Rectangle "Rectangle" (574-0) 0×0
+          Frame "Frame" (572-0) 0×28
+            Text "OPUS · HIGH" (573-0) 0×0 "OPUS · HIGH"

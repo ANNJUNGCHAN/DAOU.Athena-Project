@@ -1,0 +1,339 @@
+{
+ "board_id": "48DM-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48EK-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48EJ-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48EH-0",
+   "text": "증거금 재원·담보 상세",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Header"
+   ]
+  },
+  {
+   "id": "48EF-0",
+   "text": "종목별계좌평가현황",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48EE-0",
+   "text": "8종목",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48EC-0",
+   "text": "매수비중",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48EB-0",
+   "text": "28.0%",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48E9-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48E8-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48E5-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48E4-0",
+   "text": "값",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48E3-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48E1-0",
+   "text": "신용대용증거금",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48E0-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48DY-0",
+   "text": "0원",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48DX-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48DV-0",
+   "text": "전일대주상환손실대용증거금",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48DU-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48DS-0",
+   "text": "0원",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48DR-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48DO-0",
+   "text": "스칼라 2개, 행 1개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48DM-0",
+   "name": "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48EG-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48EI-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48DP-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48E6-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48ED-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48EA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48E7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48E2-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48DW-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48DZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48DQ-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48DT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48DN-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "증거금 재원·담보 상세": 1,
+  "종목별계좌평가현황": 1,
+  "8종목": 1,
+  "매수비중": 1,
+  "28.0%": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "신용대용증거금": 1,
+  "0원": 2,
+  "전일대주상환손실대용증거금": 1,
+  "스칼라 2개, 행 1개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "69e13009512cb150def406567bf2aef44375c0a8313cd7d5486fd56b6db221c2"
+}

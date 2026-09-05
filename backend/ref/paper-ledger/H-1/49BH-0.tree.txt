@@ -1,0 +1,9 @@
+Frame "note/CC-03 / R01-T1-X · 분봉 시세" (49BH-0) 360×92
+  Frame "Frame" (49BI-0) 334×0
+    Text "원본 보드: CC-03 / R01-T…" (49BJ-0) 0×0 "원본 보드: CC-03 / R01-T1-X · 분봉 시세"
+  Frame "Frame" (49BK-0) 334×0
+    Text "가져온 요소: 종가 · 대비 · 시가…" (49BL-0) 0×0 "가져온 요소: 종가 · 대비 · 시가 · 거래대금 · 거래량"
+  Frame "Frame" (49BM-0) 334×0
+    Text "문법: compound" (49BN-0) 0×0 "문법: compound"
+  Frame "Frame" (49BO-0) 334×0
+    Text "접은 개수: 스칼라 2개 · 행 11…" (49BP-0) 0×0 "접은 개수: 스칼라 2개 · 행 11개"

@@ -1,0 +1,14 @@
+Frame "template/reader" (45SF-0) 360×420
+  Frame "Header" (45TU-0) 0×0
+    Frame "Meta row" (45TV-0) 0×0
+      Text "Eyebrow" (45TW-0) 0×0 "읽기형"
+      Text "As of" (45TX-0) 0×0 "기준 오늘"
+    Text "Title" (45TY-0) 0×0 "문서 요약"
+  Frame "Body" (45US-0) 0×0
+    Frame "Reader title" (45ZB-0) 0×0
+      Text "투자 유의 안내" (45ZC-0) 0×0 "투자 유의 안내"
+      Text "작성 기관 / 오늘 기준" (45ZD-0) 0×0 "작성 기관 / 오늘 기준"
+    Frame "Reader paragraph" (45ZF-0) 0×0
+      Text "투자는 본인의 판단과 책임 아래 이루…" (45ZG-0) 0×0 "투자는 본인의 판단과 책임 아래 이루어집니다. 상품 설명과 위험을 확인하고, 투자 목적에 맞는지 검토해 주세"
+  Frame "Fold note" (4613-0) 0×0
+    Text "이후 6문단 접힘 · 원본에서 확인" (4614-0) 0×0 "이후 6문단 접힘 · 원본에서 확인"

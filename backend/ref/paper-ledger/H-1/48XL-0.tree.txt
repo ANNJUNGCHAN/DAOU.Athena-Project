@@ -1,0 +1,9 @@
+Frame "note/CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가" (48XL-0) 360×92
+  Frame "Frame" (48XM-0) 334×0
+    Text "원본 보드: CC-02 / R11-T…" (48XN-0) 0×0 "원본 보드: CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가"
+  Frame "Frame" (48XO-0) 334×0
+    Text "가져온 요소: 주문가능금액" (48XP-0) 0×0 "가져온 요소: 주문가능금액"
+  Frame "Frame" (48XQ-0) 334×0
+    Text "문법: order_confirm" (48XR-0) 0×0 "문법: order_confirm"
+  Frame "Frame" (48XS-0) 334×0
+    Text "접은 개수: 항목 20개" (48XT-0) 0×0 "접은 개수: 항목 20개"

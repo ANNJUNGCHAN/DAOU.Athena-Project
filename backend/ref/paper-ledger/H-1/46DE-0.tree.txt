@@ -1,0 +1,24 @@
+Frame "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도" (46DE-0) 360×420
+  Frame "Header" (46DX-0) 0×0
+    Frame "Meta row" (46DZ-0) 0×0
+      Text "Eyebrow" (46E1-0) 0×0
+      Text "As of" (46E0-0) 0×0 "기준 09:42"
+    Text "Title" (46DY-0) 0×0 "삼성전자 10주 시장가 매도"
+  Frame "Body" (46DF-0) 0×0
+    Frame "Status" (46DU-0) 0×0
+      Rectangle "Rectangle" (46DW-0) 7×7
+      Text "주문을 확인했어요" (46DV-0) 0×0 "주문을 확인했어요"
+    Frame "Confirm facts" (46DN-0) 0×0
+      Frame "Frame" (46DR-0) 0×0
+        Text "종목" (46DT-0) 0×0 "종목"
+        Text "삼성전자 / 005930" (46DS-0) 0×0 "삼성전자 / 005930"
+      Frame "Frame" (46DO-0) 0×0
+        Text "유형" (46DQ-0) 0×0 "유형"
+        Text "매도" (46DP-0) 0×0 "매도"
+    Frame "Confirm values" (46DG-0) 0×0
+      Frame "Frame" (46DK-0) 0×0
+        Text "수량" (46DM-0) 0×0 "수량"
+        Text "10주" (46DL-0) 0×0 "10주"
+      Frame "Frame" (46DH-0) 0×0
+        Text "가격" (46DJ-0) 0×0 "가격"
+        Text "150,840원" (46DI-0) 0×0 "150,840원"

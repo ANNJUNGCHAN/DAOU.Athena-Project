@@ -1,0 +1,199 @@
+Frame "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적" (2RBO-1) 1440×960
+  Frame "Instrument Root · 기업정보" (2RBP-1) 1440×960
+    Frame "Instrument Card Surface" (2RBQ-1) 1360×880
+      Frame "Instrument Header" (2RG7-1) 0×106
+        Frame "Frame" (2RGL-1) 0×0
+          Frame "Frame" (2RGQ-1) 0×0
+            Text "삼성전자" (2RGU-1) 0×0 "삼성전자"
+            Text "005930 · KOSPI · KRX" (2RGT-1) 0×0 "005930 · KOSPI · KRX"
+            Frame "Session Chips" (3A49-0) 0×0
+              Frame "장구분 칩" (3A4A-0) 0×0
+                Text "정규장" (3A4B-0) 0×0 "정규장"
+              Frame "실시간 칩" (3A4C-0) 0×0
+                Text "실시간" (3A4D-0) 0×0 "실시간"
+          Frame "Frame" (2RGM-1) 0×0
+            Text "150,850원" (2RGP-1) 0×0 "150,850원"
+            Text "+1,850 · +1.24%" (2RGO-1) 0×0 "+1,850 · +1.24%"
+            Text "09:42:18" (2RGN-1) 0×0 "09:42:18"
+        Frame "Frame" (2RG8-1) 0×0
+          Frame "Frame" (2RGJ-1) 0×0
+            Text "현재시세" (2RGK-1) 0×0 "현재시세"
+          Frame "Frame" (2RGH-1) 0×0
+            Text "차트" (2RGI-1) 0×0 "차트"
+          Frame "Frame" (2RGF-1) 0×0
+            Text "기업정보" (2RGG-1) 0×0 "기업정보"
+          Frame "Frame" (2RGD-1) 0×0
+            Text "ETF" (2RGE-1) 0×0 "ETF"
+          Frame "Frame" (2RGB-1) 0×0
+            Text "ELW" (2RGC-1) 0×0 "ELW"
+          Frame "Frame" (2RG9-1) 0×0
+            Text "금현물" (2RGA-1) 0×0 "금현물"
+          Frame "Frame" (2WFG-0) 0×0
+            Text "순위" (2WFH-0) 0×0 "순위"
+      Frame "Quote and Valuation Strip" (2RFN-1) 0×116
+        Frame "Frame" (2RG4-1) 0×78
+          Text "시가 · 고가 · 저가" (2RG6-1) 0×0 "시가 · 고가 · 저가"
+          Text "149,200 · 152,400 · …" (2RG5-1) 0×0 "149,200 · 152,400 · 148,100"
+        Frame "Frame" (2RG0-1) 190×78
+          Text "거래량" (2RG3-1) 0×0 "거래량"
+          Text "1,420만주" (2RG2-1) 0×0 "1,420만주"
+          Text "거래대금 2.14조원" (2RG1-1) 0×0 "거래대금 2.14조원"
+        Frame "Frame" (2RFW-1) 150×78
+          Text "PER" (2RFZ-1) 0×0 "PER"
+          Text "21.2배" (2RFY-1) 0×0 "21.2배"
+          Text "업종 11.2배" (2RFX-1) 0×0 "업종 11.2배"
+        Frame "Frame" (2RFS-1) 150×78
+          Text "PBR" (2RFV-1) 0×0 "PBR"
+          Text "2.63배" (2RFU-1) 0×0 "2.63배"
+          Text "업종 1.61배" (2RFT-1) 0×0 "업종 1.61배"
+        Frame "Frame" (2RFO-1) 150×78
+          Text "ROE" (2RFR-1) 0×0 "ROE"
+          Text "8.4%" (2RFQ-1) 0×0 "8.4%"
+          Text "전년 7.9%" (2RFP-1) 0×0 "전년 7.9%"
+      Frame "Chart Workspace" (2RBU-1) 0×594
+        Frame "Corp Info Mount" (2RD0-1) 1000×594
+          Frame "Frame" (2RGV-1) 0×0
+            Text "기업 개요" (2RGW-1) 0×0 "기업 개요"
+            Text "보통주 기준" (2RGX-1) 0×0 "보통주 기준"
+          Frame "기업 개요 4칸" (3EU3-0) 0×0
+            Frame "결산월" (3EU4-0) 0×0
+              Text "결산월" (3EU5-0) 0×0 "결산월"
+              Text "12월" (3EU6-0) 0×0 "12월"
+            Frame "액면가" (3EU7-0) 0×0
+              Text "액면가" (3EU8-0) 0×0 "액면가"
+              Text "100원" (3EU9-0) 0×0 "100원"
+            Frame "자본금" (3EUA-0) 0×0
+              Text "자본금" (3EUB-0) 0×0 "자본금"
+              Text "5,970억원" (3EUC-0) 0×0 "5,970억원"
+            Frame "상장주식" (3EUD-0) 0×0
+              Text "상장주식" (3EUE-0) 0×0 "상장주식"
+              Text "59억 6,978만주" (3EUF-0) 0×0 "59억 6,978만주"
+          Frame "Frame" (2RHC-1) 0×0
+            Frame "가치 지표" (3EW4-0) 0×0
+              Text "가치 지표" (3EW5-0) 0×0 "가치 지표"
+              Frame "PER" (3EW6-0) 0×36
+                Text "PER" (3EW7-0) 0×0 "PER"
+                Frame "Frame" (3EW8-0) 0×0
+                  Text "21.2배" (3EW9-0) 0×0 "21.2배"
+                  Text "EPS 7,115원" (3EWA-0) 0×0 "EPS 7,115원"
+              Frame "PBR" (3EWB-0) 0×36
+                Text "PBR" (3EWC-0) 0×0 "PBR"
+                Frame "Frame" (3EWD-0) 0×0
+                  Text "2.63배" (3EWE-0) 0×0 "2.63배"
+                  Text "BPS 57,320원" (3EWF-0) 0×0 "BPS 57,320원"
+              Frame "ROE" (3EWG-0) 0×24
+                Text "ROE" (3EWH-0) 0×0 "ROE"
+                Text "8.4%" (3EWI-0) 0×0 "8.4%"
+              Frame "EV" (3EWJ-0) 0×24
+                Text "EV" (3EWK-0) 0×0 "EV"
+                Text "868.2조원" (3EWL-0) 0×0 "868.2조원"
+            Frame "가격 이력 · 기준" (39RB-0) 0×0
+              Text "가격 이력 · 기준" (39RC-0) 0×0 "가격 이력 · 기준"
+              Frame "Frame" (39RD-0) 0×36
+                Text "250일 최고" (39RE-0) 0×0 "250일 최고"
+                Frame "Frame" (39RF-0) 0×0
+                  Text "153,400 · 08/21" (39RG-0) 0×0 "153,400 · 08/21"
+                  Text "현재가 대비 −1.66%" (39RH-0) 0×0 "현재가 대비 −1.66%"
+              Frame "Frame" (39RI-0) 0×36
+                Text "250일 최저" (39RJ-0) 0×0 "250일 최저"
+                Frame "Frame" (39RK-0) 0×0
+                  Text "67,700 · 11/03" (39RL-0) 0×0 "67,700 · 11/03"
+                  Text "현재가 대비 +122.8%" (39RM-0) 0×0 "현재가 대비 +122.8%"
+              Frame "Frame" (39RN-0) 0×24
+                Text "기준가" (39RO-0) 0×0 "기준가"
+                Text "149,000" (39RP-0) 0×0 "149,000"
+              Frame "Frame" (39RQ-0) 0×24
+                Text "상한가" (39RR-0) 0×0 "상한가"
+                Text "193,700" (39RS-0) 0×0 "193,700"
+              Frame "Frame" (39RT-0) 0×24
+                Text "하한가" (39RU-0) 0×0 "하한가"
+                Text "104,300" (39RV-0) 0×0 "104,300"
+              Frame "Frame" (39RW-0) 0×36
+                Text "예상 체결" (39RX-0) 0×0 "예상 체결"
+                Frame "Frame" (39RY-0) 0×0
+                  Text "150,900 · 8,420주" (39RZ-0) 0×0 "150,900 · 8,420주"
+                  Text "08:50 기준" (39S0-0) 0×0 "08:50 기준"
+            Frame "수급 · 신용" (39S7-0) 0×0
+              Text "수급 · 신용" (39S8-0) 0×0 "수급 · 신용"
+              Frame "Frame" (39S9-0) 0×24
+                Text "외인소진율" (39SA-0) 0×0 "외인소진율"
+                Text "65.5%" (39SB-0) 0×0 "65.5%"
+              Frame "Frame" (39SC-0) 0×36
+                Text "신용비율" (39SD-0) 0×0 "신용비율"
+                Frame "Frame" (39SE-0) 0×0
+                  Text "0.86%" (39SF-0) 0×0 "0.86%"
+                  Text "신용잔고율 0.52%" (39SG-0) 0×0 "신용잔고율 0.52%"
+              Frame "Frame" (39SH-0) 0×36
+                Text "대용가" (39SI-0) 0×0 "대용가"
+                Frame "Frame" (39SJ-0) 0×0
+                  Text "118,800" (39SK-0) 0×0 "118,800"
+                  Text "기준가 대비 79.7%" (39SL-0) 0×0 "기준가 대비 79.7%"
+              Frame "Frame" (39SM-0) 0×24
+                Text "연중최고" (39SN-0) 0×0 "연중최고"
+                Text "153,400" (39SO-0) 0×0 "153,400"
+              Frame "Frame" (39SP-0) 0×24
+                Text "연중최저" (39SQ-0) 0×0 "연중최저"
+                Text "112,300" (39SR-0) 0×0 "112,300"
+              Frame "Frame" (39SS-0) 0×24
+                Text "유통비율" (39ST-0) 0×0 "유통비율"
+                Text "74.4%" (39SU-0) 0×0 "74.4%"
+          Frame "실적 스냅샷" (3F3G-0) 0×0
+            Frame "실적 스냅샷 제목" (3F3H-0) 0×0
+              Text "실적 스냅샷" (3F3I-0) 0×0 "실적 스냅샷"
+              Text "최근 결산 · 연간" (3F3J-0) 0×0 "최근 결산 · 연간"
+            Frame "실적 3칸" (3F3K-0) 0×0
+              Frame "매출액" (3F3L-0) 0×0
+                Text "매출액" (3F3M-0) 0×0 "매출액"
+                Text "300조 8,700억원" (3F3N-0) 0×0 "300조 8,700억원"
+              Frame "영업이익" (3F3O-0) 0×0
+                Text "영업이익" (3F3P-0) 0×0 "영업이익"
+                Text "52조 8,000억원" (3F3Q-0) 0×0 "52조 8,000억원"
+              Frame "당기순이익" (3F3R-0) 0×0
+                Text "당기순이익" (3F3S-0) 0×0 "당기순이익"
+                Text "48조 1,600억원" (3F3T-0) 0×0 "48조 1,600억원"
+        Frame "Instrument Context" (2RBV-1) 360×594
+          Frame "Market Profile" (2RCN-1) 0×0
+            Frame "Frame" (2RCX-1) 0×0
+              Text "종목 요약" (2RCZ-1) 0×0 "종목 요약"
+              Text "정상 거래" (2RCY-1) 0×0 "정상 거래"
+            Frame "시가총액" (3F3V-0) 0×42
+              Text "시가총액" (3F3W-0) 0×0 "시가총액"
+              Frame "Frame" (3F3X-0) 0×0
+                Text "900.4조원" (3F3Y-0) 0×0 "900.4조원"
+                Text "코스피 비중 21.4%" (3F3Z-0) 0×0 "코스피 비중 21.4%"
+            Frame "Frame" (2RCR-1) 0×42
+              Text "외국인 보유" (2RCT-1) 0×0 "외국인 보유"
+              Text "52.41%" (2RCS-1) 0×0 "52.41%"
+            Frame "Frame" (2RCO-1) 0×42
+              Text "유통 주식" (2RCQ-1) 0×0 "유통 주식"
+              Text "44.4억주" (2RCP-1) 0×0 "44.4억주"
+          Frame "Range and Liquidity" (2RCC-1) 0×0
+            Text "가격 범위" (2RCM-1) 0×0 "가격 범위"
+            Frame "Frame" (2RCJ-1) 0×0
+              Text "52주 최저 67,700" (2RCL-1) 0×0 "52주 최저 67,700"
+              Text "최고 153,400" (2RCK-1) 0×0 "최고 153,400"
+            Frame "Frame" (2RCG-1) 0×8
+              Rectangle "Rectangle" (2RCI-1) 0×8
+              Rectangle "Rectangle" (2RCH-1) 16×16
+            Frame "Frame" (2RCD-1) 0×0
+              Text "거래대금" (2RCF-1) 0×0 "거래대금"
+              Text "2.14조원" (2RCE-1) 0×0 "2.14조원"
+          Frame "Investor Snapshot" (2RC1-1) 0×0
+            Text "오늘의 수급" (2RCB-1) 0×0 "오늘의 수급"
+            Frame "Frame" (2RC8-1) 0×38
+              Text "외국인" (2RCA-1) 0×0 "외국인"
+              Text "+128억원" (2RC9-1) 0×0 "+128억원"
+            Frame "Frame" (2RC5-1) 0×38
+              Text "기관" (2RC7-1) 0×0 "기관"
+              Text "+196억원" (2RC6-1) 0×0 "+196억원"
+            Frame "Frame" (2RC2-1) 0×38
+              Text "개인" (2RC4-1) 0×0 "개인"
+              Text "−312억원" (2RC3-1) 0×0 "−312억원"
+          Frame "Chart Context Actions" (2RBW-1) 312×44
+            Frame "Frame" (2RBZ-1) 0×44
+              Text "알림 설정" (2RC0-1) 0×0 "알림 설정"
+            Frame "Frame" (2RBX-1) 0×44
+              Text "호가 열기" (2RBY-1) 0×0 "호가 열기"
+      Frame "Chart Status Footer" (2RBR-1) 0×64
+        Text "● 기본정보 조회 기준 09:42" (2RBT-1) 0×0 "● 기본정보 조회 기준 09:42"
+        Text "결산 12월 · 증거금율 20% · …" (2RBS-1) 0×0 "결산 12월 · 증거금율 20% · 통화단위 원"

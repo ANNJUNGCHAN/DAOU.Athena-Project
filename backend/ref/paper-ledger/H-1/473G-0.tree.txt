@@ -1,0 +1,24 @@
+Frame "mini/CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가" (473G-0) 360×420
+  Frame "Header" (473Z-0) 0×0
+    Frame "Meta row" (4741-0) 0×0
+      Text "Eyebrow" (4743-0) 0×0
+      Text "As of" (4742-0) 0×0 "기준 09:42"
+    Text "Title" (4740-0) 0×0 "금 99.99K 10g 시장가 매수"
+  Frame "Body" (473H-0) 0×0
+    Frame "Status" (473W-0) 0×0
+      Rectangle "Rectangle" (473Y-0) 7×7
+      Text "주문 정보를 확인했어요" (473X-0) 0×0 "주문 정보를 확인했어요"
+    Frame "Confirm facts" (473P-0) 0×0
+      Frame "Frame" (473T-0) 0×0
+        Text "주문가능금액" (473V-0) 0×0 "주문가능금액"
+        Text "31,240,000원" (473U-0) 0×0 "31,240,000원"
+      Frame "Frame" (473Q-0) 0×0
+        Text "계좌" (473S-0) 0×0 "계좌"
+        Text "키움증권 01" (473R-0) 0×0 "키움증권 01"
+    Frame "Confirm values" (473I-0) 0×0
+      Frame "Frame" (473M-0) 0×0
+        Text "값" (473O-0) 0×0 "값"
+        Text "10g" (473N-0) 0×0 "10g"
+      Frame "Frame" (473J-0) 0×0
+        Text "변화" (473L-0) 0×0 "변화"
+        Text "25%" (473K-0) 0×0 "25%"

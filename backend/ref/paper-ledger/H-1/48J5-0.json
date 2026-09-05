@@ -1,0 +1,339 @@
+{
+ "board_id": "48J5-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48K3-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48K2-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48K0-0",
+   "text": "예수금 통화별·특수예수금",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Header"
+   ]
+  },
+  {
+   "id": "48JY-0",
+   "text": "종목별계좌평가현황",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48JX-0",
+   "text": "8종목",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48JV-0",
+   "text": "매수비중",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48JU-0",
+   "text": "28.0%",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48JS-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48JR-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48JO-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48JN-0",
+   "text": "값",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48JM-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48JK-0",
+   "text": "d+3외화예수금",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48JJ-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48JH-0",
+   "text": "0달러",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48JG-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48JE-0",
+   "text": "d+4외화예수금",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48JD-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48JB-0",
+   "text": "0달러",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48JA-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48J7-0",
+   "text": "스칼라 2개, 행 1개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48J5-0",
+   "name": "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48JZ-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48K1-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48J8-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48JP-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48JW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48JT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48JQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48JL-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48JF-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48JI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48J9-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48JC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48J6-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "예수금 통화별·특수예수금": 1,
+  "종목별계좌평가현황": 1,
+  "8종목": 1,
+  "매수비중": 1,
+  "28.0%": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "d+3외화예수금": 1,
+  "0달러": 2,
+  "d+4외화예수금": 1,
+  "스칼라 2개, 행 1개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "90b1d7ba96d356dd2ea3ad191964244c1ff8f2188fa8947f3b3a751095f99c62"
+}

@@ -1,0 +1,2659 @@
+{
+ "board_id": "15N5-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R07 · KODEX 200 ETF",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "3T4F-0",
+   "text": "KODEX 200 ETF",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "Identity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T4G-0",
+   "text": "069500",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "Identity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T4H-0",
+   "text": "국내 시장대표 · 코스피200 추종 · 시가총액형",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "Identity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T4J-0",
+   "text": "KRX · 09:42:18 장중",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "Identity",
+    "Frame",
+    "상태 칩"
+   ]
+  },
+  {
+   "id": "3T4L-0",
+   "text": "48,360원",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "Identity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T4M-0",
+   "text": "+403 · +0.84%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "Identity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T4N-0",
+   "text": "NAV 48,318 · 괴리 +0.09%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "Identity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T4Q-0",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "모드 탭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T4S-0",
+   "text": "차트",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "모드 탭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T4U-0",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "모드 탭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T4W-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "모드 탭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T4Y-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "모드 탭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T50-0",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "모드 탭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T52-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Instrument Header",
+    "모드 탭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVH-0",
+   "text": "실시간 NAV",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVI-0",
+   "text": "48,318",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVJ-0",
+   "text": "괴리 +0.09%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVK-0",
+   "text": "전일대비 ▲ +398 · +0.83%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVM-0",
+   "text": "체결 수익률",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVN-0",
+   "text": "+0.84%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVO-0",
+   "text": "전일 종가 47,957",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVP-0",
+   "text": "체결 기준 ▲ +403",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVR-0",
+   "text": "20일 추적오차",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVS-0",
+   "text": "0.11%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVT-0",
+   "text": "코스피200 448.62",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVU-0",
+   "text": "▲ +3.78 · +0.85%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVW-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVX-0",
+   "text": "1,846억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVY-0",
+   "text": "누적 거래량 382만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CVZ-0",
+   "text": "전일 84.2만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CW0-0",
+   "text": "가격과 NAV",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main"
+   ]
+  },
+  {
+   "id": "3CW6-0",
+   "text": "실선 시장가격 · 점선 NAV",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "Chart Legend"
+   ]
+  },
+  {
+   "id": "3CW8-0",
+   "text": "NAV 괴리율",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "Chart Legend",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CW9-0",
+   "text": "+0.09%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Main",
+    "Chart Legend",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CWB-0",
+   "text": "구성 비중",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side"
+   ]
+  },
+  {
+   "id": "3CWE-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CWF-0",
+   "text": "28.4%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CWJ-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CWK-0",
+   "text": "10.7%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CWO-0",
+   "text": "금융",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CWP-0",
+   "text": "9.1%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CWU-0",
+   "text": "외국인 순매수",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CWW-0",
+   "text": "+286억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CWX-0",
+   "text": "59.2만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CWZ-0",
+   "text": "기관 순매수",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CX1-0",
+   "text": "+94억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CX2-0",
+   "text": "19.4만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CX4-0",
+   "text": "ETF 기준·구성",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CX6-0",
+   "text": "기준가",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CX8-0",
+   "text": "47,957",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CX9-0",
+   "text": "대용가 38,360 · 환산가격 48,318",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXB-0",
+   "text": "주식수",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXD-0",
+   "text": "1억 2,400만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXE-0",
+   "text": "외인보유 1,840만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXG-0",
+   "text": "과표기준",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXI-0",
+   "text": "48,120",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXJ-0",
+   "text": "배당전기준 48,318 · 전일배당금 0원",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXL-0",
+   "text": "과세",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXN-0",
+   "text": "배당소득세 15.4%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXO-0",
+   "text": "ETN·원주가격 해당 없음",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Quote Section",
+    "Quote Side",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXS-0",
+   "text": "시간대별 흐름",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXT-0",
+   "text": "대상지수 코스피200",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXW-0",
+   "text": "시각",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXX-0",
+   "text": "가격",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXY-0",
+   "text": "NAV",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CXZ-0",
+   "text": "추적지수",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CY0-0",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CY1-0",
+   "text": "외국인",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CY2-0",
+   "text": "기관",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CY3-0",
+   "text": "대상지수 대비율",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CY5-0",
+   "text": "09:00",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CY7-0",
+   "text": "48,050",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CY8-0",
+   "text": "▲ +93 · +0.19%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYA-0",
+   "text": "48,022",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYB-0",
+   "text": "괴리 +0.06%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYD-0",
+   "text": "445.75",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYE-0",
+   "text": "▲ +0.91",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYG-0",
+   "text": "62만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYH-0",
+   "text": "298억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYJ-0",
+   "text": "+42억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYK-0",
+   "text": "8.7만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYM-0",
+   "text": "+8억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYN-0",
+   "text": "1.7만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYP-0",
+   "text": "99.91%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYQ-0",
+   "text": "추적오차 0.09%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYS-0",
+   "text": "09:30",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYU-0",
+   "text": "48,210",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYV-0",
+   "text": "▲ +253 · +0.53%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYX-0",
+   "text": "48,178",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CYY-0",
+   "text": "괴리 +0.07%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZ0-0",
+   "text": "447.20",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZ1-0",
+   "text": "▲ +2.36",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZ3-0",
+   "text": "214만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZ4-0",
+   "text": "1,032억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZ6-0",
+   "text": "+168억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZ7-0",
+   "text": "34.8만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZ9-0",
+   "text": "+42억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZA-0",
+   "text": "8.7만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZC-0",
+   "text": "99.98%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZD-0",
+   "text": "추적오차 0.11%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZF-0",
+   "text": "09:42",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZH-0",
+   "text": "48,360",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZI-0",
+   "text": "▲ +403 · +0.84%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZK-0",
+   "text": "48,318",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZL-0",
+   "text": "괴리 +0.09%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZN-0",
+   "text": "448.62",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZO-0",
+   "text": "▲ +3.78",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZQ-0",
+   "text": "382만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZR-0",
+   "text": "1,846억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZT-0",
+   "text": "+286억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZU-0",
+   "text": "59.2만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZW-0",
+   "text": "+94억",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZX-0",
+   "text": "19.4만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3CZZ-0",
+   "text": "100.02%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D00-0",
+   "text": "추적오차 0.13%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Intraday",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D03-0",
+   "text": "일자별 추이",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D04-0",
+   "text": "최근 3거래일",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D07-0",
+   "text": "일자",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D08-0",
+   "text": "종가",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D09-0",
+   "text": "NAV 괴리율",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0A-0",
+   "text": "추적지수",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0B-0",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0D-0",
+   "text": "09-01",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0F-0",
+   "text": "48,360",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0G-0",
+   "text": "▲ +403 · +0.84%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0H-0",
+   "text": "+0.09%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0J-0",
+   "text": "448.62",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0K-0",
+   "text": "▲ +3.78",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0L-0",
+   "text": "382만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0N-0",
+   "text": "08-31",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0P-0",
+   "text": "47,957",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0Q-0",
+   "text": "▲ +347 · +0.73%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0R-0",
+   "text": "+0.06%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0T-0",
+   "text": "444.84",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0U-0",
+   "text": "▲ +3.14",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0V-0",
+   "text": "84.2만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0X-0",
+   "text": "08-28",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D0Z-0",
+   "text": "47,610",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D10-0",
+   "text": "▼ -180 · -0.38%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D11-0",
+   "text": "+0.04%",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D13-0",
+   "text": "441.70",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D14-0",
+   "text": "▼ -1.68",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3D15-0",
+   "text": "96.5만주",
+   "path": [
+    "CC-03 / R07 · KODEX 200 ETF",
+    "Root Card",
+    "Flow Section",
+    "Daily",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "15N5-2",
+   "name": "CC-03 / R07 · KODEX 200 ETF",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "3CV5-0",
+   "name": "Root Card",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1040,
+   "depth": 1
+  },
+  {
+   "id": "3T4C-0",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 2
+  },
+  {
+   "id": "3T4D-0",
+   "name": "Identity",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3T4E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3T4I-0",
+   "name": "상태 칩",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T4K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3T4O-0",
+   "name": "모드 탭",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3T4P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3T4R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3T4T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3T4V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3T4X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3T4Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3T51-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3CV6-0",
+   "name": "Quote Section",
+   "component": "Frame",
+   "w": 0,
+   "h": 646,
+   "depth": 2
+  },
+  {
+   "id": "3CV7-0",
+   "name": "Quote Main",
+   "component": "Frame",
+   "w": 900,
+   "h": 646,
+   "depth": 3
+  },
+  {
+   "id": "3CVF-0",
+   "name": "KPI",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3CVG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CVL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CVQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CVV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3D47-0",
+   "name": "Chart",
+   "component": "Frame",
+   "w": 844,
+   "h": 422,
+   "depth": 4
+  },
+  {
+   "id": "3T54-0",
+   "name": "가격·NAV 라인",
+   "component": "SVG",
+   "w": 820,
+   "h": 396,
+   "depth": 5
+  },
+  {
+   "id": "3T55-0",
+   "name": "Polyline",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3T56-0",
+   "name": "Polyline",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CW5-0",
+   "name": "Chart Legend",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3CW7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CWA-0",
+   "name": "Quote Side",
+   "component": "Frame",
+   "w": 460,
+   "h": 646,
+   "depth": 3
+  },
+  {
+   "id": "3CWC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3CWD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CWG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "3CWH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3CWI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CWL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "3CWM-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3CWN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CWQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "3CWR-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3CWS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3CWT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CWV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CWY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CX0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CX3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3CX5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CX7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CXA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CXC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CXF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CXH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CXK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3CXM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CXP-0",
+   "name": "Flow Section",
+   "component": "Frame",
+   "w": 0,
+   "h": 288,
+   "depth": 2
+  },
+  {
+   "id": "3CXQ-0",
+   "name": "Intraday",
+   "component": "Frame",
+   "w": 900,
+   "h": 288,
+   "depth": 3
+  },
+  {
+   "id": "3CXR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3CXU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3CXV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "3CY4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3CY6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CY9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CYC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CYF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CYI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CYL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CYO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CYR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3CYT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CYW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CYZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CZ2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CZ5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CZ8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CZB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CZE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3CZG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CZJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CZM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CZP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CZS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CZV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3CZY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3D01-0",
+   "name": "Daily",
+   "component": "Frame",
+   "w": 460,
+   "h": 288,
+   "depth": 3
+  },
+  {
+   "id": "3D02-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3D05-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3D06-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "3D0C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3D0E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3D0I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3D0M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3D0O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3D0S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3D0W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3D0Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3D12-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 0,
+   "depth": 6
+  }
+ ],
+ "text_multiset": {
+  "KODEX 200 ETF": 1,
+  "069500": 1,
+  "국내 시장대표 · 코스피200 추종 · 시가총액형": 1,
+  "KRX · 09:42:18 장중": 1,
+  "48,360원": 1,
+  "+403 · +0.84%": 1,
+  "NAV 48,318 · 괴리 +0.09%": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 1,
+  "ELW": 1,
+  "금현물": 1,
+  "순위": 1,
+  "실시간 NAV": 1,
+  "48,318": 2,
+  "괴리 +0.09%": 2,
+  "전일대비 ▲ +398 · +0.83%": 1,
+  "체결 수익률": 1,
+  "+0.84%": 1,
+  "전일 종가 47,957": 1,
+  "체결 기준 ▲ +403": 1,
+  "20일 추적오차": 1,
+  "0.11%": 1,
+  "코스피200 448.62": 1,
+  "▲ +3.78 · +0.85%": 1,
+  "거래대금": 1,
+  "1,846억": 2,
+  "누적 거래량 382만주": 1,
+  "전일 84.2만주": 1,
+  "가격과 NAV": 1,
+  "실선 시장가격 · 점선 NAV": 1,
+  "NAV 괴리율": 2,
+  "+0.09%": 2,
+  "구성 비중": 1,
+  "삼성전자": 1,
+  "28.4%": 1,
+  "SK하이닉스": 1,
+  "10.7%": 1,
+  "금융": 1,
+  "9.1%": 1,
+  "외국인 순매수": 1,
+  "+286억": 2,
+  "59.2만주": 2,
+  "기관 순매수": 1,
+  "+94억": 2,
+  "19.4만주": 2,
+  "ETF 기준·구성": 1,
+  "기준가": 1,
+  "47,957": 2,
+  "대용가 38,360 · 환산가격 48,318": 1,
+  "주식수": 1,
+  "1억 2,400만주": 1,
+  "외인보유 1,840만주": 1,
+  "과표기준": 1,
+  "48,120": 1,
+  "배당전기준 48,318 · 전일배당금 0원": 1,
+  "과세": 1,
+  "배당소득세 15.4%": 1,
+  "ETN·원주가격 해당 없음": 1,
+  "시간대별 흐름": 1,
+  "대상지수 코스피200": 1,
+  "시각": 1,
+  "가격": 1,
+  "NAV": 1,
+  "추적지수": 2,
+  "거래량": 2,
+  "외국인": 1,
+  "기관": 1,
+  "대상지수 대비율": 1,
+  "09:00": 1,
+  "48,050": 1,
+  "▲ +93 · +0.19%": 1,
+  "48,022": 1,
+  "괴리 +0.06%": 1,
+  "445.75": 1,
+  "▲ +0.91": 1,
+  "62만주": 1,
+  "298억": 1,
+  "+42억": 2,
+  "8.7만주": 2,
+  "+8억": 1,
+  "1.7만주": 1,
+  "99.91%": 1,
+  "추적오차 0.09%": 1,
+  "09:30": 1,
+  "48,210": 1,
+  "▲ +253 · +0.53%": 1,
+  "48,178": 1,
+  "괴리 +0.07%": 1,
+  "447.20": 1,
+  "▲ +2.36": 1,
+  "214만주": 1,
+  "1,032억": 1,
+  "+168억": 1,
+  "34.8만주": 1,
+  "99.98%": 1,
+  "추적오차 0.11%": 1,
+  "09:42": 1,
+  "48,360": 2,
+  "▲ +403 · +0.84%": 2,
+  "448.62": 2,
+  "▲ +3.78": 2,
+  "382만주": 2,
+  "100.02%": 1,
+  "추적오차 0.13%": 1,
+  "일자별 추이": 1,
+  "최근 3거래일": 1,
+  "일자": 1,
+  "종가": 1,
+  "09-01": 1,
+  "08-31": 1,
+  "▲ +347 · +0.73%": 1,
+  "+0.06%": 1,
+  "444.84": 1,
+  "▲ +3.14": 1,
+  "84.2만주": 1,
+  "08-28": 1,
+  "47,610": 1,
+  "▼ -180 · -0.38%": 1,
+  "+0.04%": 1,
+  "441.70": 1,
+  "▼ -1.68": 1,
+  "96.5만주": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "27dda30a0813834775d993066fef1cfeb84ceea4b339e89e5f8f0eee7ab236fd"
+}

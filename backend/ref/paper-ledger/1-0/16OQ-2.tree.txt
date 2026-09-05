@@ -1,0 +1,7 @@
+Frame "04 · 부팅 — TYPE ATH→ATHE · 560–880ms" (16OQ-2) 1640×900
+  Frame "BOOT CENTER · KIWOOM + TYPE ATHE" (16OR-2) 460×209
+    Frame "키움증권 CI" (16OW-2) 220×69
+    Frame "ATHENA · TYPE ATH–ATHE" (16OS-2) 460×112
+      Text "typed · ATHE" (16OV-2) 246×112 "ATHE"
+      Text "Blinking cursor · 480ms ON / 320ms OFF" (16OU-2) 68×112 "|"
+      Text "inactive · NA" (16OT-2) 151×112 "NA"

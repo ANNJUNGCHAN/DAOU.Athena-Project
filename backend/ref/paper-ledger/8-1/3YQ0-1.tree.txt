@@ -1,0 +1,196 @@
+Frame "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결" (3YQ0-1) 1680×1080
+  Frame "Frame" (3YQ1-1) 1680×938
+    Text "백테스트 — 오류 노드에서 코드로 ·…" (3YXT-1) 0×0 "백테스트 — 오류 노드에서 코드로 · 줄 연결"
+    Text "노드를 더블클릭하거나 Enter를 누…" (3YXS-1) 0×0 "노드를 더블클릭하거나 Enter를 누르면 연결된 Python 17행을 열고, 코드 오류와 원래 노드를 같은 "
+    Frame "Frame" (3YQ2-1) 1560×850
+      Frame "47 · Project Recent Sidebar" (3YVS-1) 268×819
+        Frame "Primary Actions" (3YWV-1) 0×0
+          Frame "Frame" (3YXN-1) 0×28
+            Text "ATHENA" (3YXR-1) 0×0 "ATHENA"
+            SVG "SVG" (3YXO-1) 0×0
+              SVGVisualElement "Circle" (3YXQ-1) 0×0
+              SVGVisualElement "Path" (3YXP-1) 0×0
+          Frame "Frame" (3YXI-1) 0×30
+            SVG "SVG" (3YXK-1) 0×0
+              SVGVisualElement "Path" (3YXM-1) 0×0
+              SVGVisualElement "Path" (3YXL-1) 0×0
+            Text "새 채팅" (3YXJ-1) 0×0 "새 채팅"
+          Frame "Frame" (3YXB-1) 0×30
+            SVG "SVG" (3YXD-1) 0×0
+              SVGVisualElement "Circle" (3YXH-1) 0×0
+              SVGVisualElement "Circle" (3YXG-1) 0×0
+              SVGVisualElement "Circle" (3YXF-1) 0×0
+              SVGVisualElement "Path" (3YXE-1) 0×0
+            Text "그래프" (3YXC-1) 0×0 "그래프"
+          Frame "Frame" (3YX6-1) 0×30
+            SVG "SVG" (3YX8-1) 0×0
+              SVGVisualElement "Circle" (3YXA-1) 0×0
+              SVGVisualElement "Path" (3YX9-1) 0×0
+            Text "에이전트" (3YX7-1) 0×0 "에이전트"
+          Frame "Nav 플러그인" (3YX1-1) 0×30
+            SVG "SVG" (3YX3-1) 0×0
+              SVGVisualElement "Path" (3YX5-1) 0×0
+              SVGVisualElement "Path" (3YX4-1) 0×0
+            Text "플러그인" (3YX2-1) 0×0 "플러그인"
+          Frame "Nav 백테스트 (active)" (3YWW-1) 0×30
+            SVG "SVG" (3YWY-1) 0×0
+              SVGVisualElement "Path" (3YX0-1) 0×0
+              SVGVisualElement "Path" (3YWZ-1) 0×0
+            Text "백테스트" (3YWX-1) 0×0 "백테스트"
+        Frame "Project Tree" (3YWB-1) 0×0
+          Frame "Frame" (3YWT-1) 0×0
+            Text "프로젝트" (3YWU-1) 0×0 "프로젝트"
+          Frame "Frame" (3YWH-1) 0×32
+            SVG "SVG" (3YWQ-1) 0×0
+              SVGVisualElement "Path" (3YWS-1) 0×0
+              SVGVisualElement "Path" (3YWR-1) 0×0
+            Text "아테나" (3YWP-1) 0×0 "아테나"
+            SVG "SVG" (3YWL-1) 0×0
+              SVGVisualElement "Circle" (3YWO-1) 0×0
+              SVGVisualElement "Circle" (3YWN-1) 0×0
+              SVGVisualElement "Circle" (3YWM-1) 0×0
+            SVG "SVG" (3YWI-1) 0×0
+              SVGVisualElement "Path" (3YWK-1) 0×0
+              SVGVisualElement "Path" (3YWJ-1) 0×0
+          Frame "Frame" (3YWF-1) 0×27
+            Text "백엔드 API 개수 확인" (3YWG-1) 0×0 "백엔드 API 개수 확인"
+          Frame "Frame" (3YWC-1) 0×29
+            Text "앱 전체 기능 검수" (3YWE-1) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (3YWD-1) 6×6
+        Frame "Recent Conversations" (3YW0-1) 0×0
+          Frame "Frame" (3YW8-1) 0×20
+            Text "최근" (3YWA-1) 0×0 "최근"
+            Text "전체" (3YW9-1) 0×0 "전체"
+          Frame "Frame" (3YW5-1) 0×27
+            Text "앱 전체 기능 검수" (3YW7-1) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (3YW6-1) 6×6
+          Frame "Frame" (3YW3-1) 0×27
+            Text "삼성전자 주요 변동 알림" (3YW4-1) 0×0 "삼성전자 주요 변동 알림"
+          Frame "Frame" (3YW1-1) 0×27
+            Text "ETF 자금 흐름" (3YW2-1) 0×0 "ETF 자금 흐름"
+        Frame "Account Footer" (3YVT-1) 0×0
+          Frame "Frame" (3YVU-1) 0×38
+            Frame "Frame" (3YVY-1) 22×22
+              Text "AN" (3YVZ-1) 0×0 "AN"
+            Text "모의-주력" (3YVX-1) 0×0 "모의-주력"
+            SVG "SVG" (3YVV-1) 0×0
+              SVGVisualElement "Path" (3YVW-1) 0×0
+      Frame "Frame" (3YR3-1) 0×848
+        Frame "노드 연결 코드 편집기" (3YXU-1) 838×733
+          Frame "코드 편집기 헤더" (3YXV-1) 838×32
+            Frame "Frame" (3YXW-1) 0×0
+              Text "백테스트" (3YXX-1) 0×0 "백테스트"
+              Text "20–60 골든크로스 · v5 오류" (3YXY-1) 0×0 "20–60 골든크로스 · v5 오류"
+            Frame "Frame" (3YXZ-1) 0×0
+              Frame "Frame" (3YY0-1) 48×30
+                Text "검증" (3YY1-1) 0×0 "검증"
+              Frame "Frame" (3YY2-1) 112×30
+                Text "적용 후 시각으로" (3YY3-1) 0×0 "적용 후 시각으로"
+          Frame "코드 하위 탭" (3YY5-1) 838×34
+            Text "폼" (3YY6-1) 66×28 "폼"
+            Text "시각 설계" (3YY7-1) 82×28 "시각 설계"
+            Frame "Frame" (3YY8-1) 66×28
+              Text "코드" (3YY9-1) 0×0 "코드"
+            Text "흐름" (3YYA-1) 66×28 "흐름"
+            Frame "Frame" (3YYB-1) 126×0
+              Rectangle "Rectangle" (3YYC-1) 6×6
+              Text "v6 수정안 미적용" (3YYD-1) 0×0 "v6 수정안 미적용"
+          Frame "노드 코드 연결 리본" (3YYF-1) 838×42
+            Frame "Frame" (3YYG-1) 0×0
+              Rectangle "Rectangle" (3YYH-1) 9×9
+              Text "연결된 노드 · 하향 돌파" (3YYI-1) 0×0 "연결된 노드 · 하향 돌파"
+              Text "golden_cross.py:17" (3YYJ-1) 0×0 "golden_cross.py:17"
+            Frame "Frame" (3YYK-1) 0×26
+              Text "시각 설계에서 보기" (3YYL-1) 0×0 "시각 설계에서 보기"
+          Frame "코드 편집 본문" (3YYN-1) 838×545
+            Frame "전략 파일 목록" (3YYP-1) 150×545
+              Frame "Frame" (3YYQ-1) 0×0
+                Text "전략 파일" (3YYR-1) 0×0 "전략 파일"
+                Text "1개" (3YYS-1) 0×0 "1개"
+              Frame "Frame" (3YYT-1) 0×0
+                Text "golden_cross.py" (3YYU-1) 0×0 "golden_cross.py"
+                Text "그래프에서 생성됨" (3YYV-1) 0×0 "그래프에서 생성됨"
+              Frame "Frame" (3YYW-1) 0×0
+                Text "연결된 구성" (3YYX-1) 0×0 "연결된 구성"
+                Text "가격 데이터
+SMA 20 · SMA …" (3YYY-1) 0×0 "가격 데이터
+SMA 20 · SMA 60
+진입 · 청산"
+              Frame "Frame" (3YYZ-1) 0×0
+                Text "그래프 호환 모드" (3YZ0-1) 0×0 "그래프 호환 모드"
+                Text "지원 범위 안의 수정은 시각 설계로 …" (3YZ1-1) 0×0 "지원 범위 안의 수정은 시각 설계로 다시 동기화됩니다."
+            Frame "연결 코드 편집면" (3YZ3-1) 678×545
+              Frame "Frame" (3YZ4-1) 0×40
+                Frame "Frame" (3YZ5-1) 0×0
+                  Text "golden_cross.py" (3YZ6-1) 0×0 "golden_cross.py"
+                  Frame "Frame" (3YZ7-1) 0×0
+                    Text "그래프 호환" (3YZ8-1) 0×0 "그래프 호환"
+                Frame "Frame" (3YZ9-1) 0×0
+                  Text "Ln 17, Col 11" (3YZA-1) 0×0 "Ln 17, Col 11"
+                  Text "UTF-8" (3YZB-1) 0×0 "UTF-8"
+              Frame "코드 줄 목록" (3YZC-1) 676×463
+                Frame "코드 01–16" (3YZI-1) 676×0
+                  Text " 1  import athena_bt…" (3YZJ-1) 0×0 " 1  import athena_bt as bt
+ 2
+ 3  PARAMS = {
+ 4      "fast":"
+                Frame "오류 코드 줄 17" (3YZL-1) 676×28
+                  Frame "Frame" (3YZM-1) 18×18
+                    Text "!" (3YZN-1) 0×0 "!"
+                  Frame "Frame" (3YZO-1) 34×0
+                    Text "17" (3YZP-1) 0×0 "17"
+                  Text "        __MISSING__ …" (3YZQ-1) 0×0 "        __MISSING__  # 느린 SMA 필요"
+                  Frame "Frame" (3YZR-1) 0×0
+                    Text "하향 돌파" (3YZS-1) 0×0 "하향 돌파"
+                Frame "코드 18–23" (3YZU-1) 676×0
+                  Text "18      )
+19
+20     …" (3YZV-1) 0×96 "18      )
+19
+20      return df.assign(
+21          entry=ent"
+              Frame "Frame" (3YZD-1) 0×40
+                Frame "Frame" (3YZE-1) 18×18
+                  Text "!" (3YZF-1) 0×0 "!"
+                Text "하향 돌파의 두 번째 입력이 비어 있…" (3YZG-1) 0×0 "하향 돌파의 두 번째 입력이 비어 있습니다 · 노드 오류 BTG-PORT-002"
+          Frame "코드 그래프 동기화 상태" (3YZX-1) 838×40
+            Frame "Frame" (3YZY-1) 0×0
+              Rectangle "Rectangle" (3YZZ-1) 7×7
+              Text "노드·코드 연결됨" (3Z00-1) 0×0 "노드·코드 연결됨"
+              Text "노드 ↔ 코드 줄 범위" (3Z01-1) 0×0 "노드 ↔ 코드 줄 범위"
+            Text "그래프로 표현할 수 없는 수정은 적용…" (3Z02-1) 0×0 "그래프로 표현할 수 없는 수정은 적용 전에 코드 전용 전환을 묻습니다"
+      Frame "Frame" (3YQ3-1) 400×0
+        Frame "Frame" (3YR0-1) 0×0
+          Text "전략에게 묻기" (3YR2-1) 0×0 "전략에게 묻기"
+          Text "질문에 답하면 그래프와 코드 수정안을…" (3YR1-1) 0×0 "질문에 답하면 그래프와 코드 수정안을 함께 만듭니다"
+        Frame "코드 수정 검토 대화" (3Z04-1) 399×440
+          Frame "사용자 선택 답변" (3Z06-1) 0×0
+            Text "느린 SMA 60에 연결해줘." (3Z07-1) 0×0 "느린 SMA 60에 연결해줘."
+          Frame "AI 수정안 안내" (3Z09-1) 0×0
+            Frame "Frame" (3Z0A-1) 22×22
+              Text "AI" (3Z0B-1) 0×0 "AI"
+            Frame "Frame" (3Z0C-1) 0×0
+              Text "수정안을 준비했습니다." (3Z0D-1) 0×0 "수정안을 준비했습니다."
+              Text "그래프 연결 한 개와 연결된 Pyth…" (3Z0E-1) 0×0 "그래프 연결 한 개와 연결된 Python 한 줄이 함께 바뀝니다. 아직 저장하거나 실행하지 않았습니다."
+          Frame "그래프 코드 패치" (3Z0G-1) 0×0
+            Frame "Frame" (3Z0H-1) 0×0
+              Text "그래프 + 코드 패치" (3Z0I-1) 0×0 "그래프 + 코드 패치"
+              Frame "Frame" (3Z0J-1) 0×0
+                Text "그래프 호환" (3Z0K-1) 0×0 "그래프 호환"
+            Frame "Frame" (3Z0L-1) 0×0
+              Text "− bt.cross_below(fas…" (3Z0M-1) 0×0 "− bt.cross_below(fast, __MISSING__)"
+              Text "+ bt.cross_below(fas…" (3Z0N-1) 0×0 "+ bt.cross_below(fast, slow)"
+            Text "하향 돌파.right ← 느린 SMA…" (3Z0O-1) 0×0 "하향 돌파.right ← 느린 SMA.output · 오류 1개 해결"
+          Frame "수정 적용 행동" (3Z0Q-1) 0×0
+            Frame "Frame" (3Z0R-1) 0×34
+              Text "적용하고 시각 설계로 돌아가기" (3Z0S-1) 0×0 "적용하고 시각 설계로 돌아가기"
+            Frame "Frame" (3Z0T-1) 0×32
+              Text "차이 자세히 보기" (3Z0U-1) 0×0 "차이 자세히 보기"
+            Text "적용하면 새 v6 초안이 생깁니다. …" (3Z0V-1) 0×0 "적용하면 새 v6 초안이 생깁니다. 활성화와 백테스트 실행은 별도 확인입니다."
+        Frame "Frame" (3YQ4-1) 0×0
+          Frame "Frame" (3YQ5-1) 0×0
+            Frame "Frame" (3YQ7-1) 22×22
+              SVG "SVG" (3YQ8-1) 0×0
+                SVGVisualElement "Rect" (3YQA-1) 0×0
+                SVGVisualElement "Rect" (3YQ9-1) 0×0
+            Text "무엇이든 물어보세요" (3YQ6-1) 0×0 "무엇이든 물어보세요"

@@ -1,0 +1,2993 @@
+{
+ "board_id": "3Y38-1",
+ "page": "8-1",
+ "page_name": "백테스트",
+ "name": "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+ "width": 1680.0,
+ "height": 1080.0,
+ "texts": [
+  {
+   "id": "3Y9L-1",
+   "text": "백테스트 — 시각 전략 설계 · 편집 가능",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y9K-1",
+   "text": "Python 그림이 아니라 검증 가능한 전략을 노드로 조립합니다. 폼·코드·읽기 전용 흐름은 유지합니다.",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y9J-1",
+   "text": "ATHENA",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y9B-1",
+   "text": "새 채팅",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y94-1",
+   "text": "그래프",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y8Z-1",
+   "text": "에이전트",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y8U-1",
+   "text": "플러그인",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Nav 플러그인"
+   ]
+  },
+  {
+   "id": "3Y8P-1",
+   "text": "백테스트",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Nav 백테스트 (active)"
+   ]
+  },
+  {
+   "id": "3Y8M-1",
+   "text": "프로젝트",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y8H-1",
+   "text": "아테나",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y88-1",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y86-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y82-1",
+   "text": "최근",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y81-1",
+   "text": "전체",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y7Z-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y7W-1",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y7U-1",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y7R-1",
+   "text": "AN",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y7P-1",
+   "text": "모의-주력",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y9P-1",
+   "text": "백테스트",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "편집기 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y9Q-1",
+   "text": "20–60 골든크로스 · v5 초안",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "편집기 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y9T-1",
+   "text": "검증",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "편집기 헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y9V-1",
+   "text": "실행 검토",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "편집기 헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y9Y-1",
+   "text": "폼",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "설계 하위 탭"
+   ]
+  },
+  {
+   "id": "3YA0-1",
+   "text": "시각 설계",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "설계 하위 탭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YA1-1",
+   "text": "코드",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "설계 하위 탭"
+   ]
+  },
+  {
+   "id": "3YA2-1",
+   "text": "흐름",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "설계 하위 탭"
+   ]
+  },
+  {
+   "id": "3YA5-1",
+   "text": "서버 검증 가능",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "설계 하위 탭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YAB-1",
+   "text": "노드",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YAC-1",
+   "text": "끌어서 전략에 놓기",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YAH-1",
+   "text": "노드 검색",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YAK-1",
+   "text": "데이터",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 데이터"
+   ]
+  },
+  {
+   "id": "3YAN-1",
+   "text": "가격 데이터",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 데이터",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YAQ-1",
+   "text": "파라미터",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 데이터",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YAT-1",
+   "text": "지표",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 지표"
+   ]
+  },
+  {
+   "id": "3YAV-1",
+   "text": "ƒx",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 지표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YAW-1",
+   "text": "이동평균 SMA",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 지표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YAY-1",
+   "text": "ƒx",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 지표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YAZ-1",
+   "text": "RSI · MACD",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 지표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YB2-1",
+   "text": "조건",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 조건"
+   ]
+  },
+  {
+   "id": "3YB4-1",
+   "text": "↗",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 조건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YB5-1",
+   "text": "교차 비교",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 조건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YB7-1",
+   "text": "∧",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 조건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YB8-1",
+   "text": "AND · OR",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 조건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YBB-1",
+   "text": "출력",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 출력"
+   ]
+  },
+  {
+   "id": "3YBE-1",
+   "text": "진입 신호",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 출력",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YBH-1",
+   "text": "청산 신호",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "노드 팔레트",
+    "팔레트 출력",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YBM-1",
+   "text": "진입·청산 흐름",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "캔버스 도구막대",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YBO-1",
+   "text": "연결 정상",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "캔버스 도구막대",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YBR-1",
+   "text": "↶",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "캔버스 도구막대",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YBT-1",
+   "text": "↷",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "캔버스 도구막대",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YBV-1",
+   "text": "맞춤",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "캔버스 도구막대",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YC8-1",
+   "text": "진입 · 청산 신호 경로",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면"
+   ]
+  },
+  {
+   "id": "3YCD-1",
+   "text": "가격 데이터",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 가격 데이터",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YCE-1",
+   "text": "삼성전자 · 일봉\nclose 2,559",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 가격 데이터"
+   ]
+  },
+  {
+   "id": "3YCJ-1",
+   "text": "빠른 SMA",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 빠른 SMA",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YCK-1",
+   "text": "20",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 빠른 SMA",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YCL-1",
+   "text": "close → ma_fast\nSeries<Number>",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 빠른 SMA"
+   ]
+  },
+  {
+   "id": "3YCR-1",
+   "text": "느린 SMA",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 느린 SMA",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YCS-1",
+   "text": "60",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 느린 SMA",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YCT-1",
+   "text": "close → ma_slow\nSeries<Number>",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 느린 SMA"
+   ]
+  },
+  {
+   "id": "3YCY-1",
+   "text": "상향 돌파",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 상향 돌파"
+   ]
+  },
+  {
+   "id": "3YCZ-1",
+   "text": "fast ↗ slow\nSeries<Bool>",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 상향 돌파"
+   ]
+  },
+  {
+   "id": "3YD5-1",
+   "text": "하향 돌파",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 하향 돌파"
+   ]
+  },
+  {
+   "id": "3YD6-1",
+   "text": "fast ↘ slow\nSeries<Bool>",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 하향 돌파"
+   ]
+  },
+  {
+   "id": "3YDD-1",
+   "text": "진입",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 진입"
+   ]
+  },
+  {
+   "id": "3YDI-1",
+   "text": "청산",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "전략 캔버스",
+    "그래프 작업면",
+    "노드 · 청산"
+   ]
+  },
+  {
+   "id": "3YDO-1",
+   "text": "선택한 노드",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YDP-1",
+   "text": "빠른 이동평균",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YDR-1",
+   "text": "SMA",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YDU-1",
+   "text": "입력 데이터",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 입력 데이터"
+   ]
+  },
+  {
+   "id": "3YDW-1",
+   "text": "종가 close",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 입력 데이터",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YDX-1",
+   "text": "⌄",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 입력 데이터",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YE1-1",
+   "text": "기간",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 기간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YE2-1",
+   "text": "20",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 기간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YE8-1",
+   "text": "최소 5",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 기간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YE9-1",
+   "text": "최대 60",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 기간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YED-1",
+   "text": "입력",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 포트 계약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YEE-1",
+   "text": "Series<Number>",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 포트 계약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YEG-1",
+   "text": "출력",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 포트 계약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YEH-1",
+   "text": "Series<Number>",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 포트 계약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YEK-1",
+   "text": "연결과 값이 유효합니다",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 포트 계약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YEN-1",
+   "text": "이 노드는 무엇을 하나요?",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 설명"
+   ]
+  },
+  {
+   "id": "3YEO-1",
+   "text": "최근 20개 종가의 평균을 매 봉마다 계산합니다. 첫 19개 봉은 워밍업 구간이라 신호를 만들지 않습니다.",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 설명"
+   ]
+  },
+  {
+   "id": "3YEQ-1",
+   "text": "생성될 StrategySpec 보기",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 설명",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YEU-1",
+   "text": "값을 바꾸면 새 초안이 됩니다. 저장하거나 실행하기 전까지 현재 v4에는 영향이 없습니다.",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "시각 설계 본문",
+    "선택 노드 설정",
+    "설정 · 변경 안내"
+   ]
+  },
+  {
+   "id": "3YEZ-1",
+   "text": "✓",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "그래프 검증 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YF1-1",
+   "text": "StrategySpec으로 변환할 수 있습니다",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "그래프 검증 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YF2-1",
+   "text": "7개 노드 · 8개 연결 · 진입 1 · 청산 1 · 워밍업 59봉",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "그래프 검증 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YF4-1",
+   "text": "목록으로 보기",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 편집기",
+    "그래프 검증 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y41-1",
+   "text": "전략에게 묻기",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y40-1",
+   "text": "답이 시각 전략 초안으로 도착합니다",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YF9-1",
+   "text": "20일선이 60일선을 위로 넘으면 사고, 아래로 내려가면 팔게 만들어줘.",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 채팅",
+    "사용자 요청"
+   ]
+  },
+  {
+   "id": "3YFD-1",
+   "text": "AI",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 채팅",
+    "AI 설명",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YFE-1",
+   "text": "7개 노드로 시각 전략 초안을 만들었습니다. 현재 활성 버전은 바뀌지 않았고, 검토 후 적용할 수 있습니다.",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 채팅",
+    "AI 설명"
+   ]
+  },
+  {
+   "id": "3YFK-1",
+   "text": "시각 초안",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 채팅",
+    "시각 전략 초안 카드",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YFL-1",
+   "text": "v4 → v5",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 채팅",
+    "시각 전략 초안 카드",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YFM-1",
+   "text": "7 nodes · 8 edges",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 채팅",
+    "시각 전략 초안 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YFN-1",
+   "text": "빠른 SMA 20 · 느린 SMA 60 · 상향 돌파 진입 · 하향 돌파 청산",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 채팅",
+    "시각 전략 초안 카드"
+   ]
+  },
+  {
+   "id": "3YFQ-1",
+   "text": "초안에 적용",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 채팅",
+    "시각 전략 초안 카드",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YFS-1",
+   "text": "차이 보기",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 채팅",
+    "시각 전략 초안 카드",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YFT-1",
+   "text": "버리기",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "시각 전략 채팅",
+    "시각 전략 초안 카드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Y3E-1",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3Y38-1",
+   "name": "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 1080.0,
+   "depth": 0
+  },
+  {
+   "id": "3Y39-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 938.0,
+   "depth": 1
+  },
+  {
+   "id": "3Y3A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1560.0,
+   "h": 850.0,
+   "depth": 2
+  },
+  {
+   "id": "3Y7K-1",
+   "name": "47 · Project Recent Sidebar",
+   "component": "Frame",
+   "w": 268.0,
+   "h": 819.0,
+   "depth": 3
+  },
+  {
+   "id": "3Y8N-1",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3Y9F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 28.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y9G-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y9I-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y9H-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y9A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y9C-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y9E-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y9D-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y93-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y95-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y99-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y98-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y97-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y96-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y8Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y90-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y92-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y91-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y8T-1",
+   "name": "Nav 플러그인",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y8V-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y8X-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y8W-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y8O-1",
+   "name": "Nav 백테스트 (active)",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y8Q-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y8S-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y8R-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y83-1",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3Y8L-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y89-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 32.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y8I-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y8K-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y8J-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y8D-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y8G-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y8F-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y8E-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y8A-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y8C-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y8B-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y87-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y84-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 29.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y85-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y7S-1",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3Y80-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 20.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y7X-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y7Y-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y7V-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y7T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y7L-1",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3Y7M-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 38.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y7Q-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y7N-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y7O-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y42-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 848.0,
+   "depth": 3
+  },
+  {
+   "id": "3Y9M-1",
+   "name": "시각 전략 편집기",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 733.0,
+   "depth": 4
+  },
+  {
+   "id": "3Y9N-1",
+   "name": "편집기 헤더",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 32.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y9O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y9R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y9S-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48.0,
+   "h": 30.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y9U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72.0,
+   "h": 30.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y9X-1",
+   "name": "설계 하위 탭",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 34.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y9Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 82.0,
+   "h": 28.0,
+   "depth": 6
+  },
+  {
+   "id": "3YA3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YA4-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 7
+  },
+  {
+   "id": "3YA7-1",
+   "name": "시각 설계 본문",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 580.0,
+   "depth": 5
+  },
+  {
+   "id": "3YA9-1",
+   "name": "노드 팔레트",
+   "component": "Frame",
+   "w": 150.0,
+   "h": 580.0,
+   "depth": 6
+  },
+  {
+   "id": "3YAA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YAD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 7
+  },
+  {
+   "id": "3YAE-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YAF-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YAG-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YAJ-1",
+   "name": "팔레트 데이터",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YAL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 8
+  },
+  {
+   "id": "3YAM-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 7.0,
+   "depth": 9
+  },
+  {
+   "id": "3YAO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 8
+  },
+  {
+   "id": "3YAP-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 7.0,
+   "depth": 9
+  },
+  {
+   "id": "3YAS-1",
+   "name": "팔레트 지표",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YAU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 8
+  },
+  {
+   "id": "3YAX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 8
+  },
+  {
+   "id": "3YB1-1",
+   "name": "팔레트 조건",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YB3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 8
+  },
+  {
+   "id": "3YB6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 8
+  },
+  {
+   "id": "3YBA-1",
+   "name": "팔레트 출력",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YBC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 8
+  },
+  {
+   "id": "3YBD-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 7.0,
+   "depth": 9
+  },
+  {
+   "id": "3YBF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 8
+  },
+  {
+   "id": "3YBG-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 7.0,
+   "depth": 9
+  },
+  {
+   "id": "3YBJ-1",
+   "name": "전략 캔버스",
+   "component": "Frame",
+   "w": 440.0,
+   "h": 580.0,
+   "depth": 6
+  },
+  {
+   "id": "3YBK-1",
+   "name": "캔버스 도구막대",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 42.0,
+   "depth": 7
+  },
+  {
+   "id": "3YBL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YBN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YBP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YBQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YBS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YBU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YBW-1",
+   "name": "그래프 작업면",
+   "component": "Frame",
+   "w": 438.0,
+   "h": 536.0,
+   "depth": 7
+  },
+  {
+   "id": "3YBY-1",
+   "name": "전략 연결선",
+   "component": "SVG",
+   "w": 438.0,
+   "h": 536.0,
+   "depth": 8
+  },
+  {
+   "id": "3YBZ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YC0-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YC1-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YC2-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YC3-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YC4-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YC5-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YC6-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YCA-1",
+   "name": "노드 · 가격 데이터",
+   "component": "Frame",
+   "w": 92.0,
+   "h": 84.0,
+   "depth": 8
+  },
+  {
+   "id": "3YCB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YCC-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8.0,
+   "h": 8.0,
+   "depth": 10
+  },
+  {
+   "id": "3YCF-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YCH-1",
+   "name": "노드 · 빠른 SMA",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 86.0,
+   "depth": 8
+  },
+  {
+   "id": "3YCI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YCM-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YCN-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YCP-1",
+   "name": "노드 · 느린 SMA",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 86.0,
+   "depth": 8
+  },
+  {
+   "id": "3YCQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YCU-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YCV-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YCX-1",
+   "name": "노드 · 상향 돌파",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 86.0,
+   "depth": 8
+  },
+  {
+   "id": "3YD0-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YD1-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YD2-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YD4-1",
+   "name": "노드 · 하향 돌파",
+   "component": "Frame",
+   "w": 100.0,
+   "h": 86.0,
+   "depth": 8
+  },
+  {
+   "id": "3YD7-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YD8-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YD9-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YDB-1",
+   "name": "노드 · 진입",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 56.0,
+   "depth": 8
+  },
+  {
+   "id": "3YDC-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YDE-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YDG-1",
+   "name": "노드 · 청산",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 56.0,
+   "depth": 8
+  },
+  {
+   "id": "3YDH-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YDJ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 9
+  },
+  {
+   "id": "3YDL-1",
+   "name": "선택 노드 설정",
+   "component": "Frame",
+   "w": 228.0,
+   "h": 580.0,
+   "depth": 6
+  },
+  {
+   "id": "3YDM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YDN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YDQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YDT-1",
+   "name": "설정 · 입력 데이터",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YDV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 34.0,
+   "depth": 8
+  },
+  {
+   "id": "3YDZ-1",
+   "name": "설정 · 기간",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YE0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YE3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 18.0,
+   "depth": 8
+  },
+  {
+   "id": "3YE4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 202.0,
+   "h": 4.0,
+   "depth": 9
+  },
+  {
+   "id": "3YE5-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 58.0,
+   "h": 4.0,
+   "depth": 10
+  },
+  {
+   "id": "3YE6-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 14.0,
+   "h": 14.0,
+   "depth": 10
+  },
+  {
+   "id": "3YE7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YEB-1",
+   "name": "설정 · 포트 계약",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YEC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YEF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YEI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YEJ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 7.0,
+   "depth": 9
+  },
+  {
+   "id": "3YEM-1",
+   "name": "설정 · 설명",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YEP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 8
+  },
+  {
+   "id": "3YES-1",
+   "name": "설정 · 변경 안내",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YET-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 7.0,
+   "depth": 8
+  },
+  {
+   "id": "3YEW-1",
+   "name": "그래프 검증 요약",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 57.0,
+   "depth": 5
+  },
+  {
+   "id": "3YEX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YEY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 7
+  },
+  {
+   "id": "3YF0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YF3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96.0,
+   "h": 28.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y3B-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3Y3Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3YF6-1",
+   "name": "시각 전략 채팅",
+   "component": "Frame",
+   "w": 399.0,
+   "h": 340.0,
+   "depth": 4
+  },
+  {
+   "id": "3YF8-1",
+   "name": "사용자 요청",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3YFB-1",
+   "name": "AI 설명",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3YFC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 6
+  },
+  {
+   "id": "3YFG-1",
+   "name": "시각 전략 초안 카드",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3YFH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YFI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YFJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YFO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YFP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 74.0,
+   "h": 28.0,
+   "depth": 7
+  },
+  {
+   "id": "3YFR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 58.0,
+   "h": 28.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y3C-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3Y3D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Y3F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 6
+  },
+  {
+   "id": "3Y3G-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Y3I-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3Y3H-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  }
+ ],
+ "text_multiset": {
+  "백테스트 — 시각 전략 설계 · 편집 가능": 1,
+  "Python 그림이 아니라 검증 가능한 전략을 노드로 조립합니다. 폼·코드·읽기 전용 흐름은 유지합니다.": 1,
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "백테스트": 2,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "20–60 골든크로스 · v5 초안": 1,
+  "검증": 1,
+  "실행 검토": 1,
+  "폼": 1,
+  "시각 설계": 1,
+  "코드": 1,
+  "흐름": 1,
+  "서버 검증 가능": 1,
+  "노드": 1,
+  "끌어서 전략에 놓기": 1,
+  "노드 검색": 1,
+  "데이터": 1,
+  "가격 데이터": 2,
+  "파라미터": 1,
+  "지표": 1,
+  "ƒx": 2,
+  "이동평균 SMA": 1,
+  "RSI · MACD": 1,
+  "조건": 1,
+  "↗": 1,
+  "교차 비교": 1,
+  "∧": 1,
+  "AND · OR": 1,
+  "출력": 2,
+  "진입 신호": 1,
+  "청산 신호": 1,
+  "진입·청산 흐름": 1,
+  "연결 정상": 1,
+  "↶": 1,
+  "↷": 1,
+  "맞춤": 1,
+  "진입 · 청산 신호 경로": 1,
+  "삼성전자 · 일봉\nclose 2,559": 1,
+  "빠른 SMA": 1,
+  "20": 2,
+  "close → ma_fast\nSeries<Number>": 1,
+  "느린 SMA": 1,
+  "60": 1,
+  "close → ma_slow\nSeries<Number>": 1,
+  "상향 돌파": 1,
+  "fast ↗ slow\nSeries<Bool>": 1,
+  "하향 돌파": 1,
+  "fast ↘ slow\nSeries<Bool>": 1,
+  "진입": 1,
+  "청산": 1,
+  "선택한 노드": 1,
+  "빠른 이동평균": 1,
+  "SMA": 1,
+  "입력 데이터": 1,
+  "종가 close": 1,
+  "⌄": 1,
+  "기간": 1,
+  "최소 5": 1,
+  "최대 60": 1,
+  "입력": 1,
+  "Series<Number>": 2,
+  "연결과 값이 유효합니다": 1,
+  "이 노드는 무엇을 하나요?": 1,
+  "최근 20개 종가의 평균을 매 봉마다 계산합니다. 첫 19개 봉은 워밍업 구간이라 신호를 만들지 않습니다.": 1,
+  "생성될 StrategySpec 보기": 1,
+  "값을 바꾸면 새 초안이 됩니다. 저장하거나 실행하기 전까지 현재 v4에는 영향이 없습니다.": 1,
+  "✓": 1,
+  "StrategySpec으로 변환할 수 있습니다": 1,
+  "7개 노드 · 8개 연결 · 진입 1 · 청산 1 · 워밍업 59봉": 1,
+  "목록으로 보기": 1,
+  "전략에게 묻기": 1,
+  "답이 시각 전략 초안으로 도착합니다": 1,
+  "20일선이 60일선을 위로 넘으면 사고, 아래로 내려가면 팔게 만들어줘.": 1,
+  "AI": 1,
+  "7개 노드로 시각 전략 초안을 만들었습니다. 현재 활성 버전은 바뀌지 않았고, 검토 후 적용할 수 있습니다.": 1,
+  "시각 초안": 1,
+  "v4 → v5": 1,
+  "7 nodes · 8 edges": 1,
+  "빠른 SMA 20 · 느린 SMA 60 · 상향 돌파 진입 · 하향 돌파 청산": 1,
+  "초안에 적용": 1,
+  "차이 보기": 1,
+  "버리기": 1,
+  "무엇이든 물어보세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "48f5a27ecd0d31a59903938c6d61dda6fd4246ede8b8ed272aee3f1567b40604"
+}

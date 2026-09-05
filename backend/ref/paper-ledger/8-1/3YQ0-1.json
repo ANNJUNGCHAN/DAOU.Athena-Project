@@ -1,0 +1,1905 @@
+{
+ "board_id": "3YQ0-1",
+ "page": "8-1",
+ "page_name": "백테스트",
+ "name": "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+ "width": 1680.0,
+ "height": 1080.0,
+ "texts": [
+  {
+   "id": "3YXT-1",
+   "text": "백테스트 — 오류 노드에서 코드로 · 줄 연결",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YXS-1",
+   "text": "노드를 더블클릭하거나 Enter를 누르면 연결된 Python 17행을 열고, 코드 오류와 원래 노드를 같은 연결 정보로 추적합니다.",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YXR-1",
+   "text": "ATHENA",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YXJ-1",
+   "text": "새 채팅",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YXC-1",
+   "text": "그래프",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YX7-1",
+   "text": "에이전트",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YX2-1",
+   "text": "플러그인",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Nav 플러그인"
+   ]
+  },
+  {
+   "id": "3YWX-1",
+   "text": "백테스트",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Nav 백테스트 (active)"
+   ]
+  },
+  {
+   "id": "3YWU-1",
+   "text": "프로젝트",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YWP-1",
+   "text": "아테나",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YWG-1",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YWE-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YWA-1",
+   "text": "최근",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YW9-1",
+   "text": "전체",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YW7-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YW4-1",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YW2-1",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YVZ-1",
+   "text": "AN",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YVX-1",
+   "text": "모의-주력",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YXX-1",
+   "text": "백테스트",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집기 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YXY-1",
+   "text": "20–60 골든크로스 · v5 오류",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집기 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YY1-1",
+   "text": "검증",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집기 헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YY3-1",
+   "text": "적용 후 시각으로",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집기 헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YY6-1",
+   "text": "폼",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 하위 탭"
+   ]
+  },
+  {
+   "id": "3YY7-1",
+   "text": "시각 설계",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 하위 탭"
+   ]
+  },
+  {
+   "id": "3YY9-1",
+   "text": "코드",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 하위 탭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YYA-1",
+   "text": "흐름",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 하위 탭"
+   ]
+  },
+  {
+   "id": "3YYD-1",
+   "text": "v6 수정안 미적용",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 하위 탭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YYI-1",
+   "text": "연결된 노드 · 하향 돌파",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "노드 코드 연결 리본",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YYJ-1",
+   "text": "golden_cross.py:17",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "노드 코드 연결 리본",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YYL-1",
+   "text": "시각 설계에서 보기",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "노드 코드 연결 리본",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YYR-1",
+   "text": "전략 파일",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "전략 파일 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YYS-1",
+   "text": "1개",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "전략 파일 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YYU-1",
+   "text": "golden_cross.py",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "전략 파일 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YYV-1",
+   "text": "그래프에서 생성됨",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "전략 파일 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YYX-1",
+   "text": "연결된 구성",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "전략 파일 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YYY-1",
+   "text": "가격 데이터\nSMA 20 · SMA 60\n진입 · 청산",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "전략 파일 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YZ0-1",
+   "text": "그래프 호환 모드",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "전략 파일 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YZ1-1",
+   "text": "지원 범위 안의 수정은 시각 설계로 다시 동기화됩니다.",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "전략 파일 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YZ6-1",
+   "text": "golden_cross.py",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YZ8-1",
+   "text": "그래프 호환",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YZA-1",
+   "text": "Ln 17, Col 11",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YZB-1",
+   "text": "UTF-8",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YZJ-1",
+   "text": " 1  import athena_bt as bt\n 2\n 3  PARAMS = {\n 4      \"fast\": {\"default\": 20, \"min\": 5, \"max\": 60},\n 5      \"slow\": {\"default\": 60, \"min\": 20, \"max\": 240},\n 6  }\n 7\n 8  def signals(df, p):\n 9      fast = bt.sma(df.close, p[\"fast\"])\n10      slow = bt.sma(df.close, p[\"slow\"])\n11\n12      entry = bt.cross_above(fast, slow)\n13\n14      # node: cross_below · 하향 돌파\n15      exit = bt.cross_below(\n16          fast,",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "코드 줄 목록",
+    "코드 01–16"
+   ]
+  },
+  {
+   "id": "3YZN-1",
+   "text": "!",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "코드 줄 목록",
+    "오류 코드 줄 17",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YZP-1",
+   "text": "17",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "코드 줄 목록",
+    "오류 코드 줄 17",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YZQ-1",
+   "text": "        __MISSING__  # 느린 SMA 필요",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "코드 줄 목록",
+    "오류 코드 줄 17"
+   ]
+  },
+  {
+   "id": "3YZS-1",
+   "text": "하향 돌파",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "코드 줄 목록",
+    "오류 코드 줄 17",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YZV-1",
+   "text": "18      )\n19\n20      return df.assign(\n21          entry=entry,\n22          exit=exit,\n23      )[[\"entry\", \"exit\"]]",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "코드 줄 목록",
+    "코드 18–23"
+   ]
+  },
+  {
+   "id": "3YZF-1",
+   "text": "!",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YZG-1",
+   "text": "하향 돌파의 두 번째 입력이 비어 있습니다 · 노드 오류 BTG-PORT-002",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 편집 본문",
+    "연결 코드 편집면",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z00-1",
+   "text": "노드·코드 연결됨",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 그래프 동기화 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z01-1",
+   "text": "노드 ↔ 코드 줄 범위",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 그래프 동기화 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z02-1",
+   "text": "그래프로 표현할 수 없는 수정은 적용 전에 코드 전용 전환을 묻습니다",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "노드 연결 코드 편집기",
+    "코드 그래프 동기화 상태"
+   ]
+  },
+  {
+   "id": "3YR2-1",
+   "text": "전략에게 묻기",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3YR1-1",
+   "text": "질문에 답하면 그래프와 코드 수정안을 함께 만듭니다",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z07-1",
+   "text": "느린 SMA 60에 연결해줘.",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "사용자 선택 답변"
+   ]
+  },
+  {
+   "id": "3Z0B-1",
+   "text": "AI",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "AI 수정안 안내",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z0D-1",
+   "text": "수정안을 준비했습니다.",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "AI 수정안 안내",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z0E-1",
+   "text": "그래프 연결 한 개와 연결된 Python 한 줄이 함께 바뀝니다. 아직 저장하거나 실행하지 않았습니다.",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "AI 수정안 안내",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z0I-1",
+   "text": "그래프 + 코드 패치",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "그래프 코드 패치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z0K-1",
+   "text": "그래프 호환",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "그래프 코드 패치",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z0M-1",
+   "text": "− bt.cross_below(fast, __MISSING__)",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "그래프 코드 패치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z0N-1",
+   "text": "+ bt.cross_below(fast, slow)",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "그래프 코드 패치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z0O-1",
+   "text": "하향 돌파.right ← 느린 SMA.output · 오류 1개 해결",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "그래프 코드 패치"
+   ]
+  },
+  {
+   "id": "3Z0S-1",
+   "text": "적용하고 시각 설계로 돌아가기",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "수정 적용 행동",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z0U-1",
+   "text": "차이 자세히 보기",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "수정 적용 행동",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z0V-1",
+   "text": "적용하면 새 v6 초안이 생깁니다. 활성화와 백테스트 실행은 별도 확인입니다.",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "코드 수정 검토 대화",
+    "수정 적용 행동"
+   ]
+  },
+  {
+   "id": "3YQ6-1",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3YQ0-1",
+   "name": "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 1080.0,
+   "depth": 0
+  },
+  {
+   "id": "3YQ1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 938.0,
+   "depth": 1
+  },
+  {
+   "id": "3YQ2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1560.0,
+   "h": 850.0,
+   "depth": 2
+  },
+  {
+   "id": "3YVS-1",
+   "name": "47 · Project Recent Sidebar",
+   "component": "Frame",
+   "w": 268.0,
+   "h": 819.0,
+   "depth": 3
+  },
+  {
+   "id": "3YWV-1",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3YXN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 28.0,
+   "depth": 5
+  },
+  {
+   "id": "3YXO-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YXQ-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YXP-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YXI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "3YXK-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YXM-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YXL-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YXB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "3YXD-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YXH-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YXG-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YXF-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YXE-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YX6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "3YX8-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YXA-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YX9-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YX1-1",
+   "name": "Nav 플러그인",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "3YX3-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YX5-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YX4-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YWW-1",
+   "name": "Nav 백테스트 (active)",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "3YWY-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YX0-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YWZ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YWB-1",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3YWT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3YWH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 32.0,
+   "depth": 5
+  },
+  {
+   "id": "3YWQ-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YWS-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YWR-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YWL-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YWO-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YWN-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YWM-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YWI-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YWK-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YWJ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YWF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "3YWC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 29.0,
+   "depth": 5
+  },
+  {
+   "id": "3YWD-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 6
+  },
+  {
+   "id": "3YW0-1",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3YW8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 20.0,
+   "depth": 5
+  },
+  {
+   "id": "3YW5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "3YW6-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 6
+  },
+  {
+   "id": "3YW3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "3YW1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "3YVT-1",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3YVU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 38.0,
+   "depth": 5
+  },
+  {
+   "id": "3YVY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 6
+  },
+  {
+   "id": "3YVV-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YVW-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YR3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 848.0,
+   "depth": 3
+  },
+  {
+   "id": "3YXU-1",
+   "name": "노드 연결 코드 편집기",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 733.0,
+   "depth": 4
+  },
+  {
+   "id": "3YXV-1",
+   "name": "코드 편집기 헤더",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 32.0,
+   "depth": 5
+  },
+  {
+   "id": "3YXW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YXZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YY0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48.0,
+   "h": 30.0,
+   "depth": 7
+  },
+  {
+   "id": "3YY2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112.0,
+   "h": 30.0,
+   "depth": 7
+  },
+  {
+   "id": "3YY5-1",
+   "name": "코드 하위 탭",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 34.0,
+   "depth": 5
+  },
+  {
+   "id": "3YY8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 66.0,
+   "h": 28.0,
+   "depth": 6
+  },
+  {
+   "id": "3YYB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 126.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YYC-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 7
+  },
+  {
+   "id": "3YYF-1",
+   "name": "노드 코드 연결 리본",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 42.0,
+   "depth": 5
+  },
+  {
+   "id": "3YYG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YYH-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9.0,
+   "h": 9.0,
+   "depth": 7
+  },
+  {
+   "id": "3YYK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 26.0,
+   "depth": 6
+  },
+  {
+   "id": "3YYN-1",
+   "name": "코드 편집 본문",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 545.0,
+   "depth": 5
+  },
+  {
+   "id": "3YYP-1",
+   "name": "전략 파일 목록",
+   "component": "Frame",
+   "w": 150.0,
+   "h": 545.0,
+   "depth": 6
+  },
+  {
+   "id": "3YYQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YYT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YYW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YYZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YZ3-1",
+   "name": "연결 코드 편집면",
+   "component": "Frame",
+   "w": 678.0,
+   "h": 545.0,
+   "depth": 6
+  },
+  {
+   "id": "3YZ4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 40.0,
+   "depth": 7
+  },
+  {
+   "id": "3YZ5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YZ7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YZ9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YZC-1",
+   "name": "코드 줄 목록",
+   "component": "Frame",
+   "w": 676.0,
+   "h": 463.0,
+   "depth": 7
+  },
+  {
+   "id": "3YZI-1",
+   "name": "코드 01–16",
+   "component": "Frame",
+   "w": 676.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YZL-1",
+   "name": "오류 코드 줄 17",
+   "component": "Frame",
+   "w": 676.0,
+   "h": 28.0,
+   "depth": 8
+  },
+  {
+   "id": "3YZM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 18.0,
+   "h": 18.0,
+   "depth": 9
+  },
+  {
+   "id": "3YZO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YZR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "3YZU-1",
+   "name": "코드 18–23",
+   "component": "Frame",
+   "w": 676.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YZD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 40.0,
+   "depth": 7
+  },
+  {
+   "id": "3YZE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 18.0,
+   "h": 18.0,
+   "depth": 8
+  },
+  {
+   "id": "3YZX-1",
+   "name": "코드 그래프 동기화 상태",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 40.0,
+   "depth": 5
+  },
+  {
+   "id": "3YZY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3YZZ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 7.0,
+   "depth": 7
+  },
+  {
+   "id": "3YQ3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3YR0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3Z04-1",
+   "name": "코드 수정 검토 대화",
+   "component": "Frame",
+   "w": 399.0,
+   "h": 440.0,
+   "depth": 4
+  },
+  {
+   "id": "3Z06-1",
+   "name": "사용자 선택 답변",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Z09-1",
+   "name": "AI 수정안 안내",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Z0A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 6
+  },
+  {
+   "id": "3Z0C-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Z0G-1",
+   "name": "그래프 코드 패치",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Z0H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Z0J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3Z0L-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "3Z0Q-1",
+   "name": "수정 적용 행동",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Z0R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 34.0,
+   "depth": 6
+  },
+  {
+   "id": "3Z0T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 32.0,
+   "depth": 6
+  },
+  {
+   "id": "3YQ4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3YQ5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3YQ7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 6
+  },
+  {
+   "id": "3YQ8-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "3YQA-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "3YQ9-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  }
+ ],
+ "text_multiset": {
+  "백테스트 — 오류 노드에서 코드로 · 줄 연결": 1,
+  "노드를 더블클릭하거나 Enter를 누르면 연결된 Python 17행을 열고, 코드 오류와 원래 노드를 같은 연결 정보로 추적합니다.": 1,
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "백테스트": 2,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "20–60 골든크로스 · v5 오류": 1,
+  "검증": 1,
+  "적용 후 시각으로": 1,
+  "폼": 1,
+  "시각 설계": 1,
+  "코드": 1,
+  "흐름": 1,
+  "v6 수정안 미적용": 1,
+  "연결된 노드 · 하향 돌파": 1,
+  "golden_cross.py:17": 1,
+  "시각 설계에서 보기": 1,
+  "전략 파일": 1,
+  "1개": 1,
+  "golden_cross.py": 2,
+  "그래프에서 생성됨": 1,
+  "연결된 구성": 1,
+  "가격 데이터\nSMA 20 · SMA 60\n진입 · 청산": 1,
+  "그래프 호환 모드": 1,
+  "지원 범위 안의 수정은 시각 설계로 다시 동기화됩니다.": 1,
+  "그래프 호환": 2,
+  "Ln 17, Col 11": 1,
+  "UTF-8": 1,
+  " 1  import athena_bt as bt\n 2\n 3  PARAMS = {\n 4      \"fast\": {\"default\": 20, \"min\": 5, \"max\": 60},\n 5      \"slow\": {\"default\": 60, \"min\": 20, \"max\": 240},\n 6  }\n 7\n 8  def signals(df, p):\n 9      fast = bt.sma(df.close, p[\"fast\"])\n10      slow = bt.sma(df.close, p[\"slow\"])\n11\n12      entry = bt.cross_above(fast, slow)\n13\n14      # node: cross_below · 하향 돌파\n15      exit = bt.cross_below(\n16          fast,": 1,
+  "!": 2,
+  "17": 1,
+  "        __MISSING__  # 느린 SMA 필요": 1,
+  "하향 돌파": 1,
+  "18      )\n19\n20      return df.assign(\n21          entry=entry,\n22          exit=exit,\n23      )[[\"entry\", \"exit\"]]": 1,
+  "하향 돌파의 두 번째 입력이 비어 있습니다 · 노드 오류 BTG-PORT-002": 1,
+  "노드·코드 연결됨": 1,
+  "노드 ↔ 코드 줄 범위": 1,
+  "그래프로 표현할 수 없는 수정은 적용 전에 코드 전용 전환을 묻습니다": 1,
+  "전략에게 묻기": 1,
+  "질문에 답하면 그래프와 코드 수정안을 함께 만듭니다": 1,
+  "느린 SMA 60에 연결해줘.": 1,
+  "AI": 1,
+  "수정안을 준비했습니다.": 1,
+  "그래프 연결 한 개와 연결된 Python 한 줄이 함께 바뀝니다. 아직 저장하거나 실행하지 않았습니다.": 1,
+  "그래프 + 코드 패치": 1,
+  "− bt.cross_below(fast, __MISSING__)": 1,
+  "+ bt.cross_below(fast, slow)": 1,
+  "하향 돌파.right ← 느린 SMA.output · 오류 1개 해결": 1,
+  "적용하고 시각 설계로 돌아가기": 1,
+  "차이 자세히 보기": 1,
+  "적용하면 새 v6 초안이 생깁니다. 활성화와 백테스트 실행은 별도 확인입니다.": 1,
+  "무엇이든 물어보세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "ea225151d23a81a3abc070b350e97ef65d4baca52da86438f23de22e202f7e46"
+}

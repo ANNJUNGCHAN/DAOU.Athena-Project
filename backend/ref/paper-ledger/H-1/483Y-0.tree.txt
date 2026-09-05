@@ -1,0 +1,35 @@
+Frame "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능" (483Y-0) 360×420
+  Frame "Header" (484S-0) 0×0
+    Frame "Meta row" (484U-0) 0×0
+      Text "Eyebrow" (484W-0) 0×0
+      Text "As of" (484V-0) 0×0 "기준 09:42"
+    Text "Title" (484T-0) 0×0 "신용융자 가능"
+  Frame "Body" (4841-0) 0×0
+    Frame "KPI band" (484I-0) 0×0
+      Frame "Frame" (484P-0) 0×0
+        Text "신용보증금율" (484R-0) 0×0 "신용보증금율"
+        Text "40%" (484Q-0) 0×0 "40%"
+      Frame "Frame" (484M-0) 0×0
+        Text "변화" (484O-0) 0×0 "변화"
+        Text "증거금 100%" (484N-0) 0×0 "증거금 100%"
+      Frame "Frame" (484J-0) 0×0
+        Text "핵심" (484L-0) 0×0 "핵심"
+        Text "214종목" (484K-0) 0×0 "214종목"
+    Frame "Table header" (484E-0) 0×0
+      Text "항목" (484H-0) 0×0 "항목"
+      Text "값" (484G-0) 0×0 "값"
+      Text "비고" (484F-0) 72×0 "비고"
+    Frame "Position 1" (4848-0) 0×0
+      Frame "Frame" (484B-0) 0×0
+        Text "기준 시각" (484D-0) 0×0 "기준 시각"
+        Text "Text" (484C-0) 0×0
+      Text "09:42 조회" (484A-0) 0×0 "09:42 조회"
+      Text "Text" (4849-0) 72×0
+    Frame "Position 2" (4842-0) 0×0
+      Frame "Frame" (4845-0) 0×0
+        Text "수량" (4847-0) 0×0 "수량"
+        Text "Text" (4846-0) 0×0
+      Text "1,842종목" (4844-0) 0×0 "1,842종목"
+      Text "Text" (4843-0) 72×0
+  Frame "Fold note" (483Z-0) 0×0
+    Text "스칼라 2개, 행 6개 접힘 · 원본…" (4840-0) 0×0 "스칼라 2개, 행 6개 접힘 · 원본에서 확인"

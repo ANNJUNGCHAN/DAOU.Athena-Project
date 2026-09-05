@@ -1,0 +1,339 @@
+{
+ "board_id": "47AX-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47BV-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47BU-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47BS-0",
+   "text": "주식 신호·순위",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Header"
+   ]
+  },
+  {
+   "id": "47BQ-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47BP-0",
+   "text": "어제 89종목",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47BN-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47BM-0",
+   "text": "114",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47BK-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47BJ-0",
+   "text": "23",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47BG-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47BF-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47BE-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47BC-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47BB-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47B9-0",
+   "text": "어제 31종목",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47B8-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47B6-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47B5-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47B3-0",
+   "text": "신고저가 · 52주 기준",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47B2-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47AZ-0",
+   "text": "스칼라 2개, 행 18개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47AX-0",
+   "name": "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47BR-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47BT-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47B0-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47BH-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47BO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47BL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47BI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47BD-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47B7-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47BA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47B1-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47B4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47AY-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "주식 신호·순위": 1,
+  "수량": 2,
+  "어제 89종목": 1,
+  "값": 3,
+  "114": 1,
+  "핵심": 1,
+  "23": 1,
+  "항목": 1,
+  "비고": 1,
+  "어제 31종목": 1,
+  "신고저가 · 52주 기준": 1,
+  "스칼라 2개, 행 18개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "6a273a1a585e046af89e716c215b3e1816ec341028fd87a0c8c1e73ebcaf0882"
+}

@@ -1,0 +1,24 @@
+Frame "mini/CC-06 / R09 · 시장 체온·VI" (46JU-0) 360×420
+  Frame "Header" (46KD-0) 0×0
+    Frame "Meta row" (46KF-0) 0×0
+      Text "Eyebrow" (46KH-0) 0×0
+      Text "As of" (46KG-0) 0×0 "기준 09:42"
+    Text "Title" (46KE-0) 0×0 "시장 체온·VI"
+  Frame "Body" (46JX-0) 0×0
+    Frame "Fact 1" (46KA-0) 0×0
+      Text "KOSPI" (46KC-0) 120×0 "KOSPI"
+      Text "2,684.21 · +1.12%" (46KB-0) 0×0 "2,684.21 · +1.12%"
+    Frame "Fact 2" (46K7-0) 0×0
+      Text "KOSDAQ" (46K9-0) 120×0 "KOSDAQ"
+      Text "842.15 · +0.84%" (46K8-0) 0×0 "842.15 · +0.84%"
+    Frame "Fact 3" (46K4-0) 0×0
+      Text "상승" (46K6-0) 120×0 "상승"
+      Text "1,486종목" (46K5-0) 0×0 "1,486종목"
+    Frame "Fact 4" (46K1-0) 0×0
+      Text "보합" (46K3-0) 120×0 "보합"
+      Text "183종목" (46K2-0) 0×0 "183종목"
+    Frame "Fact 5" (46JY-0) 0×0
+      Text "하락" (46K0-0) 120×0 "하락"
+      Text "621종목" (46JZ-0) 0×0 "621종목"
+  Frame "Fold note" (46JV-0) 0×0
+    Text "외 44개 항목 접힘 · 원본에서 확…" (46JW-0) 0×0 "외 44개 항목 접힘 · 원본에서 확인"

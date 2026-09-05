@@ -1,0 +1,1151 @@
+{
+ "board_id": "AMZ-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "25 · 모드 전환 — 대화 유지·작업공간 교체",
+ "width": 1717,
+ "height": 793,
+ "texts": [
+  {
+   "id": "EVS-0",
+   "text": "모드 전환 UX · 5모드",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EVT-0",
+   "text": "사이드바가 유일한 모드 전환 · 키우미 메뉴는 빠른 기능과 플러그인 실행",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EVV-0",
+   "text": "채팅 400px 고정 · 캔버스만 교체",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EW2-0",
+   "text": "MODE 01",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EW4-0",
+   "text": "대화",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EW5-0",
+   "text": "결과 카드가 쌓이는 기본 캔버스",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EWC-0",
+   "text": "질문·분석·결과 카드",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EWL-0",
+   "text": "MODE 02",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EWN-0",
+   "text": "그래프",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EWO-0",
+   "text": "성향·엔티티·근거 연결을 탐색",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EX0-0",
+   "text": "근거·관계·보강",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EX6-0",
+   "text": "MODE 03",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EX8-0",
+   "text": "에이전트",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EX9-0",
+   "text": "감시·예약·작업 상태를 관제",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EXD-0",
+   "text": "평일 아침 브리핑",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EXE-0",
+   "text": "활성",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EXH-0",
+   "text": "가격 조건 감시",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EXI-0",
+   "text": "실시간",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EXL-0",
+   "text": "리밸런스 점검",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EXM-0",
+   "text": "6일 후",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EXP-0",
+   "text": "상태·일정·알림",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EXY-0",
+   "text": "NEW · MODE 04",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EY0-0",
+   "text": "플러그인",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EY1-0",
+   "text": "허브·설치·관리·MCP 캔버스",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EYB-0",
+   "text": "설치·권한·빠른 실행",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1V9Z-1",
+   "text": "NEW · MODE 05",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "모드 카드 — 백테스트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VA1-1",
+   "text": "백테스트",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "모드 카드 — 백테스트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VA2-1",
+   "text": "전략 폼·코드·결과 캔버스",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "모드 카드 — 백테스트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VAE-1",
+   "text": "설계 폼·파이썬 코드·결과 비교",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame",
+    "모드 카드 — 백테스트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EYD-0",
+   "text": "공통 규칙",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EYF-0",
+   "text": "모드를 바꾸면 새 대화 · 앞 세션은 봉인 (40번으로 대체됨)",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EYH-0",
+   "text": "키우미는 현재 대화의 도구·플러그인 빠른 실행",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "EYI-0",
+   "text": "ATHENA SHELL SPEC",
+   "path": [
+    "25 · 모드 전환 — 대화 유지·작업공간 교체",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "AMZ-0",
+   "name": "25 · 모드 전환 — 대화 유지·작업공간 교체",
+   "component": "Frame",
+   "w": 1717,
+   "h": 793,
+   "depth": 0
+  },
+  {
+   "id": "EVP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1656,
+   "h": 730,
+   "depth": 1
+  },
+  {
+   "id": "EVQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1600,
+   "h": 70,
+   "depth": 2
+  },
+  {
+   "id": "EVR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 459,
+   "h": 59,
+   "depth": 3
+  },
+  {
+   "id": "EVU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 203,
+   "h": 34,
+   "depth": 3
+  },
+  {
+   "id": "EVW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1600,
+   "h": 530,
+   "depth": 2
+  },
+  {
+   "id": "EVX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 317,
+   "h": 530,
+   "depth": 3
+  },
+  {
+   "id": "EVY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 44,
+   "depth": 4
+  },
+  {
+   "id": "EVZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 44,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "EW0-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "EW1-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 13,
+   "h": 11,
+   "depth": 7
+  },
+  {
+   "id": "EW3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 56,
+   "depth": 4
+  },
+  {
+   "id": "EW6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 210,
+   "depth": 4
+  },
+  {
+   "id": "EW7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 128,
+   "h": 9,
+   "depth": 5
+  },
+  {
+   "id": "EW8-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 237,
+   "h": 66,
+   "depth": 5
+  },
+  {
+   "id": "EW9-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 237,
+   "h": 66,
+   "depth": 5
+  },
+  {
+   "id": "EWA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "EWB-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "EWD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 317,
+   "h": 530,
+   "depth": 3
+  },
+  {
+   "id": "EWE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 44,
+   "depth": 4
+  },
+  {
+   "id": "EWF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 44,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "EWG-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "EWH-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "EWI-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "EWJ-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "EWK-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 5,
+   "depth": 7
+  },
+  {
+   "id": "EWM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 56,
+   "depth": 4
+  },
+  {
+   "id": "EWP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 210,
+   "depth": 4
+  },
+  {
+   "id": "EWQ-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 250,
+   "h": 150,
+   "depth": 5
+  },
+  {
+   "id": "EWR-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 174,
+   "h": 87,
+   "depth": 6
+  },
+  {
+   "id": "EWS-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 20,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "EWT-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "EWU-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "EWV-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 20,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "EWW-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "EWX-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "EWY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "EWZ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "EX1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 317,
+   "h": 530,
+   "depth": 3
+  },
+  {
+   "id": "EX2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 44,
+   "depth": 4
+  },
+  {
+   "id": "EX3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 44,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "EX4-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "EX5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 13,
+   "h": 13,
+   "depth": 7
+  },
+  {
+   "id": "EX7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 56,
+   "depth": 4
+  },
+  {
+   "id": "EXA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 210,
+   "depth": 4
+  },
+  {
+   "id": "EXB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 237,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "EXC-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "EXF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 237,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "EXG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "EXJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 237,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "EXK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "EXN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "EXO-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "EXQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 317,
+   "h": 530,
+   "depth": 3
+  },
+  {
+   "id": "EXR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 44,
+   "depth": 4
+  },
+  {
+   "id": "EXS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 44,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "EXT-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "EXU-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "EXV-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "EXW-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "EXX-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "EXZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 56,
+   "depth": 4
+  },
+  {
+   "id": "EY2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 210,
+   "depth": 4
+  },
+  {
+   "id": "EY3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 237,
+   "h": 76,
+   "depth": 5
+  },
+  {
+   "id": "EY4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 114,
+   "h": 76,
+   "depth": 6
+  },
+  {
+   "id": "EY5-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 114,
+   "h": 76,
+   "depth": 6
+  },
+  {
+   "id": "EY6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 237,
+   "h": 76,
+   "depth": 5
+  },
+  {
+   "id": "EY7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 114,
+   "h": 76,
+   "depth": 6
+  },
+  {
+   "id": "EY8-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 114,
+   "h": 76,
+   "depth": 6
+  },
+  {
+   "id": "EY9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "EYA-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "1V9S-1",
+   "name": "모드 카드 — 백테스트",
+   "component": "Frame",
+   "w": 317,
+   "h": 530,
+   "depth": 3
+  },
+  {
+   "id": "1V9T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 44,
+   "depth": 4
+  },
+  {
+   "id": "1V9U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 44,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "1V9V-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "1V9W-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "1V9X-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "1V9Y-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "1VA0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 56,
+   "depth": 4
+  },
+  {
+   "id": "1VA3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 210,
+   "depth": 4
+  },
+  {
+   "id": "1VA4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 237,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "1VA5-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 72,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "1VA6-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 72,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "1VA7-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 72,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "1VA8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 237,
+   "h": 112,
+   "depth": 5
+  },
+  {
+   "id": "1VA9-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 221,
+   "h": 80,
+   "depth": 6
+  },
+  {
+   "id": "1VAA-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 221,
+   "h": 62,
+   "depth": 7
+  },
+  {
+   "id": "1VAB-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 221,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "1VAC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 271,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "1VAD-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "EYC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1600,
+   "h": 68,
+   "depth": 2
+  },
+  {
+   "id": "EYE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 20,
+   "depth": 3
+  },
+  {
+   "id": "EYG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5,
+   "h": 5,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "모드 전환 UX · 5모드": 1,
+  "사이드바가 유일한 모드 전환 · 키우미 메뉴는 빠른 기능과 플러그인 실행": 1,
+  "채팅 400px 고정 · 캔버스만 교체": 1,
+  "MODE 01": 1,
+  "대화": 1,
+  "결과 카드가 쌓이는 기본 캔버스": 1,
+  "질문·분석·결과 카드": 1,
+  "MODE 02": 1,
+  "그래프": 1,
+  "성향·엔티티·근거 연결을 탐색": 1,
+  "근거·관계·보강": 1,
+  "MODE 03": 1,
+  "에이전트": 1,
+  "감시·예약·작업 상태를 관제": 1,
+  "평일 아침 브리핑": 1,
+  "활성": 1,
+  "가격 조건 감시": 1,
+  "실시간": 1,
+  "리밸런스 점검": 1,
+  "6일 후": 1,
+  "상태·일정·알림": 1,
+  "NEW · MODE 04": 1,
+  "플러그인": 1,
+  "허브·설치·관리·MCP 캔버스": 1,
+  "설치·권한·빠른 실행": 1,
+  "NEW · MODE 05": 1,
+  "백테스트": 1,
+  "전략 폼·코드·결과 캔버스": 1,
+  "설계 폼·파이썬 코드·결과 비교": 1,
+  "공통 규칙": 1,
+  "모드를 바꾸면 새 대화 · 앞 세션은 봉인 (40번으로 대체됨)": 1,
+  "키우미는 현재 대화의 도구·플러그인 빠른 실행": 1,
+  "ATHENA SHELL SPEC": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "b4b8da6dd8a95813caca113c44971928e710471072027ab2cc141c35fc72681f"
+}

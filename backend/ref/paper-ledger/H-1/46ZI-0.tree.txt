@@ -1,0 +1,35 @@
+Frame "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률" (46ZI-0) 360×420
+  Frame "Header" (470C-0) 0×0
+    Frame "Meta row" (470E-0) 0×0
+      Text "Eyebrow" (470G-0) 0×0
+      Text "As of" (470F-0) 0×0 "기준 09:42"
+    Text "Title" (470D-0) 0×0 "실현손익·수익률"
+  Frame "Body" (46ZL-0) 0×0
+    Frame "KPI band" (4702-0) 0×0
+      Frame "Frame" (4709-0) 0×0
+        Text "종목별계좌평가현황" (470B-0) 0×0 "종목별계좌평가현황"
+        Text "8종목" (470A-0) 0×0 "8종목"
+      Frame "Frame" (4706-0) 0×0
+        Text "매수비중" (4708-0) 0×0 "매수비중"
+        Text "28.0%" (4707-0) 0×0 "28.0%"
+      Frame "Frame" (4703-0) 0×0
+        Text "Text" (4705-0) 0×0
+        Text "Text" (4704-0) 0×0
+    Frame "Table header" (46ZY-0) 0×0
+      Text "항목" (4701-0) 0×0 "항목"
+      Text "값" (4700-0) 0×0 "값"
+      Text "비고" (46ZZ-0) 72×0 "비고"
+    Frame "Position 1" (46ZS-0) 0×0
+      Frame "Frame" (46ZV-0) 0×0
+        Text "손익율" (46ZX-0) 0×0 "손익율"
+        Text "Text" (46ZW-0) 0×0
+      Text "+1.65%" (46ZU-0) 0×0 "+1.65%"
+      Text "Text" (46ZT-0) 72×0
+    Frame "Position 2" (46ZM-0) 0×0
+      Frame "Frame" (46ZP-0) 0×0
+        Text "당일매도손익1" (46ZR-0) 0×0 "당일매도손익1"
+        Text "Text" (46ZQ-0) 0×0
+      Text "매도손익 +648,600" (46ZO-0) 0×0 "매도손익 +648,600"
+      Text "Text" (46ZN-0) 72×0
+  Frame "Fold note" (46ZJ-0) 0×0
+    Text "스칼라 2개, 행 5개 접힘 · 원본…" (46ZK-0) 0×0 "스칼라 2개, 행 5개 접힘 · 원본에서 확인"

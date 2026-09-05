@@ -1,0 +1,340 @@
+{
+ "board_id": "4820-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "482Y-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "482X-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "482V-0",
+   "text": "동일순매매",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Header"
+   ]
+  },
+  {
+   "id": "482T-0",
+   "text": "순매매금액",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "482S-0",
+   "text": "+722억원",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "482Q-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "482P-0",
+   "text": "동반 매수 1위",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "482N-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "482M-0",
+   "text": "6종목",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "482J-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "482I-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "482H-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "482F-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "482E-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "482C-0",
+   "text": "08-31 확정",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "482B-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "4829-0",
+   "text": "기준 시각",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4828-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4826-0",
+   "text": "09:42 조회",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "4825-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "4822-0",
+   "text": "스칼라 2개, 행 6개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4820-0",
+   "name": "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "482U-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "482W-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4823-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "482K-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "482R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "482O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "482L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "482G-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "482A-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "482D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4824-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4827-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4821-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "동일순매매": 1,
+  "순매매금액": 1,
+  "+722억원": 1,
+  "값": 3,
+  "동반 매수 1위": 1,
+  "핵심": 1,
+  "6종목": 1,
+  "항목": 1,
+  "비고": 1,
+  "08-31 확정": 1,
+  "기준 시각": 1,
+  "09:42 조회": 1,
+  "스칼라 2개, 행 6개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "11bac30a6d7534e35d3d093d95e6c7d7fe8f8841eb288eae0856c247da781099"
+}

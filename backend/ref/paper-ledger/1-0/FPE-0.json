@@ -1,0 +1,1445 @@
+{
+ "board_id": "FPE-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "FT5-0",
+   "text": "설정",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "FT4-0",
+   "text": "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "FT2-0",
+   "text": "화면",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item is-selected"
+   ]
+  },
+  {
+   "id": "FT0-0",
+   "text": "계좌",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "FSZ-0",
+   "text": "2개",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "FSX-0",
+   "text": "MCP 서버",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "FSW-0",
+   "text": "4개",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "FSU-0",
+   "text": "모델",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "FSS-0",
+   "text": "성향・이력",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "FSP-0",
+   "text": "계좌",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FSO-0",
+   "text": "2개 등록",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FSM-0",
+   "text": "+ 계좌 등록",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-head",
+    "uk-settings-actions",
+    "uk-btn-ghost"
+   ]
+  },
+  {
+   "id": "FSF-0",
+   "text": "별칭",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "FSE-0",
+   "text": "앱키",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "FSD-0",
+   "text": "주문 API",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "FSC-0",
+   "text": "연결 상태",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "FSB-0",
+   "text": "마지막 검증",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "FS8-0",
+   "text": "모의-주력",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FS7-0",
+   "text": "활성",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FS4-0",
+   "text": "저장됨 · 36자",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성"
+   ]
+  },
+  {
+   "id": "FS3-0",
+   "text": "ON",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FS0-0",
+   "text": "정상",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FRX-0",
+   "text": "—",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성"
+   ]
+  },
+  {
+   "id": "FRW-0",
+   "text": "×",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FRT-0",
+   "text": "모의-테스트",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FRS-0",
+   "text": "비활성",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FRP-0",
+   "text": "저장됨 · 36자",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성"
+   ]
+  },
+  {
+   "id": "FRO-0",
+   "text": "OFF",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FRL-0",
+   "text": "검증 필요",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FRI-0",
+   "text": "—",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성"
+   ]
+  },
+  {
+   "id": "FRH-0",
+   "text": "×",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FRE-0",
+   "text": "앱키·시크릿은 목록에 표시되지 않는다. 저장 위치는 OS 자격증명 저장소다.",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-settings-note"
+   ]
+  },
+  {
+   "id": "FRD-0",
+   "text": "비활성 계좌를 누르면 활성으로 전환된다. 활성 계좌는 항상 하나다.",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-settings-note"
+   ]
+  },
+  {
+   "id": "FRA-0",
+   "text": "계좌 등록",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-head"
+   ]
+  },
+  {
+   "id": "FR9-0",
+   "text": "모의투자 계좌의 APP KEY / SECRET KEY를 등록한다",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-head"
+   ]
+  },
+  {
+   "id": "FR4-0",
+   "text": "별칭",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-field-col",
+    "uk-field-group · 별칭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FR2-0",
+   "text": "모의-주력",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-field-col",
+    "uk-field-group · 별칭",
+    "uk-input"
+   ]
+  },
+  {
+   "id": "FR0-0",
+   "text": "이 컴퓨터에서만 쓰는 이름이다",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-field-col",
+    "uk-field-group · 별칭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FQX-0",
+   "text": "APP KEY",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-field-col",
+    "uk-field-group · APP KEY",
+    "uk-field-row"
+   ]
+  },
+  {
+   "id": "FQW-0",
+   "text": "붙여넣음 · 36자",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-field-col",
+    "uk-field-group · APP KEY",
+    "uk-field-row"
+   ]
+  },
+  {
+   "id": "FQU-0",
+   "text": "••••••••••••••••••••••••••••••••••••",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-field-col",
+    "uk-field-group · APP KEY",
+    "uk-input.uk-input-mono"
+   ]
+  },
+  {
+   "id": "FQR-0",
+   "text": "SECRET KEY",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-field-col",
+    "uk-field-group · SECRET KEY",
+    "uk-field-row"
+   ]
+  },
+  {
+   "id": "FQQ-0",
+   "text": "붙여넣음 · 180자",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-field-col",
+    "uk-field-group · SECRET KEY",
+    "uk-field-row"
+   ]
+  },
+  {
+   "id": "FQO-0",
+   "text": "••••••••••••••••••••••••••••••••••••",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-field-col",
+    "uk-field-group · SECRET KEY",
+    "uk-input.uk-input-mono · focus"
+   ]
+  },
+  {
+   "id": "FQK-0",
+   "text": "저장·표시 원칙",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-principles"
+   ]
+  },
+  {
+   "id": "FQI-0",
+   "text": "OS 자격증명 저장소(Windows DPAPI)에 암호화 저장한다",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-principles",
+    "uk-bullets",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FQF-0",
+   "text": "저장 후에는 화면에 다시 표시하지 않는다",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-principles",
+    "uk-bullets",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FQC-0",
+   "text": "앱 로그에도 남기지 않는다",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-principles",
+    "uk-bullets",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FQ9-0",
+   "text": "폐기는 삭제 한 번으로 끝난다",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-two-col",
+    "uk-principles",
+    "uk-bullets",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FQ1-0",
+   "text": "확인이 완료되었습니다. 저장하면 OS 자격증명 저장소에 암호화됩니다",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body"
+   ]
+  },
+  {
+   "id": "FQ0-0",
+   "text": "확인 완료 — 모의투자 계좌 연결 권한을 확인했습니다",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-success · 확인 완료"
+   ]
+  },
+  {
+   "id": "FPY-0",
+   "text": "취소",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-btn-row-end",
+    "uk-btn-ghost"
+   ]
+  },
+  {
+   "id": "FPW-0",
+   "text": "계좌 저장",
+   "path": [
+    "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 계좌 등록",
+    "uk-sheet-body",
+    "uk-btn-row-end",
+    "uk-btn-primary (시트가 열린 동안 유일한 브랜드색)"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "FPE-0",
+   "name": "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "FPF-0",
+   "name": "Shell 창 · 설정 모드 (#settings)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "FT3-0",
+   "name": "settings-head",
+   "component": "Frame",
+   "w": 1478,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "FPP-0",
+   "name": "settings-body",
+   "component": "Frame",
+   "w": 1478,
+   "h": 662,
+   "depth": 2
+  },
+  {
+   "id": "FSQ-0",
+   "name": "settings-nav",
+   "component": "Frame",
+   "w": 236,
+   "h": 662,
+   "depth": 3
+  },
+  {
+   "id": "FT1-0",
+   "name": "nav-item is-selected",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "FSY-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "FSV-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "FST-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "FSR-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "FPQ-0",
+   "name": "settings-grid",
+   "component": "Frame",
+   "w": 1226,
+   "h": 662,
+   "depth": 3
+  },
+  {
+   "id": "FPR-0",
+   "name": "카드 · 계좌 (.card.accounts)",
+   "component": "Frame",
+   "w": 1228,
+   "h": 660,
+   "depth": 4
+  },
+  {
+   "id": "FSG-0",
+   "name": "card-head",
+   "component": "Frame",
+   "w": 1226,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "FSN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 91,
+   "h": 19,
+   "depth": 6
+  },
+  {
+   "id": "FSH-0",
+   "name": "uk-settings-actions",
+   "component": "Frame",
+   "w": 128,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "FSL-0",
+   "name": "uk-btn-ghost",
+   "component": "Frame",
+   "w": 90,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "FSI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "FSJ-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "FSK-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "FRB-0",
+   "name": "card-body",
+   "component": "Frame",
+   "w": 1226,
+   "h": 614,
+   "depth": 5
+  },
+  {
+   "id": "FS9-0",
+   "name": "uk-col-head",
+   "component": "Frame",
+   "w": 1226,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "FSA-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 28,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "FRU-0",
+   "name": "uk-row · 활성",
+   "component": "Frame",
+   "w": 1226,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "FS5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "FS6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 40,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "FS1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "FS2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 33,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "FRY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "FRZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "FRV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 28,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "FRF-0",
+   "name": "uk-row · 비활성",
+   "component": "Frame",
+   "w": 1226,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "FRQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "FRR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "FRM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "FRN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "FRJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "FRK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 64,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "FRG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 28,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "FRC-0",
+   "name": "uk-settings-note",
+   "component": "Frame",
+   "w": 1226,
+   "h": 52,
+   "depth": 6
+  },
+  {
+   "id": "FPS-0",
+   "name": "uk-sheet · 계좌 등록",
+   "component": "Frame",
+   "w": 1226,
+   "h": 658,
+   "depth": 5
+  },
+  {
+   "id": "FR5-0",
+   "name": "uk-sheet-head",
+   "component": "Frame",
+   "w": 1224,
+   "h": 51,
+   "depth": 6
+  },
+  {
+   "id": "FR6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "FR7-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "FR8-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "FPT-0",
+   "name": "uk-sheet-body",
+   "component": "Frame",
+   "w": 1224,
+   "h": 605,
+   "depth": 6
+  },
+  {
+   "id": "FQ5-0",
+   "name": "uk-two-col",
+   "component": "Frame",
+   "w": 1192,
+   "h": 260,
+   "depth": 7
+  },
+  {
+   "id": "FQL-0",
+   "name": "uk-field-col",
+   "component": "Frame",
+   "w": 868,
+   "h": 260,
+   "depth": 8
+  },
+  {
+   "id": "FQY-0",
+   "name": "uk-field-group · 별칭",
+   "component": "Frame",
+   "w": 868,
+   "h": 106,
+   "depth": 9
+  },
+  {
+   "id": "FR3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 868,
+   "h": 22,
+   "depth": 10
+  },
+  {
+   "id": "FR1-0",
+   "name": "uk-input",
+   "component": "Frame",
+   "w": 868,
+   "h": 44,
+   "depth": 10
+  },
+  {
+   "id": "FQZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 868,
+   "h": 20,
+   "depth": 10
+  },
+  {
+   "id": "FQS-0",
+   "name": "uk-field-group · APP KEY",
+   "component": "Frame",
+   "w": 868,
+   "h": 87,
+   "depth": 9
+  },
+  {
+   "id": "FQV-0",
+   "name": "uk-field-row",
+   "component": "Frame",
+   "w": 868,
+   "h": 23,
+   "depth": 10
+  },
+  {
+   "id": "FQT-0",
+   "name": "uk-input.uk-input-mono",
+   "component": "Frame",
+   "w": 868,
+   "h": 44,
+   "depth": 10
+  },
+  {
+   "id": "FQM-0",
+   "name": "uk-field-group · SECRET KEY",
+   "component": "Frame",
+   "w": 868,
+   "h": 67,
+   "depth": 9
+  },
+  {
+   "id": "FQP-0",
+   "name": "uk-field-row",
+   "component": "Frame",
+   "w": 868,
+   "h": 23,
+   "depth": 10
+  },
+  {
+   "id": "FQN-0",
+   "name": "uk-input.uk-input-mono · focus",
+   "component": "Frame",
+   "w": 868,
+   "h": 44,
+   "depth": 10
+  },
+  {
+   "id": "FQ6-0",
+   "name": "uk-principles",
+   "component": "Frame",
+   "w": 300,
+   "h": 183,
+   "depth": 8
+  },
+  {
+   "id": "FQ7-0",
+   "name": "uk-bullets",
+   "component": "Frame",
+   "w": 266,
+   "h": 119,
+   "depth": 9
+  },
+  {
+   "id": "FQH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 266,
+   "h": 38,
+   "depth": 10
+  },
+  {
+   "id": "FQJ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4,
+   "h": 4,
+   "depth": 11
+  },
+  {
+   "id": "FQE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 266,
+   "h": 19,
+   "depth": 10
+  },
+  {
+   "id": "FQG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4,
+   "h": 4,
+   "depth": 11
+  },
+  {
+   "id": "FQB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 266,
+   "h": 19,
+   "depth": 10
+  },
+  {
+   "id": "FQD-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4,
+   "h": 4,
+   "depth": 11
+  },
+  {
+   "id": "FQ8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 266,
+   "h": 19,
+   "depth": 10
+  },
+  {
+   "id": "FQA-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4,
+   "h": 4,
+   "depth": 11
+  },
+  {
+   "id": "FPZ-0",
+   "name": "uk-success · 확인 완료",
+   "component": "Frame",
+   "w": 1192,
+   "h": 40,
+   "depth": 7
+  },
+  {
+   "id": "FPU-0",
+   "name": "uk-btn-row-end",
+   "component": "Frame",
+   "w": 1192,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "FPX-0",
+   "name": "uk-btn-ghost",
+   "component": "Frame",
+   "w": 52,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "FPV-0",
+   "name": "uk-btn-primary (시트가 열린 동안 유일한 브랜드색)",
+   "component": "Frame",
+   "w": 97,
+   "h": 36,
+   "depth": 8
+  },
+  {
+   "id": "FPO-0",
+   "name": "타이틀바 (.titlebar)",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "FPG-0",
+   "name": "창 제어 (.win-controls · 최대화 비활성)",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "FPM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "FPN-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "FPK-0",
+   "name": "disabled",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "FPL-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "FPH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "FPI-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "FPJ-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "설정": 1,
+  "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기": 1,
+  "화면": 1,
+  "계좌": 2,
+  "2개": 1,
+  "MCP 서버": 1,
+  "4개": 1,
+  "모델": 1,
+  "성향・이력": 1,
+  "2개 등록": 1,
+  "+ 계좌 등록": 1,
+  "별칭": 2,
+  "앱키": 1,
+  "주문 API": 1,
+  "연결 상태": 1,
+  "마지막 검증": 1,
+  "모의-주력": 2,
+  "활성": 1,
+  "저장됨 · 36자": 2,
+  "ON": 1,
+  "정상": 1,
+  "—": 2,
+  "×": 2,
+  "모의-테스트": 1,
+  "비활성": 1,
+  "OFF": 1,
+  "검증 필요": 1,
+  "앱키·시크릿은 목록에 표시되지 않는다. 저장 위치는 OS 자격증명 저장소다.": 1,
+  "비활성 계좌를 누르면 활성으로 전환된다. 활성 계좌는 항상 하나다.": 1,
+  "계좌 등록": 1,
+  "모의투자 계좌의 APP KEY / SECRET KEY를 등록한다": 1,
+  "이 컴퓨터에서만 쓰는 이름이다": 1,
+  "APP KEY": 1,
+  "붙여넣음 · 36자": 1,
+  "••••••••••••••••••••••••••••••••••••": 2,
+  "SECRET KEY": 1,
+  "붙여넣음 · 180자": 1,
+  "저장·표시 원칙": 1,
+  "OS 자격증명 저장소(Windows DPAPI)에 암호화 저장한다": 1,
+  "저장 후에는 화면에 다시 표시하지 않는다": 1,
+  "앱 로그에도 남기지 않는다": 1,
+  "폐기는 삭제 한 번으로 끝난다": 1,
+  "확인이 완료되었습니다. 저장하면 OS 자격증명 저장소에 암호화됩니다": 1,
+  "확인 완료 — 모의투자 계좌 연결 권한을 확인했습니다": 1,
+  "취소": 1,
+  "계좌 저장": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a04c28d154de0aa3a48e29fd1b28b65c67aad66a0e1c92e3ac78bef9ac65f1bd"
+}

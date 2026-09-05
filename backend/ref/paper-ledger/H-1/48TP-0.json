@@ -1,0 +1,92 @@
+{
+ "board_id": "48TP-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48TR-0",
+   "text": "원본 보드: CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+   "path": [
+    "note/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48TT-0",
+   "text": "가져온 요소: 거래소구분 · 현재가 · 전일대비 · 체결시간 · 시가",
+   "path": [
+    "note/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48TV-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48TX-0",
+   "text": "접은 개수: 스칼라 2개 · 행 7개",
+   "path": [
+    "note/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48TP-0",
+   "name": "note/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48TQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48TS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48TU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48TW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥": 1,
+  "가져온 요소: 거래소구분 · 현재가 · 전일대비 · 체결시간 · 시가": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 7개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "965ae4ecdbad370ac8c537355b388dc9c6880ed26ca9381b30c3b94833255d2f"
+}

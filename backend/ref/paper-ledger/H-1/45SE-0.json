@@ -1,0 +1,177 @@
+{
+ "board_id": "45SE-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "template/auth",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "45TQ-0",
+   "text": "인증형",
+   "path": [
+    "template/auth",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45TR-0",
+   "text": "기준 09:42",
+   "path": [
+    "template/auth",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45TS-0",
+   "text": "인증 상태",
+   "path": [
+    "template/auth",
+    "Header"
+   ]
+  },
+  {
+   "id": "45YY-0",
+   "text": "인증됨",
+   "path": [
+    "template/auth",
+    "Body",
+    "Auth status"
+   ]
+  },
+  {
+   "id": "45Z1-0",
+   "text": "계정",
+   "path": [
+    "template/auth",
+    "Body",
+    "Auth identity"
+   ]
+  },
+  {
+   "id": "45Z2-0",
+   "text": "****4721",
+   "path": [
+    "template/auth",
+    "Body",
+    "Auth identity"
+   ]
+  },
+  {
+   "id": "45Z5-0",
+   "text": "권한",
+   "path": [
+    "template/auth",
+    "Body",
+    "Auth permission"
+   ]
+  },
+  {
+   "id": "45Z6-0",
+   "text": "주문 조회",
+   "path": [
+    "template/auth",
+    "Body",
+    "Auth permission"
+   ]
+  },
+  {
+   "id": "45Z9-0",
+   "text": "만료 0일 / 안전하게 다시 인증해주세요",
+   "path": [
+    "template/auth",
+    "Body",
+    "Auth note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "45SE-0",
+   "name": "template/auth",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "45TO-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45TP-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45UQ-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45YW-0",
+   "name": "Auth status",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45YX-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 3
+  },
+  {
+   "id": "45Z0-0",
+   "name": "Auth identity",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45Z4-0",
+   "name": "Auth permission",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45Z8-0",
+   "name": "Auth note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  }
+ ],
+ "text_multiset": {
+  "인증형": 1,
+  "기준 09:42": 1,
+  "인증 상태": 1,
+  "인증됨": 1,
+  "계정": 1,
+  "****4721": 1,
+  "권한": 1,
+  "주문 조회": 1,
+  "만료 0일 / 안전하게 다시 인증해주세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "9baad669cf1167688fac8fa6017bfe98bb97825d03e76b526456f8740aec45bd"
+}

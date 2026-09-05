@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접" (47RM-0) 360×420
+  Frame "Header" (47SG-0) 0×0
+    Frame "Meta row" (47SI-0) 0×0
+      Text "Eyebrow" (47SK-0) 0×0
+      Text "As of" (47SJ-0) 0×0 "기준 09:42"
+    Text "Title" (47SH-0) 0×0 "고저가근접"
+  Frame "Body" (47RP-0) 0×0
+    Frame "KPI band" (47S6-0) 0×0
+      Frame "Frame" (47SD-0) 0×0
+        Text "값" (47SF-0) 0×0 "값"
+        Text "41" (47SE-0) 0×0 "41"
+      Frame "Frame" (47SA-0) 0×0
+        Text "변화" (47SC-0) 0×0 "변화"
+        Text "0.6%" (47SB-0) 0×0 "0.6%"
+      Frame "Frame" (47S7-0) 0×0
+        Text "핵심" (47S9-0) 0×0 "핵심"
+        Text "9" (47S8-0) 0×0 "9"
+    Frame "Table header" (47S2-0) 0×0
+      Text "항목" (47S5-0) 0×0 "항목"
+      Text "값" (47S4-0) 0×0 "값"
+      Text "비고" (47S3-0) 72×0 "비고"
+    Frame "Position 1" (47RW-0) 0×0
+      Frame "Frame" (47RZ-0) 0×0
+        Text "값" (47S1-0) 0×0 "값"
+        Text "Text" (47S0-0) 0×0
+      Text "52주 저가 대비" (47RY-0) 0×0 "52주 저가 대비"
+      Text "Text" (47RX-0) 72×0
+    Frame "Position 2" (47RQ-0) 0×0
+      Frame "Frame" (47RT-0) 0×0
+        Text "값" (47RV-0) 0×0 "값"
+        Text "Text" (47RU-0) 0×0
+      Text "52주 고가 대비" (47RS-0) 0×0 "52주 고가 대비"
+      Text "Text" (47RR-0) 72×0
+  Frame "Fold note" (47RN-0) 0×0
+    Text "스칼라 2개, 행 18개 접힘 · 원…" (47RO-0) 0×0 "스칼라 2개, 행 18개 접힘 · 원본에서 확인"

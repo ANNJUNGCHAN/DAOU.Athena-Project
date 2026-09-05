@@ -1,0 +1,190 @@
+{
+ "board_id": "45SD-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "template/event",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "45TK-0",
+   "text": "이벤트형",
+   "path": [
+    "template/event",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45TL-0",
+   "text": "기준 오늘",
+   "path": [
+    "template/event",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45TM-0",
+   "text": "체결 알림",
+   "path": [
+    "template/event",
+    "Header"
+   ]
+  },
+  {
+   "id": "45YL-0",
+   "text": "09:42",
+   "path": [
+    "template/event",
+    "Body",
+    "Event 1"
+   ]
+  },
+  {
+   "id": "45YN-0",
+   "text": "주문 체결",
+   "path": [
+    "template/event",
+    "Body",
+    "Event 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45YO-0",
+   "text": "삼성전자 매수 체결",
+   "path": [
+    "template/event",
+    "Body",
+    "Event 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45YR-0",
+   "text": "09:43",
+   "path": [
+    "template/event",
+    "Body",
+    "Event 2"
+   ]
+  },
+  {
+   "id": "45YT-0",
+   "text": "입금 완료",
+   "path": [
+    "template/event",
+    "Body",
+    "Event 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45YU-0",
+   "text": "예수금 0원 / 처리 상태 완료",
+   "path": [
+    "template/event",
+    "Body",
+    "Event 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4611-0",
+   "text": "이벤트 3건 접힘 · 원본에서 확인",
+   "path": [
+    "template/event",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "45SD-0",
+   "name": "template/event",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "45TI-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45TJ-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45UO-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45YK-0",
+   "name": "Event 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45YM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "45YQ-0",
+   "name": "Event 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45YS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4610-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "이벤트형": 1,
+  "기준 오늘": 1,
+  "체결 알림": 1,
+  "09:42": 1,
+  "주문 체결": 1,
+  "삼성전자 매수 체결": 1,
+  "09:43": 1,
+  "입금 완료": 1,
+  "예수금 0원 / 처리 상태 완료": 1,
+  "이벤트 3건 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "b17017eda9a34d8b6ed608f3c041afa615bd0ffe88527dfbd915e4b8abdb1a58"
+}

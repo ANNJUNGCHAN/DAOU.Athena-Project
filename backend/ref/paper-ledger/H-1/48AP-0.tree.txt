@@ -1,0 +1,35 @@
+Frame "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침" (48AP-0) 360×420
+  Frame "Header" (48BJ-0) 0×0
+    Frame "Meta row" (48BL-0) 0×0
+      Text "Eyebrow" (48BN-0) 0×0
+      Text "As of" (48BM-0) 0×0 "기준 09:42"
+    Text "Title" (48BK-0) 0×0 "ELW 행 펼침"
+  Frame "Body" (48AS-0) 0×0
+    Frame "Table header" (48BE-0) 0×0
+      Text "순서" (48BI-0) 34×0 "순서"
+      Text "항목" (48BH-0) 0×0 "항목"
+      Text "값" (48BG-0) 0×0 "값"
+      Text "비고" (48BF-0) 64×0 "비고"
+    Frame "Rank 1" (48B7-0) 0×0
+      Text "01" (48BD-0) 34×0 "01"
+      Frame "Frame" (48BA-0) 0×0
+        Text "호가시간" (48BC-0) 0×0 "호가시간"
+        Text "Text" (48BB-0) 0×0
+      Text "09:42:18 기준" (48B9-0) 0×0 "09:42:18 기준"
+      Text "Text" (48B8-0) 64×0
+    Frame "Rank 2" (48B0-0) 0×0
+      Text "02" (48B6-0) 34×0 "02"
+      Frame "Frame" (48B3-0) 0×0
+        Text "이론가" (48B5-0) 0×0 "이론가"
+        Text "Text" (48B4-0) 0×0
+      Text "1,210원" (48B2-0) 0×0 "1,210원"
+      Text "Text" (48B1-0) 64×0
+    Frame "Rank 3" (48AT-0) 0×0
+      Text "03" (48AZ-0) 34×0 "03"
+      Frame "Frame" (48AW-0) 0×0
+        Text "로" (48AY-0) 0×0 "로"
+        Text "Text" (48AX-0) 0×0
+      Text "0.07" (48AV-0) 0×0 "0.07"
+      Text "Text" (48AU-0) 64×0
+  Frame "Fold note" (48AQ-0) 0×0
+    Text "외 2개 행 접힘 · 원본에서 확인" (48AR-0) 0×0 "외 2개 행 접힘 · 원본에서 확인"

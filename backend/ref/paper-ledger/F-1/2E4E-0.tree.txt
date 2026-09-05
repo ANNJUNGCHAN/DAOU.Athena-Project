@@ -1,0 +1,401 @@
+Frame "DV-3 · 거래·가격 이력 — 공식 189개 필드" (2E4E-0) 1440×900
+  Frame "DV-3 Root · trade-price-history 189/189 · workbench" (2F6X-0) 1440×900
+    Frame "DV-3 Workbench Surface" (2F6Y-0) 1392×860
+      Frame "DV-3 Sticky Header" (2F6Z-0) 1390×64
+        Frame "DV-3 Identity Quote Strip · Chrome" (2F77-0) 1390×64
+          Frame "Frame" (2F78-0) 0×0
+            Text "삼성전자" (2F79-0) 0×0 "삼성전자"
+            Text "005930 · KOSPI" (2F7A-0) 0×0 "005930 · KOSPI"
+          Frame "Frame" (2F7B-0) 0×0
+            Text "150,850원" (2F7C-0) 0×0 "150,850원"
+            Text "+2.35%" (2F7D-0) 0×0 "+2.35%"
+            Text "DESIGN FIXTURE · 12:…" (2F7E-0) 0×0 "DESIGN FIXTURE · 12:34"
+      Frame "DV-3 Category Tabs" (2F70-0) 1390×42
+        Frame "DV-3 User Tabs · Chrome" (2F7G-0) 1390×42
+          Frame "Frame" (2F7H-0) 0×30
+            Text "체결" (2F7I-0) 0×0 "체결"
+          Frame "Frame" (2F7J-0) 0×30
+            Text "일별 거래" (2F7K-0) 0×0 "일별 거래"
+          Frame "Frame" (2F7L-0) 0×30
+            Text "가격 움직임" (2F7M-0) 0×0 "가격 움직임"
+          Frame "Frame" (2F7N-0) 0×30
+            Text "예상체결" (2F7O-0) 0×0 "예상체결"
+          Frame "Frame" (2F7P-0) 0×30
+            Text "VI·시장 상태" (2F7Q-0) 0×0 "VI·시장 상태"
+          Frame "Frame" (2F7R-0) 0×30
+            Text "시간외" (2F7S-0) 0×0 "시간외"
+      Frame "DV-3 Filter Sort Toolbar" (2F71-0) 1390×48
+        Frame "DV-3 Filter Sort Controls · Chrome" (2F7U-0) 1390×48
+          Frame "Frame" (2F7V-0) 0×0
+            Frame "Frame" (2F7W-0) 0×32
+              Text "기간" (2F7X-0) 0×0 "기간"
+              Text "최근 20거래일 ▾" (2F7Y-0) 0×0 "최근 20거래일 ▾"
+            Frame "Frame" (2F7Z-0) 0×32
+              Text "정렬" (2F80-0) 0×0 "정렬"
+              Text "최신 순 ▾" (2F81-0) 0×0 "최신 순 ▾"
+            Frame "Frame" (2F82-0) 0×32
+              Text "정규장 포함" (2F83-0) 0×0 "정규장 포함"
+          Frame "Frame" (2F84-0) 0×0
+            Text "● 실시간 갱신" (2F85-0) 0×0 "● 실시간 갱신"
+            Text "선택 행 12:34:18" (2F86-0) 0×0 "선택 행 12:34:18"
+      Frame "DV-3 Workspace" (2F72-0) 1390×642
+        Frame "DV-3 History Table" (2F73-0) 914×642
+          Frame "DV-3 Table Preset Strip · Chrome" (2F8C-0) 912×36
+            Text "체결 이력 · 최신 순" (2F8D-0) 0×0 "체결 이력 · 최신 순"
+            Text "열 설정: 가격 · 거래량 · 체결강…" (2F8E-0) 0×0 "열 설정: 가격 · 거래량 · 체결강도"
+          Frame "DV-3 Table Header · Chrome" (2F8F-0) 912×38
+            Text "일시" (2F8G-0) 120×0 "일시"
+            Text "체결가" (2F8H-0) 105×0 "체결가"
+            Text "전일대비" (2F8I-0) 95×0 "전일대비"
+            Text "등락률" (2F8J-0) 80×0 "등락률"
+            Text "체결량" (2F8K-0) 95×0 "체결량"
+            Text "누적거래량" (2F8L-0) 120×0 "누적거래량"
+            Text "누적대금" (2F8M-0) 125×0 "누적대금"
+            Text "체결강도" (2F8N-0) 95×0 "체결강도"
+          Frame "DV-3 History Rows · 10 visible" (2F8O-0) 912×480
+            Frame "DV-3 History Row 1" (2F8P-0) 912×48
+              Text "12:34:18" (2F8Q-0) 120×0 "12:34:18"
+              Text "150,850" (2F8R-0) 105×0 "150,850"
+              Text "+3,450" (2F8S-0) 95×0 "+3,450"
+              Text "+2.35%" (2F8T-0) 80×0 "+2.35%"
+              Text "12,480" (2F8U-0) 95×0 "12,480"
+              Text "18,420,135" (2F8V-0) 120×0 "18,420,135"
+              Text "1.42조" (2F8W-0) 125×0 "1.42조"
+              Text "128.4" (2F8X-0) 95×0 "128.4"
+            Frame "DV-3 History Row 2" (2F8Y-0) 912×48
+              Text "12:34:12" (2F8Z-0) 120×0 "12:34:12"
+              Text "150,800" (2F90-0) 105×0 "150,800"
+              Text "+3,400" (2F91-0) 95×0 "+3,400"
+              Text "+2.31%" (2F92-0) 80×0 "+2.31%"
+              Text "8,250" (2F93-0) 95×0 "8,250"
+              Text "18,407,655" (2F94-0) 120×0 "18,407,655"
+              Text "1.42조" (2F95-0) 125×0 "1.42조"
+              Text "127.9" (2F96-0) 95×0 "127.9"
+            Frame "DV-3 History Row 3" (2F97-0) 912×48
+              Text "12:34:06" (2F98-0) 120×0 "12:34:06"
+              Text "150,850" (2F99-0) 105×0 "150,850"
+              Text "+3,450" (2F9A-0) 95×0 "+3,450"
+              Text "+2.35%" (2F9B-0) 80×0 "+2.35%"
+              Text "6,140" (2F9C-0) 95×0 "6,140"
+              Text "18,399,405" (2F9D-0) 120×0 "18,399,405"
+              Text "1.41조" (2F9E-0) 125×0 "1.41조"
+              Text "128.1" (2F9F-0) 95×0 "128.1"
+            Frame "DV-3 History Row 4" (2F9G-0) 912×48
+              Text "12:34:00" (2F9H-0) 120×0 "12:34:00"
+              Text "150,750" (2F9I-0) 105×0 "150,750"
+              Text "+3,350" (2F9J-0) 95×0 "+3,350"
+              Text "+2.27%" (2F9K-0) 80×0 "+2.27%"
+              Text "9,880" (2F9L-0) 95×0 "9,880"
+              Text "18,393,265" (2F9M-0) 120×0 "18,393,265"
+              Text "1.41조" (2F9N-0) 125×0 "1.41조"
+              Text "127.4" (2F9O-0) 95×0 "127.4"
+            Frame "DV-3 History Row 5" (2F9P-0) 912×48
+              Text "12:33:54" (2F9Q-0) 120×0 "12:33:54"
+              Text "150,700" (2F9R-0) 105×0 "150,700"
+              Text "+3,300" (2F9S-0) 95×0 "+3,300"
+              Text "+2.24%" (2F9T-0) 80×0 "+2.24%"
+              Text "5,530" (2F9U-0) 95×0 "5,530"
+              Text "18,383,385" (2F9V-0) 120×0 "18,383,385"
+              Text "1.41조" (2F9W-0) 125×0 "1.41조"
+              Text "126.8" (2F9X-0) 95×0 "126.8"
+            Frame "DV-3 History Row 6" (2F9Y-0) 912×48
+              Text "12:33:48" (2F9Z-0) 120×0 "12:33:48"
+              Text "150,800" (2FA0-0) 105×0 "150,800"
+              Text "+3,400" (2FA1-0) 95×0 "+3,400"
+              Text "+2.31%" (2FA2-0) 80×0 "+2.31%"
+              Text "11,020" (2FA3-0) 95×0 "11,020"
+              Text "18,377,855" (2FA4-0) 120×0 "18,377,855"
+              Text "1.41조" (2FA5-0) 125×0 "1.41조"
+              Text "127.6" (2FA6-0) 95×0 "127.6"
+            Frame "DV-3 History Row 7" (2FA7-0) 912×48
+              Text "12:33:42" (2FA8-0) 120×0 "12:33:42"
+              Text "150,750" (2FA9-0) 105×0 "150,750"
+              Text "+3,350" (2FAA-0) 95×0 "+3,350"
+              Text "+2.27%" (2FAB-0) 80×0 "+2.27%"
+              Text "7,310" (2FAC-0) 95×0 "7,310"
+              Text "18,366,835" (2FAD-0) 120×0 "18,366,835"
+              Text "1.40조" (2FAE-0) 125×0 "1.40조"
+              Text "127.2" (2FAF-0) 95×0 "127.2"
+            Frame "DV-3 History Row 8" (2FAG-0) 912×48
+              Text "12:33:36" (2FAH-0) 120×0 "12:33:36"
+              Text "150,700" (2FAI-0) 105×0 "150,700"
+              Text "+3,300" (2FAJ-0) 95×0 "+3,300"
+              Text "+2.24%" (2FAK-0) 80×0 "+2.24%"
+              Text "4,860" (2FAL-0) 95×0 "4,860"
+              Text "18,359,525" (2FAM-0) 120×0 "18,359,525"
+              Text "1.40조" (2FAN-0) 125×0 "1.40조"
+              Text "126.9" (2FAO-0) 95×0 "126.9"
+            Frame "DV-3 History Row 9" (2FAP-0) 912×48
+              Text "12:33:30" (2FAQ-0) 120×0 "12:33:30"
+              Text "150,650" (2FAR-0) 105×0 "150,650"
+              Text "+3,250" (2FAS-0) 95×0 "+3,250"
+              Text "+2.20%" (2FAT-0) 80×0 "+2.20%"
+              Text "10,340" (2FAU-0) 95×0 "10,340"
+              Text "18,354,665" (2FAV-0) 120×0 "18,354,665"
+              Text "1.40조" (2FAW-0) 125×0 "1.40조"
+              Text "126.5" (2FAX-0) 95×0 "126.5"
+            Frame "DV-3 History Row 10" (2FAY-0) 912×48
+              Text "12:33:24" (2FAZ-0) 120×0 "12:33:24"
+              Text "150,700" (2FB0-0) 105×0 "150,700"
+              Text "+3,300" (2FB1-0) 95×0 "+3,300"
+              Text "+2.24%" (2FB2-0) 80×0 "+2.24%"
+              Text "6,920" (2FB3-0) 95×0 "6,920"
+              Text "18,344,325" (2FB4-0) 120×0 "18,344,325"
+              Text "1.39조" (2FB5-0) 125×0 "1.39조"
+              Text "126.7" (2FB6-0) 95×0 "126.7"
+          Frame "DV-3 Table Expand Controls · Chrome" (2FB7-0) 912×48
+            Frame "Frame" (2FB8-0) 0×0
+              Text "1–10 / 120" (2FB9-0) 0×0 "1–10 / 120"
+              Frame "Frame" (2FBA-0) 120×3
+                Rectangle "Rectangle" (2FBB-0) 28×3
+            Frame "Frame" (2FBC-0) 0×0
+              Frame "Frame" (2FBD-0) 0×30
+                Text "더보기" (2FBE-0) 0×0 "더보기"
+              Frame "Frame" (2FBF-0) 0×30
+                Text "접기" (2FBG-0) 0×0 "접기"
+          Frame "DV-3 Table Status · Chrome" (2FBH-0) 912×40
+            Text "선택: 12:34:18 · 150,8…" (2FBI-0) 0×0 "선택: 12:34:18 · 150,850원"
+            Text "표 안에서만 스크롤" (2FBJ-0) 0×0 "표 안에서만 스크롤"
+        Frame "DV-3 Selected Detail" (2F74-0) 422×642
+          Frame "DV-3 Selected Header · Chrome" (2FBL-0) 421×70
+            Frame "Frame" (2FBM-0) 0×0
+              Text "선택 체결" (2FBN-0) 0×0 "선택 체결"
+              Text "12:34:18 · 정규장" (2FBO-0) 0×0 "12:34:18 · 정규장"
+            Frame "Frame" (2FBP-0) 0×0
+              Text "150,850원" (2FBQ-0) 0×0 "150,850원"
+              Text "+2.35%" (2FBR-0) 0×0 "+2.35%"
+          Frame "DV-3 Detail Tabs · Chrome" (2FBS-0) 421×42
+            Frame "Frame" (2FBT-0) 0×34
+              Text "체결" (2FBU-0) 0×0 "체결"
+            Frame "Frame" (2FBV-0) 0×34
+              Text "일별" (2FBW-0) 0×0 "일별"
+            Frame "Frame" (2FBX-0) 0×34
+              Text "가격" (2FBY-0) 0×0 "가격"
+            Frame "Frame" (2FBZ-0) 0×34
+              Text "예상" (2FC0-0) 0×0 "예상"
+            Frame "Frame" (2FC1-0) 0×34
+              Text "VI·시장" (2FC2-0) 0×0 "VI·시장"
+            Frame "Frame" (2FC3-0) 0×34
+              Text "기타" (2FC4-0) 0×0 "기타"
+          Frame "DV-3 Detail Sparse Rows" (2FC5-0) 421×485
+            Frame "Frame" (2FC6-0) 0×0
+              Text "선택 행 공식 정보" (2FC7-0) 0×0 "선택 행 공식 정보"
+            Frame "base:ka10055|$.tdy_pred_cntr_qty[].cntr_tm|1" (2FC8-0) 0×36
+              Text "체결시간" (2FC9-0) 0×0 "체결시간"
+              Text "12:34:18" (2FCA-0) 0×0 "12:34:18"
+            Frame "base:ka10003|$.cntr_infr[].cur_prc|1" (2FCB-0) 0×36
+              Text "현재가" (2FCC-0) 0×0 "현재가"
+              Text "150,850원" (2FCD-0) 0×0 "150,850원"
+            Frame "base:ka10003|$.cntr_infr[].pred_pre|1" (2FCE-0) 0×36
+              Text "전일대비" (2FCF-0) 0×0 "전일대비"
+              Text "+3,450원" (2FCG-0) 0×0 "+3,450원"
+            Frame "base:ka10003|$.cntr_infr[].pre_rt|1" (2FCH-0) 0×36
+              Text "대비율" (2FCI-0) 0×0 "대비율"
+              Text "+2.35%" (2FCJ-0) 0×0 "+2.35%"
+            Frame "base:ka10003|$.cntr_infr[].cntr_trde_qty|1" (2FCK-0) 0×36
+              Text "체결거래량" (2FCL-0) 0×0 "체결거래량"
+              Text "18,420,135주" (2FCM-0) 0×0 "18,420,135주"
+            Frame "base:ka10003|$.cntr_infr[].acc_trde_qty|1" (2FCN-0) 0×36
+              Text "누적거래량" (2FCO-0) 0×0 "누적거래량"
+              Text "18,420,135주" (2FCP-0) 0×0 "18,420,135주"
+            Frame "base:ka10003|$.cntr_infr[].acc_trde_prica|1" (2FCQ-0) 0×36
+              Text "누적거래대금" (2FCR-0) 0×0 "누적거래대금"
+              Text "1.42조원" (2FCS-0) 0×0 "1.42조원"
+            Frame "base:ka10003|$.cntr_infr[].cntr_str|1" (2FCT-0) 0×36
+              Text "체결강도" (2FCU-0) 0×0 "체결강도"
+              Text "+2.35%" (2FCV-0) 0×0 "+2.35%"
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].open_pric|1" (2FCW-0) 0×36
+              Text "시가" (2FCX-0) 0×0 "시가"
+              Text "150,850원" (2FCY-0) 0×0 "150,850원"
+            Frame "base:ka10016|$.ntl_pric[].high_pric|1" (2FCZ-0) 0×36
+              Text "고가" (2FD0-0) 0×0 "고가"
+              Text "150,850원" (2FD1-0) 0×0 "150,850원"
+            Frame "Frame" (2FD2-0) 0×46
+              Text "탭 전환 시 같은 행의 공식 필드 묶…" (2FD3-0) 0×0 "탭 전환 시 같은 행의 공식 필드 묶음이 교체됩니다."
+          Frame "DV-3 Detail Footer · Chrome" (2FD4-0) 421×44
+            Text "10개 표시" (2FD5-0) 0×0 "10개 표시"
+            Text "더보기 · 접기" (2FD6-0) 0×0 "더보기 · 접기"
+          Frame "DV-3 Exact Metadata Remaining · 179" (2FD8-0) 421×1
+            Frame "base:0g|$.data[].297|1" (2FD9-0) 1×1
+            Frame "base:0g|$.data[].592|1" (2FDA-0) 1×1
+            Frame "base:0g|$.data[].593|1" (2FDB-0) 1×1
+            Frame "base:0g|$.data[].305|1" (2FDC-0) 1×1
+            Frame "base:0g|$.data[].306|1" (2FDD-0) 1×1
+            Frame "base:0g|$.data[].307|1" (2FDE-0) 1×1
+            Frame "base:0g|$.data[].689|1" (2FDF-0) 1×1
+            Frame "base:0g|$.data[].594|1" (2FDG-0) 1×1
+            Frame "base:0g|$.data[].382|1" (2FDH-0) 1×1
+            Frame "base:0g|$.data[].370|1" (2FDI-0) 1×1
+            Frame "base:ka10003|$.cntr_infr|1" (2FDJ-0) 1×1
+            Frame "base:ka10003|$.cntr_infr[].tm|1" (2FDK-0) 1×1
+            Frame "base:ka10003|$.cntr_infr[].pri_sel_bid_unit|1" (2FDL-0) 1×1
+            Frame "base:ka10003|$.cntr_infr[].pri_buy_bid_unit|1" (2FDM-0) 1×1
+            Frame "base:ka10003|$.cntr_infr[].sign|1" (2FDN-0) 1×1
+            Frame "base:ka10003|$.cntr_infr[].stex_tp|1" (2FDO-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl|1" (2FDP-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].dt|1" (2FDQ-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].close_pric|1" (2FDR-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].pred_pre_sig|1" (2FDS-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].pred_pre|1" (2FDT-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].flu_rt|1" (2FDU-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].trde_qty|1" (2FDV-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].trde_prica|1" (2FDW-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].bf_mkrt_trde_qty|1" (2FDX-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].bf_mkrt_trde_wght|1" (2FDY-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].opmr_trde_qty|1" (2FDZ-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].opmr_trde_wght|1" (2FE0-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].af_mkrt_trde_qty|1" (2FE1-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].af_mkrt_trde_wght|1" (2FE2-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].tot_3|1" (2FE3-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].prid_trde_qty|1" (2FE4-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].cntr_str|1" (2FE5-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].for_poss|1" (2FE6-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].for_wght|1" (2FE7-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].for_netprps|1" (2FE8-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].orgn_netprps|1" (2FE9-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].ind_netprps|1" (2FEA-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].frgn|1" (2FEB-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].crd_remn_rt|1" (2FEC-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].prm|1" (2FED-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].bf_mkrt_trde_prica|1" (2FEE-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].bf_mkrt_trde_prica_wght|1" (2FEF-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].opmr_trde_prica|1" (2FEG-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].opmr_trde_prica_wght|1" (2FEH-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].af_mkrt_trde_prica|1" (2FEI-0) 1×1
+            Frame "base:ka10015|$.daly_trde_dtl[].af_mkrt_trde_prica_wght|1" (2FEJ-0) 1×1
+            Frame "base:ka10016|$.ntl_pric|1" (2FEK-0) 1×1
+            Frame "base:ka10016|$.ntl_pric[].stk_cd|1" (2FEL-0) 1×1
+            Frame "base:ka10016|$.ntl_pric[].stk_nm|1" (2FEM-0) 1×1
+            Frame "base:ka10016|$.ntl_pric[].cur_prc|1" (2FEN-0) 1×1
+            Frame "base:ka10016|$.ntl_pric[].pred_pre_sig|1" (2FEO-0) 1×1
+            Frame "base:ka10016|$.ntl_pric[].pred_pre|1" (2FEP-0) 1×1
+            Frame "base:ka10016|$.ntl_pric[].flu_rt|1" (2FEQ-0) 1×1
+            Frame "base:ka10016|$.ntl_pric[].trde_qty|1" (2FER-0) 1×1
+            Frame "base:ka10016|$.ntl_pric[].pred_trde_qty_pre_rt|1" (2FES-0) 1×1
+            Frame "base:ka10016|$.ntl_pric[].sel_bid|1" (2FET-0) 1×1
+            Frame "base:ka10016|$.ntl_pric[].buy_bid|1" (2FEU-0) 1×1
+            Frame "base:ka10016|$.ntl_pric[].low_pric|1" (2FEV-0) 1×1
+            Frame "base:ka10017|$.updown_pric|1" (2FEW-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].stk_cd|1" (2FEX-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].stk_infr|1" (2FEY-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].stk_nm|1" (2FEZ-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].cur_prc|1" (2FF0-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].pred_pre_sig|1" (2FF1-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].pred_pre|1" (2FF2-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].flu_rt|1" (2FF3-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].trde_qty|1" (2FF4-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].pred_trde_qty|1" (2FF5-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].sel_req|1" (2FF6-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].sel_bid|1" (2FF7-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].buy_bid|1" (2FF8-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].buy_req|1" (2FF9-0) 1×1
+            Frame "base:ka10017|$.updown_pric[].cnt|1" (2FFA-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc|1" (2FFB-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc[].stk_cd|1" (2FFC-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc[].stk_nm|1" (2FFD-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc[].cur_prc|1" (2FFE-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc[].pred_pre_sig|1" (2FFF-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc[].pred_pre|1" (2FFG-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc[].flu_rt|1" (2FFH-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc[].trde_qty|1" (2FFI-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc[].sel_bid|1" (2FFJ-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc[].buy_bid|1" (2FFK-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc[].tdy_high_pric|1" (2FFL-0) 1×1
+            Frame "base:ka10018|$.high_low_pric_alacc[].tdy_low_pric|1" (2FFM-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu|1" (2FFN-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu[].stk_cd|1" (2FFO-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu[].stk_cls|1" (2FFP-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu[].stk_nm|1" (2FFQ-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu[].pred_pre_sig|1" (2FFR-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu[].pred_pre|1" (2FFS-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu[].flu_rt|1" (2FFT-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu[].base_pric|1" (2FFU-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu[].cur_prc|1" (2FFV-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu[].base_pre|1" (2FFW-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu[].trde_qty|1" (2FFX-0) 1×1
+            Frame "base:ka10019|$.pric_jmpflu[].jmp_rt|1" (2FFY-0) 1×1
+            Frame "base:ka10024|$.trde_qty_updt|1" (2FFZ-0) 1×1
+            Frame "base:ka10024|$.trde_qty_updt[].stk_cd|1" (2FG0-0) 1×1
+            Frame "base:ka10024|$.trde_qty_updt[].stk_nm|1" (2FG1-0) 1×1
+            Frame "base:ka10024|$.trde_qty_updt[].cur_prc|1" (2FG2-0) 1×1
+            Frame "base:ka10024|$.trde_qty_updt[].pred_pre_sig|1" (2FG3-0) 1×1
+            Frame "base:ka10024|$.trde_qty_updt[].pred_pre|1" (2FG4-0) 1×1
+            Frame "base:ka10024|$.trde_qty_updt[].flu_rt|1" (2FG5-0) 1×1
+            Frame "base:ka10024|$.trde_qty_updt[].prev_trde_qty|1" (2FG6-0) 1×1
+            Frame "base:ka10024|$.trde_qty_updt[].now_trde_qty|1" (2FG7-0) 1×1
+            Frame "base:ka10024|$.trde_qty_updt[].sel_bid|1" (2FG8-0) 1×1
+            Frame "base:ka10024|$.trde_qty_updt[].buy_bid|1" (2FG9-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr|1" (2FGA-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr[].stk_cd|1" (2FGB-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr[].stk_nm|1" (2FGC-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr[].cur_prc|1" (2FGD-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr[].pred_pre_sig|1" (2FGE-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr[].pred_pre|1" (2FGF-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr[].flu_rt|1" (2FGG-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr[].now_trde_qty|1" (2FGH-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr[].pric_strt|1" (2FGI-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr[].pric_end|1" (2FGJ-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr[].prps_qty|1" (2FGK-0) 1×1
+            Frame "base:ka10025|$.prps_cnctr[].prps_rt|1" (2FGL-0) 1×1
+            Frame "base:ka10026|$.high_low_per|1" (2FGM-0) 1×1
+            Frame "base:ka10026|$.high_low_per[].stk_cd|1" (2FGN-0) 1×1
+            Frame "base:ka10026|$.high_low_per[].stk_nm|1" (2FGO-0) 1×1
+            Frame "base:ka10026|$.high_low_per[].per|1" (2FGP-0) 1×1
+            Frame "base:ka10026|$.high_low_per[].cur_prc|1" (2FGQ-0) 1×1
+            Frame "base:ka10026|$.high_low_per[].pred_pre_sig|1" (2FGR-0) 1×1
+            Frame "base:ka10026|$.high_low_per[].pred_pre|1" (2FGS-0) 1×1
+            Frame "base:ka10026|$.high_low_per[].flu_rt|1" (2FGT-0) 1×1
+            Frame "base:ka10026|$.high_low_per[].now_trde_qty|1" (2FGU-0) 1×1
+            Frame "base:ka10026|$.high_low_per[].sel_bid|1" (2FGV-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt|1" (2FGW-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].stk_cd|1" (2FGX-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].stk_nm|1" (2FGY-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].cur_prc|1" (2FGZ-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].pred_pre_sig|1" (2FH0-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].pred_pre|1" (2FH1-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].flu_rt|1" (2FH2-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].high_pric|1" (2FH3-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].low_pric|1" (2FH4-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].open_pric_pre|1" (2FH5-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].now_trde_qty|1" (2FH6-0) 1×1
+            Frame "base:ka10028|$.open_pric_pre_flu_rt[].cntr_str|1" (2FH7-0) 1×1
+            Frame "base:ka10054|$.motn_stk|1" (2FH8-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].stk_cd|1" (2FH9-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].stk_nm|1" (2FHA-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].acc_trde_qty|1" (2FHB-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].motn_pric|1" (2FHC-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].dynm_dispty_rt|1" (2FHD-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].trde_cntr_proc_time|1" (2FHE-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].virelis_time|1" (2FHF-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].viaplc_tp|1" (2FHG-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].dynm_stdpc|1" (2FHH-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].static_stdpc|1" (2FHI-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].static_dispty_rt|1" (2FHJ-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].open_pric_pre_flu_rt|1" (2FHK-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].vimotn_cnt|1" (2FHL-0) 1×1
+            Frame "base:ka10054|$.motn_stk[].stex_tp|1" (2FHM-0) 1×1
+            Frame "base:ka10055|$.tdy_pred_cntr_qty|1" (2FHN-0) 1×1
+            Frame "base:ka10055|$.tdy_pred_cntr_qty[].cntr_pric|1" (2FHO-0) 1×1
+            Frame "base:ka10055|$.tdy_pred_cntr_qty[].pred_pre_sig|1" (2FHP-0) 1×1
+            Frame "base:ka10055|$.tdy_pred_cntr_qty[].pred_pre|1" (2FHQ-0) 1×1
+            Frame "base:ka10055|$.tdy_pred_cntr_qty[].flu_rt|1" (2FHR-0) 1×1
+            Frame "base:ka10055|$.tdy_pred_cntr_qty[].cntr_qty|1" (2FHS-0) 1×1
+            Frame "base:ka10055|$.tdy_pred_cntr_qty[].acc_trde_qty|1" (2FHT-0) 1×1
+            Frame "base:ka10055|$.tdy_pred_cntr_qty[].acc_trde_prica|1" (2FHU-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr|1" (2FHV-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].tm|1" (2FHW-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].cur_prc|1" (2FHX-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].pred_pre|1" (2FHY-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].pre_rt|1" (2FHZ-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].pri_sel_bid_unit|1" (2FI0-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].pri_buy_bid_unit|1" (2FI1-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].cntr_trde_qty|1" (2FI2-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].sign|1" (2FI3-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].acc_trde_qty|1" (2FI4-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].acc_trde_prica|1" (2FI5-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].cntr_str|1" (2FI6-0) 1×1
+            Frame "base:ka10084|$.tdy_pred_cntr[].stex_tp|1" (2FI7-0) 1×1
+      Frame "DV-3 Footer" (2F75-0) 1390×36
+        Frame "DV-3 Footer Controls · Chrome" (2F88-0) 1390×36
+          Text "10행 표시 · 더보기 시 표 내부 …" (2F89-0) 0×0 "10행 표시 · 더보기 시 표 내부 스크롤 · 접기"
+          Text "거래·가격 공식 필드 189개 연결" (2F8A-0) 0×0 "거래·가격 공식 필드 189개 연결"

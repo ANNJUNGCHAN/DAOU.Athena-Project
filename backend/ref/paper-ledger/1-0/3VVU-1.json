@@ -1,0 +1,1951 @@
+{
+ "board_id": "3VVU-1",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "40 · 모드 전환 — 조용한 전환 · 새 대화",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "3VWE-1",
+   "text": "40",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VWG-1",
+   "text": "모드 전환 — 조용한 전환 · 새 대화",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VWH-1",
+   "text": "백테스트에서 그래프로 넘어가는 순간. 묻지도 알리지도 않는다. 앞 창은 뒤에서 계속 돌고, 새 대화가 열린다",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VWJ-1",
+   "text": "신규 · 승인 대기",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VWV-1",
+   "text": "백테스트 → 그래프",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VWW-1",
+   "text": "QUIET SWITCH · NEW CONVERSATION",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VYD-1",
+   "text": "백테스트",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VYE-1",
+   "text": "전환 직전",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VYF-1",
+   "text": "추세추종 v3",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전"
+   ]
+  },
+  {
+   "id": "3VZS-1",
+   "text": "종목",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전",
+    "Mini Screen",
+    "Form Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VZT-1",
+   "text": "005930",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전",
+    "Mini Screen",
+    "Form Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VZV-1",
+   "text": "기간",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전",
+    "Mini Screen",
+    "Form Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VZW-1",
+   "text": "3년",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전",
+    "Mini Screen",
+    "Form Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VZY-1",
+   "text": "이평",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전",
+    "Mini Screen",
+    "Form Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VZZ-1",
+   "text": "20 / 60",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전",
+    "Mini Screen",
+    "Form Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W06-1",
+   "text": "bar 412/500 · pnl +18.4%",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전",
+    "Mini Screen",
+    "Log"
+   ]
+  },
+  {
+   "id": "3W07-1",
+   "text": "trade 37 · mdd -7.2%",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전",
+    "Mini Screen",
+    "Log"
+   ]
+  },
+  {
+   "id": "3VYJ-1",
+   "text": "실행 중 82%",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 1 · 전환 직전",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W1U-1",
+   "text": "전환 순간",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 2 · 전환 순간",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W1V-1",
+   "text": "0.4s",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 2 · 전환 순간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W21-1",
+   "text": "아무것도 묻지 않습니다",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 2 · 전환 순간"
+   ]
+  },
+  {
+   "id": "3W3I-1",
+   "text": "대화 12턴",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 2 · 전환 순간",
+    "Saved List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W3N-1",
+   "text": "전략 폼 값",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 2 · 전환 순간",
+    "Saved List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W3S-1",
+   "text": "파이썬 코드 84줄",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 2 · 전환 순간",
+    "Saved List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W3X-1",
+   "text": "결과 카드 3장",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 2 · 전환 순간",
+    "Saved List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W42-1",
+   "text": "실행 로그 · 스크롤 위치",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 2 · 전환 순간",
+    "Saved List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XKY-1",
+   "text": "추세추종 v3",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 2 · 전환 순간",
+    "Sidebar Row Hint",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3XL2-1",
+   "text": "사이드바 이력 행에는 스피너만 돕니다. 이 행이 곧 돌아가는 길입니다.",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 2 · 전환 순간",
+    "Sidebar Row Hint"
+   ]
+  },
+  {
+   "id": "3W4Z-1",
+   "text": "그래프",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 3 · 전환 후",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W50-1",
+   "text": "전환 후",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 3 · 전환 후",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W51-1",
+   "text": "새 그래프 대화",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 3 · 전환 후"
+   ]
+  },
+  {
+   "id": "3W53-1",
+   "text": "무엇이 쌓였는지 지금 볼 수 있습니다",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 3 · 전환 후",
+    "Empty Canvas"
+   ]
+  },
+  {
+   "id": "3W56-1",
+   "text": "대화 0턴 · 방금 시작",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Flow Zone",
+    "Flow Row",
+    "Step 3 · 전환 후",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W5P-1",
+   "text": "쓰기 지연·실패 — 사용자에게 무엇을 말하는가 (작업은 언제도 잃지 않는다)",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Failure Zone",
+    "Seal Failure"
+   ]
+  },
+  {
+   "id": "3W78-1",
+   "text": "마지막 변경분 쓰는 중 — 화면은 이미 바뀌었습니다",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Failure Zone",
+    "Seal Failure",
+    "Banners",
+    "Saving Banner",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W79-1",
+   "text": "백그라운드 쓰기. 사용자를 멈추게 하지 않습니다",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Failure Zone",
+    "Seal Failure",
+    "Banners",
+    "Saving Banner"
+   ]
+  },
+  {
+   "id": "3W7G-1",
+   "text": "디스크에 쓰지 못했습니다 — 재시도 중",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Failure Zone",
+    "Seal Failure",
+    "Banners",
+    "Fail Banner",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W7H-1",
+   "text": "작업은 메모리에 그대로 살아 있고 사라지지 않습니다. 쓰기가 성공할 때까지 재시도하고, 계속 실패하면 다른 위치로 내보냅니다.",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Failure Zone",
+    "Seal Failure",
+    "Banners",
+    "Fail Banner"
+   ]
+  },
+  {
+   "id": "3W7K-1",
+   "text": "다른 위치에 저장",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Failure Zone",
+    "Seal Failure",
+    "Banners",
+    "Fail Banner",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W7M-1",
+   "text": "자세히",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Failure Zone",
+    "Seal Failure",
+    "Banners",
+    "Fail Banner",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W5S-1",
+   "text": "25번 보드를 대체합니다",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Failure Zone",
+    "Supersedes 25"
+   ]
+  },
+  {
+   "id": "3W5T-1",
+   "text": "기존 규칙 ‘모드를 바꿔도 오른쪽 채팅은 유지’는 더 이상 유효하지 않습니다. 모드가 대화의 경계입니다.",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Failure Zone",
+    "Supersedes 25"
+   ]
+  },
+  {
+   "id": "3W5V-1",
+   "text": "폐기",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Failure Zone",
+    "Supersedes 25",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W5W-1",
+   "text": "모드를 바꿔도 오른쪽 채팅은 유지",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Stage",
+    "Failure Zone",
+    "Supersedes 25",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W81-1",
+   "text": "모드를 넘으면 새 대화",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "3W82-1",
+   "text": "MODE SWITCH",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "3W8V-1",
+   "text": "1",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W8W-1",
+   "text": "전환 순간 — 화면만 바뀐다",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W8X-1",
+   "text": "저장은 이미 되어 있습니다. 메시지는 발생 즉시, 폼·코드·필터는 바뀔 때마다 디바운스로 쓰고 있으니 모드를 누르는 순간엔 마지막 변경분만 뒤에서 flush합니다. 확인 창도 토스트도 없습니다. 떠난 창은 사이드바에서 스피너로 돌고 있음을 보일 뿐입니다. 사이드바 목록도 그대로입니다 — 모드는 목록을 거르지 않고, 프로젝트 밑에 새 대화 행 하나가 늘 뿐입니다.",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Rule 1"
+   ]
+  },
+  {
+   "id": "3W91-1",
+   "text": "2",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W92-1",
+   "text": "남는 것 — 대화가 아니라 작업 환경",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W93-1",
+   "text": "메시지만 남기지 않습니다. 폼 값, 사용자가 쓴 코드, 결과 카드, 실행 로그, 스크롤 위치까지 한 덩어리로 묶습니다. 무엇이 담기는지는 42번 보드의 표가 정본입니다.",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Rule 2"
+   ]
+  },
+  {
+   "id": "3W97-1",
+   "text": "3",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W98-1",
+   "text": "되돌리기 — 실수는 한 번의 클릭으로",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W99-1",
+   "text": "전환 직후 사이드바의 그 세션 행을 누르면 41번 보드의 복원 계약대로 그대로 돌아옵니다. 별도 '돌아가기' 링크는 두지 않습니다 — 이력 행이 곧 돌아가는 길입니다.",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Rule 3"
+   ]
+  },
+  {
+   "id": "3WAX-1",
+   "text": "한 번의 클릭이 지나는 네 단계",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Sequence"
+   ]
+  },
+  {
+   "id": "3WB0-1",
+   "text": "모드 클릭",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Sequence",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WB1-1",
+   "text": "›",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Sequence",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WB3-1",
+   "text": "뒤에서 flush",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Sequence",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WB4-1",
+   "text": "›",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Sequence",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WB6-1",
+   "text": "사이드바 스피너",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Sequence",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WB7-1",
+   "text": "›",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Sequence",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WB9-1",
+   "text": "새 대화",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Sequence",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W9S-1",
+   "text": "코드 현황 (2026-09-05)",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W9U-1",
+   "text": "01",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W9V-1",
+   "text": "대화 레코드는 mode를 가지고, 모드 전환은 그 프로젝트의 새 대화를 만듭니다 — 반영됨.",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W9X-1",
+   "text": "02",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W9Y-1",
+   "text": "과거 대화 열기는 조용한 복원입니다 — 배너 없이 메시지·모드 화면·커서가 돌아오고 입력은 열려 있습니다.",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WA0-1",
+   "text": "03",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WA1-1",
+   "text": "활성 대화 전환 IPC는 요청한 id로 기록 대상과 커서를 함께 바꿉니다 — 반영됨.",
+   "path": [
+    "40 · 모드 전환 — 조용한 전환 · 새 대화",
+    "40 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3VVU-1",
+   "name": "40 · 모드 전환 — 조용한 전환 · 새 대화",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "3VWB-1",
+   "name": "40 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 86,
+   "depth": 1
+  },
+  {
+   "id": "3VWC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 650,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "3VWD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "3VWF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 586,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "3VWI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 109,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "3VWP-1",
+   "name": "40 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 722,
+   "depth": 1
+  },
+  {
+   "id": "3VWQ-1",
+   "name": "Stage",
+   "component": "Frame",
+   "w": 1150,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3VWT-1",
+   "name": "Flow Zone",
+   "component": "Frame",
+   "w": 1148,
+   "h": 504,
+   "depth": 3
+  },
+  {
+   "id": "3VWU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1104,
+   "h": 18,
+   "depth": 4
+  },
+  {
+   "id": "3VWX-1",
+   "name": "Flow Row",
+   "component": "Frame",
+   "w": 1104,
+   "h": 428,
+   "depth": 4
+  },
+  {
+   "id": "3VY8-1",
+   "name": "Step 1 · 전환 직전",
+   "component": "Frame",
+   "w": 339,
+   "h": 428,
+   "depth": 5
+  },
+  {
+   "id": "3VY9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 309,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "3VYA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 75,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "3VYB-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3VYC-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 7,
+   "depth": 9
+  },
+  {
+   "id": "3VYG-1",
+   "name": "Mini Screen",
+   "component": "Frame",
+   "w": 309,
+   "h": 313,
+   "depth": 6
+  },
+  {
+   "id": "3VZQ-1",
+   "name": "Form Row",
+   "component": "Frame",
+   "w": 287,
+   "h": 41,
+   "depth": 7
+  },
+  {
+   "id": "3VZR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 41,
+   "depth": 8
+  },
+  {
+   "id": "3VZU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 41,
+   "depth": 8
+  },
+  {
+   "id": "3VZX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 41,
+   "depth": 8
+  },
+  {
+   "id": "3W01-1",
+   "name": "Curve",
+   "component": "Frame",
+   "w": 287,
+   "h": 189,
+   "depth": 7
+  },
+  {
+   "id": "3W02-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 264,
+   "h": 70,
+   "depth": 8
+  },
+  {
+   "id": "3W03-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 260,
+   "h": 54,
+   "depth": 9
+  },
+  {
+   "id": "3W04-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 260,
+   "h": 24,
+   "depth": 9
+  },
+  {
+   "id": "3W05-1",
+   "name": "Log",
+   "component": "Frame",
+   "w": 287,
+   "h": 45,
+   "depth": 7
+  },
+  {
+   "id": "3VYH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 309,
+   "h": 15,
+   "depth": 6
+  },
+  {
+   "id": "3VYI-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "3W13-1",
+   "name": "Arrow 1",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3W14-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 20,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3W15-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 13,
+   "h": 10,
+   "depth": 7
+  },
+  {
+   "id": "3W1R-1",
+   "name": "Step 2 · 전환 순간",
+   "component": "Frame",
+   "w": 339,
+   "h": 428,
+   "depth": 5
+  },
+  {
+   "id": "3W1S-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 309,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "3W1T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "3XKP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 44,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3XKQ-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "3XKR-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 15,
+   "h": 15,
+   "depth": 8
+  },
+  {
+   "id": "3XKS-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 8
+  },
+  {
+   "id": "3W22-1",
+   "name": "Saved List",
+   "component": "Frame",
+   "w": 309,
+   "h": 215,
+   "depth": 6
+  },
+  {
+   "id": "3W3E-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 289,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3W3F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3W3G-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 9
+  },
+  {
+   "id": "3W3H-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 6,
+   "depth": 10
+  },
+  {
+   "id": "3W3J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 289,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3W3K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3W3L-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 9
+  },
+  {
+   "id": "3W3M-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 6,
+   "depth": 10
+  },
+  {
+   "id": "3W3O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 289,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3W3P-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3W3Q-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 9
+  },
+  {
+   "id": "3W3R-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 6,
+   "depth": 10
+  },
+  {
+   "id": "3W3T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 289,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3W3U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3W3V-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 9
+  },
+  {
+   "id": "3W3W-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 6,
+   "depth": 10
+  },
+  {
+   "id": "3W3Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 289,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3W3Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3W40-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 9
+  },
+  {
+   "id": "3W41-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 6,
+   "depth": 10
+  },
+  {
+   "id": "3XKU-1",
+   "name": "Sidebar Row Hint",
+   "component": "Frame",
+   "w": 309,
+   "h": 60,
+   "depth": 6
+  },
+  {
+   "id": "3XKV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 309,
+   "h": 28,
+   "depth": 7
+  },
+  {
+   "id": "3XKW-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 8
+  },
+  {
+   "id": "3XKX-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 7,
+   "depth": 9
+  },
+  {
+   "id": "3XKZ-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3XL0-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3XL1-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 9
+  },
+  {
+   "id": "3W4O-1",
+   "name": "Arrow 2",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3W4P-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 20,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "3W4Q-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 13,
+   "h": 10,
+   "depth": 7
+  },
+  {
+   "id": "3W4R-1",
+   "name": "Step 3 · 전환 후",
+   "component": "Frame",
+   "w": 339,
+   "h": 428,
+   "depth": 5
+  },
+  {
+   "id": "3W4S-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 309,
+   "h": 24,
+   "depth": 6
+  },
+  {
+   "id": "3W4T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 67,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3W4U-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3W4V-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 9
+  },
+  {
+   "id": "3W4W-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 9
+  },
+  {
+   "id": "3W4X-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 9
+  },
+  {
+   "id": "3W4Y-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3W52-1",
+   "name": "Empty Canvas",
+   "component": "Frame",
+   "w": 309,
+   "h": 311,
+   "depth": 6
+  },
+  {
+   "id": "3W54-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 309,
+   "h": 15,
+   "depth": 6
+  },
+  {
+   "id": "3W55-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "3VWY-1",
+   "name": "Failure Zone",
+   "component": "Frame",
+   "w": 1148,
+   "h": 216,
+   "depth": 3
+  },
+  {
+   "id": "3W5O-1",
+   "name": "Seal Failure",
+   "component": "Frame",
+   "w": 712,
+   "h": 171,
+   "depth": 4
+  },
+  {
+   "id": "3W5Q-1",
+   "name": "Banners",
+   "component": "Frame",
+   "w": 712,
+   "h": 144,
+   "depth": 5
+  },
+  {
+   "id": "3W72-1",
+   "name": "Saving Banner",
+   "component": "Frame",
+   "w": 312,
+   "h": 144,
+   "depth": 6
+  },
+  {
+   "id": "3W73-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 286,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3W74-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3W75-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 9
+  },
+  {
+   "id": "3W76-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 10
+  },
+  {
+   "id": "3W77-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 4,
+   "depth": 10
+  },
+  {
+   "id": "3W7A-1",
+   "name": "Fail Banner",
+   "component": "Frame",
+   "w": 390,
+   "h": 144,
+   "depth": 6
+  },
+  {
+   "id": "3W7B-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 364,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3W7C-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3W7D-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 9
+  },
+  {
+   "id": "3W7E-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "3W7F-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 4,
+   "depth": 10
+  },
+  {
+   "id": "3W7I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 364,
+   "h": 28,
+   "depth": 7
+  },
+  {
+   "id": "3W7J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3W7L-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 28,
+   "depth": 8
+  },
+  {
+   "id": "3W5R-1",
+   "name": "Supersedes 25",
+   "component": "Frame",
+   "w": 380,
+   "h": 171,
+   "depth": 4
+  },
+  {
+   "id": "3W5U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 350,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3VWR-1",
+   "name": "Interaction Rail",
+   "component": "Frame",
+   "w": 426,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3W80-1",
+   "name": "Rail Header",
+   "component": "Frame",
+   "w": 388,
+   "h": 34,
+   "depth": 3
+  },
+  {
+   "id": "3W8S-1",
+   "name": "Rule 1",
+   "component": "Frame",
+   "w": 388,
+   "h": 133,
+   "depth": 3
+  },
+  {
+   "id": "3W8T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3W8U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3W8Y-1",
+   "name": "Rule 2",
+   "component": "Frame",
+   "w": 388,
+   "h": 103,
+   "depth": 3
+  },
+  {
+   "id": "3W8Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3W90-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3W94-1",
+   "name": "Rule 3",
+   "component": "Frame",
+   "w": 388,
+   "h": 103,
+   "depth": 3
+  },
+  {
+   "id": "3W95-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3W96-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3WAW-1",
+   "name": "Sequence",
+   "component": "Frame",
+   "w": 388,
+   "h": 84,
+   "depth": 3
+  },
+  {
+   "id": "3WAY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "3WAZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 69,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "3WB2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 69,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "3WB5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "3WB8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 69,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "3W9M-1",
+   "name": "Gap Note",
+   "component": "Frame",
+   "w": 388,
+   "h": 163,
+   "depth": 3
+  },
+  {
+   "id": "3W9N-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3W9O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3W9P-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3W9Q-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 7
+  },
+  {
+   "id": "3W9R-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3W9T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3W9W-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3W9Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 30,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "40": 1,
+  "모드 전환 — 조용한 전환 · 새 대화": 1,
+  "백테스트에서 그래프로 넘어가는 순간. 묻지도 알리지도 않는다. 앞 창은 뒤에서 계속 돌고, 새 대화가 열린다": 1,
+  "신규 · 승인 대기": 1,
+  "백테스트 → 그래프": 1,
+  "QUIET SWITCH · NEW CONVERSATION": 1,
+  "백테스트": 1,
+  "전환 직전": 1,
+  "추세추종 v3": 2,
+  "종목": 1,
+  "005930": 1,
+  "기간": 1,
+  "3년": 1,
+  "이평": 1,
+  "20 / 60": 1,
+  "bar 412/500 · pnl +18.4%": 1,
+  "trade 37 · mdd -7.2%": 1,
+  "실행 중 82%": 1,
+  "전환 순간": 1,
+  "0.4s": 1,
+  "아무것도 묻지 않습니다": 1,
+  "대화 12턴": 1,
+  "전략 폼 값": 1,
+  "파이썬 코드 84줄": 1,
+  "결과 카드 3장": 1,
+  "실행 로그 · 스크롤 위치": 1,
+  "사이드바 이력 행에는 스피너만 돕니다. 이 행이 곧 돌아가는 길입니다.": 1,
+  "그래프": 1,
+  "전환 후": 1,
+  "새 그래프 대화": 1,
+  "무엇이 쌓였는지 지금 볼 수 있습니다": 1,
+  "대화 0턴 · 방금 시작": 1,
+  "쓰기 지연·실패 — 사용자에게 무엇을 말하는가 (작업은 언제도 잃지 않는다)": 1,
+  "마지막 변경분 쓰는 중 — 화면은 이미 바뀌었습니다": 1,
+  "백그라운드 쓰기. 사용자를 멈추게 하지 않습니다": 1,
+  "디스크에 쓰지 못했습니다 — 재시도 중": 1,
+  "작업은 메모리에 그대로 살아 있고 사라지지 않습니다. 쓰기가 성공할 때까지 재시도하고, 계속 실패하면 다른 위치로 내보냅니다.": 1,
+  "다른 위치에 저장": 1,
+  "자세히": 1,
+  "25번 보드를 대체합니다": 1,
+  "기존 규칙 ‘모드를 바꿔도 오른쪽 채팅은 유지’는 더 이상 유효하지 않습니다. 모드가 대화의 경계입니다.": 1,
+  "폐기": 1,
+  "모드를 바꿔도 오른쪽 채팅은 유지": 1,
+  "모드를 넘으면 새 대화": 1,
+  "MODE SWITCH": 1,
+  "1": 1,
+  "전환 순간 — 화면만 바뀐다": 1,
+  "저장은 이미 되어 있습니다. 메시지는 발생 즉시, 폼·코드·필터는 바뀔 때마다 디바운스로 쓰고 있으니 모드를 누르는 순간엔 마지막 변경분만 뒤에서 flush합니다. 확인 창도 토스트도 없습니다. 떠난 창은 사이드바에서 스피너로 돌고 있음을 보일 뿐입니다. 사이드바 목록도 그대로입니다 — 모드는 목록을 거르지 않고, 프로젝트 밑에 새 대화 행 하나가 늘 뿐입니다.": 1,
+  "2": 1,
+  "남는 것 — 대화가 아니라 작업 환경": 1,
+  "메시지만 남기지 않습니다. 폼 값, 사용자가 쓴 코드, 결과 카드, 실행 로그, 스크롤 위치까지 한 덩어리로 묶습니다. 무엇이 담기는지는 42번 보드의 표가 정본입니다.": 1,
+  "3": 1,
+  "되돌리기 — 실수는 한 번의 클릭으로": 1,
+  "전환 직후 사이드바의 그 세션 행을 누르면 41번 보드의 복원 계약대로 그대로 돌아옵니다. 별도 '돌아가기' 링크는 두지 않습니다 — 이력 행이 곧 돌아가는 길입니다.": 1,
+  "한 번의 클릭이 지나는 네 단계": 1,
+  "모드 클릭": 1,
+  "›": 3,
+  "뒤에서 flush": 1,
+  "사이드바 스피너": 1,
+  "새 대화": 1,
+  "코드 현황 (2026-09-05)": 1,
+  "01": 1,
+  "대화 레코드는 mode를 가지고, 모드 전환은 그 프로젝트의 새 대화를 만듭니다 — 반영됨.": 1,
+  "02": 1,
+  "과거 대화 열기는 조용한 복원입니다 — 배너 없이 메시지·모드 화면·커서가 돌아오고 입력은 열려 있습니다.": 1,
+  "03": 1,
+  "활성 대화 전환 IPC는 요청한 id로 기록 대상과 커서를 함께 바꿉니다 — 반영됨.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "444478f7e3a10f22518e5a3664f19c26383f08086395f740c9341acb70fe09c1"
+}

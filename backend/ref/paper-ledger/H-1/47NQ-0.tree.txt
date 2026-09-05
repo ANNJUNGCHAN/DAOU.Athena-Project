@@ -1,0 +1,35 @@
+Frame "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위" (47NQ-0) 360×420
+  Frame "Header" (47OK-0) 0×0
+    Frame "Meta row" (47OM-0) 0×0
+      Text "Eyebrow" (47OO-0) 0×0
+      Text "As of" (47ON-0) 0×0 "기준 09:42"
+    Text "Title" (47OL-0) 0×0 "신용비율 상위"
+  Frame "Body" (47NT-0) 0×0
+    Frame "KPI band" (47OA-0) 0×0
+      Frame "Frame" (47OH-0) 0×0
+        Text "신용비율" (47OJ-0) 0×0 "신용비율"
+        Text "11.8%" (47OI-0) 0×0 "11.8%"
+      Frame "Frame" (47OE-0) 0×0
+        Text "변화" (47OG-0) 0×0 "변화"
+        Text "신용비율 10% 초과" (47OF-0) 0×0 "신용비율 10% 초과"
+      Frame "Frame" (47OB-0) 0×0
+        Text "핵심" (47OD-0) 0×0 "핵심"
+        Text "6종목" (47OC-0) 0×0 "6종목"
+    Frame "Table header" (47O6-0) 0×0
+      Text "항목" (47O9-0) 0×0 "항목"
+      Text "값" (47O8-0) 0×0 "값"
+      Text "비고" (47O7-0) 72×0 "비고"
+    Frame "Position 1" (47O0-0) 0×0
+      Frame "Frame" (47O3-0) 0×0
+        Text "금액" (47O5-0) 0×0 "금액"
+        Text "Text" (47O4-0) 0×0
+      Text "4,208억원" (47O2-0) 0×0 "4,208억원"
+      Text "Text" (47O1-0) 72×0
+    Frame "Position 2" (47NU-0) 0×0
+      Frame "Frame" (47NX-0) 0×0
+        Text "값" (47NZ-0) 0×0 "값"
+        Text "Text" (47NY-0) 0×0
+      Text "상위 50 기준" (47NW-0) 0×0 "상위 50 기준"
+      Text "Text" (47NV-0) 72×0
+  Frame "Fold note" (47NR-0) 0×0
+    Text "스칼라 2개, 행 6개 접힘 · 원본…" (47NS-0) 0×0 "스칼라 2개, 행 6개 접힘 · 원본에서 확인"

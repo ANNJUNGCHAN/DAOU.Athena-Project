@@ -1,0 +1,92 @@
+{
+ "board_id": "497V-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "497X-0",
+   "text": "원본 보드: CC-03 / R01-T4-7 · 순위 — 고저 PER",
+   "path": [
+    "note/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "497Z-0",
+   "text": "가져온 요소: PER · 시가대비등락률 · 종목코드 · 현재가 · 전일대비",
+   "path": [
+    "note/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4981-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4983-0",
+   "text": "접은 개수: 스칼라 2개 · 행 17개",
+   "path": [
+    "note/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "497V-0",
+   "name": "note/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "497W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "497Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4980-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4982-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T4-7 · 순위 — 고저 PER": 1,
+  "가져온 요소: PER · 시가대비등락률 · 종목코드 · 현재가 · 전일대비": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 17개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "90d938c10a330c1a9263ecdb51c3a1cd6678f58000d89ed40fc5ac41c9452e50"
+}

@@ -1,0 +1,3306 @@
+{
+ "board_id": "13BC-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "153D-2",
+   "text": "삼성전자 통합 호가",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "153G-2",
+   "text": "실시간",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "153H-2",
+   "text": "005930 · KOSPI · 정규장",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "153K-2",
+   "text": "정규장",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "153M-2",
+   "text": "시간외",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "153O-2",
+   "text": "금현물",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "153R-2",
+   "text": "5단",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "153T-2",
+   "text": "10단",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IF5-0",
+   "text": "현재가",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 현재가"
+   ]
+  },
+  {
+   "id": "3IF6-0",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 현재가"
+   ]
+  },
+  {
+   "id": "3IF7-0",
+   "text": "+1,850원 · +1.24%",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 현재가"
+   ]
+  },
+  {
+   "id": "1542-2",
+   "text": "최우선 매도호가",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1544-2",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1545-2",
+   "text": "3,420주",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1547-2",
+   "text": "최우선 매수호가",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1549-2",
+   "text": "150,840",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "154A-2",
+   "text": "4,180주",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IFJ-0",
+   "text": "매수비율",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 잔량 균형",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IFK-0",
+   "text": "53.0%",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 잔량 균형",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IFO-0",
+   "text": "10단 총잔량 81,160주 · 09:42:21",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 잔량 균형"
+   ]
+  },
+  {
+   "id": "3IFQ-0",
+   "text": "호가 건수",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 잔량 균형",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IFR-0",
+   "text": "매도 336 · 매수 324",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 잔량 균형",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IFT-0",
+   "text": "시간외 대기",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 잔량 균형",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IFV-0",
+   "text": "매도 13,820 · 매수 9,760",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IFW-0",
+   "text": "직전대비 +640 · −210",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Best Quote Strip",
+    "KPI 잔량 균형",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "154Q-2",
+   "text": "호가",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "Ladder Column Header"
+   ]
+  },
+  {
+   "id": "154R-2",
+   "text": "등락",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "Ladder Column Header"
+   ]
+  },
+  {
+   "id": "154S-2",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "Ladder Column Header"
+   ]
+  },
+  {
+   "id": "154U-2",
+   "text": "잔량 분포",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "Ladder Column Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "154Y-2",
+   "text": "150,940",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 10"
+   ]
+  },
+  {
+   "id": "154Z-2",
+   "text": "+90",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 10"
+   ]
+  },
+  {
+   "id": "1550-2",
+   "text": "2,160",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 10"
+   ]
+  },
+  {
+   "id": "1556-2",
+   "text": "150,930",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 9"
+   ]
+  },
+  {
+   "id": "1557-2",
+   "text": "+80",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 9"
+   ]
+  },
+  {
+   "id": "1558-2",
+   "text": "3,840",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 9"
+   ]
+  },
+  {
+   "id": "155E-2",
+   "text": "150,920",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 8"
+   ]
+  },
+  {
+   "id": "155F-2",
+   "text": "+70",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 8"
+   ]
+  },
+  {
+   "id": "155G-2",
+   "text": "1,760",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 8"
+   ]
+  },
+  {
+   "id": "155M-2",
+   "text": "150,910",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 7"
+   ]
+  },
+  {
+   "id": "155N-2",
+   "text": "+60",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 7"
+   ]
+  },
+  {
+   "id": "155O-2",
+   "text": "4,250",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 7"
+   ]
+  },
+  {
+   "id": "155U-2",
+   "text": "150,900",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 6"
+   ]
+  },
+  {
+   "id": "155V-2",
+   "text": "+50",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 6"
+   ]
+  },
+  {
+   "id": "155W-2",
+   "text": "5,130",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 6"
+   ]
+  },
+  {
+   "id": "1562-2",
+   "text": "150,890",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 5"
+   ]
+  },
+  {
+   "id": "1563-2",
+   "text": "+40",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 5"
+   ]
+  },
+  {
+   "id": "1564-2",
+   "text": "2,940",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 5"
+   ]
+  },
+  {
+   "id": "156A-2",
+   "text": "150,880",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 4"
+   ]
+  },
+  {
+   "id": "156B-2",
+   "text": "+30",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 4"
+   ]
+  },
+  {
+   "id": "156C-2",
+   "text": "3,610",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 4"
+   ]
+  },
+  {
+   "id": "156I-2",
+   "text": "150,870",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 3"
+   ]
+  },
+  {
+   "id": "156J-2",
+   "text": "+20",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 3"
+   ]
+  },
+  {
+   "id": "156K-2",
+   "text": "6,280",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 3"
+   ]
+  },
+  {
+   "id": "156Q-2",
+   "text": "150,860",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 2"
+   ]
+  },
+  {
+   "id": "156R-2",
+   "text": "+10",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 2"
+   ]
+  },
+  {
+   "id": "156S-2",
+   "text": "4,770",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 2"
+   ]
+  },
+  {
+   "id": "156Y-2",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 1"
+   ]
+  },
+  {
+   "id": "156Z-2",
+   "text": "0",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 1"
+   ]
+  },
+  {
+   "id": "1570-2",
+   "text": "3,420",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매도 1"
+   ]
+  },
+  {
+   "id": "1576-2",
+   "text": "현재가",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "Current Price Divider",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1577-2",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "Current Price Divider",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1578-2",
+   "text": "▲ 1,850 · +1.24%",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "Current Price Divider",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1579-2",
+   "text": "체결강도 112.6",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "Current Price Divider"
+   ]
+  },
+  {
+   "id": "157D-2",
+   "text": "150,840",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 1"
+   ]
+  },
+  {
+   "id": "157E-2",
+   "text": "−10",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 1"
+   ]
+  },
+  {
+   "id": "157F-2",
+   "text": "4,180",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 1"
+   ]
+  },
+  {
+   "id": "157L-2",
+   "text": "150,830",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 2"
+   ]
+  },
+  {
+   "id": "157M-2",
+   "text": "−20",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 2"
+   ]
+  },
+  {
+   "id": "157N-2",
+   "text": "5,760",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 2"
+   ]
+  },
+  {
+   "id": "157T-2",
+   "text": "150,820",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 3"
+   ]
+  },
+  {
+   "id": "157U-2",
+   "text": "−30",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 3"
+   ]
+  },
+  {
+   "id": "157V-2",
+   "text": "3,230",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 3"
+   ]
+  },
+  {
+   "id": "1581-2",
+   "text": "150,810",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 4"
+   ]
+  },
+  {
+   "id": "1582-2",
+   "text": "−40",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 4"
+   ]
+  },
+  {
+   "id": "1583-2",
+   "text": "6,540",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 4"
+   ]
+  },
+  {
+   "id": "1589-2",
+   "text": "150,800",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 5"
+   ]
+  },
+  {
+   "id": "158A-2",
+   "text": "−50",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 5"
+   ]
+  },
+  {
+   "id": "158B-2",
+   "text": "4,920",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 5"
+   ]
+  },
+  {
+   "id": "158H-2",
+   "text": "150,790",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 6"
+   ]
+  },
+  {
+   "id": "158I-2",
+   "text": "−60",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 6"
+   ]
+  },
+  {
+   "id": "158J-2",
+   "text": "2,860",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 6"
+   ]
+  },
+  {
+   "id": "158P-2",
+   "text": "150,780",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 7"
+   ]
+  },
+  {
+   "id": "158Q-2",
+   "text": "−70",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 7"
+   ]
+  },
+  {
+   "id": "158R-2",
+   "text": "5,310",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 7"
+   ]
+  },
+  {
+   "id": "158X-2",
+   "text": "150,770",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 8"
+   ]
+  },
+  {
+   "id": "158Y-2",
+   "text": "−80",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 8"
+   ]
+  },
+  {
+   "id": "158Z-2",
+   "text": "3,670",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 8"
+   ]
+  },
+  {
+   "id": "1595-2",
+   "text": "150,760",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 9"
+   ]
+  },
+  {
+   "id": "1596-2",
+   "text": "−90",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 9"
+   ]
+  },
+  {
+   "id": "1597-2",
+   "text": "2,420",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 9"
+   ]
+  },
+  {
+   "id": "159D-2",
+   "text": "150,750",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 10"
+   ]
+  },
+  {
+   "id": "159E-2",
+   "text": "−100",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 10"
+   ]
+  },
+  {
+   "id": "159F-2",
+   "text": "4,110",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Ten Step Ladder",
+    "매수 10"
+   ]
+  },
+  {
+   "id": "3IMS-0",
+   "text": "실시간 체결",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Panel Header"
+   ]
+  },
+  {
+   "id": "3IMU-0",
+   "text": "체결",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Panel Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IMV-0",
+   "text": "잔량 추이",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Panel Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IMY-0",
+   "text": "체결강도",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Strength Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IMZ-0",
+   "text": "112.6",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Strength Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IN1-0",
+   "text": "최근 1분",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Strength Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IN2-0",
+   "text": "매수 +18,420주",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Strength Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IN4-0",
+   "text": "시각",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Column Header"
+   ]
+  },
+  {
+   "id": "3IN5-0",
+   "text": "체결가",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Column Header"
+   ]
+  },
+  {
+   "id": "3IN6-0",
+   "text": "전일대비",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Column Header"
+   ]
+  },
+  {
+   "id": "3IN7-0",
+   "text": "체결량",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Column Header"
+   ]
+  },
+  {
+   "id": "3IN8-0",
+   "text": "구분",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Column Header"
+   ]
+  },
+  {
+   "id": "3IN9-0",
+   "text": "체결강도",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "Trade Column Header"
+   ]
+  },
+  {
+   "id": "3INM-0",
+   "text": "09:42:21",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:21"
+   ]
+  },
+  {
+   "id": "3INN-0",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:21"
+   ]
+  },
+  {
+   "id": "3INO-0",
+   "text": "+1,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:21"
+   ]
+  },
+  {
+   "id": "3INP-0",
+   "text": "420",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:21"
+   ]
+  },
+  {
+   "id": "3INS-0",
+   "text": "매수",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:21",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3INT-0",
+   "text": "112.6",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:21"
+   ]
+  },
+  {
+   "id": "3INV-0",
+   "text": "09:42:20",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:20"
+   ]
+  },
+  {
+   "id": "3INW-0",
+   "text": "150,840",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:20"
+   ]
+  },
+  {
+   "id": "3INX-0",
+   "text": "+1,840",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:20"
+   ]
+  },
+  {
+   "id": "3INY-0",
+   "text": "85",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:20"
+   ]
+  },
+  {
+   "id": "3IO1-0",
+   "text": "매도",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:20",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IO2-0",
+   "text": "112.5",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:20"
+   ]
+  },
+  {
+   "id": "3IO4-0",
+   "text": "09:42:19",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:19"
+   ]
+  },
+  {
+   "id": "3IO5-0",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:19"
+   ]
+  },
+  {
+   "id": "3IO6-0",
+   "text": "+1,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:19"
+   ]
+  },
+  {
+   "id": "3IO7-0",
+   "text": "1,120",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:19"
+   ]
+  },
+  {
+   "id": "3IOA-0",
+   "text": "매수",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:19",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IOB-0",
+   "text": "112.5",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:19"
+   ]
+  },
+  {
+   "id": "3IOD-0",
+   "text": "09:42:18",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3IOE-0",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3IOF-0",
+   "text": "+1,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3IOG-0",
+   "text": "340",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3IOJ-0",
+   "text": "매수",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:18",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IOK-0",
+   "text": "112.4",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:18"
+   ]
+  },
+  {
+   "id": "3IPA-0",
+   "text": "09:42:17",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:17"
+   ]
+  },
+  {
+   "id": "3IPB-0",
+   "text": "150,840",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:17"
+   ]
+  },
+  {
+   "id": "3IPC-0",
+   "text": "+1,840",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:17"
+   ]
+  },
+  {
+   "id": "3IPD-0",
+   "text": "210",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:17"
+   ]
+  },
+  {
+   "id": "3IPG-0",
+   "text": "매도",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:17",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IPH-0",
+   "text": "112.4",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:17"
+   ]
+  },
+  {
+   "id": "3IPJ-0",
+   "text": "09:42:16",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:16"
+   ]
+  },
+  {
+   "id": "3IPK-0",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:16"
+   ]
+  },
+  {
+   "id": "3IPL-0",
+   "text": "+1,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:16"
+   ]
+  },
+  {
+   "id": "3IPM-0",
+   "text": "760",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:16"
+   ]
+  },
+  {
+   "id": "3IPP-0",
+   "text": "매수",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:16",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IPQ-0",
+   "text": "112.3",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:16"
+   ]
+  },
+  {
+   "id": "3IPS-0",
+   "text": "09:42:15",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3IPT-0",
+   "text": "150,840",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3IPU-0",
+   "text": "+1,840",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3IPV-0",
+   "text": "130",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3IPY-0",
+   "text": "매도",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:15",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IPZ-0",
+   "text": "112.3",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:15"
+   ]
+  },
+  {
+   "id": "3IQ1-0",
+   "text": "09:42:14",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:14"
+   ]
+  },
+  {
+   "id": "3IQ2-0",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:14"
+   ]
+  },
+  {
+   "id": "3IQ3-0",
+   "text": "+1,850",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:14"
+   ]
+  },
+  {
+   "id": "3IQ4-0",
+   "text": "540",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:14"
+   ]
+  },
+  {
+   "id": "3IQ7-0",
+   "text": "매수",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:14",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IQ8-0",
+   "text": "112.2",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 09:42:14"
+   ]
+  },
+  {
+   "id": "3IQA-0",
+   "text": "8 / 20건 · 최신순",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "체결 목록 꼬리"
+   ]
+  },
+  {
+   "id": "3OSF-0",
+   "text": "호가 잔량",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "호가 잔량",
+    "Frame",
+    "호가 잔량 · 펼침 진입"
+   ]
+  },
+  {
+   "id": "3OSG-0",
+   "text": "▸",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "호가 잔량",
+    "Frame",
+    "호가 잔량 · 펼침 진입"
+   ]
+  },
+  {
+   "id": "3JD1-0",
+   "text": "실시간",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "호가 잔량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JD7-0",
+   "text": "매도 38,160주",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "호가 잔량",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JD8-0",
+   "text": "직전대비 +2,140",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "호가 잔량",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDA-0",
+   "text": "매수 43,000주",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "호가 잔량",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDB-0",
+   "text": "직전대비 −1,380",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Workspace",
+    "Trade Flow Panel",
+    "호가 잔량",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15BU-2",
+   "text": "장중 실시간 · 갱신 중",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15BW-2",
+   "text": "상한 193,700",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15BX-2",
+   "text": "하한 104,300",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15BY-2",
+   "text": "기준가 149,000",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WN3-0",
+   "text": "LP 매도 0 · 매수 0",
+   "path": [
+    "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+    "Order Book Root · 정규장 10단",
+    "Order Book Surface",
+    "Order Book Footer",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "13BC-2",
+   "name": "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "1537-2",
+   "name": "Order Book Root · 정규장 10단",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "1538-2",
+   "name": "Order Book Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "153A-2",
+   "name": "Order Book Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "153B-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "153C-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "153E-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "153F-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "153I-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "153J-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "153L-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "153N-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "153P-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 24,
+   "depth": 5
+  },
+  {
+   "id": "153Q-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "153S-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "153V-2",
+   "name": "Best Quote Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "3IF4-0",
+   "name": "KPI 현재가",
+   "component": "Frame",
+   "w": 310,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1541-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 280,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1543-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1546-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 280,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1548-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IFH-0",
+   "name": "KPI 잔량 균형",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3IFI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IFL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "3IFM-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3IFN-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3IFP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IFS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IFU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "154K-2",
+   "name": "Order Book Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 594,
+   "depth": 3
+  },
+  {
+   "id": "154L-2",
+   "name": "Ten Step Ladder",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "154O-2",
+   "name": "Ladder Column Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 5
+  },
+  {
+   "id": "154T-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "154W-2",
+   "name": "매도 10",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "1551-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1552-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "1554-2",
+   "name": "매도 9",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "1559-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "155A-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "155C-2",
+   "name": "매도 8",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "155H-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "155I-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "155K-2",
+   "name": "매도 7",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "155P-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "155Q-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "155S-2",
+   "name": "매도 6",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "155X-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "155Y-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "1560-2",
+   "name": "매도 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "1565-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1566-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "1568-2",
+   "name": "매도 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "156D-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "156E-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "156G-2",
+   "name": "매도 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "156L-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "156M-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "156O-2",
+   "name": "매도 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "156T-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "156U-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "156W-2",
+   "name": "매도 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "1571-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1572-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "1574-2",
+   "name": "Current Price Divider",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "1575-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "157B-2",
+   "name": "매수 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "157G-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "157H-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "157J-2",
+   "name": "매수 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "157O-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "157P-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "157R-2",
+   "name": "매수 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "157W-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "157X-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "157Z-2",
+   "name": "매수 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "1584-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1585-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "1587-2",
+   "name": "매수 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "158C-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "158D-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "158F-2",
+   "name": "매수 6",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "158K-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "158L-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "158N-2",
+   "name": "매수 7",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "158S-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "158T-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "158V-2",
+   "name": "매수 8",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "1590-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1591-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "1593-2",
+   "name": "매수 9",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "1598-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1599-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "159B-2",
+   "name": "매수 10",
+   "component": "Frame",
+   "w": 0,
+   "h": 23,
+   "depth": 5
+  },
+  {
+   "id": "159G-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "159H-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "3IMQ-0",
+   "name": "Trade Flow Panel",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3IMR-0",
+   "name": "Trade Panel Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 58,
+   "depth": 5
+  },
+  {
+   "id": "3IMT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IMW-0",
+   "name": "Trade Strength Summary",
+   "component": "Frame",
+   "w": 0,
+   "h": 74,
+   "depth": 5
+  },
+  {
+   "id": "3IMX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IN0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IN3-0",
+   "name": "Trade Column Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "3INL-0",
+   "name": "체결 09:42:21",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3INQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3INR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3INU-0",
+   "name": "체결 09:42:20",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3INZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IO0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IO3-0",
+   "name": "체결 09:42:19",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3IO8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IO9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IOC-0",
+   "name": "체결 09:42:18",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3IOH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IOI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IP9-0",
+   "name": "체결 09:42:17",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3IPE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IPF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IPI-0",
+   "name": "체결 09:42:16",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3IPN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IPO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IPR-0",
+   "name": "체결 09:42:15",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3IPW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IPX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IQ0-0",
+   "name": "체결 09:42:14",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3IQ5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IQ6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IQ9-0",
+   "name": "체결 목록 꼬리",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 5
+  },
+  {
+   "id": "3JCY-0",
+   "name": "호가 잔량",
+   "component": "Frame",
+   "w": 0,
+   "h": 152,
+   "depth": 5
+  },
+  {
+   "id": "3JCZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3OSE-0",
+   "name": "호가 잔량 · 펼침 진입",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JD2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "3JD3-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JD4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JD5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JD6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JD9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "15BR-2",
+   "name": "Order Book Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "15BS-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15BT-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 5
+  },
+  {
+   "id": "15BV-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "삼성전자 통합 호가": 1,
+  "실시간": 2,
+  "005930 · KOSPI · 정규장": 1,
+  "정규장": 1,
+  "시간외": 1,
+  "금현물": 1,
+  "5단": 1,
+  "10단": 1,
+  "현재가": 2,
+  "150,850": 9,
+  "+1,850원 · +1.24%": 1,
+  "최우선 매도호가": 1,
+  "3,420주": 1,
+  "최우선 매수호가": 1,
+  "150,840": 5,
+  "4,180주": 1,
+  "매수비율": 1,
+  "53.0%": 1,
+  "10단 총잔량 81,160주 · 09:42:21": 1,
+  "호가 건수": 1,
+  "매도 336 · 매수 324": 1,
+  "시간외 대기": 1,
+  "매도 13,820 · 매수 9,760": 1,
+  "직전대비 +640 · −210": 1,
+  "호가": 1,
+  "등락": 1,
+  "잔량": 1,
+  "잔량 분포": 1,
+  "150,940": 1,
+  "+90": 1,
+  "2,160": 1,
+  "150,930": 1,
+  "+80": 1,
+  "3,840": 1,
+  "150,920": 1,
+  "+70": 1,
+  "1,760": 1,
+  "150,910": 1,
+  "+60": 1,
+  "4,250": 1,
+  "150,900": 1,
+  "+50": 1,
+  "5,130": 1,
+  "150,890": 1,
+  "+40": 1,
+  "2,940": 1,
+  "150,880": 1,
+  "+30": 1,
+  "3,610": 1,
+  "150,870": 1,
+  "+20": 1,
+  "6,280": 1,
+  "150,860": 1,
+  "+10": 1,
+  "4,770": 1,
+  "0": 1,
+  "3,420": 1,
+  "▲ 1,850 · +1.24%": 1,
+  "체결강도 112.6": 1,
+  "−10": 1,
+  "4,180": 1,
+  "150,830": 1,
+  "−20": 1,
+  "5,760": 1,
+  "150,820": 1,
+  "−30": 1,
+  "3,230": 1,
+  "150,810": 1,
+  "−40": 1,
+  "6,540": 1,
+  "150,800": 1,
+  "−50": 1,
+  "4,920": 1,
+  "150,790": 1,
+  "−60": 1,
+  "2,860": 1,
+  "150,780": 1,
+  "−70": 1,
+  "5,310": 1,
+  "150,770": 1,
+  "−80": 1,
+  "3,670": 1,
+  "150,760": 1,
+  "−90": 1,
+  "2,420": 1,
+  "150,750": 1,
+  "−100": 1,
+  "4,110": 1,
+  "실시간 체결": 1,
+  "체결": 1,
+  "잔량 추이": 1,
+  "체결강도": 2,
+  "112.6": 2,
+  "최근 1분": 1,
+  "매수 +18,420주": 1,
+  "시각": 1,
+  "체결가": 1,
+  "전일대비": 1,
+  "체결량": 1,
+  "구분": 1,
+  "09:42:21": 1,
+  "+1,850": 5,
+  "420": 1,
+  "매수": 5,
+  "09:42:20": 1,
+  "+1,840": 3,
+  "85": 1,
+  "매도": 3,
+  "112.5": 2,
+  "09:42:19": 1,
+  "1,120": 1,
+  "09:42:18": 1,
+  "340": 1,
+  "112.4": 2,
+  "09:42:17": 1,
+  "210": 1,
+  "09:42:16": 1,
+  "760": 1,
+  "112.3": 2,
+  "09:42:15": 1,
+  "130": 1,
+  "09:42:14": 1,
+  "540": 1,
+  "112.2": 1,
+  "8 / 20건 · 최신순": 1,
+  "호가 잔량": 1,
+  "▸": 1,
+  "매도 38,160주": 1,
+  "직전대비 +2,140": 1,
+  "매수 43,000주": 1,
+  "직전대비 −1,380": 1,
+  "장중 실시간 · 갱신 중": 1,
+  "상한 193,700": 1,
+  "하한 104,300": 1,
+  "기준가 149,000": 1,
+  "LP 매도 0 · 매수 0": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "358108c7c2b06d50abd47bc756c7cffee04b224c6dc1aa12cda0d22124f0dbab"
+}

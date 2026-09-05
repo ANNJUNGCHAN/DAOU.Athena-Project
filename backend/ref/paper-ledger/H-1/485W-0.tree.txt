@@ -1,0 +1,20 @@
+Frame "mini/CC-03 / R01-T7 · 차트 — 업종 지수" (485W-0) 360×420
+  Frame "Header" (486B-0) 0×0
+    Frame "Meta row" (486D-0) 0×0
+      Text "Eyebrow" (486F-0) 0×0
+      Text "As of" (486E-0) 0×0 "기준 09:42"
+    Text "Title" (486C-0) 0×0 "업종 지수"
+  Frame "Body" (485Z-0) 0×0
+    Frame "Price hero" (4868-0) 0×0
+      Text "3,184.52" (486A-0) 0×0 "3,184.52"
+      Text "+87.96 (+2.84%)" (4869-0) 0×0 "+87.96 (+2.84%)"
+    Frame "Line chart" (4863-0) 0×184
+      SVG "SVG" (4864-0) 0×0
+        SVGVisualElement "Path" (4867-0) 0×0
+        SVGVisualElement "Path" (4866-0) 0×0
+        SVGVisualElement "Circle" (4865-0) 0×0
+    Frame "Chart range" (4860-0) 0×0
+      Text "시작" (4862-0) 0×0 "시작"
+      Text "현재" (4861-0) 0×0 "현재"
+  Frame "Fold note" (485X-0) 0×0
+    Text "계열 33개 접힘 · 원본에서 확인" (485Y-0) 0×0 "계열 33개 접힘 · 원본에서 확인"

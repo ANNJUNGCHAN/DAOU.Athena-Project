@@ -1,0 +1,35 @@
+Frame "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금" (48J5-0) 360×420
+  Frame "Header" (48JZ-0) 0×0
+    Frame "Meta row" (48K1-0) 0×0
+      Text "Eyebrow" (48K3-0) 0×0
+      Text "As of" (48K2-0) 0×0 "기준 09:42"
+    Text "Title" (48K0-0) 0×0 "예수금 통화별·특수예수금"
+  Frame "Body" (48J8-0) 0×0
+    Frame "KPI band" (48JP-0) 0×0
+      Frame "Frame" (48JW-0) 0×0
+        Text "종목별계좌평가현황" (48JY-0) 0×0 "종목별계좌평가현황"
+        Text "8종목" (48JX-0) 0×0 "8종목"
+      Frame "Frame" (48JT-0) 0×0
+        Text "매수비중" (48JV-0) 0×0 "매수비중"
+        Text "28.0%" (48JU-0) 0×0 "28.0%"
+      Frame "Frame" (48JQ-0) 0×0
+        Text "Text" (48JS-0) 0×0
+        Text "Text" (48JR-0) 0×0
+    Frame "Table header" (48JL-0) 0×0
+      Text "항목" (48JO-0) 0×0 "항목"
+      Text "값" (48JN-0) 0×0 "값"
+      Text "비고" (48JM-0) 72×0 "비고"
+    Frame "Position 1" (48JF-0) 0×0
+      Frame "Frame" (48JI-0) 0×0
+        Text "d+3외화예수금" (48JK-0) 0×0 "d+3외화예수금"
+        Text "Text" (48JJ-0) 0×0
+      Text "0달러" (48JH-0) 0×0 "0달러"
+      Text "Text" (48JG-0) 72×0
+    Frame "Position 2" (48J9-0) 0×0
+      Frame "Frame" (48JC-0) 0×0
+        Text "d+4외화예수금" (48JE-0) 0×0 "d+4외화예수금"
+        Text "Text" (48JD-0) 0×0
+      Text "0달러" (48JB-0) 0×0 "0달러"
+      Text "Text" (48JA-0) 72×0
+  Frame "Fold note" (48J6-0) 0×0
+    Text "스칼라 2개, 행 1개 접힘 · 원본…" (48J7-0) 0×0 "스칼라 2개, 행 1개 접힘 · 원본에서 확인"

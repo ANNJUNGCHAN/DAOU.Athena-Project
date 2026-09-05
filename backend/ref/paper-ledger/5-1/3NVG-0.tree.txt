@@ -1,0 +1,182 @@
+Frame "CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금" (3NVG-0) 1440×926
+  Frame "Account Root · 예수금·결제" (3NVH-0) 1440×926
+    Frame "Account Card Surface" (3NVI-0) 1360×846
+      Frame "Account Header" (3O5Z-0) 0×106
+        Frame "Frame" (3O6F-0) 0×0
+          Frame "Frame" (3O6H-0) 0×0
+            Text "내 계좌" (3O6K-0) 0×0 "내 계좌"
+            Frame "Frame" (3O6I-0) 0×0
+              Text "실시간" (3O6J-0) 0×0 "실시간"
+          Text "키움증권 종합계좌 ****4721 ·…" (3O6G-0) 0×0 "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18"
+        Frame "Frame" (3O60-0) 0×0
+          Frame "Frame" (3O6D-0) 0×0
+            Text "자산 종합" (3O6E-0) 0×0 "자산 종합"
+          Frame "Frame" (3O6B-0) 0×0
+            Text "보유종목" (3O6C-0) 0×0 "보유종목"
+          Frame "Frame" (3O69-0) 0×0
+            Text "예수금·결제" (3O6A-0) 0×0 "예수금·결제"
+          Frame "Frame" (3O67-0) 0×0
+            Text "손익·성과" (3O68-0) 0×0 "손익·성과"
+          Frame "Frame" (3O65-0) 0×0
+            Text "주문·체결" (3O66-0) 0×0 "주문·체결"
+          Frame "Frame" (3O63-0) 0×0
+            Text "증거금·담보" (3O64-0) 0×0 "증거금·담보"
+          Frame "Frame" (3O61-0) 0×0
+            Text "금현물" (3O62-0) 0×0 "금현물"
+      Frame "Account Summary Strip" (3O5E-0) 0×116
+        Frame "Frame" (3O5V-0) 340×78
+          Text "총자산" (3O5Y-0) 0×0 "총자산"
+          Text "raw|ka01690|body|tot_evlt_amt" (3O5X-0) 0×0 "124,580,240원"
+          Text "raw|ka01690|body|tot_prft_rt" (3O5W-0) 0×0 "수익률 +4.96%"
+        Frame "Frame" (3O5R-0) 265×78
+          Text "주문가능금액" (3O5U-0) 0×0 "주문가능금액"
+          Text "raw|kt00001|body|d2_pymn_alow_amt" (3O5T-0) 0×0 "31,240,000원"
+          Text "raw|kt00005|body|pymn_alow_amt" (3O5S-0) 0×0 "출금가능 28,940,000원"
+        Frame "Frame" (3O5N-0) 245×78
+          Text "주식 평가액" (3O5Q-0) 0×0 "주식 평가액"
+          Text "raw|kt00004|body|aset_evlt_amt" (3O5P-0) 0×0 "89,760,240원"
+          Text "structure|kt00004|stk_acnt_evlt_prst|count" (3O5O-0) 0×0 "8종목"
+        Frame "Frame" (3O5J-0) 245×78
+          Text "평가손익" (3O5M-0) 0×0 "평가손익"
+          Text "raw|ka01690|body|tot_evltv_prft" (3O5L-0) 0×0 "+4,240,900원"
+          Text "raw|ka01690|body|tot_prft_rt" (3O5K-0) 0×0 "매입 85,519,340원"
+        Frame "Frame" (3O5F-0) 0×78
+          Text "현금 비중" (3O5I-0) 0×0 "현금 비중"
+          Text "raw|ka01690|body|buy_wght" (3O5H-0) 0×0 "28.0%"
+          Text "보유종목 8종" (3O5G-0) 0×0 "보유종목 8종"
+      Frame "Account Workspace" (3NVM-0) 0×560
+        Frame "통화별 예수금 본문" (3P9I-0) 900×560
+          Frame "통화별 제목" (3P9J-0) 0×0
+            Text "통화별 예수금 · 주문·출금" (3P9K-0) 0×0 "통화별 예수금 · 주문·출금"
+            Text "2통화 · 09/01 09:42 기준" (3P9L-0) 0×0 "2통화 · 09/01 09:42 기준"
+          Frame "통화별 열 머리" (3P9M-0) 0×32
+            Text "통화" (3P9N-0) 160×0 "통화"
+            Frame "Frame" (3P9O-0) 160×0
+              Text "예수금" (3P9P-0) 0×0 "예수금"
+            Frame "Frame" (3P9Q-0) 180×0
+              Text "주문가능금액(예수금)" (3P9R-0) 0×0 "주문가능금액(예수금)"
+            Frame "Frame" (3P9S-0) 180×0
+              Text "출금가능금액(예수금)" (3P9T-0) 0×0 "출금가능금액(예수금)"
+            Frame "Frame" (3P9U-0) 150×0
+              Text "출금가능금액" (3P9V-0) 0×0 "출금가능금액"
+          Frame "원화 참조" (3P9W-0) 0×66
+            Frame "Frame" (3P9X-0) 160×0
+              Text "원화" (3P9Y-0) 0×0 "원화"
+              Text "KRW · 참조" (3P9Z-0) 0×0 "KRW · 참조"
+            Frame "Frame" (3PA0-0) 160×0
+              Text "34,820,000원" (3PA1-0) 0×0 "34,820,000원"
+            Frame "Frame" (3PA2-0) 180×0
+              Text "31,240,000원" (3PA3-0) 0×0 "31,240,000원"
+            Frame "Frame" (3PA4-0) 180×0
+              Text "28,940,000원" (3PA5-0) 0×0 "28,940,000원"
+            Frame "Frame" (3PA6-0) 150×0
+              Text "해당 없음" (3PA7-0) 0×0 "해당 없음"
+          Frame "미국달러 · 활성" (3PA8-0) 0×66
+            Frame "Frame" (3PA9-0) 160×0
+              Frame "Frame" (3PAA-0) 0×0
+                Text "미국달러" (3PAB-0) 0×0 "미국달러"
+                Text "▾" (3PAC-0) 0×0 "▾"
+              Text "USD · 외화예수금" (3PAD-0) 0×0 "USD · 외화예수금"
+            Frame "Frame" (3PAE-0) 160×0
+              Text "0달러" (3PAF-0) 0×0 "0달러"
+            Frame "Frame" (3PAG-0) 180×0
+              Text "0달러" (3PAH-0) 0×0 "0달러"
+            Frame "Frame" (3PAI-0) 180×0
+              Text "0달러" (3PAJ-0) 0×0 "0달러"
+            Frame "Frame" (3PAK-0) 150×0
+              Text "0달러" (3PAL-0) 0×0 "0달러"
+          Frame "외화 결제 예정 제목" (3PAM-0) 0×0
+            Text "D+1 ~ D+4 외화예수금" (3PAN-0) 0×0 "D+1 ~ D+4 외화예수금"
+            Frame "Frame" (3PAO-0) 0×0
+              Text "4영업일 모두 0달러" (3PAP-0) 0×0 "4영업일 모두 0달러"
+          Frame "외화 결제 예정 밴드" (3PAQ-0) 0×96
+            Frame "Frame" (3PAR-0) 207×0
+              Text "D+1 09/02" (3PAS-0) 0×0 "D+1 09/02"
+              Text "0달러" (3PAT-0) 0×0 "0달러"
+            Frame "Frame" (3PAU-0) 207×0
+              Text "D+2 09/03" (3PAV-0) 0×0 "D+2 09/03"
+              Text "0달러" (3PAW-0) 0×0 "0달러"
+            Frame "Frame" (3PAX-0) 208×0
+              Text "D+3 09/04" (3PAY-0) 0×0 "D+3 09/04"
+              Text "0달러" (3PAZ-0) 0×0 "0달러"
+            Frame "Frame" (3PB0-0) 208×0
+              Text "D+4 09/07" (3PB1-0) 0×0 "D+4 09/07"
+              Text "0달러" (3PB2-0) 0×0 "0달러"
+          Frame "미수·원화 항목" (3PBN-0) 844×0
+            Frame "외화 미수·연체" (3PBO-0) 490×0
+              Frame "Frame" (3PBP-0) 0×0
+                Text "외화 미수·연체" (3PBQ-0) 0×0 "외화 미수·연체"
+                Text "3항목" (3PBR-0) 0×0 "3항목"
+              Frame "Frame" (3PBS-0) 0×88
+                Frame "Frame" (3PBT-0) 155×0
+                  Text "미수 합계" (3PBU-0) 0×0 "미수 합계"
+                  Text "0달러" (3PBV-0) 0×0 "0달러"
+                Frame "Frame" (3PBW-0) 155×0
+                  Text "현금미수금" (3PBX-0) 0×0 "현금미수금"
+                  Text "0달러" (3PBY-0) 0×0 "0달러"
+                Frame "Frame" (3PBZ-0) 156×0
+                  Text "연체료" (3PC0-0) 0×0 "연체료"
+                  Text "0달러" (3PC1-0) 0×0 "0달러"
+            Frame "원화 표시 항목" (3PC2-0) 0×0
+              Frame "Frame" (3PC3-0) 0×0
+                Text "원화 표시 항목" (3PC4-0) 0×0 "원화 표시 항목"
+                Text "2항목" (3PC5-0) 0×0 "2항목"
+              Frame "Frame" (3PC6-0) 0×88
+                Frame "Frame" (3PC7-0) 163×0
+                  Text "원화대용평가금" (3PC8-0) 0×0 "원화대용평가금"
+                  Text "0원" (3PC9-0) 0×0 "0원"
+                Frame "Frame" (3PCA-0) 0×0
+                  Text "해외주식증거금" (3PCB-0) 0×0 "해외주식증거금"
+                  Text "0원" (3PCC-0) 0×0 "0원"
+        Frame "특수예수금 레일" (3PD2-0) 460×560
+          Frame "특수예수금" (3PD3-0) 0×0
+            Frame "Frame" (3PD4-0) 0×0
+              Text "특수예수금 · 증권 입출고" (3PD5-0) 0×0 "특수예수금 · 증권 입출고"
+              Frame "Frame" (3PD6-0) 0×0
+                Text "7항목 모두 0원" (3PD7-0) 0×0 "7항목 모두 0원"
+            Frame "항목" (3UPK-0) 0×0
+              Frame "Frame" (3UPL-0) 0×32
+                Text "공매도대금" (3UPM-0) 0×0 "공매도대금"
+                Text "0원" (3UPN-0) 0×0 "0원"
+              Frame "Frame" (3UPO-0) 0×32
+                Text "수표입금액" (3UPP-0) 0×0 "수표입금액"
+                Text "0원" (3UPQ-0) 0×0 "0원"
+              Frame "Frame" (3UPR-0) 0×32
+                Text "기타수표입금액" (3UPS-0) 0×0 "기타수표입금액"
+                Text "0원" (3UPT-0) 0×0 "0원"
+              Frame "Frame" (3UPU-0) 0×32
+                Text "코넥스기본예탁금" (3UPV-0) 0×0 "코넥스기본예탁금"
+                Text "0원" (3UPW-0) 0×0 "0원"
+              Frame "Frame" (3UPX-0) 0×32
+                Text "ELW예탁평가금" (3UPY-0) 0×0 "ELW예탁평가금"
+                Text "0원" (3UPZ-0) 0×0 "0원"
+              Frame "Frame" (3UQ0-0) 0×32
+                Text "증권 입고금액" (3UQ1-0) 0×0 "증권 입고금액"
+                Text "0원" (3UQ2-0) 0×0 "0원"
+              Frame "Frame" (3UQ3-0) 0×32
+                Text "증권 출고금액" (3UQ4-0) 0×0 "증권 출고금액"
+                Text "0원" (3UQ5-0) 0×0 "0원"
+          Frame "신용·생계형" (3PDO-0) 0×0
+            Frame "Frame" (3PDP-0) 0×0
+              Text "신용·생계형" (3PDQ-0) 0×0 "신용·생계형"
+              Frame "Frame" (3PDR-0) 0×0
+                Text "5항목 모두 0원" (3PDS-0) 0×0 "5항목 모두 0원"
+            Frame "Frame" (3PDT-0) 0×0
+              Frame "Frame" (3PDU-0) 0×32
+                Text "신용설정평가금" (3PDV-0) 0×0 "신용설정평가금"
+                Text "0원" (3PDW-0) 0×0 "0원"
+              Frame "Frame" (3PDX-0) 0×32
+                Text "신용담보재사용" (3PDY-0) 0×0 "신용담보재사용"
+                Text "0원" (3PDZ-0) 0×0 "0원"
+              Frame "Frame" (3PE0-0) 0×32
+                Text "신용대주권리예정금액" (3PE1-0) 0×0 "신용대주권리예정금액"
+                Text "0원" (3PE2-0) 0×0 "0원"
+              Frame "Frame" (3PE3-0) 0×32
+                Text "생계형가입금액" (3PE4-0) 0×0 "생계형가입금액"
+                Text "0원" (3PE5-0) 0×0 "0원"
+              Frame "Frame" (3PE6-0) 0×32
+                Text "생계형입금가능금액" (3PE7-0) 0×0 "생계형입금가능금액"
+                Text "0원" (3PE8-0) 0×0 "0원"
+      Frame "Account Status Footer" (3NVJ-0) 0×64
+        Text "● 예수금·결제 실시간 반영 중" (3NVL-0) 0×0 "● 예수금·결제 실시간 반영 중"
+        Text "결제 전체 내역 보기" (3NVK-0) 0×0 "결제 전체 내역 보기"

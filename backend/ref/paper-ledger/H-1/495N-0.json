@@ -1,0 +1,92 @@
+{
+ "board_id": "495N-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "495P-0",
+   "text": "원본 보드: CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+   "path": [
+    "note/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Frame"
+   ]
+  },
+  {
+   "id": "495R-0",
+   "text": "가져온 요소: 등락율 · ELW조건검색 · 발행사명 · 현재가 · 전일대비",
+   "path": [
+    "note/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Frame"
+   ]
+  },
+  {
+   "id": "495T-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Frame"
+   ]
+  },
+  {
+   "id": "495V-0",
+   "text": "접은 개수: 스칼라 2개 · 행 6개",
+   "path": [
+    "note/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "495N-0",
+   "name": "note/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "495O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "495Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "495S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "495U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T6-6 · 순위 — ELW 조건검색": 1,
+  "가져온 요소: 등락율 · ELW조건검색 · 발행사명 · 현재가 · 전일대비": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 6개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a6d3411522f166b292dde50fa5719065ca9b40dffa23858e34231e5eb9266069"
+}

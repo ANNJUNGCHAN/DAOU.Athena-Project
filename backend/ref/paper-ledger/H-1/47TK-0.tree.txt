@@ -1,0 +1,35 @@
+Frame "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가" (47TK-0) 360×420
+  Frame "Header" (47UE-0) 0×0
+    Frame "Meta row" (47UG-0) 0×0
+      Text "Eyebrow" (47UI-0) 0×0
+      Text "As of" (47UH-0) 0×0 "기준 09:42"
+    Text "Title" (47UF-0) 0×0 "한도소진율 증가"
+  Frame "Body" (47TN-0) 0×0
+    Frame "KPI band" (47U4-0) 0×0
+      Frame "Frame" (47UB-0) 0×0
+        Text "소진율증가" (47UD-0) 0×0 "소진율증가"
+        Text "+2.9%p" (47UC-0) 0×0 "+2.9%p"
+      Frame "Frame" (47U8-0) 0×0
+        Text "한도소진율" (47UA-0) 0×0 "한도소진율"
+        Text "94.2%" (47U9-0) 0×0 "94.2%"
+      Frame "Frame" (47U5-0) 0×0
+        Text "핵심" (47U7-0) 0×0 "핵심"
+        Text "128종목" (47U6-0) 0×0 "128종목"
+    Frame "Table header" (47U0-0) 0×0
+      Text "항목" (47U3-0) 0×0 "항목"
+      Text "값" (47U2-0) 0×0 "값"
+      Text "비고" (47U1-0) 72×0 "비고"
+    Frame "Position 1" (47TU-0) 0×0
+      Frame "Frame" (47TX-0) 0×0
+        Text "기준 시각" (47TZ-0) 0×0 "기준 시각"
+        Text "Text" (47TY-0) 0×0
+      Text "09:42 조회" (47TW-0) 0×0 "09:42 조회"
+      Text "Text" (47TV-0) 72×0
+    Frame "Position 2" (47TO-0) 0×0
+      Frame "Frame" (47TR-0) 0×0
+        Text "값" (47TT-0) 0×0 "값"
+        Text "Text" (47TS-0) 0×0
+      Text "소진율 증가 1위" (47TQ-0) 0×0 "소진율 증가 1위"
+      Text "Text" (47TP-0) 72×0
+  Frame "Fold note" (47TL-0) 0×0
+    Text "스칼라 2개, 행 6개 접힘 · 원본…" (47TM-0) 0×0 "스칼라 2개, 행 6개 접힘 · 원본에서 확인"

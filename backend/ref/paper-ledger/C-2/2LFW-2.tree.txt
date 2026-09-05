@@ -1,0 +1,264 @@
+Frame "09 · 키우미 — 미니 카드 10종" (2LFW-2) 1700×0
+  Frame "설명" (2LIW-2) 0×0
+    Text "캔버스 카드 9종이 미니 카드 10종…" (2LIX-2) 0×0 "캔버스 카드 9종이 미니 카드 10종으로 들어온다"
+    Text "키우미는 자기 화면을 가진다. 그 화…" (2LIY-2) 0×0 "키우미는 자기 화면을 가진다. 그 화면은 360px 폭에 640px 상한이라 캔버스 카드를 그대로 못 들인다"
+  Frame "미니 카드 1행" (2LLE-2) 0×0
+    Frame "01 · 표" (2LNJ-2) 360×0
+      Frame "Frame" (2LNK-2) 0×0
+        Text "01 · 표" (2LNL-2) 0×0 "01 · 표"
+        Text "canvas_type: table" (2LNM-2) 0×0 "canvas_type: table"
+      Frame "미니 카드" (2LNN-2) 360×0
+        Frame "Frame" (2LNO-2) 0×0
+          Text "재무상태표" (2LNP-2) 0×0 "재무상태표"
+          Text "DART 2025" (2LNQ-2) 0×0 "DART 2025"
+        Frame "Frame" (2LNR-2) 0×0
+          Frame "Frame" (2LNS-2) 0×0
+            Text "계정" (2LNT-2) 0×0 "계정"
+            Text "당기" (2LNU-2) 96×0 "당기"
+            Text "전기" (2LNV-2) 96×0 "전기"
+          Frame "Frame" (2LNW-2) 0×0
+            Text "자산총계" (2LNX-2) 0×0 "자산총계"
+            Text "566,942,110" (2LNY-2) 96×0 "566,942,110"
+            Text "514,531,948" (2LNZ-2) 96×0 "514,531,948"
+          Frame "Frame" (2LO0-2) 0×0
+            Text "유동자산" (2LO1-2) 0×0 "유동자산"
+            Text "247,684,612" (2LO2-2) 96×0 "247,684,612"
+            Text "227,062,266" (2LO3-2) 96×0 "227,062,266"
+          Frame "Frame" (2LO4-2) 0×0
+            Text "현금및현금성자산" (2LO5-2) 0×0 "현금및현금성자산"
+            Text "57,856,378" (2LO6-2) 96×0 "57,856,378"
+            Text "53,705,579" (2LO7-2) 96×0 "53,705,579"
+        Text "열 2개 · 행 2개를 접었습니다 —…" (2LO8-2) 0×0 "열 2개 · 행 2개를 접었습니다 — 전체는 캔버스에서"
+      Text "이미 있음. column-fold를 …" (2LO9-2) 0×0 "이미 있음. column-fold를 360px에 다시 적용하고 헤더 제외 3행까지만 편다. 실제로 접었을 때"
+    Frame "02 · 차트" (2LRV-2) 360×0
+      Frame "Frame" (2LRW-2) 0×0
+        Text "02 · 차트" (2LRX-2) 0×0 "02 · 차트"
+        Text "canvas_type: chart" (2LRY-2) 0×0 "canvas_type: chart"
+      Frame "미니 카드" (2LRZ-2) 360×0
+        Frame "Frame" (2LS0-2) 0×0
+          Text "삼성전자 005930" (2LS1-2) 0×0 "삼성전자 005930"
+          Text "일봉" (2LS2-2) 0×0 "일봉"
+        Frame "Frame" (2LS3-2) 0×0
+          Text "88,100" (2LS4-2) 0×0 "88,100"
+          Text "+900 (+1.03%)" (2LS5-2) 0×0 "+900 (+1.03%)"
+        SVG "SVG" (2LS6-2) 0×0
+          SVGVisualElement "Path" (2LS7-2) 0×0
+        Frame "Frame" (2LS8-2) 0×0
+          Text "2026-05-26" (2LS9-2) 0×0 "2026-05-26"
+          Text "2026-07-19" (2LSA-2) 0×0 "2026-07-19"
+        Text "지표 · 드로잉 · 매물대는 캔버스에…" (2LSB-2) 0×0 "지표 · 드로잉 · 매물대는 캔버스에서"
+      Text "이미 있음. 구성 상한은 가격 · 등…" (2LSC-2) 0×0 "이미 있음. 구성 상한은 가격 · 등락률 · 종가 선 1개 · 날짜 2개까지다. 그리드선도 면적 채움도 끝점"
+    Frame "03 · 사실" (2LXJ-2) 360×0
+      Frame "Frame" (2LXK-2) 0×0
+        Text "03 · 사실" (2LXL-2) 0×0 "03 · 사실"
+        Text "canvas_type: facts ·…" (2LXM-2) 0×0 "canvas_type: facts · 신규"
+      Frame "미니 카드" (2LXN-2) 360×0
+        Frame "Frame" (2LXO-2) 0×0
+          Text "종목정보" (2LXP-2) 0×0 "종목정보"
+          Text "삼성전자 005930" (2LXQ-2) 0×0 "삼성전자 005930"
+        Frame "Frame" (2LXR-2) 0×0
+          Frame "Frame" (2LXS-2) 0×0
+            Text "종가" (2LXT-2) 0×0 "종가"
+            Text "88,100" (2LXU-2) 120×0 "88,100"
+          Frame "Frame" (2LXV-2) 0×0
+            Text "전일비" (2LXW-2) 0×0 "전일비"
+            Text "+900 (+1.03%)" (2LXX-2) 120×0 "+900 (+1.03%)"
+          Frame "Frame" (2LXY-2) 0×0
+            Text "거래량" (2LXZ-2) 0×0 "거래량"
+            Text "11,689,068" (2LY0-2) 120×0 "11,689,068"
+          Frame "Frame" (2LY1-2) 0×0
+            Text "시가총액" (2LY2-2) 0×0 "시가총액"
+            Text "525.8조" (2LY3-2) 120×0 "525.8조"
+          Frame "Frame" (2LY4-2) 0×0
+            Text "기준시각" (2LY5-2) 0×0 "기준시각"
+            Text "2026-07-19 15:30" (2LY6-2) 120×0 "2026-07-19 15:30"
+        Text "항목 4개를 접었습니다 — 전체는 캔…" (2LY7-2) 0×0 "항목 4개를 접었습니다 — 전체는 캔버스에서"
+      Text "신규. 지금은 facts 봉투 중 주…" (2LY8-2) 0×0 "신규. 지금은 facts 봉투 중 주문 티켓만 카드가 되고 나머지 114개 operation이 카드 없이 흘"
+    Frame "04 · 복합" (2M1Z-2) 360×0
+      Frame "Frame" (2M20-2) 0×0
+        Text "04 · 복합" (2M21-2) 0×0 "04 · 복합"
+        Text "canvas_type: compoun…" (2M22-2) 0×0 "canvas_type: compound · 신규"
+      Frame "미니 카드" (2M23-2) 360×0
+        Frame "Frame" (2M24-2) 0×0
+          Text "계좌" (2M25-2) 0×0 "계좌"
+          Text "모의-주력" (2M26-2) 0×0 "모의-주력"
+        Frame "스칼라 밴드" (2M27-2) 0×0
+          Frame "Frame" (2M28-2) 0×0
+            Text "총평가" (2M29-2) 0×0 "총평가"
+            Text "18,420,500" (2M2A-2) 0×0 "18,420,500"
+          Frame "Frame" (2M2B-2) 0×0
+            Text "평가손익" (2M2C-2) 0×0 "평가손익"
+            Text "+612,300" (2M2D-2) 0×0 "+612,300"
+          Frame "Frame" (2M2E-2) 0×0
+            Text "수익률" (2M2F-2) 0×0 "수익률"
+            Text "+3.44%" (2M2G-2) 0×0 "+3.44%"
+        Frame "Frame" (2M2H-2) 0×0
+          Frame "Frame" (2M2I-2) 0×0
+            Text "종목" (2M2J-2) 0×0 "종목"
+            Text "평가금액" (2M2K-2) 96×0 "평가금액"
+          Frame "Frame" (2M2L-2) 0×0
+            Text "삼성전자" (2M2M-2) 0×0 "삼성전자"
+            Text "10,572,000" (2M2N-2) 96×0 "10,572,000"
+          Frame "Frame" (2M2O-2) 0×0
+            Text "SK하이닉스" (2M2P-2) 0×0 "SK하이닉스"
+            Text "7,848,500" (2M2Q-2) 96×0 "7,848,500"
+        Text "스칼라 3개 · 행 4개를 접었습니다…" (2M2R-2) 0×0 "스칼라 3개 · 행 4개를 접었습니다 — 전체는 캔버스에서"
+      Text "신규. 스칼라 밴드 3개 + 표 2행…" (2M2S-2) 0×0 "신규. 스칼라 밴드 3개 + 표 2행까지. 캔버스의 세로 그리드가 아니라 가로 밴드라는 점은 같고, 개수 상"
+  Frame "미니 카드 2행" (2M33-2) 0×0
+    Frame "05 · 미니 주문 티켓" (2M6L-2) 360×0
+      Frame "Frame" (2M6M-2) 0×0
+        Text "05 · 미니 주문 티켓" (2M6N-2) 0×0 "05 · 미니 주문 티켓"
+        Text "facts · card_title=주…" (2M6O-2) 0×0 "facts · card_title=주문 티켓"
+      Frame "미니 카드" (2M6P-2) 360×0
+        Frame "Frame" (2M6Q-2) 0×0
+          Text "주문 티켓" (2M6R-2) 0×0 "주문 티켓"
+          Text "모의-주력" (2M6S-2) 0×0 "모의-주력"
+        Frame "Frame" (2M6T-2) 0×0
+          Frame "Frame" (2M6U-2) 0×0
+            Text "종목" (2M6V-2) 0×0 "종목"
+            Text "삼성전자 005930" (2M6W-2) 120×0 "삼성전자 005930"
+          Frame "Frame" (2M6X-2) 0×0
+            Text "구분" (2M6Y-2) 0×0 "구분"
+            Text "매수 · 시장가" (2M6Z-2) 120×0 "매수 · 시장가"
+          Frame "Frame" (2M70-2) 0×0
+            Text "수량" (2M71-2) 0×0 "수량"
+            Text "10주" (2M72-2) 120×0 "10주"
+          Frame "Frame" (2M73-2) 0×0
+            Text "예상 체결금액" (2M74-2) 0×0 "예상 체결금액"
+            Text "881,000원" (2M75-2) 120×0 "881,000원"
+        Frame "Frame" (2M76-2) 0×0
+          Frame "Frame" (2M77-2) 0×0
+            Text "실행" (2M78-2) 0×0 "실행"
+          Frame "Frame" (2M79-2) 0×0
+            Text "취소" (2M7A-2) 0×0 "취소"
+          Rectangle "Rectangle" (2M7B-2) 0×0
+          Text "1회 확인" (2M7C-2) 0×0 "1회 확인"
+      Text "이미 있음. 실행 버튼을 가진 유일한…" (2M7D-2) 0×0 "이미 있음. 실행 버튼을 가진 유일한 미니 카드다. 없는 필드는 행을 만들지 않고, 차단 사유가 있을 때만 "
+    Frame "06 · 주문 확인" (2MAN-2) 360×0
+      Frame "Frame" (2MAO-2) 0×0
+        Text "06 · 주문 확인" (2MAP-2) 0×0 "06 · 주문 확인"
+        Text "canvas_type: action …" (2MAQ-2) 0×0 "canvas_type: action · 신규"
+      Frame "미니 카드" (2MAR-2) 360×0
+        Frame "Frame" (2MAS-2) 0×0
+          Text "주문 확인" (2MAT-2) 0×0 "주문 확인"
+          Text "모의-주력" (2MAU-2) 0×0 "모의-주력"
+        Frame "Frame" (2MAV-2) 0×0
+          Rectangle "Rectangle" (2MAW-2) 6×6
+          Text "주문 단계 · 체결 확인" (2MAX-2) 0×0 "주문 단계 · 체결 확인"
+        Frame "Frame" (2MAY-2) 0×0
+          Frame "Frame" (2MAZ-2) 0×0
+            Text "주문번호" (2MB0-2) 0×0 "주문번호"
+            Text "0000117" (2MB1-2) 120×0 "0000117"
+          Frame "Frame" (2MB2-2) 0×0
+            Text "거래소 구분" (2MB3-2) 0×0 "거래소 구분"
+            Text "KRX" (2MB4-2) 120×0 "KRX"
+        Text "표시 전용 · 실행과 최종 확인은 대…" (2MB5-2) 0×0 "표시 전용 · 실행과 최종 확인은 대화창에서만"
+      Text "신규. 05와 다르다 — 이미 낸 주…" (2MB6-2) 0×0 "신규. 05와 다르다 — 이미 낸 주문의 상태이지 새 주문이 아니다. 그래서 버튼이 없다. 허용 목록(주문번"
+    Frame "07 · 실시간 이벤트" (2MEA-2) 360×0
+      Frame "Frame" (2MEB-2) 0×0
+        Text "07 · 실시간 이벤트" (2MEC-2) 0×0 "07 · 실시간 이벤트"
+        Text "canvas_type: event ·…" (2MED-2) 0×0 "canvas_type: event · 신규"
+      Frame "미니 카드" (2MEE-2) 360×0
+        Frame "Frame" (2MEF-2) 0×0
+          Text "실시간 이벤트" (2MEG-2) 0×0 "실시간 이벤트"
+          Text "체결 · 005930" (2MEH-2) 0×0 "체결 · 005930"
+        Frame "Frame" (2MEI-2) 0×0
+          Rectangle "Rectangle" (2MEJ-2) 6×6
+          Text "수신 상태 · 연결됨" (2MEK-2) 0×0 "수신 상태 · 연결됨"
+        Frame "Frame" (2MEL-2) 0×0
+          Frame "Frame" (2MEM-2) 0×0
+            Text "15:29:58 · 88,100 · …" (2MEN-2) 0×0 "15:29:58 · 88,100 · 1,200"
+          Frame "Frame" (2MEO-2) 0×0
+            Text "15:29:57 · 88,000 · …" (2MEP-2) 0×0 "15:29:57 · 88,000 · 340"
+        Text "최근 2건 · 표시 전용 — 전체 로…" (2MEQ-2) 0×0 "최근 2건 · 표시 전용 — 전체 로그는 캔버스에서"
+      Text "신규. 수신 상태 배지 + 최근 기록…" (2MER-2) 0×0 "신규. 수신 상태 배지 + 최근 기록 2건. 기록이 없으면 “표시할 이벤트가 없습니다”를 그리고 건수를 지어"
+    Frame "08 · 인증 상태" (2MHB-2) 360×0
+      Frame "Frame" (2MHC-2) 0×0
+        Text "08 · 인증 상태" (2MHD-2) 0×0 "08 · 인증 상태"
+        Text "canvas_type: status …" (2MHE-2) 0×0 "canvas_type: status · 신규"
+      Frame "미니 카드" (2MHF-2) 360×0
+        Frame "Frame" (2MHG-2) 0×0
+          Text "연결 상태" (2MHH-2) 0×0 "연결 상태"
+          Text "Kiwoom OAuth" (2MHI-2) 0×0 "Kiwoom OAuth"
+        Frame "Frame" (2MHJ-2) 0×0
+          Rectangle "Rectangle" (2MHK-2) 6×6
+          Text "인증 상태 · 사용 가능" (2MHL-2) 0×0 "인증 상태 · 사용 가능"
+        Frame "Frame" (2MHM-2) 0×0
+          Frame "Frame" (2MHN-2) 0×0
+            Text "설정됨" (2MHO-2) 0×0 "설정됨"
+            Text "예" (2MHP-2) 120×0 "예"
+          Frame "Frame" (2MHQ-2) 0×0
+            Text "사용 가능" (2MHR-2) 0×0 "사용 가능"
+            Text "예" (2MHS-2) 120×0 "예"
+          Frame "Frame" (2MHT-2) 0×0
+            Text "만료 시각" (2MHU-2) 0×0 "만료 시각"
+            Text "2026-07-20 06:00" (2MHV-2) 120×0 "2026-07-20 06:00"
+        Text "토큰과 자격 증명 값은 표시하지 않음" (2MHW-2) 0×0 "토큰과 자격 증명 값은 표시하지 않음"
+      Text "신규. 상태 배지 + 설정됨 · 사용…" (2MHX-2) 0×0 "신규. 상태 배지 + 설정됨 · 사용 가능 · 만료 시각 세 행 고정. 캔버스와 같은 세 행이라 오브에서만 "
+  Frame "미니 카드 3행" (2MHZ-2) 0×0
+    Frame "09 · 본문" (2MK6-2) 360×0
+      Frame "Frame" (2MK7-2) 0×0
+        Text "09 · 본문" (2MK8-2) 0×0 "09 · 본문"
+        Text "canvas_type: reader …" (2MK9-2) 0×0 "canvas_type: reader · 신규"
+      Frame "미니 카드" (2MKA-2) 360×0
+        Frame "Frame" (2MKB-2) 0×0
+          Text "주요사항보고서" (2MKC-2) 0×0 "주요사항보고서"
+          Text "DART · 07-18" (2MKD-2) 0×0 "DART · 07-18"
+        Text "회사는 이사회 결의로 자기주식 취득 …" (2MKE-2) 0×0 "회사는 이사회 결의로 자기주식 취득 신탁계약 체결을 결정했습니다. 계약금액은 3,000억원이며 계약기간은 체"
+        Text "첫 문단만 · 전문 12,400자는 …" (2MKF-2) 0×0 "첫 문단만 · 전문 12,400자는 캔버스에서"
+      Text "신규. 긴 본문은 오브의 640px …" (2MKG-2) 0×0 "신규. 긴 본문은 오브의 640px 상한과 맞지 않는다. 제목 + 첫 문단 3줄까지만 펴고 남은 분량을 글자"
+    Frame "10 · 스트림" (2MO4-2) 360×0
+      Frame "Frame" (2MO5-2) 0×0
+        Text "10 · 스트림" (2MO6-2) 0×0 "10 · 스트림"
+        Text "canvas_type: stream …" (2MO7-2) 0×0 "canvas_type: stream · 신규"
+      Frame "미니 카드" (2MO8-2) 360×0
+        Frame "Frame" (2MO9-2) 0×0
+          Text "스트림 · 뉴스" (2MOA-2) 0×0 "스트림 · 뉴스"
+          Text "005930" (2MOB-2) 0×0 "005930"
+        Frame "Frame" (2MOC-2) 0×0
+          Frame "Frame" (2MOD-2) 0×0
+            Text "삼성전자, 자기주식 3,000억 취득…" (2MOE-2) 0×0 "삼성전자, 자기주식 3,000억 취득 신탁 결정"
+            Text "15:12 · DART" (2MOF-2) 0×0 "15:12 · DART"
+          Frame "Frame" (2MOG-2) 0×0
+            Text "반도체 수출 3개월 연속 증가" (2MOH-2) 0×0 "반도체 수출 3개월 연속 증가"
+            Text "14:40 · 연합인포맥스" (2MOI-2) 0×0 "14:40 · 연합인포맥스"
+        Text "최근 2건 · 18건 중 — 전체는 …" (2MOJ-2) 0×0 "최근 2건 · 18건 중 — 전체는 캔버스에서"
+      Text "신규. 제목 한 줄 + 시각·출처 한…" (2MOK-2) 0×0 "신규. 제목 한 줄 + 시각·출처 한 줄로 2건까지. 07 이벤트와 형태는 닮았지만 수신 상태 배지가 없다 "
+    Frame "공통 규칙" (2MT4-2) 760×0
+      Text "열 종이 함께 지키는 것" (2MT5-2) 0×0 "열 종이 함께 지키는 것"
+      Frame "Frame" (2MT6-2) 0×0
+        Frame "Frame" (2MT7-2) 0×0
+          Text "값을 짓지 않는다" (2MT8-2) 150×0 "값을 짓지 않는다"
+          Text "없는 필드는 행 자체를 만들지 않는다…" (2MT9-2) 0×0 "없는 필드는 행 자체를 만들지 않는다. 빈 값을 “—”로 채우면 “측정했는데 값이 없다”로 읽힌다."
+        Frame "Frame" (2MTA-2) 0×0
+          Text "접었으면 밝힌다" (2MTB-2) 150×0 "접었으면 밝힌다"
+          Text "실제로 접었을 때만, 접은 개수를 그…" (2MTC-2) 0×0 "실제로 접었을 때만, 접은 개수를 그대로 쓴다. 아무것도 안 접혔는데 고지를 내는 것도 거짓말이다."
+        Frame "Frame" (2MTD-2) 0×0
+          Text "실행은 05 하나" (2MTE-2) 150×0 "실행은 05 하나"
+          Text "미니 주문 티켓만 실행 버튼을 가진다…" (2MTF-2) 0×0 "미니 주문 티켓만 실행 버튼을 가진다. 나머지 아홉은 표시 전용이고, 행동은 셸로 넘긴다."
+        Frame "Frame" (2MTG-2) 0×0
+          Text "축소판이 아니다" (2MTH-2) 150×0 "축소판이 아니다"
+          Text "캔버스의 16종 전용 렌더러를 재사용…" (2MTI-2) 0×0 "캔버스의 16종 전용 렌더러를 재사용하지 않는다. 오브는 더 단순한 별도 렌더러이고, 그래서 캔버스가 바뀌어"
+        Frame "Frame" (2MTJ-2) 0×0
+          Text "innerHTML 0건" (2MTK-2) 150×0 "innerHTML 0건"
+          Text "전부 createElement · t…" (2MTL-2) 0×0 "전부 createElement · textContent로만 짓는다. 시세·공시 문자열이 그대로 마크업이 되는"
+      Rectangle "Rectangle" (2MTM-2) 0×1
+      Frame "Frame" (2MTN-2) 0×0
+        Frame "Frame" (2MTO-2) 0×0
+          Text "표" (2MTP-2) 0×0 "표"
+          Text "3행" (2MTQ-2) 0×0 "3행"
+        Frame "Frame" (2MTR-2) 0×0
+          Text "사실" (2MTS-2) 0×0 "사실"
+          Text "5행" (2MTT-2) 0×0 "5행"
+        Frame "Frame" (2MTU-2) 0×0
+          Text "복합" (2MTV-2) 0×0 "복합"
+          Text "스칼라 3 · 표 2행" (2MTW-2) 0×0 "스칼라 3 · 표 2행"
+        Frame "Frame" (2MTX-2) 0×0
+          Text "이벤트 · 스트림" (2MTY-2) 0×0 "이벤트 · 스트림"
+          Text "2건" (2MTZ-2) 0×0 "2건"
+        Frame "Frame" (2MU0-2) 0×0
+          Text "본문" (2MU1-2) 0×0 "본문"
+          Text "3줄" (2MU2-2) 0×0 "3줄"
+        Frame "Frame" (2MU3-2) 0×0
+          Text "카드 폭 · 패널 상한" (2MU4-2) 0×0 "카드 폭 · 패널 상한"
+          Text "360px · 640px" (2MU5-2) 0×0 "360px · 640px"

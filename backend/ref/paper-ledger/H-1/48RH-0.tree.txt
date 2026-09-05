@@ -1,0 +1,9 @@
+Frame "note/CC-06 / R09 · 시장 체온·VI" (48RH-0) 360×92
+  Frame "Frame" (48RI-0) 334×0
+    Text "원본 보드: CC-06 / R09 ·…" (48RJ-0) 0×0 "원본 보드: CC-06 / R09 · 시장 체온·VI"
+  Frame "Frame" (48RK-0) 334×0
+    Text "가져온 요소: KOSPI,K… · 체…" (48RL-0) 0×0 "가져온 요소: KOSPI,K… · 체결시간 · 현재가 · 전일대비 · 상승종목수"
+  Frame "Frame" (48RM-0) 334×0
+    Text "문법: facts" (48RN-0) 0×0 "문법: facts"
+  Frame "Frame" (48RO-0) 334×0
+    Text "접은 개수: 항목 44개" (48RP-0) 0×0 "접은 개수: 항목 44개"

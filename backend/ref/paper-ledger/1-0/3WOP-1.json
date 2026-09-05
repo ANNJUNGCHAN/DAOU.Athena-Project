@@ -1,0 +1,2920 @@
+{
+ "board_id": "3WOP-1",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "42 · 스냅샷 명세 — 모드별 저장 항목",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "3WOT-1",
+   "text": "42",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WOV-1",
+   "text": "스냅샷 명세 — 모드별 저장 항목",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WOW-1",
+   "text": "세션 하나를 봉인할 때 무엇을 남기는가. 값으로 남기거나 참조로 남긴다 — 저장 안 함은 없다.",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WOY-1",
+   "text": "신규 · 승인 대기",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WX0-1",
+   "text": "한 세션을 봉인할 때 남는 것 — 저장 안 함은 없다",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Legend"
+   ]
+  },
+  {
+   "id": "3WX5-1",
+   "text": "값으로 저장",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Legend",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WX9-1",
+   "text": "참조로 저장 · 원본은 제자리",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Legend",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WXB-1",
+   "text": "—",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Legend",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WXC-1",
+   "text": "그 모드에 개념 자체가 없음",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Legend",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WPQ-1",
+   "text": "저장 항목",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "Head Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WPU-1",
+   "text": "대화",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "Head Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WQ1-1",
+   "text": "그래프",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "Head Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WQ6-1",
+   "text": "에이전트",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "Head Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WQA-1",
+   "text": "플러그인",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "Head Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WQE-1",
+   "text": "백테스트",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "Head Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WQI-1",
+   "text": "대화 메시지 전체",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R1 대화 메시지 전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WQM-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R1 대화 메시지 전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WQQ-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R1 대화 메시지 전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WQU-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R1 대화 메시지 전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WQY-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R1 대화 메시지 전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WR2-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R1 대화 메시지 전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WR6-1",
+   "text": "캔버스 카드 스택",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R2 캔버스 카드 스택",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WRA-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R2 캔버스 카드 스택",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WRE-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R2 캔버스 카드 스택",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X4N-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R2 캔버스 카드 스택",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WRK-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R2 캔버스 카드 스택",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WRO-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R2 캔버스 카드 스택",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WSC-1",
+   "text": "화면 스크롤·선택 위치",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R3 화면 스크롤·선택 위치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WS8-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R3 화면 스크롤·선택 위치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WS4-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R3 화면 스크롤·선택 위치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WS0-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R3 화면 스크롤·선택 위치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WRW-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R3 화면 스크롤·선택 위치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WRS-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R3 화면 스크롤·선택 위치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WSF-1",
+   "text": "모드 전용 폼 값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R4 모드 전용 폼 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WSG-1",
+   "text": "전략 폼 · 필터 칩 · 드릴인 · 권한 초안 · 미전송 입력",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R4 모드 전용 폼 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X4S-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R4 모드 전용 폼 값",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X4X-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R4 모드 전용 폼 값",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X52-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R4 모드 전용 폼 값",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WSP-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R4 모드 전용 폼 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WST-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R4 모드 전용 폼 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WSW-1",
+   "text": "사용자 작성 코드",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R5 사용자 작성 코드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WSX-1",
+   "text": "파이썬 전략 원본",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R5 사용자 작성 코드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WSZ-1",
+   "text": "—",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R5 사용자 작성 코드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WT1-1",
+   "text": "—",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R5 사용자 작성 코드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WT3-1",
+   "text": "—",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R5 사용자 작성 코드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WT5-1",
+   "text": "—",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R5 사용자 작성 코드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X5H-1",
+   "text": "참조 + 버퍼 값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R5 사용자 작성 코드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WTD-1",
+   "text": "실행 로그",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R6 실행 로그",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X5M-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R6 실행 로그",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X5R-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R6 실행 로그",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X6L-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R6 실행 로그",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X6Q-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R6 실행 로그",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X6V-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R6 실행 로그",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WTW-1",
+   "text": "결과 데이터셋",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R7 결과 데이터셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WTX-1",
+   "text": "표·차트의 원본 행",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R7 결과 데이터셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X70-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R7 결과 데이터셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X75-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R7 결과 데이터셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X5W-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R7 결과 데이터셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X61-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R7 결과 데이터셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X7A-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R7 결과 데이터셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WUG-1",
+   "text": "필터·기간·정렬",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R8 필터·기간·정렬",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X57-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R8 필터·기간·정렬",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WUM-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R8 필터·기간·정렬",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WUQ-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R8 필터·기간·정렬",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X5C-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R8 필터·기간·정렬",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WUW-1",
+   "text": "값",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R8 필터·기간·정렬",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WUZ-1",
+   "text": "실행 핸들(진행률)",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R9 실행 핸들(진행률)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WV0-1",
+   "text": "job id로 재접속 · 진행률·부분 결과까지 이어 봄",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R9 실행 핸들(진행률)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X66-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R9 실행 핸들(진행률)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X6B-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R9 실행 핸들(진행률)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X7F-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R9 실행 핸들(진행률)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X6G-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R9 실행 핸들(진행률)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3X7K-1",
+   "text": "참조",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Matrix Card",
+    "Table",
+    "R9 실행 핸들(진행률)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WVF-1",
+   "text": "언제 저장하나",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "언제 저장하나"
+   ]
+  },
+  {
+   "id": "3WVK-1",
+   "text": "메시지·카드가 생길 때",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "언제 저장하나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WVL-1",
+   "text": "즉시 · 스트리밍 중에도",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "언제 저장하나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WVQ-1",
+   "text": "폼·코드·필터가 바뀔 때",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "언제 저장하나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WVR-1",
+   "text": "1s 디바운스 · 최대 5s",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "언제 저장하나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WVX-1",
+   "text": "실행 로그·진행률",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "언제 저장하나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WVY-1",
+   "text": "5s 체크포인트 + append",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "언제 저장하나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WW0-1",
+   "text": "어디에 남나",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "어디에 남나"
+   ]
+  },
+  {
+   "id": "3WW2-1",
+   "text": "대화 · 메시지",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "어디에 남나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WW3-1",
+   "text": "~/.athena/brain.sqlite3",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "어디에 남나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WW5-1",
+   "text": "폼 · 코드 · 로그",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "어디에 남나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WW6-1",
+   "text": "<프로젝트>/.athena/session/",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "어디에 남나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WW8-1",
+   "text": "큰 결과 데이터셋",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "어디에 남나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WW9-1",
+   "text": "session/result-3.parquet",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "어디에 남나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WWC-1",
+   "text": "얼마나 남기나",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "얼마나 남기나"
+   ]
+  },
+  {
+   "id": "3WWE-1",
+   "text": "세션 수·용량 상한",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "얼마나 남기나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WWF-1",
+   "text": "없음",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "얼마나 남기나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WWH-1",
+   "text": "결과 데이터셋",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "얼마나 남기나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WWI-1",
+   "text": "전부 보관",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "얼마나 남기나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WWK-1",
+   "text": "지우는 주체",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "얼마나 남기나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WWL-1",
+   "text": "사용자뿐",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Bottom Cards",
+    "얼마나 남기나",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WPL-1",
+   "text": "지금 백엔드 채팅 적재 스키마는 conversation_id · role · text · message_id · occurred_at만 받습니다. 이 표의 나머지는 전부 새 저장소가 필요합니다.",
+   "path": [
+    "42 · 스냅샷 명세 — 모드별 저장 항목",
+    "42 Content",
+    "Gap Strip"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3WOP-1",
+   "name": "42 · 스냅샷 명세 — 모드별 저장 항목",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "3WOQ-1",
+   "name": "42 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 86,
+   "depth": 1
+  },
+  {
+   "id": "3WOR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 573,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "3WOS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "3WOU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 509,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "3WOX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 109,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "3WP0-1",
+   "name": "42 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 722,
+   "depth": 1
+  },
+  {
+   "id": "3WP1-1",
+   "name": "Matrix Card",
+   "component": "Frame",
+   "w": 1600,
+   "h": 514,
+   "depth": 2
+  },
+  {
+   "id": "3WWZ-1",
+   "name": "Legend",
+   "component": "Frame",
+   "w": 1566,
+   "h": 18,
+   "depth": 3
+  },
+  {
+   "id": "3WX1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 388,
+   "h": 13,
+   "depth": 4
+  },
+  {
+   "id": "3WX2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 13,
+   "depth": 5
+  },
+  {
+   "id": "3WX3-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 6
+  },
+  {
+   "id": "3WX4-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 5,
+   "depth": 7
+  },
+  {
+   "id": "3WX6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 145,
+   "h": 13,
+   "depth": 5
+  },
+  {
+   "id": "3WX7-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 6
+  },
+  {
+   "id": "3WX8-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3WXA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 143,
+   "h": 12,
+   "depth": 5
+  },
+  {
+   "id": "3WPN-1",
+   "name": "Table",
+   "component": "Frame",
+   "w": 1566,
+   "h": 452,
+   "depth": 3
+  },
+  {
+   "id": "3WPO-1",
+   "name": "Head Row",
+   "component": "Frame",
+   "w": 1566,
+   "h": 44,
+   "depth": 4
+  },
+  {
+   "id": "3WPP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WPR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WPS-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WPT-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3WPV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WPW-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WPX-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 7
+  },
+  {
+   "id": "3WPY-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 7
+  },
+  {
+   "id": "3WPZ-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 7
+  },
+  {
+   "id": "3WQ0-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 7
+  },
+  {
+   "id": "3WQ2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WQ3-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WQ4-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "3WQ5-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "3WQ7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WQ8-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WQ9-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3WQB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WQC-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WQD-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3WQG-1",
+   "name": "R1 대화 메시지 전체",
+   "component": "Frame",
+   "w": 1566,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "3WQH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WQJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WQK-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WQL-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WQN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WQO-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WQP-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WQR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WQS-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WQT-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WQV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WQW-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WQX-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WQZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WR0-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WR1-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WR4-1",
+   "name": "R2 캔버스 카드 스택",
+   "component": "Frame",
+   "w": 1566,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "3WR5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WR7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WR8-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WR9-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WRB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WRC-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WRD-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WRF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X4K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X4L-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3X4M-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WRH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WRI-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WRJ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WRL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WRM-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WRN-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WRQ-1",
+   "name": "R3 화면 스크롤·선택 위치",
+   "component": "Frame",
+   "w": 1566,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "3WSB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WS7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WS9-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WSA-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WS3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WS5-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WS6-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WRZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WS1-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WS2-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WRV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WRX-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WRY-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WRR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WRT-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WRU-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WSD-1",
+   "name": "R4 모드 전용 폼 값",
+   "component": "Frame",
+   "w": 1566,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "3WSE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3WSH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X4P-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X4Q-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3X4R-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WSJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X4U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X4V-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3X4W-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WSL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X4Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X50-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3X51-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WSN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WWN-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WWO-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WSQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WSR-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WSS-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WSU-1",
+   "name": "R5 사용자 작성 코드",
+   "component": "Frame",
+   "w": 1566,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "3WSV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3WSY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WT0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WT2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WT4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3X5E-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X5F-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X5G-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3WTB-1",
+   "name": "R6 실행 로그",
+   "component": "Frame",
+   "w": 1566,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "3WTC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3X5J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X5K-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X5L-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X5O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X5P-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X5Q-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X6I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X6J-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X6K-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X6N-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X6O-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X6P-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X6S-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X6T-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X6U-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3WTU-1",
+   "name": "R7 결과 데이터셋",
+   "component": "Frame",
+   "w": 1566,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "3WTV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3X6X-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X6Y-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X6Z-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X72-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X73-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X74-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X5T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X5U-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X5V-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X5Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X5Z-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X60-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X77-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X78-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X79-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3WUE-1",
+   "name": "R8 필터·기간·정렬",
+   "component": "Frame",
+   "w": 1566,
+   "h": 45,
+   "depth": 4
+  },
+  {
+   "id": "3WUF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WUH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X54-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X55-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3X56-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WUJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WUK-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WUL-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WUN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WUO-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WUP-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WUR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X59-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X5A-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3X5B-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WUT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3WUU-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WUV-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WUX-1",
+   "name": "R9 실행 핸들(진행률)",
+   "component": "Frame",
+   "w": 1566,
+   "h": 44,
+   "depth": 4
+  },
+  {
+   "id": "3WUY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 230,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3X63-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X64-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X65-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X68-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X69-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X6A-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X7C-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X7D-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X7E-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X6D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X6E-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X6F-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3X7H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3X7I-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3X7J-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3WPF-1",
+   "name": "Bottom Cards",
+   "component": "Frame",
+   "w": 1600,
+   "h": 134,
+   "depth": 2
+  },
+  {
+   "id": "3WVE-1",
+   "name": "언제 저장하나",
+   "component": "Frame",
+   "w": 523,
+   "h": 134,
+   "depth": 3
+  },
+  {
+   "id": "3WVG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 489,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WVH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WVI-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 6
+  },
+  {
+   "id": "3WVJ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3WVM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 489,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WVN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WVO-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 6
+  },
+  {
+   "id": "3WVP-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3WVS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 489,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WVT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WVU-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 6
+  },
+  {
+   "id": "3WVV-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 7
+  },
+  {
+   "id": "3WVW-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "3WVZ-1",
+   "name": "어디에 남나",
+   "component": "Frame",
+   "w": 523,
+   "h": 134,
+   "depth": 3
+  },
+  {
+   "id": "3WW1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 489,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WW4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 489,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WW7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 489,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WWB-1",
+   "name": "얼마나 남기나",
+   "component": "Frame",
+   "w": 523,
+   "h": 134,
+   "depth": 3
+  },
+  {
+   "id": "3WWD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 489,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WWG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 489,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WWJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 489,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WPG-1",
+   "name": "Gap Strip",
+   "component": "Frame",
+   "w": 1600,
+   "h": 42,
+   "depth": 2
+  },
+  {
+   "id": "3WPH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 3
+  },
+  {
+   "id": "3WPI-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WPJ-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 5
+  },
+  {
+   "id": "3WPK-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 6,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "42": 1,
+  "스냅샷 명세 — 모드별 저장 항목": 1,
+  "세션 하나를 봉인할 때 무엇을 남기는가. 값으로 남기거나 참조로 남긴다 — 저장 안 함은 없다.": 1,
+  "신규 · 승인 대기": 1,
+  "한 세션을 봉인할 때 남는 것 — 저장 안 함은 없다": 1,
+  "값으로 저장": 1,
+  "참조로 저장 · 원본은 제자리": 1,
+  "—": 5,
+  "그 모드에 개념 자체가 없음": 1,
+  "저장 항목": 1,
+  "대화": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "백테스트": 1,
+  "대화 메시지 전체": 1,
+  "값": 25,
+  "캔버스 카드 스택": 1,
+  "화면 스크롤·선택 위치": 1,
+  "모드 전용 폼 값": 1,
+  "전략 폼 · 필터 칩 · 드릴인 · 권한 초안 · 미전송 입력": 1,
+  "사용자 작성 코드": 1,
+  "파이썬 전략 원본": 1,
+  "참조 + 버퍼 값": 1,
+  "실행 로그": 1,
+  "참조": 15,
+  "결과 데이터셋": 2,
+  "표·차트의 원본 행": 1,
+  "필터·기간·정렬": 1,
+  "실행 핸들(진행률)": 1,
+  "job id로 재접속 · 진행률·부분 결과까지 이어 봄": 1,
+  "언제 저장하나": 1,
+  "메시지·카드가 생길 때": 1,
+  "즉시 · 스트리밍 중에도": 1,
+  "폼·코드·필터가 바뀔 때": 1,
+  "1s 디바운스 · 최대 5s": 1,
+  "실행 로그·진행률": 1,
+  "5s 체크포인트 + append": 1,
+  "어디에 남나": 1,
+  "대화 · 메시지": 1,
+  "~/.athena/brain.sqlite3": 1,
+  "폼 · 코드 · 로그": 1,
+  "<프로젝트>/.athena/session/": 1,
+  "큰 결과 데이터셋": 1,
+  "session/result-3.parquet": 1,
+  "얼마나 남기나": 1,
+  "세션 수·용량 상한": 1,
+  "없음": 1,
+  "전부 보관": 1,
+  "지우는 주체": 1,
+  "사용자뿐": 1,
+  "지금 백엔드 채팅 적재 스키마는 conversation_id · role · text · message_id · occurred_at만 받습니다. 이 표의 나머지는 전부 새 저장소가 필요합니다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "82521b986a621e7901f40f419917d746e50efeb2a6879e558c2913b2c8c04b15"
+}

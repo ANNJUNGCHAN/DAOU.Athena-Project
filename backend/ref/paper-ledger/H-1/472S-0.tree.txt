@@ -1,0 +1,24 @@
+Frame "mini/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자" (472S-0) 360×420
+  Frame "Header" (473B-0) 0×0
+    Frame "Meta row" (473D-0) 0×0
+      Text "Eyebrow" (473F-0) 0×0
+      Text "As of" (473E-0) 0×0 "기준 09:42"
+    Text "Title" (473C-0) 0×0 "삼성전자 10주 시장가 신용융자"
+  Frame "Body" (472T-0) 0×0
+    Frame "Status" (4738-0) 0×0
+      Rectangle "Rectangle" (473A-0) 7×7
+      Text "주문 정보를 확인했어요" (4739-0) 0×0 "주문 정보를 확인했어요"
+    Frame "Confirm facts" (4731-0) 0×0
+      Frame "Frame" (4735-0) 0×0
+        Text "주문가능금액" (4737-0) 0×0 "주문가능금액"
+        Text "31,240,000원" (4736-0) 0×0 "31,240,000원"
+      Frame "Frame" (4732-0) 0×0
+        Text "계좌" (4734-0) 0×0 "계좌"
+        Text "키움증권 01" (4733-0) 0×0 "키움증권 01"
+    Frame "Confirm values" (472U-0) 0×0
+      Frame "Frame" (472Y-0) 0×0
+        Text "수량" (4730-0) 0×0 "수량"
+        Text "10주" (472Z-0) 0×0 "10주"
+      Frame "Frame" (472V-0) 0×0
+        Text "변화" (472X-0) 0×0 "변화"
+        Text "25%" (472W-0) 0×0 "25%"

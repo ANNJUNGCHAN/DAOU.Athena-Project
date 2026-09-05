@@ -1,0 +1,58 @@
+Frame "08 · 플러그인 대화 — 결과 턴" (3ZLW-0) 1680×986
+  Frame "board-head" (3ZLX-0) 0×0
+    Text "결과 턴" (3ZLY-0) 0×0 "결과 턴"
+    Text "승인한 뒤 무엇이 일어났는지 남깁니다" (3ZLZ-0) 0×0 "승인한 뒤 무엇이 일어났는지 남깁니다"
+  Frame "columns" (3ZM0-0) 0×0
+    Frame "col-success" (3ZM2-0) 304×0
+      Text "col-label" (3ZM3-0) 0×0 "성공"
+      Frame "result-turn" (3ZM4-0) 0×0
+        Text "등록했습니다" (3ZM5-0) 0×0 "등록했습니다"
+        Text "연결을 확인했습니다" (3ZM6-0) 0×0 "연결을 확인했습니다"
+        Text "기능 6개를 찾았습니다" (3ZM7-0) 0×0 "기능 6개를 찾았습니다"
+      Frame "canvas-row" (3ZM8-0) 0×0
+        Text "한국 주식 시세" (3ZM9-0) 0×0 "한국 주식 시세"
+        Frame "badges" (3ZMA-0) 0×0
+          Frame "Frame" (3ZMB-0) 0×0
+            Text "설치됨" (3ZMC-0) 0×0 "설치됨"
+          Frame "Frame" (3ZMD-0) 0×0
+            Text "기능 6" (3ZME-0) 0×0 "기능 6"
+          Frame "Frame" (3ZMF-0) 0×0
+            Text "허용 0" (3ZMG-0) 0×0 "허용 0"
+          Frame "Frame" (3ZMH-0) 0×0
+            Text "연결 확인됨" (3ZMI-0) 0×0 "연결 확인됨"
+    Frame "col-reject" (3ZMK-0) 304×0
+      Text "col-label" (3ZML-0) 0×0 "거부"
+      Frame "card-locked" (3ZMM-0) 0×0
+        Frame "Frame" (3ZMN-0) 0×0
+          Text "거부됨" (3ZMO-0) 0×0 "거부됨"
+        Text "웹 문서 읽기 설치" (3ZMP-0) 0×0 "웹 문서 읽기 설치"
+      Frame "result-turn" (3ZMQ-0) 0×0
+        Text "그대로 뒀습니다" (3ZMR-0) 0×0 "그대로 뒀습니다"
+      Frame "registry-row" (3ZMS-0) 0×0
+        Text "플러그인 목록" (3ZMT-0) 0×0 "플러그인 목록"
+        Frame "Frame" (3ZMU-0) 0×0
+          Text "변화 없음" (3ZMV-0) 0×0 "변화 없음"
+    Frame "col-retry" (3ZMX-0) 304×0
+      Text "col-label" (3ZMY-0) 0×0 "실패·재시도"
+      Frame "result-turn" (3ZMZ-0) 0×0
+        Text "등록되지 않은 별칭입니다" (3ZN0-0) 0×0 "등록되지 않은 별칭입니다"
+      Frame "retry-banner" (3ZN1-0) 0×0
+        Text "아직 설치되지 않았습니다" (3ZN2-0) 0×0 "아직 설치되지 않았습니다"
+        Frame "chip-retry" (3ZN3-0) 0×0
+          Text "다시 시도" (3ZN4-0) 0×0 "다시 시도"
+    Frame "col-restart" (3ZN6-0) 304×0
+      Text "col-label" (3ZN7-0) 0×0 "재시작 반영"
+      Frame "변형 · 런타임 켜짐" (3ZN8-0) 0×0
+        Text "런타임 켜짐" (3ZN9-0) 0×0 "런타임 켜짐"
+        Text "플러그인이 바뀌어 대화를 다시 시작했…" (3ZNA-0) 0×0 "플러그인이 바뀌어 대화를 다시 시작했습니다"
+        Text "방금 승인한 내용은 반영됐습니다" (3ZNB-0) 0×0 "방금 승인한 내용은 반영됐습니다"
+      Frame "변형 · 런타임 꺼짐" (3ZNC-0) 0×0
+        Text "런타임 꺼짐 · 기본" (3ZND-0) 0×0 "런타임 꺼짐 · 기본"
+        Text "다음 실행부터 반영됩니다" (3ZNE-0) 0×0 "다음 실행부터 반영됩니다"
+    Frame "col-discarded" (3ZNG-0) 304×0
+      Text "col-label" (3ZNH-0) 0×0 "모드 밖 폐기"
+      Frame "result-turn" (3ZNI-0) 0×0
+        Text "대화 모드 채팅" (3ZNJ-0) 0×0 "대화 모드 채팅"
+        Text "플러그인 모드에서 다시 요청합니다" (3ZNK-0) 0×0 "플러그인 모드에서 다시 요청합니다"
+      Frame "canvas-empty" (3ZNL-0) 0×120
+        Text "카드 0건" (3ZNM-0) 0×0 "카드 0건"

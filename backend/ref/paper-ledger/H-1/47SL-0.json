@@ -1,0 +1,341 @@
+{
+ "board_id": "47SL-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47TJ-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47TI-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47TG-0",
+   "text": "ELW 조건검색",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Header"
+   ]
+  },
+  {
+   "id": "47TE-0",
+   "text": "등락율",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47TD-0",
+   "text": "+12.16%",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47TB-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47TA-0",
+   "text": "98.6%",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47T8-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47T7-0",
+   "text": "2건",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47T4-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47T3-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47T2-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47T0-0",
+   "text": "ELW조건검색",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47SZ-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47SX-0",
+   "text": "기어링 10배 이상",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47SW-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47SU-0",
+   "text": "ELW조건검색",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47ST-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47SR-0",
+   "text": "잔존 30~90일",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47SQ-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47SN-0",
+   "text": "스칼라 2개, 행 6개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47SL-0",
+   "name": "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47TF-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47TH-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47SO-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47T5-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47TC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47T9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47T6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47T1-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47SV-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47SY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47SP-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47SS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47SM-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "ELW 조건검색": 1,
+  "등락율": 1,
+  "+12.16%": 1,
+  "변화": 1,
+  "98.6%": 1,
+  "핵심": 1,
+  "2건": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "ELW조건검색": 2,
+  "기어링 10배 이상": 1,
+  "잔존 30~90일": 1,
+  "스칼라 2개, 행 6개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "0af744040356d5158c0e98bc4d98cc9ed2febd9da5ff8f182daee7fe84c784ce"
+}

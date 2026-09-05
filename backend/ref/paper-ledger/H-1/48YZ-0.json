@@ -1,0 +1,92 @@
+{
+ "board_id": "48YZ-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48Z1-0",
+   "text": "원본 보드: CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+   "path": [
+    "note/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48Z3-0",
+   "text": "가져온 요소: 장운영구분 · 장시작예상잔여… · VI해제시각 · 종목코드 · VI발동횟수",
+   "path": [
+    "note/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48Z5-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48Z7-0",
+   "text": "접은 개수: 스칼라 1개 · 행 1개",
+   "path": [
+    "note/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48YZ-0",
+   "name": "note/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48Z0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48Z2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48Z4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48Z6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동": 1,
+  "가져온 요소: 장운영구분 · 장시작예상잔여… · VI해제시각 · 종목코드 · VI발동횟수": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 1개 · 행 1개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "23aa02878b2aadacc132c4de0484b17f5842f4cfc2515a94a67e397b074b1e54"
+}

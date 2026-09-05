@@ -1,0 +1,92 @@
+{
+ "board_id": "48XV-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-04 / R02-T4 · 호가 — 정규장 5단",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48XX-0",
+   "text": "원본 보드: CC-04 / R02-T4 · 호가 — 정규장 5단",
+   "path": [
+    "note/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48XZ-0",
+   "text": "가져온 요소: 종목코드 · 현재가 · 등락률",
+   "path": [
+    "note/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48Y1-0",
+   "text": "문법: table",
+   "path": [
+    "note/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48Y3-0",
+   "text": "접은 개수: 행 8개",
+   "path": [
+    "note/CC-04 / R02-T4 · 호가 — 정규장 5단",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48XV-0",
+   "name": "note/CC-04 / R02-T4 · 호가 — 정규장 5단",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48XW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48XY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48Y0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48Y2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-04 / R02-T4 · 호가 — 정규장 5단": 1,
+  "가져온 요소: 종목코드 · 현재가 · 등락률": 1,
+  "문법: table": 1,
+  "접은 개수: 행 8개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "1671c0dff5b52a3aa547c90fa2ddbb89f1039ba49afb55e3ee7c2d8426814588"
+}

@@ -1,0 +1,471 @@
+{
+ "board_id": "1I0-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "19 · 인증 — OAuth 토큰 ready",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "1JM-0",
+   "text": "3 / 3",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "1JL-0",
+   "text": "키움 인증이 연결되었습니다",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "1JK-0",
+   "text": "Athena는 토큰을 저장하지 않습니다. 만료 전에 자동으로 다시 받습니다.",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "1JP-0",
+   "text": "재발급까지 남은 시간",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-auth-body",
+    "auth-timer-card"
+   ]
+  },
+  {
+   "id": "1JR-0",
+   "text": "05:42:18",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-auth-body",
+    "auth-timer-card",
+    "auth-timer-row"
+   ]
+  },
+  {
+   "id": "1JS-0",
+   "text": "시 분 초",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-auth-body",
+    "auth-timer-card",
+    "auth-timer-row"
+   ]
+  },
+  {
+   "id": "1JT-0",
+   "text": "2026-08-25 21:12:04 만료",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-auth-body",
+    "auth-timer-card"
+   ]
+  },
+  {
+   "id": "1JW-0",
+   "text": "계좌",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-auth-body",
+    "auth-status-rows",
+    "uk-lrow (클릭 → 계좌 전환)"
+   ]
+  },
+  {
+   "id": "1JX-0",
+   "text": "모의-주력 · 등록됨",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-auth-body",
+    "auth-status-rows",
+    "uk-lrow (클릭 → 계좌 전환)"
+   ]
+  },
+  {
+   "id": "1JZ-0",
+   "text": "자동 재발급",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-auth-body",
+    "auth-status-rows",
+    "uk-lrow"
+   ]
+  },
+  {
+   "id": "1K0-0",
+   "text": "남은 10분에",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-auth-body",
+    "auth-status-rows",
+    "uk-lrow"
+   ]
+  },
+  {
+   "id": "1K2-0",
+   "text": "확인 주기",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-auth-body",
+    "auth-status-rows",
+    "uk-lrow"
+   ]
+  },
+  {
+   "id": "1K3-0",
+   "text": "60초마다",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-auth-body",
+    "auth-status-rows",
+    "uk-lrow"
+   ]
+  },
+  {
+   "id": "1K4-0",
+   "text": "남은 시간이 10분 아래로 내려가면 자동으로 다시 받습니다. 직접 누를 필요는 없습니다.",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-auth-body"
+   ]
+  },
+  {
+   "id": "1K9-0",
+   "text": "토큰 준비됨",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-auth-foot",
+    "auth-status-left"
+   ]
+  },
+  {
+   "id": "1KC-0",
+   "text": "연결 해제",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-auth-foot",
+    "auth-btn-group",
+    "uk-btn-text"
+   ]
+  },
+  {
+   "id": "1KE-0",
+   "text": "지금 재발급",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-auth-foot",
+    "auth-btn-group",
+    "uk-btn-ghost"
+   ]
+  },
+  {
+   "id": "1KG-0",
+   "text": "계속",
+   "path": [
+    "19 · 인증 — OAuth 토큰 ready",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-auth-foot",
+    "auth-btn-group",
+    "uk-btn-ghost · 계속"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1I0-0",
+   "name": "19 · 인증 — OAuth 토큰 ready",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "1I1-0",
+   "name": "Shell 창 · 온보딩 (#onboard)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "1IB-0",
+   "name": "onb-col (800px)",
+   "component": "Frame",
+   "w": 800,
+   "h": 734,
+   "depth": 2
+  },
+  {
+   "id": "1JJ-0",
+   "name": "onb-head",
+   "component": "Frame",
+   "w": 800,
+   "h": 134,
+   "depth": 3
+  },
+  {
+   "id": "1JN-0",
+   "name": "onb-body · onb-auth-body",
+   "component": "Frame",
+   "w": 800,
+   "h": 512,
+   "depth": 3
+  },
+  {
+   "id": "1JO-0",
+   "name": "auth-timer-card",
+   "component": "Frame",
+   "w": 716,
+   "h": 188,
+   "depth": 4
+  },
+  {
+   "id": "1JQ-0",
+   "name": "auth-timer-row",
+   "component": "Frame",
+   "w": 658,
+   "h": 78,
+   "depth": 5
+  },
+  {
+   "id": "1JU-0",
+   "name": "auth-status-rows",
+   "component": "Frame",
+   "w": 716,
+   "h": 108,
+   "depth": 4
+  },
+  {
+   "id": "1JV-0",
+   "name": "uk-lrow (클릭 → 계좌 전환)",
+   "component": "Frame",
+   "w": 716,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "1JY-0",
+   "name": "uk-lrow",
+   "component": "Frame",
+   "w": 716,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "1K1-0",
+   "name": "uk-lrow",
+   "component": "Frame",
+   "w": 716,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "1K6-0",
+   "name": "onb-auth-foot",
+   "component": "Frame",
+   "w": 800,
+   "h": 88,
+   "depth": 3
+  },
+  {
+   "id": "1K7-0",
+   "name": "auth-status-left",
+   "component": "Frame",
+   "w": 91,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "1K8-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 5
+  },
+  {
+   "id": "1KA-0",
+   "name": "auth-btn-group",
+   "component": "Frame",
+   "w": 298,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "1KB-0",
+   "name": "uk-btn-text",
+   "component": "Frame",
+   "w": 93,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "1KD-0",
+   "name": "uk-btn-ghost",
+   "component": "Frame",
+   "w": 101,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "1KF-0",
+   "name": "uk-btn-ghost · 계속",
+   "component": "Frame",
+   "w": 84,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "1KH-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "1KI-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "1IA-0",
+   "name": "타이틀바",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "1I2-0",
+   "name": "창 제어",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "1I8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "1I9-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "1I6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "1I7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "1I3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "1I4-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "1I5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "3 / 3": 1,
+  "키움 인증이 연결되었습니다": 1,
+  "Athena는 토큰을 저장하지 않습니다. 만료 전에 자동으로 다시 받습니다.": 1,
+  "재발급까지 남은 시간": 1,
+  "05:42:18": 1,
+  "시 분 초": 1,
+  "2026-08-25 21:12:04 만료": 1,
+  "계좌": 1,
+  "모의-주력 · 등록됨": 1,
+  "자동 재발급": 1,
+  "남은 10분에": 1,
+  "확인 주기": 1,
+  "60초마다": 1,
+  "남은 시간이 10분 아래로 내려가면 자동으로 다시 받습니다. 직접 누를 필요는 없습니다.": 1,
+  "토큰 준비됨": 1,
+  "연결 해제": 1,
+  "지금 재발급": 1,
+  "계속": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "7f524eeb37d1cc5c6d17941f735465e5fad32f5984331b957d98e1fbece26fd2"
+}

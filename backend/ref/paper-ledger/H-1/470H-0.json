@@ -1,0 +1,340 @@
+{
+ "board_id": "470H-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "471F-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "471E-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "471C-0",
+   "text": "오늘 주문 현황",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Header"
+   ]
+  },
+  {
+   "id": "471A-0",
+   "text": "종목별계좌평가현황",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4719-0",
+   "text": "8종목",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4717-0",
+   "text": "매수비중",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4716-0",
+   "text": "28.0%",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4714-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4713-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4710-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "470Z-0",
+   "text": "값",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "470Y-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "470W-0",
+   "text": "주문번호",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "470V-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "470T-0",
+   "text": "주문 0021833",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "470S-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "470Q-0",
+   "text": "체결누계금액",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "470P-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "470N-0",
+   "text": "누계 0원",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "470M-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "470J-0",
+   "text": "스칼라 2개, 행 3개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "470H-0",
+   "name": "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "471B-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "471D-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "470K-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4711-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4718-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4715-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4712-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "470X-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "470R-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "470U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "470L-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "470O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "470I-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "오늘 주문 현황": 1,
+  "종목별계좌평가현황": 1,
+  "8종목": 1,
+  "매수비중": 1,
+  "28.0%": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "주문번호": 1,
+  "주문 0021833": 1,
+  "체결누계금액": 1,
+  "누계 0원": 1,
+  "스칼라 2개, 행 3개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a0947b13e878e6cd571e1dee155353c85973b5efe93dec57ebe6b3d618651c3f"
+}

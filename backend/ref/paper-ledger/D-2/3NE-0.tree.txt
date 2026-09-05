@@ -1,0 +1,249 @@
+Frame "01 · 셸 — 그래프 모드 · 요약 뷰" (3NE-0) 1680×900
+  Frame "셸 창" (3NF-0) 0×0
+    Frame "사이드바" (3VF3-1) 268×0
+      Frame "이력 상단" (3VFY-1) 0×0
+        Frame "Frame" (3VG2-1) 0×0
+          Text "+" (3VG4-1) 0×0 "+"
+          Text "새 대화" (3VG3-1) 0×0 "새 대화"
+        Frame "Frame" (3VFZ-1) 0×0
+          Text "⌕" (3VG1-1) 0×0 "⌕"
+          Text "대화 검색" (3VG0-1) 0×0 "대화 검색"
+      Frame "이력 목록" (3VFA-1) 0×0
+        Frame "Frame" (3VFW-1) 0×0
+          Text "오늘" (3VFX-1) 0×0 "오늘"
+        Frame "Frame" (3VFT-1) 0×0
+          Text "삼성전자 흐름·재무 같이 보기" (3VFV-1) 0×0 "삼성전자 흐름·재무 같이 보기"
+          Rectangle "Rectangle" (3VFU-1) 5×5
+        Frame "Frame" (3VFR-1) 0×0
+          Text "88,000 넘으면 알려줘" (3VFS-1) 0×0 "88,000 넘으면 알려줘"
+        Frame "Frame" (3VFP-1) 0×0
+          Text "코스피 프로그램 매매 동향" (3VFQ-1) 0×0 "코스피 프로그램 매매 동향"
+        Frame "Frame" (3VFN-1) 0×0
+          Text "어제" (3VFO-1) 0×0 "어제"
+        Frame "Frame" (3VFL-1) 0×0
+          Text "SK하이닉스 유상증자 공시 읽기" (3VFM-1) 0×0 "SK하이닉스 유상증자 공시 읽기"
+        Frame "Frame" (3VFJ-1) 0×0
+          Text "모의 계좌 잔고 정리" (3VFK-1) 0×0 "모의 계좌 잔고 정리"
+        Frame "Frame" (3VFH-1) 0×0
+          Text "지난 7일" (3VFI-1) 0×0 "지난 7일"
+        Frame "Frame" (3VFF-1) 0×0
+          Text "반도체 ETF 비교" (3VFG-1) 0×0 "반도체 ETF 비교"
+        Frame "Frame" (3VFD-1) 0×0
+          Text "현대차 실적 발표 일정" (3VFE-1) 0×0 "현대차 실적 발표 일정"
+        Frame "Frame" (3VFB-1) 0×0
+          Text "더 보기" (3VFC-1) 0×0 "더 보기"
+      Frame "계정 행 — 설정 진입" (3VF4-1) 0×0
+        Rectangle "Rectangle" (3VF9-1) 5×5
+        Frame "Frame" (3VF6-1) 0×0
+          Text "모의–주력" (3VF8-1) 0×0 "모의–주력"
+          Text "토큰 5시간 42분 남음" (3VF7-1) 0×0 "토큰 5시간 42분 남음"
+        Text "⌃" (3VF5-1) 0×0 "⌃"
+    Frame "캔버스 — 요약 뷰" (3OI-0) 0×0
+      Frame "요약 헤더" (3R5-0) 0×0
+        Frame "Frame" (3R6-0) 0×0
+          Frame "뷰 토글" (3R7-0) 0×0
+            Frame "Frame" (3R8-0) 0×0
+              Text "요약" (3R9-0) 0×0 "요약"
+            Frame "Frame" (3RA-0) 0×0
+              Text "그래프" (3RB-0) 0×0 "그래프"
+            Frame "수집·노출" (3VH7-1) 0×0
+              Text "수집·노출" (3VH8-1) 0×0 "수집·노출"
+          Text "최근 갱신 12분 전" (3RC-0) 0×0 "최근 갱신 12분 전"
+        Frame "Frame" (3RD-0) 0×0
+          Frame "Frame" (3RE-0) 0×0
+            Text "최근 90일" (3RF-0) 0×0 "최근 90일"
+          Frame "Frame" (3RG-0) 0×0
+            Text "보강 순" (3RH-0) 0×0 "보강 순"
+      Frame "히어로" (3RI-0) 0×0
+        Frame "Frame" (3RJ-0) 0×0
+          Text "지금 읽히는 성향" (3RK-0) 0×0 "지금 읽히는 성향"
+          Text "반도체 대형주 중심, 배당으로 방어" (3RL-0) 0×0 "반도체 대형주 중심, 배당으로 방어"
+          Text "테마 군집 7개 · 성향 신호 312…" (3RM-0) 0×0 "테마 군집 7개 · 성향 신호 312개"
+        Frame "Frame" (3RN-0) 0×0
+          Frame "Frame" (3RO-0) 62×0
+            Text "34%" (3RP-0) 0×0 "34%"
+            Text "사실" (3RQ-0) 0×0 "사실"
+          Frame "Frame" (3RR-0) 62×0
+            Text "58%" (3RS-0) 0×0 "58%"
+            Text "추론" (3RT-0) 0×0 "추론"
+          Frame "Frame" (3RU-0) 62×0
+            Text "8%" (3RV-0) 0×0 "8%"
+            Text "불확실" (3RW-0) 0×0 "불확실"
+      Frame "확인 필요 배너" (45A-0) 0×0
+        Rectangle "Rectangle" (45B-0) 7×7
+        Text "확인이 필요한 것 3건" (45C-0) 0×0 "확인이 필요한 것 3건"
+        Text "체결과 대화가 어긋나는 성향이 있습니…" (45D-0) 0×0 "체결과 대화가 어긋나는 성향이 있습니다 — 답하시면 그대로 그래프가 갱신됩니다"
+        Frame "Frame" (45E-0) 0×0
+          Text "채팅에서 답하기" (45F-0) 0×0 "채팅에서 답하기"
+      Frame "성향 신호 섹션" (3RY-0) 0×0
+        Frame "Frame" (3RZ-0) 0×0
+          Frame "Frame" (3S0-0) 0×0
+            Text "성향 신호" (3S1-0) 0×0 "성향 신호"
+            Text "상위 5" (3S2-0) 0×0 "상위 5"
+          Text "전체 312개 보기" (3S3-0) 0×0 "전체 312개 보기"
+        Frame "Frame" (3S4-0) 0×0
+          Rectangle "Rectangle" (3S5-0) 16×0
+          Text "대상" (3S6-0) 190×0 "대상"
+          Text "관계" (3S7-0) 72×0 "관계"
+          Text "근거" (3S8-0) 0×0 "근거"
+          Text "출처" (3S9-0) 76×0 "출처"
+          Text "보강" (3SA-0) 56×0 "보강"
+          Text "최근" (3SB-0) 72×0 "최근"
+        Frame "Frame" (3SC-0) 0×0
+          Frame "Frame" (3SD-0) 16×0
+            Rectangle "Rectangle" (3SE-0) 7×7
+          Frame "Frame" (3SF-0) 190×0
+            Text "삼성전자" (3SG-0) 0×0 "삼성전자"
+            Text "005930" (3SH-0) 0×0 "005930"
+          Frame "Frame" (3SI-0) 72×0
+            Frame "Frame" (3SJ-0) 0×0
+              Text "보유" (3SK-0) 0×0 "보유"
+          Text "체결 4건 · 평균 71,200원 ·…" (3SL-0) 0×0 "체결 4건 · 평균 71,200원 · 계좌 잔고와 일치"
+          Text "체결·잔고" (3SM-0) 76×0 "체결·잔고"
+          Text "12" (3SN-0) 56×0 "12"
+          Text "2일 전" (3SO-0) 72×0 "2일 전"
+        Frame "Frame" (3SP-0) 0×0
+          Frame "Frame" (3SQ-0) 16×0
+            Rectangle "Rectangle" (3SR-0) 7×7
+          Frame "Frame" (3SS-0) 190×0
+            Text "고배당주" (3ST-0) 0×0 "고배당주"
+            Text "테마" (3SU-0) 0×0 "테마"
+          Frame "Frame" (3SV-0) 72×0
+            Frame "Frame" (3SW-0) 0×0
+              Text "선호" (3SX-0) 0×0 "선호"
+          Text "“금리가 어디로 가든 현금흐름은 나와…" (3SY-0) 0×0 "“금리가 어디로 가든 현금흐름은 나와야 편하다”"
+          Text "대화" (3SZ-0) 76×0 "대화"
+          Text "8" (3T0-0) 56×0 "8"
+          Text "5일 전" (3T1-0) 72×0 "5일 전"
+        Frame "Frame" (3T2-0) 0×0
+          Frame "Frame" (3T3-0) 16×0
+            Rectangle "Rectangle" (3T4-0) 7×7
+          Frame "Frame" (3T5-0) 190×0
+            Text "SK하이닉스" (3T6-0) 0×0 "SK하이닉스"
+            Text "000660" (3T7-0) 0×0 "000660"
+          Frame "Frame" (3T8-0) 72×0
+            Frame "Frame" (3T9-0) 0×0
+              Text "관심" (3TA-0) 0×0 "관심"
+          Text "HBM 질문 6개 대화 반복 — 매수…" (3TB-0) 0×0 "HBM 질문 6개 대화 반복 — 매수는 아직 없음"
+          Text "대화" (3TC-0) 76×0 "대화"
+          Text "6" (3TD-0) 56×0 "6"
+          Text "1주 전" (3TE-0) 72×0 "1주 전"
+        Frame "Frame" (3TF-0) 0×0
+          Frame "Frame" (3TG-0) 16×0
+            Rectangle "Rectangle" (3TH-0) 7×7
+          Frame "Frame" (3TI-0) 190×0
+            Text "단기 회전" (3TJ-0) 0×0 "단기 회전"
+            Text "성향" (3TK-0) 0×0 "성향"
+          Frame "Frame" (3TL-0) 72×0
+            Frame "Frame" (3TM-0) 0×0
+              Text "매매" (3TN-0) 0×0 "매매"
+          Text "평균 보유 3.2일 — 말은 “장기로…" (3TO-0) 0×0 "평균 보유 3.2일 — 말은 “장기로 간다”"
+          Text "체결 ↔ 대화" (3TP-0) 76×0 "체결 ↔ 대화"
+          Text "21" (3TQ-0) 56×0 "21"
+          Text "1일 전" (3TR-0) 72×0 "1일 전"
+        Frame "Frame" (3TS-0) 0×0
+          Frame "Frame" (3TT-0) 16×0
+            Rectangle "Rectangle" (3TU-0) 7×7
+          Frame "Frame" (3TV-0) 190×0
+            Text "2차전지" (3TW-0) 0×0 "2차전지"
+            Text "테마" (3TX-0) 0×0 "테마"
+          Frame "Frame" (3TY-0) 72×0
+            Frame "Frame" (3TZ-0) 0×0
+              Text "회피" (3U0-0) 0×0 "회피"
+          Text "3주 전 “이제 별로”가 한 번 — …" (3U1-0) 0×0 "3주 전 “이제 별로”가 한 번 — 이후 언급 없음"
+          Text "대화" (3U2-0) 76×0 "대화"
+          Text "1" (3U3-0) 56×0 "1"
+          Text "3주 전" (3U4-0) 72×0 "3주 전"
+      Frame "Frame" (3U6-0) 0×0
+        Frame "테마 군집" (3U7-0) 420×0
+          Frame "Frame" (3U8-0) 0×0
+            Text "테마 군집" (3U9-0) 0×0 "테마 군집"
+            Text "7개 중 3개" (3UA-0) 0×0 "7개 중 3개"
+          Frame "군집 반도체" (3UB-0) 0×0
+            Frame "Frame" (3UC-0) 0×0
+              Text "반도체 대형주" (3UD-0) 0×0 "반도체 대형주"
+              Text "9종목" (3UE-0) 0×0 "9종목"
+            Frame "Frame" (3UF-0) 0×0
+              Frame "Frame" (3UG-0) 0×3
+                Rectangle "Rectangle" (3UH-0) 0×3
+              Text "응집 74%" (3UI-0) 64×0 "응집 74%"
+          Frame "군집 배당방어" (3UJ-0) 0×0
+            Frame "Frame" (3UK-0) 0×0
+              Text "배당 방어 바스켓" (3UL-0) 0×0 "배당 방어 바스켓"
+              Text "6종목" (3UM-0) 0×0 "6종목"
+            Frame "Frame" (3UN-0) 0×0
+              Frame "Frame" (3UO-0) 0×3
+                Rectangle "Rectangle" (3UP-0) 0×3
+              Text "응집 58%" (3UQ-0) 64×0 "응집 58%"
+          Frame "군집 미명명" (3UR-0) 0×0
+            Frame "Frame" (3US-0) 0×0
+              Frame "Frame" (3UT-0) 0×0
+                Text "한국항공우주 외" (3UU-0) 0×0 "한국항공우주 외"
+                Frame "Frame" (3UV-0) 0×0
+                  Text "이름 없음" (3UW-0) 0×0 "이름 없음"
+              Text "4종목" (3UX-0) 0×0 "4종목"
+            Frame "Frame" (3UY-0) 0×0
+              Frame "Frame" (3UZ-0) 0×3
+                Rectangle "Rectangle" (3V0-0) 0×3
+              Text "응집 19%" (3V1-0) 64×0 "응집 19%"
+        Frame "숨은 연관" (3V5-0) 0×0
+          Frame "Frame" (3V6-0) 0×0
+            Text "숨은 연관" (3V7-0) 0×0 "숨은 연관"
+            Text "본인이 말한 적 없는 연결" (3V8-0) 0×0 "본인이 말한 적 없는 연결"
+          Frame "연관 1" (3V9-0) 0×0
+            Frame "Frame" (3VA-0) 0×0
+              Text "한미반도체" (3VB-0) 0×0 "한미반도체"
+              Text "↔" (3VC-0) 0×0 "↔"
+              Text "배당 방어 바스켓" (3VD-0) 0×0 "배당 방어 바스켓"
+              Text "8.5" (3VE-0) 0×0 "8.5"
+            Text "두 군집을 잇는 유일한 연결 · 주변…" (3VF-0) 0×0 "두 군집을 잇는 유일한 연결 · 주변부(2)에서 허브(11)로 · 직접 말한 적 없음"
+          Frame "연관 2" (3VG-0) 0×0
+            Frame "Frame" (3VH-0) 0×0
+              Text "금리 인하" (3VI-0) 0×0 "금리 인하"
+              Text "↔" (3VJ-0) 0×0 "↔"
+              Text "한국항공우주" (3VK-0) 0×0 "한국항공우주"
+              Text "6.0" (3VL-0) 0×0 "6.0"
+            Text "타입 교차(거시 테마 ↔ 개별 종목)…" (3VM-0) 0×0 "타입 교차(거시 테마 ↔ 개별 종목) · 군집 교차 · 근거는 추론"
+          Frame "연관 3" (3VN-0) 0×0
+            Frame "Frame" (3VO-0) 0×0
+              Text "원/달러 환율" (3VP-0) 0×0 "원/달러 환율"
+              Text "↔" (3VQ-0) 0×0 "↔"
+              Text "SK하이닉스" (3VR-0) 0×0 "SK하이닉스"
+              Text "5.5" (3VS-0) 0×0 "5.5"
+            Text "3개 대화에서 나란히 등장 · 인과로…" (3VT-0) 0×0 "3개 대화에서 나란히 등장 · 인과로 말한 적은 없어 불확실로 표시"
+    Frame "Frame" (3OJ-0) 400×0
+      Frame "채팅 헤더" (3OK-0) 0×0
+        Text "그래프에게 묻기" (3OL-0) 0×0 "그래프에게 묻기"
+        Text "답이 캔버스를 바꿉니다" (3OM-0) 0×0 "답이 캔버스를 바꿉니다"
+      Frame "대화 본문" (3ON-0) 0×0
+        Frame "Frame" (3OO-0) 0×0
+          Frame "Frame" (3OP-0) 0×0
+            Text "한미반도체가 배당주랑 왜 엮여 있어?" (3OQ-0) 0×0 "한미반도체가 배당주랑 왜 엮여 있어?"
+        Frame "Frame" (3OR-0) 0×0
+          Frame "Frame" (3OS-0) 0×0
+            Rectangle "Rectangle" (3OT-0) 5×5
+            Text "경로 탐색" (3OU-0) 0×0 "경로 탐색"
+            Text "한미반도체 → 배당 방어 바스켓" (3OV-0) 0×0 "한미반도체 → 배당 방어 바스켓"
+          Frame "Frame" (3OW-0) 0×0
+            Rectangle "Rectangle" (3OX-0) 5×5
+            Text "이웃 조회" (3OY-0) 0×0 "이웃 조회"
+            Text "7건" (3OZ-0) 0×0 "7건"
+        Text "직접 말씀하신 적은 없습니다. 그래프…" (3P0-0) 0×0 "직접 말씀하신 적은 없습니다. 그래프가 스스로 이은 추론 연결이고, 근거는 두 가지입니다 — 두 군집을 잇는"
+        Text "캔버스에 경로를 표시했습니다. 아니라…" (3P1-0) 0×0 "캔버스에 경로를 표시했습니다. 아니라고 하시면 이 연결을 지우겠습니다."
+      Frame "입력 스택" (3P2-0) 0×0
+        Frame "Frame" (3P3-0) 0×0
+          Text "그래프에 대해 물어보세요" (3P4-0) 0×0 "그래프에 대해 물어보세요"
+          Text "29s" (3P5-0) 0×0 "29s"
+        Frame "control-strip" (3P6-0) 0×0
+          Frame "키우미 점 — 모드 전환" (3P7-0) 22×22
+            Rectangle "Rectangle" (3P8-0) 3×7
+            Rectangle "Rectangle" (3P9-0) 3×7
+          Frame "Frame" (3PA-0) 0×0
+            Text "그래프" (3PB-0) 0×0 "그래프"
+          Frame "Frame" (3PC-0) 0×0
+            Text "CLAUDE" (3PD-0) 0×0 "CLAUDE"
+          Frame "Frame" (3PE-0) 0×0
+            Text "감시 2" (3PF-0) 0×0 "감시 2"
+          Rectangle "Rectangle" (3PG-0) 0×0
+          Frame "Frame" (3PH-0) 0×0
+            Text "OPUS · HIGH" (3PI-0) 0×0 "OPUS · HIGH"

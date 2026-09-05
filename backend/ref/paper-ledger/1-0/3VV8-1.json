@@ -1,0 +1,1520 @@
+{
+ "board_id": "3VV8-1",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "3VVN-1",
+   "text": "37",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VVP-1",
+   "text": "프로젝트 ⋯ — 고정 · 탐색기 · 제거",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VVQ-1",
+   "text": "⋯ 메뉴는 셋뿐입니다. 제거는 폴더를 지웁니다.",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VVS-1",
+   "text": "신규 · 승인 대기",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VXM-1",
+   "text": "프로젝트",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Anchor Group",
+    "Sidebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VYT-1",
+   "text": "아테나",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Anchor Group",
+    "Sidebar",
+    "Row 아테나 (hover)"
+   ]
+  },
+  {
+   "id": "3VZI-1",
+   "text": "키움 리서치",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Anchor Group",
+    "Sidebar",
+    "Row 키움 리서치"
+   ]
+  },
+  {
+   "id": "3VZN-1",
+   "text": "개인 연구",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Anchor Group",
+    "Sidebar",
+    "Row 개인 연구"
+   ]
+  },
+  {
+   "id": "3W10-1",
+   "text": "최상단 고정",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Anchor Group",
+    "Popover",
+    "Item Pin",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W11-1",
+   "text": "목록 맨 위에 붙여 둡니다",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Anchor Group",
+    "Popover",
+    "Item Pin",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W1E-1",
+   "text": "탐색기에서 열기",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Anchor Group",
+    "Popover",
+    "Item Explorer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W1F-1",
+   "text": "이 프로젝트 폴더를 창으로 엽니다",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Anchor Group",
+    "Popover",
+    "Item Explorer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W1O-1",
+   "text": "프로젝트 제거",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Anchor Group",
+    "Popover",
+    "Item Remove",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W1P-1",
+   "text": "폴더와 그 안의 파일을 지웁니다",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Anchor Group",
+    "Popover",
+    "Item Remove",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W2R-1",
+   "text": "이름 바꾸기는 프로젝트 행을 두 번 누르세요",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Anchor Group",
+    "Popover",
+    "Footnote"
+   ]
+  },
+  {
+   "id": "3W33-1",
+   "text": "고정 전",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Pin Demo",
+    "Before"
+   ]
+  },
+  {
+   "id": "3W36-1",
+   "text": "키움 리서치",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Pin Demo",
+    "Before",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W39-1",
+   "text": "아테나",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Pin Demo",
+    "Before",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W3C-1",
+   "text": "개인 연구",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Pin Demo",
+    "Before",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W4C-1",
+   "text": "고정 후",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Pin Demo",
+    "After"
+   ]
+  },
+  {
+   "id": "3W4G-1",
+   "text": "아테나",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Pin Demo",
+    "After",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W4J-1",
+   "text": "키움 리서치",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Pin Demo",
+    "After",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W4M-1",
+   "text": "개인 연구",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Upper",
+    "Pin Demo",
+    "After",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W5J-1",
+   "text": "프로젝트를 제거합니다",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Lower",
+    "Remove Dialog",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W5K-1",
+   "text": "폴더와 그 안의 모든 파일이 지워집니다. 되돌릴 수 없습니다.",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Lower",
+    "Remove Dialog"
+   ]
+  },
+  {
+   "id": "3W5M-1",
+   "text": "C:\\Projects\\DAOU.Athena",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Lower",
+    "Remove Dialog",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W6I-1",
+   "text": "아테나",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Lower",
+    "Remove Dialog",
+    "Confirm Input"
+   ]
+  },
+  {
+   "id": "3W6K-1",
+   "text": "프로젝트 이름을 그대로 입력",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Lower",
+    "Remove Dialog",
+    "Confirm Input"
+   ]
+  },
+  {
+   "id": "3W6N-1",
+   "text": "취소",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Lower",
+    "Remove Dialog",
+    "Dialog Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W6P-1",
+   "text": "영구 삭제",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Lower",
+    "Remove Dialog",
+    "Dialog Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W7P-1",
+   "text": "왜 이름을 다시 치게 하는가",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Lower",
+    "Why Retype"
+   ]
+  },
+  {
+   "id": "3W7Q-1",
+   "text": "이 단추는 목록에서 항목 하나를 빼는 게 아니라 디스크의 폴더를 통째로 지웁니다. 실수 한 번의 대가가 파일 전부이므로, 누르는 손보다 읽는 눈을 먼저 붙잡아야 합니다.",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Lower",
+    "Why Retype"
+   ]
+  },
+  {
+   "id": "3W7R-1",
+   "text": "이름을 직접 옮겨 적는 동안 사용자는 자기가 무엇을 지우는지 한 번 더 확인하게 됩니다. 이름이 정확히 일치하기 전까지 ‘영구 삭제’는 눌리지 않습니다.",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Lower",
+    "Why Retype"
+   ]
+  },
+  {
+   "id": "3W7Y-1",
+   "text": "폴더는 두고 목록에서만 빼려면 → 대화 보관",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Stage",
+    "Lower",
+    "Why Retype",
+    "Alternative"
+   ]
+  },
+  {
+   "id": "3W86-1",
+   "text": "⋯ 는 셋뿐이다",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rail Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W87-1",
+   "text": "PROJECT · MENU",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rail Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W88-1",
+   "text": "메뉴를 늘리지 않는 대신, 셋 각각의 결과를 분명히 적는다.",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "3W8F-1",
+   "text": "1",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W8D-1",
+   "text": "고정은 순서만 바꿈",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W8B-1",
+   "text": "최상단 고정은 목록 순서에만 손대고 파일은 건드리지 않습니다. 고정된 행에는 별을 달아 이유를 보입니다.",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rule 1"
+   ]
+  },
+  {
+   "id": "3W8L-1",
+   "text": "2",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W8J-1",
+   "text": "탐색기는 앞에 있는 것을 열 뿐",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W8H-1",
+   "text": "프로젝트가 점유한 폴더를 운영체제 창으로 엽니다. 새 폴더를 만들거나 경로를 바꾸지 않습니다.",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rule 1"
+   ]
+  },
+  {
+   "id": "3W8R-1",
+   "text": "3",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W8P-1",
+   "text": "제거는 마지막에 둔다",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3W8N-1",
+   "text": "파괴적인 항목은 메뉴 맨 아래, 빨간색으로 따로 놓습니다. 누르면 바로 지우지 않고 확인 다이얼로그를 거칩니다.",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Rule 1"
+   ]
+  },
+  {
+   "id": "3WAI-1",
+   "text": "제거는 파일 삭제다",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Warn Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WAJ-1",
+   "text": "‘프로젝트 제거’는 목록에서 빼는 게 아니라 폴더 삭제입니다. 휴지통을 거치지 않는 영구 삭제라면 다이얼로그에 그렇게 적어야 합니다.",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Warn Note"
+   ]
+  },
+  {
+   "id": "3WAK-1",
+   "text": "지금 코드에서는 이 ⋯ 메뉴 네 항목이 전부 비활성이고, 툴팁은 “프로젝트 연결 정보가 있을 때 사용할 수 있습니다”입니다. 연결 정보가 곧 폴더 경로입니다.",
+   "path": [
+    "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+    "37 Content",
+    "Interaction Rail",
+    "Warn Note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3VV8-1",
+   "name": "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "3VVK-1",
+   "name": "37 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 86,
+   "depth": 1
+  },
+  {
+   "id": "3VVL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 510,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "3VVM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "3VVO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 446,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "3VVR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 109,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "3VVZ-1",
+   "name": "37 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 722,
+   "depth": 1
+  },
+  {
+   "id": "3VW0-1",
+   "name": "Stage",
+   "component": "Frame",
+   "w": 1150,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3VXG-1",
+   "name": "Upper",
+   "component": "Frame",
+   "w": 1148,
+   "h": 380,
+   "depth": 3
+  },
+  {
+   "id": "3VXJ-1",
+   "name": "Anchor Group",
+   "component": "Frame",
+   "w": 780,
+   "h": 183,
+   "depth": 4
+  },
+  {
+   "id": "3VXK-1",
+   "name": "Sidebar",
+   "component": "Frame",
+   "w": 254,
+   "h": 149,
+   "depth": 5
+  },
+  {
+   "id": "3VXL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 15,
+   "depth": 6
+  },
+  {
+   "id": "3VYQ-1",
+   "name": "Row 아테나 (hover)",
+   "component": "Frame",
+   "w": 228,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3VYR-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VYS-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3VYU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VYV-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3VYW-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 9
+  },
+  {
+   "id": "3VYX-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3VYY-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3VYZ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3VZ0-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3VZ1-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3VZ2-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3VZ3-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 9
+  },
+  {
+   "id": "3VZF-1",
+   "name": "Row 키움 리서치",
+   "component": "Frame",
+   "w": 228,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3VZG-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VZH-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3VZJ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3VZK-1",
+   "name": "Row 개인 연구",
+   "component": "Frame",
+   "w": 228,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3VZL-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VZM-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3VZO-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 56,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3W0U-1",
+   "name": "Popover",
+   "component": "Frame",
+   "w": 250,
+   "h": 183,
+   "depth": 5
+  },
+  {
+   "id": "3W0V-1",
+   "name": "Item Pin",
+   "component": "Frame",
+   "w": 236,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3W0W-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3W0X-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3W0Y-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3W0Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 115,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3W17-1",
+   "name": "Item Explorer",
+   "component": "Frame",
+   "w": 236,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3W18-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3W19-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3W1A-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 8
+  },
+  {
+   "id": "3W1B-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3W1C-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3W1D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3W1G-1",
+   "name": "Item Remove",
+   "component": "Frame",
+   "w": 236,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3W1H-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3W1I-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 12,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3W1J-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 1,
+   "depth": 8
+  },
+  {
+   "id": "3W1K-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 11,
+   "depth": 8
+  },
+  {
+   "id": "3W1L-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3W1M-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3W1N-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 145,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "3W2P-1",
+   "name": "Divider",
+   "component": "Frame",
+   "w": 238,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "3W2Q-1",
+   "name": "Footnote",
+   "component": "Frame",
+   "w": 236,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3W31-1",
+   "name": "Pin Demo",
+   "component": "Frame",
+   "w": 300,
+   "h": 284,
+   "depth": 4
+  },
+  {
+   "id": "3W32-1",
+   "name": "Before",
+   "component": "Frame",
+   "w": 300,
+   "h": 137,
+   "depth": 5
+  },
+  {
+   "id": "3W34-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 274,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3W35-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3W37-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 274,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3W38-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3W3A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 274,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3W3B-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3W4B-1",
+   "name": "After",
+   "component": "Frame",
+   "w": 300,
+   "h": 137,
+   "depth": 5
+  },
+  {
+   "id": "3W4D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 274,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3W4E-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3W4F-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 8
+  },
+  {
+   "id": "3W4H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 274,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3W4I-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3W4K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 274,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3W4L-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3VXH-1",
+   "name": "Lower",
+   "component": "Frame",
+   "w": 1148,
+   "h": 340,
+   "depth": 3
+  },
+  {
+   "id": "3W5C-1",
+   "name": "Remove Dialog",
+   "component": "Frame",
+   "w": 520,
+   "h": 291,
+   "depth": 4
+  },
+  {
+   "id": "3W5D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 478,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "3W5E-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 28,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3W5F-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3W5G-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3W5H-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3W5I-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 13,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3W5L-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 478,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "3W6H-1",
+   "name": "Confirm Input",
+   "component": "Frame",
+   "w": 478,
+   "h": 38,
+   "depth": 5
+  },
+  {
+   "id": "3W6J-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3W6L-1",
+   "name": "Dialog Footer",
+   "component": "Frame",
+   "w": 478,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3W6M-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "3W6O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 80,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "3W7O-1",
+   "name": "Why Retype",
+   "component": "Frame",
+   "w": 556,
+   "h": 291,
+   "depth": 4
+  },
+  {
+   "id": "3W7T-1",
+   "name": "Alternative",
+   "component": "Frame",
+   "w": 556,
+   "h": 42,
+   "depth": 5
+  },
+  {
+   "id": "3W7U-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3W7V-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3W7W-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "3W7X-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3VW1-1",
+   "name": "Interaction Rail",
+   "component": "Frame",
+   "w": 426,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3W84-1",
+   "name": "Rail Header",
+   "component": "Frame",
+   "w": 388,
+   "h": 55,
+   "depth": 3
+  },
+  {
+   "id": "3W85-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 388,
+   "h": 21,
+   "depth": 4
+  },
+  {
+   "id": "3W8A-1",
+   "name": "Rule 1",
+   "component": "Frame",
+   "w": 388,
+   "h": 88,
+   "depth": 3
+  },
+  {
+   "id": "3W8C-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3W8E-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3W8G-1",
+   "name": "Rule 1",
+   "component": "Frame",
+   "w": 388,
+   "h": 88,
+   "depth": 3
+  },
+  {
+   "id": "3W8I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3W8K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3W8M-1",
+   "name": "Rule 1",
+   "component": "Frame",
+   "w": 388,
+   "h": 88,
+   "depth": 3
+  },
+  {
+   "id": "3W8O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3W8Q-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3WAC-1",
+   "name": "Warn Note",
+   "component": "Frame",
+   "w": 388,
+   "h": 122,
+   "depth": 3
+  },
+  {
+   "id": "3WAD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WAE-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WAF-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "3WAG-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3WAH-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 13,
+   "h": 12,
+   "depth": 6
+  }
+ ],
+ "text_multiset": {
+  "37": 1,
+  "프로젝트 ⋯ — 고정 · 탐색기 · 제거": 1,
+  "⋯ 메뉴는 셋뿐입니다. 제거는 폴더를 지웁니다.": 1,
+  "신규 · 승인 대기": 1,
+  "프로젝트": 1,
+  "아테나": 4,
+  "키움 리서치": 3,
+  "개인 연구": 3,
+  "최상단 고정": 1,
+  "목록 맨 위에 붙여 둡니다": 1,
+  "탐색기에서 열기": 1,
+  "이 프로젝트 폴더를 창으로 엽니다": 1,
+  "프로젝트 제거": 1,
+  "폴더와 그 안의 파일을 지웁니다": 1,
+  "이름 바꾸기는 프로젝트 행을 두 번 누르세요": 1,
+  "고정 전": 1,
+  "고정 후": 1,
+  "프로젝트를 제거합니다": 1,
+  "폴더와 그 안의 모든 파일이 지워집니다. 되돌릴 수 없습니다.": 1,
+  "C:\\Projects\\DAOU.Athena": 1,
+  "프로젝트 이름을 그대로 입력": 1,
+  "취소": 1,
+  "영구 삭제": 1,
+  "왜 이름을 다시 치게 하는가": 1,
+  "이 단추는 목록에서 항목 하나를 빼는 게 아니라 디스크의 폴더를 통째로 지웁니다. 실수 한 번의 대가가 파일 전부이므로, 누르는 손보다 읽는 눈을 먼저 붙잡아야 합니다.": 1,
+  "이름을 직접 옮겨 적는 동안 사용자는 자기가 무엇을 지우는지 한 번 더 확인하게 됩니다. 이름이 정확히 일치하기 전까지 ‘영구 삭제’는 눌리지 않습니다.": 1,
+  "폴더는 두고 목록에서만 빼려면 → 대화 보관": 1,
+  "⋯ 는 셋뿐이다": 1,
+  "PROJECT · MENU": 1,
+  "메뉴를 늘리지 않는 대신, 셋 각각의 결과를 분명히 적는다.": 1,
+  "1": 1,
+  "고정은 순서만 바꿈": 1,
+  "최상단 고정은 목록 순서에만 손대고 파일은 건드리지 않습니다. 고정된 행에는 별을 달아 이유를 보입니다.": 1,
+  "2": 1,
+  "탐색기는 앞에 있는 것을 열 뿐": 1,
+  "프로젝트가 점유한 폴더를 운영체제 창으로 엽니다. 새 폴더를 만들거나 경로를 바꾸지 않습니다.": 1,
+  "3": 1,
+  "제거는 마지막에 둔다": 1,
+  "파괴적인 항목은 메뉴 맨 아래, 빨간색으로 따로 놓습니다. 누르면 바로 지우지 않고 확인 다이얼로그를 거칩니다.": 1,
+  "제거는 파일 삭제다": 1,
+  "‘프로젝트 제거’는 목록에서 빼는 게 아니라 폴더 삭제입니다. 휴지통을 거치지 않는 영구 삭제라면 다이얼로그에 그렇게 적어야 합니다.": 1,
+  "지금 코드에서는 이 ⋯ 메뉴 네 항목이 전부 비활성이고, 툴팁은 “프로젝트 연결 정보가 있을 때 사용할 수 있습니다”입니다. 연결 정보가 곧 폴더 경로입니다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "01246beb10f17f777ae387130f7cd5488875e367379d36fae113b8ddb7d50642"
+}

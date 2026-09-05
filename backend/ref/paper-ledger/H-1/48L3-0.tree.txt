@@ -1,0 +1,35 @@
+Frame "mini/CC-01 / R10-B-X2 · 금현물 주문·체결" (48L3-0) 360×420
+  Frame "Header" (48LX-0) 0×0
+    Frame "Meta row" (48LZ-0) 0×0
+      Text "Eyebrow" (48M1-0) 0×0
+      Text "As of" (48M0-0) 0×0 "기준 09:42"
+    Text "Title" (48LY-0) 0×0 "금현물 주문·체결"
+  Frame "Body" (48L6-0) 0×0
+    Frame "KPI band" (48LN-0) 0×0
+      Frame "Frame" (48LU-0) 0×0
+        Text "계좌별주문체결현황" (48LW-0) 0×0 "계좌별주문체결현황"
+        Text "2건" (48LV-0) 0×0 "2건"
+      Frame "Frame" (48LR-0) 0×0
+        Text "체결수량" (48LT-0) 0×0 "체결수량"
+        Text "5g" (48LS-0) 0×0 "5g"
+      Frame "Frame" (48LO-0) 0×0
+        Text "미체결수량" (48LQ-0) 0×0 "미체결수량"
+        Text "10g" (48LP-0) 0×0 "10g"
+    Frame "Table header" (48LJ-0) 0×0
+      Text "항목" (48LM-0) 0×0 "항목"
+      Text "값" (48LL-0) 0×0 "값"
+      Text "비고" (48LK-0) 72×0 "비고"
+    Frame "Position 1" (48LD-0) 0×0
+      Frame "Frame" (48LG-0) 0×0
+        Text "확인시간" (48LI-0) 0×0 "확인시간"
+        Text "Text" (48LH-0) 0×0
+      Text "09:21:07" (48LF-0) 0×0 "09:21:07"
+      Text "Text" (48LE-0) 72×0
+    Frame "Position 2" (48L7-0) 0×0
+      Frame "Frame" (48LA-0) 0×0
+        Text "미체결수량" (48LC-0) 0×0 "미체결수량"
+        Text "Text" (48LB-0) 0×0
+      Text "10g" (48L9-0) 0×0 "10g"
+      Text "Text" (48L8-0) 72×0
+  Frame "Fold note" (48L4-0) 0×0
+    Text "스칼라 2개, 행 1개 접힘 · 원본…" (48L5-0) 0×0 "스칼라 2개, 행 1개 접힘 · 원본에서 확인"

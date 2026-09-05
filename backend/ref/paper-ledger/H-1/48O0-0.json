@@ -1,0 +1,342 @@
+{
+ "board_id": "48O0-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48OY-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48OX-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48OV-0",
+   "text": "부채·미수 및 연체 상세",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Header"
+   ]
+  },
+  {
+   "id": "48OT-0",
+   "text": "총평가손익금액",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48OS-0",
+   "text": "+4,240,900원",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48OQ-0",
+   "text": "매수비중",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48OP-0",
+   "text": "28.0%",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ON-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48OM-0",
+   "text": "0원",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48OJ-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48OI-0",
+   "text": "값",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48OH-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48OF-0",
+   "text": "총수익률",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48OE-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48OC-0",
+   "text": "매입 85,519,340원",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48OB-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48O9-0",
+   "text": "금액",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48O8-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48O6-0",
+   "text": "89,760,240원",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48O5-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48O2-0",
+   "text": "스칼라 2개, 행 7개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48O0-0",
+   "name": "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48OU-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48OW-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48O3-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48OK-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48OR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48OO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48OL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48OG-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48OA-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48OD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48O4-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48O7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48O1-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "부채·미수 및 연체 상세": 1,
+  "총평가손익금액": 1,
+  "+4,240,900원": 1,
+  "매수비중": 1,
+  "28.0%": 1,
+  "핵심": 1,
+  "0원": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "총수익률": 1,
+  "매입 85,519,340원": 1,
+  "금액": 1,
+  "89,760,240원": 1,
+  "스칼라 2개, 행 7개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "3882a34adec5641bc74edd814ebc377d8c4521bed27f39a4d9c8c22833e3cad8"
+}

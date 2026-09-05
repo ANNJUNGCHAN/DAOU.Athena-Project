@@ -1,0 +1,35 @@
+Frame "mini/CC-04 / R02-T2 · 호가 — 시간외 단일가" (46S1-0) 360×420
+  Frame "Header" (46SV-0) 0×0
+    Frame "Meta row" (46SX-0) 0×0
+      Text "Eyebrow" (46SZ-0) 0×0
+      Text "As of" (46SY-0) 0×0 "기준 09:42"
+    Text "Title" (46SW-0) 0×0 "시간외 단일가 호가"
+  Frame "Body" (46S4-0) 0×0
+    Frame "Table header" (46SQ-0) 0×0
+      Text "순서" (46SU-0) 34×0 "순서"
+      Text "항목" (46ST-0) 0×0 "항목"
+      Text "값" (46SS-0) 0×0 "값"
+      Text "비고" (46SR-0) 64×0 "비고"
+    Frame "Rank 1" (46SJ-0) 0×0
+      Text "01" (46SP-0) 34×0 "01"
+      Frame "Frame" (46SM-0) 0×0
+        Text "시간외단일가_매수호가2" (46SO-0) 0×0 "시간외단일가_매수호가2"
+        Text "Text" (46SN-0) 0×0
+      Text "150,800" (46SL-0) 0×0 "150,800"
+      Text "Text" (46SK-0) 64×0
+    Frame "Rank 2" (46SC-0) 0×0
+      Text "02" (46SI-0) 34×0 "02"
+      Frame "Frame" (46SF-0) 0×0
+        Text "시간외단일가_매수호가3" (46SH-0) 0×0 "시간외단일가_매수호가3"
+        Text "Text" (46SG-0) 0×0
+      Text "150,750" (46SE-0) 0×0 "150,750"
+      Text "Text" (46SD-0) 64×0
+    Frame "Rank 3" (46S5-0) 0×0
+      Text "03" (46SB-0) 34×0 "03"
+      Frame "Frame" (46S8-0) 0×0
+        Text "시간외단일가_매수호가수량3" (46SA-0) 0×0 "시간외단일가_매수호가수량3"
+        Text "Text" (46S9-0) 0×0
+      Text "15,280" (46S7-0) 0×0 "15,280"
+      Text "Text" (46S6-0) 64×0
+  Frame "Fold note" (46S2-0) 0×0
+    Text "추가 항목은 원본에서 확인" (46S3-0) 0×0 "추가 항목은 원본에서 확인"

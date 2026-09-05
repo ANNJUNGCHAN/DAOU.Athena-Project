@@ -1,0 +1,234 @@
+{
+ "board_id": "45S9-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "template/facts",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "45SW-0",
+   "text": "요약형",
+   "path": [
+    "template/facts",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45SX-0",
+   "text": "기준 09:42",
+   "path": [
+    "template/facts",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45SY-0",
+   "text": "계좌 요약",
+   "path": [
+    "template/facts",
+    "Header"
+   ]
+  },
+  {
+   "id": "45WN-0",
+   "text": "총평가금액",
+   "path": [
+    "template/facts",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "45WO-0",
+   "text": "124,580,240원",
+   "path": [
+    "template/facts",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "45WR-0",
+   "text": "총매입금액",
+   "path": [
+    "template/facts",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "45WS-0",
+   "text": "31,240,000원",
+   "path": [
+    "template/facts",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "45WV-0",
+   "text": "총예수금",
+   "path": [
+    "template/facts",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "45WW-0",
+   "text": "28,940,000원",
+   "path": [
+    "template/facts",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "45WZ-0",
+   "text": "총 평가손익",
+   "path": [
+    "template/facts",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "45X0-0",
+   "text": "+4,240,900원",
+   "path": [
+    "template/facts",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "45X3-0",
+   "text": "보유 종목",
+   "path": [
+    "template/facts",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "45X4-0",
+   "text": "8종목",
+   "path": [
+    "template/facts",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "460V-0",
+   "text": "외 7건 접힘 · 원본에서 확인",
+   "path": [
+    "template/facts",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "45S9-0",
+   "name": "template/facts",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "45SU-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45SV-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45UG-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45WM-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45WQ-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45WU-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45WY-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45X2-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "460U-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "요약형": 1,
+  "기준 09:42": 1,
+  "계좌 요약": 1,
+  "총평가금액": 1,
+  "124,580,240원": 1,
+  "총매입금액": 1,
+  "31,240,000원": 1,
+  "총예수금": 1,
+  "28,940,000원": 1,
+  "총 평가손익": 1,
+  "+4,240,900원": 1,
+  "보유 종목": 1,
+  "8종목": 1,
+  "외 7건 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "852712039e4094cbf54ab57c8d1bdebb7efd5aabfe05f7e969a56f33526cb048"
+}

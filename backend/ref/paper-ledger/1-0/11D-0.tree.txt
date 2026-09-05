@@ -1,0 +1,146 @@
+Frame "24 · 주문 — 거래 기능 연결 안내" (11D-0) 1680×900
+  Frame "Shell 창 · 설정 모드 (#settings)" (11E-0) 1520×760
+    Frame "settings-head" (13J-0) 1478×32
+      Text "settings-title" (13L-0) 29×18 "설정"
+      Text "settings-hint" (13K-0) 261×16 "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기"
+    Frame "settings-body" (11O-0) 1478×662
+      Frame "settings-nav" (136-0) 236×662
+        Frame "nav-item is-selected" (13H-0) 218×40
+          Text "화면" (13I-0) 26×16 "화면"
+        Frame "nav-item" (13E-0) 218×40
+          Text "계좌" (13G-0) 26×16 "계좌"
+          Text "2개" (13F-0) 18×14 "2개"
+        Frame "nav-item" (13B-0) 218×40
+          Text "MCP 서버" (13D-0) 59×16 "MCP 서버"
+          Text "4개" (13C-0) 18×14 "4개"
+        Frame "nav-item" (139-0) 218×40
+          Text "모델" (13A-0) 26×16 "모델"
+        Frame "nav-item" (137-0) 218×40
+          Text "성향・이력" (138-0) 65×16 "성향・이력"
+      Frame "settings-grid" (11P-0) 1226×662
+        Frame "카드 · 계좌 (.card.accounts)" (11Q-0) 1228×660
+          Frame "card-head" (12W-0) 1226×44
+            Frame "Frame" (133-0) 91×19
+              Text "계좌" (135-0) 28×18 "계좌"
+              Text "2개 등록" (134-0) 51×16 "2개 등록"
+            Frame "uk-settings-actions" (12X-0) 128×30
+              Frame "uk-btn-ghost" (131-0) 90×30
+                Text "+ 계좌 등록" (132-0) 60×14 "+ 계좌 등록"
+              Frame "Frame" (12Y-0) 22×22
+                SVG "SVG" (12Z-0) 9×9
+                  SVGVisualElement "Path" (130-0) 8×8
+          Frame "card-body" (11R-0) 1226×614
+            Frame "uk-col-head" (12P-0) 1226×32
+              Text "별칭" (12V-0) 260×14 "별칭"
+              Text "앱키" (12U-0) 200×14 "앱키"
+              Text "주문 API" (12T-0) 100×14 "주문 API"
+              Text "연결 상태" (12S-0) 120×14 "연결 상태"
+              Text "마지막 검증" (12R-0) 422×14 "마지막 검증"
+              Rectangle "Rectangle" (12Q-0) 28×0
+            Frame "uk-row · 활성" (12A-0) 1226×46
+              Frame "Frame" (12L-0) 260×20
+                Text "모의-주력" (12O-0) 58×16 "모의-주력"
+                Frame "Frame" (12M-0) 40×20
+                  Text "활성" (12N-0) 20×12 "활성"
+              Text "저장됨 · 36자" (12K-0) 200×14 "저장됨 · 36자"
+              Frame "Frame" (12H-0) 100×20
+                Frame "Frame" (12I-0) 33×20
+                  Text "ON" (12J-0) 17×14 "ON"
+              Frame "Frame" (12E-0) 120×20
+                Frame "Frame" (12F-0) 38×20
+                  Text "정상" (12G-0) 22×14 "정상"
+              Text "—" (12D-0) 422×16 "—"
+              Frame "Frame" (12B-0) 28×20
+                Text "×" (12C-0) 20×20 "×"
+            Frame "uk-row · 비활성" (11V-0) 1226×46
+              Frame "Frame" (126-0) 260×22
+                Text "모의-테스트" (129-0) 71×16 "모의-테스트"
+                Frame "Frame" (127-0) 52×22
+                  Text "비활성" (128-0) 30×12 "비활성"
+              Text "저장됨 · 36자" (125-0) 200×14 "저장됨 · 36자"
+              Frame "Frame" (122-0) 100×20
+                Frame "Frame" (123-0) 36×20
+                  Text "OFF" (124-0) 20×14 "OFF"
+              Frame "Frame" (11Z-0) 120×20
+                Frame "Frame" (120-0) 64×20
+                  Text "검증 필요" (121-0) 48×14 "검증 필요"
+              Text "—" (11Y-0) 422×16 "—"
+              Frame "Frame" (11W-0) 28×20
+                Text "×" (11X-0) 20×20 "×"
+            Frame "uk-settings-note" (11S-0) 1226×52
+              Text "앱키·시크릿은 목록에 표시되지 않는다…" (11U-0) 1190×16 "앱키·시크릿은 목록에 표시되지 않는다. 저장 위치는 OS 자격증명 저장소다."
+              Text "비활성 계좌를 누르면 활성으로 전환된…" (11T-0) 1190×16 "비활성 계좌를 누르면 활성으로 전환된다. 활성 계좌는 항상 하나다."
+          Frame "uk-sheet · 주문 API 활성화" (13M-0) 1226×658
+            Frame "uk-sheet-head" (13N-0) 1224×51
+              Text "주문 API 활성화" (13O-0) 101×18 "주문 API 활성화"
+              Text "모의-주력" (13P-0) 971×14 "모의-주력"
+              Frame "Frame" (13Q-0) 62×20
+                Text "현재 OFF" (13R-0) 46×14 "현재 OFF"
+              Frame "Frame" (13S-0) 22×22
+                SVG "SVG" (13T-0) 9×9
+                  SVGVisualElement "Path" (13U-0) 8×8
+            Frame "uk-sheet-body" (13V-0) 1224×605
+              Frame "uk-split" (13X-0) 1192×165
+                Frame "uk-split-col · 열리는 것" (13Y-0) 584×157
+                  Frame "uk-split-head" (13Z-0) 584×16
+                    Rectangle "Rectangle" (140-0) 6×6
+                    Text "열리는 것 · 12건 · 모의 계좌 …" (141-0) 195×16 "열리는 것 · 12건 · 모의 계좌 대상"
+                  Frame "uk-tr-row" (142-0) 584×17
+                    Text "kt10000~10003" (143-0) 96×16 "kt10000~10003"
+                    Text "국내주식" (144-0) 64×16 "국내주식"
+                    Text "매수 · 매도 · 정정 · 취소" (145-0) 130×16 "매수 · 매도 · 정정 · 취소"
+                  Frame "uk-tr-row" (146-0) 584×17
+                    Text "kt10006~10009" (147-0) 96×16 "kt10006~10009"
+                    Text "신용주문" (148-0) 64×16 "신용주문"
+                    Text "매수 · 매도 · 정정 · 취소" (149-0) 130×16 "매수 · 매도 · 정정 · 취소"
+                  Frame "uk-tr-row" (14A-0) 584×17
+                    Text "kt50000~50003" (14B-0) 96×16 "kt50000~50003"
+                    Text "금현물" (14C-0) 64×16 "금현물"
+                    Text "매수 · 매도 · 정정 · 취소" (14D-0) 130×16 "매수 · 매도 · 정정 · 취소"
+                  Frame "uk-tr-foot" (14E-0) 584×18
+                    Text "3계열 × 4동작 = 12건 — 신용…" (14F-0) 584×14 "3계열 × 4동작 = 12건 — 신용주문 포함"
+                Frame "uk-split-col · 열리지 않는 것" (14G-0) 584×157
+                  Text "uk-split-head" (14H-0) 584×16 "열리지 않는 것"
+                  Frame "uk-closed-item" (14I-0) 584×37
+                    Text "자동 매매 없음" (14J-0) 584×18 "자동 매매 없음"
+                    Text "모든 주문은 대화 창에서 사용자가 직…" (14K-0) 584×16 "모든 주문은 대화 창에서 사용자가 직접 지시해야 실행된다"
+                  Frame "uk-closed-item" (14L-0) 584×37
+                    Text "AI 단독 실행 없음" (14M-0) 584×18 "AI 단독 실행 없음"
+                    Text "제안은 AI가 하고, 실행 지시는 항…" (14N-0) 584×16 "제안은 AI가 하고, 실행 지시는 항상 사용자가 한다"
+                  Frame "uk-closed-item" (14O-0) 584×37
+                    Text "실거래 계좌 접근 없음" (14P-0) 584×18 "실거래 계좌 접근 없음"
+                    Text "이 API는 모의 계좌 밖으로 나가지…" (14Q-0) 584×16 "이 API는 모의 계좌 밖으로 나가지 않는다"
+              Frame "uk-toggle-row" (14S-0) 1192×58
+                Frame "Frame" (14T-0) 274×18
+                  Text "AI가 이 계좌의 주문 API를 호출…" (14U-0) 274×18 "AI가 이 계좌의 주문 API를 호출하도록 허용"
+                Frame "uk-toggle is-on" (14W-0) 44×24
+                  Rectangle "Rectangle" (14X-0) 18×18
+              Frame "uk-checklist" (14Y-0) 1192×70
+                Frame "uk-checklist-row" (14Z-0) 1164×20
+                  Frame "Frame" (150-0) 134×16
+                    Rectangle "Rectangle" (151-0) 6×6
+                    Text "주문 API 허용 (토글)" (152-0) 120×16 "주문 API 허용 (토글)"
+                  Frame "Frame" (153-0) 33×20
+                    Text "ON" (154-0) 17×14 "ON"
+                Frame "uk-checklist-row" (155-0) 1164×20
+                  Frame "Frame" (156-0) 132×16
+                    Rectangle "Rectangle" (157-0) 6×6
+                    Text "로컬 인증 토큰 설정" (158-0) 118×16 "로컬 인증 토큰 설정"
+                  Frame "Frame" (159-0) 49×20
+                    Text "미설정" (15A-0) 33×14 "미설정"
+              Frame "uk-btn-row-end" (15B-0) 1192×36
+                Frame "uk-btn-ghost" (15C-0) 52×30
+                  Text "취소" (15D-0) 22×14 "취소"
+                Frame "uk-btn-primary" (15E-0) 79×36
+                  Text "활성화" (15F-0) 39×16 "활성화"
+              Frame "uk-revert-note" (15G-0) 1192×24
+                Text "언제든 설정에서 OFF로 되돌릴 수 …" (15H-0) 1192×16 "언제든 설정에서 OFF로 되돌릴 수 있다. 되돌리면 즉시 반영된다."
+    Frame "타이틀바 (.titlebar)" (11N-0) 1518×26
+    Frame "창 제어 (.win-controls · 최대화 비활성)" (11F-0) 94×24
+      Frame "Frame" (11L-0) 30×24
+        Rectangle "Rectangle" (11M-0) 9×2
+      Frame "disabled" (11J-0) 30×24
+        Rectangle "Rectangle" (11K-0) 8×8
+      Frame "Frame" (11G-0) 30×24
+        SVG "SVG" (11H-0) 10×10
+          SVGVisualElement "Path" (11I-0) 9×9

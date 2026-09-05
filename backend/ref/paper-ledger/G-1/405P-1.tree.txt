@@ -1,0 +1,159 @@
+Frame "00b · 백테스트 — 의도 대비 구현 상태 표" (405P-1) 1655×2263
+  Frame "타이틀" (405Q-1) 0×0
+    Text "의도 대비 구현 상태 — 다르게 구현…" (405R-1) 0×0 "의도 대비 구현 상태 — 다르게 구현 3 · 구현 6 · 부분 10 · 미구현 3"
+    Text "사용자가 마지막에 준 명세 항목을 하…" (405S-1) 0×0 "사용자가 마지막에 준 명세 항목을 하나씩 코드·프로브로 대조했다. 초록=구현, 주황=부분, 빨강=미구현, 보"
+  Frame "상태 표" (405U-1) 0×0
+    Frame "행 1" (405W-1) 0×0
+      Frame "Frame" (405X-1) 86×0
+        Text "다르게 구현" (405Y-1) 0×0 "다르게 구현"
+      Frame "Frame" (405Z-1) 0×0
+        Text "1) 설계 하위 탭 4개(폼·시각 설…" (4060-1) 0×0 "1) 설계 하위 탭 4개(폼·시각 설계·코드·흐름), 흐름은 읽기 전용 projection, 시각 설계는 별"
+        Text "탭은 3개다: 지도 · 폼 · 코드·…" (4061-1) 0×0 "탭은 3개다: 지도 · 폼 · 코드·최후의 보루. 별도의 '시각 설계' 탭도, 별도의 읽기 전용 '흐름' 탭"
+        Text "app/lib/backtest-can…" (4062-1) 0×0 "app/lib/backtest-canvas.js:97 DESIGN_TABS = [['flow','지도'],["
+    Frame "행 2" (4063-1) 0×0
+      Frame "Frame" (4064-1) 86×0
+        Text "구현" (4065-1) 0×0 "구현"
+      Frame "Frame" (4066-1) 0×0
+        Text "2) 왼쪽 팔레트 · 중앙 캔버스 ·…" (4067-1) 0×0 "2) 왼쪽 팔레트 · 중앙 캔버스 · 오른쪽 검사기 · 하단 검증 요약 · 오른쪽 대화 패널"
+        Text "편집기 render()가 body에 …" (4068-1) 0×0 "편집기 render()가 body에 팔레트→캔버스→검사기를 넣고 root 끝에 요약 바를 붙인다. 다만 '오"
+        Text "app/lib/backtest-vis…" (4069-1) 0×0 "app/lib/backtest-visual-editor.js:1775-1795 render(); app/sh"
+    Frame "행 3" (406A-1) 0×0
+      Frame "Frame" (406B-1) 86×0
+        Text "부분" (406C-1) 0×0 "부분"
+      Frame "Frame" (406D-1) 0×0
+        Text "3) 같은 diagnostic이 노드…" (406E-1) 0×0 "3) 같은 diagnostic이 노드·포트·연결선·검사기·요약·코드 span·대화 intent에 동시 표시,"
+        Text "7개 표면 동시 표시는 된다: 노드 …" (406F-1) 0×0 "7개 표면 동시 표시는 된다: 노드 카드·포트 점·엣지 path·검사기 오류 상자·요약 바 전부 data-d"
+        Text "backend/athena_api/b…" (406G-1) 0×0 "backend/athena_api/backtest/visual_schema.py:161 Diagnostic("
+    Frame "행 4" (406H-1) 0×0
+      Frame "Frame" (406I-1) 86×0
+        Text "부분" (406J-1) 0×0 "부분"
+      Frame "Frame" (406K-1) 0×0
+        Text "4) 오류 노드 더블클릭·Enter·…" (406L-1) 0×0 "4) 오류 노드 더블클릭·Enter·검사기 버튼 → 코드 탭 동적 span; 코드의 '시각 설계에서 보기' "
+        Text "세 입구(더블클릭 dblclick, …" (406M-1) 0×0 "세 입구(더블클릭 dblclick, Enter, 검사기 [코드에서 열기])가 모두 onOpenCode로 들어"
+        Text "app/lib/backtest-vis…" (406N-1) 0×0 "app/lib/backtest-visual-editor.js:1237 dblclick, :822 Enter,"
+    Frame "행 5" (406O-1) 0×0
+      Frame "Frame" (406P-1) 86×0
+        Text "부분" (406Q-1) 0×0 "부분"
+      Frame "Frame" (406R-1) 0×0
+        Text "5) 대화 '오류를 고쳐줘' → 질문…" (406S-1) 0×0 "5) 대화 '오류를 고쳐줘' → 질문 하나 → 답 → 비활성 patch proposal(그래프 diff·코드"
+        Text "사슬 전체가 돈다: questions…" (406T-1) 0×0 "사슬 전체가 돈다: questions_for가 막는 첫 오류 하나만(remaining 포함) 묻고 → bui"
+        Text "backend/athena_api/b…" (406U-1) 0×0 "backend/athena_api/backtest/visual_repair.py:271 questions_f"
+    Frame "행 6" (406V-1) 0×0
+      Frame "Frame" (406W-1) 86×0
+        Text "부분" (406X-1) 0×0 "부분"
+      Frame "Frame" (406Y-1) 0×0
+        Text "6) 활성화·실행은 별도 승인 UX;…" (406Z-1) 0×0 "6) 활성화·실행은 별도 승인 UX; patch 적용만으로 run/backfill/optimize/deplo"
+        Text "'부작용 없음'은 지켜진다 — bac…" (4070-1) 0×0 "'부작용 없음'은 지켜진다 — backtest_visual.py에는 runner·store import 자체"
+        Text "backend/athena_api/a…" (4071-1) 0×0 "backend/athena_api/api/backtest_visual.py 파일 머리말; artifacts/"
+    Frame "행 7" (4073-1) 0×0
+      Frame "Frame" (4074-1) 86×0
+        Text "구현" (4075-1) 0×0 "구현"
+      Frame "Frame" (4076-1) 0×0
+        Text "7) origin visual/cod…" (4077-1) 0×0 "7) origin visual/code_only 항상 비활성, active=true 거부, active_ve"
+        Text "저장층이 _INACTIVE_ONLY_…" (4078-1) 0×0 "저장층이 _INACTIVE_ONLY_ORIGINS에 active=True를 주면 ValueError로 거부하"
+        Text "backend/athena_api/b…" (4079-1) 0×0 "backend/athena_api/backtest/store.py:634-676 add_version(ato"
+    Frame "행 8" (407A-1) 0×0
+      Frame "Frame" (407B-1) 86×0
+        Text "다르게 구현" (407C-1) 0×0 "다르게 구현"
+      Frame "Frame" (407D-1) 0×0
+        Text "8-a) graph_schema_ve…" (407E-1) 0×0 "8-a) graph_schema_version"
+        Text "이름이 graph_version이고 …" (407F-1) 0×0 "이름이 graph_version이고 Literal["1"]로 고정이다. 스키마 버전을 싣는 자리는 있으나 계"
+        Text "backend/athena_api/b…" (407G-1) 0×0 "backend/athena_api/backtest/visual_schema.py:56 GRAPH_VERSIO"
+    Frame "행 9" (407H-1) 0×0
+      Frame "Frame" (407I-1) 86×0
+        Text "부분" (407J-1) 0×0 "부분"
+      Frame "Frame" (407K-1) 0×0
+        Text "8-b) graph_revision" (407L-1) 0×0 "8-b) graph_revision"
+        Text "그래프 모델에는 없다. preview…" (407M-1) 0×0 "그래프 모델에는 없다. preview source map에만 graph_revision이 있고 값은 grap"
+        Text "backend/athena_api/b…" (407N-1) 0×0 "backend/athena_api/backtest/codegen.py:643 revision = graph_"
+    Frame "행 10" (407O-1) 0×0
+      Frame "Frame" (407P-1) 86×0
+        Text "미구현" (407Q-1) 0×0 "미구현"
+      Frame "Frame" (407R-1) 0×0
+        Text "8-c) node_type_versi…" (407S-1) 0×0 "8-c) node_type_version"
+        Text "GraphNode는 id·kind·l…" (407T-1) 0×0 "GraphNode는 id·kind·label·params·ui뿐이고 노드 종류 payload에도 버전이 없다"
+        Text "backend/athena_api/b…" (407U-1) 0×0 "backend/athena_api/backtest/visual_schema.py:74 GraphNode; b"
+    Frame "행 11" (407V-1) 0×0
+      Frame "Frame" (407W-1) 86×0
+        Text "구현" (407X-1) 0×0 "구현"
+      Frame "Frame" (407Y-1) 0×0
+        Text "8-d) compiler_versio…" (407Z-1) 0×0 "8-d) compiler_version"
+        Text ""visual-1.0.0" 하나가 h…" (4080-1) 0×0 ""visual-1.0.0" 하나가 hashes·authoritative map·preview map·저장 b"
+        Text "backend/athena_api/b…" (4081-1) 0×0 "backend/athena_api/backtest/visual_schema.py:54 COMPILER_VER"
+    Frame "행 12" (4082-1) 0×0
+      Frame "Frame" (4083-1) 86×0
+        Text "미구현" (4084-1) 0×0 "미구현"
+      Frame "Frame" (4085-1) 0×0
+        Text "8-e) indicator_regis…" (4086-1) 0×0 "8-e) indicator_registry_digest"
+        Text "digest를 계산하거나 싣는 코드가…" (4087-1) 0×0 "digest를 계산하거나 싣는 코드가 backend 전체에 없다. 지표 레지스트리가 바뀌어도 저장된 그래프가"
+        Text "backend/athena_api/b…" (4088-1) 0×0 "backend/athena_api/backtest/visual_registry.py:345 registry_"
+    Frame "행 13" (408A-1) 0×0
+      Frame "Frame" (408B-1) 86×0
+        Text "다르게 구현" (408C-1) 0×0 "다르게 구현"
+      Frame "Frame" (408D-1) 0×0
+        Text "8-f) semantic_hash" (408E-1) 0×0 "8-f) semantic_hash"
+        Text "이름은 graph_hash이고 실체는…" (408F-1) 0×0 "이름은 graph_hash이고 실체는 의미 해시다 — ui를 제거한 정규 JSON(sort_keys·구분자 "
+        Text "backend/athena_api/b…" (408G-1) 0×0 "backend/athena_api/backtest/visual_schema.py:201 canonical_g"
+    Frame "행 14" (408H-1) 0×0
+      Frame "Frame" (408I-1) 86×0
+        Text "미구현" (408J-1) 0×0 "미구현"
+      Frame "Frame" (408K-1) 0×0
+        Text "8-g) layout_hash" (408L-1) 0×0 "8-g) layout_hash"
+        Text "layout을 해시하는 함수·필드가 …" (408M-1) 0×0 "layout을 해시하는 함수·필드가 없다. ui는 해시 대상에서 빠질 뿐(저장은 된다), 배치가 바뀌었는지 "
+        Text "backend/athena_api/b…" (408N-1) 0×0 "backend/athena_api/backtest/visual_schema.py:201 canonical_g"
+    Frame "행 15" (408O-1) 0×0
+      Frame "Frame" (408P-1) 86×0
+        Text "부분" (408Q-1) 0×0 "부분"
+      Frame "Frame" (408R-1) 0×0
+        Text "9) validator 검사 항목 1…" (408S-1) 0×0 "9) validator 검사 항목 14종"
+        Text "구현 10종 — schema/버전(p…" (408T-1) 0×0 "구현 10종 — schema/버전(pydantic + Literal, 위반 시 422), unknown no"
+        Text "backend/athena_api/b…" (408U-1) 0×0 "backend/athena_api/backtest/visual_schema.py:848 validate_gr"
+    Frame "행 16" (408V-1) 0×0
+      Frame "Frame" (408W-1) 86×0
+        Text "구현" (408X-1) 0×0 "구현"
+      Frame "Frame" (408Y-1) 0×0
+        Text "10) source map 두 종류 …" (408Z-1) 0×0 "10) source map 두 종류 분리(provisional preview executable=false "
+        Text "generate_from_graph은…" (4090-1) 0×0 "generate_from_graph은 kind='authoritative'·executable=true·ar"
+        Text "backend/athena_api/b…" (4091-1) 0×0 "backend/athena_api/backtest/codegen.py:567·612; backend/athe"
+    Frame "행 17" (4092-1) 0×0
+      Frame "Frame" (4093-1) 86×0
+        Text "구현" (4094-1) 0×0 "구현"
+      Frame "Frame" (4095-1) 0×0
+        Text "11) 코드 전용 분기(origin=…" (4096-1) 0×0 "11) 코드 전용 분기(origin=code_only, 마지막 호환 그래프 읽기 전용, 동기화 표시 금지)"
+        Text "forkCodeOnly가 origin…" (4097-1) 0×0 "forkCodeOnly가 origin=code_only 비활성 버전을 남기고 codeOnlyGraph를 붙잡"
+        Text "app/lib/backtest-can…" (4098-1) 0×0 "app/lib/backtest-canvas.js:2806 forkCodeOnly / :2891 renderS"
+    Frame "행 18" (4099-1) 0×0
+      Frame "Frame" (409A-1) 86×0
+        Text "부분" (409B-1) 0×0 "부분"
+      Frame "Frame" (409C-1) 0×0
+        Text "12) 좁은 폭 drawer/over…" (409D-1) 0×0 "12) 좁은 폭 drawer/overlay + focus 복귀, .backtest-body 스크롤 소유권"
+        Text "서랍 자체는 다 있다: narrow면…" (409E-1) 0×0 "서랍 자체는 다 있다: narrow면 팔레트·검사기가 body에서 빠지고 캔버스 칼럼 안에 position:"
+        Text "app/lib/backtest-vis…" (409F-1) 0×0 "app/lib/backtest-visual-editor.js:1783-1792 render() narrow "
+    Frame "행 19" (409H-1) 0×0
+      Frame "Frame" (409I-1) 86×0
+        Text "부분" (409J-1) 0×0 "부분"
+      Frame "Frame" (409K-1) 0×0
+        Text "13) 접근성: 키보드만으로 탐색·선…" (409L-1) 0×0 "13) 접근성: 키보드만으로 탐색·선택·연결·삭제·오류 확인·코드 이동, aria-live, 접근 가능한 이"
+        Text "되는 것: Tab/Shift+Tab …" (409M-1) 0×0 "되는 것: Tab/Shift+Tab 노드 순회, Enter 코드 열기, Delete/Backspace 삭제,"
+        Text "app/lib/backtest-vis…" (409N-1) 0×0 "app/lib/backtest-visual-editor.js:800 onKeyDown / :473 isFor"
+    Frame "행 20" (409O-1) 0×0
+      Frame "Frame" (409P-1) 86×0
+        Text "부분" (409Q-1) 0×0 "부분"
+      Frame "Frame" (409R-1) 0×0
+        Text "14) P4: undo/redo, 복…" (409S-1) 0×0 "14) P4: undo/redo, 복사/붙여넣기, keyboard connection, 대형 그래프 성능 측"
+        Text "undo/redo: 구현(헤더 버튼 …" (409T-1) 0×0 "undo/redo: 구현(헤더 버튼 + Ctrl+Z/Y, 최대 100단계, 같은 파라미터 연속 편집은 coa"
+        Text "app/lib/backtest-vis…" (409U-1) 0×0 "app/lib/backtest-visual-editor.js:536 pushHistory / :546 und"
+    Frame "행 21" (409V-1) 0×0
+      Frame "Frame" (409W-1) 86×0
+        Text "구현" (409X-1) 0×0 "구현"
+      Frame "Frame" (409Y-1) 0×0
+        Text "15) 렌더러: 새 의존성 없이 DO…" (409Z-1) 0×0 "15) 렌더러: 새 의존성 없이 DOM/SVG; Rete/React 미도입"
+        Text "backtest-visual-edit…" (40A0-1) 0×0 "backtest-visual-editor.js는 UMD 한 파일이고 외부 import가 없다. 노드는 div"
+        Text "app/lib/backtest-vis…" (40A1-1) 0×0 "app/lib/backtest-visual-editor.js:26-28 헤더 주석, :30 SVG_NS, :"
+    Frame "행 22" (40A2-1) 0×0
+      Frame "Frame" (40A3-1) 86×0
+        Text "부분" (40A4-1) 0×0 "부분"
+      Frame "Frame" (40A5-1) 0×0
+        Text "16) 기존 폼·코드·흐름·승인·실행…" (40A6-1) 0×0 "16) 기존 폼·코드·흐름·승인·실행·결과·이력·최적화·배포 회귀 없음(프로브 근거)"
+        Text "프로브는 깨끗하다: full-all.…" (40A7-1) 0×0 "프로브는 깨끗하다: full-all.log가 194/196이고 FAIL 0, 나머지 2는 SKIP(C13 실"
+        Text "artifacts/backtest-t…" (40A8-1) 0×0 "artifacts/backtest-tour/full-all.log 마지막 줄 'ALL OK (194/196)"

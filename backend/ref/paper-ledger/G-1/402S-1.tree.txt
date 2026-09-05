@@ -1,0 +1,91 @@
+Frame "00 · 백테스트 — 지금 구현된 것 · 요약과 의도 편차" (402S-1) 1680×992
+  Frame "타이틀" (402T-1) 0×0
+    Text "백테스트 — 지금 구현된 것 (202…" (402U-1) 0×0 "백테스트 — 지금 구현된 것 (2026-09-03)"
+    Text "실앱에서 찍은 화면 15장(01~15…" (402V-1) 0×0 "실앱에서 찍은 화면 15장(01~15 보드)과 코드·프로브 근거로 정리했다. 전략을 지도(노드 그래프)로 그"
+  Frame "검증 수치" (402X-1) 0×0
+    Frame "Frame" (402Y-1) 0×0
+      Text "앱 단위 테스트" (402Z-1) 0×0 "앱 단위 테스트"
+      Text "2,281 pass / 11 fail" (4030-1) 0×0 "2,281 pass / 11 fail"
+      Text "실패 11건은 전부 코드 탭 IDE …" (4031-1) 0×0 "실패 11건은 전부 코드 탭 IDE 영역 — 미커밋 한 줄이 원인, 되돌리면 통과"
+    Frame "Frame" (4032-1) 0×0
+      Text "백엔드 시각 테스트" (4033-1) 0×0 "백엔드 시각 테스트"
+      Text "229 passed" (4034-1) 0×0 "229 passed"
+      Text "pytest -k "visual or…" (4035-1) 0×0 "pytest -k "visual or codegen or source_map""
+    Frame "Frame" (4036-1) 0×0
+      Text "종단 프로브" (4037-1) 0×0 "종단 프로브"
+      Text "194 / 196 OK" (4038-1) 0×0 "194 / 196 OK"
+      Text "실패 0 · SKIP 2(백필 쿼터,…" (4039-1) 0×0 "실패 0 · SKIP 2(백필 쿼터, 삭제 API 없음) · 시각 왕복 O 섹션 10스텝"
+  Frame "편차 헤더" (403B-1) 0×0
+    Text "의도와 다르게 간 곳 — 10건" (403C-1) 0×0 "의도와 다르게 간 곳 — 10건"
+    Text "우리가 한 것 / 의도가 말한 것 /…" (403D-1) 0×0 "우리가 한 것 / 의도가 말한 것 / 되돌리는 비용"
+  Frame "편차 격자" (403F-1) 0×0
+    Frame "편차 1" (403H-1) 0×0
+      Frame "Frame" (403I-1) 0×0
+        Text "1. 탭 구조 병합 — 4탭이 아니라…" (403J-1) 0×0 "1. 탭 구조 병합 — 4탭이 아니라 3탭"
+        Frame "Frame" (403K-1) 0×0
+          Text "비용 중간" (403L-1) 0×0 "비용 중간"
+      Text "우리가 한 것 지도 · 폼 · 코드·…" (403M-1) 0×0 "우리가 한 것 지도 · 폼 · 코드·최후의 보루 세 탭만 두고, 시각 편집기를 '지도' 탭 안에 넣었다. 별"
+      Text "의도 폼 · 시각 설계 · 코드 · …" (403N-1) 0×0 "의도 폼 · 시각 설계 · 코드 · 흐름 4개 탭이고, 흐름은 읽기 전용 projection이며 시각 설계는"
+    Frame "편차 2" (403P-1) 0×0
+      Frame "Frame" (403Q-1) 0×0
+        Text "2. 요약 지도가 편집기 위에 한 번…" (403R-1) 0×0 "2. 요약 지도가 편집기 위에 한 번 더 선다"
+        Frame "Frame" (403S-1) 0×0
+          Text "비용 작음" (403T-1) 0×0 "비용 작음"
+      Text "우리가 한 것 시각 설계 화면 안에서…" (403U-1) 0×0 "우리가 한 것 시각 설계 화면 안에서 renderSummaryMap(false)를 먼저 그리고 그 아래에 노"
+      Text "의도 흐름(projection)과 시…" (403V-1) 0×0 "의도 흐름(projection)과 시각 설계는 서로 다른 탭이다 — 한 화면에 겹쳐 쌓지 않는다."
+    Frame "편차 3" (403X-1) 0×0
+      Frame "Frame" (403Y-1) 0×0
+        Text "3. 채팅의 지도 반영·코드 반영은 …" (403Z-1) 0×0 "3. 채팅의 지도 반영·코드 반영은 미리보기 없이 즉시 적용된다"
+        Frame "Frame" (4040-1) 0×0
+          Text "비용 큼" (4041-1) 0×0 "비용 큼"
+      Text "우리가 한 것 spec_draft·c…" (4042-1) 0×0 "우리가 한 것 spec_draft·code_draft는 도착 즉시 spec/codeSource에 반영되고(a"
+      Text "의도 대화가 만든 수정은 비활성 pa…" (4043-1) 0×0 "의도 대화가 만든 수정은 비활성 patch proposal로 서고 사용자가 Apply를 눌러야 반영된다."
+    Frame "편차 4" (4045-1) 0×0
+      Frame "Frame" (4046-1) 0×0
+        Text "4. 패치 카드가 그래프 diff를 …" (4047-1) 0×0 "4. 패치 카드가 그래프 diff를 그리지 않는다"
+        Frame "Frame" (4048-1) 0×0
+          Text "비용 작음" (4049-1) 0×0 "비용 작음"
+      Text "우리가 한 것 서버는 graph_pa…" (404A-1) 0×0 "우리가 한 것 서버는 graph_patch(RFC 6902)·graph_after·graph_after_ha"
+      Text "의도 patch proposal은 그…" (404B-1) 0×0 "의도 patch proposal은 그래프 diff · 코드 diff · 영향 범위 · 검증 미리보기를 함께 "
+    Frame "편차 5" (404D-1) 0×0
+      Frame "Frame" (404E-1) 0×0
+        Text "5. 적용 후 '수정된 노드' 강조가…" (404F-1) 0×0 "5. 적용 후 '수정된 노드' 강조가 아니라 전체 synced 표시"
+        Frame "Frame" (404G-1) 0×0
+          Text "비용 작음" (404H-1) 0×0 "비용 작음"
+      Text "우리가 한 것 applyVisualP…" (404I-1) 0×0 "우리가 한 것 applyVisualPatch가 끝나면 검증 상태가 synced가 되고 모든 노드가 같은 is"
+      Text "의도 적용 후 수정된 노드·포트·연결…" (404J-1) 0×0 "의도 적용 후 수정된 노드·포트·연결선이 강조된다."
+    Frame "편차 6" (404L-1) 0×0
+      Frame "Frame" (404M-1) 0×0
+        Text "6. 키보드 연결은 캔버스가 아니라 …" (404N-1) 0×0 "6. 키보드 연결은 캔버스가 아니라 검사기·목록의 select로 한다"
+        Frame "Frame" (404O-1) 0×0
+          Text "비용 중간" (404P-1) 0×0 "비용 중간"
+      Text "우리가 한 것 루트 keydown이 …" (404Q-1) 0×0 "우리가 한 것 루트 keydown이 Tab을 가로채 노드만 순회하므로 포트 점에는 키보드 초점이 닿지 않는다"
+      Text "의도 키보드만으로 연결까지 된다(P4…" (404R-1) 0×0 "의도 키보드만으로 연결까지 된다(P4의 keyboard connection)."
+    Frame "편차 7" (404T-1) 0×0
+      Frame "Frame" (404U-1) 0×0
+        Text "7. 좁은 폭 서랍이 런타임에서 켜지…" (404V-1) 0×0 "7. 좁은 폭 서랍이 런타임에서 켜지지 않는다"
+        Frame "Frame" (404W-1) 0×0
+          Text "비용 작음" (404X-1) 0×0 "비용 작음"
+      Text "우리가 한 것 narrow 상태·서랍…" (404Y-1) 0×0 "우리가 한 것 narrow 상태·서랍 렌더·CSS·초점 복귀·테스트까지 다 있는데 setNarrow()를 부"
+      Text "의도 좁은 폭에서는 팔레트·검사기가 …" (404Z-1) 0×0 "의도 좁은 폭에서는 팔레트·검사기가 drawer/overlay로 접히고 닫으면 초점이 돌아온다."
+    Frame "편차 8" (4051-1) 0×0
+      Frame "Frame" (4052-1) 0×0
+        Text "8. 활성화 버튼이 어디에도 없다" (4053-1) 0×0 "8. 활성화 버튼이 어디에도 없다"
+        Frame "Frame" (4054-1) 0×0
+          Text "비용 작음" (4055-1) 0×0 "비용 작음"
+      Text "우리가 한 것 canvas.js에 a…" (4056-1) 0×0 "우리가 한 것 canvas.js에 activate 배선(athena:backtest-activate)이 있는"
+      Text "의도 활성화는 실행과 구분되는 별도의…" (4057-1) 0×0 "의도 활성화는 실행과 구분되는 별도의 승인 UX다."
+    Frame "편차 9" (4059-1) 0×0
+      Frame "Frame" (405A-1) 0×0
+        Text "9. 진단 식별자를 code + 위치…" (405B-1) 0×0 "9. 진단 식별자를 code + 위치 조합으로 쓴다"
+        Frame "Frame" (405C-1) 0×0
+          Text "비용 중간" (405D-1) 0×0 "비용 중간"
+      Text "우리가 한 것 Diagnostic에 …" (405E-1) 0×0 "우리가 한 것 Diagnostic에 id 필드를 두지 않고 code(BTG-*)와 node_id/port/j"
+      Text "의도 diagnostic에 stabl…" (405F-1) 0×0 "의도 diagnostic에 stable id 필드가 있고 오류 개수는 고유 id 수다."
+    Frame "편차 10" (405H-1) 0×0
+      Frame "Frame" (405I-1) 0×0
+        Text "10. kind별 상한(max_per…" (405J-1) 0×0 "10. kind별 상한(max_per_graph)이 선언만 되고 검증에 쓰이지 않는다"
+        Frame "Frame" (405K-1) 0×0
+          Text "비용 작음" (405L-1) 0×0 "비용 작음"
+      Text "우리가 한 것 NodeKind.max…" (405M-1) 0×0 "우리가 한 것 NodeKind.max_per_graph를 registry payload에 실어 보내지만 va"
+      Text "의도 node/edge/fan-in …" (405N-1) 0×0 "의도 node/edge/fan-in 상한을 검증한다."
