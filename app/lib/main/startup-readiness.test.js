@@ -272,8 +272,10 @@ test('LIFE-003 main source keeps one shell-to-orb visibility policy from boot th
   const handoff = source.slice(handoffStart, handoffEnd);
   const realtimeManager = source.slice(realtimeStart, realtimeEnd);
 
-  assert.match(source, /let createWindowsInflight = null;/);
-  assert.match(createWindows, /createWindows reused \(already in flight\)/);
+  // 중복 창 생성 방지 가드의 동작은 lib/main/inflight-once.test.js가 잠근다.
+  // 여기서는 main.js가 그 가드를 실제로 거쳐 가는지만 확인한다.
+  assert.match(source, /require\('\.\/lib\/main\/inflight-once'\)/);
+  assert.match(source, /const createWindows = createOnce\(async function createWindows\(\)/);
   assert.doesNotMatch(createWindows, /\borbWin\.(?:show|showInactive)\s*\(/);
   assert.doesNotMatch(createWindows, /broadcastShellVisibility\(\)/);
   assert.match(createWindows, /for \(const ev of \['show', 'hide', 'minimize', 'restore'\]\) \{\s*shellWin\.on\(ev, broadcastShellVisibility\);\s*\}/);
