@@ -61,6 +61,7 @@ const VERIFY_SUITE = Object.freeze([
   { script: 'verify:plugins', budgetMs: 90000 },
   { script: 'verify:kiumi', budgetMs: 90000 },
   { script: 'verify:kiumi-cards', budgetMs: 90000 },
+  { script: 'verify:chat-v3', budgetMs: 90000 },
   { script: 'verify:agent-paper-parity', budgetMs: 90000 },
   { script: 'verify:hoga-live', budgetMs: 90000 },
   { script: 'verify:integrated-cards', budgetMs: 180000 },
