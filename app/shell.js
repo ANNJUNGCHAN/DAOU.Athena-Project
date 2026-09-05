@@ -16,7 +16,7 @@
   // 영역이 등록하는 콜백. 서로 다른 <script>가 같은 문서에 살지만 모듈 경계는
   // 유지한다 — chat.js가 canvas.js의 내부 함수를 직접 부르지 않고 여기를 지난다.
   const hooks = {
-    clearCanvases: null, openSettings: null, seedChatInput: null,
+    clearCanvases: null, openSettings: null, seedChatInput: null, openAccountSwitch: null,
     // 과거 대화 열기(2026-09-02) — sidebar.js가 부르고 chat.js가 등록한다.
     // seedChatInput과 같은 이유로 여기를 지난다: 사이드바가 chat.js의 $history를
     // 직접 만지면 모듈 경계가 무너진다.
@@ -184,6 +184,13 @@
     registerOpenSettings(fn) { hooks.openSettings = typeof fn === 'function' ? fn : null; },
     openSettings() {
       if (hooks.openSettings) hooks.openSettings();
+    },
+    // chat.js가 등록한다 — 사이드바 계정 메뉴의 "계좌 전환" 항목(Paper 보드 16)이
+    // 여는 계좌 전환 화면(Paper 1M3-0)이다. 설정 창의 계좌 카드와는 다른 화면이라
+    // 설정 다리를 같이 쓸 수 없다.
+    registerOpenAccountSwitch(fn) { hooks.openAccountSwitch = typeof fn === 'function' ? fn : null; },
+    openAccountSwitch(accountId) {
+      if (hooks.openAccountSwitch) hooks.openAccountSwitch(accountId);
     },
     // chat.js가 등록한다 — 시트 없이 채팅 입력에 시작 문장을 심고 포커스만
     // 옮기는 43번 "새 작업은 채팅에서" 원칙의 공용 진입로다(7단계 제안 카드

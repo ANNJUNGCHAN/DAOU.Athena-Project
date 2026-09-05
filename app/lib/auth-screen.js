@@ -52,6 +52,8 @@ function buildHead(root, { kicker, title, sub }) {
 //   onContinue — embedded일 때만 사용. async () => boolean. 다음 화면(정상
 //                대화 창)으로 넘어가도 되는지 chat.js에 위임한다.
 //   onBack     — embedded일 때만 사용. 저장된 계좌를 지우지 않고 계좌 단계로 돌아간다.
+//   initialView — 'switch'면 상태 화면을 거치지 않고 계좌 전환 화면(Paper 1M3-0)으로
+//                바로 들어간다. 사이드바 계정 메뉴의 「계좌 전환」이 쓰는 진입로다.
 function renderAuthTokenStatus(root, opts) {
   const o = opts || {};
   let accountId = o.accountId;
@@ -400,6 +402,10 @@ function renderAuthTokenStatus(root, opts) {
   const unsubscribeAuthTokenChanged = window.athena.on('athena:auth-token-changed', onChanged);
 
   paint();
+  // 「계좌 전환」으로 들어온 경우 목록부터 보여준다. view를 동기로 'switch'에
+  // 두므로 뒤이은 refreshStatus()가 상태 화면으로 덮어쓰지 않는다(그 함수는
+  // view === 'status'일 때만 그린다).
+  if (o.initialView === 'switch') void openSwitch();
   refreshStatus();
 
   return function cleanup() {

@@ -399,3 +399,77 @@ test('CLI + 계좌 + 토큰 완료를 persistence한 뒤에만 메인 셸과 채
   assert.equal(shell.hidden, false);
   assert.equal(app.hidden, false);
 });
+
+// ---------- Paper 1M3-0 「계좌 전환」 진입로 ----------
+// 보드 19가 계좌 상태 행에 붙인 이름이 「uk-lrow (클릭 → 계좌 전환)」이고, 그
+// 다음 화면(1M3-0)이 경고·4단계 흐름·[전환하고 다시 인증]을 그린다. 배포 앱에서는
+// 온보딩 3/3을 지나면 그 화면에 닿을 길이 없었다 — 사이드바 계정 메뉴가 새 진입로다.
+
+test('embedded=false로 열면 계좌 행 클릭이 계좌 전환 뷰로 간다', async () => {
+  invokeImpl = async (channel) => {
+    if (channel === 'athena:auth-token-status') return { state: 'ready', expiresInSec: 3600 };
+    if (channel === 'athena:account-list') {
+      return { accounts: [{ id: 'account-1', alias: '모의-1' }, { id: 'account-2', alias: '모의-2' }] };
+    }
+    return { ok: true };
+  };
+  const root = new FakeElement('div');
+  const cleanup = authScreen.renderAuthTokenStatus(root, { accountId: 'account-1', embedded: false });
+  await flushAsync();
+
+  const rows = findByClass(root, 'auth-status-rows');
+  assert.ok(rows, '계좌 상태 행 묶음이 있다');
+  const accRow = rows.children.find((child) => child.classList.contains('is-clickable'));
+  assert.ok(accRow, '계좌 행이 클릭 가능하다');
+  accRow.click();
+  await flushAsync();
+
+  assert.equal(
+    containsText(root, '전환하면 지금 토큰을 폐기하고 새 계좌로 다시 발급받습니다. 진행 중인 실시간 구독은 모두 끊겼다가 다시 등록됩니다.'),
+    true,
+  );
+  assert.ok(findByText(root, 'button', '전환하고 다시 인증'));
+  assert.equal(findByText(root, 'button', '이전'), null, '온보딩 밖에는 이전이 없다');
+  cleanup();
+});
+
+test('initialView: switch는 계좌 목록 화면으로 바로 들어간다', async () => {
+  invokeImpl = async (channel) => {
+    if (channel === 'athena:auth-token-status') return { state: 'ready', expiresInSec: 3600 };
+    if (channel === 'athena:account-list') return { accounts: [{ id: 'account-1', alias: '모의-1' }] };
+    return { ok: true };
+  };
+  const root = new FakeElement('div');
+  const cleanup = authScreen.renderAuthTokenStatus(root, {
+    accountId: 'account-1',
+    embedded: false,
+    initialView: 'switch',
+  });
+  await flushAsync();
+
+  assert.ok(findByText(root, 'button', '전환하고 다시 인증'), '한 번의 클릭도 없이 전환 화면이 선다');
+  assert.equal(containsText(root, '등록된 계좌 1'), true);
+  // 늦게 오는 상태 응답이 전환 화면을 상태 화면으로 덮어쓰지 않는다.
+  assert.equal(findByText(root, 'button', '지금 재발급'), null);
+  cleanup();
+});
+
+test('온보딩(embedded)은 initialView를 주지 않아 3 / 3 상태 화면으로 연다', async () => {
+  invokeImpl = async (channel) => {
+    if (channel === 'athena:auth-token-status') return { state: 'ready', expiresInSec: 3600 };
+    if (channel === 'athena:account-list') return { accounts: [{ id: 'account-1', alias: '모의-1' }] };
+    return { ok: true };
+  };
+  const root = new FakeElement('div');
+  const cleanup = authScreen.renderAuthTokenStatus(root, {
+    accountId: 'account-1',
+    embedded: true,
+    onBack: () => {},
+    onContinue: async () => true,
+  });
+  await flushAsync();
+  assert.equal(containsText(root, '3 / 3'), true);
+  assert.ok(findByText(root, 'button', '이전'));
+  assert.equal(findByText(root, 'button', '전환하고 다시 인증'), null);
+  cleanup();
+});
