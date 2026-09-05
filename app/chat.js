@@ -552,6 +552,19 @@ window.addEventListener('DOMContentLoaded', () => {
     if (offBootReadiness) offBootReadiness();
   }, { once: true });
 
+  // 검사 전용 정지 — 부팅은 화면이 아니라 시간축이라, 러너가 창을 다시 읽어도
+  // 지나간 단계로는 되돌아갈 수 없다. 화면계 게이트(probe-paper-screens.js)가 부팅
+  // 창을 `?bootHoldChars=N`으로 다시 읽으면 N글자까지만 찍고 그 자리에 선다 —
+  // 셸 창의 shellHandoff=1(shell.js:11)과 같은 문법이다. 파라미터가 없는 제품
+  // 경로는 이 블록을 지나가지도 않는다.
+  const bootHold = /(?:^|[?&])bootHoldChars=([0-6])(?:&|$)/.exec(location.search || '');
+  if (bootHold) {
+    const held = Number(bootHold[1]);
+    'ATHENA'.split('').slice(0, held).forEach(appendBootChar);
+    if (held > 0) $boot.dataset.phase = 'typing';
+    return;
+  }
+
   if (reducedMotion) {
     // 모션 감소는 타이핑/확장 애니메이션만 생략한다. 부팅 시작부터 완성된 정적
     // ATHENA 프레임을 최소 1.92초 유지한 뒤 같은 readiness gate를 통과한다.
