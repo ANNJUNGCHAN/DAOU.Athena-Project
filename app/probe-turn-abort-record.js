@@ -17,7 +17,7 @@
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture'; // 이 프로브는 canvasSource 자체를 안 씀 — 그냥 검증 프로필 관례
 
-const { app } = require('electron');
+const { app, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -52,13 +52,10 @@ async function main() {
   // 원래 구현 그대로 통과시킨다. runQueryLive는 top-level function 선언이라
   // (chat.js가 IIFE로 안 감싸는 classic script) window.runQueryLive로 직접
   // 호출 가능하다 — 새 진입점을 만들지 않는다.
-  await shellWin.webContents.executeJavaScript(`(() => {
-    const origInvoke = window.athena.invoke.bind(window.athena);
-    window.athena.invoke = (channel, payload) => {
-      if (channel === 'athena__render_canvas') return new Promise(() => {}); // 영원히 pending
-      return origInvoke(channel, payload);
-    };
-  })()`);
+  // 질의를 영원히 pending으로 묶는다 — 렌더러의 window.athena는 contextBridge 객체라 갈아끼울 수
+  // 없으므로(대입이 조용히 무시된다) main 쪽 핸들러를 바꾼다(2026-09-05).
+  ipcMain.removeHandler('athena__render_canvas');
+  ipcMain.handle('athena__render_canvas', () => new Promise(() => {}));
 
   // ---------- (1) 도구 단계가 있던 채로 중단 ----------
   shellWin.webContents.executeJavaScript("window.runQueryLive('테스트 — 도구 단계 있는 중단')");
@@ -102,7 +99,7 @@ async function main() {
     const header = document.querySelector('.turn-exec-header.is-aborted');
     header.click();
     const steps = header.closest('.turn-exec-record').querySelector('.progress-tool-steps');
-    return { hiddenAfterClick: steps.hidden, caret: header.querySelector('.turn-exec-header-caret').textContent };
+    return { hiddenAfterClick: steps.hidden, open: header.classList.contains('is-open') };
   })()`);
   console.log('[probe] 헤더 클릭 후(펼침 기대):', JSON.stringify(afterClick));
 
@@ -114,7 +111,7 @@ async function main() {
     && afterEscape1.stepRowCount === 1
     && afterEscape1.progressLineGone === true
     && afterClick.hiddenAfterClick === false
-    && afterClick.caret === '⌃';
+    && afterClick.open === true; // Paper 44: 캐럿은 SVG, 펼침은 is-open 클래스
 
   // ---------- (2) 도구 단계 없이(순수 판단 중) 중단 — 기록 없어야 한다 ----------
   const recordCountBefore2 = await shellWin.webContents.executeJavaScript(
