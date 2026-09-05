@@ -793,10 +793,15 @@ function stateLinksOf(contract) {
   return (Array.isArray(raw) ? raw : []).filter((link) => link && link.board_id);
 }
 
-// 하이드레이션 대상 — 봉투가 아는 종목/계좌를 그대로 넘긴다(없으면 안 싣는다).
+// 하이드레이션 대상 — 백엔드는 op의 manifest request alias로 적은 인자 가방을 받는다
+// (BoardHydrateRequest.target은 dict다). 봉투가 실어온 인자를 그대로 넘기고 종목코드만
+// 봉투 머리에서 보강한다 — 백엔드가 op마다 자기 alias만 골라 쓴다.
 function boardHydrateTarget(envelope) {
   const args = (envelope && (envelope.operation_args || envelope.arguments)) || {};
-  return cardStkCd(envelope) || args.stk_cd || envelope.symbol || args.symbol || '';
+  const target = args && typeof args === 'object' && !Array.isArray(args) ? { ...args } : {};
+  const stkCd = cardStkCd(envelope) || args.stk_cd || (envelope && envelope.symbol) || args.symbol;
+  if (stkCd) target.stk_cd = stkCd;
+  return target;
 }
 
 function boardHydrateAccount(envelope) {
@@ -869,6 +874,11 @@ function applyBoardRealtimeTick(host, tick) {
 function mountBoardState(host, boardId, envelope) {
   const state = boardStateOf(host);
   state.boardId = String(boardId);
+  // 상태 링크의 정본은 생성물 색인이다 — 봉투는 마운트한 그 보드의 직계 자식만 나르므로
+  // 갈아탄 뒤에는 형제 탭도 되돌아갈 길도 목록에 없다. 색인이 모르는 보드(픽스처 계약)
+  // 에서만 봉투가 실어온 목록을 그대로 쓴다.
+  const links = boardTemplateRegistry.stateLinksFor(state.boardId);
+  if (links.length) state.links = links;
   return boardMount.mountBoardAsync(host, state.boardId, state.values, boardMountOptions(host, envelope))
     .then((mounted) => {
       rememberMountedBoard(state, mounted);
@@ -953,6 +963,15 @@ async function hydrateBoardSlots(host, envelope, mounted) {
   if (!filled || !Object.keys(filled).length) return mounted;
   state.values = { ...state.values, ...filled };
   state.unbound = state.unbound.filter((slotId) => !(slotId in filled));
+  // 하이드레이션이 채운 슬롯도 실시간 프레임을 받아야 한다 — 응답 계약으로 색인을
+  // 다시 만들어 덧댄다. 안 하면 이 슬롯들은 첫 값에서 영영 멈춘다.
+  for (const [bindingId, slotIds] of boardMount.realtimeSlotIndex(
+    reply.surface_contract, realtimeBindingsOf(envelope),
+  )) {
+    const bucket = state.realtimeSlots.get(bindingId) || [];
+    for (const slotId of slotIds) if (!bucket.includes(slotId)) bucket.push(slotId);
+    state.realtimeSlots.set(bindingId, bucket);
+  }
   return boardMount
     .mountBoardAsync(host, state.boardId, state.values, boardMountOptions(host, envelope))
     .then((remounted) => rememberMountedBoard(state, remounted));

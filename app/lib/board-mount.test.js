@@ -10,6 +10,7 @@ const {
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
 } = require('./board-mount');
+const registry = require('./board-template-registry');
 const {
   assertReadability, collectPairedSemanticFindings,
 } = require('./board-glyph-geometry');
@@ -224,6 +225,56 @@ test('real-board fixture state marks flatten into wired 3GLA and 33WM links', ()
     node.dispatch('click');
     assert.deepEqual(activations, [targetBoard, targetBoard, targetBoard, targetBoard]);
   }
+});
+
+// ---------- 상태 링크 재계산(D-1) ----------
+// 봉투는 마운트한 그 보드의 직계 자식만 나른다. 상태 보드로 갈아탄 뒤에도 탭 레일이
+// 살아 있으려면 부모 레일의 링크를 색인에서 다시 읽어야 한다.
+
+test('상태 보드로 갈아타도 부모 레일 링크가 그대로 남는다', () => {
+  const parent = registry.stateLinksFor('137X-2');
+  const child = registry.stateLinksFor('2R3M-1');
+  assert.ok(parent.length > 0, '137X-2 색인에 상태 링크가 없다');
+  for (const link of parent) {
+    assert.ok(
+      child.some((item) => item.control === link.control && item.board_id === link.board_id),
+      `2R3M-1이 부모 레일의 ${link.control} 링크를 잃었다`,
+    );
+  }
+  // 갈아탄 보드 제 자식도 함께 갖는다 — 링크가 줄지 않는다.
+  assert.ok(child.some((item) => item.control === '분봉 시세' && item.board_id === '3FR6-0'));
+  assert.ok(child.length > parent.length);
+  assert.equal(new Set(child.map((item) => `${item.board_id} ${item.control}`)).size, child.length);
+});
+
+test('레일 주인을 부모로 둔 보드는 레일 주인으로 되돌아갈 링크를 갖는다', () => {
+  // 2QFO-2는 제 레일을 이고 있는 탭 주인이라 제 표식(투자자별 → 2QFO-2)이 레일에 있다.
+  const owner = registry.stateLinksFor('2QFO-2');
+  assert.deepEqual(
+    owner.find((item) => item.board_id === '2QFO-2'),
+    { control: '투자자별', board_id: '2QFO-2' },
+  );
+  const child = registry.stateLinksFor('2ROJ-1');
+  assert.deepEqual(
+    child.find((item) => item.board_id === '2QFO-2'),
+    { control: '투자자별', board_id: '2QFO-2' },
+  );
+  for (const link of owner) {
+    assert.ok(
+      child.some((item) => item.control === link.control && item.board_id === link.board_id),
+      `2ROJ-1이 레일 주인의 ${link.control} 링크를 잃었다`,
+    );
+  }
+});
+
+test('레일에 제 표식이 없는 부모로 되돌아가는 링크는 지어내지 않는다', () => {
+  // 13BC-2 레일에는 13BC-2 자신을 여는 표식이 없다(저작 공백). 없는 화면을 만들지 않는다.
+  const child = registry.stateLinksFor('2TRW-1');
+  assert.ok(child.length > 0, '2TRW-1이 부모 레일 링크조차 못 받았다');
+  assert.equal(child.some((item) => item.board_id === '13BC-2'), false);
+  // 색인이 모르는 보드는 빈 목록 — 호출부가 봉투가 실어온 목록을 그대로 쓴다.
+  assert.deepEqual(registry.stateLinksFor('fixture-quote'), []);
+  assert.deepEqual(registry.stateLinksFor(''), []);
 });
 
 test('native button and tab state controls keep their existing semantics', () => {
