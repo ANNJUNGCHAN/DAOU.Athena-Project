@@ -2364,12 +2364,13 @@ app.whenReady().then(async () => {
       expanded: trigger.getAttribute('aria-expanded'),
       visible: !menu.hidden,
       role: menu.getAttribute('role'),
-      firstAction: menu.querySelector('[role="menuitem"]')?.textContent || '',
+      firstAction: menu.querySelector('.sidebar-project-menu-item-label')?.textContent || '',
       actionsOpacity: Number(getComputedStyle(actions).opacity),
       display: getComputedStyle(menu).display,
       rect: { width: rect.width, height: rect.height },
       focusedRole: document.activeElement?.getAttribute('role') || '',
-      itemLabels: Array.from(menu.querySelectorAll('[role="menuitem"]')).map((node) => node.textContent),
+      itemLabels: Array.from(menu.querySelectorAll('.sidebar-project-menu-item-label')).map((node) => node.textContent),
+      itemHints: Array.from(menu.querySelectorAll('.sidebar-project-menu-item-hint')).map((node) => node.textContent),
     };
   })()`);
   await shot(shellWin, '03k-project-menu-paper-54.png');
@@ -2411,6 +2412,10 @@ app.whenReady().then(async () => {
     // 37번 보드 — ⋯ 는 셋뿐이다(고정·탐색기·제거). 편집·작업 트리·보관은 사라졌다.
     && JSON.stringify(projectMenu.itemLabels) === JSON.stringify([
       '최상단 고정', '탐색기에서 열기', '프로젝트 제거',
+    ])
+    // 같은 보드가 항목마다 결과 한 줄을 함께 그린다 — 라벨만 두면 무슨 일이 일어나는지 안 적힌다.
+    && JSON.stringify(projectMenu.itemHints) === JSON.stringify([
+      '목록 맨 위에 붙여 둡니다', '이 프로젝트 폴더를 창으로 엽니다', '폴더와 그 안의 파일을 지웁니다',
     ]));
 
   // ---------- 검증 4: 접근성 3종 (CDP Emulation.setEmulatedMedia) ----------

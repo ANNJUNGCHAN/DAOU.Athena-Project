@@ -101,6 +101,11 @@
            클릭만 배선하고, 실제 전환은 graph-mode/controller.js의 setView()
            하나가 소유한다 — P4). 기본 active는 "대화"(VIEW_SUMMARY 초기값과
            일치) — 부팅 시 별도 JS 호출 없이 정적 마크업으로 맞춘다. -->
+      <!-- 이력의 머리는 다섯 모드다(Paper 보드 35) — 그 구역의 이름과 지금 든 대화 수. -->
+      <div class="sidebar-mode-caption">
+        <span>이력 · 모드</span>
+        <span id="sidebarModeTotal"></span>
+      </div>
       <div class="sidebar-mode-nav" id="sidebarModeNav">
         <button class="sidebar-mode-item is-active" id="modeNavSummary" type="button" data-view="summary" aria-pressed="true">
           <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5C2 2.7 2.7 2 3.5 2h7c.8 0 1.5.7 1.5 1.5v5c0 .8-.7 1.5-1.5 1.5H6L3.5 12v-2H3.5C2.7 10 2 9.3 2 8.5v-5z" fill="none" stroke="currentColor" stroke-width="1.2" /></svg>

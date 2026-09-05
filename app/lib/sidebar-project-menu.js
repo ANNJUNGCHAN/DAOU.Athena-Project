@@ -26,19 +26,27 @@ const MODE_CHOICES = Object.freeze([
 const DEFAULT_PROJECT_ID = 'default'; // conversations.js DEFAULT_PROJECT_ID와 같은 값.
 
 // 비활성은 이유를 함께 낸다 — 왜 못 누르는지 없이 회색으로만 두면 사람이 고장으로 읽는다.
+// 항목마다 결과를 한 줄로 붙인다(37번 보드 "메뉴를 늘리지 않는 대신, 셋 각각의 결과를
+// 분명히 적는다") — 고정만 순서를 되돌리는 쪽 문장이 따로 있다.
 function menuItemsFor(project) {
   const row = project || {};
   return [
-    { key: 'pin', label: row.pinned ? '고정 해제' : '최상단 고정' },
+    {
+      key: 'pin',
+      label: row.pinned ? '고정 해제' : '최상단 고정',
+      hint: row.pinned ? '목록 맨 위에서 내립니다' : '목록 맨 위에 붙여 둡니다',
+    },
     {
       key: 'reveal',
       label: '탐색기에서 열기',
+      hint: '이 프로젝트 폴더를 창으로 엽니다',
       disabled: !row.path,
       reason: '폴더가 연결되지 않은 프로젝트입니다',
     },
     {
       key: 'remove',
       label: '프로젝트 제거',
+      hint: '폴더와 그 안의 파일을 지웁니다',
       danger: true,
       disabled: row.id === DEFAULT_PROJECT_ID,
       reason: '기본 프로젝트는 지울 수 없습니다',
