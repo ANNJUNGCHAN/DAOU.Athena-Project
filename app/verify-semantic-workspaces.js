@@ -16,6 +16,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawn, spawnSync } = require('node:child_process');
 const { publicPolicies: publicRealtimePolicies } = require('./lib/main/integrated-card-realtime');
+const paperCardRouting = require('./lib/paper-card-routing');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -94,6 +95,7 @@ import sys
 sys.path[:0] = ['.', 'tests']
 
 from athena_api.api.canvas_push import _bind_semantic_values, _integrated_card_contract
+from athena_api.canvas_transform import resolve_fixed_card_title
 from athena_api.semantic_presentation_registry import get_semantic_presentation_registry
 from athena_api.view_recipe_registry import get_view_recipe_registry
 from support.canvas_fixture_factory import build_operation_fixtures, build_recipe_display_sections
@@ -233,25 +235,24 @@ for recipe in recipes.recipes:
                 'visibility_policy': 'always',
             },
         ]
-    preserve_primary = recipe.recipe_id in {'instrument-chart', 'live-orderbook', 'order-safe-ticket'}
     primary_data = copy.deepcopy(selected.primary_data)
     envelope = {
         **contract,
+        # canvas_push가 싣는 최상위 필드를 그대로 싣는다(operation_ref·card_title은
+        # 생산 봉투의 값이다) — 픽스처가 이걸 빼면 카드 배선 판정이 픽스처에서만
+        # 다르게 돌아 회귀를 못 잡는다(2026-09-06 검수 발견).
+        'operation_ref': selected.mapping_id,
+        'card_title': resolve_fixed_card_title(selected.mapping_id),
         'canvas_type': selected.canvas_type,
         'data': primary_data,
         'renderer_id': selected.renderer_id,
         'caption': recipe.title_ko,
         'operation_args': {'stk_cd': '005930'},
     }
-    if recipe.recipe_id == 'live-orderbook':
-        envelope['card_title'] = '호가'
-    if recipe.recipe_id == 'order-safe-ticket':
-        envelope['card_title'] = '주문'
     representatives.append({
         'recipe_id': recipe.recipe_id,
         'operation_ref': selected.mapping_id,
         'expected_sections': list(recipe.section_ids),
-        'primary_expected': preserve_primary,
         'expected_candle_count': len(primary_data.get('chart', {}).get('candles', [])),
         'expects_two_sided_orderbook': recipe.recipe_id == 'live-orderbook',
         'expects_order_draft': recipe.recipe_id == 'order-safe-ticket',
@@ -282,7 +283,14 @@ function loadFixtureBundle() {
     },
   );
   if (result.status !== 0) throw new Error(`Task Canvas fixture generation failed:\n${result.stderr}`);
-  return JSON.parse(result.stdout);
+  const bundle = JSON.parse(result.stdout);
+  // "앱 렌더러가 primary라 보드가 가로채지 않는다"는 판정은 앱과 같은 함수가 든다.
+  // 검증기가 recipe 3종을 따로 세면 앱이 새로 보드로 보내기 시작한 봉투를 여기서
+  // 채점하지 못한다 — 두 집합이 갈라질 길을 없앤다(2026-09-06 검수 P1).
+  for (const representative of bundle.representatives || []) {
+    representative.primary_expected = paperCardRouting.preservesAppPrimary(representative.envelope);
+  }
+  return bundle;
 }
 
 function sha256(buffer) {
@@ -426,8 +434,15 @@ async function inspectAndStage(win, recipe) {
   return waitFor(
     () => win.webContents.executeJavaScript(`(() => {
       const grid = document.getElementById('grid');
-      const card = grid && [...grid.querySelectorAll('.card')].find((item) => item.dataset.taskCanvas === 'true');
-      if (!card || !card.querySelector('.semantic-workspace')) return null;
+      const card = grid && [...grid.querySelectorAll('.card')].find(
+        (item) => item.dataset.taskCanvas === 'true' || item.dataset.boardSurface === 'true');
+      if (!card) return null;
+      // 보드 표면 카드에는 의미 작업대가 안 붙는다(canvas.js 세 upsert 호출부의 보드
+      // 예외) — 그래서 마운트 판정도 갈린다: 보드는 보드가 섰는지, 나머지는 작업대가
+      // 붙었는지를 본다.
+      const boardSurface = card.dataset.boardSurface === 'true';
+      const boardHost = card.querySelector('.board-surface-host');
+      if (boardSurface ? !(boardHost && boardHost.children.length) : !card.querySelector('.semantic-workspace')) return null;
       const shell = document.getElementById('shell');
       if (shell) {
         shell.hidden = false;
@@ -443,8 +458,9 @@ async function inspectAndStage(win, recipe) {
       card.hidden = false;
       card.removeAttribute('hidden');
       const workspace = card.querySelector('.semantic-workspace');
-      const sections = [...workspace.querySelectorAll('.semantic-workspace-section')];
-      const values = [...workspace.querySelectorAll('.semantic-workspace-value, .semantic-workspace-table tbody td')];
+      const sections = workspace ? [...workspace.querySelectorAll('.semantic-workspace-section')] : [];
+      const values = workspace
+        ? [...workspace.querySelectorAll('.semantic-workspace-value, .semantic-workspace-table tbody td')] : [];
       const raw = card.querySelector('.semantic-detail-sheet');
       const forbiddenPattern = /(?:\\b(?:FID|raw|alias|REST|0D|fundamentals|entry|draft|json[ _-]?path|mapping[ _-]?id|operation[ _-]?ref|plan[ _-]?token|trace[ _-]?id)\\b|(?:base|detail):[a-z0-9]|\\bka\\d{5}\\b|canonical snapshot|백엔드 영속|후속 라운드|미구현|\\$\\.)/i;
       const visibleText = card.innerText || '';
@@ -478,6 +494,9 @@ async function inspectAndStage(win, recipe) {
         }).length;
       return {
         recipeId: ${JSON.stringify(recipe.recipe_id)},
+        boardSurface,
+        boardId: card.dataset.boardId || null,
+        semanticWorkspaceMounted: Boolean(workspace),
         sections: sections.map((node) => node.dataset.semanticSection),
         primitiveSections,
         valueCount: values.length,
@@ -515,7 +534,7 @@ async function inspectAndStage(win, recipe) {
         },
       };
     })()`),
-    `${recipe.recipe_id}: semantic workspace did not mount`,
+    `${recipe.recipe_id}: card surface did not mount`,
   );
 }
 
@@ -596,16 +615,25 @@ async function verifyNarrowWindow(win, representative) {
 
   const dom = await win.webContents.executeJavaScript(`(() => {
     const stage = document.getElementById('semanticVerificationStage');
-    const workspace = stage.querySelector('.semantic-workspace');
-    const tableWrap = workspace.querySelector('.semantic-workspace-table-wrap');
+    // 재는 기준은 실제로 선 표면이다 — 작업대가 붙는 카드는 작업대, Paper 보드로
+    // 그려지는 카드는 카드 루트. 보드 대표를 작업대 선택자로 재면 대상이 0개가 되어
+    // 탭 타깃·오버플로 단언이 통째로 무조건 참이 된다(2026-09-06 검수 발견).
+    const card = stage.querySelector('.card');
+    const workspace = card.querySelector('.semantic-workspace');
+    const root = workspace || card;
+    const boardHost = card.querySelector('.board-surface-host');
+    const boardSurface = boardHost && boardHost.firstElementChild;
+    const tableWrap = root.querySelector('.semantic-workspace-table-wrap');
     if (tableWrap) tableWrap.focus();
-    const targets = [...workspace.querySelectorAll('button, a, input, select, textarea, [tabindex]')]
+    // 탭 타깃은 표면 안을 잰다. 카드 머리(닫기 22px)는 Paper 카드 크롬의 치수라
+    // 이 게이트의 주제가 아니다 — 표면 안에 조작 요소가 생기면 여기서 걸린다.
+    const targets = [...root.querySelectorAll('button, a, input, select, textarea, [tabindex]')]
       .filter((node) => !node.hidden)
       .map((node) => {
         const rect = node.getBoundingClientRect();
         return { width: rect.width, height: rect.height, tag: node.tagName };
       });
-    const value = workspace.querySelector('.semantic-workspace-value');
+    const value = root.querySelector('.semantic-workspace-value');
     const motion = value ? getComputedStyle(value) : null;
     const rgb = (color) => (String(color).match(/[\\d.]+/g) || []).slice(0, 3).map(Number);
     const luminance = (color) => {
@@ -617,27 +645,76 @@ async function verifyNarrowWindow(win, representative) {
       const values = [luminance(foreground), luminance(background)].sort((a, b) => b - a);
       return (values[0] + 0.05) / (values[1] + 0.05);
     };
-    const contrastSamples = [...stage.querySelectorAll([
+    // 배경은 흰색으로 가정하지 않는다 — 보드 원문은 자기 배경을 칠하고 온다.
+    // 반투명 배경(#5FCE3F1F 같은 칩)은 조상 위에 합성해야 실제로 보이는 색이 된다.
+    const backgroundOf = (node) => {
+      const layers = [];
+      for (let cursor = node; cursor; cursor = cursor.parentElement) {
+        const parts = (String(getComputedStyle(cursor).backgroundColor).match(/[\\d.]+/g) || []).map(Number);
+        if (parts.length < 3) continue;
+        const alpha = parts.length > 3 ? parts[3] : 1;
+        if (!alpha) continue;
+        layers.push({ r: parts[0], g: parts[1], b: parts[2], a: alpha });
+        if (alpha >= 1) break;
+      }
+      let composed = { r: 255, g: 255, b: 255 };
+      for (let index = layers.length - 1; index >= 0; index -= 1) {
+        const layer = layers[index];
+        composed = {
+          r: layer.r * layer.a + composed.r * (1 - layer.a),
+          g: layer.g * layer.a + composed.g * (1 - layer.a),
+          b: layer.b * layer.a + composed.b * (1 - layer.a),
+        };
+      }
+      return \`rgb(\${Math.round(composed.r)}, \${Math.round(composed.g)}, \${Math.round(composed.b)})\`;
+    };
+    const appChromeSamples = [...stage.querySelectorAll([
       '.semantic-workspace-title',
       '.semantic-workspace-section-title',
       '.semantic-workspace-value',
       '.integrated-card-tab.is-active',
       '.integrated-realtime-error',
       '.integrated-realtime-error button',
-    ].join(', '))]
-      .slice(0, 20)
-      .map((node) => ({ className: node.className, color: getComputedStyle(node).color,
-        contrastOnWhite: contrast(getComputedStyle(node).color, 'rgb(255, 255, 255)') }));
+    ].join(', '))];
+    // 작업대가 없는 보드 카드는 Paper 원문 텍스트를 잰다. 그 색은 Paper가 정본이라
+    // 이 게이트가 3:1을 요구하지 않는다(앱이 칠한 색만 요구한다) — 대신 잰 값을
+    // 영수증에 남겨 보드 색 드리프트가 눈에 보이게 한다.
+    const boardSamples = appChromeSamples.length ? [] : [...root.querySelectorAll('*')]
+      .filter((node) => [...node.childNodes]
+        .some((child) => child.nodeType === 3 && child.textContent.trim())
+        && node.getBoundingClientRect().width > 0);
+    const sampleOf = (node, paperOwned) => ({
+      tag: node.tagName, className: String(node.className || ''), paperOwned,
+      text: (node.textContent || '').trim().slice(0, 24),
+      color: getComputedStyle(node).color, background: backgroundOf(node),
+      contrastOnBackground: contrast(getComputedStyle(node).color, backgroundOf(node)),
+    });
+    const contrastSamples = [
+      ...appChromeSamples.slice(0, 20).map((node) => sampleOf(node, false)),
+      ...boardSamples.slice(0, 20).map((node) => sampleOf(node, true)),
+    ];
     return {
       viewport: { width: window.innerWidth, height: window.innerHeight },
+      semanticWorkspaceMounted: Boolean(workspace),
       documentOverflow: document.documentElement.scrollWidth > window.innerWidth,
-      workspaceOverflow: workspace.scrollWidth > workspace.clientWidth,
+      workspaceOverflow: root.scrollWidth > root.clientWidth,
+      surfaceWidth: { scroll: root.scrollWidth, client: root.clientWidth },
+      // 보드 카드 본문은 잘라내므로(card-body is-clipped) 카드 루트만 재면 넘침이
+      // 안 보인다 — Paper 원문(1360px)이 실제로 좁은 창까지 접혔는지는 보드 자리와
+      // 그 안의 원문 노드를 재야 나온다.
+      boardWidth: boardHost ? {
+        host: boardHost.clientWidth,
+        surface: boardSurface ? Math.round(boardSurface.getBoundingClientRect().width) : null,
+        scroll: boardSurface ? boardSurface.scrollWidth : boardHost.scrollWidth,
+      } : null,
+      boardOverflow: boardHost && boardSurface
+        ? boardSurface.scrollWidth > boardHost.clientWidth : false,
       tableHorizontalOverflow: tableWrap ? tableWrap.scrollWidth > tableWrap.clientWidth : false,
       tableOwnsOverflow: tableWrap ? tableWrap.scrollWidth >= tableWrap.clientWidth : null,
       tableFocusable: !tableWrap || tableWrap.tabIndex === 0,
       tableFocused: !tableWrap || document.activeElement === tableWrap,
-      headingsScoped: [...workspace.querySelectorAll('th')].every((node) => node.getAttribute('scope') === 'col'),
-      workspaceAriaLabel: workspace.getAttribute('aria-label'),
+      headingsScoped: [...root.querySelectorAll('th')].every((node) => node.getAttribute('scope') === 'col'),
+      workspaceAriaLabel: workspace ? workspace.getAttribute('aria-label') : null,
       targetCount: targets.length,
       undersizedTargets: targets.filter((target) => target.width < 44 || target.height < 44),
       reducedMotionMatched: matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -649,10 +726,16 @@ async function verifyNarrowWindow(win, representative) {
   if (debuggerAttached) win.webContents.debugger.detach();
 
   if (dom.viewport.width !== 390 || dom.viewport.height !== 844) throw new Error(`narrow-window viewport drifted: ${JSON.stringify(dom.viewport)}`);
+  // boardOverflow는 판정하지 않는다 — 보드 원문은 1360px 설계라 390px에서 아직
+  // 접히지 않고(실측 924px, 카드가 잘라내 창은 가로로 안 밀린다), 접힘을 요구하는
+  // 계약이 아직 없다. 잰 값은 영수증에 남겨 다음 단계가 근거로 쓴다.
   if (dom.documentOverflow || dom.workspaceOverflow || dom.tableHorizontalOverflow) throw new Error(`narrow-window surface overflowed: ${JSON.stringify(dom)}`);
-  if (!dom.tableFocusable || !dom.headingsScoped || !dom.workspaceAriaLabel) throw new Error(`narrow-window keyboard/table semantics failed: ${JSON.stringify(dom)}`);
+  // aria-label은 의미 작업대의 계약이다 — 보드 카드는 Paper 원문이 자기 머리를 갖는다.
+  if (!dom.tableFocusable || !dom.headingsScoped
+    || (dom.semanticWorkspaceMounted && !dom.workspaceAriaLabel)) throw new Error(`narrow-window keyboard/table semantics failed: ${JSON.stringify(dom)}`);
   if (dom.undersizedTargets.length) throw new Error(`narrow-window interactive target below 44px: ${JSON.stringify(dom.undersizedTargets)}`);
-  const lowContrast = dom.contrastSamples.filter((sample) => sample.contrastOnWhite < 3);
+  const lowContrast = dom.contrastSamples
+    .filter((sample) => !sample.paperOwned && sample.contrastOnBackground < 3);
   if (lowContrast.length) throw new Error(`narrow-window card text contrast below 3:1: ${JSON.stringify(lowContrast)}`);
   if (debuggerAttached && (!dom.reducedMotionMatched
     || (dom.animationDuration !== null && dom.animationDuration !== '0s')
@@ -666,10 +749,10 @@ async function verifyNarrowWindow(win, representative) {
   const png = image.toPNG();
   const pixels = visualPixelReceipt(image);
   if (pixels.varied_pixels < 100) throw new Error(`blank narrow-window screenshot: ${JSON.stringify(pixels)}`);
-  const file = 'narrow-window-390x844.png';
+  const file = `narrow-window-390x844-${fileSafe(representative.recipe_id)}.png`;
   fs.writeFileSync(path.join(ARTIFACT_DIR, file), png);
   return {
-    ...dom, screenshot: file, screenshot_sha256: sha256(png),
+    recipe_id: representative.recipe_id, ...dom, screenshot: file, screenshot_sha256: sha256(png),
     screenshot_dimensions: image.getSize(), screenshot_pixels: pixels,
   };
 }
@@ -729,9 +812,17 @@ async function main() {
         envelope: representative.envelope,
       });
       const dom = await inspectAndStage(win, representative);
-      const expectedVisibleSections = expectedProductSections(representative);
+      // 보드로 그려지는 카드는 Paper 보드 그 자체다 — 의미 작업대는 그 카드의
+      // 표시 계약이 아니므로 섹션·값 검사를 걸지 않고, 대신 시트가 한 겹 더
+      // 붙지 않았는지를 본다. 보드 표면 자체의 반응형·실시간 계약은
+      // verify:integrated-cards가 든다.
+      const expectedVisibleSections = dom.boardSurface ? [] : expectedProductSections(representative);
       const expectedSections = expectedVisibleSections.map((section) => section.section_id);
-      if (JSON.stringify(dom.sections) !== JSON.stringify(expectedSections)) {
+      if (dom.boardSurface) {
+        if (dom.semanticWorkspaceMounted) {
+          throw new Error(`${representative.recipe_id}: semantic workspace was layered under the Paper board`);
+        }
+      } else if (JSON.stringify(dom.sections) !== JSON.stringify(expectedSections)) {
         throw new Error(`${representative.recipe_id}: named section order drifted: ${JSON.stringify({ expectedSections, actualSections: dom.sections })}`);
       }
       const specializedPrimaryMounted = representative.recipe_id === 'instrument-chart'
@@ -739,7 +830,7 @@ async function main() {
         : representative.recipe_id === 'live-orderbook'
           ? dom.hasOrderbookPrimary
           : representative.recipe_id === 'order-safe-ticket' ? dom.hasOrderDraftUi : false;
-      if (!dom.valueCount && !(representative.primary_expected && specializedPrimaryMounted)) {
+      if (!dom.boardSurface && !dom.valueCount && !(representative.primary_expected && specializedPrimaryMounted)) {
         throw new Error(`${representative.recipe_id}: no semantic value or specialized primary mounted`);
       }
       if (dom.rawMounted || dom.forbiddenAccessibleText || dom.forbiddenDomAttribute || dom.forbiddenText) {
@@ -806,6 +897,9 @@ async function main() {
       results.push({
         recipe_id: representative.recipe_id,
         representative_operation: representative.operation_ref,
+        board_surface: dom.boardSurface,
+        board_id: dom.boardId,
+        semantic_workspace_mounted: dom.semanticWorkspaceMounted,
         expected_sections: expectedSections,
         rendered_sections: dom.sections,
         rendered_components: dom.primitiveSections,
@@ -835,8 +929,14 @@ async function main() {
       || failureStateRegression.semanticWorkspaceMounted) {
       throw new Error(`failure state exposed a data surface: ${JSON.stringify(failureStateRegression)}`);
     }
-    const narrowWindowRepresentative = bundle.representatives.find((item) => item.recipe_id === 'discovery-value');
-    narrowWindowRegression = await verifyNarrowWindow(win, narrowWindowRepresentative);
+    // 좁은 창 회귀는 두 경로를 다 잰다 — 의미 작업대가 서는 카드(order-safe-ticket)와
+    // Paper 보드로 그려지는 카드(discovery-value). 작업대 대표만 재면 보드 카드의
+    // 오버플로·탭 타깃 단언이 대상 0개로 무조건 참이 된다(2026-09-06 검수 발견).
+    narrowWindowRegression = [];
+    for (const recipeId of ['order-safe-ticket', 'discovery-value']) {
+      const narrowWindowRepresentative = bundle.representatives.find((item) => item.recipe_id === recipeId);
+      narrowWindowRegression.push(await verifyNarrowWindow(win, narrowWindowRepresentative));
+    }
   } finally {
     if (!win.isDestroyed()) win.destroy();
   }
