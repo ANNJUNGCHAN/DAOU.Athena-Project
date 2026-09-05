@@ -4,7 +4,7 @@
 //
 // 매니페스트 role==="screen" 104장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 초기 8장(에이전트 4 + 화면 4)이고, 래칫(§4.5)이 이 8장을 잠근 뒤 저작이 이어진다.
+// 지금은 16장(에이전트 4 + 화면 4 + 부팅 5 + 온보딩 3)이고, 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
 // 임의 JS를 표에 심으면 표가 곧 프로브가 되어 유지가 안 된다. STEP_KINDS만 허용하고,
@@ -62,10 +62,24 @@ const STEP_KINDS = Object.freeze({
   'ipc-fixture': Object.freeze(['channel', 'data']),
   // envelope  data — 캔버스 봉투 주입 (verify.js:3745-3754 liveEnvelope)
   envelope: Object.freeze(['data']),
+  // send      channel,data — main→렌더러 이벤트를 그대로 쏜다(webContents.send).
+  //                          `envelope`이 add-canvas-live 하나에 봉투 모양까지 박아 둔
+  //                          것과 달리 채널과 값을 그대로 넘긴다. 클릭으로는 못 가는
+  //                          상태가 있어서다: 능동 턴은 백엔드 WS가 밀어 준
+  //                          athena:routine-event 하나로만 그려지고(chat.js:3041),
+  //                          앱 어디에도 그것을 다시 여는 버튼이 없다. 채널이 실재하는지는
+  //                          check-paper-routes.mjs 규칙 2가 잰다 — 되돌릴 것은 없다
+  //                          (라우트마다 창을 다시 읽는다).
+  send: Object.freeze(['channel', 'data']),
   // wait      ms
   wait: Object.freeze(['ms']),
   // settle    (인자 없음) — rAF 2회 (verify.js responsiveSettle)
   settle: Object.freeze([]),
+  // boot-hold chars — 부팅 창을 `?bootHoldChars=N`으로 다시 읽어 N글자에서 세운다
+  //                    (chat.js의 같은 이름 블록, 셸 창의 shellHandoff=1과 같은 문법).
+  //                    부팅은 화면이 아니라 시간축이라 도달한 뒤에 되돌아갈 클릭이 없다 —
+  //                    이 한 마디가 없으면 부팅 다섯 단계가 전부 마지막 프레임으로 수렴한다.
+  'boot-hold': Object.freeze(['chars']),
   // eval      js,why — 탈출구. why가 없으면 라우트표 린트가 거절한다
   eval: Object.freeze(['js', 'why']),
 });
@@ -113,7 +127,264 @@ const PAPER_ACCOUNTS = Object.freeze({
   ],
 });
 
+// CLI 목록 fixture — 온보딩 07·33이 그린 상태(다계정 카드 하나 + 연결된 한 줄 +
+// 미연결 한 줄)를 앱이 실제로 돌려주는 봉투 모양·순서 그대로 만든다
+// (cli-accounts.js:258-265 selectList, PROVIDER_ORDER는 claude·grok·codex).
+// 이게 없으면 판정이 이 컴퓨터에 로그인된 CLI에 좌우된다. 값은 전부 데이터라
+// phrases에는 한 글자도 넣지 않는다 — 제공자 이름도 여기서 오므로 안 쓴다.
+const PAPER_CLI_PROVIDERS = Object.freeze({
+  providers: [
+    {
+      id: 'claude',
+      name: 'Claude',
+      connected: true,
+      accounts: [
+        { id: 'fx-c1', label: 'athena-1@example.com', active: true, current: true },
+        { id: 'fx-c2', label: 'athena-2@example.com', active: false, current: false },
+      ],
+    },
+    { id: 'grok', name: 'Grok', connected: false, accounts: [] },
+    {
+      id: 'codex',
+      name: 'Codex',
+      connected: true,
+      accounts: [{ id: 'fx-x1', label: 'athena-1@example.com', active: false, current: true }],
+    },
+  ],
+});
+
+// 로그인 요청의 두 결말. 실제 핸들러는 터미널 창을 띄우므로(main.js:4849 handleCliLogin →
+// cli-accounts.js login) 검사에서 원 핸들러를 부르면 안 된다 — 봉투는 login()이
+// 돌려주는 그 모양이다(cli-accounts.js:334·347).
+const CLI_LOGIN_LAUNCHED = Object.freeze({ ok: true, launched: true, message: '' });
+const CLI_LOGIN_NOT_INSTALLED = Object.freeze({ ok: false, launched: false, message: '' });
+
+// 능동 턴 이벤트 — 보드 09가 그린 turn-agent(조건 패널 형식) 그대로. 앱은 이 한
+// 봉투에서 배지·방식·조건 패널·각주를 전부 만든다(lib/routine-turn.js buildTurnModel).
+// `mode`를 안 싣는 것은 일부러다: Paper가 머리에 적은 말이 「주기 확인」이고, 그것이
+// describeMode의 기본값이다. 종목·관측값·임계는 값이라 phrases에 한 글자도 안 넣는다 —
+// 각주와 고지 문장만이 이 봉투와 무관하게 늘 같은 문구다.
+const ROUTINE_FIRED = Object.freeze({
+  type: 'routine-fired',
+  routine_id: 'fx-r1',
+  symbol: '삼성전자 005930',
+  note: '삼성전자 88,000',
+  observed: '88,100',
+  threshold: '88,000',
+  fired_at: '2026-08-20T15:30:00+09:00',
+});
+
+// 되물을 것들 3건 — 보드 08의 「1 / 3」이 그 수다. 백엔드 봉투 모양 그대로
+// {ok, revision, questions}(main.js가 result.body를 펼쳐 준다, chat.js:1941 주석).
+// 이 fixture가 없으면 카드가 이 컴퓨터의 브레인에 좌우된다: 물을 것이 0건이면
+// 확인 필요 배너 자체가 안 그려지고(summary-table.js renderConfirmBanner), 배너가
+// 없으면 카드를 여는 클릭이 없다. 질문 문장·근거는 전부 값이라 phrases에 안 넣는다.
+const BRAIN_QUESTIONS = Object.freeze({
+  ok: true,
+  revision: 1,
+  questions: [
+    {
+      relation_id: 'fx-q1',
+      subject_name: 'default',
+      object_name: '헬스케어',
+      relation_kind: 'interested_in',
+      rationale: '"잘 모르겠다" — 관심 여부 불명확',
+      question: "헬스케어에 대해 'interested_in'가 맞나요? 확실하지 않은 것으로 기록해 두었습니다.",
+    },
+    {
+      relation_id: 'fx-q2',
+      subject_name: 'default',
+      object_name: '2차전지',
+      relation_kind: 'avoids',
+      rationale: null,
+      question: "2차전지에 대해 'avoids'가 맞나요? 확실하지 않은 것으로 기록해 두었습니다.",
+    },
+    {
+      relation_id: 'fx-q3',
+      subject_name: '한미반도체',
+      object_name: '배당 방어 바스켓',
+      relation_kind: 'relates_to',
+      rationale: null,
+      question: "'relates_to'가 맞나요? 확실하지 않은 것으로 기록해 두었습니다.",
+    },
+  ],
+});
+
 const ROUTES = Object.freeze([
+  // ---------- 부팅 5장 (1-0) ----------
+  // 부팅 02~05는 한 애니메이션의 시간 단계라 서로를 가르는 것은 **찍힌 글자 수**뿐이다.
+  // 원장 texts도 그것뿐이다: 'ATHENA'(폭 guide) · 이미 찍힌 조각 · 커서 '|'. 그래서 이
+  // 넷은 문구가 아니라 structure가 판정을 진다 — .boot-name-char 개수가 0·2·4·6으로
+  // 갈린다(chat.js 240 + (i+1)*160ms 슬롯 여섯 번). 02·05는 원장에 문구가 둘뿐이라
+  // 3개 하한을 paper-screen-routes.test.js가 사유와 함께 예외 처리했고, 그 대가로
+  // structure를 셋씩 실었다.
+  {
+    board: '16OD-2', // 02 · 부팅 — READY · 0–240ms
+    window: 'boot',
+    reach: [{ do: 'boot-hold', chars: 0 }, { do: 'settle' }],
+    root: '#boot',
+    // 'ATHENA'는 앱에서 색이 투명한 폭 guide다(chat.css .boot-base — 사용자 결정
+    // "글자 뒤에 회색 문자가 비치지 않는다"). 가시 텍스트로는 잡히지만 눈에는
+    // 안 보이므로, 이 보드에서 실제로 무게를 지는 것은 아래 structure 셋이다.
+    phrases: ['ATHENA', '|'],
+    structure: [
+      { what: 'absent', selector: '.boot-name-char' }, // 아직 한 글자도 안 찍혔다
+      { what: 'count', selector: '.boot-logo', equals: 1 }, // 키움증권 CI
+      { what: 'count', selector: '.boot-cursor', equals: 1 },
+    ],
+  },
+  {
+    board: '16OJ-2', // 03 · 부팅 — TYPE A→AT · 240–560ms
+    window: 'boot',
+    reach: [{ do: 'boot-hold', chars: 2 }, { do: 'settle' }],
+    root: '#boot',
+    // Paper는 남은 글자를 'HENA'로 따로 그리고 앱은 'ATHENA' 폭 guide 한 덩이로
+    // 그린다 — 같은 픽셀이라 문구로는 갈리지 않는다. 갈리는 것은 찍힌 두 글자다.
+    phrases: ['AT', 'HENA', '|'],
+    structure: [
+      { what: 'count', selector: '.boot-name-char', equals: 2 },
+      { what: 'count', selector: '.boot-logo', equals: 1 },
+    ],
+  },
+  {
+    board: '16OQ-2', // 04 · 부팅 — TYPE ATH→ATHE · 560–880ms
+    window: 'boot',
+    reach: [{ do: 'boot-hold', chars: 4 }, { do: 'settle' }],
+    root: '#boot',
+    phrases: ['ATHE', 'NA', '|'],
+    structure: [
+      { what: 'count', selector: '.boot-name-char', equals: 4 },
+      { what: 'count', selector: '.boot-logo', equals: 1 },
+    ],
+  },
+  {
+    board: '16OX-2', // 05 · 부팅 — COMPLETE · 880–1440ms
+    window: 'boot',
+    reach: [{ do: 'boot-hold', chars: 6 }, { do: 'settle' }],
+    root: '#boot',
+    phrases: ['ATHENA', '|'],
+    structure: [
+      { what: 'count', selector: '.boot-name-char', equals: 6 }, // ATHENA가 다 찍혔다
+      { what: 'count', selector: '.boot-logo', equals: 1 },
+      { what: 'count', selector: '.boot-cursor', equals: 1 },
+    ],
+  },
+  {
+    board: '16P3-2', // 06 · 부팅 — DIRECT SHELL EXPAND · 1440–1920ms
+    window: 'shell',
+    // 부팅이 끝나면 완성된 조판이 셸로 펼쳐진다 — 러너가 읽은 셸 창이 곧 그 상태다.
+    reach: [{ do: 'settle' }],
+    root: '#shell',
+    // Paper가 이 보드에 채운 카드·대화·에이전트 턴은 전부 데이터라 문구가 못 된다.
+    // 사이드바 첫 행은 Paper가 「새 채팅」, 앱이 「새 대화」로 갈리는데(보드 12·29도
+    // 같다) 어느 쪽이 정본인지는 사이드바 보드가 정할 일이라 여기서는 안 적는다.
+    phrases: ['그래프', '에이전트', '플러그인'],
+    // Paper의 프레임 이름이 그대로 계약이다 — 「Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)」.
+    structure: [{ what: 'count', selector: '.shell-region', equals: 3 }],
+  },
+
+  // ---------- 온보딩 3장 (1-0) ----------
+  // 온보딩은 부팅이 딱 한 번 읽는 상태다(chat.js:255 athena:onboarding-state →
+  // startOnboarding). 도달한 뒤에 그 화면을 여는 클릭이 앱 어디에도 없어서, 셸을
+  // 다시 읽지 않는 러너에서는 앱 자신의 진입점을 부르는 eval이 유일한 통로다 —
+  // 그래서 이 셋만 탈출구를 쓴다(paper-screen-routes.test.js가 목록을 잠근다).
+  {
+    board: '1DX-0', // 07 · 온보딩 — CLI 연결 (AT-SY-002)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:cli-list', data: PAPER_CLI_PROVIDERS },
+      { do: 'ipc-fixture', channel: 'athena:cli-login', data: CLI_LOGIN_LAUNCHED },
+      {
+        do: 'eval',
+        js: 'startOnboarding(2)',
+        why: '온보딩 진입은 부팅 한 번뿐이라 도달한 뒤에 여는 클릭이 없다 — 부팅이 부르는 그 함수를 그대로 부른다',
+      },
+      // 미연결 한 줄의 [연결]을 눌러 Paper가 그린 「로그인 대기 중…」을 만든다.
+      // fixture가 핸들러를 갈아끼웠으므로 실제 터미널 창은 열리지 않는다.
+      { do: 'click', selector: '.onb-cli-row .uk-btn-ghost' },
+      { do: 'settle' },
+    ],
+    root: '#onboard',
+    // 제공자 이름(Paper의 'Claude Code'·'Gemini CLI'·'Grok CLI')은 fixture가 주는
+    // 데이터라 문구가 못 된다. 남는 것은 앱이 리터럴로 그리는 제목·안내·라벨뿐이다.
+    phrases: [
+      '사용할 CLI를 연결합니다',
+      'Athena는 자체 API 키를 사용하지 않습니다. 로그인한 계정으로 CLI를 제어합니다.',
+      '계정 추가',
+      '연결을 누르면 해당 CLI의 로그인 명령이 새 터미널 창에서 실행됩니다. 로그인은 그 창에서 완료하세요. 계정은 여러 개 연결할 수 있고, 활성 계정 하나가 명령을 받습니다.',
+      '로그인 대기 중…',
+      '계속',
+    ],
+    // Paper는 다계정 카드 하나(계정 두 줄)와 대기 중인 한 줄을 그린다. 단일 행
+    // 개수는 안 적는다 — Paper는 넷째 제공자(Gemini)까지 그리는데 앱의 제공자는
+    // 셋뿐이라(cli-accounts.js:13) 거기에 앱의 수를 적으면 앱이 정본이 된다.
+    structure: [
+      { what: 'count', selector: '.onb-cli-card', equals: 1 },
+      { what: 'count', selector: '.onb-cli-account-row', equals: 2 },
+      { what: 'count', selector: '.onb-cli-waiting', equals: 1 },
+    ],
+  },
+  {
+    board: '1FN-0', // 08 · 온보딩 — 계좌 연결 (AT-SY-003)
+    window: 'shell',
+    reach: [
+      {
+        do: 'eval',
+        js: 'startOnboarding(3)',
+        why: '온보딩 진입은 부팅 한 번뿐이라 도달한 뒤에 여는 클릭이 없다 — 부팅이 부르는 그 함수를 그대로 부른다',
+      },
+      { do: 'settle' },
+    ],
+    root: '#onboard',
+    // 「모의-1」은 <input>의 placeholder라 문구가 못 된다(onboarding.js:338).
+    // 마스크 점과 「붙여넣음 · 36자」는 값이라 애초에 후보에서 빠져 있다.
+    phrases: [
+      '증권 계좌를 연결합니다',
+      '키움 모의투자 계좌를 연결합니다. 앱키는 이 컴퓨터의 자격증명 저장소에만 저장되고 화면에 다시 나타나지 않습니다.',
+      'APP KEY',
+      'SECRET KEY',
+      '저장 위치',
+      '검증 후 시작',
+    ],
+    // Paper의 입력 세 칸(별칭·APP KEY·SECRET KEY)과 저장 위치 상자 하나.
+    // 발 부분은 안 적는다 — Paper는 [검증 후 시작] 하나인데 앱은 [이전]도 둔다.
+    structure: [
+      { what: 'count', selector: '.onb-field', equals: 3 },
+      { what: 'count', selector: '.onb-input-row', equals: 3 },
+      { what: 'count', selector: '.onb-savebox', equals: 1 },
+    ],
+  },
+  {
+    board: '2V0K-1', // 33 · 온보딩 — CLI 연결 실패 (AT-SY-002)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:cli-list', data: PAPER_CLI_PROVIDERS },
+      { do: 'ipc-fixture', channel: 'athena:cli-login', data: CLI_LOGIN_NOT_INSTALLED },
+      {
+        do: 'eval',
+        js: 'startOnboarding(2)',
+        why: '온보딩 진입은 부팅 한 번뿐이라 도달한 뒤에 여는 클릭이 없다 — 부팅이 부르는 그 함수를 그대로 부른다',
+      },
+      // 07과 같은 자극에 로그인 결과만 실패다 — 그 한 클릭이 이 보드를 만든다.
+      { do: 'click', selector: '.onb-cli-row .uk-btn-ghost' },
+      { do: 'settle' },
+    ],
+    root: '#onboard',
+    // Paper가 실패 행에 그린 안내문은 「Gemini CLI 실행 파일을 찾지 못했습니다…」인데
+    // 앱에는 Gemini 제공자가 없어 그 문장은 어느 상태에서도 못 만든다 — 적지 않는다.
+    phrases: [
+      '사용할 CLI를 연결합니다',
+      'Athena는 자체 API 키를 사용하지 않습니다. 로그인한 계정으로 CLI를 제어합니다.',
+      '계정 추가',
+      '연결 실패 · 재시도',
+      '계속',
+    ],
+    structure: [
+      { what: 'count', selector: '.onb-cli-card', equals: 1 },
+      { what: 'count', selector: '.onb-cli-waiting.is-failed', equals: 1 },
+    ],
+  },
+
   // ---------- 에이전트 4장 (A-2) ----------
   {
     board: 'ARM-0', // 02 · 에이전트 — 알람 센터 · 라이브 관제
@@ -264,6 +535,78 @@ const ROUTES = Object.freeze([
     root: '#shell',
     phrases: ['요약', '수집·노출', '그래프에게 묻기', '답이 캔버스를 바꿉니다'],
     structure: [{ what: 'count', selector: '#graphSummaryHeader .view-toggle-tab', equals: 3 }],
+  },
+
+  // ---------- 셸·그래프 2장 (1-0) ----------
+  {
+    board: '25Q-0', // 09 · 셸 — 질문 입력 · Task Canvas
+    window: 'shell',
+    // 보드 09는 대화 영역에 턴 셋(완료·진행 중·능동)을 겹쳐 그린다. 그중 도달
+    // 절차로 결정론이 되는 것은 능동 턴 하나다 — 앞의 둘은 실제 질의가 끝나야
+    // 생기고, 그 질의는 CLI와 백엔드가 무엇을 답하느냐에 좌우된다. 능동 턴은
+    // 반대로 값이 봉투에 다 들어 있어 앱이 그것을 1:1로 옮겨 그린다.
+    reach: [
+      { do: 'send', channel: 'athena:routine-event', data: ROUTINE_FIRED },
+      { do: 'settle' },
+    ],
+    root: '#app',
+    // 넷 다 봉투와 무관하게 늘 같은 문구다(routine-turn.js: modeText 기본값·
+    // bodyNote·각주 틀, chat.js:2984 패널 제목). 종목·관측값·임계·경과는 값이라
+    // 안 적는다. 「무엇이든 물어보세요」는 <textarea>의 placeholder라 문구가 못
+    // 된다(shell.html:358) — 「ESC 중단」은 Paper 44가 입력행에서 걷어낸 뒤로
+    // 앱이 그리지 않으므로(shell.html:330 주석) 역시 안 적는다.
+    phrases: [
+      '주기 확인',
+      '감시 조건',
+      '값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.',
+      "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다",
+    ],
+    // 능동 턴 하나에 조건 패널 하나 — Paper의 「turn-agent (능동 턴) — 조건 패널
+    // 형식」 그대로다. 조건 행 수는 안 적는다: Paper는 셋을 그렸지만 봉투에는
+    // 조건이 하나뿐이라(routine-turn.js conditions 주석) 거기에 1을 적으면 앱이
+    // 정본이 된다.
+    structure: [
+      { what: 'count', selector: '.turn-agent', equals: 1 },
+      { what: 'count', selector: '.agent-watch', equals: 1 },
+    ],
+  },
+  {
+    board: '3VHD-1', // 08 · 그래프 — 되물을 것들 카드 · 지난 대화 읽기 전용
+    window: 'shell',
+    // 카드를 여는 클릭은 확인 필요 배너의 CTA 하나뿐이고(canvas.js:3653
+    // onConfirmCta), 그 배너는 요약 표가 한 번 실릴 때만 그려진다. 표를 싣는
+    // 세 자리 중 클릭으로 닿는 것이 없어(부팅 프리페치·필터 select의 change·
+    // 그래프 갱신 이벤트) 앱이 스스로 쓰는 갱신 이벤트를 그대로 쏜다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:brain-suggested-questions', data: BRAIN_QUESTIONS },
+      { do: 'mode', view: 'graph' },
+      { do: 'send', channel: 'athena:brain-graph-updated', data: null },
+      { do: 'click', selector: '#graphConfirmBanner .confirm-banner-cta' },
+      { do: 'settle' },
+    ],
+    root: '#app',
+    // 제목·부제·근거는 fixture가 주는 값이라 한 글자도 안 넣는다. 남는 것은 앱이
+    // 리터럴로 그리는 채팅 머리 두 줄(controller.js CHAT_HEAD_COPY)과 카드의
+    // 안내문·선택지 셋이다. 「그래프에 대해 물어보세요」는 placeholder라 못 쓴다.
+    //
+    // Paper가 오른쪽에 함께 그린 B판(지난 대화 읽기 전용 — 「과거 대화 · …」 배너와
+    // 「현재 대화로」)은 적지 않는다. 앱은 과거 대화를 배너 없이 조용히 복원하고
+    // 읽기 전용으로 잠그지도 않는다(chat.js:2189 「배너는 없다」, 2026-09-05 사용자
+    // 정정) — Paper와 앱이 실제로 어긋나는 자리다.
+    phrases: [
+      '그래프에게 묻기',
+      '답이 캔버스를 바꿉니다',
+      '답하면 채팅으로 보내지고, 그 답이 그래프를 갱신합니다.',
+      '건너뛰기',
+      '아니다',
+      '맞다',
+      'Ctrl Enter',
+    ],
+    // Paper의 버튼 행 — [건너뛰기 Esc][아니다][맞다 Ctrl Enter], 키 힌트는 둘.
+    structure: [
+      { what: 'count', selector: '.question-card-btn', equals: 3 },
+      { what: 'count', selector: '.question-card-key', equals: 2 },
+    ],
   },
 ]);
 

@@ -130,6 +130,9 @@ const WINDOW_READY = Object.freeze({
   // 셸은 부팅 창이 물러나고 #app이 드러나면 준비된 것이다(probe-agent-paper-parity.js와 같은 신호).
   shell: "document.getElementById('app') && !document.getElementById('app').hidden",
   orb: "!!document.getElementById('orbRoot')",
+  // 부팅 창은 부팅 스크립트가 돌기 시작한 것이 준비다. 셸처럼 #app이 드러나기를
+  // 기다리면 그때는 이미 부팅이 끝나 잴 것이 없다 — 단계는 boot-hold가 세운다.
+  boot: "!!document.getElementById('boot') && !!document.getElementById('boot').dataset.startedAt",
 });
 
 async function waitReady(win, kind) {
@@ -192,6 +195,15 @@ async function runStep(win, step) {
       if (!sent) throw new Error('커맨드바 #input이 없다');
       return;
     }
+    case 'boot-hold': {
+      // 부팅 창을 `?bootHoldChars=N`으로 다시 읽어 그 단계에 세운다(chat.js의
+      // 같은 이름 블록). 러너의 재읽기만으로는 다섯 단계가 전부 마지막 프레임으로
+      // 수렴한다 — 부팅은 시간축이라 도달한 뒤에 되돌아갈 클릭이 없다.
+      const url = new URL(win.webContents.getURL());
+      url.searchParams.set('bootHoldChars', String(step.chars));
+      await win.loadURL(url.href);
+      return;
+    }
     case 'ipc-fixture':
       applyFixture(step.channel, step.data);
       return;
@@ -201,6 +213,12 @@ async function runStep(win, step) {
         status: 'success',
         envelope: { fell_back: false, fallback_reason: null, layout: null, drop_types: [], ...step.data },
       });
+      return;
+    case 'send':
+      // main이 밀어 주는 이벤트를 그대로 쏜다 — 능동 턴(athena:routine-event)처럼
+      // 이벤트로만 그려지는 화면은 클릭으로 도달할 길이 없다. 되돌릴 것은 없다:
+      // 라우트마다 창을 다시 읽으므로 남긴 DOM이 다음 라우트로 새지 않는다.
+      win.webContents.send(step.channel, step.data);
       return;
     case 'wait':
       await wait(step.ms);
@@ -350,13 +368,15 @@ async function main() {
     boards.push(routeMissingRecord(board));
   }
 
-  let wins = { shell: null, orb: null };
+  let wins = { boot: null, shell: null, orb: null };
   if (routed.length) {
     await app.whenReady();
     const mainMod = require('./main.js');
     await mainMod.createWindows();
-    const { shellWin, orbWin } = mainMod.getWins();
-    wins = { shell: shellWin, orb: orbWin };
+    // bootWin은 부팅 단계 보드가 사는 창이다 — 부팅이 끝나야 셸로 넘어가므로
+    // (main.js attemptShellHandoff) 부팅이 서 있는 동안에만 살아 있다.
+    const { bootWin, shellWin, orbWin } = mainMod.getWins();
+    wins = { boot: bootWin, shell: shellWin, orb: orbWin };
     await waitReady(shellWin, 'shell');
   }
 

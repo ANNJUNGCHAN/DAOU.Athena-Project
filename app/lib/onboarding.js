@@ -135,6 +135,9 @@ function renderCliStep(root, { onContinue }) {
   foot.appendChild(continueBtn);
 
   const pending = new Map(); // providerId -> timeoutId (브라우저 로그인 대기 중)
+  // 마지막 연결 시도가 실패한 CLI(Paper 보드 33). 실패한 행은 [연결] 자리에
+  // 「연결 실패 · 재시도」를 두고, 행 자체가 재시도가 된다.
+  const failedConnect = new Set();
   let destroyed = false;
   let lastProviders = [];
 
@@ -206,16 +209,29 @@ function renderCliStep(root, { onContinue }) {
   function renderSingleUnconnected(p, isPending) {
     const r = row('onb-cli-row', [statusDot(false), el('div', 'onb-cli-name', p.name)]);
     r.appendChild(el('div', 'onb-cli-spacer'));
-    r.appendChild(isPending ? waitingLabel() : button('ghost', '연결', { icon: 'up-right', onClick: () => doConnect(p) }));
+    if (isPending) {
+      r.appendChild(waitingLabel());
+    } else if (failedConnect.has(p.id)) {
+      // Paper 보드 33은 이 자리를 버튼이 아니라 대기 라벨과 같은 텍스트로 그린다.
+      // 그래서 재시도는 행 클릭이 받는다 — 비활성 계정 행(setActive)과 같은 관례.
+      r.appendChild(el('span', 'onb-cli-waiting is-failed', '연결 실패 · 재시도'));
+      r.classList.add('is-clickable');
+      r.addEventListener('click', () => doConnect(p));
+    } else {
+      r.appendChild(button('ghost', '연결', { icon: 'up-right', onClick: () => doConnect(p) }));
+    }
     return r;
   }
 
   async function doConnect(p) {
     clear(errSlot);
+    failedConnect.delete(p.id);
     try {
       const res = await window.athena.invoke('athena:cli-login', { providerId: p.id });
       if (!res || !res.ok) {
         errSlot.appendChild(errorNote(`${p.name} 로그인을 시작하지 못했습니다.${res && res.message ? ' ' + res.message : ''}`));
+        failedConnect.add(p.id);
+        renderAll();
         return;
       }
       if (res.launched) {
@@ -230,6 +246,8 @@ function renderCliStep(root, { onContinue }) {
       }
     } catch (err) {
       errSlot.appendChild(errorNote(`${p.name} 로그인 요청 중 오류가 발생했습니다.`));
+      failedConnect.add(p.id);
+      renderAll();
     }
   }
 
@@ -259,6 +277,7 @@ function renderCliStep(root, { onContinue }) {
   function onChanged(data) {
     for (const t of pending.values()) clearTimeout(t);
     pending.clear();
+    failedConnect.clear();
     lastProviders = (data && data.providers) || [];
     renderAll();
   }
