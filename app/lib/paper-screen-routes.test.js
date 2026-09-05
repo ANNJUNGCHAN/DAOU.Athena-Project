@@ -63,10 +63,13 @@ test('every reach step uses a declared verb and carries exactly its declared arg
   }
 });
 
-// 탈출구를 쓰는 보드는 이 셋뿐이다. 온보딩은 부팅이 딱 한 번 읽는 상태라
-// (chat.js athena:onboarding-state → startOnboarding) 도달한 뒤에 그 화면을 여는
-// 클릭이 앱 어디에도 없다 — 목록을 여기서 잠가 eval이 다른 보드로 번지지 않게 한다.
-const EVAL_ROUTES = new Set(['1DX-0', '1FN-0', '2V0K-1']);
+// 탈출구를 쓰는 보드는 이 여섯뿐이고 전부 온보딩 안이다. 온보딩은 부팅이 딱 한 번
+// 읽는 상태라(chat.js athena:onboarding-state → startOnboarding) 도달한 뒤에 그
+// 화면을 여는 클릭이 앱 어디에도 없다. 인증 셋(19·20·21)은 한 겹 더 깊다: 계좌
+// 단계에서 인증 화면으로 넘어가는 클릭은 앱키·시크릿 검증이 성공해야 생긴다
+// (onboarding.js onRegistered) — 검사에서 만들 수 없는 자극이다. 목록을 여기서
+// 잠가 eval이 다른 보드로 번지지 않게 한다.
+const EVAL_ROUTES = new Set(['1DX-0', '1FN-0', '2V0K-1', '1I0-0', '1KK-0', '1M3-0']);
 
 test('the only eval escape hatches are the onboarding ones, and each says why', () => {
   assert.deepEqual(STEP_KINDS.eval, ['js', 'why']);
