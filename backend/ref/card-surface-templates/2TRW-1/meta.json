@@ -7,7 +7,8 @@
   "state": {
     "kind": "tab",
     "parent_board": "13BC-2",
-    "control": "정규장 · 5단"
+    "control": "정규장 · 5단",
+    "control_text": "5단"
   },
   "saved_at": "2026-09-02T11:20:31Z"
 }

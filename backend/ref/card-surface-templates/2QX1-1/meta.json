@@ -7,7 +7,8 @@
   "state": {
     "kind": "tab",
     "parent_board": "13BC-2",
-    "control": "금현물 · 5단"
+    "control": "금현물 · 5단",
+    "control_text": "금현물"
   },
   "saved_at": "2026-09-02T11:20:31Z"
 }
