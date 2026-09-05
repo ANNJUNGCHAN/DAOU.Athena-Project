@@ -4,7 +4,7 @@
 //
 // 매니페스트 role==="screen" 104장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 20장(부팅 5 + 온보딩 3 + 에이전트 4 + 화면 4 + 셸·그래프 2 + 대화·계정 2)이고,
+// 지금은 23장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 화면 4 + 셸·그래프 2 + 대화·계정 2)이고,
 // 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
@@ -125,6 +125,24 @@ const PAPER_ACCOUNTS = Object.freeze({
   accounts: [
     { id: 'fx-a1', alias: '모의-주력', active: true, connected: true, appKeyChars: 36, orderApi: true },
     { id: 'fx-a2', alias: '모의-테스트', active: false, connected: false, appKeyChars: 36, orderApi: false },
+  ],
+});
+
+// 인증 화면 fixture — 토큰 상태는 이 계좌의 만료 시각과 이 컴퓨터의 시계에
+// 좌우되므로(main/accounts.js tokenStatus) 상태를 봉투로 못 박는다. 남은 초는
+// Paper가 적은 05:42:18 그대로다 — 화면에 찍히는 숫자는 값이라 phrases에 안 넣는다.
+const AUTH_TOKEN_READY = Object.freeze({ state: 'ready', expiresInSec: 20538, issuedAt: null });
+// 보드 20의 넷 중 「인증 필요」 칸. 토큰이 아예 없을 때의 봉투 그대로다
+// (main/accounts.js tokenStatus의 계좌 없음 반환값).
+const AUTH_TOKEN_NEEDED = Object.freeze({ state: 'needed', expiresInSec: 0, issuedAt: null });
+
+// 계좌 전환 목록 fixture — 보드 21이 그린 세 줄(사용 중 하나 + 나머지 둘) 그대로.
+// 별칭·개수는 전부 값이라 phrases에 한 글자도 안 넣는다.
+const SWITCH_ACCOUNTS = Object.freeze({
+  accounts: [
+    { id: 'fx-a1', alias: '모의-주력', active: true, connected: true, appKeyChars: 36, orderApi: true },
+    { id: 'fx-a2', alias: '모의-테스트', active: false, connected: false, appKeyChars: 36, orderApi: false },
+    { id: 'fx-a3', alias: '모의-백테스트', active: false, connected: false, appKeyChars: 36, orderApi: false },
   ],
 });
 
@@ -383,6 +401,104 @@ const ROUTES = Object.freeze([
     structure: [
       { what: 'count', selector: '.onb-cli-card', equals: 1 },
       { what: 'count', selector: '.onb-cli-waiting.is-failed', equals: 1 },
+    ],
+  },
+
+  // ---------- 인증 3장 (1-0) ----------
+  // 셋 다 온보딩 3/3 안의 화면이다(chat.js showAuthConfirm). 계좌 단계에서 이 화면으로
+  // 넘어오는 클릭은 앱키·시크릿 검증이 끝나야 생기므로, 온보딩 셋과 같은 이유로 앱 자신의
+  // 진입점을 부른다(paper-screen-routes.test.js가 목록을 잠근다).
+  {
+    board: '1I0-0', // 19 · 인증 — OAuth 토큰 ready
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:account-list', data: PAPER_ACCOUNTS },
+      { do: 'ipc-fixture', channel: 'athena:auth-token-status', data: AUTH_TOKEN_READY },
+      { do: 'eval', js: "startOnboarding(3); showAuthConfirm('fx-a1')", why: '온보딩 인증 화면은 부팅이 딱 한 번 읽는 온보딩 안에만 있다 — 온보딩 창을 열고(startOnboarding), 계좌 등록이 끝났을 때 chat.js가 부르는 그 함수를 그대로 부른다' },
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    root: '#onboard',
+    // 「3 / 3」·「모의-주력 · 등록됨」·「05:42:18」·「2026-08-25 21:12:04 만료」는 값이라
+    // 안 넣는다. 아래 넷은 ready 상태에서만 그려진다(auth-screen.js paint) — 「연결 해제」는
+    // ready·refreshing, 「지금 재발급」·안내문은 ready뿐이라 상태가 판정을 진다.
+    phrases: [
+      '키움 인증이 연결되었습니다',
+      'Athena는 토큰을 저장하지 않습니다. 만료 전에 자동으로 다시 받습니다.',
+      '재발급까지 남은 시간',
+      '남은 시간이 10분 아래로 내려가면 자동으로 다시 받습니다. 직접 누를 필요는 없습니다.',
+      '연결 해제',
+      '지금 재발급',
+      '계속',
+    ],
+    // Paper의 auth-status-rows는 uk-lrow 셋(계좌·자동 재발급·확인 주기)이고, 그중 첫
+    // 줄의 프레임 이름이 「uk-lrow (클릭 → 계좌 전환)」다 — 그 한 줄만 눌린다.
+    structure: [
+      { what: 'count', selector: '.auth-timer-card', equals: 1 },
+      { what: 'count', selector: '.auth-status-rows .uk-lrow', equals: 3 },
+      { what: 'count', selector: '.auth-status-rows .uk-lrow.is-clickable', equals: 1 },
+    ],
+  },
+  {
+    board: '1KK-0', // 20 · 인증 — 토큰 4상태
+    window: 'shell',
+    // 보드 20은 화면이 아니라 같은 카드의 상태 네 칸을 나란히 세운 목록이다. 한 화면은
+    // 한 상태만 그리므로 라우트는 그중 하나만 잰다 — 보드 19가 이미 지고 있는 ready를
+    // 빼고, 나머지 셋의 머리인 needed를 잡는다(refreshing·expired는 이 화면의 전이
+    // 상태라 단위 테스트가 진다, onboarding-flow.test.js 「Paper 28 재발급 중」).
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:account-list', data: PAPER_ACCOUNTS },
+      { do: 'ipc-fixture', channel: 'athena:auth-token-status', data: AUTH_TOKEN_NEEDED },
+      { do: 'eval', js: "startOnboarding(3); showAuthConfirm('fx-a1')", why: '온보딩 인증 화면은 부팅이 딱 한 번 읽는 온보딩 안에만 있다 — 온보딩 창을 열고(startOnboarding), 계좌 등록이 끝났을 때 chat.js가 부르는 그 함수를 그대로 부른다' },
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    root: '#onboard',
+    // 「--:--:--」는 자릿수를 맞춘 표기라 값 쪽이다 — 안 넣는다. 남는 넷 중 「토큰이
+    // 없다」·「인증 필요」는 needed 칸에만 있고, 「발급」은 needed·expired 칸의 버튼이다.
+    phrases: ['토큰이 없다', '시 분 초', '인증 필요', '발급'],
+    // Paper의 needed 칸만 만료 시각 줄이 없다(나머지 셋은 「2026-08-25 21:12:04 만료」를
+    // 달고 있다). 숫자 자리는 흐린 대시 한 덩이 + 「시 분 초」 한 덩이다.
+    structure: [
+      { what: 'absent', selector: '.auth-timer-expiry:not(:empty)' },
+      { what: 'count', selector: '.auth-timer-digits.is-dim', equals: 1 },
+      { what: 'count', selector: '.auth-timer-units', equals: 1 },
+    ],
+  },
+  {
+    board: '1M3-0', // 21 · 인증 — 계좌 전환
+    window: 'shell',
+    // 보드 21의 머리는 보드 19와 같은 3/3이다 — 온보딩 안에서 계좌 행을 눌러 연 화면이다.
+    // 앱은 온보딩일 때 그 진입로를 막고 있었다(auth-screen.js) — Paper 쪽으로 고쳤다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:account-list', data: SWITCH_ACCOUNTS },
+      { do: 'ipc-fixture', channel: 'athena:auth-token-status', data: AUTH_TOKEN_READY },
+      { do: 'eval', js: "startOnboarding(3); showAuthConfirm('fx-a1')", why: '온보딩 인증 화면은 부팅이 딱 한 번 읽는 온보딩 안에만 있다 — 온보딩 창을 열고(startOnboarding), 계좌 등록이 끝났을 때 chat.js가 부르는 그 함수를 그대로 부른다' },
+      { do: 'click', selector: '.auth-status-rows .uk-lrow.is-clickable' },
+      // Paper의 둘째 줄이 is-selected다 — 고른 계좌가 있어야 [전환하고 다시 인증]이 산다.
+      { do: 'click', selector: '.switch-row:nth-child(2)' },
+      { do: 'settle' },
+    ],
+    root: '#onboard',
+    // 별칭 셋·「등록된 계좌 3」·「키움증권」·「모의」·「사용 중」·「선택」은 줄마다 달라지는
+    // 값이라 안 넣는다. 남는 것은 경고문·흐름 네 마디·발치 안내·확정 버튼이다.
+    phrases: [
+      '전환하면 지금 토큰을 폐기하고 새 계좌로 다시 발급받습니다. 진행 중인 실시간 구독은 모두 끊겼다가 다시 등록됩니다.',
+      '지금 토큰 폐기',
+      '자격증명 교체',
+      '새 토큰 발급',
+      '실시간 재등록',
+      '한 번에 한 계좌만 사용할 수 있습니다',
+      '전환하고 다시 인증',
+    ],
+    // Paper의 switch-list 세 줄(사용 중 하나 + 고른 하나) · switch-flow 네 마디 ·
+    // 그리고 이 화면이 온보딩 3/3 안이라는 것(onb-head의 「3 / 3」).
+    structure: [
+      { what: 'count', selector: '.switch-row', equals: 3 },
+      { what: 'count', selector: '.switch-row.is-active', equals: 1 },
+      { what: 'count', selector: '.switch-row.is-selected', equals: 1 },
+      { what: 'count', selector: '.switch-flow-step', equals: 4 },
+      { what: 'count', selector: '.onb-kicker', equals: 1 },
     ],
   },
 

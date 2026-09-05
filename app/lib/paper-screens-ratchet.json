@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "gate": "verify:paper-screens",
-  "blessed_at": "2026-09-05T22:16:33.227Z",
+  "blessed_at": "2026-09-05T22:37:11.225Z",
   "blessed_by": "verify:paper-screens --bless",
   "target_boards": 116,
   "passing": [
@@ -12,6 +12,9 @@
     "16P3-2",
     "1DX-0",
     "1FN-0",
+    "1I0-0",
+    "1KK-0",
+    "1M3-0",
     "1Y3-0",
     "25Q-0",
     "2V0K-1",
@@ -26,6 +29,6 @@
     "F9-0",
     "OJ-0"
   ],
-  "passing_count": 20,
+  "passing_count": 23,
   "shrink_log": []
 }
