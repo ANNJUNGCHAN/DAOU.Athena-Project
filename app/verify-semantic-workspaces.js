@@ -16,6 +16,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawn, spawnSync } = require('node:child_process');
 const { publicPolicies: publicRealtimePolicies } = require('./lib/main/integrated-card-realtime');
+const paperCardRouting = require('./lib/paper-card-routing');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -234,7 +235,6 @@ for recipe in recipes.recipes:
                 'visibility_policy': 'always',
             },
         ]
-    preserve_primary = recipe.recipe_id in {'instrument-chart', 'live-orderbook', 'order-safe-ticket'}
     primary_data = copy.deepcopy(selected.primary_data)
     envelope = {
         **contract,
@@ -253,7 +253,6 @@ for recipe in recipes.recipes:
         'recipe_id': recipe.recipe_id,
         'operation_ref': selected.mapping_id,
         'expected_sections': list(recipe.section_ids),
-        'primary_expected': preserve_primary,
         'expected_candle_count': len(primary_data.get('chart', {}).get('candles', [])),
         'expects_two_sided_orderbook': recipe.recipe_id == 'live-orderbook',
         'expects_order_draft': recipe.recipe_id == 'order-safe-ticket',
@@ -284,7 +283,14 @@ function loadFixtureBundle() {
     },
   );
   if (result.status !== 0) throw new Error(`Task Canvas fixture generation failed:\n${result.stderr}`);
-  return JSON.parse(result.stdout);
+  const bundle = JSON.parse(result.stdout);
+  // "앱 렌더러가 primary라 보드가 가로채지 않는다"는 판정은 앱과 같은 함수가 든다.
+  // 검증기가 recipe 3종을 따로 세면 앱이 새로 보드로 보내기 시작한 봉투를 여기서
+  // 채점하지 못한다 — 두 집합이 갈라질 길을 없앤다(2026-09-06 검수 P1).
+  for (const representative of bundle.representatives || []) {
+    representative.primary_expected = paperCardRouting.preservesAppPrimary(representative.envelope);
+  }
+  return bundle;
 }
 
 function sha256(buffer) {

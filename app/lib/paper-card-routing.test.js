@@ -204,3 +204,14 @@ test('canvas_type chart는 recipe_id가 없어도 보드가 AITS를 가로채지
     fell_back: true,
   }), false);
 });
+
+test('semantic-workspaces 검증기의 preserve 판정은 이 모듈이 든다', () => {
+  // 검증기가 자기 기준(recipe 3종)을 따로 들면 앱이 새로 보드로 보내는 봉투를
+  // 채점하지 못한다 — 두 집합이 갈라질 수 없게 같은 함수를 부른다(2026-09-06 검수 P1).
+  const verifier = fs.readFileSync(
+    path.join(__dirname, '..', 'verify-semantic-workspaces.js'), 'utf8',
+  );
+  assert.match(verifier, /require\('\.\/lib\/paper-card-routing'\)/);
+  assert.match(verifier, /primary_expected = paperCardRouting\.preservesAppPrimary\(/);
+  assert.doesNotMatch(verifier, /preserve_primary/);
+});
