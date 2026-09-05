@@ -34,6 +34,7 @@
     "verify:live-full": "electron probe-live-full.js",
     "verify:paper-cards-static": "node scripts/paper-cards-static.mjs",
     "verify:paper-cards-mount": "electron probe-paper-cards-mount.js",
+    "verify:paper-screens": "electron probe-paper-screens.js",
     "verify:suite": "node scripts/run-verify-suite.js",
     "capture:wide15": "electron capture-wide15.js"
   },
