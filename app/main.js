@@ -79,6 +79,7 @@ const restRetryRegistry = new RestRetryRegistry({
 });
 const { correlationKey: restCorrelationKey } = require('./lib/rest-canvas-paint');
 const { resolveWindowHtmlPath, waitForWindowReady } = require('./lib/main/window-readiness');
+const { createOnce } = require('./lib/main/inflight-once');
 const {
   StartupReadiness, StartupFailureNotifier, showStartupOsNotification,
   runStartupOrchestration, waitForInitialReadiness, classifyBrainStartupStatus,
@@ -352,15 +353,7 @@ function commonWinOpts(bounds) {
   };
 }
 
-let createWindowsInflight = null;
-async function createWindows() {
-  if (createWindowsInflight) {
-    mdlog('createWindows reused (already in flight)');
-    return createWindowsInflight;
-  }
-  let settle;
-  createWindowsInflight = new Promise((resolve, reject) => { settle = { resolve, reject }; });
-  try {
+const createWindows = createOnce(async function createWindows() {
   mdlog('createWindows start');
   layout = computeLayout();
   mdlog('layout computed ' + JSON.stringify(layout));
@@ -494,14 +487,7 @@ async function createWindows() {
   // 캔버스 사이드 채널 구독(2026-08-19 데이터 지름길) — 게이트웨이가 채운 카드가
   // 모델 스트림을 안 타고 이 WS로 직접 온다("캔버스 먼저, 채팅은 요약만").
   startCanvasFeed();
-    settle.resolve();
-  } catch (err) {
-    createWindowsInflight = null;
-    settle.reject(err);
-    throw err;
-  }
-  return createWindowsInflight;
-}
+}, () => mdlog('createWindows reused (already started)'));
 
 // ---------- 루틴 알림 — 백엔드 WS 구독 → 토스트 + 능동 턴 (실행계획 P2) ----------
 // 백엔드가 상시 감시(파수꾼)를 돌리고, 앱은 표시만 담당한다. 본문은 결정론
