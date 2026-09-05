@@ -295,7 +295,7 @@ async def open_routines(
             {
                 "type": "routine-restore-failed",
                 "detail": report.detail,
-                "note": "저장된 루틴을 복원하지 못했다 — 감시가 비어 있다. 다시 등록이 필요하다.",
+                "note": "저장된 감시 목록이 손상됐습니다",
             }
         )
 
@@ -371,7 +371,7 @@ async def open_routines(
                         "type": "routine-restore-failed",
                         "routine_id": spec.id,
                         "detail": type(exc).__name__,
-                        "note": f"'{spec.note}' 재구독 실패 — 감시가 멈춰 있다.",
+                        "note": f"'{spec.note}' 실시간 구독에 실패했습니다",
                     }
                 )
         runtime.restore_trigger_state()

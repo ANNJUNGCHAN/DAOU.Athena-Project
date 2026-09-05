@@ -79,18 +79,23 @@ function buildTurnModel(event, nowMs) {
       kind: 'expired',
       modeText: null,
       sourceLabel: '루틴 만료 안내 — 묻지 않은 턴입니다',
-      body: `루틴 '${event.note || event.routine_id}'이 만료로 종료됐다. 계속 필요하면 다시 등록해 달라.`,
+      body: `루틴 '${event.note || event.routine_id}'이 만료로 종료됐습니다. 계속 필요하면 다시 등록해 주세요.`,
     };
   }
   if (event.type === 'routine-restore-failed') {
+    // 이유는 백엔드가 note(사람이 읽는 문장)나 reason(코드 감시 실패 사유) 중
+    // 한쪽으로만 보낸다 — reason만 오는 경로(scheduler._fail_code_watch)에서
+    // 기본 문구로 떨어지면 화면이 오지도 않은 사실을 말하게 된다.
+    const why = event.note || event.reason || '';
     return {
       kind: 'restore-failed',
       modeText: null,
       sourceLabel: '복원 실패 — 이전 세션의 능동 턴', // 보드 09(6XE-0) 어휘
-      body: event.note || '저장된 루틴을 복원하지 못했다 — 감시가 비어 있다.',
+      // 보드 09 DH7-0 원문 형태: 무엇이 실패했는가 + 사람이 할 다음 행동.
+      body: `감시를 복원하지 못했습니다${why ? ` — ${why}` : ''}. 백엔드 재시작 후 다시 시도해 주세요.`,
     };
   }
-  return { kind: 'unknown', body: '해석할 수 없는 알림을 받았다.' };
+  return { kind: 'unknown', body: '해석할 수 없는 알림을 받았습니다.' };
 }
 
 // OS 토스트용 — Electron Notification의 title/body.

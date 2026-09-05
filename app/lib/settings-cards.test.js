@@ -7,6 +7,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const settingsCards = require('./settings-cards');
 
@@ -188,4 +190,19 @@ test('exposeToModel 패치는 전용 채널로 main에 미러링된다', () => {
   } finally {
     delete global.window;
   }
+});
+
+// ---- 화면 P1 항목 11 (Paper 11D-0/11Q-0) — 흰 시트 위의 다크 잔재 색 ----
+// settings-cards.js가 그리는 DOM은 Electron 게이트가 보고, 여기서는 CSS 파일을
+// 읽어 색 토큰만 못박는다(controller.test.js가 쓰는 것과 같은 문법).
+test('열리지 않는 것 제목은 토큰 색을 쓴다 — 다크 잔재 하드코딩이 없다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'settings-cards.css'), 'utf8');
+  const rule = css.slice(css.indexOf('.uk-closed-title'), css.indexOf('.uk-closed-desc'));
+  assert.doesNotMatch(rule, /#F2F4F8/i);
+  assert.match(rule, /color: var\(--color-k-text\)/);
+});
+
+test('settings-cards.css 어디에도 #F2F4F8 하드코딩이 없다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'settings-cards.css'), 'utf8');
+  assert.doesNotMatch(css, /#F2F4F8/i);
 });
