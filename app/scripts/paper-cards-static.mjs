@@ -5,6 +5,8 @@
  * 3자 대조 사슬(설계서 §2.3) 중 구간 A·B를 이 스크립트가 맡는다.
  * 마운트 충실도(구간 C)는 `verify:paper-cards-mount`가 따로 재고,
  * 이 파일은 그 리포트와 같은 파일(`app/captures/paper-gates/PAPER-CARDS.json`)에 정적 층을 쓴다.
+ * 쓸 때는 통째로 덮지 않고 `paper-cards-report.js`가 정적 층만 갈아 끼운다 —
+ * 층이 서로를 지우면 리포트 내용이 「어느 게이트가 마지막에 돌았나」로 정해진다.
  *
  * 검사 6종:
  *   S1  매니페스트 불변식 — paper-manifest-check.mjs를 그대로 부른다(I1~I6, index.json 상등 포함)
@@ -43,6 +45,9 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { checkPaperManifest, loadManifest, LEDGER_DIR, CARD_INDEX_PATH } from './paper-manifest-check.mjs';
+
+// 두 층이 같은 파일에 쓰는 병합 규칙은 CJS 한 곳에 있다(마운트 프로브도 이것을 쓴다).
+const { mergeStaticLayer } = createRequire(import.meta.url)('../lib/paper-cards-report.js');
 
 const APP_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REPO_ROOT = path.resolve(APP_DIR, '..');
@@ -393,7 +398,8 @@ export function formatCliReport(report, reportPath = REPORT_PATH) {
 
 export function writeReport(report, reportPath = REPORT_PATH) {
   mkdirSync(path.dirname(reportPath), { recursive: true });
-  writeFileSync(reportPath, JSON.stringify(report, null, 2) + '\n');
+  const existing = existsSync(reportPath) ? readJson(reportPath) : null;
+  writeFileSync(reportPath, JSON.stringify(mergeStaticLayer(existing, report), null, 2) + '\n');
   return reportPath;
 }
 
