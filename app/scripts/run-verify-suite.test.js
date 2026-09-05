@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const { EventEmitter } = require('node:events');
 const { StringDecoder } = require('node:string_decoder');
 
-const { parseOnly, runOne } = require('./run-verify-suite');
+const { parseOnly, parseSuite, runOne } = require('./run-verify-suite');
 
 // Node의 readable 스트림처럼 setEncoding이 걸리면 청크 경계를 이어 붙여 디코드한다.
 class FakeStream extends EventEmitter {
@@ -79,6 +79,33 @@ test('parseOnly는 --only 뒤에 다른 플래그가 오면 값 누락으로 본
   const parsed = parseOnly(['node', 'run-verify-suite.js', '--only', '--json']);
   assert.equal(parsed.only, undefined);
   assert.match(parsed.error, /--only/);
+});
+
+test('parseSuite는 --suite가 없으면 기본 스위트를 뜻한다', () => {
+  assert.deepEqual(parseSuite(['node', 'run-verify-suite.js']), { suite: 'default' });
+});
+
+test('parseSuite는 --suite paper를 받는다', () => {
+  assert.deepEqual(parseSuite(['node', 'run-verify-suite.js', '--suite', 'paper']), { suite: 'paper' });
+});
+
+test('parseSuite는 --suite 뒤 값이 없으면 기본 스위트로 떨어지지 않고 오류를 준다', () => {
+  const parsed = parseSuite(['node', 'run-verify-suite.js', '--suite']);
+  assert.equal(parsed.suite, undefined);
+  assert.match(parsed.error, /--suite/);
+});
+
+test('parseSuite는 --suite 뒤에 다른 플래그가 오면 값 누락으로 본다', () => {
+  const parsed = parseSuite(['node', 'run-verify-suite.js', '--suite', '--list']);
+  assert.equal(parsed.suite, undefined);
+  assert.match(parsed.error, /--suite/);
+});
+
+test('parseSuite는 오타난 스위트 이름을 조용히 기본 스위트로 바꾸지 않는다', () => {
+  // 오타가 통과하면 15분짜리 전수를 돌린 줄 알고 22분짜리 기본 스위트를 돌리게 된다.
+  const parsed = parseSuite(['node', 'run-verify-suite.js', '--suite', 'papers']);
+  assert.equal(parsed.suite, undefined);
+  assert.match(parsed.error, /unknown suite papers/);
 });
 
 test('runOne은 예산을 넘기면 자식 트리를 통째로 죽이고 timedOut을 알린다', async () => {

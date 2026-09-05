@@ -53,7 +53,12 @@ const SAFE_CLICK_IDS = Object.freeze([
   'sidebarCompactToggle',
 ]);
 
+// 기본 스위트. Paper 전수 게이트 중 **값싼 정적 3종만** 여기 들어간다(설계서 §6.2).
+// 매니페스트가 맨 앞인 것은 전제가 깨지면 나머지 판정이 무의미해서다.
 const VERIFY_SUITE = Object.freeze([
+  { script: 'verify:paper-manifest', budgetMs: 30000 },
+  { script: 'verify:paper-cards-static', budgetMs: 30000 },
+  { script: 'verify:paper-mini-static', budgetMs: 30000 },
   { script: 'verify:live-full', budgetMs: 180000 },
   { script: 'verify', budgetMs: 180000 },
   { script: 'verify:settings', budgetMs: 90000 },
@@ -69,6 +74,17 @@ const VERIFY_SUITE = Object.freeze([
   { script: 'verify:life003', budgetMs: 60000 },
 ]);
 
+// Paper 전수 스위트. electron 항목이 분 단위라 기본 스위트(약 22분)에 넣으면 40분이 된다 —
+// `npm run verify:paper` 로 마일스톤·야간에만 돈다(설계서 §6.2·§6.5).
+const PAPER_SUITE = Object.freeze([
+  { script: 'verify:paper-manifest', budgetMs: 30000 },
+  { script: 'verify:paper-cards-static', budgetMs: 30000 },
+  { script: 'verify:paper-cards-mount', budgetMs: 900000 },
+  { script: 'verify:paper-screens', budgetMs: 420000 },
+  { script: 'verify:paper-mini-static', budgetMs: 30000 },
+  { script: 'verify:paper-mini-template', budgetMs: 120000 },
+]);
+
 module.exports = {
   MODES,
   SETTINGS_NAV,
@@ -77,4 +93,5 @@ module.exports = {
   LIVE_QUERIES,
   SAFE_CLICK_IDS,
   VERIFY_SUITE,
+  PAPER_SUITE,
 };

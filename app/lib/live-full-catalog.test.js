@@ -13,6 +13,7 @@ const {
   LIVE_QUERIES,
   SAFE_CLICK_IDS,
   VERIFY_SUITE,
+  PAPER_SUITE,
 } = require('./live-full-catalog');
 
 const appDir = path.join(__dirname, '..');
@@ -82,4 +83,34 @@ test('verify suite lists live-full and the official verify script with budgets',
   const verifyJs = fs.readFileSync(path.join(appDir, 'verify.js'), 'utf8');
   assert.match(verifyJs, /capture skip/);
   assert.match(verifyJs, /wait\(12000\)/);
+});
+
+test('기본 스위트는 Paper 정적 게이트 3종을 매니페스트부터 순서대로 담는다', () => {
+  // 전제(매니페스트)가 깨지면 나머지 판정이 무의미하니 맨 앞이다(설계서 §6.2).
+  const names = VERIFY_SUITE.map((item) => item.script);
+  assert.deepEqual(names.slice(0, 3), [
+    'verify:paper-manifest',
+    'verify:paper-cards-static',
+    'verify:paper-mini-static',
+  ]);
+});
+
+test('paper 스위트도 예산과 실재하는 npm 스크립트를 단언한다', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(appDir, 'package.json'), 'utf8'));
+  assert.ok(PAPER_SUITE.length);
+  for (const item of PAPER_SUITE) {
+    assert.ok(Number.isInteger(item.budgetMs) && item.budgetMs >= 30000, item.script);
+    assert.ok(pkg.scripts[item.script], `missing npm script ${item.script}`);
+  }
+  assert.equal(pkg.scripts['verify:paper'], 'node scripts/run-verify-suite.js --suite paper');
+});
+
+test('paper 스위트의 electron 항목은 기본 스위트에 못 들어간다', () => {
+  // 15분짜리 전수가 기본 스위트로 새면 매 verify:suite가 22분에서 40분이 된다.
+  const pkg = JSON.parse(fs.readFileSync(path.join(appDir, 'package.json'), 'utf8'));
+  const base = new Set(VERIFY_SUITE.map((item) => item.script));
+  for (const item of PAPER_SUITE) {
+    if (!pkg.scripts[item.script].startsWith('electron')) continue;
+    assert.equal(base.has(item.script), false, `${item.script} 는 기본 스위트에 넣지 않는다`);
+  }
 });

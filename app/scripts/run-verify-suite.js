@@ -2,11 +2,14 @@
 
 const { spawn } = require('node:child_process');
 const path = require('node:path');
-const { VERIFY_SUITE } = require('../lib/live-full-catalog');
+const { VERIFY_SUITE, PAPER_SUITE } = require('../lib/live-full-catalog');
 const { terminateTree } = require('../lib/main/proc-utils');
 
 const appDir = path.join(__dirname, '..');
-const USAGE = 'usage: node scripts/run-verify-suite.js [--list] [--only <script>]';
+const USAGE = 'usage: node scripts/run-verify-suite.js [--list] [--suite <name>] [--only <script>]';
+
+// 스위트는 두 개뿐이다(설계서 §6.2). 늘리려면 여기와 live-full-catalog.js 를 같이 고친다.
+const SUITES = Object.freeze({ default: VERIFY_SUITE, paper: PAPER_SUITE });
 
 function parseOnly(argv) {
   const idx = argv.indexOf('--only');
@@ -16,8 +19,19 @@ function parseOnly(argv) {
   return { only: value };
 }
 
-function printList() {
-  for (const item of VERIFY_SUITE) {
+// --suite 오타를 조용히 기본 스위트로 떨어뜨리면 15분짜리를 돌린 줄 알고 22분짜리를
+// 돌린다. --only 와 같이 exit 2로 거절한다.
+function parseSuite(argv) {
+  const idx = argv.indexOf('--suite');
+  if (idx === -1) return { suite: 'default' };
+  const value = argv[idx + 1];
+  if (!value || value.startsWith('--')) return { error: '--suite 뒤에 스위트 이름이 필요하다' };
+  if (!SUITES[value]) return { error: `unknown suite ${value} (${Object.keys(SUITES).join(', ')})` };
+  return { suite: value };
+}
+
+function printList(suite) {
+  for (const item of suite) {
     process.stdout.write(`${item.script}\t${item.budgetMs}\n`);
   }
 }
@@ -71,8 +85,15 @@ function runOne(item, deps = {}) {
 }
 
 async function main() {
+  const parsedSuite = parseSuite(process.argv);
+  if (parsedSuite.error) {
+    process.stderr.write(`${parsedSuite.error}\n${USAGE}\n`);
+    process.exitCode = 2;
+    return;
+  }
+  const suite = SUITES[parsedSuite.suite];
   if (process.argv.includes('--list')) {
-    printList();
+    printList(suite);
     return;
   }
   const parsed = parseOnly(process.argv);
@@ -83,8 +104,8 @@ async function main() {
   }
   const only = parsed.only;
   const selected = only
-    ? VERIFY_SUITE.filter((item) => item.script === only)
-    : VERIFY_SUITE;
+    ? suite.filter((item) => item.script === only)
+    : suite;
   if (!selected.length) {
     process.stderr.write(`unknown script ${only}\n`);
     process.exitCode = 2;
@@ -109,4 +130,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { parseOnly, runOne };
+module.exports = { parseOnly, parseSuite, runOne };

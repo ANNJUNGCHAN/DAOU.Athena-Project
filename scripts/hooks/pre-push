@@ -1,18 +1,27 @@
 #!/bin/sh
 # pre-push — 결정론층 강제 (2026-08-28 안정화 랄프 P3a).
 #
-# 게이트 4종 + app 단위 테스트만 돈다. push당 지연 예산 60초 —
+# 게이트 6종 + app 단위 테스트만 돈다. push당 지연 예산 60초 —
 # backend pytest(전체 ~17분)는 **의도적으로 제외**한다. 사후에 이 훅에
 # 추가하지 말 것: backend 결정층은 P8 최종 재검증·CI·수동 실행의 몫이다.
 # 게이트는 plain node로 실행한다(cmd /c 경유 금지 — rtk 훅이 명령을 훼손한
 # 실측, 2026-08-26).
+#
+# Paper 전수 게이트(설계서 §6.3)는 값싸고 **지금 초록인 것만** 들어와 있다:
+# 라우트표 신선도 0.2초 + 매니페스트 불변식 0.4초. 나머지는 훅 밖이다 —
+# paper-cards-static 은 S2·S4가 6장 빨강이고 paper-mini-static 은 84장이
+# 어긋나 있어 지금 넣으면 훅이 상시 빨강이 되어 모든 워크트리의 push를 막는다.
+# 둘은 `npm run verify:suite`(정적 3종)와 `npm run verify:paper`(전수)가 돌리고,
+# 각자 0이 된 뒤에 이 자리로 승격한다. 파이썬은 어떤 경우에도 훅에 끌어들이지 않는다.
 set -e
 cd "$(git rev-parse --show-toplevel)"
-echo "[pre-push] 결정론층 검사 시작 (게이트 4종 + app 단위, 예산 60초)"
+echo "[pre-push] 결정론층 검사 시작 (게이트 6종 + app 단위, 예산 60초)"
 node scripts/gates/check-orb.mjs
 node scripts/gates/check-glass-ladder.mjs
 node scripts/gates/check-window-model.mjs
 node scripts/gates/check-harness-freshness.mjs
+node scripts/gates/check-paper-routes.mjs
 cd app
+node scripts/paper-manifest-check.mjs
 node --test lib/*.test.js lib/main/*.test.js lib/graph-mode/*.test.js > /dev/null
 echo "[pre-push] 통과 — push 진행"
