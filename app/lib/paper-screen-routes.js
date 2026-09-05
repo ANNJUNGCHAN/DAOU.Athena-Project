@@ -4,7 +4,7 @@
 //
 // 매니페스트 role==="screen" 104장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 23장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 화면 4 + 셸·그래프 2 + 대화·계정 2)이고,
+// 지금은 26장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 화면 4 + 셸·그래프 2 + 대화·계정 2 + 사이드바 3)이고,
 // 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
@@ -45,6 +45,12 @@
 const STEP_KINDS = Object.freeze({
   // click     selector — 첫 일치 요소를 누른다
   click: Object.freeze(['selector']),
+  // hover     selector — 첫 일치 요소에 포인터를 올린다(mouseenter·mouseover).
+  //                      클릭으로는 못 만드는 상태가 있어서다: 사이드바 프로젝트 설명
+  //                      카드는 행 위에 머무는 동안에만 뜨고(sidebar.js showDescription),
+  //                      그 카드 안의 [프로젝트 수정]이 수정 패널을 여는 유일한 문이다.
+  //                      행을 누르면 프로젝트만 갈아 끼우고 카드는 안 뜬다.
+  hover: Object.freeze(['selector']),
   // mode      view — 사이드바 모드 네비(live-full-catalog.js MODES의 navId)를 누른다
   mode: Object.freeze(['view']),
   // command-bar text — 입력창에 문장을 넣고 Enter (verify.js openSettingsViaCommandBar)
@@ -227,6 +233,38 @@ const BRAIN_QUESTIONS = Object.freeze({
       question: "'relates_to'가 맞나요? 확실하지 않은 것으로 기록해 두었습니다.",
     },
   ],
+});
+
+// 이력 사이드바 fixture — 보드 35가 그린 프로젝트 둘과 모드별 대화 여덟(대화 3 · 그래프 1 ·
+// 에이전트 2 · 플러그인 0 · 백테스트 2) 그대로다. 이게 없으면 판정이 이 컴퓨터에 쌓인 대화에
+// 좌우된다: 검사 프로필은 비어 있어 프로젝트가 「기본 프로젝트」 한 줄뿐이고 최근 구역은
+// 아예 안 그려진다(sidebar.js renderList의 filtered.length 분기). 별칭·제목·경로는 전부
+// 값이라 phrases에 한 글자도 넣지 않는다.
+const SIDEBAR_HISTORY = Object.freeze({
+  activeId: null,
+  activeMode: 'chat',
+  currentProjectId: 'fx-p1',
+  projects: [
+    { id: 'fx-p1', label: '아테나', path: 'C:\\Projects\\DAOU.Athena', pinned: false },
+    { id: 'fx-p2', label: '키움 리서치', path: 'C:\\Projects\\kiwoom-research', pinned: false },
+  ],
+  conversations: [
+    { id: 'fx-s1', title: '추세추종 v3', projectId: 'fx-p1', mode: 'backtest' },
+    { id: 'fx-s2', title: '변동성 돌파 실험', projectId: 'fx-p1', mode: 'backtest' },
+    { id: 'fx-s3', title: '반도체 수급 점검', projectId: 'fx-p1', mode: 'chat' },
+    { id: 'fx-s4', title: '성향 지도 · 9월', projectId: 'fx-p1', mode: 'graph' },
+    { id: 'fx-s5', title: '아침 브리핑 감시', projectId: 'fx-p2', mode: 'agent' },
+    { id: 'fx-s6', title: '삼성전자 주요 변동 알림', projectId: 'fx-p2', mode: 'agent' },
+    { id: 'fx-s7', title: '백엔드 API 개수 확인', projectId: 'fx-p2', mode: 'chat' },
+    { id: 'fx-s8', title: '앱 전체 기능 검수', projectId: 'fx-p2', mode: 'chat' },
+  ],
+});
+
+// 보드 37만 프로젝트를 셋 그린다(아테나 · 키움 리서치 · 개인 연구) — 같은 목록에 한 줄을 더한다.
+const SIDEBAR_HISTORY_THREE = Object.freeze({
+  ...SIDEBAR_HISTORY,
+  projects: [...SIDEBAR_HISTORY.projects,
+    { id: 'fx-p3', label: '개인 연구', path: 'C:\\Projects\\personal', pinned: false }],
 });
 
 const ROUTES = Object.freeze([
@@ -793,6 +831,97 @@ const ROUTES = Object.freeze([
     structure: [
       { what: 'count', selector: '.sidebar-menu-head', equals: 1 },
       { what: 'count', selector: '.sidebar-menu-item', equals: 3 },
+    ],
+  },
+
+  // ---------- 사이드바 3장 (1-0) ----------
+  // 셋 다 이력 사이드바 하나를 다른 상태로 그린 보드라 fixture와 다시 읽히는 방법이 같다.
+  // 사이드바는 대화 목록을 부팅 때 한 번 읽고 다음 폴링이 5초 뒤다(sidebar.js:1359) —
+  // 5초를 세 번 기다리는 대신, 앱이 「모르는 대화의 실행 상태」를 받으면 목록을 통째로
+  // 다시 읽는다는 것을 그대로 쓴다(sidebar.js:944 handleSessionRunState).
+  {
+    board: 'GCF-0', // 29 · 프로젝트·최근·새 채팅
+    window: 'shell',
+    // 보드 29의 1단계가 「프로젝트 행 Hover」다. 행을 누르면 프로젝트만 갈아 끼우고
+    // 설명 카드는 안 뜬다 — 카드는 행이나 카드 위에 머무는 동안에만 산다
+    // (sidebar.js showDescription, 2026-09-05 사용자 정정). 그래서 hover가 유일한 문이다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:conversations-list', data: SIDEBAR_HISTORY },
+      { do: 'send', channel: 'athena:session-run-state', data: { id: 'fx-reload' } },
+      { do: 'wait', ms: 300 },
+      { do: 'hover', selector: '.sidebar-project-row' },
+      { do: 'settle' },
+    ],
+    root: '#historyRegion',
+    // 프로젝트 이름·대화 수·저장소 경로는 값이라 안 넣는다. 카드가 실제로 열렸을 때만
+    // 그려지는 것은 아래 넷 중 뒤의 둘이다 — 앞의 둘은 사이드바 구역 머리말이다.
+    // Paper가 첫 행에 그린 「새 채팅」은 안 적는다: 사이드바를 다시 그린 보드 35가
+    // 같은 자리를 「새 대화」로 확정했고 앱이 그것을 따른다. 「전체」도 마찬가지로
+    // 앱에 없는 자리라 적지 않는다.
+    phrases: ['프로젝트', '최근', '프로젝트 수정', '이 프로젝트에 속한 대화와 작업'],
+    // 카드는 프로젝트마다 만들어 두고 hidden만 푼다 — 목록에 프로젝트가 둘인데 보이는
+    // 카드가 하나라는 것이 곧 「포인터가 머문 행의 카드만 뜬다」의 증거다.
+    structure: [
+      { what: 'count', selector: '.sidebar-project-description', equals: 1 },
+      { what: 'count', selector: '.sidebar-project-description-copy', equals: 1 },
+      { what: 'count', selector: '.sidebar-project-description-action', equals: 1 },
+    ],
+  },
+  {
+    board: '3VIQ-1', // 35 · 대화 이력 — 모드 5구역 · 세션 목록
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:conversations-list', data: SIDEBAR_HISTORY },
+      { do: 'send', channel: 'athena:session-run-state', data: { id: 'fx-reload' } },
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    root: '#historyRegion',
+    // 「8개 대화」·「3」 같은 숫자와 대화 제목은 값이라 안 넣는다. 남는 것은 구역 머리말과
+    // 머리의 두 버튼이다. 「폴더 추가」는 앱이 「+ 폴더 추가」로 늘려 그리지만 포함 판정이다.
+    phrases: ['새 대화', '대화 검색', '이력 · 모드', '프로젝트', '폴더 추가', '최근 · 모드 무관'],
+    // 이력의 맨 앞은 다섯 모드고 그 차례가 이 보드의 계약이다. 머리 버튼 개수는 안 적는다 —
+    // Paper는 둘(새 대화·대화 검색)인데 앱은 「프로젝트·최근」 접기 버튼을 하나 더 둔다.
+    structure: [
+      {
+        what: 'order',
+        selector: '.sidebar-mode-item-label',
+        equals: ['대화', '그래프', '에이전트', '플러그인', '백테스트'],
+      },
+      { what: 'count', selector: '.sidebar-project', equals: 2 },
+    ],
+  },
+  {
+    board: '3VV8-1', // 37 · 프로젝트 ⋯ — 고정·탐색기·제거
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:conversations-list', data: SIDEBAR_HISTORY_THREE },
+      { do: 'send', channel: 'athena:session-run-state', data: { id: 'fx-reload' } },
+      { do: 'wait', ms: 300 },
+      // 첫 프로젝트 행의 ⋯ — 메뉴는 hidden으로 시작하고 행 도구는 opacity 0이라
+      // 이 한 클릭이 없으면 아래 셋이 하나도 안 보인다.
+      { do: 'click', selector: '.sidebar-project-menu-trigger' },
+      { do: 'settle' },
+    ],
+    root: '#historyRegion',
+    // 세 항목의 라벨과 그 결과 한 줄. 발치의 「이름 바꾸기는 프로젝트 행을 두 번 누르세요」는
+    // 안 적는다 — 앱에서 이름을 고치는 문은 설명 카드의 [프로젝트 수정] 하나뿐이라(보드 29)
+    // 그 문장을 그리면 없는 제스처를 있다고 하는 것이 된다.
+    phrases: [
+      '프로젝트',
+      '최상단 고정',
+      '목록 맨 위에 붙여 둡니다',
+      '탐색기에서 열기',
+      '이 프로젝트 폴더를 창으로 엽니다',
+      '프로젝트 제거',
+      '폴더와 그 안의 파일을 지웁니다',
+    ],
+    // Paper의 팝오버 — 항목 셋, 각 항목에 결과 한 줄. 목록은 프로젝트 세 줄이고
+    // 그중 한 줄의 메뉴만 열려 있다(나머지 둘의 메뉴는 hidden이라 안 세어진다).
+    structure: [
+      { what: 'count', selector: '.sidebar-project', equals: 3 },
+      { what: 'count', selector: '.sidebar-project-menu-item', equals: 3 },
+      { what: 'count', selector: '.sidebar-project-menu-item-hint', equals: 3 },
     ],
   },
 ]);

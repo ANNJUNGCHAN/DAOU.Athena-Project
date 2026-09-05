@@ -151,25 +151,40 @@ const settle = (win) => win.webContents.executeJavaScript(
 // IPC 왕복 뒤에 그려지므로 한 번 훑고 없다고 단정하면 라우트가 시계에 좌우된다
 // (실측: OJ-0이 같은 코드로 통과와 실패를 오갔다). 2초까지 기다렸는데도 없으면
 // 그때는 도달 절차가 깨진 것이다 — verify.js가 쓰는 폴링과 같은 관례.
-async function clickWhenPresent(win, selector, timeoutMs = 2000) {
+async function actWhenPresent(win, selector, action, missing, timeoutMs = 2000) {
   const literal = JSON.stringify(selector);
   for (let waited = 0; waited <= timeoutMs; waited += 100) {
-    const clicked = await win.webContents.executeJavaScript(`(() => {
+    const acted = await win.webContents.executeJavaScript(`(() => {
       const el = document.querySelector(${literal});
       if (!el) return false;
-      el.click();
+      ${action}
       return true;
     })()`);
-    if (clicked) return;
+    if (acted) return;
     await wait(100);
   }
-  throw new Error(`누를 것이 없다: ${selector}`);
+  throw new Error(`${missing}: ${selector}`);
 }
+
+const clickWhenPresent = (win, selector) => actWhenPresent(win, selector, 'el.click();', '누를 것이 없다');
+
+// hover는 진짜 포인터가 없다 — 앱이 듣는 두 이벤트를 그대로 쏜다. mouseenter는 버블하지
+// 않으므로 요소 자신에게 보내야 한다(sidebar.js가 행에 직접 건 리스너가 그것이다).
+const hoverWhenPresent = (win, selector) => actWhenPresent(
+  win,
+  selector,
+  "el.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));"
+  + "el.dispatchEvent(new MouseEvent('mouseenter'));",
+  '포인터를 올릴 것이 없다',
+);
 
 async function runStep(win, step) {
   switch (step.do) {
     case 'click':
       await clickWhenPresent(win, step.selector);
+      return;
+    case 'hover':
+      await hoverWhenPresent(win, step.selector);
       return;
     case 'mode': {
       const mode = MODES.find((entry) => entry.view === step.view);
