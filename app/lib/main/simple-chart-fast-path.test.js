@@ -151,3 +151,34 @@ test('recognizes the narrow daily-chart display grammar', () => {
     assert.equal(isSimpleDailyChartQuery(query), false, query);
   }
 });
+
+test('leaves a compound screen query to the compound binder even when 차트 comes second', async () => {
+  for (const query of [
+    '삼성전자 시세랑 차트',
+    '삼성전자 현재가와 차트 보여줘',
+    '삼성전자 호가하고 차트',
+    '삼성전자 주가, 차트 보여줘',
+    '삼성전자 호가랑 일봉 차트',
+  ]) {
+    assert.equal(isSimpleDailyChartQuery(query), false, query);
+  }
+
+  for (const query of [
+    '삼성전자 차트',
+    '삼성전자 일봉 차트',
+    '삼성전자 주가 차트 보여줘',
+    '삼성전자의 차트 보여줘',
+  ]) {
+    assert.equal(isSimpleDailyChartQuery(query), true, query);
+  }
+
+  const routed = await runSimpleChartFastPath({
+    query: '삼성전자 시세랑 차트',
+    index: { size: 1, resolveQuery: () => ({ code: '005930', kind: 'stock', market: '0' }) },
+    ensureReady: async () => assert.fail('ready index must not wait'),
+    buildDataset: () => assert.fail('compound query must not bind a single chart dataset'),
+    runDataset: async () => assert.fail('compound query must not run here'),
+  });
+  assert.equal(routed.handled, false);
+  assert.equal(routed.reason, 'not-simple-daily-chart');
+});

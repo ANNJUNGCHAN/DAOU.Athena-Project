@@ -1,8 +1,16 @@
 'use strict';
 
+const { KOREAN_SCREEN_CORE, KOREAN_SCREEN_JOIN } = require('./rest-dataset-runner');
+
 const DEFAULT_READY_TIMEOUT_MS = 5_000;
 const COMPLEX_CHART_TERMS_RE = /(?:왜|원인|이유|뉴스|공시|분석|비교|전망|예측|매수|매도|주문|분봉|주봉|월봉|연봉|년봉|시간봉|틱)/;
 const CHART_TERM_RE = /(?:일봉(?:\s*차트)?|차트)/;
+// "삼성전자 시세랑 차트"처럼 차트가 두 번째 화면으로 오는 복합 질의는
+// buildCompoundScreenDataset이 두 장으로 그린다 — 여기서 먼저 잡으면 단일
+// 차트 문법에 안 맞아 종목 확인 되묻기로 끝난다. 차트 낱말 앞 구간이 다른
+// 화면 코어 + 접속 조사로 끝나면 이 문법이 아니다(문법은 rest-dataset-runner
+// 것을 그대로 쓴다 — 따로 적으면 또 어긋난다).
+const COMPOUND_SCREEN_PREFIX_RE = new RegExp(`${KOREAN_SCREEN_CORE}\\s*${KOREAN_SCREEN_JOIN}$`, 'u');
 
 function normalizeQuery(query) {
   return String(query || '').normalize('NFKC').replace(/\s+/g, ' ').trim();
@@ -16,6 +24,7 @@ function isSimpleDailyChartQuery(query) {
 
   const entityText = text.slice(0, match.index).replace(/(?:의|주식)\s*$/u, '').trim();
   if (!entityText || !/[0-9A-Za-z가-힣]/u.test(entityText)) return false;
+  if (COMPOUND_SCREEN_PREFIX_RE.test(entityText)) return false;
 
   const suffix = text.slice(match.index + match[0].length).trim();
   return /^(?:(?:을|를|은|는)?\s*)?(?:(?:좀|한번)\s*)?(?:(?:보여|그려|띄워)\s*(?:줘|주세요|줄래)?|(?:조회|확인)\s*(?:해)?\s*(?:줘|주세요)|해\s*(?:줘|주세요))?\s*[?!.~]*$/u.test(suffix);
