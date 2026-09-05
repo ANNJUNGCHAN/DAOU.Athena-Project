@@ -1091,6 +1091,12 @@ def _explicit_table_shape(
         if len(cells) < 3:
             ended = True
             continue
+        if abs(len(cells) - columns) > 1:
+            # 열 수가 헤더와 한참 다른 줄은 데이터 행이 아니라 본문을 가르는 띠다
+            # (30HY-0 `3SYD-0` 「7~48위 생략」). 휴리스틱은 이미 ±1 밖을 본문에서
+            # 빼고 있으므로(:1315) 같은 잣대로 건너뛴다. ±1 근방은 셀을 하나 흘린
+            # 저작 실수이므로 아래에서 그대로 막는다.
+            continue
         if len(cells) != columns:
             raise ExtractError(
                 f"explicit table {owner_node.node_id}: body column count "
