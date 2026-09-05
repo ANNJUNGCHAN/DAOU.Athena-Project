@@ -23,6 +23,16 @@ const BOARD_ID = 'fixture-quote';
 const TEMPLATE_DIR = path.join(
   __dirname, '..', '..', 'backend', 'ref', 'card-surface-templates', BOARD_ID,
 );
+// 카드 게이트 원문은 두 파일로 나뉜다 — 어느 보드에나 같은 프로브 절차는
+// lib/board-probe.js가, 6장 게이트 고유의 절차는 verify-integrated-cards.js가
+// 갖는다. 원문 단언은 둘을 이어 붙여 읽는다.
+function verifierSource() {
+  return [
+    fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8'),
+    fs.readFileSync(path.join(__dirname, 'board-probe.js'), 'utf8'),
+  ].join('\n');
+}
+
 const HTML = fs.readFileSync(path.join(TEMPLATE_DIR, 'board.html'), 'utf8');
 const CONTRACT = JSON.parse(fs.readFileSync(path.join(TEMPLATE_DIR, 'slots.json'), 'utf8'));
 const CANON = JSON.parse(fs.readFileSync(path.join(TEMPLATE_DIR, 'values.canon.json'), 'utf8')).values;
@@ -187,7 +197,7 @@ test('P1 — 정본 값으로 마운트한 결과의 텍스트 다중집합이 P
 });
 
 test('glyph readability probe keeps raw geometry evidence and hard-enforces every selected board', () => {
-  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  const verify = verifierSource();
   assert.match(verify, /document\.fonts && document\.fonts\.ready/);
   assert.match(verify, /requiredStableSamples: 4/);
   assert.match(verify, /Range\(\)/);
@@ -228,7 +238,7 @@ test('glyph readability probe keeps raw geometry evidence and hard-enforces ever
 });
 
 test('paired semantic probe scopes legacy ambiguity to opted-in paired tables', () => {
-  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  const verify = verifierSource();
   assert.match(verify, /surface\.querySelectorAll\('\[data-paired-source\]'\)/);
   assert.match(verify, /surface\.querySelectorAll\('\.bs-r-paired-table \.bs-paired'\)/);
   assert.doesNotMatch(verify,
@@ -258,32 +268,30 @@ test('paired semantic probe scopes legacy ambiguity to opted-in paired tables', 
 });
 
 test('real-board verifier fixtures preserve authored state-board links for runtime wiring', () => {
-  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  const verify = verifierSource();
   assert.match(verify, /stateLinksFromMarks/);
   assert.match(
     verify,
     /function loadRealBoardContract[\s\S]*?state_boards:\s*stateLinksFromMarks\(slots\.state_controls\)/,
   );
-  const realBoardFactory = verify.match(
-    /function loadRealBoardContract[\s\S]*?\n}\n\n\/\/ 보드 1장/,
-  )[0];
+  const realBoardFactory = verify.match(/function loadRealBoardContract[\s\S]*?\n}\n/)[0];
   assert.doesNotMatch(realBoardFactory, /state_boards:\s*\[\]/);
 });
 
 test('canonical glyph verifier has no alternate diagnostic success path', () => {
-  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  const verify = verifierSource();
   assert.match(verify, /waitForStableLayout/);
   assert.doesNotMatch(verify, /ATHENA_GLYPH_DIAGNOSTIC|GLYPH_DIAGNOSTIC|glyph-performance-diagnostic/);
 });
 
 test('the integrated verifier takes its exact default readability board order from the frozen contract', () => {
-  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  const verify = verifierSource();
   assert.match(verify, /DEFAULT_REAL_BOARDS = DEFAULT_READABILITY_BOARD_IDS/);
   assert.match(verify, /resolveBoardSelection\(BOARD_SELECTION_OVERRIDE, DEFAULT_REAL_BOARDS\)/);
 });
 
 test('canonical capture hygiene is exact-set guarded while overrides write to diagnostics', () => {
-  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  const verify = verifierSource();
   assert.match(verify, /ensureCaptureOutputDirectory\(CAPTURE_DIR, CANONICAL_CAPTURE_RUN\)/);
   assert.match(verify, /expectedBoardCaptureNames\(DEFAULT_REAL_BOARDS, BOARD_WINDOW_PRESETS\)/);
   assert.match(verify, /CANONICAL_CAPTURE_RUN\s*\?\s*pruneUnexpectedBoardCaptures/);
@@ -777,13 +785,13 @@ test('KPI 칸은 M 이하에서만 3칸/2칸/1칸 흐름으로 바뀐다', () =>
 });
 
 test('실보드 검증은 strip 내부 스크롤과 달리 surface 가로 넘침을 실패시킨다', () => {
-  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  const verify = verifierSource();
   assert.match(verify, /if \(probe\.overflow_x > 1\)/);
   assert.match(verify, /surface overflow/);
 });
 
 test('실보드 검증은 24개 사용자 캡처와 별도로 XL·M 컨테이너를 기하 프로브한다', () => {
-  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  const verify = verifierSource();
   assert.match(verify, /BOARD_BREAKPOINT_PROBE_PRESETS/);
   assert.match(verify, /name: 'XL 프로브'[\s\S]*minContainer: 1280[\s\S]*maxContainer: 1440/);
   assert.match(verify, /name: 'M 프로브'[\s\S]*minContainer: 720[\s\S]*maxContainer: 959/);
@@ -798,7 +806,7 @@ test('실보드 검증은 24개 사용자 캡처와 별도로 XL·M 컨테이너
 });
 
 test('실보드 검증의 선택 필터는 빈 집합과 중복 보드를 거부한다', () => {
-  const verify = fs.readFileSync(path.join(__dirname, '..', 'verify-integrated-cards.js'), 'utf8');
+  const verify = verifierSource();
   assert.match(verify, /if \(!REAL_BOARDS\.length\)/);
   assert.match(verify, /new Set\(REAL_BOARDS\)\.size !== REAL_BOARDS\.length/);
   assert.match(verify, /ATHENA_VERIFY_BOARD_IDS contains unknown board/);
