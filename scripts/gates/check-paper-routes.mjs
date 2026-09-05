@@ -12,7 +12,7 @@
  * 검사 6종(설계서 §4.4).
  *   1) `root`·`reach[].selector`·`structure[].selector`의 DOM id 리터럴이
  *      app/shell.html 또는 app/orb.html에 실재
- *   2) `reach[].channel`이 preload.js 허용 Set 또는 main.js 등록에 실재
+ *   2) `reach[].channel`(ipc-fixture·send)이 preload.js 허용 Set 또는 main.js 등록에 실재
  *   3) `board`가 매니페스트 role=="screen" 부분집합이고 중복 없음
  *   4) `phrases[]`가 그 보드 원장 `texts[]`에 실재 — 저작자 오타가 영원한 빨간 보드가
  *      되는 것을 막는다
@@ -103,7 +103,7 @@ export function checkPaperRoutes(input) {
 
     // 2) IPC 채널 · 6) eval의 why
     for (const step of route.reach) {
-      if (step.do === 'ipc-fixture' && !channels.has(step.channel)) {
+      if (step.channel && !channels.has(step.channel)) {
         failures.push(`${where}: 미등록 IPC 채널 '${step.channel}'`);
       }
       if (step.do === 'eval' && !String(step.why ?? '').trim()) {
