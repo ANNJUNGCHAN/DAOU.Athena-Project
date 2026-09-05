@@ -1707,12 +1707,12 @@ function createBacktestCanvas(options) {
 
   // 반영을 막는 것만 돌려준다 — 얹을 스펙이 없거나 모르는 프리셋. 검증 오류는 막지 않는다.
   function mergeBlockers(patch, merged) {
-    if (!merged) return ['프리셋이 없어 설정을 얹을 수 없습니다'];
+    if (!merged) return ['기법이 없어 설정을 얹을 수 없습니다'];
     // 모르는 프리셋 id는 mergePatch가 조용히 흘려보내 "아무것도 안 바뀐 반영"이 된다 —
     // 사람에게도 모델에게도 알리고 반영을 막는다.
     const wanted = patch.preset;
     if (typeof wanted === 'string' && !presets.some((p) => p.id === wanted)) {
-      return [`${wanted}는 없는 프리셋입니다`];
+      return [`${wanted}는 없는 기법입니다`];
     }
     return [];
   }
@@ -1835,6 +1835,10 @@ function createBacktestCanvas(options) {
     const note = envelopeNote(envelope);
     const suggestRun = envelope.suggest_run === true;
     if (isBusyView()) return busyReceipt('spec_draft', note);
+    // 아직 아무 기법도 고르지 않은 목록 화면(보드 19)에서 온 설정은 새 기법의 것이다 —
+    // 얹을 스펙이 없다고 되돌리지 않고 [+ 새 기법 만들기]와 같은 뼈대를 세워 그 위에
+    // 얹는다. 아는 기법 id가 patch에 있으면 그것을 고르는 길이 먼저다.
+    if (listFirst() && !presets.some((p) => p.id === patch.preset)) startTechniqueFromChat();
 
     const base = spec || SpecModel.createSpec(null);
     const merged = mergePatch(patch);
@@ -1860,7 +1864,10 @@ function createBacktestCanvas(options) {
     // 반영된 결과를 보는 자리는 지도다 — 대화가 고치는 것이 폼 칸이 아니라 흐름이라는
     // 규칙이 여기서 화면으로 지켜진다.
     setState({
-      draft: null, formErrors: pending, view: 'design', tab: 'design', designTab: 'flow',
+      draft: null, formErrors: pending, view: 'design', tab: 'design',
+      // 새 기법 초안에는 지도 탭이 없다(TECHNIQUE_DRAFT_TABS) — 거기로 찍으면 화면은
+      // 코드인데 컨텍스트만 '지도'라고 말한다.
+      designTab: techniqueDraft ? 'code' : 'flow',
       mapVersion: version.to,
     });
     const receipt = remember(makeReceipt('spec_draft', {
@@ -1877,6 +1884,9 @@ function createBacktestCanvas(options) {
     if (typeof source !== 'string' || !source) return null;
     const note = envelopeNote(envelope);
     if (isBusyView()) return busyReceipt('code_draft', note);
+    // 목록 화면에서 온 코드도 새 기법의 것이다 — 뼈대 없이 얹으면 「반영됨」이라 해놓고
+    // 화면에는 목록만 남는다(코드창도 하위 탭도 서지 않는다).
+    if (listFirst()) startTechniqueFromChat();
 
     const before = snapshot();
     const beforeSource = codeSource;
@@ -2097,6 +2107,13 @@ function createBacktestCanvas(options) {
     if (isBusyView()) return busyReceipt('navigate', envelopeNote(payload));
     const wanted = payload.designTab;
     const designTab = DESIGN_TABS.some(([key]) => key === wanted) ? wanted : null;
+    // 고르기 전 목록 화면에는 하위 탭 막대 자체가 없다(보드 19) — 옮겼다고 답하면
+    // 다음 턴 컨텍스트만 화면과 갈라진다. 모드 탭(이력·결과)은 그대로 선다.
+    if (designTab && listFirst()) {
+      return remember(makeReceipt('navigate', {
+        note: envelopeNote(payload), errors: ['기법을 먼저 고르세요'],
+      }));
+    }
     if (designTab) setState({ designTab });
     if (tab === 'history') void loadHistory();
     else if (tab === 'deploy') void loadDeployments();
@@ -2690,6 +2707,21 @@ function createBacktestCanvas(options) {
   // 제어하며 질문 하나씩으로 사람이 원하는 알고리즘을 만든다. 그래서 이 함수가 하는 마지막
   // 일은 화면 전환이 아니라 첫 문장을 채팅에 보내는 것이다.
   function startNewTechnique() {
+    beginTechniqueDraft();
+    emitChatSubmit(TECHNIQUE_NEW_PROMPT);
+    // 폴더는 뒤에서 만든다 — 첫 문장이 나가는 것이 먼저다(사람은 대화를 기다린다).
+    void createTechniqueProject();
+  }
+
+  // 목록 화면에서 대화가 먼저 시작된 경우(모델이 낸 설정·코드) — 같은 뼈대를 세우되 첫
+  // 문장은 보내지 않는다. 대화는 이미 시작됐고, 여기서 또 던지면 모델이 자기 말에 답한다.
+  function startTechniqueFromChat() {
+    beginTechniqueDraft();
+    void createTechniqueProject();
+  }
+
+  // 위 두 길이 함께 쓰는 뼈대 세우기 — 화면이 한 가지여야 대화도 한 가지다.
+  function beginTechniqueDraft() {
     spec = Object.assign(
       SpecModel.createSpec(null, { name: TECHNIQUE_NEW_NAME, params: {} }), keptTarget(),
     );
@@ -2711,9 +2743,6 @@ function createBacktestCanvas(options) {
     // 빈 뼈대는 검사하지 않는다 — 아무 신호도 만들지 않는 코드가 '통과'로 찍히면
     // 노드 창이 곧바로 열려 대화가 시작되기도 전에 화면을 뺏는다. 첫 검사는 코드가
     // 실제로 바뀐 뒤다(사람이 치거나 AI가 code_draft를 냈을 때).
-    emitChatSubmit(TECHNIQUE_NEW_PROMPT);
-    // 폴더는 뒤에서 만든다 — 첫 문장이 나가는 것이 먼저다(사람은 대화를 기다린다).
-    void createTechniqueProject();
   }
 
   // 기법 하나 = 폴더 하나 = 대화 하나(사용자 확정, 보드 19~23). 폴더를 만들고 뼈대 두
