@@ -1006,7 +1006,10 @@ async function renderTaskCanvasEnvelope(envelope) {
   }
   if (!root) root = createSemanticWorkspaceCard(envelope);
   root = replaceUnsafeTaskPrimary(root, envelope);
-  semanticWorkspace.upsert(root, envelope);
+  // 보드 표면 카드에는 의미 작업대도 덧대지 않는다 — 카드가 Paper 보드 그 자체라
+  // 그 아래에 같은 값을 다시 펴는 시트가 붙으면 "보드와 동일하게 그린다"가
+  // 깨진다(upsertDeveloperDiagnostics의 보드 예외와 같은 판단).
+  if (!integratedCardSurface.isBoardSurface(root)) semanticWorkspace.upsert(root, envelope);
   upsertDeveloperDiagnostics(root, envelope);
   return root;
 }
@@ -1055,7 +1058,7 @@ async function renderIntegratedCard(envelope) {
   // 돌려준다. 이 경우 scaffold를 다시 만들거나 lifecycle ownership을 옮기지 않는다.
   if (rendered === existing) {
     integratedCardSurface.refreshExisting(existing, envelope);
-    if (semanticWorkspace) semanticWorkspace.upsert(existing, envelope);
+    if (semanticWorkspace && !integratedCardSurface.isBoardSurface(existing)) semanticWorkspace.upsert(existing, envelope);
     decorateRankingPanel(existing, envelope);
     upsertDeveloperDiagnostics(existing, envelope);
     syncIntegratedRealtime(existing, envelope);
@@ -1118,7 +1121,7 @@ async function renderIntegratedCard(envelope) {
   });
   if (transientCard) transientCard.remove();
 
-  if (semanticWorkspace) semanticWorkspace.upsert(root, envelope);
+  if (semanticWorkspace && !integratedCardSurface.isBoardSurface(root)) semanticWorkspace.upsert(root, envelope);
   decorateRankingPanel(root, envelope, panelKey);
   upsertDeveloperDiagnostics(root, envelope);
   syncIntegratedRealtime(root, envelope);

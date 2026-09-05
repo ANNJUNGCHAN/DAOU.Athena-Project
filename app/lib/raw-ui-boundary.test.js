@@ -51,6 +51,15 @@ test('board surface cards draw no integrated card chrome over the Paper board', 
     helper.indexOf('isBoardSurface(root)') < helper.indexOf('semanticDetailSheet.upsert(root, envelope)'),
   );
 
+  // 의미 작업대(semantic workspace)도 보드 아래에 붙이지 않는다 — 세 upsert
+  // 호출부가 전부 같은 보드 예외를 든다. 하나라도 빠지면 보드 밑에 같은 값을
+  // 다시 편 시트가 한 겹 더 생긴다.
+  assert.equal((canvas.match(/semanticWorkspace\.upsert\(/g) || []).length, 3);
+  assert.equal(
+    (canvas.match(/!integratedCardSurface\.isBoardSurface\((?:root|existing)\)\) semanticWorkspace\.upsert\(/g) || []).length,
+    3,
+  );
+
   // 남은 카드 껍데기는 유리·테두리·여백을 보드에 내준다(테두리 두 줄 금지).
   assert.match(css, /\.card\[data-board-surface="true"\] \{[^}]*padding: 0;/);
   assert.match(css, /\.card\[data-board-surface="true"\] \{[^}]*border: 0;/);
