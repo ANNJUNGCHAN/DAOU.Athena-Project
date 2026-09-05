@@ -159,7 +159,14 @@ def build_surface_contract(
     board = registry.base_board_for(operation_ref)
     if board is None:
         return None
-    return _board_contract(registry, board, bound_values, (operation_ref,))
+    initial = registry.initial_state_board_for(operation_ref)
+    return _board_contract(
+        registry,
+        board,
+        bound_values,
+        (operation_ref,),
+        initial_state_board=initial.board_id if initial is not None else None,
+    )
 
 
 def build_board_surface_contract(
@@ -197,6 +204,8 @@ def _board_contract(
     board: BoardTemplate,
     bound_values: Mapping[str, Any] | None,
     active_operation_refs: Iterable[str] = (),
+    *,
+    initial_state_board: str | None = None,
 ) -> dict[str, Any]:
     bound = bound_values or {}
     priority = _operation_priority(board, active_operation_refs)
@@ -230,6 +239,10 @@ def _board_contract(
         "board_id": board.board_id,
         "card_id": board.card_id,
         "state_boards": _state_boards(registry, board),
+        # 이 보드를 세운 직후 갈아탈 탭 보드. op로 연 계약에만 실리고, 보드를
+        # 직접 지정한 계약(:func:`build_board_surface_contract`)에서는 언제나
+        # None이다 — 이미 그 보드에 있다.
+        "initial_state_board": initial_state_board,
         "slot_values": slot_values,
         "unbound_slots": unbound_slots,
         "column_priority": list(board.column_priority),

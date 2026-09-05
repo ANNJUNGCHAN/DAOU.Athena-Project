@@ -630,3 +630,41 @@ def test_board_hydrate_carries_the_state_board_control_text(surface_templates):
             "control_text": "보유 종목",
         },
     ]
+
+
+def test_generic_push_carries_the_initial_state_board_for_the_quote_operation():
+    """시세 op의 봉투는 기본 보드와 함께 곧바로 갈아탈 탭 보드를 싣는다.
+
+    CC-03 기본 보드(137X-2)는 차트 화면이고, 시세 값을 그 op로 더 그리는 탭은
+    현재시세(2R3M-1)다. 프론트가 기본 보드를 세운 뒤 이 값으로 갈아탄다 —
+    기준 보드(`board_id`)는 그대로라 탭 레일이 산다.
+    """
+
+    app = _app()
+    client = TestClient(app)
+
+    response = client.post(
+        "/api/v1/canvas/push",
+        json={
+            "canvas_type": "facts",
+            "operation_ref": "detail:ka10001:current_trading",
+            "card_id": "CC-03",
+            "data": {"stk_cd": "005930"},
+        },
+    )
+
+    assert response.status_code == 200
+    contract = app.state.canvas_events.get_nowait()["surface_contract"]
+    assert contract["board_id"] == "137X-2"
+    assert contract["initial_state_board"] == "2R3M-1"
+
+
+def test_board_hydrate_never_names_an_initial_state_board(surface_templates):
+    """보드를 직접 지정해 만든 계약에는 갈아탈 보드가 없다 — 이미 그 보드에 있다."""
+
+    data = _DataSpy({"ka10085": _KA10085_BODY, "kt00003": _KT00003_BODY})
+    client = TestClient(_hydrate_app(data))
+
+    contract = _hydrate(client).json()["surface_contract"]
+
+    assert contract["initial_state_board"] is None

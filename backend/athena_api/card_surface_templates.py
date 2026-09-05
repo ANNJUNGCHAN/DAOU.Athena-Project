@@ -230,6 +230,18 @@ class ExcludedBoard:
     reasons: tuple[str, ...]
 
 
+def _operation_occurrences(board: BoardTemplate, operation_ref: str) -> set[str]:
+    """보드가 그 op로 그리는 occurrence 전부(대체 바인딩 포함)."""
+
+    prefix = f"{operation_ref}|"
+    return {
+        occurrence_id
+        for slot in board.slots
+        for occurrence_id in slot.occurrence_ids
+        if occurrence_id.startswith(prefix)
+    }
+
+
 @dataclass(frozen=True, slots=True)
 class CardSurfaceRegistry:
     boards: Mapping[str, BoardTemplate]
@@ -260,6 +272,31 @@ class CardSurfaceRegistry:
             ),
         )
         return self.boards[ordered[0]]
+
+    def initial_state_board_for(self, operation_ref: str) -> BoardTemplate | None:
+        """기본 보드를 세운 뒤 곧바로 갈아탈 탭 보드 — 없으면 ``None``.
+
+        후보는 그 op의 값을 기본 보드에 **없는** 자리로 더 그리는 탭이다. 기본
+        보드가 이미 그리는 값만 되풀이하는 탭으로는 옮길 이유가 없고, 후보가 둘
+        이상이면 어디로도 가지 않는다 — 어느 탭인지 지어내지 않는다.
+
+        기준 보드(:meth:`base_board_for`)는 그대로 두는 것이 요점이다: 형제 탭
+        레일은 기본 보드에서 나오므로, 갈아타기는 사람이 탭을 누른 것과 같은
+        경로여야 한다. 기본 보드로 되돌아가는 칩은 별개 문제다 — 부모 레일에 자기
+        칩이 없는 보드가 있고, 그건 이 규칙이 메우지 않는다.
+        """
+
+        base = self.base_board_for(operation_ref)
+        if base is None or base.state.kind != "default":
+            return None
+        shown = _operation_occurrences(base, operation_ref)
+        candidates = [
+            child
+            for child in self.state_boards_for(base.board_id)
+            if child.state.kind == "tab"
+            and _operation_occurrences(child, operation_ref) - shown
+        ]
+        return candidates[0] if len(candidates) == 1 else None
 
     def state_boards_for(self, board_id: str) -> tuple[BoardTemplate, ...]:
         return tuple(self.boards[child] for child in self.state_links.get(board_id, ()))

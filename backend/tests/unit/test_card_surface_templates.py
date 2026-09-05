@@ -131,6 +131,28 @@ def test_base_board_prefers_the_default_state_over_the_expand_board(universe) ->
     assert registry.base_board_for("base:ka10060") is None
 
 
+def test_initial_state_board_only_names_a_tab_that_adds_to_the_base_board(
+    universe,
+) -> None:
+    """기본 보드를 세운 뒤 곧바로 갈아탈 탭 — 없으면 None(지어내지 않는다).
+
+    후보는 그 op의 값을 기본 보드에 **없는** 자리로 더 그리는 탭뿐이다. 기본
+    보드가 이미 그리는 값만 되풀이하는 탭으로는 옮길 이유가 없고, 펼침 보드는
+    탭이 아니라 후보가 아니다.
+    """
+
+    registry = load_registry(FIXTURE_ROOT, universe=universe)
+
+    # 탭(2SKU-1-T1)은 기본 보드에도 있는 ka10085 값만 되풀이하고, 기본 보드에 없는
+    # 값을 더 그리는 것은 펼침 보드(2SKU-1-X1)뿐이다 — 펼침은 후보가 아니다.
+    assert registry.initial_state_board_for("base:ka10085") is None
+    # kt00003은 어느 자식도 기본 보드 밖의 값을 그리지 않는다.
+    assert registry.initial_state_board_for("base:kt00003") is None
+    # 기본 보드가 탭 보드면 갈아탈 곳이 없다.
+    assert registry.initial_state_board_for("detail:ka10087:sell_bid_prices") is None
+    assert registry.initial_state_board_for("base:ka10060") is None
+
+
 def test_slots_resolve_to_canonical_wire_occurrences(universe) -> None:
     registry = load_registry(FIXTURE_ROOT, universe=universe)
     board = registry.boards["2SKU-1"]
