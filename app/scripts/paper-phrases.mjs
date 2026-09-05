@@ -20,14 +20,14 @@
  *   E4  진행 카운터                  3 / 3
  *   E5  복합 데이터 줄               +1,850 · +1.24%  (데이터 토큰 2개 이상)
  *   E6  종목명·계좌 별칭             카드 slots.json이 kind:"value"로 묶은 텍스트
- *   E7  낱말 아닌 1~2글자 표식        ● ◆ ◐ ○ ▸ · — ↗ × ◌ ✓ ⚠ ▾ ≥ ❚❚
+ *   E7  낱말 아닌 표식(폐쇄 목록)      ● ◆ ◐ ○ ▸ · — ↗ × ◌ ✓ ⚠ ▾ ≥ ❚❚
  *   E8  데이터 접미 라벨(연성)        지난 알람 3건 더 · 오늘 07:30
  *
  * ── 6보드 수동 대조(1I0-0 · 1KK-0 · ARM-0 · B57-0 · BIM-0 · BV0-0)로 고친 두 가지
  * (1) E5·E8이 세는 「데이터 토큰」을 E1 수치만이 아니라 시각·날짜·코드(E2·E3 꼴)까지로 넓혔다.
  *     안 그러면 「오늘 07:30」·「8/22 금」·「어제 07:41」이 전부 온전한 후보로 남는다.
- * (2) E7을 아홉 글자 목록이 아니라 「글자·숫자가 없는 1~2글자」로 바꿨다. 화면계 보드는
- *     같은 자리에 ◌ ✓ ⚠ ▾ ≥ ❚❚ 를 쓰는데 목록에는 하나도 없었다.
+ * (2) E7의 폐쇄 목록에 ◌ ✓ ⚠ ▾ ≥ ❚❚ 여섯을 더했다 — 화면계 보드가 설계서의 아홉
+ *     글자와 같은 자리에 쓰는데 목록에 하나도 없었다. 목록 자체는 여전히 닫혀 있다.
  *
  * ── E1의 단위 목록은 설계서에 적힌 그대로(원·주·%·배·건·개·종목·억원·만주) 닫아 둔다
  * 넓히면 「다음 24시간」·「최근 30회」 같은 열 제목까지 데이터로 몰린다. 대신 「300초」·
@@ -104,6 +104,17 @@ export function promotedFrame(name) {
   return cls.includes('-empty');
 }
 
+/**
+ * E7의 폐쇄 목록. 설계서가 든 아홉 글자에 6보드 수동 대조로 본 여섯을 더했다.
+ * 「글자·숫자 없는 1~2글자」로 넓히지 않는다 — 그러면 원장에 실재하는 →·+·‹ 같은
+ * 한 글자 실라벨까지 하드로 버려, 이 파일이 정한 오차 방향(과다 포함 — 생성기가 지운
+ * 라벨은 저작자가 되찾을 길이 없다)과 반대로 간다. 남는 표식은 저작자가 지운다.
+ */
+const E7_MARKS = new Set([
+  '●', '◆', '◐', '○', '▸', '·', '—', '↗', '×',   // 설계서 §4.2 E7
+  '◌', '✓', '⚠', '▾', '≥', '❚❚',        // 6보드 수동 대조에서 같은 자리에 쓰이는 것
+]);
+
 function tokens(text) {
   return text.split(/[\s·]+/).filter(Boolean);
 }
@@ -121,9 +132,7 @@ export function excludeReason(text, valueTexts) {
   const data = tokens(trimmed).filter((token) => valueShape(token));
   if (data.length >= 2) return { code: 'E5', hard: true };
   if (valueTexts && valueTexts.has(trimmed)) return { code: 'E6', hard: true };
-  // E7 — 낱말이 아닌 1~2글자 표식. 설계서가 든 ●◆◐○▸·—↗× 말고도 화면계 보드에는
-  // ◌ ✓ ⚠ ▾ ≥ ❚❚ 가 같은 자리에 쓰인다(6보드 수동 대조). 글자·숫자가 없는 것만 고른다.
-  if (trimmed.length <= 2 && !/[\p{L}\p{N}]/u.test(trimmed)) return { code: 'E7', hard: true };
+  if (E7_MARKS.has(trimmed)) return { code: 'E7', hard: true };
   if (data.length === 1) return { code: 'E8', hard: false };
   return null;
 }
