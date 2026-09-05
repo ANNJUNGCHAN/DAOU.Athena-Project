@@ -107,6 +107,16 @@ function findByClass(node, cls) {
   return found;
 }
 
+function findByTag(node, tag) {
+  const found = [];
+  const walk = (n) => {
+    if (n.tag === tag) found.push(n);
+    (n.children || []).forEach(walk);
+  };
+  walk(node);
+  return found;
+}
+
 function textOf(node) {
   const parts = [];
   const walk = (n) => {
@@ -1990,6 +2000,45 @@ test('목록 화면에서도 모드 탭 이동(이력)은 그대로 반영된다
   await flush();
   assert.equal(receipt.applied, true);
   assert.equal(made.canvas.getContext().tab, 'history');
+});
+
+// 위 두 케이스를 **실제 앱의 배선**(폴더 생성 + 파일 쓰기)에서 다시 본다. 폴더 만들기는
+// 비동기라 그 사이에 얹힌 코드가 씨앗 쓰기에 덮일 수 있고, 막힐 설정이 폴더를 남길 수
+// 있다 — 단일 버퍼 배선에서는 둘 다 보이지 않는 자리다.
+
+test('폴더 배선에서도 목록 화면에서 온 코드가 디스크와 편집기에 남는다', async () => {
+  const calls = techniqueCalls();
+  const source = ['import athena_bt as bt', '', 'PARAMS = {"n": 5}', '', '',
+    'def signals(df, p):', '    return df', ''].join('\n');
+  const made = await listMounted(techniqueProjectDeps(calls));
+  const receipt = made.canvas.onChatAction({ kind: 'code_draft', source, note: '초안' });
+  assert.equal(receipt.applied, true);
+  for (let i = 0; i < 8; i += 1) await flush();
+  // 폴더 하나에 뼈대 두 파일 — 그런데 strategy.py에 남는 것은 빈 뼈대가 아니라 그 코드다.
+  assert.equal(calls.created.length, 1);
+  const strategy = calls.writes.filter((w) => w.path === 'strategy.py').pop();
+  assert.equal(strategy.text, source, '빈 뼈대가 방금 반영한 코드를 덮으면 안 된다');
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.code.source, source);
+  assert.equal(ctx.project.activeFile, 'strategy.py');
+  assert.equal(findByClass(made.container, 'project-ide').length, 1);
+  // 「반영됨」이라 했으면 화면에도 그 코드가 있어야 한다 — 도는 것과 보이는 것이 같다.
+  assert.equal(findByTag(made.container, 'textarea')[0].value, source);
+});
+
+test('폴더 배선에서 모르는 기법 id는 뼈대도 폴더도 만들지 않는다', async () => {
+  const calls = techniqueCalls();
+  const made = await listMounted(techniqueProjectDeps(calls));
+  const receipt = made.canvas.onChatAction({ kind: 'spec_draft', patch: { preset: 'nope' } });
+  for (let i = 0; i < 8; i += 1) await flush();
+  assert.equal(receipt.applied, false);
+  assert.deepEqual(receipt.errors, ['nope는 없는 기법입니다']);
+  // 되돌렸다고 답해놓고 폴더만 쌓이면 모델이 id를 틀릴 때마다 빈 폴더가 남는다.
+  assert.deepEqual(calls.created, []);
+  assert.deepEqual(calls.writes, []);
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.techniqueDraft, false);
+  assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1);
 });
 
 test('내 전략을 고르면 그 파일이 IDE에 열리고 실행경로가 코드로 바뀐다', async () => {
