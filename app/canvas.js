@@ -1060,16 +1060,35 @@ function releaseBoardChartPanel(panelId) {
   return destroyed;
 }
 
+// 이 보드의 primary가 어느 조회에서 값을 받는지는 계약이 저작해 뒀다(props_from).
+// 봉투의 조회가 그 목록에 없으면 남의 보드다. 상태 보드를 갈아타면 같은 봉투가
+// 다음 보드로 그대로 따라가므로(switchStateBoard → mountBoardState) 여기서 막지
+// 않으면 137X-2의 종목 일봉이 32S7-0(업종 지수 캔들) 자리에 얹힌다 — 그 보드가
+// 부르지 않는 조회의 봉이다. 출처를 저작하지 않은 보드는 아무 것도 주장하지
+// 않은 것이므로 그대로 얹는다(픽스처 계약이 그 경우다).
+function boardPrimaryAcceptsEnvelope(primary, envelope) {
+  const sources = Array.isArray(primary.propsFrom) ? primary.propsFrom : [];
+  if (!sources.length) return true;
+  const operationRef = String((envelope && (envelope.operation_ref || envelope.operationRef)) || '');
+  return sources.some((source) => String((source && source.mapping_id) || '') === operationRef);
+}
+
 // 껍질(보드 HTML)이 선 뒤에 primary 자리의 Paper 목업을 접고 그 자리에 앱 렌더러를
 // 얹는다. 목업은 지우지 않고 접는다(D1) — 마운트가 실패하면 되돌리고 사유를 얹는다.
 // 실시간은 여기서 다시 걸지 않는다: 통합 카드 리스가 이미 그 피드를 나르고
 // (syncIntegratedRealtime → applyBoardRealtimeTick), 진행봉은 aitsChartPanels가 접는다.
 async function mountBoardPrimary(host, envelope, mounted) {
-  const primary = mounted && mounted.primary;
-  if (!primary || primary.renderer !== BOARD_CHART_RENDERER || !primary.mountPoint) return null;
-  const card = typeof host.closest === 'function' ? host.closest('.card') : null;
-  if (!card) return null;
   const state = boardStateOf(host);
+  const primary = mounted && mounted.primary;
+  const card = typeof host.closest === 'function' ? host.closest('.card') : null;
+  // 안 얹기로 한 것도 결과다 — 껍질이 'loading'을 찍어 두고 여기서 조용히 빠지면
+  // 확정 ack가 영영 안 나가고 main의 pendingMount 한도 뒤 'timeout'으로 샌다.
+  // (갈아탄 보드에서는 이미 맺힌 뒤라 settleBoardChartMount가 아무 것도 안 한다.)
+  if (!primary || primary.renderer !== BOARD_CHART_RENDERER || !primary.mountPoint || !card
+    || !boardPrimaryAcceptsEnvelope(primary, envelope)) {
+    settleBoardChartMount(state, 'error');
+    return null;
+  }
   // 껍질 단계가 만든 신원을 그대로 쓴다 — 다시 만들면 paint ack가 실어 보낸
   // panel_id·generation과 어긋난다.
   let descriptor = state.primaryDescriptor;
@@ -1100,6 +1119,17 @@ async function mountBoardPrimary(host, envelope, mounted) {
     // 카드 정리자는 renderBoardSurfaceCard가 이미 걸었다(보드 상태가 패널을 닫는다) —
     // 여기서 덮으면 통합 카드 root의 집계 정리자를 잃는다.
     const session = await mountAitsChartPanel(card, chartBody, descriptor, { registerCardDestroyer: false });
+    // 성공도 실패와 같은 문으로 판정한다 — 그 사이 보드를 갈아탔으면(destroyBoardPrimary)
+    // 이 자리는 이미 화면에서 빠진 표면이다. 그대로 'data'로 맺으면 main이 죽은
+    // panelId에 재조회 권위와 실시간을 건다(main.js athena:rest-canvas-painted).
+    if (state.primaryMount !== attempt) {
+      session.destroy();
+      chartBody.remove();
+      delete primary.mountPoint.dataset.bsPrimaryMounted;
+      boardMount.restorePrimaryMockup(collapsed);
+      settleBoardChartMount(state, 'error');
+      return null;
+    }
     settleBoardChartMount(state, session.body.candles.length ? 'data' : 'empty');
     return session;
   } catch (error) {
@@ -1108,7 +1138,10 @@ async function mountBoardPrimary(host, envelope, mounted) {
     chartBody.remove();
     delete primary.mountPoint.dataset.bsPrimaryMounted;
     boardMount.restorePrimaryMockup(collapsed);
-    if (state.primaryMount !== attempt) return null;
+    if (state.primaryMount !== attempt) {
+      settleBoardChartMount(state, 'error');
+      return null;
+    }
     state.primaryMount = null;
     state.primaryPanelId = '';
     primary.mountPoint.dataset.bsPrimaryError = String((error && error.message) || error);

@@ -815,6 +815,21 @@ test('저작된 mount_slot은 실보드의 primary 자리 그 자체다', () => 
   }
 });
 
+test('primary가 저작된 전 보드에 마운트 지점이 실재한다', () => {
+  // mount_slot을 저작하지 않은 보드(32S7-0)는 `.bs-primary` 폴백 하나에만 기댄다.
+  // 그 자리가 없으면 canvas.js mountBoardPrimary가 조용히 빠지고, 카드는 껍질이
+  // 찍어둔 'loading'에 멈춘 채 확정 ack를 못 받는다 — 구조적으로 여기서 막는다.
+  const { BOARD_PRIMARY } = require('./board-templates.index.generated');
+  const boardIds = Object.keys(BOARD_PRIMARY);
+  assert.ok(boardIds.length > 0);
+  for (const boardId of boardIds) {
+    const tree = parse(registry.boardHtml(boardId));
+    const surface = tree.querySelector('.board-surface') || tree.children.find((c) => c.tag !== '#text');
+    const node = primaryMountPoint(surface, registry.contractFor(boardId));
+    assert.ok(node, `${boardId}: primary 마운트 지점을 못 찾았다`);
+  }
+});
+
 test('차트 자리는 그 보드가 실제로 부르는 op에서만 값을 받는다', () => {
   const authored = JSON.parse(fs.readFileSync(
     path.join(TEMPLATE_DIR, '..', '137X-2', 'slots.json'), 'utf8',
