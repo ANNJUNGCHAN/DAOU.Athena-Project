@@ -1,7 +1,7 @@
 """보드 표면 템플릿 색인 생성기.
 
 입력: backend/ref/card-surface-templates/<board_id>/board.html (+ meta.json, slots.json)
-출력: app/lib/board-templates.index.generated.js     — 보드 id → 카드 id 색인(소형)
+출력: app/lib/board-templates.index.generated.js     — 보드 id → 카드 id 색인 + 상태 그래프(소형)
       app/lib/board-templates.<card_id>.generated.js — 카드별 청크(원문 HTML + 마운트 계약)
       둘 다 편집 금지, 이 스크립트만 쓴다.
 
@@ -31,6 +31,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE_DIR = ROOT / "backend" / "ref" / "card-surface-templates"
 OUT_DIR = ROOT / "app" / "lib"
 INDEX_JS = OUT_DIR / "board-templates.index.generated.js"
+INDEX_JSON = TEMPLATE_DIR / "index.json"
 
 CARD_ID_RE = re.compile(r"^[A-Za-z0-9-]{1,32}$")
 
@@ -40,7 +41,7 @@ GENERATED_BANNER = (
 )
 
 INDEX_FOOTER = """
-const __exports = { BOARD_CARD, CARD_IDS };
+const __exports = { BOARD_CARD, CARD_IDS, STATE_GRAPH };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
@@ -142,6 +143,37 @@ def collect() -> list[dict]:
     return boards
 
 
+def state_graph() -> dict[str, dict]:
+    """보드 id → {parent, links} — 상태 보드 그래프.
+
+    `links`는 그 보드의 레일에 실제로 찍힌 표식을 편 목록이고(board-mount의
+    ``stateLinksFromMarks``와 같은 모양), `parent`는 그 보드로 들어온 자리다. 봉투는
+    마운트한 보드의 직계 자식만 나르는데 자식 보드의 레일은 부모 레일의 복제본이라,
+    전환 뒤에도 레일이 살려면 프론트가 부모의 링크를 여기서 다시 읽어야 한다.
+
+    원본은 추출기가 해석을 끝낸 `index.json`이다 — `meta.json`의 `state`는 부모가
+    비어 있거나 자기 자신으로 적힌 채라(레일 주인) 그대로 못 쓴다.
+    """
+    if not INDEX_JSON.exists():
+        raise SystemExit(f"상태 그래프 원본이 없다 — {INDEX_JSON}")
+    index = json.loads(INDEX_JSON.read_text(encoding="utf-8"))
+    graph: dict[str, dict] = {}
+    for board in index.get("boards", []):
+        links = []
+        for mark in (board.get("state_controls") or {}).get("marks") or []:
+            control = str(mark.get("control") or "").strip()
+            if not control:
+                continue
+            for target in mark.get("boards") or []:
+                if target:
+                    links.append({"control": control, "board_id": str(target)})
+        parent = (board.get("state") or {}).get("parent_board")
+        # 링크도 부모도 없는 보드는 실을 것이 없다 — 색인은 작아야 한다.
+        if links or parent:
+            graph[board["board_id"]] = {"parent": parent, "links": links}
+    return graph
+
+
 def chunk_path(card_id: str) -> Path:
     return OUT_DIR / f"board-templates.{card_id}.generated.js"
 
@@ -150,12 +182,17 @@ def card_ids(boards: list[dict]) -> list[str]:
     return sorted({board["card_id"] for board in boards})
 
 
-def render_index(boards: list[dict]) -> str:
+def render_index(boards: list[dict], graph: dict[str, dict]) -> str:
     parts = [GENERATED_BANNER, "(function () {\n'use strict';\n\n", "const BOARD_CARD = Object.freeze({\n"]
     for board in boards:
         parts.append(f"  {_js_string(board['board_id'])}: {_js_string(board['card_id'])},\n")
     parts.append("});\n\n")
-    parts.append(f"const CARD_IDS = Object.freeze({json.dumps(card_ids(boards), ensure_ascii=False)});\n")
+    parts.append(f"const CARD_IDS = Object.freeze({json.dumps(card_ids(boards), ensure_ascii=False)});\n\n")
+    parts.append("const STATE_GRAPH = Object.freeze({\n")
+    for board_id in sorted(graph):
+        entry = json.dumps(graph[board_id], ensure_ascii=False, separators=(",", ":"))
+        parts.append(f"  {_js_string(board_id)}: {entry},\n")
+    parts.append("});\n")
     parts.append(INDEX_FOOTER)
     return "".join(parts)
 
@@ -177,9 +214,9 @@ def render_chunk(card_id: str, boards: list[dict]) -> str:
     return "".join(parts)
 
 
-def render(boards: list[dict]) -> dict[Path, str]:
+def render(boards: list[dict], graph: dict[str, dict]) -> dict[Path, str]:
     """경로 → 소스. 색인 1장 + 카드 청크 N장."""
-    files = {INDEX_JS: render_index(boards)}
+    files = {INDEX_JS: render_index(boards, graph)}
     for card_id in card_ids(boards):
         members = [board for board in boards if board["card_id"] == card_id]
         files[chunk_path(card_id)] = render_chunk(card_id, members)
@@ -208,7 +245,7 @@ def main() -> None:
     boards = collect()
     if not boards:
         raise SystemExit(f"보드 템플릿이 하나도 없다 — {TEMPLATE_DIR}")
-    files = render(boards)
+    files = render(boards, state_graph())
     stale = stale_outputs(files)
 
     if args.check:

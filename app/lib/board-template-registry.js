@@ -18,6 +18,7 @@ const index = isCjs
 
 const BOARD_CARD = (index && index.BOARD_CARD) || {};
 const CARD_IDS = (index && index.CARD_IDS) || [];
+const STATE_GRAPH = (index && index.STATE_GRAPH) || {};
 
 // 이 스크립트가 어디서 왔는지 — 청크도 같은 폴더에 있다. 문서 URL 기준 상대경로를
 // 쓰면 fixture HTML(app/*.html)처럼 다른 위치에서 부를 때 깨진다.
@@ -160,6 +161,26 @@ function contractFor(boardId) {
   return entry ? { board_id: String(boardId), slots: entry.slots || [] } : null;
 }
 
+// 상태 보드 링크(어느 칩이 어느 보드를 여는가)의 정본은 이 색인이다. 봉투는 마운트한
+// 그 보드의 직계 자식만 나르는데, 자식 보드의 탭 레일은 부모 레일의 복제본이라 부모의
+// 링크가 없으면 갈아탄 뒤 레일이 통째로 죽는다. 그래서 제 자식 + 부모 레일 전부를 준다.
+// 되돌아가기는 부모 레일에 부모 자신을 여는 표식이 있을 때만 나온다(레일 주인) —
+// 없는 보드는 되돌아갈 칩을 지어내지 않는다.
+function stateLinksFor(boardId) {
+  const entry = STATE_GRAPH[String(boardId || '')];
+  if (!entry) return [];
+  const parent = entry.parent ? STATE_GRAPH[entry.parent] : null;
+  const links = [];
+  const seen = new Set();
+  for (const link of (entry.links || []).concat((parent && parent.links) || [])) {
+    const key = `${link.board_id} ${link.control}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    links.push({ control: link.control, board_id: link.board_id });
+  }
+  return links;
+}
+
 // 보드 1장당 <template> 1개. cloneNode는 호출부(board-mount)가 한다.
 function templateFor(boardId, doc = typeof document !== 'undefined' ? document : null) {
   if (!doc) return null;
@@ -180,7 +201,7 @@ function clearTemplateCache() {
 const __exports = {
   BOARD_CARD, boardIds, cardIds, hasBoard, cardIdFor, isLoaded,
   chunkFileName, chunkUrl, loadChunk, loadBoard,
-  boardHtml, boardSha256, contractFor, templateFor, clearTemplateCache,
+  boardHtml, boardSha256, contractFor, stateLinksFor, templateFor, clearTemplateCache,
 };
 
 if (typeof module !== 'undefined' && module.exports) {

@@ -874,6 +874,11 @@ function applyBoardRealtimeTick(host, tick) {
 function mountBoardState(host, boardId, envelope) {
   const state = boardStateOf(host);
   state.boardId = String(boardId);
+  // 상태 링크의 정본은 생성물 색인이다 — 봉투는 마운트한 그 보드의 직계 자식만 나르므로
+  // 갈아탄 뒤에는 형제 탭도 되돌아갈 길도 목록에 없다. 색인이 모르는 보드(픽스처 계약)
+  // 에서만 봉투가 실어온 목록을 그대로 쓴다.
+  const links = boardTemplateRegistry.stateLinksFor(state.boardId);
+  if (links.length) state.links = links;
   return boardMount.mountBoardAsync(host, state.boardId, state.values, boardMountOptions(host, envelope))
     .then((mounted) => {
       rememberMountedBoard(state, mounted);
