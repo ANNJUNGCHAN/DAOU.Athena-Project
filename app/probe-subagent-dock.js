@@ -26,7 +26,7 @@
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 
-const { app } = require('electron');
+const { app, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -105,13 +105,10 @@ async function main() {
     await wait(100);
   }
 
-  await shellWin.webContents.executeJavaScript(`(() => {
-    const origInvoke = window.athena.invoke.bind(window.athena);
-    window.athena.invoke = (channel, payload) => {
-      if (channel === 'athena__render_canvas') return new Promise(() => {}); // 영원히 pending — claude -p 스폰 없음
-      return origInvoke(channel, payload);
-    };
-  })()`);
+  // 질의를 영원히 pending으로 묶는다 — 렌더러의 window.athena는 contextBridge 객체라 갈아끼울 수
+  // 없으므로(대입이 조용히 무시된다) main 쪽 핸들러를 바꾼다(2026-09-05).
+  ipcMain.removeHandler('athena__render_canvas');
+  ipcMain.handle('athena__render_canvas', () => new Promise(() => {}));
 
   // ---------- 케이스 A: 서브에이전트 2개짜리 턴 ----------
   shellWin.webContents.executeJavaScript("window.runQueryLive('테스트 — 서브에이전트 2개')");
@@ -129,22 +126,22 @@ async function main() {
   const snapshot = await shellWin.webContents.executeJavaScript(`(() => {
     const topLevelSteps = Array.from(document.querySelectorAll('.progress-tool-step .progress-tool-step-label'))
       .map((el) => el.textContent);
-    const agentRows = Array.from(document.querySelectorAll('.result-dock-agent-row')).map((row) => ({
-      label: row.querySelector('.result-dock-agent-label').textContent,
-      isRunning: row.classList.contains('is-running'),
-      hasDot: !!row.querySelector('.result-dock-agent-dot'),
-    }));
+    // Paper 44(2026-09-05): 하위 에이전트는 도크 행이 아니라 이력의 에이전트 카드 하나다.
+    const card = document.querySelector('.agent-card');
+    const agentRows = card ? Array.from(card.querySelectorAll('.agent-card-row')).map((row) => ({
+      label: row.querySelector('.agent-card-row-name').textContent + ' · ' + row.querySelector('.agent-card-row-state').textContent,
+      isRunning: row.querySelector('.agent-card-row-cell').classList.contains('is-running'),
+      hasDot: !!row.querySelector('.agent-card-row-cell'),
+    })) : [];
     return {
       topLevelSteps,
       agentRowCount: agentRows.length,
       agentRows,
-      agentCountLabel: document.querySelector('.result-dock-agent-list')
-        .closest('.result-dock-row').querySelector('.result-dock-count').textContent,
+      agentCountLabel: card ? card.querySelector('.agent-card-count').textContent : null,
+      cellCount: card ? card.querySelectorAll('.agent-card-grid .agent-card-cell').length : 0,
+      doneCellCount: card ? card.querySelectorAll('.agent-card-grid .agent-card-cell.is-done').length : 0,
+      cardCount: document.querySelectorAll('.agent-card').length,
       resultDockHidden: document.querySelector('.result-dock').hidden,
-      // 행 순서는 보드 37: [0]결과물 [1]하위 에이전트 [2]출처.
-      resultRowHidden: document.querySelectorAll('.result-dock-row')[0].hidden,
-      agentRowHidden: document.querySelectorAll('.result-dock-row')[1].hidden,
-      sourceRowHidden: document.querySelectorAll('.result-dock-row')[2].hidden,
     };
   })()`);
   console.log('[probe] 케이스A 스냅샷:', JSON.stringify(snapshot, null, 1));
@@ -161,11 +158,10 @@ async function main() {
     && !!rowA && rowA.isRunning === false && rowA.hasDot
     && !!rowB && rowB.isRunning === false && rowB.hasDot;
 
-  const visibilityOk = snapshot.resultDockHidden === false // 하위 에이전트 행이 있어 도크 자체는 보인다
-    && snapshot.resultRowHidden === true // 카드 0개 — 결과물 숨음
-    && snapshot.sourceRowHidden === true // 출처도 숨음
-    && snapshot.agentRowHidden === false // 하위 에이전트만 보임
-    && snapshot.agentCountLabel === '2 / 2'; // 보드 37 "완료 / 전체" 포맷
+  const visibilityOk = snapshot.resultDockHidden === true // 카드 0개 — 결과물 바는 숨는다(Paper 44)
+    && snapshot.cardCount === 1 // 턴에 카드 하나
+    && snapshot.cellCount === 2 && snapshot.doneCellCount === 2 // 격자 = 에이전트 수, 둘 다 완료
+    && snapshot.agentCountLabel === '2개';
 
   // 이 턴을 정리(abort)한다 — 다음 케이스를 깨끗한 상태에서 시작하기 위해.
   await shellWin.webContents.executeJavaScript(
@@ -179,12 +175,14 @@ async function main() {
   shellWin.webContents.send('athena:live-tool-step', { id: 'plain-step', label: '조회', done: false });
   await wait(200);
   const regressionSnapshot = await shellWin.webContents.executeJavaScript(`(() => ({
-    agentRowHidden: document.querySelectorAll('.result-dock-row')[1].hidden,
-    agentRowCountNow: document.querySelectorAll('.result-dock-agent-row').length,
+    // 케이스A의 카드는 기록으로 남는다(Paper 44) — 새 턴이 카드를 하나도 더 만들지 않아야 한다.
+    cardCountNow: document.querySelectorAll('.agent-card').length,
+    liveCardAfterProgress: !!(document.querySelector('.progress-line') && document.querySelector('.progress-line').nextElementSibling
+      && document.querySelector('.progress-line').nextElementSibling.querySelector('.agent-card')),
   }))()`);
   console.log('[probe] 케이스B(에이전트 없음) 스냅샷:', JSON.stringify(regressionSnapshot));
   // 케이스A의 잔여 행(2개)이 새 턴 시작 시 지워지고, 이번 턴엔 하나도 안 늘어야 한다.
-  const regressionOk = regressionSnapshot.agentRowHidden === true && regressionSnapshot.agentRowCountNow === 0;
+  const regressionOk = regressionSnapshot.cardCountNow === 1 && regressionSnapshot.liveCardAfterProgress === false;
 
   await shellWin.webContents.executeJavaScript(
     "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))",
