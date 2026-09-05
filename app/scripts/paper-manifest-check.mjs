@@ -8,18 +8,20 @@
  * 그래서 매니페스트가 조용히 썩으면 그 위의 게이트 전부가 공허 통과한다.
  * 이 검사가 그 부류를 막는다(fail-closed).
  *
- * 불변식 5개:
+ * 불변식 6개:
  *   I1  sum(pages[].boards) == boards[].length == 444
  *   I2  페이지별 boards[] 실개수 == pages[].boards
  *   I3  role=="card_template" 집합 == card-surface-templates/index.json 96개 (정확 상등)
  *   I4  role=="retired"는 why 필수 — 사유 없는 제외 금지
- *   I5  모든 boards[].id에 대해 <page>/<id>.json 과 .tree.txt 가 실재
- * 형식 검사(위 5개의 전제): schema_version·role 폐쇄집합·id 유일·page 등록 여부.
+ *   I5  모든 boards[].id에 대해 <page>/<id>.json 과 .tree.txt 가 실재(역방향 포함)
+ *   I6  원장 JSON의 tree_summary_sha256 == sha256(같은 보드의 .tree.txt 바이트)
+ * 형식 검사(위 6개의 전제): schema_version·role 폐쇄집합·id 유일·page 등록 여부.
  *
  * 성공 표지: paper manifest verification passed
  */
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -40,6 +42,20 @@ export const ROLES = Object.freeze([
   'reference',
   'retired',
 ]);
+
+/**
+ * .tree.txt 원문에서 해시 대상 바이트 후보를 고른다.
+ *
+ * 추출기의 개행 관례가 두 갈래다 — 444장 중 384장은 파일 원문 그대로,
+ * 60장은 끝 개행 1개를 뺀 바이트로 tree_summary_sha256을 냈다. 둘 다 인정한다.
+ * CR은 어느 관례에도 없다: CRLF로 저장된 원문은 정규화해 살려주지 않고
+ * 그대로 실패시킨다 — 커밋된 바이트에서 재현되지 않는 해시는 무결성 필드가 아니다.
+ */
+function treeHashes(raw) {
+  const candidates = [raw];
+  if (raw.length && raw[raw.length - 1] === 0x0a) candidates.push(raw.subarray(0, -1));
+  return candidates.map((buffer) => createHash('sha256').update(buffer).digest('hex'));
+}
 
 function readJson(file) {
   return JSON.parse(readFileSync(file, 'utf8'));
@@ -133,18 +149,57 @@ export function checkPaperManifest(options = {}) {
     }
   }
 
+  // ---------- I5 역방향: 원장에만 있고 매니페스트에는 없는 보드 ----------
+  const registered = new Set(boards.map((board) => `${board.page}/${board.id}`));
+  for (const page of pages) {
+    const dir = path.join(ledgerDir, String(page.id));
+    if (!existsSync(dir)) continue; // 앞의 I5가 보드별로 이미 잡았다
+    for (const entry of readdirSync(dir)) {
+      if (!entry.endsWith('.json')) continue;
+      const id = entry.slice(0, -'.json'.length);
+      if (!registered.has(`${page.id}/${id}`)) {
+        failures.push(`I5 ${page.id}/${entry}: 원장에 있는데 매니페스트에 없다`);
+      }
+    }
+  }
+
+  // ---------- I6 ----------
+  for (const board of boards) {
+    const dir = path.join(ledgerDir, String(board.page));
+    const jsonFile = path.join(dir, `${board.id}.json`);
+    const treeFile = path.join(dir, `${board.id}.tree.txt`);
+    if (!existsSync(jsonFile) || !existsSync(treeFile)) continue; // I5가 이미 잡았다
+    const recorded = readJson(jsonFile).tree_summary_sha256;
+    const raw = readFileSync(treeFile);
+    if (!recorded) {
+      failures.push(`I6 ${board.id}: tree_summary_sha256이 없다`);
+    } else if (!treeHashes(raw).includes(recorded)) {
+      const crlf = raw.includes('\r\n') ? ' (CRLF로 저장됐다)' : '';
+      failures.push(`I6 ${board.id}: tree_summary_sha256이 ${board.page}/${board.id}.tree.txt 바이트에서 재현되지 않는다${crlf}`);
+    }
+  }
+
   return { failures, counts };
+}
+
+/**
+ * CLI 출력과 종료코드. 실패 경로를 테스트가 부를 수 있게 순수 함수로 뽑았다.
+ */
+export function formatCliReport({ failures, counts }) {
+  if (failures.length) {
+    return {
+      exitCode: 1,
+      lines: ['[paper-manifest] 매니페스트 불변식 위반:', ...failures.map((failure) => '  - ' + failure)],
+    };
+  }
+  const summary = ROLES.map((role) => `${role}=${counts[role] ?? 0}`).join(' ');
+  return { exitCode: 0, lines: [`paper manifest verification passed — ${summary}`] };
 }
 
 const invokedDirectly = process.argv[1]
   && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (invokedDirectly) {
-  const { failures, counts } = checkPaperManifest();
-  if (failures.length) {
-    console.error('[paper-manifest] 매니페스트 불변식 위반:');
-    for (const failure of failures) console.error('  - ' + failure);
-    process.exit(1);
-  }
-  const summary = ROLES.map((role) => `${role}=${counts[role] ?? 0}`).join(' ');
-  console.log(`paper manifest verification passed — ${summary}`);
+  const { exitCode, lines } = formatCliReport(checkPaperManifest());
+  for (const line of lines) (exitCode ? console.error : console.log)(line);
+  process.exit(exitCode);
 }

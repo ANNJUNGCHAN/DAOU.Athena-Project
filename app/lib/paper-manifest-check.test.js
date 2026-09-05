@@ -4,6 +4,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const os = require('node:os');
+const crypto = require('node:crypto');
 
 const ledgerDir = path.join(__dirname, '..', '..', 'backend', 'ref', 'paper-ledger');
 const checkerPath = path.join(__dirname, '..', 'scripts', 'paper-manifest-check.mjs');
@@ -16,7 +18,7 @@ const load = async () => {
 
 const clone = () => JSON.parse(fs.readFileSync(path.join(ledgerDir, 'manifest.json'), 'utf8'));
 
-test('paper ledger manifest satisfies all five invariants', async () => {
+test('paper ledger manifest satisfies all six invariants', async () => {
   const { checkPaperManifest, TOTAL_BOARDS } = await load();
   const { failures, counts } = checkPaperManifest();
   assert.deepEqual(failures, []);
@@ -88,4 +90,68 @@ test('the 8-1 graph boards stay on page 8-1 and remain implementation targets', 
     assert.equal(board.page, '8-1');
     assert.equal(board.role, 'screen');
   }
+});
+
+// ---------- I6 · I5 역방향: 합성 원장으로 실패 경로를 재현한다 ----------
+
+const sha = (text) => crypto.createHash('sha256').update(Buffer.from(text, 'utf8')).digest('hex');
+
+// boards: [{ id, tree, sha, unregistered? }] — 한 페이지(P-1)짜리 최소 원장을 임시 폴더에 짓는다.
+const makeLedger = (t, boards) => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-ledger-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const pageDir = path.join(dir, 'P-1');
+  fs.mkdirSync(pageDir, { recursive: true });
+  const manifest = { schema_version: 1, pages: [{ id: 'P-1', name: 'p', boards: 0 }], boards: [] };
+  for (const board of boards) {
+    fs.writeFileSync(path.join(pageDir, `${board.id}.tree.txt`), board.tree);
+    fs.writeFileSync(path.join(pageDir, `${board.id}.json`), JSON.stringify({ tree_summary_sha256: board.sha }));
+    if (!board.unregistered) manifest.boards.push({ id: board.id, page: 'P-1', role: 'screen' });
+  }
+  manifest.pages[0].boards = manifest.boards.length;
+  return { ledgerDir: dir, manifest, cardTemplateIds: new Set() };
+};
+
+test('I6 accepts both newline conventions the extractor actually used', async (t) => {
+  const { checkPaperManifest } = await load();
+  const options = makeLedger(t, [
+    { id: 'AA-0', tree: 'a\nb\n', sha: sha('a\nb\n') },
+    { id: 'BB-0', tree: 'a\nb\n', sha: sha('a\nb') },
+  ]);
+  const { failures } = checkPaperManifest(options);
+  assert.deepEqual(failures.filter((f) => f.startsWith('I6')), []);
+});
+
+test('I6 catches a tree summary whose hash no longer reproduces from the file', async (t) => {
+  const { checkPaperManifest } = await load();
+  const options = makeLedger(t, [{ id: 'AA-0', tree: 'a\nb\n', sha: sha('다른 내용') }]);
+  const { failures } = checkPaperManifest(options);
+  assert.ok(failures.some((f) => f.startsWith('I6 AA-0') && f.includes('재현되지 않는다')));
+});
+
+test('I6 refuses a tree summary stored with CRLF line endings', async (t) => {
+  const { checkPaperManifest } = await load();
+  const options = makeLedger(t, [{ id: 'AA-0', tree: 'a\r\nb\r\n', sha: sha('a\nb\n') }]);
+  const { failures } = checkPaperManifest(options);
+  assert.ok(failures.some((f) => f.startsWith('I6 AA-0') && f.includes('CRLF로 저장됐다')));
+});
+
+test('I5 catches a ledger file that no manifest row claims', async (t) => {
+  const { checkPaperManifest } = await load();
+  const options = makeLedger(t, [
+    { id: 'AA-0', tree: 'a\n', sha: sha('a\n') },
+    { id: 'ZZ-9', tree: 'z\n', sha: sha('z\n'), unregistered: true },
+  ]);
+  const { failures } = checkPaperManifest(options);
+  assert.ok(failures.some((f) => f === 'I5 P-1/ZZ-9.json: 원장에 있는데 매니페스트에 없다'));
+});
+
+test('the CLI reports failures on stderr semantics and exits nonzero', async () => {
+  const { formatCliReport } = await load();
+  const failed = formatCliReport({ failures: ['I6 AA-0: 깨졌다'], counts: {} });
+  assert.equal(failed.exitCode, 1);
+  assert.deepEqual(failed.lines, ['[paper-manifest] 매니페스트 불변식 위반:', '  - I6 AA-0: 깨졌다']);
+  const passed = formatCliReport({ failures: [], counts: { screen: 104 } });
+  assert.equal(passed.exitCode, 0);
+  assert.match(passed.lines[0], /^paper manifest verification passed — .*screen=104/);
 });
