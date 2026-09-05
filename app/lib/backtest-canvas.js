@@ -4372,6 +4372,20 @@ function createBacktestCanvas(options) {
     return openedVersion;
   }
 
+  // [이 버전 켜기] — 되열기·편집과 다른 축이다. 여기서 켠 버전이 다음 실행·배포의
+  // 기준이 된다(US-010 보드 05 행 6 「활성화·실행은 별도 승인 UX」). 사람 클릭
+  // 전용이라 모델 액션 경로(onChatAction)에는 이 문이 없다.
+  async function activateVersion(entry) {
+    if (!strategyId || !deps.activate) {
+      setState({ historyError: '이 화면에는 버전 활성화 배선이 없습니다' });
+      return;
+    }
+    try { await deps.activate(strategyId, entry.id); }
+    catch (err) { setState({ historyError: String((err && err.message) || err) }); return; }
+    setState({ historyError: null });
+    await loadVersions();
+  }
+
   // [이 버전으로 편집] — 되연 버전을 지금 작업 초안으로 삼는다. 새 지도 판이 서는
   // 이유: 편집의 출발점이 바뀌었고, 서랍의 "지도 vN"이 이력의 번호를 계속 가리키면
   // 그 숫자가 무엇을 센 것인지 아무도 모르게 된다.
@@ -5423,9 +5437,17 @@ function createBacktestCanvas(options) {
     ));
     if (!list.length) {
       wrap.appendChild(el('div', 'backtest-card-empty', '아직 저장한 버전이 없습니다'));
+    } else {
+      // 켜기를 누르기 전에 지금 무엇이 켜져 있는지 같은 자리에서 읽어야 한다.
+      const activeEntry = list.find((entry) => entry.active);
+      wrap.appendChild(el(
+        'div', 'backtest-version-active-now',
+        activeEntry ? `지금 활성 · v${activeEntry.version}` : '아직 켠 버전이 없습니다',
+      ));
     }
     list.forEach((entry) => {
       const isOn = !!(openedVersion && openedVersion.id === entry.id);
+      const line = el('div', 'backtest-version-line');
       const row = button(
         `backtest-version-row${isOn ? ' is-on' : ''}`, null,
         () => { void openVersion(entry); },
@@ -5435,7 +5457,16 @@ function createBacktestCanvas(options) {
       row.appendChild(el('span', `backtest-version-origin is-${entry.origin}`, entry.origin));
       row.appendChild(el('span', 'backtest-version-note', entry.note || ''));
       if (entry.active) row.appendChild(el('span', 'backtest-version-active', '활성'));
-      wrap.appendChild(row);
+      line.appendChild(row);
+      if (deps.activate && !entry.active) {
+        const activate = button(
+          'backtest-version-activate', '이 버전 켜기',
+          () => { void activateVersion(entry); },
+        );
+        activate.setAttribute('aria-label', `v${entry.version} 켜기`);
+        line.appendChild(activate);
+      }
+      wrap.appendChild(line);
     });
     if (state.historyError) {
       wrap.appendChild(el('div', 'backtest-design-error-line', state.historyError));
