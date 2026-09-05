@@ -3439,6 +3439,13 @@ body { margin: 0; overflow: hidden; }
   display: none !important;
 }
 
+/* Paper AJ-0 — 설정 모드는 1520×760 창 **전체**다(뒤에 사이드바도 대화 열도 없다).
+ * 온보딩과 같은 처방을 쓰되 클래스는 따로 둔다 — 한 클래스를 두 경로가 나눠 쓰면
+ * 설정을 닫는 것이 온보딩의 표시 차단까지 풀어 버린다. */
+#shell.is-settings-hidden {
+  display: none !important;
+}
+
 /* 부팅 연출은 셸·크롬 위에 있어야 한다 — 연출이 끝나야 창이 확정된다. */
 .boot {
   z-index: 20;
