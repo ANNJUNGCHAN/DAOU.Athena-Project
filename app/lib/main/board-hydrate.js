@@ -4,11 +4,12 @@
 // 마운트 뒤에 한 번 더 채운다. 렌더러는 백엔드에 직접 붙지 않는다(backtest-bridge와
 // 같은 관례): main이 REST를 부르고 봉투 {ok, data} 하나로 돌려준다.
 //
-// 계약(레인 B2): POST /api/v1/internal/canvas/board-hydrate
-//   요청 {board_id, target, account}
-//   응답 {slot_values: [{slot_id, value}, ...]}  또는 {slot_values: {slot_id: value}}
+// 계약(canvas_push.py internal_canvas_board_hydrate): POST /api/v1/internal/canvas/board-hydrate
+//   요청 헤더 Authorization: Bearer <로컬 토큰>  — 없으면 401이다.
+//   요청 {board_id, target: {manifest alias: 값}, account}
+//   응답 {board_id, card_id, operations, surface_contract: {slot_values: [...], ...}}
 //
-// 엔드포인트가 아직 없을 수 있다(레인 B2 진행 중). 그때는 실패가 아니라
+// 붙은 백엔드에 이 경로가 없을 수 있다. 그때는 실패가 아니라
 // `status: 'unavailable'`로 조용히 접는다 — 화면은 결측어(미제공)를 그대로 둔다.
 // 없는 값을 지어내지 않는 것이 이 경로의 유일한 안전 조건이다(헌장 신념 5).
 
@@ -22,14 +23,26 @@ function clean(value) {
   return String(value == null ? '' : value).trim();
 }
 
-// 요청 몸체는 계약이 정한 세 필드뿐이다. 값이 없는 필드는 아예 싣지 않는다
-// (빈 문자열을 보내 백엔드가 ''를 계좌로 오인하게 두지 않는다).
+// target은 op의 manifest request alias로 적은 인자 가방이다(BoardHydrateRequest.target은
+// dict — 문자열을 보내면 몸체 검증에서 422로 튕긴다). 값이 없는 alias는 아예 싣지 않는다
+// (빈 문자열을 보내 백엔드가 ''를 인자로 오인하게 두지 않는다).
+function buildTargetBag(target) {
+  if (!target || typeof target !== 'object' || Array.isArray(target)) return null;
+  const bag = {};
+  for (const [alias, value] of Object.entries(target)) {
+    if (!clean(alias) || value == null || clean(value) === '') continue;
+    bag[alias] = value;
+  }
+  return Object.keys(bag).length ? bag : null;
+}
+
+// 요청 몸체는 계약이 정한 세 필드뿐이다. 값이 없는 필드는 아예 싣지 않는다.
 function buildHydrateBody({ boardId, target, account } = {}) {
   const board = clean(boardId);
   if (!board) throw new TypeError('board_id가 없다');
   const body = { board_id: board };
-  const targetValue = clean(target);
-  if (targetValue) body.target = targetValue;
+  const bag = buildTargetBag(target);
+  if (bag) body.target = bag;
   const accountValue = clean(account);
   if (accountValue) body.account = accountValue;
   return body;
@@ -56,7 +69,7 @@ function normalizeSlotValues(raw) {
   return values;
 }
 
-async function hydrateBoard({ backendBase, fetchImpl, boardId, target, account } = {}) {
+async function hydrateBoard({ backendBase, fetchImpl, token, boardId, target, account } = {}) {
   let body;
   try {
     body = buildHydrateBody({ boardId, target, account });
@@ -67,11 +80,16 @@ async function hydrateBoard({ backendBase, fetchImpl, boardId, target, account }
   if (typeof fetcher !== 'function') {
     return { ok: false, status: 'unavailable', error: 'fetch 없음' };
   }
+  // 로컬 베어러 — 이 경로는 require_local_bearer로 막혀 있다. 토큰이 없으면 빈
+  // 자격을 지어내지 않고 헤더를 빼서, 401을 설정 결함으로 드러낸다.
+  const headers = { 'Content-Type': 'application/json' };
+  const bearer = clean(token);
+  if (bearer) headers.Authorization = `Bearer ${bearer}`;
   let response;
   try {
     response = await fetcher(`${clean(backendBase)}${HYDRATE_PATH}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(body),
     });
   } catch (error) {
@@ -94,13 +112,23 @@ async function hydrateBoard({ backendBase, fetchImpl, boardId, target, account }
   if (!payload || typeof payload !== 'object') {
     return { ok: false, status: 'error', httpStatus, error: '하이드레이션 응답이 비었다' };
   }
-  const slotValues = normalizeSlotValues(payload.slot_values || payload.slotValues);
+  // 값은 surface_contract 안에 있다(봉투의 표면 계약과 같은 자리). 최상위
+  // slot_values는 옛 계약의 폴백으로만 본다.
+  const contract = payload.surface_contract && typeof payload.surface_contract === 'object'
+    ? payload.surface_contract
+    : null;
+  const slotValues = normalizeSlotValues(
+    (contract && contract.slot_values) || payload.slot_values || payload.slotValues,
+  );
   return {
     ok: true,
     status: 'hydrated',
     board_id: body.board_id,
     slot_values: slotValues,
     filled: Object.keys(slotValues).length,
+    // 하이드레이션으로 채워진 슬롯도 실시간 갱신을 받으려면 observation_id가 붙은
+    // 원본 계약이 필요하다(렌더러가 realtimeSlotIndex를 다시 만든다).
+    surface_contract: contract,
   };
 }
 
