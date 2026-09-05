@@ -1641,6 +1641,9 @@ let settingsOpen = false;
 function openSettings() {
   if (settingsOpen) return;
   settingsOpen = true;
+  // Paper AJ-0 — 설정은 창 전체를 차지한다. 반투명 오버레이만 올리면 셸(사이드바·
+  // 대화 열)이 그대로 비쳐 두 화면이 겹쳐 읽힌다(온보딩과 같은 처방, 다른 클래스).
+  $shell.classList.add('is-settings-hidden');
   $app.hidden = true;
   $settings.hidden = false;
   // Paper 43쪽(2026-08-18 확정) — 좌 사이드바(화면·계좌·MCP 서버·모델) + 우 패널.
@@ -1667,6 +1670,7 @@ function closeSettings() {
   $settingsGrid.replaceChildren();
   $settingsNav.replaceChildren();
   $settings.hidden = true;
+  $shell.classList.remove('is-settings-hidden');
   $app.hidden = false;
   $input.focus();
 }
