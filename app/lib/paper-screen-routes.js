@@ -4,7 +4,7 @@
 //
 // 매니페스트 role==="screen" 104장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 13장(에이전트 4 + 화면 4 + 부팅 5)이고, 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
+// 지금은 16장(에이전트 4 + 화면 4 + 부팅 5 + 온보딩 3)이고, 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
 // 임의 JS를 표에 심으면 표가 곧 프로브가 되어 유지가 안 된다. STEP_KINDS만 허용하고,
@@ -118,6 +118,38 @@ const PAPER_ACCOUNTS = Object.freeze({
   ],
 });
 
+// CLI 목록 fixture — 온보딩 07·33이 그린 상태(다계정 카드 하나 + 연결된 한 줄 +
+// 미연결 한 줄)를 앱이 실제로 돌려주는 봉투 모양·순서 그대로 만든다
+// (cli-accounts.js:258-265 selectList, PROVIDER_ORDER는 claude·grok·codex).
+// 이게 없으면 판정이 이 컴퓨터에 로그인된 CLI에 좌우된다. 값은 전부 데이터라
+// phrases에는 한 글자도 넣지 않는다 — 제공자 이름도 여기서 오므로 안 쓴다.
+const PAPER_CLI_PROVIDERS = Object.freeze({
+  providers: [
+    {
+      id: 'claude',
+      name: 'Claude',
+      connected: true,
+      accounts: [
+        { id: 'fx-c1', label: 'athena-1@example.com', active: true, current: true },
+        { id: 'fx-c2', label: 'athena-2@example.com', active: false, current: false },
+      ],
+    },
+    { id: 'grok', name: 'Grok', connected: false, accounts: [] },
+    {
+      id: 'codex',
+      name: 'Codex',
+      connected: true,
+      accounts: [{ id: 'fx-x1', label: 'athena-1@example.com', active: false, current: true }],
+    },
+  ],
+});
+
+// 로그인 요청의 두 결말. 실제 핸들러는 터미널 창을 띄우므로(main.js:4849 handleCliLogin →
+// cli-accounts.js login) 검사에서 원 핸들러를 부르면 안 된다 — 봉투는 login()이
+// 돌려주는 그 모양이다(cli-accounts.js:334·347).
+const CLI_LOGIN_LAUNCHED = Object.freeze({ ok: true, launched: true, message: '' });
+const CLI_LOGIN_NOT_INSTALLED = Object.freeze({ ok: false, launched: false, message: '' });
+
 const ROUTES = Object.freeze([
   // ---------- 부팅 5장 (1-0) ----------
   // 부팅 02~05는 한 애니메이션의 시간 단계라 서로를 가르는 것은 **찍힌 글자 수**뿐이다.
@@ -189,6 +221,108 @@ const ROUTES = Object.freeze([
     phrases: ['그래프', '에이전트', '플러그인'],
     // Paper의 프레임 이름이 그대로 계약이다 — 「Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)」.
     structure: [{ what: 'count', selector: '.shell-region', equals: 3 }],
+  },
+
+  // ---------- 온보딩 3장 (1-0) ----------
+  // 온보딩은 부팅이 딱 한 번 읽는 상태다(chat.js:255 athena:onboarding-state →
+  // startOnboarding). 도달한 뒤에 그 화면을 여는 클릭이 앱 어디에도 없어서, 셸을
+  // 다시 읽지 않는 러너에서는 앱 자신의 진입점을 부르는 eval이 유일한 통로다 —
+  // 그래서 이 셋만 탈출구를 쓴다(paper-screen-routes.test.js가 목록을 잠근다).
+  {
+    board: '1DX-0', // 07 · 온보딩 — CLI 연결 (AT-SY-002)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:cli-list', data: PAPER_CLI_PROVIDERS },
+      { do: 'ipc-fixture', channel: 'athena:cli-login', data: CLI_LOGIN_LAUNCHED },
+      {
+        do: 'eval',
+        js: 'startOnboarding(2)',
+        why: '온보딩 진입은 부팅 한 번뿐이라 도달한 뒤에 여는 클릭이 없다 — 부팅이 부르는 그 함수를 그대로 부른다',
+      },
+      // 미연결 한 줄의 [연결]을 눌러 Paper가 그린 「로그인 대기 중…」을 만든다.
+      // fixture가 핸들러를 갈아끼웠으므로 실제 터미널 창은 열리지 않는다.
+      { do: 'click', selector: '.onb-cli-row .uk-btn-ghost' },
+      { do: 'settle' },
+    ],
+    root: '#onboard',
+    // 제공자 이름(Paper의 'Claude Code'·'Gemini CLI'·'Grok CLI')은 fixture가 주는
+    // 데이터라 문구가 못 된다. 남는 것은 앱이 리터럴로 그리는 제목·안내·라벨뿐이다.
+    phrases: [
+      '사용할 CLI를 연결합니다',
+      'Athena는 자체 API 키를 사용하지 않습니다. 로그인한 계정으로 CLI를 제어합니다.',
+      '계정 추가',
+      '연결을 누르면 해당 CLI의 로그인 명령이 새 터미널 창에서 실행됩니다. 로그인은 그 창에서 완료하세요. 계정은 여러 개 연결할 수 있고, 활성 계정 하나가 명령을 받습니다.',
+      '로그인 대기 중…',
+      '계속',
+    ],
+    // Paper는 다계정 카드 하나(계정 두 줄)와 대기 중인 한 줄을 그린다. 단일 행
+    // 개수는 안 적는다 — Paper는 넷째 제공자(Gemini)까지 그리는데 앱의 제공자는
+    // 셋뿐이라(cli-accounts.js:13) 거기에 앱의 수를 적으면 앱이 정본이 된다.
+    structure: [
+      { what: 'count', selector: '.onb-cli-card', equals: 1 },
+      { what: 'count', selector: '.onb-cli-account-row', equals: 2 },
+      { what: 'count', selector: '.onb-cli-waiting', equals: 1 },
+    ],
+  },
+  {
+    board: '1FN-0', // 08 · 온보딩 — 계좌 연결 (AT-SY-003)
+    window: 'shell',
+    reach: [
+      {
+        do: 'eval',
+        js: 'startOnboarding(3)',
+        why: '온보딩 진입은 부팅 한 번뿐이라 도달한 뒤에 여는 클릭이 없다 — 부팅이 부르는 그 함수를 그대로 부른다',
+      },
+      { do: 'settle' },
+    ],
+    root: '#onboard',
+    // 「모의-1」은 <input>의 placeholder라 문구가 못 된다(onboarding.js:338).
+    // 마스크 점과 「붙여넣음 · 36자」는 값이라 애초에 후보에서 빠져 있다.
+    phrases: [
+      '증권 계좌를 연결합니다',
+      '키움 모의투자 계좌를 연결합니다. 앱키는 이 컴퓨터의 자격증명 저장소에만 저장되고 화면에 다시 나타나지 않습니다.',
+      'APP KEY',
+      'SECRET KEY',
+      '저장 위치',
+      '검증 후 시작',
+    ],
+    // Paper의 입력 세 칸(별칭·APP KEY·SECRET KEY)과 저장 위치 상자 하나.
+    // 발 부분은 안 적는다 — Paper는 [검증 후 시작] 하나인데 앱은 [이전]도 둔다.
+    structure: [
+      { what: 'count', selector: '.onb-field', equals: 3 },
+      { what: 'count', selector: '.onb-input-row', equals: 3 },
+      { what: 'count', selector: '.onb-savebox', equals: 1 },
+    ],
+  },
+  {
+    board: '2V0K-1', // 33 · 온보딩 — CLI 연결 실패 (AT-SY-002)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:cli-list', data: PAPER_CLI_PROVIDERS },
+      { do: 'ipc-fixture', channel: 'athena:cli-login', data: CLI_LOGIN_NOT_INSTALLED },
+      {
+        do: 'eval',
+        js: 'startOnboarding(2)',
+        why: '온보딩 진입은 부팅 한 번뿐이라 도달한 뒤에 여는 클릭이 없다 — 부팅이 부르는 그 함수를 그대로 부른다',
+      },
+      // 07과 같은 자극에 로그인 결과만 실패다 — 그 한 클릭이 이 보드를 만든다.
+      { do: 'click', selector: '.onb-cli-row .uk-btn-ghost' },
+      { do: 'settle' },
+    ],
+    root: '#onboard',
+    // Paper가 실패 행에 그린 안내문은 「Gemini CLI 실행 파일을 찾지 못했습니다…」인데
+    // 앱에는 Gemini 제공자가 없어 그 문장은 어느 상태에서도 못 만든다 — 적지 않는다.
+    phrases: [
+      '사용할 CLI를 연결합니다',
+      'Athena는 자체 API 키를 사용하지 않습니다. 로그인한 계정으로 CLI를 제어합니다.',
+      '계정 추가',
+      '연결 실패 · 재시도',
+      '계속',
+    ],
+    structure: [
+      { what: 'count', selector: '.onb-cli-card', equals: 1 },
+      { what: 'count', selector: '.onb-cli-waiting.is-failed', equals: 1 },
+    ],
   },
 
   // ---------- 에이전트 4장 (A-2) ----------

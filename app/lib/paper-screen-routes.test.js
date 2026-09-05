@@ -63,9 +63,21 @@ test('every reach step uses a declared verb and carries exactly its declared arg
   }
 });
 
-test('an eval escape hatch would have to say why — none of the seed routes needs one', () => {
+// 탈출구를 쓰는 보드는 이 셋뿐이다. 온보딩은 부팅이 딱 한 번 읽는 상태라
+// (chat.js athena:onboarding-state → startOnboarding) 도달한 뒤에 그 화면을 여는
+// 클릭이 앱 어디에도 없다 — 목록을 여기서 잠가 eval이 다른 보드로 번지지 않게 한다.
+const EVAL_ROUTES = new Set(['1DX-0', '1FN-0', '2V0K-1']);
+
+test('the only eval escape hatches are the onboarding ones, and each says why', () => {
   assert.deepEqual(STEP_KINDS.eval, ['js', 'why']);
-  assert.deepEqual(ROUTES.filter((r) => r.reach.some((s) => s.do === 'eval')), []);
+  const used = ROUTES.filter((r) => r.reach.some((s) => s.do === 'eval')).map((r) => r.board);
+  assert.deepEqual(used.filter((board) => !EVAL_ROUTES.has(board)), [],
+    '온보딩 밖에서 eval을 쓰려면 그 보드가 왜 클릭으로 못 가는지부터 적어야 한다');
+  for (const route of ROUTES) {
+    for (const step of route.reach.filter((s) => s.do === 'eval')) {
+      assert.ok(String(step.why || '').trim(), `${route.board}: eval에 why가 없다`);
+    }
+  }
 });
 
 test('every mode step names a mode the shell can actually switch to', () => {
