@@ -7,6 +7,7 @@ const path = require('node:path');
 const {
   collapsePlan, mountPlan, pairedGroups, nodeIndex, applyPlan, setHidden, isValueSlot,
   hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, primaryMountPoint,
+  collapsePrimaryMockup, restorePrimaryMockup,
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
 } = require('./board-mount');
@@ -1104,6 +1105,37 @@ test('primaryMountPoint는 mount_slot을 먼저 보고, 없으면 .bs-primary로
   // mount_slot 없이 renderer만 저작된 보드도 마찬가지다(32S7-0 저작 정본).
   assert.equal(primaryMountPoint(surface, { primary: { renderer: 'athena-chart', mount_slot: null } }), fallback);
   assert.equal(primaryMountPoint(surface, null), fallback);
+});
+
+test('primary 목업은 지우지 않고 접었다가 그대로 편다', () => {
+  const toolbar = el({ node: '14PC-2' });
+  toolbar.style.display = 'flex';
+  const preview = el({ node: '14PK-2' });
+  // 마운트 계획이 이미 접어 둔 자식은 손대지 않는다 — 되돌릴 때 같이 펴면 안 된다.
+  const folded = el({ node: '14PZ-2' });
+  setHidden(folded, true);
+  const mount = el({ node: '14P9-2' }, [toolbar, preview, folded], 'bs-primary');
+
+  const collapsed = collapsePrimaryMockup(mount);
+  assert.deepEqual(collapsed, [toolbar, preview]);
+  // 삭제가 아니라 숨김이다(D1: Paper 원문 보존).
+  assert.equal(mount.children.length, 3);
+  assert.equal(toolbar.hidden, true);
+  assert.equal(preview.hidden, true);
+
+  assert.equal(restorePrimaryMockup(collapsed), 2);
+  assert.equal(toolbar.hidden, false);
+  // 인라인 display 원문을 되찾는다.
+  assert.equal(toolbar.style.display, 'flex');
+  assert.equal(preview.hidden, false);
+  // 원래 접혀 있던 자식은 접힌 채다.
+  assert.equal(folded.hidden, true);
+});
+
+test('접을 자리가 없으면 아무 일도 하지 않는다', () => {
+  assert.deepEqual(collapsePrimaryMockup(null), []);
+  assert.deepEqual(collapsePrimaryMockup(el({ node: '14P9-2' })), []);
+  assert.equal(restorePrimaryMockup(null), 0);
 });
 
 test('primaryMountPoint는 자리가 없으면 지어내지 않는다', () => {

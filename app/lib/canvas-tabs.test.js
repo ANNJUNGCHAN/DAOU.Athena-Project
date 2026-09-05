@@ -342,7 +342,7 @@ test('surface_contract가 있으면 보드 마운트로, 없으면 기존 경로
   );
   // D1의 예외 — 앱 렌더러(AITS 차트·호가 래더·주문 초안)가 primary인 recipe는 보드가
   // 가로채지 않는다. 판정은 paper-card-routing.preservesAppPrimary가 든다(2026-09-04).
-  assert.match(primary, /const boardCard = paperCardRouting\.preservesAppPrimary\(envelope\) \? null : renderBoardSurfaceCard\(envelope\);\n\s*if \(boardCard\) return boardCard;/);
+  assert.match(primary, /const boardCard = paperCardRouting\.preservesAppPrimary\(envelope, boardPrimaryRendererOf\(envelope\)\)\n\s*\? null : renderBoardSurfaceCard\(envelope\);\n\s*if \(boardCard\) return boardCard;/);
   assert.match(primary, /canvas_type === 'table' && !envelope\.fell_back\) return renderMcpTable/);
   const board = CANVAS.slice(CANVAS.indexOf('function renderBoardSurfaceCard'), CANVAS.indexOf('async function renderTaskCanvasEnvelope'));
   assert.match(board, /if \(!contract \|\| !boardMount\) return null;/);
@@ -457,4 +457,67 @@ test('덱 엘리먼트가 밖에서 떨어져 나갔으면 탭을 닫고 덱을 
   assert.match(helper, /for \(const key of canvasTabDeck\.keys\(\)\) canvasTabDeck\.close\(key\);\n\s*canvasTabDeck = null;/);
   // 복구 분기 뒤에야 캐시를 돌려준다 — 순서가 바뀌면 복구가 죽은 코드가 된다.
   assert.ok(helper.indexOf('isConnected') < helper.indexOf('if (canvasTabDeck) return canvasTabDeck;'));
+});
+
+// ---------- 보드 primary: 껍질 먼저, 앱 렌더러는 그 자리에 ----------
+//
+// 차트 봉투는 이제 자기 Paper 보드(137X-2)로 간다. 보드는 껍질을 먼저 세우고
+// 라이브 차트를 primary 자리에 얹는다 — 그 순서가 흐트러지면 첫 피드백 3초
+// 계약을 넘기거나(마운트를 기다림) 상태 전환이 컨테이너 충돌로 던진다.
+
+test('보드가 얹는 렌더러 종류는 라우팅이 아는 목록과 같다', () => {
+  const { BOARD_MOUNTED_RENDERERS } = require('./paper-card-routing');
+  const mounted = CANVAS.match(/const BOARD_CHART_RENDERER = '([^']+)';/);
+  assert.ok(mounted, 'canvas.js가 보드에 얹을 렌더러 이름을 상수로 갖고 있지 않다');
+  // 라우팅이 보드로 보내는 종류와 canvas가 실제로 마운트하는 종류가 어긋나면
+  // 그 봉투는 보드로 갔는데 자리는 목업인 채로 남는다.
+  assert.deepEqual(Array.from(BOARD_MOUNTED_RENDERERS), [mounted[1]]);
+});
+
+test('보드 껍질을 먼저 세우고 앱 렌더러는 뒤에서 얹는다', () => {
+  const mount = CANVAS.slice(CANVAS.indexOf('function mountBoardState'), CANVAS.indexOf('function switchStateBoard'));
+  // await하면 AITS 라이브러리 로드가 3초 계약을 넘긴다 — 던져 놓고 하이드레이션으로 간다.
+  assert.match(mount, /void mountBoardPrimary\(host, envelope, mounted\);/);
+  assert.doesNotMatch(mount, /await mountBoardPrimary|return mountBoardPrimary/);
+  assert.ok(mount.indexOf('wireStateControls') < mount.indexOf('mountBoardPrimary'));
+  assert.ok(mount.indexOf('mountBoardPrimary') < mount.indexOf('hydrateBoardSlots'));
+});
+
+test('상태 보드를 갈아타기 전에 열린 primary 패널을 먼저 닫는다', () => {
+  const swap = CANVAS.slice(CANVAS.indexOf('function switchStateBoard'), CANVAS.indexOf('function findStateControl'));
+  // 표면을 갈면 컨테이너가 바뀐다 — 같은 panelId를 다른 컨테이너로 열면 adapter가 던진다.
+  assert.match(swap, /destroyBoardPrimary\(state\);\n\s*return mountBoardState\(host, target, envelope\);/);
+});
+
+test('보드 primary는 목업을 접고 얹으며, 실패하면 목업을 되돌린다', () => {
+  const primary = CANVAS.slice(
+    CANVAS.indexOf('async function mountBoardPrimary'),
+    CANVAS.indexOf('// 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다.'),
+  );
+  // 저작된 렌더러 자리에만 손댄다.
+  assert.match(primary, /primary\.renderer !== BOARD_CHART_RENDERER \|\| !primary\.mountPoint\) return null;/);
+  // 데이터가 없으면 목업을 걷지 않는다 — 봉을 지어내지 않는다.
+  assert.match(primary, /if \(!data \|\| !data\.chart\) return null;/);
+  assert.match(primary, /if \(!descriptor\.body\.candles\.length\) return null;/);
+  // 목업은 지우지 않고 접는다(D1) — 실패하면 그대로 편다.
+  assert.match(primary, /boardMount\.collapsePrimaryMockup\(primary\.mountPoint\)/);
+  assert.match(primary, /boardMount\.restorePrimaryMockup\(collapsed\)/);
+  assert.doesNotMatch(primary, /mountPoint\.replaceChildren|mountPoint\.innerHTML/);
+  // 마운트 표식 — 검증 스크립트와 CSS가 이걸 본다.
+  assert.match(primary, /primary\.mountPoint\.dataset\.bsPrimaryMounted = BOARD_CHART_RENDERER;/);
+  // 실패를 감추지 않는다.
+  assert.match(primary, /appendChild\(errorNote\(`차트를 그리지 못했다/);
+  // 실시간은 통합 카드 리스가 이미 나른다 — 보드 카드에 0B를 다시 걸지 않는다.
+  assert.doesNotMatch(primary, /wireQuoteRealtime/);
+  // 저수준 렌더러를 직접 부르지 않는다 — 같은 AITS adapter 문으로만 들어간다.
+  assert.match(primary, /mountAitsChartPanel\(card, chartBody, descriptor, \{ registerCardDestroyer: false \}\)/);
+  assert.doesNotMatch(primary, /createChartCard/);
+});
+
+test('보드 카드를 닫으면 그 자리에 열린 패널도 닫힌다', () => {
+  const board = CANVAS.slice(CANVAS.indexOf('function renderBoardSurfaceCard'), CANVAS.indexOf('async function renderTaskCanvasEnvelope'));
+  // 정리자가 없으면 카드를 닫아도 패널과 그 리스가 남는다.
+  assert.match(board, /cardDestroyers\.set\(card, \(\) => destroyBoardPrimary\(boardStateOf\(host\)\)\);/);
+  // 보드 카드는 리스를 통합 카드에서 받는다 — 여기서 0B를 따로 걸지 않는다.
+  assert.doesNotMatch(board, /wireQuoteRealtime/);
 });
