@@ -184,6 +184,28 @@ test('visible AITS renderer error is feedback, never a successful data canvas', 
   assert.equal(result.canvases[0].generation, 1);
 });
 
+test('마운트 결과를 못 받은 차트는 timeout으로 집계되고 데이터 카드가 아니다', async () => {
+  const result = await runRestDataset({
+    dataset: dataset(),
+    backendBase: 'http://backend',
+    fetchImpl: successfulFetch(),
+    emitCanvas: async (payload) => ({
+      verifiedVisible: true,
+      // 껍질은 3초 안에 떴다 — 첫 피드백 계약은 지켜진다.
+      visiblePaintAt: payload.requestStartedAt + 20,
+      renderState: 'timeout',
+      rendererId: 'aits-chart-v1',
+      panelId: 'panel-1',
+      generation: 1,
+    }),
+  });
+  assert.equal(result.feedbackOk, true);
+  assert.equal(result.canvases[0].renderState, 'timeout');
+  assert.equal(result.canvases[0].isDataCanvas, false);
+  assert.equal(result.dataCanvasCount, 0);
+  assert.equal(result.ok, false);
+});
+
 test('render-plan deadline uses the remaining three-second budget with paint reserve', async () => {
   let now = 10_000;
   let renderRequest = null;
@@ -1368,4 +1390,42 @@ test('recommendations accept only predeclared safe query actions, dedupe, and ca
     { follow_up_id: 'e', label: '추가', query: '추가 항목', target_intent: 'query', operation_ref: 'base:ka10100' },
   ]);
   assert.deepEqual(actions.map((item) => item.id), ['a', 'c', 'd']);
+});
+
+test('껍질 paint를 알린 차트는 마운트가 마감을 넘겨 끝나도 답변이 뒤집히지 않는다', async () => {
+  async function runProfile(announceFirstPaint) {
+    const input = dataset();
+    input.firstCanvasDeadlineMs = 60;
+    const eventTypes = [];
+    const result = await runRestDataset({
+      dataset: input,
+      backendBase: 'http://backend',
+      fetchImpl: successfulFetch(),
+      onEvent: (event) => eventTypes.push(event.type),
+      emitCanvas: async (payload) => {
+        const visiblePaintAt = payload.requestStartedAt + 20;
+        if (announceFirstPaint) payload.onFirstPaint({ visiblePaintAt });
+        // 마운트 결과 ack는 첫 카드 마감을 넘겨서야 도착한다.
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        return { verifiedVisible: true, visiblePaintAt, renderState: 'data' };
+      },
+    });
+    return { result, eventTypes };
+  }
+
+  const announced = await runProfile(true);
+  assert.equal(announced.result.ok, true);
+  assert.equal(announced.result.feedbackOk, true);
+  assert.equal(Math.round(announced.result.firstFeedbackMs), 20);
+  assert.equal(announced.result.canvases.length, 1);
+  assert.equal(announced.result.errors.length, 0);
+  assert.equal(announced.result.state, null);
+  assert.ok(announced.eventTypes.indexOf('paint-pending') < announced.eventTypes.indexOf('paint-ack'));
+
+  // 알리지 않으면 종전대로 3초 마감이 걸린다 — 마감 자체는 살아 있다.
+  const silent = await runProfile(false);
+  assert.equal(silent.result.ok, false);
+  assert.equal(silent.result.state, 'timeout');
+  assert.equal(silent.result.canvases.length, 0);
+  assert.equal(silent.eventTypes.includes('paint-pending'), false);
 });

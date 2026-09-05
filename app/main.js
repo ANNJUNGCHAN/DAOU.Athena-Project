@@ -77,7 +77,12 @@ function isQueryOnlyRetryDataset(dataset) {
 const restRetryRegistry = new RestRetryRegistry({
   isQueryOnlyDataset: isQueryOnlyRetryDataset,
 });
-const { correlationKey: restCorrelationKey } = require('./lib/rest-canvas-paint');
+const {
+  correlationKey: restCorrelationKey,
+  decidePaintAck,
+  timedOutPaint,
+  PENDING_MOUNT_ACK_TIMEOUT_MS,
+} = require('./lib/rest-canvas-paint');
 const { resolveWindowHtmlPath, waitForWindowReady } = require('./lib/main/window-readiness');
 const { createOnce } = require('./lib/main/inflight-once');
 const {
@@ -2049,31 +2054,40 @@ ipcMain.on('athena:rest-canvas-painted', (event, payload = {}) => {
   });
   const waiter = key && restPaintWaiters.get(key);
   if (!waiter) return;
-  restPaintWaiters.delete(key);
-  waiter.cleanup();
-  if (!payload.verified_visible) {
-    waiter.reject(new Error(payload.error || 'REST 카드가 실제 표시되지 않았다'));
+  const decision = decidePaintAck(payload, {
+    pendingPaint: waiter.pendingPaint || null,
+    now: () => performance.now(),
+  });
+  if (decision.action === 'reject') {
+    restPaintWaiters.delete(key);
+    waiter.cleanup();
+    waiter.reject(new Error(decision.message));
     return;
   }
-  const paintResult = {
-    verifiedVisible: true,
-    visiblePaintAt: performance.now(),
-    inlineToDomMs: Number(payload.inline_to_dom_ms) || 0,
-    inlineToChartImportMs: payload.inline_to_chart_import_ms == null ? null : Number(payload.inline_to_chart_import_ms),
-    chartImportToDomMs: payload.chart_import_to_dom_ms == null ? null : Number(payload.chart_import_to_dom_ms),
-    domToPaintAckMs: Number(payload.dom_to_paint_ack_ms) || 0,
-    renderState: payload.render_state || null,
-    rendererId: payload.renderer_id || null,
-    panelId: payload.panel_id || null,
-    generation: payload.generation != null && Number.isInteger(Number(payload.generation)) ? Number(payload.generation) : null,
-    rect: payload.rect || null,
-  };
-  chartReloadAuthority.registerPaint(paintResult, waiter.reloadAuthority);
+  if (decision.action === 'defer') {
+    // 차트 껍질만 붙은 첫 ack다. 첫 피드백은 이미 지켰으니 3초 한도를 풀고,
+    // 마운트 결과 ack가 render_state를 확정할 때까지만 짧게 더 기다린다. 이
+    // 값으로 재조회 권위·실시간 REG·데이터 카드 집계가 갈리므로 낙관값을
+    // 미리 넘기지 않는다.
+    waiter.pendingPaint = decision.paint;
+    waiter.beginPendingMount(() => {
+      restPaintWaiters.delete(key);
+      waiter.cleanup();
+      waiter.resolve(timedOutPaint(decision.paint));
+    });
+    // 카드는 이미 눈에 보인다. 첫 피드백 도달을 지금 알려 러너의 3초 마감과
+    // 지연 영수증 워치독을 풀고, 미루는 것은 render_state 확정뿐이다.
+    if (waiter.notifyFirstPaint) waiter.notifyFirstPaint(decision.paint);
+    return;
+  }
+  restPaintWaiters.delete(key);
+  waiter.cleanup();
+  chartReloadAuthority.registerPaint(decision.paint, waiter.reloadAuthority);
   // 차트가 실제로 그려진 순간에만 실시간을 건다 — 그려지지도 않은 패널로 REG를
   // 소모하지 않는다(REG는 리미터를 먹는다). 참조 중복은 registrar와
   // chartRealtimePanelSymbols(panelId 단위)가 함께 막는다.
-  ensureChartRealtime(waiter.reloadAuthority, payload.panel_id || null);
-  waiter.resolve(paintResult);
+  ensureChartRealtime(waiter.reloadAuthority, decision.paint.panelId);
+  waiter.resolve(decision.paint);
 });
 
 ipcMain.on('athena:rest-receipt-painted', (event, payload = {}) => {
@@ -2249,6 +2263,7 @@ async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs
   if (restPaintWaiters.has(key)) throw new Error('같은 REST 카드 paint ack가 이미 대기 중이다');
   return new Promise((resolve, reject) => {
     let timer = null;
+    let pendingTimer = null;
     const onAbort = () => {
       restPaintWaiters.delete(key);
       cleanup();
@@ -2258,6 +2273,7 @@ async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs
     };
     const cleanup = () => {
       if (timer) clearTimeout(timer);
+      if (pendingTimer) clearTimeout(pendingTimer);
       if (payload.signal) payload.signal.removeEventListener('abort', onAbort);
     };
     timer = setTimeout(() => {
@@ -2271,6 +2287,12 @@ async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs
       resolve,
       reject,
       cleanup,
+      notifyFirstPaint: typeof payload.onFirstPaint === 'function' ? payload.onFirstPaint : null,
+      // 차트 껍질 ack가 도착하면 첫 피드백 한도를 풀고 마운트 결과 ack만 기다린다.
+      beginPendingMount(onTimeout) {
+        if (timer) { clearTimeout(timer); timer = null; }
+        pendingTimer = setTimeout(onTimeout, PENDING_MOUNT_ACK_TIMEOUT_MS);
+      },
       reloadAuthority: {
         correlation,
         operationRef: payload.operationRef,
@@ -3455,7 +3477,10 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
     ).then((paint) => ({ paint, error: null }), (error) => ({ paint: null, error }));
   }, DIRECT_FEEDBACK_WATCHDOG_MS) : null;
   const handleDirectEvent = (event) => {
-    if (event && event.type === 'paint-ack') feedbackObserved = true;
+    // 차트는 껍질이 뜬 시점('paint-pending')이 사용자가 실제로 본 첫 피드백이다 —
+    // 마운트 확정 ack를 기다리다 워치독이 먼저 터지면 화면에 카드가 있는데도
+    // 지연 영수증을 그리게 된다.
+    if (event && (event.type === 'paint-ack' || event.type === 'paint-pending')) feedbackObserved = true;
     if (typeof overrides.onEvent === 'function') overrides.onEvent(event);
   };
   let result;
