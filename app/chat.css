@@ -73,9 +73,10 @@ html, body { background: transparent; }
   white-space: nowrap;
 }
 .boot-base {
-  /* 글자 폭을 고정하는 투명한 layout guide다. 타이핑 글자 뒤로 회색 문자가
-     비치거나 별도 색상 면처럼 보이지 않아야 한다. */
-  color: transparent;
+  /* 아직 입력되지 않은 ATHENA — Paper 보드 02 16OG-2의 비활성 회색이다. 파란
+     타이핑 레이어가 입력한 만큼 위를 덮으므로 접두사는 파랑, 나머지는 회색으로
+     읽힌다(보드 03: AT 파랑 + 핑크 캐럿 + HENA 회색). 색만 칠하고 면은 없다. */
+  color: #9aa2ae;
   background: none;
 }
 .boot-typed-layer {

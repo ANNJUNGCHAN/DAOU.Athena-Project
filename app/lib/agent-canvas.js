@@ -533,19 +533,19 @@ function createAgentCanvas(deps) {
   panels.appendChild(detailCol);
   body.appendChild(panels);
 
-  // ---------- 동선 규칙(Paper 에이전트 보드 05 하단) ----------
+  // ---------- 이중 제어 규칙(Paper 에이전트 보드 05 하단 C6U-0~C6X-0) ----------
   // 이 화면이 "새 작업"을 어떻게 다루는지 적어 둔 고정 안내다 — 데이터가 아니라
   // 화면 자신의 계약이라 fixture/live 구분이 없다(그래서 data-source를 안 붙인다).
-  // 세 줄은 Paper 원문 그대로다. 코드 곳곳의 "동선 규칙①/③" 주석이 가리키던
-  // 원본이 그동안 화면에 없었다 — 이제 사람도 같은 문장을 본다.
+  // 세 줄은 Paper 원문 그대로다(C6V-0/C6W-0/C6X-0). 보드 07 게이트 지도 437L-1
+  // 「두 입구 · 한 게이트」와 같은 계약이라 어느 입구로 들어와도 게이트는 하나다.
   const ROUTE_RULES = [
-    '① ＋ 새 작업 버튼은 시트를 열지 않는다 — 채팅 입력창에 시작 문장을 넣고 커서를 옮긴다.',
-    '② 편집도 채팅으로 — 행을 고르고 "이거 고쳐줘". 상세 패널은 보기 전용.',
-    '③ 확정(미리보기·활성화)은 채팅 카드의 칩 — 캔버스는 결과가 비치는 곳.',
+    '① 새 작업 — 채팅 문장으로도, 시트로도.',
+    '② 편집 — "이거 고쳐줘"로도, 폼으로도.',
+    '③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트.',
   ];
   const routeRules = el('div', 'agent-route-rules');
   const routeRulesCaption = el('div', 'agent-panel-caption');
-  routeRulesCaption.textContent = '동선 규칙';
+  routeRulesCaption.textContent = '이중 제어 규칙';
   routeRules.appendChild(routeRulesCaption);
   for (const text of ROUTE_RULES) {
     const line = el('div', 'agent-route-rule');

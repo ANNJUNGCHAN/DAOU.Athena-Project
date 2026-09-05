@@ -3738,6 +3738,36 @@ test('origin=code_only 버전은 코드 탭에서 열리고 지도는 읽기 전
   assert.doesNotMatch(textOf(made.container), /그래프·코드 검증 완료/);
 });
 
+test('이력 탭 버전 행에 [이 버전 켜기]가 있고 누르면 activate를 부른다', async () => {
+  const activated = [];
+  const made = await mountWithHistory({
+    activate: async (strategyId, versionId) => { activated.push([strategyId, versionId]); return {}; },
+  });
+  const buttons = findByClass(made.container, 'backtest-version-activate');
+  assert.equal(buttons.length, 2, '이미 활성인 v1에는 켜기 버튼이 서지 않는다');
+  assert.equal(buttons[0].textContent, '이 버전 켜기');
+
+  await click(buttons[0]);
+  await flush();
+  assert.deepEqual(activated, [['s1', 'v2']]);
+});
+
+test('활성화는 실행과 다른 버튼이고 지금 활성 버전을 함께 말한다', async () => {
+  const made = await mountWithHistory();
+  assert.match(textOf(made.container), /지금 활성 · v1/);
+
+  await click(findByClass(made.container, 'backtest-version-activate')[0]);
+  await flush();
+  assert.equal(made.calls.activate, 1);
+  assert.equal(made.calls.run, 0, '켜기는 실행이 아니다');
+  assert.equal(made.calls.backfill, 0);
+});
+
+test('활성화 배선이 없으면 켜기 버튼을 세우지 않는다 — 누를 수 없는 약속을 만들지 않는다', async () => {
+  const made = await mountWithHistory({ activate: undefined });
+  assert.equal(findByClass(made.container, 'backtest-version-activate').length, 0);
+});
+
 test('버전 되열기 배선이 없으면 그 자리에 이유를 적는다 — 화면을 오류로 바꾸지 않는다', async () => {
   const made = await mountWithHistory({ versionDetail: undefined });
   await click(findByClass(made.container, 'backtest-version-row')[1]);
