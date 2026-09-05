@@ -426,8 +426,15 @@ async function inspectAndStage(win, recipe) {
   return waitFor(
     () => win.webContents.executeJavaScript(`(() => {
       const grid = document.getElementById('grid');
-      const card = grid && [...grid.querySelectorAll('.card')].find((item) => item.dataset.taskCanvas === 'true');
-      if (!card || !card.querySelector('.semantic-workspace')) return null;
+      const card = grid && [...grid.querySelectorAll('.card')].find(
+        (item) => item.dataset.taskCanvas === 'true' || item.dataset.boardSurface === 'true');
+      if (!card) return null;
+      // 보드 표면 카드에는 의미 작업대가 안 붙는다(canvas.js 세 upsert 호출부의 보드
+      // 예외) — 그래서 마운트 판정도 갈린다: 보드는 보드가 섰는지, 나머지는 작업대가
+      // 붙었는지를 본다.
+      const boardSurface = card.dataset.boardSurface === 'true';
+      const boardHost = card.querySelector('.board-surface-host');
+      if (boardSurface ? !(boardHost && boardHost.children.length) : !card.querySelector('.semantic-workspace')) return null;
       const shell = document.getElementById('shell');
       if (shell) {
         shell.hidden = false;
@@ -443,8 +450,9 @@ async function inspectAndStage(win, recipe) {
       card.hidden = false;
       card.removeAttribute('hidden');
       const workspace = card.querySelector('.semantic-workspace');
-      const sections = [...workspace.querySelectorAll('.semantic-workspace-section')];
-      const values = [...workspace.querySelectorAll('.semantic-workspace-value, .semantic-workspace-table tbody td')];
+      const sections = workspace ? [...workspace.querySelectorAll('.semantic-workspace-section')] : [];
+      const values = workspace
+        ? [...workspace.querySelectorAll('.semantic-workspace-value, .semantic-workspace-table tbody td')] : [];
       const raw = card.querySelector('.semantic-detail-sheet');
       const forbiddenPattern = /(?:\\b(?:FID|raw|alias|REST|0D|fundamentals|entry|draft|json[ _-]?path|mapping[ _-]?id|operation[ _-]?ref|plan[ _-]?token|trace[ _-]?id)\\b|(?:base|detail):[a-z0-9]|\\bka\\d{5}\\b|canonical snapshot|백엔드 영속|후속 라운드|미구현|\\$\\.)/i;
       const visibleText = card.innerText || '';
@@ -478,6 +486,9 @@ async function inspectAndStage(win, recipe) {
         }).length;
       return {
         recipeId: ${JSON.stringify(recipe.recipe_id)},
+        boardSurface,
+        boardId: card.dataset.boardId || null,
+        semanticWorkspaceMounted: Boolean(workspace),
         sections: sections.map((node) => node.dataset.semanticSection),
         primitiveSections,
         valueCount: values.length,
@@ -515,7 +526,7 @@ async function inspectAndStage(win, recipe) {
         },
       };
     })()`),
-    `${recipe.recipe_id}: semantic workspace did not mount`,
+    `${recipe.recipe_id}: card surface did not mount`,
   );
 }
 
@@ -729,9 +740,17 @@ async function main() {
         envelope: representative.envelope,
       });
       const dom = await inspectAndStage(win, representative);
-      const expectedVisibleSections = expectedProductSections(representative);
+      // 보드로 그려지는 카드는 Paper 보드 그 자체다 — 의미 작업대는 그 카드의
+      // 표시 계약이 아니므로 섹션·값 검사를 걸지 않고, 대신 시트가 한 겹 더
+      // 붙지 않았는지를 본다. 보드 표면 자체의 반응형·실시간 계약은
+      // verify:integrated-cards가 든다.
+      const expectedVisibleSections = dom.boardSurface ? [] : expectedProductSections(representative);
       const expectedSections = expectedVisibleSections.map((section) => section.section_id);
-      if (JSON.stringify(dom.sections) !== JSON.stringify(expectedSections)) {
+      if (dom.boardSurface) {
+        if (dom.semanticWorkspaceMounted) {
+          throw new Error(`${representative.recipe_id}: semantic workspace was layered under the Paper board`);
+        }
+      } else if (JSON.stringify(dom.sections) !== JSON.stringify(expectedSections)) {
         throw new Error(`${representative.recipe_id}: named section order drifted: ${JSON.stringify({ expectedSections, actualSections: dom.sections })}`);
       }
       const specializedPrimaryMounted = representative.recipe_id === 'instrument-chart'
@@ -739,7 +758,7 @@ async function main() {
         : representative.recipe_id === 'live-orderbook'
           ? dom.hasOrderbookPrimary
           : representative.recipe_id === 'order-safe-ticket' ? dom.hasOrderDraftUi : false;
-      if (!dom.valueCount && !(representative.primary_expected && specializedPrimaryMounted)) {
+      if (!dom.boardSurface && !dom.valueCount && !(representative.primary_expected && specializedPrimaryMounted)) {
         throw new Error(`${representative.recipe_id}: no semantic value or specialized primary mounted`);
       }
       if (dom.rawMounted || dom.forbiddenAccessibleText || dom.forbiddenDomAttribute || dom.forbiddenText) {
@@ -806,6 +825,9 @@ async function main() {
       results.push({
         recipe_id: representative.recipe_id,
         representative_operation: representative.operation_ref,
+        board_surface: dom.boardSurface,
+        board_id: dom.boardId,
+        semantic_workspace_mounted: dom.semanticWorkspaceMounted,
         expected_sections: expectedSections,
         rendered_sections: dom.sections,
         rendered_components: dom.primitiveSections,
@@ -835,7 +857,10 @@ async function main() {
       || failureStateRegression.semanticWorkspaceMounted) {
       throw new Error(`failure state exposed a data surface: ${JSON.stringify(failureStateRegression)}`);
     }
-    const narrowWindowRepresentative = bundle.representatives.find((item) => item.recipe_id === 'discovery-value');
+    // 좁은 창 회귀는 의미 작업대가 실제로 서는 대표로 잰다. 표를 가진 recipe는
+    // 전부 보드로 그려지므로(위 boardSurface 분기) 작업대가 남는 것은 앱 렌더러가
+    // primary인 카드들이다. 보드 쪽 좁은 창 계약은 verify:integrated-cards가 든다.
+    const narrowWindowRepresentative = bundle.representatives.find((item) => item.recipe_id === 'order-safe-ticket');
     narrowWindowRegression = await verifyNarrowWindow(win, narrowWindowRepresentative);
   } finally {
     if (!win.isDestroyed()) win.destroy();
