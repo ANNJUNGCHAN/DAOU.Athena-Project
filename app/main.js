@@ -4782,9 +4782,18 @@ async function handleCliSetActive(e, { accountId } = {}) {
   return result;
 }
 
+// 설정 모델 카드 [제거](2026-09-05, Paper 화면 18) — 활성 계정이 지워질 수 있어
+// 전환과 같은 이유로 프로바이더를 회전시킨다.
+async function handleCliRemove(e, { accountId } = {}) {
+  const result = await cliAccounts.remove(accountId);
+  if (result.ok) await broadcastCliChanged({ rotateReason: 'cli_account_removed' });
+  return result;
+}
+
 ipcMain.handle('athena:cli-list', handleCliList);
 ipcMain.handle('athena:cli-login', handleCliLogin);
 ipcMain.handle('athena:cli-set-active', handleCliSetActive);
+ipcMain.handle('athena:cli-remove', handleCliRemove);
 
 // 키우미 메뉴 › 파일/폴더 첨부(2026-08-27, Paper 보드 45) — 경로만 돌려준다.
 // 파일 내용은 여기서 읽지 않는다: 경로 텍스트가 입력줄에 붙고, 읽는 건 CLI의 몫.

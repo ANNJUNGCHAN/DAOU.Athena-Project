@@ -815,17 +815,20 @@ function openOrderApiSheet(card, account, onDone) {
 }
 
 // =============================================================================
-// 모델 — Paper 43쪽(2026-08-18 확정, 다계정 요건 2026-08-18 추가). Claude 섹션
-// (계정 목록 · 계정 추가 · 모델 칩 · 직접 입력 · 사고 강도 칩) / 구분선 / Codex
-// 섹션(같은 구조, 미연결이면 계정 목록 대신 "미연결 · 연결" 행이고 모델·강도는
-// 비활성) / 정직성 노트 2줄.
+// 모델 — Paper 화면 18 "설정 — 모델 · AI 제공업체 계정"(2026-09-05 계정 카드형으로
+// 개편, 원본 2026-08-18). 리드(제목·설명) / Claude 섹션 / 구분선 / Codex 섹션 /
+// 정직성 노트 2줄. 섹션마다: 상태 헤드(점·이름·연결 pill) · 설명 · "계정" 소제목과
+// 우측 [+ 계정 추가] · 계정 카드 목록(활성 카드는 진한 테두리, 비활성 카드는
+// 본문이 전환 button, 카드 우측에 [재인증]·[제거]) · 모델/사고 강도 칩.
 //
-// 공급자당 연결 상태는 더 이상 단일 pill이 아니라 **계정 목록**이다 —
-// athena:cli-list가 provider.accounts: [{id,label,active}]를 준다(2~3개 가능,
-// 온보딩 2/3과 같은 계약). 활성 전환은 athena:cli-set-active(무확인, 온보딩과
-// 동일), 계정 추가는 athena:cli-login(providerId) 위임 — 새 콘솔 창에서 로그인이
+// 계정 데이터는 athena:cli-list의 provider.accounts: [{id,label,active,addedAt,
+// current}] — current는 그 CLI가 지금 들고 있는 로그인이다(cli-accounts.js
+// selectList). 활성 전환은 athena:cli-set-active(무확인, 온보딩과 동일), 계정
+// 추가·재인증은 athena:cli-login(providerId) 위임 — 새 콘솔 창에서 로그인이
 // 끝나면 athena:cli-changed가 이 창에도 오고, 그 구독이 카드를 다시 그린다(아래
-// renderModel 참고). 여기서 별도 폴링·타임아웃을 두지 않는다.
+// renderModel 참고). 제거는 athena:cli-remove — Codex는 런타임 로그아웃, Claude는
+// 이전 로그인 항목만 지워지고 현재 CLI 로그인은 버튼이 잠긴다. 여기서 별도
+// 폴링·타임아웃을 두지 않는다.
 //
 // 모델·사고 강도는 계정별이 아니라 앱 전역 설정이다(athena:model-get/-set, 위
 // IPC 계약 그대로) — 그래서 buildModelSection이 accounts와 modelState를
@@ -859,57 +862,153 @@ const CODEX_EFFORT_CHIPS = [
   { value: 'xhigh', label: 'xhigh' },
 ];
 
-// 활성 계정 행 — 상태 표시만, 조작이 없으므로 button이 아니다(누를 게 없는
-// 행까지 버튼으로 만들면 오히려 키보드 사용자에게 "여기 액션이 있다"고
-// 거짓 신호를 준다). 비활성 계정 행은 buildModelAccountSwitchButton이 만든다
-// — 그쪽만 진짜 button이다(팀리드 지시: 전부 키보드 도달 가능, 행도 button).
-function buildModelActiveAccountRow(acc) {
-  return row('uk-model-account-row is-active', [
+// 재인증(↻)·제거(휴지통) — Paper 화면 18의 11×11 선 아이콘. ui-kit의 arrowIcon과
+// 같은 방식으로 innerHTML 없이 노드로 만든다.
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const ACTION_ICON_PATHS = {
+  refresh: ['M9.2 5.5A3.7 3.7 0 1 1 8.1 2.9', 'M8.3 1.2v2.1H6.2'],
+  trash: ['M1.5 3h8M4 3V1.8h3V3M2.5 3l.6 6.2h4.8L8.5 3'],
+};
+function actionIcon(kind) {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('width', '11');
+  svg.setAttribute('height', '11');
+  svg.setAttribute('viewBox', '0 0 11 11');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('aria-hidden', 'true');
+  for (const d of ACTION_ICON_PATHS[kind]) {
+    const p = document.createElementNS(SVG_NS, 'path');
+    p.setAttribute('d', d);
+    p.setAttribute('stroke', 'currentColor');
+    p.setAttribute('stroke-width', '1.2');
+    p.setAttribute('stroke-linecap', 'round');
+    p.setAttribute('stroke-linejoin', 'round');
+    svg.appendChild(p);
+  }
+  return svg;
+}
+function iconButton(kind, label, opts) {
+  const b = button('ghost', label, opts);
+  b.insertBefore(actionIcon(kind), b.firstChild);
+  return b;
+}
+
+// addedAt(ISO) → "8월 10일 오후 4:49"(이 컴퓨터 시간대). 못 읽으면 null — 부제에서
+// 날짜 조각을 뺀다. Intl ko-KR은 엔진에 따라 "8. 10. 오후 4:49"로 찍혀 손으로 잇는다.
+function formatAddedAt(iso) {
+  const d = new Date(iso);
+  if (!iso || Number.isNaN(d.getTime())) return null;
+  const h = d.getHours();
+  const h12 = h % 12 === 0 ? 12 : h % 12;
+  return `${d.getMonth() + 1}월 ${d.getDate()}일 ${h < 12 ? '오전' : '오후'} ${h12}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
+// 계정 카드 부제 — 출처 · 추가 시각 · (비활성이면) 전환 안내. Paper 화면 18의
+// "현재 CLI 로그인 · 8월 10일 오후 4:49 추가" 문법. 순수 함수라 node --test로 잰다.
+function accountSubline(acc, sourceLabel) {
+  const parts = [sourceLabel];
+  const when = formatAddedAt(acc && acc.addedAt);
+  if (when) parts.push(`${when} 추가`);
+  if (!(acc && acc.active)) parts.push('누르면 활성으로 전환');
+  return parts.join(' · ');
+}
+
+const CLAUDE_CURRENT_LOCK_TITLE = '현재 Claude CLI에 로그인된 계정이다 — 터미널에서 로그아웃한 뒤 제거한다';
+
+// 계정 카드 — 활성 카드는 상태 표시라 본문이 정적이고, 비활성 카드는 본문 전체가
+// 전환 button이다(이전 행 구조와 같은 규칙: 누를 게 있는 곳만 button, 전부 키보드
+// 도달 가능). 우측 [재인증]·[제거]는 두 카드 모두 진짜 button — button 안에
+// button을 넣지 않으려고 카드 자체는 div다. .uk-model-account-row 클래스는
+// verify.js 검증7의 프로브(.uk-model-accounts .uk-model-account-row)가 센다.
+function buildAccountCard(acc, { providerId, sourceLabel, onSwitch, onReauth, onRemove }) {
+  const card = el('div', `uk-model-account-row uk-account-card${acc.active ? ' is-active' : ''}`);
+  const titleRow = row('uk-account-title-row', [
     el('span', 'uk-model-account-label', acc.label),
-    el('span', 'uk-flex-spacer'),
-    badge(true, '활성'),
+    badge(!!acc.active, acc.active ? '활성' : '비활성'),
   ]);
+  const sub = el('div', 'uk-account-sub', accountSubline(acc, sourceLabel(acc)));
+  let main;
+  if (acc.active) {
+    main = row('uk-account-main', [titleRow, sub]);
+  } else {
+    main = el('button', 'uk-account-main uk-account-switch');
+    main.type = 'button';
+    main.setAttribute('aria-label', `${acc.label} — 눌러서 활성 계정으로 전환`);
+    main.appendChild(titleRow);
+    main.appendChild(sub);
+    main.addEventListener('click', () => onSwitch(acc));
+  }
+  card.appendChild(main);
+
+  const actions = el('div', 'uk-account-actions');
+  actions.appendChild(iconButton('refresh', '재인증', {
+    onClick: onReauth,
+    title: '로그인 명령을 새 터미널 창에서 다시 실행한다',
+  }));
+  // Claude는 자격증명 파일이 하나뿐이라 지금 CLI가 들고 있는 로그인은 여기서
+  // 못 지운다(cli-accounts.js remove()도 같은 이유로 거부한다) — 잠그고 이유를 단다.
+  const locked = providerId === 'claude' && acc.current;
+  actions.appendChild(iconButton('trash', '제거', locked
+    ? { disabled: true, title: CLAUDE_CURRENT_LOCK_TITLE }
+    : {
+      onClick: () => askRemove(),
+      title: providerId === 'codex' ? 'Athena 전용 Codex 로그인을 로그아웃한다' : '이전에 감지된 로그인 항목을 목록에서 지운다',
+    }));
+  card.appendChild(actions);
+
+  // 계좌 카드의 삭제 확인 바와 같은 문법 — 카드 내용을 확인 바로 바꿨다가 취소·실패
+  // 시 되돌린다. 성공 시에는 onRemove가 카드 전체를 다시 그린다.
+  function askRemove() {
+    const normal = [main, actions];
+    clear(card);
+    const { bar, cancelBtn, confirmBtn } = deleteConfirmBar(providerId === 'codex'
+      ? `'${acc.label}' 계정을 제거할까요? Athena 전용 Codex 로그인이 로그아웃된다`
+      : `'${acc.label}' 계정을 목록에서 제거할까요?`);
+    confirmBtn.querySelector('.uk-btn-label').textContent = '제거';
+    const restore = () => {
+      clear(card);
+      for (const c of normal) card.appendChild(c);
+    };
+    cancelBtn.addEventListener('click', restore);
+    confirmBtn.addEventListener('click', async () => {
+      cancelBtn.disabled = true;
+      confirmBtn.disabled = true;
+      confirmBtn.querySelector('.uk-btn-label').textContent = '제거 중…';
+      const ok = await onRemove(acc);
+      if (!ok) restore();
+    });
+    card.appendChild(bar);
+  }
+
+  return card;
 }
 
-function buildModelAccountSwitchButton(acc, onSwitch) {
-  const b = el('button', 'uk-model-account-row uk-model-account-switch');
-  b.type = 'button';
-  b.setAttribute('aria-label', `${acc.label} — 눌러서 활성 계정으로 전환`);
-  b.appendChild(el('span', 'uk-model-account-label', acc.label));
-  b.appendChild(el('span', 'uk-flex-spacer'));
-  b.appendChild(badge(false, '비활성'));
-  b.addEventListener('click', () => onSwitch(acc));
-  return b;
-}
-
-function buildModelConnectRow(title, onConnect) {
-  const b = el('button', 'uk-model-account-row uk-model-account-connect');
-  b.type = 'button';
-  b.appendChild(statusDot(false, `${title} 미연결`));
-  b.appendChild(el('span', 'uk-model-account-label', '미연결'));
-  b.appendChild(el('span', 'uk-flex-spacer'));
-  b.appendChild(el('span', 'uk-model-connect-label', '연결'));
-  b.addEventListener('click', onConnect);
-  return b;
-}
-
-// title/provider(athena:cli-list의 provider 항목, accounts:[{id,label,active}])/
+// title/provider(athena:cli-list의 provider 항목, accounts:[{id,label,active,
+// addedAt,current}])/description(섹션 설명)/accountsHint("계정" 소제목 아래 설명)/
+// sourceLabel(acc → 카드 부제의 출처 문구)/optional(Codex처럼 "선택 사항" pill)/
 // modelState({model,effort} 또는 null)/modelChips(null이면 Codex처럼 입력 하나만)/
 // effortChips/disabled(모델·강도 컨트롤만 잠근다 — 계정 목록·로그인은 연결
 // 상태와 무관하게 항상 조작 가능해야 "연결" 자체가 가능하다)/onModelChange/
-// onAccountsChanged(계정 전환·로그인 성공 시 카드 전체를 다시 그리라는 콜백)/
+// onAccountsChanged(계정 전환·로그인·제거 성공 시 카드 전체를 다시 그리라는 콜백)/
 // errBox(공용 오류 표시 슬롯, 두 섹션이 공유).
 function buildModelSection(opts) {
-  const { title, provider, modelState, modelChips, effortChips, disabled, onModelChange, onAccountsChanged, errBox } = opts;
+  const {
+    title, provider, description, accountsHint, sourceLabel, optional,
+    modelState, modelChips, effortChips, disabled, onModelChange, onAccountsChanged, errBox,
+  } = opts;
   const accounts = (provider && provider.accounts) || [];
   const connected = accounts.length > 0;
   const s = modelState || {};
 
   const wrap = el('div', 'uk-model-section');
-  wrap.appendChild(row('uk-model-section-head', [
+  const headRow = row('uk-model-section-head', [
+    statusDot(connected, `${title} ${connected ? '연결됨' : '미연결'}`),
     el('span', 'uk-settings-name', title),
     pill(connected ? '연결됨' : '미연결', connected ? 'ok' : 'dim'),
-  ]));
+  ]);
+  if (optional) headRow.appendChild(pill('선택 사항', 'dim'));
+  wrap.appendChild(headRow);
+  wrap.appendChild(el('div', 'uk-provider-desc', description));
 
   async function doSwitch(acc) {
     clear(errBox);
@@ -938,18 +1037,43 @@ function buildModelSection(opts) {
     }
   }
 
-  // ---- 계정 목록 · 계정 추가 — 연결 상태와 무관하게 항상 조작 가능하다 ----
+  // 성공하면 onAccountsChanged가 카드를 다시 그리므로 true, 실패면 카드가 원래
+  // 모습으로 돌아가야 하므로 false를 돌려준다(buildAccountCard askRemove).
+  async function doRemove(acc) {
+    clear(errBox);
+    try {
+      const res = await window.athena.invoke('athena:cli-remove', { accountId: acc.id });
+      if (!res || !res.ok) {
+        errBox.appendChild(errorNote((res && res.message) || `${acc.label} 계정을 제거하지 못했다`));
+        return false;
+      }
+    } catch (err) {
+      errBox.appendChild(errorNote('계정 제거 기능을 아직 사용할 수 없다 (athena:cli-remove 핸들러 없음)'));
+      return false;
+    }
+    onAccountsChanged();
+    return true;
+  }
+
+  // ---- "계정" 소제목 + [+ 계정 추가] · 계정 카드 목록 — 연결 상태와 무관하게
+  // 항상 조작 가능하다(미연결이면 빈 카드 한 장, 추가 버튼은 그대로). ----
+  const block = el('div', 'uk-accounts-block');
+  const headText = el('div');
+  headText.appendChild(el('div', 'uk-accounts-title', '계정'));
+  headText.appendChild(el('div', 'uk-accounts-hint', accountsHint));
+  block.appendChild(row('uk-accounts-head', [headText, button('ghost', '+ 계정 추가', { onClick: doLogin })]));
   const accountsWrap = el('div', 'uk-model-accounts');
   if (connected) {
     for (const acc of accounts) {
-      accountsWrap.appendChild(acc.active ? buildModelActiveAccountRow(acc) : buildModelAccountSwitchButton(acc, doSwitch));
+      accountsWrap.appendChild(buildAccountCard(acc, {
+        providerId: provider.id, sourceLabel, onSwitch: doSwitch, onReauth: doLogin, onRemove: doRemove,
+      }));
     }
-    accountsWrap.appendChild(button('text', '+ 계정 추가', { onClick: doLogin }));
   } else {
-    accountsWrap.appendChild(buildModelConnectRow(title, doLogin));
+    accountsWrap.appendChild(el('div', 'uk-account-empty', `연결된 ${title} 계정이 없다 — + 계정 추가를 누르면 로그인 명령이 새 터미널 창에서 실행되고, 로그인은 그 창에서 끝난다.`));
   }
-  accountsWrap.appendChild(el('div', 'uk-field-hint-static', '연결을 누르면 해당 CLI의 로그인 명령이 새 터미널 창에서 실행된다 — 로그인은 그 창에서 완료한다.'));
-  wrap.appendChild(accountsWrap);
+  block.appendChild(accountsWrap);
+  wrap.appendChild(block);
 
   // ---- 모델 · 사고 강도 — 앱 전역 설정(계정별 아님). disabled면 이 컨트롤만
   // 잠긴다, 위 계정 UI는 그대로 켜져 있다(연결해야 잠금이 풀리므로). ----
@@ -1080,9 +1204,18 @@ async function refreshModelCard(card, head, body) {
     }
   }
 
+  // 리드 — Paper 화면 18 상단. 카드 헤드 "모델"은 설정 카테고리, 이 리드가 패널의 제목이다.
+  const lead = el('div', 'uk-provider-lead');
+  lead.appendChild(el('div', 'uk-provider-lead-title', 'AI 제공업체 계정'));
+  lead.appendChild(el('div', 'uk-provider-lead-desc', 'Athena는 이 컴퓨터의 Claude·Codex CLI 로그인을 그대로 쓴다. 질의는 활성 계정으로 실행되고, 모델·사고 강도는 공급자별로 정한다.'));
+  body.appendChild(lead);
+
   body.appendChild(buildModelSection({
     title: 'Claude',
     provider: claudeProvider,
+    description: '이 컴퓨터의 Claude CLI 로그인을 그대로 쓴다. 계정을 여러 개 오가려면 여기서 추가한다 — 로그인은 새 터미널 창에서 끝난다.',
+    accountsHint: '이 컴퓨터에서 감지된 Claude 계정이다. 새 계정은 여기에 추가된다.',
+    sourceLabel: (acc) => (acc.current ? '현재 CLI 로그인' : '이전 CLI 로그인'),
     modelState: modelState && modelState.claude,
     modelChips: CLAUDE_MODEL_CHIPS,
     effortChips: CLAUDE_EFFORT_CHIPS,
@@ -1097,6 +1230,10 @@ async function refreshModelCard(card, head, body) {
   body.appendChild(buildModelSection({
     title: 'Codex',
     provider: codexProvider,
+    description: 'Codex 로그인은 Athena 전용 홈에 따로 보관된다 — 이 컴퓨터의 다른 Codex 로그인과 섞이지 않는다. 연결하지 않아도 질의는 Claude로 실행된다.',
+    accountsHint: 'Athena 전용 홈에 보관된 Codex 로그인이다. 새 계정은 여기에 추가된다.',
+    sourceLabel: () => 'Athena 전용 로그인',
+    optional: true,
     modelState: modelState && modelState.codex,
     modelChips: null,
     effortChips: CODEX_EFFORT_CHIPS,
@@ -1367,6 +1504,7 @@ function refreshHistoryCard(card, head, body, initialError = '', collectChatOver
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
 const __exports = {
   renderAccounts, renderScreen, renderModel, renderHistory, renderNav,
+  accountSubline, formatAddedAt,
   normalizeGraphSettings, readGraphSettings, writeGraphSettings, setCollectChatPreference,
   collectChatPreferenceErrorMessage, GRAPH_SETTINGS_DEFAULTS,
   HOLDINGS_INTERVAL_MINUTES,
