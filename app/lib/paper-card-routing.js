@@ -49,6 +49,15 @@ function paperCardRoute(envelope, surfaces) {
 // (detail:ka10001:current_trading → 137X-2 상실, 2026-09-05 실측).
 const APP_PRIMARY_RENDERERS = new Set(['aits-chart-v1']);
 
+// 예외가 소멸하는 지점 — 보드가 그 자리에 앱 렌더러를 직접 얹을 수 있으면 봉투는
+// 보드로 간다. 껍질은 Paper 원문이 그리고 라이브 렌더러는 그 안 primary 자리에
+// 앉는다(canvas.js mountBoardPrimary). 값은 보드 slots.json의 primary.renderer이고
+// 색인이 동기로 나른다(board-template-registry.primaryRendererFor).
+// canvas가 실제로 마운트할 줄 아는 종류만 여기 있다 — 저작만 되고 마운트 코드가
+// 없는 종류를 넣으면 라이브 표면이 정적 목업으로 바뀐다. 호가 사다리
+// ('orderbook-ladder')는 그 마운트가 붙는 커밋에서 함께 넣는다.
+const BOARD_MOUNTED_RENDERERS = new Set(['athena-chart']);
+
 // renderer_id를 안 싣는 옛 봉투·픽스처 대비 안전망. 정본은
 // backend/ref/kiwoom-common-screen-manifest.json에서 presentation.renderer_id가
 // 'aits-chart-v1'인 전집합(19개)이고, 이 목록이 manifest와 어긋나면
@@ -90,8 +99,9 @@ const APP_PRIMARY_ORDER_OPS = new Set([
   'base:kt50002', 'base:kt50003',
 ]);
 
-function preservesAppPrimary(envelope) {
+function preservesAppPrimary(envelope, boardRenderer) {
   if (!envelope) return false;
+  if (BOARD_MOUNTED_RENDERERS.has(String(boardRenderer || ''))) return false;
   const renderer = typeof envelope.renderer_id === 'string' ? envelope.renderer_id : '';
   if (APP_PRIMARY_RENDERERS.has(renderer)) return true;
   // REST 직행 차트 봉투는 renderer_id가 비어 있어도 AITS가 primary다. 보드 HTML을
@@ -107,7 +117,7 @@ function blockedReason(envelope) {
 
 const __exports = {
   isKiwoomEnvelope, operationRefOf, paperCardRoute, blockedReason, preservesAppPrimary,
-  APP_PRIMARY_RENDERERS, APP_PRIMARY_CHART_OPS,
+  APP_PRIMARY_RENDERERS, APP_PRIMARY_CHART_OPS, BOARD_MOUNTED_RENDERERS,
   APP_PRIMARY_ORDERBOOK_OPS, APP_PRIMARY_ORDER_OPS,
 };
 

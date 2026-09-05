@@ -17,6 +17,7 @@ const path = require('node:path');
 const { spawn, spawnSync } = require('node:child_process');
 const { publicPolicies: publicRealtimePolicies } = require('./lib/main/integrated-card-realtime');
 const paperCardRouting = require('./lib/paper-card-routing');
+const boardTemplateRegistry = require('./lib/board-template-registry');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -288,7 +289,13 @@ function loadFixtureBundle() {
   // 검증기가 recipe 3종을 따로 세면 앱이 새로 보드로 보내기 시작한 봉투를 여기서
   // 채점하지 못한다 — 두 집합이 갈라질 길을 없앤다(2026-09-06 검수 P1).
   for (const representative of bundle.representatives || []) {
-    representative.primary_expected = paperCardRouting.preservesAppPrimary(representative.envelope);
+    // 보드가 그 앱 렌더러를 자기 자리에 얹을 수 있으면 봉투는 보드로 간다 —
+    // 앱(canvas.boardPrimaryRendererOf)이 보는 사실을 여기서도 같이 본다.
+    const surface = (representative.envelope && representative.envelope.surface_contract) || {};
+    representative.primary_expected = paperCardRouting.preservesAppPrimary(
+      representative.envelope,
+      boardTemplateRegistry.primaryRendererFor(surface.board_id || ''),
+    );
   }
   return bundle;
 }

@@ -41,7 +41,7 @@ GENERATED_BANNER = (
 )
 
 INDEX_FOOTER = """
-const __exports = { BOARD_CARD, CARD_IDS, STATE_GRAPH };
+const __exports = { BOARD_CARD, CARD_IDS, STATE_GRAPH, BOARD_PRIMARY };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
@@ -218,6 +218,15 @@ def render_index(boards: list[dict], graph: dict[str, dict]) -> str:
         parts.append(f"  {_js_string(board['board_id'])}: {_js_string(board['card_id'])},\n")
     parts.append("});\n\n")
     parts.append(f"const CARD_IDS = Object.freeze({json.dumps(card_ids(boards), ensure_ascii=False)});\n\n")
+    # 전문 렌더러를 품을 자리가 저작된 보드 — 라우팅은 카드 청크(수 MB)가 실리기
+    # 전에 "이 보드가 앱 렌더러를 얹을 수 있는가"에 답해야 하므로 종류 하나만 색인에
+    # 둔다. 계약 전문(mount_slot·props_from)은 그대로 청크에 있다.
+    parts.append("const BOARD_PRIMARY = Object.freeze({\n")
+    for board in boards:
+        renderer = (board.get("primary") or {}).get("renderer")
+        if renderer:
+            parts.append(f"  {_js_string(board['board_id'])}: {_js_string(renderer)},\n")
+    parts.append("});\n\n")
     parts.append("const STATE_GRAPH = Object.freeze({\n")
     for board_id in sorted(graph):
         entry = json.dumps(graph[board_id], ensure_ascii=False, separators=(",", ":"))

@@ -19,6 +19,7 @@ const index = isCjs
 const BOARD_CARD = (index && index.BOARD_CARD) || {};
 const CARD_IDS = (index && index.CARD_IDS) || [];
 const STATE_GRAPH = (index && index.STATE_GRAPH) || {};
+const BOARD_PRIMARY = (index && index.BOARD_PRIMARY) || {};
 
 // 이 스크립트가 어디서 왔는지 — 청크도 같은 폴더에 있다. 문서 URL 기준 상대경로를
 // 쓰면 fixture HTML(app/*.html)처럼 다른 위치에서 부를 때 깨진다.
@@ -164,6 +165,13 @@ function contractFor(boardId) {
   return { board_id: String(boardId), slots: entry.slots || [], primary: entry.primary || null };
 }
 
+// 그 보드에 전문 렌더러가 앉을 자리가 저작돼 있는가 — 종류 하나만 돌려준다.
+// 청크가 아니라 색인을 읽는다: 라우팅은 봉투를 어느 표면으로 보낼지 정할 때
+// 답이 있어야 하고, 그 시점에 카드 청크(수 MB)는 아직 안 실려 있다.
+function primaryRendererFor(boardId) {
+  return BOARD_PRIMARY[String(boardId || '')] || '';
+}
+
 // 상태 보드 링크(어느 칩이 어느 보드를 여는가)의 정본은 이 색인이다. 봉투는 마운트한
 // 그 보드의 직계 자식만 나르는데, 자식 보드의 탭 레일은 부모 레일의 복제본이라 부모의
 // 링크가 없으면 갈아탄 뒤 레일이 통째로 죽는다. 그래서 제 자식 + 부모 레일 전부를 준다.
@@ -204,7 +212,7 @@ function clearTemplateCache() {
 const __exports = {
   BOARD_CARD, boardIds, cardIds, hasBoard, cardIdFor, isLoaded,
   chunkFileName, chunkUrl, loadChunk, loadBoard,
-  boardHtml, boardSha256, contractFor, stateLinksFor, templateFor, clearTemplateCache,
+  boardHtml, boardSha256, contractFor, primaryRendererFor, stateLinksFor, templateFor, clearTemplateCache,
 };
 
 if (typeof module !== 'undefined' && module.exports) {

@@ -567,6 +567,26 @@ function primaryMountPoint(surface, contract) {
   return fallback || null;
 }
 
+// 앱 렌더러가 앉을 자리를 비운다 — Paper 목업 자식(툴바·프리뷰)을 지우지 않고
+// 접는다(D1: 추출 원문 삭제 금지). 접은 목록을 돌려주므로 마운트가 실패하면
+// 그대로 되돌릴 수 있다. 이미 접혀 있던 자식(병합·접기 계획이 접은 것)은 건드리지
+// 않는다 — 되돌릴 때 그것까지 펴면 보드가 계획과 달라진다.
+function collapsePrimaryMockup(mountPoint) {
+  if (!mountPoint || !mountPoint.children) return [];
+  const collapsed = [];
+  for (const child of Array.from(mountPoint.children)) {
+    if (child.hidden) continue;
+    setHidden(child, true);
+    collapsed.push(child);
+  }
+  return collapsed;
+}
+
+function restorePrimaryMockup(collapsed) {
+  for (const child of collapsed || []) setHidden(child, false);
+  return (collapsed || []).length;
+}
+
 // 보드 1장을 root 안에 세운다. <template>은 registry가 보드당 1회만 파싱하고
 // 여기서는 cloneNode만 한다 — 같은 보드를 다시 마운트하면 텍스트만 갈아끼운다.
 function mountBoard(root, boardId, values, options = {}) {
@@ -622,7 +642,7 @@ const __exports = {
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
   nodeIndex, elementChildCount, setHidden, applyPlan,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,
-  primaryMountPoint, mountBoard, mountBoardAsync,
+  primaryMountPoint, collapsePrimaryMockup, restorePrimaryMockup, mountBoard, mountBoardAsync,
   RAW_IDENTITY_NAME, scrubRawIdentityNames,
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,

@@ -105,6 +105,13 @@ const BOARD_CARD = Object.freeze({
 
 const CARD_IDS = Object.freeze(["CC-01", "CC-02", "CC-03", "CC-04", "CC-05", "CC-06"]);
 
+const BOARD_PRIMARY = Object.freeze({
+  "137X-2": "athena-chart",
+  "13BC-2": "orderbook-ladder",
+  "1JPU-0": "orderbook-ladder",
+  "32S7-0": "athena-chart",
+});
+
 const STATE_GRAPH = Object.freeze({
   "133H-2": {"parent":null,"links":[{"control":"금현물 잔고·거래내역","board_id":"3ODO-0"},{"control":"보유종목","board_id":"2SCE-1"},{"control":"손익·성과","board_id":"2SRV-1"},{"control":"예수금·결제","board_id":"2SKU-1"},{"control":"주문·체결","board_id":"2SYW-1"}]},
   "135M-2": {"parent":null,"links":[{"control":"금현물 · 매수","board_id":"2TNJ-1"},{"control":"신용 · 매수","board_id":"2TJ6-1"},{"control":"정정","board_id":"2TAG-1"},{"control":"취소","board_id":"2TET-1"},{"control":"현금 매도","board_id":"2T63-1"}]},
@@ -198,7 +205,7 @@ const STATE_GRAPH = Object.freeze({
   "3UTA-0": {"parent":"2SKU-1","links":[]},
 });
 
-const __exports = { BOARD_CARD, CARD_IDS, STATE_GRAPH };
+const __exports = { BOARD_CARD, CARD_IDS, STATE_GRAPH, BOARD_PRIMARY };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
