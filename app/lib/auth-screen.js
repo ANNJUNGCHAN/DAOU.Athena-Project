@@ -47,8 +47,8 @@ function buildHead(root, { kicker, title, sub }) {
 
 // opts:
 //   accountId  — 대상 계좌 id
-//   embedded   — true면 온보딩(AT-SY-003) 직후 1회 노출되는 문맥. 계좌 전환
-//                진입로를 막고, 상태가 "준비됨"이 되면 온보딩을 이어간다.
+//   embedded   — true면 온보딩(AT-SY-003) 직후 1회 노출되는 문맥. 상태가
+//                "준비됨"이 되면 온보딩을 이어간다.
 //   onContinue — embedded일 때만 사용. async () => boolean. 다음 화면(정상
 //                대화 창)으로 넘어가도 되는지 chat.js에 위임한다.
 //   onBack     — embedded일 때만 사용. 저장된 계좌를 지우지 않고 계좌 단계로 돌아간다.
@@ -133,11 +133,12 @@ function renderAuthTokenStatus(root, opts) {
 
     const statusRows = el('div', 'auth-status-rows');
     const accRow = labeledRow('계좌', accountAlias ? `${accountAlias} · 등록됨` : '등록됨');
-    if (!embedded) {
-      accRow.classList.add('is-clickable');
-      accRow.title = '계좌 전환';
-      accRow.addEventListener('click', openSwitch);
-    }
+    // Paper 19가 이 행에 붙인 이름이 「uk-lrow (클릭 → 계좌 전환)」이고, 그 보드는
+    // 온보딩 3/3 화면이다(Paper 21의 머리도 같은 3/3이다) — 온보딩에서만 진입로를
+    // 막던 조건을 걷어낸다.
+    accRow.classList.add('is-clickable');
+    accRow.title = '계좌 전환';
+    accRow.addEventListener('click', openSwitch);
     statusRows.appendChild(accRow);
     statusRows.appendChild(labeledRow('자동 재발급', currentState === 'ready' ? '남은 10분에' : '—'));
     statusRows.appendChild(labeledRow('확인 주기', '60초마다'));
@@ -284,10 +285,12 @@ function renderAuthTokenStatus(root, opts) {
   }
 
   // ---------- 계좌 전환 하위 뷰 (AT-CV-OAUTH-계좌-전환) ----------
-  // 트리거: 스펙은 "토큰 상태 화면에서 계좌 선택"이라고만 말한다 — 정확히 어느
-  // 요소를 누르는지는 명시가 없어 위 "계좌" 상태 행 클릭으로 결정했다(발명).
+  // 트리거는 위 "계좌" 상태 행 클릭이다 — Paper 19가 그 행 이름에 적어 둔 그대로다.
   async function openSwitch() {
-    if (embedded || view === 'switch') return;
+    if (view === 'switch') return;
+    // doAction/doRevoke와 같은 경합 — 목록을 고르는 동안 예약된 자동 진행이 터지면
+    // 온보딩이 사용자를 이 화면 밖으로 끌어낸다.
+    if (autoContinueTimer) { clearTimeout(autoContinueTimer); autoContinueTimer = null; }
     view = 'switch';
     switchSelectedId = null;
     clear(body);
