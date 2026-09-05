@@ -606,6 +606,16 @@ async function runRestDataset({
   const deadlineTimer = setTimeout(() => {
     if (!firstPainted) controller.abort(new RestDatasetError('first_canvas_deadline', '첫 카드 3초 마감 시간을 넘겼다'));
   }, dataset.firstCanvasDeadlineMs);
+  // 차트 껍질처럼 먼저 보이는 카드는 마운트 결과가 확정되기 전에 이미 첫 피드백을
+  // 지킨다. 그 시점에 마감을 풀지 않으면 늦게 뜨는 차트마다 화면에는 카드가 있는데
+  // 답변만 first_canvas_deadline으로 뒤집힌다.
+  const markFirstFeedback = (paintedAt) => {
+    if (firstPainted) return false;
+    firstPainted = true;
+    firstFeedbackMs = Math.max(0, paintedAt - startedAt);
+    clearTimeout(deadlineTimer);
+    return true;
+  };
 
   const canvases = [];
   const errors = [];
@@ -688,6 +698,19 @@ async function runRestDataset({
         inlineAt,
         paintDeadlineAt,
         firstFeedbackPending: !firstPainted,
+        // 카드가 눈에 보인 순간 호출된다(차트는 마운트 확정 전이다). 여기서
+        // 마감을 풀고 첫 피드백 도달을 알린 뒤, 최종 render_state만 기다린다.
+        onFirstPaint: (provisional) => {
+          const at = Number(provisional && provisional.visiblePaintAt) || clock();
+          if (!markFirstFeedback(at)) return;
+          onEvent({
+            type: 'paint-pending',
+            datasetId: dataset.datasetId,
+            itemId: item.itemId,
+            ordinal: item.ordinal,
+            totalMs: firstFeedbackMs,
+          });
+        },
         signal: controller.signal,
       });
       if (controller.signal.aborted && !firstPainted) {
@@ -698,11 +721,7 @@ async function runRestDataset({
       const totalMs = Math.max(0, paintedAt - startedAt);
       const renderState = (paint && paint.renderState)
         || (body.status === 'rendered' ? 'data' : (body.envelope.state || 'error'));
-      if (!firstPainted) {
-        firstPainted = true;
-        firstFeedbackMs = totalMs;
-        clearTimeout(deadlineTimer);
-      }
+      markFirstFeedback(paintedAt);
       if (body.status === 'rendered' && renderState === 'data' && firstCanvasMs === null) firstCanvasMs = totalMs;
       const observed = {
         operationRef: item.operationRef,

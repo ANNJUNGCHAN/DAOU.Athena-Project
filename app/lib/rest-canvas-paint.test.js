@@ -150,6 +150,11 @@ test('pending 대기는 main의 paint waiter 배선에 실제로 걸려 있다',
   assert.ok(handler.indexOf('ensureChartRealtime') > handler.indexOf("decision.action === 'defer'"));
   assert.match(mainSource, /PENDING_MOUNT_ACK_TIMEOUT_MS/);
   assert.match(mainSource, /beginPendingMount\(onTimeout\)/);
+  // pending으로 미루는 동안에도 첫 피드백은 이미 도달했다 — 러너의 3초 마감과
+  // 지연 영수증 워치독은 defer 시점에 풀린다.
+  assert.match(handler, /decision\.action === 'defer'[\s\S]*notifyFirstPaint\(decision\.paint\)/);
+  assert.match(mainSource, /notifyFirstPaint: typeof payload\.onFirstPaint === 'function'/);
+  assert.match(mainSource, /event\.type === 'paint-ack' \|\| event\.type === 'paint-pending'\)\) feedbackObserved = true/);
   // 무한 대기는 3초 계약 뒤에 답변을 영원히 붙잡는다 — 한도는 유한하고 짧다.
   assert.equal(Number.isInteger(PENDING_MOUNT_ACK_TIMEOUT_MS), true);
   assert.equal(PENDING_MOUNT_ACK_TIMEOUT_MS, 8000);

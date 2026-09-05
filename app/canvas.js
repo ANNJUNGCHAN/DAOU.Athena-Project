@@ -580,20 +580,24 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
       rect: paint.rect,
     });
     if (chartSettled) {
-      const mountedState = await chartSettled;
-      window.athena.send('athena:rest-canvas-painted', {
-        dataset_id: correlation.dataset_id,
-        item_id: correlation.item_id,
-        ordinal: correlation.ordinal,
-        operation_ref: payload.operationRef,
-        canvas_type: payload.canvasType,
-        render_state: mountedState,
-        renderer_id: card.dataset.rendererId || null,
-        panel_id: card.dataset.chartPanelId || null,
-        generation: card.dataset.chartGeneration ? Number(card.dataset.chartGeneration) : null,
-        verified_visible: true,
-        pending: false,
-      });
+      // 첫 ack는 이미 성공으로 나갔다. 후속 관측이 실패하더라도 눈에 보이는 카드를
+      // paint 실패로 뒤집지 않는다 — main은 한도가 지나면 'timeout'으로 맺는다.
+      try {
+        const mountedState = await chartSettled;
+        window.athena.send('athena:rest-canvas-painted', {
+          dataset_id: correlation.dataset_id,
+          item_id: correlation.item_id,
+          ordinal: correlation.ordinal,
+          operation_ref: payload.operationRef,
+          canvas_type: payload.canvasType,
+          render_state: mountedState,
+          renderer_id: card.dataset.rendererId || null,
+          panel_id: card.dataset.chartPanelId || null,
+          generation: card.dataset.chartGeneration ? Number(card.dataset.chartGeneration) : null,
+          verified_visible: true,
+          pending: false,
+        });
+      } catch { /* 마운트 결과 관측 실패 — main의 pending 한도가 상태를 맺는다 */ }
     }
   } catch (error) {
     window.athena.send('athena:rest-canvas-painted', {
