@@ -157,10 +157,9 @@ test('responsive plain state control activates exactly once for click, Enter, an
 test('a state control inside an identity-free columnheader wrapper keeps sole button semantics', () => {
   const columnheader = stateControlStub({ role: 'columnheader' });
   columnheader.dataset = {};
+  // 지금 이 모양을 저작한 보드는 없다 — 순위표 열 머리에 물려 있던 표식 하나를
+  // Paper가 가리키는 칩으로 옮겼다. 그래도 셀 안에 표식이 놓이는 날 의미론은 살아 있어야 한다.
   const control = stateControlStub();
-  control.dataset = {
-    node: '33WM-0', stateControl: '시간외 등락률', stateBoard: '2YNQ-0',
-  };
   columnheader.children = [control];
 
   const activations = [];
@@ -188,10 +187,10 @@ test('a state control inside an identity-free columnheader wrapper keeps sole bu
   assert.equal(activations.at(-1), 'activate');
 });
 
-test('real-board fixture state marks flatten into wired 3GLA and 33WM links', () => {
+test('real-board fixture state marks flatten into wired 3GLA and 2WI2 links', () => {
   const fixtures = [
     ['2SKU-1', '3GLA-0', 'D+2 정산 후 계좌', '3MTJ-0'],
-    ['13K0-2', '33WM-0', '시간외 등락률', '2YNQ-0'],
+    ['13K0-2', '2WI2-0', '시간외 등락률', '2YNQ-0'],
   ];
   for (const [boardId, nodeId, controlText, targetBoard] of fixtures) {
     const slots = JSON.parse(fs.readFileSync(path.join(

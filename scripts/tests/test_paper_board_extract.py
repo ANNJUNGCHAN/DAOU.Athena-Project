@@ -1154,7 +1154,7 @@ def test_2sku_scroll_table_preserves_original_action_identity_in_the_seven_colum
     }
 
 
-def test_13k_scroll_table_keeps_nested_header_control_and_footer_topology():
+def test_13k_scroll_table_header_is_not_a_state_control_and_footer_stays_outside():
     board_dir = pbe.TEMPLATE_ROOT / "13K0-2"
     manifest = json.loads((board_dir / "regions.json").read_text(encoding="utf-8"))
     declaration = next(item for item in manifest["responsive"] if item["node_id"] == "33WD-0")
@@ -1177,8 +1177,9 @@ def test_13k_scroll_table_keeps_nested_header_control_and_footer_topology():
     assert table_html.count('role="rowheader"') == 5
     assert table_html.count('role="cell"') == 30
     assert table_html.count('data-node="33WM-0"') == 1
-    assert table_html.count('data-state-control="시간외 등락률"') == 1
-    assert table_html.count('data-state-board="2YNQ-0"') == 1
+    # 순위표 열 머리는 조작이 아니다 — 시간외 보드를 여는 칩은 세션 칩 2WI2-0이다.
+    assert "data-state-control=" not in table_html
+    assert "data-state-board=" not in table_html
     assert 'class="bs-col"' not in table_html
     assert 'class="bs-paired"' not in table_html
     assert 'data-paired-source=' not in table_html
@@ -1213,14 +1214,19 @@ def test_13k_scroll_table_keeps_nested_header_control_and_footer_topology():
         "aria-colindex": "4",
     }
     assert len(control_cell.children) == 1
-    control = control_cell.children[0]
-    assert isinstance(control, pbe.Element)
-    control_attrs = dict(control.attrs)
-    assert control_attrs["data-node"] == "33WM-0"
-    assert control_attrs["data-state-control"] == "시간외 등락률"
-    assert control_attrs["data-state-board"] == "2YNQ-0"
-    assert "role" not in control_attrs
-    assert "aria-colindex" not in control_attrs
+    leaf = control_cell.children[0]
+    assert isinstance(leaf, pbe.Element)
+    leaf_attrs = dict(leaf.attrs)
+    assert leaf_attrs["data-node"] == "33WM-0"
+    assert "data-state-control" not in leaf_attrs
+    assert "data-state-board" not in leaf_attrs
+    assert "role" not in leaf_attrs
+    assert "aria-colindex" not in leaf_attrs
+    mark = next(
+        item for item in payload["state_controls"]["marks"]
+        if item["control"] == "시간외 등락률"
+    )
+    assert (mark["node_id"], mark["boards"], mark["how"]) == ("2WI2-0", ["2YNQ-0"], "hand")
     assert any(
         isinstance(child, pbe.Element)
         and dict(child.attrs).get("data-node") == "33YY-0"
