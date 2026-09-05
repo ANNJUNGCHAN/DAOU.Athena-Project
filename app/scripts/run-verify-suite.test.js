@@ -33,10 +33,15 @@ function fakeChild(pid = 4242) {
   return child;
 }
 
-function harness({ budgetMs = 20 } = {}) {
+// deferTerminate: 실제 Windows 경로처럼 taskkill이 끝나기 전에 close가 먼저 오는 순서를
+// 재현하려고 terminateTree를 테스트가 붙잡는 지연 프라미스로 만든다.
+function harness({ budgetMs = 20, deferTerminate = false } = {}) {
   const child = fakeChild();
   const terminated = [];
   const spawnArgs = [];
+  let signalTerminate;
+  const whenTerminated = new Promise((resolve) => { signalTerminate = resolve; });
+  let release = () => {};
   const promise = runOne({ script: 'verify:kiumi', budgetMs }, {
     spawn: (command, args, options) => {
       spawnArgs.push({ command, args, options });
@@ -44,10 +49,13 @@ function harness({ budgetMs = 20 } = {}) {
     },
     terminateTree: (target) => {
       terminated.push(target);
-      return Promise.resolve({ ok: true, outcome: 'forced' });
+      signalTerminate();
+      const outcome = { ok: true, outcome: 'forced' };
+      if (!deferTerminate) return Promise.resolve(outcome);
+      return new Promise((resolve) => { release = () => resolve(outcome); });
     },
   });
-  return { child, terminated, spawnArgs, promise };
+  return { child, terminated, spawnArgs, promise, whenTerminated, release: () => release() };
 }
 
 test('parseOnly는 --only가 없으면 전체 실행을 뜻하는 null을 준다', () => {
@@ -68,7 +76,7 @@ test('parseOnly는 --only 뒤 값이 없으면 전체 실행으로 떨어지지 
 });
 
 test('parseOnly는 --only 뒤에 다른 플래그가 오면 값 누락으로 본다', () => {
-  const parsed = parseOnly(['node', 'run-verify-suite.js', '--only', '--list']);
+  const parsed = parseOnly(['node', 'run-verify-suite.js', '--only', '--json']);
   assert.equal(parsed.only, undefined);
   assert.match(parsed.error, /--only/);
 });
@@ -84,12 +92,15 @@ test('runOne은 예산을 넘기면 자식 트리를 통째로 죽이고 timedOu
 });
 
 test('runOne은 예산 초과 뒤 늦게 오는 close로 판정을 뒤집지 않는다', async () => {
-  const { child, promise } = harness({ budgetMs: 10 });
-  const result = await promise;
+  const { child, promise, whenTerminated, release } = harness({ budgetMs: 10, deferTerminate: true });
+  await whenTerminated;
+  // 트리를 죽이면 close가 taskkill 완료보다 먼저 도착한다. 가드가 없으면 여기서 ok=true로 뒤집힌다.
   child.emit('close', 0);
-  await new Promise((resolve) => setImmediate(resolve));
+  release();
+  const result = await promise;
   assert.equal(result.timedOut, true);
   assert.equal(result.ok, false);
+  assert.equal(result.code, null);
 });
 
 test('runOne은 정상 종료 시 종료 코드로 판정하고 로그 꼬리를 담는다', async () => {
