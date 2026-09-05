@@ -48,6 +48,15 @@ function findByText(root, tagName, text) {
   return null;
 }
 
+function findByClass(root, className) {
+  if (root.classList && root.classList.contains(className)) return root;
+  for (const child of root.children) {
+    const found = findByClass(child, className);
+    if (found) return found;
+  }
+  return null;
+}
+
 function containsText(root, text) {
   if (root.textContent === text) return true;
   return root.children.some((child) => containsText(child, text));
@@ -111,6 +120,38 @@ test('현재 최초 실제 단계인 CLI 2 / 3에는 이전 버튼이 없다', (
   const cleanup = onboarding.renderCliStep(root, { onContinue: async () => true });
   assert.equal(findByText(root, 'button', '이전'), null);
   cleanup();
+});
+
+test('Paper 33 — 연결에 실패한 CLI 행은 [연결] 자리에 재시도를 두고 행 클릭이 다시 시도한다', async () => {
+  const previousInvoke = invokeImpl;
+  let loginLaunches = false;
+  invokeImpl = async (channel) => {
+    if (channel === 'athena:cli-list') {
+      return { providers: [{ id: 'grok', name: 'Grok', connected: false, accounts: [] }] };
+    }
+    if (channel === 'athena:cli-login') {
+      return loginLaunches
+        ? { ok: true, launched: true, message: '' }
+        : { ok: false, launched: false, message: 'Grok CLI가 이 컴퓨터에 설치되어 있지 않다' };
+    }
+    return { ok: true };
+  };
+  const root = new FakeElement('div');
+  const cleanup = onboarding.renderCliStep(root, { onContinue: async () => true });
+  await flushAsync();
+
+  findByText(root, 'button', '연결').click();
+  await flushAsync();
+  assert.equal(containsText(root, '연결 실패 · 재시도'), true);
+  assert.equal(findByText(root, 'button', '연결'), null, '실패한 행은 [연결]을 그대로 두지 않는다');
+
+  loginLaunches = true;
+  findByClass(root, 'onb-cli-row').click();
+  await flushAsync();
+  assert.equal(containsText(root, '로그인 대기 중…'), true, '행 클릭이 재시도가 되어야 막다른 길이 아니다');
+
+  cleanup();
+  invokeImpl = previousInvoke;
 });
 
 test('3 / 3 계좌 단계의 이전은 CLI 2 / 3 callback만 호출하고 cleanup 뒤에는 동작하지 않는다', () => {
