@@ -1,0 +1,836 @@
+{
+ "board_id": "15XT-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "C01 · 좁은 데스크톱 — 차트",
+ "width": 390,
+ "height": 844,
+ "texts": [
+  {
+   "id": "167Q-2",
+   "text": "ATHENA",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Compact desktop title bar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "167R-2",
+   "text": "좁은 창 · 차트",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Compact desktop title bar"
+   ]
+  },
+  {
+   "id": "15YW-2",
+   "text": "삼성전자 · 005930",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15YY-2",
+   "text": "최근 3개월",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15Z0-2",
+   "text": "150,850",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15Z1-2",
+   "text": "+1.24%",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15Z4-2",
+   "text": "3개월",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15Z6-2",
+   "text": "1개월",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15Z8-2",
+   "text": "1년",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15ZE-2",
+   "text": "거래대금",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15ZG-2",
+   "text": "2.14조",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15ZI-2",
+   "text": "외국인",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15ZK-2",
+   "text": "+1,248억",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15ZN-2",
+   "text": "거래 요약",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15ZO-2",
+   "text": "거래량 1,420만주 · 전일 대비 1.2배",
+   "path": [
+    "C01 · 좁은 데스크톱 — 차트",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "15XT-2",
+   "name": "C01 · 좁은 데스크톱 — 차트",
+   "component": "Frame",
+   "w": 390,
+   "h": 844,
+   "depth": 0
+  },
+  {
+   "id": "167N-2",
+   "name": "Compact desktop title bar",
+   "component": "Frame",
+   "w": 390,
+   "h": 62,
+   "depth": 1
+  },
+  {
+   "id": "167O-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "167P-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 3
+  },
+  {
+   "id": "167S-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "167T-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "167U-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "167V-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "167W-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "167X-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "167Y-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "167Z-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15YT-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 390,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "15YU-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "15YV-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15YX-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15YZ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15Z2-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "15Z3-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15Z5-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15Z7-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15Z9-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 260,
+   "depth": 2
+  },
+  {
+   "id": "16XD-2",
+   "name": "Compact candlestick chart",
+   "component": "SVG",
+   "w": 0,
+   "h": 260,
+   "depth": 3
+  },
+  {
+   "id": "16XE-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16XF-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16XG-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16XH-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16XI-2",
+   "name": "153K",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16XJ-2",
+   "name": "149K",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16XK-2",
+   "name": "145K",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16XL-2",
+   "name": "141K",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16XM-2",
+   "name": "Group",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16XN-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XO-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XP-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XQ-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XR-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XS-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XT-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XU-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XV-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XW-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XX-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XY-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16XZ-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16Y0-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16Y1-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16Y2-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16Y3-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16Y4-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16Y5-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16Y6-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16Y7-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16Y8-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16Y9-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YA-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YB-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16YC-2",
+   "name": "Group",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16YD-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YE-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YF-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YG-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YH-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YI-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YJ-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YK-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YL-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YM-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YN-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YO-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "16YP-2",
+   "name": "6/03",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16YQ-2",
+   "name": "7/01",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16YR-2",
+   "name": "8/01",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16YS-2",
+   "name": "8/30",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "16YT-2",
+   "name": "거래량",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15ZC-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "15ZD-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15ZF-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15ZH-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15ZJ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15ZL-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "15ZM-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "ATHENA": 1,
+  "좁은 창 · 차트": 1,
+  "삼성전자 · 005930": 1,
+  "최근 3개월": 1,
+  "150,850": 1,
+  "+1.24%": 1,
+  "3개월": 1,
+  "1개월": 1,
+  "1년": 1,
+  "거래대금": 1,
+  "2.14조": 1,
+  "외국인": 1,
+  "+1,248억": 1,
+  "거래 요약": 1,
+  "거래량 1,420만주 · 전일 대비 1.2배": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "b3ae6eaf78cddb5d414a410a213c8744665310941ee1e70a343bb3784cbe768e"
+}

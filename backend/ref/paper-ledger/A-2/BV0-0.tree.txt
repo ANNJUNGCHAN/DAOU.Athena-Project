@@ -1,0 +1,378 @@
+Frame "05 · 에이전트 — 작업" (BV0-0) 1680×900
+  Frame "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)" (BV1-0) 1520×760
+    Frame "타이틀바" (C5K-0) 0×26
+    Frame "창 제어" (C5C-0) 0×0
+      Frame "Frame" (C5I-0) 30×24
+        Rectangle "Rectangle" (C5J-0) 9×2
+      Frame "Frame" (C5G-0) 30×24
+        Rectangle "Rectangle" (C5H-0) 8×8
+      Frame "Frame" (C5D-0) 30×24
+        SVG "SVG" (C5E-0) 0×0
+          SVGVisualElement "Path" (C5F-0) 0×0
+    Frame "① 이력 사이드바 268px (리프 1.2.2 · 미구현)" (C3N-0) 268×0
+      Frame "사이드바 머리" (C52-0) 0×0
+        Frame "새 대화" (C58-0) 0×36
+          SVG "SVG" (C5A-0) 0×0
+            SVGVisualElement "Path" (C5B-0) 0×0
+          Text "새 대화" (C59-0) 0×0 "새 대화"
+        Frame "검색" (C53-0) 0×36
+          SVG "SVG" (C55-0) 0×0
+            SVGVisualElement "Circle" (C57-0) 0×0
+            SVGVisualElement "Path" (C56-0) 0×0
+          Text "대화 검색" (C54-0) 0×0 "대화 검색"
+      Frame "Frame" (C4I-0) 267×0
+        Frame "Frame" (C50-0) 0×0
+        Frame "Frame" (C4W-0) 0×0
+          SVG "SVG" (C4Y-0) 0×0
+            SVGVisualElement "Path" (C4Z-0) 0×0
+          Text "대화" (C4X-0) 0×0 "대화"
+        Frame "Frame" (C4P-0) 0×0
+          SVG "SVG" (C4R-0) 0×0
+            SVGVisualElement "Circle" (C4V-0) 0×0
+            SVGVisualElement "Circle" (C4U-0) 0×0
+            SVGVisualElement "Circle" (C4T-0) 0×0
+            SVGVisualElement "Path" (C4S-0) 0×0
+          Text "그래프" (C4Q-0) 0×0 "그래프"
+        Frame "Frame" (C4J-0) 0×0
+          SVG "SVG" (C4N-0) 0×0
+            SVGVisualElement "Path" (C4O-0) 0×0
+          Text "에이전트" (C4M-0) 0×0 "에이전트"
+          Frame "Frame" (C4K-0) 0×0
+            Text "3" (C4L-0) 0×0 "3"
+        Frame "모드 · 플러그인" (2HH6-2) 0×0
+          SVG "SVG" (2HH7-2) 0×0
+            SVGVisualElement "Path" (2HH8-2) 0×0
+          Text "플러그인" (2HH9-2) 0×0 "플러그인"
+        Frame "모드 · 백테스트" (2HHB-2) 0×0
+          SVG "SVG" (2HHC-2) 0×0
+            SVGVisualElement "Path" (2HHD-2) 0×0
+            SVGVisualElement "Path" (2HHE-2) 0×0
+          Text "백테스트" (2HHF-2) 0×0 "백테스트"
+      Frame "구분선" (C4H-0) 0×1
+      Frame "이력 목록" (C3T-0) 0×0
+        Frame "섹션 · 오늘" (C4F-0) 0×0
+          Text "오늘" (C4G-0) 0×0 "오늘"
+        Frame "항목 · 선택됨" (C4C-0) 0×34
+          Text "삼성전자 흐름·재무 같이 보기" (C4E-0) 0×0 "삼성전자 흐름·재무 같이 보기"
+          Rectangle "Rectangle" (C4D-0) 5×5
+        Frame "항목" (C4A-0) 0×34
+          Text "88,000 넘으면 알려줘" (C4B-0) 0×0 "88,000 넘으면 알려줘"
+        Frame "항목" (C48-0) 0×34
+          Text "코스피 프로그램 매매 동향" (C49-0) 0×0 "코스피 프로그램 매매 동향"
+        Frame "섹션 · 어제" (C46-0) 0×0
+          Text "어제" (C47-0) 0×0 "어제"
+        Frame "항목" (C44-0) 0×34
+          Text "SK하이닉스 유상증자 공시 읽기" (C45-0) 0×0 "SK하이닉스 유상증자 공시 읽기"
+        Frame "항목" (C42-0) 0×34
+          Text "모의 계좌 잔고 정리" (C43-0) 0×0 "모의 계좌 잔고 정리"
+        Frame "섹션 · 지난 7일" (C40-0) 0×0
+          Text "지난 7일" (C41-0) 0×0 "지난 7일"
+        Frame "항목" (C3Y-0) 0×34
+          Text "반도체 ETF 비교" (C3Z-0) 0×0 "반도체 ETF 비교"
+        Frame "항목" (C3W-0) 0×34
+          Text "현대차 실적 발표 일정" (C3X-0) 0×0 "현대차 실적 발표 일정"
+        Frame "더 보기" (C3U-0) 0×34
+          Text "더 보기" (C3V-0) 0×0 "더 보기"
+      Frame "사이드바 발치 — 활성 계좌" (C3O-0) 0×48
+        Rectangle "Rectangle" (C3S-0) 7×7
+        Frame "Frame" (C3P-0) 0×0
+          Text "모의-주력" (C3R-0) 0×0 "모의-주력"
+          Text "토큰 5시간 42분 남음" (C3Q-0) 0×0 "토큰 5시간 42분 남음"
+    Frame "② 캔버스 영역" (BYT-0) 0×0
+      Frame "Frame" (BYU-0) 811×717
+        Frame "Frame" (C5L-0) 0×0
+          Text "에이전트" (C5M-0) 0×0 "에이전트"
+          Frame "Frame" (C5N-0) 0×0
+            Frame "탭 · 작업 (활성)" (C5O-0) 0×0
+              Text "작업" (C5P-0) 0×0 "작업"
+            Frame "탭 · 알람 3" (C5Q-0) 0×0
+              Text "알람 3" (C5R-0) 0×0 "알람 3"
+            Frame "탭 · 라이브" (2G3S-2) 0×0
+              Text "라이브" (2G3T-2) 0×0 "라이브"
+            Frame "탭 · 제안 2" (C5S-0) 0×0
+              Text "제안 2" (C5T-0) 0×0 "제안 2"
+        Frame "작업 뷰 머리 (부제 · 필터 · 검색 · CTA)" (2G8U-2) 0×0
+          Text "부제" (2G8V-2) 0×0 "루틴 5 · 감시 2 진행 중"
+          Frame "리스트 필터 탭" (2GA0-2) 0×0
+            Frame "필터 · 모두 (활성)" (2GA1-2) 0×0
+              Text "모두" (2GA2-2) 0×0 "모두"
+            Frame "필터 · 활성" (2GA3-2) 0×0
+              Text "활성" (2GA4-2) 0×0 "활성"
+            Frame "필터 · 일시중지" (2GA5-2) 0×0
+              Text "일시중지" (2GA6-2) 0×0 "일시중지"
+          Frame "작업 검색" (2GDD-2) 180×0
+          Frame "Frame" (C5U-0) 0×0
+            Text "＋ 새 작업" (C5V-0) 0×0 "＋ 새 작업"
+        Frame "통계 카드 4장" (2GDH-2) 0×0
+          Frame "통계 · 다음 실행 (live)" (2GDI-2) 0×0
+            Text "다음 실행" (2GDJ-2) 0×0 "다음 실행"
+              Frame "Frame" (2GDM-2) 0×0
+                Text "20    stop = df.clos…" (2GDN-2) 0×0 "20    stop = df.close - atr * p[\"atr_mult\"]"
+              Frame "Frame" (2GDO-2) 0×0
+                Text "21    exit_ = bt.cro…" (2GDP-2) 0×0 "21    exit_ = bt.cross_below(fast, slow) | (df.low <= stop)"
+            Text "07:30 평일 아침 브리핑" (2GDK-2) 0×0 "07:30 평일 아침 브리핑"
+            Text "49분 후 · 예약 실행" (2GDL-2) 0×0 "49분 후 · 예약 실행"
+          Frame "통계 · 진행 중 (fixture)" (2GDW-2) 0×0
+            Text "진행 중" (2GDZ-2) 0×0 "진행 중"
+              Frame "Frame" (2GE2-2) 0×0
+                Text "20    stop = df.clos…" (2GE3-2) 0×0 "20    stop = df.close - atr * p[\"atr_mult\"]"
+              Frame "Frame" (2GE0-2) 0×0
+                Text "21    exit_ = bt.cro…" (2GE1-2) 0×0 "21    exit_ = bt.cross_below(fast, slow) | (df.low <= stop)"
+            Text "● 시세 수집 — 삼성전자" (2GDY-2) 0×0 "● 시세 수집 — 삼성전자"
+            Text "감시 조건 2/3 · 12초 전" (2GDX-2) 0×0 "감시 조건 2/3 · 12초 전"
+          Frame "통계 · 오늘 발화 (live)" (2GE4-2) 0×0
+            Text "오늘 발화" (2GE7-2) 0×0 "오늘 발화"
+              Frame "Frame" (2GEA-2) 0×0
+                Text "20    stop = df.clos…" (2GEB-2) 0×0 "20    stop = df.close - atr * p[\"atr_mult\"]"
+              Frame "Frame" (2GE8-2) 0×0
+                Text "21    exit_ = bt.cro…" (2GE9-2) 0×0 "21    exit_ = bt.cross_below(fast, slow) | (df.low <= stop)"
+            Text "3건" (2GE6-2) 0×0 "3건"
+            Text "KST 기준" (2GE5-2) 0×0 "KST 기준"
+          Frame "통계 · 성향 제안 (live · accent)" (2GEC-2) 0×0
+            Text "성향 제안" (2GEF-2) 0×0 "성향 제안"
+              Frame "Frame" (2GEI-2) 0×0
+                Text "20    stop = df.clos…" (2GEJ-2) 0×0 "20    stop = df.close - atr * p[\"atr_mult\"]"
+              Frame "Frame" (2GEG-2) 0×0
+                Text "21    exit_ = bt.cro…" (2GEH-2) 0×0 "21    exit_ = bt.cross_below(fast, slow) | (df.low <= stop)"
+            Text "2건 대기" (2GEE-2) 0×0 "2건 대기"
+            Text "그래프 성향 기반" (2GED-2) 0×0 "그래프 성향 기반"
+        Frame "본문 — 예약·감시 리스트 + 상세" (2GNL-2) 0×396
+          Frame "리스트 열 330px — 예약 · 감시" (C5W-0) 330×0
+            Frame "Frame" (C5X-0) 0×0
+              Text "예약 · 감시" (C5Y-0) 0×0 "예약 · 감시"
+            Frame "Frame" (C5Z-0) 0×0
+              Text "●" (C60-0) 0×0 "●"
+              Frame "Frame" (C61-0) 0×0
+                Text "평일 아침 브리핑" (C62-0) 0×0 "평일 아침 브리핑"
+                Text "주중 오전 7:30 · 기존 채팅" (C63-0) 0×0 "주중 오전 7:30 · 기존 채팅"
+              Text "49분 후" (C64-0) 0×0 "49분 후"
+            Frame "Frame" (C65-0) 0×0
+              Text "●" (C66-0) 0×0 "●"
+              Frame "Frame" (C67-0) 0×0
+                Text "삼성전자 88,000 감시" (C68-0) 0×0 "삼성전자 88,000 감시"
+                Text "모니터링 중 · 조건 2/3" (C69-0) 0×0 "모니터링 중 · 조건 2/3"
+              Text "실시간" (C6A-0) 0×0 "실시간"
+            Frame "Frame" (C6B-0) 0×0
+              Text "◌" (C6C-0) 0×0 "◌"
+              Frame "Frame" (C6D-0) 0×0
+                Text "장 마감 후 손익 요약" (C6E-0) 0×0 "장 마감 후 손익 요약"
+                Text "초안 — 확정 대기 · 매매일 15:…" (C6F-0) 0×0 "초안 — 확정 대기 · 매매일 15:40"
+              Text "지금" (C6G-0) 0×0 "지금"
+            Frame "Frame" (C6H-0) 0×0
+              Text "●" (C6I-0) 0×0 "●"
+              Frame "Frame" (C6J-0) 0×0
+                Text "시계열 연구 브리핑" (C6K-0) 0×0 "시계열 연구 브리핑"
+                Text "매주 금요일 오전 9:00" (C6L-0) 0×0 "매주 금요일 오전 9:00"
+              Text "2일 후" (C6M-0) 0×0 "2일 후"
+            Frame "Frame" (C6N-0) 0×0
+              Text "❚❚" (C6O-0) 0×0 "❚❚"
+              Frame "Frame" (C6P-0) 0×0
+                Text "코스피 프로그램 매매 동향" (C6Q-0) 0×0 "코스피 프로그램 매매 동향"
+                Text "일시중지됨 · 3일 전" (C6R-0) 0×0 "일시중지됨 · 3일 전"
+              Text "—" (C6S-0) 0×0 "—"
+            Frame "제안 — 그래프 성향 기반 (live)" (2GZT-2) 0×0
+              Frame "구분선" (2GZU-2) 0×1
+              Frame "Frame" (2GZV-2) 0×0
+                Text "제안 — 그래프 성향 기반" (2GZW-2) 0×0 "제안 — 그래프 성향 기반"
+              Frame "제안 행 · 삼성전자" (2H25-2) 0×0
+                Text "◆" (2H26-2) 11×0 "◆"
+                Frame "Frame" (2H27-2) 212×0
+                  Text "삼성전자" (2H28-2) 0×0 "삼성전자"
+                  Text "단기 회전 성향 21회 보강 — 매매…" (2H29-2) 212×0 "단기 회전 성향 21회 보강 — 매매일마다 정리가 필요해 보여요"
+                Frame "추가" (2H2A-2) 0×0
+                  Text "추가" (2H2B-2) 0×0 "추가"
+              Frame "제안 행 · 배당 바스켓" (2H37-2) 0×0
+                Text "◆" (2H3D-2) 11×0 "◆"
+                Frame "Frame" (2H3A-2) 212×0
+                  Text "배당 바스켓" (2H3C-2) 0×0 "배당 바스켓"
+                  Text "배당 방어 성향 6회 보강 — 아침 …" (2H3B-2) 212×0 "배당 방어 성향 6회 보강 — 아침 브리핑에 섹션을 붙일까요"
+                Frame "추가" (2H38-2) 0×0
+                  Text "추가" (2H39-2) 0×0 "추가"
+          Frame "상세 열 — 선택 항목" (2GQB-2) 0×0
+            Frame "캡션 · 상세" (2GQC-2) 0×0
+              Text "상세" (2GQD-2) 0×0 "상세"
+            Frame "상세 머리 — 배지 · 제목 · 일시중지" (2GQG-2) 0×0
+              Frame "배지 · 활성" (2GQH-2) 0×0
+                Text "활성" (2GQI-2) 0×0 "활성"
+              Text "삼성전자 88,000 감시" (2GQJ-2) 0×0 "삼성전자 88,000 감시"
+            Frame "상태 제어 행 — 확정 · 일시중지 · 재개 · 취소" (42VG-1) 0×0
+              Frame "Frame" (42VH-1) 0×0
+                Frame "버튼 · 확정 (비활성)" (42VI-1) 0×32
+                  Text "확정" (42VJ-1) 0×0 "확정"
+                Frame "버튼 · 일시중지 (활성)" (42VK-1) 0×32
+                  Text "일시중지" (42VL-1) 0×0 "일시중지"
+                Frame "버튼 · 재개 (비활성)" (42VM-1) 0×32
+                  Text "재개" (42VN-1) 0×0 "재개"
+                Frame "버튼 · 취소 (비활성)" (42VO-1) 0×32
+                  Text "취소" (42VP-1) 0×0 "취소"
+                Rectangle "Rectangle" (42VQ-1) 0×0
+                Text "활성 상태 · 1개만 켜짐" (42VR-1) 0×0 "활성 상태 · 1개만 켜짐"
+              Text "대화 경로 — "이 감시 일시중지해줘…" (42VS-1) 0×0 "대화 경로 — "이 감시 일시중지해줘" · 같은 게이트"
+            Frame "상세 설명 (note)" (2GRE-2) 0×0
+              Text "삼성전자 종가가 88,000 이상이고…" (2GRF-2) 0×0 "삼성전자 종가가 88,000 이상이고 거래량 1,000만주를 넘으면 장중에만 알려줍니다."
+            Frame "캡션 · 세부 정보" (2GSE-2) 0×0
+              Text "세부 정보" (2GSF-2) 0×0 "세부 정보"
+            Frame "세부 정보 필드 (live)" (2GUB-2) 0×0
+              Frame "Frame" (2GUC-2) 0×0
+                Text "소스" (2GUD-2) 76×0 "소스"
+                Text "키움 시세 · 실시간" (2GUE-2) 0×0 "키움 시세 · 실시간"
+              Frame "Frame" (2GUF-2) 0×0
+                Text "쿨다운" (2GUG-2) 76×0 "쿨다운"
+                Text "300초" (2GUH-2) 0×0 "300초"
+              Frame "Frame" (2GUI-2) 0×0
+                Text "생성" (2GUJ-2) 76×0 "생성"
+                Text "08/20 10:00" (2GUK-2) 0×0 "08/20 10:00"
+            Frame "캡션 행 · 최근 실행 + 전체 이력 보기" (2GVV-2) 0×0
+              Text "최근 실행" (2GVW-2) 0×0 "최근 실행"
+              Text "전체 이력 보기 →" (2GVX-2) 0×0 "전체 이력 보기 →"
+            Frame "최근 실행 로그 (fixture)" (2GXZ-2) 0×0
+              Frame "Frame" (2GY0-2) 0×0
+                Text "오늘 07:30" (2GY1-2) 62×0 "오늘 07:30"
+                Text "✓" (2GY2-2) 11×0 "✓"
+                Text "브리핑 카드 생성 — 캔버스 2" (2GY3-2) 0×0 "브리핑 카드 생성 — 캔버스 2"
+              Frame "Frame" (2GY4-2) 0×0
+                Text "어제 07:30" (2GY5-2) 62×0 "어제 07:30"
+                Text "✓" (2GY6-2) 11×0 "✓"
+                Text "긴급 항목 없음" (2GY7-2) 0×0 "긴급 항목 없음"
+              Frame "Frame" (2GY8-2) 0×0
+                Text "금 07:30" (2GY9-2) 62×0 "금 07:30"
+                Text "⚠" (2GYA-2) 11×0 "⚠"
+                Text "DART 응답 지연 — 소스 2개로 …" (2GYB-2) 0×0 "DART 응답 지연 — 소스 2개로 실행"
+            Frame "루틴 발화 — 채팅에서 열기" (2GZN-2) 0×0
+        Frame "Frame" (C6T-0) 0×0
+          Text "이중 제어 규칙" (C6U-0) 0×0 "이중 제어 규칙"
+          Text "① 새 작업 — 채팅 문장으로도, 시…" (C6V-0) 0×0 "① 새 작업 — 채팅 문장으로도, 시트로도."
+          Text "② 편집 — "이거 고쳐줘"로도, 폼…" (C6W-0) 0×0 "② 편집 — "이거 고쳐줘"로도, 폼으로도."
+          Text "③ 확정 — 채팅 칩으로도, 버튼으로…" (C6X-0) 0×0 "③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트."
+    Frame "③ 대화 영역 400px" (BV2-0) 400×0
+      Frame "대화 머리 — 아테나 · 에이전트 대화" (42V4-1) 0×0
+        Rectangle "Rectangle" (42V5-1) 6×6
+        Text "아테나 · 에이전트 대화" (42V6-1) 0×0 "아테나 · 에이전트 대화"
+        Rectangle "Rectangle" (42V7-1) 0×0
+        Text "관제 창 1 · 루틴 · 알람 · 제…" (42V8-1) 0×0 "관제 창 1 · 루틴 · 알람 · 제안"
+      Frame "④ 결과물 · 하위 에이전트 · 출처 도크" (BY2-0) 0×0
+        Frame "결과물" (BYO-0) 0×0
+          Frame "Frame" (BYQ-0) 0×0
+            Text "결과물" (BYS-0) 0×0 "결과물"
+            Text "캔버스 2" (BYR-0) 0×0 "캔버스 2"
+          Text "네이버 뉴스 · 삼성전자 일봉" (BYP-0) 0×0 "네이버 뉴스 · 삼성전자 일봉"
+        Frame "하위 에이전트" (BYE-0) 0×0
+          Frame "Frame" (BYL-0) 0×0
+            Text "하위 에이전트" (BYN-0) 0×0 "하위 에이전트"
+            Text "1 / 2" (BYM-0) 0×0 "1 / 2"
+          Frame "Frame" (BYI-0) 0×0
+            Rectangle "Rectangle" (BYK-0) 7×7
+            Text "재무 해석 · 작업 중" (BYJ-0) 0×0 "재무 해석 · 작업 중"
+          Frame "Frame" (BYF-0) 0×0
+            Rectangle "Rectangle" (BYH-0) 7×7
+            Text "시세 수집 · 완료" (BYG-0) 0×0 "시세 수집 · 완료"
+        Frame "출처" (BY3-0) 0×0
+          Frame "Frame" (BYB-0) 0×0
+            Text "출처" (BYD-0) 0×0 "출처"
+            Text "3" (BYC-0) 0×0 "3"
+          Frame "Frame" (BY4-0) 0×0
+            Frame "Frame" (BY9-0) 0×0
+              Text "일봉 차트" (BYA-0) 0×0 "일봉 차트"
+            Frame "Frame" (BY7-0) 0×0
+              Text "DART 재무제표" (BY8-0) 0×0 "DART 재무제표"
+            Frame "Frame" (BY5-0) 0×0
+              Text "네이버 뉴스" (BY6-0) 0×0 "네이버 뉴스"
+      Frame "history" (BVM-0) 0×0
+        Frame "Frame" (C6Z-0) 0×0
+          Frame "Frame" (C70-0) 0×0
+            Text "장 마감하면 오늘 손익이랑 보유 변화…" (C71-0) 0×0 "장 마감하면 오늘 손익이랑 보유 변화 정리해줘. 매일."
+        Text "장 마감 후 손익 요약이군요. 두 가…" (C72-0) 0×0 "장 마감 후 손익 요약이군요. 두 가지만 — 휴장일은 건너뛸까요? 감시 중인 조건과 겹치는 종목은 표시할까요"
+        Frame "Frame" (C73-0) 0×0
+          Frame "Frame" (C74-0) 0×0
+            Text "응 둘 다. 3시 40분쯤." (C75-0) 0×0 "응 둘 다. 3시 40분쯤."
+        Frame "Frame" (C76-0) 0×0
+          Frame "Frame" (C77-0) 0×0
+            Frame "Frame" (C78-0) 0×0
+              Text "작업 요약" (C79-0) 0×0 "작업 요약"
+            Frame "Frame" (C7A-0) 0×0
+              Text "초안" (C7B-0) 0×0 "초안"
+            Text "← 캔버스에 초안 생성됨" (C7C-0) 0×0 "← 캔버스에 초안 생성됨"
+          Text "장 마감 후 손익 요약" (C7D-0) 0×0 "장 마감 후 손익 요약"
+          Text "매매일 15:40 (휴장 제외) · …" (C7E-0) 0×0 "매매일 15:40 (휴장 제외) · 소스: 계좌 + 일봉 차트 · 감시 겹침 표시 · 결과: 새 캔버스 카드"
+          Frame "Frame" (C7F-0) 0×0
+            Frame "Frame" (C7G-0) 0×0
+              Text "미리보기 실행" (C7H-0) 0×0 "미리보기 실행"
+            Frame "Frame" (C7I-0) 0×0
+              Text "바로 활성화" (C7J-0) 0×0 "바로 활성화"
+            Frame "Frame" (C7K-0) 0×0
+              Text "고칠 게 있어" (C7L-0) 0×0 "고칠 게 있어"
+        Text "수정도 두 입구 — "손익 요약 4시…" (C7M-0) 0×0 "수정도 두 입구 — "손익 요약 4시로 옮겨줘"로도, 상세 패널 폼으로도. 어느 입구든 같은 게이트."
+      Frame "input-stack" (BV3-0) 0×0
+        Frame "input-row · 실행 중 (ESC 중단)" (BVG-0) 0×44
+          Text "무엇이든 물어보세요" (BVL-0) 0×0 "무엇이든 물어보세요"
+          Frame "Frame" (BVH-0) 0×0
+            Text "29s" (BVK-0) 0×0 "29s"
+            Frame "Frame" (BVI-0) 0×0
+              Text "ESC 중단" (BVJ-0) 0×0 "ESC 중단"
+        Frame "control-strip" (BV4-0) 0×40
+          Frame "키우미 (#dot 대체) · 호출 중 — 얼굴 열림" (BVC-0) 18×18
+            Frame "visor" (BVD-0) 11×11
+              Rectangle "Rectangle" (BVF-0) 2×4
+              Rectangle "Rectangle" (BVE-0) 2×4
+          Frame "Frame" (BVA-0) 0×28
+            Text "CLAUDE" (BVB-0) 0×0 "CLAUDE"
+          Frame "Frame" (BV8-0) 0×0
+            Text "감시 2" (BV9-0) 0×0 "감시 2"
+          Rectangle "Rectangle" (BV7-0) 0×0
+          Frame "Frame" (BV5-0) 0×28
+            Text "OPUS · HIGH" (BV6-0) 0×0 "OPUS · HIGH"
+  Frame "시트 · ＋ 새 작업 (오버레이)" (42W3-1) 392×0
+    Frame "Frame" (42W4-1) 0×0
+      Text "새 작업" (42W5-1) 0×0 "새 작업"
+      Frame "Frame" (42W6-1) 0×0
+        Text "시트" (42W7-1) 0×0 "시트"
+      Rectangle "Rectangle" (42W8-1) 0×0
+      Text "채팅 문장과 같은 게이트" (42W9-1) 0×0 "채팅 문장과 같은 게이트"
+    Frame "폼 본문" (42WB-1) 0×0
+      Frame "행 · 종목" (42WC-1) 0×0
+        Text "종목" (42WD-1) 76×0 "종목"
+        Frame "Frame" (42WE-1) 120×32
+          Text "005930" (42WF-1) 0×0 "005930"
+        Text "종목코드 6자리" (42WG-1) 0×0 "종목코드 6자리"
+      Frame "행 · 조건" (42WH-1) 0×0
+        Text "조건" (42WI-1) 76×0 "조건"
+        Frame "Frame" (42WJ-1) 110×32
+          Text "현재가" (42WK-1) 0×0 "현재가"
+          Rectangle "Rectangle" (42WL-1) 0×0
+          Text "▾" (42WM-1) 0×0 "▾"
+        Frame "Frame" (42WN-1) 64×32
+          Text "≥" (42WO-1) 0×0 "≥"
+          Rectangle "Rectangle" (42WP-1) 0×0
+          Text "▾" (42WQ-1) 0×0 "▾"
+        Frame "Frame" (42WR-1) 0×32
+          Text "88000" (42WS-1) 0×0 "88000"
+          Rectangle "Rectangle" (42WT-1) 0×0
+          Text "원" (42WU-1) 0×0 "원"
+      Frame "행 · 조건 보조" (42WV-1) 0×0
+        Rectangle "Rectangle" (42WW-1) 76×0
+        Text "소스별로 비교·값 컨트롤이 바뀜 · …" (42WX-1) 0×0 "소스별로 비교·값 컨트롤이 바뀜 · 실시간 소스는 연속 틱 1~20"
+      Frame "행 · 쿨다운 · 만료" (42WY-1) 0×0
+        Text "쿨다운(초)" (42WZ-1) 76×0 "쿨다운(초)"
+        Frame "Frame" (42X0-1) 96×32
+          Text "300" (42X1-1) 0×0 "300"
+        Text "만료(일)" (42X2-1) 52×0 "만료(일)"
+        Frame "Frame" (42X3-1) 72×32
+          Text "7" (42X4-1) 0×0 "7"
+      Frame "행 · 설명" (42X5-1) 0×0
+        Text "설명" (42X6-1) 76×0 "설명"
+        Frame "Frame" (42X7-1) 0×32
+          Text "삼성전자 88,000 감시" (42X8-1) 0×0 "삼성전자 88,000 감시"
+      Frame "행 · 브리핑 모델" (42X9-1) 0×0
+        Text "브리핑 모델" (42XA-1) 76×0 "브리핑 모델"
+        Frame "Frame" (42XB-1) 120×32
+          Text "opus" (42XC-1) 0×0 "opus"
+          Rectangle "Rectangle" (42XD-1) 0×0
+          Text "▾" (42XE-1) 0×0 "▾"
+        Text "선택" (42XF-1) 0×0 "선택"
+    Frame "버튼 행" (42YK-1) 0×0
+      Frame "버튼 · 초안 만들기" (42YL-1) 0×32
+        Text "초안 만들기" (42YM-1) 0×0 "초안 만들기"
+      Frame "버튼 · 채팅에서 쓰기" (42YN-1) 0×32
+        Text "채팅에서 쓰기" (42YO-1) 0×0 "채팅에서 쓰기"
+      Rectangle "Rectangle" (42YP-1) 0×0
+      Text "확정은 버튼 또는 채팅 칩" (42YQ-1) 0×0 "확정은 버튼 또는 채팅 칩"

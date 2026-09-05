@@ -1,0 +1,35 @@
+Frame "mini/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별" (48FK-0) 360×420
+  Frame "Header" (48GE-0) 0×0
+    Frame "Meta row" (48GG-0) 0×0
+      Text "Eyebrow" (48GI-0) 0×0
+      Text "As of" (48GH-0) 0×0 "기준 09:42"
+    Text "Title" (48GF-0) 0×0 "단계별 낱값·거래소별 호가"
+  Frame "Body" (48FN-0) 0×0
+    Frame "Table header" (48G9-0) 0×0
+      Text "순서" (48GD-0) 34×0 "순서"
+      Text "항목" (48GC-0) 0×0 "항목"
+      Text "값" (48GB-0) 0×0 "값"
+      Text "비고" (48GA-0) 64×0 "비고"
+    Frame "Rank 1" (48G2-0) 0×0
+      Text "01" (48G8-0) 34×0 "01"
+      Frame "Frame" (48G5-0) 0×0
+        Text "NXT 매수호가잔량2" (48G7-0) 0×0 "NXT 매수호가잔량2"
+        Text "Text" (48G6-0) 0×0
+      Text "1,730" (48G4-0) 0×0 "1,730"
+      Text "Text" (48G3-0) 64×0
+    Frame "Rank 2" (48FV-0) 0×0
+      Text "02" (48G1-0) 34×0 "02"
+      Frame "Frame" (48FY-0) 0×0
+        Text "매수호가수량3" (48G0-0) 0×0 "매수호가수량3"
+        Text "Text" (48FZ-0) 0×0
+      Text "3,230" (48FX-0) 0×0 "3,230"
+      Text "Text" (48FW-0) 64×0
+    Frame "Rank 3" (48FO-0) 0×0
+      Text "03" (48FU-0) 34×0 "03"
+      Frame "Frame" (48FR-0) 0×0
+        Text "매수호가3" (48FT-0) 0×0 "매수호가3"
+        Text "Text" (48FS-0) 0×0
+      Text "150,820" (48FQ-0) 0×0 "150,820"
+      Text "Text" (48FP-0) 64×0
+  Frame "Fold note" (48FL-0) 0×0
+    Text "외 17개 행 접힘 · 원본에서 확인" (48FM-0) 0×0 "외 17개 행 접힘 · 원본에서 확인"

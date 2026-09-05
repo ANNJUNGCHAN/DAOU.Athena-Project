@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매" (47PO-0) 360×420
+  Frame "Header" (47QI-0) 0×0
+    Frame "Meta row" (47QK-0) 0×0
+      Text "Eyebrow" (47QM-0) 0×0
+      Text "As of" (47QL-0) 0×0 "기준 09:42"
+    Text "Title" (47QJ-0) 0×0 "ELW 거래원별 순매매"
+  Frame "Body" (47PR-0) 0×0
+    Frame "KPI band" (47Q8-0) 0×0
+      Frame "Frame" (47QF-0) 0×0
+        Text "ELW 거래원별 순매매" (47QH-0) 0×0 "ELW 거래원별 순매매"
+        Text "10창구" (47QG-0) 0×0 "10창구"
+      Frame "Frame" (47QC-0) 0×0
+        Text "순매수" (47QE-0) 0×0 "순매수"
+        Text "+210만" (47QD-0) 0×0 "+210만"
+      Frame "Frame" (47Q9-0) 0×0
+        Text "순매수" (47QB-0) 0×0 "순매수"
+        Text "+40만" (47QA-0) 0×0 "+40만"
+    Frame "Table header" (47Q4-0) 0×0
+      Text "항목" (47Q7-0) 0×0 "항목"
+      Text "값" (47Q6-0) 0×0 "값"
+      Text "비고" (47Q5-0) 72×0 "비고"
+    Frame "Position 1" (47PY-0) 0×0
+      Frame "Frame" (47Q1-0) 0×0
+        Text "순매수" (47Q3-0) 0×0 "순매수"
+        Text "Text" (47Q2-0) 0×0
+      Text "−90만" (47Q0-0) 0×0 "−90만"
+      Text "Text" (47PZ-0) 72×0
+    Frame "Position 2" (47PS-0) 0×0
+      Frame "Frame" (47PV-0) 0×0
+        Text "값" (47PX-0) 0×0 "값"
+        Text "Text" (47PW-0) 0×0
+      Text "매수 1위" (47PU-0) 0×0 "매수 1위"
+      Text "Text" (47PT-0) 72×0
+  Frame "Fold note" (47PP-0) 0×0
+    Text "스칼라 2개, 행 4개 접힘 · 원본…" (47PQ-0) 0×0 "스칼라 2개, 행 4개 접힘 · 원본에서 확인"

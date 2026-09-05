@@ -1,0 +1,24 @@
+Frame "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적" (46UY-0) 360×420
+  Frame "Header" (46VH-0) 0×0
+    Frame "Meta row" (46VJ-0) 0×0
+      Text "Eyebrow" (46VL-0) 0×0
+      Text "As of" (46VK-0) 0×0 "기준 09:42"
+    Text "Title" (46VI-0) 0×0 "기업 개요·가치 및 실적"
+  Frame "Body" (46V1-0) 0×0
+    Frame "Fact 1" (46VE-0) 0×0
+      Text "거래대금" (46VG-0) 120×0 "거래대금"
+      Text "거래대금 2.14조원" (46VF-0) 0×0 "거래대금 2.14조원"
+    Frame "Fact 2" (46VB-0) 0×0
+      Text "거래량" (46VD-0) 120×0 "거래량"
+      Text "1,420만주" (46VC-0) 0×0 "1,420만주"
+    Frame "Fact 3" (46V8-0) 0×0
+      Text "PBR" (46VA-0) 120×0 "PBR"
+      Text "2.63배" (46V9-0) 0×0 "2.63배"
+    Frame "Fact 4" (46V5-0) 0×0
+      Text "PER" (46V7-0) 120×0 "PER"
+      Text "21.2배" (46V6-0) 0×0 "21.2배"
+    Frame "Fact 5" (46V2-0) 0×0
+      Text "ROE" (46V4-0) 120×0 "ROE"
+      Text "8.4%" (46V3-0) 0×0 "8.4%"
+  Frame "Fold note" (46UZ-0) 0×0
+    Text "외 52개 항목 접힘 · 원본에서 확…" (46V0-0) 0×0 "외 52개 항목 접힘 · 원본에서 확인"

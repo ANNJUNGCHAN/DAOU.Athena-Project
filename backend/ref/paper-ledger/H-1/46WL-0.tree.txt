@@ -1,0 +1,35 @@
+Frame "mini/CC-05 / R03-T3 · 수급 — 프로그램" (46WL-0) 360×420
+  Frame "Header" (46XF-0) 0×0
+    Frame "Meta row" (46XH-0) 0×0
+      Text "Eyebrow" (46XJ-0) 0×0
+      Text "As of" (46XI-0) 0×0 "기준 09:42"
+    Text "Title" (46XG-0) 0×0 "프로그램 수급"
+  Frame "Body" (46WO-0) 0×0
+    Frame "KPI band" (46X5-0) 0×0
+      Frame "Frame" (46XC-0) 0×0
+        Text "금융투자" (46XE-0) 0×0 "금융투자"
+        Text "금융투자 -842억원" (46XD-0) 0×0 "금융투자 -842억원"
+      Frame "Frame" (46X9-0) 0×0
+        Text "기관계" (46XB-0) 0×0 "기관계"
+        Text "-1,204억원" (46XA-0) 0×0 "-1,204억원"
+      Frame "Frame" (46X6-0) 0×0
+        Text "거래대금" (46X8-0) 0×0 "거래대금"
+        Text "2.14조원" (46X7-0) 0×0 "2.14조원"
+    Frame "Table header" (46X1-0) 0×0
+      Text "항목" (46X4-0) 0×0 "항목"
+      Text "값" (46X3-0) 0×0 "값"
+      Text "비고" (46X2-0) 72×0 "비고"
+    Frame "Position 1" (46WV-0) 0×0
+      Frame "Frame" (46WY-0) 0×0
+        Text "차익거래순매수" (46X0-0) 0×0 "차익거래순매수"
+        Text "Text" (46WZ-0) 0×0
+      Text "+60억원" (46WX-0) 0×0 "+60억원"
+      Text "Text" (46WW-0) 72×0
+    Frame "Position 2" (46WP-0) 0×0
+      Frame "Frame" (46WS-0) 0×0
+        Text "체결시간" (46WU-0) 0×0 "체결시간"
+        Text "Text" (46WT-0) 0×0
+      Text "09:15" (46WR-0) 0×0 "09:15"
+      Text "Text" (46WQ-0) 72×0
+  Frame "Fold note" (46WM-0) 0×0
+    Text "스칼라 2개 접힘 · 원본에서 확인" (46WN-0) 0×0 "스칼라 2개 접힘 · 원본에서 확인"

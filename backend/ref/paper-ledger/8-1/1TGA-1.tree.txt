@@ -1,0 +1,207 @@
+Frame "03 · 백테스트 — 결과" (1TGA-1) 1680×1010
+  Frame "Frame" (1TGB-1) 1680×938
+    Text "셸 — 백테스트 · 결과 — 지표 6…" (1TMN-1) 0×0 "셸 — 백테스트 · 결과 — 지표 6장 · 자산곡선 · 체결 · 숨기지 않는 가정"
+    Text "실행이 끝나면 캔버스가 결과로 바뀝니…" (1TMM-1) 0×0 "실행이 끝나면 캔버스가 결과로 바뀝니다. 수치 6장 · 전략 vs 매수보유 곡선 · 체결 표가 한 화면이고,"
+    Frame "Frame" (1TGC-1) 1560×850
+      Frame "47 · Project Recent Sidebar" (1TKM-1) 268×819
+        Frame "Primary Actions" (1TLP-1) 0×0
+          Frame "Frame" (1TMH-1) 0×28
+            Text "ATHENA" (1TML-1) 0×0 "ATHENA"
+            SVG "SVG" (1TMI-1) 0×0
+              SVGVisualElement "Circle" (1TMK-1) 0×0
+              SVGVisualElement "Path" (1TMJ-1) 0×0
+          Frame "Frame" (1TMC-1) 0×30
+            SVG "SVG" (1TME-1) 0×0
+              SVGVisualElement "Path" (1TMG-1) 0×0
+              SVGVisualElement "Path" (1TMF-1) 0×0
+            Text "새 채팅" (1TMD-1) 0×0 "새 채팅"
+          Frame "Frame" (1TM5-1) 0×30
+            SVG "SVG" (1TM7-1) 0×0
+              SVGVisualElement "Circle" (1TMB-1) 0×0
+              SVGVisualElement "Circle" (1TMA-1) 0×0
+              SVGVisualElement "Circle" (1TM9-1) 0×0
+              SVGVisualElement "Path" (1TM8-1) 0×0
+            Text "그래프" (1TM6-1) 0×0 "그래프"
+          Frame "Frame" (1TM0-1) 0×30
+            SVG "SVG" (1TM2-1) 0×0
+              SVGVisualElement "Circle" (1TM4-1) 0×0
+              SVGVisualElement "Path" (1TM3-1) 0×0
+            Text "에이전트" (1TM1-1) 0×0 "에이전트"
+          Frame "Nav 플러그인" (1TLV-1) 0×30
+            SVG "SVG" (1TLX-1) 0×0
+              SVGVisualElement "Path" (1TLZ-1) 0×0
+              SVGVisualElement "Path" (1TLY-1) 0×0
+            Text "플러그인" (1TLW-1) 0×0 "플러그인"
+          Frame "Nav 백테스트 (active)" (1TLQ-1) 0×30
+            SVG "SVG" (1TLS-1) 0×0
+              SVGVisualElement "Path" (1TLU-1) 0×0
+              SVGVisualElement "Path" (1TLT-1) 0×0
+            Text "백테스트" (1TLR-1) 0×0 "백테스트"
+        Frame "Project Tree" (1TL5-1) 0×0
+          Frame "Frame" (1TLN-1) 0×0
+            Text "프로젝트" (1TLO-1) 0×0 "프로젝트"
+          Frame "Frame" (1TLB-1) 0×32
+            SVG "SVG" (1TLK-1) 0×0
+              SVGVisualElement "Path" (1TLM-1) 0×0
+              SVGVisualElement "Path" (1TLL-1) 0×0
+            Text "아테나" (1TLJ-1) 0×0 "아테나"
+            SVG "SVG" (1TLF-1) 0×0
+              SVGVisualElement "Circle" (1TLI-1) 0×0
+              SVGVisualElement "Circle" (1TLH-1) 0×0
+              SVGVisualElement "Circle" (1TLG-1) 0×0
+            SVG "SVG" (1TLC-1) 0×0
+              SVGVisualElement "Path" (1TLE-1) 0×0
+              SVGVisualElement "Path" (1TLD-1) 0×0
+          Frame "Frame" (1TL9-1) 0×27
+            Text "백엔드 API 개수 확인" (1TLA-1) 0×0 "백엔드 API 개수 확인"
+          Frame "Frame" (1TL6-1) 0×29
+            Text "앱 전체 기능 검수" (1TL8-1) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (1TL7-1) 6×6
+        Frame "Recent Conversations" (1TKU-1) 0×0
+          Frame "Frame" (1TL2-1) 0×20
+            Text "최근" (1TL4-1) 0×0 "최근"
+            Text "전체" (1TL3-1) 0×0 "전체"
+          Frame "Frame" (1TKZ-1) 0×27
+            Text "앱 전체 기능 검수" (1TL1-1) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (1TL0-1) 6×6
+          Frame "Frame" (1TKX-1) 0×27
+            Text "삼성전자 주요 변동 알림" (1TKY-1) 0×0 "삼성전자 주요 변동 알림"
+          Frame "Frame" (1TKV-1) 0×27
+            Text "ETF 자금 흐름" (1TKW-1) 0×0 "ETF 자금 흐름"
+        Frame "Account Footer" (1TKN-1) 0×0
+          Frame "Frame" (1TKO-1) 0×38
+            Frame "Frame" (1TKS-1) 22×22
+              Text "AN" (1TKT-1) 0×0 "AN"
+            Text "모의-주력" (1TKR-1) 0×0 "모의-주력"
+            SVG "SVG" (1TKP-1) 0×0
+              SVGVisualElement "Path" (1TKQ-1) 0×0
+      Frame "Frame" (1TH4-1) 0×848
+        Frame "백테스트 설계 폼" (1TH5-1) 838×0
+          Frame "헤더" (1TK9-1) 0×0
+            Frame "Frame" (1TKA-1) 0×0
+              Frame "Frame" (1TKJ-1) 0×0
+                Text "백테스트" (1TKL-1) 0×0 "백테스트"
+                Text "20-60 골든크로스 · v4 · 실…" (1TKK-1) 0×0 "20-60 골든크로스 · v4 · 실행 #41 · 3.2초"
+              Frame "Frame" (1TKB-1) 0×0
+                Frame "Frame" (1TKE-1) 0×0
+                  Frame "Frame" (1TKH-1) 0×0
+                    Text "설계" (1TKI-1) 0×0 "설계"
+                  Frame "Frame" (1TKF-1) 0×0
+                    Text "결과" (1TKG-1) 0×0 "결과"
+                Frame "Frame" (1TKC-1) 0×0
+                  Text "다시 실행" (1TKD-1) 0×0 "다시 실행"
+          Frame "지표 타일" (1TMO-1) 0×0
+            Frame "Frame" (1TMP-1) 0×0
+              Text "총수익률" (1TMQ-1) 0×0 "총수익률"
+              Text "+184.2%" (1TMR-1) 0×0 "+184.2%"
+              Text "보유 +141.0%" (1TMS-1) 0×0 "보유 +141.0%"
+            Frame "Frame" (1TMT-1) 0×0
+              Text "CAGR" (1TMU-1) 0×0 "CAGR"
+              Text "10.4%" (1TMV-1) 0×0 "10.4%"
+              Text "거래일 252일 기준" (1TMW-1) 0×0 "거래일 252일 기준"
+            Frame "Frame" (1TMX-1) 0×0
+              Text "Sharpe" (1TMY-1) 0×0 "Sharpe"
+              Text "0.87" (1TMZ-1) 0×0 "0.87"
+              Text "워밍업 60봉 제외" (1TN0-1) 0×0 "워밍업 60봉 제외"
+            Frame "Frame" (1TN1-1) 0×0
+              Text "최대 낙폭" (1TN2-1) 0×0 "최대 낙폭"
+              Text "-27.9%" (1TN3-1) 0×0 "-27.9%"
+              Text "2020-03 · 87일" (1TN4-1) 0×0 "2020-03 · 87일"
+            Frame "Frame" (1TN5-1) 0×0
+              Text "승률" (1TN6-1) 0×0 "승률"
+              Text "46.3%" (1TN7-1) 0×0 "46.3%"
+              Text "41전 19승 · 미청산 0" (1TN8-1) 0×0 "41전 19승 · 미청산 0"
+            Frame "Frame" (1TN9-1) 0×0
+              Text "Profit Factor" (1TNA-1) 0×0 "Profit Factor"
+              Text "1.62" (1TNB-1) 0×0 "1.62"
+              Text "총익 ÷ 총손" (1TNC-1) 0×0 "총익 ÷ 총손"
+          Frame "자산곡선" (1TNE-1) 0×0
+            Frame "Frame" (1TNF-1) 0×0
+              Text "자산곡선" (1TNG-1) 0×0 "자산곡선"
+              Frame "Frame" (1TNH-1) 0×0
+                Frame "Frame" (1TNI-1) 0×0
+                  Rectangle "Rectangle" (1TNJ-1) 14×2
+                  Text "전략" (1TNK-1) 0×0 "전략"
+                Frame "Frame" (1TNL-1) 0×0
+                  Rectangle "Rectangle" (1TNM-1) 14×2
+                  Text "매수보유" (1TNN-1) 0×0 "매수보유"
+                Frame "Frame" (1TNO-1) 0×0
+                  Rectangle "Rectangle" (1TNP-1) 8×8
+                  Text "진입" (1TNQ-1) 0×0 "진입"
+                Frame "Frame" (1TNR-1) 0×0
+                  Rectangle "Rectangle" (1TNS-1) 8×8
+                  Text "청산" (1TNT-1) 0×0 "청산"
+            SVG "SVG" (1TNU-1) 0×0
+              SVGVisualElement "Line" (1TNV-1) 0×0
+              SVGVisualElement "Line" (1TNW-1) 0×0
+              SVGVisualElement "Line" (1TNX-1) 0×0
+              SVGVisualElement "Path" (1TNY-1) 0×0
+              SVGVisualElement "Path" (1TNZ-1) 0×0
+              SVGVisualElement "Circle" (1TO0-1) 0×0
+              SVGVisualElement "Circle" (1TO1-1) 0×0
+              SVGVisualElement "Circle" (1TO2-1) 0×0
+              SVGVisualElement "Circle" (1TO3-1) 0×0
+            Frame "Frame" (1TO4-1) 0×0
+              Text "2016" (1TO5-1) 0×0 "2016"
+              Text "2019" (1TO6-1) 0×0 "2019"
+              Text "2022" (1TO7-1) 0×0 "2022"
+              Text "2026" (1TO8-1) 0×0 "2026"
+          Frame "체결 표" (1TOA-1) 0×0
+            Frame "Frame" (1TOB-1) 0×0
+              Text "체결 41건" (1TOC-1) 0×0 "체결 41건"
+              Text "수수료·세금 반영 후 손익" (1TOD-1) 0×0 "수수료·세금 반영 후 손익"
+            Frame "Frame" (1TOE-1) 0×22
+              Text "일자" (1TOF-1) 88×0 "일자"
+              Text "방향" (1TOG-1) 44×0 "방향"
+              Text "체결가" (1TOH-1) 84×0 "체결가"
+              Text "수량" (1TOI-1) 64×0 "수량"
+              Text "비용" (1TOJ-1) 84×0 "비용"
+              Text "손익" (1TOK-1) 96×0 "손익"
+              Text "사유" (1TOL-1) 0×0 "사유"
+            Frame "체결 행 1" (1TOM-1) 0×28
+              Frame "Frame" (1TON-1) 88×0
+                Text "2026-07-14" (1TOO-1) 0×0 "2026-07-14"
+              Text "매수" (1TOP-1) 44×0 "매수"
+              Text "71,300" (1TOQ-1) 84×0 "71,300"
+              Text "140" (1TOR-1) 64×0 "140"
+              Text "1,497" (1TOS-1) 84×0 "1,497"
+              Text "—" (1TOT-1) 96×0 "—"
+              Text "signal" (1TOU-1) 0×0 "signal"
+            Frame "체결 행 2" (1TOV-1) 0×28
+              Frame "Frame" (1TOW-1) 88×0
+                Text "2026-08-21" (1TOX-1) 0×0 "2026-08-21"
+              Text "매도" (1TOY-1) 44×0 "매도"
+              Text "76,800" (1TOZ-1) 84×0 "76,800"
+              Text "140" (1TP0-1) 64×0 "140"
+              Text "20,966" (1TP1-1) 84×0 "20,966"
+              Text "+747,537" (1TP2-1) 96×0 "+747,537"
+              Text "signal" (1TP3-1) 0×0 "signal"
+            Frame "체결 행 3" (1TP4-1) 0×28
+              Frame "Frame" (1TP5-1) 88×0
+                Text "2026-05-02" (1TP6-1) 0×0 "2026-05-02"
+              Text "매도" (1TP7-1) 44×0 "매도"
+              Text "64,170" (1TP8-1) 84×0 "64,170"
+              Text "155" (1TP9-1) 64×0 "155"
+              Text "19,406" (1TPA-1) 84×0 "19,406"
+              Text "-864,120" (1TPB-1) 96×0 "-864,120"
+              Text "stop_loss" (1TPC-1) 0×0 "stop_loss"
+            Text "… 38건 더 — 스크롤" (1TPD-1) 0×0 "… 38건 더 — 스크롤"
+          Frame "가정" (1TH6-1) 0×0
+            Text "체결 가정 — 결과에도 같은 문장이 …" (1TH8-1) 0×0 "체결 가정 — 결과에도 같은 문장이 그대로 붙습니다"
+            Text "신호는 종가 확정 후 판정하고 체결은…" (1TH7-1) 0×0 "신호는 종가 확정 후 판정하고 체결은 다음 봉 시가입니다 · 손절·익절은 봉 내부 저가·고가 터치로 보고, "
+      Frame "Frame" (1TGD-1) 400×0
+        Frame "Frame" (1TH1-1) 0×0
+          Text "전략에게 묻기" (1TH3-1) 0×0 "전략에게 묻기"
+          Text "답이 코드와 백테스트를 바꿉니다" (1TH2-1) 0×0 "답이 코드와 백테스트를 바꿉니다"
+        Frame "채팅 본문" (1TGL-1) 399×0
+          Frame "Frame" (1TGY-1) 0×0
+            Frame "Frame" (1TGZ-1) 0×0
+              Text "이번 결과에서 낙폭이 제일 깊었던 구…" (1TH0-1) 0×0 "이번 결과에서 낙폭이 제일 깊었던 구간만 보여줘"
+          Text "2020-03 초입니다 — 87일간 …" (1TGX-1) 0×0 "2020-03 초입니다 — 87일간 -27.9%. 손절이 두 번 연속 발화했고, 같은 구간 매수보유는 -32"
+        Frame "Frame" (1TGE-1) 0×0
+          Frame "Frame" (1TGF-1) 0×0
+            Frame "Frame" (1TGH-1) 22×22
+              SVG "SVG" (1TGI-1) 0×0
+                SVGVisualElement "Rect" (1TGK-1) 0×0
+                SVGVisualElement "Rect" (1TGJ-1) 0×0
+            Text "무엇이든 물어보세요" (1TGG-1) 0×0 "무엇이든 물어보세요"

@@ -1,0 +1,3334 @@
+{
+ "board_id": "3VIQ-1",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "3VIU-1",
+   "text": "35",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VIW-1",
+   "text": "대화 이력 — 모드 5구역 · 세션 목록",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VIX-1",
+   "text": "이력의 맨 앞은 다섯 모드입니다. 모드를 누르면 그 모드로 들어갈 뿐 목록은 그대로고, 프로젝트 안에서는 그 모드의 새 대화가 하나 생깁니다. 앞의 창은 뒤에서 그대로 돕니다.",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VIZ-1",
+   "text": "신규 · 승인 대기",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VJ8-1",
+   "text": "ATHENA",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Native Titlebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VJ9-1",
+   "text": "아테나 · 백테스트 · 추세추종 v3",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Native Titlebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VJB-1",
+   "text": "파일　편집　보기　도움말",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Native Titlebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VJK-1",
+   "text": "ATHENA",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Sidebar Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VJS-1",
+   "text": "새 대화",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Sidebar Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VJX-1",
+   "text": "대화 검색",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Sidebar Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VK1-1",
+   "text": "이력 · 모드",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VK2-1",
+   "text": "8개 대화",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VK6-1",
+   "text": "대화",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Mode 대화"
+   ]
+  },
+  {
+   "id": "3VK8-1",
+   "text": "3",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Mode 대화",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VKF-1",
+   "text": "그래프",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Mode 그래프"
+   ]
+  },
+  {
+   "id": "3VKH-1",
+   "text": "1",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Mode 그래프",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VKN-1",
+   "text": "에이전트",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Mode 에이전트"
+   ]
+  },
+  {
+   "id": "3VKQ-1",
+   "text": "2",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Mode 에이전트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VKV-1",
+   "text": "플러그인",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Mode 플러그인"
+   ]
+  },
+  {
+   "id": "3VKX-1",
+   "text": "0",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Mode 플러그인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VL1-1",
+   "text": "백테스트",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Mode 백테스트 (active)"
+   ]
+  },
+  {
+   "id": "3VL4-1",
+   "text": "2",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Mode Zones",
+    "Mode 백테스트 (active)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VL8-1",
+   "text": "프로젝트",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VLC-1",
+   "text": "폴더 추가",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VLH-1",
+   "text": "아테나",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Project 아테나 (pinned)"
+   ]
+  },
+  {
+   "id": "3VLV-1",
+   "text": "추세추종 v3",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Session 백테스트 추세추종 (열림)"
+   ]
+  },
+  {
+   "id": "3VM1-1",
+   "text": "변동성 돌파 실험",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Session 백테스트 변동성돌파"
+   ]
+  },
+  {
+   "id": "3VM7-1",
+   "text": "반도체 수급 점검",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Session 채팅 반도체수급"
+   ]
+  },
+  {
+   "id": "3VMF-1",
+   "text": "성향 지도 · 9월",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Session 그래프 성향지도"
+   ]
+  },
+  {
+   "id": "3VMM-1",
+   "text": "키움 리서치",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Project 키움 리서치"
+   ]
+  },
+  {
+   "id": "3VMO-1",
+   "text": "3",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Project 키움 리서치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VMS-1",
+   "text": "최근 · 모드 무관",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Recent",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VMT-1",
+   "text": "전체",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Recent",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VMX-1",
+   "text": "추세추종 v3",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Recent",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VN4-1",
+   "text": "아침 브리핑 감시",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Recent",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VNE-1",
+   "text": "AN",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VNF-1",
+   "text": "모의-주력",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Account Footer"
+   ]
+  },
+  {
+   "id": "3VNO-1",
+   "text": "추세추종 v3",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Canvas Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VNQ-1",
+   "text": "백테스트",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Canvas Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VNT-1",
+   "text": "실행 중 · 4년 구간",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Canvas Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VNY-1",
+   "text": "전략 폼",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Form Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VNZ-1",
+   "text": "이 세션에 저장됨",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Form Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VO2-1",
+   "text": "종목",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VO3-1",
+   "text": "005930",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VO5-1",
+   "text": "기간",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VO6-1",
+   "text": "2021-09 → 2026-09",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VO8-1",
+   "text": "지표",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VO9-1",
+   "text": "SMA 20 / 60",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VOD-1",
+   "text": "누적 수익 곡선",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Result Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VOF-1",
+   "text": "전략 +34.2%",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Result Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VOG-1",
+   "text": "매수보유 +18.7%",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Result Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VON-1",
+   "text": "최대 낙폭",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Result Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VOO-1",
+   "text": "-11.4%",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Result Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VOQ-1",
+   "text": "승률",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Result Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VOR-1",
+   "text": "58%",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Result Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VOT-1",
+   "text": "거래 수",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Result Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VOU-1",
+   "text": "37",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Result Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VOW-1",
+   "text": "진행",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Result Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VOX-1",
+   "text": "82%",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Backtest Canvas",
+    "Workspace",
+    "Result Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VP2-1",
+   "text": "추세추종 v3",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Chat Panel",
+    "Chat Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VP3-1",
+   "text": "아테나 · 백테스트 대화",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Chat Panel",
+    "Chat Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VPE-1",
+   "text": "20/60 골든크로스로 4년 돌려줘",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Chat Panel",
+    "Chat Log",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VPH-1",
+   "text": "폼을 채우고 실행했습니다. 4년 구간에서 전략이 매수보유를 15.5%p 앞섭니다.",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Chat Panel",
+    "Chat Log",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VPK-1",
+   "text": "남은 구간 계산 중 · 이 대화는 계속 진행됩니다",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Chat Panel",
+    "Chat Log",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VPN-1",
+   "text": "무엇이든 요청하세요",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Chat Panel",
+    "Chat Composer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VPR-1",
+   "text": "다른 모드로 가도 이 창은 계속 돕니다",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Chat Panel",
+    "Chat Composer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VPS-1",
+   "text": "OPUS · HIGH",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Chat Panel",
+    "Chat Composer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VPW-1",
+   "text": "모드가 대화의 경계다",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rail Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VPX-1",
+   "text": "HISTORY · MODE",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rail Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VPY-1",
+   "text": "이력의 맨 앞이 다섯 모드입니다. 대화는 모드 안에서만 이어지고, 모드를 넘으면 새 대화가 됩니다.",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "3VQ3-1",
+   "text": "1",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQ4-1",
+   "text": "이력의 머리는 모드 다섯",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQ7-1",
+   "text": "대화",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQ8-1",
+   "text": "3",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQA-1",
+   "text": "그래프",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQB-1",
+   "text": "1",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQD-1",
+   "text": "에이전트",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQE-1",
+   "text": "2",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQG-1",
+   "text": "플러그인",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQH-1",
+   "text": "0",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQJ-1",
+   "text": "백테스트",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQK-1",
+   "text": "2",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQL-1",
+   "text": "모드 행은 그 모드로 가는 문입니다. 목록은 거르지 않고, 행 앞 아이콘이 그 대화의 모드를 말합니다. 숫자는 그 모드의 대화 수입니다.",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 1"
+   ]
+  },
+  {
+   "id": "3VQQ-1",
+   "text": "2",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQR-1",
+   "text": "모드를 넘으면 새 대화",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQU-1",
+   "text": "지금",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQV-1",
+   "text": "백테스트 · 추세추종 v3",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VQW-1",
+   "text": "폼·코드·결과·로그 보유",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VR0-1",
+   "text": "그래프로 이동",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VR1-1",
+   "text": "새 그래프 대화",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VR2-1",
+   "text": "아테나 밑에 행 하나 · 앞 창은 그대로",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VR3-1",
+   "text": "남는 것은 대화만이 아닙니다. 폼 값·코드·결과 카드·로그·스크롤까지 한 덩어리로 남고, 도는 중이면 이력 행에 스피너가 돌 뿐 묻거나 알리지 않습니다.",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 2"
+   ]
+  },
+  {
+   "id": "3VR8-1",
+   "text": "3",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VR9-1",
+   "text": "스피너는 지금 돌고 있다는 뜻",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VRD-1",
+   "text": "실행 중 — 계산하는 동안에도 다른 창에서 대화할 수 있습니다",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VRG-1",
+   "text": "멈춤 — 열면 마지막 상태 그대로 복원됩니다",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VRO-1",
+   "text": "2026-09-05 개정 — 실앱에서 어긋났던 것",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VRP-1",
+   "text": "목록을 거르는 모드 행 · 아이콘 없는 대화 행 · 복원 배너 · 누르기 전에 꺼지는 프로젝트 카드 — 넷을 이 보드·29·41번으로 되돌립니다.",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VRS-1",
+   "text": "이 보드가 정하는 것",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Acceptance"
+   ]
+  },
+  {
+   "id": "3VRW-1",
+   "text": "대화 레코드는 mode를 가진다 — 채팅·그래프·에이전트·플러그인·백테스트",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Acceptance",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VS0-1",
+   "text": "이력 행은 모드 아이콘 · 제목 · 실행 점의 세 레인을 지킨다",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Acceptance",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49VA-0",
+   "text": "모드 행 클릭은 캔버스와 새 대화만 바꾼다 — 목록은 거르지 않는다",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Acceptance",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49VE-0",
+   "text": "복원은 배너 없이 조용하다 — 41번 보드의 계약",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Acceptance",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VS4-1",
+   "text": "25번 보드의 \"모드를 바꿔도 채팅 유지\"는 40번 보드가 대체한다",
+   "path": [
+    "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+    "35 Content",
+    "Interaction Rail",
+    "Acceptance",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3VIQ-1",
+   "name": "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "3VIR-1",
+   "name": "35 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 86,
+   "depth": 1
+  },
+  {
+   "id": "3VIS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1008,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "3VIT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "3VIV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 944,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "3VIY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 109,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "3VJ1-1",
+   "name": "35 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 722,
+   "depth": 1
+  },
+  {
+   "id": "3VJ2-1",
+   "name": "Live Athena Shell",
+   "component": "Frame",
+   "w": 1150,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3VJ3-1",
+   "name": "Native Titlebar",
+   "component": "Frame",
+   "w": 1148,
+   "h": 46,
+   "depth": 3
+  },
+  {
+   "id": "3VJ4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 241,
+   "h": 18,
+   "depth": 4
+  },
+  {
+   "id": "3VJ5-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 18,
+   "h": 18,
+   "depth": 5
+  },
+  {
+   "id": "3VJ6-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 14,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "3VJ7-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "3VJA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 204,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3VJC-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 58,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3VJD-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 52,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "3VJE-1",
+   "name": "Shell Body",
+   "component": "Frame",
+   "w": 1148,
+   "h": 676,
+   "depth": 3
+  },
+  {
+   "id": "3VJH-1",
+   "name": "Project Sidebar",
+   "component": "Frame",
+   "w": 254,
+   "h": 676,
+   "depth": 4
+  },
+  {
+   "id": "3VJI-1",
+   "name": "Sidebar Head",
+   "component": "Frame",
+   "w": 228,
+   "h": 96,
+   "depth": 5
+  },
+  {
+   "id": "3VJJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3VJL-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VJM-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3VJN-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3VJO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3VJP-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VJQ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VJR-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 8
+  },
+  {
+   "id": "3VJT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3VJU-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VJV-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3VJW-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3VJZ-1",
+   "name": "Mode Zones",
+   "component": "Frame",
+   "w": 228,
+   "h": 186,
+   "depth": 5
+  },
+  {
+   "id": "3VK0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3VK3-1",
+   "name": "Mode 대화",
+   "component": "Frame",
+   "w": 228,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3VK4-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VK5-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3VK7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3VK9-1",
+   "name": "Mode 그래프",
+   "component": "Frame",
+   "w": 228,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3VKA-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VKB-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3VKC-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3VKD-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3VKE-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 8
+  },
+  {
+   "id": "3VKG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3VKJ-1",
+   "name": "Mode 에이전트",
+   "component": "Frame",
+   "w": 228,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3VKK-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VKL-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3VKM-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3VKO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3XVZ-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3XW0-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3XW1-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3VKR-1",
+   "name": "Mode 플러그인",
+   "component": "Frame",
+   "w": 228,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3VKS-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VKT-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 10,
+   "depth": 8
+  },
+  {
+   "id": "3VKU-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 1,
+   "depth": 8
+  },
+  {
+   "id": "3VKW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3VKY-1",
+   "name": "Mode 백테스트 (active)",
+   "component": "Frame",
+   "w": 228,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "3VKZ-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VL0-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 12,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3VL2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3XW3-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3XW4-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3XW5-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3VL6-1",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 228,
+   "h": 219,
+   "depth": 5
+  },
+  {
+   "id": "3VL7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3VL9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 59,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3VLA-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 8
+  },
+  {
+   "id": "3VLB-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3VLD-1",
+   "name": "Project 아테나 (pinned)",
+   "component": "Frame",
+   "w": 228,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3VLE-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VLF-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3VLG-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3VLI-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3VLJ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3VLK-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 17,
+   "h": 17,
+   "depth": 7
+  },
+  {
+   "id": "3VLL-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VLM-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VLN-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VLO-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 17,
+   "h": 17,
+   "depth": 7
+  },
+  {
+   "id": "3VLP-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3VLQ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 8
+  },
+  {
+   "id": "3VLS-1",
+   "name": "Session 백테스트 추세추종 (열림)",
+   "component": "Frame",
+   "w": 228,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "3VLT-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VLU-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3VLW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3XW7-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3XW8-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3XW9-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3VLY-1",
+   "name": "Session 백테스트 변동성돌파",
+   "component": "Frame",
+   "w": 228,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3VLZ-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VM0-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3VM2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3XWB-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3XWC-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3XWD-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3VM4-1",
+   "name": "Session 채팅 반도체수급",
+   "component": "Frame",
+   "w": 228,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3VM5-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VM6-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3VM8-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 22,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3VM9-1",
+   "name": "Session 그래프 성향지도",
+   "component": "Frame",
+   "w": 228,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3VMA-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VMB-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VMC-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VMD-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VME-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3VMG-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 22,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3VMI-1",
+   "name": "Project 키움 리서치",
+   "component": "Frame",
+   "w": 228,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3VMJ-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VMK-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3VML-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3VMN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3VMQ-1",
+   "name": "Recent",
+   "component": "Frame",
+   "w": 228,
+   "h": 81,
+   "depth": 5
+  },
+  {
+   "id": "3VMR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3VMU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "3VMV-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VMW-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3VMY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3XWF-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3XWG-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3XWH-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3VN0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "3VN1-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VN2-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3VN3-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3VN5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3XWJ-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3XWK-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3XWL-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 9
+  },
+  {
+   "id": "3VNC-1",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 228,
+   "h": 38,
+   "depth": 5
+  },
+  {
+   "id": "3VND-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "3VNG-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 6
+  },
+  {
+   "id": "3VNH-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 3,
+   "depth": 7
+  },
+  {
+   "id": "3VNJ-1",
+   "name": "Backtest Canvas",
+   "component": "Frame",
+   "w": 556,
+   "h": 676,
+   "depth": 4
+  },
+  {
+   "id": "3VNK-1",
+   "name": "Canvas Header",
+   "component": "Frame",
+   "w": 556,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3VNL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "3VNM-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VNN-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 12,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3VNP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 18,
+   "depth": 7
+  },
+  {
+   "id": "3VNR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3XVU-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3XVV-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3XVW-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3VNV-1",
+   "name": "Workspace",
+   "component": "Frame",
+   "w": 556,
+   "h": 624,
+   "depth": 5
+  },
+  {
+   "id": "3VNW-1",
+   "name": "Form Card",
+   "component": "Frame",
+   "w": 516,
+   "h": 100,
+   "depth": 6
+  },
+  {
+   "id": "3VNX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 486,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VO0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 486,
+   "h": 47,
+   "depth": 7
+  },
+  {
+   "id": "3VO1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 157,
+   "h": 47,
+   "depth": 8
+  },
+  {
+   "id": "3VO4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 157,
+   "h": 47,
+   "depth": 8
+  },
+  {
+   "id": "3VO7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 157,
+   "h": 47,
+   "depth": 8
+  },
+  {
+   "id": "3VOB-1",
+   "name": "Result Card",
+   "component": "Frame",
+   "w": 516,
+   "h": 472,
+   "depth": 6
+  },
+  {
+   "id": "3VOC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 486,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VOE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 148,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3VOH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 486,
+   "h": 379,
+   "depth": 7
+  },
+  {
+   "id": "3VOI-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 484,
+   "h": 150,
+   "depth": 8
+  },
+  {
+   "id": "3VOJ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 484,
+   "h": 110,
+   "depth": 9
+  },
+  {
+   "id": "3VOK-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 484,
+   "h": 48,
+   "depth": 9
+  },
+  {
+   "id": "3VOL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 486,
+   "h": 29,
+   "depth": 7
+  },
+  {
+   "id": "3VOM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 29,
+   "depth": 8
+  },
+  {
+   "id": "3VOP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 29,
+   "depth": 8
+  },
+  {
+   "id": "3VOS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 29,
+   "depth": 8
+  },
+  {
+   "id": "3VOV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 29,
+   "depth": 8
+  },
+  {
+   "id": "3VOZ-1",
+   "name": "Chat Panel",
+   "component": "Frame",
+   "w": 340,
+   "h": 676,
+   "depth": 4
+  },
+  {
+   "id": "3VP0-1",
+   "name": "Chat Header",
+   "component": "Frame",
+   "w": 339,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3VP1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 103,
+   "h": 29,
+   "depth": 6
+  },
+  {
+   "id": "3VP4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 40,
+   "h": 15,
+   "depth": 6
+  },
+  {
+   "id": "3VP5-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VP6-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3VP7-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VP8-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VP9-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VPA-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3VPB-1",
+   "name": "Chat Log",
+   "component": "Frame",
+   "w": 339,
+   "h": 539,
+   "depth": 5
+  },
+  {
+   "id": "3VPC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 307,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3VPD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 179,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3VPF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 307,
+   "h": 50,
+   "depth": 6
+  },
+  {
+   "id": "3VPG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 268,
+   "h": 50,
+   "depth": 7
+  },
+  {
+   "id": "3VPI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 268,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3XWR-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 9
+  },
+  {
+   "id": "3XWS-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 10
+  },
+  {
+   "id": "3XWT-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 10
+  },
+  {
+   "id": "3VPL-1",
+   "name": "Chat Composer",
+   "component": "Frame",
+   "w": 339,
+   "h": 85,
+   "depth": 5
+  },
+  {
+   "id": "3VPM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 311,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3VPO-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "3VPP-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3VPQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 311,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "3VJF-1",
+   "name": "Interaction Rail",
+   "component": "Frame",
+   "w": 426,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3VPU-1",
+   "name": "Rail Header",
+   "component": "Frame",
+   "w": 396,
+   "h": 58,
+   "depth": 3
+  },
+  {
+   "id": "3VPV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 396,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3VQ0-1",
+   "name": "Rule 1",
+   "component": "Frame",
+   "w": 396,
+   "h": 114,
+   "depth": 3
+  },
+  {
+   "id": "3VQ1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 370,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3VQ2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3VQ5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 370,
+   "h": 22,
+   "depth": 4
+  },
+  {
+   "id": "3VQ6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 51,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3VQ9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 61,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3VQC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 71,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3VQF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 71,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3VQI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 71,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3VQN-1",
+   "name": "Rule 2",
+   "component": "Frame",
+   "w": 396,
+   "h": 168,
+   "depth": 3
+  },
+  {
+   "id": "3VQO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 370,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3VQP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3VQS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 370,
+   "h": 76,
+   "depth": 4
+  },
+  {
+   "id": "3VQT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 165,
+   "h": 64,
+   "depth": 5
+  },
+  {
+   "id": "3VQX-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3VQY-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 13,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "3VQZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 165,
+   "h": 76,
+   "depth": 5
+  },
+  {
+   "id": "3VR5-1",
+   "name": "Rule 3",
+   "component": "Frame",
+   "w": 396,
+   "h": 111,
+   "depth": 3
+  },
+  {
+   "id": "3VR6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 370,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3VR7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3VRA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 370,
+   "h": 57,
+   "depth": 4
+  },
+  {
+   "id": "3VRB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 370,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "3XWN-1",
+   "name": "Spinner",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "3XWO-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "3XWP-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "3VRE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 370,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "3VRF-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "3VRH-1",
+   "name": "Gap Note",
+   "component": "Frame",
+   "w": 396,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "3VRI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 26,
+   "h": 26,
+   "depth": 4
+  },
+  {
+   "id": "3VRJ-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3VRK-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "3VRL-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 1,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "3VRM-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 6
+  },
+  {
+   "id": "3VRN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 329,
+   "h": 48,
+   "depth": 4
+  },
+  {
+   "id": "3VRR-1",
+   "name": "Acceptance",
+   "component": "Frame",
+   "w": 396,
+   "h": 144,
+   "depth": 3
+  },
+  {
+   "id": "3VRT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 366,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3VRU-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 5
+  },
+  {
+   "id": "3VRV-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 5,
+   "depth": 6
+  },
+  {
+   "id": "3VRX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 366,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3VRY-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 5
+  },
+  {
+   "id": "3VRZ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 5,
+   "depth": 6
+  },
+  {
+   "id": "49V9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 366,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "49VB-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 5
+  },
+  {
+   "id": "49VC-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 5,
+   "depth": 6
+  },
+  {
+   "id": "49VD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 366,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "49VF-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 5
+  },
+  {
+   "id": "49VG-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 5,
+   "depth": 6
+  },
+  {
+   "id": "3VS1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 366,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "3VS2-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 5
+  },
+  {
+   "id": "3VS3-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 5,
+   "depth": 6
+  }
+ ],
+ "text_multiset": {
+  "35": 1,
+  "대화 이력 — 모드 5구역 · 세션 목록": 1,
+  "이력의 맨 앞은 다섯 모드입니다. 모드를 누르면 그 모드로 들어갈 뿐 목록은 그대로고, 프로젝트 안에서는 그 모드의 새 대화가 하나 생깁니다. 앞의 창은 뒤에서 그대로 돕니다.": 1,
+  "신규 · 승인 대기": 1,
+  "ATHENA": 2,
+  "아테나 · 백테스트 · 추세추종 v3": 1,
+  "파일　편집　보기　도움말": 1,
+  "새 대화": 1,
+  "대화 검색": 1,
+  "이력 · 모드": 1,
+  "8개 대화": 1,
+  "대화": 2,
+  "3": 4,
+  "그래프": 2,
+  "1": 3,
+  "에이전트": 2,
+  "2": 5,
+  "플러그인": 2,
+  "0": 2,
+  "백테스트": 3,
+  "프로젝트": 1,
+  "폴더 추가": 1,
+  "아테나": 1,
+  "추세추종 v3": 4,
+  "변동성 돌파 실험": 1,
+  "반도체 수급 점검": 1,
+  "성향 지도 · 9월": 1,
+  "키움 리서치": 1,
+  "최근 · 모드 무관": 1,
+  "전체": 1,
+  "아침 브리핑 감시": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "실행 중 · 4년 구간": 1,
+  "전략 폼": 1,
+  "이 세션에 저장됨": 1,
+  "종목": 1,
+  "005930": 1,
+  "기간": 1,
+  "2021-09 → 2026-09": 1,
+  "지표": 1,
+  "SMA 20 / 60": 1,
+  "누적 수익 곡선": 1,
+  "전략 +34.2%": 1,
+  "매수보유 +18.7%": 1,
+  "최대 낙폭": 1,
+  "-11.4%": 1,
+  "승률": 1,
+  "58%": 1,
+  "거래 수": 1,
+  "37": 1,
+  "진행": 1,
+  "82%": 1,
+  "아테나 · 백테스트 대화": 1,
+  "20/60 골든크로스로 4년 돌려줘": 1,
+  "폼을 채우고 실행했습니다. 4년 구간에서 전략이 매수보유를 15.5%p 앞섭니다.": 1,
+  "남은 구간 계산 중 · 이 대화는 계속 진행됩니다": 1,
+  "무엇이든 요청하세요": 1,
+  "다른 모드로 가도 이 창은 계속 돕니다": 1,
+  "OPUS · HIGH": 1,
+  "모드가 대화의 경계다": 1,
+  "HISTORY · MODE": 1,
+  "이력의 맨 앞이 다섯 모드입니다. 대화는 모드 안에서만 이어지고, 모드를 넘으면 새 대화가 됩니다.": 1,
+  "이력의 머리는 모드 다섯": 1,
+  "모드 행은 그 모드로 가는 문입니다. 목록은 거르지 않고, 행 앞 아이콘이 그 대화의 모드를 말합니다. 숫자는 그 모드의 대화 수입니다.": 1,
+  "모드를 넘으면 새 대화": 1,
+  "지금": 1,
+  "백테스트 · 추세추종 v3": 1,
+  "폼·코드·결과·로그 보유": 1,
+  "그래프로 이동": 1,
+  "새 그래프 대화": 1,
+  "아테나 밑에 행 하나 · 앞 창은 그대로": 1,
+  "남는 것은 대화만이 아닙니다. 폼 값·코드·결과 카드·로그·스크롤까지 한 덩어리로 남고, 도는 중이면 이력 행에 스피너가 돌 뿐 묻거나 알리지 않습니다.": 1,
+  "스피너는 지금 돌고 있다는 뜻": 1,
+  "실행 중 — 계산하는 동안에도 다른 창에서 대화할 수 있습니다": 1,
+  "멈춤 — 열면 마지막 상태 그대로 복원됩니다": 1,
+  "2026-09-05 개정 — 실앱에서 어긋났던 것": 1,
+  "목록을 거르는 모드 행 · 아이콘 없는 대화 행 · 복원 배너 · 누르기 전에 꺼지는 프로젝트 카드 — 넷을 이 보드·29·41번으로 되돌립니다.": 1,
+  "이 보드가 정하는 것": 1,
+  "대화 레코드는 mode를 가진다 — 채팅·그래프·에이전트·플러그인·백테스트": 1,
+  "이력 행은 모드 아이콘 · 제목 · 실행 점의 세 레인을 지킨다": 1,
+  "모드 행 클릭은 캔버스와 새 대화만 바꾼다 — 목록은 거르지 않는다": 1,
+  "복원은 배너 없이 조용하다 — 41번 보드의 계약": 1,
+  "25번 보드의 \"모드를 바꿔도 채팅 유지\"는 40번 보드가 대체한다": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "c285dfae90dff545bb6eb367e8e27f5e08cde79b32cd510cd4de12163bb2cb8b"
+}

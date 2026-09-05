@@ -1,0 +1,94 @@
+{
+ "board_id": "40CF-1",
+ "page": "G-1",
+ "page_name": "백테스트 구현 현황",
+ "name": "08 · 오류 칸 → 코드 미리보기(__MISSING__)",
+ "width": 1680.0,
+ "height": 1240.0,
+ "texts": [
+  {
+   "id": "40CI-1",
+   "text": "08",
+   "path": [
+    "08 · 오류 칸 → 코드 미리보기(__MISSING__)",
+    "설명",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40CJ-1",
+   "text": "오류 칸 → 코드 미리보기(__MISSING__)",
+   "path": [
+    "08 · 오류 칸 → 코드 미리보기(__MISSING__)",
+    "설명",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40CK-1",
+   "text": "오류 칸에서 Enter를 누르면 코드 탭의 미실행 미리보기로 내려간다. 리본이 '연결된 노드 · ma_fast 하향 돌파 · strategy_preview.py:24 · BTG-PORT-002 · 미실행 미리보기'라고 말하고, 24행 `cond_exit_1 = bt.cross_below(ma_fast, __MISSING__)`가 붉게 켜지며 '__MISSING__: 비교할 값이 없습니다' 주석이 그 줄에 붙는다. 배너가 '이 코드는 실행·저장 대상이 아닙니다'라고 못박고 편집기는 읽기 전용이며, [시각 설계에서 보기]가 그 칸으로 되돌린다.",
+   "path": [
+    "08 · 오류 칸 → 코드 미리보기(__MISSING__)",
+    "설명"
+   ]
+  },
+  {
+   "id": "40CL-1",
+   "text": "주석 · 켜진 줄이 코드 상자 아래쪽이라 리본과 그 줄을 한 프레임에 담으려고 상자를 24행으로 굴려 찍었다(상자는 다시 그려지면 1행부터 보인다). 파일 이름도 strategy.py가 아니라 strategy_preview.py다.",
+   "path": [
+    "08 · 오류 칸 → 코드 미리보기(__MISSING__)",
+    "설명"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "40CF-1",
+   "name": "08 · 오류 칸 → 코드 미리보기(__MISSING__)",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 1240.0,
+   "depth": 0
+  },
+  {
+   "id": "40CG-1",
+   "name": "설명",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "40CH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "40CN-1",
+   "name": "화면",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "40CO-1",
+   "name": "Korean programming webpage",
+   "component": "Rectangle",
+   "w": 1600.0,
+   "h": 1000.0,
+   "depth": 2
+  }
+ ],
+ "text_multiset": {
+  "08": 1,
+  "오류 칸 → 코드 미리보기(__MISSING__)": 1,
+  "오류 칸에서 Enter를 누르면 코드 탭의 미실행 미리보기로 내려간다. 리본이 '연결된 노드 · ma_fast 하향 돌파 · strategy_preview.py:24 · BTG-PORT-002 · 미실행 미리보기'라고 말하고, 24행 `cond_exit_1 = bt.cross_below(ma_fast, __MISSING__)`가 붉게 켜지며 '__MISSING__: 비교할 값이 없습니다' 주석이 그 줄에 붙는다. 배너가 '이 코드는 실행·저장 대상이 아닙니다'라고 못박고 편집기는 읽기 전용이며, [시각 설계에서 보기]가 그 칸으로 되돌린다.": 1,
+  "주석 · 켜진 줄이 코드 상자 아래쪽이라 리본과 그 줄을 한 프레임에 담으려고 상자를 24행으로 굴려 찍었다(상자는 다시 그려지면 1행부터 보인다). 파일 이름도 strategy.py가 아니라 strategy_preview.py다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "3d633754a3ce0725bfebdd36960e709f22970dbc994438aa58d158c095eb6a7b"
+}

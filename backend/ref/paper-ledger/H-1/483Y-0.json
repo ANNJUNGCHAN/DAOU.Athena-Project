@@ -1,0 +1,342 @@
+{
+ "board_id": "483Y-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "484W-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "484V-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "484T-0",
+   "text": "신용융자 가능",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Header"
+   ]
+  },
+  {
+   "id": "484R-0",
+   "text": "신용보증금율",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "484Q-0",
+   "text": "40%",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "484O-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "484N-0",
+   "text": "증거금 100%",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "484L-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "484K-0",
+   "text": "214종목",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "484H-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "484G-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "484F-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "484D-0",
+   "text": "기준 시각",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "484C-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "484A-0",
+   "text": "09:42 조회",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "4849-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "4847-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4846-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4844-0",
+   "text": "1,842종목",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "4843-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "4840-0",
+   "text": "스칼라 2개, 행 6개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "483Y-0",
+   "name": "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "484S-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "484U-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4841-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "484I-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "484P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "484M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "484J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "484E-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4848-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "484B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4842-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4845-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "483Z-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "신용융자 가능": 1,
+  "신용보증금율": 1,
+  "40%": 1,
+  "변화": 1,
+  "증거금 100%": 1,
+  "핵심": 1,
+  "214종목": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "기준 시각": 1,
+  "09:42 조회": 1,
+  "수량": 1,
+  "1,842종목": 1,
+  "스칼라 2개, 행 6개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "d8b6080e3af72c457ecc3425429be15d7a21948cfee28ec95af9885ba10aa986"
+}

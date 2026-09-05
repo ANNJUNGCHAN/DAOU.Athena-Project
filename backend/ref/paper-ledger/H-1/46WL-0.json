@@ -1,0 +1,342 @@
+{
+ "board_id": "46WL-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46XJ-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46XI-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46XG-0",
+   "text": "프로그램 수급",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Header"
+   ]
+  },
+  {
+   "id": "46XE-0",
+   "text": "금융투자",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46XD-0",
+   "text": "금융투자 -842억원",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46XB-0",
+   "text": "기관계",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46XA-0",
+   "text": "-1,204억원",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46X8-0",
+   "text": "거래대금",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46X7-0",
+   "text": "2.14조원",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46X4-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46X3-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46X2-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46X0-0",
+   "text": "차익거래순매수",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46WZ-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46WX-0",
+   "text": "+60억원",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46WW-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46WU-0",
+   "text": "체결시간",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46WT-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46WR-0",
+   "text": "09:15",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46WQ-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46WN-0",
+   "text": "스칼라 2개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46WL-0",
+   "name": "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46XF-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46XH-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46WO-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46X5-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46XC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46X9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46X6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46X1-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46WV-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46WY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46WP-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46WS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46WM-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "프로그램 수급": 1,
+  "금융투자": 1,
+  "금융투자 -842억원": 1,
+  "기관계": 1,
+  "-1,204억원": 1,
+  "거래대금": 1,
+  "2.14조원": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "차익거래순매수": 1,
+  "+60억원": 1,
+  "체결시간": 1,
+  "09:15": 1,
+  "스칼라 2개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "da929ecea2e2360dcc1504ff68197938051e8ed32e8ca2bd71a95f44d0528c2d"
+}

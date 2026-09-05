@@ -1,0 +1,1658 @@
+{
+ "board_id": "DO-0",
+ "page": "C-2",
+ "page_name": "키우미",
+ "name": "01 · 키우미 — 상황별 표현·크기 매핑",
+ "width": 1660.0,
+ "height": 0.0,
+ "texts": [
+  {
+   "id": "21P-0",
+   "text": "상황은 늘어도 공식 표현 축은 늘어나지 않는다",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "설명"
+   ]
+  },
+  {
+   "id": "21Q-0",
+   "text": "아래는 상황별 매핑 예시다 — 공식 규격: 표정 10종 · 시선 9방향 · 시간 루프 3종 · 크기 3단계",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "설명"
+   ]
+  },
+  {
+   "id": "2Y9-0",
+   "text": "잠듦",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 1행",
+    "상황 · 잠듦",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YA-0",
+   "text": "5분 이상 입력이 없다 — 바이저가 거의 닫힌다",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 1행",
+    "상황 · 잠듦",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YJ-0",
+   "text": "1",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 1행",
+    "상황 · 발화 기본",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YL-0",
+   "text": "발화 · 기본",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 1행",
+    "상황 · 발화 기본",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YM-0",
+   "text": "조건 도달 — 여기서만 색이 있다",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 1행",
+    "상황 · 발화 기본",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YV-0",
+   "text": "12",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 1행",
+    "상황 · 발화 다건",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YX-0",
+   "text": "발화 · 다건",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 1행",
+    "상황 · 발화 다건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2YY-0",
+   "text": "수는 신호가 아니라 신호의 크기",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 1행",
+    "상황 · 발화 다건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Z9-0",
+   "text": "완료 · 웃음",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 1행",
+    "상황 · 완료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ZA-0",
+   "text": "요청한 일이 끝남",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 1행",
+    "상황 · 완료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ZJ-0",
+   "text": "승인됨 · 윙크",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 2행",
+    "상황 · 승인됨",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ZK-0",
+   "text": "감시 등록이 반영됨",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 2행",
+    "상황 · 승인됨",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ZV-0",
+   "text": "만료 · 시무룩",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 2행",
+    "상황 · 만료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ZW-0",
+   "text": "루틴이 만료로 끝남",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 2행",
+    "상황 · 만료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "306-0",
+   "text": "오류 · 찡그림",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 2행",
+    "상황 · 오류",
+    "Frame"
+   ]
+  },
+  {
+   "id": "307-0",
+   "text": "호출 실패 · 연결 끊김",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 2행",
+    "상황 · 오류",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30I-0",
+   "text": "복원 실패 · 우는",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 2행",
+    "상황 · 복원 실패",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30J-0",
+   "text": "감시가 비었다 — 강제 알림",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 2행",
+    "상황 · 복원 실패",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30S-0",
+   "text": "장 마감 · 졸림",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 2행",
+    "상황 · 장 마감",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30T-0",
+   "text": "감시가 쉬는 시간",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "상황별 표현 매핑 2행",
+    "상황 · 장 마감",
+    "Frame"
+   ]
+  },
+  {
+   "id": "249-0",
+   "text": "76 × 76",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "1단계 · 접힘 76×76"
+   ]
+  },
+  {
+   "id": "24J-0",
+   "text": "좌상단 반지름 38px은 원의 것을 그대로 물려받는다 — 이 모서리가 “아까 그 공”이라는 증거다.",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "2단계 · 늘어나는 중"
+   ]
+  },
+  {
+   "id": "24W-0",
+   "text": "15:30 발화",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "머리 영역 (얼굴 76 + 오른쪽 헤더)",
+    "헤더 (얼굴 오른쪽에서 시작)",
+    "Frame",
+    "orb-badge"
+   ]
+  },
+  {
+   "id": "24X-0",
+   "text": "주기 확인",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "머리 영역 (얼굴 76 + 오른쪽 헤더)",
+    "헤더 (얼굴 오른쪽에서 시작)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "24Y-0",
+   "text": "2분 전",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "머리 영역 (얼굴 76 + 오른쪽 헤더)",
+    "헤더 (얼굴 오른쪽에서 시작)"
+   ]
+  },
+  {
+   "id": "253-0",
+   "text": "삼성전자 005930 조건 도달 — 관측값 88,100 (임계 88,000). 값은 발화 시점 기준입니다.",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-body (대화체 문장 1)"
+   ]
+  },
+  {
+   "id": "257-0",
+   "text": "종목",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-card (원장 행 1:1)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "258-0",
+   "text": "삼성전자 005930",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-card (원장 행 1:1)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "25A-0",
+   "text": "종가",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-card (원장 행 1:1)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "25B-0",
+   "text": "88,100",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-card (원장 행 1:1)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "25D-0",
+   "text": "전일비",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-card (원장 행 1:1)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "25E-0",
+   "text": "▲ 900 (+1.03%)",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-card (원장 행 1:1)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "25G-0",
+   "text": "거래량",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-card (원장 행 1:1)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "25H-0",
+   "text": "11,689,068",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-card (원장 행 1:1)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "25J-0",
+   "text": "기준시각",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-card (원장 행 1:1)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "25K-0",
+   "text": "2026-07-19 15:30",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-card (원장 행 1:1)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "25M-0",
+   "text": "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-foot"
+   ]
+  },
+  {
+   "id": "25O-0",
+   "text": "더보기",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)",
+    "orb-root expanded (한 덩어리)",
+    "orb-foot",
+    "orb-more"
+   ]
+  },
+  {
+   "id": "24M-0",
+   "text": "알림 전용(셸 표시)에서는 세 조각까지 — 문장 1 · 대표 카드 1 · 더보기. 셸을 숨기면 같은 패널이 미니 채팅이 되고 입력줄과 미니 주문 티켓의 실행 버튼이 산다(보드 04⑤ · 05 DISPLAY A).",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "크기 3단계 — 접힘 · 전환 중 · 펼침",
+    "3단계 · 펼침 360×400 (최대 640)"
+   ]
+  },
+  {
+   "id": "2FKE-2",
+   "text": "접힘 원에는 얼굴 말고 채널이 둘 더 있다",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "접힘 원의 두 번째 채널"
+   ]
+  },
+  {
+   "id": "2FKF-2",
+   "text": "둘 다 무채색이고 눈 모양을 건드리지 않는다 — 표정이 “무슨 일”을 말하면 이 둘은 “몇 건”을 말한다. 신호가 아니라 신호의 크기라서 화면당 신호 하나 원칙을 깨지 않는다.",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "접힘 원의 두 번째 채널"
+   ]
+  },
+  {
+   "id": "2FKR-2",
+   "text": "감시 궤도 링 — 활성 감시 3건",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "접힘 원의 두 번째 채널",
+    "채널 2종",
+    "감시 궤도 링"
+   ]
+  },
+  {
+   "id": "2FKS-2",
+   "text": "원 둘레 바깥 7px 궤도에 감시(루틴) 수만큼 위성 점을 12시부터 시계 방향으로 등분해 놓는다. 0건이면 궤도 자체를 그리지 않는다 — 없는 감시를 있는 것처럼 보이면 안 된다. 60초 주기와 루틴 이벤트 수신 때 다시 센다.",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "접힘 원의 두 번째 채널",
+    "채널 2종",
+    "감시 궤도 링"
+   ]
+  },
+  {
+   "id": "2FL3-2",
+   "text": "3",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "접힘 원의 두 번째 채널",
+    "채널 2종",
+    "미확인 배지",
+    "배지 예시",
+    "배지"
+   ]
+  },
+  {
+   "id": "2FL4-2",
+   "text": "미확인 배지 — 읽지 않은 3건",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "접힘 원의 두 번째 채널",
+    "채널 2종",
+    "미확인 배지"
+   ]
+  },
+  {
+   "id": "2FL5-2",
+   "text": "우상단 무채색 배지. 루틴 알림·시작 알림·접힌 채 도착한 대화 답을 합산한 수이고, 0이면 아예 그리지 않는다. 얼굴과 배지는 같은 사실의 두 표현이라 한 함수가 같이 정한다 — 따로 켜지는 사고를 막는다.",
+   "path": [
+    "01 · 키우미 — 상황별 표현·크기 매핑",
+    "접힘 원의 두 번째 채널",
+    "채널 2종",
+    "미확인 배지"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "DO-0",
+   "name": "01 · 키우미 — 상황별 표현·크기 매핑",
+   "component": "Frame",
+   "w": 1660.0,
+   "h": 0.0,
+   "depth": 0
+  },
+  {
+   "id": "21O-0",
+   "name": "설명",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "2X8-0",
+   "name": "상황별 표현 매핑 1행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "2Y2-0",
+   "name": "상황 · 잠듦",
+   "component": "Frame",
+   "w": 200.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2Y3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2Y4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 29.0,
+   "depth": 4
+  },
+  {
+   "id": "2Y5-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 9.0,
+   "depth": 5
+  },
+  {
+   "id": "2Y6-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 9.0,
+   "depth": 5
+  },
+  {
+   "id": "2Y7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2Y8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2YB-0",
+   "name": "상황 · 발화 기본",
+   "component": "Frame",
+   "w": 200.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2YC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2YD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2FSE-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2FSF-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2FSG-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2YH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2YI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20.0,
+   "h": 18.0,
+   "depth": 4
+  },
+  {
+   "id": "2YK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2YN-0",
+   "name": "상황 · 발화 다건",
+   "component": "Frame",
+   "w": 200.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2YO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2YP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2FSI-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2FSJ-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2FSK-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2YT-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2YU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 18.0,
+   "depth": 4
+  },
+  {
+   "id": "2YW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2Z1-0",
+   "name": "상황 · 완료",
+   "component": "Frame",
+   "w": 200.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2Z2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2Z3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2Z4-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2Z5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2Z6-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2Z7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2Z8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2Z0-0",
+   "name": "상황별 표현 매핑 2행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "2ZB-0",
+   "name": "상황 · 승인됨",
+   "component": "Frame",
+   "w": 200.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2ZC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2ZD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2ZE-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2ZF-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2ZG-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2ZH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2ZI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2ZL-0",
+   "name": "상황 · 만료",
+   "component": "Frame",
+   "w": 200.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2ZM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2ZN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2Q87-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2Q88-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2Q89-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2ZT-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "2ZU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2ZX-0",
+   "name": "상황 · 오류",
+   "component": "Frame",
+   "w": 200.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2ZY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "2ZZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "300-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "301-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "302-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "303-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "304-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16.0,
+   "h": 16.0,
+   "depth": 4
+  },
+  {
+   "id": "305-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "308-0",
+   "name": "상황 · 복원 실패",
+   "component": "Frame",
+   "w": 200.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "309-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "30A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "2Q8D-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2Q8E-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2Q8F-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2Q8G-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "30F-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "30G-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16.0,
+   "h": 16.0,
+   "depth": 4
+  },
+  {
+   "id": "30H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "30K-0",
+   "name": "상황 · 장 마감",
+   "component": "Frame",
+   "w": 200.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "30L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "30M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "30N-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "30O-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "30P-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "30Q-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 78.0,
+   "h": 78.0,
+   "depth": 4
+  },
+  {
+   "id": "30R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "243-0",
+   "name": "크기 3단계 — 접힘 · 전환 중 · 펼침",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "244-0",
+   "name": "1단계 · 접힘 76×76",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "245-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 3
+  },
+  {
+   "id": "246-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "247-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 16.0,
+   "depth": 5
+  },
+  {
+   "id": "248-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 16.0,
+   "depth": 5
+  },
+  {
+   "id": "24A-0",
+   "name": "2단계 · 늘어나는 중",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "24B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 218.0,
+   "h": 168.0,
+   "depth": 3
+  },
+  {
+   "id": "24C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 4
+  },
+  {
+   "id": "24D-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 16.0,
+   "depth": 5
+  },
+  {
+   "id": "24E-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 16.0,
+   "depth": 5
+  },
+  {
+   "id": "24F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "24G-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 8.0,
+   "depth": 5
+  },
+  {
+   "id": "24H-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 8.0,
+   "depth": 5
+  },
+  {
+   "id": "24I-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 56.0,
+   "depth": 4
+  },
+  {
+   "id": "24K-0",
+   "name": "3단계 · 펼침 360×400 (최대 640)",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "24L-0",
+   "name": "orb-root expanded (한 덩어리)",
+   "component": "Frame",
+   "w": 360.0,
+   "h": 340.0,
+   "depth": 3
+  },
+  {
+   "id": "24O-0",
+   "name": "머리 영역 (얼굴 76 + 오른쪽 헤더)",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 76.0,
+   "depth": 4
+  },
+  {
+   "id": "24P-0",
+   "name": "얼굴 — 접힘과 같은 좌표 (14.4, 12.2)",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 5
+  },
+  {
+   "id": "24Q-0",
+   "name": "orb-visor",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 6
+  },
+  {
+   "id": "24R-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 16.0,
+   "depth": 7
+  },
+  {
+   "id": "24S-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 16.0,
+   "depth": 7
+  },
+  {
+   "id": "24T-0",
+   "name": "헤더 (얼굴 오른쪽에서 시작)",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "24U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "24V-0",
+   "name": "orb-badge",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "252-0",
+   "name": "orb-body (대화체 문장 1)",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "24Z-0",
+   "name": "orb-close",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 4
+  },
+  {
+   "id": "250-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "251-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "255-0",
+   "name": "orb-card (원장 행 1:1)",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "256-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "259-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "25C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "25F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "25I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "25L-0",
+   "name": "orb-foot",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "25N-0",
+   "name": "orb-more",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2FKD-2",
+   "name": "접힘 원의 두 번째 채널",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "2FKH-2",
+   "name": "채널 2종",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "2FKI-2",
+   "name": "감시 궤도 링",
+   "component": "Frame",
+   "w": 300.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2FKJ-2",
+   "name": "링 예시",
+   "component": "Frame",
+   "w": 90.0,
+   "h": 90.0,
+   "depth": 4
+  },
+  {
+   "id": "2FKK-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 5
+  },
+  {
+   "id": "2FKL-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 6
+  },
+  {
+   "id": "2FKM-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 16.0,
+   "depth": 7
+  },
+  {
+   "id": "2FKN-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 16.0,
+   "depth": 7
+  },
+  {
+   "id": "2FKO-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4.0,
+   "h": 4.0,
+   "depth": 5
+  },
+  {
+   "id": "2FKP-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4.0,
+   "h": 4.0,
+   "depth": 5
+  },
+  {
+   "id": "2FKQ-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4.0,
+   "h": 4.0,
+   "depth": 5
+  },
+  {
+   "id": "2FKU-2",
+   "name": "점선 궤도",
+   "component": "Frame",
+   "w": 90.0,
+   "h": 90.0,
+   "depth": 5
+  },
+  {
+   "id": "2FKW-2",
+   "name": "미확인 배지",
+   "component": "Frame",
+   "w": 300.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "2FKX-2",
+   "name": "배지 예시",
+   "component": "Frame",
+   "w": 90.0,
+   "h": 90.0,
+   "depth": 4
+  },
+  {
+   "id": "2FKY-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76.0,
+   "h": 76.0,
+   "depth": 5
+  },
+  {
+   "id": "2FKZ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62.0,
+   "h": 61.0,
+   "depth": 6
+  },
+  {
+   "id": "2FL0-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 16.0,
+   "depth": 7
+  },
+  {
+   "id": "2FL1-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7.0,
+   "h": 16.0,
+   "depth": 7
+  },
+  {
+   "id": "2FL2-2",
+   "name": "배지",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 18.0,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "상황은 늘어도 공식 표현 축은 늘어나지 않는다": 1,
+  "아래는 상황별 매핑 예시다 — 공식 규격: 표정 10종 · 시선 9방향 · 시간 루프 3종 · 크기 3단계": 1,
+  "잠듦": 1,
+  "5분 이상 입력이 없다 — 바이저가 거의 닫힌다": 1,
+  "1": 1,
+  "발화 · 기본": 1,
+  "조건 도달 — 여기서만 색이 있다": 1,
+  "12": 1,
+  "발화 · 다건": 1,
+  "수는 신호가 아니라 신호의 크기": 1,
+  "완료 · 웃음": 1,
+  "요청한 일이 끝남": 1,
+  "승인됨 · 윙크": 1,
+  "감시 등록이 반영됨": 1,
+  "만료 · 시무룩": 1,
+  "루틴이 만료로 끝남": 1,
+  "오류 · 찡그림": 1,
+  "호출 실패 · 연결 끊김": 1,
+  "복원 실패 · 우는": 1,
+  "감시가 비었다 — 강제 알림": 1,
+  "장 마감 · 졸림": 1,
+  "감시가 쉬는 시간": 1,
+  "76 × 76": 1,
+  "좌상단 반지름 38px은 원의 것을 그대로 물려받는다 — 이 모서리가 “아까 그 공”이라는 증거다.": 1,
+  "15:30 발화": 1,
+  "주기 확인": 1,
+  "2분 전": 1,
+  "삼성전자 005930 조건 도달 — 관측값 88,100 (임계 88,000). 값은 발화 시점 기준입니다.": 1,
+  "종목": 1,
+  "삼성전자 005930": 1,
+  "종가": 1,
+  "88,100": 1,
+  "전일비": 1,
+  "▲ 900 (+1.03%)": 1,
+  "거래량": 1,
+  "11,689,068": 1,
+  "기준시각": 1,
+  "2026-07-19 15:30": 1,
+  "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다": 1,
+  "더보기": 1,
+  "알림 전용(셸 표시)에서는 세 조각까지 — 문장 1 · 대표 카드 1 · 더보기. 셸을 숨기면 같은 패널이 미니 채팅이 되고 입력줄과 미니 주문 티켓의 실행 버튼이 산다(보드 04⑤ · 05 DISPLAY A).": 1,
+  "접힘 원에는 얼굴 말고 채널이 둘 더 있다": 1,
+  "둘 다 무채색이고 눈 모양을 건드리지 않는다 — 표정이 “무슨 일”을 말하면 이 둘은 “몇 건”을 말한다. 신호가 아니라 신호의 크기라서 화면당 신호 하나 원칙을 깨지 않는다.": 1,
+  "감시 궤도 링 — 활성 감시 3건": 1,
+  "원 둘레 바깥 7px 궤도에 감시(루틴) 수만큼 위성 점을 12시부터 시계 방향으로 등분해 놓는다. 0건이면 궤도 자체를 그리지 않는다 — 없는 감시를 있는 것처럼 보이면 안 된다. 60초 주기와 루틴 이벤트 수신 때 다시 센다.": 1,
+  "3": 1,
+  "미확인 배지 — 읽지 않은 3건": 1,
+  "우상단 무채색 배지. 루틴 알림·시작 알림·접힌 채 도착한 대화 답을 합산한 수이고, 0이면 아예 그리지 않는다. 얼굴과 배지는 같은 사실의 두 표현이라 한 함수가 같이 정한다 — 따로 켜지는 사고를 막는다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "bad993c0063b9ebf8a6c9c105e6cfb7033a01cbed738169f1acf8a1b6140d98a"
+}

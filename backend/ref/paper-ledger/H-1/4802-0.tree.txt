@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER" (4802-0) 360×420
+  Frame "Header" (480W-0) 0×0
+    Frame "Meta row" (480Y-0) 0×0
+      Text "Eyebrow" (4810-0) 0×0
+      Text "As of" (480Z-0) 0×0 "기준 09:42"
+    Text "Title" (480X-0) 0×0 "고저 PER"
+  Frame "Body" (4805-0) 0×0
+    Frame "KPI band" (480M-0) 0×0
+      Frame "Frame" (480T-0) 0×0
+        Text "PER" (480V-0) 0×0 "PER"
+        Text "3.1배" (480U-0) 0×0 "3.1배"
+      Frame "Frame" (480Q-0) 0×0
+        Text "PER" (480S-0) 0×0 "PER"
+        Text "214.0배" (480R-0) 0×0 "214.0배"
+      Frame "Frame" (480N-0) 0×0
+        Text "핵심" (480P-0) 0×0 "핵심"
+        Text "14.2배" (480O-0) 0×0 "14.2배"
+    Frame "Table header" (480I-0) 0×0
+      Text "항목" (480L-0) 0×0 "항목"
+      Text "값" (480K-0) 0×0 "값"
+      Text "비고" (480J-0) 72×0 "비고"
+    Frame "Position 1" (480C-0) 0×0
+      Frame "Frame" (480F-0) 0×0
+        Text "수량" (480H-0) 0×0 "수량"
+        Text "Text" (480G-0) 0×0
+      Text "1위 종목" (480E-0) 0×0 "1위 종목"
+      Text "Text" (480D-0) 72×0
+    Frame "Position 2" (4806-0) 0×0
+      Frame "Frame" (4809-0) 0×0
+        Text "값" (480B-0) 0×0 "값"
+        Text "Text" (480A-0) 0×0
+      Text "전체 814건 · 19건 표시" (4808-0) 0×0 "전체 814건 · 19건 표시"
+      Text "Text" (4807-0) 72×0
+  Frame "Fold note" (4803-0) 0×0
+    Text "스칼라 2개, 행 17개 접힘 · 원…" (4804-0) 0×0 "스칼라 2개, 행 17개 접힘 · 원본에서 확인"

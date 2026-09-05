@@ -1,0 +1,35 @@
+Frame "mini/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중" (46AX-0) 360×420
+  Frame "Header" (46BR-0) 0×0
+    Frame "Meta row" (46BT-0) 0×0
+      Text "Eyebrow" (46BV-0) 0×0
+      Text "As of" (46BU-0) 0×0 "기준 09:42"
+    Text "Title" (46BS-0) 0×0 "종목별 평가·비중"
+  Frame "Body" (46B0-0) 0×0
+    Frame "KPI band" (46BH-0) 0×0
+      Frame "Frame" (46BO-0) 0×0
+        Text "총 평가금액" (46BQ-0) 0×0 "총 평가금액"
+        Text "124,580,240원" (46BP-0) 0×0 "124,580,240원"
+      Frame "Frame" (46BL-0) 0×0
+        Text "평가손익" (46BN-0) 0×0 "평가손익"
+        Text "+4.96%" (46BM-0) 0×0 "+4.96%"
+      Frame "Frame" (46BI-0) 0×0
+        Text "종목" (46BK-0) 0×0 "종목"
+        Text "8" (46BJ-0) 0×0 "8"
+    Frame "Table header" (46BD-0) 0×0
+      Text "종목" (46BG-0) 124×0 "종목"
+      Text "평가금액" (46BF-0) 0×0 "평가금액"
+      Text "수익률" (46BE-0) 72×0 "수익률"
+    Frame "Position 1" (46B7-0) 0×0
+      Frame "Frame" (46BA-0) 124×0
+        Text "삼성전자" (46BC-0) 0×0 "삼성전자"
+        Text "005930" (46BB-0) 0×0 "005930"
+      Text "41,483,750" (46B9-0) 0×0 "41,483,750"
+      Text "+9.04%" (46B8-0) 72×0 "+9.04%"
+    Frame "Position 2" (46B1-0) 0×0
+      Frame "Frame" (46B4-0) 124×0
+        Text "SK하이닉스" (46B6-0) 0×0 "SK하이닉스"
+        Text "000660" (46B5-0) 0×0 "000660"
+      Text "21,824,000" (46B3-0) 0×0 "21,824,000"
+      Text "+3.17%" (46B2-0) 72×0 "+3.17%"
+  Frame "Fold note" (46AY-0) 0×0
+    Text "스칼라 2개, 행 6개 접힘 · 원본…" (46AZ-0) 0×0 "스칼라 2개, 행 6개 접힘 · 원본에서 확인"

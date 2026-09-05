@@ -1,0 +1,92 @@
+{
+ "board_id": "48VN-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48VP-0",
+   "text": "원본 보드: CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+   "path": [
+    "note/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48VR-0",
+   "text": "가져온 요소: 계좌명 · 예탁자산평가액 · 수익률 · 주문가능금액 · 인출가능금액",
+   "path": [
+    "note/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48VT-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48VV-0",
+   "text": "접은 개수: 스칼라 2개 · 행 5개",
+   "path": [
+    "note/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48VN-0",
+   "name": "note/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48VO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48VQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48VS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48VU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정": 1,
+  "가져온 요소: 계좌명 · 예탁자산평가액 · 수익률 · 주문가능금액 · 인출가능금액": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 5개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "1fadeca261967723aa657df8eadb330176206d3a32df85269f5051efb006b812"
+}

@@ -1,0 +1,91 @@
+Frame "11 · 대화 — 모델 팝오버 · 루틴 승인" (1Y3-0) 1000×820
+  Frame "채팅 열 400px (모델 팝오버 열림 · 답변 중)" (1Y4-0) 400×720
+    Frame "input-stack" (1Y5-0) 398×84
+      Frame "input-row · 답변 중 (lock-hint)" (1Y6-0) 390×44
+        Text "무엇이든 물어보세요" (1Y7-0) 210×18 "무엇이든 물어보세요"
+        Frame "lock-hint" (1Y8-0) 128×20
+          Text "답변 중…" (1Y9-0) 51×16 "답변 중…"
+          Frame "esc" (1YA-0) 67×20
+            Text "ESC 중단" (1YB-0) 53×16 "ESC 중단"
+      Frame "control-strip" (1YC-0) 390×40
+        Frame "키우미 · 호출 중" (2L6-0) 18×18
+          Frame "visor" (2L7-0) 11×11
+            Rectangle "Rectangle" (2L8-0) 2×4
+            Rectangle "Rectangle" (2L9-0) 2×4
+        Frame "pill · CLI" (1YE-0) 73×28
+          Text "CLAUDE" (1YF-0) 47×14 "CLAUDE"
+        Rectangle "Rectangle" (1YG-0) 126×0
+        Frame "pill · 모델 (팝오버 열림)" (1YH-0) 111×28
+          Text "OPUS · HIGH" (1YI-0) 85×14 "OPUS · HIGH"
+    Frame "model-popover (창 안 오버레이 · 새 창 아님)" (1YJ-0) 240×191
+      Text "mp-title" (1YK-0) 210×16 "모델"
+      Frame "mp-row" (1YL-0) 210×50
+        Frame "Frame" (1YM-0) 44×22
+          Text "기본" (1YN-0) 22×14 "기본"
+        Frame "Frame" (1YO-0) 55×22
+          Text "fable" (1YP-0) 33×14 "fable"
+        Frame "mp-chip.on" (1YQ-0) 49×22
+          Text "opus" (1YR-0) 27×14 "opus"
+        Frame "Frame" (1YS-0) 62×22
+          Text "sonnet" (1YT-0) 40×14 "sonnet"
+        Frame "Frame" (1YU-0) 55×22
+          Text "haiku" (1YV-0) 33×14 "haiku"
+      Frame "mp-sep" (1YW-0) 210×1
+      Text "mp-title" (1YX-0) 210×16 "사고 강도"
+      Frame "mp-row" (1YY-0) 210×50
+        Frame "Frame" (1YZ-0) 42×22
+          Text "low" (1Z0-0) 20×14 "low"
+        Frame "Frame" (1Z1-0) 62×22
+          Text "medium" (1Z2-0) 40×14 "medium"
+        Frame "mp-chip.on" (1Z3-0) 49×22
+          Text "high" (1Z4-0) 27×14 "high"
+        Frame "Frame" (1Z5-0) 55×22
+          Text "xhigh" (1Z6-0) 33×14 "xhigh"
+        Frame "Frame" (1Z7-0) 42×22
+          Text "max" (1Z8-0) 20×14 "max"
+  Frame "루틴 승인 카드 · 진행 상태" (1ZC-0) 460×720
+    Frame "turn-agent.routine-approval" (1ZD-0) 460×126
+      Frame "agent-head" (1ZE-0) 428×16
+        Frame "agent-badge" (1ZF-0) 64×16
+          Text "승인 필요" (1ZG-0) 46×12 "승인 필요"
+        Text "감시 등록 요청" (1ZH-0) 68×12 "감시 등록 요청"
+        Text "방금" (1ZI-0) 20×12 "방금"
+      Frame "routine-mode-line" (1ZJ-0) 428×26
+        Text "삼성전자 종가가 88,000원 이상이…" (1ZK-0) 428×18 "삼성전자 종가가 88,000원 이상이면 알려드릴까요? 장중 60초마다 확인합니다."
+      Text "agent-source" (1ZL-0) 428×12 "승인하면 백엔드에 감시가 등록됩니다. 주문은 실행되지 않습니다."
+      Frame "routine-approval-actions" (1ZM-0) 428×38
+        Frame "routine-btn-approve" (1ZN-0) 66×30
+          Text "승인" (1ZO-0) 24×16 "승인"
+        Frame "routine-btn" (1ZP-0) 66×30
+          Text "거절" (1ZQ-0) 24×16 "거절"
+    Frame "turn-agent.agent-restore-failed" (6XE-0) 460×80
+      Frame "Frame" (6XF-0) 426×12
+        Rectangle "Rectangle" (6XG-0) 6×6
+        Text "복원 실패 — 이전 세션의 능동 턴" (6XH-0) 178×12 "복원 실패 — 이전 세션의 능동 턴"
+      Text "저장된 능동 턴을 복원하지 못했습니다…" (6XI-0) 426×36 "저장된 능동 턴을 복원하지 못했습니다. 원본 이벤트는 원장에 남아 있으니 감시 상태 카드에서 확인하세요."
+    Frame "실패 턴 (신규 참조 상태)" (C8B-0) 460×62
+      Frame "fail-head" (C8D-0) 426×12
+        Rectangle "warn-dot" (C8F-0) 6×6
+        Text "fail-label" (C8E-0) 50×12 "질의 실패"
+      Text "fail-text" (C8C-0) 426×18 "네트워크 연결을 확인할 수 없습니다. 잠시 후 다시 시도해 주세요."
+    Frame "progress-line · 판단 중" (1ZX-0) 460×98
+      Frame "Frame" (1ZY-0) 426×16
+        Rectangle "Rectangle" (1ZZ-0) 12×12
+        Text "판단 중 — 어떤 TR을 부를지 고르…" (200-0) 228×16 "판단 중 — 어떤 TR을 부를지 고르는 중"
+      Frame "Frame" (201-0) 426×16
+        Text "호출 중" (202-0) 44×16 "호출 중"
+        Frame "Frame" (203-0) 241×16
+          Text "일봉 차트" (204-0) 53×16 "일봉 차트"
+          Text "현재가" (205-0) 36×16 "현재가"
+          Text "일별 주가" (206-0) 53×16 "일별 주가"
+          Text "계좌 잔고 실패" (207-0) 81×16 "계좌 잔고 실패"
+      Frame "Frame" (208-0) 426×16
+        Text "4.2s" (209-0) 29×16 "4.2s"
+        Text "기록 안 됨" (20A-0) 63×16 "기록 안 됨"
+    Frame "중단 턴 — 접힌 헤더 (신규 참조 상태)" (DFQ-0) 460×51
+      Frame "run-row" (DFR-0) 426×16
+        Rectangle "Rectangle" (DFS-0) 6×6
+        Text "run-label" (DFT-0) 94×16 "17초 만에 중단됨"
+        SVG "SVG" (DFU-0) 9×9
+          SVGVisualElement "Path" (DFV-0) 3×6
+      Frame "divider" (DFW-0) 426×1

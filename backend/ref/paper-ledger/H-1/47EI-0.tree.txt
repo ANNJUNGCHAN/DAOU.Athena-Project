@@ -1,0 +1,35 @@
+Frame "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량" (47EI-0) 360×420
+  Frame "Header" (47FC-0) 0×0
+    Frame "Meta row" (47FE-0) 0×0
+      Text "Eyebrow" (47FG-0) 0×0
+      Text "As of" (47FF-0) 0×0 "기준 09:42"
+    Text "Title" (47FD-0) 0×0 "당일 거래량"
+  Frame "Body" (47EL-0) 0×0
+    Frame "Table header" (47F7-0) 0×0
+      Text "순서" (47FB-0) 34×0 "순서"
+      Text "항목" (47FA-0) 0×0 "항목"
+      Text "값" (47F9-0) 0×0 "값"
+      Text "비고" (47F8-0) 64×0 "비고"
+    Frame "Rank 1" (47F0-0) 0×0
+      Text "01" (47F6-0) 34×0 "01"
+      Frame "Frame" (47F3-0) 0×0
+        Text "거래회전율" (47F5-0) 0×0 "거래회전율"
+        Text "Text" (47F4-0) 0×0
+      Text "회전율 1.52%" (47F2-0) 0×0 "회전율 1.52%"
+      Text "Text" (47F1-0) 64×0
+    Frame "Rank 2" (47ET-0) 0×0
+      Text "02" (47EZ-0) 34×0 "02"
+      Frame "Frame" (47EW-0) 0×0
+        Text "거래금액" (47EY-0) 0×0 "거래금액"
+        Text "Text" (47EX-0) 0×0
+      Text "7,420억" (47EV-0) 0×0 "7,420억"
+      Text "Text" (47EU-0) 64×0
+    Frame "Rank 3" (47EM-0) 0×0
+      Text "03" (47ES-0) 34×0 "03"
+      Frame "Frame" (47EP-0) 0×0
+        Text "종목코드" (47ER-0) 0×0 "종목코드"
+        Text "Text" (47EQ-0) 0×0
+      Text "035420" (47EO-0) 0×0 "035420"
+      Text "Text" (47EN-0) 64×0
+  Frame "Fold note" (47EJ-0) 0×0
+    Text "추가 항목은 원본에서 확인" (47EK-0) 0×0 "추가 항목은 원본에서 확인"

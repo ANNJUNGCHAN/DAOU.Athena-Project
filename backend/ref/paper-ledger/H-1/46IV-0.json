@@ -1,0 +1,346 @@
+{
+ "board_id": "46IV-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46JT-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46JS-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46JQ-0",
+   "text": "거래대금 상위 저평가 탐색",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Header"
+   ]
+  },
+  {
+   "id": "46JO-0",
+   "text": "순위",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46JN-0",
+   "text": "종목",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46JM-0",
+   "text": "현재가",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46JL-0",
+   "text": "등락",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46JJ-0",
+   "text": "01",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46JI-0",
+   "text": "삼성전자",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46JH-0",
+   "text": "005930",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46JF-0",
+   "text": "150,850",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46JE-0",
+   "text": "+1.24%",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46JC-0",
+   "text": "02",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46JB-0",
+   "text": "SK하이닉스",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46JA-0",
+   "text": "000660",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46J8-0",
+   "text": "198,400",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46J7-0",
+   "text": "+2.05%",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46J5-0",
+   "text": "03",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46J4-0",
+   "text": "현대차",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46J3-0",
+   "text": "005380",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46J1-0",
+   "text": "232,500",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46J0-0",
+   "text": "-0.52%",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46IX-0",
+   "text": "추가 항목은 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46IV-0",
+   "name": "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46JP-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46JR-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46IY-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46JK-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46JD-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46JG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46J6-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46J9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46IZ-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46J2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46IW-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "거래대금 상위 저평가 탐색": 1,
+  "순위": 1,
+  "종목": 1,
+  "현재가": 1,
+  "등락": 1,
+  "01": 1,
+  "삼성전자": 1,
+  "005930": 1,
+  "150,850": 1,
+  "+1.24%": 1,
+  "02": 1,
+  "SK하이닉스": 1,
+  "000660": 1,
+  "198,400": 1,
+  "+2.05%": 1,
+  "03": 1,
+  "현대차": 1,
+  "005380": 1,
+  "232,500": 1,
+  "-0.52%": 1,
+  "추가 항목은 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "8f413208d8fb4427e307e7de7b9183dcc5b98acbf35d082eb8e51eab8d394563"
+}

@@ -1,0 +1,63 @@
+Frame "S01 · 시간 초과·취소·인증 만료·장 마감" (1IG3-0) 1440×960
+  Frame "Header" (1ISJ-0) 0×64
+    Frame "Frame" (1ISK-0) 0×0
+      Text "중단돼도 질문과 이미 확인한 값은 사…" (1ISL-0) 0×0 "중단돼도 질문과 이미 확인한 값은 사라지지 않습니다"
+      Text "시간 초과 · 사용자 취소 · 인증 …" (1ISM-0) 0×0 "시간 초과 · 사용자 취소 · 인증 만료 · 장 마감의 실제 Canvas 상태"
+    Text "S01 · 4 states" (1ISN-0) 0×0 "S01 · 4 states"
+  Frame "Compact runtime state workspace" (1SU2-0) 1344×0
+    Frame "Runtime state selector" (1SU4-0) 470×0
+      Frame "State list header" (1SU8-0) 0×0
+        Text "중단·시장 상태" (1SU9-0) 0×0 "중단·시장 상태"
+        Text "4개 상태" (1SUA-0) 0×0 "4개 상태"
+      Frame "시간 초과" (1SUC-0) 430×0
+        Frame "Frame" (1SUD-0) 0×0
+          Text "시간 초과" (1SUE-0) 0×0 "시간 초과"
+          Text "삼성전자 3개월 차트 · 2026-0…" (1SUF-0) 0×0 "삼성전자 3개월 차트 · 2026-08-31 09:42"
+          Text "삼성전자 005930 · 최근 3개월…" (1SUG-0) 0×0 "삼성전자 005930 · 최근 3개월 · 현재가 150,850원"
+        Text "다시 시도" (1SUH-0) 112×0 "다시 시도"
+      Frame "사용자 취소" (1SUJ-0) 430×0
+        Frame "Frame" (1SUK-0) 0×0
+          Text "사용자 취소" (1SUL-0) 0×0 "사용자 취소"
+          Text "거래대금 상위 저평가 종목 · 202…" (1SUM-0) 0×0 "거래대금 상위 저평가 종목 · 2026-08-31 09:40"
+          Text "삼성전자 2.14조 · SK하이닉스 …" (1SUN-0) 0×0 "삼성전자 2.14조 · SK하이닉스 0.94조 · 현대차 0.53조 · KOSPI · 거래대금 상위 · PE"
+        Text "결과 유지 · 다시 검색" (1SUO-0) 112×0 "결과 유지 · 다시 검색"
+      Frame "인증 만료" (1SUQ-0) 430×0
+        Frame "Frame" (1SUR-0) 0×0
+          Text "인증 만료" (1SUS-0) 0×0 "인증 만료"
+          Text "내 계좌 · 보유종목 · 2026-0…" (1SUT-0) 0×0 "내 계좌 · 보유종목 · 2026-08-31 09:33"
+          Text "평가금액 89,760,240원 · 8…" (1SUU-0) 0×0 "평가금액 89,760,240원 · 8종목 · 키움증권 끝 4721 · 이전 값 읽기 전용 유지 · 주문과 새"
+        Text "계좌 다시 연결" (1SUV-0) 112×0 "계좌 다시 연결"
+      Frame "장 마감" (1SUX-0) 430×0
+        Frame "Frame" (1SUY-0) 0×0
+          Text "장 마감" (1SUZ-0) 0×0 "장 마감"
+          Text "삼성전자 호가 · 005930 · 정…" (1SV0-0) 0×0 "삼성전자 호가 · 005930 · 정규장 최종"
+          Text "종가 150,850원 · 매도 150…" (1SV1-0) 0×0 "종가 150,850원 · 매도 150,900/12,430주 · 매수 150,850/10,240주 · 실시간"
+        Text "시간외 호가 보기" (1SV2-0) 112×0 "시간외 호가 보기"
+    Frame "Selected runtime state detail" (1SU6-0) 854×0
+      Frame "Selected state header" (1SV4-0) 0×0
+        Text "선택 상태 · 시간 초과" (1SV5-0) 0×0 "선택 상태 · 시간 초과"
+        Text "2026-08-31 09:42" (1SV6-0) 0×0 "2026-08-31 09:42"
+      Frame "Timeout hero" (1SV8-0) 0×0
+        Text "응답 시간이 초과됐습니다" (1SV9-0) 0×0 "응답 시간이 초과됐습니다"
+        Text "이미 확인한 현재가와 기간은 유지했습…" (1SVA-0) 0×0 "이미 확인한 현재가와 기간은 유지했습니다. 같은 조회를 다시 요청할 수 있습니다."
+      Frame "Preserved chart" (1SVC-0) 0×128
+        Rectangle "Rectangle" (1SVD-0) 26×44
+        Rectangle "Rectangle" (1SVE-0) 26×76
+        Rectangle "Rectangle" (1SVF-0) 26×62
+        Rectangle "Rectangle" (1SVG-0) 26×96
+        Rectangle "Rectangle" (1SVH-0) 26×80
+        Rectangle "Rectangle" (1SVI-0) 26×110
+        Rectangle "Rectangle" (1SVJ-0) 26×90
+        Rectangle "Rectangle" (1SVK-0) 26×118
+      Frame "Preserved query facts" (1SVM-0) 0×0
+        Frame "Frame" (1SVN-0) 250×0
+          Text "종목" (1SVO-0) 0×0 "종목"
+          Text "삼성전자 005930" (1SVP-0) 0×0 "삼성전자 005930"
+        Frame "Frame" (1SVQ-0) 250×0
+          Text "기간" (1SVR-0) 0×0 "기간"
+          Text "최근 3개월" (1SVS-0) 0×0 "최근 3개월"
+        Frame "Frame" (1SVT-0) 250×0
+          Text "보존된 값" (1SVU-0) 0×0 "보존된 값"
+          Text "현재가 150,850원" (1SVV-0) 0×0 "현재가 150,850원"
+      Frame "Timeout action" (1SVX-0) 0×50
+        Text "다시 시도" (1SVY-0) 0×0 "다시 시도"

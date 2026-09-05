@@ -1,0 +1,1616 @@
+{
+ "board_id": "11D-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "24 · 주문 — 거래 기능 연결 안내",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "13L-0",
+   "text": "설정",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "13K-0",
+   "text": "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "13I-0",
+   "text": "화면",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item is-selected"
+   ]
+  },
+  {
+   "id": "13G-0",
+   "text": "계좌",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "13F-0",
+   "text": "2개",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "13D-0",
+   "text": "MCP 서버",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "13C-0",
+   "text": "4개",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "13A-0",
+   "text": "모델",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "138-0",
+   "text": "성향・이력",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "135-0",
+   "text": "계좌",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "134-0",
+   "text": "2개 등록",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "132-0",
+   "text": "+ 계좌 등록",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-head",
+    "uk-settings-actions",
+    "uk-btn-ghost"
+   ]
+  },
+  {
+   "id": "12V-0",
+   "text": "별칭",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "12U-0",
+   "text": "앱키",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "12T-0",
+   "text": "주문 API",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "12S-0",
+   "text": "연결 상태",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "12R-0",
+   "text": "마지막 검증",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-col-head"
+   ]
+  },
+  {
+   "id": "12O-0",
+   "text": "모의-주력",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "12N-0",
+   "text": "활성",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "12K-0",
+   "text": "저장됨 · 36자",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성"
+   ]
+  },
+  {
+   "id": "12J-0",
+   "text": "ON",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "12G-0",
+   "text": "정상",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "12D-0",
+   "text": "—",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성"
+   ]
+  },
+  {
+   "id": "12C-0",
+   "text": "×",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "129-0",
+   "text": "모의-테스트",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "128-0",
+   "text": "비활성",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "125-0",
+   "text": "저장됨 · 36자",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성"
+   ]
+  },
+  {
+   "id": "124-0",
+   "text": "OFF",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "121-0",
+   "text": "검증 필요",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "11Y-0",
+   "text": "—",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성"
+   ]
+  },
+  {
+   "id": "11X-0",
+   "text": "×",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-row · 비활성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "11U-0",
+   "text": "앱키·시크릿은 목록에 표시되지 않는다. 저장 위치는 OS 자격증명 저장소다.",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-settings-note"
+   ]
+  },
+  {
+   "id": "11T-0",
+   "text": "비활성 계좌를 누르면 활성으로 전환된다. 활성 계좌는 항상 하나다.",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "card-body",
+    "uk-settings-note"
+   ]
+  },
+  {
+   "id": "13O-0",
+   "text": "주문 API 활성화",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-head"
+   ]
+  },
+  {
+   "id": "13P-0",
+   "text": "모의-주력",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-head"
+   ]
+  },
+  {
+   "id": "13R-0",
+   "text": "현재 OFF",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "141-0",
+   "text": "열리는 것 · 12건 · 모의 계좌 대상",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리는 것",
+    "uk-split-head"
+   ]
+  },
+  {
+   "id": "143-0",
+   "text": "kt10000~10003",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리는 것",
+    "uk-tr-row"
+   ]
+  },
+  {
+   "id": "144-0",
+   "text": "국내주식",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리는 것",
+    "uk-tr-row"
+   ]
+  },
+  {
+   "id": "145-0",
+   "text": "매수 · 매도 · 정정 · 취소",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리는 것",
+    "uk-tr-row"
+   ]
+  },
+  {
+   "id": "147-0",
+   "text": "kt10006~10009",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리는 것",
+    "uk-tr-row"
+   ]
+  },
+  {
+   "id": "148-0",
+   "text": "신용주문",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리는 것",
+    "uk-tr-row"
+   ]
+  },
+  {
+   "id": "149-0",
+   "text": "매수 · 매도 · 정정 · 취소",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리는 것",
+    "uk-tr-row"
+   ]
+  },
+  {
+   "id": "14B-0",
+   "text": "kt50000~50003",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리는 것",
+    "uk-tr-row"
+   ]
+  },
+  {
+   "id": "14C-0",
+   "text": "금현물",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리는 것",
+    "uk-tr-row"
+   ]
+  },
+  {
+   "id": "14D-0",
+   "text": "매수 · 매도 · 정정 · 취소",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리는 것",
+    "uk-tr-row"
+   ]
+  },
+  {
+   "id": "14F-0",
+   "text": "3계열 × 4동작 = 12건 — 신용주문 포함",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리는 것",
+    "uk-tr-foot"
+   ]
+  },
+  {
+   "id": "14H-0",
+   "text": "열리지 않는 것",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리지 않는 것"
+   ]
+  },
+  {
+   "id": "14J-0",
+   "text": "자동 매매 없음",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리지 않는 것",
+    "uk-closed-item"
+   ]
+  },
+  {
+   "id": "14K-0",
+   "text": "모든 주문은 대화 창에서 사용자가 직접 지시해야 실행된다",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리지 않는 것",
+    "uk-closed-item"
+   ]
+  },
+  {
+   "id": "14M-0",
+   "text": "AI 단독 실행 없음",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리지 않는 것",
+    "uk-closed-item"
+   ]
+  },
+  {
+   "id": "14N-0",
+   "text": "제안은 AI가 하고, 실행 지시는 항상 사용자가 한다",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리지 않는 것",
+    "uk-closed-item"
+   ]
+  },
+  {
+   "id": "14P-0",
+   "text": "실거래 계좌 접근 없음",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리지 않는 것",
+    "uk-closed-item"
+   ]
+  },
+  {
+   "id": "14Q-0",
+   "text": "이 API는 모의 계좌 밖으로 나가지 않는다",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-split",
+    "uk-split-col · 열리지 않는 것",
+    "uk-closed-item"
+   ]
+  },
+  {
+   "id": "14U-0",
+   "text": "AI가 이 계좌의 주문 API를 호출하도록 허용",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-toggle-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "152-0",
+   "text": "주문 API 허용 (토글)",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-checklist",
+    "uk-checklist-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "154-0",
+   "text": "ON",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-checklist",
+    "uk-checklist-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "158-0",
+   "text": "로컬 인증 토큰 설정",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-checklist",
+    "uk-checklist-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15A-0",
+   "text": "미설정",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-checklist",
+    "uk-checklist-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15D-0",
+   "text": "취소",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-btn-row-end",
+    "uk-btn-ghost"
+   ]
+  },
+  {
+   "id": "15F-0",
+   "text": "활성화",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-btn-row-end",
+    "uk-btn-primary"
+   ]
+  },
+  {
+   "id": "15H-0",
+   "text": "언제든 설정에서 OFF로 되돌릴 수 있다. 되돌리면 즉시 반영된다.",
+   "path": [
+    "24 · 주문 — 거래 기능 연결 안내",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 계좌 (.card.accounts)",
+    "uk-sheet · 주문 API 활성화",
+    "uk-sheet-body",
+    "uk-revert-note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "11D-0",
+   "name": "24 · 주문 — 거래 기능 연결 안내",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "11E-0",
+   "name": "Shell 창 · 설정 모드 (#settings)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "13J-0",
+   "name": "settings-head",
+   "component": "Frame",
+   "w": 1478,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "11O-0",
+   "name": "settings-body",
+   "component": "Frame",
+   "w": 1478,
+   "h": 662,
+   "depth": 2
+  },
+  {
+   "id": "136-0",
+   "name": "settings-nav",
+   "component": "Frame",
+   "w": 236,
+   "h": 662,
+   "depth": 3
+  },
+  {
+   "id": "13H-0",
+   "name": "nav-item is-selected",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "13E-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "13B-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "139-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "137-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "11P-0",
+   "name": "settings-grid",
+   "component": "Frame",
+   "w": 1226,
+   "h": 662,
+   "depth": 3
+  },
+  {
+   "id": "11Q-0",
+   "name": "카드 · 계좌 (.card.accounts)",
+   "component": "Frame",
+   "w": 1228,
+   "h": 660,
+   "depth": 4
+  },
+  {
+   "id": "12W-0",
+   "name": "card-head",
+   "component": "Frame",
+   "w": 1226,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "133-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 91,
+   "h": 19,
+   "depth": 6
+  },
+  {
+   "id": "12X-0",
+   "name": "uk-settings-actions",
+   "component": "Frame",
+   "w": 128,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "131-0",
+   "name": "uk-btn-ghost",
+   "component": "Frame",
+   "w": 90,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "12Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "12Z-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "130-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "11R-0",
+   "name": "card-body",
+   "component": "Frame",
+   "w": 1226,
+   "h": 614,
+   "depth": 5
+  },
+  {
+   "id": "12P-0",
+   "name": "uk-col-head",
+   "component": "Frame",
+   "w": 1226,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "12Q-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 28,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "12A-0",
+   "name": "uk-row · 활성",
+   "component": "Frame",
+   "w": 1226,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "12L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "12M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 40,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "12H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "12I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 33,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "12E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "12F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "12B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 28,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "11V-0",
+   "name": "uk-row · 비활성",
+   "component": "Frame",
+   "w": 1226,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "126-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "127-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "122-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "123-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "11Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "120-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 64,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "11W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 28,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "11S-0",
+   "name": "uk-settings-note",
+   "component": "Frame",
+   "w": 1226,
+   "h": 52,
+   "depth": 6
+  },
+  {
+   "id": "13M-0",
+   "name": "uk-sheet · 주문 API 활성화",
+   "component": "Frame",
+   "w": 1226,
+   "h": 658,
+   "depth": 5
+  },
+  {
+   "id": "13N-0",
+   "name": "uk-sheet-head",
+   "component": "Frame",
+   "w": 1224,
+   "h": 51,
+   "depth": 6
+  },
+  {
+   "id": "13Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "13S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "13T-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "13U-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "13V-0",
+   "name": "uk-sheet-body",
+   "component": "Frame",
+   "w": 1224,
+   "h": 605,
+   "depth": 6
+  },
+  {
+   "id": "13X-0",
+   "name": "uk-split",
+   "component": "Frame",
+   "w": 1192,
+   "h": 165,
+   "depth": 7
+  },
+  {
+   "id": "13Y-0",
+   "name": "uk-split-col · 열리는 것",
+   "component": "Frame",
+   "w": 584,
+   "h": 157,
+   "depth": 8
+  },
+  {
+   "id": "13Z-0",
+   "name": "uk-split-head",
+   "component": "Frame",
+   "w": 584,
+   "h": 16,
+   "depth": 9
+  },
+  {
+   "id": "140-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 10
+  },
+  {
+   "id": "142-0",
+   "name": "uk-tr-row",
+   "component": "Frame",
+   "w": 584,
+   "h": 17,
+   "depth": 9
+  },
+  {
+   "id": "146-0",
+   "name": "uk-tr-row",
+   "component": "Frame",
+   "w": 584,
+   "h": 17,
+   "depth": 9
+  },
+  {
+   "id": "14A-0",
+   "name": "uk-tr-row",
+   "component": "Frame",
+   "w": 584,
+   "h": 17,
+   "depth": 9
+  },
+  {
+   "id": "14E-0",
+   "name": "uk-tr-foot",
+   "component": "Frame",
+   "w": 584,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "14G-0",
+   "name": "uk-split-col · 열리지 않는 것",
+   "component": "Frame",
+   "w": 584,
+   "h": 157,
+   "depth": 8
+  },
+  {
+   "id": "14I-0",
+   "name": "uk-closed-item",
+   "component": "Frame",
+   "w": 584,
+   "h": 37,
+   "depth": 9
+  },
+  {
+   "id": "14L-0",
+   "name": "uk-closed-item",
+   "component": "Frame",
+   "w": 584,
+   "h": 37,
+   "depth": 9
+  },
+  {
+   "id": "14O-0",
+   "name": "uk-closed-item",
+   "component": "Frame",
+   "w": 584,
+   "h": 37,
+   "depth": 9
+  },
+  {
+   "id": "14S-0",
+   "name": "uk-toggle-row",
+   "component": "Frame",
+   "w": 1192,
+   "h": 58,
+   "depth": 7
+  },
+  {
+   "id": "14T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 274,
+   "h": 18,
+   "depth": 8
+  },
+  {
+   "id": "14W-0",
+   "name": "uk-toggle is-on",
+   "component": "Frame",
+   "w": 44,
+   "h": 24,
+   "depth": 8
+  },
+  {
+   "id": "14X-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 18,
+   "h": 18,
+   "depth": 9
+  },
+  {
+   "id": "14Y-0",
+   "name": "uk-checklist",
+   "component": "Frame",
+   "w": 1192,
+   "h": 70,
+   "depth": 7
+  },
+  {
+   "id": "14Z-0",
+   "name": "uk-checklist-row",
+   "component": "Frame",
+   "w": 1164,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "150-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 134,
+   "h": 16,
+   "depth": 9
+  },
+  {
+   "id": "151-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 10
+  },
+  {
+   "id": "153-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 33,
+   "h": 20,
+   "depth": 9
+  },
+  {
+   "id": "155-0",
+   "name": "uk-checklist-row",
+   "component": "Frame",
+   "w": 1164,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "156-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 16,
+   "depth": 9
+  },
+  {
+   "id": "157-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 10
+  },
+  {
+   "id": "159-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 49,
+   "h": 20,
+   "depth": 9
+  },
+  {
+   "id": "15B-0",
+   "name": "uk-btn-row-end",
+   "component": "Frame",
+   "w": 1192,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "15C-0",
+   "name": "uk-btn-ghost",
+   "component": "Frame",
+   "w": 52,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "15E-0",
+   "name": "uk-btn-primary",
+   "component": "Frame",
+   "w": 79,
+   "h": 36,
+   "depth": 8
+  },
+  {
+   "id": "15G-0",
+   "name": "uk-revert-note",
+   "component": "Frame",
+   "w": 1192,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "11N-0",
+   "name": "타이틀바 (.titlebar)",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "11F-0",
+   "name": "창 제어 (.win-controls · 최대화 비활성)",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "11L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "11M-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "11J-0",
+   "name": "disabled",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "11K-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "11G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "11H-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "11I-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "설정": 1,
+  "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기": 1,
+  "화면": 1,
+  "계좌": 2,
+  "2개": 1,
+  "MCP 서버": 1,
+  "4개": 1,
+  "모델": 1,
+  "성향・이력": 1,
+  "2개 등록": 1,
+  "+ 계좌 등록": 1,
+  "별칭": 1,
+  "앱키": 1,
+  "주문 API": 1,
+  "연결 상태": 1,
+  "마지막 검증": 1,
+  "모의-주력": 2,
+  "활성": 1,
+  "저장됨 · 36자": 2,
+  "ON": 2,
+  "정상": 1,
+  "—": 2,
+  "×": 2,
+  "모의-테스트": 1,
+  "비활성": 1,
+  "OFF": 1,
+  "검증 필요": 1,
+  "앱키·시크릿은 목록에 표시되지 않는다. 저장 위치는 OS 자격증명 저장소다.": 1,
+  "비활성 계좌를 누르면 활성으로 전환된다. 활성 계좌는 항상 하나다.": 1,
+  "주문 API 활성화": 1,
+  "현재 OFF": 1,
+  "열리는 것 · 12건 · 모의 계좌 대상": 1,
+  "kt10000~10003": 1,
+  "국내주식": 1,
+  "매수 · 매도 · 정정 · 취소": 3,
+  "kt10006~10009": 1,
+  "신용주문": 1,
+  "kt50000~50003": 1,
+  "금현물": 1,
+  "3계열 × 4동작 = 12건 — 신용주문 포함": 1,
+  "열리지 않는 것": 1,
+  "자동 매매 없음": 1,
+  "모든 주문은 대화 창에서 사용자가 직접 지시해야 실행된다": 1,
+  "AI 단독 실행 없음": 1,
+  "제안은 AI가 하고, 실행 지시는 항상 사용자가 한다": 1,
+  "실거래 계좌 접근 없음": 1,
+  "이 API는 모의 계좌 밖으로 나가지 않는다": 1,
+  "AI가 이 계좌의 주문 API를 호출하도록 허용": 1,
+  "주문 API 허용 (토글)": 1,
+  "로컬 인증 토큰 설정": 1,
+  "미설정": 1,
+  "취소": 1,
+  "활성화": 1,
+  "언제든 설정에서 OFF로 되돌릴 수 있다. 되돌리면 즉시 반영된다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "cfe2ec83316b1aaa50ae2933f54e3b4efd2a9a9aa5d20a98803fde0a494b67d1"
+}

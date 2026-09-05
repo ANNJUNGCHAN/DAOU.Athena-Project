@@ -1,0 +1,35 @@
+Frame "mini/CC-05 / R03-T5 · 수급 — 종목 동향" (46YJ-0) 360×420
+  Frame "Header" (46ZD-0) 0×0
+    Frame "Meta row" (46ZF-0) 0×0
+      Text "Eyebrow" (46ZH-0) 0×0
+      Text "As of" (46ZG-0) 0×0 "기준 09:42"
+    Text "Title" (46ZE-0) 0×0 "종목 동향 수급"
+  Frame "Body" (46YM-0) 0×0
+    Frame "KPI band" (46Z3-0) 0×0
+      Frame "Frame" (46ZA-0) 0×0
+        Text "개인투자자" (46ZC-0) 0×0 "개인투자자"
+        Text "-638억원" (46ZB-0) 0×0 "-638억원"
+      Frame "Frame" (46Z7-0) 0×0
+        Text "금융투자" (46Z9-0) 0×0 "금융투자"
+        Text "금융투자 -842억원" (46Z8-0) 0×0 "금융투자 -842억원"
+      Frame "Frame" (46Z4-0) 0×0
+        Text "누적거래대금" (46Z6-0) 0×0 "누적거래대금"
+        Text "2.14조원" (46Z5-0) 0×0 "2.14조원"
+    Frame "Table header" (46YZ-0) 0×0
+      Text "항목" (46Z2-0) 0×0 "항목"
+      Text "값" (46Z1-0) 0×0 "값"
+      Text "비고" (46Z0-0) 72×0 "비고"
+    Frame "Position 1" (46YT-0) 0×0
+      Frame "Frame" (46YW-0) 0×0
+        Text "외인일별순매매수량" (46YY-0) 0×0 "외인일별순매매수량"
+        Text "Text" (46YX-0) 0×0
+      Text "+15.4만주" (46YV-0) 0×0 "+15.4만주"
+      Text "Text" (46YU-0) 72×0
+    Frame "Position 2" (46YN-0) 0×0
+      Frame "Frame" (46YQ-0) 0×0
+        Text "기관계" (46YS-0) 0×0 "기관계"
+        Text "Text" (46YR-0) 0×0
+      Text "-142" (46YP-0) 0×0 "-142"
+      Text "Text" (46YO-0) 72×0
+  Frame "Fold note" (46YK-0) 0×0
+    Text "스칼라 2개, 행 3개 접힘 · 원본…" (46YL-0) 0×0 "스칼라 2개, 행 3개 접힘 · 원본에서 확인"

@@ -1,0 +1,92 @@
+{
+ "board_id": "48UT-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-05 / R03-T4 · 수급 — 신용·대차",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48UV-0",
+   "text": "원본 보드: CC-05 / R03-T4 · 수급 — 신용·대차",
+   "path": [
+    "note/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48UX-0",
+   "text": "가져온 요소: 종목코드 · 외국인투자자 · 기관계 · 금융투자 · 개인투자자",
+   "path": [
+    "note/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48UZ-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48V1-0",
+   "text": "접은 개수: 스칼라 2개 · 행 3개",
+   "path": [
+    "note/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48UT-0",
+   "name": "note/CC-05 / R03-T4 · 수급 — 신용·대차",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48UU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48UW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48UY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48V0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-05 / R03-T4 · 수급 — 신용·대차": 1,
+  "가져온 요소: 종목코드 · 외국인투자자 · 기관계 · 금융투자 · 개인투자자": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 3개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "fef5046d02d42ab8c6cefc10e0f66ac17e6a38ab15fa26bc8a9e807973397a97"
+}

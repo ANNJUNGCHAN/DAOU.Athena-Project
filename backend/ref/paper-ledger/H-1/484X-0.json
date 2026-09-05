@@ -1,0 +1,340 @@
+{
+ "board_id": "484X-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "485V-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "485U-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "485S-0",
+   "text": "당일·전일 체결량",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Header"
+   ]
+  },
+  {
+   "id": "485Q-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "485P-0",
+   "text": "120%",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "485N-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "485M-0",
+   "text": "200% 초과",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "485K-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "485J-0",
+   "text": "19",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "485G-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "485F-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "485E-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "485C-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "485B-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4859-0",
+   "text": "512%",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "4858-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "4856-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4855-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4853-0",
+   "text": "1위 종목",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "4852-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "484Z-0",
+   "text": "스칼라 2개, 행 17개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "484X-0",
+   "name": "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "485R-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "485T-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4850-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "485H-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "485O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "485L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "485I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "485D-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4857-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "485A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4851-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4854-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "484Y-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "당일·전일 체결량": 1,
+  "변화": 3,
+  "120%": 1,
+  "200% 초과": 1,
+  "핵심": 1,
+  "19": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "512%": 1,
+  "수량": 1,
+  "1위 종목": 1,
+  "스칼라 2개, 행 17개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "bee77bd99408ebedd7a133e80a0e7792ad8622f85ea5942e842b98bb59effe8b"
+}

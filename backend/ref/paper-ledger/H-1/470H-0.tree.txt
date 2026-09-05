@@ -1,0 +1,35 @@
+Frame "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황" (470H-0) 360×420
+  Frame "Header" (471B-0) 0×0
+    Frame "Meta row" (471D-0) 0×0
+      Text "Eyebrow" (471F-0) 0×0
+      Text "As of" (471E-0) 0×0 "기준 09:42"
+    Text "Title" (471C-0) 0×0 "오늘 주문 현황"
+  Frame "Body" (470K-0) 0×0
+    Frame "KPI band" (4711-0) 0×0
+      Frame "Frame" (4718-0) 0×0
+        Text "종목별계좌평가현황" (471A-0) 0×0 "종목별계좌평가현황"
+        Text "8종목" (4719-0) 0×0 "8종목"
+      Frame "Frame" (4715-0) 0×0
+        Text "매수비중" (4717-0) 0×0 "매수비중"
+        Text "28.0%" (4716-0) 0×0 "28.0%"
+      Frame "Frame" (4712-0) 0×0
+        Text "Text" (4714-0) 0×0
+        Text "Text" (4713-0) 0×0
+    Frame "Table header" (470X-0) 0×0
+      Text "항목" (4710-0) 0×0 "항목"
+      Text "값" (470Z-0) 0×0 "값"
+      Text "비고" (470Y-0) 72×0 "비고"
+    Frame "Position 1" (470R-0) 0×0
+      Frame "Frame" (470U-0) 0×0
+        Text "주문번호" (470W-0) 0×0 "주문번호"
+        Text "Text" (470V-0) 0×0
+      Text "주문 0021833" (470T-0) 0×0 "주문 0021833"
+      Text "Text" (470S-0) 72×0
+    Frame "Position 2" (470L-0) 0×0
+      Frame "Frame" (470O-0) 0×0
+        Text "체결누계금액" (470Q-0) 0×0 "체결누계금액"
+        Text "Text" (470P-0) 0×0
+      Text "누계 0원" (470N-0) 0×0 "누계 0원"
+      Text "Text" (470M-0) 72×0
+  Frame "Fold note" (470I-0) 0×0
+    Text "스칼라 2개, 행 3개 접힘 · 원본…" (470J-0) 0×0 "스칼라 2개, 행 3개 접힘 · 원본에서 확인"

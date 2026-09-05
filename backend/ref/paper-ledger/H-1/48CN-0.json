@@ -1,0 +1,340 @@
+{
+ "board_id": "48CN-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48DL-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48DK-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48DI-0",
+   "text": "증거금·보증금 구간별",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Header"
+   ]
+  },
+  {
+   "id": "48DG-0",
+   "text": "종목별계좌평가현황",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48DF-0",
+   "text": "8종목",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48DD-0",
+   "text": "매수비중",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48DC-0",
+   "text": "28.0%",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48DA-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48D9-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48D6-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48D5-0",
+   "text": "값",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48D4-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48D2-0",
+   "text": "유가잔고평가액",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48D1-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48CZ-0",
+   "text": "89,760,240원",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48CY-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48CW-0",
+   "text": "총 평가손익",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48CV-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48CT-0",
+   "text": "+4,240,900원",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48CS-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48CP-0",
+   "text": "스칼라 2개, 행 5개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48CN-0",
+   "name": "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48DH-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48DJ-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48CQ-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48D7-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48DE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48DB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48D8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48D3-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48CX-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48D0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48CR-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48CU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48CO-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "증거금·보증금 구간별": 1,
+  "종목별계좌평가현황": 1,
+  "8종목": 1,
+  "매수비중": 1,
+  "28.0%": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "유가잔고평가액": 1,
+  "89,760,240원": 1,
+  "총 평가손익": 1,
+  "+4,240,900원": 1,
+  "스칼라 2개, 행 5개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "25bea0f0db8090f1cabcaf84ad34e0cd00412b9638648cc0b23ed57e14200709"
+}

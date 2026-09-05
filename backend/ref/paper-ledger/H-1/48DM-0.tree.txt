@@ -1,0 +1,35 @@
+Frame "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세" (48DM-0) 360×420
+  Frame "Header" (48EG-0) 0×0
+    Frame "Meta row" (48EI-0) 0×0
+      Text "Eyebrow" (48EK-0) 0×0
+      Text "As of" (48EJ-0) 0×0 "기준 09:42"
+    Text "Title" (48EH-0) 0×0 "증거금 재원·담보 상세"
+  Frame "Body" (48DP-0) 0×0
+    Frame "KPI band" (48E6-0) 0×0
+      Frame "Frame" (48ED-0) 0×0
+        Text "종목별계좌평가현황" (48EF-0) 0×0 "종목별계좌평가현황"
+        Text "8종목" (48EE-0) 0×0 "8종목"
+      Frame "Frame" (48EA-0) 0×0
+        Text "매수비중" (48EC-0) 0×0 "매수비중"
+        Text "28.0%" (48EB-0) 0×0 "28.0%"
+      Frame "Frame" (48E7-0) 0×0
+        Text "Text" (48E9-0) 0×0
+        Text "Text" (48E8-0) 0×0
+    Frame "Table header" (48E2-0) 0×0
+      Text "항목" (48E5-0) 0×0 "항목"
+      Text "값" (48E4-0) 0×0 "값"
+      Text "비고" (48E3-0) 72×0 "비고"
+    Frame "Position 1" (48DW-0) 0×0
+      Frame "Frame" (48DZ-0) 0×0
+        Text "신용대용증거금" (48E1-0) 0×0 "신용대용증거금"
+        Text "Text" (48E0-0) 0×0
+      Text "0원" (48DY-0) 0×0 "0원"
+      Text "Text" (48DX-0) 72×0
+    Frame "Position 2" (48DQ-0) 0×0
+      Frame "Frame" (48DT-0) 0×0
+        Text "전일대주상환손실대용증거금" (48DV-0) 0×0 "전일대주상환손실대용증거금"
+        Text "Text" (48DU-0) 0×0
+      Text "0원" (48DS-0) 0×0 "0원"
+      Text "Text" (48DR-0) 72×0
+  Frame "Fold note" (48DN-0) 0×0
+    Text "스칼라 2개, 행 1개 접힘 · 원본…" (48DO-0) 0×0 "스칼라 2개, 행 1개 접힘 · 원본에서 확인"

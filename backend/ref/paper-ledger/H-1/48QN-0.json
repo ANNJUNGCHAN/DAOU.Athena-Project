@@ -1,0 +1,92 @@
+{
+ "board_id": "48QN-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-06 / R06 · 관심종목·조건 신호",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48QP-0",
+   "text": "원본 보드: CC-06 / R06 · 관심종목·조건 신호",
+   "path": [
+    "note/CC-06 / R06 · 관심종목·조건 신호",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48QR-0",
+   "text": "가져온 요소: 종목코드 · 현재가 · 전일대비 · 등락율 · 시가",
+   "path": [
+    "note/CC-06 / R06 · 관심종목·조건 신호",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48QT-0",
+   "text": "문법: facts",
+   "path": [
+    "note/CC-06 / R06 · 관심종목·조건 신호",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48QV-0",
+   "text": "접은 개수: 항목 67개",
+   "path": [
+    "note/CC-06 / R06 · 관심종목·조건 신호",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48QN-0",
+   "name": "note/CC-06 / R06 · 관심종목·조건 신호",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48QO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48QQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48QS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48QU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-06 / R06 · 관심종목·조건 신호": 1,
+  "가져온 요소: 종목코드 · 현재가 · 전일대비 · 등락율 · 시가": 1,
+  "문법: facts": 1,
+  "접은 개수: 항목 67개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "734ad6d441705a407f4aec23bc3def67a8caafab9e825daa40820cca6e812cbf"
+}

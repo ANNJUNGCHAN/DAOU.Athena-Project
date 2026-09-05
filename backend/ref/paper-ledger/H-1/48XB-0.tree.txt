@@ -1,0 +1,9 @@
+Frame "note/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자" (48XB-0) 360×92
+  Frame "Frame" (48XC-0) 334×0
+    Text "원본 보드: CC-02 / R11-T…" (48XD-0) 0×0 "원본 보드: CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자"
+  Frame "Frame" (48XE-0) 334×0
+    Text "가져온 요소: 주문가능금액" (48XF-0) 0×0 "가져온 요소: 주문가능금액"
+  Frame "Frame" (48XG-0) 334×0
+    Text "문법: order_confirm" (48XH-0) 0×0 "문법: order_confirm"
+  Frame "Frame" (48XI-0) 334×0
+    Text "접은 개수: 항목 20개" (48XJ-0) 0×0 "접은 개수: 항목 20개"

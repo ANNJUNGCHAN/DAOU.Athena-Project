@@ -1,0 +1,343 @@
+Frame "20 · 백테스트 — 새 기법 만들기 · 폴더·편집기·터미널·단계 카드" (43DP-1) 1680×1120
+  Frame "타이틀" (43DQ-1) 1584×0
+    Text "셸 — 백테스트 · 새 기법 만들기 …" (43DR-1) 0×0 "셸 — 백테스트 · 새 기법 만들기 — 폴더 하나 = 대화 하나"
+    Text "가운데는 기법 폴더 · 편집기 · 터…" (43DS-1) 0×0 "가운데는 기법 폴더 · 편집기 · 터미널이고, 오른쪽은 그 폴더를 다루는 대화 하나입니다. AI가 한 일은 "
+  Frame "셸" (43DU-1) 1584×900
+    Frame "Frame" (43DV-1) 268×900
+      Frame "Primary Actions" (43DW-1) 0×0
+        Frame "Frame" (43DX-1) 0×28
+          Text "ATHENA" (43DY-1) 0×0 "ATHENA"
+          SVG "SVG" (43DZ-1) 0×0
+            SVGVisualElement "Circle" (43E0-1) 0×0
+            SVGVisualElement "Path" (43E1-1) 0×0
+        Frame "Frame" (43E2-1) 0×30
+          SVG "SVG" (43E3-1) 0×0
+            SVGVisualElement "Path" (43E4-1) 0×0
+            SVGVisualElement "Path" (43E5-1) 0×0
+          Text "새 채팅" (43E6-1) 0×0 "새 채팅"
+        Frame "Frame" (43E7-1) 0×30
+          SVG "SVG" (43E8-1) 0×0
+            SVGVisualElement "Circle" (43E9-1) 0×0
+            SVGVisualElement "Circle" (43EA-1) 0×0
+            SVGVisualElement "Circle" (43EB-1) 0×0
+            SVGVisualElement "Path" (43EC-1) 0×0
+          Text "그래프" (43ED-1) 0×0 "그래프"
+        Frame "Frame" (43EE-1) 0×30
+          SVG "SVG" (43EF-1) 0×0
+            SVGVisualElement "Circle" (43EG-1) 0×0
+            SVGVisualElement "Path" (43EH-1) 0×0
+          Text "에이전트" (43EI-1) 0×0 "에이전트"
+        Frame "Nav 플러그인" (43EJ-1) 0×30
+          SVG "SVG" (43EK-1) 0×0
+            SVGVisualElement "Path" (43EL-1) 0×0
+            SVGVisualElement "Path" (43EM-1) 0×0
+          Text "플러그인" (43EN-1) 0×0 "플러그인"
+        Frame "Nav 백테스트 (active)" (43EO-1) 0×30
+          SVG "SVG" (43EP-1) 0×0
+            SVGVisualElement "Path" (43EQ-1) 0×0
+            SVGVisualElement "Path" (43ER-1) 0×0
+          Text "백테스트" (43ES-1) 0×0 "백테스트"
+      Frame "Project Tree" (43ET-1) 0×0
+        Frame "Frame" (43EU-1) 0×0
+          Text "프로젝트" (43EV-1) 0×0 "프로젝트"
+        Frame "Frame" (43EW-1) 0×32
+          SVG "SVG" (43EX-1) 0×0
+            SVGVisualElement "Path" (43EY-1) 0×0
+            SVGVisualElement "Path" (43EZ-1) 0×0
+          Text "아테나" (43F0-1) 0×0 "아테나"
+          SVG "SVG" (43F1-1) 0×0
+            SVGVisualElement "Circle" (43F2-1) 0×0
+            SVGVisualElement "Circle" (43F3-1) 0×0
+            SVGVisualElement "Circle" (43F4-1) 0×0
+          SVG "SVG" (43F5-1) 0×0
+            SVGVisualElement "Path" (43F6-1) 0×0
+            SVGVisualElement "Path" (43F7-1) 0×0
+        Frame "Frame" (43F8-1) 0×27
+          Text "백엔드 API 개수 확인" (43F9-1) 0×0 "백엔드 API 개수 확인"
+        Frame "Frame" (43FA-1) 0×29
+          Text "앱 전체 기능 검수" (43FB-1) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (43FC-1) 6×6
+      Frame "Recent Conversations" (43FD-1) 0×0
+        Frame "Frame" (43FE-1) 0×20
+          Text "최근" (43FF-1) 0×0 "최근"
+          Text "전체" (43FG-1) 0×0 "전체"
+        Frame "Frame" (43FH-1) 0×27
+          Text "내-atr-돌파 · 새 기법" (43FI-1) 0×0 "내-atr-돌파 · 새 기법"
+          Rectangle "Rectangle" (43FJ-1) 6×6
+        Frame "Frame" (43FK-1) 0×27
+          Text "삼성전자 주요 변동 알림" (43FL-1) 0×0 "삼성전자 주요 변동 알림"
+        Frame "Frame" (43FM-1) 0×27
+          Text "ETF 자금 흐름" (43FN-1) 0×0 "ETF 자금 흐름"
+      Frame "Account Footer" (43FO-1) 0×0
+        Frame "Frame" (43FP-1) 0×38
+          Frame "Frame" (43FQ-1) 22×22
+            Text "AN" (43FR-1) 0×0 "AN"
+          Text "모의-주력" (43FS-1) 0×0 "모의-주력"
+          SVG "SVG" (43FT-1) 0×0
+            SVGVisualElement "Path" (43FU-1) 0×0
+    Frame "메인 · 폴더·편집기·터미널" (43FV-1) 0×0
+      Frame "헤더" (43FY-1) 0×28
+        Text "내-atr-돌파/" (43FZ-1) 0×0 "내-atr-돌파/"
+        Text "폴더 하나가 기법 하나 · 대화 하나…" (43G0-1) 0×0 "폴더 하나가 기법 하나 · 대화 하나 · 4개 파일 · 방금 저장됨"
+        Frame "Frame" (43G1-1) 0×0
+          Rectangle "Rectangle" (43G2-1) 6×6
+          Text "AI가 쓰는 중" (43G3-1) 0×0 "AI가 쓰는 중"
+        Frame "Frame" (43G4-1) 0×0
+          Text "그만두기" (43G5-1) 0×0 "그만두기"
+      Frame "자동 수락 띠" (43G7-1) 0×0
+        Text "AI가 제어하는 중 · 자동 수락" (43G8-1) 0×0 "AI가 제어하는 중 · 자동 수락"
+        Text "— 폴더 안 편집·검사·백테스트 실행…" (43G9-1) 0×0 "— 폴더 안 편집·검사·백테스트 실행은 묻지 않습니다"
+        Text "L28 · 자동 저장" (43GA-1) 0×0 "L28 · 자동 저장"
+        Frame "Frame" (43GB-1) 0×0
+          Text "직접 편집" (43GC-1) 0×0 "직접 편집"
+      Frame "탭 바" (43GE-1) 0×34
+        Frame "탭 코드 (active)" (43GF-1) 0×33
+          Text "코드" (43GG-1) 0×0 "코드"
+          Text "strategy.py" (43GH-1) 0×0 "strategy.py"
+        Frame "탭 노드·흐름" (43GI-1) 0×33
+          Text "노드·흐름" (43GJ-1) 0×0 "노드·흐름"
+          Text "5" (43GK-1) 0×0 "5"
+        Rectangle "Rectangle" (43GL-1) 0×0
+        Frame "Frame" (43GM-1) 0×0
+          Rectangle "Rectangle" (43GN-1) 5×5
+          Text "파일이 바뀌면 자동으로 다시 그려집니…" (43GO-1) 0×0 "파일이 바뀌면 자동으로 다시 그려집니다"
+      Frame "본문 행" (43GQ-1) 0×0
+        Frame "파일 트리" (43GR-1) 186×0
+          Frame "트리 헤더" (43GU-1) 0×0
+            Text "기법 폴더" (43GV-1) 0×0 "기법 폴더"
+            Rectangle "Rectangle" (43GW-1) 0×1
+          Frame "폴더 행" (43GX-1) 0×0
+            SVG "SVG" (43GY-1) 0×0
+              SVGVisualElement "Path" (43GZ-1) 0×0
+            Text "내-atr-돌파/" (43H0-1) 0×0 "내-atr-돌파/"
+          Frame "파일 strategy.py (선택)" (43H2-1) 0×0
+            Rectangle "Rectangle" (43H3-1) 5×5
+            Text "strategy.py" (43H4-1) 0×0 "strategy.py"
+            Text "+12" (43H5-1) 0×0 "+12"
+          Frame "폴더 tests" (43H6-1) 0×0
+            Rectangle "Rectangle" (43H7-1) 5×5
+            Text "tests/" (43H8-1) 0×0 "tests/"
+            Rectangle "Rectangle" (43H9-1) 22×0
+          Frame "파일 test_strategy.py" (43HA-1) 0×0
+            Rectangle "Rectangle" (43HB-1) 5×5
+            Text "test_strategy.py" (43HC-1) 0×0 "test_strategy.py"
+            Text "3" (43HD-1) 0×0 "3"
+          Frame "파일 README.md" (43HF-1) 0×0
+            Rectangle "Rectangle" (43HG-1) 5×5
+            Text "README.md" (43HH-1) 0×0 "README.md"
+            Rectangle "Rectangle" (43HI-1) 22×0
+          Frame "폴더 .venv" (43HJ-1) 0×0
+            Rectangle "Rectangle" (43HK-1) 5×5
+            Text ".venv/" (43HL-1) 0×0 ".venv/"
+            Text "환경" (43HM-1) 0×0 "환경"
+          Rectangle "Rectangle" (43HO-1) 0×0
+          Frame "자동 검사 7" (43KI-1) 0×0
+            Frame "Frame" (43KJ-1) 0×0
+              Text "자동 검사 7" (43KK-1) 0×0 "자동 검사 7"
+              Text "5/5" (43KL-1) 0×0 "5/5"
+            Frame "Frame" (43KN-1) 0×0
+              Rectangle "Rectangle" (43KO-1) 5×5
+              Text "문법" (43KP-1) 0×0 "문법"
+              Text "차단" (43KQ-1) 26×0 "차단"
+            Frame "Frame" (43KR-1) 0×0
+              Rectangle "Rectangle" (43KS-1) 5×5
+              Text "계약" (43KT-1) 0×0 "계약"
+              Text "차단" (43KU-1) 26×0 "차단"
+            Frame "Frame" (43KV-1) 0×0
+              Rectangle "Rectangle" (43KW-1) 5×5
+              Text "시험 실행" (43KX-1) 0×0 "시험 실행"
+              Text "차단" (43KY-1) 26×0 "차단"
+            Frame "Frame" (43KZ-1) 0×0
+              Rectangle "Rectangle" (43L0-1) 5×5
+              Text "룩어헤드" (43L1-1) 0×0 "룩어헤드"
+              Text "차단" (43L2-1) 26×0 "차단"
+            Frame "Frame" (43L3-1) 0×0
+              Rectangle "Rectangle" (43L4-1) 5×5
+              Text "워밍업" (43L5-1) 0×0 "워밍업"
+              Text "차단" (43L6-1) 26×0 "차단"
+            Frame "Frame" (43L7-1) 0×0
+              Rectangle "Rectangle" (43L8-1) 5×5
+              Text "매직 넘버" (43L9-1) 0×0 "매직 넘버"
+              Text "경고" (43LA-1) 26×0 "경고"
+            Frame "Frame" (43LB-1) 0×0
+              Rectangle "Rectangle" (43LC-1) 5×5
+              Text "구조" (43LD-1) 0×0 "구조"
+              Text "경고" (43LE-1) 26×0 "경고"
+          Frame "트리 바닥" (43HP-1) 0×0
+            Text "이 폴더 밖은 AI가 건드리지 않습니…" (43HQ-1) 0×0 "이 폴더 밖은 AI가 건드리지 않습니다."
+        Frame "편집기" (43GS-1) 0×0
+          Frame "편집기 헤더" (43HS-1) 0×40
+            Frame "Frame" (43HT-1) 0×0
+              Text "strategy.py" (43HU-1) 0×0 "strategy.py"
+              Frame "Frame" (43HV-1) 0×0
+                Text "방금 AI가 고침 · 3줄" (43HW-1) 0×0 "방금 AI가 고침 · 3줄"
+            Frame "Frame" (43HX-1) 0×0
+              Text "python 3.12 · pandas…" (43HY-1) 0×0 "python 3.12 · pandas · athena_bt"
+          Frame "코드" (43I0-1) 0×0
+            Frame "Frame" (43I2-1) 0×19
+              Text "1" (43I3-1) 22×0 "1"
+              Text "# 내 ATR 돌파 + 손절 — 대화…" (43I4-1) 0×0 "# 내 ATR 돌파 + 손절 — 대화를 보고 AI가 씁니다"
+            Frame "Frame" (43I5-1) 0×19
+              Text "2" (43I6-1) 22×0 "2"
+              Text "import athena_bt as …" (43I7-1) 0×0 "import athena_bt as bt"
+            Frame "Frame" (43I8-1) 0×19
+              Text "3" (43I9-1) 22×0 "3"
+            Frame "Frame" (43IA-1) 0×19
+              Text "4" (43IB-1) 22×0 "4"
+              Text "P = {" (43IC-1) 0×0 "P = {"
+            Frame "Frame" (43ID-1) 0×19
+              Text "5" (43IE-1) 22×0 "5"
+              Text "    "lookback": {"de…" (43IF-1) 0×0 "    "lookback": {"default": 20,  "min": 5,   "max": 60},"
+            Frame "Frame" (43IG-1) 0×19
+              Text "6" (43IH-1) 22×0 "6"
+              Text "    "atr_len":  {"de…" (43II-1) 0×0 "    "atr_len":  {"default": 14,  "min": 5,   "max": 40},"
+            Frame "Frame" (43IJ-1) 0×19
+              Text "7" (43IK-1) 22×0 "7"
+              Text "    "atr_mult": {"de…" (43IL-1) 0×0 "    "atr_mult": {"default": 2.0, "min": 0.5, "max": 5.0},"
+            Frame "Frame" (43IM-1) 0×19
+              Text "8" (43IN-1) 22×0 "8"
+              Text "}" (43IO-1) 0×0 "}"
+            Frame "Frame" (43IQ-1) 0×19
+              Text "9" (43IR-1) 22×0 "9"
+            Frame "Frame" (43IS-1) 0×19
+              Text "10" (43IT-1) 22×0 "10"
+              Text "def compute_atr(df, …" (43IU-1) 0×0 "def compute_atr(df, n):"
+            Frame "Frame" (43IV-1) 0×19
+              Text "11" (43IW-1) 22×0 "11"
+              Text "    """변동폭(ATR)을 n봉 …" (43IX-1) 0×0 "    """변동폭(ATR)을 n봉 평균으로 구한다.""""
+            Frame "Frame" (43IY-1) 0×19
+              Text "12" (43IZ-1) 22×0 "12"
+              Text "    tr = (df.high - …" (43J0-1) 0×0 "    tr = (df.high - df.low).abs()"
+            Frame "Frame" (43J1-1) 0×19
+              Text "13" (43J2-1) 22×0 "13"
+              Text "    return tr.rollin…" (43J3-1) 0×0 "    return tr.rolling(n).mean()"
+            Frame "Frame" (43J4-1) 0×19
+              Text "14" (43J5-1) 22×0 "14"
+            Frame "Frame" (43J6-1) 0×19
+              Text "15" (43J7-1) 22×0 "15"
+              Text "def breakout_level(d…" (43J8-1) 0×0 "def breakout_level(df, lookback):"
+            Frame "Frame" (43J9-1) 0×19
+              Text "16" (43JA-1) 22×0 "16"
+              Text "    """직전 lookback봉의…" (43JB-1) 0×0 "    """직전 lookback봉의 최고가 = 돌파선.""""
+            Frame "Frame" (43JC-1) 0×19
+              Text "17" (43JD-1) 22×0 "17"
+              Text "    return df.high.r…" (43JE-1) 0×0 "    return df.high.rolling(lookback).max().shift(1)"
+            Frame "Frame" (43JF-1) 0×19
+              Text "18" (43JG-1) 22×0 "18"
+            Frame "추가된 줄 19" (43JI-1) 0×19
+              Text "19" (43JJ-1) 22×0 "19"
+              Text "def should_enter(df,…" (43JK-1) 0×0 "def should_enter(df, i, atr):"
+            Frame "추가된 줄 20" (43JL-1) 0×19
+              Text "20" (43JM-1) 22×0 "20"
+              Text "    """돌파선을 넘고 변동폭이 …" (43JN-1) 0×0 "    """돌파선을 넘고 변동폭이 살아 있으면 산다.""""
+            Frame "추가된 줄 21" (43JO-1) 0×19
+              Text "21" (43JP-1) 22×0 "21"
+              Text "    lv = breakout_le…" (43JQ-1) 0×0 "    lv = breakout_level(df, P["lookback"])"
+            Frame "쓰는 중 줄 22" (43JR-1) 0×19
+              Text "22" (43JS-1) 22×0 "22"
+              Text "    return df.close[…" (43JT-1) 0×0 "    return df.close[i] > lv[i]"
+              Rectangle "Rectangle" (43JU-1) 2×14
+              Text "AI가 이 줄을 쓰는 중" (43JV-1) 0×0 "AI가 이 줄을 쓰는 중"
+      Frame "터미널" (43JX-1) 0×0
+        Frame "Frame" (43JY-1) 0×0
+          Text "터미널" (43JZ-1) 0×0 "터미널"
+          Text "AI가 실행합니다 — 이 폴더 안에서…" (43K0-1) 0×0 "AI가 실행합니다 — 이 폴더 안에서는 묻지 않습니다"
+          Frame "Frame" (43K1-1) 0×0
+            Text "경고 1" (43K2-1) 0×0 "경고 1"
+          Frame "Frame" (43K3-1) 0×0
+            Text "검사 5/5 통과" (43K4-1) 0×0 "검사 5/5 통과"
+        Frame "출력" (43K6-1) 0×0
+          Text "$ pytest -q tests/" (43K7-1) 0×0 "$ pytest -q tests/"
+          Text "...                 …" (43K8-1) 0×0 "...                                                    [100%"
+          Text "$ athena check strat…" (43K9-1) 0×0 "$ athena check strategy.py"
+          Text "검사 5/5 통과  ·  경고 1 —…" (43KA-1) 0×0 "검사 5/5 통과  ·  경고 1 — 매직 넘버 0.7 (L34) 이름을 붙이면 좋습니다"
+          Text "$ athena dryrun --ba…" (43KB-1) 0×0 "$ athena dryrun --bars 300"
+          Text "entry 41   exit 41  …" (43KC-1) 0×0 "entry 41   exit 41   미체결 0   워밍업 19봉"
+      Frame "바닥 문구" (43KE-1) 0×0
+        Rectangle "Rectangle" (43KF-1) 5×5
+        Text "여기서 사람이 누르는 건 없습니다. …" (43KG-1) 0×0 "여기서 사람이 누르는 건 없습니다. 기법 승인과 실매매 적용만 사람의 버튼입니다."
+    Frame "채팅" (43FW-1) 400×900
+      Frame "채팅 헤더" (43LG-1) 0×0
+        Text "내-atr-돌파" (43LH-1) 0×0 "내-atr-돌파"
+        Text "이 폴더의 대화 하나" (43LI-1) 0×0 "이 폴더의 대화 하나"
+      Frame "채팅 본문" (43LJ-1) 0×0
+        Frame "대화 시작" (43NT-1) 0×0
+          Text "코드는 제가 씁니다. 다섯 가지만 물…" (43NU-1) 0×0 "코드는 제가 씁니다. 다섯 가지만 물을게요 — 답하면 이 폴더 안에서 바로 고치고 검사합니다."
+          Frame "Frame" (43NV-1) 0×0
+            SVG "SVG" (43NW-1) 0×0
+              SVGVisualElement "Path" (43NX-1) 0×0
+            Text "질문 1/5 · 무엇으로 시험할까요?" (43NY-1) 0×0 "질문 1/5 · 무엇으로 시험할까요?"
+            Text "삼성전자 · 일봉 · 2년" (43NZ-1) 0×0 "삼성전자 · 일봉 · 2년"
+        Frame "답한 질문 카드" (43LL-1) 0×0
+          Frame "Frame" (43LM-1) 0×0
+            Frame "Frame" (43LN-1) 0×0
+              Text "질문 2/5" (43LO-1) 0×0 "질문 2/5"
+            Text "답했습니다" (43LP-1) 0×0 "답했습니다"
+          Text "어떤 신호로 사고 싶으세요?" (43LQ-1) 0×0 "어떤 신호로 사고 싶으세요?"
+          Frame "선택지 가 (고름)" (43LS-1) 0×0
+            Text "가" (43LT-1) 14×0 "가"
+            Text "20일 신고가를 넘을 때" (43LU-1) 0×0 "20일 신고가를 넘을 때"
+            Frame "Frame" (43LV-1) 0×0
+              Text "권장" (43LW-1) 0×0 "권장"
+          Frame "선택지 나" (43LX-1) 0×0
+            Text "나" (43LY-1) 14×0 "나"
+            Text "20일선이 60일선을 위로 지날 때" (43LZ-1) 0×0 "20일선이 60일선을 위로 지날 때"
+            Rectangle "Rectangle" (43M0-1) 30×0
+          Frame "선택지 다" (43M1-1) 0×0
+            Text "다" (43M2-1) 14×0 "다"
+            Text "제가 직접 설명할게요" (43M3-1) 0×0 "제가 직접 설명할게요"
+            Rectangle "Rectangle" (43M4-1) 30×0
+        Frame "단계 카드 묶음" (43M6-1) 0×0
+          Frame "Frame" (43M7-1) 0×0
+            Text "AI가 한 일 3" (43M8-1) 0×0 "AI가 한 일 3"
+            Rectangle "Rectangle" (43M9-1) 0×1
+            Text "묻지 않고 진행함" (43MA-1) 0×0 "묻지 않고 진행함"
+          Frame "단계 카드 1 · 수정" (43MC-1) 0×0
+            Frame "Frame" (43MD-1) 22×22
+              Text "±" (43ME-1) 0×0 "±"
+            Frame "Frame" (43MF-1) 0×0
+              Text "strategy.py 수정" (43MG-1) 0×0 "strategy.py 수정"
+              Frame "Frame" (43MH-1) 0×0
+                Text "+12" (43MI-1) 0×0 "+12"
+                Text "−3" (43MJ-1) 0×0 "−3"
+                Text "L19–L34" (43MK-1) 0×0 "L19–L34"
+            Frame "Frame" (43ML-1) 62×0
+              Frame "Frame" (43MM-1) 0×0
+                Text "diff 보기" (43MN-1) 0×0 "diff 보기"
+          Frame "단계 카드 2 · 검사" (43MP-1) 0×0
+            Frame "Frame" (43MQ-1) 22×22
+              SVG "SVG" (43MR-1) 0×0
+                SVGVisualElement "Path" (43MS-1) 0×0
+            Frame "Frame" (43MT-1) 0×0
+              Text "검사 실행 · 5/5 통과" (43MU-1) 0×0 "검사 실행 · 5/5 통과"
+              Frame "Frame" (43MV-1) 0×0
+                Text "경고 1" (43MW-1) 0×0 "경고 1"
+                Text "매직 넘버 0.7" (43MX-1) 0×0 "매직 넘버 0.7"
+            Frame "Frame" (43MY-1) 62×0
+              Frame "Frame" (43MZ-1) 0×0
+                Text "출력 보기" (43N0-1) 0×0 "출력 보기"
+          Frame "단계 카드 3 · 노드" (43N1-1) 0×0
+            Frame "Frame" (43N2-1) 22×22
+              SVG "SVG" (43N3-1) 0×0
+                SVGVisualElement "Circle" (43N4-1) 0×0
+                SVGVisualElement "Circle" (43N5-1) 0×0
+                SVGVisualElement "Path" (43N6-1) 0×0
+            Frame "Frame" (43N7-1) 0×0
+              Text "노드 다시 그림 · 4 → 5" (43N8-1) 0×0 "노드 다시 그림 · 4 → 5"
+              Text "should_enter() 새로 생김" (43N9-1) 0×0 "should_enter() 새로 생김"
+            Frame "Frame" (43NA-1) 62×0
+              Frame "Frame" (43NB-1) 0×0
+                Text "노드 보기" (43NC-1) 0×0 "노드 보기"
+        Text "AI 한 줄" (43NE-1) 0×0 "신호가 코드에 들어갔고 검사도 통과했어요. 다음은 청산 규칙을 정하죠."
+        Frame "다음 질문 카드" (43NF-1) 0×0
+          Frame "Frame" (43NG-1) 0×0
+            Frame "Frame" (43NH-1) 0×0
+              Text "질문 3/5" (43NI-1) 0×0 "질문 3/5"
+            Text "답하면 코드가 바뀝니다" (43NJ-1) 0×0 "답하면 코드가 바뀝니다"
+          Text "언제 팔까요?" (43NK-1) 0×0 "언제 팔까요?"
+          Text "손절과 익절을 한 번에 정합니다. 고…" (43NL-1) 0×0 "손절과 익절을 한 번에 정합니다. 고르지 않고 그냥 말해도 됩니다."
+      Frame "입력" (43NN-1) 0×0
+        Frame "Frame" (43NO-1) 0×0
+          Frame "Frame" (43NP-1) 22×22
+            Text "+" (43NQ-1) 0×0 "+"
+          Text "답 대신 그냥 말해도 됩니다" (43NR-1) 0×0 "답 대신 그냥 말해도 됩니다"

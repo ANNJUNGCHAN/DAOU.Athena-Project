@@ -1,0 +1,342 @@
+{
+ "board_id": "46TZ-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46UX-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46UW-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46UU-0",
+   "text": "체결·호가 문맥",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Header"
+   ]
+  },
+  {
+   "id": "46US-0",
+   "text": "누적거래대금",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46UR-0",
+   "text": "2.14조원",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46UP-0",
+   "text": "ROE",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46UO-0",
+   "text": "8.4%",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46UM-0",
+   "text": "PBR",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46UL-0",
+   "text": "2.63배",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46UI-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46UH-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46UG-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46UE-0",
+   "text": "(최우선)매수호가",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46UD-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46UB-0",
+   "text": "150,850",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46UA-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46U8-0",
+   "text": "거래회전율",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46U7-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46U5-0",
+   "text": "0.24%",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46U4-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46U1-0",
+   "text": "스칼라 2개, 행 7개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46TZ-0",
+   "name": "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46UT-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46UV-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46U2-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46UJ-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46UQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46UN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46UK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46UF-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46U9-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46UC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46U3-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46U6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46U0-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "체결·호가 문맥": 1,
+  "누적거래대금": 1,
+  "2.14조원": 1,
+  "ROE": 1,
+  "8.4%": 1,
+  "PBR": 1,
+  "2.63배": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "(최우선)매수호가": 1,
+  "150,850": 1,
+  "거래회전율": 1,
+  "0.24%": 1,
+  "스칼라 2개, 행 7개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "4b431827db02567c92d491557a7bee2ea4f1230f737864f13df28bf56f07da63"
+}

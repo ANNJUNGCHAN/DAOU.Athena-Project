@@ -1,0 +1,563 @@
+{
+ "board_id": "1DX-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "1EA-0",
+   "text": "2 / 3",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "1EB-0",
+   "text": "사용할 CLI를 연결합니다",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "1EC-0",
+   "text": "Athena는 자체 API 키를 사용하지 않습니다. 로그인한 계정으로 CLI를 제어합니다.",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "1EJ-0",
+   "text": "Claude Code",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-card-head"
+   ]
+  },
+  {
+   "id": "1EL-0",
+   "text": "계정 추가",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-card-head"
+   ]
+  },
+  {
+   "id": "1EN-0",
+   "text": "ajc227ung@gmail.com",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-account-row is-active"
+   ]
+  },
+  {
+   "id": "1EP-0",
+   "text": "활성",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-account-row is-active",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ER-0",
+   "text": "jcahn@daou.co.kr",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-account-row"
+   ]
+  },
+  {
+   "id": "1ET-0",
+   "text": "비활성",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-account-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1EX-0",
+   "text": "Codex",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Codex (단일 연결)",
+    "onb-cli-namecol"
+   ]
+  },
+  {
+   "id": "1EY-0",
+   "text": "ajc227ung@gmail.com",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Codex (단일 연결)",
+    "onb-cli-namecol"
+   ]
+  },
+  {
+   "id": "1F1-0",
+   "text": "Gemini CLI",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Gemini (로그인 대기)"
+   ]
+  },
+  {
+   "id": "1F3-0",
+   "text": "로그인 대기 중…",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Gemini (로그인 대기)"
+   ]
+  },
+  {
+   "id": "1F6-0",
+   "text": "Grok CLI",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Grok (미연결)"
+   ]
+  },
+  {
+   "id": "1F9-0",
+   "text": "연결",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Grok (미연결)",
+    "uk-btn-ghost"
+   ]
+  },
+  {
+   "id": "1FB-0",
+   "text": "연결을 누르면 해당 CLI의 로그인 명령이 새 터미널 창에서 실행됩니다. 로그인은 그 창에서 완료하세요. 계정은 여러 개 연결할 수 있고, 활성 계정 하나가 명령을 받습니다.",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-hint"
+   ]
+  },
+  {
+   "id": "1FJ-0",
+   "text": "계속",
+   "path": [
+    "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-foot",
+    "uk-btn-primary · 계속 (화면 내 유일 브랜드색)"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1DX-0",
+   "name": "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "1DY-0",
+   "name": "Shell 창 · 온보딩 (#onboard)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "1E8-0",
+   "name": "onb-col (800px)",
+   "component": "Frame",
+   "w": 800,
+   "h": 734,
+   "depth": 2
+  },
+  {
+   "id": "1E9-0",
+   "name": "onb-head",
+   "component": "Frame",
+   "w": 800,
+   "h": 134,
+   "depth": 3
+  },
+  {
+   "id": "1ED-0",
+   "name": "onb-body",
+   "component": "Frame",
+   "w": 800,
+   "h": 530,
+   "depth": 3
+  },
+  {
+   "id": "1EG-0",
+   "name": "onb-cli-card · Claude (다계정)",
+   "component": "Frame",
+   "w": 716,
+   "h": 134,
+   "depth": 4
+  },
+  {
+   "id": "1EH-0",
+   "name": "onb-cli-card-head",
+   "component": "Frame",
+   "w": 714,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "1EI-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "1EK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 503,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1EM-0",
+   "name": "onb-cli-account-row is-active",
+   "component": "Frame",
+   "w": 714,
+   "h": 42,
+   "depth": 5
+  },
+  {
+   "id": "1EO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 40,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "1EQ-0",
+   "name": "onb-cli-account-row",
+   "component": "Frame",
+   "w": 714,
+   "h": 42,
+   "depth": 5
+  },
+  {
+   "id": "1ES-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "1EU-0",
+   "name": "onb-cli-row · Codex (단일 연결)",
+   "component": "Frame",
+   "w": 716,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "1EV-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 5
+  },
+  {
+   "id": "1EW-0",
+   "name": "onb-cli-namecol",
+   "component": "Frame",
+   "w": 103,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "1EZ-0",
+   "name": "onb-cli-row · Gemini (로그인 대기)",
+   "component": "Frame",
+   "w": 716,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "1F0-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 5
+  },
+  {
+   "id": "1F2-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 487,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1F4-0",
+   "name": "onb-cli-row · Grok (미연결)",
+   "component": "Frame",
+   "w": 716,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "1F5-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 5
+  },
+  {
+   "id": "1F7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 531,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1F8-0",
+   "name": "uk-btn-ghost",
+   "component": "Frame",
+   "w": 52,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "1FA-0",
+   "name": "onb-hint",
+   "component": "Frame",
+   "w": 716,
+   "h": 41,
+   "depth": 4
+  },
+  {
+   "id": "1EE-0",
+   "name": "onb-foot",
+   "component": "Frame",
+   "w": 800,
+   "h": 70,
+   "depth": 3
+  },
+  {
+   "id": "1FD-0",
+   "name": "uk-dots (3단계 중 2)",
+   "component": "Frame",
+   "w": 72,
+   "h": 3,
+   "depth": 4
+  },
+  {
+   "id": "1FE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 20,
+   "h": 3,
+   "depth": 5
+  },
+  {
+   "id": "1FF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 20,
+   "h": 3,
+   "depth": 5
+  },
+  {
+   "id": "1FG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 20,
+   "h": 3,
+   "depth": 5
+  },
+  {
+   "id": "1FH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 528,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1FI-0",
+   "name": "uk-btn-primary · 계속 (화면 내 유일 브랜드색)",
+   "component": "Frame",
+   "w": 86,
+   "h": 36,
+   "depth": 4
+  },
+  {
+   "id": "1FK-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 10,
+   "depth": 5
+  },
+  {
+   "id": "1FL-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "1DZ-0",
+   "name": "타이틀바",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "1E0-0",
+   "name": "창 제어",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "1E1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "1E2-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "1E3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "1E4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "1E5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "1E6-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "1E7-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "2 / 3": 1,
+  "사용할 CLI를 연결합니다": 1,
+  "Athena는 자체 API 키를 사용하지 않습니다. 로그인한 계정으로 CLI를 제어합니다.": 1,
+  "Claude Code": 1,
+  "계정 추가": 1,
+  "ajc227ung@gmail.com": 2,
+  "활성": 1,
+  "jcahn@daou.co.kr": 1,
+  "비활성": 1,
+  "Codex": 1,
+  "Gemini CLI": 1,
+  "로그인 대기 중…": 1,
+  "Grok CLI": 1,
+  "연결": 1,
+  "연결을 누르면 해당 CLI의 로그인 명령이 새 터미널 창에서 실행됩니다. 로그인은 그 창에서 완료하세요. 계정은 여러 개 연결할 수 있고, 활성 계정 하나가 명령을 받습니다.": 1,
+  "계속": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "d36b9765e7b40cc847cc636f76ece315af8330cf4f7665eb35b9e615d15f6ca1"
+}

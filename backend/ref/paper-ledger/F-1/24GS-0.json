@@ -1,0 +1,5950 @@
+{
+ "board_id": "24GS-0",
+ "page": "F-1",
+ "page_name": "증명",
+ "name": "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+ "width": 1440,
+ "height": 0,
+ "texts": [
+  {
+   "id": "24H9-0",
+   "text": "실시간 KRX·NXT·LP 공식 원문",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "24HB-0",
+   "text": "0C · 0D",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "헤더",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "24HD-0",
+   "text": "2 mapping · 165 field destinations",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "24HF-0",
+   "text": "거래소별 잔량·LP·예상체결·중간가를 실시간 상태와 함께 표시합니다.",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "24HG-0",
+   "text": "삼성전자 · 005930 · 정규장 · 실시간 연결",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2509-0",
+   "text": "실시간 거래소별 10단 호가",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "250A-0",
+   "text": "매도·매수 방향, KRX·NXT·LP 잔량, 예상체결과 공식 비율을 같은 창에서 유지",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "250C-0",
+   "text": "0C 2 / 2 · 0D 163 / 163",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "250F-0",
+   "text": "최우선 매도",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "raw · base:0C · $.data[].27 · ordinal 1"
+   ]
+  },
+  {
+   "id": "250G-0",
+   "text": "150,850원",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "raw · base:0C · $.data[].27 · ordinal 1"
+   ]
+  },
+  {
+   "id": "250I-0",
+   "text": "최우선 매수",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "raw · base:0C · $.data[].28 · ordinal 1"
+   ]
+  },
+  {
+   "id": "250J-0",
+   "text": "150,840원",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "raw · base:0C · $.data[].28 · ordinal 1"
+   ]
+  },
+  {
+   "id": "250L-0",
+   "text": "실시간 등록",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "250M-0",
+   "text": "0D · 삼성전자 005930",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "250O-0",
+   "text": "재연결 시 마지막 정상 호가 유지",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "250T-0",
+   "text": "매도 10",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].50 · ordinal 10"
+   ]
+  },
+  {
+   "id": "250U-0",
+   "text": "150,940",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].50 · ordinal 10"
+   ]
+  },
+  {
+   "id": "250W-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].70 · ordinal 10"
+   ]
+  },
+  {
+   "id": "250X-0",
+   "text": "2,600",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].70 · ordinal 10"
+   ]
+  },
+  {
+   "id": "250Z-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].90 · ordinal 10"
+   ]
+  },
+  {
+   "id": "2510-0",
+   "text": "+70",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].90 · ordinal 10"
+   ]
+  },
+  {
+   "id": "2512-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].6053 · ordinal 10"
+   ]
+  },
+  {
+   "id": "2513-0",
+   "text": "1,900",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].6053 · ordinal 10"
+   ]
+  },
+  {
+   "id": "2515-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].6075 · ordinal 10"
+   ]
+  },
+  {
+   "id": "2516-0",
+   "text": "900",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].6075 · ordinal 10"
+   ]
+  },
+  {
+   "id": "2518-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].630 · ordinal 10"
+   ]
+  },
+  {
+   "id": "2519-0",
+   "text": "800",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].630 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251C-0",
+   "text": "매수 10",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].60 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251D-0",
+   "text": "150,750",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].60 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251F-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].80 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251G-0",
+   "text": "2,900",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].80 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251I-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].100 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251J-0",
+   "text": "-65",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].100 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251L-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].6063 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251M-0",
+   "text": "2,200",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].6063 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251O-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].6085 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251P-0",
+   "text": "1,040",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].6085 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251R-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].640 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251S-0",
+   "text": "790",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 10단",
+    "raw · base:0D · $.data[].640 · ordinal 10"
+   ]
+  },
+  {
+   "id": "251V-0",
+   "text": "매도 9",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].49 · ordinal 9"
+   ]
+  },
+  {
+   "id": "251W-0",
+   "text": "150,930",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].49 · ordinal 9"
+   ]
+  },
+  {
+   "id": "251Y-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].69 · ordinal 9"
+   ]
+  },
+  {
+   "id": "251Z-0",
+   "text": "2,940",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].69 · ordinal 9"
+   ]
+  },
+  {
+   "id": "2521-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].89 · ordinal 9"
+   ]
+  },
+  {
+   "id": "2522-0",
+   "text": "+78",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].89 · ordinal 9"
+   ]
+  },
+  {
+   "id": "2524-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].6052 · ordinal 9"
+   ]
+  },
+  {
+   "id": "2525-0",
+   "text": "2,150",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].6052 · ordinal 9"
+   ]
+  },
+  {
+   "id": "2527-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].6074 · ordinal 9"
+   ]
+  },
+  {
+   "id": "2528-0",
+   "text": "1,070",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].6074 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252A-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].629 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252B-0",
+   "text": "755",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].629 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252E-0",
+   "text": "매수 9",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].59 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252F-0",
+   "text": "150,760",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].59 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252H-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].79 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252I-0",
+   "text": "3,270",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].79 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252K-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].99 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252L-0",
+   "text": "-74",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].99 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252N-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].6062 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252O-0",
+   "text": "2,470",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].6062 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252Q-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].6084 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252R-0",
+   "text": "1,225",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].6084 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252T-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].639 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252U-0",
+   "text": "752",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 9단",
+    "raw · base:0D · $.data[].639 · ordinal 9"
+   ]
+  },
+  {
+   "id": "252X-0",
+   "text": "매도 8",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].48 · ordinal 8"
+   ]
+  },
+  {
+   "id": "252Y-0",
+   "text": "150,920",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].48 · ordinal 8"
+   ]
+  },
+  {
+   "id": "2530-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].68 · ordinal 8"
+   ]
+  },
+  {
+   "id": "2531-0",
+   "text": "3,280",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].68 · ordinal 8"
+   ]
+  },
+  {
+   "id": "2533-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].88 · ordinal 8"
+   ]
+  },
+  {
+   "id": "2534-0",
+   "text": "+86",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].88 · ordinal 8"
+   ]
+  },
+  {
+   "id": "2536-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].6051 · ordinal 8"
+   ]
+  },
+  {
+   "id": "2537-0",
+   "text": "2,400",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].6051 · ordinal 8"
+   ]
+  },
+  {
+   "id": "2539-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].6073 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253A-0",
+   "text": "1,240",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].6073 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253C-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].628 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253D-0",
+   "text": "710",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].628 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253G-0",
+   "text": "매수 8",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].58 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253H-0",
+   "text": "150,770",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].58 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253J-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].78 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253K-0",
+   "text": "3,640",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].78 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253M-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].98 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253N-0",
+   "text": "-83",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].98 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253P-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].6061 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253Q-0",
+   "text": "2,740",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].6061 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253S-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].6083 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253T-0",
+   "text": "1,410",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].6083 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253V-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].638 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253W-0",
+   "text": "714",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 8단",
+    "raw · base:0D · $.data[].638 · ordinal 8"
+   ]
+  },
+  {
+   "id": "253Z-0",
+   "text": "매도 7",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].47 · ordinal 7"
+   ]
+  },
+  {
+   "id": "2540-0",
+   "text": "150,910",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].47 · ordinal 7"
+   ]
+  },
+  {
+   "id": "2542-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].67 · ordinal 7"
+   ]
+  },
+  {
+   "id": "2543-0",
+   "text": "3,620",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].67 · ordinal 7"
+   ]
+  },
+  {
+   "id": "2545-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].87 · ordinal 7"
+   ]
+  },
+  {
+   "id": "2546-0",
+   "text": "+94",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].87 · ordinal 7"
+   ]
+  },
+  {
+   "id": "2548-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].6050 · ordinal 7"
+   ]
+  },
+  {
+   "id": "2549-0",
+   "text": "2,650",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].6050 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254B-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].6072 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254C-0",
+   "text": "1,410",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].6072 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254E-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].627 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254F-0",
+   "text": "665",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].627 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254I-0",
+   "text": "매수 7",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].57 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254J-0",
+   "text": "150,780",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].57 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254L-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].77 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254M-0",
+   "text": "4,010",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].77 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254O-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].97 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254P-0",
+   "text": "-92",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].97 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254R-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].6060 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254S-0",
+   "text": "3,010",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].6060 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254U-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].6082 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254V-0",
+   "text": "1,595",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].6082 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254X-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].637 · ordinal 7"
+   ]
+  },
+  {
+   "id": "254Y-0",
+   "text": "676",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 7단",
+    "raw · base:0D · $.data[].637 · ordinal 7"
+   ]
+  },
+  {
+   "id": "2551-0",
+   "text": "매도 6",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].46 · ordinal 6"
+   ]
+  },
+  {
+   "id": "2552-0",
+   "text": "150,900",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].46 · ordinal 6"
+   ]
+  },
+  {
+   "id": "2554-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].66 · ordinal 6"
+   ]
+  },
+  {
+   "id": "2555-0",
+   "text": "3,960",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].66 · ordinal 6"
+   ]
+  },
+  {
+   "id": "2557-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].86 · ordinal 6"
+   ]
+  },
+  {
+   "id": "2558-0",
+   "text": "+102",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].86 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255A-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].6049 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255B-0",
+   "text": "2,900",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].6049 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255D-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].6071 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255E-0",
+   "text": "1,580",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].6071 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255G-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].626 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255H-0",
+   "text": "620",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].626 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255K-0",
+   "text": "매수 6",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].56 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255L-0",
+   "text": "150,790",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].56 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255N-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].76 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255O-0",
+   "text": "4,380",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].76 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255Q-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].96 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255R-0",
+   "text": "-101",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].96 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255T-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].6059 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255U-0",
+   "text": "3,280",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].6059 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255W-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].6081 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255X-0",
+   "text": "1,780",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].6081 · ordinal 6"
+   ]
+  },
+  {
+   "id": "255Z-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].636 · ordinal 6"
+   ]
+  },
+  {
+   "id": "2560-0",
+   "text": "638",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 6단",
+    "raw · base:0D · $.data[].636 · ordinal 6"
+   ]
+  },
+  {
+   "id": "2563-0",
+   "text": "매도 5",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].45 · ordinal 5"
+   ]
+  },
+  {
+   "id": "2564-0",
+   "text": "150,890",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].45 · ordinal 5"
+   ]
+  },
+  {
+   "id": "2566-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].65 · ordinal 5"
+   ]
+  },
+  {
+   "id": "2567-0",
+   "text": "4,300",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].65 · ordinal 5"
+   ]
+  },
+  {
+   "id": "2569-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].85 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256A-0",
+   "text": "+110",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].85 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256C-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].6048 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256D-0",
+   "text": "3,150",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].6048 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256F-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].6070 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256G-0",
+   "text": "1,750",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].6070 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256I-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].625 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256J-0",
+   "text": "575",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].625 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256M-0",
+   "text": "매수 5",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].55 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256N-0",
+   "text": "150,800",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].55 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256P-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].75 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256Q-0",
+   "text": "4,750",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].75 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256S-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].95 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256T-0",
+   "text": "-110",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].95 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256V-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].6058 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256W-0",
+   "text": "3,550",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].6058 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256Y-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].6080 · ordinal 5"
+   ]
+  },
+  {
+   "id": "256Z-0",
+   "text": "1,965",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].6080 · ordinal 5"
+   ]
+  },
+  {
+   "id": "2571-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].635 · ordinal 5"
+   ]
+  },
+  {
+   "id": "2572-0",
+   "text": "600",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 5단",
+    "raw · base:0D · $.data[].635 · ordinal 5"
+   ]
+  },
+  {
+   "id": "2575-0",
+   "text": "매도 4",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].44 · ordinal 4"
+   ]
+  },
+  {
+   "id": "2576-0",
+   "text": "150,880",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].44 · ordinal 4"
+   ]
+  },
+  {
+   "id": "2578-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].64 · ordinal 4"
+   ]
+  },
+  {
+   "id": "2579-0",
+   "text": "4,640",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].64 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257B-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].84 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257C-0",
+   "text": "+118",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].84 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257E-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].6047 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257F-0",
+   "text": "3,400",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].6047 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257H-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].6069 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257I-0",
+   "text": "1,920",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].6069 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257K-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].624 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257L-0",
+   "text": "530",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].624 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257O-0",
+   "text": "매수 4",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].54 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257P-0",
+   "text": "150,810",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].54 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257R-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].74 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257S-0",
+   "text": "5,120",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].74 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257U-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].94 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257V-0",
+   "text": "-119",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].94 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257X-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].6057 · ordinal 4"
+   ]
+  },
+  {
+   "id": "257Y-0",
+   "text": "3,820",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].6057 · ordinal 4"
+   ]
+  },
+  {
+   "id": "2580-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].6079 · ordinal 4"
+   ]
+  },
+  {
+   "id": "2581-0",
+   "text": "2,150",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].6079 · ordinal 4"
+   ]
+  },
+  {
+   "id": "2583-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].634 · ordinal 4"
+   ]
+  },
+  {
+   "id": "2584-0",
+   "text": "562",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 4단",
+    "raw · base:0D · $.data[].634 · ordinal 4"
+   ]
+  },
+  {
+   "id": "2587-0",
+   "text": "매도 3",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].43 · ordinal 3"
+   ]
+  },
+  {
+   "id": "2588-0",
+   "text": "150,870",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].43 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258A-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].63 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258B-0",
+   "text": "4,980",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].63 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258D-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].83 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258E-0",
+   "text": "+126",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].83 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258G-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].6046 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258H-0",
+   "text": "3,650",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].6046 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258J-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].6068 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258K-0",
+   "text": "2,090",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].6068 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258M-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].623 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258N-0",
+   "text": "485",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].623 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258Q-0",
+   "text": "매수 3",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].53 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258R-0",
+   "text": "150,820",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].53 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258T-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].73 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258U-0",
+   "text": "5,490",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].73 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258W-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].93 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258X-0",
+   "text": "-128",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].93 · ordinal 3"
+   ]
+  },
+  {
+   "id": "258Z-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].6056 · ordinal 3"
+   ]
+  },
+  {
+   "id": "2590-0",
+   "text": "4,090",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].6056 · ordinal 3"
+   ]
+  },
+  {
+   "id": "2592-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].6078 · ordinal 3"
+   ]
+  },
+  {
+   "id": "2593-0",
+   "text": "2,335",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].6078 · ordinal 3"
+   ]
+  },
+  {
+   "id": "2595-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].633 · ordinal 3"
+   ]
+  },
+  {
+   "id": "2596-0",
+   "text": "524",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 3단",
+    "raw · base:0D · $.data[].633 · ordinal 3"
+   ]
+  },
+  {
+   "id": "2599-0",
+   "text": "매도 2",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].42 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259A-0",
+   "text": "150,860",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].42 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259C-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].62 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259D-0",
+   "text": "5,320",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].62 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259F-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].82 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259G-0",
+   "text": "+134",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].82 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259I-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].6045 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259J-0",
+   "text": "3,900",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].6045 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259L-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].6067 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259M-0",
+   "text": "2,260",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].6067 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259O-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].622 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259P-0",
+   "text": "440",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].622 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259S-0",
+   "text": "매수 2",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].52 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259T-0",
+   "text": "150,830",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].52 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259V-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].72 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259W-0",
+   "text": "5,860",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].72 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259Y-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].92 · ordinal 2"
+   ]
+  },
+  {
+   "id": "259Z-0",
+   "text": "-137",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].92 · ordinal 2"
+   ]
+  },
+  {
+   "id": "25A1-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].6055 · ordinal 2"
+   ]
+  },
+  {
+   "id": "25A2-0",
+   "text": "4,360",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].6055 · ordinal 2"
+   ]
+  },
+  {
+   "id": "25A4-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].6077 · ordinal 2"
+   ]
+  },
+  {
+   "id": "25A5-0",
+   "text": "2,520",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].6077 · ordinal 2"
+   ]
+  },
+  {
+   "id": "25A7-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].632 · ordinal 2"
+   ]
+  },
+  {
+   "id": "25A8-0",
+   "text": "486",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 2단",
+    "raw · base:0D · $.data[].632 · ordinal 2"
+   ]
+  },
+  {
+   "id": "25AB-0",
+   "text": "매도 1",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].41 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AC-0",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].41 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AE-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].61 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AF-0",
+   "text": "5,660",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].61 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AH-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].81 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AI-0",
+   "text": "+142",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].81 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AK-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].6044 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AL-0",
+   "text": "4,150",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].6044 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AN-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].6066 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AO-0",
+   "text": "2,430",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].6066 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AQ-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].621 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AR-0",
+   "text": "395",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].621 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AU-0",
+   "text": "매수 1",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].51 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AV-0",
+   "text": "150,840",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].51 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AX-0",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].71 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25AY-0",
+   "text": "6,230",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].71 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25B0-0",
+   "text": "증감",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].91 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25B1-0",
+   "text": "-146",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].91 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25B3-0",
+   "text": "KRX",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].6054 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25B4-0",
+   "text": "4,630",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].6054 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25B6-0",
+   "text": "NXT",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].6076 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25B7-0",
+   "text": "2,705",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].6076 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25B9-0",
+   "text": "LP",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].631 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BA-0",
+   "text": "448",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "0D · 거래소별 호가 1단",
+    "raw · base:0D · $.data[].631 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BC-0",
+   "text": "예상체결·총잔량·시장 원문",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "25BF-0",
+   "text": "매도호가총잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].121 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BG-0",
+   "text": "193,500주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].121 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BI-0",
+   "text": "매도호가총잔량대비",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].122 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BJ-0",
+   "text": "+12,430주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].122 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BL-0",
+   "text": "매수호가총잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].125 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BM-0",
+   "text": "205,630주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].125 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BO-0",
+   "text": "매수호가총잔량대비",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].126 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BP-0",
+   "text": "+9,870주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].126 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BR-0",
+   "text": "예상체결가",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].23 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BS-0",
+   "text": "150,850원",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].23 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BU-0",
+   "text": "예상체결량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].24 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BV-0",
+   "text": "127,540주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].24 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BX-0",
+   "text": "예상체결가전일대비",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].200 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25BY-0",
+   "text": "+3,500원",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].200 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25C0-0",
+   "text": "예상체결가등락률",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].201 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25C1-0",
+   "text": "+2.35%",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].201 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25C3-0",
+   "text": "예상체결가전일대비기호",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].238 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25C4-0",
+   "text": "▲",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].238 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25C6-0",
+   "text": "예상체결가변화",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].291 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25C7-0",
+   "text": "150,200→150,850",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].291 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25C9-0",
+   "text": "예상체결량변화",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].292 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CA-0",
+   "text": "+7,240주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].292 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CC-0",
+   "text": "예상매도호가",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].293 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CD-0",
+   "text": "150,850원",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].293 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CF-0",
+   "text": "예상매수호가",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].294 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CG-0",
+   "text": "150,840원",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].294 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CI-0",
+   "text": "예상체결시간",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].295 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CJ-0",
+   "text": "08:59:19",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].295 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CL-0",
+   "text": "순매수잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].128 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CM-0",
+   "text": "12,130주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].128 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CO-0",
+   "text": "매수비율",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].129 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CP-0",
+   "text": "54.7%",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].129 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CR-0",
+   "text": "순매도잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].138 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CS-0",
+   "text": "9,860주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].138 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CU-0",
+   "text": "매도비율",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].139 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CV-0",
+   "text": "45.3%",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].139 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CX-0",
+   "text": "누적거래량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].13 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25CY-0",
+   "text": "2,375,785주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].13 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25D0-0",
+   "text": "장운영구분",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].215 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25D1-0",
+   "text": "정규장",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].215 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25D3-0",
+   "text": "종목코드",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].216 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25D4-0",
+   "text": "005930",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].216 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25D6-0",
+   "text": "호가시간",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].21 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25D7-0",
+   "text": "14:31:08",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].21 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25D9-0",
+   "text": "예상체결등락률",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].299 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DA-0",
+   "text": "+2.35%",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].299 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DC-0",
+   "text": "KRX 매도총잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6064 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DD-0",
+   "text": "112,410주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6064 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DF-0",
+   "text": "KRX 매수총잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6065 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DG-0",
+   "text": "128,630주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6065 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DI-0",
+   "text": "NXT 매도총잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6086 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DJ-0",
+   "text": "81,090주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6086 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DL-0",
+   "text": "NXT 매수총잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6087 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DM-0",
+   "text": "77,000주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6087 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DO-0",
+   "text": "KRX 중간가",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6100 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DP-0",
+   "text": "150,845원",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6100 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DR-0",
+   "text": "KRX 중간가대비",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6101 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DS-0",
+   "text": "+3,495원",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6101 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DU-0",
+   "text": "KRX 중간가등락률",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6102 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DV-0",
+   "text": "+2.34%",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6102 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DX-0",
+   "text": "KRX 매도중간잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6103 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25DY-0",
+   "text": "56,205주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6103 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25E0-0",
+   "text": "KRX 매수중간잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6104 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25E1-0",
+   "text": "64,315주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6104 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25E3-0",
+   "text": "NXT 중간가",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6105 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25E4-0",
+   "text": "150,835원",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6105 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25E6-0",
+   "text": "NXT 중간가대비",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6106 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25E7-0",
+   "text": "+3,485원",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6106 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25E9-0",
+   "text": "NXT 중간가등락률",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6107 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EA-0",
+   "text": "+2.33%",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6107 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EC-0",
+   "text": "NXT 매도중간잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6108 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25ED-0",
+   "text": "40,545주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6108 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EF-0",
+   "text": "NXT 매수중간잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6109 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EG-0",
+   "text": "38,500주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6109 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EI-0",
+   "text": "KRX 대비 매도잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6110 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EJ-0",
+   "text": "31,320주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6110 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EL-0",
+   "text": "KRX 대비 매수잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6111 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EM-0",
+   "text": "51,630주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6111 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EO-0",
+   "text": "KRX 잔량비율",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6112 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EP-0",
+   "text": "53.4%",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6112 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25ER-0",
+   "text": "NXT 대비 매도잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6113 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25ES-0",
+   "text": "18,430주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6113 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EU-0",
+   "text": "NXT 대비 매수잔량",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6114 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EV-0",
+   "text": "22,540주",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6114 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EX-0",
+   "text": "NXT 잔량비율",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6115 · ordinal 1"
+   ]
+  },
+  {
+   "id": "25EY-0",
+   "text": "46.6%",
+   "path": [
+    "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+    "0C·0D · 실시간 통합 호가 · 165 raw",
+    "Frame",
+    "Frame",
+    "Frame",
+    "raw · base:0D · $.data[].6115 · ordinal 1"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "24GS-0",
+   "name": "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+   "component": "Frame",
+   "w": 1440,
+   "h": 0,
+   "depth": 0
+  },
+  {
+   "id": "24H6-0",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "24H7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "24H8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "24HA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "24HC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "24HE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2506-0",
+   "name": "0C·0D · 실시간 통합 호가 · 165 raw",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "2507-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2508-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "250B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "250D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "250E-0",
+   "name": "raw · base:0C · $.data[].27 · ordinal 1",
+   "component": "Frame",
+   "w": 230,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "250H-0",
+   "name": "raw · base:0C · $.data[].28 · ordinal 1",
+   "component": "Frame",
+   "w": 230,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "250K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "250N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "250P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "250Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1374,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "250R-0",
+   "name": "0D · 거래소별 호가 10단",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "250S-0",
+   "name": "raw · base:0D · $.data[].50 · ordinal 10",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "250V-0",
+   "name": "raw · base:0D · $.data[].70 · ordinal 10",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "250Y-0",
+   "name": "raw · base:0D · $.data[].90 · ordinal 10",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2511-0",
+   "name": "raw · base:0D · $.data[].6053 · ordinal 10",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2514-0",
+   "name": "raw · base:0D · $.data[].6075 · ordinal 10",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2517-0",
+   "name": "raw · base:0D · $.data[].630 · ordinal 10",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "251A-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "251B-0",
+   "name": "raw · base:0D · $.data[].60 · ordinal 10",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "251E-0",
+   "name": "raw · base:0D · $.data[].80 · ordinal 10",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "251H-0",
+   "name": "raw · base:0D · $.data[].100 · ordinal 10",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "251K-0",
+   "name": "raw · base:0D · $.data[].6063 · ordinal 10",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "251N-0",
+   "name": "raw · base:0D · $.data[].6085 · ordinal 10",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "251Q-0",
+   "name": "raw · base:0D · $.data[].640 · ordinal 10",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "251T-0",
+   "name": "0D · 거래소별 호가 9단",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "251U-0",
+   "name": "raw · base:0D · $.data[].49 · ordinal 9",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "251X-0",
+   "name": "raw · base:0D · $.data[].69 · ordinal 9",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2520-0",
+   "name": "raw · base:0D · $.data[].89 · ordinal 9",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2523-0",
+   "name": "raw · base:0D · $.data[].6052 · ordinal 9",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2526-0",
+   "name": "raw · base:0D · $.data[].6074 · ordinal 9",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2529-0",
+   "name": "raw · base:0D · $.data[].629 · ordinal 9",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "252C-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "252D-0",
+   "name": "raw · base:0D · $.data[].59 · ordinal 9",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "252G-0",
+   "name": "raw · base:0D · $.data[].79 · ordinal 9",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "252J-0",
+   "name": "raw · base:0D · $.data[].99 · ordinal 9",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "252M-0",
+   "name": "raw · base:0D · $.data[].6062 · ordinal 9",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "252P-0",
+   "name": "raw · base:0D · $.data[].6084 · ordinal 9",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "252S-0",
+   "name": "raw · base:0D · $.data[].639 · ordinal 9",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "252V-0",
+   "name": "0D · 거래소별 호가 8단",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "252W-0",
+   "name": "raw · base:0D · $.data[].48 · ordinal 8",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "252Z-0",
+   "name": "raw · base:0D · $.data[].68 · ordinal 8",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2532-0",
+   "name": "raw · base:0D · $.data[].88 · ordinal 8",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2535-0",
+   "name": "raw · base:0D · $.data[].6051 · ordinal 8",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2538-0",
+   "name": "raw · base:0D · $.data[].6073 · ordinal 8",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "253B-0",
+   "name": "raw · base:0D · $.data[].628 · ordinal 8",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "253E-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "253F-0",
+   "name": "raw · base:0D · $.data[].58 · ordinal 8",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "253I-0",
+   "name": "raw · base:0D · $.data[].78 · ordinal 8",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "253L-0",
+   "name": "raw · base:0D · $.data[].98 · ordinal 8",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "253O-0",
+   "name": "raw · base:0D · $.data[].6061 · ordinal 8",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "253R-0",
+   "name": "raw · base:0D · $.data[].6083 · ordinal 8",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "253U-0",
+   "name": "raw · base:0D · $.data[].638 · ordinal 8",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "253X-0",
+   "name": "0D · 거래소별 호가 7단",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "253Y-0",
+   "name": "raw · base:0D · $.data[].47 · ordinal 7",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2541-0",
+   "name": "raw · base:0D · $.data[].67 · ordinal 7",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2544-0",
+   "name": "raw · base:0D · $.data[].87 · ordinal 7",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2547-0",
+   "name": "raw · base:0D · $.data[].6050 · ordinal 7",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "254A-0",
+   "name": "raw · base:0D · $.data[].6072 · ordinal 7",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "254D-0",
+   "name": "raw · base:0D · $.data[].627 · ordinal 7",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "254G-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "254H-0",
+   "name": "raw · base:0D · $.data[].57 · ordinal 7",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "254K-0",
+   "name": "raw · base:0D · $.data[].77 · ordinal 7",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "254N-0",
+   "name": "raw · base:0D · $.data[].97 · ordinal 7",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "254Q-0",
+   "name": "raw · base:0D · $.data[].6060 · ordinal 7",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "254T-0",
+   "name": "raw · base:0D · $.data[].6082 · ordinal 7",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "254W-0",
+   "name": "raw · base:0D · $.data[].637 · ordinal 7",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "254Z-0",
+   "name": "0D · 거래소별 호가 6단",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "2550-0",
+   "name": "raw · base:0D · $.data[].46 · ordinal 6",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2553-0",
+   "name": "raw · base:0D · $.data[].66 · ordinal 6",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2556-0",
+   "name": "raw · base:0D · $.data[].86 · ordinal 6",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2559-0",
+   "name": "raw · base:0D · $.data[].6049 · ordinal 6",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "255C-0",
+   "name": "raw · base:0D · $.data[].6071 · ordinal 6",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "255F-0",
+   "name": "raw · base:0D · $.data[].626 · ordinal 6",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "255I-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "255J-0",
+   "name": "raw · base:0D · $.data[].56 · ordinal 6",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "255M-0",
+   "name": "raw · base:0D · $.data[].76 · ordinal 6",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "255P-0",
+   "name": "raw · base:0D · $.data[].96 · ordinal 6",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "255S-0",
+   "name": "raw · base:0D · $.data[].6059 · ordinal 6",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "255V-0",
+   "name": "raw · base:0D · $.data[].6081 · ordinal 6",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "255Y-0",
+   "name": "raw · base:0D · $.data[].636 · ordinal 6",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2561-0",
+   "name": "0D · 거래소별 호가 5단",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "2562-0",
+   "name": "raw · base:0D · $.data[].45 · ordinal 5",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2565-0",
+   "name": "raw · base:0D · $.data[].65 · ordinal 5",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2568-0",
+   "name": "raw · base:0D · $.data[].85 · ordinal 5",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "256B-0",
+   "name": "raw · base:0D · $.data[].6048 · ordinal 5",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "256E-0",
+   "name": "raw · base:0D · $.data[].6070 · ordinal 5",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "256H-0",
+   "name": "raw · base:0D · $.data[].625 · ordinal 5",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "256K-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "256L-0",
+   "name": "raw · base:0D · $.data[].55 · ordinal 5",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "256O-0",
+   "name": "raw · base:0D · $.data[].75 · ordinal 5",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "256R-0",
+   "name": "raw · base:0D · $.data[].95 · ordinal 5",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "256U-0",
+   "name": "raw · base:0D · $.data[].6058 · ordinal 5",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "256X-0",
+   "name": "raw · base:0D · $.data[].6080 · ordinal 5",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2570-0",
+   "name": "raw · base:0D · $.data[].635 · ordinal 5",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2573-0",
+   "name": "0D · 거래소별 호가 4단",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "2574-0",
+   "name": "raw · base:0D · $.data[].44 · ordinal 4",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2577-0",
+   "name": "raw · base:0D · $.data[].64 · ordinal 4",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "257A-0",
+   "name": "raw · base:0D · $.data[].84 · ordinal 4",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "257D-0",
+   "name": "raw · base:0D · $.data[].6047 · ordinal 4",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "257G-0",
+   "name": "raw · base:0D · $.data[].6069 · ordinal 4",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "257J-0",
+   "name": "raw · base:0D · $.data[].624 · ordinal 4",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "257M-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "257N-0",
+   "name": "raw · base:0D · $.data[].54 · ordinal 4",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "257Q-0",
+   "name": "raw · base:0D · $.data[].74 · ordinal 4",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "257T-0",
+   "name": "raw · base:0D · $.data[].94 · ordinal 4",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "257W-0",
+   "name": "raw · base:0D · $.data[].6057 · ordinal 4",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "257Z-0",
+   "name": "raw · base:0D · $.data[].6079 · ordinal 4",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2582-0",
+   "name": "raw · base:0D · $.data[].634 · ordinal 4",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2585-0",
+   "name": "0D · 거래소별 호가 3단",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "2586-0",
+   "name": "raw · base:0D · $.data[].43 · ordinal 3",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2589-0",
+   "name": "raw · base:0D · $.data[].63 · ordinal 3",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "258C-0",
+   "name": "raw · base:0D · $.data[].83 · ordinal 3",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "258F-0",
+   "name": "raw · base:0D · $.data[].6046 · ordinal 3",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "258I-0",
+   "name": "raw · base:0D · $.data[].6068 · ordinal 3",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "258L-0",
+   "name": "raw · base:0D · $.data[].623 · ordinal 3",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "258O-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "258P-0",
+   "name": "raw · base:0D · $.data[].53 · ordinal 3",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "258S-0",
+   "name": "raw · base:0D · $.data[].73 · ordinal 3",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "258V-0",
+   "name": "raw · base:0D · $.data[].93 · ordinal 3",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "258Y-0",
+   "name": "raw · base:0D · $.data[].6056 · ordinal 3",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2591-0",
+   "name": "raw · base:0D · $.data[].6078 · ordinal 3",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2594-0",
+   "name": "raw · base:0D · $.data[].633 · ordinal 3",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2597-0",
+   "name": "0D · 거래소별 호가 2단",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "2598-0",
+   "name": "raw · base:0D · $.data[].42 · ordinal 2",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "259B-0",
+   "name": "raw · base:0D · $.data[].62 · ordinal 2",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "259E-0",
+   "name": "raw · base:0D · $.data[].82 · ordinal 2",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "259H-0",
+   "name": "raw · base:0D · $.data[].6045 · ordinal 2",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "259K-0",
+   "name": "raw · base:0D · $.data[].6067 · ordinal 2",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "259N-0",
+   "name": "raw · base:0D · $.data[].622 · ordinal 2",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "259Q-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "259R-0",
+   "name": "raw · base:0D · $.data[].52 · ordinal 2",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "259U-0",
+   "name": "raw · base:0D · $.data[].72 · ordinal 2",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "259X-0",
+   "name": "raw · base:0D · $.data[].92 · ordinal 2",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25A0-0",
+   "name": "raw · base:0D · $.data[].6055 · ordinal 2",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25A3-0",
+   "name": "raw · base:0D · $.data[].6077 · ordinal 2",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25A6-0",
+   "name": "raw · base:0D · $.data[].632 · ordinal 2",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25A9-0",
+   "name": "0D · 거래소별 호가 1단",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "25AA-0",
+   "name": "raw · base:0D · $.data[].41 · ordinal 1",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25AD-0",
+   "name": "raw · base:0D · $.data[].61 · ordinal 1",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25AG-0",
+   "name": "raw · base:0D · $.data[].81 · ordinal 1",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25AJ-0",
+   "name": "raw · base:0D · $.data[].6044 · ordinal 1",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25AM-0",
+   "name": "raw · base:0D · $.data[].6066 · ordinal 1",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25AP-0",
+   "name": "raw · base:0D · $.data[].621 · ordinal 1",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25AS-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25AT-0",
+   "name": "raw · base:0D · $.data[].51 · ordinal 1",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25AW-0",
+   "name": "raw · base:0D · $.data[].71 · ordinal 1",
+   "component": "Frame",
+   "w": 82,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25AZ-0",
+   "name": "raw · base:0D · $.data[].91 · ordinal 1",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25B2-0",
+   "name": "raw · base:0D · $.data[].6054 · ordinal 1",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25B5-0",
+   "name": "raw · base:0D · $.data[].6076 · ordinal 1",
+   "component": "Frame",
+   "w": 70,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25B8-0",
+   "name": "raw · base:0D · $.data[].631 · ordinal 1",
+   "component": "Frame",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25BB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1374,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "25BD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1340,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "25BE-0",
+   "name": "raw · base:0D · $.data[].121 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25BH-0",
+   "name": "raw · base:0D · $.data[].122 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25BK-0",
+   "name": "raw · base:0D · $.data[].125 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25BN-0",
+   "name": "raw · base:0D · $.data[].126 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25BQ-0",
+   "name": "raw · base:0D · $.data[].23 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25BT-0",
+   "name": "raw · base:0D · $.data[].24 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25BW-0",
+   "name": "raw · base:0D · $.data[].200 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25BZ-0",
+   "name": "raw · base:0D · $.data[].201 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25C2-0",
+   "name": "raw · base:0D · $.data[].238 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25C5-0",
+   "name": "raw · base:0D · $.data[].291 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25C8-0",
+   "name": "raw · base:0D · $.data[].292 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25CB-0",
+   "name": "raw · base:0D · $.data[].293 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25CE-0",
+   "name": "raw · base:0D · $.data[].294 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25CH-0",
+   "name": "raw · base:0D · $.data[].295 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25CK-0",
+   "name": "raw · base:0D · $.data[].128 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25CN-0",
+   "name": "raw · base:0D · $.data[].129 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25CQ-0",
+   "name": "raw · base:0D · $.data[].138 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25CT-0",
+   "name": "raw · base:0D · $.data[].139 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25CW-0",
+   "name": "raw · base:0D · $.data[].13 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25CZ-0",
+   "name": "raw · base:0D · $.data[].215 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25D2-0",
+   "name": "raw · base:0D · $.data[].216 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25D5-0",
+   "name": "raw · base:0D · $.data[].21 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25D8-0",
+   "name": "raw · base:0D · $.data[].299 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25DB-0",
+   "name": "raw · base:0D · $.data[].6064 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25DE-0",
+   "name": "raw · base:0D · $.data[].6065 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25DH-0",
+   "name": "raw · base:0D · $.data[].6086 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25DK-0",
+   "name": "raw · base:0D · $.data[].6087 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25DN-0",
+   "name": "raw · base:0D · $.data[].6100 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25DQ-0",
+   "name": "raw · base:0D · $.data[].6101 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25DT-0",
+   "name": "raw · base:0D · $.data[].6102 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25DW-0",
+   "name": "raw · base:0D · $.data[].6103 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25DZ-0",
+   "name": "raw · base:0D · $.data[].6104 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25E2-0",
+   "name": "raw · base:0D · $.data[].6105 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25E5-0",
+   "name": "raw · base:0D · $.data[].6106 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25E8-0",
+   "name": "raw · base:0D · $.data[].6107 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25EB-0",
+   "name": "raw · base:0D · $.data[].6108 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25EE-0",
+   "name": "raw · base:0D · $.data[].6109 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25EH-0",
+   "name": "raw · base:0D · $.data[].6110 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25EK-0",
+   "name": "raw · base:0D · $.data[].6111 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25EN-0",
+   "name": "raw · base:0D · $.data[].6112 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25EQ-0",
+   "name": "raw · base:0D · $.data[].6113 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25ET-0",
+   "name": "raw · base:0D · $.data[].6114 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "25EW-0",
+   "name": "raw · base:0D · $.data[].6115 · ordinal 1",
+   "component": "Frame",
+   "w": 154,
+   "h": 0,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "실시간 KRX·NXT·LP 공식 원문": 1,
+  "0C · 0D": 1,
+  "2 mapping · 165 field destinations": 1,
+  "거래소별 잔량·LP·예상체결·중간가를 실시간 상태와 함께 표시합니다.": 1,
+  "삼성전자 · 005930 · 정규장 · 실시간 연결": 1,
+  "실시간 거래소별 10단 호가": 1,
+  "매도·매수 방향, KRX·NXT·LP 잔량, 예상체결과 공식 비율을 같은 창에서 유지": 1,
+  "0C 2 / 2 · 0D 163 / 163": 1,
+  "최우선 매도": 1,
+  "150,850원": 3,
+  "최우선 매수": 1,
+  "150,840원": 2,
+  "실시간 등록": 1,
+  "0D · 삼성전자 005930": 1,
+  "재연결 시 마지막 정상 호가 유지": 1,
+  "매도 10": 1,
+  "150,940": 1,
+  "잔량": 20,
+  "2,600": 1,
+  "증감": 20,
+  "+70": 1,
+  "KRX": 20,
+  "1,900": 1,
+  "NXT": 20,
+  "900": 1,
+  "LP": 20,
+  "800": 1,
+  "매수 10": 1,
+  "150,750": 1,
+  "2,900": 2,
+  "-65": 1,
+  "2,200": 1,
+  "1,040": 1,
+  "790": 1,
+  "매도 9": 1,
+  "150,930": 1,
+  "2,940": 1,
+  "+78": 1,
+  "2,150": 2,
+  "1,070": 1,
+  "755": 1,
+  "매수 9": 1,
+  "150,760": 1,
+  "3,270": 1,
+  "-74": 1,
+  "2,470": 1,
+  "1,225": 1,
+  "752": 1,
+  "매도 8": 1,
+  "150,920": 1,
+  "3,280": 2,
+  "+86": 1,
+  "2,400": 1,
+  "1,240": 1,
+  "710": 1,
+  "매수 8": 1,
+  "150,770": 1,
+  "3,640": 1,
+  "-83": 1,
+  "2,740": 1,
+  "1,410": 2,
+  "714": 1,
+  "매도 7": 1,
+  "150,910": 1,
+  "3,620": 1,
+  "+94": 1,
+  "2,650": 1,
+  "665": 1,
+  "매수 7": 1,
+  "150,780": 1,
+  "4,010": 1,
+  "-92": 1,
+  "3,010": 1,
+  "1,595": 1,
+  "676": 1,
+  "매도 6": 1,
+  "150,900": 1,
+  "3,960": 1,
+  "+102": 1,
+  "1,580": 1,
+  "620": 1,
+  "매수 6": 1,
+  "150,790": 1,
+  "4,380": 1,
+  "-101": 1,
+  "1,780": 1,
+  "638": 1,
+  "매도 5": 1,
+  "150,890": 1,
+  "4,300": 1,
+  "+110": 1,
+  "3,150": 1,
+  "1,750": 1,
+  "575": 1,
+  "매수 5": 1,
+  "150,800": 1,
+  "4,750": 1,
+  "-110": 1,
+  "3,550": 1,
+  "1,965": 1,
+  "600": 1,
+  "매도 4": 1,
+  "150,880": 1,
+  "4,640": 1,
+  "+118": 1,
+  "3,400": 1,
+  "1,920": 1,
+  "530": 1,
+  "매수 4": 1,
+  "150,810": 1,
+  "5,120": 1,
+  "-119": 1,
+  "3,820": 1,
+  "562": 1,
+  "매도 3": 1,
+  "150,870": 1,
+  "4,980": 1,
+  "+126": 1,
+  "3,650": 1,
+  "2,090": 1,
+  "485": 1,
+  "매수 3": 1,
+  "150,820": 1,
+  "5,490": 1,
+  "-128": 1,
+  "4,090": 1,
+  "2,335": 1,
+  "524": 1,
+  "매도 2": 1,
+  "150,860": 1,
+  "5,320": 1,
+  "+134": 1,
+  "3,900": 1,
+  "2,260": 1,
+  "440": 1,
+  "매수 2": 1,
+  "150,830": 1,
+  "5,860": 1,
+  "-137": 1,
+  "4,360": 1,
+  "2,520": 1,
+  "486": 1,
+  "매도 1": 1,
+  "150,850": 1,
+  "5,660": 1,
+  "+142": 1,
+  "4,150": 1,
+  "2,430": 1,
+  "395": 1,
+  "매수 1": 1,
+  "150,840": 1,
+  "6,230": 1,
+  "-146": 1,
+  "4,630": 1,
+  "2,705": 1,
+  "448": 1,
+  "예상체결·총잔량·시장 원문": 1,
+  "매도호가총잔량": 1,
+  "193,500주": 1,
+  "매도호가총잔량대비": 1,
+  "+12,430주": 1,
+  "매수호가총잔량": 1,
+  "205,630주": 1,
+  "매수호가총잔량대비": 1,
+  "+9,870주": 1,
+  "예상체결가": 1,
+  "예상체결량": 1,
+  "127,540주": 1,
+  "예상체결가전일대비": 1,
+  "+3,500원": 1,
+  "예상체결가등락률": 1,
+  "+2.35%": 2,
+  "예상체결가전일대비기호": 1,
+  "▲": 1,
+  "예상체결가변화": 1,
+  "150,200→150,850": 1,
+  "예상체결량변화": 1,
+  "+7,240주": 1,
+  "예상매도호가": 1,
+  "예상매수호가": 1,
+  "예상체결시간": 1,
+  "08:59:19": 1,
+  "순매수잔량": 1,
+  "12,130주": 1,
+  "매수비율": 1,
+  "54.7%": 1,
+  "순매도잔량": 1,
+  "9,860주": 1,
+  "매도비율": 1,
+  "45.3%": 1,
+  "누적거래량": 1,
+  "2,375,785주": 1,
+  "장운영구분": 1,
+  "정규장": 1,
+  "종목코드": 1,
+  "005930": 1,
+  "호가시간": 1,
+  "14:31:08": 1,
+  "예상체결등락률": 1,
+  "KRX 매도총잔량": 1,
+  "112,410주": 1,
+  "KRX 매수총잔량": 1,
+  "128,630주": 1,
+  "NXT 매도총잔량": 1,
+  "81,090주": 1,
+  "NXT 매수총잔량": 1,
+  "77,000주": 1,
+  "KRX 중간가": 1,
+  "150,845원": 1,
+  "KRX 중간가대비": 1,
+  "+3,495원": 1,
+  "KRX 중간가등락률": 1,
+  "+2.34%": 1,
+  "KRX 매도중간잔량": 1,
+  "56,205주": 1,
+  "KRX 매수중간잔량": 1,
+  "64,315주": 1,
+  "NXT 중간가": 1,
+  "150,835원": 1,
+  "NXT 중간가대비": 1,
+  "+3,485원": 1,
+  "NXT 중간가등락률": 1,
+  "+2.33%": 1,
+  "NXT 매도중간잔량": 1,
+  "40,545주": 1,
+  "NXT 매수중간잔량": 1,
+  "38,500주": 1,
+  "KRX 대비 매도잔량": 1,
+  "31,320주": 1,
+  "KRX 대비 매수잔량": 1,
+  "51,630주": 1,
+  "KRX 잔량비율": 1,
+  "53.4%": 1,
+  "NXT 대비 매도잔량": 1,
+  "18,430주": 1,
+  "NXT 대비 매수잔량": 1,
+  "22,540주": 1,
+  "NXT 잔량비율": 1,
+  "46.6%": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "5d9c8551268bd3605ba6ccb0c4333d747775f804ff1d406a76b8fa2ed1a40671"
+}

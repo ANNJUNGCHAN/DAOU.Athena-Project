@@ -1,0 +1,73 @@
+Frame "05 · 키우미 — 셸 숨김·표시" (5EU-0) 1400×0
+  Frame "설명" (5EV-0) 940×0
+    Text "표시 모드는 둘뿐이다" (5EW-0) 0×0 "표시 모드는 둘뿐이다"
+    Text "셸 숨김에서는 미니 채팅, 셸 표시에…" (5EX-0) 0×0 "셸 숨김에서는 미니 채팅, 셸 표시에서는 알림 전용이다. 최소화·가려짐은 표시 모드를 바꾸지 않는다."
+  Frame "표시 모드 규칙" (5EZ-0) 0×0
+    Frame "표시 모드 A · 셸 숨김" (5F1-0) 420×0
+      Frame "Frame" (5F2-0) 0×0
+        Frame "orb 56" (5F3-0) 56×56
+          Frame "Frame" (5F4-0) 45×45
+            Rectangle "Rectangle" (5F5-0) 5×12
+            Rectangle "Rectangle" (5F6-0) 5×12
+        Frame "Frame" (5F7-0) 0×0
+          Text "DISPLAY A" (5F8-0) 0×0 "DISPLAY A"
+          Text "오브 = 미니 채팅" (5F9-0) 0×0 "오브 = 미니 채팅"
+      Text "셸이 숨겨졌을 때만 입력줄·컨트롤 스…" (5FA-0) 0×0 "셸이 숨겨졌을 때만 입력줄·컨트롤 스트립·미니 주문 티켓이 활성화된다. 표정 10종이 현재 상황을 표현한다."
+    Frame "전이 두 갈래" (5FC-0) 280×0
+      Frame "A→B" (5FD-0) 0×0
+        SVG "SVG" (5FE-0) 0×0
+          SVGVisualElement "Path" (5FF-0) 0×0
+        Text "대화창으로 가기" (5FG-0) 0×0 "대화창으로 가기"
+        Text "메인 방 그대로 이어진다" (5FH-0) 0×0 "메인 방 그대로 이어진다"
+      Frame "B→A" (5FI-0) 0×0
+        SVG "SVG" (5FJ-0) 0×0
+          SVGVisualElement "Path" (5FK-0) 0×0
+        Text "닫기 · 트레이로 내리기" (5FL-0) 0×0 "닫기 · 트레이로 내리기"
+        Text "프로세스는 산다 — 창만 숨는다 · …" (5FM-0) 0×0 "프로세스는 산다 — 창만 숨는다 · 메뉴: 열기 / 종료"
+    Frame "표시 모드 B · 셸 표시" (5FO-0) 420×0
+      Frame "Frame" (5FP-0) 0×0
+        Frame "shell 아이콘" (5FQ-0) 56×56
+          Rectangle "Rectangle" (5FR-0) 12×0
+          Rectangle "Rectangle" (5FS-0) 0×0
+          Rectangle "Rectangle" (5FT-0) 16×0
+        Frame "Frame" (5FU-0) 0×0
+          Text "DISPLAY B" (5FV-0) 0×0 "DISPLAY B"
+          Text "오브 = 알림 전용" (5FW-0) 0×0 "오브 = 알림 전용"
+      Text "셸이 보이는 동안 오브는 알림 전용이…" (5FX-0) 0×0 "셸이 보이는 동안 오브는 알림 전용이다. 입력줄 없이 발화·대표 카드·셸로 가기만 제공한다."
+  Frame "아래 행" (5FZ-0) 0×0
+    Frame "방 생성 규칙" (5G1-0) 740×0
+      Text "방은 알림에서만 생긴다" (5G2-0) 0×0 "방은 알림에서만 생긴다"
+      Frame "흐름 4단" (5G3-0) 0×0
+        Frame "Frame" (5G4-0) 0×0
+          Text "01" (5G5-0) 0×0 "01"
+          Text "루틴 발화" (5G6-0) 0×0 "루틴 발화"
+        SVG "SVG" (5G7-0) 0×0
+          SVGVisualElement "Path" (5G8-0) 0×0
+        Frame "Frame" (5G9-0) 0×0
+          Text "02" (5GA-0) 0×0 "02"
+          Text "셸로 가기" (5GB-0) 0×0 "셸로 가기"
+        SVG "SVG" (5GC-0) 0×0
+          SVGVisualElement "Path" (5GD-0) 0×0
+        Frame "Frame" (5GE-0) 0×0
+          Text "03" (5GF-0) 0×0 "03"
+          Text "새 방 생성" (5GG-0) 0×0 "새 방 생성"
+        SVG "SVG" (5GH-0) 0×0
+          SVGVisualElement "Path" (5GI-0) 0×0
+        Frame "Frame" (5GJ-0) 0×0
+          Text "04" (5GK-0) 0×0 "04"
+          Text "사이드바 ‘알림에서’" (5GL-0) 0×0 "사이드바 ‘알림에서’"
+      Text "오브 미니 채팅은 언제나 메인 방 하…" (5GM-0) 0×0 "오브 미니 채팅은 언제나 메인 방 하나에만 말한다. 알림 파생 방에는 오브에서 말할 수 없다 — 그 방이 열"
+    Frame "전환이 아닌 것" (5GO-0) 380×0
+      Text "전환이 아닌 것" (5GP-0) 0×0 "전환이 아닌 것"
+      Frame "예외 · 최소화" (5GQ-0) 0×0
+        SVG "SVG" (5GR-0) 0×0
+          SVGVisualElement "Path" (5GS-0) 0×0
+        Frame "Frame" (5GT-0) 0×0
+          Text "셸 최소화" (5GU-0) 0×0 "셸 최소화"
+          Text "작업 표시줄에 남아 있으면 아직 셸을…" (5GV-0) 0×0 "작업 표시줄에 남아 있으면 아직 셸을 쓰는 중이다. 오브는 알림 전용에 머문다."
+      Frame "예외 · 가려짐" (5GW-0) 0×0
+        SVG "SVG" (5GX-0) 0×0
+          SVGVisualElement "Path" (5GY-0) 0×0
+        Frame "Frame" (5GZ-0) 0×0
+          Text "다른 앱에 가려짐" (5H0-0) 0×0 "다른 앱에 가려짐"
+          Text "가려짐은 판정하지 않는다. 모드가 팔…" (5H1-0) 0×0 "가려짐은 판정하지 않는다. 모드가 팔랑거리는 것보다 예측 가능한 편이 낫다."

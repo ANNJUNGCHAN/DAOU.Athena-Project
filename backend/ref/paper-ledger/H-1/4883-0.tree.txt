@@ -1,0 +1,35 @@
+Frame "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침" (4883-0) 360×420
+  Frame "Header" (488X-0) 0×0
+    Frame "Meta row" (488Z-0) 0×0
+      Text "Eyebrow" (4891-0) 0×0
+      Text "As of" (4890-0) 0×0 "기준 09:42"
+    Text "Title" (488Y-0) 0×0 "삼성전자 행 펼침"
+  Frame "Body" (4886-0) 0×0
+    Frame "Table header" (488S-0) 0×0
+      Text "순서" (488W-0) 34×0 "순서"
+      Text "항목" (488V-0) 0×0 "항목"
+      Text "값" (488U-0) 0×0 "값"
+      Text "비고" (488T-0) 64×0 "비고"
+    Frame "Rank 1" (488L-0) 0×0
+      Text "01" (488R-0) 34×0 "01"
+      Frame "Frame" (488O-0) 0×0
+        Text "상한가" (488Q-0) 0×0 "상한가"
+        Text "Text" (488P-0) 0×0
+      Text "193,700" (488N-0) 0×0 "193,700"
+      Text "Text" (488M-0) 64×0
+    Frame "Rank 2" (488E-0) 0×0
+      Text "02" (488K-0) 34×0 "02"
+      Frame "Frame" (488H-0) 0×0
+        Text "하한가" (488J-0) 0×0 "하한가"
+        Text "Text" (488I-0) 0×0
+      Text "104,300" (488G-0) 0×0 "104,300"
+      Text "Text" (488F-0) 64×0
+    Frame "Rank 3" (4887-0) 0×0
+      Text "03" (488D-0) 34×0 "03"
+      Frame "Frame" (488A-0) 0×0
+        Text "시가" (488C-0) 0×0 "시가"
+        Text "Text" (488B-0) 0×0
+      Text "149,200" (4889-0) 0×0 "149,200"
+      Text "Text" (4888-0) 64×0
+  Frame "Fold note" (4884-0) 0×0
+    Text "외 2개 행 접힘 · 원본에서 확인" (4885-0) 0×0 "외 2개 행 접힘 · 원본에서 확인"

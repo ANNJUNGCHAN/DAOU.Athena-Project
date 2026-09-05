@@ -1,0 +1,7 @@
+Frame "03 · 부팅 — TYPE A→AT · 240–560ms" (16OJ-2) 1640×900
+  Frame "BOOT CENTER · KIWOOM + TYPE AT" (16OK-2) 460×209
+    Frame "키움증권 CI" (16OP-2) 220×69
+    Frame "ATHENA · TYPE A–AT" (16OL-2) 460×112
+      Text "typed · AT" (16OO-2) 116×112 "AT"
+      Text "Blinking cursor · 480ms ON / 320ms OFF" (16ON-2) 68×112 "|"
+      Text "inactive · HENA" (16OM-2) 281×112 "HENA"

@@ -1,0 +1,92 @@
+{
+ "board_id": "48RH-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-06 / R09 · 시장 체온·VI",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48RJ-0",
+   "text": "원본 보드: CC-06 / R09 · 시장 체온·VI",
+   "path": [
+    "note/CC-06 / R09 · 시장 체온·VI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48RL-0",
+   "text": "가져온 요소: KOSPI,K… · 체결시간 · 현재가 · 전일대비 · 상승종목수",
+   "path": [
+    "note/CC-06 / R09 · 시장 체온·VI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48RN-0",
+   "text": "문법: facts",
+   "path": [
+    "note/CC-06 / R09 · 시장 체온·VI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48RP-0",
+   "text": "접은 개수: 항목 44개",
+   "path": [
+    "note/CC-06 / R09 · 시장 체온·VI",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48RH-0",
+   "name": "note/CC-06 / R09 · 시장 체온·VI",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48RI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48RK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48RM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48RO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-06 / R09 · 시장 체온·VI": 1,
+  "가져온 요소: KOSPI,K… · 체결시간 · 현재가 · 전일대비 · 상승종목수": 1,
+  "문법: facts": 1,
+  "접은 개수: 항목 44개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "2bca9d16e9a7ce4efb026594574ae5982cf4cb3021997c0411972a0f1ad27d1c"
+}

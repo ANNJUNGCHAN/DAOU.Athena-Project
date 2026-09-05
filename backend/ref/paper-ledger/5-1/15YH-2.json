@@ -1,0 +1,406 @@
+{
+ "board_id": "15YH-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "C03 · 좁은 데스크톱 — 주문 확인",
+ "width": 390,
+ "height": 844,
+ "texts": [
+  {
+   "id": "168I-2",
+   "text": "ATHENA",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Compact desktop title bar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "168J-2",
+   "text": "좁은 창 · 주문 확인",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Compact desktop title bar"
+   ]
+  },
+  {
+   "id": "160Y-2",
+   "text": "주문 내용을\n확인해주세요",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1610-2",
+   "text": "아직 주문되지 않았습니다.",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1613-2",
+   "text": "종목",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1614-2",
+   "text": "삼성전자 · 005930",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1616-2",
+   "text": "방향",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1617-2",
+   "text": "매수",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1619-2",
+   "text": "수량",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "161A-2",
+   "text": "10주",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "161C-2",
+   "text": "유형",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "161D-2",
+   "text": "시장가",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "161G-2",
+   "text": "예상 금액",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "161H-2",
+   "text": "약 1,508,500원",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "161J-2",
+   "text": "시장가는 체결 순간 가격이 달라질 수 있습니다. 주문 후 현금은 약 8,491,500원입니다.",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "161M-2",
+   "text": "매수 주문 확인",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "161O-2",
+   "text": "취소",
+   "path": [
+    "C03 · 좁은 데스크톱 — 주문 확인",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "15YH-2",
+   "name": "C03 · 좁은 데스크톱 — 주문 확인",
+   "component": "Frame",
+   "w": 390,
+   "h": 844,
+   "depth": 0
+  },
+  {
+   "id": "168F-2",
+   "name": "Compact desktop title bar",
+   "component": "Frame",
+   "w": 390,
+   "h": 62,
+   "depth": 1
+  },
+  {
+   "id": "168G-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "168H-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 3
+  },
+  {
+   "id": "168K-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "168L-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "168M-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "168N-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "168O-2",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "168P-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "168Q-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "168R-2",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "160W-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 390,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "160X-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "160Z-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1611-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1612-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1615-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1618-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "161B-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "161E-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 3
+  },
+  {
+   "id": "161F-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "161I-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "161K-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "161L-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 3
+  },
+  {
+   "id": "161N-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "ATHENA": 1,
+  "좁은 창 · 주문 확인": 1,
+  "주문 내용을\n확인해주세요": 1,
+  "아직 주문되지 않았습니다.": 1,
+  "종목": 1,
+  "삼성전자 · 005930": 1,
+  "방향": 1,
+  "매수": 1,
+  "수량": 1,
+  "10주": 1,
+  "유형": 1,
+  "시장가": 1,
+  "예상 금액": 1,
+  "약 1,508,500원": 1,
+  "시장가는 체결 순간 가격이 달라질 수 있습니다. 주문 후 현금은 약 8,491,500원입니다.": 1,
+  "매수 주문 확인": 1,
+  "취소": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "74b99c360ec4d3b775964efc042e15fbe1d750cc4c97d5ac59e8e3568fd626a6"
+}

@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T6 · 순위 — ELW 순위" (47CV-0) 360×420
+  Frame "Header" (47DP-0) 0×0
+    Frame "Meta row" (47DR-0) 0×0
+      Text "Eyebrow" (47DT-0) 0×0
+      Text "As of" (47DS-0) 0×0 "기준 09:42"
+    Text "Title" (47DQ-0) 0×0 "ELW 순위"
+  Frame "Body" (47CY-0) 0×0
+    Frame "KPI band" (47DF-0) 0×0
+      Frame "Frame" (47DM-0) 0×0
+        Text "등락률" (47DO-0) 0×0 "등락률"
+        Text "+12.16%" (47DN-0) 0×0 "+12.16%"
+      Frame "Frame" (47DJ-0) 0×0
+        Text "변화" (47DL-0) 0×0 "변화"
+        Text "98.6%" (47DK-0) 0×0 "98.6%"
+      Frame "Frame" (47DG-0) 0×0
+        Text "핵심" (47DI-0) 0×0 "핵심"
+        Text "2건" (47DH-0) 0×0 "2건"
+    Frame "Table header" (47DB-0) 0×0
+      Text "항목" (47DE-0) 0×0 "항목"
+      Text "값" (47DD-0) 0×0 "값"
+      Text "비고" (47DC-0) 72×0 "비고"
+    Frame "Position 1" (47D5-0) 0×0
+      Frame "Frame" (47D8-0) 0×0
+        Text "수량" (47DA-0) 0×0 "수량"
+        Text "Text" (47D9-0) 0×0
+      Text "12건" (47D7-0) 0×0 "12건"
+      Text "Text" (47D6-0) 72×0
+    Frame "Position 2" (47CZ-0) 0×0
+      Frame "Frame" (47D2-0) 0×0
+        Text "ELW잔량순위" (47D4-0) 0×0 "ELW잔량순위"
+        Text "Text" (47D3-0) 0×0
+      Text "전체 3,482건 · 20건 표시" (47D1-0) 0×0 "전체 3,482건 · 20건 표시"
+      Text "Text" (47D0-0) 72×0
+  Frame "Fold note" (47CW-0) 0×0
+    Text "스칼라 2개, 행 18개 접힘 · 원…" (47CX-0) 0×0 "스칼라 2개, 행 18개 접힘 · 원본에서 확인"

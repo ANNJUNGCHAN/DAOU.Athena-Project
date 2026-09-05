@@ -1,0 +1,234 @@
+{
+ "board_id": "47IG-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47J3-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47J2-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47J0-0",
+   "text": "호가잔량 상위",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Header"
+   ]
+  },
+  {
+   "id": "47IY-0",
+   "text": "순매수잔량",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47IX-0",
+   "text": "+0.7만",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47IV-0",
+   "text": "매수비율",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47IU-0",
+   "text": "매수비율 61.3%",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47IS-0",
+   "text": "총매도잔량",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47IR-0",
+   "text": "매도 1.2만",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47IP-0",
+   "text": "전일대비기호",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47IO-0",
+   "text": "+3.01%",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47IM-0",
+   "text": "총매수잔량",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47IL-0",
+   "text": "매수 1.9만",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47II-0",
+   "text": "외 90개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47IG-0",
+   "name": "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47IZ-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47J1-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47IJ-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47IW-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47IT-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47IQ-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47IN-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47IK-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47IH-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "호가잔량 상위": 1,
+  "순매수잔량": 1,
+  "+0.7만": 1,
+  "매수비율": 1,
+  "매수비율 61.3%": 1,
+  "총매도잔량": 1,
+  "매도 1.2만": 1,
+  "전일대비기호": 1,
+  "+3.01%": 1,
+  "총매수잔량": 1,
+  "매수 1.9만": 1,
+  "외 90개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "1c539ca1bcff842631f5b5c26790fd1033d755ac47886ee19356e9107b4e37ee"
+}

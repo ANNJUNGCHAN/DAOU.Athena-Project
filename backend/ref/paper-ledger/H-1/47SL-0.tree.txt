@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색" (47SL-0) 360×420
+  Frame "Header" (47TF-0) 0×0
+    Frame "Meta row" (47TH-0) 0×0
+      Text "Eyebrow" (47TJ-0) 0×0
+      Text "As of" (47TI-0) 0×0 "기준 09:42"
+    Text "Title" (47TG-0) 0×0 "ELW 조건검색"
+  Frame "Body" (47SO-0) 0×0
+    Frame "KPI band" (47T5-0) 0×0
+      Frame "Frame" (47TC-0) 0×0
+        Text "등락율" (47TE-0) 0×0 "등락율"
+        Text "+12.16%" (47TD-0) 0×0 "+12.16%"
+      Frame "Frame" (47T9-0) 0×0
+        Text "변화" (47TB-0) 0×0 "변화"
+        Text "98.6%" (47TA-0) 0×0 "98.6%"
+      Frame "Frame" (47T6-0) 0×0
+        Text "핵심" (47T8-0) 0×0 "핵심"
+        Text "2건" (47T7-0) 0×0 "2건"
+    Frame "Table header" (47T1-0) 0×0
+      Text "항목" (47T4-0) 0×0 "항목"
+      Text "값" (47T3-0) 0×0 "값"
+      Text "비고" (47T2-0) 72×0 "비고"
+    Frame "Position 1" (47SV-0) 0×0
+      Frame "Frame" (47SY-0) 0×0
+        Text "ELW조건검색" (47T0-0) 0×0 "ELW조건검색"
+        Text "Text" (47SZ-0) 0×0
+      Text "기어링 10배 이상" (47SX-0) 0×0 "기어링 10배 이상"
+      Text "Text" (47SW-0) 72×0
+    Frame "Position 2" (47SP-0) 0×0
+      Frame "Frame" (47SS-0) 0×0
+        Text "ELW조건검색" (47SU-0) 0×0 "ELW조건검색"
+        Text "Text" (47ST-0) 0×0
+      Text "잔존 30~90일" (47SR-0) 0×0 "잔존 30~90일"
+      Text "Text" (47SQ-0) 72×0
+  Frame "Fold note" (47SM-0) 0×0
+    Text "스칼라 2개, 행 6개 접힘 · 원본…" (47SN-0) 0×0 "스칼라 2개, 행 6개 접힘 · 원본에서 확인"

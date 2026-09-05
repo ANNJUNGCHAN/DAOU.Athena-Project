@@ -1,0 +1,92 @@
+{
+ "board_id": "495X-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "495Z-0",
+   "text": "원본 보드: CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+   "path": [
+    "note/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4961-0",
+   "text": "가져온 요소: 외인한도소진율… · 소진율증가 · 한도소진율 · 종목코드 · 전일대비",
+   "path": [
+    "note/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4963-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4965-0",
+   "text": "접은 개수: 스칼라 2개 · 행 6개",
+   "path": [
+    "note/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "495X-0",
+   "name": "note/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "495Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4960-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4962-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4964-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-05 / R03-T6-4 · 순위 — 한도소진율 증가": 1,
+  "가져온 요소: 외인한도소진율… · 소진율증가 · 한도소진율 · 종목코드 · 전일대비": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 6개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "761c62e36d5e9730df89318e8dc6fc3671cc6520139fe75eeedaedf6242a48de"
+}

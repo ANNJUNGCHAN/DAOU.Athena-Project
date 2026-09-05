@@ -1,0 +1,153 @@
+Frame "CC-02 / R11 · 삼성전자 10주 시장가 매수" (135M-2) 1440×960
+  Frame "Order Root · 매수 검토" (14YF-2) 1440×960
+    Frame "Order Card Surface" (14YH-2) 1360×880
+      Frame "Order Header" (14YJ-2) 0×106
+        Frame "Frame" (14YK-2) 0×0
+          Frame "Frame" (14YL-2) 0×0
+            Text "삼성전자 주문" (14YM-2) 0×0 "삼성전자 주문"
+            Frame "Frame" (14YN-2) 0×0
+              Text "검토 필요" (14YO-2) 0×0 "검토 필요"
+          Text "005930 · 키움증권 01" (14YP-2) 0×0 "005930 · 키움증권 01"
+        Frame "Frame" (14YQ-2) 0×0
+          Frame "Frame" (14YR-2) 0×0
+            Text "현금" (14YS-2) 0×0 "현금"
+          Frame "Frame" (14YT-2) 0×0
+            Text "신용" (14YU-2) 0×0 "신용"
+          Frame "Frame" (14YV-2) 0×0
+            Text "금현물" (14YW-2) 0×0 "금현물"
+          Rectangle "Rectangle" (14YX-2) 1×22
+          Frame "Frame" (14YY-2) 0×0
+            Text "매수" (14YZ-2) 0×0 "매수"
+          Frame "Frame" (14Z0-2) 0×0
+            Text "매도" (14Z1-2) 0×0 "매도"
+          Frame "Frame" (14Z2-2) 0×0
+            Text "정정" (14Z3-2) 0×0 "정정"
+          Frame "Frame" (14Z4-2) 0×0
+            Text "취소" (14Z5-2) 0×0 "취소"
+      Frame "Order Progress" (14Z7-2) 0×84
+        Frame "Frame" (14Z8-2) 0×0
+          Frame "Frame" (14Z9-2) 28×28
+            Text "1" (14ZA-2) 0×0 "1"
+          Text "주문 작성" (14ZB-2) 0×0 "주문 작성"
+          Rectangle "Rectangle" (14ZC-2) 0×1
+        Frame "Frame" (14ZD-2) 0×0
+          Frame "Frame" (14ZE-2) 28×28
+            Text "2" (14ZF-2) 0×0 "2"
+          Text "주문 조건 검토" (14ZG-2) 0×0 "주문 조건 검토"
+          Rectangle "Rectangle" (14ZH-2) 0×1
+        Frame "Frame" (14ZI-2) 0×0
+          Frame "Frame" (14ZJ-2) 28×28
+            Text "3" (14ZK-2) 0×0 "3"
+          Text "사용자 확인" (14ZL-2) 0×0 "사용자 확인"
+          Rectangle "Rectangle" (14ZM-2) 0×1
+        Frame "Frame" (14ZN-2) 220×0
+          Frame "Frame" (14ZO-2) 28×28
+            Text "4" (14ZP-2) 0×0 "4"
+          Text "접수·체결" (14ZQ-2) 0×0 "접수·체결"
+      Frame "Order Workspace" (14ZS-2) 0×626
+        Frame "Order Entry" (14ZT-2) 420×626
+          Frame "Order Form" (14ZX-2) 0×0
+            Frame "Frame" (14ZY-2) 0×0
+              Text "주문 입력" (14ZZ-2) 0×0 "주문 입력"
+              Text "현재가 150,850원" (1500-2) 0×0 "현재가 150,850원"
+            Frame "Frame" (1501-2) 0×64
+              Text "주문 유형" (1502-2) 0×0 "주문 유형"
+              Text "시장가" (1503-2) 0×0 "시장가"
+            Frame "Frame" (1504-2) 0×82
+              Text "수량" (1505-2) 0×0 "수량"
+              Frame "Frame" (1506-2) 190×46
+                Text "10주" (1507-2) 0×0 "10주"
+            Frame "Frame" (1508-2) 0×64
+              Text "가격" (1509-2) 0×0 "가격"
+              Text "시장가로 체결" (150A-2) 0×0 "시장가로 체결"
+            Frame "Frame" (150B-2) 0×64
+              Text "계좌" (150C-2) 0×0 "계좌"
+              Text "키움증권 01" (150D-2) 0×0 "키움증권 01"
+          Frame "Order Quick Quantity" (150F-2) 0×0
+            Frame "Frame" (150G-2) 0×0
+              Frame "Frame" (150H-2) 0×0
+                Text "10%" (150I-2) 0×0 "10%"
+              Frame "Frame" (150J-2) 0×0
+                Text "25%" (150K-2) 0×0 "25%"
+              Frame "Frame" (150L-2) 0×0
+                Text "50%" (150M-2) 0×0 "50%"
+              Frame "Frame" (150N-2) 0×0
+                Text "최대" (150O-2) 0×0 "최대"
+            Frame "Frame" (150P-2) 0×0
+              Text "주문가능금액" (150Q-2) 0×0 "주문가능금액"
+              Text "raw · base:kt00001 · $.ord_alow_amt" (150R-2) 0×0 "31,240,000원"
+            Frame "Frame" (150S-2) 0×0
+              Text "현재 매수 1호가" (150T-2) 0×0 "현재 매수 1호가"
+              Text "150,840원" (150U-2) 0×0 "150,840원"
+        Frame "Order Preview" (14ZU-2) 520×626
+          Frame "Preview Heading" (150W-2) 0×0
+            Text "주문 전 최종 확인" (150X-2) 0×0 "주문 전 최종 확인"
+          Frame "Order Hero" (1510-2) 0×0
+            Text "삼성전자 · 시장가 매수" (1511-2) 0×0 "삼성전자 · 시장가 매수"
+            Frame "Frame" (1512-2) 0×0
+              Text "10주" (1513-2) 0×0 "10주"
+              Text "응답 대기" (1514-2) 0×0 "응답 대기"
+          Frame "Order Details" (1516-2) 0×0
+            Frame "Frame" (1517-2) 0×0
+              Text "주문 방향" (1518-2) 0×0 "주문 방향"
+              Text "매수" (1519-2) 0×0 "매수"
+            Frame "Frame" (151A-2) 0×0
+              Text "가격 조건" (151B-2) 0×0 "가격 조건"
+              Text "시장가" (151C-2) 0×0 "시장가"
+            Frame "Frame" (151D-2) 0×0
+              Text "현재 매수 1호가" (151E-2) 0×0 "현재 매수 1호가"
+              Text "150,840원" (151F-2) 0×0 "150,840원"
+            Frame "Frame" (151G-2) 0×0
+              Text "계좌" (151H-2) 0×0 "계좌"
+              Text "키움증권 01" (151I-2) 0×0 "키움증권 01"
+          Frame "Order Safety Notice" (151K-2) 0×0
+            Rectangle "Rectangle" (151L-2) 8×8
+            Frame "Frame" (151M-2) 0×0
+              Text "아직 주문되지 않았습니다" (151N-2) 0×0 "아직 주문되지 않았습니다"
+              Text "아래 주문 확인을 누른 뒤 한 번 더…" (151O-2) 0×0 "아래 주문 확인을 누른 뒤 한 번 더 확인해야 접수됩니다."
+          Frame "Order Actions" (151Q-2) 0×0
+            Frame "Frame" (151R-2) 120×44
+              Text "수정" (151S-2) 0×0 "수정"
+            Frame "Frame" (151T-2) 0×44
+              Text "주문 확인" (151U-2) 0×0 "주문 확인"
+        Frame "Fees and Execution" (14ZV-2) 420×626
+          Frame "Cost Heading" (151W-2) 0×0
+            Text "주문 접수 정보" (151X-2) 0×0 "주문 접수 정보"
+          Frame "Cost Breakdown" (1520-2) 0×0
+            Frame "Frame" (1521-2) 0×0
+              Text "주문번호" (1522-2) 0×0 "주문번호"
+              Text "raw · base:kt10000 · $.ord_no" (1523-2) 0×0 "—"
+            Frame "Frame" (1524-2) 0×0
+              Text "국내거래소구분" (1525-2) 0×0 "국내거래소구분"
+              Text "raw · base:kt10000 · $.dmst_stex_tp" (1526-2) 0×0 "—"
+            Frame "Frame" (1527-2) 0×0
+              Text "주문수량" (1528-2) 0×0 "주문수량"
+              Text "request · base:kt10000 · $.ord_qty" (1529-2) 0×0 "10주"
+            Frame "Frame" (152A-2) 0×0
+              Text "매매구분" (152B-2) 0×0 "매매구분"
+              Text "request · base:kt10000 · $.trde_tp" (152C-2) 0×0 "시장가"
+            Frame "Frame" (152D-2) 0×0
+              Text "종목코드" (152E-2) 0×0 "종목코드"
+              Text "request · base:kt10000 · $.stk_cd" (152F-2) 0×0 "005930"
+            Frame "Frame" (2WG1-0) 0×0
+              Text "조건단가" (2WG2-0) 0×0 "조건단가"
+              Text "— · 미사용" (2WG3-0) 0×0 "— · 미사용"
+          Frame "Execution Status" (152H-2) 0×0
+            Frame "Frame" (152I-2) 0×0
+              Text "이 주문의 진행 상태" (152J-2) 0×0 "이 주문의 진행 상태"
+              Text "검토 중" (152K-2) 0×0 "검토 중"
+            Frame "Frame" (152L-2) 0×0
+              Frame "Frame" (152M-2) 22×22
+                Text "1" (152N-2) 0×0 "1"
+              Frame "Frame" (152O-2) 0×0
+                Text "조건 입력 완료" (152P-2) 0×0 "조건 입력 완료"
+                Text "시장가 · 10주 · 현금" (152Q-2) 0×0 "시장가 · 10주 · 현금"
+            Frame "Frame" (152R-2) 0×0
+              Frame "Frame" (152S-2) 22×22
+                Text "2" (152T-2) 0×0 "2"
+              Frame "Frame" (152U-2) 0×0
+                Text "응답 필드 대기" (152V-2) 0×0 "응답 필드 대기"
+                Text "주문번호 · 거래소구분" (152W-2) 0×0 "주문번호 · 거래소구분"
+            Frame "Frame" (152X-2) 0×0
+              Rectangle "Rectangle" (152Y-2) 22×22
+              Text "사용자 확인 후 접수" (152Z-2) 0×0 "사용자 확인 후 접수"

@@ -1,0 +1,342 @@
+{
+ "board_id": "46MT-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R07 · KODEX 200 ETF",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46NR-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46NQ-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46NO-0",
+   "text": "KODEX 200 ETF",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Header"
+   ]
+  },
+  {
+   "id": "46NM-0",
+   "text": "NAV전일대비",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46NL-0",
+   "text": "전일대비 ▲ +398 · +0.83%",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46NJ-0",
+   "text": "NAV/ETF 괴리율",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46NI-0",
+   "text": "괴리 +0.09%",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46NG-0",
+   "text": "추적오차율",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46NF-0",
+   "text": "0.11%",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46NC-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46NB-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46NA-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46N8-0",
+   "text": "ETF대상지수코드",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46N7-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46N5-0",
+   "text": "대상지수 코스피200",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46N4-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46N2-0",
+   "text": "NAV/지수괴리율",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46N1-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46MZ-0",
+   "text": "+0.09%",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46MY-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46MV-0",
+   "text": "스칼라 1개, 행 1개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R07 · KODEX 200 ETF",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46MT-0",
+   "name": "mini/CC-03 / R07 · KODEX 200 ETF",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46NN-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46NP-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46MW-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46ND-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46NK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46NH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46NE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46N9-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46N3-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46N6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46MX-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46N0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46MU-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "KODEX 200 ETF": 1,
+  "NAV전일대비": 1,
+  "전일대비 ▲ +398 · +0.83%": 1,
+  "NAV/ETF 괴리율": 1,
+  "괴리 +0.09%": 1,
+  "추적오차율": 1,
+  "0.11%": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "ETF대상지수코드": 1,
+  "대상지수 코스피200": 1,
+  "NAV/지수괴리율": 1,
+  "+0.09%": 1,
+  "스칼라 1개, 행 1개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "d419008623315aef61d4599cd430e06362d2dfd9c4e9158fdc1641430f1be900"
+}

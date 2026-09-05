@@ -1,0 +1,340 @@
+{
+ "board_id": "47BW-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47CU-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47CT-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47CR-0",
+   "text": "ETF 전체시세",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Header"
+   ]
+  },
+  {
+   "id": "47CP-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47CO-0",
+   "text": "+0.04%",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47CM-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47CL-0",
+   "text": "괴리 1% 초과",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47CJ-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47CI-0",
+   "text": "4기간",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47CF-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47CE-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47CD-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47CB-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47CA-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47C8-0",
+   "text": "전일 대비 1.2배",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47C7-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47C5-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47C4-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47C2-0",
+   "text": "7 종목",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47C1-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47BY-0",
+   "text": "스칼라 2개, 행 18개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47BW-0",
+   "name": "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47CQ-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47CS-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47BZ-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47CG-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47CN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47CK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47CH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47CC-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47C6-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47C9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47C0-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47C3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47BX-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "ETF 전체시세": 1,
+  "변화": 2,
+  "+0.04%": 1,
+  "괴리 1% 초과": 1,
+  "핵심": 1,
+  "4기간": 1,
+  "항목": 1,
+  "값": 2,
+  "비고": 1,
+  "전일 대비 1.2배": 1,
+  "수량": 1,
+  "7 종목": 1,
+  "스칼라 2개, 행 18개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "d402d48e26b9a946e7ab2b43172461abc4a0f3790875ab5472a36f415a5fb1ee"
+}

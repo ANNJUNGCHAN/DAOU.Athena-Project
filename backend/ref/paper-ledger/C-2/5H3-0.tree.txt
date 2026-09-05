@@ -1,0 +1,290 @@
+Frame "03 · 키우미 — 시선·시간 루프" (5H3-0) 1900×0
+  Frame "설명" (5H4-0) 1180×0
+    Text "흰 도형의 위치와 시간으로 살아난다" (5H5-0) 0×0 "흰 도형의 위치와 시간으로 살아난다"
+    Text "표정은 보드 02의 10종만 사용한다…" (5H6-0) 0×0 "표정은 보드 02의 10종만 사용한다. 시선 9방향과 시간 루프 3종을 별도 축으로 조합한다."
+  Frame "시선 9방향" (5RW-0) 0×0
+    Frame "시선 9방향" (5S4-0) 0×0
+      Frame "Frame" (5S5-0) 0×0
+        Text "시선 9방향 — 두 도형이 함께 옮겨…" (5S6-0) 0×0 "시선 9방향 — 두 도형이 함께 옮겨간다"
+        Text "눈동자를 새로 그리지 않는다. 흰 알…" (5S7-0) 380×0 "눈동자를 새로 그리지 않는다. 흰 알약 두 개가 바이저 안에서 ±10px 옮겨 앉을 뿐이다. 도형 수는 그대"
+      Frame "3x3" (5S8-0) 0×0
+        Frame "행" (5S9-0) 0×0
+          Frame "orb 100 · 기본" (5SD-0) 100×100
+            Frame "visor" (5SE-0) 81×80
+              Frame "eyes" (5SF-0) 0×0
+                Frame "eye-l" (5SH-0) 9×21
+                Frame "eye-r" (5SG-0) 9×21
+          Frame "orb 100 · 기본" (5SI-0) 100×100
+            Frame "visor" (5SJ-0) 81×80
+              Frame "eyes" (5SK-0) 0×0
+                Frame "eye-l" (5SM-0) 9×21
+                Frame "eye-r" (5SL-0) 9×21
+          Frame "orb 100 · 기본" (5SN-0) 100×100
+            Frame "visor" (5SO-0) 81×80
+              Frame "eyes" (5SP-0) 0×0
+                Frame "eye-l" (5SR-0) 9×21
+                Frame "eye-r" (5SQ-0) 9×21
+        Frame "행" (5SA-0) 0×0
+          Frame "orb 100 · 기본" (5SS-0) 100×100
+            Frame "visor" (5ST-0) 81×80
+              Frame "eyes" (5SU-0) 0×0
+                Frame "eye-l" (5SW-0) 9×21
+                Frame "eye-r" (5SV-0) 9×21
+          Frame "orb 100 · 기본" (5SX-0) 100×100
+            Frame "visor" (5SY-0) 81×80
+              Frame "eyes" (5SZ-0) 0×0
+                Frame "eye-l" (5T1-0) 9×21
+                Frame "eye-r" (5T0-0) 9×21
+          Frame "orb 100 · 기본" (5T2-0) 100×100
+            Frame "visor" (5T3-0) 81×80
+              Frame "eyes" (5T4-0) 0×0
+                Frame "eye-l" (5T6-0) 9×21
+                Frame "eye-r" (5T5-0) 9×21
+        Frame "행" (5SB-0) 0×0
+          Frame "orb 100 · 기본" (5T7-0) 100×100
+            Frame "visor" (5T8-0) 81×80
+              Frame "eyes" (5T9-0) 0×0
+                Frame "eye-l" (5TB-0) 9×21
+                Frame "eye-r" (5TA-0) 9×21
+          Frame "orb 100 · 기본" (5TC-0) 100×100
+            Frame "visor" (5TD-0) 81×80
+              Frame "eyes" (5TE-0) 0×0
+                Frame "eye-l" (5TG-0) 9×21
+                Frame "eye-r" (5TF-0) 9×21
+          Frame "orb 100 · 기본" (5TH-0) 100×100
+            Frame "visor" (5TI-0) 81×80
+              Frame "eyes" (5TJ-0) 0×0
+                Frame "eye-l" (5TL-0) 9×21
+                Frame "eye-r" (5TK-0) 9×21
+    Frame "시선이 쓰이는 곳" (5WV-0) 520×0
+      Frame "Frame" (5WW-0) 0×0
+        Text "아래" (5WX-0) 74×0 "아래"
+        Text "듣는 중 — 입력줄을 내려다본다" (5WY-0) 0×0 "듣는 중 — 입력줄을 내려다본다"
+      Frame "Frame" (5WZ-0) 0×0
+        Text "위·옆" (5X0-0) 74×0 "위·옆"
+        Text "생각 중 — 답을 더듬는다. 스피너 …" (5X1-0) 0×0 "생각 중 — 답을 더듬는다. 스피너 대신이다"
+      Frame "Frame" (5X2-0) 0×0
+        Text "한쪽 고정" (5X3-0) 74×0 "한쪽 고정"
+        Text "경계 — 임계에 붙은 종목 쪽을 붙박…" (5X4-0) 0×0 "경계 — 임계에 붙은 종목 쪽을 붙박는다"
+      Frame "Frame" (5X5-0) 0×0
+        Text "커서 쪽" (5X6-0) 74×0 "커서 쪽"
+        Text "반경 320px 안의 커서를 곁눈질한…" (5X7-0) 0×0 "반경 320px 안의 커서를 곁눈질한다 — 기본 표정에서만"
+      Frame "Frame" (5X8-0) 0×0
+        Text "사용자" (5X9-0) 74×0 "사용자"
+        Text "오브를 끌 때 — 끌리는 방향 반대로…" (5XA-0) 0×0 "오브를 끌 때 — 끌리는 방향 반대로 밀린다(관성)"
+      Frame "Frame" (2FQP-2) 0×0
+        Text "정면" (2FQR-2) 74×0 "정면"
+        Text "그 밖 전부 — 시선은 0,0으로 돌…" (2FQQ-2) 0×0 "그 밖 전부 — 시선은 0,0으로 돌아온다"
+      Frame "Frame" (5XB-0) 460×0
+        Text "시선은 정보가 아니라 태도다. 틀려도…" (5XC-0) 0×0 "시선은 정보가 아니라 태도다. 틀려도 사용자가 손해 보지 않는 유일한 표현이라, 마음껏 움직여도 정직성 계약"
+  Frame "상황별 표현 매핑" (5N7-0) 0×0
+    Frame "Frame" (5N8-0) 0×0
+      Text "상황별 표현 매핑 — 신호 상태 14…" (5N9-0) 0×0 "상황별 표현 매핑 — 신호 상태 14가지"
+      Text "감정은 지어내지 않는다 — 전부 앱에…" (5NA-0) 900×0 "감정은 지어내지 않는다 — 전부 앱에 이미 있는 신호에 붙는다. 14가지 상태가 보드 02의 표정 10종으로"
+    Frame "1행" (5NB-0) 0×0
+      Frame "셀 · 잠듦" (5NE-0) 320×0
+        Frame "orb 100 · 기본" (5TM-0) 100×100
+          Frame "visor" (5TN-0) 81×80
+            Frame "eyes" (5TO-0) 0×0
+              Frame "eye-l" (5TQ-0) 9×4
+              Frame "eye-r" (5TP-0) 9×4
+        Frame "Frame" (5NF-0) 0×0
+          Text "잠듦" (5NG-0) 0×0 "잠듦"
+          Text "idle > 5min" (5NH-0) 0×0 "idle > 5min"
+          Text "바이저가 거의 닫힌다. 5분 이상 입…" (5NI-0) 0×0 "바이저가 거의 닫힌다. 5분 이상 입력이 없을 때의 휴식 표현이다."
+      Frame "셀 · 대기" (5NJ-0) 320×0
+        Frame "orb 100 · 기본" (5TR-0) 100×100
+          Frame "visor" (5TS-0) 81×80
+            Frame "eyes" (5TT-0) 0×0
+              Frame "eye-l" (5TV-0) 9×21
+              Frame "eye-r" (5TU-0) 9×21
+        Frame "Frame" (5NK-0) 0×0
+          Text "대기" (5NL-0) 0×0 "대기"
+          Text "idle — 기본값" (5NM-0) 0×0 "idle — 기본값"
+          Text "말 걸 수 있는 상태. 가끔 두리번거…" (5NN-0) 0×0 "말 걸 수 있는 상태. 가끔 두리번거린다."
+      Frame "셀 · 듣는 중" (5NO-0) 320×0
+        Frame "orb 100 · 기본" (5TW-0) 100×100
+          Frame "visor" (5TX-0) 81×80
+            Frame "eyes" (5TY-0) 0×0
+              Frame "eye-l" (5U0-0) 9×18
+              Frame "eye-r" (5TZ-0) 9×18
+        Frame "Frame" (5NP-0) 0×0
+          Text "듣는 중" (5NQ-0) 0×0 "듣는 중"
+          Text "input:focus" (5NR-0) 0×0 "input:focus"
+          Text "눈이 입력줄을 내려다본다. 딴 데 안…" (5NS-0) 0×0 "눈이 입력줄을 내려다본다. 딴 데 안 본다는 신호."
+      Frame "셀 · 생각 중" (5NT-0) 320×0
+        Frame "orb 100 · 기본" (5U1-0) 100×100
+          Frame "visor" (5U2-0) 81×80
+            Frame "eyes" (5U3-0) 0×0
+              Frame "eye-l" (5U5-0) 9×21
+              Frame "eye-r" (5U4-0) 9×21
+        Frame "Frame" (5NU-0) 0×0
+          Text "생각 중" (5NV-0) 0×0 "생각 중"
+          Text "query running" (5NW-0) 0×0 "query running"
+          Text "흰 도형이 위를 훑는다. 스피너를 대…" (5NX-0) 0×0 "흰 도형이 위를 훑는다. 스피너를 대신한다."
+      Frame "셀 · 완료" (5NY-0) 320×0
+        Frame "orb 100 · 기본" (5U6-0) 100×100
+          Frame "visor" (5U7-0) 81×80
+            Frame "eyes" (5U8-0) 0×0
+              Frame "eye-l" (5UA-0) 14×8
+              Frame "eye-r" (5U9-0) 14×8
+        Frame "Frame" (5NZ-0) 0×0
+          Text "완료" (5O0-0) 0×0 "완료"
+          Text "result ok" (5O1-0) 0×0 "result ok"
+          Text "웃고 나서 2초 뒤 대기로 돌아간다." (5O2-0) 0×0 "웃고 나서 2초 뒤 대기로 돌아간다."
+    Frame "2행" (5NC-0) 0×0
+      Frame "셀 · 경계" (5O4-0) 320×0
+        Frame "orb 100 · 기본" (5UB-0) 100×100
+          Frame "visor" (5UC-0) 81×80
+            Frame "eyes" (5UD-0) 0×0
+              Frame "eye-l" (5UF-0) 7×17
+              Frame "eye-r" (5UE-0) 7×17
+        Frame "Frame" (5O5-0) 0×0
+          Text "경계" (5O6-0) 0×0 "경계"
+          Text "임계 90% 근접" (5O7-0) 0×0 "임계 90% 근접"
+          Text "좁아지며 한쪽을 붙박한다. 아직 발화…" (5O8-0) 0×0 "좁아지며 한쪽을 붙박한다. 아직 발화는 아니다."
+      Frame "셀 · 발화" (5O9-0) 320×0
+        Frame "orb 100 · 기본" (5UG-0) 100×100
+          Frame "visor" (5UH-0) 81×80
+            Frame "eyes" (5UI-0) 0×0
+              Frame "eye-l" (5UK-0) 14×14
+              Frame "eye-r" (5UJ-0) 14×14
+        Frame "Frame" (5OA-0) 0×0
+          Text "발화" (5OB-0) 0×0 "발화"
+          Text "routine-event" (5OC-0) 0×0 "routine-event"
+          Text "두 도형이 동그래진다. 화면당 신호는…" (5OD-0) 0×0 "두 도형이 동그래진다. 화면당 신호는 여기 하나."
+      Frame "셀 · 신남" (5OE-0) 320×0
+        Frame "orb 100 · 기본" (5UL-0) 100×100
+          Frame "visor" (5UM-0) 81×80
+            Frame "eyes" (5UN-0) 0×0
+              Frame "eye-l" (5UP-0) 17×10
+              Frame "eye-r" (5UO-0) 17×10
+        Frame "Frame" (5OF-0) 0×0
+          Text "신남" (5OG-0) 0×0 "신남"
+          Text "goal 플래그 발화" (5OH-0) 0×0 "goal 플래그 발화"
+          Text "사용자가 명시한 목표가 도달. 가장 …" (5OI-0) 0×0 "사용자가 명시한 목표가 도달. 가장 큰 아치."
+      Frame "셀 · 시무룩" (5OJ-0) 320×0
+        Frame "orb 100 · 기본" (5UQ-0) 100×100
+          Frame "visor" (5UR-0) 81×80
+            Frame "eyes" (5US-0) 0×0
+              Frame "eye-l" (5UU-0) 14×7
+              Frame "eye-r" (5UT-0) 14×7
+        Frame "Frame" (5OK-0) 0×0
+          Text "시무룩" (5OL-0) 0×0 "시무룩"
+          Text "routine expired" (5OM-0) 0×0 "routine expired"
+          Text "루틴이 만료로 끝났다. 평평한 가로 …" (5ON-0) 0×0 "루틴이 만료로 끝났다. 평평한 가로 막대."
+      Frame "셀 · 졸림" (5OO-0) 320×0
+        Frame "orb 100 · 기본" (5UV-0) 100×100
+          Frame "visor" (5UW-0) 81×80
+            Frame "eyes" (5UX-0) 0×0
+              Frame "eye-l" (5UZ-0) 14×4
+              Frame "eye-r" (5UY-0) 14×4
+        Frame "Frame" (5OP-0) 0×0
+          Text "졸림" (5OQ-0) 0×0 "졸림"
+          Text "market closed" (5OR-0) 0×0 "market closed"
+          Text "장 밖 시간대. 바이저는 그대로고 눈…" (5OS-0) 0×0 "장 밖 시간대. 바이저는 그대로고 눈만 무겁게 처진다."
+    Frame "3행" (2FL7-2) 0×0
+      Frame "셀 · 승인됨" (2FMC-2) 320×0
+        Frame "orb 100 · 기본" (2FMH-2) 100×100
+          Frame "visor" (2FMI-2) 81×80
+            Frame "eyes" (2FMJ-2) 0×0
+              Frame "eye-l" (2FML-2) 9×4
+              Frame "eye-r" (2FMK-2) 15×9
+        Frame "Frame" (2FMD-2) 0×0
+          Text "승인됨" (2FMG-2) 0×0 "승인됨"
+          Text "routine confirmed" (2FMF-2) 0×0 "routine confirmed"
+          Text "감시 등록이 반영됐다. 표정 중 유일…" (2FME-2) 0×0 "감시 등록이 반영됐다. 표정 중 유일한 좌우 비대칭."
+      Frame "셀 · 놀람" (2FM2-2) 320×0
+        Frame "orb 100 · 기본" (2FM7-2) 100×100
+          Frame "visor" (2FM8-2) 81×80
+            Frame "eyes" (2FM9-2) 0×0
+              Frame "eye-l" (2FMB-2) 16×16
+              Frame "eye-r" (2FMA-2) 16×16
+        Frame "Frame" (2FM3-2) 0×0
+          Text "놀람" (2FM6-2) 0×0 "놀람"
+          Text "exceed ratio ≥ 1.5" (2FM5-2) 0×0 "exceed ratio ≥ 1.5"
+          Text "발화 중 급변. 발화보다 더 크고 둥…" (2FM4-2) 0×0 "발화 중 급변. 발화보다 더 크고 둥근 원."
+      Frame "셀 · 찡그림" (2FLI-2) 320×0
+        Frame "orb 100 · 기본" (2FLN-2) 100×100
+          Frame "visor" (2FLO-2) 81×80
+            Frame "eyes" (2FLP-2) 0×0
+              Frame "eye-l" (2FLR-2) 8×18
+              Frame "eye-r" (2FLQ-2) 8×18
+        Frame "Frame" (2FLJ-2) 0×0
+          Text "찡그림" (2FLM-2) 0×0 "찡그림"
+          Text "error · timeout · fe…" (2FLL-2) 0×0 "error · timeout · feed down"
+          Text "사선으로 부딪는 두 막대. 재연결까지…" (2FLK-2) 0×0 "사선으로 부딪는 두 막대. 재연결까지 지속된다."
+      Frame "셀 · 우는" (2FL8-2) 320×0
+        Frame "orb 100 · 기본" (2FLD-2) 100×100
+          Frame "visor" (2FLE-2) 81×80
+            Frame "eyes" (2FLF-2) 0×0
+              Frame "eye-l" (2FLH-2) 14×7
+              Frame "eye-r" (2FLG-2) 14×7
+                Frame "눈물" (2FMV-2) 4×8
+        Frame "Frame" (2FL9-2) 0×0
+          Text "우는" (2FLC-2) 0×0 "우는"
+          Text "restore failed" (2FLB-2) 0×0 "restore failed"
+          Text "감시 복원 실패. 시무룩 눈에 눈물 …" (2FLA-2) 0×0 "감시 복원 실패. 시무룩 눈에 눈물 한 방울만 더한다."
+  Frame "시간 루프 3종" (5V0-0) 0×0
+    Frame "Frame" (5V1-0) 0×0
+      Text "시간 루프 3종 — 깜빡임 · 두리번…" (5V2-0) 0×0 "시간 루프 3종 — 깜빡임 · 두리번 · 숨"
+      Text "표정을 늘리는 것보다 이쪽이 크다. …" (5V3-0) 900×0 "표정을 늘리는 것보다 이쪽이 크다. 같은 얼굴이라도 깜빡이고 두리번거리면 다른 생물이 된다. 셋 다 흰 도형"
+    Frame "루프 3종" (5V4-0) 0×0
+      Frame "깜빡임" (5V6-0) 560×0
+        Frame "Frame" (5V7-0) 0×0
+          Text "깜빡임" (5V8-0) 0×0 "깜빡임"
+          Text "4~7s 간격 · 랜덤" (5V9-0) 0×0 "4~7s 간격 · 랜덤"
+        Frame "타임라인" (5VA-0) 0×34
+          Rectangle "Rectangle" (5VB-0) 96×2
+          Rectangle "Rectangle" (5VC-0) 7×26
+          Rectangle "Rectangle" (5VD-0) 118×2
+          Rectangle "Rectangle" (5VE-0) 7×26
+          Rectangle "Rectangle" (5VF-0) 5×0
+          Rectangle "Rectangle" (5VG-0) 7×26
+          Rectangle "Rectangle" (5VH-0) 152×2
+          Rectangle "Rectangle" (5VI-0) 7×26
+          Rectangle "Rectangle" (5VJ-0) 0×2
+        Text "감는 데 90ms, 뜨는 데 130m…" (5VK-0) 0×0 "감는 데 90ms, 뜨는 데 130ms — 뜨는 쪽이 느려야 기계가 아니다. 가끔(15%) 두 번 연속으로 "
+      Frame "두리번" (5VM-0) 560×0
+        Frame "Frame" (5VN-0) 0×0
+          Text "두리번" (5VO-0) 0×0 "두리번"
+          Text "8~20s 간격 · 대기에서만" (5VP-0) 0×0 "8~20s 간격 · 대기에서만"
+        Frame "궤적" (5VQ-0) 0×34
+          Text "가운데" (5VR-0) 0×0 "가운데"
+          SVG "SVG" (5VS-0) 0×0
+            SVGVisualElement "Path" (5VT-0) 0×0
+          Text "한쪽 260ms" (5VU-0) 0×0 "한쪽 260ms"
+          SVG "SVG" (5VV-0) 0×0
+            SVGVisualElement "Path" (5VW-0) 0×0
+          Text "머묾 1.2s" (5VX-0) 0×0 "머묾 1.2s"
+          SVG "SVG" (5VY-0) 0×0
+            SVGVisualElement "Path" (5VZ-0) 0×0
+          Text "복귀 340ms" (5W0-0) 0×0 "복귀 340ms"
+        Text "갈 때는 빠르고 돌아올 때는 느리다 …" (5W1-0) 0×0 "갈 때는 빠르고 돌아올 때는 느리다 — 사람 눈이 그렇다. 목적지는 9방향 중 무작위지만 아래는 뺀다. 아래"
+      Frame "숨" (5W2-0) 560×0
+        Frame "Frame" (5W3-0) 0×0
+          Text "숨" (5W4-0) 0×0 "숨"
+          Text "4.2s 주기 · 상시" (5W5-0) 0×0 "4.2s 주기 · 상시"
+        Frame "사인파" (5W6-0) 0×34
+          SVG "SVG" (5W7-0) 0×0
+            SVGVisualElement "Path" (5W8-0) 0×0
+        Text "바이저가 scale 1.000 ↔ 1…" (5W9-0) 0×0 "바이저가 scale 1.000 ↔ 1.018 로 아주 조금 부푼다. 알아채면 실패다 — 없으면 허전한 정도가"
+  Frame "E · 지켜야 하는 것" (5WB-0) 0×0
+    Text "늘려도 깨면 안 되는 것 — 코드가 …" (5WC-0) 0×0 "늘려도 깨면 안 되는 것 — 코드가 이미 강제하고 있다"
+    Frame "제약 카드" (5WD-0) 0×0
+      Frame "Frame" (5WE-0) 415×0
+        Text "GATE · check-orb.mjs…" (5WF-0) 0×0 "GATE · check-orb.mjs:223"
+        Text "페이드로 나타나면 빌드가 죽는다" (5WG-0) 0×0 "페이드로 나타나면 빌드가 죽는다"
+        Text "바이저 전이에 opacity만 있으면…" (5WH-0) 0×0 "바이저 전이에 opacity만 있으면 게이트가 막는다. 새 루프도 clip-path · transform 같"
+      Frame "Frame" (5WI-0) 415×0
+        Text "A11Y · access.css:83" (5WJ-0) 0×0 "A11Y · access.css:83"
+        Text "멈춘 프레임도 상태를 말해야 한다" (5WK-0) 0×0 "멈춘 프레임도 상태를 말해야 한다"
+        Text "reduced-motion에서 전역 …" (5WL-0) 0×0 "reduced-motion에서 전역 규칙이 반복을 1회로 깎는다. 깜빡임이 감은 채 멈추면 “잠듦”으로 오독"
+      Frame "Frame" (5WM-0) 415×0
+        Text "WINDOW · orb-window.…" (5WN-0) 0×0 "WINDOW · orb-window.js:36"
+        Text "창 밖으로는 못 튄다" (5WO-0) 0×0 "창 밖으로는 못 튄다"
+        Text "창 크기가 오브 크기와 딱 같아 여백…" (5WP-0) 0×0 "창 크기가 오브 크기와 딱 같아 여백이 0이다. 튀어오르게 하려면 창을 여백째 키워야 한다. 매 프레임 se"
+      Frame "Frame" (5WQ-0) 415×0
+        Text "BUDGET · 선례 없음" (5WR-0) 0×0 "BUDGET · 선례 없음"
+        Text "상시 애니메이션은 이번이 처음이다" (5WS-0) 0×0 "상시 애니메이션은 이번이 처음이다"
+        Text "지금 코드에 무한 루프도 reques…" (5WT-0) 0×0 "지금 코드에 무한 루프도 requestAnimationFrame도 0건이다. alwaysOnTop · bac"

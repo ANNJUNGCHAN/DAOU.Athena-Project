@@ -1,0 +1,35 @@
+Frame "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동" (4780-0) 360×420
+  Frame "Header" (478U-0) 0×0
+    Frame "Meta row" (478W-0) 0×0
+      Text "Eyebrow" (478Y-0) 0×0
+      Text "As of" (478X-0) 0×0 "기준 09:42"
+    Text "Title" (478V-0) 0×0 "시장 상태와 VI 발동"
+  Frame "Body" (4783-0) 0×0
+    Frame "KPI band" (478K-0) 0×0
+      Frame "Frame" (478R-0) 0×0
+        Text "장시작예상잔여시간" (478T-0) 0×0 "장시작예상잔여시간"
+        Text "장 시작 09:00 · 잔여 없음" (478S-0) 0×0 "장 시작 09:00 · 잔여 없음"
+      Frame "Frame" (478O-0) 0×0
+        Text "수량" (478Q-0) 0×0 "수량"
+        Text "3건" (478P-0) 0×0 "3건"
+      Frame "Frame" (478L-0) 0×0
+        Text "핵심" (478N-0) 0×0 "핵심"
+        Text "842.15" (478M-0) 0×0 "842.15"
+    Frame "Table header" (478G-0) 0×0
+      Text "항목" (478J-0) 0×0 "항목"
+      Text "값" (478I-0) 0×0 "값"
+      Text "비고" (478H-0) 72×0 "비고"
+    Frame "Position 1" (478A-0) 0×0
+      Frame "Frame" (478D-0) 0×0
+        Text "누적거래대금" (478F-0) 0×0 "누적거래대금"
+        Text "Text" (478E-0) 0×0
+      Text "272억" (478C-0) 0×0 "272억"
+      Text "Text" (478B-0) 72×0
+    Frame "Position 2" (4784-0) 0×0
+      Frame "Frame" (4787-0) 0×0
+        Text "괴리율 동적" (4789-0) 0×0 "괴리율 동적"
+        Text "Text" (4788-0) 0×0
+      Text "괴리 -10.1%" (4786-0) 0×0 "괴리 -10.1%"
+      Text "Text" (4785-0) 72×0
+  Frame "Fold note" (4781-0) 0×0
+    Text "스칼라 1개, 행 1개 접힘 · 원본…" (4782-0) 0×0 "스칼라 1개, 행 1개 접힘 · 원본에서 확인"

@@ -1,0 +1,341 @@
+{
+ "board_id": "47TK-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47UI-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47UH-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47UF-0",
+   "text": "한도소진율 증가",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Header"
+   ]
+  },
+  {
+   "id": "47UD-0",
+   "text": "소진율증가",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47UC-0",
+   "text": "+2.9%p",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47UA-0",
+   "text": "한도소진율",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47U9-0",
+   "text": "94.2%",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47U7-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47U6-0",
+   "text": "128종목",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47U3-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47U2-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47U1-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47TZ-0",
+   "text": "기준 시각",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47TY-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47TW-0",
+   "text": "09:42 조회",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47TV-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47TT-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47TS-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47TQ-0",
+   "text": "소진율 증가 1위",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47TP-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47TM-0",
+   "text": "스칼라 2개, 행 6개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47TK-0",
+   "name": "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47UE-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47UG-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47TN-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47U4-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47UB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47U8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47U5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47U0-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47TU-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47TX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47TO-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47TR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47TL-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "한도소진율 증가": 1,
+  "소진율증가": 1,
+  "+2.9%p": 1,
+  "한도소진율": 1,
+  "94.2%": 1,
+  "핵심": 1,
+  "128종목": 1,
+  "항목": 1,
+  "값": 2,
+  "비고": 1,
+  "기준 시각": 1,
+  "09:42 조회": 1,
+  "소진율 증가 1위": 1,
+  "스칼라 2개, 행 6개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "9662806ce03f7f215347a8b427f2fc822038338dfad605c099cf5ab7eebf1c5c"
+}

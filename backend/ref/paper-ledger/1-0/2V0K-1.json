@@ -1,0 +1,563 @@
+{
+ "board_id": "2V0K-1",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "2V26-1",
+   "text": "2 / 3",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "2V25-1",
+   "text": "사용할 CLI를 연결합니다",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "2V24-1",
+   "text": "Athena는 자체 API 키를 사용하지 않습니다. 로그인한 계정으로 CLI를 제어합니다.",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "2V21-1",
+   "text": "Claude Code",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-card-head"
+   ]
+  },
+  {
+   "id": "2V1Z-1",
+   "text": "계정 추가",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-card-head"
+   ]
+  },
+  {
+   "id": "2V1X-1",
+   "text": "ajc227ung@gmail.com",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-account-row is-active"
+   ]
+  },
+  {
+   "id": "2V1W-1",
+   "text": "활성",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-account-row is-active",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V1T-1",
+   "text": "jcahn@daou.co.kr",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-account-row"
+   ]
+  },
+  {
+   "id": "2V1S-1",
+   "text": "비활성",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-card · Claude (다계정)",
+    "onb-cli-account-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2V1N-1",
+   "text": "Codex",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Codex (단일 연결)",
+    "onb-cli-namecol"
+   ]
+  },
+  {
+   "id": "2V1M-1",
+   "text": "ajc227ung@gmail.com",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Codex (단일 연결)",
+    "onb-cli-namecol"
+   ]
+  },
+  {
+   "id": "2V1I-1",
+   "text": "Gemini CLI",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Gemini (연결 실패)"
+   ]
+  },
+  {
+   "id": "2V1G-1",
+   "text": "연결 실패 · 재시도",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Gemini (연결 실패)"
+   ]
+  },
+  {
+   "id": "2V1D-1",
+   "text": "Grok CLI",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Grok (미연결)"
+   ]
+  },
+  {
+   "id": "2V1B-1",
+   "text": "연결",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-cli-row · Grok (미연결)",
+    "uk-btn-ghost"
+   ]
+  },
+  {
+   "id": "2V18-1",
+   "text": "Gemini CLI 실행 파일을 찾지 못했습니다. 설치 후 재시도하거나, 연결된 다른 CLI로 계속할 수 있습니다.",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body",
+    "onb-hint"
+   ]
+  },
+  {
+   "id": "2V10-1",
+   "text": "계속",
+   "path": [
+    "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-foot",
+    "uk-btn-primary · 계속 (화면 내 유일 브랜드색)"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2V0K-1",
+   "name": "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "2V0L-1",
+   "name": "Shell 창 · 온보딩 (#onboard)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "2V0V-1",
+   "name": "onb-col (800px)",
+   "component": "Frame",
+   "w": 800,
+   "h": 734,
+   "depth": 2
+  },
+  {
+   "id": "2V23-1",
+   "name": "onb-head",
+   "component": "Frame",
+   "w": 800,
+   "h": 134,
+   "depth": 3
+  },
+  {
+   "id": "2V16-1",
+   "name": "onb-body",
+   "component": "Frame",
+   "w": 800,
+   "h": 530,
+   "depth": 3
+  },
+  {
+   "id": "2V1P-1",
+   "name": "onb-cli-card · Claude (다계정)",
+   "component": "Frame",
+   "w": 716,
+   "h": 134,
+   "depth": 4
+  },
+  {
+   "id": "2V1Y-1",
+   "name": "onb-cli-card-head",
+   "component": "Frame",
+   "w": 714,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "2V22-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "2V20-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 503,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2V1U-1",
+   "name": "onb-cli-account-row is-active",
+   "component": "Frame",
+   "w": 714,
+   "h": 42,
+   "depth": 5
+  },
+  {
+   "id": "2V1V-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 40,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "2V1Q-1",
+   "name": "onb-cli-account-row",
+   "component": "Frame",
+   "w": 714,
+   "h": 42,
+   "depth": 5
+  },
+  {
+   "id": "2V1R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "2V1K-1",
+   "name": "onb-cli-row · Codex (단일 연결)",
+   "component": "Frame",
+   "w": 716,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "2V1O-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 5
+  },
+  {
+   "id": "2V1L-1",
+   "name": "onb-cli-namecol",
+   "component": "Frame",
+   "w": 103,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "2V1F-1",
+   "name": "onb-cli-row · Gemini (연결 실패)",
+   "component": "Frame",
+   "w": 716,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "2V1J-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 5
+  },
+  {
+   "id": "2V1H-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 477,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2V19-1",
+   "name": "onb-cli-row · Grok (미연결)",
+   "component": "Frame",
+   "w": 716,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "2V1E-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 5
+  },
+  {
+   "id": "2V1C-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 531,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2V1A-1",
+   "name": "uk-btn-ghost",
+   "component": "Frame",
+   "w": 52,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "2V17-1",
+   "name": "onb-hint",
+   "component": "Frame",
+   "w": 716,
+   "h": 23,
+   "depth": 4
+  },
+  {
+   "id": "2V0W-1",
+   "name": "onb-foot",
+   "component": "Frame",
+   "w": 800,
+   "h": 70,
+   "depth": 3
+  },
+  {
+   "id": "2V12-1",
+   "name": "uk-dots (3단계 중 2)",
+   "component": "Frame",
+   "w": 72,
+   "h": 3,
+   "depth": 4
+  },
+  {
+   "id": "2V15-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 20,
+   "h": 3,
+   "depth": 5
+  },
+  {
+   "id": "2V14-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 20,
+   "h": 3,
+   "depth": 5
+  },
+  {
+   "id": "2V13-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 20,
+   "h": 3,
+   "depth": 5
+  },
+  {
+   "id": "2V11-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 528,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2V0X-1",
+   "name": "uk-btn-primary · 계속 (화면 내 유일 브랜드색)",
+   "component": "Frame",
+   "w": 86,
+   "h": 36,
+   "depth": 4
+  },
+  {
+   "id": "2V0Y-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 10,
+   "depth": 5
+  },
+  {
+   "id": "2V0Z-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "2V0U-1",
+   "name": "타이틀바",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "2V0M-1",
+   "name": "창 제어",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "2V0S-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "2V0T-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "2V0Q-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "2V0R-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "2V0N-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "2V0O-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "2V0P-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "2 / 3": 1,
+  "사용할 CLI를 연결합니다": 1,
+  "Athena는 자체 API 키를 사용하지 않습니다. 로그인한 계정으로 CLI를 제어합니다.": 1,
+  "Claude Code": 1,
+  "계정 추가": 1,
+  "ajc227ung@gmail.com": 2,
+  "활성": 1,
+  "jcahn@daou.co.kr": 1,
+  "비활성": 1,
+  "Codex": 1,
+  "Gemini CLI": 1,
+  "연결 실패 · 재시도": 1,
+  "Grok CLI": 1,
+  "연결": 1,
+  "Gemini CLI 실행 파일을 찾지 못했습니다. 설치 후 재시도하거나, 연결된 다른 CLI로 계속할 수 있습니다.": 1,
+  "계속": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "d55f89c7d1c3fc41e0f763f175ec2fc46e9f30d7346c415b1c6cc535a5128a4e"
+}

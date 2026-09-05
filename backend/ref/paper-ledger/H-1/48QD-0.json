@@ -1,0 +1,92 @@
+{
+ "board_id": "48QD-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-06 / R05 · 반도체 업종·AI 테마",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48QF-0",
+   "text": "원본 보드: CC-06 / R05 · 반도체 업종·AI 테마",
+   "path": [
+    "note/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48QH-0",
+   "text": "가져온 요소: 종목코드 · 전일대비 · 고가",
+   "path": [
+    "note/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48QJ-0",
+   "text": "문법: table",
+   "path": [
+    "note/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48QL-0",
+   "text": "접은 개수: 행 0개",
+   "path": [
+    "note/CC-06 / R05 · 반도체 업종·AI 테마",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48QD-0",
+   "name": "note/CC-06 / R05 · 반도체 업종·AI 테마",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48QE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48QG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48QI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48QK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-06 / R05 · 반도체 업종·AI 테마": 1,
+  "가져온 요소: 종목코드 · 전일대비 · 고가": 1,
+  "문법: table": 1,
+  "접은 개수: 행 0개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "be5d3a709e9ff0ef3e0cd66c126c32a13d85e7f28004f26f27078a739c3756fa"
+}

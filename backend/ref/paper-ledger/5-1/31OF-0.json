@@ -1,0 +1,3085 @@
+{
+ "board_id": "31OF-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+ "width": 1440,
+ "height": 1014,
+ "texts": [
+  {
+   "id": "31TY-0",
+   "text": "수급 순위",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TX-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TU-0",
+   "text": "시장 전체 · 상위 50종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TS-0",
+   "text": "투자자별",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TQ-0",
+   "text": "거래원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TO-0",
+   "text": "프로그램",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TM-0",
+   "text": "신용·대차",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TK-0",
+   "text": "종목 동향",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TI-0",
+   "text": "순위",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TE-0",
+   "text": "정렬 기준",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TD-0",
+   "text": "보증금률 낮은 순",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TB-0",
+   "text": "융자 가능",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31TA-0",
+   "text": "1,842종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31T9-0",
+   "text": "전체 2,056종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31T7-0",
+   "text": "융자 불가",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31T6-0",
+   "text": "214종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31T5-0",
+   "text": "증거금 100%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31T3-0",
+   "text": "최저 보증금률",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31T2-0",
+   "text": "40%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31T1-0",
+   "text": "가능 종목 기준",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SZ-0",
+   "text": "기준 시점",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SY-0",
+   "text": "전일 확정",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SX-0",
+   "text": "09:42 조회",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SU-0",
+   "text": "프로그램 순매수",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SS-0",
+   "text": "신용비율 상위",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SQ-0",
+   "text": "대차 상위",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SO-0",
+   "text": "한도소진율 증가",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SM-0",
+   "text": "장중 투자자 상위",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SJ-0",
+   "text": "외국인·기관 상위",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SH-0",
+   "text": "증권사별 상위",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SF-0",
+   "text": "동일순매매",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31SD-0",
+   "text": "신용융자 가능종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A7R-0",
+   "text": "순위",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3A7S-0",
+   "text": "종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3A7T-0",
+   "text": "현재가",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3A7U-0",
+   "text": "대용가",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3A7V-0",
+   "text": "가능 여부",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3A7W-0",
+   "text": "보증금률",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3A7X-0",
+   "text": "한도 소진",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3A7Y-0",
+   "text": "융자잔고",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3A80-0",
+   "text": "1",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자"
+   ]
+  },
+  {
+   "id": "3A82-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A83-0",
+   "text": "005930",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A85-0",
+   "text": "150,850",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A86-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A87-0",
+   "text": "120,680",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자"
+   ]
+  },
+  {
+   "id": "3A8A-0",
+   "text": "가능",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A8B-0",
+   "text": "40%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자"
+   ]
+  },
+  {
+   "id": "3A8C-0",
+   "text": "62%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자"
+   ]
+  },
+  {
+   "id": "3A8D-0",
+   "text": "4,208억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "1 삼성전자"
+   ]
+  },
+  {
+   "id": "3A8F-0",
+   "text": "2",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스"
+   ]
+  },
+  {
+   "id": "3A8H-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A8I-0",
+   "text": "000660",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A8K-0",
+   "text": "198,400",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A8L-0",
+   "text": "+3,985 · +2.05%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A8M-0",
+   "text": "158,720",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스"
+   ]
+  },
+  {
+   "id": "3A8P-0",
+   "text": "가능",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A8Q-0",
+   "text": "40%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스"
+   ]
+  },
+  {
+   "id": "3A8R-0",
+   "text": "58%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스"
+   ]
+  },
+  {
+   "id": "3A8S-0",
+   "text": "3,812억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "2 SK하이닉스"
+   ]
+  },
+  {
+   "id": "3A8U-0",
+   "text": "3",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차"
+   ]
+  },
+  {
+   "id": "3A8W-0",
+   "text": "현대차",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A8X-0",
+   "text": "005380",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A8Z-0",
+   "text": "232,500",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A90-0",
+   "text": "+1,985 · +0.86%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A91-0",
+   "text": "186,000",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차"
+   ]
+  },
+  {
+   "id": "3A94-0",
+   "text": "가능",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A95-0",
+   "text": "45%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차"
+   ]
+  },
+  {
+   "id": "3A96-0",
+   "text": "47%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차"
+   ]
+  },
+  {
+   "id": "3A97-0",
+   "text": "2,940억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "3 현대차"
+   ]
+  },
+  {
+   "id": "3AF4-0",
+   "text": "4",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융"
+   ]
+  },
+  {
+   "id": "3AF6-0",
+   "text": "KB금융",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AF7-0",
+   "text": "105560",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AF9-0",
+   "text": "78,200",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AFA-0",
+   "text": "+865 · +1.12%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AFB-0",
+   "text": "62,560",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융"
+   ]
+  },
+  {
+   "id": "3AFE-0",
+   "text": "가능",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AFF-0",
+   "text": "45%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융"
+   ]
+  },
+  {
+   "id": "3AFG-0",
+   "text": "38%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융"
+   ]
+  },
+  {
+   "id": "3AFH-0",
+   "text": "1,860억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "4 KB금융"
+   ]
+  },
+  {
+   "id": "3AFJ-0",
+   "text": "5",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER"
+   ]
+  },
+  {
+   "id": "3AFL-0",
+   "text": "NAVER",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AFM-0",
+   "text": "035420",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AFO-0",
+   "text": "214,000",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AFP-0",
+   "text": "-1,010 · -0.47%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AFQ-0",
+   "text": "171,200",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER"
+   ]
+  },
+  {
+   "id": "3AFT-0",
+   "text": "가능",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AFU-0",
+   "text": "50%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER"
+   ]
+  },
+  {
+   "id": "3AFV-0",
+   "text": "71%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER"
+   ]
+  },
+  {
+   "id": "3AFW-0",
+   "text": "2,214억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "5 NAVER"
+   ]
+  },
+  {
+   "id": "3AFY-0",
+   "text": "6",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스"
+   ]
+  },
+  {
+   "id": "3AG0-0",
+   "text": "POSCO홀딩스",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AG1-0",
+   "text": "005490",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AG3-0",
+   "text": "389,500",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AG4-0",
+   "text": "+2,515 · +0.65%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AG5-0",
+   "text": "311,600",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스"
+   ]
+  },
+  {
+   "id": "3AG8-0",
+   "text": "가능",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AG9-0",
+   "text": "50%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스"
+   ]
+  },
+  {
+   "id": "3AGA-0",
+   "text": "44%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스"
+   ]
+  },
+  {
+   "id": "3AGB-0",
+   "text": "1,742억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "6 POSCO홀딩스"
+   ]
+  },
+  {
+   "id": "3T2O-0",
+   "text": "7~48위 42종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "7~48위 생략"
+   ]
+  },
+  {
+   "id": "3T2Q-0",
+   "text": "50% ~ 60%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "7~48위 생략"
+   ]
+  },
+  {
+   "id": "3AGD-0",
+   "text": "49",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학"
+   ]
+  },
+  {
+   "id": "3AGF-0",
+   "text": "LG화학",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AGG-0",
+   "text": "051910",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AGI-0",
+   "text": "312,000",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AGJ-0",
+   "text": "-3,470 · -1.10%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AGK-0",
+   "text": "249,600",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학"
+   ]
+  },
+  {
+   "id": "3AGN-0",
+   "text": "가능",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AGO-0",
+   "text": "60%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학"
+   ]
+  },
+  {
+   "id": "3AGP-0",
+   "text": "22%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학"
+   ]
+  },
+  {
+   "id": "3AGQ-0",
+   "text": "640억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "49 LG화학"
+   ]
+  },
+  {
+   "id": "3AGS-0",
+   "text": "50",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오"
+   ]
+  },
+  {
+   "id": "3AGU-0",
+   "text": "카카오",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AGV-0",
+   "text": "035720",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AGX-0",
+   "text": "41,850",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AGY-0",
+   "text": "-350 · -0.83%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AGZ-0",
+   "text": "33,480",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오"
+   ]
+  },
+  {
+   "id": "3AH2-0",
+   "text": "한도 초과",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AH3-0",
+   "text": "증거금 100% 적용",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AH4-0",
+   "text": "100%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오"
+   ]
+  },
+  {
+   "id": "3AH5-0",
+   "text": "100%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오"
+   ]
+  },
+  {
+   "id": "3AH6-0",
+   "text": "512억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Rank Table",
+    "50 카카오"
+   ]
+  },
+  {
+   "id": "31PZ-0",
+   "text": "전체 50개 · 상위 6 + 하위 2 표시",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31PY-0",
+   "text": "20개 더 보기",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31PW-0",
+   "text": "접기",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IEE-0",
+   "text": "가능 요약",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loanable Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IEF-0",
+   "text": "전체 2,056종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loanable Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IEI-0",
+   "text": "가능",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loanable Summary",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IEJ-0",
+   "text": "1,842종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loanable Summary",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IEO-0",
+   "text": "불가",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loanable Summary",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IEP-0",
+   "text": "214종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loanable Summary",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IEU-0",
+   "text": "보증금률 40% 적용",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loanable Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IEV-0",
+   "text": "412종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loanable Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IEX-0",
+   "text": "최저 보증금률",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loanable Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IEY-0",
+   "text": "40%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loanable Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T2X-0",
+   "text": "융자잔고 상위 6",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T2Y-0",
+   "text": "최대 대비",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T30-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "삼성전자"
+   ]
+  },
+  {
+   "id": "3T33-0",
+   "text": "4,208억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "삼성전자"
+   ]
+  },
+  {
+   "id": "3T35-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "SK하이닉스"
+   ]
+  },
+  {
+   "id": "3T38-0",
+   "text": "3,812억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "SK하이닉스"
+   ]
+  },
+  {
+   "id": "3T3A-0",
+   "text": "현대차",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "현대차"
+   ]
+  },
+  {
+   "id": "3T3D-0",
+   "text": "2,940억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "현대차"
+   ]
+  },
+  {
+   "id": "3T3G-0",
+   "text": "NAVER",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3T3J-0",
+   "text": "2,214억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "NAVER"
+   ]
+  },
+  {
+   "id": "3T3L-0",
+   "text": "KB금융",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "KB금융"
+   ]
+  },
+  {
+   "id": "3T3O-0",
+   "text": "1,860억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "KB금융"
+   ]
+  },
+  {
+   "id": "3T3Q-0",
+   "text": "POSCO홀딩스",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "POSCO홀딩스"
+   ]
+  },
+  {
+   "id": "3T3T-0",
+   "text": "1,742억원",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Loan Balance Bars",
+    "POSCO홀딩스"
+   ]
+  },
+  {
+   "id": "3T3X-0",
+   "text": "표시 구성 · 상위 50종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T3Y-0",
+   "text": "보증금률순",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T40-0",
+   "text": "표시 종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T41-0",
+   "text": "8종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T43-0",
+   "text": "생략 종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T44-0",
+   "text": "42종목",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T46-0",
+   "text": "표시 보증금률",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T47-0",
+   "text": "40% ~ 100%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T49-0",
+   "text": "생략 보증금률",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T4A-0",
+   "text": "50% ~ 60%",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Display Composition",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31OJ-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Status Footer"
+   ]
+  },
+  {
+   "id": "31OI-0",
+   "text": "융자 가능 여부 전일 확정 기준 · 마지막 조회 09:42:18",
+   "path": [
+    "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Flow Card Surface",
+    "Flow Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "31OF-0",
+   "name": "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1014,
+   "depth": 0
+  },
+  {
+   "id": "31OG-0",
+   "name": "Flow Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 934,
+   "depth": 1
+  },
+  {
+   "id": "31TF-0",
+   "name": "Flow Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "31TT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "31TV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "31TW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31TG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "31TR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "31TP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "31TN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "31TL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "31TJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "31TH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "31SV-0",
+   "name": "Flow Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "31TC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "31T8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "31T4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 170,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "31T0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "31SW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 170,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "31OK-0",
+   "name": "Flow Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "31PT-0",
+   "name": "Investor Panel",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "31SA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "31SK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31ST-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31SR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31SP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31SN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31SL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31SB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31SI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31SG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31SE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31SC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A7P-0",
+   "name": "Rank Table",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3A7Q-0",
+   "name": "Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "3A7Z-0",
+   "name": "1 삼성전자",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3A81-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A84-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A88-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A89-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A8E-0",
+   "name": "2 SK하이닉스",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3A8G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A8J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A8N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A8O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A8T-0",
+   "name": "3 현대차",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3A8V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A8Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A92-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A93-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AF3-0",
+   "name": "4 KB금융",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3AF5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AF8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AFC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AFD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AFI-0",
+   "name": "5 NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3AFK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AFN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AFR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AFS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AFX-0",
+   "name": "6 POSCO홀딩스",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3AFZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AG2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AG6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AG7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T2N-0",
+   "name": "7~48위 생략",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3T2P-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 308,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3T2R-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 184,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3AGC-0",
+   "name": "49 LG화학",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3AGE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AGH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AGL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AGM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AGR-0",
+   "name": "50 카카오",
+   "component": "Frame",
+   "w": 0,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3AGT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AGW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AH0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3AH1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "31PU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "31PV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31PX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31OL-0",
+   "name": "Side Panel",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3IEC-0",
+   "name": "Loanable Summary",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3IED-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IEG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IEH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IEK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3IEL-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3IEM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IEN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IEQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3IER-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3IES-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "3IET-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IEW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T2V-0",
+   "name": "Loan Balance Bars",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3T2W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T2Z-0",
+   "name": "삼성전자",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T31-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3T32-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3T34-0",
+   "name": "SK하이닉스",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T36-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3T37-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3T39-0",
+   "name": "현대차",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T3B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3T3C-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3T3F-0",
+   "name": "NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T3H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3T3I-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3T3K-0",
+   "name": "KB금융",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T3M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3T3N-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3T3P-0",
+   "name": "POSCO홀딩스",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T3R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3T3S-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3T3V-0",
+   "name": "Display Composition",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3T3W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T3Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T42-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T45-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3T48-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31OH-0",
+   "name": "Flow Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  }
+ ],
+ "text_multiset": {
+  "수급 순위": 1,
+  "조회 스냅샷": 2,
+  "시장 전체 · 상위 50종목": 1,
+  "투자자별": 1,
+  "거래원": 1,
+  "프로그램": 1,
+  "신용·대차": 1,
+  "종목 동향": 1,
+  "순위": 2,
+  "정렬 기준": 1,
+  "보증금률 낮은 순": 1,
+  "융자 가능": 1,
+  "1,842종목": 2,
+  "전체 2,056종목": 2,
+  "융자 불가": 1,
+  "214종목": 2,
+  "증거금 100%": 1,
+  "최저 보증금률": 2,
+  "40%": 4,
+  "가능 종목 기준": 1,
+  "기준 시점": 1,
+  "전일 확정": 1,
+  "09:42 조회": 1,
+  "프로그램 순매수": 1,
+  "신용비율 상위": 1,
+  "대차 상위": 1,
+  "한도소진율 증가": 1,
+  "장중 투자자 상위": 1,
+  "외국인·기관 상위": 1,
+  "증권사별 상위": 1,
+  "동일순매매": 1,
+  "신용융자 가능종목": 1,
+  "종목": 1,
+  "현재가": 1,
+  "대용가": 1,
+  "가능 여부": 1,
+  "보증금률": 1,
+  "한도 소진": 1,
+  "융자잔고": 1,
+  "1": 1,
+  "삼성전자": 2,
+  "005930": 1,
+  "150,850": 1,
+  "+1,850 · +1.24%": 1,
+  "120,680": 1,
+  "가능": 8,
+  "62%": 1,
+  "4,208억원": 2,
+  "2": 1,
+  "SK하이닉스": 2,
+  "000660": 1,
+  "198,400": 1,
+  "+3,985 · +2.05%": 1,
+  "158,720": 1,
+  "58%": 1,
+  "3,812억원": 2,
+  "3": 1,
+  "현대차": 2,
+  "005380": 1,
+  "232,500": 1,
+  "+1,985 · +0.86%": 1,
+  "186,000": 1,
+  "45%": 2,
+  "47%": 1,
+  "2,940억원": 2,
+  "4": 1,
+  "KB금융": 2,
+  "105560": 1,
+  "78,200": 1,
+  "+865 · +1.12%": 1,
+  "62,560": 1,
+  "38%": 1,
+  "1,860억원": 2,
+  "5": 1,
+  "NAVER": 2,
+  "035420": 1,
+  "214,000": 1,
+  "-1,010 · -0.47%": 1,
+  "171,200": 1,
+  "50%": 2,
+  "71%": 1,
+  "2,214억원": 2,
+  "6": 1,
+  "POSCO홀딩스": 2,
+  "005490": 1,
+  "389,500": 1,
+  "+2,515 · +0.65%": 1,
+  "311,600": 1,
+  "44%": 1,
+  "1,742억원": 2,
+  "7~48위 42종목": 1,
+  "50% ~ 60%": 2,
+  "49": 1,
+  "LG화학": 1,
+  "051910": 1,
+  "312,000": 1,
+  "-3,470 · -1.10%": 1,
+  "249,600": 1,
+  "60%": 1,
+  "22%": 1,
+  "640억원": 1,
+  "50": 1,
+  "카카오": 1,
+  "035720": 1,
+  "41,850": 1,
+  "-350 · -0.83%": 1,
+  "33,480": 1,
+  "한도 초과": 1,
+  "증거금 100% 적용": 1,
+  "100%": 2,
+  "512억원": 1,
+  "전체 50개 · 상위 6 + 하위 2 표시": 1,
+  "20개 더 보기": 1,
+  "접기": 1,
+  "가능 요약": 1,
+  "불가": 1,
+  "보증금률 40% 적용": 1,
+  "412종목": 1,
+  "융자잔고 상위 6": 1,
+  "최대 대비": 1,
+  "표시 구성 · 상위 50종목": 1,
+  "보증금률순": 1,
+  "표시 종목": 1,
+  "8종목": 1,
+  "생략 종목": 1,
+  "42종목": 1,
+  "표시 보증금률": 1,
+  "40% ~ 100%": 1,
+  "생략 보증금률": 1,
+  "융자 가능 여부 전일 확정 기준 · 마지막 조회 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "0af0949ebe9e0210eb269360f2b704ddda1bf81494f3ebfbba730eaf177610d5"
+}

@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T1-X · 분봉 시세" (48BO-0) 360×420
+  Frame "Header" (48CI-0) 0×0
+    Frame "Meta row" (48CK-0) 0×0
+      Text "Eyebrow" (48CM-0) 0×0
+      Text "As of" (48CL-0) 0×0 "기준 09:42"
+    Text "Title" (48CJ-0) 0×0 "분봉 시세"
+  Frame "Body" (48BR-0) 0×0
+    Frame "KPI band" (48C8-0) 0×0
+      Frame "Frame" (48CF-0) 0×0
+        Text "거래대금" (48CH-0) 0×0 "거래대금"
+        Text "2.14조원" (48CG-0) 0×0 "2.14조원"
+      Frame "Frame" (48CC-0) 0×0
+        Text "변화" (48CE-0) 0×0 "변화"
+        Text "8.4%" (48CD-0) 0×0 "8.4%"
+      Frame "Frame" (48C9-0) 0×0
+        Text "핵심" (48CB-0) 0×0 "핵심"
+        Text "21.2배" (48CA-0) 0×0 "21.2배"
+    Frame "Table header" (48C4-0) 0×0
+      Text "항목" (48C7-0) 0×0 "항목"
+      Text "값" (48C6-0) 0×0 "값"
+      Text "비고" (48C5-0) 72×0 "비고"
+    Frame "Position 1" (48BY-0) 0×0
+      Frame "Frame" (48C1-0) 0×0
+        Text "값" (48C3-0) 0×0 "값"
+        Text "Text" (48C2-0) 0×0
+      Text "업종 1.61배" (48C0-0) 0×0 "업종 1.61배"
+      Text "Text" (48BZ-0) 72×0
+    Frame "Position 2" (48BS-0) 0×0
+      Frame "Frame" (48BV-0) 0×0
+        Text "값" (48BX-0) 0×0 "값"
+        Text "Text" (48BW-0) 0×0
+      Text "2.63배" (48BU-0) 0×0 "2.63배"
+      Text "Text" (48BT-0) 72×0
+  Frame "Fold note" (48BP-0) 0×0
+    Text "스칼라 2개, 행 11개 접힘 · 원…" (48BQ-0) 0×0 "스칼라 2개, 행 11개 접힘 · 원본에서 확인"

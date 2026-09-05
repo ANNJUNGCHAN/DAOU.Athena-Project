@@ -1,0 +1,340 @@
+{
+ "board_id": "4802-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "4810-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "480Z-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "480X-0",
+   "text": "고저 PER",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Header"
+   ]
+  },
+  {
+   "id": "480V-0",
+   "text": "PER",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "480U-0",
+   "text": "3.1배",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "480S-0",
+   "text": "PER",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "480R-0",
+   "text": "214.0배",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "480P-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "480O-0",
+   "text": "14.2배",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "480L-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "480K-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "480J-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "480H-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "480G-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "480E-0",
+   "text": "1위 종목",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "480D-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "480B-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "480A-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4808-0",
+   "text": "전체 814건 · 19건 표시",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "4807-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "4804-0",
+   "text": "스칼라 2개, 행 17개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4802-0",
+   "name": "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "480W-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "480Y-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4805-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "480M-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "480T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "480Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "480N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "480I-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "480C-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "480F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4806-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4809-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4803-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "고저 PER": 1,
+  "PER": 2,
+  "3.1배": 1,
+  "214.0배": 1,
+  "핵심": 1,
+  "14.2배": 1,
+  "항목": 1,
+  "값": 2,
+  "비고": 1,
+  "수량": 1,
+  "1위 종목": 1,
+  "전체 814건 · 19건 표시": 1,
+  "스칼라 2개, 행 17개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "6fd33e7b492b843a499f54146740abe96a3d7ebd6a68f996620afafc04b64024"
+}

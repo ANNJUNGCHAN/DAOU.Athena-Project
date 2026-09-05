@@ -1,0 +1,4338 @@
+{
+ "board_id": "2TZN-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "2U3F-1",
+   "text": "업종 탐색",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U3E-1",
+   "text": "장중 · 09:42",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U3B-1",
+   "text": "전체 시장 · 업종 21개",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U39-1",
+   "text": "업종",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U37-1",
+   "text": "종목찾기",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U35-1",
+   "text": "관심",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U33-1",
+   "text": "테마",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U31-1",
+   "text": "시장·VI",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U2Z-1",
+   "text": "조건검색",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U2V-1",
+   "text": "조건",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U2T-1",
+   "text": "등락률",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U2R-1",
+   "text": "전체 시장",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U2P-1",
+   "text": "전체 업종",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3BQ9-0",
+   "text": "▸",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U2N-1",
+   "text": "지수 기준",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U2L-1",
+   "text": "정규장",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U2I-1",
+   "text": "● 실시간 갱신",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U2H-1",
+   "text": "21개 업종",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "340C-0",
+   "text": "업종",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종표 헤더"
+   ]
+  },
+  {
+   "id": "340D-0",
+   "text": "시장",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종표 헤더"
+   ]
+  },
+  {
+   "id": "340E-0",
+   "text": "지수",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종표 헤더"
+   ]
+  },
+  {
+   "id": "340F-0",
+   "text": "등락률",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종표 헤더"
+   ]
+  },
+  {
+   "id": "340G-0",
+   "text": "거래대금",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종표 헤더"
+   ]
+  },
+  {
+   "id": "340H-0",
+   "text": "상승 · 보합 · 하락",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종표 헤더"
+   ]
+  },
+  {
+   "id": "340I-0",
+   "text": "비중",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종표 헤더"
+   ]
+  },
+  {
+   "id": "340L-0",
+   "text": "반도체",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "340M-0",
+   "text": "G2510 · 제조",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "340P-0",
+   "text": "KOSPI",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 반도체",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "340R-0",
+   "text": "3,184.52",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "340S-0",
+   "text": "+87.96",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "340T-0",
+   "text": "+2.84%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 반도체"
+   ]
+  },
+  {
+   "id": "340V-0",
+   "text": "4.2조",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "340W-0",
+   "text": "3억 4,200만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "340Y-0",
+   "text": "71 · 8 · 23",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "340Z-0",
+   "text": "상한 2 · 하한 1",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3410-0",
+   "text": "18.4%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 반도체"
+   ]
+  },
+  {
+   "id": "3413-0",
+   "text": "의약품",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3414-0",
+   "text": "G3520 · 제조",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3417-0",
+   "text": "KOSPI",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 의약품",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3419-0",
+   "text": "14,208.55",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341A-0",
+   "text": "+190.63",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341B-0",
+   "text": "+1.36%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 의약품"
+   ]
+  },
+  {
+   "id": "341D-0",
+   "text": "0.7조",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341E-0",
+   "text": "5,100만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341G-0",
+   "text": "42 · 11 · 19",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341H-0",
+   "text": "상한 1 · 하한 0",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341I-0",
+   "text": "6.2%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 의약품"
+   ]
+  },
+  {
+   "id": "341L-0",
+   "text": "은행",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341M-0",
+   "text": "G4010 · 금융",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341P-0",
+   "text": "KOSPI",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 은행",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341R-0",
+   "text": "912.44",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341S-0",
+   "text": "+8.32",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341T-0",
+   "text": "+0.92%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 은행"
+   ]
+  },
+  {
+   "id": "341V-0",
+   "text": "0.8조",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341W-0",
+   "text": "1억 1,200만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341Y-0",
+   "text": "9 · 1 · 2",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "341Z-0",
+   "text": "상한 0 · 하한 0",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3420-0",
+   "text": "7.1%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 은행"
+   ]
+  },
+  {
+   "id": "3423-0",
+   "text": "운수장비",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 운수장비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3424-0",
+   "text": "G2710 · 제조",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 운수장비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3427-0",
+   "text": "KOSPI",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 운수장비",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3429-0",
+   "text": "2,105.80",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 운수장비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342A-0",
+   "text": "+8.60",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 운수장비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342B-0",
+   "text": "+0.41%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 운수장비"
+   ]
+  },
+  {
+   "id": "342D-0",
+   "text": "1.1조",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 운수장비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342E-0",
+   "text": "8,600만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 운수장비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342G-0",
+   "text": "28 · 6 · 14",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 운수장비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342H-0",
+   "text": "상한 0 · 하한 0",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 운수장비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342I-0",
+   "text": "9.8%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 운수장비"
+   ]
+  },
+  {
+   "id": "342L-0",
+   "text": "화학",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342M-0",
+   "text": "G1510 · 제조",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342P-0",
+   "text": "KOSPI",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 화학",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342R-0",
+   "text": "1,684.02",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342S-0",
+   "text": "-3.71",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342T-0",
+   "text": "-0.22%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 화학"
+   ]
+  },
+  {
+   "id": "342V-0",
+   "text": "0.9조",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342W-0",
+   "text": "7,400만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342Y-0",
+   "text": "31 · 9 · 48",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "342Z-0",
+   "text": "상한 0 · 하한 0",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 화학",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3430-0",
+   "text": "8.5%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 화학"
+   ]
+  },
+  {
+   "id": "3433-0",
+   "text": "건설",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 건설",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3434-0",
+   "text": "G2020 · 건설",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 건설",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3437-0",
+   "text": "KOSPI",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 건설",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3439-0",
+   "text": "78.61",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 건설",
+    "Frame"
+   ]
+  },
+  {
+   "id": "343A-0",
+   "text": "-0.67",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 건설",
+    "Frame"
+   ]
+  },
+  {
+   "id": "343B-0",
+   "text": "-0.85%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 건설"
+   ]
+  },
+  {
+   "id": "343D-0",
+   "text": "0.3조",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 건설",
+    "Frame"
+   ]
+  },
+  {
+   "id": "343E-0",
+   "text": "2,900만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 건설",
+    "Frame"
+   ]
+  },
+  {
+   "id": "343G-0",
+   "text": "8 · 4 · 27",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 건설",
+    "Frame"
+   ]
+  },
+  {
+   "id": "343H-0",
+   "text": "상한 0 · 하한 1",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 건설",
+    "Frame"
+   ]
+  },
+  {
+   "id": "343I-0",
+   "text": "2.4%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "업종 행 · 건설"
+   ]
+  },
+  {
+   "id": "2U4O-1",
+   "text": "등락률 상위 6개 표시 · 전체 21개",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U4Q-1",
+   "text": "더보기",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "345E-0",
+   "text": "지수 흐름",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "345F-0",
+   "text": "09:42 기준",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "345H-0",
+   "text": "시점",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "345I-0",
+   "text": "지수",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "345J-0",
+   "text": "등락률",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "345K-0",
+   "text": "거래량",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "345L-0",
+   "text": "상승 · 하락",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "345M-0",
+   "text": "시간별",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame"
+   ]
+  },
+  {
+   "id": "345O-0",
+   "text": "09:42",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:42"
+   ]
+  },
+  {
+   "id": "345Q-0",
+   "text": "3,184.52",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:42",
+    "Frame"
+   ]
+  },
+  {
+   "id": "345R-0",
+   "text": "+87.96",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:42",
+    "Frame"
+   ]
+  },
+  {
+   "id": "345S-0",
+   "text": "+2.84%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:42"
+   ]
+  },
+  {
+   "id": "345U-0",
+   "text": "940만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:42",
+    "Frame"
+   ]
+  },
+  {
+   "id": "345V-0",
+   "text": "누적 3억 4,200만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:42",
+    "Frame"
+   ]
+  },
+  {
+   "id": "345W-0",
+   "text": "71 · 23",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:42"
+   ]
+  },
+  {
+   "id": "345Y-0",
+   "text": "09:30",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:30"
+   ]
+  },
+  {
+   "id": "3460-0",
+   "text": "3,171.08",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:30",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3461-0",
+   "text": "+74.52",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:30",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3462-0",
+   "text": "+2.41%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:30"
+   ]
+  },
+  {
+   "id": "3464-0",
+   "text": "1,180만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:30",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3465-0",
+   "text": "누적 2억 6,800만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:30",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3466-0",
+   "text": "68 · 26",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:30"
+   ]
+  },
+  {
+   "id": "3468-0",
+   "text": "09:00",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:00"
+   ]
+  },
+  {
+   "id": "346A-0",
+   "text": "3,142.66",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:00",
+    "Frame"
+   ]
+  },
+  {
+   "id": "346B-0",
+   "text": "+46.10",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:00",
+    "Frame"
+   ]
+  },
+  {
+   "id": "346C-0",
+   "text": "+1.49%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:00"
+   ]
+  },
+  {
+   "id": "346E-0",
+   "text": "4,200만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:00",
+    "Frame"
+   ]
+  },
+  {
+   "id": "346F-0",
+   "text": "누적 4,200만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:00",
+    "Frame"
+   ]
+  },
+  {
+   "id": "346G-0",
+   "text": "61 · 33",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09:00"
+   ]
+  },
+  {
+   "id": "346I-0",
+   "text": "일별",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "그룹 · 일별"
+   ]
+  },
+  {
+   "id": "346K-0",
+   "text": "09-01",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09-01"
+   ]
+  },
+  {
+   "id": "346M-0",
+   "text": "3,184.52",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "346N-0",
+   "text": "+87.96",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "346O-0",
+   "text": "+2.84%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09-01"
+   ]
+  },
+  {
+   "id": "346Q-0",
+   "text": "3억 4,200만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "346R-0",
+   "text": "누적 9억 5,400만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09-01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "346S-0",
+   "text": "71 · 23",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "09-01"
+   ]
+  },
+  {
+   "id": "346U-0",
+   "text": "08-31",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-31"
+   ]
+  },
+  {
+   "id": "346W-0",
+   "text": "3,096.56",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "346X-0",
+   "text": "+12.94",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "346Y-0",
+   "text": "+0.42%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-31"
+   ]
+  },
+  {
+   "id": "3470-0",
+   "text": "3억 2,100만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3471-0",
+   "text": "누적 6억 1,200만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-31",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3472-0",
+   "text": "58 · 39",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-31"
+   ]
+  },
+  {
+   "id": "3474-0",
+   "text": "08-28",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-28"
+   ]
+  },
+  {
+   "id": "3476-0",
+   "text": "3,083.62",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3477-0",
+   "text": "-10.83",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3478-0",
+   "text": "-0.35%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-28"
+   ]
+  },
+  {
+   "id": "347A-0",
+   "text": "2억 9,100만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347B-0",
+   "text": "누적 2억 9,100만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-28",
+    "Frame"
+   ]
+  },
+  {
+   "id": "347C-0",
+   "text": "41 · 55",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "지수 흐름",
+    "Frame",
+    "08-28"
+   ]
+  },
+  {
+   "id": "2U4T-1",
+   "text": "반도체 — 선택 업종",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U4U-1",
+   "text": "상위 4%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CB-0",
+   "text": "지수 · 등락",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CC-0",
+   "text": "3,184.52 · +87.96 · +2.84%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CE-0",
+   "text": "거래대금 · 거래량",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CF-0",
+   "text": "4.2조 · 3억 4,200만주 · 전일 1.6배",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CH-0",
+   "text": "구성 종목 · 거래 형성",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CI-0",
+   "text": "102개 · 거래형성 96개(94.1%)",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CK-0",
+   "text": "시가 · 고가 · 저가",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CL-0",
+   "text": "3,102.11 · 3,198.40 · 3,096.85",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CN-0",
+   "text": "52주 범위",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CP-0",
+   "text": "2,410.20 ~ 3,214.80",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CQ-0",
+   "text": "최고 2026.07.17 -0.94% · 최저 2025.10.02 +32.1%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CS-0",
+   "text": "등락 종목",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CT-0",
+   "text": "상승 71 · 보합 8 · 하락 23 · 상한 2 · 하한 1",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 업종 · 6행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CW-0",
+   "text": "프로그램 매매",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매"
+   ]
+  },
+  {
+   "id": "34CY-0",
+   "text": "구분",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34CZ-0",
+   "text": "매도",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34D0-0",
+   "text": "매수",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34D1-0",
+   "text": "순매수",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34D3-0",
+   "text": "차익",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "차익"
+   ]
+  },
+  {
+   "id": "34D5-0",
+   "text": "1,240억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34D6-0",
+   "text": "8.2만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34D8-0",
+   "text": "1,322억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34D9-0",
+   "text": "8.7만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DB-0",
+   "text": "+82억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DC-0",
+   "text": "+0.5만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DE-0",
+   "text": "비차익",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "비차익"
+   ]
+  },
+  {
+   "id": "34DG-0",
+   "text": "3,180억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "비차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DH-0",
+   "text": "21.0만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "비차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DJ-0",
+   "text": "3,510억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "비차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DK-0",
+   "text": "23.2만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "비차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DM-0",
+   "text": "+330억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "비차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DN-0",
+   "text": "+2.2만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "비차익",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DP-0",
+   "text": "전체",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "전체"
+   ]
+  },
+  {
+   "id": "34DR-0",
+   "text": "4,420억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DS-0",
+   "text": "29.2만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DU-0",
+   "text": "4,832억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DV-0",
+   "text": "31.9만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DX-0",
+   "text": "+412억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34DY-0",
+   "text": "+2.7만주",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "프로그램 매매",
+    "전체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34E1-0",
+   "text": "투자자 순매수",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34E2-0",
+   "text": "반도체 +14억 · 09:42",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34E5-0",
+   "text": "개인",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "개인 · 외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34E6-0",
+   "text": "-820억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "개인 · 외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34E8-0",
+   "text": "외국인",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "개인 · 외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34E9-0",
+   "text": "+1,204억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "개인 · 외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34EC-0",
+   "text": "증권",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "증권 · 보험",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34ED-0",
+   "text": "-180억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "증권 · 보험",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34EF-0",
+   "text": "보험",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "증권 · 보험",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34EG-0",
+   "text": "-42억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "증권 · 보험",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34EJ-0",
+   "text": "투신",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "투신 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34EK-0",
+   "text": "-96억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "투신 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34EM-0",
+   "text": "은행",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "투신 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34EN-0",
+   "text": "-12억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "투신 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34EQ-0",
+   "text": "종합금융",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "종합금융 · 기금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34ER-0",
+   "text": "-8억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "종합금융 · 기금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34ET-0",
+   "text": "기금",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "종합금융 · 기금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34EU-0",
+   "text": "-10억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "종합금융 · 기금",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34EX-0",
+   "text": "사모펀드",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "사모펀드 · 기타법인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34EY-0",
+   "text": "+8억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "사모펀드 · 기타법인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34F0-0",
+   "text": "기타법인",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "사모펀드 · 기타법인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34F1-0",
+   "text": "+18억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "사모펀드 · 기타법인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34F4-0",
+   "text": "내국인대우 외국인",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "내국인대우 외국인 · 국가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34F5-0",
+   "text": "-52억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "내국인대우 외국인 · 국가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34F7-0",
+   "text": "국가",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "내국인대우 외국인 · 국가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34F8-0",
+   "text": "+4억",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "투자자 순매수",
+    "내국인대우 외국인 · 국가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34FA-0",
+   "text": "주도 종목",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "주도 종목"
+   ]
+  },
+  {
+   "id": "34FC-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "주도 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34FD-0",
+   "text": "198,400 · +2.05%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "주도 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34FF-0",
+   "text": "한미반도체",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "주도 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34FG-0",
+   "text": "197,400 · +4.18%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "주도 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34FI-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "주도 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34FJ-0",
+   "text": "150,850 · +1.24%",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "주도 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U5H-1",
+   "text": "업종 차트",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2U5J-1",
+   "text": "구성 종목 보기",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TZS-1",
+   "text": "● 업종 지수 실시간 갱신 중",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  },
+  {
+   "id": "32K1-0",
+   "text": "마지막 반영 09:42:18",
+   "path": [
+    "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Discovery Root · 업종",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2TZN-1",
+   "name": "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "2TZO-1",
+   "name": "Discovery Root · 업종",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 1
+  },
+  {
+   "id": "2TZP-1",
+   "name": "Explorer Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1040,
+   "depth": 2
+  },
+  {
+   "id": "2U2W-1",
+   "name": "Header and Capability Navigation",
+   "component": "Frame",
+   "w": 0,
+   "h": 112,
+   "depth": 3
+  },
+  {
+   "id": "2U3A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2U3C-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U3D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2U2X-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2U38-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U36-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U34-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U32-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U30-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U2Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U2F-1",
+   "name": "Ranking Query Controls",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 3
+  },
+  {
+   "id": "2U2J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2U2U-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U2S-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U2Q-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U2O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U2M-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U2K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U2G-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2TZT-1",
+   "name": "Ranking Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 772,
+   "depth": 3
+  },
+  {
+   "id": "2U3G-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "340B-0",
+   "name": "업종표 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "340J-0",
+   "name": "업종 행 · 반도체",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "340K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 220,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "340N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 58,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "340O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "340Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "340U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "340X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3411-0",
+   "name": "업종 행 · 의약품",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "3412-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 220,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3415-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 58,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3416-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3418-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "341C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "341F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "341J-0",
+   "name": "업종 행 · 은행",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "341K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 220,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "341N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 58,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "341O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "341Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "341U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "341X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3421-0",
+   "name": "업종 행 · 운수장비",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "3422-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 220,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3425-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 58,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3426-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3428-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "342C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "342F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "342J-0",
+   "name": "업종 행 · 화학",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "342K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 220,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "342N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 58,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "342O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "342Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "342U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "342X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3431-0",
+   "name": "업종 행 · 건설",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "3432-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 220,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3435-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 58,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3436-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3438-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "343C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "343F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2U4N-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U4P-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "345B-0",
+   "name": "지수 흐름",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "345C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "345D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "345G-0",
+   "name": "열 머리",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "345N-0",
+   "name": "09:42",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "345P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "345T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 200,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "345X-0",
+   "name": "09:30",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "345Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3463-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 200,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3467-0",
+   "name": "09:00",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3469-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "346D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 200,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "346H-0",
+   "name": "그룹 · 일별",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "346J-0",
+   "name": "09-01",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "346L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "346P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 200,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "346T-0",
+   "name": "08-31",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "346V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "346Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 200,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3473-0",
+   "name": "08-28",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3475-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3479-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 200,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "2U4R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 478,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2U4S-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34C9-0",
+   "name": "선택 업종 · 6행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34CA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "34CD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "34CG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "34CJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "34CM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34CO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34CR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "34CV-0",
+   "name": "프로그램 매매",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34CX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34D2-0",
+   "name": "차익",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34D4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34D7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34DA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 106,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34DD-0",
+   "name": "비차익",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34DF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34DI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34DL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 106,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34DO-0",
+   "name": "전체",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34DQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34DT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34DW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 106,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34DZ-0",
+   "name": "투자자 순매수",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34E0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34E3-0",
+   "name": "개인 · 외국인",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34E4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34E7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34EA-0",
+   "name": "증권 · 보험",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34EB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34EE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34EH-0",
+   "name": "투신 · 은행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34EI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34EL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34EO-0",
+   "name": "종합금융 · 기금",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34EP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34ES-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34EV-0",
+   "name": "사모펀드 · 기타법인",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34EW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34EZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34F2-0",
+   "name": "내국인대우 외국인 · 국가",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34F3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34F6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34F9-0",
+   "name": "주도 종목",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34FB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34FE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34FH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2U5F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2U5G-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "2U5I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "2TZQ-1",
+   "name": "User Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "업종 탐색": 1,
+  "장중 · 09:42": 1,
+  "전체 시장 · 업종 21개": 1,
+  "업종": 2,
+  "종목찾기": 1,
+  "관심": 1,
+  "테마": 1,
+  "시장·VI": 1,
+  "조건검색": 1,
+  "조건": 1,
+  "등락률": 3,
+  "전체 시장": 1,
+  "전체 업종": 1,
+  "▸": 1,
+  "지수 기준": 1,
+  "정규장": 1,
+  "● 실시간 갱신": 1,
+  "21개 업종": 1,
+  "시장": 1,
+  "지수": 2,
+  "거래대금": 1,
+  "상승 · 보합 · 하락": 1,
+  "비중": 1,
+  "반도체": 1,
+  "G2510 · 제조": 1,
+  "KOSPI": 6,
+  "3,184.52": 3,
+  "+87.96": 3,
+  "+2.84%": 3,
+  "4.2조": 1,
+  "3억 4,200만주": 2,
+  "71 · 8 · 23": 1,
+  "상한 2 · 하한 1": 1,
+  "18.4%": 1,
+  "의약품": 1,
+  "G3520 · 제조": 1,
+  "14,208.55": 1,
+  "+190.63": 1,
+  "+1.36%": 1,
+  "0.7조": 1,
+  "5,100만주": 1,
+  "42 · 11 · 19": 1,
+  "상한 1 · 하한 0": 1,
+  "6.2%": 1,
+  "은행": 2,
+  "G4010 · 금융": 1,
+  "912.44": 1,
+  "+8.32": 1,
+  "+0.92%": 1,
+  "0.8조": 1,
+  "1억 1,200만주": 1,
+  "9 · 1 · 2": 1,
+  "상한 0 · 하한 0": 3,
+  "7.1%": 1,
+  "운수장비": 1,
+  "G2710 · 제조": 1,
+  "2,105.80": 1,
+  "+8.60": 1,
+  "+0.41%": 1,
+  "1.1조": 1,
+  "8,600만주": 1,
+  "28 · 6 · 14": 1,
+  "9.8%": 1,
+  "화학": 1,
+  "G1510 · 제조": 1,
+  "1,684.02": 1,
+  "-3.71": 1,
+  "-0.22%": 1,
+  "0.9조": 1,
+  "7,400만주": 1,
+  "31 · 9 · 48": 1,
+  "8.5%": 1,
+  "건설": 1,
+  "G2020 · 건설": 1,
+  "78.61": 1,
+  "-0.67": 1,
+  "-0.85%": 1,
+  "0.3조": 1,
+  "2,900만주": 1,
+  "8 · 4 · 27": 1,
+  "상한 0 · 하한 1": 1,
+  "2.4%": 1,
+  "등락률 상위 6개 표시 · 전체 21개": 1,
+  "더보기": 1,
+  "지수 흐름": 1,
+  "09:42 기준": 1,
+  "시점": 1,
+  "거래량": 1,
+  "상승 · 하락": 1,
+  "시간별": 1,
+  "09:42": 1,
+  "940만주": 1,
+  "누적 3억 4,200만주": 1,
+  "71 · 23": 2,
+  "09:30": 1,
+  "3,171.08": 1,
+  "+74.52": 1,
+  "+2.41%": 1,
+  "1,180만주": 1,
+  "누적 2억 6,800만주": 1,
+  "68 · 26": 1,
+  "09:00": 1,
+  "3,142.66": 1,
+  "+46.10": 1,
+  "+1.49%": 1,
+  "4,200만주": 1,
+  "누적 4,200만주": 1,
+  "61 · 33": 1,
+  "일별": 1,
+  "09-01": 1,
+  "누적 9억 5,400만주": 1,
+  "08-31": 1,
+  "3,096.56": 1,
+  "+12.94": 1,
+  "+0.42%": 1,
+  "3억 2,100만주": 1,
+  "누적 6억 1,200만주": 1,
+  "58 · 39": 1,
+  "08-28": 1,
+  "3,083.62": 1,
+  "-10.83": 1,
+  "-0.35%": 1,
+  "2억 9,100만주": 1,
+  "누적 2억 9,100만주": 1,
+  "41 · 55": 1,
+  "반도체 — 선택 업종": 1,
+  "상위 4%": 1,
+  "지수 · 등락": 1,
+  "3,184.52 · +87.96 · +2.84%": 1,
+  "거래대금 · 거래량": 1,
+  "4.2조 · 3억 4,200만주 · 전일 1.6배": 1,
+  "구성 종목 · 거래 형성": 1,
+  "102개 · 거래형성 96개(94.1%)": 1,
+  "시가 · 고가 · 저가": 1,
+  "3,102.11 · 3,198.40 · 3,096.85": 1,
+  "52주 범위": 1,
+  "2,410.20 ~ 3,214.80": 1,
+  "최고 2026.07.17 -0.94% · 최저 2025.10.02 +32.1%": 1,
+  "등락 종목": 1,
+  "상승 71 · 보합 8 · 하락 23 · 상한 2 · 하한 1": 1,
+  "프로그램 매매": 1,
+  "구분": 1,
+  "매도": 1,
+  "매수": 1,
+  "순매수": 1,
+  "차익": 1,
+  "1,240억": 1,
+  "8.2만주": 1,
+  "1,322억": 1,
+  "8.7만주": 1,
+  "+82억": 1,
+  "+0.5만주": 1,
+  "비차익": 1,
+  "3,180억": 1,
+  "21.0만주": 1,
+  "3,510억": 1,
+  "23.2만주": 1,
+  "+330억": 1,
+  "+2.2만주": 1,
+  "전체": 1,
+  "4,420억": 1,
+  "29.2만주": 1,
+  "4,832억": 1,
+  "31.9만주": 1,
+  "+412억": 1,
+  "+2.7만주": 1,
+  "투자자 순매수": 1,
+  "반도체 +14억 · 09:42": 1,
+  "개인": 1,
+  "-820억": 1,
+  "외국인": 1,
+  "+1,204억": 1,
+  "증권": 1,
+  "-180억": 1,
+  "보험": 1,
+  "-42억": 1,
+  "투신": 1,
+  "-96억": 1,
+  "-12억": 1,
+  "종합금융": 1,
+  "-8억": 1,
+  "기금": 1,
+  "-10억": 1,
+  "사모펀드": 1,
+  "+8억": 1,
+  "기타법인": 1,
+  "+18억": 1,
+  "내국인대우 외국인": 1,
+  "-52억": 1,
+  "국가": 1,
+  "+4억": 1,
+  "주도 종목": 1,
+  "SK하이닉스": 1,
+  "198,400 · +2.05%": 1,
+  "한미반도체": 1,
+  "197,400 · +4.18%": 1,
+  "삼성전자": 1,
+  "150,850 · +1.24%": 1,
+  "업종 차트": 1,
+  "구성 종목 보기": 1,
+  "● 업종 지수 실시간 갱신 중": 1,
+  "마지막 반영 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "104d3368f075d6c46c0183afe9338fb12a7ba0ab4017b26c6d44e2cdbdd61fda"
+}

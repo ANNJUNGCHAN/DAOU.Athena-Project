@@ -1,0 +1,341 @@
+{
+ "board_id": "486G-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "487E-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "487D-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "487B-0",
+   "text": "신주인수권 전체",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Header"
+   ]
+  },
+  {
+   "id": "4879-0",
+   "text": "전일대비기호",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4878-0",
+   "text": "보합 0",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4876-0",
+   "text": "등락율",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4875-0",
+   "text": "+18.4%",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4873-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4872-0",
+   "text": "51억원",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "486Z-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "486Y-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "486X-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "486V-0",
+   "text": "전일대비기호",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "486U-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "486S-0",
+   "text": "9 · 5",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "486R-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "486P-0",
+   "text": "종목명",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "486O-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "486M-0",
+   "text": "삼성중공업 1WR",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "486L-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "486I-0",
+   "text": "스칼라 2개, 행 12개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "486G-0",
+   "name": "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "487A-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "487C-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "486J-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4870-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4877-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4874-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4871-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "486W-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "486Q-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "486T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "486K-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "486N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "486H-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "신주인수권 전체": 1,
+  "전일대비기호": 2,
+  "보합 0": 1,
+  "등락율": 1,
+  "+18.4%": 1,
+  "핵심": 1,
+  "51억원": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "9 · 5": 1,
+  "종목명": 1,
+  "삼성중공업 1WR": 1,
+  "스칼라 2개, 행 12개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "b352fca9e5574598eaab0d95b9fd485fd65211aecd99db3a7749087b509bb6ab"
+}

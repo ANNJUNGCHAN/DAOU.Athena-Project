@@ -1,0 +1,234 @@
+{
+ "board_id": "46GK-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/A04-X · 호가 정본 — 단계별 낱값",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46H7-0",
+   "text": "",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46H6-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46H4-0",
+   "text": "단계별 낱값",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Header"
+   ]
+  },
+  {
+   "id": "46H2-0",
+   "text": "종목",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46H1-0",
+   "text": "삼성전자 · 005930",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46GZ-0",
+   "text": "기준 시각",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46GY-0",
+   "text": "2026-09-01 09:42",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46GW-0",
+   "text": "매도 10단",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46GV-0",
+   "text": "150,940",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46GT-0",
+   "text": "매도 잔량",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46GS-0",
+   "text": "2,160주",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46GQ-0",
+   "text": "매도 직전대비",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46GP-0",
+   "text": "+770",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46GM-0",
+   "text": "외 143개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/A04-X · 호가 정본 — 단계별 낱값",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46GK-0",
+   "name": "mini/A04-X · 호가 정본 — 단계별 낱값",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46H3-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46H5-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46GN-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46H0-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46GX-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46GU-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46GR-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46GO-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46GL-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "단계별 낱값": 1,
+  "종목": 1,
+  "삼성전자 · 005930": 1,
+  "기준 시각": 1,
+  "2026-09-01 09:42": 1,
+  "매도 10단": 1,
+  "150,940": 1,
+  "매도 잔량": 1,
+  "2,160주": 1,
+  "매도 직전대비": 1,
+  "+770": 1,
+  "외 143개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "8c2c85dee870c47fa75572a2d61cf10a18af0d4181032291c63c37dec43f8434"
+}

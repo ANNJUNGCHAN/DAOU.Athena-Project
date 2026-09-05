@@ -1,0 +1,3751 @@
+{
+ "board_id": "2QM7-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-05 / R03-T2 · 수급 — 거래원",
+ "width": 1440,
+ "height": 1014,
+ "texts": [
+  {
+   "id": "2QMC-2",
+   "text": "삼성전자 수급",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QMF-2",
+   "text": "20분 지연",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32PP-0",
+   "text": "005930 · KOSPI · 장중",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QMJ-2",
+   "text": "투자자별",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QML-2",
+   "text": "거래원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QMN-2",
+   "text": "프로그램",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QMP-2",
+   "text": "신용·대차",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QMR-2",
+   "text": "종목 동향",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WFQ-0",
+   "text": "순위",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QMU-2",
+   "text": "순매수 1위 거래원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위 거래원"
+   ]
+  },
+  {
+   "id": "2QMW-2",
+   "text": "모건스탠리",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위 거래원",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QMX-2",
+   "text": "+842억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위 거래원",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QMY-2",
+   "text": "외국계 창구 · 09:22 기준",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위 거래원"
+   ]
+  },
+  {
+   "id": "2QN0-2",
+   "text": "외국계 순매수",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QN1-2",
+   "text": "+1,666억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QN2-2",
+   "text": "매수추정 4,182억원 · 매도추정 2,516억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QN4-2",
+   "text": "국내 순매도",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QN5-2",
+   "text": "-1,344억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QN6-2",
+   "text": "창구 5곳 합계",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QN8-2",
+   "text": "상위 이탈원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QN9-2",
+   "text": "다이와",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QNA-2",
+   "text": "전일 4위 → 오늘 9위",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QNC-2",
+   "text": "거래원 집중도",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QND-2",
+   "text": "48.7%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QNE-2",
+   "text": "상위 5곳 비중",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34FV-0",
+   "text": "거래원 순매수 순위",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34FW-0",
+   "text": "09:22 집계",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34FY-0",
+   "text": "순위",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34FZ-0",
+   "text": "창구",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34G0-0",
+   "text": "매도",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34G1-0",
+   "text": "매수",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34G2-0",
+   "text": "순매수",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34G3-0",
+   "text": "증감",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34G5-0",
+   "text": "비중",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Table Head",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34GN-0",
+   "text": "01",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리"
+   ]
+  },
+  {
+   "id": "34GP-0",
+   "text": "모건스탠리",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U1K-0",
+   "text": "16",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리",
+    "Frame",
+    "코드·구분"
+   ]
+  },
+  {
+   "id": "3U1M-0",
+   "text": "외국계",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리",
+    "Frame",
+    "코드·구분",
+    "외국계"
+   ]
+  },
+  {
+   "id": "34GS-0",
+   "text": "644억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34GT-0",
+   "text": "42.7만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34GV-0",
+   "text": "1,486억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34GW-0",
+   "text": "98.5만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34GY-0",
+   "text": "+842억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34GZ-0",
+   "text": "+55.8만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34H0-0",
+   "text": "▲ +18,420주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리"
+   ]
+  },
+  {
+   "id": "34H2-0",
+   "text": "10.0%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "01 모건스탠리",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34H6-0",
+   "text": "02",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간"
+   ]
+  },
+  {
+   "id": "34H8-0",
+   "text": "JP모간",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U1P-0",
+   "text": "36",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간",
+    "Frame",
+    "코드·구분"
+   ]
+  },
+  {
+   "id": "3U1R-0",
+   "text": "외국계",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간",
+    "Frame",
+    "코드·구분",
+    "외국계"
+   ]
+  },
+  {
+   "id": "34HB-0",
+   "text": "392억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34HC-0",
+   "text": "26.0만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34HE-0",
+   "text": "908억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34HF-0",
+   "text": "60.2만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34HH-0",
+   "text": "+516억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34HI-0",
+   "text": "+34.2만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34HJ-0",
+   "text": "▲ +9,240주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간"
+   ]
+  },
+  {
+   "id": "34HL-0",
+   "text": "6.1%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "02 JP모간",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34HP-0",
+   "text": "03",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권"
+   ]
+  },
+  {
+   "id": "34HR-0",
+   "text": "CS증권",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3U1U-0",
+   "text": "17",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권",
+    "Frame",
+    "코드·구분"
+   ]
+  },
+  {
+   "id": "3U1W-0",
+   "text": "외국계",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권",
+    "Frame",
+    "코드·구분",
+    "외국계"
+   ]
+  },
+  {
+   "id": "34HU-0",
+   "text": "334억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34HV-0",
+   "text": "22.1만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34HX-0",
+   "text": "642억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34HY-0",
+   "text": "42.6만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34I0-0",
+   "text": "+308억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34I1-0",
+   "text": "+20.5만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34I2-0",
+   "text": "▲ +5,180주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권"
+   ]
+  },
+  {
+   "id": "34I4-0",
+   "text": "4.6%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "03 CS증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34I8-0",
+   "text": "04",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "04 NH투자증권"
+   ]
+  },
+  {
+   "id": "34IA-0",
+   "text": "NH투자증권",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "04 NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34IB-0",
+   "text": "05",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "04 NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34ID-0",
+   "text": "448억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "04 NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34IE-0",
+   "text": "29.7만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "04 NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34IG-0",
+   "text": "512억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "04 NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34IH-0",
+   "text": "33.9만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "04 NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34IJ-0",
+   "text": "+64억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "04 NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34IK-0",
+   "text": "+4.2만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "04 NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34IL-0",
+   "text": "▲ +1,120주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "04 NH투자증권"
+   ]
+  },
+  {
+   "id": "34IN-0",
+   "text": "4.5%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "04 NH투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34L5-0",
+   "text": "05",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "05 한국투자증권"
+   ]
+  },
+  {
+   "id": "34L7-0",
+   "text": "한국투자증권",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "05 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34L8-0",
+   "text": "03",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "05 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LA-0",
+   "text": "450억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "05 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LB-0",
+   "text": "29.8만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "05 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LD-0",
+   "text": "386억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "05 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LE-0",
+   "text": "25.6만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "05 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LG-0",
+   "text": "-64억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "05 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LH-0",
+   "text": "-4.2만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "05 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LI-0",
+   "text": "▼ -980주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "05 한국투자증권"
+   ]
+  },
+  {
+   "id": "34LK-0",
+   "text": "3.9%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "05 한국투자증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LO-0",
+   "text": "06",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "06 삼성증권"
+   ]
+  },
+  {
+   "id": "34LQ-0",
+   "text": "삼성증권",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "06 삼성증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LR-0",
+   "text": "02",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "06 삼성증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LT-0",
+   "text": "1,016억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "06 삼성증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LU-0",
+   "text": "67.4만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "06 삼성증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LW-0",
+   "text": "704억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "06 삼성증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LX-0",
+   "text": "46.7만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "06 삼성증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34LZ-0",
+   "text": "-312억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "06 삼성증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34M0-0",
+   "text": "-20.7만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "06 삼성증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34M1-0",
+   "text": "▼ -3,240주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "06 삼성증권"
+   ]
+  },
+  {
+   "id": "34M3-0",
+   "text": "8.0%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "06 삼성증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34M7-0",
+   "text": "07",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "07 미래에셋"
+   ]
+  },
+  {
+   "id": "34M9-0",
+   "text": "미래에셋",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "07 미래에셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MA-0",
+   "text": "06",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "07 미래에셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MC-0",
+   "text": "1,290억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "07 미래에셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MD-0",
+   "text": "85.5만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "07 미래에셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MF-0",
+   "text": "862억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "07 미래에셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MG-0",
+   "text": "57.1만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "07 미래에셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MI-0",
+   "text": "-428억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "07 미래에셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MJ-0",
+   "text": "-28.4만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "07 미래에셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MK-0",
+   "text": "▼ -6,410주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "07 미래에셋"
+   ]
+  },
+  {
+   "id": "34MM-0",
+   "text": "10.1%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "07 미래에셋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MQ-0",
+   "text": "08",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "08 키움증권"
+   ]
+  },
+  {
+   "id": "34MS-0",
+   "text": "키움증권",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "08 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MT-0",
+   "text": "01",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "08 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MV-0",
+   "text": "1,852억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "08 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MW-0",
+   "text": "122.8만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "08 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MY-0",
+   "text": "1,248억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "08 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34MZ-0",
+   "text": "82.7만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "08 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34N1-0",
+   "text": "-604억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "08 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34N2-0",
+   "text": "-40.1만주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "08 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34N3-0",
+   "text": "▼ -9,860주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "08 키움증권"
+   ]
+  },
+  {
+   "id": "34N5-0",
+   "text": "14.5%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "08 키움증권",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34N9-0",
+   "text": "전체 8개 창구 · 순매수 순",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "Table Tail"
+   ]
+  },
+  {
+   "id": "34NA-0",
+   "text": "8곳 합계 +322억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Broker Rows",
+    "Table Tail"
+   ]
+  },
+  {
+   "id": "34UJ-0",
+   "text": "일별 순매수 추이",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34UK-0",
+   "text": "외국계 창구 합계 · 최근 3거래일",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34UM-0",
+   "text": "일자",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34UN-0",
+   "text": "외국계 순매수",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34UO-0",
+   "text": "국내 순매수",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34UQ-0",
+   "text": "종가",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34UT-0",
+   "text": "09-01",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34UU-0",
+   "text": "+1,666억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34UV-0",
+   "text": "-1,344억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34UX-0",
+   "text": "150,850 +1.24%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34UZ-0",
+   "text": "08-31",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34V0-0",
+   "text": "+1,208억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34V1-0",
+   "text": "-980억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34V3-0",
+   "text": "149,000 +0.68%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34V5-0",
+   "text": "08-28",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34V6-0",
+   "text": "+642억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34V7-0",
+   "text": "-518억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34V9-0",
+   "text": "147,990 -0.34%",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Broker Table",
+    "Daily Flow",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34WL-0",
+   "text": "상위 이탈원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "상위 이탈원",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34WM-0",
+   "text": "전일 대비",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "상위 이탈원",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34WP-0",
+   "text": "다이와",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "상위 이탈원",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34WQ-0",
+   "text": "매도 이탈 09:18 · 42,180주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "상위 이탈원",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34WR-0",
+   "text": "4위 → 9위",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "상위 이탈원",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34WU-0",
+   "text": "노무라",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "상위 이탈원",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34WV-0",
+   "text": "매수 이탈 09:20 · 28,640주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "상위 이탈원",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34WW-0",
+   "text": "5위 → 10위",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "상위 이탈원",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34WY-0",
+   "text": "이탈 창구",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "상위 이탈원",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34WZ-0",
+   "text": "2곳",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "상위 이탈원",
+    "Frame"
+   ]
+  },
+  {
+   "id": "350M-0",
+   "text": "거래원 매물대",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "거래원 매물대",
+    "Frame"
+   ]
+  },
+  {
+   "id": "350N-0",
+   "text": "상위 4개 가격대",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "거래원 매물대",
+    "Frame"
+   ]
+  },
+  {
+   "id": "350P-0",
+   "text": "151,000",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "거래원 매물대",
+    "Frame"
+   ]
+  },
+  {
+   "id": "350S-0",
+   "text": "매수 82,400주 · 매도 41,200주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "거래원 매물대",
+    "Frame"
+   ]
+  },
+  {
+   "id": "350U-0",
+   "text": "150,500",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "거래원 매물대",
+    "Frame"
+   ]
+  },
+  {
+   "id": "350X-0",
+   "text": "매수 64,300주 · 매도 32,200주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "거래원 매물대",
+    "Frame"
+   ]
+  },
+  {
+   "id": "350Z-0",
+   "text": "150,000",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "거래원 매물대",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3512-0",
+   "text": "매수 23,100주 · 매도 46,200주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "거래원 매물대",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3514-0",
+   "text": "149,500",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "거래원 매물대",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3517-0",
+   "text": "매수 14,100주 · 매도 28,200주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "거래원 매물대",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351C-0",
+   "text": "순간 거래량",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "순간 거래량",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351F-0",
+   "text": "실시간",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "순간 거래량",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351G-0",
+   "text": "최근 1분",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "순간 거래량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351I-0",
+   "text": "모건스탠리",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "순간 거래량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351K-0",
+   "text": "▲ +6,240주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "순간 거래량",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351L-0",
+   "text": "09:41:20",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "순간 거래량",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351N-0",
+   "text": "키움증권",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "순간 거래량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351P-0",
+   "text": "▼ -3,180주",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "순간 거래량",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351Q-0",
+   "text": "09:41:44",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "순간 거래량",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351T-0",
+   "text": "외국계 추정",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351U-0",
+   "text": "전일 대비",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351W-0",
+   "text": "매수 추정",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351Y-0",
+   "text": "4,182억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "351Z-0",
+   "text": "▲ +212억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3521-0",
+   "text": "매도 추정",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3523-0",
+   "text": "2,516억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3524-0",
+   "text": "▼ -94억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3526-0",
+   "text": "순매수",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3528-0",
+   "text": "+1,666억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3529-0",
+   "text": "▲ +306억원",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "352B-0",
+   "text": "공개 창구",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "352C-0",
+   "text": "3곳",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "외국계 추정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QNL-2",
+   "text": "20분 지연 집계 · 갱신 중",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Status Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QNM-2",
+   "text": "거래원 전체 항목 보기",
+   "path": [
+    "CC-05 / R03-T2 · 수급 — 거래원",
+    "Flow Card Surface",
+    "Flow Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2QM7-2",
+   "name": "CC-05 / R03-T2 · 수급 — 거래원",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1014,
+   "depth": 0
+  },
+  {
+   "id": "2QM8-2",
+   "name": "Flow Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 934,
+   "depth": 1
+  },
+  {
+   "id": "2QM9-2",
+   "name": "Flow Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QMA-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QMB-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QMD-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QME-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "2QMH-2",
+   "name": "Flow Tabs",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QMI-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QMK-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QMM-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QMO-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QMQ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2WFP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QMS-2",
+   "name": "Flow Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QMT-2",
+   "name": "Hero · 순매수 1위 거래원",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QMV-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QMZ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QN3-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QN7-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QNB-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QNF-2",
+   "name": "Flow Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "34FS-0",
+   "name": "Broker Table",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "34FT-0",
+   "name": "Table Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "34FU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34FX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34G4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34GL-0",
+   "name": "Broker Rows",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "34GM-0",
+   "name": "01 모건스탠리",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34GO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3U1J-0",
+   "name": "코드·구분",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U1L-0",
+   "name": "외국계",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "34GR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34GU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34GX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34H1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34H3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "34H4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "34H5-0",
+   "name": "02 JP모간",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34H7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3U1O-0",
+   "name": "코드·구분",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U1Q-0",
+   "name": "외국계",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "34HA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34HD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34HG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34HK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34HM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "34HN-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "34HO-0",
+   "name": "03 CS증권",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34HQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3U1T-0",
+   "name": "코드·구분",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3U1V-0",
+   "name": "외국계",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "34HT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34HW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34HZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34I3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34I5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "34I6-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "34I7-0",
+   "name": "04 NH투자증권",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34I9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34IC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34IF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34II-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34IM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34IO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "34IP-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "34L4-0",
+   "name": "05 한국투자증권",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34L6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34L9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34LC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34LF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34LJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34LL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "34LM-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "34LN-0",
+   "name": "06 삼성증권",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34LP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34LS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34LV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34LY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34M2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34M4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "34M5-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "34M6-0",
+   "name": "07 미래에셋",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34M8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34MB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34ME-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34MH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34ML-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34MN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "34MO-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "34MP-0",
+   "name": "08 키움증권",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34MR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34MU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34MX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34N0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34N4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34N6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "34N7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "34N8-0",
+   "name": "Table Tail",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34UH-0",
+   "name": "Daily Flow",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "34UI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34UL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34UP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34UR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34US-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34UW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34UY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34V2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34V4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34V8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34WI-0",
+   "name": "Side Panel",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "34WJ-0",
+   "name": "상위 이탈원",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "34WK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34WN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34WO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34WS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34WT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34WX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "350K-0",
+   "name": "거래원 매물대",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "350L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "350O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "350Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "350R-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "350T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "350V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "350W-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "350Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3510-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3511-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3513-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3515-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "3516-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3519-0",
+   "name": "순간 거래량",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "351A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "351B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "351D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "351E-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "351H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "351J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "351M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "351O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "351R-0",
+   "name": "외국계 추정",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "351S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "351V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "351X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3520-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3522-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3525-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3527-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "352A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QNI-2",
+   "name": "Flow Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QNJ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QNK-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "삼성전자 수급": 1,
+  "20분 지연": 1,
+  "005930 · KOSPI · 장중": 1,
+  "투자자별": 1,
+  "거래원": 1,
+  "프로그램": 1,
+  "신용·대차": 1,
+  "종목 동향": 1,
+  "순위": 2,
+  "순매수 1위 거래원": 1,
+  "모건스탠리": 3,
+  "+842억원": 2,
+  "외국계 창구 · 09:22 기준": 1,
+  "외국계 순매수": 2,
+  "+1,666억원": 3,
+  "매수추정 4,182억원 · 매도추정 2,516억원": 1,
+  "국내 순매도": 1,
+  "-1,344억원": 2,
+  "창구 5곳 합계": 1,
+  "상위 이탈원": 2,
+  "다이와": 2,
+  "전일 4위 → 오늘 9위": 1,
+  "거래원 집중도": 1,
+  "48.7%": 1,
+  "상위 5곳 비중": 1,
+  "거래원 순매수 순위": 1,
+  "09:22 집계": 1,
+  "창구": 1,
+  "매도": 1,
+  "매수": 1,
+  "순매수": 2,
+  "증감": 1,
+  "비중": 1,
+  "01": 2,
+  "16": 1,
+  "외국계": 3,
+  "644억원": 1,
+  "42.7만주": 1,
+  "1,486억원": 1,
+  "98.5만주": 1,
+  "+55.8만주": 1,
+  "▲ +18,420주": 1,
+  "10.0%": 1,
+  "02": 2,
+  "JP모간": 1,
+  "36": 1,
+  "392억원": 1,
+  "26.0만주": 1,
+  "908억원": 1,
+  "60.2만주": 1,
+  "+516억원": 1,
+  "+34.2만주": 1,
+  "▲ +9,240주": 1,
+  "6.1%": 1,
+  "03": 2,
+  "CS증권": 1,
+  "17": 1,
+  "334억원": 1,
+  "22.1만주": 1,
+  "642억원": 1,
+  "42.6만주": 1,
+  "+308억원": 1,
+  "+20.5만주": 1,
+  "▲ +5,180주": 1,
+  "4.6%": 1,
+  "04": 1,
+  "NH투자증권": 1,
+  "05": 2,
+  "448억원": 1,
+  "29.7만주": 1,
+  "512억원": 1,
+  "33.9만주": 1,
+  "+64억원": 1,
+  "+4.2만주": 1,
+  "▲ +1,120주": 1,
+  "4.5%": 1,
+  "한국투자증권": 1,
+  "450억원": 1,
+  "29.8만주": 1,
+  "386억원": 1,
+  "25.6만주": 1,
+  "-64억원": 1,
+  "-4.2만주": 1,
+  "▼ -980주": 1,
+  "3.9%": 1,
+  "06": 2,
+  "삼성증권": 1,
+  "1,016억원": 1,
+  "67.4만주": 1,
+  "704억원": 1,
+  "46.7만주": 1,
+  "-312억원": 1,
+  "-20.7만주": 1,
+  "▼ -3,240주": 1,
+  "8.0%": 1,
+  "07": 1,
+  "미래에셋": 1,
+  "1,290억원": 1,
+  "85.5만주": 1,
+  "862억원": 1,
+  "57.1만주": 1,
+  "-428억원": 1,
+  "-28.4만주": 1,
+  "▼ -6,410주": 1,
+  "10.1%": 1,
+  "08": 1,
+  "키움증권": 2,
+  "1,852억원": 1,
+  "122.8만주": 1,
+  "1,248억원": 1,
+  "82.7만주": 1,
+  "-604억원": 1,
+  "-40.1만주": 1,
+  "▼ -9,860주": 1,
+  "14.5%": 1,
+  "전체 8개 창구 · 순매수 순": 1,
+  "8곳 합계 +322억원": 1,
+  "일별 순매수 추이": 1,
+  "외국계 창구 합계 · 최근 3거래일": 1,
+  "일자": 1,
+  "국내 순매수": 1,
+  "종가": 1,
+  "09-01": 1,
+  "150,850 +1.24%": 1,
+  "08-31": 1,
+  "+1,208억원": 1,
+  "-980억원": 1,
+  "149,000 +0.68%": 1,
+  "08-28": 1,
+  "+642억원": 1,
+  "-518억원": 1,
+  "147,990 -0.34%": 1,
+  "전일 대비": 2,
+  "매도 이탈 09:18 · 42,180주": 1,
+  "4위 → 9위": 1,
+  "노무라": 1,
+  "매수 이탈 09:20 · 28,640주": 1,
+  "5위 → 10위": 1,
+  "이탈 창구": 1,
+  "2곳": 1,
+  "거래원 매물대": 1,
+  "상위 4개 가격대": 1,
+  "151,000": 1,
+  "매수 82,400주 · 매도 41,200주": 1,
+  "150,500": 1,
+  "매수 64,300주 · 매도 32,200주": 1,
+  "150,000": 1,
+  "매수 23,100주 · 매도 46,200주": 1,
+  "149,500": 1,
+  "매수 14,100주 · 매도 28,200주": 1,
+  "순간 거래량": 1,
+  "실시간": 1,
+  "최근 1분": 1,
+  "▲ +6,240주": 1,
+  "09:41:20": 1,
+  "▼ -3,180주": 1,
+  "09:41:44": 1,
+  "외국계 추정": 1,
+  "매수 추정": 1,
+  "4,182억원": 1,
+  "▲ +212억원": 1,
+  "매도 추정": 1,
+  "2,516억원": 1,
+  "▼ -94억원": 1,
+  "▲ +306억원": 1,
+  "공개 창구": 1,
+  "3곳": 1,
+  "20분 지연 집계 · 갱신 중": 1,
+  "거래원 전체 항목 보기": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "22e0c1acf8271c6b774c705fcb7f75dc048ce7ab69b5633fc5995b71c5adc33d"
+}
