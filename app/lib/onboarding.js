@@ -13,11 +13,10 @@ const {
 // CLI 로그인이 연 브라우저가 끝내 결과를 통보하지 않을 때의 안전장치 — 디자인에
 // 없는 상태다(AT-SY-002 Open question 6). 이 타임아웃과 오류 문구는 발명이다.
 const CLI_LOGIN_TIMEOUT_MS = 90000;
-// D6 — 2종만 노출한다(Gemini·Grok 제외). 근거는 lib/main/cli-accounts.js 상단
-// 주석 참고 — 이 fallback은 그 파일의 PROVIDER_ORDER/PROVIDER_NAMES와 반드시
-// 같은 집합이어야 한다('athena:cli-list' 실패 시에만 쓰는 자리표시자이기 때문).
-const CLI_FALLBACK_NAME = { claude: 'Claude', codex: 'Codex' };
-const CLI_FALLBACK_ORDER = ['claude', 'codex'];
+// cli-accounts.js 의 PROVIDER_ORDER/PROVIDER_NAMES 와 같은 집합이어야 한다
+// ('athena:cli-list' 실패 시에만 쓰는 자리표시자이기 때문).
+const CLI_FALLBACK_NAME = { claude: 'Claude', codex: 'Codex', grok: 'Grok' };
+const CLI_FALLBACK_ORDER = ['claude', 'grok', 'codex'];
 
 function buildShell(root, { kicker, title, sub }) {
   clear(root);

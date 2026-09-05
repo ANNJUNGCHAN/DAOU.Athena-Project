@@ -816,9 +816,9 @@ function openOrderApiSheet(card, account, onDone) {
 
 // =============================================================================
 // 모델 — Paper 43쪽(2026-08-18 확정, 다계정 요건 2026-08-18 추가). Claude 섹션
-// (계정 목록 · 계정 추가 · 모델 칩 · 직접 입력 · 사고 강도 칩) / 구분선 / Codex
-// 섹션(같은 구조, 미연결이면 계정 목록 대신 "미연결 · 연결" 행이고 모델·강도는
-// 비활성) / 정직성 노트 2줄.
+// (계정 목록 · 계정 추가 · 모델 칩 · 직접 입력 · 사고 강도 칩) / 구분선 / Grok
+// 섹션(같은 구조) / 구분선 / Codex 섹션(같은 구조, 미연결이면 계정 목록 대신
+// "미연결 · 연결" 행이고 모델·강도는 비활성) / 정직성 노트.
 //
 // 공급자당 연결 상태는 더 이상 단일 pill이 아니라 **계정 목록**이다 —
 // athena:cli-list가 provider.accounts: [{id,label,active}]를 준다(2~3개 가능,
@@ -830,7 +830,7 @@ function openOrderApiSheet(card, account, onDone) {
 // 모델·사고 강도는 계정별이 아니라 앱 전역 설정이다(athena:model-get/-set, 위
 // IPC 계약 그대로) — 그래서 buildModelSection이 accounts와 modelState를
 // 별개 인자로 받는다.
-// IPC 계약: athena:model-get → {claude:{model,effort}, codex:{model,effort}}
+// IPC 계약: athena:model-get → {claude, grok, codex} 각 {model,effort}
 // (null=기본) · athena:model-set {provider, patch} → 성공 시 전체 상태, 실패
 // 시 {ok:false, error} · on athena:model-changed.
 // =============================================================================
@@ -853,6 +853,18 @@ const CLAUDE_EFFORT_CHIPS = [
 const CODEX_EFFORT_CHIPS = [
   { value: null, label: '기본' },
   { value: 'minimal', label: 'minimal' },
+  { value: 'low', label: 'low' },
+  { value: 'medium', label: 'medium' },
+  { value: 'high', label: 'high' },
+  { value: 'xhigh', label: 'xhigh' },
+];
+const GROK_MODEL_CHIPS = [
+  { value: null, label: '기본' },
+  { value: 'grok-4.6', label: 'grok-4.6' },
+  { value: 'grok-4.5', label: 'grok-4.5' },
+];
+const GROK_EFFORT_CHIPS = [
+  { value: null, label: '기본' },
   { value: 'low', label: 'low' },
   { value: 'medium', label: 'medium' },
   { value: 'high', label: 'high' },
@@ -1057,7 +1069,9 @@ async function refreshModelCard(card, head, body) {
   head.appendChild(actions);
 
   const claudeProvider = providers.find((p) => p.id === 'claude') || { id: 'claude', accounts: [] };
+  const grokProvider = providers.find((p) => p.id === 'grok') || { id: 'grok', accounts: [] };
   const codexProvider = providers.find((p) => p.id === 'codex') || { id: 'codex', accounts: [] };
+  const grokConnected = (grokProvider.accounts || []).length > 0;
   const codexConnected = (codexProvider.accounts || []).length > 0;
 
   const errBox = el('div');
@@ -1095,6 +1109,20 @@ async function refreshModelCard(card, head, body) {
   body.appendChild(el('div', 'uk-model-divider'));
 
   body.appendChild(buildModelSection({
+    title: 'Grok',
+    provider: grokProvider,
+    modelState: modelState && modelState.grok,
+    modelChips: GROK_MODEL_CHIPS,
+    effortChips: GROK_EFFORT_CHIPS,
+    disabled: !grokConnected,
+    onModelChange: (patch) => applyChange('grok', patch),
+    onAccountsChanged: refresh,
+    errBox,
+  }));
+
+  body.appendChild(el('div', 'uk-model-divider'));
+
+  body.appendChild(buildModelSection({
     title: 'Codex',
     provider: codexProvider,
     modelState: modelState && modelState.codex,
@@ -1109,7 +1137,8 @@ async function refreshModelCard(card, head, body) {
   body.appendChild(errBox);
 
   const note = el('div', 'uk-settings-note');
-  note.appendChild(el('div', null, 'Codex 설정은 $CODEX_HOME/config.toml의 model · model_reasoning_effort에 직접 반영된다 — 이 앱 밖에서 codex를 쓸 때도 적용되는 전역 기본값이다. 질의 실행 결선은 여전히 Claude뿐이다.'));
+  note.appendChild(el('div', null, '활성 계정이 Claude면 claude CLI, Grok이면 grok CLI로 질의가 실행된다. Codex 설정은 $CODEX_HOME/config.toml에 반영되지만 질의 실행은 아직 Codex를 쓰지 않는다.'));
+  note.appendChild(el('div', null, 'Claude·Grok CLI는 자격증명이 파일 하나다 — 목록의 활성 행은 지금 로그인된 계정이 아니면 전환되지 않고, 다른 계정은 계정 추가로 다시 로그인한다.'));
   note.appendChild(el('div', null, '모델 접근 권한은 활성 계정의 플랜을 따른다 — 접근 불가 모델이면 질의가 오류로 표면화된다.'));
   body.appendChild(note);
 }

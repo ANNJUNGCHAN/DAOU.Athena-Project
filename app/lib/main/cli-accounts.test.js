@@ -49,6 +49,7 @@ function createHarness(t, { initialState, statusOutcomes = [] } = {}) {
     fsImpl: fs,
     osImpl: { homedir: () => globalHome },
     spawnImpl: () => { throw new Error('unexpected spawn'); },
+    grokBinImpl: () => 'grok',
     statusTimeoutMs: 20,
     writeStateAtomicImpl(file, state) {
       saves.push(structuredClone(state));
@@ -67,6 +68,7 @@ test('list preserves the existing provider-grouped IPC shape and fixed order', a
   assert.deepEqual(result, {
     providers: [
       { id: 'claude', name: 'Claude', connected: false, accounts: [] },
+      { id: 'grok', name: 'Grok', connected: false, accounts: [] },
       {
         id: 'codex',
         name: 'Codex',
@@ -268,4 +270,71 @@ test('Codex logout and follow-up status use the same private home and clear only
   assert.deepEqual(JSON.parse(fs.readFileSync(stateFile, 'utf8')), { activeId: null, accounts: {} });
   assert.equal(fs.readFileSync(globalAuth, 'utf8'), '{"sentinel":"global-must-not-change"}');
   assert.equal(process.env.CODEX_HOME, originalCodexHome);
+});
+
+test('stale Claude rows are pruned and activeId follows the live credentials file', async (t) => {
+  const initialState = {
+    activeId: 'claude:j227ung@naver.com',
+    accounts: {
+      'claude:ajc227ung@gmail.com': {
+        id: 'claude:ajc227ung@gmail.com', providerId: 'claude', label: 'ajc227ung@gmail.com',
+        source: 'detected', addedAt: 'old',
+      },
+      'claude:j227ung@naver.com': {
+        id: 'claude:j227ung@naver.com', providerId: 'claude', label: 'j227ung@naver.com',
+        source: 'detected', addedAt: 'old',
+      },
+    },
+  };
+  const { accounts, stateFile, globalHome } = createHarness(t, { initialState, statusOutcomes: [1] });
+  fs.mkdirSync(path.join(globalHome, '.claude'), { recursive: true });
+  fs.writeFileSync(path.join(globalHome, '.claude', '.credentials.json'), '{"ok":true}');
+  fs.writeFileSync(path.join(globalHome, '.claude.json'), JSON.stringify({
+    oauthAccount: { emailAddress: 'ajc227ung@gmail.com' },
+  }));
+
+  const result = await accounts.list();
+  const claude = result.providers.find((provider) => provider.id === 'claude');
+
+  assert.deepEqual(claude.accounts, [
+    { id: 'claude:ajc227ung@gmail.com', label: 'ajc227ung@gmail.com', active: true },
+  ]);
+  const persisted = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+  assert.equal(persisted.activeId, 'claude:ajc227ung@gmail.com');
+  assert.equal(Object.prototype.hasOwnProperty.call(persisted.accounts, 'claude:j227ung@naver.com'), false);
+});
+
+test('Grok auth.json email becomes the only grok row and can be selected', async (t) => {
+  const { accounts, globalHome } = createHarness(t, { statusOutcomes: [1] });
+  fs.mkdirSync(path.join(globalHome, '.grok'), { recursive: true });
+  fs.writeFileSync(path.join(globalHome, '.grok', 'auth.json'), JSON.stringify({
+    'https://auth.x.ai::example': {
+      email: 'j227ung@naver.com',
+      refresh_token: 'must-not-be-copied',
+    },
+  }));
+
+  const listed = await accounts.list();
+  const grok = listed.providers.find((provider) => provider.id === 'grok');
+  assert.equal(grok.connected, true);
+  assert.deepEqual(grok.accounts, [
+    { id: 'grok:j227ung@naver.com', label: 'j227ung@naver.com', active: true },
+  ]);
+  assert.equal(JSON.stringify(listed).includes('must-not-be-copied'), false);
+
+  const activated = await accounts.setActive('grok:j227ung@naver.com');
+  assert.equal(activated.ok, true);
+  const active = accounts.peekActiveAccount();
+  assert.deepEqual(active, { accountId: 'grok:j227ung@naver.com', providerId: 'grok' });
+});
+
+test('login rejects unknown providers and accepts grok as a known provider', async (t) => {
+  const { accounts } = createHarness(t, { statusOutcomes: [1] });
+  const unknown = await accounts.login('gemini');
+  assert.deepEqual(unknown, { ok: false, launched: false, message: '알 수 없는 CLI다' });
+
+  const grokMissing = await accounts.login('grok');
+  assert.equal(grokMissing.ok, false);
+  assert.equal(grokMissing.launched, false);
+  assert.match(grokMissing.message, /Grok CLI가 이 컴퓨터에 설치되어 있지 않다/);
 });

@@ -7,10 +7,11 @@ const { spawn } = require('node:child_process');
 const { performance } = require('node:perf_hooks');
 const electron = require('electron');
 const { getClaudeBin, claudeBinCandidates } = require('./claude-bin');
+const { getGrokBin, grokBinCandidates } = require('./grok-bin');
 const { resolveCodexRuntimeHome, createCodexRuntime } = require('./codex-runtime-home');
 
-const PROVIDER_ORDER = Object.freeze(['claude', 'codex']);
-const PROVIDER_NAMES = Object.freeze({ claude: 'Claude', codex: 'Codex' });
+const PROVIDER_ORDER = Object.freeze(['claude', 'grok', 'codex']);
+const PROVIDER_NAMES = Object.freeze({ claude: 'Claude', codex: 'Codex', grok: 'Grok' });
 const CODEX_ACCOUNT_ID = 'codex:athena-runtime';
 const CODEX_STATUS_TIMEOUT_MS = 5_000;
 const LOGIN_COMMANDS = Object.freeze({
@@ -21,6 +22,10 @@ const LOGIN_COMMANDS = Object.freeze({
   codex: Object.freeze({
     command: 'codex', args: Object.freeze(['login']),
     message: '터미널에서 로그인 진행 — 로컬 콜백으로 자동 완료된다.',
+  }),
+  grok: Object.freeze({
+    command: 'grok', args: Object.freeze(['login']),
+    message: '터미널에서 로그인 진행 — 브라우저에서 인증하면 완료된다.',
   }),
 });
 
@@ -64,6 +69,7 @@ function createCliAccounts({
   osImpl = os,
   spawnImpl = spawn,
   claudeBinImpl = getClaudeBin,
+  grokBinImpl = getGrokBin,
   monotonicNow = () => performance.now(),
   statusTimeoutMs = CODEX_STATUS_TIMEOUT_MS,
   writeStateAtomicImpl,
@@ -112,16 +118,55 @@ function createCliAccounts({
     return { identifier: label, label };
   }
 
-  function mergeClaude(state) {
-    const found = detectClaude();
-    if (!found) return;
-    const id = `claude:${found.identifier}`;
-    if (!state.accounts[id]) {
-      state.accounts[id] = {
-        id, providerId: 'claude', label: found.label, source: 'detected', addedAt: new Date().toISOString(),
-      };
-      if (!state.activeId) state.activeId = id;
+  function detectGrok() {
+    const authPath = path.join(osImpl.homedir(), '.grok', 'auth.json');
+    if (!fsImpl.existsSync(authPath)) return null;
+    let label = 'Grok 계정';
+    try {
+      const parsed = JSON.parse(fsImpl.readFileSync(authPath, 'utf8'));
+      if (parsed && typeof parsed === 'object') {
+        for (const entry of Object.values(parsed)) {
+          if (entry && typeof entry === 'object' && typeof entry.email === 'string' && entry.email) {
+            label = entry.email;
+            break;
+          }
+        }
+      }
+    } catch {
+      // Credential file exists — keep the generic label rather than inventing an email.
     }
+    return { identifier: label, label };
+  }
+
+  // Claude/Grok CLI 는 자격증명이 파일 하나다. 예전에 로그인했던 이메일을
+  // 계정 목록에 남겨 두면 전환 버튼이 있는 것처럼 보이지만 실제 CLI 는
+  // 지금 파일에 있는 계정만 쓴다. 그래서 현재 감지된 계정만 남기고 나머지는
+  // 지운다. 활성 행이 지워진 행이면 activeId 도 비운다.
+  function mergeSingleSlotProvider(state, providerId, found) {
+    const liveId = found ? `${providerId}:${found.identifier}` : null;
+    for (const [id, account] of Object.entries(state.accounts)) {
+      if (!account || account.providerId !== providerId || id === liveId) continue;
+      delete state.accounts[id];
+      if (state.activeId === id) state.activeId = null;
+    }
+    if (!found) return;
+    const existing = state.accounts[liveId];
+    if (!existing) {
+      state.accounts[liveId] = {
+        id: liveId, providerId, label: found.label, source: 'detected', addedAt: new Date().toISOString(),
+      };
+    } else if (existing.label !== found.label) {
+      state.accounts[liveId] = { ...existing, label: found.label };
+    }
+    if (!state.activeId) state.activeId = liveId;
+  }
+
+  function mergeClaude(state) {
+    mergeSingleSlotProvider(state, 'claude', detectClaude());
+  }
+
+  function mergeGrok(state) {
+    mergeSingleSlotProvider(state, 'grok', detectGrok());
   }
 
   function probeCodexStatus() {
@@ -169,6 +214,7 @@ function createCliAccounts({
   async function reconcileCodexRuntimeAccountLocked() {
     const state = readState();
     mergeClaude(state);
+    mergeGrok(state);
     const priorCodexIds = Object.values(state.accounts)
       .filter((account) => account && account.providerId === 'codex')
       .map((account) => account.id);
@@ -199,7 +245,7 @@ function createCliAccounts({
   const reconcileCodexRuntimeAccount = () => withMutex(reconcileCodexRuntimeAccountLocked);
 
   function selectList(snapshot) {
-    const byProvider = { claude: [], codex: [] };
+    const byProvider = { claude: [], codex: [], grok: [] };
     for (const account of Object.values(snapshot.accounts)) {
       if (!byProvider[account.providerId]) continue;
       byProvider[account.providerId].push({
@@ -222,6 +268,20 @@ function createCliAccounts({
     if (!snapshot.activeId) return null;
     const account = snapshot.accounts[snapshot.activeId];
     return account ? { accountId: account.id, providerId: account.providerId } : null;
+  }
+
+  function peekActiveAccount() {
+    const state = readState();
+    mergeClaude(state);
+    mergeGrok(state);
+    if (state.activeId && !state.accounts[state.activeId]) state.activeId = null;
+    if (!state.activeId) {
+      const preferred = PROVIDER_ORDER
+        .map((providerId) => Object.values(state.accounts).find((account) => account && account.providerId === providerId))
+        .find(Boolean);
+      if (preferred) state.activeId = preferred.id;
+    }
+    return selectActiveAccount({ accounts: state.accounts, activeId: state.activeId });
   }
 
   const list = async () => selectList(await reconcileCodexRuntimeAccount());
@@ -257,12 +317,18 @@ function createCliAccounts({
     if (!cfg || !name) return { ok: false, launched: false, message: '알 수 없는 CLI다' };
     // claude는 PATH에만 기대지 않는다 — claude-bin.js가 오버라이드·PATH·네이티브
     // 설치 순으로 푼다. codex는 아직 PATH 전제 그대로다(런타임이 별도 홈을 쓴다).
-    const command = providerId === 'claude' ? claudeBinImpl() : cfg.command;
+    const command = providerId === 'claude'
+      ? claudeBinImpl()
+      : providerId === 'grok'
+        ? grokBinImpl()
+        : cfg.command;
     if (!await probeBinaryExists(command)) {
       // 어디를 봤는지 말한다 — "설치되어 있지 않다"만으로는 다음에 뭘 할지 알 수 없다.
       const where = providerId === 'claude'
         ? ` (찾아본 곳: ${claudeBinCandidates().join(' · ')})`
-        : '';
+        : providerId === 'grok'
+          ? ` (찾아본 곳: ${grokBinCandidates().join(' · ')})`
+          : '';
       return { ok: false, launched: false, message: `${name} CLI가 이 컴퓨터에 설치되어 있지 않다${where}` };
     }
     try {
@@ -324,39 +390,49 @@ function createCliAccounts({
   }
 
   function setActive(accountId) {
-    const state = readState();
-    if (!state.accounts[accountId]) return { ok: false };
-    state.activeId = accountId;
-    writeState(state);
-    return { ok: true };
+    return withMutex(async () => {
+      const state = readState();
+      mergeClaude(state);
+      mergeGrok(state);
+      if (!state.accounts[accountId]) return { ok: false };
+      state.activeId = accountId;
+      writeState(state);
+      return { ok: true };
+    });
   }
 
   async function activateProviderCurrent(providerId) {
     if (providerId === 'codex') {
       const snapshot = await reconcileCodexRuntimeAccount();
       if (!snapshot.accounts[CODEX_ACCOUNT_ID]) return { ok: false };
-      return setActive(CODEX_ACCOUNT_ID).ok
+      const activated = await setActive(CODEX_ACCOUNT_ID);
+      return activated.ok
         ? { ok: true, accountId: CODEX_ACCOUNT_ID }
         : { ok: false };
     }
-    if (providerId !== 'claude') return { ok: false };
-    const found = detectClaude();
-    if (!found) return { ok: false };
-    const id = `claude:${found.identifier}`;
-    const state = readState();
-    if (!state.accounts[id]) {
-      state.accounts[id] = {
-        id, providerId: 'claude', label: found.label, source: 'detected', addedAt: new Date().toISOString(),
-      };
-    }
-    state.activeId = id;
-    writeState(state);
-    return { ok: true, accountId: id };
+    if (providerId !== 'claude' && providerId !== 'grok') return { ok: false };
+    return withMutex(async () => {
+      const found = providerId === 'grok' ? detectGrok() : detectClaude();
+      if (!found) return { ok: false };
+      const state = readState();
+      mergeClaude(state);
+      mergeGrok(state);
+      const id = `${providerId}:${found.identifier}`;
+      if (!state.accounts[id]) {
+        state.accounts[id] = {
+          id, providerId, label: found.label, source: 'detected', addedAt: new Date().toISOString(),
+        };
+      }
+      state.activeId = id;
+      writeState(state);
+      return { ok: true, accountId: id };
+    });
   }
 
   function credentialsSignature() {
     return [
       path.join(osImpl.homedir(), '.claude', '.credentials.json'),
+      path.join(osImpl.homedir(), '.grok', 'auth.json'),
       path.join(runtimeHome, 'auth.json'),
     ].map((file) => {
       try { return String(fsImpl.statSync(file).mtimeMs); } catch { return '0'; }
@@ -367,6 +443,7 @@ function createCliAccounts({
     reconcileCodexRuntimeAccount,
     list,
     getActiveAccount,
+    peekActiveAccount,
     login,
     logout,
     setActive,
@@ -387,6 +464,7 @@ module.exports = {
   reconcileCodexRuntimeAccount: (...args) => getDefaultInstance().reconcileCodexRuntimeAccount(...args),
   list: (...args) => getDefaultInstance().list(...args),
   getActiveAccount: (...args) => getDefaultInstance().getActiveAccount(...args),
+  peekActiveAccount: (...args) => getDefaultInstance().peekActiveAccount(...args),
   login: (...args) => getDefaultInstance().login(...args),
   logout: (...args) => getDefaultInstance().logout(...args),
   setActive: (...args) => getDefaultInstance().setActive(...args),
