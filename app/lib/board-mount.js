@@ -553,6 +553,20 @@ function surfaceRoot(root) {
   return first || null;
 }
 
+// 전문 렌더러가 앉을 자리 하나를 찾아 돌려준다. 계약이 `mount_slot`을 주면 그
+// data-node를, 없거나 못 찾으면 표면의 `.bs-primary`로 떨어진다. 둘 다 없으면 null이다.
+// 여기서 렌더러를 부르지는 않는다 — DOM 텍스트 층은 차트·호가에 의존하지 않는다(D1).
+function primaryMountPoint(surface, contract) {
+  if (!surface || typeof surface.querySelectorAll !== 'function') return null;
+  const slot = String((contract && contract.primary && contract.primary.mount_slot) || '');
+  if (slot) {
+    const [node] = surface.querySelectorAll(`[data-node="${slot}"]`);
+    if (node) return node;
+  }
+  const [fallback] = surface.querySelectorAll('.bs-primary');
+  return fallback || null;
+}
+
 // 보드 1장을 root 안에 세운다. <template>은 registry가 보드당 1회만 파싱하고
 // 여기서는 cloneNode만 한다 — 같은 보드를 다시 마운트하면 텍스트만 갈아끼운다.
 function mountBoard(root, boardId, values, options = {}) {
@@ -577,7 +591,16 @@ function mountBoard(root, boardId, values, options = {}) {
     root.__bsBoardId = String(boardId);
   }
   const report = applyPlan(surface, plan, options);
-  return { surface, plan, ...report };
+  // 렌더러가 저작된 보드에서만 자리를 딸려 보낸다 — 그 자리에 앱 렌더러를 얹는 것은
+  // 호출부(canvas) 몫이고, 여기는 자리를 찾아 주기만 한다.
+  const primary = contract.primary && contract.primary.renderer
+    ? {
+      renderer: String(contract.primary.renderer),
+      mountPoint: primaryMountPoint(surface, contract),
+      propsFrom: contract.primary.props_from || [],
+    }
+    : null;
+  return { surface, plan, primary, ...report };
 }
 
 // 청크를 먼저 실은 뒤 마운트한다. 셸은 색인(수 KB)만 동기로 싣고 원문 HTML은
@@ -598,7 +621,8 @@ const __exports = {
   ROLLUP_MARK, RESPONSIVE_REGIONS, HOISTED_PROPERTIES,
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
   nodeIndex, elementChildCount, setHidden, applyPlan,
-  hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot, mountBoard, mountBoardAsync,
+  hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,
+  primaryMountPoint, mountBoard, mountBoardAsync,
   RAW_IDENTITY_NAME, scrubRawIdentityNames,
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,

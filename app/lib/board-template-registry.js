@@ -156,9 +156,12 @@ const templateCache = new Map();
 
 // 마운트 계약(정적) — 어느 노드에 어떤 슬롯이 앉고 어떻게 포맷하는지. 값은 여기
 // 없다. 값은 봉투의 surface_contract.slot_values가 나른다(백엔드 계약 §3).
+// `primary`는 전문 렌더러가 앉을 자리의 계약이다(`renderer`·`mount_slot`·`props_from`).
+// 저작 안 된 보드는 청크에 키가 없다 — 그 보드에는 전문 렌더러 자리가 없다는 뜻이다.
 function contractFor(boardId) {
   const entry = boardEntry(boardId);
-  return entry ? { board_id: String(boardId), slots: entry.slots || [] } : null;
+  if (!entry) return null;
+  return { board_id: String(boardId), slots: entry.slots || [], primary: entry.primary || null };
 }
 
 // 상태 보드 링크(어느 칩이 어느 보드를 여는가)의 정본은 이 색인이다. 봉투는 마운트한

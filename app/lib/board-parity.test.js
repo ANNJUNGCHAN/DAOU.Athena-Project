@@ -16,6 +16,7 @@ const crypto = require('node:crypto');
 
 const {
   mountPlan, applyPlan, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES,
+  primaryMountPoint,
 } = require('./board-mount');
 const registry = require('./board-template-registry');
 
@@ -758,6 +759,55 @@ test('레인 A 실추출 보드도 마운트 계약을 갖고, 앵커가 board.h
     const anchors = new Set(Array.from(html.matchAll(/data-node="([^"]+)"/g), (m) => m[1]));
     const missing = contract.slots.map((slot) => slot.node).filter((node) => !anchors.has(node));
     assert.deepEqual(missing.slice(0, 3), [], `${boardId}: 앵커 누락`);
+  }
+});
+
+// ---------- primary: 전문 렌더러가 앉을 자리 ----------
+//
+// 마운트 지점(.bs-primary 노드 하나)은 전 보드에 이미 있다. 없던 것은 그 자리를
+// 가리키는 저작값과, 그 값을 프론트까지 나르는 길이다 — 투사되지 않으면 프론트는
+// primary의 존재 자체를 모른다.
+
+const AUTHORED_PRIMARY = [
+  ['137X-2', 'athena-chart', '14P9-2'],
+  ['13BC-2', 'orderbook-ladder', '154L-2'],
+  ['1JPU-0', 'orderbook-ladder', '1JQG-0'],
+];
+
+test('청크가 primary 계약을 나른다 — 저작 안 된 보드는 null이다', () => {
+  for (const [boardId, renderer, mountSlot] of AUTHORED_PRIMARY) {
+    const { primary } = registry.contractFor(boardId);
+    assert.ok(primary, `${boardId}: primary가 프론트까지 오지 않았다`);
+    assert.equal(primary.renderer, renderer);
+    assert.equal(primary.mount_slot, mountSlot);
+  }
+  assert.equal(registry.contractFor(BOARD_ID).primary, null);
+});
+
+test('저작된 mount_slot은 실보드의 primary 자리 그 자체다', () => {
+  for (const [boardId, , mountSlot] of AUTHORED_PRIMARY) {
+    const tree = parse(registry.boardHtml(boardId));
+    const surface = tree.querySelector('.board-surface') || tree.children.find((c) => c.tag !== '#text');
+    const node = primaryMountPoint(surface, registry.contractFor(boardId));
+    assert.ok(node, `${boardId}: 마운트 지점을 못 찾았다`);
+    assert.equal(node.dataset.node, mountSlot);
+    // 폴백으로 우연히 맞은 것과 구별한다 — 저작값이 Paper의 primary 영역을 직접 짚어야 한다.
+    assert.ok(
+      String(node.className).split(/\s+/).includes('bs-primary'),
+      `${boardId}: mount_slot이 primary 자리가 아니다`,
+    );
+  }
+});
+
+test('차트 자리는 그 보드가 실제로 부르는 op에서만 값을 받는다', () => {
+  const authored = JSON.parse(fs.readFileSync(
+    path.join(TEMPLATE_DIR, '..', '137X-2', 'slots.json'), 'utf8',
+  ));
+  const ops = new Set(authored.operation_refs);
+  const sources = registry.contractFor('137X-2').primary.props_from;
+  assert.ok(sources.length > 0, 'props_from이 비었다 — 차트가 값을 받을 길이 없다');
+  for (const source of sources) {
+    assert.ok(ops.has(source.mapping_id), `${source.mapping_id}: 보드가 부르지 않는 op다`);
   }
 });
 
