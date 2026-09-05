@@ -54,9 +54,8 @@ const APP_PRIMARY_RENDERERS = new Set(['aits-chart-v1']);
 // 앉는다(canvas.js mountBoardPrimary). 값은 보드 slots.json의 primary.renderer이고
 // 색인이 동기로 나른다(board-template-registry.primaryRendererFor).
 // canvas가 실제로 마운트할 줄 아는 종류만 여기 있다 — 저작만 되고 마운트 코드가
-// 없는 종류를 넣으면 라이브 표면이 정적 목업으로 바뀐다. 호가 사다리
-// ('orderbook-ladder')는 그 마운트가 붙는 커밋에서 함께 넣는다.
-const BOARD_MOUNTED_RENDERERS = new Set(['athena-chart']);
+// 없는 종류를 넣으면 라이브 표면이 정적 목업으로 바뀐다.
+const BOARD_MOUNTED_RENDERERS = new Set(['athena-chart', 'orderbook-ladder']);
 
 // renderer_id를 안 싣는 옛 봉투·픽스처 대비 안전망. 정본은
 // backend/ref/kiwoom-common-screen-manifest.json에서 presentation.renderer_id가
@@ -99,17 +98,28 @@ const APP_PRIMARY_ORDER_OPS = new Set([
   'base:kt50002', 'base:kt50003',
 ]);
 
-function preservesAppPrimary(envelope, boardRenderer) {
-  if (!envelope) return false;
-  if (BOARD_MOUNTED_RENDERERS.has(String(boardRenderer || ''))) return false;
+// 이 봉투의 primary를 그리는 앱 렌더러 이름. 앱 primary가 아니면 빈 문자열이다.
+// 이름은 보드 slots.json의 primary.renderer와 같은 어휘라 그대로 맞대볼 수 있다 —
+// 보드가 얹을 줄 아는 종류와 봉투가 필요한 종류가 다르면 예외는 그대로다(차트
+// 봉투를 호가 사다리 자리에 보내면 그 자리는 목업인 채로 남는다).
+function appPrimaryRendererFor(envelope) {
   const renderer = typeof envelope.renderer_id === 'string' ? envelope.renderer_id : '';
-  if (APP_PRIMARY_RENDERERS.has(renderer)) return true;
+  if (APP_PRIMARY_RENDERERS.has(renderer)) return 'athena-chart';
   // REST 직행 차트 봉투는 renderer_id가 비어 있어도 AITS가 primary다. 보드 HTML을
   // 먼저 붙이면 3초 paint ack를 넘긴다(실앱 live-full QA-CHART 실측).
-  if (envelope.canvas_type === 'chart' && !envelope.fell_back) return true;
+  if (envelope.canvas_type === 'chart' && !envelope.fell_back) return 'athena-chart';
   const ref = operationRefOf(envelope);
-  if (APP_PRIMARY_CHART_OPS.has(ref)) return true;
-  return APP_PRIMARY_ORDERBOOK_OPS.has(ref) || APP_PRIMARY_ORDER_OPS.has(ref);
+  if (APP_PRIMARY_CHART_OPS.has(ref)) return 'athena-chart';
+  if (APP_PRIMARY_ORDERBOOK_OPS.has(ref)) return 'orderbook-ladder';
+  if (APP_PRIMARY_ORDER_OPS.has(ref)) return 'order-ticket';
+  return '';
+}
+
+function preservesAppPrimary(envelope, boardRenderer) {
+  if (!envelope) return false;
+  const needed = appPrimaryRendererFor(envelope);
+  if (!needed) return false;
+  return !(BOARD_MOUNTED_RENDERERS.has(needed) && String(boardRenderer || '') === needed);
 }
 function blockedReason(envelope) {
   return `카드 계약이 없는 키움 응답이다 — ${operationRefOf(envelope)}. 범용 카드로 대체하지 않는다.`;

@@ -220,7 +220,24 @@ test('보드가 그 앱 렌더러를 얹을 수 있으면 봉투는 보드로 �
   // 자리가 저작됐고 canvas가 그 종류를 얹을 줄 알면 보드가 껍질을 그린다.
   assert.strictEqual(routing.preservesAppPrimary(chart, 'athena-chart'), false);
   // 목록은 canvas가 실제로 마운트하는 종류다 — 저작만 된 종류는 아직 들어오지 않는다.
-  assert.deepEqual(Array.from(routing.BOARD_MOUNTED_RENDERERS), ['athena-chart']);
+  assert.deepEqual(Array.from(routing.BOARD_MOUNTED_RENDERERS), ['athena-chart', 'orderbook-ladder']);
+});
+
+test('호가 사다리 자리가 저작된 보드는 호가 봉투를 받는다', () => {
+  const orderbook = {
+    operation_ref: 'detail:ka10004:sell_bid_prices',
+    canvas_type: 'facts',
+    card_id: 'CC-04',
+    card_title: '호가',
+    surface_contract: { board_id: '13BC-2' },
+  };
+  // 13BC-2·1JPU-0은 primary.renderer가 'orderbook-ladder'다 — 보드가 껍질을 그리고
+  // 사다리는 그 안 마운트 지점에 앉는다(canvas.js mountBoardOrderbook).
+  assert.strictEqual(routing.preservesAppPrimary(orderbook, 'orderbook-ladder'), false);
+  // 차트 봉투는 호가 자리에 앉지 못한다 — 종류가 다르면 예외가 그대로다.
+  assert.strictEqual(routing.preservesAppPrimary({
+    ...orderbook, renderer_id: 'aits-chart-v1',
+  }, 'orderbook-ladder'), true);
 });
 
 test('semantic-workspaces 검증기의 preserve 판정은 이 모듈이 든다', () => {
