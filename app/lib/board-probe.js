@@ -126,6 +126,8 @@ async function sendBoardEnvelope(win, surface) {
         surface_contract: surface.contract,
         realtime_bindings: surface.realtimeBindings || [],
         operation_refs: [surface.operationRef],
+        // 프로브가 보드 위에 얹을 것(전문 렌더러 봉투 등)을 더 실을 때만 쓴다.
+        ...(surface.envelopeExtra || {}),
       },
     });
   });

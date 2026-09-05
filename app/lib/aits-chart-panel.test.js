@@ -224,6 +224,32 @@ test('destroy during async mount disposes the late renderer and leaves no sessio
   assert.equal(adapter.size(), 0);
 });
 
+// 보드 primary 자리에 얹은 차트는 상태 보드를 갈아탈 때마다 컨테이너가 바뀐다
+// (board-mount가 표면을 통째로 갈아끼운다). panelId는 봉투 correlation에서 나와
+// 그대로이므로, 닫지 않고 다시 열면 여기서 던진다 — canvas의 switchStateBoard가
+// destroyBoardPrimary를 먼저 부르는 근거다.
+test('같은 panelId를 다른 컨테이너로 열면 던지고, 닫은 뒤에는 새 컨테이너로 열린다', async () => {
+  const log = fakeRendererLog();
+  const adapter = createAitsChartPanelAdapter({ renderChart: log.factory });
+  const first = {};
+  const second = {};
+  const context = { panelId: 'board:137X-2', stock: '005930' };
+
+  await adapter.openPanel(first, body(), context);
+  await assert.rejects(
+    adapter.openPanel(second, body(), context),
+    /다른 DOM 컨테이너에 중복 마운트/,
+  );
+
+  assert.equal(adapter.destroyPanel('board:137X-2'), true);
+  const reopened = await adapter.openPanel(second, body(), context);
+  assert.equal(reopened.panelId, 'board:137X-2');
+  const renders = log.calls.filter((call) => call[0] === 'render');
+  assert.deepEqual(renders.map((call) => call[1]), [first, second]);
+  // 옛 렌더러는 닫혔다 — 두 벌이 같은 보드에 남지 않는다.
+  assert.equal(log.calls.filter((call) => call[0] === 'destroy').length, 1);
+});
+
 test('concurrent same-panel reload waits for one mount and never creates a duplicate renderer', async () => {
   let resolveRenderer;
   let renderCount = 0;

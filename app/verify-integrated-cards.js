@@ -926,6 +926,97 @@ async function captureBoardSteps(win, surface) {
   };
 }
 
+// ---------- 보드 primary: 라이브 차트가 보드 크롬 안에 선다 ----------
+//
+// 차트 봉투(renderer_id aits-chart-v1)는 그 자리가 저작된 보드로 간다(137X-2 —
+// primary.renderer athena-chart). 보드가 껍질을 그리고 라이브 차트가 그 안 마운트
+// 지점에 앉는지, Paper 목업은 지워지지 않고 접혔는지를 실앱 DOM에서 잰다.
+const BOARD_CHART_BOARD_ID = '137X-2';
+// 12봉(chart-card.js HISTORY_TRIGGER_BARS) 미만이면 마운트 즉시 과거 페이지 요청이
+// 돌아 하네스가 시끄러워진다 — verify.js 검증13b와 같은 이유로 15봉을 준다.
+const BOARD_CHART_CANDLES = Object.freeze(Array.from({ length: 15 }, (_, index) => {
+  const day = String(4 + index).padStart(2, '0');
+  const close = 70000 + index * 100;
+  return {
+    time: `2026-08-${day}`,
+    open: close - 200, high: close + 300, low: close - 400, close, volume: 8000000 + index * 1000,
+  };
+}));
+
+async function exerciseBoardChartPrimary(win) {
+  const surface = loadRealBoardContract(BOARD_CHART_BOARD_ID, 4, REAL_BOARD_TEMPLATE_ROOT);
+  surface.instanceId = boardInstanceId(`${BOARD_CHART_BOARD_ID}-chart`);
+  surface.cardTitle = '보드 차트 마운트 검수';
+  surface.envelopeExtra = {
+    renderer_id: 'aits-chart-v1',
+    data: {
+      symbol: '005930',
+      chart: {
+        period: 'day', target: 'stock', trId: 'ka10081', candles: BOARD_CHART_CANDLES.slice(),
+      },
+    },
+  };
+  const paint = await sendBoardEnvelope(win, surface);
+  await activateBoardTab(win, surface.instanceId);
+  const dom = await win.webContents.executeJavaScript(`new Promise((resolve) => {
+    const started = Date.now();
+    const read = () => {
+      const card = document.querySelector(
+        '#grid .card[data-integrated-instance-key="view:${surface.instanceId}"]');
+      if (!card) return { error: 'board card missing' };
+      const mount = card.querySelector('[data-bs-primary-mounted]');
+      const chartBody = mount && mount.querySelector('.chart-card-body');
+      const rect = mount ? mount.getBoundingClientRect() : null;
+      return {
+        error: null,
+        board_id: card.dataset.boardId || null,
+        board_surface: card.dataset.boardSurface || null,
+        board_nodes: card.querySelectorAll('.board-surface [data-node]').length,
+        primary_renderer: mount ? mount.dataset.bsPrimaryMounted : null,
+        chart_body_count: mount ? mount.querySelectorAll('.chart-card-body').length : 0,
+        canvas_count: chartBody ? chartBody.querySelectorAll('canvas').length : 0,
+        // 목업은 지운 것이 아니라 접은 것이다 — 자식 수는 그대로고 보이는 것만 없다.
+        mockup_children: mount ? mount.children.length : 0,
+        visible_mockup_children: mount
+          ? [...mount.children].filter((node) => node !== chartBody && !node.hidden).length : 0,
+        mount_width: rect ? Math.round(rect.width) : 0,
+        mount_height: rect ? Math.round(rect.height) : 0,
+        error_notes: card.querySelectorAll('.uk-error, [role="alert"]').length,
+      };
+    };
+    const check = () => {
+      const probe = read();
+      if (probe.canvas_count > 0 || probe.error_notes > 0 || Date.now() - started > 12000) {
+        resolve(probe);
+        return;
+      }
+      requestAnimationFrame(check);
+    };
+    check();
+  })`);
+  if (dom.error) throw new Error(`board chart primary: ${dom.error}`);
+  if (dom.board_id !== BOARD_CHART_BOARD_ID || dom.board_surface !== 'true') {
+    throw new Error(`board chart primary: 차트 봉투가 보드로 가지 않았다 — ${JSON.stringify(dom)}`);
+  }
+  if (dom.primary_renderer !== 'athena-chart' || dom.canvas_count === 0 || dom.chart_body_count !== 1) {
+    throw new Error(`board chart primary: 라이브 차트가 보드 자리에 서지 않았다 — ${JSON.stringify(dom)}`);
+  }
+  if (dom.visible_mockup_children !== 0 || dom.mockup_children < 2) {
+    throw new Error(`board chart primary: Paper 목업 처리가 접기가 아니다 — ${JSON.stringify(dom)}`);
+  }
+  if (dom.error_notes !== 0) {
+    throw new Error(`board chart primary: 오류 문구가 남았다 — ${JSON.stringify(dom)}`);
+  }
+  if (dom.mount_width <= 0 || dom.mount_height <= 0 || dom.board_nodes < 100) {
+    throw new Error(`board chart primary: 보드 크롬이 서지 않았다 — ${JSON.stringify(dom)}`);
+  }
+  return {
+    board_id: BOARD_CHART_BOARD_ID,
+    paint_receipt: { render_state: paint.render_state, verified_visible: paint.verified_visible },
+    ...dom,
+  };
+}
+
 async function captureBoardResponsive(win, contracts, manager) {
   // 실시간 이음매는 픽스처 보드가 계속 맡는다 — 0B 시세 바인딩과 정본 값을
   // 함께 갖고 있는 유일한 보드다. 찍기는 하지 않는다(반응형은 실보드가 맡는다).
@@ -948,7 +1039,10 @@ async function captureBoardResponsive(win, contracts, manager) {
     boards.push(captured);
   }
 
+  const chartPrimary = await exerciseBoardChartPrimary(win);
+
   return {
+    chart_primary: chartPrimary,
     realtime_seam: {
       board_id: BOARD_ID,
       paint_receipt: {
