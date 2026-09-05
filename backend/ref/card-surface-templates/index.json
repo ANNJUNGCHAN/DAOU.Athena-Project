@@ -2640,11 +2640,11 @@
         "layer_직접": 238,
         "layer_병기": 1,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
-        "bs_col": 0,
-        "bs_paired": 0,
-        "bs_leaf": 0,
+        "bs_col": 126,
+        "bs_paired": 120,
+        "bs_leaf": 20,
         "bs_kpi_cell": 5,
         "state_control_marks": 0
       },
@@ -2652,7 +2652,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "1c74c440859c764ffcab37dd0564ee454aa69df5b9b99fcef871dc6d3335a52a"
+      "html_sha256": "9398263487c8634826031f7cf203cc8c29faf6cc74b80db9b262db5d77d87c3c"
     },
     {
       "board_id": "2X5N-0",
@@ -3547,10 +3547,10 @@
         "layer_직접": 189,
         "layer_병기": 0,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
-        "bs_col": 0,
-        "bs_paired": 0,
+        "bs_col": 54,
+        "bs_paired": 88,
         "bs_leaf": 0,
         "bs_kpi_cell": 5,
         "state_control_marks": 0
@@ -3559,7 +3559,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "145392fbe9a158240103da1a1930c437e80c615e65617034099efacc3f96f2bf"
+      "html_sha256": "d66610a79406e67b24bdff1354606c79b3b448b4043445663256e41a8333f4fe"
     },
     {
       "board_id": "30O1-0",

@@ -7,5 +7,8 @@
     { "node_id": "2WZQ-0", "name": "Chart Workspace", "role": "workspace", "depth": 1 },
     { "node_id": "2X1C-0", "name": "Quote Detail Mount", "role": "primary", "depth": 2 },
     { "node_id": "3O92-0", "name": "Rail", "role": "rail", "depth": 2 }
+  ],
+  "responsive": [
+    { "node_id": "3R2H-0", "traits": ["paired-table"], "header_row": "3R2I-0" }
   ]
 }
