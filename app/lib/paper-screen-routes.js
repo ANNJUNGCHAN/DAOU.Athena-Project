@@ -53,6 +53,12 @@ const STEP_KINDS = Object.freeze({
   //                            채널마다 다르다: athena:routines-list는 {ok,data}
   //                            (main.js:1243 routineHttp), athena:account-list는
   //                            {accounts}(main.js:4888 accounts.list()).
+  //                            격리는 러너 몫이다: 라우트마다 원 핸들러를 스냅샷하고
+  //                            끝나면 되돌려야 한다. 표에 되돌리는 어휘를 두지 않는 것은
+  //                            빠뜨릴 수 있는 저작 부담을 늘리지 않기 위해서다 — 대신
+  //                            갈아끼운 채널이 다음 라우트로 새면 안 된다(athena:account-list는
+  //                            settings-cards.js:139 사이드바 배지·auth-screen.js:240·
+  //                            onboarding.js:318도 읽는다).
   'ipc-fixture': Object.freeze(['channel', 'data']),
   // envelope  data — 캔버스 봉투 주입 (verify.js:3745-3754 liveEnvelope)
   envelope: Object.freeze(['data']),
@@ -86,6 +92,15 @@ const WATCH_ROUTINE = Object.freeze({
     last_error: null,
     fired_today: 2,
   },
+});
+
+// 실행 이력 fixture — 이 채널도 routineHttp를 그대로 돌려주는 {ok,data} 봉투다
+// (main.js:1273, 선례 probe-agent-paper-parity.js:188·verify.js:5276). 안쪽만 주면
+// canvas.js:3484 fetchRuns·:3491 fetchAvgDuration·:3498 fetchEngagement 셋 다
+// res.ok에서 걸려 폴백을 탄다. 값은 전부 데이터라 phrases에는 한 글자도 넣지 않는다.
+const ROUTINE_RUNS = Object.freeze({
+  ok: true,
+  data: { runs: [], avg_duration_ms: 6540, opened_rate: 0.71, replied_count: 9 },
 });
 
 // 계좌 목록 fixture — 보드 14의 활성·비활성 두 줄 그대로. 이게 없으면 계좌 표 머리
@@ -131,7 +146,7 @@ const ROUTES = Object.freeze([
     window: 'shell',
     reach: [
       { do: 'ipc-fixture', channel: 'athena:routines-list', data: WATCH_ROUTINE },
-      { do: 'ipc-fixture', channel: 'athena:routine-runs', data: { runs: [], avg_duration_ms: 6540, opened_rate: 0.71, replied_count: 9 } },
+      { do: 'ipc-fixture', channel: 'athena:routine-runs', data: ROUTINE_RUNS },
       { do: 'mode', view: 'agent' },
       { do: 'wait', ms: 700 },
       { do: 'click', selector: '.agent-row' },
