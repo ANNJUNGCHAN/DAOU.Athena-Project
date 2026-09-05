@@ -198,3 +198,54 @@
 .sidebar-project-remove-cancel { margin-right: 4px; }
 .sidebar-project-remove-confirm.is-danger { border-color: #c03445; background: #c03445; color: #fff; }
 .sidebar-project-remove-confirm:disabled { opacity: 0.45; cursor: default; }
+
+/* ---- 프로젝트 수정(29번 보드 2026-09-05 개정) — 이름·설명을 행 아래에서 고친다.
+ * 삭제 확인과 같은 자리·같은 크기(입력 26px, 버튼 24px). 저장은 검정(#121826). ---- */
+.sidebar-project-edit {
+  margin: 2px 4px 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-md);
+  background: #fff;
+  box-shadow: 0 6px 18px rgb(16 19 26 / 8%);
+  font-size: var(--text-xs);
+}
+.sidebar-project-edit-field { display: flex; flex-direction: column; gap: 3px; }
+.sidebar-project-edit-label { color: var(--color-k-faint); font-size: var(--text-2xs); line-height: 12px; }
+.sidebar-project-edit-input {
+  width: 100%;
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font: inherit;
+  font-size: var(--text-xs);
+  box-sizing: border-box;
+}
+.sidebar-project-edit-input:focus { outline: none; border-color: var(--color-down); }
+.sidebar-project-edit-hint { margin: 0; color: #c03445; font-size: var(--text-2xs); line-height: 1.4; }
+.sidebar-project-edit-hint:empty { display: none; }
+.sidebar-project-edit-actions { display: flex; justify-content: flex-end; gap: 4px; padding-top: 2px; }
+.sidebar-project-edit-cancel,
+.sidebar-project-edit-save {
+  height: 24px;
+  padding: 0 10px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: #10131a;
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.sidebar-project-edit-save {
+  border-color: #121826;
+  background: #121826;
+  color: #fff;
+  font-family: var(--font-strong);
+}
+.sidebar-project-edit-save:disabled { opacity: 0.45; cursor: default; }

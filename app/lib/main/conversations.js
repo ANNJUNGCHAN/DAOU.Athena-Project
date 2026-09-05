@@ -290,6 +290,23 @@ function setProjectPinned(id, pinned) {
   return snapshot(state);
 }
 
+// '프로젝트 수정'(29번 보드) — 이름과 설명만 고친다. 폴더·id·고정은 건드리지 않는다.
+// 이름은 비울 수 없다(사이드바 행과 삭제 확인이 이름으로 사람을 붙잡기 때문이다).
+// 설명을 비우면 필드를 지워 기본 문장("이 프로젝트에 속한 대화와 작업")으로 돌아간다.
+function updateProject({ id, label, description } = {}) {
+  const state = readState();
+  const project = state.projects.find((row) => row.id === validString(id));
+  if (!project) return { ok: false, reason: 'unknown_project' };
+  const nextLabel = validString(label);
+  if (!nextLabel) return { ok: false, reason: 'invalid_label' };
+  project.label = nextLabel;
+  const nextDescription = validString(description);
+  if (nextDescription) project.description = nextDescription;
+  else delete project.description;
+  writeState(state);
+  return { ok: true, project, state: snapshot(state) };
+}
+
 // 레코드와 그 프로젝트의 대화들만 지운다 — 폴더 자체를 지우는 것은 main의 몫이다.
 function removeProject(id) {
   const projectId = validString(id);
@@ -348,6 +365,7 @@ module.exports = {
   setResumeCursor,
   addProject,
   setProjectPinned,
+  updateProject,
   removeProject,
   projectById,
   flush,
