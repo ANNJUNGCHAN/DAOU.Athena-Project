@@ -210,6 +210,8 @@ async function main() {
       viewTabs: Array.from(c.querySelectorAll('.agent-view-tab')).map((n) => n.textContent.split(' ')[0]),
       rulesPresent: !!rules,
       rulesSource: rules ? rules.getAttribute('data-source') : 'MISSING',
+      rulesCaption: rules && rules.querySelector('.agent-panel-caption')
+        ? rules.querySelector('.agent-panel-caption').textContent : 'MISSING',
       ruleLines: Array.from(c.querySelectorAll('.agent-route-rule')).map((n) => n.textContent),
       timelineTimes: Array.from(c.querySelectorAll('.agent-live-timeline-time')).map((n) => n.textContent),
       timelineDotColors: Array.from(c.querySelectorAll('.agent-live-timeline-dot')).map((n) => n.style.color),
@@ -223,16 +225,17 @@ async function main() {
     JSON.stringify(tasksProbe.viewTabs) === JSON.stringify(['작업', '알람', '라이브', '제안']),
   );
   check('통계 카드 4장이 그대로다', tasksProbe.statCount === 4);
-  check('동선 규칙 패널이 작업 뷰에 있다 — Paper 보드 05 하단', tasksProbe.rulesPresent === true);
+  check('이중 제어 규칙 패널이 작업 뷰에 있다 — Paper 보드 05 하단', tasksProbe.rulesPresent === true);
   check(
-    '동선 규칙 3줄이 Paper 원문 그대로다',
+    '이중 제어 규칙 3줄이 Paper C6V-0~C6X-0 원문 그대로다',
     JSON.stringify(tasksProbe.ruleLines) === JSON.stringify([
-      '① ＋ 새 작업 버튼은 시트를 열지 않는다 — 채팅 입력창에 시작 문장을 넣고 커서를 옮긴다.',
-      '② 편집도 채팅으로 — 행을 고르고 "이거 고쳐줘". 상세 패널은 보기 전용.',
-      '③ 확정(미리보기·활성화)은 채팅 카드의 칩 — 캔버스는 결과가 비치는 곳.',
+      '① 새 작업 — 채팅 문장으로도, 시트로도.',
+      '② 편집 — "이거 고쳐줘"로도, 폼으로도.',
+      '③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트.',
     ]),
   );
-  check('동선 규칙은 데이터가 아니라 화면 계약이라 data-source가 없다', tasksProbe.rulesSource === null);
+  check('이중 제어 규칙 캡션이 Paper C6U-0 원문이다', tasksProbe.rulesCaption === '이중 제어 규칙');
+  check('이중 제어 규칙은 데이터가 아니라 화면 계약이라 data-source가 없다', tasksProbe.rulesSource === null);
   check(
     '라이브 타임라인 4행이 시각 열을 갖는다 — Paper 보드 02',
     JSON.stringify(tasksProbe.timelineTimes) === JSON.stringify(['07:30', '08:55', '15:30', '16:00']),

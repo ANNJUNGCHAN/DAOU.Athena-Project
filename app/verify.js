@@ -591,8 +591,9 @@ async function traceBootBar(shellWin, timeoutMs = 12000, completionSnapshotProvi
   try { lastState = await shellWin.webContents.executeJavaScript(probe); } catch { /* 창 종료 */ }
   const finalColors = (lastState && lastState.charColors) || [];
   const baseWordPresent = !!lastState && lastState.baseText === 'ATHENA';
-  const baseIsTransparent = !!lastState
-    && lastState.baseColor === 'rgba(0, 0, 0, 0)'
+  // 아직 입력되지 않은 ATHENA는 Paper 16OG-2의 비활성 회색(#9AA2AE)이다 — 면은 없다.
+  const baseIsInactiveGray = !!lastState
+    && lastState.baseColor === 'rgb(154, 162, 174)'
     && lastState.baseBackgroundColor === 'rgba(0, 0, 0, 0)';
   const overlayIsBlue = finalColors.length === 6
     && finalColors.every((c) => c === 'rgb(14, 32, 178)');
@@ -665,7 +666,7 @@ async function traceBootBar(shellWin, timeoutMs = 12000, completionSnapshotProvi
     prefixCount,
     typedPrefixes: Array.from(typedPrefixes),
     baseWordPresent,
-    baseIsTransparent,
+    baseIsInactiveGray,
     overlayIsBlue,
     cursorIsPink,
     backgroundIsTransparent,
@@ -704,7 +705,7 @@ async function traceBootBar(shellWin, timeoutMs = 12000, completionSnapshotProvi
     phases: Array.from(phases),
     maxName,
     reducedMotion,
-    pass: baseWordPresent && baseIsTransparent && overlayIsBlue && cursorIsPink
+    pass: baseWordPresent && baseIsInactiveGray && overlayIsBlue && cursorIsPink
       && backgroundIsTransparent && typeScaleMatchesPaper
       && cursorBlinks && timingMatches
       && staticLogoPresent
@@ -4533,11 +4534,14 @@ app.whenReady().then(async () => {
         // 따라 붙으므로 접두사만 본다.
         viewTabLabels: Array.from(canvas.querySelectorAll('.agent-view-tab')).map((n) => n.textContent.split(' ')[0]),
       };
-      // 동선 규칙(Paper 보드 05 하단) — 세 줄 원문과 출처 표기 없음까지 잰다.
+      // 이중 제어 규칙(Paper 보드 05 하단 C6U-0~C6X-0) — 캡션·세 줄 원문과
+      // 출처 표기 없음까지 잰다.
       const routeRulesEl = canvas.querySelector('.agent-route-rules');
+      const routeRulesCaptionEl = routeRulesEl ? routeRulesEl.querySelector('.agent-panel-caption') : null;
       const routeRules = {
         present: !!routeRulesEl,
         sourceAttr: routeRulesEl ? routeRulesEl.getAttribute('data-source') : 'MISSING',
+        caption: routeRulesCaptionEl ? routeRulesCaptionEl.textContent : 'MISSING',
         lines: Array.from(canvas.querySelectorAll('.agent-route-rule')).map((n) => n.textContent),
       };
       // 라이브 "다음 24시간" 시각 열(Paper 보드 02) — 뷰를 옮기지 않고 DOM만 읽는다.
@@ -4586,17 +4590,21 @@ app.whenReady().then(async () => {
         'agent-canvas: 뷰 탭 4종(작업/알람/라이브/제안)이 있다(Paper 보드 02·04·05 통일안)',
         JSON.stringify(agentCanvasProbe.headerText.viewTabLabels) === JSON.stringify(['작업', '알람', '라이브', '제안']),
       );
-      assertOk('agent-canvas: 동선 규칙 패널이 작업 뷰에 있다(Paper 보드 05)', agentCanvasProbe.routeRules.present === true);
+      assertOk('agent-canvas: 이중 제어 규칙 패널이 작업 뷰에 있다(Paper 보드 05)', agentCanvasProbe.routeRules.present === true);
       assertOk(
-        'agent-canvas: 동선 규칙 3줄이 Paper 원문 그대로다',
+        'agent-canvas: 이중 제어 규칙 캡션이 Paper C6U-0 원문이다',
+        agentCanvasProbe.routeRules.caption === '이중 제어 규칙',
+      );
+      assertOk(
+        'agent-canvas: 이중 제어 규칙 3줄이 Paper C6V-0~C6X-0 원문 그대로다',
         JSON.stringify(agentCanvasProbe.routeRules.lines) === JSON.stringify([
-          '① ＋ 새 작업 버튼은 시트를 열지 않는다 — 채팅 입력창에 시작 문장을 넣고 커서를 옮긴다.',
-          '② 편집도 채팅으로 — 행을 고르고 "이거 고쳐줘". 상세 패널은 보기 전용.',
-          '③ 확정(미리보기·활성화)은 채팅 카드의 칩 — 캔버스는 결과가 비치는 곳.',
+          '① 새 작업 — 채팅 문장으로도, 시트로도.',
+          '② 편집 — "이거 고쳐줘"로도, 폼으로도.',
+          '③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트.',
         ]),
       );
       assertOk(
-        'agent-canvas: 동선 규칙은 데이터가 아니라 화면 계약이라 data-source를 달지 않는다',
+        'agent-canvas: 이중 제어 규칙은 데이터가 아니라 화면 계약이라 data-source를 달지 않는다',
         agentCanvasProbe.routeRules.sourceAttr === null,
       );
       assertOk(
