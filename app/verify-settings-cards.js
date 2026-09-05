@@ -142,7 +142,8 @@ app.whenReady().then(async () => {
 
   // ---------- 모델 카드 (Paper 화면 18 · 2026-09-05 계정 카드형) ----------
   // 리드 제목 · 계정 카드 3장(활성 1) · 비활성 카드 본문은 전환 button 2개 ·
-  // 섹션마다 [+ 계정 추가] · 현재 Claude 로그인의 [제거]는 잠김 · 칩은 그대로.
+  // 섹션 3개(Claude·Grok·Codex)마다 [+ 계정 추가] · 현재 Claude 로그인의 [제거]는 잠김 ·
+  // 칩은 그대로. Paper 18은 Grok(2a1d88c) 이전 판이라 Grok 섹션 갱신이 필요하다.
   await clickAndLog(shellWin, 'select nav 모델', clickNavItem('모델'));
   await wait(400);
   const modelSurface = await shellWin.webContents.executeJavaScript(`
@@ -163,7 +164,7 @@ app.whenReady().then(async () => {
   `);
   console.log('[verify-settings] 모델 카드 표면:', JSON.stringify(modelSurface));
   if (modelSurface.lead !== 'AI 제공업체 계정' || modelSurface.accountCards !== 3 || modelSurface.activeCards !== 1
-    || modelSurface.switchButtons !== 2 || modelSurface.addButtons !== 2 || modelSurface.lockedRemove !== 1
+    || modelSurface.switchButtons !== 2 || modelSurface.addButtons !== 3 || modelSurface.lockedRemove !== 1
     || modelSurface.chipCount === 0) {
     failures.push(`모델 카드 표면이 Paper 화면 18과 다르다: ${JSON.stringify(modelSurface)}`);
   }
