@@ -4,7 +4,8 @@
 //
 // 매니페스트 role==="screen" 104장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 16장(에이전트 4 + 화면 4 + 부팅 5 + 온보딩 3)이고, 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
+// 지금은 20장(부팅 5 + 온보딩 3 + 에이전트 4 + 화면 4 + 셸·그래프 2 + 대화·계정 2)이고,
+// 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
 // 임의 JS를 표에 심으면 표가 곧 프로브가 되어 유지가 안 된다. STEP_KINDS만 허용하고,
@@ -606,6 +607,76 @@ const ROUTES = Object.freeze([
     structure: [
       { what: 'count', selector: '.question-card-btn', equals: 3 },
       { what: 'count', selector: '.question-card-key', equals: 2 },
+    ],
+  },
+
+  // ---------- 대화·계정 2장 (1-0) ----------
+  {
+    board: '1Y3-0', // 11 · 대화 — 모델 팝오버 · 루틴 승인
+    window: 'shell',
+    // 툴바 [모델]이 팝오버를 여는 클릭이다(chat.js toggleModelPopover — 키우미
+    // 메뉴 '모델 설정'도 같은 곳으로 간다). 팝오버는 shell.html에서 hidden으로
+    // 시작하므로 이 한 클릭이 없으면 root부터 안 그려진다.
+    reach: [
+      { do: 'click', selector: '#modelBtn' },
+      { do: 'settle' },
+    ],
+    // 보드가 그린 두 덩이 중 도달 절차로 결정론이 되는 것은 팝오버뿐이라 root도 팝오버다.
+    //
+    // 오른쪽 「루틴 승인 카드 · 진행 상태」는 적지 않는다. 승인 카드의 머리·버튼이
+    // Paper 보드 43에서 갈렸고 앱은 그 새 보드를 따른다 — 「작업 요약」·「초안」
+    // 두 pill과 [미리보기 실행][바로 활성화][고칠 게 있어]다(chat.js:3423 주석이
+    // 그 보드를 가리킨다). 여기에 보드 11의 「승인 필요」·[승인][거절]을 적으면
+    // 두 Paper 보드 중 오래된 쪽을 정본으로 삼는 것이 된다. 진행 중·실패·중단 턴은
+    // 실제 질의가 끝나야 생겨 CLI와 백엔드가 무엇을 답하느냐에 좌우된다.
+    //
+    // 왼쪽 입력행의 「답변 중…」·「ESC 중단」과 control-strip의 「CLAUDE」·
+    // 「OPUS · HIGH」도 안 적는다 — 잠금 힌트는 실행 중에만 그려지고, 필 줄은
+    // Paper 44·45 v5가 걷어낸 뒤로 앱이 그리지 않는다(shell.html:325 주석).
+    root: '#modelPopover',
+    // Paper의 머리말은 「모델」·「사고 강도」 둘인데 앱은 공급자별로 넷을 그린다
+    // (Claude 모델·Claude 사고 강도·Grok 모델·Grok 사고 강도). 포함 판정이라
+    // Paper의 두 낱말은 그 안에 있지만, 머리말 **개수**는 적지 않는다 — Grok은
+    // 이 보드 뒤에 붙은 실기능이라 거기에 4를 적으면 앱이 정본이 된다.
+    phrases: ['모델', '사고 강도', 'fable', 'opus', 'sonnet', 'haiku', 'max'],
+    // Paper의 모델 행 그대로 — 다섯 칩이 이 차례다. 사고 강도 행은 안 적는다:
+    // Paper는 다섯(low~max)인데 앱은 앞에 「기본」(값 위임)이 하나 더 있다.
+    // 팝오버의 첫 행이 모델 행이라는 것을 :nth-child(2)가 진다(1은 머리말).
+    structure: [
+      {
+        what: 'order',
+        selector: '.mp-row:nth-child(2) .mp-chip',
+        equals: ['기본', 'fable', 'opus', 'sonnet', 'haiku'],
+      },
+    ],
+  },
+  {
+    board: '3JL-0', // 12 · 계정 메뉴 — 설정 진입
+    window: 'shell',
+    reach: [
+      // 계정 행은 활성 계좌가 없으면 통째로 숨는다(sidebar.js:1309) — 보드 14와
+      // 같은 이유로 같은 fixture를 쓴다.
+      { do: 'ipc-fixture', channel: 'athena:account-list', data: PAPER_ACCOUNTS },
+      // 사이드바는 계좌를 부팅 때 한 번 읽고 다음 폴링이 30초 뒤다(sidebar.js:1359).
+      // fixture는 그 한 번 뒤에 걸리므로, 앱이 스스로 계정 발치를 다시 읽을 때 쓰는
+      // 이벤트를 그대로 쏴 다시 읽힌다(sidebar.js:1364 athena:auth-token-changed).
+      { do: 'send', channel: 'athena:auth-token-changed', data: null },
+      { do: 'wait', ms: 500 },
+      { do: 'click', selector: '#sidebarAccountRow' },
+      { do: 'settle' },
+    ],
+    // 보드가 그린 셸 뒤판(사이드바·빈 캔버스·대화)은 보드 06이 이미 지고 있다.
+    // 이 보드만의 것은 계정 행이 띄우는 팝업 메뉴라 root도 그것이다 — 메뉴는
+    // hidden으로 시작하므로 위 절차가 하나라도 빠지면 root부터 안 그려진다.
+    root: '#sidebarAccountMenu',
+    // 계정 별칭·「주문 API 꺼짐」·「5시간 42분 남음」·「2개」는 값이라 안 넣는다
+    // (주문 API 상태는 계좌마다 다르고, 보드 14는 같은 계좌를 ON으로 그린다).
+    // 남는 것은 앱이 리터럴로 그리는 항목 라벨과 단축키뿐이다.
+    phrases: ['토큰 사용량', '계좌 전환', '설정', 'Ctrl+,'],
+    // Paper의 팝업 메뉴 — 계정 헤더 하나 + 항목 셋(사용량·계좌·설정).
+    structure: [
+      { what: 'count', selector: '.sidebar-menu-head', equals: 1 },
+      { what: 'count', selector: '.sidebar-menu-item', equals: 3 },
     ],
   },
 ]);
