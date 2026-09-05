@@ -467,11 +467,53 @@ test('덱 엘리먼트가 밖에서 떨어져 나갔으면 탭을 닫고 덱을 
 
 test('보드가 얹는 렌더러 종류는 라우팅이 아는 목록과 같다', () => {
   const { BOARD_MOUNTED_RENDERERS } = require('./paper-card-routing');
-  const mounted = CANVAS.match(/const BOARD_CHART_RENDERER = '([^']+)';/);
-  assert.ok(mounted, 'canvas.js가 보드에 얹을 렌더러 이름을 상수로 갖고 있지 않다');
+  const chart = CANVAS.match(/const BOARD_CHART_RENDERER = '([^']+)';/);
+  const orderbook = CANVAS.match(/const BOARD_ORDERBOOK_RENDERER = '([^']+)';/);
+  assert.ok(chart, 'canvas.js가 보드에 얹을 차트 렌더러 이름을 상수로 갖고 있지 않다');
+  assert.ok(orderbook, 'canvas.js가 보드에 얹을 호가 렌더러 이름을 상수로 갖고 있지 않다');
   // 라우팅이 보드로 보내는 종류와 canvas가 실제로 마운트하는 종류가 어긋나면
   // 그 봉투는 보드로 갔는데 자리는 목업인 채로 남는다.
-  assert.deepEqual(Array.from(BOARD_MOUNTED_RENDERERS), [mounted[1]]);
+  assert.deepEqual(Array.from(BOARD_MOUNTED_RENDERERS), [chart[1], orderbook[1]]);
+});
+
+test('보드 호가 자리는 카드종 조각을 그대로 얹고 0D를 명시로 잡는다', () => {
+  const mount = CANVAS.slice(
+    CANVAS.indexOf('function mountBoardOrderbook'),
+    CANVAS.indexOf('async function mountBoardPrimary'),
+  );
+  // 조각은 카드종 렌더러가 만든다(all-or-nothing) — 못 만들면 목업을 걷지 않는다.
+  assert.match(mount, /kinds\.resolve\('호가'\)/);
+  assert.match(mount, /if \(!built\) return null;/);
+  // 목업은 지우지 않고 접는다(D1).
+  assert.match(mount, /boardMount\.collapsePrimaryMockup\(primary\.mountPoint\)/);
+  assert.doesNotMatch(mount, /mountPoint\.replaceChildren|mountPoint\.innerHTML/);
+  assert.match(mount, /primary\.mountPoint\.dataset\.bsPrimaryMounted = BOARD_ORDERBOOK_RENDERER;/);
+  // 0D는 리스가 나르지 않는다 — acquire/release 짝은 wireOrderbookRealtime이 든다.
+  assert.match(mount, /supportsLive0D\(built\)/);
+  assert.match(mount, /state\.primaryRelease = wireOrderbookRealtime\(/);
+  assert.match(mount, /\{ registerCardDestroyer: false \}/);
+  // 0B는 보드 카드에 다시 걸지 않는다 — 통합 카드 리스가 이미 그 피드를 나른다.
+  assert.doesNotMatch(mount, /wireQuoteRealtime/);
+});
+
+test('호가 자리를 놓을 때 0D 리스도 같은 문으로 놓는다', () => {
+  const destroy = CANVAS.slice(
+    CANVAS.indexOf('function destroyBoardPrimary'),
+    CANVAS.indexOf('function boardChartDescriptor'),
+  );
+  // 상태 보드를 갈아타도 리스가 남으면 REG가 하나씩 쌓인다(카드 파괴까지 안 놓인다).
+  assert.match(destroy, /const release = state\.primaryRelease;\n\s*state\.primaryRelease = null;/);
+  assert.match(destroy, /typeof release === 'function' \? release\(\) : false/);
+});
+
+test('호가 실시간 해제는 두 번 나가지 않는다', () => {
+  const wire = CANVAS.slice(
+    CANVAS.indexOf('function wireOrderbookRealtime'),
+    CANVAS.indexOf('function renderMcpTable'),
+  );
+  // acquire보다 release가 많으면 main의 REG 셈이 무너진다.
+  assert.match(wire, /if \(released\) return false;\n\s*released = true;/);
+  assert.match(wire, /if \(options\.registerCardDestroyer === false\) return release;/);
 });
 
 test('보드 껍질을 먼저 세우고 앱 렌더러는 뒤에서 얹는다', () => {

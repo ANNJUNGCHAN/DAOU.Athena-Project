@@ -134,16 +134,36 @@ test('렌더러 신호 없는 recipe는 보드 표면 판정을 막지 않는다
   }
 });
 
-test('호가 사다리·주문 티켓 op는 보드가 마운트 지점을 갖출 때까지 앱 primary로 남는다', () => {
-  for (const ref of ['detail:ka10004:buy_bid_prices', 'detail:ka10087:trading_summary',
-    'base:kt10000', 'base:kt10008']) {
+test('주문 티켓 op는 보드가 마운트 지점을 갖출 때까지 앱 primary로 남는다', () => {
+  // 주문 보드(135M-2·2TAG-1 등)는 primary.renderer가 전부 null이다 — 가로채면
+  // 사용자가 누를 수 없는 목업 주문 폼이 그 자리를 대신한다.
+  for (const ref of ['base:kt10000', 'base:kt10008']) {
     assert.strictEqual(routing.preservesAppPrimary({
-      operation_ref: ref, canvas_type: 'table', surface_contract: { board_id: '13BC-2' },
+      operation_ref: ref, canvas_type: 'action', surface_contract: { board_id: '135M-2' },
     }), true, ref);
   }
 });
 
-test('호가·주문 예외는 op 목록이지 카드 이름이 아니다', () => {
+test('호가 op는 자기 Paper 보드로 간다 — 사다리 자리가 없는 보드도 마찬가지다', () => {
+  // 13BC-2·1JPU-0은 사다리를 품고, 시간외·금현물·낱값 보드(2QRP-1·2QX1-1·3N4O-0·
+  // 3JT4-0)는 Paper가 5단·낱값으로 따로 저작했다 — 앱 사다리를 그 자리에 얹는
+  // 것이 오히려 Paper와 다른 그림이다(2026-09-06 31 op 전수 대조).
+  for (const [ref, boardRenderer] of [
+    ['detail:ka10007:bid_prices', 'orderbook-ladder'],
+    ['detail:ka10004:buy_bid_prices', 'orderbook-ladder'],
+    ['detail:ka10087:trading_summary', ''],
+    ['detail:ka10007:order_counts', ''],
+    ['base:ka50101', ''],
+    ['base:0D', 'orderbook-ladder'],
+  ]) {
+    assert.strictEqual(routing.preservesAppPrimary({
+      operation_ref: ref, canvas_type: 'facts', card_title: '호가',
+      presentation_contract: { recipe_id: 'live-orderbook', sections: [] },
+    }, boardRenderer), false, ref);
+  }
+});
+
+test('주문 예외는 op 목록이지 카드 이름이 아니다', () => {
   // card_title로 판정하면 실시간 접수 통보(base:00, 계좌 카드)가 '주문'이라는
   // 이름만으로 133H-2 보드를 잃는다 — 이번 작업이 없애려던 손실 그 자체다.
   assert.strictEqual(routing.preservesAppPrimary({
@@ -151,27 +171,22 @@ test('호가·주문 예외는 op 목록이지 카드 이름이 아니다', () =
     presentation_contract: { recipe_id: 'account-risk', sections: [] },
     surface_contract: { board_id: '133H-2' },
   }), false);
-  // 반대로 이름이 '신용거래'·'시세'인 주문·호가 op는 예외 안에 남는다.
+  // 반대로 이름이 '신용거래'인 주문 op는 예외 안에 남는다.
   assert.strictEqual(routing.preservesAppPrimary({
     operation_ref: 'base:kt10006', canvas_type: 'action', card_title: '신용거래',
     surface_contract: { board_id: '2TJ6-1' },
   }), true);
-  assert.strictEqual(routing.preservesAppPrimary({
-    operation_ref: 'detail:ka10007:session', canvas_type: 'facts', card_title: '시세',
-    surface_contract: { board_id: '1JPU-0' },
-  }), true);
 });
 
-test('호가·주문 op 목록은 capability 배정 원장과 정확히 같다', () => {
+test('주문 op 목록은 capability 배정 원장과 정확히 같다', () => {
   // 정본은 backend/ref/kiwoom-capability-assignment.json이다(view_recipe_registry가
-  // live-orderbook·order-safe-ticket recipe를 여기서 만든다). 드리프트하면 깨진다.
+  // order-safe-ticket recipe를 여기서 만든다). 드리프트하면 깨진다.
   const assignment = JSON.parse(fs.readFileSync(
     path.join(__dirname, '..', '..', 'backend', 'ref', 'kiwoom-capability-assignment.json'),
     'utf8',
   ));
   const opsOf = (capabilityId) => assignment.capabilities
     .find((entry) => entry.capability_id === capabilityId).mapping_ids.slice().sort();
-  assert.deepStrictEqual([...routing.APP_PRIMARY_ORDERBOOK_OPS].sort(), opsOf('orderbook'));
   assert.deepStrictEqual([...routing.APP_PRIMARY_ORDER_OPS].sort(), opsOf('order'));
 });
 
@@ -220,7 +235,16 @@ test('보드가 그 앱 렌더러를 얹을 수 있으면 봉투는 보드로 �
   // 자리가 저작됐고 canvas가 그 종류를 얹을 줄 알면 보드가 껍질을 그린다.
   assert.strictEqual(routing.preservesAppPrimary(chart, 'athena-chart'), false);
   // 목록은 canvas가 실제로 마운트하는 종류다 — 저작만 된 종류는 아직 들어오지 않는다.
-  assert.deepEqual(Array.from(routing.BOARD_MOUNTED_RENDERERS), ['athena-chart']);
+  assert.deepEqual(Array.from(routing.BOARD_MOUNTED_RENDERERS), ['athena-chart', 'orderbook-ladder']);
+});
+
+test('보드가 얹을 줄 아는 종류와 봉투가 필요한 종류가 달라도 예외는 그대로다', () => {
+  // 차트 봉투를 호가 사다리 자리로 보내면 그 자리는 목업인 채로 남는다 —
+  // 종류가 같을 때만 보드가 껍질을 가져간다.
+  assert.strictEqual(routing.preservesAppPrimary({
+    operation_ref: 'base:ka10081', renderer_id: 'aits-chart-v1', card_id: 'CC-04',
+    surface_contract: { board_id: '13BC-2' },
+  }, 'orderbook-ladder'), true);
 });
 
 test('semantic-workspaces 검증기의 preserve 판정은 이 모듈이 든다', () => {

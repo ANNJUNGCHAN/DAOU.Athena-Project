@@ -1176,6 +1176,180 @@ async function exerciseBoardChartPrimary(win) {
   };
 }
 
+// ---------- 보드 primary: 호가 사다리가 보드 크롬 안에 선다 ----------
+//
+// 호가 봉투는 그 자리가 저작된 보드로 간다(13BC-2 — primary.renderer
+// orderbook-ladder). 보드가 껍질을 그리고 10단 사다리가 그 안 마운트 지점에
+// 앉는지, Paper 목업은 지워지지 않고 접혔는지, 0D 호가잔량 리스를 명시로 잡았다가
+// 카드를 닫을 때 정확히 한 번 놓는지를 실앱 DOM에서 잰다.
+const BOARD_ORDERBOOK_BOARD_ID = '13BC-2';
+const BOARD_ORDERBOOK_SYMBOL = '005930';
+
+// ka10007(주식호가요청) 모양 — 매도·매수 10단이 다 차야 사다리가 20행으로 선다.
+function boardOrderbookFields() {
+  const fields = [
+    { key: 'stk_cd', value: BOARD_ORDERBOOK_SYMBOL },
+    { key: 'stk_nm', value: '삼성전자' },
+    { key: 'cur_prc', value: '150850' },
+    { key: 'flu_rt', value: '1.24' },
+    { key: 'tot_sel_req', value: '38160' },
+    { key: 'tot_buy_req', value: '43000' },
+  ];
+  for (let level = 1; level <= 10; level += 1) {
+    fields.push({ key: `sel_${level}bid`, value: String(150850 + level * 10) });
+    fields.push({ key: `sel_${level}bid_req`, value: String(900 + level * 310) });
+    fields.push({ key: `buy_${level}bid`, value: String(150840 - level * 10) });
+    fields.push({ key: `buy_${level}bid_req`, value: String(1100 + level * 280) });
+  }
+  return fields;
+}
+
+// 0D는 카드가 실제로 열려 있을 때만 REG를 쓴다 — acquire/release가 짝이 아니면
+// 리미터가 새거나 남의 카드 피드가 끊긴다. 두 채널을 다 모아서 짝을 센다.
+function collectOrderbookLeaseCalls() {
+  const calls = [];
+  const onAcquire = (_event, payload) => calls.push({ kind: 'acquire', symbol: payload && payload.symbol });
+  const onRelease = (_event, payload) => calls.push({ kind: 'release', symbol: payload && payload.symbol });
+  ipcMain.on('athena:orderbook-realtime-acquire', onAcquire);
+  ipcMain.on('athena:orderbook-realtime-release', onRelease);
+  return {
+    calls,
+    stop: () => {
+      ipcMain.removeListener('athena:orderbook-realtime-acquire', onAcquire);
+      ipcMain.removeListener('athena:orderbook-realtime-release', onRelease);
+    },
+  };
+}
+
+function readBoardOrderbookDom(win, instanceId) {
+  return win.webContents.executeJavaScript(`new Promise((resolve) => {
+    const started = Date.now();
+    const read = () => {
+      const card = document.querySelector(
+        '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
+      if (!card) return { error: 'board card missing' };
+      const panels = [...card.querySelectorAll('.integrated-card-panel')];
+      const scope = panels.find((node) => !node.hidden) || card;
+      const mount = scope.querySelector('[data-bs-primary-mounted]');
+      const ladder = mount && mount.querySelector('.card-kit-hoga-live');
+      const rect = mount ? mount.getBoundingClientRect() : null;
+      return {
+        error: null,
+        board_id: card.dataset.boardId || null,
+        board_surface: card.dataset.boardSurface || null,
+        board_nodes: scope.querySelectorAll('.board-surface [data-node]').length,
+        primary_renderer: mount ? mount.dataset.bsPrimaryMounted : null,
+        primary_error: (() => {
+          const stamped = scope.querySelector('[data-bs-primary-error]');
+          return stamped ? stamped.dataset.bsPrimaryError : null;
+        })(),
+        ladder_count: mount ? mount.querySelectorAll('.card-kit-hoga-live').length : 0,
+        ladder_rows: ladder ? ladder.querySelectorAll('.card-kit-hoga-live-row').length : 0,
+        ask1_price: ladder
+          ? (ladder.querySelector('[data-side="ask"][data-level="1"] [data-role="price"]') || {}).textContent
+          : null,
+        // 목업은 지운 것이 아니라 접은 것이다 — 자식 수는 그대로고 보이는 것만 없다.
+        mockup_children: mount ? mount.children.length : 0,
+        visible_mockup_children: mount
+          ? [...mount.children].filter((node) => node !== ladder && !node.hidden).length : 0,
+        mount_width: rect ? Math.round(rect.width) : 0,
+        mount_height: rect ? Math.round(rect.height) : 0,
+        error_notes: scope.querySelectorAll('.uk-error, [role="alert"]').length,
+      };
+    };
+    const check = () => {
+      const probe = read();
+      if (probe.ladder_rows > 0 || probe.error_notes > 0 || Date.now() - started > 12000) {
+        resolve(probe);
+        return;
+      }
+      requestAnimationFrame(check);
+    };
+    check();
+  })`);
+}
+
+function assertBoardOrderbookMounted(dom) {
+  if (dom.error) throw new Error(`board orderbook primary: ${dom.error}`);
+  if (dom.board_id !== BOARD_ORDERBOOK_BOARD_ID || dom.board_surface !== 'true') {
+    throw new Error(`board orderbook primary: 호가 봉투가 보드로 가지 않았다 — ${JSON.stringify(dom)}`);
+  }
+  if (dom.primary_renderer !== 'orderbook-ladder' || dom.ladder_count !== 1 || dom.ladder_rows !== 20) {
+    throw new Error(`board orderbook primary: 사다리가 보드 자리에 서지 않았다 — ${JSON.stringify(dom)}`);
+  }
+  if (dom.ask1_price !== '150,860') {
+    throw new Error(`board orderbook primary: 최우선 매도호가가 봉투 값이 아니다 — ${JSON.stringify(dom)}`);
+  }
+  if (dom.visible_mockup_children !== 0 || dom.mockup_children < 2) {
+    throw new Error(`board orderbook primary: Paper 목업 처리가 접기가 아니다 — ${JSON.stringify(dom)}`);
+  }
+  if (dom.error_notes !== 0 || dom.primary_error) {
+    throw new Error(`board orderbook primary: 오류 문구가 남았다 — ${JSON.stringify(dom)}`);
+  }
+  if (dom.mount_width <= 0 || dom.mount_height <= 0 || dom.board_nodes < 100) {
+    throw new Error(`board orderbook primary: 보드 크롬이 서지 않았다 — ${JSON.stringify(dom)}`);
+  }
+}
+
+// 카드를 닫으면 보드가 잡은 0D 리스도 닫힌다 — 안 닫으면 REG가 남아 리미터를 먹는다.
+async function closeBoardCard(win, instanceId) {
+  const closed = await win.webContents.executeJavaScript(`(() => {
+    const root = document.querySelector(
+      '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
+    const panel = root && root.closest('.canvas-tab-panel');
+    if (!panel) return false;
+    const close = document.querySelector(
+      '.canvas-tab-strip .canvas-tab[data-tab-key="' + panel.dataset.tabKey + '"] .canvas-tab-close');
+    if (!close) return false;
+    close.click();
+    return true;
+  })()`);
+  if (!closed) throw new Error('board orderbook primary: 카드를 닫을 탭을 못 찾았다');
+  await new Promise((resolve) => setTimeout(resolve, 300));
+}
+
+async function exerciseBoardOrderbookPrimary(win) {
+  const surface = loadRealBoardContract(BOARD_ORDERBOOK_BOARD_ID, 5, REAL_BOARD_TEMPLATE_ROOT);
+  surface.instanceId = boardInstanceId(`${BOARD_ORDERBOOK_BOARD_ID}-orderbook`);
+  surface.cardTitle = '보드 호가 마운트 검수';
+  surface.operationRef = 'detail:ka10007:bid_prices';
+  surface.envelopeExtra = { card_title: '호가', data: { fields: boardOrderbookFields() } };
+  const lease = collectOrderbookLeaseCalls();
+  let dom = null;
+  let shell = null;
+  let shellMs = 0;
+  try {
+    const startedAt = Date.now();
+    shell = await sendBoardEnvelope(win, surface);
+    shellMs = Date.now() - startedAt;
+    await activateBoardTab(win, surface.instanceId);
+    dom = await readBoardOrderbookDom(win, surface.instanceId);
+    assertBoardOrderbookMounted(dom);
+    // 첫 피드백 3초 계약 — 사다리는 동기라 껍질 ack가 그대로 확정이다.
+    if (!(shellMs < 3000)) {
+      throw new Error(`board orderbook ack: 첫 ack가 3초를 넘겼다 — ${shellMs}ms`);
+    }
+    const acquires = lease.calls.filter((call) => call.kind === 'acquire');
+    if (acquires.length !== 1 || acquires[0].symbol !== BOARD_ORDERBOOK_SYMBOL) {
+      throw new Error(`board orderbook primary: 0D acquire가 한 번이 아니다 — ${JSON.stringify(lease.calls)}`);
+    }
+    await closeBoardCard(win, surface.instanceId);
+    const releases = lease.calls.filter((call) => call.kind === 'release');
+    if (releases.length !== 1 || releases[0].symbol !== BOARD_ORDERBOOK_SYMBOL) {
+      throw new Error(`board orderbook primary: 0D release가 acquire와 짝이 아니다 — ${JSON.stringify(lease.calls)}`);
+    }
+  } finally {
+    lease.stop();
+  }
+  return {
+    board_id: BOARD_ORDERBOOK_BOARD_ID,
+    paint_receipt: { render_state: shell.render_state, verified_visible: shell.verified_visible },
+    shell_ack_ms: shellMs,
+    lease_calls: lease.calls,
+    ...dom,
+  };
+}
+
 async function captureBoardResponsive(win, contracts, manager) {
   // 실시간 이음매는 픽스처 보드가 계속 맡는다 — 0B 시세 바인딩과 정본 값을
   // 함께 갖고 있는 유일한 보드다. 찍기는 하지 않는다(반응형은 실보드가 맡는다).
@@ -1199,9 +1373,11 @@ async function captureBoardResponsive(win, contracts, manager) {
   }
 
   const chartPrimary = await exerciseBoardChartPrimary(win);
+  const orderbookPrimary = await exerciseBoardOrderbookPrimary(win);
 
   return {
     chart_primary: chartPrimary,
+    orderbook_primary: orderbookPrimary,
     realtime_seam: {
       board_id: BOARD_ID,
       paint_receipt: {
