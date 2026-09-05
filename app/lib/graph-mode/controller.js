@@ -640,6 +640,13 @@ function createGraphModeController(deps) {
     });
   }
 
+  // 지도가 핑크로 칠할 쌍 — 요약 카드·관계 목록과 같은 셋이다.
+  function highlightedHiddenPairs() {
+    if (typeof getSurprisingConnections !== 'function') return [];
+    return topSurprising(getSurprisingConnections())
+      .map((c) => [c.source_entity_id, c.target_entity_id]);
+  }
+
   // "왜 숨은 연관인가" 블록 재료(보드 04) — 선택 노드가 실제로 숨은 연관에
   // 걸려 있을 때만 값을 낸다. 아니면 null이고 섹션 자체가 안 그려진다.
   function buildHiddenLinkReason(entityId) {
@@ -1144,7 +1151,10 @@ const PANEL_TIER_LABELS = {
       while (elements.graphBody && elements.graphBody.firstChild) {
         elements.graphBody.removeChild(elements.graphBody.firstChild);
       }
-      liveMap.render(payload);
+      // 핑크 점선은 군집을 넘는 연결 전부가 아니라 요약의 “숨은 연관” 카드와
+      // **같은 상위 3쌍**에만 붙는다(보드 2QCN-2 › 2QF8-2) — 그 셋을 고르는
+      // topSurprising은 패널·관계 목록이 이미 쓰는 것과 같은 함수다.
+      liveMap.render(payload, { hiddenPairs: highlightedHiddenPairs() });
     } else {
       // vis-network를 못 불러왔다. 빈 화면 대신 정직하게 알린다 — 없는 것(그릴
       // 그래프가 없다)과 못 읽은 것(렌더러가 없다)은 다르다(§0 정책).

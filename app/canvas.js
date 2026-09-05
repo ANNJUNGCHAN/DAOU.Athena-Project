@@ -706,13 +706,17 @@ window.athena.on('athena:add-canvas-live', async (result) => {
 async function addLiveCard(result) {
   if (!result) return renderLiveNotice('빈 응답을 받았다.');
   if (result.status === 'rejected') {
-    return renderLiveNotice('캔버스 호출이 거부됐다 — --allowedTools 권한이 없다.');
+    // 거부 사유(CLI 플래그)는 로그로만 흘린다 — 화면에는 사람이 할 다음 행동만 둔다
+    // (Paper 161Q-2: 모든 상태는 다음 행동을 직접 보여준다).
+    console.warn('[canvas] 호출 거부 — 도구 권한 없음', result.reason || '');
+    return renderLiveNotice('이 조회를 실행할 권한이 없습니다 — 설정에서 권한을 확인해 주세요.');
   }
   if (result.status === 'error') {
     return renderLiveNotice('캔버스 호출이 게이트웨이/upstream 에러로 실패했다.');
   }
   if (result.status === 'unparseable') {
-    return renderLiveNotice(`캔버스 응답을 해석하지 못했다 — ${result.reason || '원인 미상'}.`);
+    console.warn('[canvas] 응답 해석 실패', result.reason || '원인 미상');
+    return renderLiveNotice('응답을 읽지 못했습니다 — 같은 질문으로 다시 시도할 수 있습니다.');
   }
   const envelope = result.envelope;
   if (!envelope) return renderLiveNotice('캔버스 응답에 데이터가 없다.');
@@ -2267,7 +2271,7 @@ function renderLiveStream(envelope) {
   const { card, body } = makeCard('stream', envelope.caption || '스트림 · 뉴스', envelope.layout, envelope.correlation);
   const records = (envelope.data && Array.isArray(envelope.data.records)) ? envelope.data.records : [];
   if (!records.length) {
-    body.appendChild(errorNote('빈 스트림 — records가 없다.'));
+    body.appendChild(errorNote('표시할 소식이 없습니다 — 기간이나 종목을 바꿔 다시 조회할 수 있습니다.'));
     return card;
   }
   const ul = document.createElement('ul');
@@ -2391,7 +2395,7 @@ async function renderLiveChart(envelope, integratedRoot = null) {
   if (augmentEl) body.appendChild(augmentEl);
   if (!descriptor.body.candles.length) {
     card.dataset.renderState = 'empty';
-    body.appendChild(errorNote('빈 차트 — candles가 없다.'));
+    body.appendChild(errorNote('표시할 봉이 없습니다 — 기간을 넓혀 다시 조회할 수 있습니다.'));
     return card;
   }
   const chartBody = document.createElement('div');
