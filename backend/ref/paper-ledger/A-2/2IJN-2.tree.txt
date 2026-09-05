@@ -1,0 +1,321 @@
+Frame "06 · 에이전트 — 작업 설정" (2IJN-2) 1680×900
+  Frame "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)" (2IJO-2) 1520×760
+    Frame "타이틀바" (2ISA-2) 0×26
+    Frame "창 제어" (2IS2-2) 0×0
+      Frame "Frame" (2IS8-2) 30×24
+        Rectangle "Rectangle" (2IS9-2) 9×2
+      Frame "Frame" (2IS6-2) 30×24
+        Rectangle "Rectangle" (2IS7-2) 8×8
+      Frame "Frame" (2IS3-2) 30×24
+        SVG "SVG" (2IS4-2) 0×0
+          SVGVisualElement "Path" (2IS5-2) 0×0
+    Frame "① 이력 사이드바 268px (리프 1.2.2 · 미구현)" (2IQ5-2) 268×0
+      Frame "사이드바 머리" (2IRS-2) 0×0
+        Frame "새 대화" (2IRY-2) 0×36
+          SVG "SVG" (2IS0-2) 0×0
+            SVGVisualElement "Path" (2IS1-2) 0×0
+          Text "새 대화" (2IRZ-2) 0×0 "새 대화"
+        Frame "검색" (2IRT-2) 0×36
+          SVG "SVG" (2IRV-2) 0×0
+            SVGVisualElement "Circle" (2IRX-2) 0×0
+            SVGVisualElement "Path" (2IRW-2) 0×0
+          Text "대화 검색" (2IRU-2) 0×0 "대화 검색"
+      Frame "Frame" (2IR0-2) 267×0
+        Frame "Frame" (2IRR-2) 0×0
+        Frame "Frame" (2IRN-2) 0×0
+          SVG "SVG" (2IRP-2) 0×0
+            SVGVisualElement "Path" (2IRQ-2) 0×0
+          Text "대화" (2IRO-2) 0×0 "대화"
+        Frame "Frame" (2IRG-2) 0×0
+          SVG "SVG" (2IRI-2) 0×0
+            SVGVisualElement "Circle" (2IRM-2) 0×0
+            SVGVisualElement "Circle" (2IRL-2) 0×0
+            SVGVisualElement "Circle" (2IRK-2) 0×0
+            SVGVisualElement "Path" (2IRJ-2) 0×0
+          Text "그래프" (2IRH-2) 0×0 "그래프"
+        Frame "Frame" (2IRA-2) 0×0
+          SVG "SVG" (2IRE-2) 0×0
+            SVGVisualElement "Path" (2IRF-2) 0×0
+          Text "에이전트" (2IRD-2) 0×0 "에이전트"
+          Frame "Frame" (2IRB-2) 0×0
+            Text "3" (2IRC-2) 0×0 "3"
+        Frame "모드 · 플러그인" (2KTT-2) 0×0
+          SVG "SVG" (2KTU-2) 0×0
+            SVGVisualElement "Path" (2KTV-2) 0×0
+          Text "플러그인" (2KTW-2) 0×0 "플러그인"
+        Frame "모드 · 백테스트" (2KUS-2) 0×0
+          SVG "SVG" (2KUT-2) 0×0
+            SVGVisualElement "Path" (2KUU-2) 0×0
+            SVGVisualElement "Path" (2KUV-2) 0×0
+          Text "백테스트" (2KUW-2) 0×0 "백테스트"
+      Frame "구분선" (2IQZ-2) 0×1
+      Frame "이력 목록" (2IQB-2) 0×0
+        Frame "섹션 · 오늘" (2IQX-2) 0×0
+          Text "오늘" (2IQY-2) 0×0 "오늘"
+        Frame "항목 · 선택됨" (2IQU-2) 0×34
+          Text "삼성전자 흐름·재무 같이 보기" (2IQW-2) 0×0 "삼성전자 흐름·재무 같이 보기"
+          Rectangle "Rectangle" (2IQV-2) 5×5
+        Frame "항목" (2IQS-2) 0×34
+          Text "88,000 넘으면 알려줘" (2IQT-2) 0×0 "88,000 넘으면 알려줘"
+        Frame "항목" (2IQQ-2) 0×34
+          Text "코스피 프로그램 매매 동향" (2IQR-2) 0×0 "코스피 프로그램 매매 동향"
+        Frame "섹션 · 어제" (2IQO-2) 0×0
+          Text "어제" (2IQP-2) 0×0 "어제"
+        Frame "항목" (2IQM-2) 0×34
+          Text "SK하이닉스 유상증자 공시 읽기" (2IQN-2) 0×0 "SK하이닉스 유상증자 공시 읽기"
+        Frame "항목" (2IQK-2) 0×34
+          Text "모의 계좌 잔고 정리" (2IQL-2) 0×0 "모의 계좌 잔고 정리"
+        Frame "섹션 · 지난 7일" (2IQI-2) 0×0
+          Text "지난 7일" (2IQJ-2) 0×0 "지난 7일"
+        Frame "항목" (2IQG-2) 0×34
+          Text "반도체 ETF 비교" (2IQH-2) 0×0 "반도체 ETF 비교"
+        Frame "항목" (2IQE-2) 0×34
+          Text "현대차 실적 발표 일정" (2IQF-2) 0×0 "현대차 실적 발표 일정"
+        Frame "더 보기" (2IQC-2) 0×34
+          Text "더 보기" (2IQD-2) 0×0 "더 보기"
+      Frame "사이드바 발치 — 활성 계좌" (2IQ6-2) 0×48
+        Rectangle "Rectangle" (2IQA-2) 7×7
+        Frame "Frame" (2IQ7-2) 0×0
+          Text "모의-주력" (2IQ9-2) 0×0 "모의-주력"
+          Text "토큰 5시간 42분 남음" (2IQ8-2) 0×0 "토큰 5시간 42분 남음"
+    Frame "② 캔버스 영역" (2ING-2) 0×0
+      Frame "Frame" (2INH-2) 811×717
+        Frame "Frame" (2IPT-2) 0×0
+          Text "에이전트" (2IQ4-2) 0×0 "에이전트"
+          Frame "Frame" (2IPZ-2) 0×0
+            Text "작업 ›" (2IQ3-2) 0×0 "작업 ›"
+            Text "평일 아침 브리핑" (2IQ2-2) 0×0 "평일 아침 브리핑"
+            Frame "Frame" (2IQ0-2) 0×0
+              Text "활성" (2IQ1-2) 0×0 "활성"
+          Frame "Frame" (2IPU-2) 0×0
+            Frame "Frame" (2IPX-2) 0×0
+              Text "이력" (2IPY-2) 0×0 "이력"
+            Frame "Frame" (2IPV-2) 0×0
+              Text "설정" (2IPW-2) 0×0 "설정"
+        Frame "Frame" (2INI-2) 0×0
+          Frame "설정 패널 — 보기 전용 (live)" (2J0E-2) 0×0
+            Frame "Frame" (2J0F-2) 0×0
+              Text "설정 — 요약" (2J0G-2) 0×0 "설정 — 요약"
+            Frame "요약 한 줄 (읽기 전용)" (42VU-1) 0×0
+              Text "주중 07:30 · 뉴스·공시·계좌 …" (42VV-1) 0×0 "주중 07:30 · 뉴스·공시·계좌 브리핑"
+              Text "예약 · 쿨다운 300초 · 다음 실…" (42VW-1) 0×0 "예약 · 쿨다운 300초 · 다음 실행 08/27 07:30 · 생성 08/20"
+            Frame "버튼 · 설정 편집" (42VY-1) 0×32
+              Text "설정 편집" (42VZ-1) 0×0 "설정 편집"
+          Frame "상세 패널 — 설정 편집 폼 (대표 2종 나란히)" (42W1-1) 0×0
+            Frame "폼 · 삼성전자 88,000 감시 (현재가 · 실시간)" (42XH-1) 0×0
+              Frame "폼 머리" (42XI-1) 0×0
+                Text "상세 패널 — 설정 편집" (42XJ-1) 0×0 "상세 패널 — 설정 편집"
+                Frame "Frame" (42XK-1) 0×0
+                  Text "삼성전자 88,000 감시" (42XL-1) 0×0 "삼성전자 88,000 감시"
+              Frame "읽기 전용 · 종목" (42XM-1) 0×20
+                Text "종목" (42XN-1) 72×0 "종목"
+                Text "005930" (42XO-1) 0×0 "005930"
+                Text "삼성전자" (42XP-1) 0×0 "삼성전자"
+              Frame "읽기 전용 · 모드" (42XQ-1) 0×20
+                Text "모드" (42XR-1) 72×0 "모드"
+                Text "자동" (42XS-1) 0×0 "자동"
+              Frame "읽기 전용 · 소스" (42XT-1) 0×20
+                Text "소스" (42XU-1) 72×0 "소스"
+                Text "현재가 · 실시간" (42XV-1) 0×0 "현재가 · 실시간"
+                Text "변경 불가" (42XW-1) 0×0 "변경 불가"
+              Frame "안내 · 종목·소스" (42XX-1) 0×0
+                Rectangle "Rectangle" (42XY-1) 72×0
+                Text "종목·소스는 취소 후 새로 만들기" (42XZ-1) 0×0 "종목·소스는 취소 후 새로 만들기"
+              Frame "편집 가능 필드 (현재가 · 8필드)" (42YS-1) 0×0
+                Frame "행 · 조건 비교" (42YT-1) 0×0
+                  Text "조건 비교" (42YU-1) 72×0 "조건 비교"
+                  Frame "Frame" (42YV-1) 72×32
+                    Text "≥" (42YW-1) 0×0 "≥"
+                    Rectangle "Rectangle" (42YX-1) 0×0
+                    Text "▾" (42YY-1) 0×0 "▾"
+                  Text "< · ≤ · > · ≥" (42YZ-1) 0×0 "< · ≤ · > · ≥"
+                Frame "행 · 조건 값" (42Z0-1) 0×0
+                  Text "조건 값" (42Z1-1) 72×0 "조건 값"
+                  Frame "Frame" (42Z2-1) 128×32
+                    Text "88000" (42Z3-1) 0×0 "88000"
+                    Rectangle "Rectangle" (42Z4-1) 0×0
+                    Text "원" (42Z5-1) 0×0 "원"
+                  Text "숫자" (42Z6-1) 0×0 "숫자"
+                Frame "행 · 연속 틱" (42Z7-1) 0×0
+                  Text "연속 틱" (42Z8-1) 72×0 "연속 틱"
+                  Frame "Frame" (42Z9-1) 72×32
+                    Text "1" (42ZA-1) 0×0 "1"
+                  Text "1~20 · 실시간 소스만" (42ZB-1) 0×0 "1~20 · 실시간 소스만"
+                Frame "행 · 쿨다운 · 만료" (431G-1) 0×0
+                  Frame "Frame" (431H-1) 0×0
+                    Text "쿨다운(초)" (431I-1) 72×0 "쿨다운(초)"
+                    Frame "Frame" (431J-1) 72×32
+                      Text "300" (431K-1) 0×0 "300"
+                    Frame "Frame" (431L-1) 44×0
+                      Text "만료(일)" (431M-1) 0×0 "만료(일)"
+                    Frame "Frame" (431N-1) 52×32
+                      Text "7" (431O-1) 0×0 "7"
+                  Frame "Frame" (431P-1) 0×0
+                    Rectangle "Rectangle" (431Q-1) 72×0
+                    Text "만료 2026-09-10 · 미변경 …" (431R-1) 0×0 "만료 2026-09-10 · 미변경 시 보존"
+                Frame "행 · 설명" (42ZK-1) 0×0
+                  Text "설명" (42ZL-1) 72×0 "설명"
+                  Frame "Frame" (42ZM-1) 0×32
+                    Text "삼성전자 88,000 감시" (42ZN-1) 0×0 "삼성전자 88,000 감시"
+                Frame "행 · 브리핑 모델 · 노력" (42ZO-1) 0×0
+                  Text "브리핑 모델" (42ZP-1) 72×0 "브리핑 모델"
+                  Frame "Frame" (42ZQ-1) 96×32
+                    Text "opus" (42ZR-1) 0×0 "opus"
+                    Rectangle "Rectangle" (42ZS-1) 0×0
+                    Text "▾" (42ZT-1) 0×0 "▾"
+                  Text "노력" (42ZU-1) 52×0 "노력"
+                  Frame "Frame" (42ZV-1) 80×32
+                    Text "high" (42ZW-1) 0×0 "high"
+                    Rectangle "Rectangle" (42ZX-1) 0×0
+                    Text "▾" (42ZY-1) 0×0 "▾"
+                Frame "읽기 전용 · 생성" (42ZZ-1) 0×20
+                  Text "생성" (4300-1) 72×0 "생성"
+                  Text "08/20 10:00" (4301-1) 0×0 "08/20 10:00"
+                Frame "버튼 행" (4302-1) 0×0
+                  Frame "버튼 · 저장" (4303-1) 0×32
+                    Text "저장" (4304-1) 0×0 "저장"
+                  Frame "버튼 · 채팅에서 고치기" (4305-1) 0×32
+                    Text "채팅에서 고치기 ↗" (4306-1) 0×0 "채팅에서 고치기 ↗"
+                  Rectangle "Rectangle" (4307-1) 0×0
+            Frame "폼 · 평일 아침 브리핑 (매일 예약)" (42Y1-1) 0×0
+              Frame "폼 머리" (42Y2-1) 0×0
+                Text "상세 패널 — 설정 편집" (42Y3-1) 0×0 "상세 패널 — 설정 편집"
+                Frame "Frame" (42Y4-1) 0×0
+                  Text "평일 아침 브리핑" (42Y5-1) 0×0 "평일 아침 브리핑"
+              Frame "읽기 전용 · 모드" (42Y6-1) 0×20
+                Text "모드" (42Y7-1) 72×0 "모드"
+                Text "예약" (42Y8-1) 0×0 "예약"
+              Frame "읽기 전용 · 소스" (42Y9-1) 0×20
+                Text "소스" (42YA-1) 72×0 "소스"
+                Text "매일 예약 · 시계" (42YB-1) 0×0 "매일 예약 · 시계"
+                Text "변경 불가" (42YC-1) 0×0 "변경 불가"
+              Frame "읽기 전용 · 다음 실행" (42YD-1) 0×20
+                Text "다음 실행" (42YE-1) 72×0 "다음 실행"
+                Text "08/27 07:30" (42YF-1) 0×0 "08/27 07:30"
+              Frame "안내 · 종목 없음" (42YG-1) 0×0
+                Rectangle "Rectangle" (42YH-1) 72×0
+                Text "종목 없음 · 연속 틱 없음 — 예약…" (42YI-1) 0×0 "종목 없음 · 연속 틱 없음 — 예약 소스 분기"
+              Frame "편집 가능 필드 (매일 예약 · 7필드)" (430A-1) 0×0
+                Frame "행 · 조건 비교" (430B-1) 0×0
+                  Text "조건 비교" (430C-1) 72×0 "조건 비교"
+                  Frame "Frame" (430D-1) 72×32
+                    Text "at" (430E-1) 0×0 "at"
+                    Rectangle "Rectangle" (430F-1) 0×0
+                    Text "▾" (430G-1) 0×0 "▾"
+                  Text "at 하나뿐" (430H-1) 0×0 "at 하나뿐"
+                Frame "행 · 조건 값" (430I-1) 0×0
+                  Text "조건 값" (430J-1) 72×0 "조건 값"
+                  Frame "Frame" (430K-1) 128×32
+                    Text "ALL@07:30" (430L-1) 0×0 "ALL@07:30"
+                  Text "요일@시각 표기" (430M-1) 0×0 "요일@시각 표기"
+                Frame "행 · 쿨다운 · 만료" (431T-1) 0×0
+                  Frame "Frame" (431U-1) 0×0
+                    Text "쿨다운(초)" (431V-1) 72×0 "쿨다운(초)"
+                    Frame "Frame" (431W-1) 72×32
+                      Text "300" (431X-1) 0×0 "300"
+                    Frame "Frame" (431Y-1) 44×0
+                      Text "만료(일)" (431Z-1) 0×0 "만료(일)"
+                    Frame "Frame" (4320-1) 52×32
+                      Text "30" (4321-1) 0×0 "30"
+                  Frame "Frame" (4322-1) 0×0
+                    Rectangle "Rectangle" (4323-1) 72×0
+                    Text "만료 2026-10-03 · 미변경 …" (4324-1) 0×0 "만료 2026-10-03 · 미변경 시 보존"
+                Frame "행 · 설명" (430V-1) 0×0
+                  Text "설명" (430W-1) 72×0 "설명"
+                  Frame "Frame" (430X-1) 0×32
+                    Text "주중 07:30 뉴스·공시·계좌 브리…" (430Y-1) 0×0 "주중 07:30 뉴스·공시·계좌 브리핑"
+                Frame "행 · 브리핑 모델 · 노력" (430Z-1) 0×0
+                  Text "브리핑 모델" (4310-1) 72×0 "브리핑 모델"
+                  Frame "Frame" (4311-1) 96×32
+                    Text "opus" (4312-1) 0×0 "opus"
+                    Rectangle "Rectangle" (4313-1) 0×0
+                    Text "▾" (4314-1) 0×0 "▾"
+                  Text "노력" (4315-1) 52×0 "노력"
+                  Frame "Frame" (4316-1) 80×32
+                    Text "high" (4317-1) 0×0 "high"
+                    Rectangle "Rectangle" (4318-1) 0×0
+                    Text "▾" (4319-1) 0×0 "▾"
+                Frame "읽기 전용 · 생성" (431A-1) 0×20
+                  Text "생성" (431B-1) 72×0 "생성"
+                  Text "08/20 10:00" (431C-1) 0×0 "08/20 10:00"
+                Frame "버튼 행 안내" (431D-1) 0×32
+                  Text "버튼 행은 왼쪽 폼과 같음 · 예약 …" (431E-1) 0×0 "버튼 행은 왼쪽 폼과 같음 · 예약 소스는 연속 틱 필드 자체가 없음"
+    Frame "③ 대화 영역 400px" (2IJP-2) 400×0
+      Frame "대화 머리 — 아테나 · 에이전트 대화" (42VA-1) 0×0
+        Rectangle "Rectangle" (42VB-1) 6×6
+        Text "아테나 · 에이전트 대화" (42VC-1) 0×0 "아테나 · 에이전트 대화"
+        Rectangle "Rectangle" (42VD-1) 0×0
+        Text "관제 창 1 · 루틴 · 알람 · 제…" (42VE-1) 0×0 "관제 창 1 · 루틴 · 알람 · 제안"
+      Frame "④ 결과물 · 하위 에이전트 · 출처 도크" (2IMP-2) 0×0
+        Frame "결과물" (2INB-2) 0×0
+          Frame "Frame" (2IND-2) 0×0
+            Text "결과물" (2INF-2) 0×0 "결과물"
+            Text "캔버스 2" (2INE-2) 0×0 "캔버스 2"
+          Text "네이버 뉴스 · 삼성전자 일봉" (2INC-2) 0×0 "네이버 뉴스 · 삼성전자 일봉"
+        Frame "하위 에이전트" (2IN1-2) 0×0
+          Frame "Frame" (2IN8-2) 0×0
+            Text "하위 에이전트" (2INA-2) 0×0 "하위 에이전트"
+            Text "1 / 2" (2IN9-2) 0×0 "1 / 2"
+          Frame "Frame" (2IN5-2) 0×0
+            Rectangle "Rectangle" (2IN7-2) 7×7
+            Text "재무 해석 · 작업 중" (2IN6-2) 0×0 "재무 해석 · 작업 중"
+          Frame "Frame" (2IN2-2) 0×0
+            Rectangle "Rectangle" (2IN4-2) 7×7
+            Text "시세 수집 · 완료" (2IN3-2) 0×0 "시세 수집 · 완료"
+        Frame "출처" (2IMQ-2) 0×0
+          Frame "Frame" (2IMY-2) 0×0
+            Text "출처" (2IN0-2) 0×0 "출처"
+            Text "3" (2IMZ-2) 0×0 "3"
+          Frame "Frame" (2IMR-2) 0×0
+            Frame "Frame" (2IMW-2) 0×0
+              Text "일봉 차트" (2IMX-2) 0×0 "일봉 차트"
+            Frame "Frame" (2IMU-2) 0×0
+              Text "DART 재무제표" (2IMV-2) 0×0 "DART 재무제표"
+            Frame "Frame" (2IMS-2) 0×0
+              Text "네이버 뉴스" (2IMT-2) 0×0 "네이버 뉴스"
+      Frame "history" (2IK9-2) 0×0
+        Frame "사용자 턴 · 88,000 감시 쿨다운 10분으로" (4326-1) 0×0
+          Frame "Frame" (4327-1) 0×0
+            Text "88,000 감시 쿨다운 10분으로 …" (4328-1) 0×0 "88,000 감시 쿨다운 10분으로 늘려줘"
+        Frame "제안 턴 A · 쿨다운 300초 → 600초" (432A-1) 0×0
+          Frame "Frame" (432B-1) 0×0
+            Frame "Frame" (432C-1) 0×0
+              Text "작업 설정" (432D-1) 0×0 "작업 설정"
+            Frame "Frame" (432E-1) 0×0
+              Text "제안" (432F-1) 0×0 "제안"
+            Frame "Frame" (432G-1) 0×0
+              Text "대화 경로" (432H-1) 0×0 "대화 경로"
+          Text "삼성전자 88,000원 감시 — 쿨다…" (432I-1) 0×0 "삼성전자 88,000원 감시 — 쿨다운 300초 → 600초"
+          Text "근거: 오늘 발화 4회 · 하루 최대…" (432J-1) 0×0 "근거: 오늘 발화 4회 · 하루 최대 3회"
+          Frame "칩 행" (432K-1) 0×0
+            Frame "칩 · 이렇게 바꿔줘" (432L-1) 0×0
+              Text "이렇게 바꿔줘" (432M-1) 0×0 "이렇게 바꿔줘"
+            Frame "칩 · 그대로 둘게" (432N-1) 0×0
+              Text "그대로 둘게" (432O-1) 0×0 "그대로 둘게"
+        Frame "결과 턴 · 쿨다운 600초 반영" (432Q-1) 0×0
+          Frame "Frame" (432R-1) 0×0
+            Frame "Frame" (432S-1) 0×0
+              Text "작업 설정" (432T-1) 0×0 "작업 설정"
+            Frame "Frame" (432U-1) 0×0
+              Text "완료" (432V-1) 0×0 "완료"
+          Text "쿨다운 600초 반영" (432W-1) 0×0 "쿨다운 600초 반영"
+          Text "왼쪽 상세 패널 폼과 같은 값 · 만…" (432X-1) 0×0 "왼쪽 상세 패널 폼과 같은 값 · 만료 보존"
+      Frame "input-stack" (2IJQ-2) 0×0
+        Frame "input-row · 실행 중 (ESC 중단)" (2IK3-2) 0×44
+          Text "무엇이든 물어보세요" (2IK8-2) 0×0 "무엇이든 물어보세요"
+          Frame "Frame" (2IK4-2) 0×0
+            Text "29s" (2IK7-2) 0×0 "29s"
+            Frame "Frame" (2IK5-2) 0×0
+              Text "ESC 중단" (2IK6-2) 0×0 "ESC 중단"
+        Frame "control-strip" (2IJR-2) 0×40
+          Frame "키우미 (#dot 대체) · 호출 중 — 얼굴 열림" (2IJZ-2) 18×18
+            Frame "visor" (2IK0-2) 11×11
+              Rectangle "Rectangle" (2IK2-2) 2×4
+              Rectangle "Rectangle" (2IK1-2) 2×4
+          Frame "Frame" (2IJX-2) 0×28
+            Text "CLAUDE" (2IJY-2) 0×0 "CLAUDE"
+          Frame "Frame" (2IJV-2) 0×0
+            Text "감시 2" (2IJW-2) 0×0 "감시 2"
+          Rectangle "Rectangle" (2IJU-2) 0×0
+          Frame "Frame" (2IJS-2) 0×28
+            Text "OPUS · HIGH" (2IJT-2) 0×0 "OPUS · HIGH"

@@ -1,0 +1,860 @@
+{
+ "board_id": "3ZJD-0",
+ "page": "B-2",
+ "page_name": "플러그인",
+ "name": "07 · 플러그인 대화 — 제안 턴 5동작",
+ "width": 1680,
+ "height": 986,
+ "texts": [
+  {
+   "id": "3ZJF-0",
+   "text": "제안 턴 5동작",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "board-head"
+   ]
+  },
+  {
+   "id": "3ZJG-0",
+   "text": "채팅이 제안하고 캔버스가 승인합니다",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "board-head"
+   ]
+  },
+  {
+   "id": "3ZJL-0",
+   "text": "설치",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install"
+   ]
+  },
+  {
+   "id": "3ZJO-0",
+   "text": "제안",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "chat-turn",
+    "제안 필"
+   ]
+  },
+  {
+   "id": "3ZJP-0",
+   "text": "한국 주식 시세를 설치할까요",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "chat-turn"
+   ]
+  },
+  {
+   "id": "3ZJR-0",
+   "text": "한국 주식 시세 설치",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card"
+   ]
+  },
+  {
+   "id": "3ZJT-0",
+   "text": "제공: athena-official",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZJU-0",
+   "text": "실행 명령: npx -y @drfirst/korea-stock-mcp",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZJV-0",
+   "text": "권한 6개 요청",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZJY-0",
+   "text": "거부",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card",
+    "buttons",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZK0-0",
+   "text": "승인",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card",
+    "buttons",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZKI-0",
+   "text": "기능 허용",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install"
+   ]
+  },
+  {
+   "id": "3ZKH-0",
+   "text": "제안",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "chat-turn",
+    "제안 필"
+   ]
+  },
+  {
+   "id": "3ZKF-0",
+   "text": "시세 조회만 허용할까요",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "chat-turn"
+   ]
+  },
+  {
+   "id": "3ZKD-0",
+   "text": "한국 주식 시세 · 기능 허용",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card"
+   ]
+  },
+  {
+   "id": "3ZKC-0",
+   "text": "허용 4 / 6",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZKB-0",
+   "text": "켤 기능: 종목 검색 · 시세 조회 · 시총 상위 · 배당 상위",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZKA-0",
+   "text": "끌 기능: 테마주 · ETF",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZK8-0",
+   "text": "거부",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card",
+    "buttons",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZK6-0",
+   "text": "승인",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-install",
+    "approval-card",
+    "buttons",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZKK-0",
+   "text": "켜기·끄기",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle"
+   ]
+  },
+  {
+   "id": "3ZKN-0",
+   "text": "제안",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "chat-turn",
+    "제안 필"
+   ]
+  },
+  {
+   "id": "3ZKO-0",
+   "text": "웹 문서 읽기를 끌까요",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "chat-turn"
+   ]
+  },
+  {
+   "id": "3ZKQ-0",
+   "text": "웹 문서 읽기 끄기",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card"
+   ]
+  },
+  {
+   "id": "3ZKS-0",
+   "text": "승인 철회",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZKT-0",
+   "text": "기능 1개가 함께 멈춥니다",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZKW-0",
+   "text": "거부",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "buttons",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZKY-0",
+   "text": "승인",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "buttons",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZLF-0",
+   "text": "삭제",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle"
+   ]
+  },
+  {
+   "id": "3ZLE-0",
+   "text": "제안",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "chat-turn",
+    "제안 필"
+   ]
+  },
+  {
+   "id": "3ZLC-0",
+   "text": "시간·시간대를 지울까요",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "chat-turn"
+   ]
+  },
+  {
+   "id": "3ZLA-0",
+   "text": "시간·시간대 삭제",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card"
+   ]
+  },
+  {
+   "id": "3ZL9-0",
+   "text": "등록과 승인 기록을 함께 지웁니다",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZL8-0",
+   "text": "되돌리려면 다시 설치합니다",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZL6-0",
+   "text": "거부",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "buttons",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZL4-0",
+   "text": "승인",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "buttons",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZLV-0",
+   "text": "스니펫 등록",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle"
+   ]
+  },
+  {
+   "id": "3ZLU-0",
+   "text": "제안",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "chat-turn",
+    "제안 필"
+   ]
+  },
+  {
+   "id": "3ZLS-0",
+   "text": "이 서버를 등록할까요",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "chat-turn"
+   ]
+  },
+  {
+   "id": "3ZLQ-0",
+   "text": "직접 등록",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card"
+   ]
+  },
+  {
+   "id": "3ZLP-0",
+   "text": "실행 명령: uvx mcp-server-time",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZLO-0",
+   "text": "등록만으로는 실행되지 않습니다",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "필드"
+   ]
+  },
+  {
+   "id": "3ZLM-0",
+   "text": "거부",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "buttons",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZLK-0",
+   "text": "승인",
+   "path": [
+    "07 · 플러그인 대화 — 제안 턴 5동작",
+    "columns",
+    "col-toggle",
+    "approval-card",
+    "buttons",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3ZJD-0",
+   "name": "07 · 플러그인 대화 — 제안 턴 5동작",
+   "component": "Frame",
+   "w": 1680,
+   "h": 986,
+   "depth": 0
+  },
+  {
+   "id": "3ZJE-0",
+   "name": "board-head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "3ZJI-0",
+   "name": "columns",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "3ZJK-0",
+   "name": "col-install",
+   "component": "Frame",
+   "w": 304,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZJM-0",
+   "name": "chat-turn",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZJN-0",
+   "name": "제안 필",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZJQ-0",
+   "name": "approval-card",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZJS-0",
+   "name": "필드",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZJW-0",
+   "name": "buttons",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZJX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZJZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZK2-0",
+   "name": "col-install",
+   "component": "Frame",
+   "w": 304,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZKE-0",
+   "name": "chat-turn",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZKG-0",
+   "name": "제안 필",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZK3-0",
+   "name": "approval-card",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZK9-0",
+   "name": "필드",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZK4-0",
+   "name": "buttons",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZK7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZK5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZKJ-0",
+   "name": "col-toggle",
+   "component": "Frame",
+   "w": 304,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZKL-0",
+   "name": "chat-turn",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZKM-0",
+   "name": "제안 필",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZKP-0",
+   "name": "approval-card",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZKR-0",
+   "name": "필드",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZKU-0",
+   "name": "buttons",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZKV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZKX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZL0-0",
+   "name": "col-toggle",
+   "component": "Frame",
+   "w": 304,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZLB-0",
+   "name": "chat-turn",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZLD-0",
+   "name": "제안 필",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZL1-0",
+   "name": "approval-card",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZL7-0",
+   "name": "필드",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZL2-0",
+   "name": "buttons",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZL5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZL3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZLG-0",
+   "name": "col-toggle",
+   "component": "Frame",
+   "w": 304,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZLR-0",
+   "name": "chat-turn",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZLT-0",
+   "name": "제안 필",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZLH-0",
+   "name": "approval-card",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZLN-0",
+   "name": "필드",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZLI-0",
+   "name": "buttons",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZLL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ZLJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "제안 턴 5동작": 1,
+  "채팅이 제안하고 캔버스가 승인합니다": 1,
+  "설치": 1,
+  "제안": 5,
+  "한국 주식 시세를 설치할까요": 1,
+  "한국 주식 시세 설치": 1,
+  "제공: athena-official": 1,
+  "실행 명령: npx -y @drfirst/korea-stock-mcp": 1,
+  "권한 6개 요청": 1,
+  "거부": 5,
+  "승인": 5,
+  "기능 허용": 1,
+  "시세 조회만 허용할까요": 1,
+  "한국 주식 시세 · 기능 허용": 1,
+  "허용 4 / 6": 1,
+  "켤 기능: 종목 검색 · 시세 조회 · 시총 상위 · 배당 상위": 1,
+  "끌 기능: 테마주 · ETF": 1,
+  "켜기·끄기": 1,
+  "웹 문서 읽기를 끌까요": 1,
+  "웹 문서 읽기 끄기": 1,
+  "승인 철회": 1,
+  "기능 1개가 함께 멈춥니다": 1,
+  "삭제": 1,
+  "시간·시간대를 지울까요": 1,
+  "시간·시간대 삭제": 1,
+  "등록과 승인 기록을 함께 지웁니다": 1,
+  "되돌리려면 다시 설치합니다": 1,
+  "스니펫 등록": 1,
+  "이 서버를 등록할까요": 1,
+  "직접 등록": 1,
+  "실행 명령: uvx mcp-server-time": 1,
+  "등록만으로는 실행되지 않습니다": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "64fb6dc07a2b930f1fcf09659fad5664362b489a5efbb347840ba24e68ea8e64"
+}

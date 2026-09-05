@@ -1,0 +1,92 @@
+{
+ "board_id": "49CL-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "49CN-0",
+   "text": "원본 보드: CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+   "path": [
+    "note/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49CP-0",
+   "text": "가져온 요소: 투자자별tic… · 현재가 · 등락률",
+   "path": [
+    "note/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49CR-0",
+   "text": "문법: table",
+   "path": [
+    "note/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49CT-0",
+   "text": "접은 개수: 행 17개",
+   "path": [
+    "note/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "49CL-0",
+   "name": "note/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "49CM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49CO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49CQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "49CS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-04 / R02-X · 호가 — 단계별 낱값·거래소별": 1,
+  "가져온 요소: 투자자별tic… · 현재가 · 등락률": 1,
+  "문법: table": 1,
+  "접은 개수: 행 17개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "0fc12ab8c70890d51b5a4d3e11b32f499031e93df8811b113cdfac9f444a17f0"
+}

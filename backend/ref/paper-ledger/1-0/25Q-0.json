@@ -1,0 +1,3031 @@
+{
+ "board_id": "25Q-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "09 · 셸 — 질문 입력 · Task Canvas",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "GP6-0",
+   "text": "ATHENA",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GPE-0",
+   "text": "새 채팅",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GPL-0",
+   "text": "그래프",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GPQ-0",
+   "text": "에이전트",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GPV-0",
+   "text": "플러그인",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GPY-0",
+   "text": "프로젝트",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GQ3-0",
+   "text": "아테나",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GQC-0",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GQE-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GQH-0",
+   "text": "최근",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GQI-0",
+   "text": "전체",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GQK-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GQN-0",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GQP-0",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GQT-0",
+   "text": "AN",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GQU-0",
+   "text": "모의-주력",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "04 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "27D-0",
+   "text": "네이버 뉴스 — 삼성전자",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-head"
+   ]
+  },
+  {
+   "id": "27F-0",
+   "text": "00:43 갱신",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-head",
+    "card-head-right"
+   ]
+  },
+  {
+   "id": "27L-0",
+   "text": "00:43",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "27N-0",
+   "text": "중앙일보",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item",
+    "Frame"
+   ]
+  },
+  {
+   "id": "27O-0",
+   "text": "은퇴 앞두고 파랗게 질린 5060 개미들",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "27Q-0",
+   "text": "00:33",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "27S-0",
+   "text": "중앙SUNDAY",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item",
+    "Frame"
+   ]
+  },
+  {
+   "id": "27T-0",
+   "text": "[선데이 칼럼] 포츠담의 실험, 대학을 바꾸는…",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "27V-0",
+   "text": "00:20",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "27X-0",
+   "text": "한국경제",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item",
+    "Frame"
+   ]
+  },
+  {
+   "id": "27Y-0",
+   "text": "성인 5명 중 1명이 삼성전자 주주…'800만 개미'",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "280-0",
+   "text": "00:11",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "282-0",
+   "text": "스포츠경향",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item",
+    "Frame"
+   ]
+  },
+  {
+   "id": "283-0",
+   "text": "김종국, 뜻밖의 삼성전자 저점매수…\"평단가 5만\"",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "285-0",
+   "text": "00:06",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "287-0",
+   "text": "KDF World",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item",
+    "Frame"
+   ]
+  },
+  {
+   "id": "288-0",
+   "text": "美 구글, 도쿄 오모테산도에 첫 해외 매장",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "28A-0",
+   "text": "00:02",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "28C-0",
+   "text": "머니투데이",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item",
+    "Frame"
+   ]
+  },
+  {
+   "id": "28D-0",
+   "text": "반도체부터 우주까지…'미래 먹거리' ETF 경쟁",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-item"
+   ]
+  },
+  {
+   "id": "28F-0",
+   "text": "+ 24건 더",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "Frame",
+    "card-body · stream-list",
+    "stream-more"
+   ]
+  },
+  {
+   "id": "2IJ-0",
+   "text": "재무상태표 — 삼성전자 (연결)",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-head"
+   ]
+  },
+  {
+   "id": "2II-0",
+   "text": "DART 2025 사업보고서",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-head",
+    "card-head-right"
+   ]
+  },
+  {
+   "id": "2IC-0",
+   "text": "corp_code 00126380 · CFS · 단위 백만원",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "fin-meta"
+   ]
+  },
+  {
+   "id": "2IA-0",
+   "text": "계정",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "thead"
+   ]
+  },
+  {
+   "id": "2I9-0",
+   "text": "당기",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "thead"
+   ]
+  },
+  {
+   "id": "2I8-0",
+   "text": "전기",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "thead"
+   ]
+  },
+  {
+   "id": "2I6-0",
+   "text": "자산총계",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2I5-0",
+   "text": "566,942,110",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2I4-0",
+   "text": "514,531,948",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2I2-0",
+   "text": "유동자산",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2I1-0",
+   "text": "247,684,612",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2I0-0",
+   "text": "227,062,266",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2HY-0",
+   "text": "현금및현금성자산",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2HX-0",
+   "text": "57,856,378",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2HW-0",
+   "text": "53,705,579",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2HU-0",
+   "text": "미수금",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2HT-0",
+   "text": "7,481,327",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2HS-0",
+   "text": "9,622,974",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2HQ-0",
+   "text": "선급비용",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2HP-0",
+   "text": "3,627,172",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2HO-0",
+   "text": "3,362,824",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "grid",
+    "카드 · 표 (.card)",
+    "card-body · fin-table",
+    "row"
+   ]
+  },
+  {
+   "id": "2F2-0",
+   "text": "결과물",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "결과물",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F3-0",
+   "text": "캔버스 2",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "결과물",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2F4-0",
+   "text": "네이버 뉴스 · 삼성전자 일봉",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "결과물"
+   ]
+  },
+  {
+   "id": "2FH-0",
+   "text": "출처",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "출처",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FI-0",
+   "text": "3",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "출처",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FL-0",
+   "text": "일봉 차트",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "출처",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FN-0",
+   "text": "DART 재무제표",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "출처",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FP-0",
+   "text": "네이버 뉴스",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "출처",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DG4-0",
+   "text": "하위 에이전트",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DG5-0",
+   "text": "1",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DG8-0",
+   "text": "재무 해석",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "agent-row",
+    "row-top"
+   ]
+  },
+  {
+   "id": "DG9-0",
+   "text": "진행 중",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "agent-row",
+    "row-top"
+   ]
+  },
+  {
+   "id": "DGB-0",
+   "text": "8.4s",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "agent-row",
+    "row-bottom"
+   ]
+  },
+  {
+   "id": "DGC-0",
+   "text": "현재가 조회",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 출처 도크",
+    "하위 에이전트",
+    "agent-row",
+    "row-bottom"
+   ]
+  },
+  {
+   "id": "2FV-0",
+   "text": "삼성전자 흐름이랑 재무 같이 보여줘",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "완료 턴",
+    "⑤ 사용자 말풍선 (우측 정렬)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FY-0",
+   "text": "38초 동안 작업함",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "완료 턴",
+    "⑥ 경과 헤더 — 접힌 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2G2-0",
+   "text": "일봉 60개를 폈습니다. 5월 하순부터 20일선이 60일선을 위로 뚫고 그대로 벌어졌고, 종가 88,100원이 구간 최고 부근입니다.",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "완료 턴"
+   ]
+  },
+  {
+   "id": "2G6-0",
+   "text": "재무 쪽은 하위 에이전트한테 맡겨서 정리해줘",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "사용자 말풍선",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2G8-0",
+   "text": "29초 동안 작업 중입니다",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑥ 경과 헤더 — 진행 중"
+   ]
+  },
+  {
+   "id": "2GA-0",
+   "text": "재무 해석은 읽기 전용 하위 에이전트에게 맡기겠습니다. 2025 연결 재무상태표에서 유동비율·현금성자산 비중만 계산하고 주문은 건드리지 않습니다.",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴"
+   ]
+  },
+  {
+   "id": "2GF-0",
+   "text": "재무 해석",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑦ 하위 에이전트 블록",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GG-0",
+   "text": "작업 시작됨",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑦ 하위 에이전트 블록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GI-0",
+   "text": "유동비율 계산",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑦ 하위 에이전트 블록",
+    "사고 문구 — 앞은 진하고 뒤로 옅어진다"
+   ]
+  },
+  {
+   "id": "2GJ-0",
+   "text": "— 유동자산 ÷",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑦ 하위 에이전트 블록",
+    "사고 문구 — 앞은 진하고 뒤로 옅어진다"
+   ]
+  },
+  {
+   "id": "2GK-0",
+   "text": "유동부채 확인 중",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑦ 하위 에이전트 블록",
+    "사고 문구 — 앞은 진하고 뒤로 옅어진다"
+   ]
+  },
+  {
+   "id": "2GQ-0",
+   "text": "재무제표 조회 · 삼성전자 2025 연결",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑧ 실행 라인 — 지금 부르고 있는 것",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GR-0",
+   "text": "1.2s",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑧ 실행 라인 — 지금 부르고 있는 것",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GW-0",
+   "text": "현재가 조회 · 삼성전자",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑧ 실행 라인 — 지금 부르고 있는 것",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GX-0",
+   "text": "0.4s",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑧ 실행 라인 — 지금 부르고 있는 것",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2H2-0",
+   "text": "일별 주가 조회 · 대기 중",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "진행 중 턴",
+    "⑧ 실행 라인 — 지금 부르고 있는 것",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2L0-0",
+   "text": "15:30 발화",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "agent-head",
+    "agent-badge"
+   ]
+  },
+  {
+   "id": "2KY-0",
+   "text": "주기 확인",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "agent-head"
+   ]
+  },
+  {
+   "id": "2KW-0",
+   "text": "2분 전",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "agent-head"
+   ]
+  },
+  {
+   "id": "2KU-0",
+   "text": null,
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "본문 — 인라인 칩을 문장에 섞는다"
+   ]
+  },
+  {
+   "id": "2KT-0",
+   "text": "삼성전자 005930",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "본문 — 인라인 칩을 문장에 섞는다",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2KR-0",
+   "text": " 조건 도달 — 관측값 88,100 (임계 88,000)",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "본문 — 인라인 칩을 문장에 섞는다"
+   ]
+  },
+  {
+   "id": "2KQ-0",
+   "text": "값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "본문 — 인라인 칩을 문장에 섞는다",
+    "시점 단서 (템플릿 고정 문구)"
+   ]
+  },
+  {
+   "id": "2KN-0",
+   "text": "감시 조건",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 머리 바"
+   ]
+  },
+  {
+   "id": "2KD-0",
+   "text": "삼성전자 005930",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문"
+   ]
+  },
+  {
+   "id": "2KC-0",
+   "text": "✓",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "2KB-0",
+   "text": "종가 88,000 이상",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "2KA-0",
+   "text": "88,100",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "2K8-0",
+   "text": "✓",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "2K7-0",
+   "text": "거래량 1,000만주 이상",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "2K6-0",
+   "text": "11,689,068",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 충족"
+   ]
+  },
+  {
+   "id": "2K4-0",
+   "text": "△",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 참고"
+   ]
+  },
+  {
+   "id": "2K3-0",
+   "text": "장중에만 확인",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 참고"
+   ]
+  },
+  {
+   "id": "2K2-0",
+   "text": "15:30 마감",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식",
+    "조건 패널",
+    "패널 본문",
+    "조건 행 · 참고"
+   ]
+  },
+  {
+   "id": "2JY-0",
+   "text": "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "turn-agent (능동 턴) — 조건 패널 형식"
+   ]
+  },
+  {
+   "id": "2H6-0",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "input-row · 실행 중 (ESC 중단)"
+   ]
+  },
+  {
+   "id": "2H8-0",
+   "text": "29s",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "input-row · 실행 중 (ESC 중단)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2HA-0",
+   "text": "ESC 중단",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "input-row · 실행 중 (ESC 중단)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2HE-0",
+   "text": "CLAUDE",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2HG-0",
+   "text": "감시 2",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2HJ-0",
+   "text": "OPUS · HIGH",
+   "path": [
+    "09 · 셸 — 질문 입력 · Task Canvas",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "control-strip",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "25Q-0",
+   "name": "09 · 셸 — 질문 입력 · Task Canvas",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "25R-0",
+   "name": "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "25S-0",
+   "name": "타이틀바",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "25T-0",
+   "name": "창 제어",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "25U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "25V-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "25W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "25X-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "25Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "25Z-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "260-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  },
+  {
+   "id": "GP3-0",
+   "name": "04 · Project Recent Sidebar",
+   "component": "Frame",
+   "w": 268,
+   "h": 717,
+   "depth": 2
+  },
+  {
+   "id": "GP4-0",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 242,
+   "h": 164,
+   "depth": 3
+  },
+  {
+   "id": "GP5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "GP7-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GP8-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "GP9-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "GPA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "GPB-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GPC-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GPD-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "GPF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "GPG-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GPH-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "GPI-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "GPJ-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "GPK-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 6
+  },
+  {
+   "id": "GPM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "GPN-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GPO-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 6
+  },
+  {
+   "id": "GPP-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 4,
+   "depth": 6
+  },
+  {
+   "id": "GPR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "GPS-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GPT-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "GPU-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "GPW-0",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 242,
+   "h": 129,
+   "depth": 3
+  },
+  {
+   "id": "GPX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "GPZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "GQ0-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GQ1-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "GQ2-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "GQ4-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 17,
+   "h": 17,
+   "depth": 5
+  },
+  {
+   "id": "GQ5-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 6
+  },
+  {
+   "id": "GQ6-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 6
+  },
+  {
+   "id": "GQ7-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 6
+  },
+  {
+   "id": "GQ8-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 17,
+   "h": 17,
+   "depth": 5
+  },
+  {
+   "id": "GQ9-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GQA-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 6
+  },
+  {
+   "id": "GQB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "GQD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 29,
+   "depth": 4
+  },
+  {
+   "id": "H3Z-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "GQF-0",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 242,
+   "h": 126,
+   "depth": 3
+  },
+  {
+   "id": "GQG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "GQJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "GQL-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "GQM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "GQO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "GQQ-0",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 242,
+   "h": 232,
+   "depth": 3
+  },
+  {
+   "id": "GQR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 38,
+   "depth": 4
+  },
+  {
+   "id": "GQS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "GQV-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 5
+  },
+  {
+   "id": "GQW-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "262-0",
+   "name": "② 캔버스 영역",
+   "component": "Frame",
+   "w": 810,
+   "h": 716,
+   "depth": 2
+  },
+  {
+   "id": "27A-0",
+   "name": "grid",
+   "component": "Frame",
+   "w": 810,
+   "h": 716,
+   "depth": 3
+  },
+  {
+   "id": "27B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 788,
+   "h": 252,
+   "depth": 4
+  },
+  {
+   "id": "27C-0",
+   "name": "card-head",
+   "component": "Frame",
+   "w": 754,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "27E-0",
+   "name": "card-head-right",
+   "component": "Frame",
+   "w": 94,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "27G-0",
+   "name": "uk-card-close",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "27H-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "27I-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "27J-0",
+   "name": "card-body · stream-list",
+   "component": "Frame",
+   "w": 754,
+   "h": 190,
+   "depth": 5
+  },
+  {
+   "id": "27K-0",
+   "name": "stream-item",
+   "component": "Frame",
+   "w": 754,
+   "h": 17,
+   "depth": 6
+  },
+  {
+   "id": "27M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "27P-0",
+   "name": "stream-item",
+   "component": "Frame",
+   "w": 754,
+   "h": 17,
+   "depth": 6
+  },
+  {
+   "id": "27R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "27U-0",
+   "name": "stream-item",
+   "component": "Frame",
+   "w": 754,
+   "h": 17,
+   "depth": 6
+  },
+  {
+   "id": "27W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "27Z-0",
+   "name": "stream-item",
+   "component": "Frame",
+   "w": 754,
+   "h": 17,
+   "depth": 6
+  },
+  {
+   "id": "281-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "284-0",
+   "name": "stream-item",
+   "component": "Frame",
+   "w": 754,
+   "h": 17,
+   "depth": 6
+  },
+  {
+   "id": "286-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "289-0",
+   "name": "stream-item",
+   "component": "Frame",
+   "w": 754,
+   "h": 17,
+   "depth": 6
+  },
+  {
+   "id": "28B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "28E-0",
+   "name": "stream-more",
+   "component": "Frame",
+   "w": 754,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "FJ0-0",
+   "name": "리사이즈 핸들",
+   "component": "Frame",
+   "w": 18,
+   "h": 18,
+   "depth": 5
+  },
+  {
+   "id": "FJ1-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "FJ2-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "2HL-0",
+   "name": "카드 · 표 (.card)",
+   "component": "Frame",
+   "w": 788,
+   "h": 252,
+   "depth": 4
+  },
+  {
+   "id": "2ID-0",
+   "name": "card-head",
+   "component": "Frame",
+   "w": 754,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "2IE-0",
+   "name": "card-head-right",
+   "component": "Frame",
+   "w": 153,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "2IF-0",
+   "name": "uk-card-close",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "2IG-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "2IH-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "2IB-0",
+   "name": "fin-meta",
+   "component": "Frame",
+   "w": 754,
+   "h": 24,
+   "depth": 5
+  },
+  {
+   "id": "2HM-0",
+   "name": "card-body · fin-table",
+   "component": "Frame",
+   "w": 754,
+   "h": 166,
+   "depth": 5
+  },
+  {
+   "id": "2I7-0",
+   "name": "thead",
+   "component": "Frame",
+   "w": 754,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "2I3-0",
+   "name": "row",
+   "component": "Frame",
+   "w": 754,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "2HZ-0",
+   "name": "row",
+   "component": "Frame",
+   "w": 754,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "2HV-0",
+   "name": "row",
+   "component": "Frame",
+   "w": 754,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "2HR-0",
+   "name": "row",
+   "component": "Frame",
+   "w": 754,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "2HN-0",
+   "name": "row",
+   "component": "Frame",
+   "w": 754,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "FJ3-0",
+   "name": "리사이즈 핸들",
+   "component": "Frame",
+   "w": 18,
+   "h": 18,
+   "depth": 5
+  },
+  {
+   "id": "FJ4-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "FJ5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "263-0",
+   "name": "③ 대화 영역 400px",
+   "component": "Frame",
+   "w": 400,
+   "h": 716,
+   "depth": 2
+  },
+  {
+   "id": "2EZ-0",
+   "name": "④ 결과물 · 출처 도크",
+   "component": "Frame",
+   "w": 392,
+   "h": 196,
+   "depth": 3
+  },
+  {
+   "id": "2F0-0",
+   "name": "결과물",
+   "component": "Frame",
+   "w": 390,
+   "h": 55,
+   "depth": 4
+  },
+  {
+   "id": "2F1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "2FF-0",
+   "name": "출처",
+   "component": "Frame",
+   "w": 390,
+   "h": 63,
+   "depth": 4
+  },
+  {
+   "id": "2FG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "2FJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "2FK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 71,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "2FM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "2FO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 83,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "DG2-0",
+   "name": "하위 에이전트",
+   "component": "Frame",
+   "w": 390,
+   "h": 76,
+   "depth": 4
+  },
+  {
+   "id": "DG3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "DG6-0",
+   "name": "agent-row",
+   "component": "Frame",
+   "w": 362,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "DG7-0",
+   "name": "row-top",
+   "component": "Frame",
+   "w": 362,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "DGA-0",
+   "name": "row-bottom",
+   "component": "Frame",
+   "w": 362,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "2FR-0",
+   "name": "history",
+   "component": "Frame",
+   "w": 400,
+   "h": 428,
+   "depth": 3
+  },
+  {
+   "id": "2FS-0",
+   "name": "완료 턴",
+   "component": "Frame",
+   "w": 368,
+   "h": 143,
+   "depth": 4
+  },
+  {
+   "id": "2FT-0",
+   "name": "⑤ 사용자 말풍선 (우측 정렬)",
+   "component": "Frame",
+   "w": 368,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "2FU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2FW-0",
+   "name": "⑥ 경과 헤더 — 접힌 상태",
+   "component": "Frame",
+   "w": 368,
+   "h": 25,
+   "depth": 5
+  },
+  {
+   "id": "2FX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 368,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "2FZ-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "2G0-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "2G1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 368,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2G3-0",
+   "name": "진행 중 턴",
+   "component": "Frame",
+   "w": 368,
+   "h": 263,
+   "depth": 4
+  },
+  {
+   "id": "2G4-0",
+   "name": "사용자 말풍선",
+   "component": "Frame",
+   "w": 368,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "2G5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 298,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "2G7-0",
+   "name": "⑥ 경과 헤더 — 진행 중",
+   "component": "Frame",
+   "w": 368,
+   "h": 25,
+   "depth": 5
+  },
+  {
+   "id": "2G9-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 368,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2GB-0",
+   "name": "⑦ 하위 에이전트 블록",
+   "component": "Frame",
+   "w": 368,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "2GC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 368,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "2GD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "2GE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "2GH-0",
+   "name": "사고 문구 — 앞은 진하고 뒤로 옅어진다",
+   "component": "Frame",
+   "w": 368,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "2GL-0",
+   "name": "⑧ 실행 라인 — 지금 부르고 있는 것",
+   "component": "Frame",
+   "w": 368,
+   "h": 58,
+   "depth": 5
+  },
+  {
+   "id": "2GM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 368,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "2GN-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "2GO-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "2GP-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "2GS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 368,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "2GT-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "2GU-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "2GV-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "2GY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 368,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "2GZ-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "2H0-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "2H1-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "2JX-0",
+   "name": "turn-agent (능동 턴) — 조건 패널 형식",
+   "component": "Frame",
+   "w": 368,
+   "h": 300,
+   "depth": 4
+  },
+  {
+   "id": "2KV-0",
+   "name": "agent-head",
+   "component": "Frame",
+   "w": 368,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "2KZ-0",
+   "name": "agent-badge",
+   "component": "Frame",
+   "w": 74,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "2KX-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 178,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2KO-0",
+   "name": "본문 — 인라인 칩을 문장에 섞는다",
+   "component": "Frame",
+   "w": 368,
+   "h": 90,
+   "depth": 5
+  },
+  {
+   "id": "2KS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 119,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "2KP-0",
+   "name": "시점 단서 (템플릿 고정 문구)",
+   "component": "Frame",
+   "w": 368,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "2JZ-0",
+   "name": "조건 패널",
+   "component": "Frame",
+   "w": 368,
+   "h": 142,
+   "depth": 5
+  },
+  {
+   "id": "2KE-0",
+   "name": "패널 머리 바",
+   "component": "Frame",
+   "w": 366,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "2KJ-0",
+   "name": "캔버스로 보내기",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "2KK-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 8
+  },
+  {
+   "id": "2KM-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "2KL-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "2KF-0",
+   "name": "복사",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "2KG-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 8
+  },
+  {
+   "id": "2KI-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 9
+  },
+  {
+   "id": "2KH-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "2K0-0",
+   "name": "패널 본문",
+   "component": "Frame",
+   "w": 366,
+   "h": 110,
+   "depth": 6
+  },
+  {
+   "id": "2K9-0",
+   "name": "조건 행 · 충족",
+   "component": "Frame",
+   "w": 344,
+   "h": 17,
+   "depth": 7
+  },
+  {
+   "id": "2K5-0",
+   "name": "조건 행 · 충족",
+   "component": "Frame",
+   "w": 344,
+   "h": 17,
+   "depth": 7
+  },
+  {
+   "id": "2K1-0",
+   "name": "조건 행 · 참고",
+   "component": "Frame",
+   "w": 344,
+   "h": 17,
+   "depth": 7
+  },
+  {
+   "id": "2H4-0",
+   "name": "input-stack",
+   "component": "Frame",
+   "w": 400,
+   "h": 84,
+   "depth": 3
+  },
+  {
+   "id": "2H5-0",
+   "name": "input-row · 실행 중 (ESC 중단)",
+   "component": "Frame",
+   "w": 392,
+   "h": 44,
+   "depth": 4
+  },
+  {
+   "id": "2H7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 99,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "2H9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 67,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "2HB-0",
+   "name": "control-strip",
+   "component": "Frame",
+   "w": 392,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "2L1-0",
+   "name": "키우미 (#dot 대체) · 호출 중 — 얼굴 열림",
+   "component": "Frame",
+   "w": 18,
+   "h": 18,
+   "depth": 5
+  },
+  {
+   "id": "2L2-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 11,
+   "h": 11,
+   "depth": 6
+  },
+  {
+   "id": "2L3-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 2,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "2L4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 2,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "2HD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 73,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "2HF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "2HH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 66,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2HI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 111,
+   "h": 28,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "네이버 뉴스 — 삼성전자": 1,
+  "00:43 갱신": 1,
+  "00:43": 1,
+  "중앙일보": 1,
+  "은퇴 앞두고 파랗게 질린 5060 개미들": 1,
+  "00:33": 1,
+  "중앙SUNDAY": 1,
+  "[선데이 칼럼] 포츠담의 실험, 대학을 바꾸는…": 1,
+  "00:20": 1,
+  "한국경제": 1,
+  "성인 5명 중 1명이 삼성전자 주주…'800만 개미'": 1,
+  "00:11": 1,
+  "스포츠경향": 1,
+  "김종국, 뜻밖의 삼성전자 저점매수…\"평단가 5만\"": 1,
+  "00:06": 1,
+  "KDF World": 1,
+  "美 구글, 도쿄 오모테산도에 첫 해외 매장": 1,
+  "00:02": 1,
+  "머니투데이": 1,
+  "반도체부터 우주까지…'미래 먹거리' ETF 경쟁": 1,
+  "+ 24건 더": 1,
+  "재무상태표 — 삼성전자 (연결)": 1,
+  "DART 2025 사업보고서": 1,
+  "corp_code 00126380 · CFS · 단위 백만원": 1,
+  "계정": 1,
+  "당기": 1,
+  "전기": 1,
+  "자산총계": 1,
+  "566,942,110": 1,
+  "514,531,948": 1,
+  "유동자산": 1,
+  "247,684,612": 1,
+  "227,062,266": 1,
+  "현금및현금성자산": 1,
+  "57,856,378": 1,
+  "53,705,579": 1,
+  "미수금": 1,
+  "7,481,327": 1,
+  "9,622,974": 1,
+  "선급비용": 1,
+  "3,627,172": 1,
+  "3,362,824": 1,
+  "결과물": 1,
+  "캔버스 2": 1,
+  "네이버 뉴스 · 삼성전자 일봉": 1,
+  "출처": 1,
+  "3": 1,
+  "일봉 차트": 1,
+  "DART 재무제표": 1,
+  "네이버 뉴스": 1,
+  "하위 에이전트": 1,
+  "1": 1,
+  "재무 해석": 2,
+  "진행 중": 1,
+  "8.4s": 1,
+  "현재가 조회": 1,
+  "삼성전자 흐름이랑 재무 같이 보여줘": 1,
+  "38초 동안 작업함": 1,
+  "일봉 60개를 폈습니다. 5월 하순부터 20일선이 60일선을 위로 뚫고 그대로 벌어졌고, 종가 88,100원이 구간 최고 부근입니다.": 1,
+  "재무 쪽은 하위 에이전트한테 맡겨서 정리해줘": 1,
+  "29초 동안 작업 중입니다": 1,
+  "재무 해석은 읽기 전용 하위 에이전트에게 맡기겠습니다. 2025 연결 재무상태표에서 유동비율·현금성자산 비중만 계산하고 주문은 건드리지 않습니다.": 1,
+  "작업 시작됨": 1,
+  "유동비율 계산": 1,
+  "— 유동자산 ÷": 1,
+  "유동부채 확인 중": 1,
+  "재무제표 조회 · 삼성전자 2025 연결": 1,
+  "1.2s": 1,
+  "현재가 조회 · 삼성전자": 1,
+  "0.4s": 1,
+  "일별 주가 조회 · 대기 중": 1,
+  "15:30 발화": 1,
+  "주기 확인": 1,
+  "2분 전": 1,
+  "null": 1,
+  "삼성전자 005930": 2,
+  " 조건 도달 — 관측값 88,100 (임계 88,000)": 1,
+  "값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.": 1,
+  "감시 조건": 1,
+  "✓": 2,
+  "종가 88,000 이상": 1,
+  "88,100": 1,
+  "거래량 1,000만주 이상": 1,
+  "11,689,068": 1,
+  "△": 1,
+  "장중에만 확인": 1,
+  "15:30 마감": 1,
+  "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다": 1,
+  "무엇이든 물어보세요": 1,
+  "29s": 1,
+  "ESC 중단": 1,
+  "CLAUDE": 1,
+  "감시 2": 1,
+  "OPUS · HIGH": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "57c17af8f2d46e18db95c17e66573114ff9d4d7d4555b2d9a457e6f699db3ae0"
+}

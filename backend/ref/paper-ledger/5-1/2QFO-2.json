@@ -1,0 +1,3808 @@
+{
+ "board_id": "2QFO-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-05 / R03-T1 · 수급 — 투자자별",
+ "width": 1440,
+ "height": 1109,
+ "texts": [
+  {
+   "id": "2QFU-2",
+   "text": "삼성전자 수급",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QFX-2",
+   "text": "실시간",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QFY-2",
+   "text": "005930 · KOSPI · 장중",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QG1-2",
+   "text": "투자자별",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QG3-2",
+   "text": "거래원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QG5-2",
+   "text": "프로그램",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QG7-2",
+   "text": "신용·대차",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QG9-2",
+   "text": "종목 동향",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WFN-0",
+   "text": "순위",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Header",
+    "Flow Tabs",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QGD-2",
+   "text": "오늘 순매수 1위",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위"
+   ]
+  },
+  {
+   "id": "2QGF-2",
+   "text": "외국인",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QGG-2",
+   "text": "+1,842억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QGH-2",
+   "text": "5거래일 연속 순매수 · 09:40 기준",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "Hero · 순매수 1위"
+   ]
+  },
+  {
+   "id": "2QGJ-2",
+   "text": "기관",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "기관"
+   ]
+  },
+  {
+   "id": "2QGK-2",
+   "text": "-1,204억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "기관"
+   ]
+  },
+  {
+   "id": "2QGL-2",
+   "text": "금융투자 -842억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "기관"
+   ]
+  },
+  {
+   "id": "2QGN-2",
+   "text": "개인",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "개인"
+   ]
+  },
+  {
+   "id": "2QGO-2",
+   "text": "-638억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "개인"
+   ]
+  },
+  {
+   "id": "2QGP-2",
+   "text": "4거래일 연속 순매도",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "개인"
+   ]
+  },
+  {
+   "id": "2QGR-2",
+   "text": "프로그램 차익",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "프로그램"
+   ]
+  },
+  {
+   "id": "2QGS-2",
+   "text": "+368억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "프로그램"
+   ]
+  },
+  {
+   "id": "2QGT-2",
+   "text": "비차익 +1,430억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "프로그램"
+   ]
+  },
+  {
+   "id": "2QGV-2",
+   "text": "거래대금",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "거래대금"
+   ]
+  },
+  {
+   "id": "2QGW-2",
+   "text": "2.14조원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "거래대금"
+   ]
+  },
+  {
+   "id": "2QGX-2",
+   "text": "거래량 1,420만주 · 체결강도 108.4",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Summary Strip",
+    "거래대금"
+   ]
+  },
+  {
+   "id": "2QH5-2",
+   "text": "투자자별 순매수",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QH6-2",
+   "text": "순매수 순 · 09:40 집계",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3844-0",
+   "text": "주체",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Table Head",
+    "투자자표 헤더"
+   ]
+  },
+  {
+   "id": "3845-0",
+   "text": "매도",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Table Head",
+    "투자자표 헤더"
+   ]
+  },
+  {
+   "id": "3846-0",
+   "text": "매수",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Table Head",
+    "투자자표 헤더"
+   ]
+  },
+  {
+   "id": "3847-0",
+   "text": "순매수",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Table Head",
+    "투자자표 헤더"
+   ]
+  },
+  {
+   "id": "3849-0",
+   "text": "비중",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Table Head",
+    "투자자표 헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "384A-0",
+   "text": "5일 누적",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Table Head",
+    "투자자표 헤더"
+   ]
+  },
+  {
+   "id": "3753-0",
+   "text": "외국인",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3754-0",
+   "text": "5일 연속 매수",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3755-0",
+   "text": "2,366억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "외국인"
+   ]
+  },
+  {
+   "id": "3756-0",
+   "text": "4,208억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "외국인"
+   ]
+  },
+  {
+   "id": "3758-0",
+   "text": "+1,842억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3759-0",
+   "text": "+122.1만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "375B-0",
+   "text": "44.0%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "375E-0",
+   "text": "+3,214억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "외국인"
+   ]
+  },
+  {
+   "id": "376H-0",
+   "text": "연기금 등",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "연기금 등"
+   ]
+  },
+  {
+   "id": "376I-0",
+   "text": "418억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "연기금 등"
+   ]
+  },
+  {
+   "id": "376J-0",
+   "text": "604억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "연기금 등"
+   ]
+  },
+  {
+   "id": "376L-0",
+   "text": "+186억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "연기금 등",
+    "Frame"
+   ]
+  },
+  {
+   "id": "376M-0",
+   "text": "+12.3만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "연기금 등",
+    "Frame"
+   ]
+  },
+  {
+   "id": "376O-0",
+   "text": "4.4%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "연기금 등",
+    "Frame"
+   ]
+  },
+  {
+   "id": "376R-0",
+   "text": "+1,014억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "연기금 등"
+   ]
+  },
+  {
+   "id": "378A-0",
+   "text": "기타법인",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타법인"
+   ]
+  },
+  {
+   "id": "378B-0",
+   "text": "246억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타법인"
+   ]
+  },
+  {
+   "id": "378C-0",
+   "text": "312억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타법인"
+   ]
+  },
+  {
+   "id": "378E-0",
+   "text": "+66억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타법인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "378F-0",
+   "text": "+4.4만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타법인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "378H-0",
+   "text": "1.6%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타법인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "378K-0",
+   "text": "+214억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타법인"
+   ]
+  },
+  {
+   "id": "379F-0",
+   "text": "은행",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "은행"
+   ]
+  },
+  {
+   "id": "379G-0",
+   "text": "110억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "은행"
+   ]
+  },
+  {
+   "id": "379H-0",
+   "text": "86억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "은행"
+   ]
+  },
+  {
+   "id": "379J-0",
+   "text": "-24억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "379K-0",
+   "text": "-1.6만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "379M-0",
+   "text": "0.6%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "379P-0",
+   "text": "-64억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "은행"
+   ]
+  },
+  {
+   "id": "37AI-0",
+   "text": "기타금융",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타금융"
+   ]
+  },
+  {
+   "id": "37AJ-0",
+   "text": "102억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타금융"
+   ]
+  },
+  {
+   "id": "37AK-0",
+   "text": "64억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타금융"
+   ]
+  },
+  {
+   "id": "37AM-0",
+   "text": "-38억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37AN-0",
+   "text": "-2.5만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37AP-0",
+   "text": "0.9%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타금융",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37AS-0",
+   "text": "-92억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기타금융"
+   ]
+  },
+  {
+   "id": "37CZ-0",
+   "text": "국가",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "국가"
+   ]
+  },
+  {
+   "id": "37D0-0",
+   "text": "82억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "국가"
+   ]
+  },
+  {
+   "id": "37D1-0",
+   "text": "38억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "국가"
+   ]
+  },
+  {
+   "id": "37D3-0",
+   "text": "-44억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "국가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37D4-0",
+   "text": "-2.9만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "국가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37D6-0",
+   "text": "1.0%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "국가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37D9-0",
+   "text": "-118억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "국가"
+   ]
+  },
+  {
+   "id": "37DO-0",
+   "text": "내외국인",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "내외국인"
+   ]
+  },
+  {
+   "id": "37DP-0",
+   "text": "120억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "내외국인"
+   ]
+  },
+  {
+   "id": "37DQ-0",
+   "text": "54억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "내외국인"
+   ]
+  },
+  {
+   "id": "37DS-0",
+   "text": "-66억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "내외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37DT-0",
+   "text": "-4.4만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "내외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37DV-0",
+   "text": "1.6%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "내외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37DY-0",
+   "text": "-280억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "내외국인"
+   ]
+  },
+  {
+   "id": "37E6-0",
+   "text": "보험",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "보험"
+   ]
+  },
+  {
+   "id": "37E7-0",
+   "text": "310억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "보험"
+   ]
+  },
+  {
+   "id": "37E8-0",
+   "text": "214억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "보험"
+   ]
+  },
+  {
+   "id": "37EA-0",
+   "text": "-96억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "보험",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37EB-0",
+   "text": "-6.4만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "보험",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37ED-0",
+   "text": "2.3%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "보험",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37EG-0",
+   "text": "-286억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "보험"
+   ]
+  },
+  {
+   "id": "37EI-0",
+   "text": "사모펀드",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "사모펀드"
+   ]
+  },
+  {
+   "id": "37EJ-0",
+   "text": "310억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "사모펀드"
+   ]
+  },
+  {
+   "id": "37EK-0",
+   "text": "168억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "사모펀드"
+   ]
+  },
+  {
+   "id": "37EM-0",
+   "text": "-142억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "사모펀드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37EN-0",
+   "text": "-9.4만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "사모펀드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37EP-0",
+   "text": "3.4%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "사모펀드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37ES-0",
+   "text": "-286억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "사모펀드"
+   ]
+  },
+  {
+   "id": "37JQ-0",
+   "text": "투신",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "투신"
+   ]
+  },
+  {
+   "id": "37JR-0",
+   "text": "590억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "투신"
+   ]
+  },
+  {
+   "id": "37JS-0",
+   "text": "386억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "투신"
+   ]
+  },
+  {
+   "id": "37JU-0",
+   "text": "-204억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "투신",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37JV-0",
+   "text": "-13.5만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "투신",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37JX-0",
+   "text": "4.9%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "투신",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37K0-0",
+   "text": "-524억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "투신"
+   ]
+  },
+  {
+   "id": "37K3-0",
+   "text": "개인",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37K4-0",
+   "text": "4일 연속 매도",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37K5-0",
+   "text": "4,480억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "개인"
+   ]
+  },
+  {
+   "id": "37K6-0",
+   "text": "3,842억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "개인"
+   ]
+  },
+  {
+   "id": "37K8-0",
+   "text": "-638억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37K9-0",
+   "text": "-42.3만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37KB-0",
+   "text": "15.2%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37KE-0",
+   "text": "-1,306억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "개인"
+   ]
+  },
+  {
+   "id": "37O7-0",
+   "text": "금융투자",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "금융투자"
+   ]
+  },
+  {
+   "id": "37O8-0",
+   "text": "1,946억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "금융투자"
+   ]
+  },
+  {
+   "id": "37O9-0",
+   "text": "1,104억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "금융투자"
+   ]
+  },
+  {
+   "id": "37OB-0",
+   "text": "-842억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "금융투자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37OC-0",
+   "text": "-55.8만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "금융투자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37OE-0",
+   "text": "20.1%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "금융투자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37OH-0",
+   "text": "-1,486억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "금융투자"
+   ]
+  },
+  {
+   "id": "37OK-0",
+   "text": "기관계",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기관계 소계",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37OL-0",
+   "text": "소계 · 8개 주체",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기관계 소계",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37OM-0",
+   "text": "3,868억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기관계 소계"
+   ]
+  },
+  {
+   "id": "37ON-0",
+   "text": "2,664억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기관계 소계"
+   ]
+  },
+  {
+   "id": "37OP-0",
+   "text": "-1,204억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기관계 소계",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37OQ-0",
+   "text": "-79.8만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기관계 소계",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37OS-0",
+   "text": "28.8%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기관계 소계",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37OV-0",
+   "text": "-1,842억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "Investor Rows",
+    "기관계 소계"
+   ]
+  },
+  {
+   "id": "37U8-0",
+   "text": "12개 주체 · 기관계 소계 포함 · 잠정 09:40 집계 · 확정 18:00 반영",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Investor Panel",
+    "투자자표 상태"
+   ]
+  },
+  {
+   "id": "2QJ0-2",
+   "text": "거래원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJ1-2",
+   "text": "오늘 상위 5",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJ4-2",
+   "text": "매수 상위",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJ6-2",
+   "text": "모건스탠리",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJ7-2",
+   "text": "+842억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJ9-2",
+   "text": "JP모간",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJA-2",
+   "text": "+516억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJC-2",
+   "text": "CS증권",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJD-2",
+   "text": "+308억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJG-2",
+   "text": "매도 상위",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJI-2",
+   "text": "키움증권",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJJ-2",
+   "text": "-604억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJL-2",
+   "text": "미래에셋",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJM-2",
+   "text": "-428억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJO-2",
+   "text": "삼성증권",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJP-2",
+   "text": "-312억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Broker Block",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJT-2",
+   "text": "신용·대차·공매도",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJU-2",
+   "text": "전일 종가 기준",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJW-2",
+   "text": "공매도 비중",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJX-2",
+   "text": "3.42%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QJZ-2",
+   "text": "대차잔고",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QK0-2",
+   "text": "1,284만주",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QK2-2",
+   "text": "신용융자 잔고",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QK3-2",
+   "text": "4,208억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QK5-2",
+   "text": "신용잔고율",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QK6-2",
+   "text": "0.86%",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Credit Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QK9-2",
+   "text": "프로그램 매매",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QKA-2",
+   "text": "시간대별",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QKC-2",
+   "text": "차익 순매수",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QKD-2",
+   "text": "+368억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QKF-2",
+   "text": "비차익 순매수",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QKG-2",
+   "text": "+1,430억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QKI-2",
+   "text": "차익잔고",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QKJ-2",
+   "text": "8,640억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "Program Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3S2Y-0",
+   "text": "시간대별 순매수",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3S2Z-0",
+   "text": "5분 단위 · 09:40 기준",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "헤더"
+   ]
+  },
+  {
+   "id": "3S32-0",
+   "text": "외국인",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "다이버징 3행",
+    "외국인 행"
+   ]
+  },
+  {
+   "id": "3S3J-0",
+   "text": "+1,842억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "다이버징 3행",
+    "외국인 행"
+   ]
+  },
+  {
+   "id": "3S3L-0",
+   "text": "기관",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "다이버징 3행",
+    "기관 행"
+   ]
+  },
+  {
+   "id": "3S42-0",
+   "text": "-1,204억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "다이버징 3행",
+    "기관 행"
+   ]
+  },
+  {
+   "id": "3S44-0",
+   "text": "개인",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "다이버징 3행",
+    "개인 행"
+   ]
+  },
+  {
+   "id": "3S4L-0",
+   "text": "-638억원",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "다이버징 3행",
+    "개인 행"
+   ]
+  },
+  {
+   "id": "3S4P-0",
+   "text": "09:15",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "시각 축",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3S4Q-0",
+   "text": "09:20",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "시각 축",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3S4R-0",
+   "text": "09:25",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "시각 축",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3S4S-0",
+   "text": "09:30",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "시각 축",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3S4T-0",
+   "text": "09:35",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "시각 축",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3S4U-0",
+   "text": "09:40",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Workspace",
+    "Side Panel",
+    "시간대별 순매수",
+    "시각 축",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QKO-2",
+   "text": "장중 실시간 · 투자자·거래원 집계 갱신 중",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Status Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QKP-2",
+   "text": "수급 전체 항목 보기",
+   "path": [
+    "CC-05 / R03-T1 · 수급 — 투자자별",
+    "Flow Card Surface",
+    "Flow Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2QFO-2",
+   "name": "CC-05 / R03-T1 · 수급 — 투자자별",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1109,
+   "depth": 0
+  },
+  {
+   "id": "2QFP-2",
+   "name": "Flow Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1029,
+   "depth": 1
+  },
+  {
+   "id": "2QFR-2",
+   "name": "Flow Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QFS-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QFT-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QFV-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QFW-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "2QFZ-2",
+   "name": "Flow Tabs",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QG0-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QG2-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QG4-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QG6-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QG8-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2WFM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QGB-2",
+   "name": "Flow Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QGC-2",
+   "name": "Hero · 순매수 1위",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QGE-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QGI-2",
+   "name": "기관",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QGM-2",
+   "name": "개인",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QGQ-2",
+   "name": "프로그램",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QGU-2",
+   "name": "거래대금",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QGZ-2",
+   "name": "Flow Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 742,
+   "depth": 2
+  },
+  {
+   "id": "2QH0-2",
+   "name": "Investor Panel",
+   "component": "Frame",
+   "w": 880,
+   "h": 742,
+   "depth": 3
+  },
+  {
+   "id": "2QH3-2",
+   "name": "Investor Table Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QH4-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3843-0",
+   "name": "투자자표 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3848-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QHG-2",
+   "name": "Investor Rows",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3751-0",
+   "name": "외국인",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "3752-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3757-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "375A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "375C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "375D-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 100,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "376G-0",
+   "name": "연기금 등",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "376K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "376N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "376P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "376Q-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 10,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3789-0",
+   "name": "기타법인",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "378D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "378G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "378I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "378J-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "379E-0",
+   "name": "은행",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "379I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "379L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "379N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "379O-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 2,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "37AH-0",
+   "name": "기타금융",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "37AL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37AO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37AQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37AR-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 2,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "37CY-0",
+   "name": "국가",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "37D2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37D5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37D7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37D8-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 2,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "37DN-0",
+   "name": "내외국인",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "37DR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37DU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37DW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37DX-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 4,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "37E5-0",
+   "name": "보험",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "37E9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37EC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37EE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37EF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "37EH-0",
+   "name": "사모펀드",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "37EL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37EO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37EQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37ER-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "37JP-0",
+   "name": "투신",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "37JT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37JW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37JY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37JZ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 11,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "37K1-0",
+   "name": "개인",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "37K2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37K7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37KA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37KC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37KD-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 35,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "37O6-0",
+   "name": "금융투자",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "37OA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37OD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37OF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37OG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 46,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "37OI-0",
+   "name": "기관계 소계",
+   "component": "Frame",
+   "w": 0,
+   "h": 47,
+   "depth": 5
+  },
+  {
+   "id": "37OJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37OO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37OR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 174,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37OT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37OU-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 65,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "37U7-0",
+   "name": "투자자표 상태",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QH1-2",
+   "name": "Side Panel",
+   "component": "Frame",
+   "w": 0,
+   "h": 742,
+   "depth": 3
+  },
+  {
+   "id": "2QIY-2",
+   "name": "Broker Block",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QIZ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QJ2-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QJ3-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QJ5-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2QJ8-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2QJB-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2QJE-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QJF-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QJH-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2QJK-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2QJN-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2QJR-2",
+   "name": "Credit Block",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QJS-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QJV-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QJY-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QK1-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QK4-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QK7-2",
+   "name": "Program Block",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QK8-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QKB-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QKE-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QKH-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3S2W-0",
+   "name": "시간대별 순매수",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3S2X-0",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3S30-0",
+   "name": "다이버징 3행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3S31-0",
+   "name": "외국인 행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3S33-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S34-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3S35-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S36-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 34,
+   "depth": 10
+  },
+  {
+   "id": "3S37-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S38-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 26,
+   "depth": 10
+  },
+  {
+   "id": "3S39-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S3A-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "3S3B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S3C-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 20,
+   "depth": 10
+  },
+  {
+   "id": "3S3D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S3E-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "3S3F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S3G-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "3S3H-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 8
+  },
+  {
+   "id": "3S3I-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3S3K-0",
+   "name": "기관 행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3S3M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S3N-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3S3O-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 8
+  },
+  {
+   "id": "3S3P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3S3Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S3R-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 23,
+   "depth": 10
+  },
+  {
+   "id": "3S3S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S3T-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 17,
+   "depth": 10
+  },
+  {
+   "id": "3S3U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S3V-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 11,
+   "depth": 10
+  },
+  {
+   "id": "3S3W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S3X-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 11,
+   "depth": 10
+  },
+  {
+   "id": "3S3Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S3Z-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 11,
+   "depth": 10
+  },
+  {
+   "id": "3S40-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S41-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 6,
+   "depth": 10
+  },
+  {
+   "id": "3S43-0",
+   "name": "개인 행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3S45-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3S46-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3S47-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 8
+  },
+  {
+   "id": "3S48-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "3S49-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S4A-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 11,
+   "depth": 10
+  },
+  {
+   "id": "3S4B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S4C-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "3S4D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S4E-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 5,
+   "depth": 10
+  },
+  {
+   "id": "3S4F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S4G-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 8,
+   "depth": 10
+  },
+  {
+   "id": "3S4H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S4I-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 5,
+   "depth": 10
+  },
+  {
+   "id": "3S4J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3S4K-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 5,
+   "depth": 10
+  },
+  {
+   "id": "3S4M-0",
+   "name": "시각 축",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3S4N-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 40,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3S4O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3S4V-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 76,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QKL-2",
+   "name": "Flow Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QKM-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QKN-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "삼성전자 수급": 1,
+  "실시간": 1,
+  "005930 · KOSPI · 장중": 1,
+  "투자자별": 1,
+  "거래원": 2,
+  "프로그램": 1,
+  "신용·대차": 1,
+  "종목 동향": 1,
+  "순위": 1,
+  "오늘 순매수 1위": 1,
+  "외국인": 3,
+  "+1,842억원": 3,
+  "5거래일 연속 순매수 · 09:40 기준": 1,
+  "기관": 2,
+  "-1,204억원": 3,
+  "금융투자 -842억원": 1,
+  "개인": 3,
+  "-638억원": 3,
+  "4거래일 연속 순매도": 1,
+  "프로그램 차익": 1,
+  "+368억원": 2,
+  "비차익 +1,430억원": 1,
+  "거래대금": 1,
+  "2.14조원": 1,
+  "거래량 1,420만주 · 체결강도 108.4": 1,
+  "투자자별 순매수": 1,
+  "순매수 순 · 09:40 집계": 1,
+  "주체": 1,
+  "매도": 1,
+  "매수": 1,
+  "순매수": 1,
+  "비중": 1,
+  "5일 누적": 1,
+  "5일 연속 매수": 1,
+  "2,366억원": 1,
+  "4,208억원": 2,
+  "+122.1만주": 1,
+  "44.0%": 1,
+  "+3,214억원": 1,
+  "연기금 등": 1,
+  "418억원": 1,
+  "604억원": 1,
+  "+186억원": 1,
+  "+12.3만주": 1,
+  "4.4%": 1,
+  "+1,014억원": 1,
+  "기타법인": 1,
+  "246억원": 1,
+  "312억원": 1,
+  "+66억원": 1,
+  "+4.4만주": 1,
+  "1.6%": 2,
+  "+214억원": 1,
+  "은행": 1,
+  "110억원": 1,
+  "86억원": 1,
+  "-24억원": 1,
+  "-1.6만주": 1,
+  "0.6%": 1,
+  "-64억원": 1,
+  "기타금융": 1,
+  "102억원": 1,
+  "64억원": 1,
+  "-38억원": 1,
+  "-2.5만주": 1,
+  "0.9%": 1,
+  "-92억원": 1,
+  "국가": 1,
+  "82억원": 1,
+  "38억원": 1,
+  "-44억원": 1,
+  "-2.9만주": 1,
+  "1.0%": 1,
+  "-118억원": 1,
+  "내외국인": 1,
+  "120억원": 1,
+  "54억원": 1,
+  "-66억원": 1,
+  "-4.4만주": 1,
+  "-280억원": 1,
+  "보험": 1,
+  "310억원": 2,
+  "214억원": 1,
+  "-96억원": 1,
+  "-6.4만주": 1,
+  "2.3%": 1,
+  "-286억원": 2,
+  "사모펀드": 1,
+  "168억원": 1,
+  "-142억원": 1,
+  "-9.4만주": 1,
+  "3.4%": 1,
+  "투신": 1,
+  "590억원": 1,
+  "386억원": 1,
+  "-204억원": 1,
+  "-13.5만주": 1,
+  "4.9%": 1,
+  "-524억원": 1,
+  "4일 연속 매도": 1,
+  "4,480억원": 1,
+  "3,842억원": 1,
+  "-42.3만주": 1,
+  "15.2%": 1,
+  "-1,306억원": 1,
+  "금융투자": 1,
+  "1,946억원": 1,
+  "1,104억원": 1,
+  "-842억원": 1,
+  "-55.8만주": 1,
+  "20.1%": 1,
+  "-1,486억원": 1,
+  "기관계": 1,
+  "소계 · 8개 주체": 1,
+  "3,868억원": 1,
+  "2,664억원": 1,
+  "-79.8만주": 1,
+  "28.8%": 1,
+  "-1,842억원": 1,
+  "12개 주체 · 기관계 소계 포함 · 잠정 09:40 집계 · 확정 18:00 반영": 1,
+  "오늘 상위 5": 1,
+  "매수 상위": 1,
+  "모건스탠리": 1,
+  "+842억원": 1,
+  "JP모간": 1,
+  "+516억원": 1,
+  "CS증권": 1,
+  "+308억원": 1,
+  "매도 상위": 1,
+  "키움증권": 1,
+  "-604억원": 1,
+  "미래에셋": 1,
+  "-428억원": 1,
+  "삼성증권": 1,
+  "-312억원": 1,
+  "신용·대차·공매도": 1,
+  "전일 종가 기준": 1,
+  "공매도 비중": 1,
+  "3.42%": 1,
+  "대차잔고": 1,
+  "1,284만주": 1,
+  "신용융자 잔고": 1,
+  "신용잔고율": 1,
+  "0.86%": 1,
+  "프로그램 매매": 1,
+  "시간대별": 1,
+  "차익 순매수": 1,
+  "비차익 순매수": 1,
+  "+1,430억원": 1,
+  "차익잔고": 1,
+  "8,640억원": 1,
+  "시간대별 순매수": 1,
+  "5분 단위 · 09:40 기준": 1,
+  "09:15": 1,
+  "09:20": 1,
+  "09:25": 1,
+  "09:30": 1,
+  "09:35": 1,
+  "09:40": 1,
+  "장중 실시간 · 투자자·거래원 집계 갱신 중": 1,
+  "수급 전체 항목 보기": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "36358134f92a76cc70a6a969d133b34230eeed40d60319937702378cf4698b1e"
+}

@@ -1,0 +1,1531 @@
+{
+ "board_id": "CU0-0",
+ "page": "B-2",
+ "page_name": "플러그인",
+ "name": "03 · 플러그인 — 허브·설치",
+ "width": 1680,
+ "height": 972,
+ "texts": [
+  {
+   "id": "D8U-0",
+   "text": "플러그인 모드 창입니다",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "D8V-0",
+   "text": "설치 · 권한 · 플러그인",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GYH-0",
+   "text": "ATHENA",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GYP-0",
+   "text": "새 채팅",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GYW-0",
+   "text": "그래프",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GZ1-0",
+   "text": "에이전트",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GZ6-0",
+   "text": "플러그인",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GZ9-0",
+   "text": "프로젝트",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GZE-0",
+   "text": "아테나",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GZN-0",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GZP-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GZS-0",
+   "text": "최근",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GZT-0",
+   "text": "전체",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GZV-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GZY-0",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H00-0",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H04-0",
+   "text": "AN",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H05-0",
+   "text": "모의-주력",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "D9X-0",
+   "text": "플러그인",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DA0-0",
+   "text": "⌕ 플러그인 검색",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NGW-2",
+   "text": "+ 서버 추가",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "btn-add-server"
+   ]
+  },
+  {
+   "id": "DA2-0",
+   "text": "관리",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DA3-0",
+   "text": "플러그인은 설치 후 기능별로 허용합니다. Kiwoom·brain은 Athena 내장 API라 이 목록에 표시하지 않습니다.",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DA4-0",
+   "text": "설치됨",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DAA-0",
+   "text": "웹 문서 읽기",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DAB-0",
+   "text": "공시·리서치 웹 페이지를 마크다운으로 읽습니다",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NGR-2",
+   "text": "연결 확인됨",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DAD-0",
+   "text": "권한",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DAI-0",
+   "text": "시간·시간대",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DAJ-0",
+   "text": "현재 시각과 시간대 변환을 정확히 계산합니다",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NGT-2",
+   "text": "꺼짐 — 대화에서 쓰이지 않습니다",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DAL-0",
+   "text": "권한",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DAM-0",
+   "text": "추천",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DAS-0",
+   "text": "단계적 사고",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DAT-0",
+   "text": "복잡한 판단을 단계로 쪼개 이어 붙입니다",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DAV-0",
+   "text": "설치",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DB0-0",
+   "text": "지식 그래프 메모리",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DB1-0",
+   "text": "관심 종목·성향을 그래프로 기억합니다",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DB3-0",
+   "text": "설치",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DB8-0",
+   "text": "한국 주식 시세",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DB9-0",
+   "text": "국내 종목 시세·재무를 대화에서 조회합니다",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DBB-0",
+   "text": "설치",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DC2-0",
+   "text": "아테나 · 플러그인 대화",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DC3-0",
+   "text": "설치와 권한을 여기서 정합니다",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DC7-0",
+   "text": "국내 종목 시세를 대화에서 보고 싶어",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DC8-0",
+   "text": "한국 주식 시세 플러그인이 맞겠습니다. 설치하면 종목 검색·시세·시총 상위를 대화에서 바로 조회합니다 — API 키는 필요 없습니다.",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DC9-0",
+   "text": "설치를 진행할까요? 승인 카드에서 실행 명령과 요청 기능을 먼저 보여드립니다.",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DCG-0",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "03 · 플러그인 — 허브·설치",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "CU0-0",
+   "name": "03 · 플러그인 — 허브·설치",
+   "component": "Frame",
+   "w": 1680,
+   "h": 972,
+   "depth": 0
+  },
+  {
+   "id": "D8T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 1
+  },
+  {
+   "id": "D8W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1560,
+   "h": 820,
+   "depth": 2
+  },
+  {
+   "id": "GYE-0",
+   "name": "47 · Project Recent Sidebar",
+   "component": "Frame",
+   "w": 268,
+   "h": 819,
+   "depth": 3
+  },
+  {
+   "id": "GYF-0",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "GYG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "GYI-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GYJ-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GYK-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GYL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "GYM-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GYN-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GYO-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GYQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "GYR-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GYS-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GYT-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GYU-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GYV-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GYX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "GYY-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GYZ-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GZ0-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GZ2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "GZ3-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GZ4-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GZ5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GZ7-0",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "GZ8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "GZA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "GZB-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GZC-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GZD-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GZF-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GZG-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GZH-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GZI-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GZJ-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GZK-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GZL-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "GZM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 5
+  },
+  {
+   "id": "GZO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 29,
+   "depth": 5
+  },
+  {
+   "id": "H45-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "GZQ-0",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "GZR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "GZU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 5
+  },
+  {
+   "id": "GZW-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "GZX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 5
+  },
+  {
+   "id": "GZZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 5
+  },
+  {
+   "id": "H01-0",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "H02-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 5
+  },
+  {
+   "id": "H03-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "H06-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "H07-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "D9U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "D9V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "D9W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "D9Y-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "D9Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 260,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2NGV-2",
+   "name": "btn-add-server",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DA1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DA5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "DA6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DA7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 32,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "H4C-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "H4E-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "H4D-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "DA9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DAC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DAE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DAF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 32,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "H4F-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "H4H-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "H4G-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "DAH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DAK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DAN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "DAO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DAP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 32,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "H4I-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "H4K-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "H4J-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "DAR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DAU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DAW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DAX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 32,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "H4L-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "H4N-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "H4M-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "DAZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DB2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DB4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DB5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 32,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "H4O-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "H4Q-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "H4P-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "DB7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DBA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DC0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "DC1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "DC4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "DC5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "DC6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DCA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "DCB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "DCC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "DCD-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DCE-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "DCF-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  }
+ ],
+ "text_multiset": {
+  "플러그인 모드 창입니다": 1,
+  "설치 · 권한 · 플러그인": 1,
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 2,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "⌕ 플러그인 검색": 1,
+  "+ 서버 추가": 1,
+  "관리": 1,
+  "플러그인은 설치 후 기능별로 허용합니다. Kiwoom·brain은 Athena 내장 API라 이 목록에 표시하지 않습니다.": 1,
+  "설치됨": 1,
+  "웹 문서 읽기": 1,
+  "공시·리서치 웹 페이지를 마크다운으로 읽습니다": 1,
+  "연결 확인됨": 1,
+  "권한": 2,
+  "시간·시간대": 1,
+  "현재 시각과 시간대 변환을 정확히 계산합니다": 1,
+  "꺼짐 — 대화에서 쓰이지 않습니다": 1,
+  "추천": 1,
+  "단계적 사고": 1,
+  "복잡한 판단을 단계로 쪼개 이어 붙입니다": 1,
+  "설치": 3,
+  "지식 그래프 메모리": 1,
+  "관심 종목·성향을 그래프로 기억합니다": 1,
+  "한국 주식 시세": 1,
+  "국내 종목 시세·재무를 대화에서 조회합니다": 1,
+  "아테나 · 플러그인 대화": 1,
+  "설치와 권한을 여기서 정합니다": 1,
+  "국내 종목 시세를 대화에서 보고 싶어": 1,
+  "한국 주식 시세 플러그인이 맞겠습니다. 설치하면 종목 검색·시세·시총 상위를 대화에서 바로 조회합니다 — API 키는 필요 없습니다.": 1,
+  "설치를 진행할까요? 승인 카드에서 실행 명령과 요청 기능을 먼저 보여드립니다.": 1,
+  "무엇이든 물어보세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "fb727a444d1a2a9fcbbbec75a2e0b7e7183dcca199842f7db67592f708ac13c6"
+}

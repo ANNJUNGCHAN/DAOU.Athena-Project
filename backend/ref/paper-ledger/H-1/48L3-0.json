@@ -1,0 +1,340 @@
+{
+ "board_id": "48L3-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48M1-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48M0-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48LY-0",
+   "text": "금현물 주문·체결",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Header"
+   ]
+  },
+  {
+   "id": "48LW-0",
+   "text": "계좌별주문체결현황",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48LV-0",
+   "text": "2건",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48LT-0",
+   "text": "체결수량",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48LS-0",
+   "text": "5g",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48LQ-0",
+   "text": "미체결수량",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48LP-0",
+   "text": "10g",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48LM-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48LL-0",
+   "text": "값",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48LK-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48LI-0",
+   "text": "확인시간",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48LH-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48LF-0",
+   "text": "09:21:07",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48LE-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48LC-0",
+   "text": "미체결수량",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48LB-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48L9-0",
+   "text": "10g",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48L8-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48L5-0",
+   "text": "스칼라 2개, 행 1개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48L3-0",
+   "name": "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48LX-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48LZ-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48L6-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48LN-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48LU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48LR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48LO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48LJ-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48LD-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48LG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48L7-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48LA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48L4-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "금현물 주문·체결": 1,
+  "계좌별주문체결현황": 1,
+  "2건": 1,
+  "체결수량": 1,
+  "5g": 1,
+  "미체결수량": 2,
+  "10g": 2,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "확인시간": 1,
+  "09:21:07": 1,
+  "스칼라 2개, 행 1개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "52e9c67ced13cd18102c3d525f83a469a89cda8a67327da4d203865498eaff91"
+}

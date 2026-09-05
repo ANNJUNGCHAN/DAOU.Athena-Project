@@ -1,0 +1,340 @@
+{
+ "board_id": "4762-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "4770-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "476Z-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "476X-0",
+   "text": "관심종목 시세 보드",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Header"
+   ]
+  },
+  {
+   "id": "476V-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "476U-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "476T-0",
+   "text": "값",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "476S-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "476Q-0",
+   "text": "01",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "476P-0",
+   "text": "종목코드",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "476O-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "476M-0",
+   "text": "035420",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "476L-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "476J-0",
+   "text": "02",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "476I-0",
+   "text": "현재가",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "476H-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "476F-0",
+   "text": "214,000",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "476E-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "476C-0",
+   "text": "03",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "476B-0",
+   "text": "전일대비",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "476A-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4768-0",
+   "text": "+1,800 (+0.85%)",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4767-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4764-0",
+   "text": "외 5개 행 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4762-0",
+   "name": "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "476W-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "476Y-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4765-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "476R-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "476K-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "476N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "476D-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "476G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4766-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4769-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4763-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "관심종목 시세 보드": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "종목코드": 1,
+  "035420": 1,
+  "02": 1,
+  "현재가": 1,
+  "214,000": 1,
+  "03": 1,
+  "전일대비": 1,
+  "+1,800 (+0.85%)": 1,
+  "외 5개 행 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "6d08f1b810a2149af5fb19d4652b1feb6aef0bd66f231d068f42c8f3846cf603"
+}

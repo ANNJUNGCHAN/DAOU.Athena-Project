@@ -1,0 +1,83 @@
+Frame "23 · 주문 — 완료·보류·재시도" (9GJ-0) 1680×520
+  Frame "36 Header" (FWG-0) 1600×72
+    Frame "Frame" (FWH-0) 399×56
+      Frame "Frame" (FWI-0) 44×44
+        SVG "SVG" (FWJ-0) 22×22
+          SVGVisualElement "Path" (FWK-0) 13×16
+          SVGVisualElement "Path" (FWL-0) 6×4
+      Frame "Frame" (FWM-0) 339×56
+        Text "주문 게이트" (FWN-0) 339×34 "주문 게이트"
+        Text "실행 전 차단과 실행 후 결과를 같은…" (FWO-0) 339×18 "실행 전 차단과 실행 후 결과를 같은 규칙으로 구분합니다."
+    Frame "Frame" (FWP-0) 193×28
+      Text "AT-ST-003" (FWQ-0) 64×16 "AT-ST-003"
+      Frame "Frame" (FWR-0) 119×28
+        Text "사람이 최종 실행" (FWS-0) 93×16 "사람이 최종 실행"
+  Frame "36 Content" (FWU-0) 1600×364
+    Frame "Preflight Lock Card" (FWW-0) 620×364
+      Frame "Preflight Header" (FWX-0) 576×38
+        Frame "Frame" (FWY-0) 220×38
+          Text "실행 전 차단" (FWZ-0) 220×22 "실행 전 차단"
+          Text "조건이 충족될 때까지 주문 버튼을 잠…" (FX0-0) 220×14 "조건이 충족될 때까지 주문 버튼을 잠급니다."
+        Frame "Frame" (FX1-0) 66×24
+          Text "실행 잠김" (FX2-0) 46×14 "실행 잠김"
+      Frame "Preflight Rows" (FX3-0) 576×196
+        Frame "Block Account Unavailable" (FX7-0) 576×93
+          Frame "Frame" (FX8-0) 34×34
+            SVG "SVG" (FX9-0) 16×16
+              SVGVisualElement "Rect" (FXA-0) 9×7
+              SVGVisualElement "Path" (FXB-0) 5×4
+          Frame "Frame" (FXC-0) 430×37
+            Text "계좌 상태 확인 불가" (FXD-0) 430×18 "계좌 상태 확인 불가"
+            Text "백엔드 연결 상태를 확인한 뒤 다시 …" (FXE-0) 430×16 "백엔드 연결 상태를 확인한 뒤 다시 시도합니다."
+          Frame "Frame" (FXF-0) 38×22
+            Text "차단" (FXG-0) 20×14 "차단"
+        Frame "Block Order API Disabled" (FXI-0) 576×93
+          Frame "Frame" (FXJ-0) 34×34
+            SVG "SVG" (FXK-0) 16×16
+              SVGVisualElement "Path" (FXL-0) 9×9
+              SVGVisualElement "Path" (FXM-0) 4×2
+          Frame "Frame" (FXN-0) 430×37
+            Text "주문 API 비활성" (FXO-0) 430×18 "주문 API 비활성"
+            Text "설정 → 계좌에서 모의주문 API를 …" (FXP-0) 430×16 "설정 → 계좌에서 모의주문 API를 활성화합니다."
+          Frame "Frame" (FXQ-0) 38×22
+            Text "차단" (FXR-0) 20×14 "차단"
+      Frame "Preflight Note" (FX4-0) 576×42
+        Text "수량과 방향은 사용자가 주문 티켓에서…" (FX5-0) 279×16 "수량과 방향은 사용자가 주문 티켓에서 최종 확정합니다."
+    Frame "Execution Result Card" (FXT-0) 960×364
+      Frame "Result Header" (FXU-0) 916×38
+        Frame "Frame" (FXV-0) 194×38
+          Text "실행 결과" (FXW-0) 194×22 "실행 결과"
+          Text "상태명과 다음 행동을 함께 표시합니다…" (FXX-0) 194×14 "상태명과 다음 행동을 함께 표시합니다."
+        Frame "Frame" (FXY-0) 178×24
+          Frame "Frame" (FXZ-0) 38×24
+            Text "검토" (FY0-0) 20×14 "검토"
+          Text "→" (FY1-0) 12×16 "→"
+          Frame "Frame" (FY2-0) 54×24
+            Text "실행 중" (FY3-0) 36×14 "실행 중"
+          Text "→" (FY4-0) 12×16 "→"
+          Frame "Frame" (FY5-0) 38×24
+            Text "완료" (FY6-0) 20×14 "완료"
+      Frame "Result Rows" (FY7-0) 916×220
+        Frame "Status Needs Confirm" (FYB-0) 916×66
+          Rectangle "Rectangle" (FYC-0) 8×8
+          Text "확인 요청" (FYD-0) 114×16 "확인 요청"
+          Text "실행 전" (FYE-0) 92×17 "실행 전"
+          Text "조건을 확인한 뒤 주문 게이트로 돌아…" (FYF-0) 548×16 "조건을 확인한 뒤 주문 게이트로 돌아갑니다."
+          Frame "Frame" (FYG-0) 36×22
+            Text "428" (FYH-0) 18×14 "428"
+        Frame "Status In Doubt" (FYJ-0) 916×66
+          Rectangle "Rectangle" (FYK-0) 8×8
+          Text "체결 확인" (FYL-0) 114×16 "체결 확인"
+          Text "결과 보류" (FYM-0) 92×17 "결과 보류"
+          Text "재전송하지 않고 실제 체결 여부를 먼…" (FYN-0) 548×16 "재전송하지 않고 실제 체결 여부를 먼저 확인합니다."
+          Frame "Frame" (FYO-0) 36×22
+            Text "409" (FYP-0) 18×14 "409"
+        Frame "Status Failed" (FYR-0) 916×66
+          Rectangle "Rectangle" (FYS-0) 8×8
+          Text "실행 실패" (FYT-0) 114×16 "실행 실패"
+          Text "종료" (FYU-0) 92×17 "종료"
+          Text "원인을 확인한 뒤 새 주문으로 다시 …" (FYV-0) 548×16 "원인을 확인한 뒤 새 주문으로 다시 시도합니다."
+          Frame "Frame" (FYW-0) 38×22
+            Text "기타" (FYX-0) 20×14 "기타"
+      Frame "Result Note" (FY8-0) 916×34
+        Text "완료와 체결 확인 필요 상태는 같은 …" (FY9-0) 346×16 "완료와 체결 확인 필요 상태는 같은 주문으로 다시 실행하지 않습니다."

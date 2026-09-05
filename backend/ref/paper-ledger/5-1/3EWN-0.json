@@ -1,0 +1,2799 @@
+{
+ "board_id": "3EWN-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "3F2W-0",
+   "text": "관심종목",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F2V-0",
+   "text": "장중 · 09:42",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F2S-0",
+   "text": "ELW 관찰 그룹 · 4종목",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F2Q-0",
+   "text": "업종",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F2O-0",
+   "text": "종목찾기",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F2M-0",
+   "text": "관심",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F2K-0",
+   "text": "테마",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F2I-0",
+   "text": "시장·VI",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F2G-0",
+   "text": "조건검색",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F2C-0",
+   "text": "그룹",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F2A-0",
+   "text": "단기 관찰",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "단기 관찰"
+   ]
+  },
+  {
+   "id": "3F28-0",
+   "text": "배당주",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "배당주"
+   ]
+  },
+  {
+   "id": "3F26-0",
+   "text": "ETF 모음",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "ETF 모음"
+   ]
+  },
+  {
+   "id": "3F24-0",
+   "text": "ELW 관찰",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F22-0",
+   "text": "등락률 순",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F20-0",
+   "text": "신호 표시",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1Y-0",
+   "text": "알림 켜짐",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1V-0",
+   "text": "● 실시간 갱신",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1U-0",
+   "text": "4종목",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1T-0",
+   "text": "그룹 4개",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1Q-0",
+   "text": "▾",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자"
+   ]
+  },
+  {
+   "id": "3F1O-0",
+   "text": "삼성전자 2503 콜",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1N-0",
+   "text": "58H215",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1L-0",
+   "text": "기초자산 005930",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1J-0",
+   "text": "1,245",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1I-0",
+   "text": "+35 · +2.89%",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1F-0",
+   "text": "4종목 중 1행 펼침 · 09-01",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼친 행 · 삼성전자"
+   ]
+  },
+  {
+   "id": "3F1D-0",
+   "text": "오늘 가격",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1C-0",
+   "text": "기준가 1,210",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F1A-0",
+   "text": "시가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F19-0",
+   "text": "1,215",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F17-0",
+   "text": "저가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F16-0",
+   "text": "1,205",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F14-0",
+   "text": "상한가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F13-0",
+   "text": "1,570",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F10-0",
+   "text": "고가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0Z-0",
+   "text": "1,260",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0X-0",
+   "text": "종가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0W-0",
+   "text": "집계 전",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0U-0",
+   "text": "하한가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0T-0",
+   "text": "845",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "오늘 가격",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0O-0",
+   "text": "5단계 호가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0N-0",
+   "text": "09:42:18 기준",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0L-0",
+   "text": "단계",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0K-0",
+   "text": "매도호가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0J-0",
+   "text": "매수호가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0H-0",
+   "text": "1차",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0G-0",
+   "text": "1,255",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0F-0",
+   "text": "1,245",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0D-0",
+   "text": "2차",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0C-0",
+   "text": "1,260",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F0B-0",
+   "text": "1,240",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F09-0",
+   "text": "3차",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F08-0",
+   "text": "1,265",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F07-0",
+   "text": "1,235",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F05-0",
+   "text": "4차",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F04-0",
+   "text": "1,270",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F03-0",
+   "text": "1,230",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F01-0",
+   "text": "5차",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F00-0",
+   "text": "1,275",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EZZ-0",
+   "text": "1,225",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 상단",
+    "5단계 호가",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FEX-0",
+   "text": "ELW 조건",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FEY-0",
+   "text": "KB증권 2503회차",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FF2-0",
+   "text": "행사가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FF3-0",
+   "text": "150,000원",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FF5-0",
+   "text": "만기일",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FF6-0",
+   "text": "2026.09.18",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FF8-0",
+   "text": "기어링",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FF9-0",
+   "text": "7.9",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FFC-0",
+   "text": "전환비율",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FFD-0",
+   "text": "0.065",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FFF-0",
+   "text": "패리티",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FFG-0",
+   "text": "100.6%",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FFI-0",
+   "text": "손익분기율",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FFJ-0",
+   "text": "+12.1%",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 조건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FN3-0",
+   "text": "ELW 위험·미결제",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FN4-0",
+   "text": "잔존 17일",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FN8-0",
+   "text": "민감도 지표",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNA-0",
+   "text": "델타",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNB-0",
+   "text": "0.54",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FND-0",
+   "text": "감마",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNE-0",
+   "text": "0.018",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNG-0",
+   "text": "쎄타",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNH-0",
+   "text": "-1.9",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNJ-0",
+   "text": "베가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNK-0",
+   "text": "0.22",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNM-0",
+   "text": "로",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNN-0",
+   "text": "0.07",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNQ-0",
+   "text": "이론가·미결제",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNS-0",
+   "text": "이론가",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNT-0",
+   "text": "1,210원",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNV-0",
+   "text": "내재변동성",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNW-0",
+   "text": "26.8%",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNY-0",
+   "text": "자본지지점",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FNZ-0",
+   "text": "미제공",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FO1-0",
+   "text": "미결제약정",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FO2-0",
+   "text": "358만주",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FO4-0",
+   "text": "전일대비",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FO5-0",
+   "text": "+18.4만주",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "행 펼침 본문",
+    "펼침 하단",
+    "ELW 위험·미결제",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EY4-0",
+   "text": "삼성전자 2503 콜 — 선택",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EY3-0",
+   "text": "신호 1건",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EY1-0",
+   "text": "현재가 · 등락",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EY0-0",
+   "text": "1,245 · +2.89%",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EXY-0",
+   "text": "거래량 · 거래대금",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EXX-0",
+   "text": "48만주 · 5.9억원",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EXV-0",
+   "text": "LP 보유 · 비중",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EXU-0",
+   "text": "642만주 · 64.2%",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EXS-0",
+   "text": "만기 임박",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EXR-0",
+   "text": "잔존 17일",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EXP-0",
+   "text": "만기 2026.09.18 · 패리티 100.6%",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EXN-0",
+   "text": "차트 열기",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EXL-0",
+   "text": "호가 열기",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FO9-0",
+   "text": "다른 ELW",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOA-0",
+   "text": "ELW 관찰 4종목",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOD-0",
+   "text": "삼성전자 콜",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOE-0",
+   "text": "58H901",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOG-0",
+   "text": "312",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOH-0",
+   "text": "+32.8%",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOK-0",
+   "text": "삼성전자 풋",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOL-0",
+   "text": "58J204",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FON-0",
+   "text": "87",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOO-0",
+   "text": "-18.2%",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOR-0",
+   "text": "SK하이닉스 콜",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOS-0",
+   "text": "58K118",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOU-0",
+   "text": "1,120",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FOV-0",
+   "text": "+12.4%",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 ELW",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EWS-0",
+   "text": "● 관심종목 시세 실시간 갱신 중",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  },
+  {
+   "id": "3EWR-0",
+   "text": "그룹 조회 정상 · 09:42:18",
+   "path": [
+    "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+    "Discovery Root · 관심",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3EWN-0",
+   "name": "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "3EWO-0",
+   "name": "Discovery Root · 관심",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "3EWP-0",
+   "name": "Explorer Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "3F2D-0",
+   "name": "Header and Capability Navigation",
+   "component": "Frame",
+   "w": 0,
+   "h": 112,
+   "depth": 3
+  },
+  {
+   "id": "3F2R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3F2T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F2U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3F2E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3F2P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F2N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F2L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F2J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F2H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F2F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F1R-0",
+   "name": "Ranking Query Controls",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 3
+  },
+  {
+   "id": "3F1W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3F2B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F29-0",
+   "name": "단기 관찰",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F27-0",
+   "name": "배당주",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F25-0",
+   "name": "ETF 모음",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F23-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F21-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F1Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F1X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F1S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3EWT-0",
+   "name": "Ranking Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 612,
+   "depth": 3
+  },
+  {
+   "id": "3EY5-0",
+   "name": "행 펼침 본문",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3F1E-0",
+   "name": "펼친 행 · 삼성전자",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "3F1P-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "3F1M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3F1K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3F1H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3F1G-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3EZV-0",
+   "name": "펼침 상단",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F0P-0",
+   "name": "오늘 가격",
+   "component": "Frame",
+   "w": 402,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3F1B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3F0Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3F11-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3F18-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3F15-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3F12-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3F0R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3F0Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3F0V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3F0S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3EZW-0",
+   "name": "5단계 호가",
+   "component": "Frame",
+   "w": 402,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3F0M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3EZX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3F0I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "3F0E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3F0A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3F06-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3F02-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3EZY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 8
+  },
+  {
+   "id": "3EY6-0",
+   "name": "펼침 하단",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3FEV-0",
+   "name": "ELW 조건",
+   "component": "Frame",
+   "w": 402,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3FEW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FEZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FF0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3FF1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3FF4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3FF7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3FFA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3FFB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3FFE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3FFH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3FN1-0",
+   "name": "ELW 위험·미결제",
+   "component": "Frame",
+   "w": 402,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3FN2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FN5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FN6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3FN7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 9
+  },
+  {
+   "id": "3FN9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 9
+  },
+  {
+   "id": "3FNC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 9
+  },
+  {
+   "id": "3FNF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 9
+  },
+  {
+   "id": "3FNI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 9
+  },
+  {
+   "id": "3FNL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 9
+  },
+  {
+   "id": "3FNO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 191,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3FNP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 9
+  },
+  {
+   "id": "3FNR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 9
+  },
+  {
+   "id": "3FNU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 9
+  },
+  {
+   "id": "3FNX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 9
+  },
+  {
+   "id": "3FO0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 9
+  },
+  {
+   "id": "3FO3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 9
+  },
+  {
+   "id": "3EWU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 478,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3EY2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3EXZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3EXW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3EXT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3EXO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3EXQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3EXJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3EXM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "3EXK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "3FO7-0",
+   "name": "다른 ELW",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3FO8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3FOB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3FOC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FOF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FOI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3FOJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FOM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FOP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3FOQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FOT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3EWQ-0",
+   "name": "User Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "관심종목": 1,
+  "장중 · 09:42": 1,
+  "ELW 관찰 그룹 · 4종목": 1,
+  "업종": 1,
+  "종목찾기": 1,
+  "관심": 1,
+  "테마": 1,
+  "시장·VI": 1,
+  "조건검색": 1,
+  "그룹": 1,
+  "단기 관찰": 1,
+  "배당주": 1,
+  "ETF 모음": 1,
+  "ELW 관찰": 1,
+  "등락률 순": 1,
+  "신호 표시": 1,
+  "알림 켜짐": 1,
+  "● 실시간 갱신": 1,
+  "4종목": 1,
+  "그룹 4개": 1,
+  "▾": 1,
+  "삼성전자 2503 콜": 1,
+  "58H215": 1,
+  "기초자산 005930": 1,
+  "1,245": 2,
+  "+35 · +2.89%": 1,
+  "4종목 중 1행 펼침 · 09-01": 1,
+  "오늘 가격": 1,
+  "기준가 1,210": 1,
+  "시가": 1,
+  "1,215": 1,
+  "저가": 1,
+  "1,205": 1,
+  "상한가": 1,
+  "1,570": 1,
+  "고가": 1,
+  "1,260": 2,
+  "종가": 1,
+  "집계 전": 1,
+  "하한가": 1,
+  "845": 1,
+  "5단계 호가": 1,
+  "09:42:18 기준": 1,
+  "단계": 1,
+  "매도호가": 1,
+  "매수호가": 1,
+  "1차": 1,
+  "1,255": 1,
+  "2차": 1,
+  "1,240": 1,
+  "3차": 1,
+  "1,265": 1,
+  "1,235": 1,
+  "4차": 1,
+  "1,270": 1,
+  "1,230": 1,
+  "5차": 1,
+  "1,275": 1,
+  "1,225": 1,
+  "ELW 조건": 1,
+  "KB증권 2503회차": 1,
+  "행사가": 1,
+  "150,000원": 1,
+  "만기일": 1,
+  "2026.09.18": 1,
+  "기어링": 1,
+  "7.9": 1,
+  "전환비율": 1,
+  "0.065": 1,
+  "패리티": 1,
+  "100.6%": 1,
+  "손익분기율": 1,
+  "+12.1%": 1,
+  "ELW 위험·미결제": 1,
+  "잔존 17일": 2,
+  "민감도 지표": 1,
+  "델타": 1,
+  "0.54": 1,
+  "감마": 1,
+  "0.018": 1,
+  "쎄타": 1,
+  "-1.9": 1,
+  "베가": 1,
+  "0.22": 1,
+  "로": 1,
+  "0.07": 1,
+  "이론가·미결제": 1,
+  "이론가": 1,
+  "1,210원": 1,
+  "내재변동성": 1,
+  "26.8%": 1,
+  "자본지지점": 1,
+  "미제공": 1,
+  "미결제약정": 1,
+  "358만주": 1,
+  "전일대비": 1,
+  "+18.4만주": 1,
+  "삼성전자 2503 콜 — 선택": 1,
+  "신호 1건": 1,
+  "현재가 · 등락": 1,
+  "1,245 · +2.89%": 1,
+  "거래량 · 거래대금": 1,
+  "48만주 · 5.9억원": 1,
+  "LP 보유 · 비중": 1,
+  "642만주 · 64.2%": 1,
+  "만기 임박": 1,
+  "만기 2026.09.18 · 패리티 100.6%": 1,
+  "차트 열기": 1,
+  "호가 열기": 1,
+  "다른 ELW": 1,
+  "ELW 관찰 4종목": 1,
+  "삼성전자 콜": 1,
+  "58H901": 1,
+  "312": 1,
+  "+32.8%": 1,
+  "삼성전자 풋": 1,
+  "58J204": 1,
+  "87": 1,
+  "-18.2%": 1,
+  "SK하이닉스 콜": 1,
+  "58K118": 1,
+  "1,120": 1,
+  "+12.4%": 1,
+  "● 관심종목 시세 실시간 갱신 중": 1,
+  "그룹 조회 정상 · 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a1cdaa2a632fd5204b45a51cd5fc1c0d1213e2c8458bbf98eb550461443aa200"
+}

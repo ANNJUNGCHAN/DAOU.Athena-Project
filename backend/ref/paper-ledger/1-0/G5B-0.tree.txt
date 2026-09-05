@@ -1,0 +1,292 @@
+Frame "28 · Windows 반응형 창 · Snap" (G5B-0) 1680×900
+  Frame "53 Header" (G5C-0) 1600×86
+    Frame "Frame" (G5D-0) 531×56
+      Frame "Frame" (G5E-0) 48×48
+        Text "50" (G5F-0) 17×20 "50"
+      Frame "Frame" (G5G-0) 467×56
+        Text "Windows 반응형 창 · Snap…" (G5H-0) 467×36 "Windows 반응형 창 · Snap 규격"
+        Text "창 크기에 맞춰 정보구조를 재배치하고…" (G5I-0) 467×18 "창 크기에 맞춰 정보구조를 재배치하고 Windows의 기본 창 제어를 그대로 사용합니다."
+    Frame "Frame" (G5J-0) 151×32
+      Text "승인됨 · Paper 규격 확정" (G5K-0) 123×16 "승인됨 · Paper 규격 확정"
+  Frame "53 Content" (G5M-0) 1600×722
+    Frame "Responsive Window Previews" (G5O-0) 1100×722
+      Frame "Preview Header" (G5Q-0) 1056×44
+        Frame "Frame" (G5R-0) 396×40
+          Text "한 셸, 네 가지 Windows 배치" (G5S-0) 396×22 "한 셸, 네 가지 Windows 배치"
+          Text "와이드·가로 2분할·세로 2분할·4분…" (G5T-0) 396×16 "와이드·가로 2분할·세로 2분할·4분할로 전환해도 선택 상태는 그대로 유지합니다."
+        Frame "Frame" (G5U-0) 95×26
+          Text "최소 330px 지원" (G5V-0) 75×14 "최소 330px 지원"
+      Frame "Window States" (G5X-0) 1056×430
+        Frame "Wide · Three Pane" (G5Z-0) 480×400
+          Frame "Frame" (G60-0) 480×28
+            Frame "Frame" (G61-0) 73×28
+              Text "와이드" (G62-0) 73×16 "와이드"
+              Text "1280px 이상 · 3열" (G63-0) 73×12 "1280px 이상 · 3열"
+            Text "좌 268 · 우 400" (G64-0) 63×12 "좌 268 · 우 400"
+          Frame "Frame" (G65-0) 480×362
+            Frame "Frame" (G66-0) 478×28
+              Frame "Frame" (G67-0) 53×12
+                Rectangle "Rectangle" (G68-0) 12×12
+                Text "ATHENA" (G69-0) 35×12 "ATHENA"
+              Frame "Frame" (G6A-0) 90×28
+                Text "—" (G6B-0) 30×28 "—"
+                Frame "Frame" (G6C-0) 30×28
+                  Rectangle "Rectangle" (G6D-0) 9×8
+                Text "×" (G6E-0) 30×28 "×"
+            Frame "Frame" (G6F-0) 478×332
+              Frame "Wide Sidebar · Common Shell" (H50-0) 82×332
+                Frame "ATHENA Header" (H51-0) 69×14
+                  Rectangle "Rectangle" (H52-0) 7×7
+                  Text "ATHENA" (H53-0) 31×10 "ATHENA"
+                Frame "Function Navigation" (H55-0) 70×70
+                  Frame "Frame" (H56-0) 70×16
+                    SVG "SVG" (H57-0) 8×8
+                      SVGVisualElement "Path" (H58-0) 5×5
+                    Text "새 대화" (H59-0) 24×9 "새 대화"
+                  Frame "Current Function · Graph" (H5A-0) 70×16
+                    SVG "SVG" (H5B-0) 8×8
+                      SVGVisualElement "Circle" (H5C-0) 2×2
+                      SVGVisualElement "Circle" (H5D-0) 2×2
+                      SVGVisualElement "Circle" (H5E-0) 2×2
+                      SVGVisualElement "Path" (H5F-0) 3×3
+                    Text "그래프" (H5G-0) 21×9 "그래프"
+                  Frame "Frame" (H5H-0) 70×16
+                    SVG "SVG" (H5I-0) 8×8
+                      SVGVisualElement "Circle" (H5J-0) 3×3
+                      SVGVisualElement "Path" (H5K-0) 5×2
+                    Text "에이전트" (H5L-0) 28×9 "에이전트"
+                  Frame "Frame" (H5M-0) 70×16
+                    SVG "SVG" (H5N-0) 8×8
+                      SVGVisualElement "Path" (H5O-0) 4×5
+                      SVGVisualElement "Path" (H5P-0) 0×1
+                    Text "플러그인" (H5Q-0) 28×9 "플러그인"
+                Frame "Projects · Active Conversation" (H5S-0) 70×49
+                  Text "프로젝트" (H5T-0) 70×8 "프로젝트"
+                  Frame "Frame" (H5U-0) 70×14
+                    SVG "SVG" (H5V-0) 8×8
+                      SVGVisualElement "Path" (H5W-0) 6×5
+                    Text "아테나" (H5X-0) 21×9 "아테나"
+                  Frame "Current Conversation · Project" (H5Y-0) 70×18
+                    Frame "Frame" (H5Z-0) 54×8
+                      Text "창 규격 검수" (H60-0) 38×8 "창 규격 검수"
+                    Rectangle "Rectangle" (H61-0) 4×4
+                Frame "Recent · Active Conversation" (H63-0) 70×31
+                  Text "최근" (H64-0) 70×8 "최근"
+                  Frame "Current Conversation · Recent" (H65-0) 70×18
+                    Frame "Frame" (H66-0) 54×8
+                      Text "창 규격 검수" (H67-0) 38×8 "창 규격 검수"
+                    Rectangle "Rectangle" (H68-0) 4×4
+              Frame "Frame" (G6Q-0) 230×332
+                Rectangle "Rectangle" (G6R-0) 206×18
+                Frame "Frame" (G6S-0) 206×92
+                  Rectangle "Rectangle" (G6T-0) 99×92
+                  Rectangle "Rectangle" (G6U-0) 99×92
+                Rectangle "Rectangle" (G6V-0) 206×82
+              Frame "Frame" (G6W-0) 166×332
+                Frame "Frame" (G6X-0) 145×73
+                  Text "우측 채팅 유지" (G6Y-0) 145×11 "우측 채팅 유지"
+                  Rectangle "Rectangle" (G6Z-0) 144×54
+                Rectangle "Rectangle" (G70-0) 144×32
+        Frame "Half Snap · Horizontal and Vertical" (H8B-0) 310×380
+          Frame "2-Split Header" (H8C-0) 310×28
+            Frame "Frame" (H8D-0) 120×28
+              Text "2분할 Snap" (H8E-0) 120×16 "2분할 Snap"
+              Text "가로·세로 두 방향" (H8F-0) 120×12 "가로·세로 두 방향"
+            Text "채팅 하단 전환" (H8G-0) 51×12 "채팅 하단 전환"
+          Frame "2-Split Variants" (H8H-0) 310×342
+            Frame "2-Split · Horizontal" (H8J-0) 178×224
+              Frame "Frame" (H8K-0) 178×24
+                Text "가로 2분할" (H8L-0) 178×11 "가로 2분할"
+                Text "상·하 Snap · 넓고 낮은 창" (H8M-0) 178×10 "상·하 Snap · 넓고 낮은 창"
+              Frame "Horizontal Window" (H8N-0) 178×195
+                Frame "Native Title Bar" (H8O-0) 176×18
+                  Frame "Frame" (H8P-0) 29×7
+                    Rectangle "Rectangle" (H8Q-0) 7×7
+                    Text "ATHENA" (H8R-0) 19×7 "ATHENA"
+                  Frame "Frame" (H8S-0) 48×18
+                    Text "—" (H8T-0) 16×18 "—"
+                    Text "□" (H8U-0) 16×18 "□"
+                    Text "×" (H8V-0) 16×18 "×"
+                Frame "Frame" (H8W-0) 176×175
+                  Frame "Horizontal Sidebar" (H8X-0) 58×175
+                    Text "ATHENA" (H8Y-0) 49×8 "ATHENA"
+                    Text "＋ 새 대화" (H8Z-0) 49×8 "＋ 새 대화"
+                    Frame "Current Function · Graph" (H90-0) 49×10
+                      Text "그래프" (H91-0) 15×7 "그래프"
+                    Text "에이전트" (H92-0) 49×8 "에이전트"
+                    Text "플러그인" (H93-0) 49×8 "플러그인"
+                    Rectangle "Rectangle" (H94-0) 49×1
+                    Text "프로젝트 · 아테나" (H95-0) 49×7 "프로젝트 · 아테나"
+                    Frame "Current Conversation · Project" (H96-0) 49×11
+                      Text "창 규격" (H97-0) 16×6 "창 규격"
+                      Rectangle "Rectangle" (H98-0) 3×3
+                    Text "최근" (H99-0) 49×7 "최근"
+                    Frame "Current Conversation · Recent" (H9A-0) 49×11
+                      Text "창 규격" (H9B-0) 16×6 "창 규격"
+                      Rectangle "Rectangle" (H9C-0) 3×3
+                  Frame "Horizontal Main" (H9D-0) 118×175
+                    Rectangle "Rectangle" (H9E-0) 104×10
+                    Rectangle "Rectangle" (H9F-0) 104×45
+                    Rectangle "Rectangle" (H9G-0) 104×34
+                    Rectangle "Rectangle" (H9H-0) 104×32
+                    Frame "Bottom Composer" (H9I-0) 104×20
+                      Text "무엇이든 물어보세요" (H9J-0) 47×7 "무엇이든 물어보세요"
+            Frame "2-Split · Vertical" (H9L-0) 124×342
+              Frame "Frame" (H9M-0) 124×24
+                Text "세로 2분할" (H9N-0) 124×11 "세로 2분할"
+                Text "좌·우 Snap · 좁고 긴 창" (H9O-0) 124×10 "좌·우 Snap · 좁고 긴 창"
+              Frame "Vertical Window" (H9P-0) 124×313
+                Frame "Native Title Bar" (H9Q-0) 122×18
+                  Rectangle "Rectangle" (H9R-0) 7×7
+                  Frame "Frame" (H9S-0) 39×18
+                    Text "—" (H9T-0) 13×18 "—"
+                    Text "□" (H9U-0) 13×18 "□"
+                    Text "×" (H9V-0) 13×18 "×"
+                Frame "Frame" (H9W-0) 122×293
+                  Frame "Vertical Sidebar" (H9X-0) 48×293
+                    Text "ATHENA" (H9Y-0) 39×8 "ATHENA"
+                    Text "＋ 새 대화" (H9Z-0) 39×8 "＋ 새 대화"
+                    Frame "Current Function · Graph" (HA0-0) 39×11
+                      Text "그래프" (HA1-0) 15×7 "그래프"
+                    Text "에이전트" (HA2-0) 39×8 "에이전트"
+                    Text "플러그인" (HA3-0) 39×8 "플러그인"
+                    Rectangle "Rectangle" (HA4-0) 39×1
+                    Text "프로젝트" (HA5-0) 39×7 "프로젝트"
+                    Text "아테나" (HA6-0) 39×7 "아테나"
+                    Frame "Current Conversation · Project" (HA7-0) 39×12
+                      Text "창 규격" (HA8-0) 14×6 "창 규격"
+                      Rectangle "Rectangle" (HA9-0) 3×3
+                    Frame "Frame" (HAA-0) 39×9
+                      Text "최근" (HAB-0) 39×7 "최근"
+                    Frame "Current Conversation · Recent" (HAC-0) 39×12
+                      Text "창 규격" (HAD-0) 14×6 "창 규격"
+                      Rectangle "Rectangle" (HAE-0) 3×3
+                    Rectangle "Rectangle" (HAF-0) 39×141
+                    Rectangle "Rectangle" (HAG-0) 13×13
+                  Frame "Vertical Main" (HAH-0) 74×293
+                    Rectangle "Rectangle" (HAI-0) 62×10
+                    Rectangle "Rectangle" (HAJ-0) 62×72
+                    Rectangle "Rectangle" (HAK-0) 62×60
+                    Rectangle "Rectangle" (HAL-0) 62×96
+                    Frame "Bottom Composer" (HAM-0) 62×23
+                      Text "채팅" (HAN-0) 9×6 "채팅"
+        Frame "Quarter Snap · Compact" (G81-0) 218×360
+          Frame "Frame" (G82-0) 218×28
+            Text "4분할 Snap" (G83-0) 218×16 "4분할 Snap"
+            Text "330–699px · 1열" (G84-0) 218×12 "330–699px · 1열"
+          Frame "Frame" (G85-0) 218×322
+            Frame "Frame" (G86-0) 216×28
+              Rectangle "Rectangle" (G87-0) 11×11
+              Frame "Frame" (G88-0) 72×28
+                Text "—" (G89-0) 24×28 "—"
+                Frame "Frame" (G8A-0) 24×28
+                  Rectangle "Rectangle" (G8B-0) 8×8
+                Text "×" (G8C-0) 24×28 "×"
+            Frame "Frame" (G8D-0) 216×292
+              Frame "Quarter Snap Icon Rail · Common State" (H7G-0) 44×292
+                Frame "ATHENA Mark" (H7H-0) 18×18
+                Rectangle "Rectangle" (H7I-0) 22×1
+                Frame "New Chat" (H7J-0) 22×22
+                  SVG "SVG" (H7K-0) 11×11
+                    SVGVisualElement "Path" (H7L-0) 7×7
+                Frame "Current Function · Graph" (H7M-0) 24×22
+                  SVG "SVG" (H7N-0) 11×11
+                    SVGVisualElement "Circle" (H7O-0) 2×2
+                    SVGVisualElement "Circle" (H7P-0) 2×2
+                    SVGVisualElement "Circle" (H7Q-0) 2×2
+                    SVGVisualElement "Path" (H7R-0) 4×4
+                Frame "Agent" (H7S-0) 22×22
+                  SVG "SVG" (H7T-0) 11×11
+                    SVGVisualElement "Circle" (H7U-0) 4×4
+                    SVGVisualElement "Path" (H7V-0) 6×3
+                Frame "Plugin" (H7W-0) 22×22
+                  SVG "SVG" (H7X-0) 11×11
+                    SVGVisualElement "Path" (H7Y-0) 6×7
+                    SVGVisualElement "Path" (H7Z-0) 0×1
+                Rectangle "Rectangle" (H80-0) 22×1
+                Frame "Project Overlay Trigger" (H81-0) 22×22
+                  SVG "SVG" (H82-0) 12×12
+                    SVGVisualElement "Path" (H83-0) 9×7
+                Frame "Current Conversation · Compact" (H84-0) 22×22
+                  SVG "SVG" (H85-0) 11×11
+                    SVGVisualElement "Path" (H86-0) 7×7
+                  Rectangle "Rectangle" (H87-0) 4×4
+                Rectangle "Rectangle" (H88-0) 0×58
+                Frame "Account" (H89-0) 16×16
+              Frame "Frame" (G8J-0) 172×292
+                Frame "Frame" (G8K-0) 150×164
+                  Rectangle "Rectangle" (G8L-0) 150×18
+                  Rectangle "Rectangle" (G8M-0) 150×72
+                  Rectangle "Rectangle" (G8N-0) 150×58
+                Frame "Frame" (G8O-0) 150×34
+                  Text "채팅" (G8P-0) 16×11 "채팅"
+          Text "아이콘 레일 · 프로젝트·최근은 오버…" (G8Q-0) 218×18 "아이콘 레일 · 프로젝트·최근은 오버레이"
+      Frame "Responsive Behavior Summary" (G8S-0) 1056×172
+        Frame "Frame" (G8T-0) 342×132
+          Text "늘어날 때" (G8U-0) 310×16 "늘어날 때"
+          Text "중앙 캔버스만 유연하게 확장합니다. …" (G8V-0) 310×34 "중앙 캔버스만 유연하게 확장합니다. 좌측은 최대 268px, 우측 채팅은 최대 400px을 넘지 않습니다."
+        Frame "Frame" (G8W-0) 342×132
+          Text "줄어들 때" (G8X-0) 310×16 "줄어들 때"
+          Text "2분할은 가로·세로 비율을 모두 지원…" (G8Y-0) 310×34 "2분할은 가로·세로 비율을 모두 지원하고, 700px 미만에서는 좌측을 44px 아이콘 레일로 접습니다."
+        Frame "Frame" (G8Z-0) 342×132
+          Text "항상 유지" (G90-0) 310×16 "항상 유지"
+          Text "기능 선택은 블루, 현재 대화는 흰 …" (G91-0) 310×34 "기능 선택은 블루, 현재 대화는 흰 행·녹색 점으로 유지합니다. Snap 후에도 초안과 스크롤은 보존합니다."
+    Frame "Windows Native Rules" (G93-0) 476×722
+      Frame "Native Rules Header" (G95-0) 434×48
+        Text "Windows 기본 동작 보장" (G96-0) 434×22 "Windows 기본 동작 보장"
+        Text "앱 전용 제어가 아니라 OS가 가진 …" (G97-0) 434×16 "앱 전용 제어가 아니라 OS가 가진 창 기능을 그대로 노출합니다."
+      Frame "01 · Native Title Bar" (G99-0) 434×144
+        Text "01 · 네이티브 제목 표시줄" (G9A-0) 400×16 "01 · 네이티브 제목 표시줄"
+        Frame "Frame" (G9B-0) 400×32
+          Frame "Frame" (G9C-0) 114×14
+            Rectangle "Rectangle" (G9D-0) 13×13
+            Text "ATHENA" (G9E-0) 38×14 "ATHENA"
+            Text "드래그 영역" (G9F-0) 49×12 "드래그 영역"
+          Frame "Frame" (G9G-0) 114×32
+            Text "—" (G9H-0) 38×32 "—"
+            Frame "Frame" (G9I-0) 38×32
+              Rectangle "Rectangle" (G9J-0) 10×9
+            Text "×" (G9K-0) 38×32 "×"
+        Text "최소화·최대화/복원·닫기 버튼은 Wi…" (G9L-0) 400×30 "최소화·최대화/복원·닫기 버튼은 Windows가 그립니다. 최대화 버튼 Hover와 Win+Z는 같은 Sna"
+      Frame "02 · Windows Shortcuts" (G9N-0) 434×174
+        Text "02 · Windows 키 조합" (G9O-0) 400×16 "02 · Windows 키 조합"
+        Frame "Shortcut Rows" (G9P-0) 400×116
+          Frame "Shortcut · Win+Z" (G9R-0) 400×20
+            Frame "Frame" (G9S-0) 112×20
+              Text "Win + Z" (G9T-0) 38×12 "Win + Z"
+            Text "Snap Layouts 열기" (G9U-0) 84×14 "Snap Layouts 열기"
+          Frame "Shortcut · Win Arrow LR" (G9W-0) 400×20
+            Frame "Frame" (G9X-0) 112×20
+              Text "Win + ← / →" (G9Y-0) 66×12 "Win + ← / →"
+            Text "좌·우 2분할 및 위치 이동" (G9Z-0) 112×14 "좌·우 2분할 및 위치 이동"
+          Frame "Shortcut · Win Arrow UD" (GA1-0) 400×20
+            Frame "Frame" (GA2-0) 112×20
+              Text "Win + ↑ / ↓" (GA3-0) 60×12 "Win + ↑ / ↓"
+            Text "최대화·복원·4분할 이동" (GA4-0) 104×14 "최대화·복원·4분할 이동"
+          Frame "Shortcut · Move Monitor" (GA6-0) 400×20
+            Frame "Frame" (GA7-0) 112×20
+              Text "Win+Shift+←/→" (GA8-0) 77×12 "Win+Shift+←/→"
+            Text "다른 모니터로 이동" (GA9-0) 88×14 "다른 모니터로 이동"
+          Frame "Shortcut · System Menu Close" (GAB-0) 400×20
+            Frame "Frame" (GAC-0) 112×20
+              Text "Alt+Space / F4" (GAD-0) 76×12 "Alt+Space / F4"
+            Text "시스템 메뉴 / 창 닫기" (GAE-0) 99×14 "시스템 메뉴 / 창 닫기"
+      Frame "03 · Mouse and Window Behavior" (GAG-0) 434×130
+        Text "03 · 마우스·창 동작" (GAH-0) 400×16 "03 · 마우스·창 동작"
+        Frame "Frame" (GAI-0) 400×52
+          Frame "Frame" (GAJ-0) 194×52
+            Text "빈 제목 영역 드래그" (GAK-0) 194×14 "빈 제목 영역 드래그"
+            Text "창 이동 · 화면 모서리 Snap" (GAL-0) 194×14 "창 이동 · 화면 모서리 Snap"
+            Text "더블클릭 최대화/복원" (GAM-0) 194×14 "더블클릭 최대화/복원"
+          Frame "Frame" (GAN-0) 194×52
+            Text "제목 표시줄 우클릭" (GAO-0) 194×14 "제목 표시줄 우클릭"
+            Text "Windows 시스템 메뉴" (GAP-0) 194×14 "Windows 시스템 메뉴"
+            Text "모든 테두리·모서리 리사이즈" (GAQ-0) 194×14 "모든 테두리·모서리 리사이즈"
+      Frame "04 · Acceptance Gate" (GAS-0) 434×146
+        Frame "Frame" (GAT-0) 402×16
+          Text "04 · 적용 게이트" (GAU-0) 89×16 "04 · 적용 게이트"
+          Text "승인됨" (GAV-0) 27×12 "승인됨"
+        Text "• 최대화 Hover·Win+Z에서 …" (GAW-0) 402×15 "• 최대화 Hover·Win+Z에서 가로·세로 2분할을 모두 사용할 것"
+        Text "• 최소 폭 330px에서도 주요 기…" (GAX-0) 402×15 "• 최소 폭 330px에서도 주요 기능과 채팅을 사용할 수 있을 것"
+        Text "• Snap·복원·모니터 이동 후 선…" (GAY-0) 402×15 "• Snap·복원·모니터 이동 후 선택·초안·스크롤을 유지할 것"
+        Text "Runtime 반영 완료 · 데스크톱…" (GAZ-0) 402×14 "Runtime 반영 완료 · 데스크톱 검증 통과"

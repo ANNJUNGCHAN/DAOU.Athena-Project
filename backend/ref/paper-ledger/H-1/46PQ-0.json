@@ -1,0 +1,340 @@
+{
+ "board_id": "46PQ-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46QO-0",
+   "text": "",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46QN-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46QL-0",
+   "text": "시장가 매수 주문",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Header"
+   ]
+  },
+  {
+   "id": "46QJ-0",
+   "text": "순서",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46QI-0",
+   "text": "항목",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46QH-0",
+   "text": "값",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46QG-0",
+   "text": "비고",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46QE-0",
+   "text": "01",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46QD-0",
+   "text": "현재가",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46QC-0",
+   "text": "",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46QA-0",
+   "text": "+20",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46Q9-0",
+   "text": "",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46Q7-0",
+   "text": "02",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46Q6-0",
+   "text": "매도호가3",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46Q5-0",
+   "text": "",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46Q3-0",
+   "text": "150,870",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46Q2-0",
+   "text": "",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46Q0-0",
+   "text": "03",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46PZ-0",
+   "text": "매도호가직전대비3",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46PY-0",
+   "text": "",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46PW-0",
+   "text": "+320",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46PV-0",
+   "text": "",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46PS-0",
+   "text": "외 18개 행 접힘 · 원본에서 확인",
+   "path": [
+    "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46PQ-0",
+   "name": "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46QK-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46QM-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46PT-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46QF-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46Q8-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46QB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46Q1-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46Q4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46PU-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46PX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46PR-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "시장가 매수 주문": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "현재가": 1,
+  "+20": 1,
+  "02": 1,
+  "매도호가3": 1,
+  "150,870": 1,
+  "03": 1,
+  "매도호가직전대비3": 1,
+  "+320": 1,
+  "외 18개 행 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "fb0353d10e1c3278ea93079277bdddac8ff4feb17277d4bcea78f193088ce57c"
+}

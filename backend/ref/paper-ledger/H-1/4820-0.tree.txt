@@ -1,0 +1,35 @@
+Frame "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매" (4820-0) 360×420
+  Frame "Header" (482U-0) 0×0
+    Frame "Meta row" (482W-0) 0×0
+      Text "Eyebrow" (482Y-0) 0×0
+      Text "As of" (482X-0) 0×0 "기준 09:42"
+    Text "Title" (482V-0) 0×0 "동일순매매"
+  Frame "Body" (4823-0) 0×0
+    Frame "KPI band" (482K-0) 0×0
+      Frame "Frame" (482R-0) 0×0
+        Text "순매매금액" (482T-0) 0×0 "순매매금액"
+        Text "+722억원" (482S-0) 0×0 "+722억원"
+      Frame "Frame" (482O-0) 0×0
+        Text "값" (482Q-0) 0×0 "값"
+        Text "동반 매수 1위" (482P-0) 0×0 "동반 매수 1위"
+      Frame "Frame" (482L-0) 0×0
+        Text "핵심" (482N-0) 0×0 "핵심"
+        Text "6종목" (482M-0) 0×0 "6종목"
+    Frame "Table header" (482G-0) 0×0
+      Text "항목" (482J-0) 0×0 "항목"
+      Text "값" (482I-0) 0×0 "값"
+      Text "비고" (482H-0) 72×0 "비고"
+    Frame "Position 1" (482A-0) 0×0
+      Frame "Frame" (482D-0) 0×0
+        Text "값" (482F-0) 0×0 "값"
+        Text "Text" (482E-0) 0×0
+      Text "08-31 확정" (482C-0) 0×0 "08-31 확정"
+      Text "Text" (482B-0) 72×0
+    Frame "Position 2" (4824-0) 0×0
+      Frame "Frame" (4827-0) 0×0
+        Text "기준 시각" (4829-0) 0×0 "기준 시각"
+        Text "Text" (4828-0) 0×0
+      Text "09:42 조회" (4826-0) 0×0 "09:42 조회"
+      Text "Text" (4825-0) 72×0
+  Frame "Fold note" (4821-0) 0×0
+    Text "스칼라 2개, 행 6개 접힘 · 원본…" (4822-0) 0×0 "스칼라 2개, 행 6개 접힘 · 원본에서 확인"

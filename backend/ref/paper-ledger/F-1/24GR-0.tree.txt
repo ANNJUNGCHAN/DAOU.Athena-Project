@@ -1,0 +1,670 @@
+Frame "CC-04 / R02-X1 · 정규·통합 호가 공식 원문 — ka10004·ka10007" (24GR-0) 1440×0
+  Frame "헤더" (24GU-0) 0×0
+    Frame "Frame" (24GV-0) 0×0
+      Frame "Frame" (24GW-0) 0×0
+        Text "정규·통합 호가 공식 원문" (24GX-0) 0×0 "정규·통합 호가 공식 원문"
+        Frame "Frame" (24GY-0) 0×0
+          Text "ka10004 · ka10007" (24GZ-0) 0×0 "ka10004 · ka10007"
+      Frame "Frame" (24H0-0) 0×0
+        Text "18 mapping · 193 fie…" (24H1-0) 0×0 "18 mapping · 193 field destinations"
+    Frame "Frame" (24H2-0) 0×0
+      Text "정규장 10단과 통합 10단을 같은 …" (24H3-0) 0×0 "정규장 10단과 통합 10단을 같은 래더 문법으로 비교합니다."
+      Text "삼성전자 · 005930 · 정규장 …" (24H4-0) 0×0 "삼성전자 · 005930 · 정규장 · 실시간 연결"
+  Frame "ka10004 · 정규장 10단 · 69 raw" (24HU-0) 0×0
+    Frame "Frame" (24HV-0) 0×0
+      Frame "Frame" (24HW-0) 0×0
+        Text "정규장 10단 호가" (24HX-0) 0×0 "정규장 10단 호가"
+        Text "매도·매수 가격, 잔량, 증감 60개…" (24HY-0) 0×0 "매도·매수 가격, 잔량, 증감 60개와 공식 합계·시간 9개"
+      Frame "Frame" (24HZ-0) 0×0
+        Text "ka10004 · 69 / 69" (24I0-0) 0×0 "ka10004 · 69 / 69"
+    Frame "Frame" (24I1-0) 0×30
+      Text "매도 가격" (24I2-0) 170×0 "매도 가격"
+      Text "매도 잔량" (24I3-0) 170×0 "매도 잔량"
+      Text "매도 증감" (24I4-0) 140×0 "매도 증감"
+      Rectangle "Rectangle" (24I5-0) 24×0
+      Text "매수 가격" (24I6-0) 170×0 "매수 가격"
+      Text "매수 잔량" (24I7-0) 170×0 "매수 잔량"
+      Text "매수 증감" (24I8-0) 140×0 "매수 증감"
+    Frame "ka10004 · 호가 10단" (24I9-0) 0×32
+      Frame "raw · ka10004 · response 매도10차선호가 · ordinal 10" (24IA-0) 170×0
+        Text "매도 10" (24IB-0) 0×0 "매도 10"
+        Text "150,940" (24IC-0) 0×0 "150,940"
+      Frame "raw · ka10004 · response 매도10차선잔량 · ordinal 10" (24ID-0) 170×0
+        Text "잔량" (24IE-0) 0×0 "잔량"
+        Text "2,170주" (24IF-0) 0×0 "2,170주"
+      Frame "raw · ka10004 · response 매도10차선잔량대비 · ordinal 10" (24IG-0) 140×0
+        Text "증감" (24IH-0) 0×0 "증감"
+        Text "+81" (24II-0) 0×0 "+81"
+      Rectangle "Rectangle" (24IJ-0) 24×0
+      Frame "raw · ka10004 · response 매수10차선호가 · ordinal 10" (24IK-0) 170×0
+        Text "매수 10" (24IL-0) 0×0 "매수 10"
+        Text "150,750" (24IM-0) 0×0 "150,750"
+      Frame "raw · ka10004 · response 매수10차선잔량 · ordinal 10" (24IN-0) 170×0
+        Text "잔량" (24IO-0) 0×0 "잔량"
+        Text "2,510주" (24IP-0) 0×0 "2,510주"
+      Frame "raw · ka10004 · response 매수10차선잔량대비 · ordinal 10" (24IQ-0) 140×0
+        Text "증감" (24IR-0) 0×0 "증감"
+        Text "-73" (24IS-0) 0×0 "-73"
+    Frame "ka10004 · 호가 9단" (24IT-0) 0×32
+      Frame "raw · ka10004 · response 매도9차선호가 · ordinal 9" (24IU-0) 170×0
+        Text "매도 9" (24IV-0) 0×0 "매도 9"
+        Text "150,930" (24IW-0) 0×0 "150,930"
+      Frame "raw · ka10004 · response 매도9차선잔량 · ordinal 9" (24IX-0) 170×0
+        Text "잔량" (24IY-0) 0×0 "잔량"
+        Text "2,540주" (24IZ-0) 0×0 "2,540주"
+      Frame "raw · ka10004 · response 매도9차선잔량대비 · ordinal 9" (24J0-0) 140×0
+        Text "증감" (24J1-0) 0×0 "증감"
+        Text "+92" (24J2-0) 0×0 "+92"
+      Rectangle "Rectangle" (24J3-0) 24×0
+      Frame "raw · ka10004 · response 매수9차선호가 · ordinal 9" (24J4-0) 170×0
+        Text "매수 9" (24J5-0) 0×0 "매수 9"
+        Text "150,760" (24J6-0) 0×0 "150,760"
+      Frame "raw · ka10004 · response 매수9차선잔량 · ordinal 9" (24J7-0) 170×0
+        Text "잔량" (24J8-0) 0×0 "잔량"
+        Text "2,920주" (24J9-0) 0×0 "2,920주"
+      Frame "raw · ka10004 · response 매수9차선잔량대비 · ordinal 9" (24JA-0) 140×0
+        Text "증감" (24JB-0) 0×0 "증감"
+        Text "-86" (24JC-0) 0×0 "-86"
+    Frame "ka10004 · 호가 8단" (24JD-0) 0×32
+      Frame "raw · ka10004 · response 매도8차선호가 · ordinal 8" (24JE-0) 170×0
+        Text "매도 8" (24JF-0) 0×0 "매도 8"
+        Text "150,920" (24JG-0) 0×0 "150,920"
+      Frame "raw · ka10004 · response 매도8차선잔량 · ordinal 8" (24JH-0) 170×0
+        Text "잔량" (24JI-0) 0×0 "잔량"
+        Text "2,910주" (24JJ-0) 0×0 "2,910주"
+      Frame "raw · ka10004 · response 매도8차선잔량대비 · ordinal 8" (24JK-0) 140×0
+        Text "증감" (24JL-0) 0×0 "증감"
+        Text "+103" (24JM-0) 0×0 "+103"
+      Rectangle "Rectangle" (24JN-0) 24×0
+      Frame "raw · ka10004 · response 매수8차선호가 · ordinal 8" (24JO-0) 170×0
+        Text "매수 8" (24JP-0) 0×0 "매수 8"
+        Text "150,770" (24JQ-0) 0×0 "150,770"
+      Frame "raw · ka10004 · response 매수8차선잔량 · ordinal 8" (24JR-0) 170×0
+        Text "잔량" (24JS-0) 0×0 "잔량"
+        Text "3,330주" (24JT-0) 0×0 "3,330주"
+      Frame "raw · ka10004 · response 매수8차선잔량대비 · ordinal 8" (24JU-0) 140×0
+        Text "증감" (24JV-0) 0×0 "증감"
+        Text "-99" (24JW-0) 0×0 "-99"
+    Frame "ka10004 · 호가 7단" (24JX-0) 0×32
+      Frame "raw · ka10004 · response 매도7차선호가 · ordinal 7" (24JY-0) 170×0
+        Text "매도 7" (24JZ-0) 0×0 "매도 7"
+        Text "150,910" (24K0-0) 0×0 "150,910"
+      Frame "raw · ka10004 · response 매도7차선잔량 · ordinal 7" (24K1-0) 170×0
+        Text "잔량" (24K2-0) 0×0 "잔량"
+        Text "3,280주" (24K3-0) 0×0 "3,280주"
+      Frame "raw · ka10004 · response 매도7차선잔량대비 · ordinal 7" (24K4-0) 140×0
+        Text "증감" (24K5-0) 0×0 "증감"
+        Text "+114" (24K6-0) 0×0 "+114"
+      Rectangle "Rectangle" (24K7-0) 24×0
+      Frame "raw · ka10004 · response 매수7차선호가 · ordinal 7" (24K8-0) 170×0
+        Text "매수 7" (24K9-0) 0×0 "매수 7"
+        Text "150,780" (24KA-0) 0×0 "150,780"
+      Frame "raw · ka10004 · response 매수7차선잔량 · ordinal 7" (24KB-0) 170×0
+        Text "잔량" (24KC-0) 0×0 "잔량"
+        Text "3,740주" (24KD-0) 0×0 "3,740주"
+      Frame "raw · ka10004 · response 매수7차선잔량대비 · ordinal 7" (24KE-0) 140×0
+        Text "증감" (24KF-0) 0×0 "증감"
+        Text "-112" (24KG-0) 0×0 "-112"
+    Frame "ka10004 · 호가 6단" (24KH-0) 0×32
+      Frame "raw · ka10004 · response 매도6차선호가 · ordinal 6" (24KI-0) 170×0
+        Text "매도 6" (24KJ-0) 0×0 "매도 6"
+        Text "150,900" (24KK-0) 0×0 "150,900"
+      Frame "raw · ka10004 · response 매도6차선잔량 · ordinal 6" (24KL-0) 170×0
+        Text "잔량" (24KM-0) 0×0 "잔량"
+        Text "3,650주" (24KN-0) 0×0 "3,650주"
+      Frame "raw · ka10004 · response 매도6차선잔량대비 · ordinal 6" (24KO-0) 140×0
+        Text "증감" (24KP-0) 0×0 "증감"
+        Text "+125" (24KQ-0) 0×0 "+125"
+      Rectangle "Rectangle" (24KR-0) 24×0
+      Frame "raw · ka10004 · response 매수6차선호가 · ordinal 6" (24KS-0) 170×0
+        Text "매수 6" (24KT-0) 0×0 "매수 6"
+        Text "150,790" (24KU-0) 0×0 "150,790"
+      Frame "raw · ka10004 · response 매수6차선잔량 · ordinal 6" (24KV-0) 170×0
+        Text "잔량" (24KW-0) 0×0 "잔량"
+        Text "4,150주" (24KX-0) 0×0 "4,150주"
+      Frame "raw · ka10004 · response 매수6차선잔량대비 · ordinal 6" (24KY-0) 140×0
+        Text "증감" (24KZ-0) 0×0 "증감"
+        Text "-125" (24L0-0) 0×0 "-125"
+    Frame "ka10004 · 호가 5단" (24L1-0) 0×32
+      Frame "raw · ka10004 · response 매도5차선호가 · ordinal 5" (24L2-0) 170×0
+        Text "매도 5" (24L3-0) 0×0 "매도 5"
+        Text "150,890" (24L4-0) 0×0 "150,890"
+      Frame "raw · ka10004 · response 매도5차선잔량 · ordinal 5" (24L5-0) 170×0
+        Text "잔량" (24L6-0) 0×0 "잔량"
+        Text "4,020주" (24L7-0) 0×0 "4,020주"
+      Frame "raw · ka10004 · response 매도5차선잔량대비 · ordinal 5" (24L8-0) 140×0
+        Text "증감" (24L9-0) 0×0 "증감"
+        Text "+136" (24LA-0) 0×0 "+136"
+      Rectangle "Rectangle" (24LB-0) 24×0
+      Frame "raw · ka10004 · response 매수5차선호가 · ordinal 5" (24LC-0) 170×0
+        Text "매수 5" (24LD-0) 0×0 "매수 5"
+        Text "150,800" (24LE-0) 0×0 "150,800"
+      Frame "raw · ka10004 · response 매수5차선잔량 · ordinal 5" (24LF-0) 170×0
+        Text "잔량" (24LG-0) 0×0 "잔량"
+        Text "4,560주" (24LH-0) 0×0 "4,560주"
+      Frame "raw · ka10004 · response 매수5차선잔량대비 · ordinal 5" (24LI-0) 140×0
+        Text "증감" (24LJ-0) 0×0 "증감"
+        Text "-138" (24LK-0) 0×0 "-138"
+    Frame "ka10004 · 호가 4단" (24LL-0) 0×32
+      Frame "raw · ka10004 · response 매도4차선호가 · ordinal 4" (24LM-0) 170×0
+        Text "매도 4" (24LN-0) 0×0 "매도 4"
+        Text "150,880" (24LO-0) 0×0 "150,880"
+      Frame "raw · ka10004 · response 매도4차선잔량 · ordinal 4" (24LP-0) 170×0
+        Text "잔량" (24LQ-0) 0×0 "잔량"
+        Text "4,390주" (24LR-0) 0×0 "4,390주"
+      Frame "raw · ka10004 · response 매도4차선잔량대비 · ordinal 4" (24LS-0) 140×0
+        Text "증감" (24LT-0) 0×0 "증감"
+        Text "+147" (24LU-0) 0×0 "+147"
+      Rectangle "Rectangle" (24LV-0) 24×0
+      Frame "raw · ka10004 · response 매수4차선호가 · ordinal 4" (24LW-0) 170×0
+        Text "매수 4" (24LX-0) 0×0 "매수 4"
+        Text "150,810" (24LY-0) 0×0 "150,810"
+      Frame "raw · ka10004 · response 매수4차선잔량 · ordinal 4" (24LZ-0) 170×0
+        Text "잔량" (24M0-0) 0×0 "잔량"
+        Text "4,970주" (24M1-0) 0×0 "4,970주"
+      Frame "raw · ka10004 · response 매수4차선잔량대비 · ordinal 4" (24M2-0) 140×0
+        Text "증감" (24M3-0) 0×0 "증감"
+        Text "-151" (24M4-0) 0×0 "-151"
+    Frame "ka10004 · 호가 3단" (24M5-0) 0×32
+      Frame "raw · ka10004 · response 매도3차선호가 · ordinal 3" (24M6-0) 170×0
+        Text "매도 3" (24M7-0) 0×0 "매도 3"
+        Text "150,870" (24M8-0) 0×0 "150,870"
+      Frame "raw · ka10004 · response 매도3차선잔량 · ordinal 3" (24M9-0) 170×0
+        Text "잔량" (24MA-0) 0×0 "잔량"
+        Text "4,760주" (24MB-0) 0×0 "4,760주"
+      Frame "raw · ka10004 · response 매도3차선잔량대비 · ordinal 3" (24MC-0) 140×0
+        Text "증감" (24MD-0) 0×0 "증감"
+        Text "+158" (24ME-0) 0×0 "+158"
+      Rectangle "Rectangle" (24MF-0) 24×0
+      Frame "raw · ka10004 · response 매수3차선호가 · ordinal 3" (24MG-0) 170×0
+        Text "매수 3" (24MH-0) 0×0 "매수 3"
+        Text "150,820" (24MI-0) 0×0 "150,820"
+      Frame "raw · ka10004 · response 매수3차선잔량 · ordinal 3" (24MJ-0) 170×0
+        Text "잔량" (24MK-0) 0×0 "잔량"
+        Text "5,380주" (24ML-0) 0×0 "5,380주"
+      Frame "raw · ka10004 · response 매수3차선잔량대비 · ordinal 3" (24MM-0) 140×0
+        Text "증감" (24MN-0) 0×0 "증감"
+        Text "-164" (24MO-0) 0×0 "-164"
+    Frame "ka10004 · 호가 2단" (24MP-0) 0×32
+      Frame "raw · ka10004 · response 매도2차선호가 · ordinal 2" (24MQ-0) 170×0
+        Text "매도 2" (24MR-0) 0×0 "매도 2"
+        Text "150,860" (24MS-0) 0×0 "150,860"
+      Frame "raw · ka10004 · response 매도2차선잔량 · ordinal 2" (24MT-0) 170×0
+        Text "잔량" (24MU-0) 0×0 "잔량"
+        Text "5,130주" (24MV-0) 0×0 "5,130주"
+      Frame "raw · ka10004 · response 매도2차선잔량대비 · ordinal 2" (24MW-0) 140×0
+        Text "증감" (24MX-0) 0×0 "증감"
+        Text "+169" (24MY-0) 0×0 "+169"
+      Rectangle "Rectangle" (24MZ-0) 24×0
+      Frame "raw · ka10004 · response 매수2차선호가 · ordinal 2" (24N0-0) 170×0
+        Text "매수 2" (24N1-0) 0×0 "매수 2"
+        Text "150,830" (24N2-0) 0×0 "150,830"
+      Frame "raw · ka10004 · response 매수2차선잔량 · ordinal 2" (24N3-0) 170×0
+        Text "잔량" (24N4-0) 0×0 "잔량"
+        Text "5,790주" (24N5-0) 0×0 "5,790주"
+      Frame "raw · ka10004 · response 매수2차선잔량대비 · ordinal 2" (24N6-0) 140×0
+        Text "증감" (24N7-0) 0×0 "증감"
+        Text "-177" (24N8-0) 0×0 "-177"
+    Frame "ka10004 · 호가 1단" (24N9-0) 0×32
+      Frame "raw · ka10004 · response 매도1차선호가 · ordinal 1" (24NA-0) 170×0
+        Text "매도 1" (24NB-0) 0×0 "매도 1"
+        Text "150,850" (24NC-0) 0×0 "150,850"
+      Frame "raw · ka10004 · response 매도1차선잔량 · ordinal 1" (24ND-0) 170×0
+        Text "잔량" (24NE-0) 0×0 "잔량"
+        Text "5,500주" (24NF-0) 0×0 "5,500주"
+      Frame "raw · ka10004 · response 매도1차선잔량대비 · ordinal 1" (24NG-0) 140×0
+        Text "증감" (24NH-0) 0×0 "증감"
+        Text "+180" (24NI-0) 0×0 "+180"
+      Rectangle "Rectangle" (24NJ-0) 24×0
+      Frame "raw · ka10004 · response 매수1차선호가 · ordinal 1" (24NK-0) 170×0
+        Text "매수 1" (24NL-0) 0×0 "매수 1"
+        Text "150,840" (24NM-0) 0×0 "150,840"
+      Frame "raw · ka10004 · response 매수1차선잔량 · ordinal 1" (24NN-0) 170×0
+        Text "잔량" (24NO-0) 0×0 "잔량"
+        Text "6,200주" (24NP-0) 0×0 "6,200주"
+      Frame "raw · ka10004 · response 매수1차선잔량대비 · ordinal 1" (24NQ-0) 140×0
+        Text "증감" (24NR-0) 0×0 "증감"
+        Text "-190" (24NS-0) 0×0 "-190"
+    Frame "Frame" (24NT-0) 0×0
+      Frame "raw · ka10004 · response 매도호가총잔량 · ordinal 1" (24NU-0) 200×0
+        Text "매도호가총잔량" (24NV-0) 0×0 "매도호가총잔량"
+        Text "193,500주" (24NW-0) 0×0 "193,500주"
+      Frame "raw · ka10004 · response 매도호가총잔량대비 · ordinal 1" (24NX-0) 200×0
+        Text "매도호가총잔량대비" (24NY-0) 0×0 "매도호가총잔량대비"
+        Text "+12,430주" (24NZ-0) 0×0 "+12,430주"
+      Frame "raw · ka10004 · response 매수호가총잔량 · ordinal 1" (24O0-0) 200×0
+        Text "매수호가총잔량" (24O1-0) 0×0 "매수호가총잔량"
+        Text "205,630주" (24O2-0) 0×0 "205,630주"
+      Frame "raw · ka10004 · response 매수호가총잔량대비 · ordinal 1" (24O3-0) 200×0
+        Text "매수호가총잔량대비" (24O4-0) 0×0 "매수호가총잔량대비"
+        Text "+9,870주" (24O5-0) 0×0 "+9,870주"
+      Frame "raw · ka10004 · response 시간외매도잔량 · ordinal 1" (24O6-0) 200×0
+        Text "시간외매도잔량" (24O7-0) 0×0 "시간외매도잔량"
+        Text "8,120주" (24O8-0) 0×0 "8,120주"
+      Frame "raw · ka10004 · response 시간외매도잔량대비 · ordinal 1" (24O9-0) 200×0
+        Text "시간외매도잔량대비" (24OA-0) 0×0 "시간외매도잔량대비"
+        Text "+640주" (24OB-0) 0×0 "+640주"
+      Frame "raw · ka10004 · response 시간외매수잔량 · ordinal 1" (24OC-0) 200×0
+        Text "시간외매수잔량" (24OD-0) 0×0 "시간외매수잔량"
+        Text "10,440주" (24OE-0) 0×0 "10,440주"
+      Frame "raw · ka10004 · response 시간외매수잔량대비 · ordinal 1" (24OF-0) 200×0
+        Text "시간외매수잔량대비" (24OG-0) 0×0 "시간외매수잔량대비"
+        Text "+920주" (24OH-0) 0×0 "+920주"
+      Frame "raw · ka10004 · response 호가잔량기준시간 · ordinal 1" (24OI-0) 200×0
+        Text "호가잔량기준시간" (24OJ-0) 0×0 "호가잔량기준시간"
+        Text "14:31:08" (24OK-0) 0×0 "14:31:08"
+  Frame "ka10007 · 통합 10단 · 124 raw" (24OM-0) 0×0
+    Frame "Frame" (24ON-0) 0×0
+      Frame "Frame" (24OO-0) 0×0
+        Text "통합 10단 호가 · 주문건수 · L…" (24OP-0) 0×0 "통합 10단 호가 · 주문건수 · LP"
+        Text "10단 원문과 종목·예상체결·장중 시…" (24OQ-0) 0×0 "10단 원문과 종목·예상체결·장중 시세를 한 창에서 전환 없이 확인"
+      Frame "Frame" (24OR-0) 0×0
+        Text "ka10007 · 124 / 124" (24OS-0) 0×0 "ka10007 · 124 / 124"
+    Frame "Frame" (24OT-0) 0×0
+      Frame "Frame" (24OU-0) 1374×0
+        Frame "ka10007 · 통합 호가 10단" (24OV-0) 0×38
+          Frame "raw · ka10007 · response 매도10차선호가 · ordinal 10" (24OW-0) 112×0
+            Text "매도 10" (24OX-0) 0×0 "매도 10"
+            Text "150,940" (24OY-0) 0×0 "150,940"
+          Frame "raw · ka10007 · response 매도10차선잔량 · ordinal 10" (24OZ-0) 112×0
+            Text "매도 잔량" (24P0-0) 0×0 "매도 잔량"
+            Text "2,720주" (24P1-0) 0×0 "2,720주"
+          Frame "raw · ka10007 · response 매도10차선잔량대비 · ordinal 10" (24P2-0) 92×0
+            Text "매도 증감" (24P3-0) 0×0 "매도 증감"
+            Text "+89" (24P4-0) 0×0 "+89"
+          Text "—" (24P5-0) 82×0 "—"
+          Frame "raw · ka10007 · response 매도LP10차선잔량 · ordinal 10" (24P6-0) 90×0
+            Text "LP 매도" (24P7-0) 0×0 "LP 매도"
+            Text "755주" (24P8-0) 0×0 "755주"
+          Rectangle "Rectangle" (24P9-0) 12×0
+          Frame "raw · ka10007 · response 매수10차선호가 · ordinal 10" (24PA-0) 112×0
+            Text "매수 10" (24PB-0) 0×0 "매수 10"
+            Text "150,750" (24PC-0) 0×0 "150,750"
+          Frame "raw · ka10007 · response 매수10차선잔량 · ordinal 10" (24PD-0) 112×0
+            Text "매수 잔량" (24PE-0) 0×0 "매수 잔량"
+            Text "2,950주" (24PF-0) 0×0 "2,950주"
+          Frame "raw · ka10007 · response 매수10차선잔량대비 · ordinal 10" (24PG-0) 92×0
+            Text "매수 증감" (24PH-0) 0×0 "매수 증감"
+            Text "-88" (24PI-0) 0×0 "-88"
+          Text "—" (24PJ-0) 82×0 "—"
+          Frame "raw · ka10007 · response 매수LP10차선잔량 · ordinal 10" (24PK-0) 90×0
+            Text "LP 매수" (24PL-0) 0×0 "LP 매수"
+            Text "752주" (24PM-0) 0×0 "752주"
+        Frame "ka10007 · 통합 호가 9단" (24PN-0) 0×38
+          Frame "raw · ka10007 · response 매도9차선호가 · ordinal 9" (24PO-0) 112×0
+            Text "매도 9" (24PP-0) 0×0 "매도 9"
+            Text "150,930" (24PQ-0) 0×0 "150,930"
+          Frame "raw · ka10007 · response 매도9차선잔량 · ordinal 9" (24PR-0) 112×0
+            Text "매도 잔량" (24PS-0) 0×0 "매도 잔량"
+            Text "3,040주" (24PT-0) 0×0 "3,040주"
+          Frame "raw · ka10007 · response 매도9차선잔량대비 · ordinal 9" (24PU-0) 92×0
+            Text "매도 증감" (24PV-0) 0×0 "매도 증감"
+            Text "+98" (24PW-0) 0×0 "+98"
+          Text "—" (24PX-0) 82×0 "—"
+          Frame "raw · ka10007 · response 매도LP9차선잔량 · ordinal 9" (24PY-0) 90×0
+            Text "LP 매도" (24PZ-0) 0×0 "LP 매도"
+            Text "710주" (24Q0-0) 0×0 "710주"
+          Rectangle "Rectangle" (24Q1-0) 12×0
+          Frame "raw · ka10007 · response 매수9차선호가 · ordinal 9" (24Q2-0) 112×0
+            Text "매수 9" (24Q3-0) 0×0 "매수 9"
+            Text "150,760" (24Q4-0) 0×0 "150,760"
+          Frame "raw · ka10007 · response 매수9차선잔량 · ordinal 9" (24Q5-0) 112×0
+            Text "매수 잔량" (24Q6-0) 0×0 "매수 잔량"
+            Text "3,300주" (24Q7-0) 0×0 "3,300주"
+          Frame "raw · ka10007 · response 매수9차선잔량대비 · ordinal 9" (24Q8-0) 92×0
+            Text "매수 증감" (24Q9-0) 0×0 "매수 증감"
+            Text "-100" (24QA-0) 0×0 "-100"
+          Text "—" (24QB-0) 82×0 "—"
+          Frame "raw · ka10007 · response 매수LP9차선잔량 · ordinal 9" (24QC-0) 90×0
+            Text "LP 매수" (24QD-0) 0×0 "LP 매수"
+            Text "714주" (24QE-0) 0×0 "714주"
+        Frame "ka10007 · 통합 호가 8단" (24QF-0) 0×38
+          Frame "raw · ka10007 · response 매도8차선호가 · ordinal 8" (24QG-0) 112×0
+            Text "매도 8" (24QH-0) 0×0 "매도 8"
+            Text "150,920" (24QI-0) 0×0 "150,920"
+          Frame "raw · ka10007 · response 매도8차선잔량 · ordinal 8" (24QJ-0) 112×0
+            Text "매도 잔량" (24QK-0) 0×0 "매도 잔량"
+            Text "3,360주" (24QL-0) 0×0 "3,360주"
+          Frame "raw · ka10007 · response 매도8차선잔량대비 · ordinal 8" (24QM-0) 92×0
+            Text "매도 증감" (24QN-0) 0×0 "매도 증감"
+            Text "+107" (24QO-0) 0×0 "+107"
+          Text "—" (24QP-0) 82×0 "—"
+          Frame "raw · ka10007 · response 매도LP8차선잔량 · ordinal 8" (24QQ-0) 90×0
+            Text "LP 매도" (24QR-0) 0×0 "LP 매도"
+            Text "665주" (24QS-0) 0×0 "665주"
+          Rectangle "Rectangle" (24QT-0) 12×0
+          Frame "raw · ka10007 · response 매수8차선호가 · ordinal 8" (24QU-0) 112×0
+            Text "매수 8" (24QV-0) 0×0 "매수 8"
+            Text "150,770" (24QW-0) 0×0 "150,770"
+          Frame "raw · ka10007 · response 매수8차선잔량 · ordinal 8" (24QX-0) 112×0
+            Text "매수 잔량" (24QY-0) 0×0 "매수 잔량"
+            Text "3,650주" (24QZ-0) 0×0 "3,650주"
+          Frame "raw · ka10007 · response 매수8차선잔량대비 · ordinal 8" (24R0-0) 92×0
+            Text "매수 증감" (24R1-0) 0×0 "매수 증감"
+            Text "-112" (24R2-0) 0×0 "-112"
+          Text "—" (24R3-0) 82×0 "—"
+          Frame "raw · ka10007 · response 매수LP8차선잔량 · ordinal 8" (24R4-0) 90×0
+            Text "LP 매수" (24R5-0) 0×0 "LP 매수"
+            Text "676주" (24R6-0) 0×0 "676주"
+        Frame "ka10007 · 통합 호가 7단" (24R7-0) 0×38
+          Frame "raw · ka10007 · response 매도7차선호가 · ordinal 7" (24R8-0) 112×0
+            Text "매도 7" (24R9-0) 0×0 "매도 7"
+            Text "150,910" (24RA-0) 0×0 "150,910"
+          Frame "raw · ka10007 · response 매도7차선잔량 · ordinal 7" (24RB-0) 112×0
+            Text "매도 잔량" (24RC-0) 0×0 "매도 잔량"
+            Text "3,680주" (24RD-0) 0×0 "3,680주"
+          Frame "raw · ka10007 · response 매도7차선잔량대비 · ordinal 7" (24RE-0) 92×0
+            Text "매도 증감" (24RF-0) 0×0 "매도 증감"
+            Text "+116" (24RG-0) 0×0 "+116"
+          Text "—" (24RH-0) 82×0 "—"
+          Frame "raw · ka10007 · response 매도LP7차선잔량 · ordinal 7" (24RI-0) 90×0
+            Text "LP 매도" (24RJ-0) 0×0 "LP 매도"
+            Text "620주" (24RK-0) 0×0 "620주"
+          Rectangle "Rectangle" (24RL-0) 12×0
+          Frame "raw · ka10007 · response 매수7차선호가 · ordinal 7" (24RM-0) 112×0
+            Text "매수 7" (24RN-0) 0×0 "매수 7"
+            Text "150,780" (24RO-0) 0×0 "150,780"
+          Frame "raw · ka10007 · response 매수7차선잔량 · ordinal 7" (24RP-0) 112×0
+            Text "매수 잔량" (24RQ-0) 0×0 "매수 잔량"
+            Text "4,000주" (24RR-0) 0×0 "4,000주"
+          Frame "raw · ka10007 · response 매수7차선잔량대비 · ordinal 7" (24RS-0) 92×0
+            Text "매수 증감" (24RT-0) 0×0 "매수 증감"
+            Text "-124" (24RU-0) 0×0 "-124"
+          Text "—" (24RV-0) 82×0 "—"
+          Frame "raw · ka10007 · response 매수LP7차선잔량 · ordinal 7" (24RW-0) 90×0
+            Text "LP 매수" (24RX-0) 0×0 "LP 매수"
+            Text "638주" (24RY-0) 0×0 "638주"
+        Frame "ka10007 · 통합 호가 6단" (24RZ-0) 0×38
+          Frame "raw · ka10007 · response 매도6차선호가 · ordinal 6" (24S0-0) 112×0
+            Text "매도 6" (24S1-0) 0×0 "매도 6"
+            Text "150,900" (24S2-0) 0×0 "150,900"
+          Frame "raw · ka10007 · response 매도6차선잔량 · ordinal 6" (24S3-0) 112×0
+            Text "매도 잔량" (24S4-0) 0×0 "매도 잔량"
+            Text "4,000주" (24S5-0) 0×0 "4,000주"
+          Frame "raw · ka10007 · response 매도6차선잔량대비 · ordinal 6" (24S6-0) 92×0
+            Text "매도 증감" (24S7-0) 0×0 "매도 증감"
+            Text "+125" (24S8-0) 0×0 "+125"
+          Text "—" (24S9-0) 82×0 "—"
+          Frame "raw · ka10007 · response 매도LP6차선잔량 · ordinal 6" (24SA-0) 90×0
+            Text "LP 매도" (24SB-0) 0×0 "LP 매도"
+            Text "575주" (24SC-0) 0×0 "575주"
+          Rectangle "Rectangle" (24SD-0) 12×0
+          Frame "raw · ka10007 · response 매수6차선호가 · ordinal 6" (24SE-0) 112×0
+            Text "매수 6" (24SF-0) 0×0 "매수 6"
+            Text "150,790" (24SG-0) 0×0 "150,790"
+          Frame "raw · ka10007 · response 매수6차선잔량 · ordinal 6" (24SH-0) 112×0
+            Text "매수 잔량" (24SI-0) 0×0 "매수 잔량"
+            Text "4,350주" (24SJ-0) 0×0 "4,350주"
+          Frame "raw · ka10007 · response 매수6차선잔량대비 · ordinal 6" (24SK-0) 92×0
+            Text "매수 증감" (24SL-0) 0×0 "매수 증감"
+            Text "-136" (24SM-0) 0×0 "-136"
+          Text "—" (24SN-0) 82×0 "—"
+          Frame "raw · ka10007 · response 매수LP6차선잔량 · ordinal 6" (24SO-0) 90×0
+            Text "LP 매수" (24SP-0) 0×0 "LP 매수"
+            Text "600주" (24SQ-0) 0×0 "600주"
+        Frame "ka10007 · 통합 호가 5단" (24SR-0) 0×38
+          Frame "raw · ka10007 · response 매도5차선호가 · ordinal 5" (24SS-0) 112×0
+            Text "매도 5" (24ST-0) 0×0 "매도 5"
+            Text "150,890" (24SU-0) 0×0 "150,890"
+          Frame "raw · ka10007 · response 매도5차선잔량 · ordinal 5" (24SV-0) 112×0
+            Text "매도 잔량" (24SW-0) 0×0 "매도 잔량"
+            Text "4,320주" (24SX-0) 0×0 "4,320주"
+          Frame "raw · ka10007 · response 매도5차선잔량대비 · ordinal 5" (24SY-0) 92×0
+            Text "매도 증감" (24SZ-0) 0×0 "매도 증감"
+            Text "+134" (24T0-0) 0×0 "+134"
+          Frame "raw · ka10007 · response 매도5차선호가건수 · ordinal 5" (24T1-0) 82×0
+            Text "매도 건수" (24T2-0) 0×0 "매도 건수"
+            Text "8건" (24T3-0) 0×0 "8건"
+          Frame "raw · ka10007 · response 매도LP5차선잔량 · ordinal 5" (24T4-0) 90×0
+            Text "LP 매도" (24T5-0) 0×0 "LP 매도"
+            Text "530주" (24T6-0) 0×0 "530주"
+          Rectangle "Rectangle" (24T7-0) 12×0
+          Frame "raw · ka10007 · response 매수5차선호가 · ordinal 5" (24T8-0) 112×0
+            Text "매수 5" (24T9-0) 0×0 "매수 5"
+            Text "150,800" (24TA-0) 0×0 "150,800"
+          Frame "raw · ka10007 · response 매수5차선잔량 · ordinal 5" (24TB-0) 112×0
+            Text "매수 잔량" (24TC-0) 0×0 "매수 잔량"
+            Text "4,700주" (24TD-0) 0×0 "4,700주"
+          Frame "raw · ka10007 · response 매수5차선잔량대비 · ordinal 5" (24TE-0) 92×0
+            Text "매수 증감" (24TF-0) 0×0 "매수 증감"
+            Text "-148" (24TG-0) 0×0 "-148"
+          Frame "raw · ka10007 · response 매수5차선호가건수 · ordinal 5" (24TH-0) 82×0
+            Text "매수 건수" (24TI-0) 0×0 "매수 건수"
+            Text "10건" (24TJ-0) 0×0 "10건"
+          Frame "raw · ka10007 · response 매수LP5차선잔량 · ordinal 5" (24TK-0) 90×0
+            Text "LP 매수" (24TL-0) 0×0 "LP 매수"
+            Text "562주" (24TM-0) 0×0 "562주"
+        Frame "ka10007 · 통합 호가 4단" (24TN-0) 0×38
+          Frame "raw · ka10007 · response 매도4차선호가 · ordinal 4" (24TO-0) 112×0
+            Text "매도 4" (24TP-0) 0×0 "매도 4"
+            Text "150,880" (24TQ-0) 0×0 "150,880"
+          Frame "raw · ka10007 · response 매도4차선잔량 · ordinal 4" (24TR-0) 112×0
+            Text "매도 잔량" (24TS-0) 0×0 "매도 잔량"
+            Text "4,640주" (24TT-0) 0×0 "4,640주"
+          Frame "raw · ka10007 · response 매도4차선잔량대비 · ordinal 4" (24TU-0) 92×0
+            Text "매도 증감" (24TV-0) 0×0 "매도 증감"
+            Text "+143" (24TW-0) 0×0 "+143"
+          Frame "raw · ka10007 · response 매도4차선호가건수 · ordinal 4" (24TX-0) 82×0
+            Text "매도 건수" (24TY-0) 0×0 "매도 건수"
+            Text "7건" (24TZ-0) 0×0 "7건"
+          Frame "raw · ka10007 · response 매도LP4차선잔량 · ordinal 4" (24U0-0) 90×0
+            Text "LP 매도" (24U1-0) 0×0 "LP 매도"
+            Text "485주" (24U2-0) 0×0 "485주"
+          Rectangle "Rectangle" (24U3-0) 12×0
+          Frame "raw · ka10007 · response 매수4차선호가 · ordinal 4" (24U4-0) 112×0
+            Text "매수 4" (24U5-0) 0×0 "매수 4"
+            Text "150,810" (24U6-0) 0×0 "150,810"
+          Frame "raw · ka10007 · response 매수4차선잔량 · ordinal 4" (24U7-0) 112×0
+            Text "매수 잔량" (24U8-0) 0×0 "매수 잔량"
+            Text "5,050주" (24U9-0) 0×0 "5,050주"
+          Frame "raw · ka10007 · response 매수4차선잔량대비 · ordinal 4" (24UA-0) 92×0
+            Text "매수 증감" (24UB-0) 0×0 "매수 증감"
+            Text "-160" (24UC-0) 0×0 "-160"
+          Frame "raw · ka10007 · response 매수4차선호가건수 · ordinal 4" (24UD-0) 82×0
+            Text "매수 건수" (24UE-0) 0×0 "매수 건수"
+            Text "9건" (24UF-0) 0×0 "9건"
+          Frame "raw · ka10007 · response 매수LP4차선잔량 · ordinal 4" (24UG-0) 90×0
+            Text "LP 매수" (24UH-0) 0×0 "LP 매수"
+            Text "524주" (24UI-0) 0×0 "524주"
+        Frame "ka10007 · 통합 호가 3단" (24UJ-0) 0×38
+          Frame "raw · ka10007 · response 매도3차선호가 · ordinal 3" (24UK-0) 112×0
+            Text "매도 3" (24UL-0) 0×0 "매도 3"
+            Text "150,870" (24UM-0) 0×0 "150,870"
+          Frame "raw · ka10007 · response 매도3차선잔량 · ordinal 3" (24UN-0) 112×0
+            Text "매도 잔량" (24UO-0) 0×0 "매도 잔량"
+            Text "4,960주" (24UP-0) 0×0 "4,960주"
+          Frame "raw · ka10007 · response 매도3차선잔량대비 · ordinal 3" (24UQ-0) 92×0
+            Text "매도 증감" (24UR-0) 0×0 "매도 증감"
+            Text "+152" (24US-0) 0×0 "+152"
+          Frame "raw · ka10007 · response 매도3차선호가건수 · ordinal 3" (24UT-0) 82×0
+            Text "매도 건수" (24UU-0) 0×0 "매도 건수"
+            Text "6건" (24UV-0) 0×0 "6건"
+          Frame "raw · ka10007 · response 매도LP3차선잔량 · ordinal 3" (24UW-0) 90×0
+            Text "LP 매도" (24UX-0) 0×0 "LP 매도"
+            Text "440주" (24UY-0) 0×0 "440주"
+          Rectangle "Rectangle" (24UZ-0) 12×0
+          Frame "raw · ka10007 · response 매수3차선호가 · ordinal 3" (24V0-0) 112×0
+            Text "매수 3" (24V1-0) 0×0 "매수 3"
+            Text "150,820" (24V2-0) 0×0 "150,820"
+          Frame "raw · ka10007 · response 매수3차선잔량 · ordinal 3" (24V3-0) 112×0
+            Text "매수 잔량" (24V4-0) 0×0 "매수 잔량"
+            Text "5,400주" (24V5-0) 0×0 "5,400주"
+          Frame "raw · ka10007 · response 매수3차선잔량대비 · ordinal 3" (24V6-0) 92×0
+            Text "매수 증감" (24V7-0) 0×0 "매수 증감"
+            Text "-172" (24V8-0) 0×0 "-172"
+          Frame "raw · ka10007 · response 매수3차선호가건수 · ordinal 3" (24V9-0) 82×0
+            Text "매수 건수" (24VA-0) 0×0 "매수 건수"
+            Text "8건" (24VB-0) 0×0 "8건"
+          Frame "raw · ka10007 · response 매수LP3차선잔량 · ordinal 3" (24VC-0) 90×0
+            Text "LP 매수" (24VD-0) 0×0 "LP 매수"
+            Text "486주" (24VE-0) 0×0 "486주"
+        Frame "ka10007 · 통합 호가 2단" (24VF-0) 0×38
+          Frame "raw · ka10007 · response 매도2차선호가 · ordinal 2" (24VG-0) 112×0
+            Text "매도 2" (24VH-0) 0×0 "매도 2"
+            Text "150,860" (24VI-0) 0×0 "150,860"
+          Frame "raw · ka10007 · response 매도2차선잔량 · ordinal 2" (24VJ-0) 112×0
+            Text "매도 잔량" (24VK-0) 0×0 "매도 잔량"
+            Text "5,280주" (24VL-0) 0×0 "5,280주"
+          Frame "raw · ka10007 · response 매도2차선잔량대비 · ordinal 2" (24VM-0) 92×0
+            Text "매도 증감" (24VN-0) 0×0 "매도 증감"
+            Text "+161" (24VO-0) 0×0 "+161"
+          Frame "raw · ka10007 · response 매도2차선호가건수 · ordinal 2" (24VP-0) 82×0
+            Text "매도 건수" (24VQ-0) 0×0 "매도 건수"
+            Text "5건" (24VR-0) 0×0 "5건"
+          Frame "raw · ka10007 · response 매도LP2차선잔량 · ordinal 2" (24VS-0) 90×0
+            Text "LP 매도" (24VT-0) 0×0 "LP 매도"
+            Text "395주" (24VU-0) 0×0 "395주"
+          Rectangle "Rectangle" (24VV-0) 12×0
+          Frame "raw · ka10007 · response 매수2차선호가 · ordinal 2" (24VW-0) 112×0
+            Text "매수 2" (24VX-0) 0×0 "매수 2"
+            Text "150,830" (24VY-0) 0×0 "150,830"
+          Frame "raw · ka10007 · response 매수2차선잔량 · ordinal 2" (24VZ-0) 112×0
+            Text "매수 잔량" (24W0-0) 0×0 "매수 잔량"
+            Text "5,750주" (24W1-0) 0×0 "5,750주"
+          Frame "raw · ka10007 · response 매수2차선잔량대비 · ordinal 2" (24W2-0) 92×0
+            Text "매수 증감" (24W3-0) 0×0 "매수 증감"
+            Text "-184" (24W4-0) 0×0 "-184"
+          Frame "raw · ka10007 · response 매수2차선호가건수 · ordinal 2" (24W5-0) 82×0
+            Text "매수 건수" (24W6-0) 0×0 "매수 건수"
+            Text "7건" (24W7-0) 0×0 "7건"
+          Frame "raw · ka10007 · response 매수LP2차선잔량 · ordinal 2" (24W8-0) 90×0
+            Text "LP 매수" (24W9-0) 0×0 "LP 매수"
+            Text "448주" (24WA-0) 0×0 "448주"
+        Frame "ka10007 · 통합 호가 1단" (24WB-0) 0×38
+          Frame "raw · ka10007 · response 매도1차선호가 · ordinal 1" (24WC-0) 112×0
+            Text "매도 1" (24WD-0) 0×0 "매도 1"
+            Text "150,850" (24WE-0) 0×0 "150,850"
+          Frame "raw · ka10007 · response 매도1차선잔량 · ordinal 1" (24WF-0) 112×0
+            Text "매도 잔량" (24WG-0) 0×0 "매도 잔량"
+            Text "5,600주" (24WH-0) 0×0 "5,600주"
+          Frame "raw · ka10007 · response 매도1차선잔량대비 · ordinal 1" (24WI-0) 92×0
+            Text "매도 증감" (24WJ-0) 0×0 "매도 증감"
+            Text "+170" (24WK-0) 0×0 "+170"
+          Frame "raw · ka10007 · response 매도1차선호가건수 · ordinal 1" (24WL-0) 82×0
+            Text "매도 건수" (24WM-0) 0×0 "매도 건수"
+            Text "4건" (24WN-0) 0×0 "4건"
+          Frame "raw · ka10007 · response 매도LP1차선잔량 · ordinal 1" (24WO-0) 90×0
+            Text "LP 매도" (24WP-0) 0×0 "LP 매도"
+            Text "350주" (24WQ-0) 0×0 "350주"
+          Rectangle "Rectangle" (24WR-0) 12×0
+          Frame "raw · ka10007 · response 매수1차선호가 · ordinal 1" (24WS-0) 112×0
+            Text "매수 1" (24WT-0) 0×0 "매수 1"
+            Text "150,840" (24WU-0) 0×0 "150,840"
+          Frame "raw · ka10007 · response 매수1차선잔량 · ordinal 1" (24WV-0) 112×0
+            Text "매수 잔량" (24WW-0) 0×0 "매수 잔량"
+            Text "6,100주" (24WX-0) 0×0 "6,100주"
+          Frame "raw · ka10007 · response 매수1차선잔량대비 · ordinal 1" (24WY-0) 92×0
+            Text "매수 증감" (24WZ-0) 0×0 "매수 증감"
+            Text "-196" (24X0-0) 0×0 "-196"
+          Frame "raw · ka10007 · response 매수1차선호가건수 · ordinal 1" (24X1-0) 82×0
+            Text "매수 건수" (24X2-0) 0×0 "매수 건수"
+            Text "6건" (24X3-0) 0×0 "6건"
+          Frame "raw · ka10007 · response 매수LP1차선잔량 · ordinal 1" (24X4-0) 90×0
+            Text "LP 매수" (24X5-0) 0×0 "LP 매수"
+            Text "410주" (24X6-0) 0×0 "410주"
+        Frame "Frame" (24X7-0) 0×0
+          Frame "raw · ka10007 · response 매도호가총잔량 · ordinal 1" (24X8-0) 180×0
+            Text "매도호가총잔량" (24X9-0) 0×0 "매도호가총잔량"
+            Text "193,500주" (24XA-0) 0×0 "193,500주"
+          Frame "raw · ka10007 · response 매도호가총건수 · ordinal 1" (24XB-0) 180×0
+            Text "매도호가총건수" (24XC-0) 0×0 "매도호가총건수"
+            Text "42건" (24XD-0) 0×0 "42건"
+          Frame "raw · ka10007 · response 매수호가총잔량 · ordinal 1" (24XE-0) 180×0
+            Text "매수호가총잔량" (24XF-0) 0×0 "매수호가총잔량"
+            Text "205,630주" (24XG-0) 0×0 "205,630주"
+          Frame "raw · ka10007 · response 매수호가총건수 · ordinal 1" (24XH-0) 180×0
+            Text "매수호가총건수" (24XI-0) 0×0 "매수호가총건수"
+            Text "51건" (24XJ-0) 0×0 "51건"
+      Frame "Frame" (24XK-0) 1374×0
+        Text "종목·예상체결·장중 시세" (24XL-0) 0×0 "종목·예상체결·장중 시세"
+        Frame "Frame" (24XM-0) 1340×0
+          Frame "raw · ka10007 · response 종목명 · ordinal 1" (24XN-0) 158×0
+            Text "종목명" (24XO-0) 0×0 "종목명"
+            Text "삼성전자" (24XP-0) 0×0 "삼성전자"
+          Frame "raw · ka10007 · response 종목코드 · ordinal 1" (24XQ-0) 158×0
+            Text "종목코드" (24XR-0) 0×0 "종목코드"
+            Text "005930" (24XS-0) 0×0 "005930"
+          Frame "raw · ka10007 · response 일자 · ordinal 1" (24XT-0) 158×0
+            Text "일자" (24XU-0) 0×0 "일자"
+            Text "2026-08-31" (24XV-0) 0×0 "2026-08-31"
+          Frame "raw · ka10007 · response 시간 · ordinal 1" (24XW-0) 158×0
+            Text "시간" (24XX-0) 0×0 "시간"
+            Text "14:31:08" (24XY-0) 0×0 "14:31:08"
+          Frame "raw · ka10007 · response 예상체결가 · ordinal 1" (24XZ-0) 158×0
+            Text "예상체결가" (24Y0-0) 0×0 "예상체결가"
+            Text "150,850원" (24Y1-0) 0×0 "150,850원"
+          Frame "raw · ka10007 · response 예상체결량 · ordinal 1" (24Y2-0) 158×0
+            Text "예상체결량" (24Y3-0) 0×0 "예상체결량"
+            Text "127,540주" (24Y4-0) 0×0 "127,540주"
+          Frame "raw · ka10007 · response 예상거래대금 · ordinal 1" (24Y5-0) 158×0
+            Text "예상거래대금" (24Y6-0) 0×0 "예상거래대금"
+            Text "192.3억원" (24Y7-0) 0×0 "192.3억원"
+          Frame "raw · ka10007 · response 예상등락기호 · ordinal 1" (24Y8-0) 158×0
+            Text "예상등락기호" (24Y9-0) 0×0 "예상등락기호"
+            Text "▲" (24YA-0) 0×0 "▲"
+          Frame "raw · ka10007 · response 예상전일대비 · ordinal 1" (24YB-0) 158×0
+            Text "예상전일대비" (24YC-0) 0×0 "예상전일대비"
+            Text "+3,500원" (24YD-0) 0×0 "+3,500원"
+          Frame "raw · ka10007 · response 예상등락률 · ordinal 1" (24YE-0) 158×0
+            Text "예상등락률" (24YF-0) 0×0 "예상등락률"
+            Text "+2.35%" (24YG-0) 0×0 "+2.35%"
+          Frame "raw · ka10007 · response 예상매도호가 · ordinal 1" (24YH-0) 158×0
+            Text "예상매도호가" (24YI-0) 0×0 "예상매도호가"
+            Text "150,850원" (24YJ-0) 0×0 "150,850원"
+          Frame "raw · ka10007 · response 예상매수호가 · ordinal 1" (24YK-0) 158×0
+            Text "예상매수호가" (24YL-0) 0×0 "예상매수호가"
+            Text "150,840원" (24YM-0) 0×0 "150,840원"
+          Frame "raw · ka10007 · response 유통주식수 · ordinal 1" (24YN-0) 158×0
+            Text "유통주식수" (24YO-0) 0×0 "유통주식수"
+            Text "5,969,782,550주" (24YP-0) 0×0 "5,969,782,550주"
+          Frame "raw · ka10007 · response 기준가 · ordinal 1" (24YQ-0) 158×0
+            Text "기준가" (24YR-0) 0×0 "기준가"
+            Text "147,350원" (24YS-0) 0×0 "147,350원"
+          Frame "raw · ka10007 · response 시가 · ordinal 1" (24YT-0) 158×0
+            Text "시가" (24YU-0) 0×0 "시가"
+            Text "149,700원" (24YV-0) 0×0 "149,700원"
+          Frame "raw · ka10007 · response 고가 · ordinal 1" (24YW-0) 158×0
+            Text "고가" (24YX-0) 0×0 "고가"
+            Text "151,300원" (24YY-0) 0×0 "151,300원"
+          Frame "raw · ka10007 · response 저가 · ordinal 1" (24YZ-0) 158×0
+            Text "저가" (24Z0-0) 0×0 "저가"
+            Text "148,600원" (24Z1-0) 0×0 "148,600원"
+          Frame "raw · ka10007 · response 현재가 · ordinal 1" (24Z2-0) 158×0
+            Text "현재가" (24Z3-0) 0×0 "현재가"
+            Text "150,850원" (24Z4-0) 0×0 "150,850원"
+          Frame "raw · ka10007 · response 체결량 · ordinal 1" (24Z5-0) 158×0
+            Text "체결량" (24Z6-0) 0×0 "체결량"
+            Text "320주" (24Z7-0) 0×0 "320주"
+          Frame "raw · ka10007 · response 누적거래량 · ordinal 1" (24Z8-0) 158×0
+            Text "누적거래량" (24Z9-0) 0×0 "누적거래량"
+            Text "2,375,785주" (24ZA-0) 0×0 "2,375,785주"
+          Frame "raw · ka10007 · response 누적거래대금 · ordinal 1" (24ZB-0) 158×0
+            Text "누적거래대금" (24ZC-0) 0×0 "누적거래대금"
+            Text "3,582억원" (24ZD-0) 0×0 "3,582억원"
+          Frame "raw · ka10007 · response 장시작일자 · ordinal 1" (24ZE-0) 158×0
+            Text "장시작일자" (24ZF-0) 0×0 "장시작일자"
+            Text "2026-08-31" (24ZG-0) 0×0 "2026-08-31"
+          Frame "raw · ka10007 · response 행사가 · ordinal 1" (24ZH-0) 158×0
+            Text "행사가" (24ZI-0) 0×0 "행사가"
+            Text "—" (24ZJ-0) 0×0 "—"
+          Frame "raw · ka10007 · response 최고가 · ordinal 1" (24ZK-0) 158×0
+            Text "최고가" (24ZL-0) 0×0 "최고가"
+            Text "196,100원" (24ZM-0) 0×0 "196,100원"
+          Frame "raw · ka10007 · response 최저가 · ordinal 1" (24ZN-0) 158×0
+            Text "최저가" (24ZO-0) 0×0 "최저가"
+            Text "105,600원" (24ZP-0) 0×0 "105,600원"
+          Frame "raw · ka10007 · response 최고가일자 · ordinal 1" (24ZQ-0) 158×0
+            Text "최고가일자" (24ZR-0) 0×0 "최고가일자"
+            Text "2026-07-09" (24ZS-0) 0×0 "2026-07-09"
+          Frame "raw · ka10007 · response 최저가일자 · ordinal 1" (24ZT-0) 158×0
+            Text "최저가일자" (24ZU-0) 0×0 "최저가일자"
+            Text "2025-10-24" (24ZV-0) 0×0 "2025-10-24"
+          Frame "raw · ka10007 · response 상한가 · ordinal 1" (24ZW-0) 158×0
+            Text "상한가" (24ZX-0) 0×0 "상한가"
+            Text "196,100원" (24ZY-0) 0×0 "196,100원"
+          Frame "raw · ka10007 · response 하한가 · ordinal 1" (24ZZ-0) 158×0
+            Text "하한가" (2500-0) 0×0 "하한가"
+            Text "105,600원" (2501-0) 0×0 "105,600원"
+          Frame "raw · ka10007 · response 전일종가 · ordinal 1" (2502-0) 158×0
+            Text "전일종가" (2503-0) 0×0 "전일종가"
+            Text "147,350원" (2504-0) 0×0 "147,350원"

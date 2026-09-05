@@ -1,0 +1,340 @@
+{
+ "board_id": "48H7-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48I5-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48I4-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48I2-0",
+   "text": "거래내역 상세",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Header"
+   ]
+  },
+  {
+   "id": "48I0-0",
+   "text": "종목별계좌평가현황",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48HZ-0",
+   "text": "8종목",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48HX-0",
+   "text": "매수비중",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48HW-0",
+   "text": "28.0%",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48HU-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48HT-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48HQ-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48HP-0",
+   "text": "값",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48HO-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48HM-0",
+   "text": "거래일자",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48HL-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48HJ-0",
+   "text": "08/26",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48HI-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48HG-0",
+   "text": "유가금잔",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48HF-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48HD-0",
+   "text": "122,364,140",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48HC-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48H9-0",
+   "text": "스칼라 2개, 행 7개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48H7-0",
+   "name": "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48I1-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48I3-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48HA-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48HR-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48HY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48HV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48HS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48HN-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48HH-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48HK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48HB-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48HE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48H8-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "거래내역 상세": 1,
+  "종목별계좌평가현황": 1,
+  "8종목": 1,
+  "매수비중": 1,
+  "28.0%": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "거래일자": 1,
+  "08/26": 1,
+  "유가금잔": 1,
+  "122,364,140": 1,
+  "스칼라 2개, 행 7개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "2b34ea0a0c08987a0f5751ad6a4e5c3778c6de610ef7f8844f35f066b532bc63"
+}

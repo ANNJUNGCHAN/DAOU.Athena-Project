@@ -1,0 +1,701 @@
+{
+ "board_id": "1WZJ-1",
+ "page": "8-1",
+ "page_name": "백테스트",
+ "name": "06 · 백테스트 — 최적화",
+ "width": 1680.0,
+ "height": 820.0,
+ "texts": [
+  {
+   "id": "1WZL-1",
+   "text": "백테스트 — 파라미터 최적화",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "타이틀"
+   ]
+  },
+  {
+   "id": "1WZM-1",
+   "text": "그리드·랜덤 서치로 조합을 훑습니다. 가장 좋은 조합이 곧 미래에 좋은 조합은 아닙니다 — 이웃 조합과 성과가 뚝 끊기면 과최적화 경고가 먼저 뜹니다.",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "타이틀"
+   ]
+  },
+  {
+   "id": "1WZP-1",
+   "text": "탐색 설정",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정"
+   ]
+  },
+  {
+   "id": "1WZS-1",
+   "text": "그리드",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WZU-1",
+   "text": "랜덤",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WZX-1",
+   "text": "fast",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WZY-1",
+   "text": "5 → 60 · step 5",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WZZ-1",
+   "text": "12값",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1X01-1",
+   "text": "slow",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1X02-1",
+   "text": "20 → 240 · step 10",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1X03-1",
+   "text": "23값",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1X05-1",
+   "text": "조합 276개 (fast<slow만) · 캐시만 사용",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1X06-1",
+   "text": "예상 ~2초",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1X09-1",
+   "text": "탐색 시작",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1X0A-1",
+   "text": "추가 TR 호출 없음 — 캐시 밖 구간은 먼저 수집 승인",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "설정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1X0D-1",
+   "text": "Sharpe 히트맵 — fast × slow",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "히트맵",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1X0G-1",
+   "text": "과최적화 의심",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "히트맵",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1X0H-1",
+   "text": "최고점이 이웃보다 0.4 이상 튑니다 — 넓은 언덕을 고르세요",
+   "path": [
+    "06 · 백테스트 — 최적화",
+    "본문 행",
+    "히트맵",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1WZJ-1",
+   "name": "06 · 백테스트 — 최적화",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 820.0,
+   "depth": 0
+  },
+  {
+   "id": "1WZK-1",
+   "name": "타이틀",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "1WZN-1",
+   "name": "본문 행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "1WZO-1",
+   "name": "설정",
+   "component": "Frame",
+   "w": 400.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "1WZQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 200.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "1WZR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1WZT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1WZV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "1WZW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 32.0,
+   "depth": 4
+  },
+  {
+   "id": "1X00-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 32.0,
+   "depth": 4
+  },
+  {
+   "id": "1X04-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "1X07-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "1X08-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X0B-1",
+   "name": "히트맵",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "1X0C-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "1X0E-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X0F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0I-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "1X0J-1",
+   "name": "Group",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X0K-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0L-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0M-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0N-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0O-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0P-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0Q-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0R-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0S-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0T-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0U-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0V-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0W-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0X-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0Y-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X0Z-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X10-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X11-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X12-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X13-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X14-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X15-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X16-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X17-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X18-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X19-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X1A-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X1B-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X1C-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X1D-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X1E-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1X1F-1",
+   "name": "240",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X1G-1",
+   "name": "120",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X1H-1",
+   "name": "40",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X1I-1",
+   "name": "5",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X1J-1",
+   "name": "25",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X1K-1",
+   "name": "60",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X1L-1",
+   "name": "최고 Sharpe 1.31 (fast…",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X1M-1",
+   "name": "이웃 평균 0.72 — 급락. 외딴 …",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X1N-1",
+   "name": "넓은 언덕: fast 20-30 · …",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1X1O-1",
+   "name": "→ 권장은 봉우리가 아니라 언덕의 중…",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "백테스트 — 파라미터 최적화": 1,
+  "그리드·랜덤 서치로 조합을 훑습니다. 가장 좋은 조합이 곧 미래에 좋은 조합은 아닙니다 — 이웃 조합과 성과가 뚝 끊기면 과최적화 경고가 먼저 뜹니다.": 1,
+  "탐색 설정": 1,
+  "그리드": 1,
+  "랜덤": 1,
+  "fast": 1,
+  "5 → 60 · step 5": 1,
+  "12값": 1,
+  "slow": 1,
+  "20 → 240 · step 10": 1,
+  "23값": 1,
+  "조합 276개 (fast<slow만) · 캐시만 사용": 1,
+  "예상 ~2초": 1,
+  "탐색 시작": 1,
+  "추가 TR 호출 없음 — 캐시 밖 구간은 먼저 수집 승인": 1,
+  "Sharpe 히트맵 — fast × slow": 1,
+  "과최적화 의심": 1,
+  "최고점이 이웃보다 0.4 이상 튑니다 — 넓은 언덕을 고르세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "b2a9d4f5c726bf40d2f34e527ef5e0770a8de938e8d9268a98a40887c038da60"
+}

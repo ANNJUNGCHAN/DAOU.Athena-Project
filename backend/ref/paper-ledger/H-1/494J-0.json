@@ -1,0 +1,92 @@
+{
+ "board_id": "494J-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T4-2 · 순위 — 상하한가",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "494L-0",
+   "text": "원본 보드: CC-03 / R01-T4-2 · 순위 — 상하한가",
+   "path": [
+    "note/CC-03 / R01-T4-2 · 순위 — 상하한가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "494N-0",
+   "text": "가져온 요소: 상하한가 · 종목코드 · 현재가 · 전일대비 · 매도잔량",
+   "path": [
+    "note/CC-03 / R01-T4-2 · 순위 — 상하한가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "494P-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T4-2 · 순위 — 상하한가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "494R-0",
+   "text": "접은 개수: 스칼라 2개 · 행 17개",
+   "path": [
+    "note/CC-03 / R01-T4-2 · 순위 — 상하한가",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "494J-0",
+   "name": "note/CC-03 / R01-T4-2 · 순위 — 상하한가",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "494K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "494M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "494O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "494Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T4-2 · 순위 — 상하한가": 1,
+  "가져온 요소: 상하한가 · 종목코드 · 현재가 · 전일대비 · 매도잔량": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 17개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "ba3d08bb9fe6a5cccb4f7f3533abec7536f2e9304a405cba6d2583cf40463a84"
+}

@@ -1,0 +1,819 @@
+{
+ "board_id": "9GJ-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "23 · 주문 — 완료·보류·재시도",
+ "width": 1680,
+ "height": 520,
+ "texts": [
+  {
+   "id": "FWN-0",
+   "text": "주문 게이트",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FWO-0",
+   "text": "실행 전 차단과 실행 후 결과를 같은 규칙으로 구분합니다.",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FWQ-0",
+   "text": "AT-ST-003",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FWS-0",
+   "text": "사람이 최종 실행",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FWZ-0",
+   "text": "실행 전 차단",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Preflight Lock Card",
+    "Preflight Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FX0-0",
+   "text": "조건이 충족될 때까지 주문 버튼을 잠급니다.",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Preflight Lock Card",
+    "Preflight Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FX2-0",
+   "text": "실행 잠김",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Preflight Lock Card",
+    "Preflight Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FXD-0",
+   "text": "계좌 상태 확인 불가",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Preflight Lock Card",
+    "Preflight Rows",
+    "Block Account Unavailable",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FXE-0",
+   "text": "백엔드 연결 상태를 확인한 뒤 다시 시도합니다.",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Preflight Lock Card",
+    "Preflight Rows",
+    "Block Account Unavailable",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FXG-0",
+   "text": "차단",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Preflight Lock Card",
+    "Preflight Rows",
+    "Block Account Unavailable",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FXO-0",
+   "text": "주문 API 비활성",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Preflight Lock Card",
+    "Preflight Rows",
+    "Block Order API Disabled",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FXP-0",
+   "text": "설정 → 계좌에서 모의주문 API를 활성화합니다.",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Preflight Lock Card",
+    "Preflight Rows",
+    "Block Order API Disabled",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FXR-0",
+   "text": "차단",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Preflight Lock Card",
+    "Preflight Rows",
+    "Block Order API Disabled",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FX5-0",
+   "text": "수량과 방향은 사용자가 주문 티켓에서 최종 확정합니다.",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Preflight Lock Card",
+    "Preflight Note"
+   ]
+  },
+  {
+   "id": "FXW-0",
+   "text": "실행 결과",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FXX-0",
+   "text": "상태명과 다음 행동을 함께 표시합니다.",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FY0-0",
+   "text": "검토",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FY1-0",
+   "text": "→",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FY3-0",
+   "text": "실행 중",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FY4-0",
+   "text": "→",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FY6-0",
+   "text": "완료",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FYD-0",
+   "text": "확인 요청",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status Needs Confirm"
+   ]
+  },
+  {
+   "id": "FYE-0",
+   "text": "실행 전",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status Needs Confirm"
+   ]
+  },
+  {
+   "id": "FYF-0",
+   "text": "조건을 확인한 뒤 주문 게이트로 돌아갑니다.",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status Needs Confirm"
+   ]
+  },
+  {
+   "id": "FYH-0",
+   "text": "428",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status Needs Confirm",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FYL-0",
+   "text": "체결 확인",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status In Doubt"
+   ]
+  },
+  {
+   "id": "FYM-0",
+   "text": "결과 보류",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status In Doubt"
+   ]
+  },
+  {
+   "id": "FYN-0",
+   "text": "재전송하지 않고 실제 체결 여부를 먼저 확인합니다.",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status In Doubt"
+   ]
+  },
+  {
+   "id": "FYP-0",
+   "text": "409",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status In Doubt",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FYT-0",
+   "text": "실행 실패",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status Failed"
+   ]
+  },
+  {
+   "id": "FYU-0",
+   "text": "종료",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status Failed"
+   ]
+  },
+  {
+   "id": "FYV-0",
+   "text": "원인을 확인한 뒤 새 주문으로 다시 시도합니다.",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status Failed"
+   ]
+  },
+  {
+   "id": "FYX-0",
+   "text": "기타",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Rows",
+    "Status Failed",
+    "Frame"
+   ]
+  },
+  {
+   "id": "FY9-0",
+   "text": "완료와 체결 확인 필요 상태는 같은 주문으로 다시 실행하지 않습니다.",
+   "path": [
+    "23 · 주문 — 완료·보류·재시도",
+    "36 Content",
+    "Execution Result Card",
+    "Result Note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "9GJ-0",
+   "name": "23 · 주문 — 완료·보류·재시도",
+   "component": "Frame",
+   "w": 1680,
+   "h": 520,
+   "depth": 0
+  },
+  {
+   "id": "FWG-0",
+   "name": "36 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 72,
+   "depth": 1
+  },
+  {
+   "id": "FWH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 399,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "FWI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 44,
+   "h": 44,
+   "depth": 3
+  },
+  {
+   "id": "FWJ-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 22,
+   "h": 22,
+   "depth": 4
+  },
+  {
+   "id": "FWK-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 13,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "FWL-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 4,
+   "depth": 5
+  },
+  {
+   "id": "FWM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 339,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "FWP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 193,
+   "h": 28,
+   "depth": 2
+  },
+  {
+   "id": "FWR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 119,
+   "h": 28,
+   "depth": 3
+  },
+  {
+   "id": "FWU-0",
+   "name": "36 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 364,
+   "depth": 1
+  },
+  {
+   "id": "FWW-0",
+   "name": "Preflight Lock Card",
+   "component": "Frame",
+   "w": 620,
+   "h": 364,
+   "depth": 2
+  },
+  {
+   "id": "FWX-0",
+   "name": "Preflight Header",
+   "component": "Frame",
+   "w": 576,
+   "h": 38,
+   "depth": 3
+  },
+  {
+   "id": "FWY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 220,
+   "h": 38,
+   "depth": 4
+  },
+  {
+   "id": "FX1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 66,
+   "h": 24,
+   "depth": 4
+  },
+  {
+   "id": "FX3-0",
+   "name": "Preflight Rows",
+   "component": "Frame",
+   "w": 576,
+   "h": 196,
+   "depth": 3
+  },
+  {
+   "id": "FX7-0",
+   "name": "Block Account Unavailable",
+   "component": "Frame",
+   "w": 576,
+   "h": 93,
+   "depth": 4
+  },
+  {
+   "id": "FX8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "FX9-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "FXA-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "FXB-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "FXC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 430,
+   "h": 37,
+   "depth": 5
+  },
+  {
+   "id": "FXF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "FXI-0",
+   "name": "Block Order API Disabled",
+   "component": "Frame",
+   "w": 576,
+   "h": 93,
+   "depth": 4
+  },
+  {
+   "id": "FXJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "FXK-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "FXL-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "FXM-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 2,
+   "depth": 7
+  },
+  {
+   "id": "FXN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 430,
+   "h": 37,
+   "depth": 5
+  },
+  {
+   "id": "FXQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "FX4-0",
+   "name": "Preflight Note",
+   "component": "Frame",
+   "w": 576,
+   "h": 42,
+   "depth": 3
+  },
+  {
+   "id": "FXT-0",
+   "name": "Execution Result Card",
+   "component": "Frame",
+   "w": 960,
+   "h": 364,
+   "depth": 2
+  },
+  {
+   "id": "FXU-0",
+   "name": "Result Header",
+   "component": "Frame",
+   "w": 916,
+   "h": 38,
+   "depth": 3
+  },
+  {
+   "id": "FXV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 194,
+   "h": 38,
+   "depth": 4
+  },
+  {
+   "id": "FXY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 178,
+   "h": 24,
+   "depth": 4
+  },
+  {
+   "id": "FXZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 24,
+   "depth": 5
+  },
+  {
+   "id": "FY2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 54,
+   "h": 24,
+   "depth": 5
+  },
+  {
+   "id": "FY5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 24,
+   "depth": 5
+  },
+  {
+   "id": "FY7-0",
+   "name": "Result Rows",
+   "component": "Frame",
+   "w": 916,
+   "h": 220,
+   "depth": 3
+  },
+  {
+   "id": "FYB-0",
+   "name": "Status Needs Confirm",
+   "component": "Frame",
+   "w": 916,
+   "h": 66,
+   "depth": 4
+  },
+  {
+   "id": "FYC-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "FYG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "FYJ-0",
+   "name": "Status In Doubt",
+   "component": "Frame",
+   "w": 916,
+   "h": 66,
+   "depth": 4
+  },
+  {
+   "id": "FYK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "FYO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 36,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "FYR-0",
+   "name": "Status Failed",
+   "component": "Frame",
+   "w": 916,
+   "h": 66,
+   "depth": 4
+  },
+  {
+   "id": "FYS-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "FYW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "FY8-0",
+   "name": "Result Note",
+   "component": "Frame",
+   "w": 916,
+   "h": 34,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "주문 게이트": 1,
+  "실행 전 차단과 실행 후 결과를 같은 규칙으로 구분합니다.": 1,
+  "AT-ST-003": 1,
+  "사람이 최종 실행": 1,
+  "실행 전 차단": 1,
+  "조건이 충족될 때까지 주문 버튼을 잠급니다.": 1,
+  "실행 잠김": 1,
+  "계좌 상태 확인 불가": 1,
+  "백엔드 연결 상태를 확인한 뒤 다시 시도합니다.": 1,
+  "차단": 2,
+  "주문 API 비활성": 1,
+  "설정 → 계좌에서 모의주문 API를 활성화합니다.": 1,
+  "수량과 방향은 사용자가 주문 티켓에서 최종 확정합니다.": 1,
+  "실행 결과": 1,
+  "상태명과 다음 행동을 함께 표시합니다.": 1,
+  "검토": 1,
+  "→": 2,
+  "실행 중": 1,
+  "완료": 1,
+  "확인 요청": 1,
+  "실행 전": 1,
+  "조건을 확인한 뒤 주문 게이트로 돌아갑니다.": 1,
+  "428": 1,
+  "체결 확인": 1,
+  "결과 보류": 1,
+  "재전송하지 않고 실제 체결 여부를 먼저 확인합니다.": 1,
+  "409": 1,
+  "실행 실패": 1,
+  "종료": 1,
+  "원인을 확인한 뒤 새 주문으로 다시 시도합니다.": 1,
+  "기타": 1,
+  "완료와 체결 확인 필요 상태는 같은 주문으로 다시 실행하지 않습니다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "e07bbac0e1987046dca7e12b416f3b467c9b9abf155e95adabe46039794487d5"
+}

@@ -1,0 +1,238 @@
+Frame "CC-03 / R07 · KODEX 200 ETF" (15N5-2) 1440×1120
+  Frame "Root Card" (3CV5-0) 1360×1040
+    Frame "Instrument Header" (3T4C-0) 0×106
+      Frame "Identity" (3T4D-0) 0×0
+        Frame "Frame" (3T4E-0) 0×0
+          Text "KODEX 200 ETF" (3T4F-0) 0×0 "KODEX 200 ETF"
+          Text "069500" (3T4G-0) 0×0 "069500"
+          Text "국내 시장대표 · 코스피200 추종 …" (3T4H-0) 0×0 "국내 시장대표 · 코스피200 추종 · 시가총액형"
+          Frame "상태 칩" (3T4I-0) 0×0
+            Text "KRX · 09:42:18 장중" (3T4J-0) 0×0 "KRX · 09:42:18 장중"
+        Frame "Frame" (3T4K-0) 0×0
+          Text "48,360원" (3T4L-0) 0×0 "48,360원"
+          Text "+403 · +0.84%" (3T4M-0) 0×0 "+403 · +0.84%"
+          Text "NAV 48,318 · 괴리 +0.0…" (3T4N-0) 0×0 "NAV 48,318 · 괴리 +0.09%"
+      Frame "모드 탭" (3T4O-0) 0×0
+        Frame "Frame" (3T4P-0) 0×0
+          Text "현재시세" (3T4Q-0) 0×0 "현재시세"
+        Frame "Frame" (3T4R-0) 0×0
+          Text "차트" (3T4S-0) 0×0 "차트"
+        Frame "Frame" (3T4T-0) 0×0
+          Text "기업정보" (3T4U-0) 0×0 "기업정보"
+        Frame "Frame" (3T4V-0) 0×0
+          Text "ETF" (3T4W-0) 0×0 "ETF"
+        Frame "Frame" (3T4X-0) 0×0
+          Text "ELW" (3T4Y-0) 0×0 "ELW"
+        Frame "Frame" (3T4Z-0) 0×0
+          Text "금현물" (3T50-0) 0×0 "금현물"
+        Frame "Frame" (3T51-0) 0×0
+          Text "순위" (3T52-0) 0×0 "순위"
+    Frame "Quote Section" (3CV6-0) 0×646
+      Frame "Quote Main" (3CV7-0) 900×646
+        Frame "KPI" (3CVF-0) 0×0
+          Frame "Frame" (3CVG-0) 0×0
+            Text "실시간 NAV" (3CVH-0) 0×0 "실시간 NAV"
+            Text "48,318" (3CVI-0) 0×0 "48,318"
+            Text "괴리 +0.09%" (3CVJ-0) 0×0 "괴리 +0.09%"
+            Text "전일대비 ▲ +398 · +0.83%" (3CVK-0) 0×0 "전일대비 ▲ +398 · +0.83%"
+          Frame "Frame" (3CVL-0) 0×0
+            Text "체결 수익률" (3CVM-0) 0×0 "체결 수익률"
+            Text "+0.84%" (3CVN-0) 0×0 "+0.84%"
+            Text "전일 종가 47,957" (3CVO-0) 0×0 "전일 종가 47,957"
+            Text "체결 기준 ▲ +403" (3CVP-0) 0×0 "체결 기준 ▲ +403"
+          Frame "Frame" (3CVQ-0) 0×0
+            Text "20일 추적오차" (3CVR-0) 0×0 "20일 추적오차"
+            Text "0.11%" (3CVS-0) 0×0 "0.11%"
+            Text "코스피200 448.62" (3CVT-0) 0×0 "코스피200 448.62"
+            Text "▲ +3.78 · +0.85%" (3CVU-0) 0×0 "▲ +3.78 · +0.85%"
+          Frame "Frame" (3CVV-0) 0×0
+            Text "거래대금" (3CVW-0) 0×0 "거래대금"
+            Text "1,846억" (3CVX-0) 0×0 "1,846억"
+            Text "누적 거래량 382만주" (3CVY-0) 0×0 "누적 거래량 382만주"
+            Text "전일 84.2만주" (3CVZ-0) 0×0 "전일 84.2만주"
+        Text "Chart Title" (3CW0-0) 0×0 "가격과 NAV"
+        Frame "Chart" (3D47-0) 844×422
+          SVG "가격·NAV 라인" (3T54-0) 820×396
+            SVGVisualElement "Polyline" (3T55-0) 0×0
+            SVGVisualElement "Polyline" (3T56-0) 0×0
+        Frame "Chart Legend" (3CW5-0) 0×0
+          Text "실선 시장가격 · 점선 NAV" (3CW6-0) 0×0 "실선 시장가격 · 점선 NAV"
+          Frame "Frame" (3CW7-0) 0×0
+            Text "NAV 괴리율" (3CW8-0) 0×0 "NAV 괴리율"
+            Text "+0.09%" (3CW9-0) 0×0 "+0.09%"
+      Frame "Quote Side" (3CWA-0) 460×646
+        Text "구성 비중" (3CWB-0) 0×0 "구성 비중"
+        Frame "Frame" (3CWC-0) 0×0
+          Frame "Frame" (3CWD-0) 0×0
+            Text "삼성전자" (3CWE-0) 0×0 "삼성전자"
+            Text "28.4%" (3CWF-0) 0×0 "28.4%"
+          Frame "Frame" (3CWG-0) 0×8
+            Rectangle "Rectangle" (3CWH-0) 0×8
+          Frame "Frame" (3CWI-0) 0×0
+            Text "SK하이닉스" (3CWJ-0) 0×0 "SK하이닉스"
+            Text "10.7%" (3CWK-0) 0×0 "10.7%"
+          Frame "Frame" (3CWL-0) 0×8
+            Rectangle "Rectangle" (3CWM-0) 0×8
+          Frame "Frame" (3CWN-0) 0×0
+            Text "금융" (3CWO-0) 0×0 "금융"
+            Text "9.1%" (3CWP-0) 0×0 "9.1%"
+          Frame "Frame" (3CWQ-0) 0×8
+            Rectangle "Rectangle" (3CWR-0) 0×8
+        Frame "Frame" (3CWS-0) 0×0
+          Frame "Frame" (3CWT-0) 0×0
+            Text "외국인 순매수" (3CWU-0) 0×0 "외국인 순매수"
+            Frame "Frame" (3CWV-0) 0×0
+              Text "+286억" (3CWW-0) 0×0 "+286억"
+              Text "59.2만주" (3CWX-0) 0×0 "59.2만주"
+          Frame "Frame" (3CWY-0) 0×0
+            Text "기관 순매수" (3CWZ-0) 0×0 "기관 순매수"
+            Frame "Frame" (3CX0-0) 0×0
+              Text "+94억" (3CX1-0) 0×0 "+94억"
+              Text "19.4만주" (3CX2-0) 0×0 "19.4만주"
+        Frame "Frame" (3CX3-0) 0×0
+          Text "ETF 기준·구성" (3CX4-0) 0×0 "ETF 기준·구성"
+          Frame "Frame" (3CX5-0) 0×0
+            Text "기준가" (3CX6-0) 0×0 "기준가"
+            Frame "Frame" (3CX7-0) 0×0
+              Text "47,957" (3CX8-0) 0×0 "47,957"
+              Text "대용가 38,360 · 환산가격 48…" (3CX9-0) 0×0 "대용가 38,360 · 환산가격 48,318"
+          Frame "Frame" (3CXA-0) 0×0
+            Text "주식수" (3CXB-0) 0×0 "주식수"
+            Frame "Frame" (3CXC-0) 0×0
+              Text "1억 2,400만주" (3CXD-0) 0×0 "1억 2,400만주"
+              Text "외인보유 1,840만주" (3CXE-0) 0×0 "외인보유 1,840만주"
+          Frame "Frame" (3CXF-0) 0×0
+            Text "과표기준" (3CXG-0) 0×0 "과표기준"
+            Frame "Frame" (3CXH-0) 0×0
+              Text "48,120" (3CXI-0) 0×0 "48,120"
+              Text "배당전기준 48,318 · 전일배당금…" (3CXJ-0) 0×0 "배당전기준 48,318 · 전일배당금 0원"
+          Frame "Frame" (3CXK-0) 0×0
+            Text "과세" (3CXL-0) 0×0 "과세"
+            Frame "Frame" (3CXM-0) 0×0
+              Text "배당소득세 15.4%" (3CXN-0) 0×0 "배당소득세 15.4%"
+              Text "ETN·원주가격 해당 없음" (3CXO-0) 0×0 "ETN·원주가격 해당 없음"
+    Frame "Flow Section" (3CXP-0) 0×288
+      Frame "Intraday" (3CXQ-0) 900×288
+        Frame "Frame" (3CXR-0) 0×0
+          Text "시간대별 흐름" (3CXS-0) 0×0 "시간대별 흐름"
+          Text "대상지수 코스피200" (3CXT-0) 0×0 "대상지수 코스피200"
+        Frame "Frame" (3CXU-0) 0×0
+          Frame "Frame" (3CXV-0) 0×28
+            Text "시각" (3CXW-0) 56×0 "시각"
+            Text "가격" (3CXX-0) 104×0 "가격"
+            Text "NAV" (3CXY-0) 88×0 "NAV"
+            Text "추적지수" (3CXZ-0) 88×0 "추적지수"
+            Text "거래량" (3CY0-0) 96×0 "거래량"
+            Text "외국인" (3CY1-0) 96×0 "외국인"
+            Text "기관" (3CY2-0) 84×0 "기관"
+            Text "대상지수 대비율" (3CY3-0) 104×0 "대상지수 대비율"
+          Frame "Frame" (3CY4-0) 0×52
+            Text "09:00" (3CY5-0) 56×0 "09:00"
+            Frame "Frame" (3CY6-0) 104×0
+              Text "48,050" (3CY7-0) 0×0 "48,050"
+              Text "▲ +93 · +0.19%" (3CY8-0) 0×0 "▲ +93 · +0.19%"
+            Frame "Frame" (3CY9-0) 88×0
+              Text "48,022" (3CYA-0) 0×0 "48,022"
+              Text "괴리 +0.06%" (3CYB-0) 0×0 "괴리 +0.06%"
+            Frame "Frame" (3CYC-0) 88×0
+              Text "445.75" (3CYD-0) 0×0 "445.75"
+              Text "▲ +0.91" (3CYE-0) 0×0 "▲ +0.91"
+            Frame "Frame" (3CYF-0) 96×0
+              Text "62만주" (3CYG-0) 0×0 "62만주"
+              Text "298억" (3CYH-0) 0×0 "298억"
+            Frame "Frame" (3CYI-0) 96×0
+              Text "+42억" (3CYJ-0) 0×0 "+42억"
+              Text "8.7만주" (3CYK-0) 0×0 "8.7만주"
+            Frame "Frame" (3CYL-0) 84×0
+              Text "+8억" (3CYM-0) 0×0 "+8억"
+              Text "1.7만주" (3CYN-0) 0×0 "1.7만주"
+            Frame "Frame" (3CYO-0) 104×0
+              Text "99.91%" (3CYP-0) 0×0 "99.91%"
+              Text "추적오차 0.09%" (3CYQ-0) 0×0 "추적오차 0.09%"
+          Frame "Frame" (3CYR-0) 0×52
+            Text "09:30" (3CYS-0) 56×0 "09:30"
+            Frame "Frame" (3CYT-0) 104×0
+              Text "48,210" (3CYU-0) 0×0 "48,210"
+              Text "▲ +253 · +0.53%" (3CYV-0) 0×0 "▲ +253 · +0.53%"
+            Frame "Frame" (3CYW-0) 88×0
+              Text "48,178" (3CYX-0) 0×0 "48,178"
+              Text "괴리 +0.07%" (3CYY-0) 0×0 "괴리 +0.07%"
+            Frame "Frame" (3CYZ-0) 88×0
+              Text "447.20" (3CZ0-0) 0×0 "447.20"
+              Text "▲ +2.36" (3CZ1-0) 0×0 "▲ +2.36"
+            Frame "Frame" (3CZ2-0) 96×0
+              Text "214만주" (3CZ3-0) 0×0 "214만주"
+              Text "1,032억" (3CZ4-0) 0×0 "1,032억"
+            Frame "Frame" (3CZ5-0) 96×0
+              Text "+168억" (3CZ6-0) 0×0 "+168억"
+              Text "34.8만주" (3CZ7-0) 0×0 "34.8만주"
+            Frame "Frame" (3CZ8-0) 84×0
+              Text "+42억" (3CZ9-0) 0×0 "+42억"
+              Text "8.7만주" (3CZA-0) 0×0 "8.7만주"
+            Frame "Frame" (3CZB-0) 104×0
+              Text "99.98%" (3CZC-0) 0×0 "99.98%"
+              Text "추적오차 0.11%" (3CZD-0) 0×0 "추적오차 0.11%"
+          Frame "Frame" (3CZE-0) 0×52
+            Text "09:42" (3CZF-0) 56×0 "09:42"
+            Frame "Frame" (3CZG-0) 104×0
+              Text "48,360" (3CZH-0) 0×0 "48,360"
+              Text "▲ +403 · +0.84%" (3CZI-0) 0×0 "▲ +403 · +0.84%"
+            Frame "Frame" (3CZJ-0) 88×0
+              Text "48,318" (3CZK-0) 0×0 "48,318"
+              Text "괴리 +0.09%" (3CZL-0) 0×0 "괴리 +0.09%"
+            Frame "Frame" (3CZM-0) 88×0
+              Text "448.62" (3CZN-0) 0×0 "448.62"
+              Text "▲ +3.78" (3CZO-0) 0×0 "▲ +3.78"
+            Frame "Frame" (3CZP-0) 96×0
+              Text "382만주" (3CZQ-0) 0×0 "382만주"
+              Text "1,846억" (3CZR-0) 0×0 "1,846억"
+            Frame "Frame" (3CZS-0) 96×0
+              Text "+286억" (3CZT-0) 0×0 "+286억"
+              Text "59.2만주" (3CZU-0) 0×0 "59.2만주"
+            Frame "Frame" (3CZV-0) 84×0
+              Text "+94억" (3CZW-0) 0×0 "+94억"
+              Text "19.4만주" (3CZX-0) 0×0 "19.4만주"
+            Frame "Frame" (3CZY-0) 104×0
+              Text "100.02%" (3CZZ-0) 0×0 "100.02%"
+              Text "추적오차 0.13%" (3D00-0) 0×0 "추적오차 0.13%"
+      Frame "Daily" (3D01-0) 460×288
+        Frame "Frame" (3D02-0) 0×0
+          Text "일자별 추이" (3D03-0) 0×0 "일자별 추이"
+          Text "최근 3거래일" (3D04-0) 0×0 "최근 3거래일"
+        Frame "Frame" (3D05-0) 0×0
+          Frame "Frame" (3D06-0) 0×28
+            Text "일자" (3D07-0) 52×0 "일자"
+            Text "종가" (3D08-0) 108×0 "종가"
+            Text "NAV 괴리율" (3D09-0) 64×0 "NAV 괴리율"
+            Text "추적지수" (3D0A-0) 72×0 "추적지수"
+            Text "거래량" (3D0B-0) 60×0 "거래량"
+          Frame "Frame" (3D0C-0) 0×52
+            Text "09-01" (3D0D-0) 52×0 "09-01"
+            Frame "Frame" (3D0E-0) 108×0
+              Text "48,360" (3D0F-0) 0×0 "48,360"
+              Text "▲ +403 · +0.84%" (3D0G-0) 0×0 "▲ +403 · +0.84%"
+            Text "+0.09%" (3D0H-0) 64×0 "+0.09%"
+            Frame "Frame" (3D0I-0) 72×0
+              Text "448.62" (3D0J-0) 0×0 "448.62"
+              Text "▲ +3.78" (3D0K-0) 0×0 "▲ +3.78"
+            Text "382만주" (3D0L-0) 60×0 "382만주"
+          Frame "Frame" (3D0M-0) 0×52
+            Text "08-31" (3D0N-0) 52×0 "08-31"
+            Frame "Frame" (3D0O-0) 108×0
+              Text "47,957" (3D0P-0) 0×0 "47,957"
+              Text "▲ +347 · +0.73%" (3D0Q-0) 0×0 "▲ +347 · +0.73%"
+            Text "+0.06%" (3D0R-0) 64×0 "+0.06%"
+            Frame "Frame" (3D0S-0) 72×0
+              Text "444.84" (3D0T-0) 0×0 "444.84"
+              Text "▲ +3.14" (3D0U-0) 0×0 "▲ +3.14"
+            Text "84.2만주" (3D0V-0) 60×0 "84.2만주"
+          Frame "Frame" (3D0W-0) 0×52
+            Text "08-28" (3D0X-0) 52×0 "08-28"
+            Frame "Frame" (3D0Y-0) 108×0
+              Text "47,610" (3D0Z-0) 0×0 "47,610"
+              Text "▼ -180 · -0.38%" (3D10-0) 0×0 "▼ -180 · -0.38%"
+            Text "+0.04%" (3D11-0) 64×0 "+0.04%"
+            Frame "Frame" (3D12-0) 72×0
+              Text "441.70" (3D13-0) 0×0 "441.70"
+              Text "▼ -1.68" (3D14-0) 0×0 "▼ -1.68"
+            Text "96.5만주" (3D15-0) 60×0 "96.5만주"

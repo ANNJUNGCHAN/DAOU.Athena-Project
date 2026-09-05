@@ -1,0 +1,156 @@
+Frame "CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정" (2TAG-1) 1440×960
+  Frame "Order Root · 정정 검토" (2TAH-1) 1440×960
+    Frame "Order Card Surface" (2TAI-1) 1360×880
+      Frame "Order Header" (2TE6-1) 0×106
+        Frame "Frame" (2TEN-1) 0×0
+          Frame "Frame" (2TEP-1) 0×0
+            Text "삼성전자 주문 정정" (2TES-1) 0×0 "삼성전자 주문 정정"
+            Frame "Frame" (2TEQ-1) 0×0
+              Text "검토 필요" (2TER-1) 0×0 "검토 필요"
+          Text "005930 · 키움증권 01 · 원…" (2TEO-1) 0×0 "005930 · 키움증권 01 · 원주문 150,500원 · 미체결 10주"
+        Frame "Frame" (2TE7-1) 0×0
+          Frame "Frame" (2TEL-1) 0×0
+            Text "현금" (2TEM-1) 0×0 "현금"
+          Frame "Frame" (2TEJ-1) 0×0
+            Text "신용" (2TEK-1) 0×0 "신용"
+          Frame "Frame" (2TEH-1) 0×0
+            Text "금현물" (2TEI-1) 0×0 "금현물"
+          Rectangle "Rectangle" (2TEG-1) 1×22
+          Frame "Frame" (2TEE-1) 0×0
+            Text "매수" (2TEF-1) 0×0 "매수"
+          Frame "Frame" (2TEC-1) 0×0
+            Text "매도" (2TED-1) 0×0 "매도"
+          Frame "Frame" (2TEA-1) 0×0
+            Text "정정" (2TEB-1) 0×0 "정정"
+          Frame "Frame" (2TE8-1) 0×0
+            Text "취소" (2TE9-1) 0×0 "취소"
+      Frame "Order Progress" (2TDM-1) 0×84
+        Frame "Frame" (2TE1-1) 0×0
+          Frame "Frame" (2TE4-1) 28×28
+            Text "1" (2TE5-1) 0×0 "1"
+          Text "주문 작성" (2TE3-1) 0×0 "주문 작성"
+          Rectangle "Rectangle" (2TE2-1) 0×1
+        Frame "Frame" (2TDW-1) 0×0
+          Frame "Frame" (2TDZ-1) 28×28
+            Text "2" (2TE0-1) 0×0 "2"
+          Text "주문 조건 검토" (2TDY-1) 0×0 "주문 조건 검토"
+          Rectangle "Rectangle" (2TDX-1) 0×1
+        Frame "Frame" (2TDR-1) 0×0
+          Frame "Frame" (2TDU-1) 28×28
+            Text "3" (2TDV-1) 0×0 "3"
+          Text "사용자 확인" (2TDT-1) 0×0 "사용자 확인"
+          Rectangle "Rectangle" (2TDS-1) 0×1
+        Frame "Frame" (2TDN-1) 220×0
+          Frame "Frame" (2TDP-1) 28×28
+            Text "4" (2TDQ-1) 0×0 "4"
+          Text "접수·체결" (2TDO-1) 0×0 "접수·체결"
+      Frame "Order Workspace" (2TAO-1) 0×626
+        Frame "Order Entry" (2TCO-1) 420×626
+          Frame "Order Form" (2TD5-1) 0×0
+            Frame "Frame" (2TDJ-1) 0×0
+              Text "주문 입력" (2TDL-1) 0×0 "주문 입력"
+              Text "현재가 150,850원" (2TDK-1) 0×0 "현재가 150,850원"
+            Frame "Frame" (2TDG-1) 0×64
+              Text "주문 유형" (2TDI-1) 0×0 "주문 유형"
+              Text "지정가 정정" (2TDH-1) 0×0 "지정가 정정"
+            Frame "Frame" (2TDC-1) 0×82
+              Text "수량" (2TDF-1) 0×0 "수량"
+              Frame "Frame" (2TDD-1) 190×46
+                Text "10주" (2TDE-1) 0×0 "10주"
+            Frame "Frame" (2TD9-1) 0×64
+              Text "가격" (2TDB-1) 0×0 "가격"
+              Text "150,800원" (2TDA-1) 0×0 "150,800원"
+            Frame "Frame" (2TD6-1) 0×64
+              Text "계좌" (2TD8-1) 0×0 "계좌"
+              Text "키움증권 01" (2TD7-1) 0×0 "키움증권 01"
+          Frame "Order Quick Quantity" (2TCP-1) 0×0
+            Frame "Frame" (2TCW-1) 0×0
+              Frame "Frame" (2TD3-1) 0×0
+                Text "10%" (2TD4-1) 0×0 "10%"
+              Frame "Frame" (2TD1-1) 0×0
+                Text "25%" (2TD2-1) 0×0 "25%"
+              Frame "Frame" (2TCZ-1) 0×0
+                Text "50%" (2TD0-1) 0×0 "50%"
+              Frame "Frame" (2TCX-1) 0×0
+                Text "최대" (2TCY-1) 0×0 "최대"
+            Frame "Frame" (2TCT-1) 0×0
+              Text "주문가능금액" (2TCV-1) 0×0 "주문가능금액"
+              Text "raw · base:kt00001 · $.ord_alow_amt" (2TCU-1) 0×0 "31,240,000원"
+            Frame "Frame" (2TCQ-1) 0×0
+              Text "현재 매수 1호가" (2TCS-1) 0×0 "현재 매수 1호가"
+              Text "150,840원" (2TCR-1) 0×0 "150,840원"
+        Frame "Order Preview" (2TBS-1) 520×626
+          Frame "Preview Heading" (2TCL-1) 0×0
+            Text "정정 전 최종 확인" (2TCN-1) 0×0 "정정 전 최종 확인"
+          Frame "Order Hero" (2TCG-1) 0×0
+            Text "삼성전자 · 지정가 정정" (2TCK-1) 0×0 "삼성전자 · 지정가 정정"
+            Frame "Frame" (2TCH-1) 0×0
+              Text "10주" (2TCJ-1) 0×0 "10주"
+              Text "응답 대기" (2TCI-1) 0×0 "응답 대기"
+          Frame "Order Details" (2TC3-1) 0×0
+            Frame "Frame" (2TCD-1) 0×0
+              Text "주문 방향" (2TCF-1) 0×0 "주문 방향"
+              Text "매수 유지" (2TCE-1) 0×0 "매수 유지"
+            Frame "Frame" (2TCA-1) 0×0
+              Text "정정 단가" (2TCC-1) 0×0 "정정 단가"
+              Text "150,500 → 150,800원" (2TCB-1) 0×0 "150,500 → 150,800원"
+            Frame "Frame" (2TC7-1) 0×0
+              Text "현재 매수 1호가" (2TC9-1) 0×0 "현재 매수 1호가"
+              Text "150,840원" (2TC8-1) 0×0 "150,840원"
+            Frame "Frame" (2TC4-1) 0×0
+              Text "계좌" (2TC6-1) 0×0 "계좌"
+              Text "키움증권 01" (2TC5-1) 0×0 "키움증권 01"
+          Frame "Order Safety Notice" (2TBY-1) 0×0
+            Rectangle "Rectangle" (2TC2-1) 8×8
+            Frame "Frame" (2TBZ-1) 0×0
+              Text "아직 정정되지 않았습니다" (2TC1-1) 0×0 "아직 정정되지 않았습니다"
+              Text "아래 정정 확인을 누른 뒤 한 번 더…" (2TC0-1) 0×0 "아래 정정 확인을 누른 뒤 한 번 더 확인해야 접수됩니다."
+          Frame "Order Actions" (2TBT-1) 0×0
+            Frame "Frame" (2TBW-1) 120×44
+              Text "수정" (2TBX-1) 0×0 "수정"
+            Frame "Frame" (2TBU-1) 0×44
+              Text "정정 확인" (2TBV-1) 0×0 "정정 확인"
+        Frame "Fees and Execution" (2TAP-1) 420×626
+          Frame "Cost Heading" (2TBP-1) 0×0
+            Text "주문 접수 정보" (2TBR-1) 0×0 "주문 접수 정보"
+          Frame "Cost Breakdown" (2TB9-1) 0×0
+            Frame "Frame" (2TBM-1) 0×0
+              Text "주문번호" (2TBO-1) 0×0 "주문번호"
+              Text "raw · base:kt10002 · $.ord_no" (2TBN-1) 0×0 "—"
+            Frame "Frame" (2TBJ-1) 0×0
+              Text "원주문번호" (2TBL-1) 0×0 "원주문번호"
+              Text "raw · base:kt10002 · $.base_orig_ord_no" (2TBK-1) 0×0 "—"
+            Frame "Frame" (2TBG-1) 0×0
+              Text "정정수량" (2TBI-1) 0×0 "정정수량"
+              Text "request · base:kt10002 · $.mdfy_qty" (2TBH-1) 0×0 "10주"
+            Frame "Frame" (2TBD-1) 0×0
+              Text "정정단가" (2TBF-1) 0×0 "정정단가"
+              Text "request · base:kt10002 · $.mdfy_uv" (2TBE-1) 0×0 "150,800원"
+            Frame "Frame" (2TBA-1) 0×0
+              Text "종목코드" (2TBC-1) 0×0 "종목코드"
+              Text "request · base:kt10002 · $.stk_cd" (2TBB-1) 0×0 "005930"
+            Frame "Frame" (2WG9-0) 0×0
+              Text "국내거래소구분" (2WGA-0) 0×0 "국내거래소구분"
+              Text "KRX" (2WGB-0) 0×0 "KRX"
+            Frame "Frame" (2WGC-0) 0×0
+              Text "정정조건단가" (2WGD-0) 0×0 "정정조건단가"
+              Text "— · 미사용" (2WGE-0) 0×0 "— · 미사용"
+          Frame "Execution Status" (2TAQ-1) 0×0
+            Frame "Frame" (2TB6-1) 0×0
+              Text "이 주문의 진행 상태" (2TB8-1) 0×0 "이 주문의 진행 상태"
+              Text "검토 중" (2TB7-1) 0×0 "검토 중"
+            Frame "Frame" (2TB0-1) 0×0
+              Frame "Frame" (2TB4-1) 22×22
+                Text "1" (2TB5-1) 0×0 "1"
+              Frame "Frame" (2TB1-1) 0×0
+                Text "조건 입력 완료" (2TB3-1) 0×0 "조건 입력 완료"
+                Text "지정가 · 10주 · 현금" (2TB2-1) 0×0 "지정가 · 10주 · 현금"
+            Frame "Frame" (2TAU-1) 0×0
+              Frame "Frame" (2TAY-1) 22×22
+                Text "2" (2TAZ-1) 0×0 "2"
+              Frame "Frame" (2TAV-1) 0×0
+                Text "응답 필드 대기" (2TAX-1) 0×0 "응답 필드 대기"
+                Text "주문번호 · 거래소구분" (2TAW-1) 0×0 "주문번호 · 거래소구분"
+            Frame "Frame" (2TAR-1) 0×0
+              Rectangle "Rectangle" (2TAT-1) 22×22
+              Text "사용자 확인 후 접수" (2TAS-1) 0×0 "사용자 확인 후 접수"

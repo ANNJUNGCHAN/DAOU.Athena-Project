@@ -1,0 +1,1879 @@
+{
+ "board_id": "OJ-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "18 · 설정 — 모델 · AI 제공업체 계정",
+ "width": 1680,
+ "height": 1054,
+ "texts": [
+  {
+   "id": "RH-0",
+   "text": "설정",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "RG-0",
+   "text": "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "RE-0",
+   "text": "화면",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item is-selected"
+   ]
+  },
+  {
+   "id": "RC-0",
+   "text": "계좌",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "RB-0",
+   "text": "2개",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "R9-0",
+   "text": "MCP 서버",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "R8-0",
+   "text": "4개",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "R6-0",
+   "text": "모델",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "R4-0",
+   "text": "성향・이력",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "RK-0",
+   "text": "모델",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-head"
+   ]
+  },
+  {
+   "id": "49FV-0",
+   "text": "AI 제공업체 계정",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-lead"
+   ]
+  },
+  {
+   "id": "49FW-0",
+   "text": "Athena는 이 컴퓨터의 Claude·Codex CLI 로그인을 그대로 쓴다. 질의는 활성 계정으로 실행되고, 모델·사고 강도는 공급자별로 정한다.",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-lead"
+   ]
+  },
+  {
+   "id": "49G1-0",
+   "text": "Claude",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "section-head"
+   ]
+  },
+  {
+   "id": "49G3-0",
+   "text": "연결됨",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "section-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49G4-0",
+   "text": "이 컴퓨터의 Claude CLI 로그인을 그대로 쓴다. 계정을 여러 개 오가려면 여기서 추가한다 — 로그인은 새 터미널 창에서 끝난다.",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude"
+   ]
+  },
+  {
+   "id": "49G9-0",
+   "text": "계정",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-accounts-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49GA-0",
+   "text": "이 컴퓨터에서 감지된 Claude 계정이다. 새 계정은 여기에 추가된다.",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-accounts-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49GC-0",
+   "text": "+ 계정 추가",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-accounts-head",
+    "uk-btn-ghost · 계정 추가"
+   ]
+  },
+  {
+   "id": "49GI-0",
+   "text": "user@example.com",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card is-active",
+    "uk-account-main",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49GK-0",
+   "text": "활성",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card is-active",
+    "uk-account-main",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49GL-0",
+   "text": "현재 CLI 로그인 · 8월 10일 오후 4:49 추가",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card is-active",
+    "uk-account-main"
+   ]
+  },
+  {
+   "id": "49GR-0",
+   "text": "재인증",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card is-active",
+    "uk-account-actions",
+    "uk-btn-ghost · 재인증"
+   ]
+  },
+  {
+   "id": "49GV-0",
+   "text": "제거",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card is-active",
+    "uk-account-actions",
+    "uk-btn-ghost · 제거 (disabled — 현재 CLI 로그인)"
+   ]
+  },
+  {
+   "id": "49HD-0",
+   "text": "work@example.com",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card (전환 button)",
+    "uk-account-main",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49HC-0",
+   "text": "비활성",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card (전환 button)",
+    "uk-account-main",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49H9-0",
+   "text": "이전 CLI 로그인 · 8월 8일 오후 5:45 추가 · 누르면 활성으로 전환",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card (전환 button)",
+    "uk-account-main"
+   ]
+  },
+  {
+   "id": "49H4-0",
+   "text": "재인증",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card (전환 button)",
+    "uk-account-actions",
+    "uk-btn-ghost · 재인증"
+   ]
+  },
+  {
+   "id": "49H0-0",
+   "text": "제거",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card (전환 button)",
+    "uk-account-actions",
+    "uk-btn-ghost · 제거"
+   ]
+  },
+  {
+   "id": "49HF-0",
+   "text": "모델",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls"
+   ]
+  },
+  {
+   "id": "49HI-0",
+   "text": "기본",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-chip-row · 모델",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49HK-0",
+   "text": "fable",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-chip-row · 모델",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49HM-0",
+   "text": "opus",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-chip-row · 모델",
+    "is-pressed"
+   ]
+  },
+  {
+   "id": "49HO-0",
+   "text": "sonnet",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-chip-row · 모델",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49HQ-0",
+   "text": "haiku",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-chip-row · 모델",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49V7-0",
+   "text": "모델 이름 직접 입력",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-input · 모델 이름 직접 입력"
+   ]
+  },
+  {
+   "id": "49HS-0",
+   "text": "사고 강도",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49HV-0",
+   "text": "기본",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49HX-0",
+   "text": "low",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49HZ-0",
+   "text": "medium",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49I1-0",
+   "text": "high",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "is-pressed"
+   ]
+  },
+  {
+   "id": "49I3-0",
+   "text": "xhigh",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49I5-0",
+   "text": "max",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Claude",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49IB-0",
+   "text": "Codex",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "section-head"
+   ]
+  },
+  {
+   "id": "49ID-0",
+   "text": "연결됨",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "section-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49IF-0",
+   "text": "선택 사항",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "section-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49IG-0",
+   "text": "Codex 로그인은 Athena 전용 홈에 따로 보관된다 — 이 컴퓨터의 다른 Codex 로그인과 섞이지 않는다. 연결하지 않아도 질의는 Claude로 실행된다.",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex"
+   ]
+  },
+  {
+   "id": "49IL-0",
+   "text": "계정",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-accounts-block",
+    "uk-accounts-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49IM-0",
+   "text": "Athena 전용 홈에 보관된 Codex 로그인이다. 새 계정은 여기에 추가된다.",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-accounts-block",
+    "uk-accounts-head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49IO-0",
+   "text": "+ 계정 추가",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-accounts-block",
+    "uk-accounts-head",
+    "uk-btn-ghost · 계정 추가"
+   ]
+  },
+  {
+   "id": "49IT-0",
+   "text": "Codex",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card is-active",
+    "uk-account-main",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49IV-0",
+   "text": "활성",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card is-active",
+    "uk-account-main",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49IW-0",
+   "text": "Athena 전용 로그인 · 8월 8일 오후 5:46 추가",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card is-active",
+    "uk-account-main"
+   ]
+  },
+  {
+   "id": "49J2-0",
+   "text": "재인증",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card is-active",
+    "uk-account-actions",
+    "uk-btn-ghost · 재인증"
+   ]
+  },
+  {
+   "id": "49J6-0",
+   "text": "제거",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-accounts-block",
+    "uk-account-list",
+    "uk-account-card is-active",
+    "uk-account-actions",
+    "uk-btn-ghost · 제거"
+   ]
+  },
+  {
+   "id": "49JP-0",
+   "text": "사고 강도",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-model-controls"
+   ]
+  },
+  {
+   "id": "49JS-0",
+   "text": "기본",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "is-pressed"
+   ]
+  },
+  {
+   "id": "49JU-0",
+   "text": "minimal",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49JW-0",
+   "text": "low",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49JY-0",
+   "text": "medium",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49K0-0",
+   "text": "high",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49K2-0",
+   "text": "xhigh",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-provider-section · Codex",
+    "uk-model-controls",
+    "uk-chip-row · 사고 강도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49K5-0",
+   "text": "Codex 설정은 $CODEX_HOME/config.toml의 model · model_reasoning_effort에 직접 반영된다 — 이 앱 밖에서 codex를 쓸 때도 적용되는 전역 기본값이다. 질의 실행 결선은 여전히 Claude뿐이다.",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-settings-note"
+   ]
+  },
+  {
+   "id": "49K6-0",
+   "text": "모델 접근 권한은 활성 계정의 플랜을 따른다 — 접근 불가 모델이면 질의가 오류로 표면화된다.",
+   "path": [
+    "18 · 설정 — 모델 · AI 제공업체 계정",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-settings-note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "OJ-0",
+   "name": "18 · 설정 — 모델 · AI 제공업체 계정",
+   "component": "Frame",
+   "w": 1680,
+   "h": 1054,
+   "depth": 0
+  },
+  {
+   "id": "OK-0",
+   "name": "Shell 창 · 설정 모드 (#settings)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 974,
+   "depth": 1
+  },
+  {
+   "id": "RF-0",
+   "name": "settings-head",
+   "component": "Frame",
+   "w": 1478,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "OU-0",
+   "name": "settings-body",
+   "component": "Frame",
+   "w": 1478,
+   "h": 876,
+   "depth": 2
+  },
+  {
+   "id": "R2-0",
+   "name": "settings-nav",
+   "component": "Frame",
+   "w": 236,
+   "h": 876,
+   "depth": 3
+  },
+  {
+   "id": "RD-0",
+   "name": "nav-item is-selected",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "RA-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "R7-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "R5-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "R3-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "OV-0",
+   "name": "settings-grid",
+   "component": "Frame",
+   "w": 1226,
+   "h": 876,
+   "depth": 3
+  },
+  {
+   "id": "RI-0",
+   "name": "카드 · 모델 (.card.model) — 2026-09-05 계정 카드형",
+   "component": "Frame",
+   "w": 1226,
+   "h": 876,
+   "depth": 4
+  },
+  {
+   "id": "RJ-0",
+   "name": "card-head",
+   "component": "Frame",
+   "w": 1224,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "RL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "RM-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "RN-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "RO-0",
+   "name": "card-body · 내용 초과 시 세로 스크롤",
+   "component": "Frame",
+   "w": 1224,
+   "h": 830,
+   "depth": 5
+  },
+  {
+   "id": "49FU-0",
+   "name": "uk-provider-lead",
+   "component": "Frame",
+   "w": 1188,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "49FY-0",
+   "name": "uk-provider-section · Claude",
+   "component": "Frame",
+   "w": 1188,
+   "h": 421,
+   "depth": 6
+  },
+  {
+   "id": "49FZ-0",
+   "name": "section-head",
+   "component": "Frame",
+   "w": 1188,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "49G0-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 8
+  },
+  {
+   "id": "49G2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 49,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "49G6-0",
+   "name": "uk-accounts-block",
+   "component": "Frame",
+   "w": 1188,
+   "h": 175,
+   "depth": 7
+  },
+  {
+   "id": "49G7-0",
+   "name": "uk-accounts-head",
+   "component": "Frame",
+   "w": 1188,
+   "h": 35,
+   "depth": 8
+  },
+  {
+   "id": "49G8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 365,
+   "h": 35,
+   "depth": 9
+  },
+  {
+   "id": "49GB-0",
+   "name": "uk-btn-ghost · 계정 추가",
+   "component": "Frame",
+   "w": 90,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49GD-0",
+   "name": "uk-account-list",
+   "component": "Frame",
+   "w": 1188,
+   "h": 132,
+   "depth": 8
+  },
+  {
+   "id": "49GF-0",
+   "name": "uk-account-card is-active",
+   "component": "Frame",
+   "w": 1188,
+   "h": 62,
+   "depth": 9
+  },
+  {
+   "id": "49GG-0",
+   "name": "uk-account-main",
+   "component": "Frame",
+   "w": 228,
+   "h": 40,
+   "depth": 10
+  },
+  {
+   "id": "49GH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 20,
+   "depth": 11
+  },
+  {
+   "id": "49GJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 40,
+   "h": 20,
+   "depth": 12
+  },
+  {
+   "id": "49GM-0",
+   "name": "uk-account-actions",
+   "component": "Frame",
+   "w": 149,
+   "h": 30,
+   "depth": 10
+  },
+  {
+   "id": "49GN-0",
+   "name": "uk-btn-ghost · 재인증",
+   "component": "Frame",
+   "w": 76,
+   "h": 30,
+   "depth": 11
+  },
+  {
+   "id": "49GO-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 12
+  },
+  {
+   "id": "49GP-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 13
+  },
+  {
+   "id": "49GQ-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 13
+  },
+  {
+   "id": "49GS-0",
+   "name": "uk-btn-ghost · 제거 (disabled — 현재 CLI 로그인)",
+   "component": "Frame",
+   "w": 65,
+   "h": 30,
+   "depth": 11
+  },
+  {
+   "id": "49GT-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 12
+  },
+  {
+   "id": "49GU-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 7,
+   "depth": 13
+  },
+  {
+   "id": "49GX-0",
+   "name": "uk-account-card (전환 button)",
+   "component": "Frame",
+   "w": 1188,
+   "h": 64,
+   "depth": 9
+  },
+  {
+   "id": "49H8-0",
+   "name": "uk-account-main",
+   "component": "Frame",
+   "w": 349,
+   "h": 42,
+   "depth": 10
+  },
+  {
+   "id": "49HA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 349,
+   "h": 22,
+   "depth": 11
+  },
+  {
+   "id": "49HB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 22,
+   "depth": 12
+  },
+  {
+   "id": "49GY-0",
+   "name": "uk-account-actions",
+   "component": "Frame",
+   "w": 149,
+   "h": 30,
+   "depth": 10
+  },
+  {
+   "id": "49H3-0",
+   "name": "uk-btn-ghost · 재인증",
+   "component": "Frame",
+   "w": 76,
+   "h": 30,
+   "depth": 11
+  },
+  {
+   "id": "49H5-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 12
+  },
+  {
+   "id": "49H7-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 13
+  },
+  {
+   "id": "49H6-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 13
+  },
+  {
+   "id": "49GZ-0",
+   "name": "uk-btn-ghost · 제거",
+   "component": "Frame",
+   "w": 65,
+   "h": 30,
+   "depth": 11
+  },
+  {
+   "id": "49H1-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 12
+  },
+  {
+   "id": "49H2-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 7,
+   "depth": 13
+  },
+  {
+   "id": "49HE-0",
+   "name": "uk-model-controls",
+   "component": "Frame",
+   "w": 1188,
+   "h": 180,
+   "depth": 7
+  },
+  {
+   "id": "49HG-0",
+   "name": "uk-chip-row · 모델",
+   "component": "Frame",
+   "w": 1188,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "49HH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 50,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49HJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 53,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49HL-0",
+   "name": "is-pressed",
+   "component": "Frame",
+   "w": 53,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49HN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 63,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49HP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49V6-0",
+   "name": "uk-input · 모델 이름 직접 입력",
+   "component": "Frame",
+   "w": 320,
+   "h": 44,
+   "depth": 8
+  },
+  {
+   "id": "49HR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1188,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "49HT-0",
+   "name": "uk-chip-row · 사고 강도",
+   "component": "Frame",
+   "w": 1188,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "49HU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 50,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49HW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 45,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49HY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 71,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49I0-0",
+   "name": "is-pressed",
+   "component": "Frame",
+   "w": 51,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49I2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49I4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 49,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49I7-0",
+   "name": "uk-model-divider",
+   "component": "Frame",
+   "w": 1188,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "49I8-0",
+   "name": "uk-provider-section · Codex",
+   "component": "Frame",
+   "w": 1188,
+   "h": 227,
+   "depth": 6
+  },
+  {
+   "id": "49I9-0",
+   "name": "section-head",
+   "component": "Frame",
+   "w": 1188,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "49IA-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 8
+  },
+  {
+   "id": "49IC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 49,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "49IE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 64,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "49II-0",
+   "name": "uk-accounts-block",
+   "component": "Frame",
+   "w": 1188,
+   "h": 105,
+   "depth": 7
+  },
+  {
+   "id": "49IJ-0",
+   "name": "uk-accounts-head",
+   "component": "Frame",
+   "w": 1188,
+   "h": 35,
+   "depth": 8
+  },
+  {
+   "id": "49IK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 392,
+   "h": 35,
+   "depth": 9
+  },
+  {
+   "id": "49IN-0",
+   "name": "uk-btn-ghost · 계정 추가",
+   "component": "Frame",
+   "w": 90,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49IP-0",
+   "name": "uk-account-list",
+   "component": "Frame",
+   "w": 1188,
+   "h": 62,
+   "depth": 8
+  },
+  {
+   "id": "49IQ-0",
+   "name": "uk-account-card is-active",
+   "component": "Frame",
+   "w": 1188,
+   "h": 62,
+   "depth": 9
+  },
+  {
+   "id": "49IR-0",
+   "name": "uk-account-main",
+   "component": "Frame",
+   "w": 243,
+   "h": 40,
+   "depth": 10
+  },
+  {
+   "id": "49IS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 243,
+   "h": 20,
+   "depth": 11
+  },
+  {
+   "id": "49IU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 40,
+   "h": 20,
+   "depth": 12
+  },
+  {
+   "id": "49IX-0",
+   "name": "uk-account-actions",
+   "component": "Frame",
+   "w": 149,
+   "h": 30,
+   "depth": 10
+  },
+  {
+   "id": "49IY-0",
+   "name": "uk-btn-ghost · 재인증",
+   "component": "Frame",
+   "w": 76,
+   "h": 30,
+   "depth": 11
+  },
+  {
+   "id": "49IZ-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 12
+  },
+  {
+   "id": "49J0-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 13
+  },
+  {
+   "id": "49J1-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 13
+  },
+  {
+   "id": "49J3-0",
+   "name": "uk-btn-ghost · 제거",
+   "component": "Frame",
+   "w": 65,
+   "h": 30,
+   "depth": 11
+  },
+  {
+   "id": "49J4-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 12
+  },
+  {
+   "id": "49J5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 7,
+   "depth": 13
+  },
+  {
+   "id": "49JO-0",
+   "name": "uk-model-controls",
+   "component": "Frame",
+   "w": 1188,
+   "h": 56,
+   "depth": 7
+  },
+  {
+   "id": "49JQ-0",
+   "name": "uk-chip-row · 사고 강도",
+   "component": "Frame",
+   "w": 1188,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "49JR-0",
+   "name": "is-pressed",
+   "component": "Frame",
+   "w": 50,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49JT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 70,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49JV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 45,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49JX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 71,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49JZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 51,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49K1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 30,
+   "depth": 9
+  },
+  {
+   "id": "49K4-0",
+   "name": "uk-settings-note",
+   "component": "Frame",
+   "w": 1188,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "OT-0",
+   "name": "타이틀바 (.titlebar)",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "OL-0",
+   "name": "창 제어 (.win-controls · 최대화 비활성)",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "OR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "OS-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "OP-0",
+   "name": "disabled",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "OQ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "OM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "ON-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "OO-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "설정": 1,
+  "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기": 1,
+  "화면": 1,
+  "계좌": 1,
+  "2개": 1,
+  "MCP 서버": 1,
+  "4개": 1,
+  "모델": 3,
+  "성향・이력": 1,
+  "AI 제공업체 계정": 1,
+  "Athena는 이 컴퓨터의 Claude·Codex CLI 로그인을 그대로 쓴다. 질의는 활성 계정으로 실행되고, 모델·사고 강도는 공급자별로 정한다.": 1,
+  "Claude": 1,
+  "연결됨": 2,
+  "이 컴퓨터의 Claude CLI 로그인을 그대로 쓴다. 계정을 여러 개 오가려면 여기서 추가한다 — 로그인은 새 터미널 창에서 끝난다.": 1,
+  "계정": 2,
+  "이 컴퓨터에서 감지된 Claude 계정이다. 새 계정은 여기에 추가된다.": 1,
+  "+ 계정 추가": 2,
+  "user@example.com": 1,
+  "활성": 2,
+  "현재 CLI 로그인 · 8월 10일 오후 4:49 추가": 1,
+  "재인증": 3,
+  "제거": 3,
+  "work@example.com": 1,
+  "비활성": 1,
+  "이전 CLI 로그인 · 8월 8일 오후 5:45 추가 · 누르면 활성으로 전환": 1,
+  "기본": 3,
+  "fable": 1,
+  "opus": 1,
+  "sonnet": 1,
+  "haiku": 1,
+  "모델 이름 직접 입력": 1,
+  "사고 강도": 2,
+  "low": 2,
+  "medium": 2,
+  "high": 2,
+  "xhigh": 2,
+  "max": 1,
+  "Codex": 2,
+  "선택 사항": 1,
+  "Codex 로그인은 Athena 전용 홈에 따로 보관된다 — 이 컴퓨터의 다른 Codex 로그인과 섞이지 않는다. 연결하지 않아도 질의는 Claude로 실행된다.": 1,
+  "Athena 전용 홈에 보관된 Codex 로그인이다. 새 계정은 여기에 추가된다.": 1,
+  "Athena 전용 로그인 · 8월 8일 오후 5:46 추가": 1,
+  "minimal": 1,
+  "Codex 설정은 $CODEX_HOME/config.toml의 model · model_reasoning_effort에 직접 반영된다 — 이 앱 밖에서 codex를 쓸 때도 적용되는 전역 기본값이다. 질의 실행 결선은 여전히 Claude뿐이다.": 1,
+  "모델 접근 권한은 활성 계정의 플랜을 따른다 — 접근 불가 모델이면 질의가 오류로 표면화된다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "ceaa51f4ab4c51980bd3db119a0f8df3b69cb511d1a96dce1986afa7d0e1a53f"
+}

@@ -1,0 +1,64 @@
+Frame "32 · 설정 — 성향·이력" (2UWT-1) 1680×900
+  Frame "Shell 창 · 설정 모드 (#settings)" (2UWU-1) 1520×760
+    Frame "settings-head" (2UZH-1) 1478×32
+      Text "settings-title" (2UZJ-1) 29×18 "설정"
+      Text "settings-hint" (2UZI-1) 261×16 "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기"
+    Frame "settings-body" (2UX4-1) 1478×662
+      Frame "settings-nav" (2UZ4-1) 236×662
+        Frame "nav-item is-selected" (2UZF-1) 218×40
+          Text "화면" (2UZG-1) 26×16 "화면"
+        Frame "nav-item" (2UZC-1) 218×40
+          Text "계좌" (2UZE-1) 26×16 "계좌"
+          Text "2개" (2UZD-1) 18×14 "2개"
+        Frame "nav-item" (2UZ9-1) 218×40
+          Text "플러그인" (2UZB-1) 52×16 "플러그인"
+          Text "2개" (2UZA-1) 18×14 "2개"
+        Frame "nav-item" (2UZ7-1) 218×40
+          Text "모델" (2UZ8-1) 26×16 "모델"
+        Frame "nav-item" (2UZ5-1) 218×40
+          Text "성향・이력" (2UZ6-1) 65×16 "성향・이력"
+      Frame "settings-grid" (2UX5-1) 1226×662
+        Frame "Frame" (2UZK-1) 1226×662
+          Frame "Frame" (2UZL-1) 1224×44
+            Text "성향·이력" (2UZM-1) 60×18 "성향·이력"
+            Text "로컬 보관 · 언제든 내보내기 가능" (2UZN-1) 166×12 "로컬 보관 · 언제든 내보내기 가능"
+          Frame "Frame" (2UZO-1) 1224×408
+            Frame "Frame" (2UZP-1) 1188×200
+              Text "투자 성향" (2UZQ-1) 1188×12 "투자 성향"
+              Frame "Frame" (2UZR-1) 1188×66
+                Frame "Frame" (2UZS-1) 1160×16
+                  Text "장기 ETF 적립형" (2UZT-1) 95×16 "장기 ETF 적립형"
+                  Text "대화에서 학습됨" (2UZU-1) 76×12 "대화에서 학습됨"
+                Text "지수 ETF 위주로 장기 적립하고, …" (2UZV-1) 1160×16 "지수 ETF 위주로 장기 적립하고, 개별 종목은 반도체 대형주를 관찰합니다. 답변은 차분한 설명을 선호합니다"
+              Frame "Frame" (2UZW-1) 1188×30
+                Text "위험 성향" (2UZX-1) 51×14 "위험 성향"
+                Text "안정 추구" (2UZY-1) 51×14 "안정 추구"
+              Frame "Frame" (2UZZ-1) 1188×30
+                Text "주요 관심" (2V00-1) 51×14 "주요 관심"
+                Text "지수 ETF · 반도체" (2V01-1) 102×14 "지수 ETF · 반도체"
+              Frame "Frame" (2V02-1) 1188×30
+                Text "성향 반영" (2V03-1) 51×14 "성향 반영"
+                Text "켜짐 · 답변 어조에만 사용" (2V04-1) 143×14 "켜짐 · 답변 어조에만 사용"
+            Frame "Frame" (2V05-1) 1188×162
+              Text "대화 이력" (2V06-1) 1188×12 "대화 이력"
+              Frame "Frame" (2V07-1) 1188×30
+                Text "보관 중" (2V08-1) 40×14 "보관 중"
+                Text "대화 128건 · 42MB" (2V09-1) 106×14 "대화 128건 · 42MB"
+              Frame "Frame" (2V0A-1) 1188×30
+                Text "보존 기간" (2V0B-1) 51×14 "보존 기간"
+                Text "90일 · 이후 자동 정리" (2V0C-1) 124×14 "90일 · 이후 자동 정리"
+              Frame "Frame" (2V0D-1) 1188×44
+                Frame "Frame" (2V0E-1) 589×38
+                  Text "이력 내보내기" (2V0F-1) 77×16 "이력 내보내기"
+                Frame "Frame" (2V0G-1) 589×38
+                  Text "전체 삭제" (2V0H-1) 53×16 "전체 삭제"
+              Text "삭제는 확인 단계를 한 번 더 거치며…" (2V0I-1) 1188×14 "삭제는 확인 단계를 한 번 더 거치며 되돌릴 수 없습니다"
+    Frame "타이틀바 (.titlebar)" (2UX3-1) 1518×26
+    Frame "창 제어 (.win-controls · 최대화 비활성)" (2UWV-1) 94×24
+      Frame "Frame" (2UX1-1) 30×24
+        Rectangle "Rectangle" (2UX2-1) 9×2
+      Frame "disabled" (2UWZ-1) 30×24
+        Rectangle "Rectangle" (2UX0-1) 8×8
+      Frame "Frame" (2UWW-1) 30×24
+        SVG "SVG" (2UWX-1) 10×10
+          SVGVisualElement "Path" (2UWY-1) 9×9

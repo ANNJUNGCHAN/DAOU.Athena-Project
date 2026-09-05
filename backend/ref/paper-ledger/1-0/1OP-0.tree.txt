@@ -1,0 +1,65 @@
+Frame "22 · 주문 — 검토·영향·확인" (1OP-0) 1680×900
+  Frame "Shell 창 · 설정 모드 (#settings)" (1OQ-0) 1520×760
+    Frame "settings-head" (1RL-0) 1478×32
+      Text "settings-title" (1RN-0) 63×18 "주문 티켓"
+      Text "settings-hint" (1RM-0) 292×16 "Esc 닫기 — 실행 전에는 아무 일도 일어나지 않습니다"
+    Frame "#orderBody (.settings-grid)" (1RO-0) 1478×662
+      Frame "ticket-card (v3 주문카드 · 세로형)" (9F3-0) 440×429
+        Frame "Frame" (9F4-0) 390×37
+          Frame "Frame" (9F5-0) 390×18
+            Text "삼성전자 005930" (9F6-0) 108×18 "삼성전자 005930"
+            Rectangle "Rectangle" (9F7-0) 194×0
+            Text "집행 전 재확인" (9F8-0) 72×12 "집행 전 재확인"
+          Text "감시 조건 도달 — 종가 88,000…" (9F9-0) 390×16 "감시 조건 도달 — 종가 88,000 이상 · 발화 관측값 88,100"
+        Frame "Frame" (9FA-0) 390×32
+          Frame "Frame" (9FB-0) 193×28
+            Text "구매" (9FC-0) 24×16 "구매"
+          Frame "Frame" (9FD-0) 193×28
+            Text "판매" (9FE-0) 24×16 "판매"
+        Frame "Frame" (9FF-0) 390×28
+          Text "가격" (9FG-0) 52×14 "가격"
+          Frame "Frame" (9FH-0) 104×22
+            Frame "Frame" (9FI-0) 50×18
+              Text "지정가" (9FJ-0) 30×12 "지정가"
+            Frame "Frame" (9FK-0) 50×18
+              Text "시장가" (9FL-0) 30×12 "시장가"
+          Frame "Frame" (9FM-0) 214×28
+            Text "시장가 체결" (9FN-0) 68×16 "시장가 체결"
+        Frame "Frame" (9FO-0) 390×28
+          Text "수량" (9FP-0) 52×14 "수량"
+          Frame "Frame" (9FQ-0) 168×28
+            Text "10" (9FR-0) 16×16 "10"
+            Text "주" (9FS-0) 10×12 "주"
+          Frame "Frame" (9FT-0) 150×22
+            Frame "Frame" (9FU-0) 34×22
+              Text "10%" (9FV-0) 18×12 "10%"
+            Frame "Frame" (9FW-0) 34×22
+              Text "25%" (9FX-0) 18×12 "25%"
+            Frame "Frame" (9FY-0) 34×22
+              Text "50%" (9FZ-0) 18×12 "50%"
+            Frame "Frame" (9G0-0) 36×22
+              Text "최대" (9G1-0) 20×12 "최대"
+        Frame "Frame" (9G2-0) 390×29
+          Text "총 주문 금액 (시장가 추정)" (9G3-0) 133×14 "총 주문 금액 (시장가 추정)"
+          Text "약 881,000원" (9G4-0) 86×18 "약 881,000원"
+        Frame "Frame" (9G5-0) 390×73
+          Frame "Frame" (9G6-0) 360×12
+            Rectangle "Rectangle" (9G7-0) 6×6
+            Text "지금은 실행할 수 없음" (9G8-0) 118×12 "지금은 실행할 수 없음"
+          Text "활성 계좌의 주문 API가 OFF입니…" (9G9-0) 360×34 "활성 계좌의 주문 API가 OFF입니다 — 설정 › 계좌에서 게이트를 여세요."
+        Frame "Frame" (9GA-0) 390×72
+          Frame "Frame" (9GB-0) 390×34
+            Frame "Frame" (9GC-0) 291×34
+              Text "구매하기" (9GD-0) 52×16 "구매하기"
+            Frame "Frame" (9GE-0) 91×34
+              Text "닫기 (Esc)" (9GF-0) 53×16 "닫기 (Esc)"
+          Text "실행하면 확인 게이트와 멱등키가 적용…" (9GG-0) 390×30 "실행하면 확인 게이트와 멱등키가 적용됩니다 — 같은 멱등키로는 두 번 체결되지 않습니다."
+    Frame "타이틀바 (.titlebar)" (1OZ-0) 1518×26
+    Frame "창 제어 (.win-controls · 최대화 비활성)" (1OR-0) 94×24
+      Frame "Frame" (1OX-0) 30×24
+        Rectangle "Rectangle" (1OY-0) 9×2
+      Frame "disabled" (1OV-0) 30×24
+        Rectangle "Rectangle" (1OW-0) 8×8
+      Frame "Frame" (1OS-0) 30×24
+        SVG "SVG" (1OT-0) 10×10
+          SVGVisualElement "Path" (1OU-0) 9×9

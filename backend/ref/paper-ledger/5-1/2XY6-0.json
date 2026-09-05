@@ -1,0 +1,6425 @@
+{
+ "board_id": "2XY6-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "2Y46-0",
+   "text": "ELW 순위",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y45-0",
+   "text": "전 종목 · 근접률 순",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y44-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y41-0",
+   "text": "상장 ELW 3,482 종목",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y40-0",
+   "text": "콜 2,146 · 풋 1,336",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3Z-0",
+   "text": "09:42:18 조회",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3W-0",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3U-0",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3S-0",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3Q-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3O-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3M-0",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3K-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3G-0",
+   "text": "정렬 기준",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3F-0",
+   "text": "근접률 높은 순",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3D-0",
+   "text": "등락률 상위",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3C-0",
+   "text": "+12.16%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y3B-0",
+   "text": "장중 갱신 기준",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y39-0",
+   "text": "근접률 최고",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y38-0",
+   "text": "98.6%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y37-0",
+   "text": "행사가 대비",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y35-0",
+   "text": "급등락 감지",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y34-0",
+   "text": "12건",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y33-0",
+   "text": "오늘 누적",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y31-0",
+   "text": "조건검색 저장",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y30-0",
+   "text": "2건",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y2Z-0",
+   "text": "저장 조건 기준",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y2W-0",
+   "text": "잔량",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y2U-0",
+   "text": "등락률",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y2S-0",
+   "text": "근접률",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y2Q-0",
+   "text": "가격급등락",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y2O-0",
+   "text": "거래원별 순매매",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y2M-0",
+   "text": "조건검색",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y2J-0",
+   "text": "범위",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y2I-0",
+   "text": "주식",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y2G-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2Y2E-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LDQ-0",
+   "text": "전체 3,482건 · 20건 표시",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39V7-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "39V8-0",
+   "text": "종목 · 코드 · 발행사",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "39V9-0",
+   "text": "현재가 · 전일대비",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "39VA-0",
+   "text": "등락률",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "39VB-0",
+   "text": "근접률 · 잔여",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "39VC-0",
+   "text": "거래량 · 대금",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "39VD-0",
+   "text": "잔존일 · 행사가",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "39VE-0",
+   "text": "LP",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "헤더"
+   ]
+  },
+  {
+   "id": "39VG-0",
+   "text": "1",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜"
+   ]
+  },
+  {
+   "id": "39VI-0",
+   "text": "KOSPI200 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39VJ-0",
+   "text": "58P630 · 한국투자증권 6B44회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39VL-0",
+   "text": "305",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39VM-0",
+   "text": "▲ +10",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39VN-0",
+   "text": "+3.39%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜"
+   ]
+  },
+  {
+   "id": "39VP-0",
+   "text": "98.6%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39VQ-0",
+   "text": "기초지수 448.62",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39VS-0",
+   "text": "320만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39VT-0",
+   "text": "9.8억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39VV-0",
+   "text": "17일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39VW-0",
+   "text": "행사가 442.50",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39VX-0",
+   "text": "한투",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 1 · KOSPI200 콜"
+   ]
+  },
+  {
+   "id": "39VZ-0",
+   "text": "2",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜"
+   ]
+  },
+  {
+   "id": "39W1-0",
+   "text": "카카오 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39W2-0",
+   "text": "58R210 · KB증권 4H27회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39W4-0",
+   "text": "62",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39W5-0",
+   "text": "▲ +5",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39W6-0",
+   "text": "+8.77%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜"
+   ]
+  },
+  {
+   "id": "39W8-0",
+   "text": "97.3%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39W9-0",
+   "text": "잔여 1,150원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WB-0",
+   "text": "260만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WC-0",
+   "text": "1.6억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WE-0",
+   "text": "21일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WF-0",
+   "text": "행사가 43,000",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WG-0",
+   "text": "키움",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 2 · 카카오 콜"
+   ]
+  },
+  {
+   "id": "39WI-0",
+   "text": "3",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜"
+   ]
+  },
+  {
+   "id": "39WK-0",
+   "text": "SK하이닉스 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WL-0",
+   "text": "58J377 · 미래에셋증권 7K55회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WN-0",
+   "text": "285",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WO-0",
+   "text": "▲ +25",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WP-0",
+   "text": "+9.62%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜"
+   ]
+  },
+  {
+   "id": "39WR-0",
+   "text": "94.5%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WS-0",
+   "text": "잔여 11,600원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WU-0",
+   "text": "540만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WV-0",
+   "text": "15.4억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WX-0",
+   "text": "38일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WY-0",
+   "text": "행사가 210,000",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39WZ-0",
+   "text": "미래",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 3 · SK하이닉스 콜"
+   ]
+  },
+  {
+   "id": "39X1-0",
+   "text": "4",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜"
+   ]
+  },
+  {
+   "id": "39X3-0",
+   "text": "삼성전자 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39X4-0",
+   "text": "58H219 · KB증권 9C21회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39X6-0",
+   "text": "415",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39X7-0",
+   "text": "▲ +45",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39X8-0",
+   "text": "+12.16%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜"
+   ]
+  },
+  {
+   "id": "39XA-0",
+   "text": "94.3%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XB-0",
+   "text": "잔여 9,150원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XD-0",
+   "text": "620만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XE-0",
+   "text": "25.7억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XG-0",
+   "text": "24일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XH-0",
+   "text": "행사가 160,000",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XI-0",
+   "text": "키움",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 4 · 삼성전자 콜"
+   ]
+  },
+  {
+   "id": "39Y3-0",
+   "text": "5",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋"
+   ]
+  },
+  {
+   "id": "39Y5-0",
+   "text": "삼성전자 풋",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39Y6-0",
+   "text": "58L118 · 신한투자증권 5T31회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39Y8-0",
+   "text": "145",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39Y9-0",
+   "text": "▼ −10",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YA-0",
+   "text": "−6.45%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋"
+   ]
+  },
+  {
+   "id": "39YC-0",
+   "text": "92.8%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YD-0",
+   "text": "잔여 10,850원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YF-0",
+   "text": "420만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YG-0",
+   "text": "6.1억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YI-0",
+   "text": "31일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YJ-0",
+   "text": "행사가 140,000",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YK-0",
+   "text": "신한",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 5 · 삼성전자 풋"
+   ]
+  },
+  {
+   "id": "39YM-0",
+   "text": "6",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "39YO-0",
+   "text": "LG에너지솔루션 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YP-0",
+   "text": "58Q745 · 신한투자증권 9K12회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YR-0",
+   "text": "240",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YS-0",
+   "text": "▲ +5",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YT-0",
+   "text": "+2.13%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "39YV-0",
+   "text": "91.7%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YW-0",
+   "text": "잔여 35,000원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YY-0",
+   "text": "280만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39YZ-0",
+   "text": "6.7억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39Z1-0",
+   "text": "52일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39Z2-0",
+   "text": "행사가 420,000",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39Z3-0",
+   "text": "신한",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 6 · LG에너지솔루션 콜"
+   ]
+  },
+  {
+   "id": "39Z5-0",
+   "text": "7",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜"
+   ]
+  },
+  {
+   "id": "39Z7-0",
+   "text": "POSCO홀딩스 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39Z8-0",
+   "text": "58T933 · 한국투자증권 5N82회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ZA-0",
+   "text": "96",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ZB-0",
+   "text": "▼ −4",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ZC-0",
+   "text": "−4.00%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜"
+   ]
+  },
+  {
+   "id": "39ZE-0",
+   "text": "90.4%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ZF-0",
+   "text": "잔여 38,000원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ZH-0",
+   "text": "240만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ZI-0",
+   "text": "2.3억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ZK-0",
+   "text": "33일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ZL-0",
+   "text": "행사가 396,000",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ZM-0",
+   "text": "한투",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 7 · POSCO홀딩스 콜"
+   ]
+  },
+  {
+   "id": "3KGZ-0",
+   "text": "8",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜"
+   ]
+  },
+  {
+   "id": "3KGY-0",
+   "text": "이수페타시스 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KGX-0",
+   "text": "59F215 · 미래에셋증권 3C41회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KGV-0",
+   "text": "96",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KGU-0",
+   "text": "▲ +9",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KGS-0",
+   "text": "+10.34%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜"
+   ]
+  },
+  {
+   "id": "3KGR-0",
+   "text": "89.9%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KGQ-0",
+   "text": "잔여 7,200원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KGO-0",
+   "text": "84만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KGN-0",
+   "text": "0.8억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KGL-0",
+   "text": "28일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KGK-0",
+   "text": "행사가 71,700",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KGI-0",
+   "text": "미래",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 8 · 이수페타시스 콜"
+   ]
+  },
+  {
+   "id": "3KHI-0",
+   "text": "9",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜"
+   ]
+  },
+  {
+   "id": "3KHH-0",
+   "text": "한미반도체 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHG-0",
+   "text": "59G608 · KB증권 8L07회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHE-0",
+   "text": "52",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHD-0",
+   "text": "▲ +4",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHB-0",
+   "text": "+8.33%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜"
+   ]
+  },
+  {
+   "id": "3KHA-0",
+   "text": "89.1%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KH9-0",
+   "text": "잔여 24,100원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KH7-0",
+   "text": "78만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KH6-0",
+   "text": "0.4억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KH4-0",
+   "text": "41일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KH3-0",
+   "text": "행사가 221,500",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KH1-0",
+   "text": "키움",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 9 · 한미반도체 콜"
+   ]
+  },
+  {
+   "id": "39XK-0",
+   "text": "10",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜"
+   ]
+  },
+  {
+   "id": "39XM-0",
+   "text": "기아 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XN-0",
+   "text": "58S408 · 미래에셋증권 1J60회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XP-0",
+   "text": "110",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XQ-0",
+   "text": "▼ −8",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XR-0",
+   "text": "−6.78%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜"
+   ]
+  },
+  {
+   "id": "39XT-0",
+   "text": "88.8%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XU-0",
+   "text": "잔여 12,600원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XW-0",
+   "text": "310만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XX-0",
+   "text": "3.4억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39XZ-0",
+   "text": "29일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39Y0-0",
+   "text": "행사가 112,000",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39Y1-0",
+   "text": "미래",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 10 · 기아 콜"
+   ]
+  },
+  {
+   "id": "3KI1-0",
+   "text": "11",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜"
+   ]
+  },
+  {
+   "id": "3KI0-0",
+   "text": "현대차 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHZ-0",
+   "text": "59H172 · 한국투자증권 5D29회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHX-0",
+   "text": "38",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHW-0",
+   "text": "▲ +2",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHU-0",
+   "text": "+5.56%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜"
+   ]
+  },
+  {
+   "id": "3KHT-0",
+   "text": "88.4%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHS-0",
+   "text": "잔여 30,500원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHQ-0",
+   "text": "71만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHP-0",
+   "text": "0.3억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHN-0",
+   "text": "36일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHM-0",
+   "text": "행사가 263,000",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KHK-0",
+   "text": "한투",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 11 · 현대차 콜"
+   ]
+  },
+  {
+   "id": "3KIK-0",
+   "text": "12",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜"
+   ]
+  },
+  {
+   "id": "3KIJ-0",
+   "text": "NAVER 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KII-0",
+   "text": "59J940 · 신한투자증권 2M63회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIG-0",
+   "text": "24",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIF-0",
+   "text": "▲ +1",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KID-0",
+   "text": "+4.35%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜"
+   ]
+  },
+  {
+   "id": "3KIC-0",
+   "text": "87.6%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIB-0",
+   "text": "잔여 30,300원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KI9-0",
+   "text": "66만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KI8-0",
+   "text": "0.2억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KI6-0",
+   "text": "47일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KI5-0",
+   "text": "행사가 244,300",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KI3-0",
+   "text": "신한",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 12 · NAVER 콜"
+   ]
+  },
+  {
+   "id": "3KJ3-0",
+   "text": "13",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋"
+   ]
+  },
+  {
+   "id": "3KJ2-0",
+   "text": "SK하이닉스 풋",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJ1-0",
+   "text": "59K337 · KB증권 7B18회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIZ-0",
+   "text": "61",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIY-0",
+   "text": "▼ −4",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIW-0",
+   "text": "−6.15%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋"
+   ]
+  },
+  {
+   "id": "3KIV-0",
+   "text": "86.9%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIU-0",
+   "text": "잔여 26,000원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIS-0",
+   "text": "61만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIR-0",
+   "text": "0.4억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIP-0",
+   "text": "22일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIO-0",
+   "text": "행사가 172,400",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KIM-0",
+   "text": "키움",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 13 · SK하이닉스 풋"
+   ]
+  },
+  {
+   "id": "3KJM-0",
+   "text": "14",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋"
+   ]
+  },
+  {
+   "id": "3KJL-0",
+   "text": "KODEX 200 풋",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJK-0",
+   "text": "59L806 · 미래에셋증권 4F52회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJI-0",
+   "text": "45",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJH-0",
+   "text": "▼ −3",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJF-0",
+   "text": "−6.25%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋"
+   ]
+  },
+  {
+   "id": "3KJE-0",
+   "text": "86.1%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJD-0",
+   "text": "잔여 6,720원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJB-0",
+   "text": "57만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJA-0",
+   "text": "0.3억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJ8-0",
+   "text": "39일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJ7-0",
+   "text": "행사가 41,640",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJ5-0",
+   "text": "미래",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 14 · KODEX 200 풋"
+   ]
+  },
+  {
+   "id": "3KK5-0",
+   "text": "15",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋"
+   ]
+  },
+  {
+   "id": "3KK4-0",
+   "text": "카카오 풋",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KK3-0",
+   "text": "59M429 · 한국투자증권 9R84회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KK1-0",
+   "text": "33",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KK0-0",
+   "text": "▼ −2",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJY-0",
+   "text": "−5.71%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋"
+   ]
+  },
+  {
+   "id": "3KJX-0",
+   "text": "85.3%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJW-0",
+   "text": "잔여 6,150원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJU-0",
+   "text": "52만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJT-0",
+   "text": "0.2억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJR-0",
+   "text": "31일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJQ-0",
+   "text": "행사가 35,700",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KJO-0",
+   "text": "한투",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 15 · 카카오 풋"
+   ]
+  },
+  {
+   "id": "3KKO-0",
+   "text": "16",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118"
+   ]
+  },
+  {
+   "id": "3KKN-0",
+   "text": "삼성전자 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKM-0",
+   "text": "59N118 · 신한투자증권 6T20회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKK-0",
+   "text": "28",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKJ-0",
+   "text": "▲ +2",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKH-0",
+   "text": "+7.69%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118"
+   ]
+  },
+  {
+   "id": "3KKG-0",
+   "text": "84.5%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKF-0",
+   "text": "잔여 27,650원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKD-0",
+   "text": "48만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKC-0",
+   "text": "0.1억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKA-0",
+   "text": "44일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KK9-0",
+   "text": "행사가 178,500",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KK7-0",
+   "text": "신한",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 16 · 삼성전자 콜 59N118"
+   ]
+  },
+  {
+   "id": "3KL7-0",
+   "text": "17",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋"
+   ]
+  },
+  {
+   "id": "3KL6-0",
+   "text": "한미반도체 풋",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KL5-0",
+   "text": "59P573 · KB증권 1V96회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KL3-0",
+   "text": "41",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KL2-0",
+   "text": "▼ −3",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KL0-0",
+   "text": "−6.82%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋"
+   ]
+  },
+  {
+   "id": "3KKZ-0",
+   "text": "83.6%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKY-0",
+   "text": "잔여 32,400원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKW-0",
+   "text": "43만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKV-0",
+   "text": "0.2억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKT-0",
+   "text": "25일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKS-0",
+   "text": "행사가 165,000",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KKQ-0",
+   "text": "키움",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 17 · 한미반도체 풋"
+   ]
+  },
+  {
+   "id": "3KLQ-0",
+   "text": "18",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋"
+   ]
+  },
+  {
+   "id": "3KLP-0",
+   "text": "현대차 풋",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLO-0",
+   "text": "59Q264 · 미래에셋증권 8W35회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLM-0",
+   "text": "26",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLL-0",
+   "text": "▼ −2",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLJ-0",
+   "text": "−7.14%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋"
+   ]
+  },
+  {
+   "id": "3KLI-0",
+   "text": "82.7%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLH-0",
+   "text": "잔여 40,200원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLF-0",
+   "text": "39만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLE-0",
+   "text": "0.1억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLC-0",
+   "text": "33일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLB-0",
+   "text": "행사가 192,300",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KL9-0",
+   "text": "미래",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 18 · 현대차 풋"
+   ]
+  },
+  {
+   "id": "3KM9-0",
+   "text": "19",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850"
+   ]
+  },
+  {
+   "id": "3KM8-0",
+   "text": "KOSPI200 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KM7-0",
+   "text": "59R850 · 한국투자증권 3Y47회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KM5-0",
+   "text": "19",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KM4-0",
+   "text": "▲ +1",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KM2-0",
+   "text": "+5.56%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850"
+   ]
+  },
+  {
+   "id": "3KM1-0",
+   "text": "81.9%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KM0-0",
+   "text": "잔여 98.88p",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLY-0",
+   "text": "34만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLX-0",
+   "text": "0.1억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLV-0",
+   "text": "50일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLU-0",
+   "text": "행사가 547.50",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KLS-0",
+   "text": "한투",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 19 · KOSPI200 콜 59R850"
+   ]
+  },
+  {
+   "id": "3KMS-0",
+   "text": "20",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋"
+   ]
+  },
+  {
+   "id": "3KMR-0",
+   "text": "NAVER 풋",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KMQ-0",
+   "text": "59S391 · 신한투자증권 5H62회차",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KMO-0",
+   "text": "15",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KMN-0",
+   "text": "▼ −1",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KML-0",
+   "text": "−6.25%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋"
+   ]
+  },
+  {
+   "id": "3KMK-0",
+   "text": "80.8%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KMJ-0",
+   "text": "잔여 41,100원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KMH-0",
+   "text": "29만주",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KMG-0",
+   "text": "0.1억원",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KME-0",
+   "text": "29일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KMD-0",
+   "text": "행사가 172,900",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KMB-0",
+   "text": "신한",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "근접률 순위 표",
+    "행 20 · NAVER 풋"
+   ]
+  },
+  {
+   "id": "2XZK-0",
+   "text": "KB 9C21 삼성전자 콜",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZJ-0",
+   "text": "58H219 · 근접률 4위",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZH-0",
+   "text": "4위",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZE-0",
+   "text": "415",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZD-0",
+   "text": "+45 · +12.16%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZA-0",
+   "text": "근접률",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZ9-0",
+   "text": "94.3%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZ7-0",
+   "text": "행사가",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZ6-0",
+   "text": "160,000",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZ4-0",
+   "text": "기어링",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZ3-0",
+   "text": "18.2배",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZ1-0",
+   "text": "잔존",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XZ0-0",
+   "text": "24일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XYX-0",
+   "text": "ELW 상세 열기",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XYV-0",
+   "text": "차트 열기",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Selected Warrant",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XYR-0",
+   "text": "근접 요약",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread"
+   ]
+  },
+  {
+   "id": "2XYQ-0",
+   "text": "95% 이상 2종목 · 평균 잔존 19일",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread"
+   ]
+  },
+  {
+   "id": "2XYM-0",
+   "text": "콜 65% · 풋 35%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread"
+   ]
+  },
+  {
+   "id": "2XYK-0",
+   "text": "평균 근접률",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XYJ-0",
+   "text": "98.0%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XYH-0",
+   "text": "행사가 도달 임박",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XYG-0",
+   "text": "1종목",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Open Interest Spread",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LFU-0",
+   "text": "근접 구간별",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "근접 구간별"
+   ]
+  },
+  {
+   "id": "3LFX-0",
+   "text": "95% 이상",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "근접 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LFY-0",
+   "text": "2종목",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "근접 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LG0-0",
+   "text": "90 ~ 95%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "근접 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LG1-0",
+   "text": "5종목",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "근접 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LG3-0",
+   "text": "85 ~ 90%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "근접 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LG4-0",
+   "text": "8종목",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "근접 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LG6-0",
+   "text": "80 ~ 85%",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "근접 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LG7-0",
+   "text": "12종목",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "근접 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LG9-0",
+   "text": "80% 미만",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "근접 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LGA-0",
+   "text": "3,455종목",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "근접 구간별",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2XYB-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "2XYA-0",
+   "text": "마지막 조회 09:42:18",
+   "path": [
+    "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2XY6-0",
+   "name": "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "2XY7-0",
+   "name": "Instrument Root · 현재시세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 1
+  },
+  {
+   "id": "2XY8-0",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1040,
+   "depth": 2
+  },
+  {
+   "id": "2Y3H-0",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 86,
+   "depth": 3
+  },
+  {
+   "id": "2Y3X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2Y42-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y43-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Y3Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y3I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2Y3V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y3T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y3R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y3P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y3N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y3L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y3J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2Y2X-0",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 3
+  },
+  {
+   "id": "2Y3E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Y3A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Y36-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Y32-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2Y2Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2XYC-0",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 822,
+   "depth": 3
+  },
+  {
+   "id": "2XZL-0",
+   "name": "Quote Detail Mount",
+   "component": "Frame",
+   "w": 1000,
+   "h": 822,
+   "depth": 4
+  },
+  {
+   "id": "2Y2B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "2Y2K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Y2V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y2T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y2R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y2P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y2N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y2L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y2C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2Y2H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y2F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2Y2D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39V5-0",
+   "name": "근접률 순위 표",
+   "component": "Frame",
+   "w": 0,
+   "h": 748,
+   "depth": 5
+  },
+  {
+   "id": "39V6-0",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "39VF-0",
+   "name": "행 1 · KOSPI200 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "39VH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39VK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39VO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39VR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39VU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39VY-0",
+   "name": "행 2 · 카카오 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "39W0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39W3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39W7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39WA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39WD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39WH-0",
+   "name": "행 3 · SK하이닉스 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "39WJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39WM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39WQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39WT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39WW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39X0-0",
+   "name": "행 4 · 삼성전자 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "39X2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39X5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39X9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39XC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39XF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39Y2-0",
+   "name": "행 5 · 삼성전자 풋",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "39Y4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39Y7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39YB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39YE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39YH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39YL-0",
+   "name": "행 6 · LG에너지솔루션 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "39YN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39YQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39YU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39YX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39Z0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39Z4-0",
+   "name": "행 7 · POSCO홀딩스 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "39Z6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39Z9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39ZD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39ZG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39ZJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KGH-0",
+   "name": "행 8 · 이수페타시스 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KGW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KGT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KGP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KGM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KGJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KH0-0",
+   "name": "행 9 · 한미반도체 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KHF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KHC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KH8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KH5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KH2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39XJ-0",
+   "name": "행 10 · 기아 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "39XL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39XO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39XS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39XV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39XY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KHJ-0",
+   "name": "행 11 · 현대차 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KHY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KHV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KHR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KHO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KHL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KI2-0",
+   "name": "행 12 · NAVER 콜",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KIH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KIE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KIA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KI7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KI4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KIL-0",
+   "name": "행 13 · SK하이닉스 풋",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KJ0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KIX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KIT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KIQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KIN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KJ4-0",
+   "name": "행 14 · KODEX 200 풋",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KJJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KJG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KJC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KJ9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KJ6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KJN-0",
+   "name": "행 15 · 카카오 풋",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KK2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KJZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KJV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KJS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KJP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KK6-0",
+   "name": "행 16 · 삼성전자 콜 59N118",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KKL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KKI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KKE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KKB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KK8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KKP-0",
+   "name": "행 17 · 한미반도체 풋",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KL4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KL1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KKX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KKU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KKR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KL8-0",
+   "name": "행 18 · 현대차 풋",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KLN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KLK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KLG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KLD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KLA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KLR-0",
+   "name": "행 19 · KOSPI200 콜 59R850",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KM6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KM3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KLZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KLW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KLT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KMA-0",
+   "name": "행 20 · NAVER 풋",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3KMP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KMM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KMI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KMF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3KMC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2XYD-0",
+   "name": "Instrument Context",
+   "component": "Frame",
+   "w": 360,
+   "h": 822,
+   "depth": 4
+  },
+  {
+   "id": "2XYS-0",
+   "name": "Selected Warrant",
+   "component": "Frame",
+   "w": 312,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2XZF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2XZI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2XZG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2XZC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2XZB-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2XYY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2XZ8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2XZ5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2XZ2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2XYZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2XYT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2XYW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 7
+  },
+  {
+   "id": "2XYU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 7
+  },
+  {
+   "id": "2XYE-0",
+   "name": "Open Interest Spread",
+   "component": "Frame",
+   "w": 312,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2XYN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "2XYP-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 177,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "2XYO-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 95,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "2XYL-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "2XYI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2XYF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LFT-0",
+   "name": "근접 구간별",
+   "component": "Frame",
+   "w": 312,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3LFV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LFW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3LFZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3LG2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3LG5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3LG8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2XY9-0",
+   "name": "Chart Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "ELW 순위": 1,
+  "전 종목 · 근접률 순": 1,
+  "조회 스냅샷": 2,
+  "상장 ELW 3,482 종목": 1,
+  "콜 2,146 · 풋 1,336": 1,
+  "09:42:18 조회": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 2,
+  "ELW": 2,
+  "금현물": 1,
+  "순위": 2,
+  "정렬 기준": 1,
+  "근접률 높은 순": 1,
+  "등락률 상위": 1,
+  "+12.16%": 2,
+  "장중 갱신 기준": 1,
+  "근접률 최고": 1,
+  "98.6%": 2,
+  "행사가 대비": 1,
+  "급등락 감지": 1,
+  "12건": 1,
+  "오늘 누적": 1,
+  "조건검색 저장": 1,
+  "2건": 1,
+  "저장 조건 기준": 1,
+  "잔량": 1,
+  "등락률": 2,
+  "근접률": 2,
+  "가격급등락": 1,
+  "거래원별 순매매": 1,
+  "조건검색": 1,
+  "범위": 1,
+  "주식": 1,
+  "전체 3,482건 · 20건 표시": 1,
+  "종목 · 코드 · 발행사": 1,
+  "현재가 · 전일대비": 1,
+  "근접률 · 잔여": 1,
+  "거래량 · 대금": 1,
+  "잔존일 · 행사가": 1,
+  "LP": 1,
+  "1": 1,
+  "KOSPI200 콜": 2,
+  "58P630 · 한국투자증권 6B44회차": 1,
+  "305": 1,
+  "▲ +10": 1,
+  "+3.39%": 1,
+  "기초지수 448.62": 1,
+  "320만주": 1,
+  "9.8억원": 1,
+  "17일": 1,
+  "행사가 442.50": 1,
+  "한투": 5,
+  "2": 1,
+  "카카오 콜": 1,
+  "58R210 · KB증권 4H27회차": 1,
+  "62": 1,
+  "▲ +5": 2,
+  "+8.77%": 1,
+  "97.3%": 1,
+  "잔여 1,150원": 1,
+  "260만주": 1,
+  "1.6억원": 1,
+  "21일": 1,
+  "행사가 43,000": 1,
+  "키움": 5,
+  "3": 1,
+  "SK하이닉스 콜": 1,
+  "58J377 · 미래에셋증권 7K55회차": 1,
+  "285": 1,
+  "▲ +25": 1,
+  "+9.62%": 1,
+  "94.5%": 1,
+  "잔여 11,600원": 1,
+  "540만주": 1,
+  "15.4억원": 1,
+  "38일": 1,
+  "행사가 210,000": 1,
+  "미래": 5,
+  "4": 1,
+  "삼성전자 콜": 2,
+  "58H219 · KB증권 9C21회차": 1,
+  "415": 2,
+  "▲ +45": 1,
+  "94.3%": 2,
+  "잔여 9,150원": 1,
+  "620만주": 1,
+  "25.7억원": 1,
+  "24일": 2,
+  "행사가 160,000": 1,
+  "5": 1,
+  "삼성전자 풋": 1,
+  "58L118 · 신한투자증권 5T31회차": 1,
+  "145": 1,
+  "▼ −10": 1,
+  "−6.45%": 1,
+  "92.8%": 1,
+  "잔여 10,850원": 1,
+  "420만주": 1,
+  "6.1억원": 1,
+  "31일": 2,
+  "행사가 140,000": 1,
+  "신한": 5,
+  "6": 1,
+  "LG에너지솔루션 콜": 1,
+  "58Q745 · 신한투자증권 9K12회차": 1,
+  "240": 1,
+  "+2.13%": 1,
+  "91.7%": 1,
+  "잔여 35,000원": 1,
+  "280만주": 1,
+  "6.7억원": 1,
+  "52일": 1,
+  "행사가 420,000": 1,
+  "7": 1,
+  "POSCO홀딩스 콜": 1,
+  "58T933 · 한국투자증권 5N82회차": 1,
+  "96": 2,
+  "▼ −4": 2,
+  "−4.00%": 1,
+  "90.4%": 1,
+  "잔여 38,000원": 1,
+  "240만주": 1,
+  "2.3억원": 1,
+  "33일": 2,
+  "행사가 396,000": 1,
+  "8": 1,
+  "이수페타시스 콜": 1,
+  "59F215 · 미래에셋증권 3C41회차": 1,
+  "▲ +9": 1,
+  "+10.34%": 1,
+  "89.9%": 1,
+  "잔여 7,200원": 1,
+  "84만주": 1,
+  "0.8억원": 1,
+  "28일": 1,
+  "행사가 71,700": 1,
+  "9": 1,
+  "한미반도체 콜": 1,
+  "59G608 · KB증권 8L07회차": 1,
+  "52": 1,
+  "▲ +4": 1,
+  "+8.33%": 1,
+  "89.1%": 1,
+  "잔여 24,100원": 1,
+  "78만주": 1,
+  "0.4억원": 2,
+  "41일": 1,
+  "행사가 221,500": 1,
+  "10": 1,
+  "기아 콜": 1,
+  "58S408 · 미래에셋증권 1J60회차": 1,
+  "110": 1,
+  "▼ −8": 1,
+  "−6.78%": 1,
+  "88.8%": 1,
+  "잔여 12,600원": 1,
+  "310만주": 1,
+  "3.4억원": 1,
+  "29일": 2,
+  "행사가 112,000": 1,
+  "11": 1,
+  "현대차 콜": 1,
+  "59H172 · 한국투자증권 5D29회차": 1,
+  "38": 1,
+  "▲ +2": 2,
+  "+5.56%": 2,
+  "88.4%": 1,
+  "잔여 30,500원": 1,
+  "71만주": 1,
+  "0.3억원": 2,
+  "36일": 1,
+  "행사가 263,000": 1,
+  "12": 1,
+  "NAVER 콜": 1,
+  "59J940 · 신한투자증권 2M63회차": 1,
+  "24": 1,
+  "▲ +1": 2,
+  "+4.35%": 1,
+  "87.6%": 1,
+  "잔여 30,300원": 1,
+  "66만주": 1,
+  "0.2억원": 3,
+  "47일": 1,
+  "행사가 244,300": 1,
+  "13": 1,
+  "SK하이닉스 풋": 1,
+  "59K337 · KB증권 7B18회차": 1,
+  "61": 1,
+  "−6.15%": 1,
+  "86.9%": 1,
+  "잔여 26,000원": 1,
+  "61만주": 1,
+  "22일": 1,
+  "행사가 172,400": 1,
+  "14": 1,
+  "KODEX 200 풋": 1,
+  "59L806 · 미래에셋증권 4F52회차": 1,
+  "45": 1,
+  "▼ −3": 2,
+  "−6.25%": 2,
+  "86.1%": 1,
+  "잔여 6,720원": 1,
+  "57만주": 1,
+  "39일": 1,
+  "행사가 41,640": 1,
+  "15": 2,
+  "카카오 풋": 1,
+  "59M429 · 한국투자증권 9R84회차": 1,
+  "33": 1,
+  "▼ −2": 2,
+  "−5.71%": 1,
+  "85.3%": 1,
+  "잔여 6,150원": 1,
+  "52만주": 1,
+  "행사가 35,700": 1,
+  "16": 1,
+  "59N118 · 신한투자증권 6T20회차": 1,
+  "28": 1,
+  "+7.69%": 1,
+  "84.5%": 1,
+  "잔여 27,650원": 1,
+  "48만주": 1,
+  "0.1억원": 4,
+  "44일": 1,
+  "행사가 178,500": 1,
+  "17": 1,
+  "한미반도체 풋": 1,
+  "59P573 · KB증권 1V96회차": 1,
+  "41": 1,
+  "−6.82%": 1,
+  "83.6%": 1,
+  "잔여 32,400원": 1,
+  "43만주": 1,
+  "25일": 1,
+  "행사가 165,000": 1,
+  "18": 1,
+  "현대차 풋": 1,
+  "59Q264 · 미래에셋증권 8W35회차": 1,
+  "26": 1,
+  "−7.14%": 1,
+  "82.7%": 1,
+  "잔여 40,200원": 1,
+  "39만주": 1,
+  "행사가 192,300": 1,
+  "19": 2,
+  "59R850 · 한국투자증권 3Y47회차": 1,
+  "81.9%": 1,
+  "잔여 98.88p": 1,
+  "34만주": 1,
+  "50일": 1,
+  "행사가 547.50": 1,
+  "20": 1,
+  "NAVER 풋": 1,
+  "59S391 · 신한투자증권 5H62회차": 1,
+  "▼ −1": 1,
+  "80.8%": 1,
+  "잔여 41,100원": 1,
+  "29만주": 1,
+  "행사가 172,900": 1,
+  "KB 9C21 삼성전자 콜": 1,
+  "58H219 · 근접률 4위": 1,
+  "4위": 1,
+  "+45 · +12.16%": 1,
+  "행사가": 1,
+  "160,000": 1,
+  "기어링": 1,
+  "18.2배": 1,
+  "잔존": 1,
+  "ELW 상세 열기": 1,
+  "차트 열기": 1,
+  "근접 요약": 1,
+  "95% 이상 2종목 · 평균 잔존 19일": 1,
+  "콜 65% · 풋 35%": 1,
+  "평균 근접률": 1,
+  "98.0%": 1,
+  "행사가 도달 임박": 1,
+  "1종목": 1,
+  "근접 구간별": 1,
+  "95% 이상": 1,
+  "2종목": 1,
+  "90 ~ 95%": 1,
+  "5종목": 1,
+  "85 ~ 90%": 1,
+  "8종목": 1,
+  "80 ~ 85%": 1,
+  "12종목": 1,
+  "80% 미만": 1,
+  "3,455종목": 1,
+  "마지막 조회 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "7887316192422cc8fa9495afe265821e8dab44049023bbeb208b93f4ed948e08"
+}

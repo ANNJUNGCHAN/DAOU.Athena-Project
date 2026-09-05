@@ -1,0 +1,340 @@
+{
+ "board_id": "48I6-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48J4-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48J3-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48J1-0",
+   "text": "D+2 정산 후 계좌",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Header"
+   ]
+  },
+  {
+   "id": "48IZ-0",
+   "text": "종목별계좌평가현황",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48IY-0",
+   "text": "8종목",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48IW-0",
+   "text": "매수비중",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48IV-0",
+   "text": "28.0%",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48IT-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48IS-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48IP-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48IO-0",
+   "text": "값",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48IN-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48IL-0",
+   "text": "신용대주평가금D+2",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48IK-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48II-0",
+   "text": "0원",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48IH-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48IF-0",
+   "text": "종목명",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48IE-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48IC-0",
+   "text": "SK하이닉스 20주",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48IB-0",
+   "text": "",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48I8-0",
+   "text": "스칼라 2개, 행 1개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48I6-0",
+   "name": "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48J0-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48J2-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48I9-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48IQ-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48IX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48IU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48IR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48IM-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48IG-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48IJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48IA-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48ID-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48I7-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "D+2 정산 후 계좌": 1,
+  "종목별계좌평가현황": 1,
+  "8종목": 1,
+  "매수비중": 1,
+  "28.0%": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "신용대주평가금D+2": 1,
+  "0원": 1,
+  "종목명": 1,
+  "SK하이닉스 20주": 1,
+  "스칼라 2개, 행 1개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "132886afd9b997e563d3e67f8ee01a4e536f77ba1c50493e962ead69e0af094f"
+}

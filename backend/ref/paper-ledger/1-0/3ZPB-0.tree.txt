@@ -1,0 +1,386 @@
+Frame "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기" (3ZPB-0) 1680×900
+  Frame "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)" (3ZPC-0) 1520×760
+    Frame "타이틀바" (3ZXK-0) 1518×26
+    Frame "창 제어" (3ZXC-0) 94×24
+      Frame "Frame" (3ZXI-0) 30×24
+        Rectangle "Rectangle" (3ZXJ-0) 9×2
+      Frame "Frame" (3ZXG-0) 30×24
+        Rectangle "Rectangle" (3ZXH-0) 8×8
+      Frame "Frame" (3ZXD-0) 30×24
+        SVG "SVG" (3ZXE-0) 10×10
+          SVGVisualElement "Path" (3ZXF-0) 9×9
+    Frame "04 · Project Recent Sidebar" (3ZVH-0) 268×717
+      Frame "Primary Actions" (3ZWK-0) 242×164
+        Frame "Frame" (3ZX7-0) 242×28
+          Text "ATHENA" (3ZXB-0) 53×18 "ATHENA"
+          SVG "SVG" (3ZX8-0) 15×15
+            SVGVisualElement "Circle" (3ZXA-0) 8×8
+            SVGVisualElement "Path" (3ZX9-0) 3×3
+        Frame "Frame" (3ZX2-0) 242×30
+          SVG "SVG" (3ZX4-0) 15×15
+            SVGVisualElement "Path" (3ZX6-0) 6×0
+            SVGVisualElement "Path" (3ZX5-0) 10×10
+          Text "새 채팅" (3ZX3-0) 41×16 "새 채팅"
+        Frame "Frame" (3ZWV-0) 242×30
+          SVG "SVG" (3ZWX-0) 15×15
+            SVGVisualElement "Circle" (3ZX1-0) 3×3
+            SVGVisualElement "Circle" (3ZX0-0) 3×3
+            SVGVisualElement "Circle" (3ZWZ-0) 3×3
+            SVGVisualElement "Path" (3ZWY-0) 5×5
+          Text "그래프" (3ZWW-0) 36×16 "그래프"
+        Frame "Frame" (3ZWQ-0) 242×30
+          SVG "SVG" (3ZWS-0) 15×15
+            SVGVisualElement "Circle" (3ZWU-0) 4×4
+            SVGVisualElement "Path" (3ZWT-0) 8×4
+          Text "에이전트" (3ZWR-0) 48×16 "에이전트"
+        Frame "Frame" (3ZWL-0) 242×30
+          SVG "SVG" (3ZWN-0) 15×15
+            SVGVisualElement "Path" (3ZWP-0) 9×10
+            SVGVisualElement "Path" (3ZWO-0) 0×1
+          Text "플러그인" (3ZWM-0) 48×16 "플러그인"
+      Frame "Project Tree" (3ZW0-0) 242×129
+        Frame "Frame" (3ZWI-0) 242×16
+          Text "프로젝트" (3ZWJ-0) 43×12 "프로젝트"
+        Frame "Frame" (3ZW6-0) 242×32
+          SVG "SVG" (3ZWF-0) 15×15
+            SVGVisualElement "Path" (3ZWH-0) 11×8
+            SVGVisualElement "Path" (3ZWG-0) 8×3
+          Text "아테나" (3ZWE-0) 155×16 "아테나"
+          SVG "SVG" (3ZWA-0) 17×17
+            SVGVisualElement "Circle" (3ZWD-0) 2×2
+            SVGVisualElement "Circle" (3ZWC-0) 2×2
+            SVGVisualElement "Circle" (3ZWB-0) 2×2
+          SVG "SVG" (3ZW7-0) 17×17
+            SVGVisualElement "Path" (3ZW9-0) 6×0
+            SVGVisualElement "Path" (3ZW8-0) 11×11
+        Frame "Frame" (3ZW4-0) 242×27
+          Text "백엔드 API 개수 확인" (3ZW5-0) 106×14 "백엔드 API 개수 확인"
+        Frame "Frame" (3ZW1-0) 242×29
+          Text "앱 전체 기능 검수" (3ZW3-0) 89×14 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (3ZW2-0) 6×6
+      Frame "Recent Conversations" (3ZVP-0) 242×126
+        Frame "Frame" (3ZVX-0) 242×20
+          Text "최근" (3ZVZ-0) 22×12 "최근"
+          Text "전체" (3ZVY-0) 18×12 "전체"
+        Frame "Frame" (3ZVU-0) 242×27
+          Text "앱 전체 기능 검수" (3ZVW-0) 212×14 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (3ZVV-0) 6×6
+        Frame "Frame" (3ZVS-0) 242×27
+          Text "삼성전자 주요 변동 알림" (3ZVT-0) 122×14 "삼성전자 주요 변동 알림"
+        Frame "Frame" (3ZVQ-0) 242×27
+          Text "ETF 자금 흐름" (3ZVR-0) 69×14 "ETF 자금 흐름"
+      Frame "Account Footer" (3ZVI-0) 242×232
+        Frame "Frame" (3ZVJ-0) 242×38
+          Frame "Frame" (3ZVN-0) 22×22
+            Text "AN" (3ZVO-0) 13×12 "AN"
+          Text "모의-주력" (3ZVM-0) 173×14 "모의-주력"
+          SVG "SVG" (3ZVK-0) 13×13
+            SVGVisualElement "Path" (3ZVL-0) 5×3
+    Frame "② 캔버스 영역 — 탭 스트립 + 뷰포트 1개" (3ZT5-0) 810×716
+      Frame "canvas-tab-deck" (3ZT6-0) 810×716
+        Frame "canvas-tab-strip" (3ZXL-0) 786×36
+          Frame "canvas-tab · 시세 · 삼성전자 (is-active)" (3ZXM-0) 132×32
+            Text "canvas-tab-label" (3ZXN-0) 84×16 "시세 · 삼성전자"
+            Frame "canvas-tab-close" (3ZXO-0) 20×20
+              Text "×" (3ZXP-0) 9×16 "×"
+          Frame "canvas-tab · 계좌 · ****4721" (3ZXR-0) 128×32
+            Text "canvas-tab-label" (3ZXS-0) 78×16 "계좌 · ****4721"
+            Frame "canvas-tab-close" (3ZXT-0) 20×20
+              Text "×" (3ZXU-0) 9×16 "×"
+          Frame "canvas-tab · 호가 · 삼성전자" (3ZXW-0) 132×32
+            Text "canvas-tab-label" (3ZXZ-0) 82×16 "호가 · 삼성전자"
+            Frame "canvas-tab-close" (3ZXX-0) 20×20
+              Text "×" (3ZXY-0) 9×16 "×"
+          Frame "canvas-tab · 수급 · 삼성전자" (3ZY0-0) 132×32
+            Text "canvas-tab-label" (3ZY3-0) 82×16 "수급 · 삼성전자"
+            Frame "canvas-tab-close" (3ZY1-0) 20×20
+              Text "×" (3ZY2-0) 9×16 "×"
+        Frame "canvas-tab-viewport" (3ZY4-0) 786×648
+          Frame "canvas-tab-panel (is-active) · 시세 · 삼성전자" (3ZY5-0) 786×648
+            Frame "카드 · 현재시세 (.card — 뷰포트 100%)" (3ZY6-0) 786×648
+              Frame "Instrument Header" (3ZY8-0) 752×53
+                Frame "종목" (3ZY9-0) 132×42
+                  Text "삼성전자" (3ZYA-0) 132×26 "삼성전자"
+                  Text "식별" (3ZYB-0) 132×14 "005930 · KOSPI · KRX"
+                Frame "현재가" (3ZYC-0) 160×42
+                  Text "150,850원" (3ZYD-0) 83×26 "150,850원"
+                  Frame "대비" (3ZYE-0) 160×14
+                    Text "+1,850 · +1.24%" (3ZYF-0) 99×14 "+1,850 · +1.24%"
+                    Text "09:42:18" (3ZYG-0) 53×14 "09:42:18"
+              Frame "Quote and Valuation Strip — M: 3칸×2줄" (3ZYI-0) 752×132
+                Frame "KPI · 시가 고가 저가" (3ZYJ-0) 244×61
+                  Text "라벨" (3ZYK-0) 224×14 "시가 · 고가 · 저가"
+                  Text "값" (3ZYL-0) 224×17 "149,200 · 152,400 · 148,100"
+                  Text "보조" (3ZYM-0) 224×12 "09:00:03 · 09:12:40 · 09:05:22"
+                Frame "KPI · 거래대금" (3ZYN-0) 244×61
+                  Text "라벨" (3ZYO-0) 224×14 "거래대금"
+                  Text "값" (3ZYP-0) 224×17 "2.14조원"
+                  Text "보조" (3ZYQ-0) 224×12 "거래량 1,420만주 · 전일 대비 120.3%"
+                Frame "KPI · PER" (3ZYR-0) 244×61
+                  Text "라벨" (3ZYS-0) 224×14 "PER"
+                  Text "값" (3ZYT-0) 224×17 "21.2배"
+                  Text "보조" (3ZYU-0) 224×12 "업종 11.2배"
+                Frame "KPI · PBR" (3ZYW-0) 244×61
+                  Text "라벨" (3ZYZ-0) 224×14 "PBR"
+                  Text "값" (3ZYY-0) 224×17 "2.63배"
+                  Text "보조" (3ZYX-0) 224×12 "업종 1.61배"
+                Frame "KPI · ROE" (3ZZ0-0) 244×61
+                  Text "라벨" (3ZZ3-0) 224×14 "ROE"
+                  Text "값" (3ZZ2-0) 224×17 "8.4%"
+                  Text "보조" (3ZZ1-0) 224×12 "전년 7.9%"
+              Frame "Primary — 체결 흐름 표 (M: 5열 · 구분 병기)" (3ZZ4-0) 752×228
+                Frame "체결 흐름 제목" (3ZZ5-0) 752×22
+                  Text "체결 흐름" (3ZZ6-0) 57×17 "체결 흐름"
+                  Text "09:42:18" (3ZZ7-0) 48×12 "09:42:18"
+                Frame "표 헤더" (3ZZ8-0) 752×24
+                  Text "시각" (3ZZ9-0) 88×14 "시각"
+                  Text "체결가" (3ZZA-0) 316×14 "체결가 · 구분"
+                  Text "전일대비" (3ZZB-0) 110×14 "전일대비"
+                  Text "체결량" (3ZZC-0) 110×14 "체결량"
+                  Text "체결강도" (3ZZD-0) 96×14 "체결강도"
+                Frame "체결 09:42:18" (3ZZF-0) 752×26
+                  Text "시각" (3ZZG-0) 88×15 "09:42:18"
+                  Frame "체결가 · 구분" (3ZZH-0) 316×15
+                    Text "150,850" (3ZZI-0) 51×15 "150,850"
+                    Text "구분 병기" (3ZZJ-0) 76×12 "매수체결 · KRX"
+                  Text "전일대비" (3ZZK-0) 110×15 "+1,850 · +1.24%"
+                  Text "체결량" (3ZZL-0) 110×15 "1,284주"
+                  Text "체결강도" (3ZZM-0) 96×15 "108.4%"
+                Frame "체결 09:42:15" (3ZZO-0) 752×26
+                  Text "시각" (3ZZV-0) 88×15 "09:42:15"
+                  Frame "체결가 · 구분" (3ZZS-0) 316×15
+                    Text "150,850" (3ZZU-0) 51×15 "150,850"
+                    Text "구분 병기" (3ZZT-0) 76×12 "매수체결 · KRX"
+                  Text "전일대비" (3ZZR-0) 110×15 "+1,850 · +1.24%"
+                  Text "체결량" (3ZZQ-0) 110×15 "560주"
+                  Text "체결강도" (3ZZP-0) 96×15 "118.1%"
+                Frame "체결 09:42:13 · 기세" (3ZZW-0) 752×26
+                  Text "시각" (4003-0) 88×15 "09:42:13"
+                  Frame "체결가 · 구분" (4000-0) 316×15
+                    Text "150,850" (4002-0) 51×15 "150,900"
+                    Text "구분 병기" (4001-0) 56×12 "기세 · KRX"
+                  Text "전일대비" (3ZZZ-0) 110×15 "+1,900 · +1.28%"
+                  Text "체결량" (3ZZY-0) 110×15 "해당 없음"
+                  Text "체결강도" (3ZZX-0) 96×15 "해당 없음"
+                Frame "체결 09:42:11" (4004-0) 752×26
+                  Text "시각" (400B-0) 88×15 "09:42:11"
+                  Frame "체결가 · 구분" (4008-0) 316×15
+                    Text "150,850" (400A-0) 51×15 "150,800"
+                    Text "구분 병기" (4009-0) 76×12 "매도체결 · KRX"
+                  Text "전일대비" (4007-0) 110×15 "+1,800 · +1.21%"
+                  Text "체결량" (4006-0) 110×15 "2,410주"
+                  Text "체결강도" (4005-0) 96×15 "116.7%"
+                Frame "체결 09:42:08" (400C-0) 752×26
+                  Text "시각" (400J-0) 88×15 "09:42:08"
+                  Frame "체결가 · 구분" (400G-0) 316×15
+                    Text "150,850" (400I-0) 51×15 "150,850"
+                    Text "구분 병기" (400H-0) 76×12 "매수체결 · KRX"
+                  Text "전일대비" (400F-0) 110×15 "+1,850 · +1.24%"
+                  Text "체결량" (400E-0) 110×15 "890주"
+                  Text "체결강도" (400D-0) 96×15 "121.3%"
+                Frame "체결 상태 줄" (400K-0) 752×24
+                  Text "순간 요약" (400L-0) 296×12 "순간 거래대금 1.94억원 · 매수 42,180건 · 매도 38,640건"
+                  Frame "당일 · 전일 체결" (400M-0) 237×12
+                    Text "라벨" (400N-0) 71×12 "당일 · 전일 체결"
+                    Text "값" (400O-0) 118×12 "1,420만주 · 1,180만주"
+                    Text "+20.3%" (400P-0) 36×12 "+20.3%"
+              Frame "Instrument Context — 레일 (M: primary 아래 100%)" (400R-0) 752×175
+                Frame "Rail Top Row — 3열" (400S-0) 752×78
+                  Frame "종목 요약" (400T-0) 243×78
+                    Frame "제목" (400U-0) 243×15
+                      Text "종목 요약" (400V-0) 53×15 "종목 요약"
+                      Text "정상 거래" (400W-0) 43×12 "정상 거래"
+                    Frame "시가총액" (400X-0) 243×17
+                      Text "라벨" (400Y-0) 44×14 "시가총액"
+                      Text "값" (400Z-0) 55×14 "900.4조원"
+                    Frame "외국인 보유" (4010-0) 243×17
+                      Text "라벨" (4011-0) 59×14 "외국인 보유"
+                      Text "값" (4012-0) 40×14 "52.41%"
+                    Frame "유통 주식" (4013-0) 243×17
+                      Text "라벨" (4014-0) 48×14 "유통 주식"
+                      Text "값" (4015-0) 49×14 "44.4억주"
+                  Frame "오늘의 수급" (4017-0) 243×78
+                    Frame "제목" (401H-0) 243×15
+                      Text "종목 요약" (401J-0) 65×15 "오늘의 수급"
+                      Text "정상 거래" (401I-0) 53×12 "순매수 기준"
+                    Frame "시가총액" (401E-0) 243×17
+                      Text "라벨" (401G-0) 33×14 "외국인"
+                      Text "값" (401F-0) 49×14 "+128억원"
+                    Frame "외국인 보유" (401B-0) 243×17
+                      Text "라벨" (401D-0) 22×14 "기관"
+                      Text "값" (401C-0) 49×14 "+196억원"
+                    Frame "유통 주식" (4018-0) 243×17
+                      Text "라벨" (401A-0) 22×14 "개인"
+                      Text "값" (4019-0) 49×14 "−312억원"
+                  Frame "체결 비용 · 증거금" (401K-0) 243×78
+                    Frame "제목" (401U-0) 243×15
+                      Text "종목 요약" (401W-0) 100×15 "체결 비용 · 증거금"
+                      Text "정상 거래" (401V-0) 95×12 "K.O 접근도 해당 없음"
+                    Frame "시가총액" (401R-0) 243×17
+                      Text "라벨" (401T-0) 44×14 "거래비용"
+                      Text "값" (401S-0) 42×14 "22원/주"
+                    Frame "외국인 보유" (401O-0) 243×17
+                      Text "라벨" (401Q-0) 54×14 "CFD증거금"
+                      Text "값" (401P-0) 20×14 "40%"
+                    Frame "유통 주식" (401L-0) 243×17
+                      Text "라벨" (401N-0) 55×14 "유지증거금"
+                      Text "값" (401M-0) 20×14 "25%"
+                Frame "일별 시세" (401X-0) 752×80
+                  Frame "일별 시세 제목" (401Y-0) 752×18
+                    Text "일별 시세" (401Z-0) 53×15 "일별 시세"
+                    Text "기간 요약" (4020-0) 108×12 "전체 60건 · 3건 표시"
+                  Frame "일별 표 헤더" (4021-0) 752×18
+                    Text "일자" (4022-0) 88×12 "일자"
+                    Text "시가 고가 저가" (4023-0) 408×12 "시가 · 고가 · 저가"
+                    Text "종가" (4024-0) 68×12 "종가 · 전일대비"
+                    Text "거래량" (4025-0) 78×12 "거래량 · 거래대금"
+                    Text "외국계" (4026-0) 78×12 "외국계 · 프로그램"
+                  Frame "일별 행 09-01" (4028-0) 752×19
+                    Text "일자" (4029-0) 88×14 "09-01"
+                    Text "시가 고가 저가" (402A-0) 292×14 "149,200 · 152,400 · 148,100"
+                    Text "종가 · 전일대비" (402B-0) 106×14 "150,850 · +1.24%"
+                    Text "거래량 · 거래대금" (402C-0) 124×14 "1,420만주 · 2.14조원"
+                    Text "외국계 · 프로그램" (402D-0) 110×14 "+182만주 · +64만주"
+                  Frame "일별 행 08-31" (402F-0) 752×19
+                    Text "일자" (402K-0) 88×14 "08-31"
+                    Text "시가 고가 저가" (402J-0) 298×14 "148,200 · 149,400 · 148,000"
+                    Text "종가 · 전일대비" (402I-0) 106×14 "149,000 · +0.68%"
+                    Text "거래량 · 거래대금" (402H-0) 124×14 "1,180만주 · 1.76조원"
+                    Text "외국계 · 프로그램" (402G-0) 104×14 "+95만주 · +21만주"
+    Frame "③ 대화 영역 400px" (3ZPD-0) 400×716
+      Frame "④ 결과물 · 출처 도크" (3ZSD-0) 392×196
+        Frame "결과물" (3ZT0-0) 390×55
+          Frame "Frame" (3ZT2-0) 362×16
+            Text "결과물" (3ZT4-0) 303×16 "결과물"
+            Text "캔버스 2" (3ZT3-0) 51×16 "캔버스 2"
+          Text "네이버 뉴스 · 삼성전자 일봉" (3ZT1-0) 362×16 "네이버 뉴스 · 삼성전자 일봉"
+        Frame "출처" (3ZSP-0) 390×63
+          Frame "Frame" (3ZSX-0) 362×16
+            Text "출처" (3ZSZ-0) 346×16 "출처"
+            Text "3" (3ZSY-0) 8×16 "3"
+          Frame "Frame" (3ZSQ-0) 362×22
+            Frame "Frame" (3ZSV-0) 71×22
+              Text "일봉 차트" (3ZSW-0) 53×16 "일봉 차트"
+            Frame "Frame" (3ZST-0) 100×22
+              Text "DART 재무제표" (3ZSU-0) 82×16 "DART 재무제표"
+            Frame "Frame" (3ZSR-0) 83×22
+              Text "네이버 뉴스" (3ZSS-0) 65×16 "네이버 뉴스"
+        Frame "하위 에이전트" (3ZSE-0) 390×76
+          Frame "Frame" (3ZSM-0) 362×16
+            Text "label" (3ZSO-0) 346×16 "하위 에이전트"
+            Text "count" (3ZSN-0) 8×16 "1"
+          Frame "agent-row" (3ZSF-0) 362×34
+            Frame "row-top" (3ZSJ-0) 362×16
+              Text "name" (3ZSL-0) 310×16 "재무 해석"
+              Text "status" (3ZSK-0) 44×16 "진행 중"
+            Frame "row-bottom" (3ZSG-0) 362×16
+              Text "elapsed" (3ZSI-0) 29×16 "8.4s"
+              Text "last-tool" (3ZSH-0) 68×16 "현재가 조회"
+      Frame "history" (3ZPX-0) 400×428
+        Frame "완료 턴" (3ZS2-0) 368×143
+          Frame "⑤ 사용자 말풍선 (우측 정렬)" (3ZSA-0) 368×36
+            Frame "Frame" (3ZSB-0) 242×36
+              Text "삼성전자 흐름이랑 재무 같이 보여줘" (3ZSC-0) 214×20 "삼성전자 흐름이랑 재무 같이 보여줘"
+          Frame "⑥ 경과 헤더 — 접힌 상태" (3ZS4-0) 368×25
+            Frame "Frame" (3ZS6-0) 368×16
+              Text "38초 동안 작업함" (3ZS9-0) 94×16 "38초 동안 작업함"
+              SVG "SVG" (3ZS7-0) 9×9
+                SVGVisualElement "Path" (3ZS8-0) 3×6
+            Rectangle "Rectangle" (3ZS5-0) 368×1
+          Text "일봉 60개를 폈습니다. 5월 하순부…" (3ZS3-0) 368×66 "일봉 60개를 폈습니다. 5월 하순부터 20일선이 60일선을 위로 뚫고 그대로 벌어졌고, 종가 88,100원"
+        Frame "진행 중 턴" (3ZR2-0) 368×263
+          Frame "사용자 말풍선" (3ZRZ-0) 368×36
+            Frame "Frame" (3ZS0-0) 298×36
+              Text "재무 쪽은 하위 에이전트한테 맡겨서 …" (3ZS1-0) 270×20 "재무 쪽은 하위 에이전트한테 맡겨서 정리해줘"
+          Frame "⑥ 경과 헤더 — 진행 중" (3ZRW-0) 368×25
+            Text "29초 동안 작업 중입니다" (3ZRY-0) 368×16 "29초 동안 작업 중입니다"
+            Rectangle "Rectangle" (3ZRX-0) 368×1
+          Text "재무 해석은 읽기 전용 하위 에이전트…" (3ZRV-0) 368×60 "재무 해석은 읽기 전용 하위 에이전트에게 맡기겠습니다. 2025 연결 재무상태표에서 유동비율·현금성자산 비중"
+          Frame "⑦ 하위 에이전트 블록" (3ZRL-0) 368×44
+            Frame "Frame" (3ZRQ-0) 368×22
+              Frame "Frame" (3ZRS-0) 88×22
+                Rectangle "Rectangle" (3ZRU-0) 8×8
+                Text "재무 해석" (3ZRT-0) 53×16 "재무 해석"
+              Text "작업 시작됨" (3ZRR-0) 65×16 "작업 시작됨"
+            Frame "사고 문구 — 앞은 진하고 뒤로 옅어진다" (3ZRM-0) 368×16
+              Text "유동비율 계산" (3ZRP-0) 77×16 "유동비율 계산"
+              Text "— 유동자산 ÷" (3ZRO-0) 78×16 "— 유동자산 ÷"
+              Text "유동부채 확인 중" (3ZRN-0) 93×16 "유동부채 확인 중"
+          Frame "⑧ 실행 라인 — 지금 부르고 있는 것" (3ZR3-0) 368×58
+            Frame "Frame" (3ZRF-0) 368×16
+              SVG "SVG" (3ZRI-0) 12×12
+                SVGVisualElement "Rect" (3ZRK-0) 11×9
+                SVGVisualElement "Path" (3ZRJ-0) 2×3
+              Text "재무제표 조회 · 삼성전자 2025 …" (3ZRH-0) 311×16 "재무제표 조회 · 삼성전자 2025 연결"
+              Text "1.2s" (3ZRG-0) 29×16 "1.2s"
+            Frame "Frame" (3ZR9-0) 368×16
+              SVG "SVG" (3ZRC-0) 12×12
+                SVGVisualElement "Rect" (3ZRE-0) 11×9
+                SVGVisualElement "Path" (3ZRD-0) 2×3
+              Text "현재가 조회 · 삼성전자" (3ZRB-0) 311×16 "현재가 조회 · 삼성전자"
+              Text "0.4s" (3ZRA-0) 29×16 "0.4s"
+            Frame "Frame" (3ZR4-0) 368×16
+              SVG "SVG" (3ZR6-0) 12×12
+                SVGVisualElement "Rect" (3ZR8-0) 11×9
+                SVGVisualElement "Path" (3ZR7-0) 2×3
+              Text "일별 주가 조회 · 대기 중" (3ZR5-0) 348×16 "일별 주가 조회 · 대기 중"
+        Frame "turn-agent (능동 턴) — 조건 패널 형식" (3ZPY-0) 368×300
+          Frame "agent-head" (3ZQW-0) 368×20
+            Frame "agent-badge" (3ZR0-0) 74×20
+              Text "15:30 발화" (3ZR1-0) 58×16 "15:30 발화"
+            Text "주기 확인" (3ZQZ-0) 53×16 "주기 확인"
+            Rectangle "Rectangle" (3ZQY-0) 178×0
+            Text "2분 전" (3ZQX-0) 39×16 "2분 전"
+          Frame "본문 — 인라인 칩을 문장에 섞는다" (3ZQP-0) 368×90
+            Text "Text" (3ZQV-0) 0×24
+            Frame "Frame" (3ZQT-0) 119×18
+              Text "삼성전자 005930" (3ZQU-0) 107×16 "삼성전자 005930"
+            Text " 조건 도달 — 관측값 88,100 …" (3ZQS-0) 286×24 " 조건 도달 — 관측값 88,100 (임계 88,000)"
+            Frame "시점 단서 (템플릿 고정 문구)" (3ZQQ-0) 368×42
+              Text "값은 발화 시점 기준입니다 — 최신 …" (3ZQR-0) 368×40 "값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요."
+          Frame "조건 패널" (3ZQ0-0) 368×142
+            Frame "패널 머리 바" (3ZQF-0) 366×30
+              Text "감시 조건" (3ZQO-0) 296×16 "감시 조건"
+              Frame "캔버스로 보내기" (3ZQK-0) 16×16
+                SVG "SVG" (3ZQL-0) 11×11
+                  SVGVisualElement "Path" (3ZQN-0) 6×6
+                  SVGVisualElement "Path" (3ZQM-0) 8×8
+              Frame "복사" (3ZQG-0) 16×16
+                SVG "SVG" (3ZQH-0) 11×11
+                  SVGVisualElement "Rect" (3ZQJ-0) 7×7
+                  SVGVisualElement "Path" (3ZQI-0) 6×6
+            Frame "패널 본문" (3ZQ1-0) 366×110
+              Text "대상" (3ZQE-0) 344×16 "삼성전자 005930"
+              Frame "조건 행 · 충족" (3ZQA-0) 344×17
+                Text "✓" (3ZQD-0) 11×16 "✓"
+                Text "종가 88,000 이상" (3ZQC-0) 256×16 "종가 88,000 이상"
+                Text "88,100" (3ZQB-0) 47×16 "88,100"
+              Frame "조건 행 · 충족" (3ZQ6-0) 344×17
+                Text "✓" (3ZQ9-0) 11×16 "✓"
+                Text "거래량 1,000만주 이상" (3ZQ8-0) 225×16 "거래량 1,000만주 이상"
+                Text "11,689,068" (3ZQ7-0) 78×16 "11,689,068"
+              Frame "조건 행 · 참고" (3ZQ2-0) 344×17
+                Text "△" (3ZQ5-0) 11×16 "△"
+                Text "장중에만 확인" (3ZQ4-0) 230×16 "장중에만 확인"
+                Text "15:30 마감" (3ZQ3-0) 73×16 "15:30 마감"
+          Text "agent-source (각주)" (3ZPZ-0) 368×17 "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다"
+      Frame "input-stack" (3ZPE-0) 400×84
+        Frame "input-row · 실행 중 (ESC 중단)" (3ZPR-0) 392×44
+          Text "무엇이든 물어보세요" (3ZPW-0) 241×18 "무엇이든 물어보세요"
+          Frame "Frame" (3ZPS-0) 99×20
+            Text "29s" (3ZPV-0) 22×16 "29s"
+            Frame "Frame" (3ZPT-0) 67×20
+              Text "ESC 중단" (3ZPU-0) 53×16 "ESC 중단"
+        Frame "control-strip" (3ZPF-0) 392×40
+          Frame "키우미 (#dot 대체) · 호출 중 — 얼굴 열림" (3ZPN-0) 18×18
+            Frame "visor" (3ZPO-0) 11×11
+              Rectangle "Rectangle" (3ZPQ-0) 2×4
+              Rectangle "Rectangle" (3ZPP-0) 2×4
+          Frame "Frame" (3ZPL-0) 73×28
+            Text "CLAUDE" (3ZPM-0) 47×14 "CLAUDE"
+          Frame "Frame" (3ZPJ-0) 52×20
+            Text "감시 2" (3ZPK-0) 30×12 "감시 2"
+          Rectangle "Rectangle" (3ZPI-0) 66×0
+          Frame "Frame" (3ZPG-0) 111×28
+            Text "OPUS · HIGH" (3ZPH-0) 85×14 "OPUS · HIGH"
+  Text "보드 캡션" (402L-0) 328×16 "탭 = 카드 인스턴스 · 뷰포트 1개 · 컨테이너 쿼리 XL/L/M/S/XS"

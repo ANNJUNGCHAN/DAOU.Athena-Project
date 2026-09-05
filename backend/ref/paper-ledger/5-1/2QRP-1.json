@@ -1,0 +1,2188 @@
+{
+ "board_id": "2QRP-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+ "width": 1440,
+ "height": 1014,
+ "texts": [
+  {
+   "id": "2QRU-1",
+   "text": "삼성전자 통합 호가",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QRX-1",
+   "text": "시간외 단일가",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QRY-1",
+   "text": "005930 · 16:00~18:00",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32HH-0",
+   "text": "정규장",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Header",
+    "Frame",
+    "정규장"
+   ]
+  },
+  {
+   "id": "32HJ-0",
+   "text": "시간외",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Header",
+    "Frame",
+    "시간외"
+   ]
+  },
+  {
+   "id": "32HL-0",
+   "text": "금현물",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Header",
+    "Frame",
+    "금현물"
+   ]
+  },
+  {
+   "id": "32HO-0",
+   "text": "5단",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Header",
+    "Frame",
+    "5단"
+   ]
+  },
+  {
+   "id": "32HQ-0",
+   "text": "10단",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Header",
+    "Frame",
+    "10단"
+   ]
+  },
+  {
+   "id": "2QSF-1",
+   "text": "시간외 현재가",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSH-1",
+   "text": "150,900",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSI-1",
+   "text": "+50 · +0.03%",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSJ-1",
+   "text": "정규장 종가 150,850 대비 · 16:12:41",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSL-1",
+   "text": "최우선 매도호가",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSM-1",
+   "text": "150,950",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSN-1",
+   "text": "잔량 24,050주",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSP-1",
+   "text": "최우선 매수호가",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSQ-1",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSR-1",
+   "text": "잔량 15,760주",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSU-1",
+   "text": "매수비율",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSV-1",
+   "text": "41.2%",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QSZ-1",
+   "text": "총 잔량 193,580주 · 다음 체결 16:20",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QTB-1",
+   "text": "호가",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ladder Head"
+   ]
+  },
+  {
+   "id": "2QTC-1",
+   "text": "등락",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ladder Head"
+   ]
+  },
+  {
+   "id": "2QTD-1",
+   "text": "잔량",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ladder Head"
+   ]
+  },
+  {
+   "id": "2QTF-1",
+   "text": "잔량 분포",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ladder Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QTJ-1",
+   "text": "151,150",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QTK-1",
+   "text": "+300",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QTL-1",
+   "text": "17,940",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QTQ-1",
+   "text": "151,100",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QTR-1",
+   "text": "+250",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QTS-1",
+   "text": "21,340",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QTX-1",
+   "text": "151,050",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QTY-1",
+   "text": "+200",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QTZ-1",
+   "text": "24,880",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QU4-1",
+   "text": "151,000",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QU5-1",
+   "text": "+150",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QU6-1",
+   "text": "25,610",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUB-1",
+   "text": "150,950",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUC-1",
+   "text": "+100",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUD-1",
+   "text": "24,050",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUI-1",
+   "text": "예상 체결가",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Current Price Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUJ-1",
+   "text": "150,900",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Current Price Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUK-1",
+   "text": "▲ 50 · +0.03%",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Current Price Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUL-1",
+   "text": "예상 체결수량 8,420주 · 다음 체결 16:20",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Current Price Row"
+   ]
+  },
+  {
+   "id": "2QUP-1",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUQ-1",
+   "text": "0",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUR-1",
+   "text": "15,760",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUW-1",
+   "text": "150,800",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUX-1",
+   "text": "−50",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QUY-1",
+   "text": "16,940",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QV3-1",
+   "text": "150,750",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QV4-1",
+   "text": "−100",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QV5-1",
+   "text": "15,280",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVA-1",
+   "text": "150,700",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVB-1",
+   "text": "−150",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVC-1",
+   "text": "16,120",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVH-1",
+   "text": "150,650",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVI-1",
+   "text": "−200",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVJ-1",
+   "text": "15,660",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVN-1",
+   "text": "매도 잔량 113,820",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ladder Totals"
+   ]
+  },
+  {
+   "id": "2QVO-1",
+   "text": "총 193,580주",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ladder Totals"
+   ]
+  },
+  {
+   "id": "2QVP-1",
+   "text": "매수 잔량 79,760",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Ladder Totals"
+   ]
+  },
+  {
+   "id": "3IOO-0",
+   "text": "구간별 호가 잔량",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Head"
+   ]
+  },
+  {
+   "id": "3IOP-0",
+   "text": "매도 / 매수",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Head"
+   ]
+  },
+  {
+   "id": "3IP0-0",
+   "text": "정규장",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 정규장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IP2-0",
+   "text": "38,160 / 43,000",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 정규장"
+   ]
+  },
+  {
+   "id": "3IP4-0",
+   "text": "직전대비",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 정규장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IP5-0",
+   "text": "+2,140",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 정규장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IP6-0",
+   "text": "/",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 정규장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IP7-0",
+   "text": "−1,380",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 정규장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IQE-0",
+   "text": "시간외 단일가",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 시간외 단일가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IQG-0",
+   "text": "▸",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 시간외 단일가",
+    "Frame",
+    "Expand Hit"
+   ]
+  },
+  {
+   "id": "3IQH-0",
+   "text": "113,820 / 79,760",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 시간외 단일가"
+   ]
+  },
+  {
+   "id": "3IQJ-0",
+   "text": "직전대비",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 시간외 단일가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IQK-0",
+   "text": "+1,240",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 시간외 단일가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IQL-0",
+   "text": "/",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 시간외 단일가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IQM-0",
+   "text": "−860",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell 시간외 단일가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IW7-0",
+   "text": "NXT 애프터마켓",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell NXT 애프터마켓",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IW9-0",
+   "text": "46,180 / 31,520",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell NXT 애프터마켓"
+   ]
+  },
+  {
+   "id": "3IWB-0",
+   "text": "직전대비",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell NXT 애프터마켓",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IWC-0",
+   "text": "미제공",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Ladder Panel",
+    "Depth Queue Band",
+    "Band Cells",
+    "Cell NXT 애프터마켓",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVT-1",
+   "text": "단일가 체결",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVU-1",
+   "text": "10분 주기",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVW-1",
+   "text": "16:10",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVX-1",
+   "text": "150,900",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QVY-1",
+   "text": "8,420주",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QW0-1",
+   "text": "16:00",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QW1-1",
+   "text": "150,880",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QW2-1",
+   "text": "12,640주",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QW9-1",
+   "text": "시간외 정보",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Info Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QWA-1",
+   "text": "16:00~18:00",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Info Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QWC-1",
+   "text": "누적 거래량",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Info Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QWD-1",
+   "text": "21,060주",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Info Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QWF-1",
+   "text": "누적 거래대금",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Info Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QWG-1",
+   "text": "31.8억",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Info Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QWI-1",
+   "text": "가격 제한",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Info Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QWJ-1",
+   "text": "±10%",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Info Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QWL-1",
+   "text": "정규장 종가",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Info Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QWM-1",
+   "text": "150,850",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Session Info Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33Q5-0",
+   "text": "거래소별 잔량",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Cross Market Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33Q6-0",
+   "text": "시간외 단일가",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Cross Market Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33Q8-0",
+   "text": "KRX 매도 / 매수",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Cross Market Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33Q9-0",
+   "text": "86,420 / 61,340",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Cross Market Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33QB-0",
+   "text": "NXT 매도 / 매수",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Cross Market Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33QC-0",
+   "text": "27,400 / 18,420",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Cross Market Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33QE-0",
+   "text": "LP 매도 / 매수",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Cross Market Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33QF-0",
+   "text": "0 / 0",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Workspace",
+    "Side Panel",
+    "Cross Market Block",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QT6-1",
+   "text": "시간외 단일가 · 10분 주기",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Status Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QT7-1",
+   "text": "상한 165,900 · 하한 135,800 · 기준가 150,850",
+   "path": [
+    "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+    "Hoga Card Surface",
+    "Hoga Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2QRP-1",
+   "name": "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1014,
+   "depth": 0
+  },
+  {
+   "id": "2QRQ-1",
+   "name": "Hoga Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 934,
+   "depth": 1
+  },
+  {
+   "id": "2QRR-1",
+   "name": "Hoga Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QRS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QRT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QRV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QRW-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "2QRZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "32HG-0",
+   "name": "정규장",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "32HI-0",
+   "name": "시간외",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "32HK-0",
+   "name": "금현물",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "32HM-0",
+   "name": "Divider",
+   "component": "Frame",
+   "w": 1,
+   "h": 24,
+   "depth": 4
+  },
+  {
+   "id": "32HN-0",
+   "name": "5단",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "32HP-0",
+   "name": "10단",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QSD-1",
+   "name": "Hoga Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QSE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QSG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QSK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QSO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QSS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QST-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QSW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "2QSX-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "2QSY-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "2QT0-1",
+   "name": "Hoga Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QT1-1",
+   "name": "Ladder Panel",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QT9-1",
+   "name": "Ladder Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QTE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QTG-1",
+   "name": "Ask Rows",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QTH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QTM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QTN-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QTO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QTT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QTU-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QTV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QU0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QU1-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QU2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QU7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QU8-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QU9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QUE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QUF-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QUG-1",
+   "name": "Current Price Row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QUH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QUM-1",
+   "name": "Bid Rows",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QUN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QUS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QUT-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QUU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QUZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QV0-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QV1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QV6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QV7-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QV8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QVD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QVE-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QVF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QVK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QVL-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QVM-1",
+   "name": "Ladder Totals",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3IOM-0",
+   "name": "Depth Queue Band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ION-0",
+   "name": "Band Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IOX-0",
+   "name": "Band Cells",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IOY-0",
+   "name": "Cell 정규장",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IOZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IP1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 32,
+   "h": 16,
+   "depth": 8
+  },
+  {
+   "id": "3IP3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IQC-0",
+   "name": "Cell 시간외 단일가",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IQD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IQF-0",
+   "name": "Expand Hit",
+   "component": "Frame",
+   "w": 32,
+   "h": 16,
+   "depth": 8
+  },
+  {
+   "id": "3IQI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IW5-0",
+   "name": "Cell NXT 애프터마켓",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IW6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IW8-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 32,
+   "h": 16,
+   "depth": 8
+  },
+  {
+   "id": "3IWA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2QT2-1",
+   "name": "Side Panel",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QVR-1",
+   "name": "Session Block",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QVS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QVV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QVZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QW7-1",
+   "name": "Session Info Block",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QW8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QWB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QWE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QWH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QWK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33Q3-0",
+   "name": "Cross Market Block",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "33Q4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33Q7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33QA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33QD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QT3-1",
+   "name": "Hoga Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QT4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QT5-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "삼성전자 통합 호가": 1,
+  "시간외 단일가": 3,
+  "005930 · 16:00~18:00": 1,
+  "정규장": 2,
+  "시간외": 1,
+  "금현물": 1,
+  "5단": 1,
+  "10단": 1,
+  "시간외 현재가": 1,
+  "150,900": 3,
+  "+50 · +0.03%": 1,
+  "정규장 종가 150,850 대비 · 16:12:41": 1,
+  "최우선 매도호가": 1,
+  "150,950": 2,
+  "잔량 24,050주": 1,
+  "최우선 매수호가": 1,
+  "150,850": 3,
+  "잔량 15,760주": 1,
+  "매수비율": 1,
+  "41.2%": 1,
+  "총 잔량 193,580주 · 다음 체결 16:20": 1,
+  "호가": 1,
+  "등락": 1,
+  "잔량": 1,
+  "잔량 분포": 1,
+  "151,150": 1,
+  "+300": 1,
+  "17,940": 1,
+  "151,100": 1,
+  "+250": 1,
+  "21,340": 1,
+  "151,050": 1,
+  "+200": 1,
+  "24,880": 1,
+  "151,000": 1,
+  "+150": 1,
+  "25,610": 1,
+  "+100": 1,
+  "24,050": 1,
+  "예상 체결가": 1,
+  "▲ 50 · +0.03%": 1,
+  "예상 체결수량 8,420주 · 다음 체결 16:20": 1,
+  "0": 1,
+  "15,760": 1,
+  "150,800": 1,
+  "−50": 1,
+  "16,940": 1,
+  "150,750": 1,
+  "−100": 1,
+  "15,280": 1,
+  "150,700": 1,
+  "−150": 1,
+  "16,120": 1,
+  "150,650": 1,
+  "−200": 1,
+  "15,660": 1,
+  "매도 잔량 113,820": 1,
+  "총 193,580주": 1,
+  "매수 잔량 79,760": 1,
+  "구간별 호가 잔량": 1,
+  "매도 / 매수": 1,
+  "38,160 / 43,000": 1,
+  "직전대비": 3,
+  "+2,140": 1,
+  "/": 2,
+  "−1,380": 1,
+  "▸": 1,
+  "113,820 / 79,760": 1,
+  "+1,240": 1,
+  "−860": 1,
+  "NXT 애프터마켓": 1,
+  "46,180 / 31,520": 1,
+  "미제공": 1,
+  "단일가 체결": 1,
+  "10분 주기": 1,
+  "16:10": 1,
+  "8,420주": 1,
+  "16:00": 1,
+  "150,880": 1,
+  "12,640주": 1,
+  "시간외 정보": 1,
+  "16:00~18:00": 1,
+  "누적 거래량": 1,
+  "21,060주": 1,
+  "누적 거래대금": 1,
+  "31.8억": 1,
+  "가격 제한": 1,
+  "±10%": 1,
+  "정규장 종가": 1,
+  "거래소별 잔량": 1,
+  "KRX 매도 / 매수": 1,
+  "86,420 / 61,340": 1,
+  "NXT 매도 / 매수": 1,
+  "27,400 / 18,420": 1,
+  "LP 매도 / 매수": 1,
+  "0 / 0": 1,
+  "시간외 단일가 · 10분 주기": 1,
+  "상한 165,900 · 하한 135,800 · 기준가 150,850": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "0a7d1e320b2efe31d51a37c0f311b8b5a56dca2b3a6fe2f83fd90aac1c53d4a0"
+}

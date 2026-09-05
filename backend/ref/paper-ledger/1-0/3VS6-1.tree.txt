@@ -1,0 +1,98 @@
+Frame "36 · 프로젝트 추가 — 폴더 점유" (3VS6-1) 1680×900
+  Frame "36 Header" (3VS7-1) 1600×86
+    Frame "Frame" (3VS8-1) 497×56
+      Frame "Frame" (3VS9-1) 48×48
+        Text "36" (3VSA-1) 17×20 "36"
+      Frame "Frame" (3VSB-1) 433×56
+        Text "프로젝트 추가 — 폴더를 점유한다" (3VSC-1) 433×36 "프로젝트 추가 — 폴더를 점유한다"
+        Text "프로젝트는 폴더 하나입니다. 사용자가…" (3VSD-1) 433×18 "프로젝트는 폴더 하나입니다. 사용자가 직접 고르고, 그 안에서만 자유롭습니다."
+    Frame "Frame" (3VSE-1) 109×32
+      Text "신규 · 승인 대기" (3VSF-1) 81×16 "신규 · 승인 대기"
+  Frame "36 Content" (3VSH-1) 1600×722
+    Frame "Stage" (3VSI-1) 1150×722
+      Frame "Titlebar" (3VSL-1) 1148×46
+        Frame "Frame" (3VSM-1) 56×10
+          Rectangle "Rectangle" (3VSN-1) 10×10
+          Rectangle "Rectangle" (3VSO-1) 10×10
+          Rectangle "Rectangle" (3VSP-1) 10×10
+        Text "ATHENA" (3VSQ-1) 42×16 "ATHENA"
+        Text "· 아테나" (3VSR-1) 40×16 "· 아테나"
+      Frame "Blurred Shell" (3VSS-1) 1148×674
+        Frame "Add Project Modal" (3VSU-1) 560×467
+          Frame "Frame" (3VSV-1) 514×41
+            Text "프로젝트 추가" (3VSW-1) 514×22 "프로젝트 추가"
+            Text "프로젝트는 폴더 하나를 점유합니다" (3VSX-1) 514×16 "프로젝트는 폴더 하나를 점유합니다"
+          Frame "Step 1 Folder" (3VSZ-1) 514×98
+            Text "작업 폴더" (3VT0-1) 514×15 "작업 폴더"
+            Frame "Frame" (3VT1-1) 516×52
+              SVG "SVG" (3VT2-1) 18×18
+                SVGVisualElement "Path" (3VT3-1) 14×11
+              Text "C:\Projects\DAOU.Ath…" (3VT4-1) 368×17 "C:\Projects\DAOU.Athena"
+              Frame "Frame" (3VT5-1) 80×28
+                Text "폴더 바꾸기" (3VT6-1) 54×15 "폴더 바꾸기"
+            Text "탐색기가 열립니다. 빈 폴더든 기존 …" (3VT7-1) 514×15 "탐색기가 열립니다. 빈 폴더든 기존 폴더든 됩니다."
+          Frame "Step 2 Name" (3VT9-1) 514×63
+            Text "프로젝트 이름" (3VTA-1) 514×15 "프로젝트 이름"
+            Frame "Frame" (3VTB-1) 516×40
+              Text "아테나" (3VTC-1) 266×17 "아테나"
+              Text "폴더 이름에서 가져왔습니다 · 바꿀 …" (3VTD-1) 214×15 "폴더 이름에서 가져왔습니다 · 바꿀 수 있습니다"
+          Frame "Step 3 Permission" (3VTF-1) 514×121
+            Text "이 폴더에서 아테나가 하는 일" (3VTG-1) 484×16 "이 폴더에서 아테나가 하는 일"
+            Frame "Frame" (3VTH-1) 484×15
+              SVG "SVG" (3VTI-1) 14×14
+                SVGVisualElement "Path" (3VTJ-1) 9×6
+              Text "이 폴더 안에서 파일을 만들고 고치고…" (3VTK-1) 212×15 "이 폴더 안에서 파일을 만들고 고치고 지웁니다"
+            Frame "Frame" (3VTL-1) 484×15
+              SVG "SVG" (3VTM-1) 14×14
+                SVGVisualElement "Path" (3VTN-1) 9×6
+              Text "백테스트 코드·결과·로그를 이 폴더에…" (3VTO-1) 209×15 "백테스트 코드·결과·로그를 이 폴더에 남깁니다"
+            Frame "Frame" (3VTP-1) 484×15
+              SVG "SVG" (3VTQ-1) 14×14
+                SVGVisualElement "Path" (3VTR-1) 9×6
+              Text "폴더 밖은 읽지도 쓰지도 않습니다" (3VTS-1) 155×15 "폴더 밖은 읽지도 쓰지도 않습니다"
+          Frame "Modal Footer" (3VTU-1) 514×34
+            Frame "Frame" (3VTV-1) 56×34
+              Text "취소" (3VTW-1) 22×16 "취소"
+            Frame "Frame" (3VTX-1) 117×34
+              Text "이 폴더로 만들기" (3VTY-1) 85×16 "이 폴더로 만들기"
+        Frame "Edge Cases" (3VU0-1) 300×188
+          Frame "Occupied" (3VU1-1) 300×107
+            Text "이미 점유된 폴더" (3VU2-1) 270×16 "이미 점유된 폴더"
+            Text "이 폴더는 ‘키움 리서치’가 쓰고 있…" (3VU3-1) 270×30 "이 폴더는 ‘키움 리서치’가 쓰고 있습니다. 프로젝트 하나가 폴더 하나를 독점합니다."
+            Text "C:\Projects\DAOU.Ath…" (3VU4-1) 270×15 "C:\Projects\DAOU.Athena"
+          Frame "Not Empty" (3VU5-1) 300×69
+            Text "빈 폴더가 아닐 때" (3VU6-1) 270×16 "빈 폴더가 아닐 때"
+            Text "기존 파일은 그대로 둡니다. 아테나가…" (3VU7-1) 270×15 "기존 파일은 그대로 둡니다. 아테나가 만든 것만 지웁니다."
+    Frame "Interaction Rail" (3VSJ-1) 426×722
+      Frame "Rail Header" (3VU9-1) 388×55
+        Frame "Frame" (3VUA-1) 388×21
+          Text "폴더가 곧 프로젝트다" (3VUB-1) 146×21 "폴더가 곧 프로젝트다"
+          Text "PROJECT · FOLDER" (3VUC-1) 96×15 "PROJECT · FOLDER"
+        Text "추가 흐름에서 정한 규칙과, 지금 코…" (3VUD-1) 388×15 "추가 흐름에서 정한 규칙과, 지금 코드가 아직 갖지 못한 것."
+      Frame "Rule 1" (3VUF-1) 388×88
+        Frame "Frame" (3VUG-1) 358×20
+          Frame "Frame" (3VUH-1) 20×20
+            Text "1" (3VUI-1) 6×12 "1"
+          Text "폴더 하나 = 프로젝트 하나" (3VUJ-1) 146×16 "폴더 하나 = 프로젝트 하나"
+        Text "관계는 1:1입니다. 두 프로젝트가 …" (3VUK-1) 358×30 "관계는 1:1입니다. 두 프로젝트가 같은 폴더를 동시에 쓸 수 없고, 이미 점유된 폴더를 고르면 만들기 단추"
+      Frame "Rule 1" (3VUM-1) 388×88
+        Frame "Frame" (3VUO-1) 358×20
+          Frame "Frame" (3VUQ-1) 20×20
+            Text "2" (3VUR-1) 6×12 "2"
+          Text "폴더는 사용자가 고른다" (3VUP-1) 129×16 "폴더는 사용자가 고른다"
+        Text "앱이 임의로 폴더를 만들지 않습니다.…" (3VUN-1) 358×30 "앱이 임의로 폴더를 만들지 않습니다. 탐색기 대화상자를 띄워 사용자가 직접 지정한 경로만 받습니다."
+      Frame "Rule 1" (3VUS-1) 388×88
+        Frame "Frame" (3VUU-1) 358×20
+          Frame "Frame" (3VUW-1) 20×20
+            Text "3" (3VUX-1) 6×12 "3"
+          Text "권한의 경계는 폴더 벽" (3VUV-1) 121×16 "권한의 경계는 폴더 벽"
+        Text "안쪽은 마음대로, 바깥은 접근 금지.…" (3VUT-1) 358×30 "안쪽은 마음대로, 바깥은 접근 금지. 이 경계를 만들기 화면에서 문장으로 그대로 보여주고, 동의한 뒤에만 프"
+      Frame "Gap Note" (3VUY-1) 388×122
+        Frame "Frame" (3VUZ-1) 358×16
+          SVG "SVG" (3VV0-1) 16×16
+            SVGVisualElement "Path" (3VV1-1) 0×3
+            SVGVisualElement "Path" (3VV2-1) 0×0
+            SVGVisualElement "Path" (3VV3-1) 13×12
+          Text "지금 코드에 없는 것" (3VV4-1) 109×16 "지금 코드에 없는 것"
+        Text "프로젝트 자료구조는 id·label·…" (3VV5-1) 358×30 "프로젝트 자료구조는 id·label·description 셋뿐이고 폴더 경로 필드가 아예 없습니다. 프로젝트"
+        Text "폴더 스캔·경로 검증 모듈은 하나 있…" (3VV6-1) 358×30 "폴더 스캔·경로 검증 모듈은 하나 있지만 테스트에서만 불리고 프로덕션에서는 로드되지 않습니다. 이 보드는 그"

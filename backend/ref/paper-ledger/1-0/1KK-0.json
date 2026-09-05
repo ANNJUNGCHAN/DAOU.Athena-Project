@@ -1,0 +1,515 @@
+{
+ "board_id": "1KK-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "20 · 인증 — 토큰 4상태",
+ "width": 1560,
+ "height": 560,
+ "texts": [
+  {
+   "id": "1KM-0",
+   "text": "토큰 4상태 — 같은 카드, 값과 상태등만 다르다",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "설명"
+   ]
+  },
+  {
+   "id": "1KN-0",
+   "text": "auth-screen.js STATE_META. 72px 자리에 숫자가 없을 때는 8자 대시(--:--:--)로 폭을 00:00:00과 맞춘다 — 원 스펙의 “— — : — — : — —”를 그대로 쓰면 줄바꿈된다.",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "설명"
+   ]
+  },
+  {
+   "id": "1KS-0",
+   "text": "토큰이 없다",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 인증 필요 (needed)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1KU-0",
+   "text": "--:--:--",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 인증 필요 (needed)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1KV-0",
+   "text": "시 분 초",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 인증 필요 (needed)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1KZ-0",
+   "text": "인증 필요",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 인증 필요 (needed)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1L1-0",
+   "text": "발급",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 인증 필요 (needed)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1L4-0",
+   "text": "재발급까지 남은 시간",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 토큰 준비됨 (ready)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1L6-0",
+   "text": "05:42:18",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 토큰 준비됨 (ready)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1L7-0",
+   "text": "시 분 초",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 토큰 준비됨 (ready)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1L8-0",
+   "text": "2026-08-25 21:12:04 만료",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 토큰 준비됨 (ready)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LB-0",
+   "text": "토큰 준비됨",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 토큰 준비됨 (ready)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LD-0",
+   "text": "지금 재발급",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 토큰 준비됨 (ready)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LG-0",
+   "text": "재발급까지 남은 시간",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 재발급 중 (refreshing)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LI-0",
+   "text": "00:08:31",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 재발급 중 (refreshing)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LJ-0",
+   "text": "시 분 초",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 재발급 중 (refreshing)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LK-0",
+   "text": "2026-08-25 21:12:04 만료",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 재발급 중 (refreshing)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LN-0",
+   "text": "재발급 중",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 재발급 중 (refreshing)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LP-0",
+   "text": "발급 중",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 재발급 중 (refreshing)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LS-0",
+   "text": "재발급까지 남은 시간",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 만료됨 (expired)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LU-0",
+   "text": "00:00:00",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 만료됨 (expired)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LV-0",
+   "text": "시 분 초",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 만료됨 (expired)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LW-0",
+   "text": "2026-08-25 21:12:04 만료",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 만료됨 (expired)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1LZ-0",
+   "text": "만료됨",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 만료됨 (expired)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1M1-0",
+   "text": "발급",
+   "path": [
+    "20 · 인증 — 토큰 4상태",
+    "4상태 행",
+    "상태 · 만료됨 (expired)",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1KK-0",
+   "name": "20 · 인증 — 토큰 4상태",
+   "component": "Frame",
+   "w": 1560,
+   "h": 560,
+   "depth": 0
+  },
+  {
+   "id": "1KL-0",
+   "name": "설명",
+   "component": "Frame",
+   "w": 1440,
+   "h": 46,
+   "depth": 1
+  },
+  {
+   "id": "1KO-0",
+   "name": "4상태 행",
+   "component": "Frame",
+   "w": 1440,
+   "h": 186,
+   "depth": 1
+  },
+  {
+   "id": "1KQ-0",
+   "name": "상태 · 인증 필요 (needed)",
+   "component": "Frame",
+   "w": 342,
+   "h": 186,
+   "depth": 2
+  },
+  {
+   "id": "1KR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 342,
+   "h": 144,
+   "depth": 3
+  },
+  {
+   "id": "1KT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 296,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "1KW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 296,
+   "h": 18,
+   "depth": 4
+  },
+  {
+   "id": "1KX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 342,
+   "h": 28,
+   "depth": 3
+  },
+  {
+   "id": "1KY-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 4
+  },
+  {
+   "id": "1L0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 50,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "1L2-0",
+   "name": "상태 · 토큰 준비됨 (ready)",
+   "component": "Frame",
+   "w": 342,
+   "h": 186,
+   "depth": 2
+  },
+  {
+   "id": "1L3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 342,
+   "h": 144,
+   "depth": 3
+  },
+  {
+   "id": "1L5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 296,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "1L9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 342,
+   "h": 30,
+   "depth": 3
+  },
+  {
+   "id": "1LA-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 4
+  },
+  {
+   "id": "1LC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 89,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "1LE-0",
+   "name": "상태 · 재발급 중 (refreshing)",
+   "component": "Frame",
+   "w": 342,
+   "h": 186,
+   "depth": 2
+  },
+  {
+   "id": "1LF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 342,
+   "h": 144,
+   "depth": 3
+  },
+  {
+   "id": "1LH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 296,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "1LL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 342,
+   "h": 30,
+   "depth": 3
+  },
+  {
+   "id": "1LM-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 4
+  },
+  {
+   "id": "1LO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 67,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "1LQ-0",
+   "name": "상태 · 만료됨 (expired)",
+   "component": "Frame",
+   "w": 342,
+   "h": 186,
+   "depth": 2
+  },
+  {
+   "id": "1LR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 342,
+   "h": 144,
+   "depth": 3
+  },
+  {
+   "id": "1LT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 296,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "1LX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 342,
+   "h": 30,
+   "depth": 3
+  },
+  {
+   "id": "1LY-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 4
+  },
+  {
+   "id": "1M0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 30,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "토큰 4상태 — 같은 카드, 값과 상태등만 다르다": 1,
+  "auth-screen.js STATE_META. 72px 자리에 숫자가 없을 때는 8자 대시(--:--:--)로 폭을 00:00:00과 맞춘다 — 원 스펙의 “— — : — — : — —”를 그대로 쓰면 줄바꿈된다.": 1,
+  "토큰이 없다": 1,
+  "--:--:--": 1,
+  "시 분 초": 4,
+  "인증 필요": 1,
+  "발급": 2,
+  "재발급까지 남은 시간": 3,
+  "05:42:18": 1,
+  "2026-08-25 21:12:04 만료": 3,
+  "토큰 준비됨": 1,
+  "지금 재발급": 1,
+  "00:08:31": 1,
+  "재발급 중": 1,
+  "발급 중": 1,
+  "00:00:00": 1,
+  "만료됨": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "f22834357387893848f21633a274abb265a66f14c56f461d9c503b37a5e7ecc8"
+}

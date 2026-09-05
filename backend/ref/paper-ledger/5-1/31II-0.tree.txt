@@ -1,0 +1,290 @@
+Frame "CC-03 / R01-T4-9 · 순위 — VI 발동" (31II-0) 1440×960
+  Frame "Instrument Root · 현재시세" (31IJ-0) 1440×960
+    Frame "Instrument Card Surface" (31IK-0) 1360×880
+      Frame "Instrument Header" (31NP-0) 0×106
+        Frame "Frame" (31O5-0) 0×0
+          Frame "Frame" (31OA-0) 0×0
+            Text "주식 순위" (31OE-0) 0×0 "주식 순위"
+            Text "KRX 전체 · 변동성완화장치 발동" (31OD-0) 0×0 "KRX 전체 · 변동성완화장치 발동"
+            Frame "Frame" (31OB-0) 0×0
+              Text "조회 스냅샷" (31OC-0) 0×0 "조회 스냅샷"
+          Frame "Frame" (31O6-0) 0×0
+            Text "오늘 12건" (31O9-0) 0×0 "오늘 12건"
+            Text "정적 8 · 동적 4" (31O8-0) 0×0 "정적 8 · 동적 4"
+            Text "09:42:18 조회" (31O7-0) 0×0 "09:42:18 조회"
+        Frame "Frame" (31NQ-0) 0×0
+          Frame "Frame" (31O3-0) 0×0
+            Text "현재시세" (31O4-0) 0×0 "현재시세"
+          Frame "Frame" (31O1-0) 0×0
+            Text "차트" (31O2-0) 0×0 "차트"
+          Frame "Frame" (31NZ-0) 0×0
+            Text "기업정보" (31O0-0) 0×0 "기업정보"
+          Frame "Frame" (31NX-0) 0×0
+            Text "ETF" (31NY-0) 0×0 "ETF"
+          Frame "Frame" (31NV-0) 0×0
+            Text "ELW" (31NW-0) 0×0 "ELW"
+          Frame "Frame" (31NT-0) 0×0
+            Text "금현물" (31NU-0) 0×0 "금현물"
+          Frame "Frame" (31NR-0) 0×0
+            Text "순위" (31NS-0) 0×0 "순위"
+      Frame "Quote and Valuation Strip" (31N5-0) 0×116
+        Frame "Frame" (31NM-0) 0×78
+          Text "정렬 기준" (31NO-0) 0×0 "정렬 기준"
+          Text "발동 시각순" (31NN-0) 0×0 "발동 시각순"
+        Frame "Frame" (31NI-0) 190×78
+          Text "오늘 발동" (31NL-0) 0×0 "오늘 발동"
+          Text "12건" (31NK-0) 0×0 "12건"
+          Text "오늘 누적" (31NJ-0) 0×0 "오늘 누적"
+        Frame "Frame" (31NE-0) 150×78
+          Text "정적 VI" (31NH-0) 0×0 "정적 VI"
+          Text "8건" (31NG-0) 0×0 "8건"
+          Text "오늘 누적" (31NF-0) 0×0 "오늘 누적"
+        Frame "Frame" (31NA-0) 150×78
+          Text "동적 VI" (31ND-0) 0×0 "동적 VI"
+          Text "4건" (31NC-0) 0×0 "4건"
+          Text "오늘 누적" (31NB-0) 0×0 "오늘 누적"
+        Frame "Frame" (31N6-0) 150×78
+          Text "해제 대기" (31N9-0) 0×0 "해제 대기"
+          Text "1건" (31N8-0) 0×0 "1건"
+          Text "발동 중" (31N7-0) 0×0 "발동 중"
+      Frame "Chart Workspace" (31IO-0) 0×594
+        Frame "Quote Detail Mount" (31K1-0) 1000×594
+          Frame "Frame" (31M9-0) 0×0
+            Frame "Frame" (31ML-0) 0×0
+              Frame "Frame" (31MU-0) 0×0
+                Frame "Frame" (31N3-0) 0×0
+                  Text "신고저가" (31N4-0) 0×0 "신고저가"
+                Frame "Frame" (31N1-0) 0×0
+                  Text "상하한가" (31N2-0) 0×0 "상하한가"
+                Frame "Frame" (31MZ-0) 0×0
+                  Text "고저가근접" (31N0-0) 0×0 "고저가근접"
+                Frame "Frame" (31MX-0) 0×0
+                  Text "가격급등락" (31MY-0) 0×0 "가격급등락"
+                Frame "Frame" (31MV-0) 0×0
+                  Text "거래량갱신" (31MW-0) 0×0 "거래량갱신"
+              Frame "Frame" (31MM-0) 0×0
+                Text "범위" (31MT-0) 0×0 "범위"
+                Frame "Frame" (31MR-0) 0×0
+                  Text "주식" (31MS-0) 0×0 "주식"
+                Frame "Frame" (31MP-0) 0×0
+                  Text "ETF" (31MQ-0) 0×0 "ETF"
+                Frame "Frame" (31MN-0) 0×0
+                  Text "ELW" (31MO-0) 0×0 "ELW"
+            Frame "Frame" (31MA-0) 0×0
+              Frame "Frame" (31MJ-0) 0×0
+                Text "매물대집중" (31MK-0) 0×0 "매물대집중"
+              Frame "Frame" (31MH-0) 0×0
+                Text "고저 PER" (31MI-0) 0×0 "고저 PER"
+              Frame "Frame" (31MF-0) 0×0
+                Text "시가대비 등락" (31MG-0) 0×0 "시가대비 등락"
+              Frame "Frame" (31MD-0) 0×0
+                Text "VI 발동" (31ME-0) 0×0 "VI 발동"
+              Frame "Frame" (31MB-0) 0×0
+                Text "당일·전일 체결량" (31MC-0) 0×0 "당일·전일 체결량"
+          Frame "순위 표" (3ARB-0) 0×0
+            Frame "표 머리" (3ARC-0) 0×36
+              Text "순위" (3ARD-0) 40×0 "순위"
+              Text "종목" (3ARE-0) 0×0 "종목"
+              Text "현재가" (3ARF-0) 132×0 "현재가"
+              Text "구분" (3ARG-0) 72×0 "구분"
+              Text "기준가격" (3ARH-0) 116×0 "기준가격"
+              Text "괴리율" (3ARI-0) 100×0 "괴리율"
+              Text "누적거래량" (3ARJ-0) 124×0 "누적거래량"
+              Text "발동 횟수" (3ARK-0) 96×0 "발동 횟수"
+            Frame "1 한미반도체" (3ARL-0) 0×44
+              Text "1" (3ARM-0) 40×0 "1"
+              Frame "Frame" (3ARN-0) 0×0
+                Text "한미반도체" (3ARO-0) 0×0 "한미반도체"
+                Text "042700 · 코스피" (3ARP-0) 0×0 "042700 · 코스피"
+              Frame "Frame" (3ARQ-0) 132×0
+                Text "197,400" (3ARR-0) 0×0 "197,400"
+                Text "+7,900 · +4.18%" (3ARS-0) 0×0 "+7,900 · +4.18%"
+              Frame "Frame" (3ART-0) 72×0
+                Frame "Frame" (3ARU-0) 0×0
+                  Text "정적" (3ARV-0) 0×0 "정적"
+              Frame "Frame" (3ARW-0) 116×0
+                Text "정적 180,000" (3ARX-0) 0×0 "정적 180,000"
+                Text "동적 192,200" (3ARY-0) 0×0 "동적 192,200"
+              Frame "Frame" (3ARZ-0) 100×0
+                Text "정적 +9.7%" (3AS0-0) 0×0 "정적 +9.7%"
+                Text "동적 +2.7%" (3AS1-0) 0×0 "동적 +2.7%"
+              Frame "Frame" (3AS2-0) 124×0
+                Text "320만주" (3AS3-0) 0×0 "320만주"
+                Text "시가대비 +3.5%" (3AS4-0) 0×0 "시가대비 +3.5%"
+              Frame "Frame" (3AS5-0) 96×0
+                Text "1회" (3AS6-0) 0×0 "1회"
+                Text "09:41 발동" (3AS7-0) 0×0 "09:41 발동"
+            Frame "2 HD현대일렉트릭" (3AS8-0) 0×44
+              Text "2" (3AS9-0) 40×0 "2"
+              Frame "Frame" (3ASA-0) 0×0
+                Text "HD현대일렉트릭" (3ASB-0) 0×0 "HD현대일렉트릭"
+                Text "267260 · 코스피" (3ASC-0) 0×0 "267260 · 코스피"
+              Frame "Frame" (3ASD-0) 132×0
+                Text "412,500" (3ASE-0) 0×0 "412,500"
+                Text "+11,500 · +2.86%" (3ASF-0) 0×0 "+11,500 · +2.86%"
+              Frame "Frame" (3ASG-0) 72×0
+                Frame "Frame" (3ASH-0) 0×0
+                  Text "정적" (3ASI-0) 0×0 "정적"
+              Frame "Frame" (3ASJ-0) 116×0
+                Text "정적 377,500" (3ASK-0) 0×0 "정적 377,500"
+                Text "동적 403,000" (3ASL-0) 0×0 "동적 403,000"
+              Frame "Frame" (3ASM-0) 100×0
+                Text "정적 +9.3%" (3ASN-0) 0×0 "정적 +9.3%"
+                Text "동적 +2.4%" (3ASO-0) 0×0 "동적 +2.4%"
+              Frame "Frame" (3ASP-0) 124×0
+                Text "80만주" (3ASQ-0) 0×0 "80만주"
+                Text "시가대비 +2.7%" (3ASR-0) 0×0 "시가대비 +2.7%"
+              Frame "Frame" (3ASS-0) 96×0
+                Text "1회" (3AST-0) 0×0 "1회"
+                Text "09:28 발동" (3ASU-0) 0×0 "09:28 발동"
+            Frame "3 알테오젠" (3ASV-0) 0×44
+              Text "3" (3ASW-0) 40×0 "3"
+              Frame "Frame" (3ASX-0) 0×0
+                Text "알테오젠" (3ASY-0) 0×0 "알테오젠"
+                Text "196170 · 코스닥" (3ASZ-0) 0×0 "196170 · 코스닥"
+              Frame "Frame" (3AT0-0) 132×0
+                Text "391,000" (3AT1-0) 0×0 "391,000"
+                Text "+88,200 · +29.12%" (3AT2-0) 0×0 "+88,200 · +29.12%"
+              Frame "Frame" (3AT3-0) 72×0
+                Frame "Frame" (3AT4-0) 0×0
+                  Text "동적" (3AT5-0) 0×0 "동적"
+              Frame "Frame" (3AT6-0) 116×0
+                Text "정적 372,000" (3AT7-0) 0×0 "정적 372,000"
+                Text "동적 381,100" (3AT8-0) 0×0 "동적 381,100"
+              Frame "Frame" (3AT9-0) 100×0
+                Text "정적 +5.1%" (3ATA-0) 0×0 "정적 +5.1%"
+                Text "동적 +2.6%" (3ATB-0) 0×0 "동적 +2.6%"
+              Frame "Frame" (3ATC-0) 124×0
+                Text "110만주" (3ATD-0) 0×0 "110만주"
+                Text "시가대비 +2.6%" (3ATE-0) 0×0 "시가대비 +2.6%"
+              Frame "Frame" (3ATF-0) 96×0
+                Text "1회" (3ATG-0) 0×0 "1회"
+                Text "09:12 발동" (3ATH-0) 0×0 "09:12 발동"
+            Frame "4 이수페타시스" (3T6K-0) 0×44
+              Text "4" (3T6L-0) 40×0 "4"
+              Frame "Frame" (3T6M-0) 0×0
+                Text "이수페타시스" (3T6N-0) 0×0 "이수페타시스"
+                Text "007660 · 코스피" (3T6O-0) 0×0 "007660 · 코스피"
+              Frame "Frame" (3T6P-0) 132×0
+                Text "64,500" (3T6Q-0) 0×0 "64,500"
+                Text "+14,850 · +29.90%" (3T6R-0) 0×0 "+14,850 · +29.90%"
+              Frame "Frame" (3T6S-0) 72×0
+                Frame "Frame" (3T6T-0) 0×0
+                  Text "정적" (3T6U-0) 0×0 "정적"
+              Frame "Frame" (3T6V-0) 116×0
+                Text "정적 58,600" (3T6W-0) 0×0 "정적 58,600"
+                Text "동적 62,600" (3T6X-0) 0×0 "동적 62,600"
+              Frame "Frame" (3T6Y-0) 100×0
+                Text "정적 +10.1%" (3T6Z-0) 0×0 "정적 +10.1%"
+                Text "동적 +3.0%" (3T70-0) 0×0 "동적 +3.0%"
+              Frame "Frame" (3T71-0) 124×0
+                Text "1,240만주" (3T72-0) 0×0 "1,240만주"
+                Text "시가대비 +8.0%" (3T73-0) 0×0 "시가대비 +8.0%"
+              Frame "Frame" (3T74-0) 96×0
+                Text "2회" (3T75-0) 0×0 "2회"
+                Text "09:08 발동" (3T76-0) 0×0 "09:08 발동"
+            Frame "5 레인보우로보틱스" (3T78-0) 0×44
+              Text "5" (3T7U-0) 40×0 "5"
+              Frame "Frame" (3T7R-0) 0×0
+                Text "레인보우로보틱스" (3T7T-0) 0×0 "레인보우로보틱스"
+                Text "277810 · 코스닥" (3T7S-0) 0×0 "277810 · 코스닥"
+              Frame "Frame" (3T7O-0) 132×0
+                Text "246,500" (3T7Q-0) 0×0 "246,500"
+                Text "+56,800 · +29.94%" (3T7P-0) 0×0 "+56,800 · +29.94%"
+              Frame "Frame" (3T7L-0) 72×0
+                Frame "Frame" (3T7M-0) 0×0
+                  Text "정적" (3T7N-0) 0×0 "정적"
+              Frame "Frame" (3T7I-0) 116×0
+                Text "정적 224,000" (3T7K-0) 0×0 "정적 224,000"
+                Text "동적 239,000" (3T7J-0) 0×0 "동적 239,000"
+              Frame "Frame" (3T7F-0) 100×0
+                Text "정적 +10.0%" (3T7H-0) 0×0 "정적 +10.0%"
+                Text "동적 +3.1%" (3T7G-0) 0×0 "동적 +3.1%"
+              Frame "Frame" (3T7C-0) 124×0
+                Text "92만주" (3T7E-0) 0×0 "92만주"
+                Text "시가대비 +8.4%" (3T7D-0) 0×0 "시가대비 +8.4%"
+              Frame "Frame" (3T79-0) 96×0
+                Text "2회" (3T7B-0) 0×0 "2회"
+                Text "09:06 발동" (3T7A-0) 0×0 "09:06 발동"
+            Frame "6 실리콘투" (3T7V-0) 0×44
+              Text "6" (3T8H-0) 40×0 "6"
+              Frame "Frame" (3T8E-0) 0×0
+                Text "실리콘투" (3T8G-0) 0×0 "실리콘투"
+                Text "257720 · 코스닥" (3T8F-0) 0×0 "257720 · 코스닥"
+              Frame "Frame" (3T8B-0) 132×0
+                Text "58,900" (3T8D-0) 0×0 "58,900"
+                Text "+13,530 · +29.81%" (3T8C-0) 0×0 "+13,530 · +29.81%"
+              Frame "Frame" (3T88-0) 72×0
+                Frame "Frame" (3T89-0) 0×0
+                  Text "동적" (3T8A-0) 0×0 "동적"
+              Frame "Frame" (3T85-0) 116×0
+                Text "정적 53,500" (3T87-0) 0×0 "정적 53,500"
+                Text "동적 57,200" (3T86-0) 0×0 "동적 57,200"
+              Frame "Frame" (3T82-0) 100×0
+                Text "정적 +10.1%" (3T84-0) 0×0 "정적 +10.1%"
+                Text "동적 +3.0%" (3T83-0) 0×0 "동적 +3.0%"
+              Frame "Frame" (3T7Z-0) 124×0
+                Text "316만주" (3T81-0) 0×0 "316만주"
+                Text "시가대비 +7.3%" (3T80-0) 0×0 "시가대비 +7.3%"
+              Frame "Frame" (3T7W-0) 96×0
+                Text "2회" (3T7Y-0) 0×0 "2회"
+                Text "09:03 발동" (3T7X-0) 0×0 "09:03 발동"
+          Frame "Frame" (31K2-0) 0×0
+            Text "전체 12건 · 6건 표시 ▸" (31K7-0) 0×0 "전체 12건 · 6건 표시 ▸"
+          Frame "VI Progress Band" (32GV-0) 943×0
+            Frame "Frame" (32GW-0) 0×0
+              Text "발동 진행" (32GX-0) 0×0 "발동 진행"
+              Text "한미반도체 · 정적 VI" (32GY-0) 0×0 "한미반도체 · 정적 VI"
+            Frame "Frame" (32GZ-0) 0×0
+              Frame "Frame" (32H0-0) 180×0
+                Rectangle "Rectangle" (32H1-0) 9×9
+                Text "09:41" (32H2-0) 0×0 "09:41"
+                Text "발동" (32H3-0) 0×0 "발동"
+              Rectangle "Rectangle" (32H4-0) 0×1
+              Frame "Frame" (32H5-0) 180×0
+                Rectangle "Rectangle" (32H6-0) 9×9
+                Text "09:41~" (32H7-0) 0×0 "09:41~"
+                Text "단일가 접수" (32H8-0) 0×0 "단일가 접수"
+              Rectangle "Rectangle" (32H9-0) 0×1
+              Frame "Frame" (32HA-0) 180×0
+                Rectangle "Rectangle" (32HB-0) 9×9
+                Text "09:43" (32HC-0) 0×0 "09:43"
+                Text "해제 예정" (32HD-0) 0×0 "해제 예정"
+        Frame "Rail" (3OV3-0) 360×594
+          Frame "Block 1 · 발동 현황" (3OV4-0) 0×0
+            Frame "Frame" (3OV5-0) 0×0
+              Text "발동 현황" (3OV6-0) 0×0 "발동 현황"
+              Text "09:42:18 기준" (3OV7-0) 0×0 "09:42:18 기준"
+            Frame "Frame" (3OV8-0) 0×0
+              Frame "Frame" (3OV9-0) 0×0
+                Text "발동 중" (3OVA-0) 0×0 "발동 중"
+                Text "1건" (3OVB-0) 0×0 "1건"
+              Frame "Frame" (3OVC-0) 0×0
+                Text "해제 완료" (3OVD-0) 0×0 "해제 완료"
+                Text "11건" (3OVE-0) 0×0 "11건"
+              Frame "Frame" (3OVF-0) 0×0
+                Text "해제 예정" (3OVG-0) 0×0 "해제 예정"
+                Text "09:43" (3OVH-0) 0×0 "09:43"
+          Frame "Block 2 · 최근 5일 발동" (3OVI-0) 0×0
+            Frame "Frame" (3OVJ-0) 0×0
+              Text "최근 5일 발동" (3OVK-0) 0×0 "최근 5일 발동"
+              Text "합계 21건 · 일평균 4.2건" (3OVL-0) 0×0 "합계 21건 · 일평균 4.2건"
+            Frame "Frame" (3OVM-0) 0×0
+              Frame "Frame" (3OVN-0) 0×0
+                Text "09-01" (3OVO-0) 0×0 "09-01"
+                Text "12건" (3OVP-0) 0×0 "12건"
+              Frame "Frame" (3OVQ-0) 0×0
+                Text "08-31" (3OVR-0) 0×0 "08-31"
+                Text "2건" (3OVS-0) 0×0 "2건"
+              Frame "Frame" (3OVT-0) 0×0
+                Text "08-28" (3OVU-0) 0×0 "08-28"
+                Text "4건" (3OVV-0) 0×0 "4건"
+              Frame "Frame" (3OVW-0) 0×0
+                Text "08-27" (3OVX-0) 0×0 "08-27"
+                Text "2건" (3OVY-0) 0×0 "2건"
+              Frame "Frame" (3OVZ-0) 0×0
+                Text "08-26" (3OW0-0) 0×0 "08-26"
+                Text "1건" (3OW1-0) 0×0 "1건"
+      Frame "Chart Status Footer" (31IL-0) 0×64
+        Text "조회 스냅샷" (31IN-0) 0×0 "조회 스냅샷"
+        Text "Footer Meta" (31IM-0) 0×0 "마지막 조회 09:42:18"

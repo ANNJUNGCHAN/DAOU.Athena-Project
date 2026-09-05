@@ -1,0 +1,1073 @@
+{
+ "board_id": "3KM-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "10 · 셸 — 답변 중 · Task Canvas",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "GR1-0",
+   "text": "ATHENA",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GR9-0",
+   "text": "새 채팅",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GRG-0",
+   "text": "그래프",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GRL-0",
+   "text": "에이전트",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GRQ-0",
+   "text": "플러그인",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GRT-0",
+   "text": "프로젝트",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GRY-0",
+   "text": "아테나",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GS7-0",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GS9-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GSC-0",
+   "text": "최근",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GSD-0",
+   "text": "전체",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GSF-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GSI-0",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GSK-0",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GSO-0",
+   "text": "AN",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GSP-0",
+   "text": "모의-주력",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "05 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3M8-0",
+   "text": "아직 답변 카드가 없습니다",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "캔버스 — 빈 상태",
+    "빈 상태",
+    "빈 상태 문구"
+   ]
+  },
+  {
+   "id": "3M9-0",
+   "text": "그동안 나눈 대화와 체결로 성향은 계속 쌓이고 있습니다.\n무엇이 쌓였는지 지금 볼 수 있습니다.",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "캔버스 — 빈 상태",
+    "빈 상태",
+    "빈 상태 문구"
+   ]
+  },
+  {
+   "id": "3MB-0",
+   "text": "엔티티 312",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "캔버스 — 빈 상태",
+    "빈 상태",
+    "빈 상태 수치"
+   ]
+  },
+  {
+   "id": "3MC-0",
+   "text": "·",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "캔버스 — 빈 상태",
+    "빈 상태",
+    "빈 상태 수치"
+   ]
+  },
+  {
+   "id": "3MD-0",
+   "text": "테마 군집 7",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "캔버스 — 빈 상태",
+    "빈 상태",
+    "빈 상태 수치"
+   ]
+  },
+  {
+   "id": "3ME-0",
+   "text": "·",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "캔버스 — 빈 상태",
+    "빈 상태",
+    "빈 상태 수치"
+   ]
+  },
+  {
+   "id": "3MF-0",
+   "text": "최근 7일 +14",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "캔버스 — 빈 상태",
+    "빈 상태",
+    "빈 상태 수치"
+   ]
+  },
+  {
+   "id": "3MH-0",
+   "text": "성향 그래프 열기",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "캔버스 — 빈 상태",
+    "빈 상태",
+    "빈 상태 CTA"
+   ]
+  },
+  {
+   "id": "3MJ-0",
+   "text": "확인이 필요한 것 3건이 기다리고 있습니다",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "캔버스 — 빈 상태",
+    "빈 상태",
+    "확인 필요 힌트"
+   ]
+  },
+  {
+   "id": "3MM-0",
+   "text": "새 대화",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "채팅 400",
+    "대화 본문"
+   ]
+  },
+  {
+   "id": "3MN-0",
+   "text": "종목·재무·공시를 물어보면\n답이 캔버스에 카드로 쌓입니다",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "채팅 400",
+    "대화 본문"
+   ]
+  },
+  {
+   "id": "3MQ-0",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "채팅 400",
+    "입력 스택",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MW-0",
+   "text": "답변",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "채팅 400",
+    "입력 스택",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MY-0",
+   "text": "CLAUDE",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "채팅 400",
+    "입력 스택",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3N0-0",
+   "text": "감시 2",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "채팅 400",
+    "입력 스택",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3N3-0",
+   "text": "OPUS · HIGH",
+   "path": [
+    "10 · 셸 — 답변 중 · Task Canvas",
+    "셸 창",
+    "채팅 400",
+    "입력 스택",
+    "control-strip",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3KM-0",
+   "name": "10 · 셸 — 답변 중 · Task Canvas",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "3KN-0",
+   "name": "셸 창",
+   "component": "Frame",
+   "w": 1560,
+   "h": 820,
+   "depth": 1
+  },
+  {
+   "id": "GQY-0",
+   "name": "05 · Project Recent Sidebar",
+   "component": "Frame",
+   "w": 268,
+   "h": 799,
+   "depth": 2
+  },
+  {
+   "id": "GQZ-0",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 242,
+   "h": 164,
+   "depth": 3
+  },
+  {
+   "id": "GR0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "GR2-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GR3-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "GR4-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "GR5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "GR6-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GR7-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GR8-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "GRA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "GRB-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GRC-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "GRD-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "GRE-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "GRF-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 6
+  },
+  {
+   "id": "GRH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "GRI-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GRJ-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 6
+  },
+  {
+   "id": "GRK-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 4,
+   "depth": 6
+  },
+  {
+   "id": "GRM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "GRN-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GRO-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "GRP-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 1,
+   "depth": 6
+  },
+  {
+   "id": "GRR-0",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 242,
+   "h": 129,
+   "depth": 3
+  },
+  {
+   "id": "GRS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "GRU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "GRV-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GRW-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "GRX-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "GRZ-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 17,
+   "h": 17,
+   "depth": 5
+  },
+  {
+   "id": "GS0-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 6
+  },
+  {
+   "id": "GS1-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 6
+  },
+  {
+   "id": "GS2-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 6
+  },
+  {
+   "id": "GS3-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 17,
+   "h": 17,
+   "depth": 5
+  },
+  {
+   "id": "GS4-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GS5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 6
+  },
+  {
+   "id": "GS6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "GS8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 29,
+   "depth": 4
+  },
+  {
+   "id": "H41-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "GSA-0",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 242,
+   "h": 126,
+   "depth": 3
+  },
+  {
+   "id": "GSB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "GSE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "GSG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 5
+  },
+  {
+   "id": "GSH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "GSJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 27,
+   "depth": 4
+  },
+  {
+   "id": "GSL-0",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 242,
+   "h": 314,
+   "depth": 3
+  },
+  {
+   "id": "GSM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 242,
+   "h": 38,
+   "depth": 4
+  },
+  {
+   "id": "GSN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "GSQ-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 5
+  },
+  {
+   "id": "GSR-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "3LQ-0",
+   "name": "캔버스 — 빈 상태",
+   "component": "Frame",
+   "w": 850,
+   "h": 798,
+   "depth": 2
+  },
+  {
+   "id": "3LT-0",
+   "name": "빈 상태",
+   "component": "Frame",
+   "w": 420,
+   "h": 290,
+   "depth": 3
+  },
+  {
+   "id": "3LU-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 120,
+   "h": 74,
+   "depth": 4
+  },
+  {
+   "id": "3LV-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 32,
+   "h": 10,
+   "depth": 5
+  },
+  {
+   "id": "3LW-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "3LX-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 36,
+   "h": 24,
+   "depth": 5
+  },
+  {
+   "id": "3LY-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 28,
+   "h": 10,
+   "depth": 5
+  },
+  {
+   "id": "3LZ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 18,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3M0-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 18,
+   "h": 18,
+   "depth": 5
+  },
+  {
+   "id": "3M1-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 14,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "3M2-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  },
+  {
+   "id": "3M3-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "3M4-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "3M5-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 7,
+   "depth": 5
+  },
+  {
+   "id": "3M7-0",
+   "name": "빈 상태 문구",
+   "component": "Frame",
+   "w": 334,
+   "h": 96,
+   "depth": 4
+  },
+  {
+   "id": "3MA-0",
+   "name": "빈 상태 수치",
+   "component": "Frame",
+   "w": 259,
+   "h": 52,
+   "depth": 4
+  },
+  {
+   "id": "3MG-0",
+   "name": "빈 상태 CTA",
+   "component": "Frame",
+   "w": 141,
+   "h": 38,
+   "depth": 4
+  },
+  {
+   "id": "3MI-0",
+   "name": "확인 필요 힌트",
+   "component": "Frame",
+   "w": 213,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3LR-0",
+   "name": "채팅 400",
+   "component": "Frame",
+   "w": 400,
+   "h": 798,
+   "depth": 2
+  },
+  {
+   "id": "3ML-0",
+   "name": "대화 본문",
+   "component": "Frame",
+   "w": 398,
+   "h": 718,
+   "depth": 3
+  },
+  {
+   "id": "3MO-0",
+   "name": "입력 스택",
+   "component": "Frame",
+   "w": 398,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "3MP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 366,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3MR-0",
+   "name": "control-strip",
+   "component": "Frame",
+   "w": 366,
+   "h": 26,
+   "depth": 4
+  },
+  {
+   "id": "3MS-0",
+   "name": "키우미 점 — 모드 전환",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3MT-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 3,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "3MU-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 3,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "3MV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 44,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "3MX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 61,
+   "h": 24,
+   "depth": 5
+  },
+  {
+   "id": "3MZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 24,
+   "depth": 5
+  },
+  {
+   "id": "3N1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 61,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3N2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86,
+   "h": 24,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "아직 답변 카드가 없습니다": 1,
+  "그동안 나눈 대화와 체결로 성향은 계속 쌓이고 있습니다.\n무엇이 쌓였는지 지금 볼 수 있습니다.": 1,
+  "엔티티 312": 1,
+  "·": 2,
+  "테마 군집 7": 1,
+  "최근 7일 +14": 1,
+  "성향 그래프 열기": 1,
+  "확인이 필요한 것 3건이 기다리고 있습니다": 1,
+  "새 대화": 1,
+  "종목·재무·공시를 물어보면\n답이 캔버스에 카드로 쌓입니다": 1,
+  "무엇이든 물어보세요": 1,
+  "답변": 1,
+  "CLAUDE": 1,
+  "감시 2": 1,
+  "OPUS · HIGH": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "ba3b659ece04b8d28cfe95a92a91ff614e0a246277501eb3f9d78f5e424f3a3f"
+}

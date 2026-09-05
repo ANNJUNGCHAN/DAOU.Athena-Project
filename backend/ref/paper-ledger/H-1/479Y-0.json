@@ -1,0 +1,342 @@
+{
+ "board_id": "479Y-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T6 · 수급 — 순위",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47AW-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47AV-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47AT-0",
+   "text": "수급 순위",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Header"
+   ]
+  },
+  {
+   "id": "47AR-0",
+   "text": "순매수대금합계",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47AQ-0",
+   "text": "+1.24조원",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47AO-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47AN-0",
+   "text": "11.8%",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47AL-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47AK-0",
+   "text": "순매수 1위",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47AH-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47AG-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47AF-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47AD-0",
+   "text": "잔고주수",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47AC-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47AA-0",
+   "text": "1,284만주",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47A9-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47A7-0",
+   "text": "대차거래증감",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47A6-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47A4-0",
+   "text": "전일 +82만주",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47A3-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47A0-0",
+   "text": "스칼라 2개, 행 6개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T6 · 수급 — 순위",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "479Y-0",
+   "name": "mini/CC-05 / R03-T6 · 수급 — 순위",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47AS-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47AU-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47A1-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47AI-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47AP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47AM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47AJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47AE-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47A8-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47AB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47A2-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47A5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "479Z-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "수급 순위": 1,
+  "순매수대금합계": 1,
+  "+1.24조원": 1,
+  "변화": 1,
+  "11.8%": 1,
+  "핵심": 1,
+  "순매수 1위": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "잔고주수": 1,
+  "1,284만주": 1,
+  "대차거래증감": 1,
+  "전일 +82만주": 1,
+  "스칼라 2개, 행 6개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "c498180715320761db1f97d2d330dbd756bffae3b8c0e212d019fe27d0b83aa9"
+}

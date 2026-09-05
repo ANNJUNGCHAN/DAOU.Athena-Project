@@ -1,0 +1,2430 @@
+{
+ "board_id": "GCF-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "29 · 프로젝트·최근·새 채팅",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "GCJ-0",
+   "text": "51",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GCL-0",
+   "text": "프로젝트 · 최근 · 새 채팅 상호작용",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GCM-0",
+   "text": "프로젝트 Hover부터 새 채팅까지, 실제 Athena 셸에서 연결합니다. 설명 카드는 머물고, 프로젝트 수정은 이름·설명을 그 자리에서 고칩니다.",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GCO-0",
+   "text": "개정 2026-09-05 · 승인 대기",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GI4-0",
+   "text": "ATHENA",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Native Titlebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GI5-0",
+   "text": "아테나 · 그래프",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Native Titlebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GI7-0",
+   "text": "파일　편집　보기　도움말",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Native Titlebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GIQ-0",
+   "text": "ATHENA",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GIY-0",
+   "text": "새 채팅",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GJ5-0",
+   "text": "그래프",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GJA-0",
+   "text": "에이전트",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GJF-0",
+   "text": "플러그인",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GJJ-0",
+   "text": "프로젝트",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GJO-0",
+   "text": "아테나",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GJX-0",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GJZ-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GK3-0",
+   "text": "최근",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GK4-0",
+   "text": "전체",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GK6-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GK9-0",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GKB-0",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GKG-0",
+   "text": "AN",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GKH-0",
+   "text": "모의-주력",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Project Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GKP-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Graph Canvas",
+    "Canvas Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GKR-0",
+   "text": "그래프",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Graph Canvas",
+    "Canvas Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GKY-0",
+   "text": "현재 기능 유지 · 그래프",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Graph Canvas",
+    "Graph Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GKZ-0",
+   "text": "새 채팅을 열어도 캔버스는 유지됩니다",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Graph Canvas",
+    "Graph Workspace",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GL2-0",
+   "text": "Athena 기능 구조",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Graph Canvas",
+    "Graph Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GL3-0",
+   "text": "7 CLUSTERS · 24 LINKS",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Graph Canvas",
+    "Graph Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GLM-0",
+   "text": "프로젝트 소속 대화와 전역 최근은 같은 기록을 엽니다",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Graph Canvas",
+    "Graph Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GLN-0",
+   "text": "동일 대화",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "Graph Canvas",
+    "Graph Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GLR-0",
+   "text": "새 채팅",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "New Chat Panel",
+    "Chat Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GLS-0",
+   "text": "아테나 · 그래프",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "New Chat Panel",
+    "Chat Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GM7-0",
+   "text": "그래프에서 새 채팅",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "New Chat Panel",
+    "Blank Conversation"
+   ]
+  },
+  {
+   "id": "GM8-0",
+   "text": "프로젝트는 아테나로, 현재 기능은 그래프로 유지된 빈 채팅입니다.",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "New Chat Panel",
+    "Blank Conversation"
+   ]
+  },
+  {
+   "id": "GMB-0",
+   "text": "첫 입력 후 프로젝트와 최근에 표시",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "New Chat Panel",
+    "Blank Conversation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GMF-0",
+   "text": "무엇이든 요청하세요",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "New Chat Panel",
+    "Chat Composer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GML-0",
+   "text": "아테나 프로젝트",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "New Chat Panel",
+    "Chat Composer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GMM-0",
+   "text": "그래프 유지",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Shell Body",
+    "New Chat Panel",
+    "Chat Composer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GMT-0",
+   "text": "아테나",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Project Info Popover",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GMW-0",
+   "text": "대화 2개 · 활성 1개",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Project Info Popover"
+   ]
+  },
+  {
+   "id": "GMY-0",
+   "text": "ANNJUNGCHAN/DAOU.Athena",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Project Info Popover",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GMZ-0",
+   "text": "C:\\Projects\\DAOU.Athena",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Project Info Popover",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49VL-0",
+   "text": "프로젝트 수정",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Live Athena Shell",
+    "Project Info Popover",
+    "프로젝트 수정 버튼"
+   ]
+  },
+  {
+   "id": "GIF-0",
+   "text": "한 번의 흐름",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Rail Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GIG-0",
+   "text": "PROJECT CHAT",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Rail Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GIH-0",
+   "text": "Hover에서 새 채팅까지, 실제 셸 안에서 이어집니다.",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "GN5-0",
+   "text": "1",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 1 Hover",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GN6-0",
+   "text": "프로젝트 행 Hover",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 1 Hover",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GNA-0",
+   "text": "아테나",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 1 Hover",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GNB-0",
+   "text": "···",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 1 Hover",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GNF-0",
+   "text": "설명 카드는 행이나 카드 위에 머무는 동안 남습니다 — 카드로 건너가도 꺼지지 않고, '프로젝트 수정'이 눌립니다. 행에 title 툴팁은 겹치지 않습니다.",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 1 Hover"
+   ]
+  },
+  {
+   "id": "GNK-0",
+   "text": "2",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 2 Project Menu",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GNL-0",
+   "text": "프로젝트 수정 — 이름·설명을 그 자리에서",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 2 Project Menu",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49VQ-0",
+   "text": "이름",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 2 Project Menu",
+    "Project Edit Panel"
+   ]
+  },
+  {
+   "id": "49VS-0",
+   "text": "아테나",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 2 Project Menu",
+    "Project Edit Panel",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49VT-0",
+   "text": "설명",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 2 Project Menu",
+    "Project Edit Panel"
+   ]
+  },
+  {
+   "id": "49VV-0",
+   "text": "이 프로젝트에 속한 대화와 작업",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 2 Project Menu",
+    "Project Edit Panel",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49VY-0",
+   "text": "취소",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 2 Project Menu",
+    "Project Edit Panel",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49W0-0",
+   "text": "저장",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 2 Project Menu",
+    "Project Edit Panel",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49W2-0",
+   "text": "설명 카드의 '프로젝트 수정'을 누르면 행 아래에 열립니다. 이름은 비울 수 없고, Esc·취소로 닫힙니다.",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 2 Project Menu"
+   ]
+  },
+  {
+   "id": "GOI-0",
+   "text": "3",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 3 New Chat",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GOJ-0",
+   "text": "현재 기능으로 새 채팅",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 3 New Chat",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GOM-0",
+   "text": "현재",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 3 New Chat",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GON-0",
+   "text": "아테나 · 그래프",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 3 New Chat",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GOR-0",
+   "text": "결과",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 3 New Chat",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GOS-0",
+   "text": "빈 우측 채팅",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 3 New Chat",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GOT-0",
+   "text": "첫 입력 뒤 프로젝트 하위와 최근에 같은 기록으로 표시",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Step 3 New Chat"
+   ]
+  },
+  {
+   "id": "GP0-0",
+   "text": "하나의 대화 기록",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Acceptance Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "GP1-0",
+   "text": "프로젝트와 최근은 동일한 우측 채팅을 엽니다. 04–08과 47–49의 실제 셸에 반영했습니다.",
+   "path": [
+    "29 · 프로젝트·최근·새 채팅",
+    "54 Content",
+    "Interaction Rail",
+    "Acceptance Note",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "GCF-0",
+   "name": "29 · 프로젝트·최근·새 채팅",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "GCG-0",
+   "name": "54 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 86,
+   "depth": 1
+  },
+  {
+   "id": "GCH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 816,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "GCI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "GCK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 752,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "GCN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 170,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "GCQ-0",
+   "name": "54 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 722,
+   "depth": 1
+  },
+  {
+   "id": "GHV-0",
+   "name": "Live Athena Shell",
+   "component": "Frame",
+   "w": 1150,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "GHZ-0",
+   "name": "Native Titlebar",
+   "component": "Frame",
+   "w": 1148,
+   "h": 46,
+   "depth": 3
+  },
+  {
+   "id": "GI0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 165,
+   "h": 18,
+   "depth": 4
+  },
+  {
+   "id": "GI1-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 18,
+   "h": 18,
+   "depth": 5
+  },
+  {
+   "id": "GI2-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 13,
+   "h": 13,
+   "depth": 6
+  },
+  {
+   "id": "GI3-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "GI6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 208,
+   "h": 14,
+   "depth": 4
+  },
+  {
+   "id": "GI8-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 58,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "GI9-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GIA-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "GIB-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "GIJ-0",
+   "name": "Shell Body",
+   "component": "Frame",
+   "w": 1148,
+   "h": 676,
+   "depth": 3
+  },
+  {
+   "id": "GIK-0",
+   "name": "Project Sidebar",
+   "component": "Frame",
+   "w": 254,
+   "h": 676,
+   "depth": 4
+  },
+  {
+   "id": "GIO-0",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 228,
+   "h": 164,
+   "depth": 5
+  },
+  {
+   "id": "GIP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "GIR-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "GIS-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "GIT-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "GIU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "GIV-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "GIW-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "GIX-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 8
+  },
+  {
+   "id": "GIZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "GJ0-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "GJ1-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "GJ2-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "GJ3-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 3,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "GJ4-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 8
+  },
+  {
+   "id": "GJ6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "GJ7-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "GJ8-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "GJ9-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "GJB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "GJC-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "GJD-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 10,
+   "depth": 8
+  },
+  {
+   "id": "GJE-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 1,
+   "depth": 8
+  },
+  {
+   "id": "GJH-0",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 228,
+   "h": 129,
+   "depth": 5
+  },
+  {
+   "id": "GJI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "GJK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "GJL-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "GJM-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "GJN-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "GJP-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 17,
+   "h": 17,
+   "depth": 7
+  },
+  {
+   "id": "GJQ-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "GJR-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "GJS-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "GJT-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 17,
+   "h": 17,
+   "depth": 7
+  },
+  {
+   "id": "GJU-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "GJV-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 8
+  },
+  {
+   "id": "GJW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "49W4-0",
+   "name": "Mode 대화",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "49W5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "GJY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 29,
+   "depth": 6
+  },
+  {
+   "id": "49W7-0",
+   "name": "Mode 그래프",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "49W8-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "49W9-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "49WA-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "49WB-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "H47-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "GK1-0",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 228,
+   "h": 126,
+   "depth": 5
+  },
+  {
+   "id": "GK2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "GK5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "49WD-0",
+   "name": "Mode 그래프",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "49WE-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "49WF-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "49WG-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "49WH-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "GK7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "GK8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "49WJ-0",
+   "name": "Mode 에이전트",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "49WK-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "49WL-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "GKA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 27,
+   "depth": 6
+  },
+  {
+   "id": "49WN-0",
+   "name": "Mode 대화",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "49WO-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "GKD-0",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 228,
+   "h": 191,
+   "depth": 5
+  },
+  {
+   "id": "GKE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "GKF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "GKI-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 7
+  },
+  {
+   "id": "GKJ-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "GIL-0",
+   "name": "Graph Canvas",
+   "component": "Frame",
+   "w": 556,
+   "h": 676,
+   "depth": 4
+  },
+  {
+   "id": "GKL-0",
+   "name": "Canvas Header",
+   "component": "Frame",
+   "w": 555,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "GKM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 129,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "GKN-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "GKO-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 12,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "GKQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 45,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "GKS-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 7
+  },
+  {
+   "id": "GKU-0",
+   "name": "Graph Workspace",
+   "component": "Frame",
+   "w": 555,
+   "h": 624,
+   "depth": 5
+  },
+  {
+   "id": "GKV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 523,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "GKW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "GKX-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 8
+  },
+  {
+   "id": "GL0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 523,
+   "h": 540,
+   "depth": 6
+  },
+  {
+   "id": "GL1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 489,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "GL4-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 489,
+   "h": 360,
+   "depth": 7
+  },
+  {
+   "id": "GL5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 388,
+   "h": 259,
+   "depth": 8
+  },
+  {
+   "id": "GL6-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 82,
+   "h": 82,
+   "depth": 8
+  },
+  {
+   "id": "GL7-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 59,
+   "h": 59,
+   "depth": 8
+  },
+  {
+   "id": "GL8-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 59,
+   "h": 59,
+   "depth": 8
+  },
+  {
+   "id": "GL9-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 59,
+   "h": 59,
+   "depth": 8
+  },
+  {
+   "id": "GLA-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 59,
+   "h": 59,
+   "depth": 8
+  },
+  {
+   "id": "GLB-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 47,
+   "h": 47,
+   "depth": 8
+  },
+  {
+   "id": "GLC-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 39,
+   "h": 39,
+   "depth": 8
+  },
+  {
+   "id": "GLD-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 39,
+   "h": 39,
+   "depth": 8
+  },
+  {
+   "id": "GLE-0",
+   "name": "ATHENA",
+   "component": "SVGVisualElement",
+   "w": 57,
+   "h": 21,
+   "depth": 8
+  },
+  {
+   "id": "GLF-0",
+   "name": "APP REVIEW",
+   "component": "SVGVisualElement",
+   "w": 58,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "GLG-0",
+   "name": "대화",
+   "component": "SVGVisualElement",
+   "w": 26,
+   "h": 17,
+   "depth": 8
+  },
+  {
+   "id": "GLH-0",
+   "name": "그래프",
+   "component": "SVGVisualElement",
+   "w": 35,
+   "h": 17,
+   "depth": 8
+  },
+  {
+   "id": "GLI-0",
+   "name": "에이전트",
+   "component": "SVGVisualElement",
+   "w": 44,
+   "h": 17,
+   "depth": 8
+  },
+  {
+   "id": "GLJ-0",
+   "name": "플러그인",
+   "component": "SVGVisualElement",
+   "w": 44,
+   "h": 17,
+   "depth": 8
+  },
+  {
+   "id": "GLK-0",
+   "name": "계정",
+   "component": "SVGVisualElement",
+   "w": 21,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "GLL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 489,
+   "h": 34,
+   "depth": 7
+  },
+  {
+   "id": "GIM-0",
+   "name": "New Chat Panel",
+   "component": "Frame",
+   "w": 340,
+   "h": 676,
+   "depth": 4
+  },
+  {
+   "id": "GLP-0",
+   "name": "Chat Header",
+   "component": "Frame",
+   "w": 340,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "GLQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 70,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "GLT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 24,
+   "depth": 6
+  },
+  {
+   "id": "GLU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 24,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "GLV-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "GLW-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 9
+  },
+  {
+   "id": "GLX-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "GLY-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "GLZ-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "GM0-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "GM2-0",
+   "name": "Blank Conversation",
+   "component": "Frame",
+   "w": 340,
+   "h": 535,
+   "depth": 5
+  },
+  {
+   "id": "GM3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 44,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "GM4-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "GM5-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 15,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "GM6-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 7,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "GM9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 193,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "GMA-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "GMD-0",
+   "name": "Chat Composer",
+   "component": "Frame",
+   "w": 340,
+   "h": 89,
+   "depth": 5
+  },
+  {
+   "id": "GME-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 316,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "GMG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 24,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "GMH-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 10,
+   "h": 5,
+   "depth": 8
+  },
+  {
+   "id": "GMI-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 7
+  },
+  {
+   "id": "GMJ-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "GMK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 316,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "GMO-0",
+   "name": "Project Info Popover",
+   "component": "Frame",
+   "w": 226,
+   "h": 158,
+   "depth": 3
+  },
+  {
+   "id": "GMP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 198,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "GMQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 59,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "GMR-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 6
+  },
+  {
+   "id": "GMS-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "GMU-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "GMV-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "GMX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 198,
+   "h": 51,
+   "depth": 4
+  },
+  {
+   "id": "49VH-0",
+   "name": "프로젝트 수정 버튼",
+   "component": "Frame",
+   "w": 102,
+   "h": 24,
+   "depth": 4
+  },
+  {
+   "id": "49VI-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 5
+  },
+  {
+   "id": "49VJ-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "49VK-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "GHX-0",
+   "name": "Interaction Rail",
+   "component": "Frame",
+   "w": 426,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "GID-0",
+   "name": "Rail Header",
+   "component": "Frame",
+   "w": 388,
+   "h": 54,
+   "depth": 3
+  },
+  {
+   "id": "GIE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 388,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "GN2-0",
+   "name": "Step 1 Hover",
+   "component": "Frame",
+   "w": 388,
+   "h": 112,
+   "depth": 3
+  },
+  {
+   "id": "GN3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "GN4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "GN7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "GN8-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 5
+  },
+  {
+   "id": "GN9-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "GNC-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GND-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "GNE-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "GNH-0",
+   "name": "Step 2 Project Menu",
+   "component": "Frame",
+   "w": 388,
+   "h": 232,
+   "depth": 3
+  },
+  {
+   "id": "GNI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "GNJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "49VP-0",
+   "name": "Project Edit Panel",
+   "component": "Frame",
+   "w": 362,
+   "h": 144,
+   "depth": 4
+  },
+  {
+   "id": "49VR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 344,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "49VU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 344,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "49VW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 344,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "49VX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 44,
+   "h": 24,
+   "depth": 6
+  },
+  {
+   "id": "49VZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 42,
+   "h": 24,
+   "depth": 6
+  },
+  {
+   "id": "GOF-0",
+   "name": "Step 3 New Chat",
+   "component": "Frame",
+   "w": 388,
+   "h": 140,
+   "depth": 3
+  },
+  {
+   "id": "GOG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "GOH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "GOK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 362,
+   "h": 50,
+   "depth": 4
+  },
+  {
+   "id": "GOL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 164,
+   "h": 50,
+   "depth": 5
+  },
+  {
+   "id": "GOO-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "GOP-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 12,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "GOQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 164,
+   "h": 50,
+   "depth": 5
+  },
+  {
+   "id": "GOV-0",
+   "name": "Acceptance Note",
+   "component": "Frame",
+   "w": 388,
+   "h": 78,
+   "depth": 3
+  },
+  {
+   "id": "GOW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 28,
+   "h": 28,
+   "depth": 4
+  },
+  {
+   "id": "GOX-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 15,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "GOY-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "GOZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 324,
+   "h": 47,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "51": 1,
+  "프로젝트 · 최근 · 새 채팅 상호작용": 1,
+  "프로젝트 Hover부터 새 채팅까지, 실제 Athena 셸에서 연결합니다. 설명 카드는 머물고, 프로젝트 수정은 이름·설명을 그 자리에서 고칩니다.": 1,
+  "개정 2026-09-05 · 승인 대기": 1,
+  "ATHENA": 2,
+  "아테나 · 그래프": 3,
+  "파일　편집　보기　도움말": 1,
+  "새 채팅": 2,
+  "그래프": 2,
+  "에이전트": 1,
+  "플러그인": 1,
+  "프로젝트": 1,
+  "아테나": 4,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 3,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "현재 기능 유지 · 그래프": 1,
+  "새 채팅을 열어도 캔버스는 유지됩니다": 1,
+  "Athena 기능 구조": 1,
+  "7 CLUSTERS · 24 LINKS": 1,
+  "프로젝트 소속 대화와 전역 최근은 같은 기록을 엽니다": 1,
+  "동일 대화": 1,
+  "그래프에서 새 채팅": 1,
+  "프로젝트는 아테나로, 현재 기능은 그래프로 유지된 빈 채팅입니다.": 1,
+  "첫 입력 후 프로젝트와 최근에 표시": 1,
+  "무엇이든 요청하세요": 1,
+  "아테나 프로젝트": 1,
+  "그래프 유지": 1,
+  "대화 2개 · 활성 1개": 1,
+  "ANNJUNGCHAN/DAOU.Athena": 1,
+  "C:\\Projects\\DAOU.Athena": 1,
+  "프로젝트 수정": 1,
+  "한 번의 흐름": 1,
+  "PROJECT CHAT": 1,
+  "Hover에서 새 채팅까지, 실제 셸 안에서 이어집니다.": 1,
+  "1": 1,
+  "프로젝트 행 Hover": 1,
+  "···": 1,
+  "설명 카드는 행이나 카드 위에 머무는 동안 남습니다 — 카드로 건너가도 꺼지지 않고, '프로젝트 수정'이 눌립니다. 행에 title 툴팁은 겹치지 않습니다.": 1,
+  "2": 1,
+  "프로젝트 수정 — 이름·설명을 그 자리에서": 1,
+  "이름": 1,
+  "설명": 1,
+  "이 프로젝트에 속한 대화와 작업": 1,
+  "취소": 1,
+  "저장": 1,
+  "설명 카드의 '프로젝트 수정'을 누르면 행 아래에 열립니다. 이름은 비울 수 없고, Esc·취소로 닫힙니다.": 1,
+  "3": 1,
+  "현재 기능으로 새 채팅": 1,
+  "현재": 1,
+  "결과": 1,
+  "빈 우측 채팅": 1,
+  "첫 입력 뒤 프로젝트 하위와 최근에 같은 기록으로 표시": 1,
+  "하나의 대화 기록": 1,
+  "프로젝트와 최근은 동일한 우측 채팅을 엽니다. 04–08과 47–49의 실제 셸에 반영했습니다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "70650b724f9a24f3a62360f66c6cb26e05780dbd1194cd1f66ffb4912b02e11f"
+}

@@ -1,0 +1,181 @@
+Frame "03 · 그래프 — 기본 군집 지도" (4IA-0) 1680×900
+  Frame "셸 창" (4IB-0) 0×0
+    Frame "Frame" (4IC-0) 268×0
+      Frame "이력 상단" (4ID-0) 0×0
+        Frame "Frame" (4IE-0) 0×0
+          Text "+" (4IF-0) 0×0 "+"
+          Text "새 대화" (4IG-0) 0×0 "새 대화"
+        Frame "Frame" (4IH-0) 0×0
+          Text "⌕" (4II-0) 0×0 "⌕"
+          Text "대화 검색" (4IJ-0) 0×0 "대화 검색"
+      Frame "이력 목록" (4IK-0) 0×0
+        Frame "Frame" (4IL-0) 0×0
+          Text "오늘" (4IM-0) 0×0 "오늘"
+        Frame "Frame" (4IN-0) 0×0
+          Text "삼성전자 흐름·재무 같이 보기" (4IO-0) 0×0 "삼성전자 흐름·재무 같이 보기"
+          Rectangle "Rectangle" (4IP-0) 5×5
+        Frame "Frame" (4IQ-0) 0×0
+          Text "88,000 넘으면 알려줘" (4IR-0) 0×0 "88,000 넘으면 알려줘"
+        Frame "Frame" (4IS-0) 0×0
+          Text "코스피 프로그램 매매 동향" (4IT-0) 0×0 "코스피 프로그램 매매 동향"
+        Frame "Frame" (4IU-0) 0×0
+          Text "어제" (4IV-0) 0×0 "어제"
+        Frame "Frame" (4IW-0) 0×0
+          Text "SK하이닉스 유상증자 공시 읽기" (4IX-0) 0×0 "SK하이닉스 유상증자 공시 읽기"
+        Frame "Frame" (4IY-0) 0×0
+          Text "모의 계좌 잔고 정리" (4IZ-0) 0×0 "모의 계좌 잔고 정리"
+        Frame "Frame" (4J0-0) 0×0
+          Text "지난 7일" (4J1-0) 0×0 "지난 7일"
+        Frame "Frame" (4J2-0) 0×0
+          Text "반도체 ETF 비교" (4J3-0) 0×0 "반도체 ETF 비교"
+        Frame "Frame" (4J4-0) 0×0
+          Text "현대차 실적 발표 일정" (4J5-0) 0×0 "현대차 실적 발표 일정"
+        Frame "Frame" (4J6-0) 0×0
+          Text "더 보기" (4J7-0) 0×0 "더 보기"
+      Frame "계정 행 — 설정 진입" (4J8-0) 0×0
+        Rectangle "Rectangle" (4J9-0) 5×5
+        Frame "Frame" (4JA-0) 0×0
+          Text "모의–주력" (4JB-0) 0×0 "모의–주력"
+          Text "토큰 5시간 42분 남음" (4JC-0) 0×0 "토큰 5시간 42분 남음"
+        Text "⌃" (4JD-0) 0×0 "⌃"
+    Frame "캔버스 — 군집 지도" (4JE-0) 0×0
+      Frame "그래프 헤더" (4KG-0) 0×0
+        Frame "Frame" (4KH-0) 0×0
+          Frame "뷰 토글" (4KI-0) 0×0
+            Frame "Frame" (4KJ-0) 0×0
+              Text "요약" (4KK-0) 0×0 "요약"
+            Frame "Frame" (4KL-0) 0×0
+              Text "그래프" (4KM-0) 0×0 "그래프"
+            Frame "수집·노출" (3VCO-1) 0×0
+              Text "수집·노출" (3VCP-1) 0×0 "수집·노출"
+          Text "군집 7개 · 엔티티 312 · 미분…" (4KN-0) 0×0 "군집 7개 · 엔티티 312 · 미분류 18"
+        Frame "Frame" (4KO-0) 0×0
+          Frame "Frame" (4KP-0) 0×0
+            Text "최근 90일" (4KQ-0) 0×0 "최근 90일"
+          Frame "Frame" (4KR-0) 0×0
+            Text "연결 전체" (4KS-0) 0×0 "연결 전체"
+      Frame "지도 안내" (4KT-0) 0×0
+        Text "테마 지도" (4KU-0) 0×0 "테마 지도"
+        Text "노드를 끌어 옮길 수 있습니다 · 휠…" (4KV-0) 0×0 "노드를 끌어 옮길 수 있습니다 · 휠 또는 Ctrl+휠로 확대 · 채팅으로 물어도 같은 곳이 열립니다"
+      Frame "지도 플롯" (3V7T-1) 849×657
+        Frame "네모 창 — 화면 고정 프레임" (3V7U-1) 0×0
+          Frame "관계선" (3VA9-1) 813×627
+            SVG "SVG" (3VAA-1) 0×0
+              SVGVisualElement "Group" (3VAB-1) 0×0
+                SVGVisualElement "Line" (3VAC-1) 0×0
+                SVGVisualElement "Line" (3VAD-1) 0×0
+                SVGVisualElement "Line" (3VAE-1) 0×0
+                SVGVisualElement "Line" (3VAF-1) 0×0
+                SVGVisualElement "Line" (3VAG-1) 0×0
+                SVGVisualElement "Line" (3VAH-1) 0×0
+                SVGVisualElement "Line" (3VAI-1) 0×0
+                SVGVisualElement "Line" (3VAJ-1) 0×0
+                SVGVisualElement "Line" (3VAK-1) 0×0
+                SVGVisualElement "Line" (3VAL-1) 0×0
+                SVGVisualElement "Line" (3VAM-1) 0×0
+                SVGVisualElement "Line" (3VAN-1) 0×0
+              SVGVisualElement "Group" (3VAO-1) 0×0
+                SVGVisualElement "belongs_to" (3VAP-1) 0×0
+                SVGVisualElement "belongs_to" (3VAQ-1) 0×0
+                SVGVisualElement "belongs_to" (3VAR-1) 0×0
+                SVGVisualElement "belongs_to" (3VAS-1) 0×0
+                SVGVisualElement "belongs_to" (3VAT-1) 0×0
+                SVGVisualElement "belongs_to" (3VAU-1) 0×0
+                SVGVisualElement "belongs_to" (3VAV-1) 0×0
+                SVGVisualElement "belongs_to" (3VAW-1) 0×0
+                SVGVisualElement "relates_to" (3VAX-1) 0×0
+                SVGVisualElement "belongs_to" (3VAY-1) 0×0
+                SVGVisualElement "exposed_to" (3VAZ-1) 0×0
+                SVGVisualElement "belongs_to" (3VB0-1) 0×0
+          Frame "엔티티 노드" (3VB2-1) 813×627
+            Frame "배당·인컴" (3VB3-1) 72×72
+              Text "배당·인컴" (3VB4-1) 58×0 "배당·인컴"
+            Frame "금융·지주" (3VB5-1) 52×52
+              Text "금융·지주" (3VB6-1) 40×0 "금융·지주"
+            Frame "KB금융" (3VB7-1) 56×56
+              Text "KB금융" (3VB8-1) 44×0 "KB금융"
+            Frame "삼성화재" (3VB9-1) 44×44
+              Text "삼성화재" (3VBA-1) 34×0 "삼성화재"
+            Frame "자동차·산업" (3VBB-1) 58×58
+              Text "자동차·산업" (3VBC-1) 46×0 "자동차·산업"
+            Frame "기아" (3VBD-1) 44×44
+              Text "기아" (3VBE-1) 34×0 "기아"
+            Frame "반도체 대형주" (3VBF-1) 68×68
+              Text "반도체 대형주" (3VBG-1) 54×0 "반도체 대형주"
+            Frame "SK하이닉스" (3VBH-1) 50×50
+              Text "SK하이닉스" (3VBI-1) 38×0 "SK하이닉스"
+            Frame "KODEX 반도체" (3VBJ-1) 48×48
+              Text "KODEX 반도체" (3VBK-1) 38×0 "KODEX 반도체"
+            Frame "KODEX 배당…" (3VBL-1) 46×46
+              Text "KODEX 배당…" (3VBM-1) 42×0 "KODEX 배당…"
+            Frame "인터넷·플랫폼" (3VBN-1) 46×46
+              Text "인터넷·플랫폼" (3VBO-1) 36×0 "인터넷·플랫폼"
+            Frame "ACE 미국배당…" (3VBP-1) 54×54
+              Text "ACE 미국…" (3VBQ-1) 42×0 "ACE 미국…"
+            Frame "헬스케어" (3VBR-1) 44×44
+              Text "헬스케어" (3VBS-1) 34×0 "헬스케어"
+      Frame "범례" (3VBU-1) 849×37
+        Frame "색 = 군집" (3VBV-1) 0×0
+          Frame "군집 색" (3VBW-1) 0×0
+            Rectangle "Rectangle" (3VBX-1) 9×9
+            Rectangle "Rectangle" (3VBY-1) 9×9
+            Rectangle "Rectangle" (3VBZ-1) 9×9
+            Rectangle "Rectangle" (3VC0-1) 9×9
+          Text "색 = 군집" (3VC1-1) 0×0 "색 = 군집"
+        Frame "원 크기 = 연결 수" (3VC2-1) 0×0
+          Frame "Frame" (3VC3-1) 0×0
+            Rectangle "Rectangle" (3VC4-1) 6×6
+            Rectangle "Rectangle" (3VC5-1) 13×13
+          Text "원 크기 = 연결 수" (3VC6-1) 0×0 "원 크기 = 연결 수"
+        Frame "사실" (3VC7-1) 0×0
+          SVG "SVG" (3VC8-1) 0×0
+            SVGVisualElement "Line" (3VC9-1) 0×0
+          Text "사실" (3VCA-1) 0×0 "사실"
+        Frame "추론" (3VCB-1) 0×0
+          SVG "SVG" (3VCC-1) 0×0
+            SVGVisualElement "Line" (3VCD-1) 0×0
+          Text "추론" (3VCE-1) 0×0 "추론"
+        Frame "불확실" (3VCF-1) 0×0
+          SVG "SVG" (3VCG-1) 0×0
+            SVGVisualElement "Line" (3VCH-1) 0×0
+          Text "불확실" (3VCI-1) 0×0 "불확실"
+        Frame "숨은 연관" (3VCJ-1) 0×0
+          SVG "SVG" (3VCK-1) 0×0
+            SVGVisualElement "Line" (3VCL-1) 0×0
+          Text "숨은 연관 — 군집을 넘는 연결" (3VCM-1) 0×0 "숨은 연관 — 군집을 넘는 연결"
+    Frame "Frame" (4JF-0) 400×0
+      Frame "채팅 헤더" (4JG-0) 0×0
+        Text "그래프에게 묻기" (4JH-0) 0×0 "그래프에게 묻기"
+        Text "답이 캔버스를 바꿉니다" (4JI-0) 0×0 "답이 캔버스를 바꿉니다"
+      Frame "대화 본문" (4JJ-0) 0×0
+        Frame "Frame" (4JK-0) 0×0
+          Frame "Frame" (4JL-0) 0×0
+            Text "한미반도체가 배당주랑 왜 엮여 있어?" (4JM-0) 0×0 "한미반도체가 배당주랑 왜 엮여 있어?"
+        Frame "Frame" (4JN-0) 0×0
+          Frame "Frame" (4JO-0) 0×0
+            Rectangle "Rectangle" (4JP-0) 5×5
+            Text "경로 탐색" (4JQ-0) 0×0 "경로 탐색"
+            Text "한미반도체 → 배당 방어 바스켓" (4JR-0) 0×0 "한미반도체 → 배당 방어 바스켓"
+          Frame "Frame" (4JS-0) 0×0
+            Rectangle "Rectangle" (4JT-0) 5×5
+            Text "이웃 조회" (4JU-0) 0×0 "이웃 조회"
+            Text "7건" (4JV-0) 0×0 "7건"
+        Text "직접 말씀하신 적은 없습니다. 그래프…" (4JW-0) 0×0 "직접 말씀하신 적은 없습니다. 그래프가 스스로 이은 추론 연결이고, 근거는 두 가지입니다 — 두 군집을 잇는"
+        Text "캔버스에 경로를 표시했습니다. 아니라…" (4JX-0) 0×0 "캔버스에 경로를 표시했습니다. 아니라고 하시면 이 연결을 지우겠습니다."
+      Frame "입력 스택" (4JY-0) 0×0
+        Frame "Frame" (4JZ-0) 0×0
+          Text "그래프에 대해 물어보세요" (4K0-0) 0×0 "그래프에 대해 물어보세요"
+          Text "29s" (4K1-0) 0×0 "29s"
+        Frame "control-strip" (4K2-0) 0×0
+          Frame "키우미 점 — 모드 전환" (4K3-0) 22×22
+            Rectangle "Rectangle" (4K4-0) 3×7
+            Rectangle "Rectangle" (4K5-0) 3×7
+          Frame "Frame" (4K6-0) 0×0
+            Text "그래프" (4K7-0) 0×0 "그래프"
+          Frame "Frame" (4K8-0) 0×0
+            Text "CLAUDE" (4K9-0) 0×0 "CLAUDE"
+          Frame "Frame" (4KA-0) 0×0
+            Text "감시 2" (4KB-0) 0×0 "감시 2"
+          Rectangle "Rectangle" (4KC-0) 0×0
+          Frame "Frame" (4KD-0) 0×0
+            Text "OPUS · HIGH" (4KE-0) 0×0 "OPUS · HIGH"

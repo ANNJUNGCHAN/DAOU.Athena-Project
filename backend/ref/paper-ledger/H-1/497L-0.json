@@ -1,0 +1,92 @@
+{
+ "board_id": "497L-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "497N-0",
+   "text": "원본 보드: CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+   "path": [
+    "note/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "497P-0",
+   "text": "가져온 요소: 순매수금액 · 종목코드 · 전일대비 · 순매수거래량 · 매수거래량",
+   "path": [
+    "note/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "497R-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "497T-0",
+   "text": "접은 개수: 스칼라 2개 · 행 6개",
+   "path": [
+    "note/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "497L-0",
+   "name": "note/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "497M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "497O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "497Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "497S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-05 / R03-T6-7 · 순위 — 증권사별 상위": 1,
+  "가져온 요소: 순매수금액 · 종목코드 · 전일대비 · 순매수거래량 · 매수거래량": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 6개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "ef6cb4d20b9267053f39bcec6fa906cc78a3ce2d13e3a08c7e0c03ab3709609b"
+}

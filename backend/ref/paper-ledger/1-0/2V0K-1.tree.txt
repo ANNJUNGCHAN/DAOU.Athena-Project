@@ -1,0 +1,59 @@
+Frame "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)" (2V0K-1) 1680×900
+  Frame "Shell 창 · 온보딩 (#onboard)" (2V0L-1) 1520×760
+    Frame "onb-col (800px)" (2V0V-1) 800×734
+      Frame "onb-head" (2V23-1) 800×134
+        Text "onb-kicker" (2V26-1) 716×16 "2 / 3"
+        Text "onb-title" (2V25-1) 716×34 "사용할 CLI를 연결합니다"
+        Text "onb-sub" (2V24-1) 716×22 "Athena는 자체 API 키를 사용하지 않습니다. 로그인한 계정으로 CLI를 제어합니다."
+      Frame "onb-body" (2V16-1) 800×530
+        Frame "onb-cli-card · Claude (다계정)" (2V1P-1) 716×134
+          Frame "onb-cli-card-head" (2V1Y-1) 714×48
+            Rectangle "Rectangle" (2V22-1) 7×7
+            Text "onb-cli-name" (2V21-1) 82×18 "Claude Code"
+            Rectangle "Rectangle" (2V20-1) 503×0
+            Text "uk-btn-text" (2V1Z-1) 53×16 "계정 추가"
+          Frame "onb-cli-account-row is-active" (2V1U-1) 714×42
+            Text "onb-cli-email" (2V1X-1) 124×16 "user@example.com"
+            Frame "Frame" (2V1V-1) 40×20
+              Text "활성" (2V1W-1) 20×12 "활성"
+          Frame "onb-cli-account-row" (2V1Q-1) 714×42
+            Text "onb-cli-email" (2V1T-1) 97×16 "work@example.com"
+            Frame "Frame" (2V1R-1) 52×22
+              Text "비활성" (2V1S-1) 30×12 "비활성"
+        Frame "onb-cli-row · Codex (단일 연결)" (2V1K-1) 716×52
+          Rectangle "Rectangle" (2V1O-1) 7×7
+          Frame "onb-cli-namecol" (2V1L-1) 103×32
+            Text "onb-cli-name" (2V1N-1) 103×18 "Codex"
+            Text "onb-cli-email-sm" (2V1M-1) 103×12 "user@example.com"
+        Frame "onb-cli-row · Gemini (연결 실패)" (2V1F-1) 716×52
+          Rectangle "Rectangle" (2V1J-1) 7×7
+          Text "onb-cli-name" (2V1I-1) 69×18 "Gemini CLI"
+          Rectangle "Rectangle" (2V1H-1) 477×0
+          Text "onb-cli-waiting" (2V1G-1) 92×14 "연결 실패 · 재시도"
+        Frame "onb-cli-row · Grok (미연결)" (2V19-1) 716×52
+          Rectangle "Rectangle" (2V1E-1) 7×7
+          Text "onb-cli-name" (2V1D-1) 55×18 "Grok CLI"
+          Rectangle "Rectangle" (2V1C-1) 531×0
+          Frame "uk-btn-ghost" (2V1A-1) 52×30
+            Text "연결" (2V1B-1) 22×14 "연결"
+        Frame "onb-hint" (2V17-1) 716×23
+          Text "Gemini CLI 실행 파일을 찾지…" (2V18-1) 716×18 "Gemini CLI 실행 파일을 찾지 못했습니다. 설치 후 재시도하거나, 연결된 다른 CLI로 계속할 수 있"
+      Frame "onb-foot" (2V0W-1) 800×70
+        Frame "uk-dots (3단계 중 2)" (2V12-1) 72×3
+          Rectangle "Rectangle" (2V15-1) 20×3
+          Rectangle "Rectangle" (2V14-1) 20×3
+          Rectangle "Rectangle" (2V13-1) 20×3
+        Rectangle "Rectangle" (2V11-1) 528×0
+        Frame "uk-btn-primary · 계속 (화면 내 유일 브랜드색)" (2V0X-1) 86×36
+          Text "계속" (2V10-1) 26×16 "계속"
+          SVG "SVG" (2V0Y-1) 12×10
+            SVGVisualElement "Path" (2V0Z-1) 10×7
+    Frame "타이틀바" (2V0U-1) 1518×26
+    Frame "창 제어" (2V0M-1) 94×24
+      Frame "Frame" (2V0S-1) 30×24
+        Rectangle "Rectangle" (2V0T-1) 9×2
+      Frame "Frame" (2V0Q-1) 30×24
+        Rectangle "Rectangle" (2V0R-1) 8×8
+      Frame "Frame" (2V0N-1) 30×24
+        SVG "SVG" (2V0O-1) 10×10
+          SVGVisualElement "Path" (2V0P-1) 9×9

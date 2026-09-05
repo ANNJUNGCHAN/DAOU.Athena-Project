@@ -1,0 +1,92 @@
+{
+ "board_id": "48PJ-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01 · 삼성전자 3개월 차트",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48PL-0",
+   "text": "원본 보드: CC-03 / R01 · 삼성전자 3개월 차트",
+   "path": [
+    "note/CC-03 / R01 · 삼성전자 3개월 차트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48PN-0",
+   "text": "가져온 요소: 종목코드 · 현재가 · 추이",
+   "path": [
+    "note/CC-03 / R01 · 삼성전자 3개월 차트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48PP-0",
+   "text": "문법: chart",
+   "path": [
+    "note/CC-03 / R01 · 삼성전자 3개월 차트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48PR-0",
+   "text": "접은 개수: 계열 67개",
+   "path": [
+    "note/CC-03 / R01 · 삼성전자 3개월 차트",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48PJ-0",
+   "name": "note/CC-03 / R01 · 삼성전자 3개월 차트",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48PK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48PM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48PO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48PQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01 · 삼성전자 3개월 차트": 1,
+  "가져온 요소: 종목코드 · 현재가 · 추이": 1,
+  "문법: chart": 1,
+  "접은 개수: 계열 67개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "702eda1b35e9d0ca2f43e5e1a0ccb7a395d7462ef2d235cacb7c3ddb7b75b154"
+}

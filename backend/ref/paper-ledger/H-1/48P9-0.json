@@ -1,0 +1,92 @@
+{
+ "board_id": "48P9-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-02 / R11 · 삼성전자 10주 시장가 매수",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48PB-0",
+   "text": "원본 보드: CC-02 / R11 · 삼성전자 10주 시장가 매수",
+   "path": [
+    "note/CC-02 / R11 · 삼성전자 10주 시장가 매수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48PD-0",
+   "text": "가져온 요소: 주문가능금액",
+   "path": [
+    "note/CC-02 / R11 · 삼성전자 10주 시장가 매수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48PF-0",
+   "text": "문법: order_ticket",
+   "path": [
+    "note/CC-02 / R11 · 삼성전자 10주 시장가 매수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48PH-0",
+   "text": "접은 개수: 항목 18개",
+   "path": [
+    "note/CC-02 / R11 · 삼성전자 10주 시장가 매수",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48P9-0",
+   "name": "note/CC-02 / R11 · 삼성전자 10주 시장가 매수",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48PA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48PC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48PE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48PG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-02 / R11 · 삼성전자 10주 시장가 매수": 1,
+  "가져온 요소: 주문가능금액": 1,
+  "문법: order_ticket": 1,
+  "접은 개수: 항목 18개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "e34f41deb9200749e3c88a2c165ff63256feccc5e8bcd91100c787308b960673"
+}

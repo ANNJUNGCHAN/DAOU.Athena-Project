@@ -1,0 +1,339 @@
+{
+ "board_id": "48N1-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48NZ-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48NY-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48NW-0",
+   "text": "ELW 거래원별 10창구 전체",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Header"
+   ]
+  },
+  {
+   "id": "48NU-0",
+   "text": "ELW 거래원별 순매매",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48NT-0",
+   "text": "10창구",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48NR-0",
+   "text": "순매수",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48NQ-0",
+   "text": "+210만",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48NO-0",
+   "text": "순매수",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48NN-0",
+   "text": "+40만",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48NK-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48NJ-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48NI-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48NG-0",
+   "text": "순매수",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48NF-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ND-0",
+   "text": "−90만",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48NC-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48NA-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48N9-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48N7-0",
+   "text": "매수 1위",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48N6-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48N3-0",
+   "text": "스칼라 2개, 행 8개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48N1-0",
+   "name": "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48NV-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48NX-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48N4-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48NL-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48NS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48NP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48NM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48NH-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48NB-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48NE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48N5-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48N8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48N2-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "ELW 거래원별 10창구 전체": 1,
+  "ELW 거래원별 순매매": 1,
+  "10창구": 1,
+  "순매수": 3,
+  "+210만": 1,
+  "+40만": 1,
+  "항목": 1,
+  "값": 2,
+  "비고": 1,
+  "−90만": 1,
+  "매수 1위": 1,
+  "스칼라 2개, 행 8개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "f0633d8165f06121fd732bf418e68ce3675a6b76012209cb0791d886ac239d4a"
+}

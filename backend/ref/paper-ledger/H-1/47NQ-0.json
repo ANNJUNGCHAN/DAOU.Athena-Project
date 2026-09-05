@@ -1,0 +1,341 @@
+{
+ "board_id": "47NQ-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47OO-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47ON-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47OL-0",
+   "text": "신용비율 상위",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Header"
+   ]
+  },
+  {
+   "id": "47OJ-0",
+   "text": "신용비율",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47OI-0",
+   "text": "11.8%",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47OG-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47OF-0",
+   "text": "신용비율 10% 초과",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47OD-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47OC-0",
+   "text": "6종목",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47O9-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47O8-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47O7-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47O5-0",
+   "text": "금액",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47O4-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47O2-0",
+   "text": "4,208억원",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47O1-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47NZ-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47NY-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47NW-0",
+   "text": "상위 50 기준",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47NV-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47NS-0",
+   "text": "스칼라 2개, 행 6개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47NQ-0",
+   "name": "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47OK-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47OM-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47NT-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47OA-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47OH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47OE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47OB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47O6-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47O0-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47O3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47NU-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47NX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47NR-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "신용비율 상위": 1,
+  "신용비율": 1,
+  "11.8%": 1,
+  "변화": 1,
+  "신용비율 10% 초과": 1,
+  "핵심": 1,
+  "6종목": 1,
+  "항목": 1,
+  "값": 2,
+  "비고": 1,
+  "금액": 1,
+  "4,208억원": 1,
+  "상위 50 기준": 1,
+  "스칼라 2개, 행 6개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "1efe5afffc78e914c2a6ab5eea83a0c6d489d69016a263e587b2e08d0c3d77f7"
+}

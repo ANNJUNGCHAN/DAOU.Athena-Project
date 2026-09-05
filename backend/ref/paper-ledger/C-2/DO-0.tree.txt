@@ -1,0 +1,184 @@
+Frame "01 · 키우미 — 상황별 표현·크기 매핑" (DO-0) 1660×0
+  Frame "설명" (21O-0) 0×0
+    Text "상황은 늘어도 공식 표현 축은 늘어나…" (21P-0) 0×0 "상황은 늘어도 공식 표현 축은 늘어나지 않는다"
+    Text "아래는 상황별 매핑 예시다 — 공식 …" (21Q-0) 0×0 "아래는 상황별 매핑 예시다 — 공식 규격: 표정 10종 · 시선 9방향 · 시간 루프 3종 · 크기 3단계"
+  Frame "상황별 표현 매핑 1행" (2X8-0) 0×0
+    Frame "상황 · 잠듦" (2Y2-0) 200×0
+      Frame "Frame" (2Y3-0) 76×76
+        Frame "Frame" (2Y4-0) 62×29
+          Rectangle "Rectangle" (2Y5-0) 6×9
+          Rectangle "Rectangle" (2Y6-0) 6×9
+        Rectangle "Rectangle" (2Y7-0) 78×78
+      Frame "Frame" (2Y8-0) 0×0
+        Text "잠듦" (2Y9-0) 0×0 "잠듦"
+        Text "5분 이상 입력이 없다 — 바이저가 …" (2YA-0) 0×0 "5분 이상 입력이 없다 — 바이저가 거의 닫힌다"
+    Frame "상황 · 발화 기본" (2YB-0) 200×0
+      Frame "Frame" (2YC-0) 76×76
+        Frame "Frame" (2YD-0) 62×61
+          SVG "SVG" (2FSE-2) 0×0
+            SVGVisualElement "Rect" (2FSF-2) 0×0
+            SVGVisualElement "Rect" (2FSG-2) 0×0
+        Rectangle "Rectangle" (2YH-0) 78×78
+        Frame "Frame" (2YI-0) 20×18
+          Text "1" (2YJ-0) 0×0 "1"
+      Frame "Frame" (2YK-0) 0×0
+        Text "발화 · 기본" (2YL-0) 0×0 "발화 · 기본"
+        Text "조건 도달 — 여기서만 색이 있다" (2YM-0) 0×0 "조건 도달 — 여기서만 색이 있다"
+    Frame "상황 · 발화 다건" (2YN-0) 200×0
+      Frame "Frame" (2YO-0) 76×76
+        Frame "Frame" (2YP-0) 62×61
+          SVG "SVG" (2FSI-2) 0×0
+            SVGVisualElement "Rect" (2FSJ-2) 0×0
+            SVGVisualElement "Rect" (2FSK-2) 0×0
+        Rectangle "Rectangle" (2YT-0) 78×78
+        Frame "Frame" (2YU-0) 0×18
+          Text "12" (2YV-0) 0×0 "12"
+      Frame "Frame" (2YW-0) 0×0
+        Text "발화 · 다건" (2YX-0) 0×0 "발화 · 다건"
+        Text "수는 신호가 아니라 신호의 크기" (2YY-0) 0×0 "수는 신호가 아니라 신호의 크기"
+    Frame "상황 · 완료" (2Z1-0) 200×0
+      Frame "Frame" (2Z2-0) 76×76
+        Frame "Frame" (2Z3-0) 62×61
+          SVG "SVG" (2Z4-0) 0×0
+            SVGVisualElement "Path" (2Z5-0) 0×0
+            SVGVisualElement "Path" (2Z6-0) 0×0
+        Rectangle "Rectangle" (2Z7-0) 78×78
+      Frame "Frame" (2Z8-0) 0×0
+        Text "완료 · 웃음" (2Z9-0) 0×0 "완료 · 웃음"
+        Text "요청한 일이 끝남" (2ZA-0) 0×0 "요청한 일이 끝남"
+  Frame "상황별 표현 매핑 2행" (2Z0-0) 0×0
+    Frame "상황 · 승인됨" (2ZB-0) 200×0
+      Frame "Frame" (2ZC-0) 76×76
+        Frame "Frame" (2ZD-0) 62×61
+          SVG "SVG" (2ZE-0) 0×0
+            SVGVisualElement "Rect" (2ZF-0) 0×0
+            SVGVisualElement "Path" (2ZG-0) 0×0
+        Rectangle "Rectangle" (2ZH-0) 78×78
+      Frame "Frame" (2ZI-0) 0×0
+        Text "승인됨 · 윙크" (2ZJ-0) 0×0 "승인됨 · 윙크"
+        Text "감시 등록이 반영됨" (2ZK-0) 0×0 "감시 등록이 반영됨"
+    Frame "상황 · 만료" (2ZL-0) 200×0
+      Frame "Frame" (2ZM-0) 76×76
+        Frame "Frame" (2ZN-0) 62×61
+          SVG "SVG" (2Q87-2) 0×0
+            SVGVisualElement "Rect" (2Q88-2) 0×0
+            SVGVisualElement "Rect" (2Q89-2) 0×0
+        Rectangle "Rectangle" (2ZT-0) 78×78
+      Frame "Frame" (2ZU-0) 0×0
+        Text "만료 · 시무룩" (2ZV-0) 0×0 "만료 · 시무룩"
+        Text "루틴이 만료로 끝남" (2ZW-0) 0×0 "루틴이 만료로 끝남"
+    Frame "상황 · 오류" (2ZX-0) 200×0
+      Frame "Frame" (2ZY-0) 76×76
+        Frame "Frame" (2ZZ-0) 62×61
+          SVG "SVG" (300-0) 0×0
+            SVGVisualElement "Path" (301-0) 0×0
+            SVGVisualElement "Path" (302-0) 0×0
+        Rectangle "Rectangle" (303-0) 78×78
+        Rectangle "Rectangle" (304-0) 16×16
+      Frame "Frame" (305-0) 0×0
+        Text "오류 · 찡그림" (306-0) 0×0 "오류 · 찡그림"
+        Text "호출 실패 · 연결 끊김" (307-0) 0×0 "호출 실패 · 연결 끊김"
+    Frame "상황 · 복원 실패" (308-0) 200×0
+      Frame "Frame" (309-0) 76×76
+        Frame "Frame" (30A-0) 62×61
+          SVG "SVG" (2Q8D-2) 0×0
+            SVGVisualElement "Rect" (2Q8E-2) 0×0
+            SVGVisualElement "Rect" (2Q8F-2) 0×0
+            SVGVisualElement "Path" (2Q8G-2) 0×0
+        Rectangle "Rectangle" (30F-0) 78×78
+        Rectangle "Rectangle" (30G-0) 16×16
+      Frame "Frame" (30H-0) 0×0
+        Text "복원 실패 · 우는" (30I-0) 0×0 "복원 실패 · 우는"
+        Text "감시가 비었다 — 강제 알림" (30J-0) 0×0 "감시가 비었다 — 강제 알림"
+    Frame "상황 · 장 마감" (30K-0) 200×0
+      Frame "Frame" (30L-0) 76×76
+        Frame "Frame" (30M-0) 62×61
+          SVG "SVG" (30N-0) 0×0
+            SVGVisualElement "Rect" (30O-0) 0×0
+            SVGVisualElement "Rect" (30P-0) 0×0
+        Rectangle "Rectangle" (30Q-0) 78×78
+      Frame "Frame" (30R-0) 0×0
+        Text "장 마감 · 졸림" (30S-0) 0×0 "장 마감 · 졸림"
+        Text "감시가 쉬는 시간" (30T-0) 0×0 "감시가 쉬는 시간"
+  Frame "크기 3단계 — 접힘 · 전환 중 · 펼침" (243-0) 0×0
+    Frame "1단계 · 접힘 76×76" (244-0) 0×0
+      Frame "Frame" (245-0) 76×76
+        Frame "Frame" (246-0) 62×61
+          Rectangle "Rectangle" (247-0) 7×16
+          Rectangle "Rectangle" (248-0) 7×16
+      Text "76 × 76" (249-0) 76×0 "76 × 76"
+    Frame "2단계 · 늘어나는 중" (24A-0) 0×0
+      Frame "Frame" (24B-0) 218×168
+        Frame "Frame" (24C-0) 62×61
+          Rectangle "Rectangle" (24D-0) 7×16
+          Rectangle "Rectangle" (24E-0) 7×16
+        Frame "Frame" (24F-0) 0×0
+          Rectangle "Rectangle" (24G-0) 0×8
+          Rectangle "Rectangle" (24H-0) 0×8
+        Rectangle "Rectangle" (24I-0) 0×56
+      Text "좌상단 반지름 38px은 원의 것을 …" (24J-0) 218×0 "좌상단 반지름 38px은 원의 것을 그대로 물려받는다 — 이 모서리가 “아까 그 공”이라는 증거다."
+    Frame "3단계 · 펼침 360×400 (최대 640)" (24K-0) 0×0
+      Frame "orb-root expanded (한 덩어리)" (24L-0) 360×340
+        Frame "머리 영역 (얼굴 76 + 오른쪽 헤더)" (24O-0) 0×76
+          Frame "얼굴 — 접힘과 같은 좌표 (14.4, 12.2)" (24P-0) 76×76
+            Frame "orb-visor" (24Q-0) 62×61
+              Rectangle "Rectangle" (24R-0) 7×16
+              Rectangle "Rectangle" (24S-0) 7×16
+          Frame "헤더 (얼굴 오른쪽에서 시작)" (24T-0) 0×0
+            Frame "Frame" (24U-0) 0×0
+              Frame "orb-badge" (24V-0) 0×0
+                Text "15:30 발화" (24W-0) 0×0 "15:30 발화"
+              Text "주기 확인" (24X-0) 0×0 "주기 확인"
+            Text "2분 전" (24Y-0) 0×0 "2분 전"
+        Frame "orb-body (대화체 문장 1)" (252-0) 0×0
+          Text "삼성전자 005930 조건 도달 — …" (253-0) 0×0 "삼성전자 005930 조건 도달 — 관측값 88,100 (임계 88,000). 값은 발화 시점 기준입니다."
+        Frame "orb-close" (24Z-0) 22×22
+          SVG "SVG" (250-0) 0×0
+            SVGVisualElement "Path" (251-0) 0×0
+        Frame "orb-card (원장 행 1:1)" (255-0) 0×0
+          Frame "Frame" (256-0) 0×0
+            Text "종목" (257-0) 64×0 "종목"
+            Text "삼성전자 005930" (258-0) 0×0 "삼성전자 005930"
+          Frame "Frame" (259-0) 0×0
+            Text "종가" (25A-0) 64×0 "종가"
+            Text "88,100" (25B-0) 0×0 "88,100"
+          Frame "Frame" (25C-0) 0×0
+            Text "전일비" (25D-0) 64×0 "전일비"
+            Text "▲ 900 (+1.03%)" (25E-0) 0×0 "▲ 900 (+1.03%)"
+          Frame "Frame" (25F-0) 0×0
+            Text "거래량" (25G-0) 64×0 "거래량"
+            Text "11,689,068" (25H-0) 0×0 "11,689,068"
+          Frame "Frame" (25I-0) 0×0
+            Text "기준시각" (25J-0) 64×0 "기준시각"
+            Text "2026-07-19 15:30" (25K-0) 0×0 "2026-07-19 15:30"
+        Frame "orb-foot" (25L-0) 0×0
+          Text "orb-source" (25M-0) 0×0 "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다"
+          Frame "orb-more" (25N-0) 0×0
+            Text "더보기" (25O-0) 0×0 "더보기"
+      Text "알림 전용(셸 표시)에서는 세 조각까…" (24M-0) 360×0 "알림 전용(셸 표시)에서는 세 조각까지 — 문장 1 · 대표 카드 1 · 더보기. 셸을 숨기면 같은 패널이 "
+  Frame "접힘 원의 두 번째 채널" (2FKD-2) 0×0
+    Text "제목" (2FKE-2) 0×0 "접힘 원에는 얼굴 말고 채널이 둘 더 있다"
+    Text "부제" (2FKF-2) 0×0 "둘 다 무채색이고 눈 모양을 건드리지 않는다 — 표정이 “무슨 일”을 말하면 이 둘은 “몇 건”을 말한다. "
+    Frame "채널 2종" (2FKH-2) 0×0
+      Frame "감시 궤도 링" (2FKI-2) 300×0
+        Frame "링 예시" (2FKJ-2) 90×90
+          Frame "Frame" (2FKK-2) 76×76
+            Frame "Frame" (2FKL-2) 62×61
+              Rectangle "Rectangle" (2FKM-2) 7×16
+              Rectangle "Rectangle" (2FKN-2) 7×16
+          Rectangle "Rectangle" (2FKO-2) 4×4
+          Rectangle "Rectangle" (2FKP-2) 4×4
+          Rectangle "Rectangle" (2FKQ-2) 4×4
+          Frame "점선 궤도" (2FKU-2) 90×90
+        Text "라벨" (2FKR-2) 0×0 "감시 궤도 링 — 활성 감시 3건"
+        Text "설명" (2FKS-2) 0×0 "원 둘레 바깥 7px 궤도에 감시(루틴) 수만큼 위성 점을 12시부터 시계 방향으로 등분해 놓는다. 0건이면"
+      Frame "미확인 배지" (2FKW-2) 300×0
+        Frame "배지 예시" (2FKX-2) 90×90
+          Frame "Frame" (2FKY-2) 76×76
+            Frame "Frame" (2FKZ-2) 62×61
+              Rectangle "Rectangle" (2FL0-2) 7×16
+              Rectangle "Rectangle" (2FL1-2) 7×16
+          Frame "배지" (2FL2-2) 0×18
+            Text "3" (2FL3-2) 0×0 "3"
+        Text "라벨" (2FL4-2) 0×0 "미확인 배지 — 읽지 않은 3건"
+        Text "설명" (2FL5-2) 0×0 "우상단 무채색 배지. 루틴 알림·시작 알림·접힌 채 도착한 대화 답을 합산한 수이고, 0이면 아예 그리지 않"

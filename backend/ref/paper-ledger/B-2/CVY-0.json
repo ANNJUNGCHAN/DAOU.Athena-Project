@@ -1,0 +1,1267 @@
+{
+ "board_id": "CVY-0",
+ "page": "B-2",
+ "page_name": "플러그인",
+ "name": "04 · 플러그인 — 관리·마켓플레이스",
+ "width": 1680,
+ "height": 983,
+ "texts": [
+  {
+   "id": "DCJ-0",
+   "text": "셸 — 플러그인 관리 (같은 프레임 · 관리 탭)",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DCK-0",
+   "text": "허브 우측 상단 관리로 진입합니다. 켜기·끄기는 승인·승인 철회고, 삭제는 등록과 허용 기능을 함께 지웁니다.",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H0C-0",
+   "text": "ATHENA",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H0K-0",
+   "text": "새 채팅",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H0R-0",
+   "text": "그래프",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H0W-0",
+   "text": "에이전트",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H11-0",
+   "text": "플러그인",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H14-0",
+   "text": "프로젝트",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H19-0",
+   "text": "아테나",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H1I-0",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H1K-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H1N-0",
+   "text": "최근",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H1O-0",
+   "text": "전체",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H1Q-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H1T-0",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H1V-0",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H1Z-0",
+   "text": "AN",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H20-0",
+   "text": "모의-주력",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "48 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DDM-0",
+   "text": "플러그인 관리",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DDP-0",
+   "text": "플러그인 2",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DDT-0",
+   "text": "기능 3",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DDV-0",
+   "text": "마켓플레이스 1",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DDW-0",
+   "text": "플러그인만 설치·활성화합니다. 제공 기능은 상세 화면에서 허용하며 Athena 내장 API는 표시하지 않습니다.",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DDZ-0",
+   "text": "웹 문서 읽기",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DE0-0",
+   "text": "연결 확인됨",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZEU-0",
+   "text": "승인 후 지웁니다",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NP7-2",
+   "text": "삭제",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "btn-remove"
+   ]
+  },
+  {
+   "id": "3ZEV-0",
+   "text": "승인 후 반영됩니다",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DEB-0",
+   "text": "시간·시간대",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DEC-0",
+   "text": "꺼짐 — 대화에서 쓰이지 않습니다",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZEX-0",
+   "text": "승인 후 지웁니다",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2NPA-2",
+   "text": "삭제",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "btn-remove"
+   ]
+  },
+  {
+   "id": "3ZEY-0",
+   "text": "승인 후 반영됩니다",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DF0-0",
+   "text": "마켓플레이스",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DF3-0",
+   "text": "athena-official",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DF4-0",
+   "text": "앱 내장 카탈로그 · 키가 필요 없는 5종",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DF8-0",
+   "text": "+ 마켓플레이스 추가 — GitHub·Git URL·로컬 폴더. 등록만으로는 아무것도 실행되지 않습니다 — 설치·활성은 항목별 승인 시트를 거칩니다.",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DFB-0",
+   "text": "플러그인에게 묻기",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DFC-0",
+   "text": "설치·설정도 대화로 됩니다",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DFG-0",
+   "text": "시간·시간대 왜 꺼져 있어?",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DFH-0",
+   "text": "현재 꺼져 있습니다. 끄기는 삭제가 아니라 승인 철회입니다 — 등록은 남고 허용 도구 목록만 비워집니다. 다시 켜면 기능을 다시 허용하면 됩니다.",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DFO-0",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "04 · 플러그인 — 관리·마켓플레이스",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "CVY-0",
+   "name": "04 · 플러그인 — 관리·마켓플레이스",
+   "component": "Frame",
+   "w": 1680,
+   "h": 983,
+   "depth": 0
+  },
+  {
+   "id": "DCI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 1
+  },
+  {
+   "id": "DCL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1560,
+   "h": 820,
+   "depth": 2
+  },
+  {
+   "id": "H09-0",
+   "name": "48 · Project Recent Sidebar",
+   "component": "Frame",
+   "w": 268,
+   "h": 819,
+   "depth": 3
+  },
+  {
+   "id": "H0A-0",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "H0B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "H0D-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "H0E-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H0F-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H0G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "H0H-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "H0I-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H0J-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H0L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "H0M-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "H0N-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H0O-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H0P-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H0Q-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H0S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "H0T-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "H0U-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H0V-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H0X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 5
+  },
+  {
+   "id": "H0Y-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "H0Z-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H10-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H12-0",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "H13-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "H15-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "H16-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "H17-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H18-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H1A-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "H1B-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H1C-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H1D-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H1E-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "H1F-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H1G-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "H1H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 5
+  },
+  {
+   "id": "H1J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 29,
+   "depth": 5
+  },
+  {
+   "id": "H46-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "H1L-0",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "H1M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "H1P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 5
+  },
+  {
+   "id": "H1R-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "H1S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 5
+  },
+  {
+   "id": "H1U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 5
+  },
+  {
+   "id": "H1W-0",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "H1X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 5
+  },
+  {
+   "id": "H1Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "H21-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "H22-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DDJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "DDK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "DDL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "DDN-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DDO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DDS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DDU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DDX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 86,
+   "depth": 5
+  },
+  {
+   "id": "DDY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DE1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2NP6-2",
+   "name": "btn-remove",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DE2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "DE3-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 8
+  },
+  {
+   "id": "DEA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DED-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2NP9-2",
+   "name": "btn-remove",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DEE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "DEF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 8
+  },
+  {
+   "id": "DF1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "DF2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DF5-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DF6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "DF7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 8
+  },
+  {
+   "id": "DF9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "DFA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "DFD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "DFE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "DFF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "DFI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "DFJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "DFK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "DFL-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "DFM-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "DFN-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  }
+ ],
+ "text_multiset": {
+  "셸 — 플러그인 관리 (같은 프레임 · 관리 탭)": 1,
+  "허브 우측 상단 관리로 진입합니다. 켜기·끄기는 승인·승인 철회고, 삭제는 등록과 허용 기능을 함께 지웁니다.": 1,
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "플러그인 관리": 1,
+  "플러그인 2": 1,
+  "기능 3": 1,
+  "마켓플레이스 1": 1,
+  "플러그인만 설치·활성화합니다. 제공 기능은 상세 화면에서 허용하며 Athena 내장 API는 표시하지 않습니다.": 1,
+  "웹 문서 읽기": 1,
+  "연결 확인됨": 1,
+  "승인 후 지웁니다": 2,
+  "삭제": 2,
+  "승인 후 반영됩니다": 2,
+  "시간·시간대": 1,
+  "꺼짐 — 대화에서 쓰이지 않습니다": 1,
+  "마켓플레이스": 1,
+  "athena-official": 1,
+  "앱 내장 카탈로그 · 키가 필요 없는 5종": 1,
+  "+ 마켓플레이스 추가 — GitHub·Git URL·로컬 폴더. 등록만으로는 아무것도 실행되지 않습니다 — 설치·활성은 항목별 승인 시트를 거칩니다.": 1,
+  "플러그인에게 묻기": 1,
+  "설치·설정도 대화로 됩니다": 1,
+  "시간·시간대 왜 꺼져 있어?": 1,
+  "현재 꺼져 있습니다. 끄기는 삭제가 아니라 승인 철회입니다 — 등록은 남고 허용 도구 목록만 비워집니다. 다시 켜면 기능을 다시 허용하면 됩니다.": 1,
+  "무엇이든 물어보세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "6273756dbea33f2e002580a3361f01514cd7a8fda32ae628b133fba04900fe41"
+}

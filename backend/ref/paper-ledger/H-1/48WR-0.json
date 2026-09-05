@@ -1,0 +1,92 @@
+{
+ "board_id": "48WR-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48WT-0",
+   "text": "원본 보드: CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+   "path": [
+    "note/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48WV-0",
+   "text": "가져온 요소: 주문가능금액 · 정정수량",
+   "path": [
+    "note/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48WX-0",
+   "text": "문법: order_confirm",
+   "path": [
+    "note/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48WZ-0",
+   "text": "접은 개수: 항목 22개",
+   "path": [
+    "note/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48WR-0",
+   "name": "note/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48WS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48WU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48WW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48WY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정": 1,
+  "가져온 요소: 주문가능금액 · 정정수량": 1,
+  "문법: order_confirm": 1,
+  "접은 개수: 항목 22개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a5909e9a8ab7854e1eaca3d6fa95a44b90844a88de4cd13112fe602f370b854f"
+}

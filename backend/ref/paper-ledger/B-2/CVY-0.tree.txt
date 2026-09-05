@@ -1,0 +1,130 @@
+Frame "04 · 플러그인 — 관리·마켓플레이스" (CVY-0) 1680×983
+  Frame "Frame" (DCI-0) 1680×900
+    Text "셸 — 플러그인 관리 (같은 프레임 …" (DCJ-0) 0×0 "셸 — 플러그인 관리 (같은 프레임 · 관리 탭)"
+    Text "허브 우측 상단 관리로 진입합니다. …" (DCK-0) 0×0 "허브 우측 상단 관리로 진입합니다. 켜기·끄기는 승인·승인 철회고, 삭제는 등록과 허용 기능을 함께 지웁니다"
+    Frame "Frame" (DCL-0) 1560×820
+      Frame "48 · Project Recent Sidebar" (H09-0) 268×819
+        Frame "Primary Actions" (H0A-0) 0×0
+          Frame "Frame" (H0B-0) 0×28
+            Text "ATHENA" (H0C-0) 0×0 "ATHENA"
+            SVG "SVG" (H0D-0) 0×0
+              SVGVisualElement "Circle" (H0E-0) 0×0
+              SVGVisualElement "Path" (H0F-0) 0×0
+          Frame "Frame" (H0G-0) 0×30
+            SVG "SVG" (H0H-0) 0×0
+              SVGVisualElement "Path" (H0I-0) 0×0
+              SVGVisualElement "Path" (H0J-0) 0×0
+            Text "새 채팅" (H0K-0) 0×0 "새 채팅"
+          Frame "Frame" (H0L-0) 0×30
+            SVG "SVG" (H0M-0) 0×0
+              SVGVisualElement "Circle" (H0N-0) 0×0
+              SVGVisualElement "Circle" (H0O-0) 0×0
+              SVGVisualElement "Circle" (H0P-0) 0×0
+              SVGVisualElement "Path" (H0Q-0) 0×0
+            Text "그래프" (H0R-0) 0×0 "그래프"
+          Frame "Frame" (H0S-0) 0×30
+            SVG "SVG" (H0T-0) 0×0
+              SVGVisualElement "Circle" (H0U-0) 0×0
+              SVGVisualElement "Path" (H0V-0) 0×0
+            Text "에이전트" (H0W-0) 0×0 "에이전트"
+          Frame "Frame" (H0X-0) 0×30
+            SVG "SVG" (H0Y-0) 0×0
+              SVGVisualElement "Path" (H0Z-0) 0×0
+              SVGVisualElement "Path" (H10-0) 0×0
+            Text "플러그인" (H11-0) 0×0 "플러그인"
+        Frame "Project Tree" (H12-0) 0×0
+          Frame "Frame" (H13-0) 0×0
+            Text "프로젝트" (H14-0) 0×0 "프로젝트"
+          Frame "Frame" (H15-0) 0×32
+            SVG "SVG" (H16-0) 0×0
+              SVGVisualElement "Path" (H17-0) 0×0
+              SVGVisualElement "Path" (H18-0) 0×0
+            Text "아테나" (H19-0) 0×0 "아테나"
+            SVG "SVG" (H1A-0) 0×0
+              SVGVisualElement "Circle" (H1B-0) 0×0
+              SVGVisualElement "Circle" (H1C-0) 0×0
+              SVGVisualElement "Circle" (H1D-0) 0×0
+            SVG "SVG" (H1E-0) 0×0
+              SVGVisualElement "Path" (H1F-0) 0×0
+              SVGVisualElement "Path" (H1G-0) 0×0
+          Frame "Frame" (H1H-0) 0×27
+            Text "백엔드 API 개수 확인" (H1I-0) 0×0 "백엔드 API 개수 확인"
+          Frame "Frame" (H1J-0) 0×29
+            Text "앱 전체 기능 검수" (H1K-0) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (H46-0) 6×6
+        Frame "Recent Conversations" (H1L-0) 0×0
+          Frame "Frame" (H1M-0) 0×20
+            Text "최근" (H1N-0) 0×0 "최근"
+            Text "전체" (H1O-0) 0×0 "전체"
+          Frame "Frame" (H1P-0) 0×27
+            Text "앱 전체 기능 검수" (H1Q-0) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (H1R-0) 6×6
+          Frame "Frame" (H1S-0) 0×27
+            Text "삼성전자 주요 변동 알림" (H1T-0) 0×0 "삼성전자 주요 변동 알림"
+          Frame "Frame" (H1U-0) 0×27
+            Text "ETF 자금 흐름" (H1V-0) 0×0 "ETF 자금 흐름"
+        Frame "Account Footer" (H1W-0) 0×0
+          Frame "Frame" (H1X-0) 0×38
+            Frame "Frame" (H1Y-0) 22×22
+              Text "AN" (H1Z-0) 0×0 "AN"
+            Text "모의-주력" (H20-0) 0×0 "모의-주력"
+            SVG "SVG" (H21-0) 0×0
+              SVGVisualElement "Path" (H22-0) 0×0
+      Frame "Frame" (DDJ-0) 0×0
+        Frame "Frame" (DDK-0) 0×0
+          Frame "Frame" (DDL-0) 0×0
+            Text "플러그인 관리" (DDM-0) 0×0 "플러그인 관리"
+            Rectangle "Rectangle" (DDN-0) 0×0
+            Frame "Frame" (DDO-0) 0×0
+              Text "플러그인 2" (DDP-0) 0×0 "플러그인 2"
+            Frame "Frame" (DDS-0) 0×0
+              Text "기능 3" (DDT-0) 0×0 "기능 3"
+            Frame "Frame" (DDU-0) 0×0
+              Text "마켓플레이스 1" (DDV-0) 0×0 "마켓플레이스 1"
+          Text "플러그인만 설치·활성화합니다. 제공 …" (DDW-0) 0×0 "플러그인만 설치·활성화합니다. 제공 기능은 상세 화면에서 허용하며 Athena 내장 API는 표시하지 않습니"
+          Frame "Frame" (DDX-0) 0×86
+            Frame "Frame" (DDY-0) 0×0
+              Text "웹 문서 읽기" (DDZ-0) 0×0 "웹 문서 읽기"
+              Text "연결 확인됨" (DE0-0) 0×0 "연결 확인됨"
+              Rectangle "Rectangle" (DE1-0) 0×0
+              Text "삭제 안내" (3ZEU-0) 0×0 "승인 후 지웁니다"
+              Frame "btn-remove" (2NP6-2) 0×0
+                Text "삭제" (2NP7-2) 0×0 "삭제"
+              Text "스위치 안내" (3ZEV-0) 0×0 "승인 후 반영됩니다"
+              Frame "Frame" (DE2-0) 34×20
+                Rectangle "Rectangle" (DE3-0) 16×16
+            Frame "Frame" (DEA-0) 0×0
+              Text "시간·시간대" (DEB-0) 0×0 "시간·시간대"
+              Text "꺼짐 — 대화에서 쓰이지 않습니다" (DEC-0) 0×0 "꺼짐 — 대화에서 쓰이지 않습니다"
+              Rectangle "Rectangle" (DED-0) 0×0
+              Text "삭제 안내" (3ZEX-0) 0×0 "승인 후 지웁니다"
+              Frame "btn-remove" (2NP9-2) 0×0
+                Text "삭제" (2NPA-2) 0×0 "삭제"
+              Text "스위치 안내" (3ZEY-0) 0×0 "승인 후 반영됩니다"
+              Frame "Frame" (DEE-0) 34×20
+                Rectangle "Rectangle" (DEF-0) 16×16
+          Text "마켓플레이스" (DF0-0) 0×0 "마켓플레이스"
+          Frame "Frame" (DF1-0) 0×0
+            Frame "Frame" (DF2-0) 0×0
+              Text "athena-official" (DF3-0) 0×0 "athena-official"
+              Text "앱 내장 카탈로그 · 키가 필요 없는…" (DF4-0) 0×0 "앱 내장 카탈로그 · 키가 필요 없는 5종"
+              Rectangle "Rectangle" (DF5-0) 0×0
+              Frame "Frame" (DF6-0) 34×20
+                Rectangle "Rectangle" (DF7-0) 16×16
+          Text "+ 마켓플레이스 추가 — GitHub…" (DF8-0) 0×0 "+ 마켓플레이스 추가 — GitHub·Git URL·로컬 폴더. 등록만으로는 아무것도 실행되지 않습니다 — "
+      Frame "Frame" (DF9-0) 400×0
+        Frame "Frame" (DFA-0) 0×0
+          Text "플러그인에게 묻기" (DFB-0) 0×0 "플러그인에게 묻기"
+          Text "설치·설정도 대화로 됩니다" (DFC-0) 0×0 "설치·설정도 대화로 됩니다"
+        Frame "Frame" (DFD-0) 0×0
+          Frame "Frame" (DFE-0) 0×0
+            Frame "Frame" (DFF-0) 0×0
+              Text "시간·시간대 왜 꺼져 있어?" (DFG-0) 0×0 "시간·시간대 왜 꺼져 있어?"
+          Text "현재 꺼져 있습니다. 끄기는 삭제가 …" (DFH-0) 0×0 "현재 꺼져 있습니다. 끄기는 삭제가 아니라 승인 철회입니다 — 등록은 남고 허용 도구 목록만 비워집니다. 다"
+        Frame "Frame" (DFI-0) 0×0
+          Frame "Frame" (DFJ-0) 0×0
+            Frame "Frame" (DFK-0) 22×22
+              SVG "SVG" (DFL-0) 0×0
+                SVGVisualElement "Rect" (DFM-0) 0×0
+                SVGVisualElement "Rect" (DFN-0) 0×0
+            Text "무엇이든 물어보세요" (DFO-0) 0×0 "무엇이든 물어보세요"

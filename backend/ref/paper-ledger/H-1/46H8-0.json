@@ -1,0 +1,234 @@
+{
+ "board_id": "46H8-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46HV-0",
+   "text": "",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46HU-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46HS-0",
+   "text": "외국인 기간별 매매 상위",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Header"
+   ]
+  },
+  {
+   "id": "46HQ-0",
+   "text": "조회",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46HP-0",
+   "text": "2026-09-01 09:42",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46HN-0",
+   "text": "상위 50건 합계",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46HM-0",
+   "text": "+1.18조원",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46HK-0",
+   "text": "표시",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46HJ-0",
+   "text": "20건 · +10,815억원",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46HH-0",
+   "text": "순매수 1위",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46HG-0",
+   "text": "+3,214억원",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46HE-0",
+   "text": "연속 매수",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46HD-0",
+   "text": "5일",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46HA-0",
+   "text": "외 222개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46H8-0",
+   "name": "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46HR-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46HT-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46HB-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46HO-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46HL-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46HI-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46HF-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46HC-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46H9-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "외국인 기간별 매매 상위": 1,
+  "조회": 1,
+  "2026-09-01 09:42": 1,
+  "상위 50건 합계": 1,
+  "+1.18조원": 1,
+  "표시": 1,
+  "20건 · +10,815억원": 1,
+  "순매수 1위": 1,
+  "+3,214억원": 1,
+  "연속 매수": 1,
+  "5일": 1,
+  "외 222개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "5f288428a637cdf5540d80f5712c6d312741e71789a2988860baadf3695a5724"
+}

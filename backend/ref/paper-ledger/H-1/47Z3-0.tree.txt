@@ -1,0 +1,35 @@
+Frame "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위" (47Z3-0) 360×420
+  Frame "Header" (47ZX-0) 0×0
+    Frame "Meta row" (47ZZ-0) 0×0
+      Text "Eyebrow" (4801-0) 0×0
+      Text "As of" (4800-0) 0×0 "기준 09:42"
+    Text "Title" (47ZY-0) 0×0 "증권사별 상위"
+  Frame "Body" (47Z6-0) 0×0
+    Frame "KPI band" (47ZN-0) 0×0
+      Frame "Frame" (47ZU-0) 0×0
+        Text "순매수금액" (47ZW-0) 0×0 "순매수금액"
+        Text "+1,272억원" (47ZV-0) 0×0 "+1,272억원"
+      Frame "Frame" (47ZR-0) 0×0
+        Text "기준 시각" (47ZT-0) 0×0 "기준 시각"
+        Text "당일 09:40" (47ZS-0) 0×0 "당일 09:40"
+      Frame "Frame" (47ZO-0) 0×0
+        Text "핵심" (47ZQ-0) 0×0 "핵심"
+        Text "3종목" (47ZP-0) 0×0 "3종목"
+    Frame "Table header" (47ZJ-0) 0×0
+      Text "항목" (47ZM-0) 0×0 "항목"
+      Text "값" (47ZL-0) 0×0 "값"
+      Text "비고" (47ZK-0) 72×0 "비고"
+    Frame "Position 1" (47ZD-0) 0×0
+      Frame "Frame" (47ZG-0) 0×0
+        Text "기준 시각" (47ZI-0) 0×0 "기준 시각"
+        Text "Text" (47ZH-0) 0×0
+      Text "09:42 조회" (47ZF-0) 0×0 "09:42 조회"
+      Text "Text" (47ZE-0) 72×0
+    Frame "Position 2" (47Z7-0) 0×0
+      Frame "Frame" (47ZA-0) 0×0
+        Text "변화" (47ZC-0) 0×0 "변화"
+        Text "Text" (47ZB-0) 0×0
+      Text "상위 3종목 89.6%" (47Z9-0) 0×0 "상위 3종목 89.6%"
+      Text "Text" (47Z8-0) 72×0
+  Frame "Fold note" (47Z4-0) 0×0
+    Text "스칼라 2개, 행 6개 접힘 · 원본…" (47Z5-0) 0×0 "스칼라 2개, 행 6개 접힘 · 원본에서 확인"

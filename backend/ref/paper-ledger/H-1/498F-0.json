@@ -1,0 +1,92 @@
+{
+ "board_id": "498F-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "498H-0",
+   "text": "원본 보드: CC-05 / R03-T6-8 · 순위 — 동일순매매",
+   "path": [
+    "note/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Frame"
+   ]
+  },
+  {
+   "id": "498J-0",
+   "text": "가져온 요소: 동일순매매순위 · 순매매금액 · 종목코드 · 전일대비 · 외인순매매수량",
+   "path": [
+    "note/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Frame"
+   ]
+  },
+  {
+   "id": "498L-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Frame"
+   ]
+  },
+  {
+   "id": "498N-0",
+   "text": "접은 개수: 스칼라 2개 · 행 6개",
+   "path": [
+    "note/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "498F-0",
+   "name": "note/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "498G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "498I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "498K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "498M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-05 / R03-T6-8 · 순위 — 동일순매매": 1,
+  "가져온 요소: 동일순매매순위 · 순매매금액 · 종목코드 · 전일대비 · 외인순매매수량": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 6개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "adcc3408ef2ac9d03d7a8be61e1c859a2f583d39582a5d5df20903fcd056ca84"
+}

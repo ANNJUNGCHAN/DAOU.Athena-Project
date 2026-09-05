@@ -1,0 +1,19 @@
+Frame "mini/CC-02 / R11 · 삼성전자 10주 시장가 매수" (46CV-0) 360×420
+  Frame "Header" (46D9-0) 0×0
+    Frame "Meta row" (46DB-0) 0×0
+      Text "Eyebrow" (46DD-0) 0×0
+      Text "As of" (46DC-0) 0×0 "기준 09:42"
+    Text "Title" (46DA-0) 0×0 "삼성전자 10주 시장가 매수"
+  Frame "Body" (46CW-0) 0×0
+    Frame "Order lead" (46D6-0) 0×0
+      Text "삼성전자" (46D8-0) 0×0 "삼성전자"
+      Text "005930 / 키움증권 01" (46D7-0) 0×0 "005930 / 키움증권 01"
+    Frame "Order side" (46D3-0) 0×0
+      Text "주문 구분" (46D5-0) 0×0 "주문 구분"
+      Text "매수" (46D4-0) 0×0 "매수"
+    Frame "Order quantity" (46D0-0) 0×0
+      Text "수량" (46D2-0) 0×0 "수량"
+      Text "10주" (46D1-0) 0×0 "10주"
+    Frame "Order price" (46CX-0) 0×0
+      Text "현재 매수 1호가" (46CZ-0) 0×0 "현재 매수 1호가"
+      Text "150,840원" (46CY-0) 0×0 "150,840원"

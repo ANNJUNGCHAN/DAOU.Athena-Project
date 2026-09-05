@@ -1,0 +1,233 @@
+{
+ "board_id": "487F-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "4882-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "4881-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "487Z-0",
+   "text": "업종 목록 펼침",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Header"
+   ]
+  },
+  {
+   "id": "487X-0",
+   "text": "업종코드리스트",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "487W-0",
+   "text": "전체 시장 · 업종 21개",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "487U-0",
+   "text": "체결시간",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "487T-0",
+   "text": "장중 · 09:42",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "487R-0",
+   "text": "업종코드리스트",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "487Q-0",
+   "text": "4개",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "487O-0",
+   "text": "시장구분코드",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "487N-0",
+   "text": "KOSPI200",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "487L-0",
+   "text": "업종명",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "487K-0",
+   "text": "K200 반도체",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "487H-0",
+   "text": "외 31개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "487F-0",
+   "name": "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "487Y-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4880-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "487I-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "487V-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "487S-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "487P-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "487M-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "487J-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "487G-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "업종 목록 펼침": 1,
+  "업종코드리스트": 2,
+  "전체 시장 · 업종 21개": 1,
+  "체결시간": 1,
+  "장중 · 09:42": 1,
+  "4개": 1,
+  "시장구분코드": 1,
+  "KOSPI200": 1,
+  "업종명": 1,
+  "K200 반도체": 1,
+  "외 31개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "3edaacfc377071dd94b48f3764d35c309fe887175e9658deb989bc9fe1122ef1"
+}

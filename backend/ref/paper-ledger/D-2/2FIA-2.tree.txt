@@ -1,0 +1,68 @@
+Frame "05 · 그래프 — 수집·노출·브레인 제어" (2FIA-2) 1680×700
+  Frame "그래프 패널" (2FIB-2) 0×0
+    Frame "그래프 헤더" (2FIC-2) 0×0
+      Frame "뷰 토글" (2FID-2) 0×0
+        Frame "탭 요약" (2FIE-2) 0×0
+          Text "요약" (2FIF-2) 0×0 "요약"
+        Frame "탭 그래프" (2FIG-2) 0×0
+          Text "그래프" (2FIH-2) 0×0 "그래프"
+        Frame "탭 수집·노출 (활성)" (2FII-2) 0×0
+          Text "수집·노출" (2FIJ-2) 0×0 "수집·노출"
+      Text "최근 갱신" (2FIK-2) 0×0 "최근 갱신 12분 전"
+    Frame "본문" (2FIM-2) 0×0
+      Frame "카드 · 수집과 노출" (2FIN-2) 0×0
+        Frame "카드 헤더" (2FIO-2) 0×0
+          Text "그래프 수집과 노출" (2FIP-2) 0×0 "그래프 수집과 노출"
+          Text "무엇을 읽고 누구에게 보일지" (2FIQ-2) 0×0 "무엇을 읽고 누구에게 보일지"
+        Frame "수집 소스 3열" (2FIS-2) 0×0
+          Frame "열 · 대화" (2FIT-2) 0×0
+            Frame "Frame" (2FIU-2) 0×0
+              Text "대화" (2FIV-2) 0×0 "대화"
+              Frame "토글 켜짐" (2FIW-2) 34×19
+                Rectangle "Rectangle" (2FIX-2) 15×15
+          Frame "열 · 체결내역" (2FIY-2) 0×0
+            Frame "Frame" (2FIZ-2) 0×0
+              Text "체결내역" (2FJ0-2) 0×0 "체결내역"
+              Frame "토글 켜짐" (2FJ1-2) 34×19
+                Rectangle "Rectangle" (2FJ2-2) 15×15
+          Frame "열 · 보유잔고" (2FJ3-2) 0×0
+            Frame "Frame" (2FJ4-2) 0×0
+              Text "보유잔고" (2FJ5-2) 0×0 "보유잔고"
+              Frame "Frame" (2FJ6-2) 0×0
+                Text "조회 주기" (2FJ7-2) 0×0 "조회 주기"
+                Frame "Frame" (2FJ8-2) 0×0
+                  Text "60분" (2FJ9-2) 0×0 "60분"
+                Frame "토글 켜짐" (2FJA-2) 34×19
+                  Rectangle "Rectangle" (2FJB-2) 15×15
+        Frame "행 · 모델 전달" (2FJD-2) 0×0
+          Frame "Frame" (2FJE-2) 0×0
+            Text "보유 종목·수량과 대화 원문을 모델에…" (2FJF-2) 0×0 "보유 종목·수량과 대화 원문을 모델에 전달"
+            Text "끄면 그래프는 계속 쌓이지만 모델에게…" (2FJG-2) 0×0 "끄면 그래프는 계속 쌓이지만 모델에게는 넘기지 않습니다."
+          Frame "토글 켜짐" (2FJH-2) 34×19
+            Rectangle "Rectangle" (2FJI-2) 15×15
+      Frame "카드 · 브레인 상태" (2FJK-2) 0×0
+        Frame "카드 헤더" (2FJL-2) 0×0
+          Frame "Frame" (2FJM-2) 0×0
+            Text "브레인 상태" (2FJN-2) 0×0 "브레인 상태"
+            Text "이 화면이 바꿀 수 있는 값과 아닌 …" (2FJO-2) 0×0 "이 화면이 바꿀 수 있는 값과 아닌 값"
+          Frame "배지 준비됨" (2FJP-2) 0×0
+            Text "브레인 준비됨" (2FJQ-2) 0×0 "브레인 준비됨"
+        Frame "행 · 배치 주기" (2FJS-2) 0×0
+          Frame "Frame" (2FJT-2) 0×0
+            Text "배치 주기" (2FJU-2) 0×0 "배치 주기"
+            Frame "Frame" (2FJV-2) 0×0
+              Frame "Frame" (2FJW-2) 0×0
+                Text "ATHENA_BRAIN_INGEST_…" (2FJX-2) 0×0 "ATHENA_BRAIN_INGEST_INTERVAL_MINUTES"
+              Text "기본 60분 · 설정 파일이 소유하므…" (2FJY-2) 0×0 "기본 60분 · 설정 파일이 소유하므로 이 화면은 값을 바꾸지 않습니다."
+          Text "상태 슬롯" (2FJZ-2) 88×0 "설정 파일"
+        Frame "행 · 수동 실행" (2FK0-2) 0×0
+          Frame "Frame" (2FK1-2) 0×0
+            Text "수동 실행 · 마지막·다음 실행 시각" (2FK2-2) 0×0 "수동 실행 · 마지막·다음 실행 시각"
+            Text "상태 API가 아직 이 값을 노출하지…" (2FK3-2) 0×0 "상태 API가 아직 이 값을 노출하지 않아 이 화면에서 제공하지 않습니다."
+          Text "상태 슬롯" (2FK4-2) 88×0 "제공 안 함"
+        Frame "행 · 전체 삭제" (2FK6-2) 0×0
+          Frame "Frame" (2FK7-2) 0×0
+            Text "전체 삭제" (2FK8-2) 0×0 "전체 삭제"
+            Text "채팅 이력과 성향 그래프를 모두 지우…" (2FK9-2) 0×0 "채팅 이력과 성향 그래프를 모두 지우고 백엔드를 재기동합니다. 되돌릴 수 없습니다."
+          Frame "버튼 전체 삭제" (2FKA-2) 0×0
+            Text "전체 삭제" (2FKB-2) 0×0 "전체 삭제"

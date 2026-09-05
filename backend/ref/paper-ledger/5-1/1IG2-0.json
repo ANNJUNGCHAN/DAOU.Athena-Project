@@ -1,0 +1,2760 @@
+{
+ "board_id": "1IG2-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+ "width": 1760,
+ "height": 980,
+ "texts": [
+  {
+   "id": "1IJH-0",
+   "text": "좁은 데스크톱에서도 정보는 줄이지 않습니다",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IJI-0",
+   "text": "계좌 · 수급 · 탐색 · 상품의 선택 본문을 390px Canvas 폭에 맞춰 재배치한 정본",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IJJ-0",
+   "text": "C04 — C07 · 390 × 844",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Header"
+   ]
+  },
+  {
+   "id": "1IL8-0",
+   "text": "내 계좌",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IL9-0",
+   "text": "주식 계좌 · 끝 4721 · 09:42 기준",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILB-0",
+   "text": "정상 연결",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILE-0",
+   "text": "자산",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILG-0",
+   "text": "보유종목",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILI-0",
+   "text": "예수금",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILK-0",
+   "text": "손익",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILM-0",
+   "text": "체결",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILQ-0",
+   "text": "평가금액",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILR-0",
+   "text": "89,760,240원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILT-0",
+   "text": "평가손익",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILU-0",
+   "text": "+4,240,900원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILX-0",
+   "text": "주식 71.6%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ILY-0",
+   "text": "현금 28.4%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IM3-0",
+   "text": "종목",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IM4-0",
+   "text": "평가금액",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IM5-0",
+   "text": "손익률",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IM7-0",
+   "text": "삼성전자 005930",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IM8-0",
+   "text": "45,255,000",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IM9-0",
+   "text": "+8.4%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMB-0",
+   "text": "SK하이닉스 000660",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMC-0",
+   "text": "21,450,000",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMD-0",
+   "text": "+5.1%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMF-0",
+   "text": "KODEX 200",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMG-0",
+   "text": "12,880,000",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMH-0",
+   "text": "−1.2%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMJ-0",
+   "text": "LG에너지솔루션",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMK-0",
+   "text": "10,175,240",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IML-0",
+   "text": "+2.0%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMO-0",
+   "text": "삼성전자 상세",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMP-0",
+   "text": "300주",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMR-0",
+   "text": "평균 매입가",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMS-0",
+   "text": "139,020원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMU-0",
+   "text": "현재가",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMV-0",
+   "text": "150,850원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMX-0",
+   "text": "주문 가능",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IMY-0",
+   "text": "300주",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VGX-1",
+   "text": "전체 8종목 표시",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C04 · 계좌 — 보유종목",
+    "List Footer · Complete"
+   ]
+  },
+  {
+   "id": "1IN7-0",
+   "text": "삼성전자 수급",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IN8-0",
+   "text": "005930 · 2026-08-31 장중",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1INA-0",
+   "text": "09:42 갱신",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IND-0",
+   "text": "프로그램",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1INF-0",
+   "text": "투자자",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1INH-0",
+   "text": "거래원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1INJ-0",
+   "text": "신용",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1INL-0",
+   "text": "대차",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1INP-0",
+   "text": "외국인 순매수",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1INQ-0",
+   "text": "+382억원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1INS-0",
+   "text": "기관 순매도",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1INT-0",
+   "text": "−144억원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1INV-0",
+   "text": "최근 5거래일 순매수",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IO3-0",
+   "text": "8/25",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IO4-0",
+   "text": "8/26",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IO5-0",
+   "text": "8/27",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IO6-0",
+   "text": "8/28",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IO7-0",
+   "text": "8/31",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOA-0",
+   "text": "주체",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOB-0",
+   "text": "순매수",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOC-0",
+   "text": "연속일",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOE-0",
+   "text": "외국인",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOF-0",
+   "text": "+382억원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOG-0",
+   "text": "3일",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOI-0",
+   "text": "기관",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOJ-0",
+   "text": "−144억원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOK-0",
+   "text": "1일",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOM-0",
+   "text": "개인",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ION-0",
+   "text": "−238억원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOO-0",
+   "text": "2일",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IOW-0",
+   "text": "현물 체결 기준 · 잠정 집계",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C05 · 수급 — 투자자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IP1-0",
+   "text": "종목 찾기",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IP2-0",
+   "text": "09:40 기준",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IP5-0",
+   "text": "거래대금 상위",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IP7-0",
+   "text": "PER 20배 이하",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IP9-0",
+   "text": "KOSPI",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPD-0",
+   "text": "순위",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPE-0",
+   "text": "종목",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPF-0",
+   "text": "거래대금",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPG-0",
+   "text": "PER",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPI-0",
+   "text": "1",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPJ-0",
+   "text": "삼성전자",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPK-0",
+   "text": "2.14조",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPL-0",
+   "text": "18.7",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPN-0",
+   "text": "2",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPO-0",
+   "text": "SK하이닉스",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPP-0",
+   "text": "0.94조",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPQ-0",
+   "text": "14.2",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPS-0",
+   "text": "3",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPT-0",
+   "text": "현대차",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPU-0",
+   "text": "0.53조",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPV-0",
+   "text": "6.1",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPX-0",
+   "text": "4",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPY-0",
+   "text": "KB금융",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IPZ-0",
+   "text": "0.42조",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQ0-0",
+   "text": "5.9",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQ4-0",
+   "text": "삼성전자",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQ5-0",
+   "text": "005930 · 반도체",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQ6-0",
+   "text": "150,850원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQ9-0",
+   "text": "PER",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQA-0",
+   "text": "18.7배",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQC-0",
+   "text": "PBR",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQD-0",
+   "text": "1.42배",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQF-0",
+   "text": "ROE",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQG-0",
+   "text": "8.4%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VH0-1",
+   "text": "상위 10개 표시 · 전체 48종목",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "List Footer · Collapsed"
+   ]
+  },
+  {
+   "id": "1VH2-1",
+   "text": "더보기",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "List Footer · Collapsed",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQN-0",
+   "text": "조건 수정",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQP-0",
+   "text": "차트로 보기",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C06 · 탐색 — 순위와 상세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQV-0",
+   "text": "KODEX 200",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQW-0",
+   "text": "069500 · ETF · 09:42 기준",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IQX-0",
+   "text": "48,360원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IR0-0",
+   "text": "ETF",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IR2-0",
+   "text": "ELW",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IR4-0",
+   "text": "금현물",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IR8-0",
+   "text": "NAV",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IR9-0",
+   "text": "48,318원",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IRB-0",
+   "text": "괴리율",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IRC-0",
+   "text": "+0.09%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IRE-0",
+   "text": "추적오차",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IRF-0",
+   "text": "0.18%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IRI-0",
+   "text": "최근 1개월",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IRJ-0",
+   "text": "+3.2%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IRY-0",
+   "text": "구성 종목",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IRZ-0",
+   "text": "비중",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IS0-0",
+   "text": "기여도",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IS2-0",
+   "text": "삼성전자",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IS3-0",
+   "text": "27.4%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IS4-0",
+   "text": "+0.82%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IS6-0",
+   "text": "SK하이닉스",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IS7-0",
+   "text": "9.8%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1IS8-0",
+   "text": "+0.41%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ISA-0",
+   "text": "현대차",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ISB-0",
+   "text": "3.2%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ISC-0",
+   "text": "−0.08%",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ISE-0",
+   "text": "분배금 과세 기준",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1ISF-0",
+   "text": "배당소득세 적용",
+   "path": [
+    "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+    "Narrow desktop screens",
+    "C07 · 상품 — ETF 상세",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1IG2-0",
+   "name": "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+   "component": "Frame",
+   "w": 1760,
+   "h": 980,
+   "depth": 0
+  },
+  {
+   "id": "1IJF-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 1
+  },
+  {
+   "id": "1IJG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1IJL-0",
+   "name": "Narrow desktop screens",
+   "component": "Frame",
+   "w": 0,
+   "h": 844,
+   "depth": 1
+  },
+  {
+   "id": "1IL4-0",
+   "name": "C04 · 계좌 — 보유종목",
+   "component": "Frame",
+   "w": 390,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1IL5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1IL6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IL7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ILA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ILC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1ILD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ILF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ILH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ILJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ILL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ILN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1ILO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1ILP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ILS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ILV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1ILW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ILZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "1IM0-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1IM2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IM1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IM6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IMA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IME-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IMI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IMM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IMN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IMQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IMT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IMW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1VGW-1",
+   "name": "List Footer · Complete",
+   "component": "Frame",
+   "w": 388,
+   "h": 34,
+   "depth": 3
+  },
+  {
+   "id": "1IN3-0",
+   "name": "C05 · 수급 — 투자자",
+   "component": "Frame",
+   "w": 390,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1IN4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1IN5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IN6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IN9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1INB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1INC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1INE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ING-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1INI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1INK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1INM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1INN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1INO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1INR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1INU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1INW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 112,
+   "depth": 5
+  },
+  {
+   "id": "1INX-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 46,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "1INY-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 46,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "1INZ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 46,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "1IO0-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 46,
+   "h": 78,
+   "depth": 6
+  },
+  {
+   "id": "1IO1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 46,
+   "h": 96,
+   "depth": 6
+  },
+  {
+   "id": "1IO2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IO8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IO9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IOD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IOH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IOL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IOV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1IOY-0",
+   "name": "C06 · 탐색 — 순위와 상세",
+   "component": "Frame",
+   "w": 390,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1IOZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1IP0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IP3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IP4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IP6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IP8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IPA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1IPC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IPB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IPH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IPM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IPR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IPW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IQ1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IQ2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IQ3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1IQ7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IQ8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1IQB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1IQE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1VGZ-1",
+   "name": "List Footer · Collapsed",
+   "component": "Frame",
+   "w": 348,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "1VH1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "1IQL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1IQM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IQO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IQR-0",
+   "name": "C07 · 상품 — ETF 상세",
+   "component": "Frame",
+   "w": 390,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1IQS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1IQT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IQU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IQY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IQZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IR1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IR3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IR5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1IR6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IR7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IRA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IRD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IRG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IRH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33J7-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33J8-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33J9-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33JA-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33JB-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33JC-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33JD-0",
+   "name": "4.85만",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33JE-0",
+   "name": "4.77만",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33JF-0",
+   "name": "4.69만",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33JG-0",
+   "name": "8/01",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33JH-0",
+   "name": "8/14",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33JI-0",
+   "name": "8/31",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1IRW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1IRX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IS1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IS5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1IS9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1ISD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "좁은 데스크톱에서도 정보는 줄이지 않습니다": 1,
+  "계좌 · 수급 · 탐색 · 상품의 선택 본문을 390px Canvas 폭에 맞춰 재배치한 정본": 1,
+  "C04 — C07 · 390 × 844": 1,
+  "내 계좌": 1,
+  "주식 계좌 · 끝 4721 · 09:42 기준": 1,
+  "정상 연결": 1,
+  "자산": 1,
+  "보유종목": 1,
+  "예수금": 1,
+  "손익": 1,
+  "체결": 1,
+  "평가금액": 2,
+  "89,760,240원": 1,
+  "평가손익": 1,
+  "+4,240,900원": 1,
+  "주식 71.6%": 1,
+  "현금 28.4%": 1,
+  "종목": 2,
+  "손익률": 1,
+  "삼성전자 005930": 1,
+  "45,255,000": 1,
+  "+8.4%": 1,
+  "SK하이닉스 000660": 1,
+  "21,450,000": 1,
+  "+5.1%": 1,
+  "KODEX 200": 2,
+  "12,880,000": 1,
+  "−1.2%": 1,
+  "LG에너지솔루션": 1,
+  "10,175,240": 1,
+  "+2.0%": 1,
+  "삼성전자 상세": 1,
+  "300주": 2,
+  "평균 매입가": 1,
+  "139,020원": 1,
+  "현재가": 1,
+  "150,850원": 2,
+  "주문 가능": 1,
+  "전체 8종목 표시": 1,
+  "삼성전자 수급": 1,
+  "005930 · 2026-08-31 장중": 1,
+  "09:42 갱신": 1,
+  "프로그램": 1,
+  "투자자": 1,
+  "거래원": 1,
+  "신용": 1,
+  "대차": 1,
+  "외국인 순매수": 1,
+  "+382억원": 2,
+  "기관 순매도": 1,
+  "−144억원": 2,
+  "최근 5거래일 순매수": 1,
+  "8/25": 1,
+  "8/26": 1,
+  "8/27": 1,
+  "8/28": 1,
+  "8/31": 1,
+  "주체": 1,
+  "순매수": 1,
+  "연속일": 1,
+  "외국인": 1,
+  "3일": 1,
+  "기관": 1,
+  "1일": 1,
+  "개인": 1,
+  "−238억원": 1,
+  "2일": 1,
+  "현물 체결 기준 · 잠정 집계": 1,
+  "종목 찾기": 1,
+  "09:40 기준": 1,
+  "거래대금 상위": 1,
+  "PER 20배 이하": 1,
+  "KOSPI": 1,
+  "순위": 1,
+  "거래대금": 1,
+  "PER": 2,
+  "1": 1,
+  "삼성전자": 3,
+  "2.14조": 1,
+  "18.7": 1,
+  "2": 1,
+  "SK하이닉스": 2,
+  "0.94조": 1,
+  "14.2": 1,
+  "3": 1,
+  "현대차": 2,
+  "0.53조": 1,
+  "6.1": 1,
+  "4": 1,
+  "KB금융": 1,
+  "0.42조": 1,
+  "5.9": 1,
+  "005930 · 반도체": 1,
+  "18.7배": 1,
+  "PBR": 1,
+  "1.42배": 1,
+  "ROE": 1,
+  "8.4%": 1,
+  "상위 10개 표시 · 전체 48종목": 1,
+  "더보기": 1,
+  "조건 수정": 1,
+  "차트로 보기": 1,
+  "069500 · ETF · 09:42 기준": 1,
+  "48,360원": 1,
+  "ETF": 1,
+  "ELW": 1,
+  "금현물": 1,
+  "NAV": 1,
+  "48,318원": 1,
+  "괴리율": 1,
+  "+0.09%": 1,
+  "추적오차": 1,
+  "0.18%": 1,
+  "최근 1개월": 1,
+  "+3.2%": 1,
+  "구성 종목": 1,
+  "비중": 1,
+  "기여도": 1,
+  "27.4%": 1,
+  "+0.82%": 1,
+  "9.8%": 1,
+  "+0.41%": 1,
+  "3.2%": 1,
+  "−0.08%": 1,
+  "분배금 과세 기준": 1,
+  "배당소득세 적용": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "2323aff2b828ce6bd0fe9b6076e62567b25908875f1d60458c92330696fb0d3d"
+}

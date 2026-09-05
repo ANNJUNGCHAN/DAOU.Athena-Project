@@ -1,0 +1,360 @@
+Frame "CC-05 / R03-T1 · 수급 — 투자자별" (2QFO-2) 1440×1109
+  Frame "Flow Card Surface" (2QFP-2) 1360×1029
+    Frame "Flow Header" (2QFR-2) 0×0
+      Frame "Frame" (2QFS-2) 0×0
+        Frame "Frame" (2QFT-2) 0×0
+          Text "삼성전자 수급" (2QFU-2) 0×0 "삼성전자 수급"
+          Frame "Frame" (2QFV-2) 0×0
+            Rectangle "Rectangle" (2QFW-2) 6×6
+            Text "실시간" (2QFX-2) 0×0 "실시간"
+        Text "005930 · KOSPI · 장중" (2QFY-2) 0×0 "005930 · KOSPI · 장중"
+      Frame "Flow Tabs" (2QFZ-2) 0×0
+        Frame "Frame" (2QG0-2) 0×0
+          Text "투자자별" (2QG1-2) 0×0 "투자자별"
+        Frame "Frame" (2QG2-2) 0×0
+          Text "거래원" (2QG3-2) 0×0 "거래원"
+        Frame "Frame" (2QG4-2) 0×0
+          Text "프로그램" (2QG5-2) 0×0 "프로그램"
+        Frame "Frame" (2QG6-2) 0×0
+          Text "신용·대차" (2QG7-2) 0×0 "신용·대차"
+        Frame "Frame" (2QG8-2) 0×0
+          Text "종목 동향" (2QG9-2) 0×0 "종목 동향"
+        Frame "Frame" (2WFM-0) 0×0
+          Text "순위" (2WFN-0) 0×0 "순위"
+    Frame "Flow Summary Strip" (2QGB-2) 0×0
+      Frame "Hero · 순매수 1위" (2QGC-2) 0×0
+        Text "오늘 순매수 1위" (2QGD-2) 0×0 "오늘 순매수 1위"
+        Frame "Frame" (2QGE-2) 0×0
+          Text "외국인" (2QGF-2) 0×0 "외국인"
+          Text "+1,842억원" (2QGG-2) 0×0 "+1,842억원"
+        Text "5거래일 연속 순매수 · 09:40 …" (2QGH-2) 0×0 "5거래일 연속 순매수 · 09:40 기준"
+      Frame "기관" (2QGI-2) 0×0
+        Text "기관" (2QGJ-2) 0×0 "기관"
+        Text "-1,204억원" (2QGK-2) 0×0 "-1,204억원"
+        Text "금융투자 -842억원" (2QGL-2) 0×0 "금융투자 -842억원"
+      Frame "개인" (2QGM-2) 0×0
+        Text "개인" (2QGN-2) 0×0 "개인"
+        Text "-638억원" (2QGO-2) 0×0 "-638억원"
+        Text "4거래일 연속 순매도" (2QGP-2) 0×0 "4거래일 연속 순매도"
+      Frame "프로그램" (2QGQ-2) 0×0
+        Text "프로그램 차익" (2QGR-2) 0×0 "프로그램 차익"
+        Text "+368억원" (2QGS-2) 0×0 "+368억원"
+        Text "비차익 +1,430억원" (2QGT-2) 0×0 "비차익 +1,430억원"
+      Frame "거래대금" (2QGU-2) 0×0
+        Text "거래대금" (2QGV-2) 0×0 "거래대금"
+        Text "2.14조원" (2QGW-2) 0×0 "2.14조원"
+        Text "거래량 1,420만주 · 체결강도 1…" (2QGX-2) 0×0 "거래량 1,420만주 · 체결강도 108.4"
+    Frame "Flow Workspace" (2QGZ-2) 0×742
+      Frame "Investor Panel" (2QH0-2) 880×742
+        Frame "Investor Table Head" (2QH3-2) 0×0
+          Frame "Frame" (2QH4-2) 0×0
+            Text "투자자별 순매수" (2QH5-2) 0×0 "투자자별 순매수"
+            Text "순매수 순 · 09:40 집계" (2QH6-2) 0×0 "순매수 순 · 09:40 집계"
+          Frame "투자자표 헤더" (3843-0) 0×0
+            Text "주체" (3844-0) 150×0 "주체"
+            Text "매도" (3845-0) 116×0 "매도"
+            Text "매수" (3846-0) 116×0 "매수"
+            Text "순매수" (3847-0) 130×0 "순매수"
+            Frame "Frame" (3848-0) 174×0
+              Text "비중" (3849-0) 48×0 "비중"
+            Text "5일 누적" (384A-0) 106×0 "5일 누적"
+        Frame "Investor Rows" (2QHG-2) 0×0
+          Frame "외국인" (3751-0) 0×47
+            Frame "Frame" (3752-0) 150×0
+              Text "외국인" (3753-0) 0×0 "외국인"
+              Text "5일 연속 매수" (3754-0) 0×0 "5일 연속 매수"
+            Text "2,366억원" (3755-0) 116×0 "2,366억원"
+            Text "4,208억원" (3756-0) 116×0 "4,208억원"
+            Frame "Frame" (3757-0) 130×0
+              Text "+1,842억원" (3758-0) 0×0 "+1,842억원"
+              Text "+122.1만주" (3759-0) 0×0 "+122.1만주"
+            Frame "Frame" (375A-0) 174×0
+              Text "44.0%" (375B-0) 48×0 "44.0%"
+              Frame "Frame" (375C-0) 100×0
+                Rectangle "Rectangle" (375D-0) 100×6
+            Text "+3,214억원" (375E-0) 106×0 "+3,214억원"
+          Frame "연기금 등" (376G-0) 0×47
+            Text "연기금 등" (376H-0) 150×0 "연기금 등"
+            Text "418억원" (376I-0) 116×0 "418억원"
+            Text "604억원" (376J-0) 116×0 "604억원"
+            Frame "Frame" (376K-0) 130×0
+              Text "+186억원" (376L-0) 0×0 "+186억원"
+              Text "+12.3만주" (376M-0) 0×0 "+12.3만주"
+            Frame "Frame" (376N-0) 174×0
+              Text "4.4%" (376O-0) 48×0 "4.4%"
+              Frame "Frame" (376P-0) 100×0
+                Rectangle "Rectangle" (376Q-0) 10×6
+            Text "+1,014억원" (376R-0) 106×0 "+1,014억원"
+          Frame "기타법인" (3789-0) 0×47
+            Text "기타법인" (378A-0) 150×0 "기타법인"
+            Text "246억원" (378B-0) 116×0 "246억원"
+            Text "312억원" (378C-0) 116×0 "312억원"
+            Frame "Frame" (378D-0) 130×0
+              Text "+66억원" (378E-0) 0×0 "+66억원"
+              Text "+4.4만주" (378F-0) 0×0 "+4.4만주"
+            Frame "Frame" (378G-0) 174×0
+              Text "1.6%" (378H-0) 48×0 "1.6%"
+              Frame "Frame" (378I-0) 100×0
+                Rectangle "Rectangle" (378J-0) 4×6
+            Text "+214억원" (378K-0) 106×0 "+214억원"
+          Frame "은행" (379E-0) 0×47
+            Text "은행" (379F-0) 150×0 "은행"
+            Text "110억원" (379G-0) 116×0 "110억원"
+            Text "86억원" (379H-0) 116×0 "86억원"
+            Frame "Frame" (379I-0) 130×0
+              Text "-24억원" (379J-0) 0×0 "-24억원"
+              Text "-1.6만주" (379K-0) 0×0 "-1.6만주"
+            Frame "Frame" (379L-0) 174×0
+              Text "0.6%" (379M-0) 48×0 "0.6%"
+              Frame "Frame" (379N-0) 100×0
+                Rectangle "Rectangle" (379O-0) 2×6
+            Text "-64억원" (379P-0) 106×0 "-64억원"
+          Frame "기타금융" (37AH-0) 0×47
+            Text "기타금융" (37AI-0) 150×0 "기타금융"
+            Text "102억원" (37AJ-0) 116×0 "102억원"
+            Text "64억원" (37AK-0) 116×0 "64억원"
+            Frame "Frame" (37AL-0) 130×0
+              Text "-38억원" (37AM-0) 0×0 "-38억원"
+              Text "-2.5만주" (37AN-0) 0×0 "-2.5만주"
+            Frame "Frame" (37AO-0) 174×0
+              Text "0.9%" (37AP-0) 48×0 "0.9%"
+              Frame "Frame" (37AQ-0) 100×0
+                Rectangle "Rectangle" (37AR-0) 2×6
+            Text "-92억원" (37AS-0) 106×0 "-92억원"
+          Frame "국가" (37CY-0) 0×47
+            Text "국가" (37CZ-0) 150×0 "국가"
+            Text "82억원" (37D0-0) 116×0 "82억원"
+            Text "38억원" (37D1-0) 116×0 "38억원"
+            Frame "Frame" (37D2-0) 130×0
+              Text "-44억원" (37D3-0) 0×0 "-44억원"
+              Text "-2.9만주" (37D4-0) 0×0 "-2.9만주"
+            Frame "Frame" (37D5-0) 174×0
+              Text "1.0%" (37D6-0) 48×0 "1.0%"
+              Frame "Frame" (37D7-0) 100×0
+                Rectangle "Rectangle" (37D8-0) 2×6
+            Text "-118억원" (37D9-0) 106×0 "-118억원"
+          Frame "내외국인" (37DN-0) 0×47
+            Text "내외국인" (37DO-0) 150×0 "내외국인"
+            Text "120억원" (37DP-0) 116×0 "120억원"
+            Text "54억원" (37DQ-0) 116×0 "54억원"
+            Frame "Frame" (37DR-0) 130×0
+              Text "-66억원" (37DS-0) 0×0 "-66억원"
+              Text "-4.4만주" (37DT-0) 0×0 "-4.4만주"
+            Frame "Frame" (37DU-0) 174×0
+              Text "1.6%" (37DV-0) 48×0 "1.6%"
+              Frame "Frame" (37DW-0) 100×0
+                Rectangle "Rectangle" (37DX-0) 4×6
+            Text "-280억원" (37DY-0) 106×0 "-280억원"
+          Frame "보험" (37E5-0) 0×47
+            Text "보험" (37E6-0) 150×0 "보험"
+            Text "310억원" (37E7-0) 116×0 "310억원"
+            Text "214억원" (37E8-0) 116×0 "214억원"
+            Frame "Frame" (37E9-0) 130×0
+              Text "-96억원" (37EA-0) 0×0 "-96억원"
+              Text "-6.4만주" (37EB-0) 0×0 "-6.4만주"
+            Frame "Frame" (37EC-0) 174×0
+              Text "2.3%" (37ED-0) 48×0 "2.3%"
+              Frame "Frame" (37EE-0) 100×0
+                Rectangle "Rectangle" (37EF-0) 5×6
+            Text "-286억원" (37EG-0) 106×0 "-286억원"
+          Frame "사모펀드" (37EH-0) 0×47
+            Text "사모펀드" (37EI-0) 150×0 "사모펀드"
+            Text "310억원" (37EJ-0) 116×0 "310억원"
+            Text "168억원" (37EK-0) 116×0 "168억원"
+            Frame "Frame" (37EL-0) 130×0
+              Text "-142억원" (37EM-0) 0×0 "-142억원"
+              Text "-9.4만주" (37EN-0) 0×0 "-9.4만주"
+            Frame "Frame" (37EO-0) 174×0
+              Text "3.4%" (37EP-0) 48×0 "3.4%"
+              Frame "Frame" (37EQ-0) 100×0
+                Rectangle "Rectangle" (37ER-0) 8×6
+            Text "-286억원" (37ES-0) 106×0 "-286억원"
+          Frame "투신" (37JP-0) 0×47
+            Text "투신" (37JQ-0) 150×0 "투신"
+            Text "590억원" (37JR-0) 116×0 "590억원"
+            Text "386억원" (37JS-0) 116×0 "386억원"
+            Frame "Frame" (37JT-0) 130×0
+              Text "-204억원" (37JU-0) 0×0 "-204억원"
+              Text "-13.5만주" (37JV-0) 0×0 "-13.5만주"
+            Frame "Frame" (37JW-0) 174×0
+              Text "4.9%" (37JX-0) 48×0 "4.9%"
+              Frame "Frame" (37JY-0) 100×0
+                Rectangle "Rectangle" (37JZ-0) 11×6
+            Text "-524억원" (37K0-0) 106×0 "-524억원"
+          Frame "개인" (37K1-0) 0×47
+            Frame "Frame" (37K2-0) 150×0
+              Text "개인" (37K3-0) 0×0 "개인"
+              Text "4일 연속 매도" (37K4-0) 0×0 "4일 연속 매도"
+            Text "4,480억원" (37K5-0) 116×0 "4,480억원"
+            Text "3,842억원" (37K6-0) 116×0 "3,842억원"
+            Frame "Frame" (37K7-0) 130×0
+              Text "-638억원" (37K8-0) 0×0 "-638억원"
+              Text "-42.3만주" (37K9-0) 0×0 "-42.3만주"
+            Frame "Frame" (37KA-0) 174×0
+              Text "15.2%" (37KB-0) 48×0 "15.2%"
+              Frame "Frame" (37KC-0) 100×0
+                Rectangle "Rectangle" (37KD-0) 35×6
+            Text "-1,306억원" (37KE-0) 106×0 "-1,306억원"
+          Frame "금융투자" (37O6-0) 0×47
+            Text "금융투자" (37O7-0) 150×0 "금융투자"
+            Text "1,946억원" (37O8-0) 116×0 "1,946억원"
+            Text "1,104억원" (37O9-0) 116×0 "1,104억원"
+            Frame "Frame" (37OA-0) 130×0
+              Text "-842억원" (37OB-0) 0×0 "-842억원"
+              Text "-55.8만주" (37OC-0) 0×0 "-55.8만주"
+            Frame "Frame" (37OD-0) 174×0
+              Text "20.1%" (37OE-0) 48×0 "20.1%"
+              Frame "Frame" (37OF-0) 100×0
+                Rectangle "Rectangle" (37OG-0) 46×6
+            Text "-1,486억원" (37OH-0) 106×0 "-1,486억원"
+          Frame "기관계 소계" (37OI-0) 0×47
+            Frame "Frame" (37OJ-0) 150×0
+              Text "기관계" (37OK-0) 0×0 "기관계"
+              Text "소계 · 8개 주체" (37OL-0) 0×0 "소계 · 8개 주체"
+            Text "3,868억원" (37OM-0) 116×0 "3,868억원"
+            Text "2,664억원" (37ON-0) 116×0 "2,664억원"
+            Frame "Frame" (37OO-0) 130×0
+              Text "-1,204억원" (37OP-0) 0×0 "-1,204억원"
+              Text "-79.8만주" (37OQ-0) 0×0 "-79.8만주"
+            Frame "Frame" (37OR-0) 174×0
+              Text "28.8%" (37OS-0) 48×0 "28.8%"
+              Frame "Frame" (37OT-0) 100×0
+                Rectangle "Rectangle" (37OU-0) 65×6
+            Text "-1,842억원" (37OV-0) 106×0 "-1,842억원"
+        Frame "투자자표 상태" (37U7-0) 0×0
+          Text "12개 주체 · 기관계 소계 포함 ·…" (37U8-0) 0×0 "12개 주체 · 기관계 소계 포함 · 잠정 09:40 집계 · 확정 18:00 반영"
+      Frame "Side Panel" (2QH1-2) 0×742
+        Frame "Broker Block" (2QIY-2) 0×0
+          Frame "Frame" (2QIZ-2) 0×0
+            Text "거래원" (2QJ0-2) 0×0 "거래원"
+            Text "오늘 상위 5" (2QJ1-2) 0×0 "오늘 상위 5"
+          Frame "Frame" (2QJ2-2) 0×0
+            Frame "Frame" (2QJ3-2) 0×0
+              Text "매수 상위" (2QJ4-2) 0×0 "매수 상위"
+              Frame "Frame" (2QJ5-2) 0×0
+                Text "모건스탠리" (2QJ6-2) 0×0 "모건스탠리"
+                Text "+842억원" (2QJ7-2) 0×0 "+842억원"
+              Frame "Frame" (2QJ8-2) 0×0
+                Text "JP모간" (2QJ9-2) 0×0 "JP모간"
+                Text "+516억원" (2QJA-2) 0×0 "+516억원"
+              Frame "Frame" (2QJB-2) 0×0
+                Text "CS증권" (2QJC-2) 0×0 "CS증권"
+                Text "+308억원" (2QJD-2) 0×0 "+308억원"
+            Rectangle "Rectangle" (2QJE-2) 1×0
+            Frame "Frame" (2QJF-2) 0×0
+              Text "매도 상위" (2QJG-2) 0×0 "매도 상위"
+              Frame "Frame" (2QJH-2) 0×0
+                Text "키움증권" (2QJI-2) 0×0 "키움증권"
+                Text "-604억원" (2QJJ-2) 0×0 "-604억원"
+              Frame "Frame" (2QJK-2) 0×0
+                Text "미래에셋" (2QJL-2) 0×0 "미래에셋"
+                Text "-428억원" (2QJM-2) 0×0 "-428억원"
+              Frame "Frame" (2QJN-2) 0×0
+                Text "삼성증권" (2QJO-2) 0×0 "삼성증권"
+                Text "-312억원" (2QJP-2) 0×0 "-312억원"
+        Frame "Credit Block" (2QJR-2) 0×0
+          Frame "Frame" (2QJS-2) 0×0
+            Text "신용·대차·공매도" (2QJT-2) 0×0 "신용·대차·공매도"
+            Text "전일 종가 기준" (2QJU-2) 0×0 "전일 종가 기준"
+          Frame "Frame" (2QJV-2) 0×0
+            Text "공매도 비중" (2QJW-2) 0×0 "공매도 비중"
+            Text "3.42%" (2QJX-2) 0×0 "3.42%"
+          Frame "Frame" (2QJY-2) 0×0
+            Text "대차잔고" (2QJZ-2) 0×0 "대차잔고"
+            Text "1,284만주" (2QK0-2) 0×0 "1,284만주"
+          Frame "Frame" (2QK1-2) 0×0
+            Text "신용융자 잔고" (2QK2-2) 0×0 "신용융자 잔고"
+            Text "4,208억원" (2QK3-2) 0×0 "4,208억원"
+          Frame "Frame" (2QK4-2) 0×0
+            Text "신용잔고율" (2QK5-2) 0×0 "신용잔고율"
+            Text "0.86%" (2QK6-2) 0×0 "0.86%"
+        Frame "Program Block" (2QK7-2) 0×0
+          Frame "Frame" (2QK8-2) 0×0
+            Text "프로그램 매매" (2QK9-2) 0×0 "프로그램 매매"
+            Text "시간대별" (2QKA-2) 0×0 "시간대별"
+          Frame "Frame" (2QKB-2) 0×0
+            Text "차익 순매수" (2QKC-2) 0×0 "차익 순매수"
+            Text "+368억원" (2QKD-2) 0×0 "+368억원"
+          Frame "Frame" (2QKE-2) 0×0
+            Text "비차익 순매수" (2QKF-2) 0×0 "비차익 순매수"
+            Text "+1,430억원" (2QKG-2) 0×0 "+1,430억원"
+          Frame "Frame" (2QKH-2) 0×0
+            Text "차익잔고" (2QKI-2) 0×0 "차익잔고"
+            Text "8,640억원" (2QKJ-2) 0×0 "8,640억원"
+        Frame "시간대별 순매수" (3S2W-0) 0×0
+          Frame "헤더" (3S2X-0) 0×0
+            Text "시간대별 순매수" (3S2Y-0) 0×0 "시간대별 순매수"
+            Text "5분 단위 · 09:40 기준" (3S2Z-0) 0×0 "5분 단위 · 09:40 기준"
+          Frame "다이버징 3행" (3S30-0) 0×0
+            Frame "외국인 행" (3S31-0) 0×0
+              Text "외국인" (3S32-0) 40×0 "외국인"
+              Frame "Frame" (3S33-0) 0×0
+                Frame "Frame" (3S34-0) 0×34
+                  Frame "Frame" (3S35-0) 0×0
+                    Rectangle "Rectangle" (3S36-0) 16×34
+                  Frame "Frame" (3S37-0) 0×0
+                    Rectangle "Rectangle" (3S38-0) 16×26
+                  Frame "Frame" (3S39-0) 0×0
+                    Rectangle "Rectangle" (3S3A-0) 16×17
+                  Frame "Frame" (3S3B-0) 0×0
+                    Rectangle "Rectangle" (3S3C-0) 16×20
+                  Frame "Frame" (3S3D-0) 0×0
+                    Rectangle "Rectangle" (3S3E-0) 16×17
+                  Frame "Frame" (3S3F-0) 0×0
+                    Rectangle "Rectangle" (3S3G-0) 16×8
+                Rectangle "Rectangle" (3S3H-0) 0×1
+                Rectangle "Rectangle" (3S3I-0) 0×34
+              Text "+1,842억원" (3S3J-0) 76×0 "+1,842억원"
+            Frame "기관 행" (3S3K-0) 0×0
+              Text "기관" (3S3L-0) 40×0 "기관"
+              Frame "Frame" (3S3M-0) 0×0
+                Rectangle "Rectangle" (3S3N-0) 0×34
+                Rectangle "Rectangle" (3S3O-0) 0×1
+                Frame "Frame" (3S3P-0) 0×34
+                  Frame "Frame" (3S3Q-0) 0×0
+                    Rectangle "Rectangle" (3S3R-0) 16×23
+                  Frame "Frame" (3S3S-0) 0×0
+                    Rectangle "Rectangle" (3S3T-0) 16×17
+                  Frame "Frame" (3S3U-0) 0×0
+                    Rectangle "Rectangle" (3S3V-0) 16×11
+                  Frame "Frame" (3S3W-0) 0×0
+                    Rectangle "Rectangle" (3S3X-0) 16×11
+                  Frame "Frame" (3S3Y-0) 0×0
+                    Rectangle "Rectangle" (3S3Z-0) 16×11
+                  Frame "Frame" (3S40-0) 0×0
+                    Rectangle "Rectangle" (3S41-0) 16×6
+              Text "-1,204억원" (3S42-0) 76×0 "-1,204억원"
+            Frame "개인 행" (3S43-0) 0×0
+              Text "개인" (3S44-0) 40×0 "개인"
+              Frame "Frame" (3S45-0) 0×0
+                Rectangle "Rectangle" (3S46-0) 0×34
+                Rectangle "Rectangle" (3S47-0) 0×1
+                Frame "Frame" (3S48-0) 0×34
+                  Frame "Frame" (3S49-0) 0×0
+                    Rectangle "Rectangle" (3S4A-0) 16×11
+                  Frame "Frame" (3S4B-0) 0×0
+                    Rectangle "Rectangle" (3S4C-0) 16×8
+                  Frame "Frame" (3S4D-0) 0×0
+                    Rectangle "Rectangle" (3S4E-0) 16×5
+                  Frame "Frame" (3S4F-0) 0×0
+                    Rectangle "Rectangle" (3S4G-0) 16×8
+                  Frame "Frame" (3S4H-0) 0×0
+                    Rectangle "Rectangle" (3S4I-0) 16×5
+                  Frame "Frame" (3S4J-0) 0×0
+                    Rectangle "Rectangle" (3S4K-0) 16×5
+              Text "-638억원" (3S4L-0) 76×0 "-638억원"
+          Frame "시각 축" (3S4M-0) 0×0
+            Rectangle "Rectangle" (3S4N-0) 40×0
+            Frame "Frame" (3S4O-0) 0×0
+              Text "09:15" (3S4P-0) 0×0 "09:15"
+              Text "09:20" (3S4Q-0) 0×0 "09:20"
+              Text "09:25" (3S4R-0) 0×0 "09:25"
+              Text "09:30" (3S4S-0) 0×0 "09:30"
+              Text "09:35" (3S4T-0) 0×0 "09:35"
+              Text "09:40" (3S4U-0) 0×0 "09:40"
+            Rectangle "Rectangle" (3S4V-0) 76×0
+    Frame "Flow Status Footer" (2QKL-2) 0×0
+      Frame "Frame" (2QKM-2) 0×0
+        Rectangle "Rectangle" (2QKN-2) 6×6
+        Text "장중 실시간 · 투자자·거래원 집계 …" (2QKO-2) 0×0 "장중 실시간 · 투자자·거래원 집계 갱신 중"
+      Text "수급 전체 항목 보기" (2QKP-2) 0×0 "수급 전체 항목 보기"

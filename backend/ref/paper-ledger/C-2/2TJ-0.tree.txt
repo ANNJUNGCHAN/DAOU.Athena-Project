@@ -1,0 +1,108 @@
+Frame "02 · 키우미 — 표정 10종" (2TJ-0) 1000×540
+  Frame "설명" (2TK-0) 0×0
+    Text "표정 10종은 눈 모양과 시선만으로 …" (2TL-0) 0×0 "표정 10종은 눈 모양과 시선만으로 만든다"
+    Text "바이저 색·헬멧·링은 고정하고 흰 도…" (2TM-0) 0×0 "바이저 색·헬멧·링은 고정하고 흰 도형만 바꾼다. 앱이 가진 신호 상태 14가지는 전부 이 10종 안으로 들"
+  Frame "표정 1행" (2TN-0) 0×0
+    Frame "① 기본 — 대기·듣는 중·경계" (2TQ-0) 164×0
+      Frame "Frame" (2TR-0) 76×76
+        Frame "Frame" (2TS-0) 62×61
+          SVG "SVG" (2TT-0) 0×0
+            SVGVisualElement "Rect" (2TU-0) 0×0
+            SVGVisualElement "Rect" (2TV-0) 0×0
+        Rectangle "Rectangle" (2TW-0) 78×78
+      Frame "Frame" (2TX-0) 0×0
+        Text "기본" (2TY-0) 0×0 "기본"
+        Text "대기 · 듣는 중 · 경계" (2TZ-0) 0×0 "대기 · 듣는 중 · 경계"
+    Frame "② 웃음 — 작업 완료" (2U0-0) 164×0
+      Frame "Frame" (2U1-0) 76×76
+        Frame "Frame" (2U2-0) 62×61
+          SVG "SVG" (2U3-0) 0×0
+            SVGVisualElement "Path" (2U4-0) 0×0
+            SVGVisualElement "Path" (2U5-0) 0×0
+        Rectangle "Rectangle" (2U6-0) 78×78
+      Frame "Frame" (2U7-0) 0×0
+        Text "웃음" (2U8-0) 0×0 "웃음"
+        Text "요청한 일이 끝남" (2U9-0) 0×0 "요청한 일이 끝남"
+    Frame "③ 윙크 — 승인됨" (2UA-0) 164×0
+      Frame "Frame" (2UB-0) 76×76
+        Frame "Frame" (2UC-0) 62×61
+          SVG "SVG" (2X4-0) 0×0
+            SVGVisualElement "Rect" (2X5-0) 0×0
+            SVGVisualElement "Path" (2X6-0) 0×0
+        Rectangle "Rectangle" (2UG-0) 78×78
+      Frame "Frame" (2UH-0) 0×0
+        Text "윙크" (2UI-0) 0×0 "윙크"
+        Text "승인 반영됨" (2UJ-0) 0×0 "승인 반영됨"
+    Frame "④ 즐거움 — 목표 달성" (2UK-0) 164×0
+      Frame "Frame" (2UL-0) 76×76
+        Frame "Frame" (2UM-0) 62×61
+          SVG "SVG" (2UN-0) 0×0
+            SVGVisualElement "Path" (2UO-0) 0×0
+            SVGVisualElement "Path" (2UP-0) 0×0
+        Rectangle "Rectangle" (2US-0) 78×78
+      Frame "Frame" (2UT-0) 0×0
+        Text "즐거움" (2UU-0) 0×0 "즐거움"
+        Text "목표가 도달" (2UV-0) 0×0 "목표가 도달"
+    Frame "⑤ 놀람 — 발화·급변" (2UW-0) 164×0
+      Frame "Frame" (2UX-0) 76×76
+        Frame "Frame" (2UY-0) 62×61
+          SVG "SVG" (2UZ-0) 0×0
+            SVGVisualElement "Circle" (2V0-0) 0×0
+            SVGVisualElement "Circle" (2V1-0) 0×0
+        Rectangle "Rectangle" (2V2-0) 78×78
+      Frame "Frame" (2V3-0) 0×0
+        Text "놀람" (2V4-0) 0×0 "놀람"
+        Text "발화 · 변동성 급등" (2V5-0) 0×0 "발화 · 변동성 급등"
+  Frame "표정 2행" (2TO-0) 0×0
+    Frame "⑥ 찡그림 — 오류·연결 끊김" (2V7-0) 164×0
+      Frame "Frame" (2V8-0) 76×76
+        Frame "Frame" (2V9-0) 62×61
+          SVG "SVG" (2VA-0) 0×0
+            SVGVisualElement "Path" (2VB-0) 0×0
+            SVGVisualElement "Path" (2VC-0) 0×0
+        Rectangle "Rectangle" (2VD-0) 78×78
+        Rectangle "Rectangle" (2VE-0) 16×16
+      Frame "Frame" (2VF-0) 0×0
+        Text "찡그림" (2VG-0) 0×0 "찡그림"
+        Text "호출 실패 · 연결 끊김" (2VH-0) 0×0 "호출 실패 · 연결 끊김"
+    Frame "⑦ 우는 — 감시 복원 실패" (2VI-0) 164×0
+      Frame "Frame" (2VJ-0) 76×76
+        Frame "Frame" (2VK-0) 62×61
+          SVG "SVG" (2QCO-2) 0×0
+            SVGVisualElement "Rect" (2QCP-2) 0×0
+            SVGVisualElement "Rect" (2QCQ-2) 0×0
+            SVGVisualElement "Path" (2QCR-2) 0×0
+        Rectangle "Rectangle" (2VP-0) 78×78
+      Frame "Frame" (2VQ-0) 0×0
+        Text "우는" (2VR-0) 0×0 "우는"
+        Text "감시 복원 실패" (2VS-0) 0×0 "감시 복원 실패"
+    Frame "⑧ 시무룩 — 루틴 만료" (2VT-0) 164×0
+      Frame "Frame" (2VU-0) 76×76
+        Frame "Frame" (2VV-0) 62×61
+          SVG "SVG" (2QE2-2) 0×0
+            SVGVisualElement "Rect" (2QE3-2) 0×0
+            SVGVisualElement "Rect" (2QE4-2) 0×0
+        Rectangle "Rectangle" (2W1-0) 78×78
+      Frame "Frame" (2W2-0) 0×0
+        Text "시무룩" (2W3-0) 0×0 "시무룩"
+        Text "루틴 만료로 종료" (2W4-0) 0×0 "루틴 만료로 종료"
+    Frame "⑨ 졸림 — 잠듦·장 마감" (2W5-0) 164×0
+      Frame "Frame" (2W6-0) 76×76
+        Frame "Frame" (2W7-0) 62×61
+          SVG "SVG" (2W8-0) 0×0
+            SVGVisualElement "Rect" (2W9-0) 0×0
+            SVGVisualElement "Rect" (2WA-0) 0×0
+        Rectangle "Rectangle" (2WB-0) 78×78
+      Frame "Frame" (2WC-0) 0×0
+        Text "졸림" (2WD-0) 0×0 "졸림"
+        Text "잠듦 · 장 마감" (2WE-0) 0×0 "잠듦 · 장 마감"
+    Frame "⑩ 생각 중 — 판단" (2WF-0) 164×0
+      Frame "Frame" (2WG-0) 76×76
+        Frame "Frame" (2WH-0) 62×61
+          SVG "SVG" (2QCX-2) 0×0
+            SVGVisualElement "Rect" (2QCY-2) 0×0
+            SVGVisualElement "Rect" (2QCZ-2) 0×0
+        Rectangle "Rectangle" (2WO-0) 78×78
+      Frame "Frame" (2WP-0) 0×0
+        Text "생각 중" (2WQ-0) 0×0 "생각 중"
+        Text "판단 · 호출 중 — 모양은 기본, …" (2WR-0) 0×0 "판단 · 호출 중 — 모양은 기본, 시선이 위를 훑는다"

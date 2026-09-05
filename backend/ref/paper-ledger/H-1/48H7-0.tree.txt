@@ -1,0 +1,35 @@
+Frame "mini/CC-01 / R10-T2-X3 · 거래내역 상세" (48H7-0) 360×420
+  Frame "Header" (48I1-0) 0×0
+    Frame "Meta row" (48I3-0) 0×0
+      Text "Eyebrow" (48I5-0) 0×0
+      Text "As of" (48I4-0) 0×0 "기준 09:42"
+    Text "Title" (48I2-0) 0×0 "거래내역 상세"
+  Frame "Body" (48HA-0) 0×0
+    Frame "KPI band" (48HR-0) 0×0
+      Frame "Frame" (48HY-0) 0×0
+        Text "종목별계좌평가현황" (48I0-0) 0×0 "종목별계좌평가현황"
+        Text "8종목" (48HZ-0) 0×0 "8종목"
+      Frame "Frame" (48HV-0) 0×0
+        Text "매수비중" (48HX-0) 0×0 "매수비중"
+        Text "28.0%" (48HW-0) 0×0 "28.0%"
+      Frame "Frame" (48HS-0) 0×0
+        Text "Text" (48HU-0) 0×0
+        Text "Text" (48HT-0) 0×0
+    Frame "Table header" (48HN-0) 0×0
+      Text "항목" (48HQ-0) 0×0 "항목"
+      Text "값" (48HP-0) 0×0 "값"
+      Text "비고" (48HO-0) 72×0 "비고"
+    Frame "Position 1" (48HH-0) 0×0
+      Frame "Frame" (48HK-0) 0×0
+        Text "거래일자" (48HM-0) 0×0 "거래일자"
+        Text "Text" (48HL-0) 0×0
+      Text "08/26" (48HJ-0) 0×0 "08/26"
+      Text "Text" (48HI-0) 72×0
+    Frame "Position 2" (48HB-0) 0×0
+      Frame "Frame" (48HE-0) 0×0
+        Text "유가금잔" (48HG-0) 0×0 "유가금잔"
+        Text "Text" (48HF-0) 0×0
+      Text "122,364,140" (48HD-0) 0×0 "122,364,140"
+      Text "Text" (48HC-0) 72×0
+  Frame "Fold note" (48H8-0) 0×0
+    Text "스칼라 2개, 행 7개 접힘 · 원본…" (48H9-0) 0×0 "스칼라 2개, 행 7개 접힘 · 원본에서 확인"

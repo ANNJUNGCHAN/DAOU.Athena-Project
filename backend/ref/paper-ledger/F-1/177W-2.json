@@ -1,0 +1,1437 @@
+{
+ "board_id": "177W-2",
+ "page": "F-1",
+ "page_name": "증명",
+ "name": "CC-04 / R02-B · 시간외·통합·금현물 호가",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "177Z-2",
+   "text": "삼성전자 호가를 시장별로 보여줘",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1780-2",
+   "text": "정규장·통합·시간외·금현물 데이터를 같은 래더 문법으로 읽습니다.",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1784-2",
+   "text": "실시간 등록",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1786-2",
+   "text": "위 매도 · 아래 매수",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "178E-2",
+   "text": "정규장",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "178G-2",
+   "text": "통합호가",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "178I-2",
+   "text": "시간외",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "178K-2",
+   "text": "금현물",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "178L-2",
+   "text": "10단 · 정규장+거래소 통합",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame"
+   ]
+  },
+  {
+   "id": "178O-2",
+   "text": "삼성전자 005930",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "178P-2",
+   "text": "KOSPI · 통합 예상체결 포함",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "178R-2",
+   "text": "150,850원",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "178S-2",
+   "text": "+2.35%",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "178V-2",
+   "text": "42,510",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "178W-2",
+   "text": "151,100",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1790-2",
+   "text": "38,440",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1791-2",
+   "text": "151,050",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1795-2",
+   "text": "31,280",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1796-2",
+   "text": "151,000",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "179A-2",
+   "text": "24,950",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "179B-2",
+   "text": "150,950",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "179F-2",
+   "text": "56,320",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "179G-2",
+   "text": "150,900",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "179K-2",
+   "text": "예상 체결",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "179L-2",
+   "text": "150,850원",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "179M-2",
+   "text": "127,540주",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "179Q-2",
+   "text": "150,800",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "179R-2",
+   "text": "61,780",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "179V-2",
+   "text": "150,750",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "179W-2",
+   "text": "34,210",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17A0-2",
+   "text": "150,700",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17A1-2",
+   "text": "28,670",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17A5-2",
+   "text": "150,650",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17A6-2",
+   "text": "22,540",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AA-2",
+   "text": "150,600",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AB-2",
+   "text": "18,430",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BU-2",
+   "text": "총 매도 193,500주",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Orderbook Imbalance Summary",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BV-2",
+   "text": "총 매수 165,630주",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Orderbook Imbalance Summary",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BW-2",
+   "text": "매도비율 45.3%",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Unified Orderbook Ladder",
+    "Orderbook Imbalance Summary",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AF-2",
+   "text": "시장별 맥락",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AG-2",
+   "text": "14:31:08.214",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AJ-2",
+   "text": "시간외 단일가",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AK-2",
+   "text": "다음 체결 16:20",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AN-2",
+   "text": "예상가",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AO-2",
+   "text": "150,900원",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AQ-2",
+   "text": "예상 거래량",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AR-2",
+   "text": "82,140주",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AV-2",
+   "text": "매수비율 54.7%",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AW-2",
+   "text": "매도비율 45.3%",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17AZ-2",
+   "text": "KRX 금현물",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17B0-2",
+   "text": "g 단위",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17B3-2",
+   "text": "매도 1호가",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17B4-2",
+   "text": "128,470원",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17B5-2",
+   "text": "3,240g",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17B7-2",
+   "text": "매수 1호가",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17B8-2",
+   "text": "128,450원",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17B9-2",
+   "text": "4,120g",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BA-2",
+   "text": "체결강도 112.6 · LP회원사 키움증권",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BC-2",
+   "text": "최근 체결",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BE-2",
+   "text": "14:31:08",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BF-2",
+   "text": "150,850원",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BG-2",
+   "text": "320주",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BI-2",
+   "text": "14:31:07",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BJ-2",
+   "text": "150,800원",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BK-2",
+   "text": "180주",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BO-2",
+   "text": "실시간 연결됨",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "17BP-2",
+   "text": "재연결 시 마지막 정상값 유지",
+   "path": [
+    "CC-04 / R02-B · 시간외·통합·금현물 호가",
+    "Orderbook Mode Workspace",
+    "Orderbook Market Context",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "177W-2",
+   "name": "CC-04 / R02-B · 시간외·통합·금현물 호가",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "177X-2",
+   "name": "Orderbook Mode Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 1
+  },
+  {
+   "id": "177Y-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1781-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1782-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 3
+  },
+  {
+   "id": "1783-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 4
+  },
+  {
+   "id": "1785-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 3
+  },
+  {
+   "id": "1788-2",
+   "name": "Orderbook Mode Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "178A-2",
+   "name": "Unified Orderbook Ladder",
+   "component": "Frame",
+   "w": 800,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "178B-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "178C-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "178D-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "178F-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "178H-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "178J-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "178M-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "178N-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "178Q-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "178T-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "178U-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "178X-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "178Y-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "178Z-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "1792-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1793-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "1794-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "1797-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1798-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "1799-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "179C-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "179D-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "179E-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "179H-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "179I-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "179J-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "179N-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "179O-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "179P-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "179S-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "179T-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "179U-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "179X-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "179Y-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "179Z-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "17A2-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "17A3-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17A4-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "17A7-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "17A8-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17A9-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "17BR-2",
+   "name": "Orderbook Imbalance Summary",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17BS-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17BT-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17BX-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "17BY-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17BZ-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17AD-2",
+   "name": "Orderbook Market Context",
+   "component": "Frame",
+   "w": 492,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "17AE-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17AH-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17AI-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17AL-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17AM-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17AP-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17AS-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "17AT-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "17AU-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17AX-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17AY-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17B1-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17B2-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17B6-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "17BB-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17BD-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "17BH-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "17BL-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "17BM-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "17BN-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "삼성전자 호가를 시장별로 보여줘": 1,
+  "정규장·통합·시간외·금현물 데이터를 같은 래더 문법으로 읽습니다.": 1,
+  "실시간 등록": 1,
+  "위 매도 · 아래 매수": 1,
+  "정규장": 1,
+  "통합호가": 1,
+  "시간외": 1,
+  "금현물": 1,
+  "10단 · 정규장+거래소 통합": 1,
+  "삼성전자 005930": 1,
+  "KOSPI · 통합 예상체결 포함": 1,
+  "150,850원": 3,
+  "+2.35%": 1,
+  "42,510": 1,
+  "151,100": 1,
+  "38,440": 1,
+  "151,050": 1,
+  "31,280": 1,
+  "151,000": 1,
+  "24,950": 1,
+  "150,950": 1,
+  "56,320": 1,
+  "150,900": 1,
+  "예상 체결": 1,
+  "127,540주": 1,
+  "150,800": 1,
+  "61,780": 1,
+  "150,750": 1,
+  "34,210": 1,
+  "150,700": 1,
+  "28,670": 1,
+  "150,650": 1,
+  "22,540": 1,
+  "150,600": 1,
+  "18,430": 1,
+  "총 매도 193,500주": 1,
+  "총 매수 165,630주": 1,
+  "매도비율 45.3%": 2,
+  "시장별 맥락": 1,
+  "14:31:08.214": 1,
+  "시간외 단일가": 1,
+  "다음 체결 16:20": 1,
+  "예상가": 1,
+  "150,900원": 1,
+  "예상 거래량": 1,
+  "82,140주": 1,
+  "매수비율 54.7%": 1,
+  "KRX 금현물": 1,
+  "g 단위": 1,
+  "매도 1호가": 1,
+  "128,470원": 1,
+  "3,240g": 1,
+  "매수 1호가": 1,
+  "128,450원": 1,
+  "4,120g": 1,
+  "체결강도 112.6 · LP회원사 키움증권": 1,
+  "최근 체결": 1,
+  "14:31:08": 1,
+  "320주": 1,
+  "14:31:07": 1,
+  "150,800원": 1,
+  "180주": 1,
+  "실시간 연결됨": 1,
+  "재연결 시 마지막 정상값 유지": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a23d9eb4464dab4ca3982ff09bb5da1e50fa128f7ea3052e6aa3c14a115676bb"
+}

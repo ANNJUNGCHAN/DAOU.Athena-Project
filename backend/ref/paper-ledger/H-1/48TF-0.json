@@ -1,0 +1,92 @@
+{
+ "board_id": "48TF-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-04 / R02-T3 · 호가 — KRX 금현물",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48TH-0",
+   "text": "원본 보드: CC-04 / R02-T3 · 호가 — KRX 금현물",
+   "path": [
+    "note/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48TJ-0",
+   "text": "가져온 요소: 거래소구분 · 체결가 · 등락율",
+   "path": [
+    "note/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48TL-0",
+   "text": "문법: table",
+   "path": [
+    "note/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48TN-0",
+   "text": "접은 개수: 행 5개",
+   "path": [
+    "note/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48TF-0",
+   "name": "note/CC-04 / R02-T3 · 호가 — KRX 금현물",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48TG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48TI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48TK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48TM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-04 / R02-T3 · 호가 — KRX 금현물": 1,
+  "가져온 요소: 거래소구분 · 체결가 · 등락율": 1,
+  "문법: table": 1,
+  "접은 개수: 행 5개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "ea40ddce227a340cf8eebf18885d18a92f717112baac8a5fdb2f0ce6b02822f4"
+}

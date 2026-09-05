@@ -1,0 +1,340 @@
+{
+ "board_id": "47EI-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47FG-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47FF-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47FD-0",
+   "text": "당일 거래량",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Header"
+   ]
+  },
+  {
+   "id": "47FB-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47FA-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47F9-0",
+   "text": "값",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47F8-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47F6-0",
+   "text": "01",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "47F5-0",
+   "text": "거래회전율",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47F4-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47F2-0",
+   "text": "회전율 1.52%",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "47F1-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "47EZ-0",
+   "text": "02",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "47EY-0",
+   "text": "거래금액",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47EX-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47EV-0",
+   "text": "7,420억",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "47EU-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "47ES-0",
+   "text": "03",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "47ER-0",
+   "text": "종목코드",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47EQ-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47EO-0",
+   "text": "035420",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "47EN-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "47EK-0",
+   "text": "추가 항목은 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47EI-0",
+   "name": "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47FC-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47FE-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47EL-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47F7-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47F0-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47F3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47ET-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47EW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47EM-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47EP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47EJ-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "당일 거래량": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "거래회전율": 1,
+  "회전율 1.52%": 1,
+  "02": 1,
+  "거래금액": 1,
+  "7,420억": 1,
+  "03": 1,
+  "종목코드": 1,
+  "035420": 1,
+  "추가 항목은 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "136cd9106f5692b529b5b3ca1dcdb494b34ea71ae332aff79becf256d936385d"
+}

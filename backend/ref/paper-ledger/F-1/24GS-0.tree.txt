@@ -1,0 +1,545 @@
+Frame "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D" (24GS-0) 1440×0
+  Frame "헤더" (24H6-0) 0×0
+    Frame "Frame" (24H7-0) 0×0
+      Frame "Frame" (24H8-0) 0×0
+        Text "실시간 KRX·NXT·LP 공식 원문" (24H9-0) 0×0 "실시간 KRX·NXT·LP 공식 원문"
+        Frame "Frame" (24HA-0) 0×0
+          Text "0C · 0D" (24HB-0) 0×0 "0C · 0D"
+      Frame "Frame" (24HC-0) 0×0
+        Text "2 mapping · 165 fiel…" (24HD-0) 0×0 "2 mapping · 165 field destinations"
+    Frame "Frame" (24HE-0) 0×0
+      Text "거래소별 잔량·LP·예상체결·중간가를…" (24HF-0) 0×0 "거래소별 잔량·LP·예상체결·중간가를 실시간 상태와 함께 표시합니다."
+      Text "삼성전자 · 005930 · 정규장 …" (24HG-0) 0×0 "삼성전자 · 005930 · 정규장 · 실시간 연결"
+  Frame "0C·0D · 실시간 통합 호가 · 165 raw" (2506-0) 0×0
+    Frame "Frame" (2507-0) 0×0
+      Frame "Frame" (2508-0) 0×0
+        Text "실시간 거래소별 10단 호가" (2509-0) 0×0 "실시간 거래소별 10단 호가"
+        Text "매도·매수 방향, KRX·NXT·LP…" (250A-0) 0×0 "매도·매수 방향, KRX·NXT·LP 잔량, 예상체결과 공식 비율을 같은 창에서 유지"
+      Frame "Frame" (250B-0) 0×0
+        Text "0C 2 / 2 · 0D 163 / …" (250C-0) 0×0 "0C 2 / 2 · 0D 163 / 163"
+    Frame "Frame" (250D-0) 0×0
+      Frame "raw · base:0C · $.data[].27 · ordinal 1" (250E-0) 230×0
+        Text "최우선 매도" (250F-0) 0×0 "최우선 매도"
+        Text "150,850원" (250G-0) 0×0 "150,850원"
+      Frame "raw · base:0C · $.data[].28 · ordinal 1" (250H-0) 230×0
+        Text "최우선 매수" (250I-0) 0×0 "최우선 매수"
+        Text "150,840원" (250J-0) 0×0 "150,840원"
+      Frame "Frame" (250K-0) 0×0
+        Text "실시간 등록" (250L-0) 0×0 "실시간 등록"
+        Text "0D · 삼성전자 005930" (250M-0) 0×0 "0D · 삼성전자 005930"
+      Frame "Frame" (250N-0) 0×0
+        Text "재연결 시 마지막 정상 호가 유지" (250O-0) 0×0 "재연결 시 마지막 정상 호가 유지"
+    Frame "Frame" (250P-0) 0×0
+      Frame "Frame" (250Q-0) 1374×0
+        Frame "0D · 거래소별 호가 10단" (250R-0) 0×40
+          Frame "raw · base:0D · $.data[].50 · ordinal 10" (250S-0) 82×0
+            Text "매도 10" (250T-0) 0×0 "매도 10"
+            Text "150,940" (250U-0) 0×0 "150,940"
+          Frame "raw · base:0D · $.data[].70 · ordinal 10" (250V-0) 82×0
+            Text "잔량" (250W-0) 0×0 "잔량"
+            Text "2,600" (250X-0) 0×0 "2,600"
+          Frame "raw · base:0D · $.data[].90 · ordinal 10" (250Y-0) 66×0
+            Text "증감" (250Z-0) 0×0 "증감"
+            Text "+70" (2510-0) 0×0 "+70"
+          Frame "raw · base:0D · $.data[].6053 · ordinal 10" (2511-0) 70×0
+            Text "KRX" (2512-0) 0×0 "KRX"
+            Text "1,900" (2513-0) 0×0 "1,900"
+          Frame "raw · base:0D · $.data[].6075 · ordinal 10" (2514-0) 70×0
+            Text "NXT" (2515-0) 0×0 "NXT"
+            Text "900" (2516-0) 0×0 "900"
+          Frame "raw · base:0D · $.data[].630 · ordinal 10" (2517-0) 66×0
+            Text "LP" (2518-0) 0×0 "LP"
+            Text "800" (2519-0) 0×0 "800"
+          Rectangle "Rectangle" (251A-0) 12×0
+          Frame "raw · base:0D · $.data[].60 · ordinal 10" (251B-0) 82×0
+            Text "매수 10" (251C-0) 0×0 "매수 10"
+            Text "150,750" (251D-0) 0×0 "150,750"
+          Frame "raw · base:0D · $.data[].80 · ordinal 10" (251E-0) 82×0
+            Text "잔량" (251F-0) 0×0 "잔량"
+            Text "2,900" (251G-0) 0×0 "2,900"
+          Frame "raw · base:0D · $.data[].100 · ordinal 10" (251H-0) 66×0
+            Text "증감" (251I-0) 0×0 "증감"
+            Text "-65" (251J-0) 0×0 "-65"
+          Frame "raw · base:0D · $.data[].6063 · ordinal 10" (251K-0) 70×0
+            Text "KRX" (251L-0) 0×0 "KRX"
+            Text "2,200" (251M-0) 0×0 "2,200"
+          Frame "raw · base:0D · $.data[].6085 · ordinal 10" (251N-0) 70×0
+            Text "NXT" (251O-0) 0×0 "NXT"
+            Text "1,040" (251P-0) 0×0 "1,040"
+          Frame "raw · base:0D · $.data[].640 · ordinal 10" (251Q-0) 66×0
+            Text "LP" (251R-0) 0×0 "LP"
+            Text "790" (251S-0) 0×0 "790"
+        Frame "0D · 거래소별 호가 9단" (251T-0) 0×40
+          Frame "raw · base:0D · $.data[].49 · ordinal 9" (251U-0) 82×0
+            Text "매도 9" (251V-0) 0×0 "매도 9"
+            Text "150,930" (251W-0) 0×0 "150,930"
+          Frame "raw · base:0D · $.data[].69 · ordinal 9" (251X-0) 82×0
+            Text "잔량" (251Y-0) 0×0 "잔량"
+            Text "2,940" (251Z-0) 0×0 "2,940"
+          Frame "raw · base:0D · $.data[].89 · ordinal 9" (2520-0) 66×0
+            Text "증감" (2521-0) 0×0 "증감"
+            Text "+78" (2522-0) 0×0 "+78"
+          Frame "raw · base:0D · $.data[].6052 · ordinal 9" (2523-0) 70×0
+            Text "KRX" (2524-0) 0×0 "KRX"
+            Text "2,150" (2525-0) 0×0 "2,150"
+          Frame "raw · base:0D · $.data[].6074 · ordinal 9" (2526-0) 70×0
+            Text "NXT" (2527-0) 0×0 "NXT"
+            Text "1,070" (2528-0) 0×0 "1,070"
+          Frame "raw · base:0D · $.data[].629 · ordinal 9" (2529-0) 66×0
+            Text "LP" (252A-0) 0×0 "LP"
+            Text "755" (252B-0) 0×0 "755"
+          Rectangle "Rectangle" (252C-0) 12×0
+          Frame "raw · base:0D · $.data[].59 · ordinal 9" (252D-0) 82×0
+            Text "매수 9" (252E-0) 0×0 "매수 9"
+            Text "150,760" (252F-0) 0×0 "150,760"
+          Frame "raw · base:0D · $.data[].79 · ordinal 9" (252G-0) 82×0
+            Text "잔량" (252H-0) 0×0 "잔량"
+            Text "3,270" (252I-0) 0×0 "3,270"
+          Frame "raw · base:0D · $.data[].99 · ordinal 9" (252J-0) 66×0
+            Text "증감" (252K-0) 0×0 "증감"
+            Text "-74" (252L-0) 0×0 "-74"
+          Frame "raw · base:0D · $.data[].6062 · ordinal 9" (252M-0) 70×0
+            Text "KRX" (252N-0) 0×0 "KRX"
+            Text "2,470" (252O-0) 0×0 "2,470"
+          Frame "raw · base:0D · $.data[].6084 · ordinal 9" (252P-0) 70×0
+            Text "NXT" (252Q-0) 0×0 "NXT"
+            Text "1,225" (252R-0) 0×0 "1,225"
+          Frame "raw · base:0D · $.data[].639 · ordinal 9" (252S-0) 66×0
+            Text "LP" (252T-0) 0×0 "LP"
+            Text "752" (252U-0) 0×0 "752"
+        Frame "0D · 거래소별 호가 8단" (252V-0) 0×40
+          Frame "raw · base:0D · $.data[].48 · ordinal 8" (252W-0) 82×0
+            Text "매도 8" (252X-0) 0×0 "매도 8"
+            Text "150,920" (252Y-0) 0×0 "150,920"
+          Frame "raw · base:0D · $.data[].68 · ordinal 8" (252Z-0) 82×0
+            Text "잔량" (2530-0) 0×0 "잔량"
+            Text "3,280" (2531-0) 0×0 "3,280"
+          Frame "raw · base:0D · $.data[].88 · ordinal 8" (2532-0) 66×0
+            Text "증감" (2533-0) 0×0 "증감"
+            Text "+86" (2534-0) 0×0 "+86"
+          Frame "raw · base:0D · $.data[].6051 · ordinal 8" (2535-0) 70×0
+            Text "KRX" (2536-0) 0×0 "KRX"
+            Text "2,400" (2537-0) 0×0 "2,400"
+          Frame "raw · base:0D · $.data[].6073 · ordinal 8" (2538-0) 70×0
+            Text "NXT" (2539-0) 0×0 "NXT"
+            Text "1,240" (253A-0) 0×0 "1,240"
+          Frame "raw · base:0D · $.data[].628 · ordinal 8" (253B-0) 66×0
+            Text "LP" (253C-0) 0×0 "LP"
+            Text "710" (253D-0) 0×0 "710"
+          Rectangle "Rectangle" (253E-0) 12×0
+          Frame "raw · base:0D · $.data[].58 · ordinal 8" (253F-0) 82×0
+            Text "매수 8" (253G-0) 0×0 "매수 8"
+            Text "150,770" (253H-0) 0×0 "150,770"
+          Frame "raw · base:0D · $.data[].78 · ordinal 8" (253I-0) 82×0
+            Text "잔량" (253J-0) 0×0 "잔량"
+            Text "3,640" (253K-0) 0×0 "3,640"
+          Frame "raw · base:0D · $.data[].98 · ordinal 8" (253L-0) 66×0
+            Text "증감" (253M-0) 0×0 "증감"
+            Text "-83" (253N-0) 0×0 "-83"
+          Frame "raw · base:0D · $.data[].6061 · ordinal 8" (253O-0) 70×0
+            Text "KRX" (253P-0) 0×0 "KRX"
+            Text "2,740" (253Q-0) 0×0 "2,740"
+          Frame "raw · base:0D · $.data[].6083 · ordinal 8" (253R-0) 70×0
+            Text "NXT" (253S-0) 0×0 "NXT"
+            Text "1,410" (253T-0) 0×0 "1,410"
+          Frame "raw · base:0D · $.data[].638 · ordinal 8" (253U-0) 66×0
+            Text "LP" (253V-0) 0×0 "LP"
+            Text "714" (253W-0) 0×0 "714"
+        Frame "0D · 거래소별 호가 7단" (253X-0) 0×40
+          Frame "raw · base:0D · $.data[].47 · ordinal 7" (253Y-0) 82×0
+            Text "매도 7" (253Z-0) 0×0 "매도 7"
+            Text "150,910" (2540-0) 0×0 "150,910"
+          Frame "raw · base:0D · $.data[].67 · ordinal 7" (2541-0) 82×0
+            Text "잔량" (2542-0) 0×0 "잔량"
+            Text "3,620" (2543-0) 0×0 "3,620"
+          Frame "raw · base:0D · $.data[].87 · ordinal 7" (2544-0) 66×0
+            Text "증감" (2545-0) 0×0 "증감"
+            Text "+94" (2546-0) 0×0 "+94"
+          Frame "raw · base:0D · $.data[].6050 · ordinal 7" (2547-0) 70×0
+            Text "KRX" (2548-0) 0×0 "KRX"
+            Text "2,650" (2549-0) 0×0 "2,650"
+          Frame "raw · base:0D · $.data[].6072 · ordinal 7" (254A-0) 70×0
+            Text "NXT" (254B-0) 0×0 "NXT"
+            Text "1,410" (254C-0) 0×0 "1,410"
+          Frame "raw · base:0D · $.data[].627 · ordinal 7" (254D-0) 66×0
+            Text "LP" (254E-0) 0×0 "LP"
+            Text "665" (254F-0) 0×0 "665"
+          Rectangle "Rectangle" (254G-0) 12×0
+          Frame "raw · base:0D · $.data[].57 · ordinal 7" (254H-0) 82×0
+            Text "매수 7" (254I-0) 0×0 "매수 7"
+            Text "150,780" (254J-0) 0×0 "150,780"
+          Frame "raw · base:0D · $.data[].77 · ordinal 7" (254K-0) 82×0
+            Text "잔량" (254L-0) 0×0 "잔량"
+            Text "4,010" (254M-0) 0×0 "4,010"
+          Frame "raw · base:0D · $.data[].97 · ordinal 7" (254N-0) 66×0
+            Text "증감" (254O-0) 0×0 "증감"
+            Text "-92" (254P-0) 0×0 "-92"
+          Frame "raw · base:0D · $.data[].6060 · ordinal 7" (254Q-0) 70×0
+            Text "KRX" (254R-0) 0×0 "KRX"
+            Text "3,010" (254S-0) 0×0 "3,010"
+          Frame "raw · base:0D · $.data[].6082 · ordinal 7" (254T-0) 70×0
+            Text "NXT" (254U-0) 0×0 "NXT"
+            Text "1,595" (254V-0) 0×0 "1,595"
+          Frame "raw · base:0D · $.data[].637 · ordinal 7" (254W-0) 66×0
+            Text "LP" (254X-0) 0×0 "LP"
+            Text "676" (254Y-0) 0×0 "676"
+        Frame "0D · 거래소별 호가 6단" (254Z-0) 0×40
+          Frame "raw · base:0D · $.data[].46 · ordinal 6" (2550-0) 82×0
+            Text "매도 6" (2551-0) 0×0 "매도 6"
+            Text "150,900" (2552-0) 0×0 "150,900"
+          Frame "raw · base:0D · $.data[].66 · ordinal 6" (2553-0) 82×0
+            Text "잔량" (2554-0) 0×0 "잔량"
+            Text "3,960" (2555-0) 0×0 "3,960"
+          Frame "raw · base:0D · $.data[].86 · ordinal 6" (2556-0) 66×0
+            Text "증감" (2557-0) 0×0 "증감"
+            Text "+102" (2558-0) 0×0 "+102"
+          Frame "raw · base:0D · $.data[].6049 · ordinal 6" (2559-0) 70×0
+            Text "KRX" (255A-0) 0×0 "KRX"
+            Text "2,900" (255B-0) 0×0 "2,900"
+          Frame "raw · base:0D · $.data[].6071 · ordinal 6" (255C-0) 70×0
+            Text "NXT" (255D-0) 0×0 "NXT"
+            Text "1,580" (255E-0) 0×0 "1,580"
+          Frame "raw · base:0D · $.data[].626 · ordinal 6" (255F-0) 66×0
+            Text "LP" (255G-0) 0×0 "LP"
+            Text "620" (255H-0) 0×0 "620"
+          Rectangle "Rectangle" (255I-0) 12×0
+          Frame "raw · base:0D · $.data[].56 · ordinal 6" (255J-0) 82×0
+            Text "매수 6" (255K-0) 0×0 "매수 6"
+            Text "150,790" (255L-0) 0×0 "150,790"
+          Frame "raw · base:0D · $.data[].76 · ordinal 6" (255M-0) 82×0
+            Text "잔량" (255N-0) 0×0 "잔량"
+            Text "4,380" (255O-0) 0×0 "4,380"
+          Frame "raw · base:0D · $.data[].96 · ordinal 6" (255P-0) 66×0
+            Text "증감" (255Q-0) 0×0 "증감"
+            Text "-101" (255R-0) 0×0 "-101"
+          Frame "raw · base:0D · $.data[].6059 · ordinal 6" (255S-0) 70×0
+            Text "KRX" (255T-0) 0×0 "KRX"
+            Text "3,280" (255U-0) 0×0 "3,280"
+          Frame "raw · base:0D · $.data[].6081 · ordinal 6" (255V-0) 70×0
+            Text "NXT" (255W-0) 0×0 "NXT"
+            Text "1,780" (255X-0) 0×0 "1,780"
+          Frame "raw · base:0D · $.data[].636 · ordinal 6" (255Y-0) 66×0
+            Text "LP" (255Z-0) 0×0 "LP"
+            Text "638" (2560-0) 0×0 "638"
+        Frame "0D · 거래소별 호가 5단" (2561-0) 0×40
+          Frame "raw · base:0D · $.data[].45 · ordinal 5" (2562-0) 82×0
+            Text "매도 5" (2563-0) 0×0 "매도 5"
+            Text "150,890" (2564-0) 0×0 "150,890"
+          Frame "raw · base:0D · $.data[].65 · ordinal 5" (2565-0) 82×0
+            Text "잔량" (2566-0) 0×0 "잔량"
+            Text "4,300" (2567-0) 0×0 "4,300"
+          Frame "raw · base:0D · $.data[].85 · ordinal 5" (2568-0) 66×0
+            Text "증감" (2569-0) 0×0 "증감"
+            Text "+110" (256A-0) 0×0 "+110"
+          Frame "raw · base:0D · $.data[].6048 · ordinal 5" (256B-0) 70×0
+            Text "KRX" (256C-0) 0×0 "KRX"
+            Text "3,150" (256D-0) 0×0 "3,150"
+          Frame "raw · base:0D · $.data[].6070 · ordinal 5" (256E-0) 70×0
+            Text "NXT" (256F-0) 0×0 "NXT"
+            Text "1,750" (256G-0) 0×0 "1,750"
+          Frame "raw · base:0D · $.data[].625 · ordinal 5" (256H-0) 66×0
+            Text "LP" (256I-0) 0×0 "LP"
+            Text "575" (256J-0) 0×0 "575"
+          Rectangle "Rectangle" (256K-0) 12×0
+          Frame "raw · base:0D · $.data[].55 · ordinal 5" (256L-0) 82×0
+            Text "매수 5" (256M-0) 0×0 "매수 5"
+            Text "150,800" (256N-0) 0×0 "150,800"
+          Frame "raw · base:0D · $.data[].75 · ordinal 5" (256O-0) 82×0
+            Text "잔량" (256P-0) 0×0 "잔량"
+            Text "4,750" (256Q-0) 0×0 "4,750"
+          Frame "raw · base:0D · $.data[].95 · ordinal 5" (256R-0) 66×0
+            Text "증감" (256S-0) 0×0 "증감"
+            Text "-110" (256T-0) 0×0 "-110"
+          Frame "raw · base:0D · $.data[].6058 · ordinal 5" (256U-0) 70×0
+            Text "KRX" (256V-0) 0×0 "KRX"
+            Text "3,550" (256W-0) 0×0 "3,550"
+          Frame "raw · base:0D · $.data[].6080 · ordinal 5" (256X-0) 70×0
+            Text "NXT" (256Y-0) 0×0 "NXT"
+            Text "1,965" (256Z-0) 0×0 "1,965"
+          Frame "raw · base:0D · $.data[].635 · ordinal 5" (2570-0) 66×0
+            Text "LP" (2571-0) 0×0 "LP"
+            Text "600" (2572-0) 0×0 "600"
+        Frame "0D · 거래소별 호가 4단" (2573-0) 0×40
+          Frame "raw · base:0D · $.data[].44 · ordinal 4" (2574-0) 82×0
+            Text "매도 4" (2575-0) 0×0 "매도 4"
+            Text "150,880" (2576-0) 0×0 "150,880"
+          Frame "raw · base:0D · $.data[].64 · ordinal 4" (2577-0) 82×0
+            Text "잔량" (2578-0) 0×0 "잔량"
+            Text "4,640" (2579-0) 0×0 "4,640"
+          Frame "raw · base:0D · $.data[].84 · ordinal 4" (257A-0) 66×0
+            Text "증감" (257B-0) 0×0 "증감"
+            Text "+118" (257C-0) 0×0 "+118"
+          Frame "raw · base:0D · $.data[].6047 · ordinal 4" (257D-0) 70×0
+            Text "KRX" (257E-0) 0×0 "KRX"
+            Text "3,400" (257F-0) 0×0 "3,400"
+          Frame "raw · base:0D · $.data[].6069 · ordinal 4" (257G-0) 70×0
+            Text "NXT" (257H-0) 0×0 "NXT"
+            Text "1,920" (257I-0) 0×0 "1,920"
+          Frame "raw · base:0D · $.data[].624 · ordinal 4" (257J-0) 66×0
+            Text "LP" (257K-0) 0×0 "LP"
+            Text "530" (257L-0) 0×0 "530"
+          Rectangle "Rectangle" (257M-0) 12×0
+          Frame "raw · base:0D · $.data[].54 · ordinal 4" (257N-0) 82×0
+            Text "매수 4" (257O-0) 0×0 "매수 4"
+            Text "150,810" (257P-0) 0×0 "150,810"
+          Frame "raw · base:0D · $.data[].74 · ordinal 4" (257Q-0) 82×0
+            Text "잔량" (257R-0) 0×0 "잔량"
+            Text "5,120" (257S-0) 0×0 "5,120"
+          Frame "raw · base:0D · $.data[].94 · ordinal 4" (257T-0) 66×0
+            Text "증감" (257U-0) 0×0 "증감"
+            Text "-119" (257V-0) 0×0 "-119"
+          Frame "raw · base:0D · $.data[].6057 · ordinal 4" (257W-0) 70×0
+            Text "KRX" (257X-0) 0×0 "KRX"
+            Text "3,820" (257Y-0) 0×0 "3,820"
+          Frame "raw · base:0D · $.data[].6079 · ordinal 4" (257Z-0) 70×0
+            Text "NXT" (2580-0) 0×0 "NXT"
+            Text "2,150" (2581-0) 0×0 "2,150"
+          Frame "raw · base:0D · $.data[].634 · ordinal 4" (2582-0) 66×0
+            Text "LP" (2583-0) 0×0 "LP"
+            Text "562" (2584-0) 0×0 "562"
+        Frame "0D · 거래소별 호가 3단" (2585-0) 0×40
+          Frame "raw · base:0D · $.data[].43 · ordinal 3" (2586-0) 82×0
+            Text "매도 3" (2587-0) 0×0 "매도 3"
+            Text "150,870" (2588-0) 0×0 "150,870"
+          Frame "raw · base:0D · $.data[].63 · ordinal 3" (2589-0) 82×0
+            Text "잔량" (258A-0) 0×0 "잔량"
+            Text "4,980" (258B-0) 0×0 "4,980"
+          Frame "raw · base:0D · $.data[].83 · ordinal 3" (258C-0) 66×0
+            Text "증감" (258D-0) 0×0 "증감"
+            Text "+126" (258E-0) 0×0 "+126"
+          Frame "raw · base:0D · $.data[].6046 · ordinal 3" (258F-0) 70×0
+            Text "KRX" (258G-0) 0×0 "KRX"
+            Text "3,650" (258H-0) 0×0 "3,650"
+          Frame "raw · base:0D · $.data[].6068 · ordinal 3" (258I-0) 70×0
+            Text "NXT" (258J-0) 0×0 "NXT"
+            Text "2,090" (258K-0) 0×0 "2,090"
+          Frame "raw · base:0D · $.data[].623 · ordinal 3" (258L-0) 66×0
+            Text "LP" (258M-0) 0×0 "LP"
+            Text "485" (258N-0) 0×0 "485"
+          Rectangle "Rectangle" (258O-0) 12×0
+          Frame "raw · base:0D · $.data[].53 · ordinal 3" (258P-0) 82×0
+            Text "매수 3" (258Q-0) 0×0 "매수 3"
+            Text "150,820" (258R-0) 0×0 "150,820"
+          Frame "raw · base:0D · $.data[].73 · ordinal 3" (258S-0) 82×0
+            Text "잔량" (258T-0) 0×0 "잔량"
+            Text "5,490" (258U-0) 0×0 "5,490"
+          Frame "raw · base:0D · $.data[].93 · ordinal 3" (258V-0) 66×0
+            Text "증감" (258W-0) 0×0 "증감"
+            Text "-128" (258X-0) 0×0 "-128"
+          Frame "raw · base:0D · $.data[].6056 · ordinal 3" (258Y-0) 70×0
+            Text "KRX" (258Z-0) 0×0 "KRX"
+            Text "4,090" (2590-0) 0×0 "4,090"
+          Frame "raw · base:0D · $.data[].6078 · ordinal 3" (2591-0) 70×0
+            Text "NXT" (2592-0) 0×0 "NXT"
+            Text "2,335" (2593-0) 0×0 "2,335"
+          Frame "raw · base:0D · $.data[].633 · ordinal 3" (2594-0) 66×0
+            Text "LP" (2595-0) 0×0 "LP"
+            Text "524" (2596-0) 0×0 "524"
+        Frame "0D · 거래소별 호가 2단" (2597-0) 0×40
+          Frame "raw · base:0D · $.data[].42 · ordinal 2" (2598-0) 82×0
+            Text "매도 2" (2599-0) 0×0 "매도 2"
+            Text "150,860" (259A-0) 0×0 "150,860"
+          Frame "raw · base:0D · $.data[].62 · ordinal 2" (259B-0) 82×0
+            Text "잔량" (259C-0) 0×0 "잔량"
+            Text "5,320" (259D-0) 0×0 "5,320"
+          Frame "raw · base:0D · $.data[].82 · ordinal 2" (259E-0) 66×0
+            Text "증감" (259F-0) 0×0 "증감"
+            Text "+134" (259G-0) 0×0 "+134"
+          Frame "raw · base:0D · $.data[].6045 · ordinal 2" (259H-0) 70×0
+            Text "KRX" (259I-0) 0×0 "KRX"
+            Text "3,900" (259J-0) 0×0 "3,900"
+          Frame "raw · base:0D · $.data[].6067 · ordinal 2" (259K-0) 70×0
+            Text "NXT" (259L-0) 0×0 "NXT"
+            Text "2,260" (259M-0) 0×0 "2,260"
+          Frame "raw · base:0D · $.data[].622 · ordinal 2" (259N-0) 66×0
+            Text "LP" (259O-0) 0×0 "LP"
+            Text "440" (259P-0) 0×0 "440"
+          Rectangle "Rectangle" (259Q-0) 12×0
+          Frame "raw · base:0D · $.data[].52 · ordinal 2" (259R-0) 82×0
+            Text "매수 2" (259S-0) 0×0 "매수 2"
+            Text "150,830" (259T-0) 0×0 "150,830"
+          Frame "raw · base:0D · $.data[].72 · ordinal 2" (259U-0) 82×0
+            Text "잔량" (259V-0) 0×0 "잔량"
+            Text "5,860" (259W-0) 0×0 "5,860"
+          Frame "raw · base:0D · $.data[].92 · ordinal 2" (259X-0) 66×0
+            Text "증감" (259Y-0) 0×0 "증감"
+            Text "-137" (259Z-0) 0×0 "-137"
+          Frame "raw · base:0D · $.data[].6055 · ordinal 2" (25A0-0) 70×0
+            Text "KRX" (25A1-0) 0×0 "KRX"
+            Text "4,360" (25A2-0) 0×0 "4,360"
+          Frame "raw · base:0D · $.data[].6077 · ordinal 2" (25A3-0) 70×0
+            Text "NXT" (25A4-0) 0×0 "NXT"
+            Text "2,520" (25A5-0) 0×0 "2,520"
+          Frame "raw · base:0D · $.data[].632 · ordinal 2" (25A6-0) 66×0
+            Text "LP" (25A7-0) 0×0 "LP"
+            Text "486" (25A8-0) 0×0 "486"
+        Frame "0D · 거래소별 호가 1단" (25A9-0) 0×40
+          Frame "raw · base:0D · $.data[].41 · ordinal 1" (25AA-0) 82×0
+            Text "매도 1" (25AB-0) 0×0 "매도 1"
+            Text "150,850" (25AC-0) 0×0 "150,850"
+          Frame "raw · base:0D · $.data[].61 · ordinal 1" (25AD-0) 82×0
+            Text "잔량" (25AE-0) 0×0 "잔량"
+            Text "5,660" (25AF-0) 0×0 "5,660"
+          Frame "raw · base:0D · $.data[].81 · ordinal 1" (25AG-0) 66×0
+            Text "증감" (25AH-0) 0×0 "증감"
+            Text "+142" (25AI-0) 0×0 "+142"
+          Frame "raw · base:0D · $.data[].6044 · ordinal 1" (25AJ-0) 70×0
+            Text "KRX" (25AK-0) 0×0 "KRX"
+            Text "4,150" (25AL-0) 0×0 "4,150"
+          Frame "raw · base:0D · $.data[].6066 · ordinal 1" (25AM-0) 70×0
+            Text "NXT" (25AN-0) 0×0 "NXT"
+            Text "2,430" (25AO-0) 0×0 "2,430"
+          Frame "raw · base:0D · $.data[].621 · ordinal 1" (25AP-0) 66×0
+            Text "LP" (25AQ-0) 0×0 "LP"
+            Text "395" (25AR-0) 0×0 "395"
+          Rectangle "Rectangle" (25AS-0) 12×0
+          Frame "raw · base:0D · $.data[].51 · ordinal 1" (25AT-0) 82×0
+            Text "매수 1" (25AU-0) 0×0 "매수 1"
+            Text "150,840" (25AV-0) 0×0 "150,840"
+          Frame "raw · base:0D · $.data[].71 · ordinal 1" (25AW-0) 82×0
+            Text "잔량" (25AX-0) 0×0 "잔량"
+            Text "6,230" (25AY-0) 0×0 "6,230"
+          Frame "raw · base:0D · $.data[].91 · ordinal 1" (25AZ-0) 66×0
+            Text "증감" (25B0-0) 0×0 "증감"
+            Text "-146" (25B1-0) 0×0 "-146"
+          Frame "raw · base:0D · $.data[].6054 · ordinal 1" (25B2-0) 70×0
+            Text "KRX" (25B3-0) 0×0 "KRX"
+            Text "4,630" (25B4-0) 0×0 "4,630"
+          Frame "raw · base:0D · $.data[].6076 · ordinal 1" (25B5-0) 70×0
+            Text "NXT" (25B6-0) 0×0 "NXT"
+            Text "2,705" (25B7-0) 0×0 "2,705"
+          Frame "raw · base:0D · $.data[].631 · ordinal 1" (25B8-0) 66×0
+            Text "LP" (25B9-0) 0×0 "LP"
+            Text "448" (25BA-0) 0×0 "448"
+      Frame "Frame" (25BB-0) 1374×0
+        Text "예상체결·총잔량·시장 원문" (25BC-0) 0×0 "예상체결·총잔량·시장 원문"
+        Frame "Frame" (25BD-0) 1340×0
+          Frame "raw · base:0D · $.data[].121 · ordinal 1" (25BE-0) 154×0
+            Text "매도호가총잔량" (25BF-0) 0×0 "매도호가총잔량"
+            Text "193,500주" (25BG-0) 0×0 "193,500주"
+          Frame "raw · base:0D · $.data[].122 · ordinal 1" (25BH-0) 154×0
+            Text "매도호가총잔량대비" (25BI-0) 0×0 "매도호가총잔량대비"
+            Text "+12,430주" (25BJ-0) 0×0 "+12,430주"
+          Frame "raw · base:0D · $.data[].125 · ordinal 1" (25BK-0) 154×0
+            Text "매수호가총잔량" (25BL-0) 0×0 "매수호가총잔량"
+            Text "205,630주" (25BM-0) 0×0 "205,630주"
+          Frame "raw · base:0D · $.data[].126 · ordinal 1" (25BN-0) 154×0
+            Text "매수호가총잔량대비" (25BO-0) 0×0 "매수호가총잔량대비"
+            Text "+9,870주" (25BP-0) 0×0 "+9,870주"
+          Frame "raw · base:0D · $.data[].23 · ordinal 1" (25BQ-0) 154×0
+            Text "예상체결가" (25BR-0) 0×0 "예상체결가"
+            Text "150,850원" (25BS-0) 0×0 "150,850원"
+          Frame "raw · base:0D · $.data[].24 · ordinal 1" (25BT-0) 154×0
+            Text "예상체결량" (25BU-0) 0×0 "예상체결량"
+            Text "127,540주" (25BV-0) 0×0 "127,540주"
+          Frame "raw · base:0D · $.data[].200 · ordinal 1" (25BW-0) 154×0
+            Text "예상체결가전일대비" (25BX-0) 0×0 "예상체결가전일대비"
+            Text "+3,500원" (25BY-0) 0×0 "+3,500원"
+          Frame "raw · base:0D · $.data[].201 · ordinal 1" (25BZ-0) 154×0
+            Text "예상체결가등락률" (25C0-0) 0×0 "예상체결가등락률"
+            Text "+2.35%" (25C1-0) 0×0 "+2.35%"
+          Frame "raw · base:0D · $.data[].238 · ordinal 1" (25C2-0) 154×0
+            Text "예상체결가전일대비기호" (25C3-0) 0×0 "예상체결가전일대비기호"
+            Text "▲" (25C4-0) 0×0 "▲"
+          Frame "raw · base:0D · $.data[].291 · ordinal 1" (25C5-0) 154×0
+            Text "예상체결가변화" (25C6-0) 0×0 "예상체결가변화"
+            Text "150,200→150,850" (25C7-0) 0×0 "150,200→150,850"
+          Frame "raw · base:0D · $.data[].292 · ordinal 1" (25C8-0) 154×0
+            Text "예상체결량변화" (25C9-0) 0×0 "예상체결량변화"
+            Text "+7,240주" (25CA-0) 0×0 "+7,240주"
+          Frame "raw · base:0D · $.data[].293 · ordinal 1" (25CB-0) 154×0
+            Text "예상매도호가" (25CC-0) 0×0 "예상매도호가"
+            Text "150,850원" (25CD-0) 0×0 "150,850원"
+          Frame "raw · base:0D · $.data[].294 · ordinal 1" (25CE-0) 154×0
+            Text "예상매수호가" (25CF-0) 0×0 "예상매수호가"
+            Text "150,840원" (25CG-0) 0×0 "150,840원"
+          Frame "raw · base:0D · $.data[].295 · ordinal 1" (25CH-0) 154×0
+            Text "예상체결시간" (25CI-0) 0×0 "예상체결시간"
+            Text "08:59:19" (25CJ-0) 0×0 "08:59:19"
+          Frame "raw · base:0D · $.data[].128 · ordinal 1" (25CK-0) 154×0
+            Text "순매수잔량" (25CL-0) 0×0 "순매수잔량"
+            Text "12,130주" (25CM-0) 0×0 "12,130주"
+          Frame "raw · base:0D · $.data[].129 · ordinal 1" (25CN-0) 154×0
+            Text "매수비율" (25CO-0) 0×0 "매수비율"
+            Text "54.7%" (25CP-0) 0×0 "54.7%"
+          Frame "raw · base:0D · $.data[].138 · ordinal 1" (25CQ-0) 154×0
+            Text "순매도잔량" (25CR-0) 0×0 "순매도잔량"
+            Text "9,860주" (25CS-0) 0×0 "9,860주"
+          Frame "raw · base:0D · $.data[].139 · ordinal 1" (25CT-0) 154×0
+            Text "매도비율" (25CU-0) 0×0 "매도비율"
+            Text "45.3%" (25CV-0) 0×0 "45.3%"
+          Frame "raw · base:0D · $.data[].13 · ordinal 1" (25CW-0) 154×0
+            Text "누적거래량" (25CX-0) 0×0 "누적거래량"
+            Text "2,375,785주" (25CY-0) 0×0 "2,375,785주"
+          Frame "raw · base:0D · $.data[].215 · ordinal 1" (25CZ-0) 154×0
+            Text "장운영구분" (25D0-0) 0×0 "장운영구분"
+            Text "정규장" (25D1-0) 0×0 "정규장"
+          Frame "raw · base:0D · $.data[].216 · ordinal 1" (25D2-0) 154×0
+            Text "종목코드" (25D3-0) 0×0 "종목코드"
+            Text "005930" (25D4-0) 0×0 "005930"
+          Frame "raw · base:0D · $.data[].21 · ordinal 1" (25D5-0) 154×0
+            Text "호가시간" (25D6-0) 0×0 "호가시간"
+            Text "14:31:08" (25D7-0) 0×0 "14:31:08"
+          Frame "raw · base:0D · $.data[].299 · ordinal 1" (25D8-0) 154×0
+            Text "예상체결등락률" (25D9-0) 0×0 "예상체결등락률"
+            Text "+2.35%" (25DA-0) 0×0 "+2.35%"
+          Frame "raw · base:0D · $.data[].6064 · ordinal 1" (25DB-0) 154×0
+            Text "KRX 매도총잔량" (25DC-0) 0×0 "KRX 매도총잔량"
+            Text "112,410주" (25DD-0) 0×0 "112,410주"
+          Frame "raw · base:0D · $.data[].6065 · ordinal 1" (25DE-0) 154×0
+            Text "KRX 매수총잔량" (25DF-0) 0×0 "KRX 매수총잔량"
+            Text "128,630주" (25DG-0) 0×0 "128,630주"
+          Frame "raw · base:0D · $.data[].6086 · ordinal 1" (25DH-0) 154×0
+            Text "NXT 매도총잔량" (25DI-0) 0×0 "NXT 매도총잔량"
+            Text "81,090주" (25DJ-0) 0×0 "81,090주"
+          Frame "raw · base:0D · $.data[].6087 · ordinal 1" (25DK-0) 154×0
+            Text "NXT 매수총잔량" (25DL-0) 0×0 "NXT 매수총잔량"
+            Text "77,000주" (25DM-0) 0×0 "77,000주"
+          Frame "raw · base:0D · $.data[].6100 · ordinal 1" (25DN-0) 154×0
+            Text "KRX 중간가" (25DO-0) 0×0 "KRX 중간가"
+            Text "150,845원" (25DP-0) 0×0 "150,845원"
+          Frame "raw · base:0D · $.data[].6101 · ordinal 1" (25DQ-0) 154×0
+            Text "KRX 중간가대비" (25DR-0) 0×0 "KRX 중간가대비"
+            Text "+3,495원" (25DS-0) 0×0 "+3,495원"
+          Frame "raw · base:0D · $.data[].6102 · ordinal 1" (25DT-0) 154×0
+            Text "KRX 중간가등락률" (25DU-0) 0×0 "KRX 중간가등락률"
+            Text "+2.34%" (25DV-0) 0×0 "+2.34%"
+          Frame "raw · base:0D · $.data[].6103 · ordinal 1" (25DW-0) 154×0
+            Text "KRX 매도중간잔량" (25DX-0) 0×0 "KRX 매도중간잔량"
+            Text "56,205주" (25DY-0) 0×0 "56,205주"
+          Frame "raw · base:0D · $.data[].6104 · ordinal 1" (25DZ-0) 154×0
+            Text "KRX 매수중간잔량" (25E0-0) 0×0 "KRX 매수중간잔량"
+            Text "64,315주" (25E1-0) 0×0 "64,315주"
+          Frame "raw · base:0D · $.data[].6105 · ordinal 1" (25E2-0) 154×0
+            Text "NXT 중간가" (25E3-0) 0×0 "NXT 중간가"
+            Text "150,835원" (25E4-0) 0×0 "150,835원"
+          Frame "raw · base:0D · $.data[].6106 · ordinal 1" (25E5-0) 154×0
+            Text "NXT 중간가대비" (25E6-0) 0×0 "NXT 중간가대비"
+            Text "+3,485원" (25E7-0) 0×0 "+3,485원"
+          Frame "raw · base:0D · $.data[].6107 · ordinal 1" (25E8-0) 154×0
+            Text "NXT 중간가등락률" (25E9-0) 0×0 "NXT 중간가등락률"
+            Text "+2.33%" (25EA-0) 0×0 "+2.33%"
+          Frame "raw · base:0D · $.data[].6108 · ordinal 1" (25EB-0) 154×0
+            Text "NXT 매도중간잔량" (25EC-0) 0×0 "NXT 매도중간잔량"
+            Text "40,545주" (25ED-0) 0×0 "40,545주"
+          Frame "raw · base:0D · $.data[].6109 · ordinal 1" (25EE-0) 154×0
+            Text "NXT 매수중간잔량" (25EF-0) 0×0 "NXT 매수중간잔량"
+            Text "38,500주" (25EG-0) 0×0 "38,500주"
+          Frame "raw · base:0D · $.data[].6110 · ordinal 1" (25EH-0) 154×0
+            Text "KRX 대비 매도잔량" (25EI-0) 0×0 "KRX 대비 매도잔량"
+            Text "31,320주" (25EJ-0) 0×0 "31,320주"
+          Frame "raw · base:0D · $.data[].6111 · ordinal 1" (25EK-0) 154×0
+            Text "KRX 대비 매수잔량" (25EL-0) 0×0 "KRX 대비 매수잔량"
+            Text "51,630주" (25EM-0) 0×0 "51,630주"
+          Frame "raw · base:0D · $.data[].6112 · ordinal 1" (25EN-0) 154×0
+            Text "KRX 잔량비율" (25EO-0) 0×0 "KRX 잔량비율"
+            Text "53.4%" (25EP-0) 0×0 "53.4%"
+          Frame "raw · base:0D · $.data[].6113 · ordinal 1" (25EQ-0) 154×0
+            Text "NXT 대비 매도잔량" (25ER-0) 0×0 "NXT 대비 매도잔량"
+            Text "18,430주" (25ES-0) 0×0 "18,430주"
+          Frame "raw · base:0D · $.data[].6114 · ordinal 1" (25ET-0) 154×0
+            Text "NXT 대비 매수잔량" (25EU-0) 0×0 "NXT 대비 매수잔량"
+            Text "22,540주" (25EV-0) 0×0 "22,540주"
+          Frame "raw · base:0D · $.data[].6115 · ordinal 1" (25EW-0) 154×0
+            Text "NXT 잔량비율" (25EX-0) 0×0 "NXT 잔량비율"
+            Text "46.6%" (25EY-0) 0×0 "46.6%"

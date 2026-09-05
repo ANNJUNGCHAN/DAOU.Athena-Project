@@ -1,0 +1,340 @@
+{
+ "board_id": "47WH-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47XF-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47XE-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47XC-0",
+   "text": "거래량갱신",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Header"
+   ]
+  },
+  {
+   "id": "47XA-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47X9-0",
+   "text": "5.2배",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47X7-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47X6-0",
+   "text": "41",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47X4-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47X3-0",
+   "text": "5일",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47X0-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47WZ-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47WY-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47WW-0",
+   "text": "매수호가",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47WV-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47WT-0",
+   "text": "매수 412,500",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47WS-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47WQ-0",
+   "text": "현재거래량",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47WP-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47WN-0",
+   "text": "80만주",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47WM-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47WJ-0",
+   "text": "스칼라 2개, 행 1개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47WH-0",
+   "name": "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47XB-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47XD-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47WK-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47X1-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47X8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47X5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47X2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47WX-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47WR-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47WU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47WL-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47WO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47WI-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "거래량갱신": 1,
+  "값": 3,
+  "5.2배": 1,
+  "41": 1,
+  "핵심": 1,
+  "5일": 1,
+  "항목": 1,
+  "비고": 1,
+  "매수호가": 1,
+  "매수 412,500": 1,
+  "현재거래량": 1,
+  "80만주": 1,
+  "스칼라 2개, 행 1개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "a067bba23a9bb35d2eed2b0a168fc6456ef34c22c979d401541651593cca30ad"
+}

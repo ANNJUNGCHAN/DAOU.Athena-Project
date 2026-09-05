@@ -1,0 +1,285 @@
+Frame "19 · 백테스트 — 기법 목록 · 새 기법" (40EV-1) 1680×1120
+  Frame "타이틀" (40EW-1) 1584×0
+    Text "셸 — 백테스트 · 기법 목록 — 처…" (40EX-1) 0×0 "셸 — 백테스트 · 기법 목록 — 처음 있던 것도, 내가 만든 것도, 다 같은 기법"
+    Text "프리셋이라는 구분은 없습니다. 목록은…" (40EY-1) 0×0 "프리셋이라는 구분은 없습니다. 목록은 하나뿐이고 맨 위 [+ 새 기법 만들기]로 늘어납니다. 기법은 언제든 "
+  Frame "셸" (40F0-1) 1584×900
+    Frame "Frame" (40F2-1) 268×900
+      Frame "Primary Actions" (40F3-1) 0×0
+        Frame "Frame" (40F4-1) 0×28
+          Text "ATHENA" (40F5-1) 0×0 "ATHENA"
+          SVG "SVG" (40F6-1) 0×0
+            SVGVisualElement "Circle" (40F7-1) 0×0
+            SVGVisualElement "Path" (40F8-1) 0×0
+        Frame "Frame" (40F9-1) 0×30
+          SVG "SVG" (40FA-1) 0×0
+            SVGVisualElement "Path" (40FB-1) 0×0
+            SVGVisualElement "Path" (40FC-1) 0×0
+          Text "새 채팅" (40FD-1) 0×0 "새 채팅"
+        Frame "Frame" (40FE-1) 0×30
+          SVG "SVG" (40FF-1) 0×0
+            SVGVisualElement "Circle" (40FG-1) 0×0
+            SVGVisualElement "Circle" (40FH-1) 0×0
+            SVGVisualElement "Circle" (40FI-1) 0×0
+            SVGVisualElement "Path" (40FJ-1) 0×0
+          Text "그래프" (40FK-1) 0×0 "그래프"
+        Frame "Frame" (40FL-1) 0×30
+          SVG "SVG" (40FM-1) 0×0
+            SVGVisualElement "Circle" (40FN-1) 0×0
+            SVGVisualElement "Path" (40FO-1) 0×0
+          Text "에이전트" (40FP-1) 0×0 "에이전트"
+        Frame "Nav 플러그인" (40FQ-1) 0×30
+          SVG "SVG" (40FR-1) 0×0
+            SVGVisualElement "Path" (40FS-1) 0×0
+            SVGVisualElement "Path" (40FT-1) 0×0
+          Text "플러그인" (40FU-1) 0×0 "플러그인"
+        Frame "Nav 백테스트 (active)" (40FV-1) 0×30
+          SVG "SVG" (40FW-1) 0×0
+            SVGVisualElement "Path" (40FX-1) 0×0
+            SVGVisualElement "Path" (40FY-1) 0×0
+          Text "백테스트" (40FZ-1) 0×0 "백테스트"
+      Frame "Project Tree" (40G0-1) 0×0
+        Frame "Frame" (40G1-1) 0×0
+          Text "프로젝트" (40G2-1) 0×0 "프로젝트"
+        Frame "Frame" (40G3-1) 0×32
+          SVG "SVG" (40G4-1) 0×0
+            SVGVisualElement "Path" (40G5-1) 0×0
+            SVGVisualElement "Path" (40G6-1) 0×0
+          Text "아테나" (40G7-1) 0×0 "아테나"
+          SVG "SVG" (40G8-1) 0×0
+            SVGVisualElement "Circle" (40G9-1) 0×0
+            SVGVisualElement "Circle" (40GA-1) 0×0
+            SVGVisualElement "Circle" (40GB-1) 0×0
+          SVG "SVG" (40GC-1) 0×0
+            SVGVisualElement "Path" (40GD-1) 0×0
+            SVGVisualElement "Path" (40GE-1) 0×0
+        Frame "Frame" (40GF-1) 0×27
+          Text "백엔드 API 개수 확인" (40GG-1) 0×0 "백엔드 API 개수 확인"
+        Frame "Frame" (40GH-1) 0×29
+          Text "앱 전체 기능 검수" (40GI-1) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (40GJ-1) 6×6
+      Frame "Recent Conversations" (40GK-1) 0×0
+        Frame "Frame" (40GL-1) 0×20
+          Text "최근" (40GM-1) 0×0 "최근"
+          Text "전체" (40GN-1) 0×0 "전체"
+        Frame "Frame" (40GO-1) 0×27
+          Text "앱 전체 기능 검수" (40GP-1) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (40GQ-1) 6×6
+        Frame "Frame" (40GR-1) 0×27
+          Text "삼성전자 주요 변동 알림" (40GS-1) 0×0 "삼성전자 주요 변동 알림"
+        Frame "Frame" (40GT-1) 0×27
+          Text "ETF 자금 흐름" (40GU-1) 0×0 "ETF 자금 흐름"
+      Frame "Account Footer" (40GV-1) 0×0
+        Frame "Frame" (40GW-1) 0×38
+          Frame "Frame" (40GX-1) 22×22
+            Text "AN" (40GY-1) 0×0 "AN"
+          Text "모의-주력" (40GZ-1) 0×0 "모의-주력"
+          SVG "SVG" (40H0-1) 0×0
+            SVGVisualElement "Path" (40H1-1) 0×0
+    Frame "메인 · 기법 목록" (40H3-1) 0×0
+      Frame "헤더" (40H7-1) 0×0
+        Frame "Frame" (40H8-1) 0×0
+          Text "백테스트" (40H9-1) 0×0 "백테스트"
+          Text "기법 11개 · 마지막 수정 2분 전" (40HA-1) 0×0 "기법 11개 · 마지막 수정 2분 전"
+        Frame "Frame" (40HB-1) 0×0
+          Frame "Frame" (40HC-1) 0×0
+            Text "기법" (40HD-1) 0×0 "기법"
+          Frame "Frame" (40HE-1) 0×0
+            Text "결과" (40HF-1) 0×0 "결과"
+          Frame "Frame" (40HG-1) 0×0
+            Text "이력" (40HH-1) 0×0 "이력"
+      Frame "새 기법 만들기" (40HJ-1) 0×0
+        Frame "Frame" (40HK-1) 30×30
+          Text "+" (40HL-1) 0×0 "+"
+        Frame "Frame" (40HM-1) 0×0
+          Text "새 기법 만들기" (40HN-1) 0×0 "새 기법 만들기"
+          Text "코드창과 대화창이 열립니다 — AI가…" (40HO-1) 0×0 "코드창과 대화창이 열립니다 — AI가 한 번에 하나씩 물어보며 원하는 알고리즘을 코드로 씁니다"
+        Frame "Frame" (40HP-1) 0×0
+          Text "대화로 시작" (40HQ-1) 0×0 "대화로 시작"
+      Frame "목록 헤더" (40HS-1) 0×0
+        Text "기법 11개" (40HT-1) 0×0 "기법 11개"
+        Text "처음 있던 10개와 내가 만든 1개를…" (40HU-1) 0×0 "처음 있던 10개와 내가 만든 1개를 구분하지 않습니다"
+        Rectangle "Rectangle" (40HV-1) 0×1
+        Text "분류 전체 · 상태 전체" (40HW-1) 0×0 "분류 전체 · 상태 전체"
+      Frame "기법 격자" (40HY-1) 0×0
+        Frame "기법 1 · 20-60 골든크로스" (40I0-1) 0×0
+          Frame "Frame" (40I1-1) 0×0
+            Text "20-60 골든크로스" (40I2-1) 0×0 "20-60 골든크로스"
+            Frame "Frame" (40I3-1) 0×0
+              Text "추세" (40I4-1) 0×0 "추세"
+            Rectangle "Rectangle" (40I5-1) 0×0
+            Frame "Frame" (40I6-1) 0×0
+              Text "실매매 적용 중" (40I7-1) 0×0 "실매매 적용 중"
+          Text "20일선이 60일선을 위로 뚫으면 사…" (40I8-1) 0×0 "20일선이 60일선을 위로 뚫으면 사고, 아래로 뚫으면 팝니다."
+          Frame "Frame" (40I9-1) 0×0
+            Text "v7 · 08-30 검증 · 거래 4…" (40IA-1) 0×0 "v7 · 08-30 검증 · 거래 41"
+            Frame "Frame" (40IB-1) 0×0
+              Text "키우미 적용 중" (40IC-1) 0×0 "키우미 적용 중"
+            Rectangle "Rectangle" (40ID-1) 0×0
+            Frame "Frame" (40IE-1) 0×0
+              Text "수정" (40IF-1) 0×0 "수정"
+        Frame "기법 2 · 볼린저 하단 반등" (40IG-1) 0×0
+          Frame "Frame" (40IH-1) 0×0
+            Text "볼린저 하단 반등" (40II-1) 0×0 "볼린저 하단 반등"
+            Frame "Frame" (40IJ-1) 0×0
+              Text "평균회귀" (40IK-1) 0×0 "평균회귀"
+            Rectangle "Rectangle" (40IL-1) 0×0
+            Frame "Frame" (40IM-1) 0×0
+              Text "검증됨" (40IN-1) 0×0 "검증됨"
+          Text "가격이 하단 밴드를 찍고 돌아설 때 …" (40IO-1) 0×0 "가격이 하단 밴드를 찍고 돌아설 때 삽니다."
+          Frame "Frame" (40IP-1) 0×0
+            Text "v3 · 08-27 검증 · 거래 6…" (40IQ-1) 0×0 "v3 · 08-27 검증 · 거래 66"
+            Rectangle "Rectangle" (40IR-1) 0×0
+            Frame "Frame" (40IS-1) 0×0
+              Text "수정" (40IT-1) 0×0 "수정"
+        Frame "기법 3 · 20일 신고가 돌파" (40IU-1) 0×0
+          Frame "Frame" (40IV-1) 0×0
+            Text "20일 신고가 돌파" (40IW-1) 0×0 "20일 신고가 돌파"
+            Frame "Frame" (40IX-1) 0×0
+              Text "돌파" (40IY-1) 0×0 "돌파"
+            Rectangle "Rectangle" (40IZ-1) 0×0
+            Frame "Frame" (40J0-1) 0×0
+              Text "검증됨" (40J1-1) 0×0 "검증됨"
+          Text "직전 20봉 최고가를 종가로 넘기면 …" (40J2-1) 0×0 "직전 20봉 최고가를 종가로 넘기면 삽니다."
+          Frame "Frame" (40J3-1) 0×0
+            Text "v2 · 08-22 검증 · 거래 3…" (40J4-1) 0×0 "v2 · 08-22 검증 · 거래 38"
+            Rectangle "Rectangle" (40J5-1) 0×0
+            Frame "Frame" (40J6-1) 0×0
+              Text "수정" (40J7-1) 0×0 "수정"
+        Frame "기법 4 · RSI 과매도 반전" (40J9-1) 0×0
+          Frame "Frame" (40JA-1) 0×0
+            Text "RSI 과매도 반전" (40JB-1) 0×0 "RSI 과매도 반전"
+            Frame "Frame" (40JC-1) 0×0
+              Text "평균회귀" (40JD-1) 0×0 "평균회귀"
+            Rectangle "Rectangle" (40JE-1) 0×0
+            Frame "Frame" (40JF-1) 0×0
+              Text "검증됨" (40JG-1) 0×0 "검증됨"
+          Text "RSI가 30 아래로 갔다가 다시 올…" (40JH-1) 0×0 "RSI가 30 아래로 갔다가 다시 올라오면 삽니다."
+          Frame "Frame" (40JI-1) 0×0
+            Text "v4 · 08-19 검증 · 거래 5…" (40JJ-1) 0×0 "v4 · 08-19 검증 · 거래 52"
+            Rectangle "Rectangle" (40JK-1) 0×0
+            Frame "Frame" (40JL-1) 0×0
+              Text "수정" (40JM-1) 0×0 "수정"
+        Frame "기법 5 · MACD 시그널 교차" (40JN-1) 0×0
+          Frame "Frame" (40JO-1) 0×0
+            Text "MACD 시그널 교차" (40JP-1) 0×0 "MACD 시그널 교차"
+            Frame "Frame" (40JQ-1) 0×0
+              Text "추세" (40JR-1) 0×0 "추세"
+            Rectangle "Rectangle" (40JS-1) 0×0
+            Frame "Frame" (40JT-1) 0×0
+              Text "검증됨" (40JU-1) 0×0 "검증됨"
+          Text "MACD가 시그널선을 위로 지날 때 …" (40JV-1) 0×0 "MACD가 시그널선을 위로 지날 때 삽니다."
+          Frame "Frame" (40JW-1) 0×0
+            Text "v2 · 08-15 검증 · 거래 4…" (40JX-1) 0×0 "v2 · 08-15 검증 · 거래 44"
+            Rectangle "Rectangle" (40JY-1) 0×0
+            Frame "Frame" (40JZ-1) 0×0
+              Text "수정" (40K0-1) 0×0 "수정"
+        Frame "기법 6 · 이격도 회귀" (40K1-1) 0×0
+          Frame "Frame" (40K2-1) 0×0
+            Text "이격도 회귀" (40K3-1) 0×0 "이격도 회귀"
+            Frame "Frame" (40K4-1) 0×0
+              Text "평균회귀" (40K5-1) 0×0 "평균회귀"
+            Rectangle "Rectangle" (40K6-1) 0×0
+            Frame "Frame" (40K7-1) 0×0
+              Text "검증됨" (40K8-1) 0×0 "검증됨"
+          Text "20일선에서 너무 벌어지면 되돌림을 …" (40K9-1) 0×0 "20일선에서 너무 벌어지면 되돌림을 노립니다."
+          Frame "Frame" (40KA-1) 0×0
+            Text "v1 · 08-11 검증 · 거래 7…" (40KB-1) 0×0 "v1 · 08-11 검증 · 거래 71"
+            Rectangle "Rectangle" (40KC-1) 0×0
+            Frame "Frame" (40KD-1) 0×0
+              Text "수정" (40KE-1) 0×0 "수정"
+        Frame "기법 7 · 거래량 급증 추격" (40KG-1) 0×0
+          Frame "Frame" (40KH-1) 0×0
+            Text "거래량 급증 추격" (40KI-1) 0×0 "거래량 급증 추격"
+            Frame "Frame" (40KJ-1) 0×0
+              Text "수급" (40KK-1) 0×0 "수급"
+            Rectangle "Rectangle" (40KL-1) 0×0
+            Frame "Frame" (40KM-1) 0×0
+              Text "검증됨" (40KN-1) 0×0 "검증됨"
+          Text "평균 거래량의 3배가 터진 날 종가에…" (40KO-1) 0×0 "평균 거래량의 3배가 터진 날 종가에 붙습니다."
+          Frame "Frame" (40KP-1) 0×0
+            Text "v3 · 08-08 검증 · 거래 2…" (40KQ-1) 0×0 "v3 · 08-08 검증 · 거래 29"
+            Rectangle "Rectangle" (40KR-1) 0×0
+            Frame "Frame" (40KS-1) 0×0
+              Text "수정" (40KT-1) 0×0 "수정"
+        Frame "기법 8 · 갭 상승 눌림 매수" (40KU-1) 0×0
+          Frame "Frame" (40KV-1) 0×0
+            Text "갭 상승 눌림 매수" (40KW-1) 0×0 "갭 상승 눌림 매수"
+            Frame "Frame" (40KX-1) 0×0
+              Text "돌파" (40KY-1) 0×0 "돌파"
+            Rectangle "Rectangle" (40KZ-1) 0×0
+            Frame "Frame" (40L0-1) 0×0
+              Text "검증됨" (40L1-1) 0×0 "검증됨"
+          Text "갭으로 뛴 뒤 첫 눌림에서 삽니다." (40L2-1) 0×0 "갭으로 뛴 뒤 첫 눌림에서 삽니다."
+          Frame "Frame" (40L3-1) 0×0
+            Text "v2 · 08-04 검증 · 거래 3…" (40L4-1) 0×0 "v2 · 08-04 검증 · 거래 33"
+            Rectangle "Rectangle" (40L5-1) 0×0
+            Frame "Frame" (40L6-1) 0×0
+              Text "수정" (40L7-1) 0×0 "수정"
+        Frame "기법 9 · 5-20 단기 교차" (40L8-1) 0×0
+          Frame "Frame" (40L9-1) 0×0
+            Text "5-20 단기 교차" (40LA-1) 0×0 "5-20 단기 교차"
+            Frame "Frame" (40LB-1) 0×0
+              Text "추세" (40LC-1) 0×0 "추세"
+            Rectangle "Rectangle" (40LD-1) 0×0
+            Frame "Frame" (40LE-1) 0×0
+              Text "검증됨" (40LF-1) 0×0 "검증됨"
+          Text "짧은 두 이동평균의 교차만 봅니다." (40LG-1) 0×0 "짧은 두 이동평균의 교차만 봅니다."
+          Frame "Frame" (40LH-1) 0×0
+            Text "v5 · 07-31 검증 · 거래 8…" (40LI-1) 0×0 "v5 · 07-31 검증 · 거래 88"
+            Rectangle "Rectangle" (40LJ-1) 0×0
+            Frame "Frame" (40LK-1) 0×0
+              Text "수정" (40LL-1) 0×0 "수정"
+        Frame "기법 10 · 변동성 돌파" (40LN-1) 0×0
+          Frame "Frame" (40LO-1) 0×0
+            Text "변동성 돌파" (40LP-1) 0×0 "변동성 돌파"
+            Frame "Frame" (40LQ-1) 0×0
+              Text "돌파" (40LR-1) 0×0 "돌파"
+            Rectangle "Rectangle" (40LS-1) 0×0
+            Frame "Frame" (40LT-1) 0×0
+              Text "검증됨" (40LU-1) 0×0 "검증됨"
+          Text "전일 변동폭의 절반을 넘으면 그날 삽…" (40LV-1) 0×0 "전일 변동폭의 절반을 넘으면 그날 삽니다."
+          Frame "Frame" (40LW-1) 0×0
+            Text "v2 · 07-28 검증 · 거래 5…" (40LX-1) 0×0 "v2 · 07-28 검증 · 거래 57"
+            Rectangle "Rectangle" (40LY-1) 0×0
+            Frame "Frame" (40LZ-1) 0×0
+              Text "수정" (40M0-1) 0×0 "수정"
+        Frame "기법 11 · 내 ATR 돌파 + 손절" (40M1-1) 0×0
+          Frame "Frame" (40M2-1) 0×0
+            Text "내 ATR 돌파 + 손절" (40M3-1) 0×0 "내 ATR 돌파 + 손절"
+            Frame "Frame" (40M4-1) 0×0
+              Text "돌파" (40M5-1) 0×0 "돌파"
+            Rectangle "Rectangle" (40M6-1) 0×0
+            Frame "Frame" (40M7-1) 0×0
+              Text "수정 중" (40M8-1) 0×0 "수정 중"
+          Text "20일 신고가 돌파에 ATR 2배 손…" (40M9-1) 0×0 "20일 신고가 돌파에 ATR 2배 손절을 붙인 내 기법."
+          Frame "Frame" (40MA-1) 0×0
+            Text "v3 초안 · 방금 대화로 바뀜" (40MB-1) 0×0 "v3 초안 · 방금 대화로 바뀜"
+            Rectangle "Rectangle" (40MC-1) 0×0
+            Frame "Frame" (40MD-1) 0×0
+              Text "수정" (40ME-1) 0×0 "수정"
+      Frame "바닥 안내" (40MG-1) 0×0
+        Rectangle "Rectangle" (40MH-1) 5×5
+        Text "기법을 누르면 오른쪽 대화가 그 기법…" (40MI-1) 0×0 "기법을 누르면 오른쪽 대화가 그 기법을 다룹니다. 실행·배포·주문은 여기서도 사람이 누르는 버튼입니다."
+    Frame "채팅" (40H5-1) 400×900
+      Frame "채팅 헤더" (40MK-1) 0×0
+        Text "기법에게 묻기" (40ML-1) 0×0 "기법에게 묻기"
+        Text "고른 기법을 다룹니다" (40MM-1) 0×0 "고른 기법을 다룹니다"
+      Frame "채팅 본문" (40MO-1) 0×0
+        Frame "빈 상태" (40MQ-1) 0×0
+          Frame "Frame" (40MR-1) 44×44
+            Text "?" (40MS-1) 0×0 "?"
+          Text "아직 고른 기법이 없습니다" (40MT-1) 0×0 "아직 고른 기법이 없습니다"
+          Text "왼쪽 목록에서 기법을 누르면 그 기법…" (40MU-1) 0×0 "왼쪽 목록에서 기법을 누르면 그 기법에 대해 묻고 고칠 수 있어요. 새로 만들려면 [+ 새 기법 만들기]를 "
+        Frame "예시 질문" (40MW-1) 0×0
+          Text "이런 걸 물어볼 수 있어요" (40MX-1) 0×0 "이런 걸 물어볼 수 있어요"
+          Frame "Frame" (40MY-1) 0×0
+            Text "이 기법은 다른 것과 뭐가 다른가요?" (40MZ-1) 0×0 "이 기법은 다른 것과 뭐가 다른가요?"
+          Frame "Frame" (40N0-1) 0×0
+            Text "왜 최근 두 달 동안 한 번도 안 샀…" (40N1-1) 0×0 "왜 최근 두 달 동안 한 번도 안 샀죠?"
+          Frame "Frame" (40N2-1) 0×0
+            Text "손절을 ATR 2배로 바꾸고 싶어요" (40N3-1) 0×0 "손절을 ATR 2배로 바꾸고 싶어요"
+      Frame "입력" (40N5-1) 0×0
+        Frame "Frame" (40N6-1) 0×0
+          Frame "Frame" (40N7-1) 22×22
+            Text "+" (40N8-1) 0×0 "+"
+          Text "무엇이든 물어보세요" (40N9-1) 0×0 "무엇이든 물어보세요"

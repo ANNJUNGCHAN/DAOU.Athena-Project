@@ -1,0 +1,232 @@
+{
+ "board_id": "47DU-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47EH-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47EG-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47EE-0",
+   "text": "ETF 기간 수익률",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Header"
+   ]
+  },
+  {
+   "id": "47EC-0",
+   "text": "종목명",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47EB-0",
+   "text": "KODEX 2차전지산업",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47E9-0",
+   "text": "종목명",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47E8-0",
+   "text": "TIGER 2차전지테마",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47E6-0",
+   "text": "ETF수익률",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47E5-0",
+   "text": "+42.1%",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47E3-0",
+   "text": "ETF수익률",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47E2-0",
+   "text": "+88.4%",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47E0-0",
+   "text": "ETF전체시세",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47DZ-0",
+   "text": "전체 1,024 종목",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47DW-0",
+   "text": "외 196개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47DU-0",
+   "name": "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47ED-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47EF-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47DX-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47EA-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47E7-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47E4-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47E1-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47DY-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47DV-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "ETF 기간 수익률": 1,
+  "종목명": 2,
+  "KODEX 2차전지산업": 1,
+  "TIGER 2차전지테마": 1,
+  "ETF수익률": 2,
+  "+42.1%": 1,
+  "+88.4%": 1,
+  "ETF전체시세": 1,
+  "전체 1,024 종목": 1,
+  "외 196개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "e599a854703b26f41a05ccd18b0b891eda437dbaea0346f8ac64b275392b9ff8"
+}

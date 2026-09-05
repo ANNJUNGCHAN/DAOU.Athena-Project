@@ -1,0 +1,239 @@
+{
+ "board_id": "45SA-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "template/order_confirm",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "45T2-0",
+   "text": "주문 확인형",
+   "path": [
+    "template/order_confirm",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45T3-0",
+   "text": "기준 09:42",
+   "path": [
+    "template/order_confirm",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45T4-0",
+   "text": "주문 확인",
+   "path": [
+    "template/order_confirm",
+    "Header"
+   ]
+  },
+  {
+   "id": "45X8-0",
+   "text": "주문을 확인했어요",
+   "path": [
+    "template/order_confirm",
+    "Body",
+    "Status"
+   ]
+  },
+  {
+   "id": "45XC-0",
+   "text": "종목",
+   "path": [
+    "template/order_confirm",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45XD-0",
+   "text": "삼성전자 / 005930",
+   "path": [
+    "template/order_confirm",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45XF-0",
+   "text": "유형",
+   "path": [
+    "template/order_confirm",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45XG-0",
+   "text": "매수",
+   "path": [
+    "template/order_confirm",
+    "Body",
+    "Confirm facts",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45XK-0",
+   "text": "수량",
+   "path": [
+    "template/order_confirm",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45XL-0",
+   "text": "10주",
+   "path": [
+    "template/order_confirm",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45XN-0",
+   "text": "가격",
+   "path": [
+    "template/order_confirm",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  },
+  {
+   "id": "45XO-0",
+   "text": "시장가",
+   "path": [
+    "template/order_confirm",
+    "Body",
+    "Confirm values",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "45SA-0",
+   "name": "template/order_confirm",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "45T0-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45T1-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45UI-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45X6-0",
+   "name": "Status",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45X7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 3
+  },
+  {
+   "id": "45XA-0",
+   "name": "Confirm facts",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45XB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "45XE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "45XI-0",
+   "name": "Confirm values",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45XJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "45XM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "주문 확인형": 1,
+  "기준 09:42": 1,
+  "주문 확인": 1,
+  "주문을 확인했어요": 1,
+  "종목": 1,
+  "삼성전자 / 005930": 1,
+  "유형": 1,
+  "매수": 1,
+  "수량": 1,
+  "10주": 1,
+  "가격": 1,
+  "시장가": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "088235b5053950b30f8c5f1c1acc1f1020a46ba39043bf745cafb85c4ab6478e"
+}

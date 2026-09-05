@@ -1,0 +1,3762 @@
+{
+ "board_id": "2SYW-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "2T3S-1",
+   "text": "내 계좌",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T3R-1",
+   "text": "실시간",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T3O-1",
+   "text": "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T3M-1",
+   "text": "자산 종합",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T3K-1",
+   "text": "보유종목",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T3I-1",
+   "text": "예수금·결제",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T3G-1",
+   "text": "손익·성과",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T3E-1",
+   "text": "주문·체결",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T3C-1",
+   "text": "증거금·담보",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T3A-1",
+   "text": "금현물",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T36-1",
+   "text": "총자산",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T35-1",
+   "text": "124,580,240원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T34-1",
+   "text": "수익률 +4.96%",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T32-1",
+   "text": "주문가능금액",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T31-1",
+   "text": "31,240,000원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T30-1",
+   "text": "출금가능 28,940,000원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T2Y-1",
+   "text": "주식 평가액",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T2X-1",
+   "text": "89,760,240원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T2W-1",
+   "text": "8종목",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T2U-1",
+   "text": "평가손익",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T2T-1",
+   "text": "+4,240,900원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T2S-1",
+   "text": "매입 85,519,340원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T2Q-1",
+   "text": "현금 비중",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T2P-1",
+   "text": "28.0%",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2T2O-1",
+   "text": "보유종목 8종",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q8T-0",
+   "text": "오늘 주문·체결",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q8U-0",
+   "text": "주식 현물 · 실시간 · 최신순",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q8X-0",
+   "text": "오늘 주문",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q8Y-0",
+   "text": "5건",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q8Z-0",
+   "text": "약정 16,788,000원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q91-0",
+   "text": "체결",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q92-0",
+   "text": "3건",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q93-0",
+   "text": "274주 · 16,788,000원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q95-0",
+   "text": "미체결",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q96-0",
+   "text": "2건",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q97-0",
+   "text": "잔량 15주",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q99-0",
+   "text": "체결률",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9A-0",
+   "text": "60%",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9B-0",
+   "text": "3건 / 5건",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9D-0",
+   "text": "오늘 약정",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Today Notional"
+   ]
+  },
+  {
+   "id": "3Q9G-0",
+   "text": "매수 약정",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Today Notional",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9H-0",
+   "text": "3,842,000원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Today Notional",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9J-0",
+   "text": "매도 약정",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Today Notional",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9K-0",
+   "text": "12,946,000원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Today Notional",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9M-0",
+   "text": "약정 합계",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Today Notional",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9N-0",
+   "text": "16,788,000원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Today Notional",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9Q-0",
+   "text": "매매 비용",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Today Notional",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9R-0",
+   "text": "-24,600원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Today Notional",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9S-0",
+   "text": "수수료 -3,880 · 세금 -20,720",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Today Notional",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9U-0",
+   "text": "시간",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9V-0",
+   "text": "종목",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9W-0",
+   "text": "구분",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9X-0",
+   "text": "수량",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9Y-0",
+   "text": "주문가격",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Q9Z-0",
+   "text": "체결",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QA0-0",
+   "text": "상태",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QA3-0",
+   "text": "09:42:05",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QA4-0",
+   "text": "확인 09:42:06",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QA6-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QA8-0",
+   "text": "005930",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAA-0",
+   "text": "KRX",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAC-0",
+   "text": "최선집행",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAE-0",
+   "text": "매수",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAF-0",
+   "text": "시장가 · 현금",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAH-0",
+   "text": "10주",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAI-0",
+   "text": "확인 10 · 체결 0",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAK-0",
+   "text": "시장가",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAL-0",
+   "text": "스톱 해당 없음",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAN-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAO-0",
+   "text": "누계 0원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAQ-0",
+   "text": "접수 · 미체결",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAR-0",
+   "text": "주문 0021846",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAU-0",
+   "text": "09:38:12",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAV-0",
+   "text": "확인 09:38:13",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAX-0",
+   "text": "KODEX 200",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QAZ-0",
+   "text": "069500",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QB1-0",
+   "text": "KRX",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QB3-0",
+   "text": "매도",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QB4-0",
+   "text": "지정가 · 현금",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QB6-0",
+   "text": "250주",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QB7-0",
+   "text": "확인 250 · 체결 250",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QB9-0",
+   "text": "48,360",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBA-0",
+   "text": "스톱 해당 없음",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBC-0",
+   "text": "48,360",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBD-0",
+   "text": "누계 12,090,000",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBF-0",
+   "text": "체결 완료",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBG-0",
+   "text": "주문 0021840",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBJ-0",
+   "text": "09:21:44",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBK-0",
+   "text": "확인 09:21:45",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBM-0",
+   "text": "현대차",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBO-0",
+   "text": "005380",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBQ-0",
+   "text": "KRX",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBS-0",
+   "text": "매수",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBT-0",
+   "text": "지정가 · 현금",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBV-0",
+   "text": "5주",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBW-0",
+   "text": "확인 5 · 체결 0",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBY-0",
+   "text": "232,000",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QBZ-0",
+   "text": "스톱 해당 없음",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QC1-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QC2-0",
+   "text": "누계 0원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QC4-0",
+   "text": "호가 대기",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QC5-0",
+   "text": "주문 0021833",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QC8-0",
+   "text": "09:15:30",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QC9-0",
+   "text": "확인 09:15:31",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCB-0",
+   "text": "NAVER",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCD-0",
+   "text": "035420",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCF-0",
+   "text": "KRX",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCH-0",
+   "text": "매도",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCI-0",
+   "text": "지정가 · 현금",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCK-0",
+   "text": "4주",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCL-0",
+   "text": "확인 4 · 체결 4",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCN-0",
+   "text": "214,000",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCO-0",
+   "text": "스톱 해당 없음",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCQ-0",
+   "text": "214,000",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCR-0",
+   "text": "누계 856,000",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCT-0",
+   "text": "체결 완료",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCU-0",
+   "text": "주문 0021827",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCX-0",
+   "text": "09:02:18",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QCY-0",
+   "text": "확인 09:02:19",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QD0-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QD2-0",
+   "text": "000660",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QD4-0",
+   "text": "KRX",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QD6-0",
+   "text": "매수",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QD7-0",
+   "text": "지정가 · 현금",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QD9-0",
+   "text": "20주",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QDA-0",
+   "text": "확인 20 · 체결 20",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QDC-0",
+   "text": "192,100",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QDD-0",
+   "text": "스톱 해당 없음",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QDF-0",
+   "text": "192,100",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QDG-0",
+   "text": "누계 3,842,000",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QDI-0",
+   "text": "체결 완료",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QDJ-0",
+   "text": "주문 0021815",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3QDL-0",
+   "text": "오늘 5건 전체 표시",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "Order Ledger",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKN-0",
+   "text": "주문 추적",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKO-0",
+   "text": "미체결 2건",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKR-0",
+   "text": "삼성전자 매수",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKS-0",
+   "text": "접수 · 미체결",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKV-0",
+   "text": "주문",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "주문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKW-0",
+   "text": "10주 · 시장가",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "주문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKY-0",
+   "text": "09:42:05 접수 · 09:42:06 확인 10주",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "주문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UL1-0",
+   "text": "주문번호",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "주문번호",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UL2-0",
+   "text": "0021846",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "주문번호",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UL4-0",
+   "text": "원주문 0021846 · 분할 2/3회차",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "주문번호",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UL6-0",
+   "text": "최우선 호가",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "최우선 호가"
+   ]
+  },
+  {
+   "id": "3UL7-0",
+   "text": "매도 150,900 · 매수 150,800",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "최우선 호가"
+   ]
+  },
+  {
+   "id": "3ULA-0",
+   "text": "미체결 잔량",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "미체결 잔량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ULB-0",
+   "text": "10주",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "미체결 잔량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ULD-0",
+   "text": "체결 해당 없음",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "삼성전자 매수",
+    "미체결 잔량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ULG-0",
+   "text": "현대차 매수",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ULH-0",
+   "text": "호가 대기",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ULK-0",
+   "text": "주문",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "주문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ULL-0",
+   "text": "5주 · 232,000원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "주문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ULN-0",
+   "text": "09:21:44 접수 · 09:21:45 확인 5주",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "주문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ULQ-0",
+   "text": "주문번호",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "주문번호",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ULR-0",
+   "text": "0021833",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "주문번호",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ULT-0",
+   "text": "체결 해당 없음",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "주문번호",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ULV-0",
+   "text": "최우선 호가",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "최우선 호가"
+   ]
+  },
+  {
+   "id": "3ULW-0",
+   "text": "매도 232,600 · 매수 232,400",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "최우선 호가"
+   ]
+  },
+  {
+   "id": "3ULZ-0",
+   "text": "현재가",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "현재가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UM0-0",
+   "text": "232,500원",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "현재가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UM2-0",
+   "text": "주문가와 500원 차이",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "현대차 매수",
+    "현재가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UM5-0",
+   "text": "체결 주문",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "체결 주문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UM6-0",
+   "text": "3건",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "체결 주문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UM9-0",
+   "text": "KODEX 200",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "체결 주문",
+    "KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMA-0",
+   "text": "최우선 48,365 / 48,355",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "체결 주문",
+    "KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMC-0",
+   "text": "체결 0000238",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "체결 주문",
+    "KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMF-0",
+   "text": "NAVER",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "체결 주문",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMG-0",
+   "text": "최우선 214,500 / 213,500",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "체결 주문",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMI-0",
+   "text": "체결 0000191",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "체결 주문",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UML-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "체결 주문",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMM-0",
+   "text": "최우선 198,500 / 198,300",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "체결 주문",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMO-0",
+   "text": "체결 0000154",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "체결 주문",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMR-0",
+   "text": "주문 상태 · 경로",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMS-0",
+   "text": "오늘 5건",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMV-0",
+   "text": "주문 경로",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "주문 경로",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMW-0",
+   "text": "HTS",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "주문 경로",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UMY-0",
+   "text": "최선집행 1건",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "주문 경로",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UN1-0",
+   "text": "투자자 구분",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "투자자 구분",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UN2-0",
+   "text": "개인",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "투자자 구분",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UN4-0",
+   "text": "업무 주식 현물",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "투자자 구분",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UN7-0",
+   "text": "시간외 단일가",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "시간외 단일가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UN8-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "시간외 단일가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UNA-0",
+   "text": "16:00 개시",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "시간외 단일가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UNC-0",
+   "text": "정정·취소·거부 사유·예약·반대·대출일",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "영값 묶음"
+   ]
+  },
+  {
+   "id": "3UNE-0",
+   "text": "해당 없음 6항목",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UNF-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Workspace",
+    "주문 추적 레일",
+    "주문 상태 · 경로",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39LU-0",
+   "text": "● 주문·체결 실시간 반영 중",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Status Footer"
+   ]
+  },
+  {
+   "id": "39LW-0",
+   "text": "영업부 · 담당자 미제공",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Status Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39LX-0",
+   "text": "주문 전체 내역 보기",
+   "path": [
+    "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+    "Account Root · 주문·체결",
+    "Account Card Surface",
+    "Account Status Footer",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2SYW-1",
+   "name": "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "2SYX-1",
+   "name": "Account Root · 주문·체결",
+   "component": "Frame",
+   "w": 1440,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "2SYY-1",
+   "name": "Account Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2T37-1",
+   "name": "Account Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "2T3N-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2T3P-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2T3Q-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2T38-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2T3L-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2T3J-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2T3H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2T3F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2T3D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2T3B-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2T39-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2T2M-1",
+   "name": "Account Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "2T33-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 340,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2T2Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 265,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2T2V-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2T2R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2T2N-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SZ2-1",
+   "name": "Account Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3Q8R-0",
+   "name": "Order Ledger",
+   "component": "Frame",
+   "w": 900,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3Q8S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3Q8V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3Q8W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3Q90-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3Q94-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3Q98-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3Q9C-0",
+   "name": "Today Notional",
+   "component": "Frame",
+   "w": 844,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3Q9E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3Q9F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3Q9I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3Q9L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3Q9O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3Q9P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3Q9T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "3QA1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 60,
+   "depth": 5
+  },
+  {
+   "id": "3QA2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 106,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QA5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QA7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3QA9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3QAB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3QAD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QAG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QAJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 102,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QAM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QAP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QAS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 60,
+   "depth": 5
+  },
+  {
+   "id": "3QAT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 106,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QAW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QAY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3QB0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3QB2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QB5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QB8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 102,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QBB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QBE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QBH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 60,
+   "depth": 5
+  },
+  {
+   "id": "3QBI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 106,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QBL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QBN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3QBP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3QBR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QBU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QBX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 102,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QC0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QC3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QC6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 60,
+   "depth": 5
+  },
+  {
+   "id": "3QC7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 106,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QCA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QCC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3QCE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3QCG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QCJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QCM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 102,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QCP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QCS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QCV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 60,
+   "depth": 5
+  },
+  {
+   "id": "3QCW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 106,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QCZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QD1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3QD3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3QD5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 108,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QD8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 130,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QDB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 102,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QDE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QDH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3QDK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UKL-0",
+   "name": "주문 추적 레일",
+   "component": "Frame",
+   "w": 460,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3UKM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UKP-0",
+   "name": "삼성전자 매수",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UKQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UKT-0",
+   "name": "주문",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UKU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UKX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UKZ-0",
+   "name": "주문번호",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UL0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UL3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UL5-0",
+   "name": "최우선 호가",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UL8-0",
+   "name": "미체결 잔량",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UL9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ULC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ULE-0",
+   "name": "현대차 매수",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ULF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ULI-0",
+   "name": "주문",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3ULJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ULM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ULO-0",
+   "name": "주문번호",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3ULP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ULS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ULU-0",
+   "name": "최우선 호가",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3ULX-0",
+   "name": "현재가",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3ULY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UM1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UM3-0",
+   "name": "체결 주문",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UM4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UM7-0",
+   "name": "KODEX 200",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UM8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UMB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UMD-0",
+   "name": "NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UME-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UMH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UMJ-0",
+   "name": "SK하이닉스",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UMK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UMN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UMP-0",
+   "name": "주문 상태 · 경로",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UMQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UMT-0",
+   "name": "주문 경로",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UMU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UMX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UMZ-0",
+   "name": "투자자 구분",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UN0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UN3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UN5-0",
+   "name": "시간외 단일가",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UN6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UN9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UNB-0",
+   "name": "영값 묶음",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UND-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39LT-0",
+   "name": "Account Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "39LV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "내 계좌": 1,
+  "실시간": 1,
+  "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18": 1,
+  "자산 종합": 1,
+  "보유종목": 1,
+  "예수금·결제": 1,
+  "손익·성과": 1,
+  "주문·체결": 1,
+  "증거금·담보": 1,
+  "금현물": 1,
+  "총자산": 1,
+  "124,580,240원": 1,
+  "수익률 +4.96%": 1,
+  "주문가능금액": 1,
+  "31,240,000원": 1,
+  "출금가능 28,940,000원": 1,
+  "주식 평가액": 1,
+  "89,760,240원": 1,
+  "8종목": 1,
+  "평가손익": 1,
+  "+4,240,900원": 1,
+  "매입 85,519,340원": 1,
+  "현금 비중": 1,
+  "28.0%": 1,
+  "보유종목 8종": 1,
+  "오늘 주문·체결": 1,
+  "주식 현물 · 실시간 · 최신순": 1,
+  "오늘 주문": 1,
+  "5건": 1,
+  "약정 16,788,000원": 1,
+  "체결": 2,
+  "3건": 2,
+  "274주 · 16,788,000원": 1,
+  "미체결": 1,
+  "2건": 1,
+  "잔량 15주": 1,
+  "체결률": 1,
+  "60%": 1,
+  "3건 / 5건": 1,
+  "오늘 약정": 1,
+  "매수 약정": 1,
+  "3,842,000원": 1,
+  "매도 약정": 1,
+  "12,946,000원": 1,
+  "약정 합계": 1,
+  "16,788,000원": 1,
+  "매매 비용": 1,
+  "-24,600원": 1,
+  "수수료 -3,880 · 세금 -20,720": 1,
+  "시간": 1,
+  "종목": 1,
+  "구분": 1,
+  "수량": 1,
+  "주문가격": 1,
+  "상태": 1,
+  "09:42:05": 1,
+  "확인 09:42:06": 1,
+  "삼성전자": 1,
+  "005930": 1,
+  "KRX": 5,
+  "최선집행": 1,
+  "매수": 3,
+  "시장가 · 현금": 1,
+  "10주": 2,
+  "확인 10 · 체결 0": 1,
+  "시장가": 1,
+  "스톱 해당 없음": 5,
+  "해당 없음": 3,
+  "누계 0원": 2,
+  "접수 · 미체결": 2,
+  "주문 0021846": 1,
+  "09:38:12": 1,
+  "확인 09:38:13": 1,
+  "KODEX 200": 2,
+  "069500": 1,
+  "매도": 2,
+  "지정가 · 현금": 4,
+  "250주": 1,
+  "확인 250 · 체결 250": 1,
+  "48,360": 2,
+  "누계 12,090,000": 1,
+  "체결 완료": 3,
+  "주문 0021840": 1,
+  "09:21:44": 1,
+  "확인 09:21:45": 1,
+  "현대차": 1,
+  "005380": 1,
+  "5주": 1,
+  "확인 5 · 체결 0": 1,
+  "232,000": 1,
+  "호가 대기": 2,
+  "주문 0021833": 1,
+  "09:15:30": 1,
+  "확인 09:15:31": 1,
+  "NAVER": 2,
+  "035420": 1,
+  "4주": 1,
+  "확인 4 · 체결 4": 1,
+  "214,000": 2,
+  "누계 856,000": 1,
+  "주문 0021827": 1,
+  "09:02:18": 1,
+  "확인 09:02:19": 1,
+  "SK하이닉스": 2,
+  "000660": 1,
+  "20주": 1,
+  "확인 20 · 체결 20": 1,
+  "192,100": 2,
+  "누계 3,842,000": 1,
+  "주문 0021815": 1,
+  "오늘 5건 전체 표시": 1,
+  "주문 추적": 1,
+  "미체결 2건": 1,
+  "삼성전자 매수": 1,
+  "주문": 2,
+  "10주 · 시장가": 1,
+  "09:42:05 접수 · 09:42:06 확인 10주": 1,
+  "주문번호": 2,
+  "0021846": 1,
+  "원주문 0021846 · 분할 2/3회차": 1,
+  "최우선 호가": 2,
+  "매도 150,900 · 매수 150,800": 1,
+  "미체결 잔량": 1,
+  "체결 해당 없음": 2,
+  "현대차 매수": 1,
+  "5주 · 232,000원": 1,
+  "09:21:44 접수 · 09:21:45 확인 5주": 1,
+  "0021833": 1,
+  "매도 232,600 · 매수 232,400": 1,
+  "현재가": 1,
+  "232,500원": 1,
+  "주문가와 500원 차이": 1,
+  "체결 주문": 1,
+  "최우선 48,365 / 48,355": 1,
+  "체결 0000238": 1,
+  "최우선 214,500 / 213,500": 1,
+  "체결 0000191": 1,
+  "최우선 198,500 / 198,300": 1,
+  "체결 0000154": 1,
+  "주문 상태 · 경로": 1,
+  "오늘 5건": 1,
+  "주문 경로": 1,
+  "HTS": 1,
+  "최선집행 1건": 1,
+  "투자자 구분": 1,
+  "개인": 1,
+  "업무 주식 현물": 1,
+  "시간외 단일가": 1,
+  "16:00 개시": 1,
+  "정정·취소·거부 사유·예약·반대·대출일": 1,
+  "해당 없음 6항목": 1,
+  "▸": 1,
+  "● 주문·체결 실시간 반영 중": 1,
+  "영업부 · 담당자 미제공": 1,
+  "주문 전체 내역 보기": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "50f566488e8defa006f503a7ed8b2ed779509a86d9d5cc90d89ab5054f878e58"
+}

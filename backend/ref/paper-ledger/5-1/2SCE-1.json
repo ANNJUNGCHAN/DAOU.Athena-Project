@@ -1,0 +1,4248 @@
+{
+ "board_id": "2SCE-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+ "width": 1440,
+ "height": 1092,
+ "texts": [
+  {
+   "id": "2SHA-1",
+   "text": "내 계좌",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SH9-1",
+   "text": "실시간",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SH6-1",
+   "text": "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SH4-1",
+   "text": "자산 종합",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SH2-1",
+   "text": "보유종목",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SH0-1",
+   "text": "예수금·결제",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGY-1",
+   "text": "손익·성과",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGW-1",
+   "text": "주문·체결",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGU-1",
+   "text": "증거금·담보",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGS-1",
+   "text": "금현물",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGO-1",
+   "text": "총자산",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGN-1",
+   "text": "124,580,240원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGM-1",
+   "text": "수익률 +4.96%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGK-1",
+   "text": "주문가능금액",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGJ-1",
+   "text": "31,240,000원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGI-1",
+   "text": "출금가능 28,940,000원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGG-1",
+   "text": "주식 평가액",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGF-1",
+   "text": "89,760,240원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGE-1",
+   "text": "8종목",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGC-1",
+   "text": "평가손익",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGB-1",
+   "text": "+4,240,900원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SGA-1",
+   "text": "매입 85,519,340원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SG8-1",
+   "text": "현금 비중",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SG7-1",
+   "text": "28.0%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SG6-1",
+   "text": "보유종목 8종",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "375I-0",
+   "text": "보유종목 8종목",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Table Title"
+   ]
+  },
+  {
+   "id": "375J-0",
+   "text": "평가액 순 · 실시간 09:42:18",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Table Title"
+   ]
+  },
+  {
+   "id": "375L-0",
+   "text": "종목",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "375N-0",
+   "text": "수량",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "375P-0",
+   "text": "평단",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "375R-0",
+   "text": "현재가",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "375T-0",
+   "text": "평가액",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "375V-0",
+   "text": "손익",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "375X-0",
+   "text": "오늘 매매",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Table Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "379T-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "379V-0",
+   "text": "005930",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "379X-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "379Z-0",
+   "text": "275",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37A0-0",
+   "text": "가능 275 · 결제 275",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37A2-0",
+   "text": "138,344",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37A3-0",
+   "text": "매입 38,044,600",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37A5-0",
+   "text": "150,850",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37A6-0",
+   "text": "전일 149,000 · +1.24%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37A8-0",
+   "text": "41,483,750",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37A9-0",
+   "text": "비중 33.3% · 매입 44.5%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37AB-0",
+   "text": "+3,439,150",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37AC-0",
+   "text": "+9.04%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37AE-0",
+   "text": "매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37AF-0",
+   "text": "전일 매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FI-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FH-0",
+   "text": "000660",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FG-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FC-0",
+   "text": "110",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FB-0",
+   "text": "가능 110 · 결제 90",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37F9-0",
+   "text": "192,300",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37F8-0",
+   "text": "매입 21,153,000",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37F6-0",
+   "text": "198,400",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37F5-0",
+   "text": "전일 194,410 · +2.05%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37F3-0",
+   "text": "21,824,000",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37F2-0",
+   "text": "비중 17.5% · 매입 24.7%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37F0-0",
+   "text": "+671,000",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37EZ-0",
+   "text": "+3.17%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37EX-0",
+   "text": "매수 20 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37EW-0",
+   "text": "전일 매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37G7-0",
+   "text": "KODEX 200",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37G6-0",
+   "text": "069500",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37G5-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37G1-0",
+   "text": "184",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37G0-0",
+   "text": "가능 184 · 결제 434",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FY-0",
+   "text": "48,655",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FX-0",
+   "text": "매입 8,952,520",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FV-0",
+   "text": "48,360",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FU-0",
+   "text": "전일 48,300 · +0.12%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FS-0",
+   "text": "8,898,240",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FR-0",
+   "text": "비중 7.1% · 매입 10.5%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FP-0",
+   "text": "-54,280",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FO-0",
+   "text": "-0.61%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FM-0",
+   "text": "매수 0 · 매도 250",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37FL-0",
+   "text": "전일 매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GW-0",
+   "text": "현대차",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GV-0",
+   "text": "005380",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GU-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GQ-0",
+   "text": "25",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GP-0",
+   "text": "가능 25 · 결제 25",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GN-0",
+   "text": "229,650",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GM-0",
+   "text": "매입 5,741,250",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GK-0",
+   "text": "232,500",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GJ-0",
+   "text": "전일 229,900 · +1.13%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GH-0",
+   "text": "5,812,500",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GG-0",
+   "text": "비중 4.7% · 매입 6.7%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GE-0",
+   "text": "+71,250",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GD-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GB-0",
+   "text": "매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GA-0",
+   "text": "전일 매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HL-0",
+   "text": "NAVER",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HK-0",
+   "text": "035420",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HJ-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HF-0",
+   "text": "25",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HE-0",
+   "text": "가능 25 · 결제 29",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HC-0",
+   "text": "209,760",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HB-0",
+   "text": "매입 5,244,000",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37H9-0",
+   "text": "214,000",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37H8-0",
+   "text": "전일 209,700 · +2.05%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37H6-0",
+   "text": "5,350,000",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37H5-0",
+   "text": "비중 4.3% · 매입 6.1%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37H3-0",
+   "text": "+106,000",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37H2-0",
+   "text": "+2.02%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37H0-0",
+   "text": "매수 0 · 매도 4",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37GZ-0",
+   "text": "전일 매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IA-0",
+   "text": "삼성바이오로직스",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37I9-0",
+   "text": "207940",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37I8-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37I4-0",
+   "text": "3",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37I3-0",
+   "text": "가능 3 · 결제 3",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37I1-0",
+   "text": "1,036,540",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37I0-0",
+   "text": "매입 3,109,620",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HY-0",
+   "text": "1,032,000",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HX-0",
+   "text": "전일 1,036,000 · -0.39%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HV-0",
+   "text": "3,096,000",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HU-0",
+   "text": "비중 2.5% · 매입 3.6%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HS-0",
+   "text": "-13,620",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HR-0",
+   "text": "-0.44%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HP-0",
+   "text": "매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37HO-0",
+   "text": "전일 매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 삼성바이오로직스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IZ-0",
+   "text": "카카오",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IY-0",
+   "text": "035720",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IX-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IT-0",
+   "text": "55",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IS-0",
+   "text": "가능 55 · 결제 15",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IQ-0",
+   "text": "41,310",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IP-0",
+   "text": "매입 2,272,050",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IN-0",
+   "text": "41,850",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IM-0",
+   "text": "전일 41,300 · +1.33%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IK-0",
+   "text": "2,301,750",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IJ-0",
+   "text": "비중 1.8% · 매입 2.7%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IH-0",
+   "text": "+29,700",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IG-0",
+   "text": "+1.31%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37IE-0",
+   "text": "매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37ID-0",
+   "text": "전일 매수 40 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 카카오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37JO-0",
+   "text": "기아",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37JN-0",
+   "text": "000270",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37JM-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37JI-0",
+   "text": "10",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37JH-0",
+   "text": "가능 10 · 결제 10",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37JF-0",
+   "text": "100,230",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37JE-0",
+   "text": "매입 1,002,300",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37JC-0",
+   "text": "99,400",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37JB-0",
+   "text": "전일 100,100 · -0.70%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37J9-0",
+   "text": "994,000",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37J8-0",
+   "text": "비중 0.8% · 매입 1.2%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37J6-0",
+   "text": "-8,300",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37J5-0",
+   "text": "-0.83%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37J3-0",
+   "text": "매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37J2-0",
+   "text": "전일 매수 0 · 매도 0",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Row · 기아",
+    "Frame"
+   ]
+  },
+  {
+   "id": "37UB-0",
+   "text": "전체 8종목 표시 · 평가액 합 89,760,240원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Table Foot"
+   ]
+  },
+  {
+   "id": "37UC-0",
+   "text": "매입 합 85,519,340원 · 전 종목 현금",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Table Column",
+    "Table Foot"
+   ]
+  },
+  {
+   "id": "388K-0",
+   "text": "배분",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R1 배분",
+    "Frame"
+   ]
+  },
+  {
+   "id": "388L-0",
+   "text": "총자산 대비",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R1 배분",
+    "Frame"
+   ]
+  },
+  {
+   "id": "388N-0",
+   "text": "주식 72.0%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R1 배분",
+    "Frame"
+   ]
+  },
+  {
+   "id": "388O-0",
+   "text": "현금 28.0%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R1 배분",
+    "Frame"
+   ]
+  },
+  {
+   "id": "388T-0",
+   "text": "집중 · 수익",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익"
+   ]
+  },
+  {
+   "id": "388W-0",
+   "text": "총 평가손익",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "388Y-0",
+   "text": "+4,240,900원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "388Z-0",
+   "text": "+4.96%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3891-0",
+   "text": "총매입금액",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3893-0",
+   "text": "85,519,340원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3897-0",
+   "text": "상위 3종목 집중",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3898-0",
+   "text": "58.0%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "389A-0",
+   "text": "종목 수",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "389B-0",
+   "text": "8 · ETF 1",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IF1-0",
+   "text": "매입비중 1위",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익",
+    "R2-3 매입비중 1위"
+   ]
+  },
+  {
+   "id": "3IF2-0",
+   "text": "삼성전자 44.5%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R2 집중·수익",
+    "R2-3 매입비중 1위"
+   ]
+  },
+  {
+   "id": "3UNJ-0",
+   "text": "신용 · 대출",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R3 신용·대출",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UNL-0",
+   "text": "재매수가능",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R3 신용·대출",
+    "재매수가능"
+   ]
+  },
+  {
+   "id": "3UNM-0",
+   "text": "31,240,000원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R3 신용·대출",
+    "재매수가능"
+   ]
+  },
+  {
+   "id": "3UNO-0",
+   "text": "대출일 · 만기일",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R3 신용·대출",
+    "대출일 · 만기일"
+   ]
+  },
+  {
+   "id": "3UNP-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R3 신용·대출",
+    "대출일 · 만기일"
+   ]
+  },
+  {
+   "id": "3UNR-0",
+   "text": "신용 잔고·당일 실현손익·신용이자·담보대출수량·총대주금액",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R3 신용·대출",
+    "영값 묶음"
+   ]
+  },
+  {
+   "id": "3UNT-0",
+   "text": "0원 4항목 · 0주 1항목",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R3 신용·대출",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UNU-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R3 신용·대출",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38IU-0",
+   "text": "오늘 매매 · 비용",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용"
+   ]
+  },
+  {
+   "id": "38IW-0",
+   "text": "당일 순매수",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38IY-0",
+   "text": "SK하이닉스 +20 · KODEX 200 -250 · NAVER -4",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38IZ-0",
+   "text": "그 외 5종목 0주",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UPA-0",
+   "text": "매매 비용",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "매매 비용"
+   ]
+  },
+  {
+   "id": "3UPC-0",
+   "text": "-24,600원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "매매 비용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UPD-0",
+   "text": "당일매매세금 -20,720 · 수수료 -3,880",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "매매 비용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UPF-0",
+   "text": "매매 수수료",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "매매 수수료"
+   ]
+  },
+  {
+   "id": "3UPH-0",
+   "text": "-3,880원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "매매 수수료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UPI-0",
+   "text": "매입수수료 -770 · 매도수수료 -3,110",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "매매 수수료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38J6-0",
+   "text": "전일 매매",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38J8-0",
+   "text": "카카오 매수 40주",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38J9-0",
+   "text": "그 외 7종목 매수·매도 0주",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R4 오늘 매매·비용",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JB-0",
+   "text": "선택 종목",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목"
+   ]
+  },
+  {
+   "id": "38JD-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JE-0",
+   "text": "비중 33.3%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38KG-0",
+   "text": "비중 30% 초과",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JI-0",
+   "text": "최우선 매도",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JJ-0",
+   "text": "150,900",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JL-0",
+   "text": "최우선 매수",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JM-0",
+   "text": "150,800",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JP-0",
+   "text": "기준가",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JR-0",
+   "text": "149,000",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JS-0",
+   "text": "전일 종가",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JU-0",
+   "text": "평가손익",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JW-0",
+   "text": "+3,439,150원",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38JX-0",
+   "text": "+9.04%",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38K0-0",
+   "text": "결제잔고",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38K1-0",
+   "text": "275주",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38K3-0",
+   "text": "가능수량",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "38K4-0",
+   "text": "275주",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Workspace",
+    "Holdings Rail",
+    "R5 선택 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SCJ-1",
+   "text": "● 보유종목 시세 실시간 반영 중",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Status Footer"
+   ]
+  },
+  {
+   "id": "2SCI-1",
+   "text": "보유종목 전체 항목 보기",
+   "path": [
+    "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+    "Account Root · 보유종목",
+    "Account Card Surface",
+    "Account Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2SCE-1",
+   "name": "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1092,
+   "depth": 0
+  },
+  {
+   "id": "2SCF-1",
+   "name": "Account Root · 보유종목",
+   "component": "Frame",
+   "w": 1440,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "2SCG-1",
+   "name": "Account Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2SGP-1",
+   "name": "Account Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "2SH5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SH7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SH8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2SGQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SH3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SH1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SGZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SGX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SGV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SGT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SGR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SG4-1",
+   "name": "Account Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "2SGL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 340,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SGH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 265,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SGD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SG9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SG5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SCK-1",
+   "name": "Account Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "375G-0",
+   "name": "Holdings Table Column",
+   "component": "Frame",
+   "w": 900,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "375H-0",
+   "name": "Table Title",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "375K-0",
+   "name": "Table Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "375M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "375O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "375Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "375S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 144,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "375U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "375W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "379R-0",
+   "name": "Row · 삼성전자",
+   "component": "Frame",
+   "w": 0,
+   "h": 68,
+   "depth": 5
+  },
+  {
+   "id": "379S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "379U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "379W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "379Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37A1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37A4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37A7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 144,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37AA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37AD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37EU-0",
+   "name": "Row · SK하이닉스",
+   "component": "Frame",
+   "w": 0,
+   "h": 68,
+   "depth": 5
+  },
+  {
+   "id": "37FD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37FE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37FF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "37FA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37F7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37F4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37F1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 144,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37EY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37EV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37FJ-0",
+   "name": "Row · KODEX 200",
+   "component": "Frame",
+   "w": 0,
+   "h": 68,
+   "depth": 5
+  },
+  {
+   "id": "37G2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37G3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37G4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "37FZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37FW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37FT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37FQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 144,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37FN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37FK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37G8-0",
+   "name": "Row · 현대차",
+   "component": "Frame",
+   "w": 0,
+   "h": 68,
+   "depth": 5
+  },
+  {
+   "id": "37GR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37GS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37GT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "37GO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37GL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37GI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37GF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 144,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37GC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37G9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37GX-0",
+   "name": "Row · NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 68,
+   "depth": 5
+  },
+  {
+   "id": "37HG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37HH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37HI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "37HD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37HA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37H7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37H4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 144,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37H1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37GY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37HM-0",
+   "name": "Row · 삼성바이오로직스",
+   "component": "Frame",
+   "w": 0,
+   "h": 68,
+   "depth": 5
+  },
+  {
+   "id": "37I5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37I6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37I7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "37I2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37HZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37HW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37HT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 144,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37HQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37HN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37IB-0",
+   "name": "Row · 카카오",
+   "component": "Frame",
+   "w": 0,
+   "h": 68,
+   "depth": 5
+  },
+  {
+   "id": "37IU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37IV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37IW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "37IR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37IO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37IL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37II-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 144,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37IF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37IC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37J0-0",
+   "name": "Row · 기아",
+   "component": "Frame",
+   "w": 0,
+   "h": 68,
+   "depth": 5
+  },
+  {
+   "id": "37JJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 118,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37JK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "37JL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "37JG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 112,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37JD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37JA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37J7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 144,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37J4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 92,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37J1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "37UA-0",
+   "name": "Table Foot",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "388H-0",
+   "name": "Holdings Rail",
+   "component": "Frame",
+   "w": 460,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "388I-0",
+   "name": "R1 배분",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "388J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "388M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "388P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 10,
+   "depth": 6
+  },
+  {
+   "id": "388Q-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "388R-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "388S-0",
+   "name": "R2 집중·수익",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "388U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "388V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "388X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3890-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3892-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3895-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3896-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3899-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IF0-0",
+   "name": "R2-3 매입비중 1위",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3UNH-0",
+   "name": "R3 신용·대출",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UNI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UNK-0",
+   "name": "재매수가능",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UNN-0",
+   "name": "대출일 · 만기일",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UNQ-0",
+   "name": "영값 묶음",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "3UNS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38IT-0",
+   "name": "R4 오늘 매매·비용",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "38IV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "38IX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UP9-0",
+   "name": "매매 비용",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "3UPB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UPE-0",
+   "name": "매매 수수료",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "3UPG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38J5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "38J7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38JA-0",
+   "name": "R5 선택 종목",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "38JC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "38JG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "38JH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 182,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38JK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 182,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38JN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "38JO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 182,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38JQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "38JT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 182,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38JV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "38JY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "38JZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 182,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "38K2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 182,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2SCH-1",
+   "name": "Account Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "내 계좌": 1,
+  "실시간": 1,
+  "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18": 1,
+  "자산 종합": 1,
+  "보유종목": 1,
+  "예수금·결제": 1,
+  "손익·성과": 1,
+  "주문·체결": 1,
+  "증거금·담보": 1,
+  "금현물": 1,
+  "총자산": 1,
+  "124,580,240원": 1,
+  "수익률 +4.96%": 1,
+  "주문가능금액": 1,
+  "31,240,000원": 2,
+  "출금가능 28,940,000원": 1,
+  "주식 평가액": 1,
+  "89,760,240원": 1,
+  "8종목": 1,
+  "평가손익": 2,
+  "+4,240,900원": 2,
+  "매입 85,519,340원": 1,
+  "현금 비중": 1,
+  "28.0%": 1,
+  "보유종목 8종": 1,
+  "보유종목 8종목": 1,
+  "평가액 순 · 실시간 09:42:18": 1,
+  "종목": 1,
+  "수량": 1,
+  "평단": 1,
+  "현재가": 1,
+  "평가액": 1,
+  "손익": 1,
+  "오늘 매매": 1,
+  "삼성전자": 2,
+  "005930": 1,
+  "현금": 8,
+  "275": 1,
+  "가능 275 · 결제 275": 1,
+  "138,344": 1,
+  "매입 38,044,600": 1,
+  "150,850": 1,
+  "전일 149,000 · +1.24%": 1,
+  "41,483,750": 1,
+  "비중 33.3% · 매입 44.5%": 1,
+  "+3,439,150": 1,
+  "+9.04%": 2,
+  "매수 0 · 매도 0": 5,
+  "전일 매수 0 · 매도 0": 7,
+  "SK하이닉스": 1,
+  "000660": 1,
+  "110": 1,
+  "가능 110 · 결제 90": 1,
+  "192,300": 1,
+  "매입 21,153,000": 1,
+  "198,400": 1,
+  "전일 194,410 · +2.05%": 1,
+  "21,824,000": 1,
+  "비중 17.5% · 매입 24.7%": 1,
+  "+671,000": 1,
+  "+3.17%": 1,
+  "매수 20 · 매도 0": 1,
+  "KODEX 200": 1,
+  "069500": 1,
+  "184": 1,
+  "가능 184 · 결제 434": 1,
+  "48,655": 1,
+  "매입 8,952,520": 1,
+  "48,360": 1,
+  "전일 48,300 · +0.12%": 1,
+  "8,898,240": 1,
+  "비중 7.1% · 매입 10.5%": 1,
+  "-54,280": 1,
+  "-0.61%": 1,
+  "매수 0 · 매도 250": 1,
+  "현대차": 1,
+  "005380": 1,
+  "25": 2,
+  "가능 25 · 결제 25": 1,
+  "229,650": 1,
+  "매입 5,741,250": 1,
+  "232,500": 1,
+  "전일 229,900 · +1.13%": 1,
+  "5,812,500": 1,
+  "비중 4.7% · 매입 6.7%": 1,
+  "+71,250": 1,
+  "+1.24%": 1,
+  "NAVER": 1,
+  "035420": 1,
+  "가능 25 · 결제 29": 1,
+  "209,760": 1,
+  "매입 5,244,000": 1,
+  "214,000": 1,
+  "전일 209,700 · +2.05%": 1,
+  "5,350,000": 1,
+  "비중 4.3% · 매입 6.1%": 1,
+  "+106,000": 1,
+  "+2.02%": 1,
+  "매수 0 · 매도 4": 1,
+  "삼성바이오로직스": 1,
+  "207940": 1,
+  "3": 1,
+  "가능 3 · 결제 3": 1,
+  "1,036,540": 1,
+  "매입 3,109,620": 1,
+  "1,032,000": 1,
+  "전일 1,036,000 · -0.39%": 1,
+  "3,096,000": 1,
+  "비중 2.5% · 매입 3.6%": 1,
+  "-13,620": 1,
+  "-0.44%": 1,
+  "카카오": 1,
+  "035720": 1,
+  "55": 1,
+  "가능 55 · 결제 15": 1,
+  "41,310": 1,
+  "매입 2,272,050": 1,
+  "41,850": 1,
+  "전일 41,300 · +1.33%": 1,
+  "2,301,750": 1,
+  "비중 1.8% · 매입 2.7%": 1,
+  "+29,700": 1,
+  "+1.31%": 1,
+  "전일 매수 40 · 매도 0": 1,
+  "기아": 1,
+  "000270": 1,
+  "10": 1,
+  "가능 10 · 결제 10": 1,
+  "100,230": 1,
+  "매입 1,002,300": 1,
+  "99,400": 1,
+  "전일 100,100 · -0.70%": 1,
+  "994,000": 1,
+  "비중 0.8% · 매입 1.2%": 1,
+  "-8,300": 1,
+  "-0.83%": 1,
+  "전체 8종목 표시 · 평가액 합 89,760,240원": 1,
+  "매입 합 85,519,340원 · 전 종목 현금": 1,
+  "배분": 1,
+  "총자산 대비": 1,
+  "주식 72.0%": 1,
+  "현금 28.0%": 1,
+  "집중 · 수익": 1,
+  "총 평가손익": 1,
+  "+4.96%": 1,
+  "총매입금액": 1,
+  "85,519,340원": 1,
+  "상위 3종목 집중": 1,
+  "58.0%": 1,
+  "종목 수": 1,
+  "8 · ETF 1": 1,
+  "매입비중 1위": 1,
+  "삼성전자 44.5%": 1,
+  "신용 · 대출": 1,
+  "재매수가능": 1,
+  "대출일 · 만기일": 1,
+  "해당 없음": 1,
+  "신용 잔고·당일 실현손익·신용이자·담보대출수량·총대주금액": 1,
+  "0원 4항목 · 0주 1항목": 1,
+  "▸": 1,
+  "오늘 매매 · 비용": 1,
+  "당일 순매수": 1,
+  "SK하이닉스 +20 · KODEX 200 -250 · NAVER -4": 1,
+  "그 외 5종목 0주": 1,
+  "매매 비용": 1,
+  "-24,600원": 1,
+  "당일매매세금 -20,720 · 수수료 -3,880": 1,
+  "매매 수수료": 1,
+  "-3,880원": 1,
+  "매입수수료 -770 · 매도수수료 -3,110": 1,
+  "전일 매매": 1,
+  "카카오 매수 40주": 1,
+  "그 외 7종목 매수·매도 0주": 1,
+  "선택 종목": 1,
+  "비중 33.3%": 1,
+  "비중 30% 초과": 1,
+  "최우선 매도": 1,
+  "150,900": 1,
+  "최우선 매수": 1,
+  "150,800": 1,
+  "기준가": 1,
+  "149,000": 1,
+  "전일 종가": 1,
+  "+3,439,150원": 1,
+  "결제잔고": 1,
+  "275주": 2,
+  "가능수량": 1,
+  "● 보유종목 시세 실시간 반영 중": 1,
+  "보유종목 전체 항목 보기": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "aebed5ba70e723ebea3d383e5615970bde6e07276cf1db70f382198694891544"
+}

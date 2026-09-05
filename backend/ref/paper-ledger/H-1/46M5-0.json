@@ -1,0 +1,234 @@
+{
+ "board_id": "46M5-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R06 · 관심종목·조건 신호",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46MS-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46MR-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46MP-0",
+   "text": "관심종목·조건 신호",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Header"
+   ]
+  },
+  {
+   "id": "46MN-0",
+   "text": "현재가",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46MM-0",
+   "text": "214,000",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46MK-0",
+   "text": "종목코드",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46MJ-0",
+   "text": "035420",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46MH-0",
+   "text": "저가",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46MG-0",
+   "text": "저 232,000",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46ME-0",
+   "text": "전일대비",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46MD-0",
+   "text": "+1,800",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46MB-0",
+   "text": "고가",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46MA-0",
+   "text": "고 214,800",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46M7-0",
+   "text": "외 67개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R06 · 관심종목·조건 신호",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46M5-0",
+   "name": "mini/CC-06 / R06 · 관심종목·조건 신호",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46MO-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46MQ-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46M8-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46ML-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46MI-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46MF-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46MC-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46M9-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46M6-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "관심종목·조건 신호": 1,
+  "현재가": 1,
+  "214,000": 1,
+  "종목코드": 1,
+  "035420": 1,
+  "저가": 1,
+  "저 232,000": 1,
+  "전일대비": 1,
+  "+1,800": 1,
+  "고가": 1,
+  "고 214,800": 1,
+  "외 67개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "c7356e005b722fc7db2313a4708cff66f9d834c09dfb49057def1b210f2f285a"
+}

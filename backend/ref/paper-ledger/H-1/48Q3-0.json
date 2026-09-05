@@ -1,0 +1,92 @@
+{
+ "board_id": "48Q3-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48Q5-0",
+   "text": "원본 보드: CC-06 / R04 · 거래대금 상위 저평가 탐색",
+   "path": [
+    "note/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48Q7-0",
+   "text": "가져온 요소: 거래대금상위 · 현재순위 · 전일순위",
+   "path": [
+    "note/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48Q9-0",
+   "text": "문법: table",
+   "path": [
+    "note/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48QB-0",
+   "text": "접은 개수: 행 0개",
+   "path": [
+    "note/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48Q3-0",
+   "name": "note/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48Q4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48Q6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48Q8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48QA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-06 / R04 · 거래대금 상위 저평가 탐색": 1,
+  "가져온 요소: 거래대금상위 · 현재순위 · 전일순위": 1,
+  "문법: table": 1,
+  "접은 개수: 행 0개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "5edd94e76ddab9ef231429899acad91e2727655dea1b28fce68b5f7d04d9cb05"
+}

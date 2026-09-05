@@ -1,0 +1,190 @@
+{
+ "board_id": "45SC-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "template/chart",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "45TE-0",
+   "text": "차트형",
+   "path": [
+    "template/chart",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45TF-0",
+   "text": "기준 09:42",
+   "path": [
+    "template/chart",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "45TG-0",
+   "text": "주가 추이",
+   "path": [
+    "template/chart",
+    "Header"
+   ]
+  },
+  {
+   "id": "45Y7-0",
+   "text": "150,850원",
+   "path": [
+    "template/chart",
+    "Body",
+    "Price hero"
+   ]
+  },
+  {
+   "id": "45Y8-0",
+   "text": "+1.24%",
+   "path": [
+    "template/chart",
+    "Body",
+    "Price hero"
+   ]
+  },
+  {
+   "id": "45YH-0",
+   "text": "06.03",
+   "path": [
+    "template/chart",
+    "Body",
+    "Chart range"
+   ]
+  },
+  {
+   "id": "45YI-0",
+   "text": "09.01",
+   "path": [
+    "template/chart",
+    "Body",
+    "Chart range"
+   ]
+  },
+  {
+   "id": "460Y-0",
+   "text": "이전 58개 접힘 · 원본에서 확인",
+   "path": [
+    "template/chart",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "45SC-0",
+   "name": "template/chart",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "45TC-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45TD-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45UM-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "45Y6-0",
+   "name": "Price hero",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "45YA-0",
+   "name": "Line chart",
+   "component": "Frame",
+   "w": 0,
+   "h": 184,
+   "depth": 2
+  },
+  {
+   "id": "45YB-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "45YC-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "45YD-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "45YE-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "45YG-0",
+   "name": "Chart range",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "460X-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "차트형": 1,
+  "기준 09:42": 1,
+  "주가 추이": 1,
+  "150,850원": 1,
+  "+1.24%": 1,
+  "06.03": 1,
+  "09.01": 1,
+  "이전 58개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "e09bc077d000ec94ecd78ae1ab9084dc299a538cdce279645c411af4082f0fbf"
+}

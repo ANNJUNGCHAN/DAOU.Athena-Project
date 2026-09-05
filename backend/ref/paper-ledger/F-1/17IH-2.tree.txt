@@ -1,0 +1,137 @@
+Frame "CC-02 / R11-B · 신용·금현물·정정·취소 주문" (17IH-2) 1440×960
+  Frame "Order Variant Header" (17II-2) 0×92
+    Frame "Frame" (17IJ-2) 0×0
+      Text "삼성전자 주문을 10주에서 6주로 정…" (17IK-2) 0×0 "삼성전자 주문을 10주에서 6주로 정정해줘"
+      Text "현금·신용·금현물·정정·취소가 같은 …" (17IL-2) 0×0 "현금·신용·금현물·정정·취소가 같은 안전 검토 단계를 공유합니다."
+    Frame "Frame" (17IM-2) 0×0
+      Frame "Frame" (17IN-2) 0×34
+        Text "아직 주문 전" (17IO-2) 0×0 "아직 주문 전"
+      Frame "Frame" (17IP-2) 0×34
+        Text "검토 후 1회 확인" (17IQ-2) 0×0 "검토 후 1회 확인"
+  Frame "Order Variant Workspace" (17IS-2) 0×770
+    Frame "Amend Cancel Order Ticket" (17IU-2) 800×722
+      Frame "Frame" (17IV-2) 0×0
+        Frame "Frame" (17IW-2) 0×0
+          Frame "Frame" (17IX-2) 0×34
+            Text "현금" (17IY-2) 0×0 "현금"
+          Frame "Frame" (17IZ-2) 0×34
+            Text "신용" (17J0-2) 0×0 "신용"
+          Frame "Frame" (17J1-2) 0×34
+            Text "금현물" (17J2-2) 0×0 "금현물"
+          Frame "Frame" (17J3-2) 0×34
+            Text "정정" (17J4-2) 0×0 "정정"
+          Frame "Frame" (17J5-2) 0×34
+            Text "취소" (17J6-2) 0×0 "취소"
+        Text "미체결 10주" (17J7-2) 0×0 "미체결 10주"
+      Frame "Frame" (17J8-2) 0×0
+        Frame "Frame" (17J9-2) 0×0
+          Text "삼성전자 005930" (17JA-2) 0×0 "삼성전자 005930"
+          Text "매수 · 지정가 · 원주문 접수 14…" (17JB-2) 0×0 "매수 · 지정가 · 원주문 접수 14:28:10"
+        Frame "Frame" (17JC-2) 0×0
+          Text "150,800원" (17JD-2) 0×0 "150,800원"
+          Text "현재가 150,850원" (17JE-2) 0×0 "현재가 150,850원"
+      Frame "Frame" (17JF-2) 0×0
+        Frame "Frame" (17JG-2) 0×0
+          Text "원주문" (17JH-2) 0×0 "원주문"
+          Frame "Frame" (17JI-2) 0×0
+            Text "수량" (17JJ-2) 0×0 "수량"
+            Text "10주" (17JK-2) 0×0 "10주"
+          Frame "Frame" (17JL-2) 0×0
+            Text "가격" (17JM-2) 0×0 "가격"
+            Text "150,800원" (17JN-2) 0×0 "150,800원"
+          Frame "Frame" (17JO-2) 0×0
+            Text "원주문번호" (17JP-2) 0×0 "원주문번호"
+            Text "request · base:kt10002 · $.orig_ord_no" (17JQ-2) 0×0 "선택된 원주문"
+        Frame "Frame" (17JR-2) 0×0
+          Text "정정 후" (17JS-2) 0×0 "정정 후"
+          Frame "Frame" (17JT-2) 0×0
+            Text "수량" (17JU-2) 0×0 "수량"
+            Text "6주" (17JV-2) 0×0 "6주"
+          Frame "Frame" (17JW-2) 0×0
+            Text "가격" (17JX-2) 0×0 "가격"
+            Text "150,800원" (17JY-2) 0×0 "150,800원"
+          Frame "Frame" (17JZ-2) 0×0
+            Text "정정수량" (17K0-2) 0×0 "정정수량"
+            Text "request · base:kt10002 · $.mdfy_qty" (17K1-2) 0×0 "6주"
+      Frame "Frame" (17K2-2) 0×0
+        Frame "Frame" (17K3-2) 0×0
+          Text "응답 정정수량" (17K4-2) 0×0 "응답 정정수량"
+          Text "raw · base:kt10002 · $.mdfy_qty" (17K5-2) 0×0 "—"
+        Frame "Frame" (17K6-2) 0×0
+          Text "주문번호" (17K7-2) 0×0 "주문번호"
+          Text "raw · base:kt10002 · $.ord_no" (17K8-2) 0×0 "—"
+        Frame "Frame" (17K9-2) 0×0
+          Text "모주문번호" (17KA-2) 0×0 "모주문번호"
+          Text "raw · base:kt10002 · $.base_orig_ord_no" (17KB-2) 0×0 "—"
+        Frame "raw · base:kt10002 · $.dmst_stex_tp" (2175-0) 0×0
+          Text "국내거래소구분" (2176-0) 0×0 "국내거래소구분"
+          Text "—" (2177-0) 0×0 "—"
+      Frame "Frame" (17KC-2) 0×0
+        Text "정정 가능 수량 확인" (17KD-2) 0×0 "정정 가능 수량 확인"
+        Text "현재 미체결 10주 중 6주를 정정 …" (17KE-2) 0×0 "현재 미체결 10주 중 6주를 정정 요청합니다."
+      Frame "Frame" (17KF-2) 0×0
+        Frame "Frame" (17KG-2) 0×48
+          Text "변경 취소" (17KH-2) 0×0 "변경 취소"
+        Frame "Frame" (17KI-2) 0×48
+          Text "정정 내용 검토" (17KJ-2) 0×0 "정정 내용 검토"
+    Frame "Order Variant Requirements" (17KL-2) 492×722
+      Frame "Frame" (17KM-2) 0×0
+        Text "유형별 추가 확인" (17KN-2) 0×0 "유형별 추가 확인"
+        Text "실행 전 필수" (17KO-2) 0×0 "실행 전 필수"
+      Frame "Frame" (17KP-2) 0×0
+        Frame "Frame" (17KQ-2) 0×0
+          Text "신용 매수" (17KR-2) 0×0 "신용 매수"
+          Text "융자형" (17KS-2) 0×0 "융자형"
+        Frame "Frame" (17KT-2) 0×0
+          Frame "Frame" (17KU-2) 0×0
+            Text "신용거래구분" (17KV-2) 0×0 "신용거래구분"
+            Text "request · base:kt10006 · $.crd_deal_tp" (17KW-2) 0×0 "33 · 융자"
+          Frame "Frame" (17KX-2) 0×0
+            Text "대출일" (17KY-2) 0×0 "대출일"
+            Text "request · base:kt10006 · $.crd_loan_dt" (17KZ-2) 0×0 "2026.07.15"
+        Frame "Frame" (17L0-2) 0×0
+          Text "request · base:kt10006 · $.ord_qty" (17L1-2) 0×0 "주문수량 6주"
+          Text "request · base:kt10006 · $.ord_uv" (17L2-2) 0×0 "주문단가 150,800원"
+      Frame "Frame" (17L3-2) 0×0
+        Frame "Frame" (17L4-2) 0×0
+          Text "금현물 매수" (17L5-2) 0×0 "금현물 매수"
+          Text "10주" (17L6-2) 0×0 "10주"
+        Frame "Frame" (17L7-2) 0×0
+          Frame "Frame" (17L8-2) 0×0
+            Text "종목코드" (17L9-2) 0×0 "종목코드"
+            Text "request · base:kt50000 · $.stk_cd" (17LA-2) 0×0 "M04020000"
+          Frame "Frame" (17LB-2) 0×0
+            Text "주문수량" (17LC-2) 0×0 "주문수량"
+            Text "request · base:kt50000 · $.ord_qty" (17LD-2) 0×0 "10주"
+        Frame "Frame" (17LE-2) 0×0
+          Text "request · base:kt50000 · $.ord_uv" (17LF-2) 0×0 "주문단가 128,460원"
+          Text "request · base:kt50000 · $.trde_tp" (17LG-2) 0×0 "매매구분 00 · 보통"
+      Frame "Frame" (17LH-2) 0×0
+        Frame "Frame" (17LI-2) 0×0
+          Text "주문 취소" (17LJ-2) 0×0 "주문 취소"
+          Text "미체결만" (17LK-2) 0×0 "미체결만"
+        Frame "Frame" (17LL-2) 0×0
+          Frame "Frame" (17LM-2) 0×0
+            Text "취소수량" (17LN-2) 0×0 "취소수량"
+            Text "request · base:kt10003 · $.cncl_qty" (17LO-2) 0×0 "10주"
+          Frame "Frame" (17LP-2) 0×0
+            Text "원주문번호" (17LQ-2) 0×0 "원주문번호"
+            Text "request · base:kt10003 · $.orig_ord_no" (17LR-2) 0×0 "선택된 원주문"
+        Text "접수 응답은 주문번호·모주문번호·취소…" (17LS-2) 0×0 "접수 응답은 주문번호·모주문번호·취소수량으로 표시됩니다."
+      Frame "Frame" (17LT-2) 0×0
+        Text "안전 단계" (17LU-2) 0×0 "안전 단계"
+        Frame "Frame" (17LV-2) 0×0
+          Frame "Frame" (17LW-2) 130×0
+            Rectangle "Rectangle" (17LX-2) 9×9
+            Text "작성 완료" (17LY-2) 0×0 "작성 완료"
+          Rectangle "Rectangle" (17LZ-2) 20×1
+          Frame "Frame" (17M0-2) 130×0
+            Rectangle "Rectangle" (17M1-2) 9×9
+            Text "검토 중" (17M2-2) 0×0 "검토 중"
+          Rectangle "Rectangle" (17M3-2) 20×1
+          Frame "Frame" (17M4-2) 130×0
+            Rectangle "Rectangle" (17M5-2) 9×9
+            Text "최종 확인" (17M6-2) 0×0 "최종 확인"
+      Frame "Frame" (17M7-2) 0×0
+        Rectangle "Rectangle" (17M8-2) 8×8
+        Text "버튼을 눌러도 즉시 주문되지 않습니다…" (17M9-2) 0×0 "버튼을 눌러도 즉시 주문되지 않습니다. 최종 확인에서 한 번 더 검토합니다."

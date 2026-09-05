@@ -1,0 +1,234 @@
+{
+ "board_id": "47L2-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47LP-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47LO-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47LM-0",
+   "text": "호가잔량 급증",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Header"
+   ]
+  },
+  {
+   "id": "47LK-0",
+   "text": "현재가",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47LJ-0",
+   "text": "810,000",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47LH-0",
+   "text": "종목코드",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47LG-0",
+   "text": "006400",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47LE-0",
+   "text": "총매수량",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47LD-0",
+   "text": "총매수 3.2만",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47LB-0",
+   "text": "전일대비",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47LA-0",
+   "text": "+23,700",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47L8-0",
+   "text": "기준량",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47L7-0",
+   "text": "0.9만 → 1.9만",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47L4-0",
+   "text": "외 86개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47L2-0",
+   "name": "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47LL-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47LN-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47L5-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47LI-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47LF-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47LC-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47L9-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47L6-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47L3-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "호가잔량 급증": 1,
+  "현재가": 1,
+  "810,000": 1,
+  "종목코드": 1,
+  "006400": 1,
+  "총매수량": 1,
+  "총매수 3.2만": 1,
+  "전일대비": 1,
+  "+23,700": 1,
+  "기준량": 1,
+  "0.9만 → 1.9만": 1,
+  "외 86개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "bb32180aab099c7af7e88523c4d28cb9c142703e11eeb904cd3d313304c95cc0"
+}

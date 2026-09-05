@@ -1,0 +1,53 @@
+Frame "05 · 백테스트 — 이력·비교" (1WSI-1) 1680×760
+  Frame "타이틀" (1WSJ-1) 0×0
+    Text "백테스트 — 이력·비교" (1WSK-1) 0×0 "백테스트 — 이력·비교"
+    Text "모든 실행은 전략 버전에 묶입니다 —…" (1WSL-1) 0×0 "모든 실행은 전략 버전에 묶입니다 — 같은 버전·같은 파라미터·같은 구간이면 같은 결과가 나와야 하고, 두 "
+  Frame "본문 행" (1WY5-1) 0×0
+    Frame "실행 목록" (1WY6-1) 520×0
+      Frame "Frame" (1WY7-1) 0×0
+        Text "실행 이력 — 20-60 골든크로스" (1WY8-1) 0×0 "실행 이력 — 20-60 골든크로스"
+        Text "2개 선택 → 비교" (1WY9-1) 0×0 "2개 선택 → 비교"
+      Frame "Frame" (1WYA-1) 0×40
+        Rectangle "Rectangle" (1WYB-1) 14×14
+        Text "#41" (1WYC-1) 44×0 "#41"
+        Text "v4" (1WYD-1) 52×0 "v4"
+        Text "fast 20 · slow 60" (1WYE-1) 0×0 "fast 20 · slow 60"
+        Text "+184.2%" (1WYF-1) 70×0 "+184.2%"
+      Frame "Frame" (1WYG-1) 0×40
+        Rectangle "Rectangle" (1WYH-1) 14×14
+        Text "#38" (1WYI-1) 44×0 "#38"
+        Text "v3" (1WYJ-1) 52×0 "v3"
+        Text "fast 10 · slow 40" (1WYK-1) 0×0 "fast 10 · slow 40"
+        Text "+96.7%" (1WYL-1) 70×0 "+96.7%"
+      Frame "Frame" (1WYM-1) 0×40
+        Rectangle "Rectangle" (1WYN-1) 14×14
+        Text "#36" (1WYO-1) 44×0 "#36"
+        Text "v3" (1WYP-1) 52×0 "v3"
+        Text "fast 5 · slow 20" (1WYQ-1) 0×0 "fast 5 · slow 20"
+        Text "-12.1%" (1WYR-1) 70×0 "-12.1%"
+      Frame "Frame" (1WYS-1) 0×40
+        Rectangle "Rectangle" (1WYT-1) 14×14
+        Text "#29" (1WYU-1) 44×0 "#29"
+        Text "v2" (1WYV-1) 52×0 "v2"
+        Text "실패 — 캐시 부족 (수집 미승인)" (1WYW-1) 0×0 "실패 — 캐시 부족 (수집 미승인)"
+        Text "—" (1WYX-1) 70×0 "—"
+    Frame "비교 패널" (1WYY-1) 0×0
+      Text "#41 vs #38 — 무엇이 달랐나" (1WYZ-1) 0×0 "#41 vs #38 — 무엇이 달랐나"
+      Frame "Frame" (1WZ0-1) 0×0
+        Frame "Frame" (1WZ1-1) 0×0
+          Text "파라미터 diff" (1WZ2-1) 0×0 "파라미터 diff"
+          Text "fast 10→20 · slow 40…" (1WZ3-1) 0×0 "fast 10→20 · slow 40→60"
+        Frame "Frame" (1WZ4-1) 0×0
+          Text "코드 diff" (1WZ5-1) 0×0 "코드 diff"
+          Text "v3→v4 · 12줄 (ATR 손절)" (1WZ6-1) 0×0 "v3→v4 · 12줄 (ATR 손절)"
+      SVG "SVG" (1WZ7-1) 0×0
+        SVGVisualElement "Line" (1WZ8-1) 0×0
+        SVGVisualElement "Path" (1WZ9-1) 0×0
+        SVGVisualElement "Path" (1WZA-1) 0×0
+      Frame "Frame" (1WZB-1) 0×0
+        Frame "Frame" (1WZC-1) 0×0
+          Rectangle "Rectangle" (1WZD-1) 14×2
+          Text "#41 · MDD -27.9% · S…" (1WZE-1) 0×0 "#41 · MDD -27.9% · Sharpe 0.87"
+        Frame "Frame" (1WZF-1) 0×0
+          Rectangle "Rectangle" (1WZG-1) 14×2
+          Text "#38 · MDD -34.6% · S…" (1WZH-1) 0×0 "#38 · MDD -34.6% · Sharpe 0.51"

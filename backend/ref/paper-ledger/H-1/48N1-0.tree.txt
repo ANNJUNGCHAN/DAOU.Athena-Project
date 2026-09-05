@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체" (48N1-0) 360×420
+  Frame "Header" (48NV-0) 0×0
+    Frame "Meta row" (48NX-0) 0×0
+      Text "Eyebrow" (48NZ-0) 0×0
+      Text "As of" (48NY-0) 0×0 "기준 09:42"
+    Text "Title" (48NW-0) 0×0 "ELW 거래원별 10창구 전체"
+  Frame "Body" (48N4-0) 0×0
+    Frame "KPI band" (48NL-0) 0×0
+      Frame "Frame" (48NS-0) 0×0
+        Text "ELW 거래원별 순매매" (48NU-0) 0×0 "ELW 거래원별 순매매"
+        Text "10창구" (48NT-0) 0×0 "10창구"
+      Frame "Frame" (48NP-0) 0×0
+        Text "순매수" (48NR-0) 0×0 "순매수"
+        Text "+210만" (48NQ-0) 0×0 "+210만"
+      Frame "Frame" (48NM-0) 0×0
+        Text "순매수" (48NO-0) 0×0 "순매수"
+        Text "+40만" (48NN-0) 0×0 "+40만"
+    Frame "Table header" (48NH-0) 0×0
+      Text "항목" (48NK-0) 0×0 "항목"
+      Text "값" (48NJ-0) 0×0 "값"
+      Text "비고" (48NI-0) 72×0 "비고"
+    Frame "Position 1" (48NB-0) 0×0
+      Frame "Frame" (48NE-0) 0×0
+        Text "순매수" (48NG-0) 0×0 "순매수"
+        Text "Text" (48NF-0) 0×0
+      Text "−90만" (48ND-0) 0×0 "−90만"
+      Text "Text" (48NC-0) 72×0
+    Frame "Position 2" (48N5-0) 0×0
+      Frame "Frame" (48N8-0) 0×0
+        Text "값" (48NA-0) 0×0 "값"
+        Text "Text" (48N9-0) 0×0
+      Text "매수 1위" (48N7-0) 0×0 "매수 1위"
+      Text "Text" (48N6-0) 72×0
+  Frame "Fold note" (48N2-0) 0×0
+    Text "스칼라 2개, 행 8개 접힘 · 원본…" (48N3-0) 0×0 "스칼라 2개, 행 8개 접힘 · 원본에서 확인"

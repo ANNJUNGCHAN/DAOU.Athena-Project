@@ -1,0 +1,3377 @@
+{
+ "board_id": "31II-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T4-9 · 순위 — VI 발동",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "31OE-0",
+   "text": "주식 순위",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31OD-0",
+   "text": "KRX 전체 · 변동성완화장치 발동",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31OC-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31O9-0",
+   "text": "오늘 12건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31O8-0",
+   "text": "정적 8 · 동적 4",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31O7-0",
+   "text": "09:42:18 조회",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31O4-0",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31O2-0",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31O0-0",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NY-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NW-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NU-0",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NS-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NO-0",
+   "text": "정렬 기준",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NN-0",
+   "text": "발동 시각순",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NL-0",
+   "text": "오늘 발동",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NK-0",
+   "text": "12건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NJ-0",
+   "text": "오늘 누적",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NH-0",
+   "text": "정적 VI",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NG-0",
+   "text": "8건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NF-0",
+   "text": "오늘 누적",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31ND-0",
+   "text": "동적 VI",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NC-0",
+   "text": "4건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31NB-0",
+   "text": "오늘 누적",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31N9-0",
+   "text": "해제 대기",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31N8-0",
+   "text": "1건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31N7-0",
+   "text": "발동 중",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31N4-0",
+   "text": "신고저가",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31N2-0",
+   "text": "상하한가",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31N0-0",
+   "text": "고저가근접",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31MY-0",
+   "text": "가격급등락",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31MW-0",
+   "text": "거래량갱신",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31MT-0",
+   "text": "범위",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31MS-0",
+   "text": "주식",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31MQ-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31MO-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31MK-0",
+   "text": "매물대집중",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31MI-0",
+   "text": "고저 PER",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31MG-0",
+   "text": "시가대비 등락",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31ME-0",
+   "text": "VI 발동",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31MC-0",
+   "text": "당일·전일 체결량",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ARD-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "표 머리"
+   ]
+  },
+  {
+   "id": "3ARE-0",
+   "text": "종목",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "표 머리"
+   ]
+  },
+  {
+   "id": "3ARF-0",
+   "text": "현재가",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "표 머리"
+   ]
+  },
+  {
+   "id": "3ARG-0",
+   "text": "구분",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "표 머리"
+   ]
+  },
+  {
+   "id": "3ARH-0",
+   "text": "기준가격",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "표 머리"
+   ]
+  },
+  {
+   "id": "3ARI-0",
+   "text": "괴리율",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "표 머리"
+   ]
+  },
+  {
+   "id": "3ARJ-0",
+   "text": "누적거래량",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "표 머리"
+   ]
+  },
+  {
+   "id": "3ARK-0",
+   "text": "발동 횟수",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "표 머리"
+   ]
+  },
+  {
+   "id": "3ARM-0",
+   "text": "1",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체"
+   ]
+  },
+  {
+   "id": "3ARO-0",
+   "text": "한미반도체",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ARP-0",
+   "text": "042700 · 코스피",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ARR-0",
+   "text": "197,400",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ARS-0",
+   "text": "+7,900 · +4.18%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ARV-0",
+   "text": "정적",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ARX-0",
+   "text": "정적 180,000",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ARY-0",
+   "text": "동적 192,200",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AS0-0",
+   "text": "정적 +9.7%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AS1-0",
+   "text": "동적 +2.7%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AS3-0",
+   "text": "320만주",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AS4-0",
+   "text": "시가대비 +3.5%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AS6-0",
+   "text": "1회",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AS7-0",
+   "text": "09:41 발동",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AS9-0",
+   "text": "2",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭"
+   ]
+  },
+  {
+   "id": "3ASB-0",
+   "text": "HD현대일렉트릭",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASC-0",
+   "text": "267260 · 코스피",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASE-0",
+   "text": "412,500",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASF-0",
+   "text": "+11,500 · +2.86%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASI-0",
+   "text": "정적",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASK-0",
+   "text": "정적 377,500",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASL-0",
+   "text": "동적 403,000",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASN-0",
+   "text": "정적 +9.3%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASO-0",
+   "text": "동적 +2.4%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASQ-0",
+   "text": "80만주",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASR-0",
+   "text": "시가대비 +2.7%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AST-0",
+   "text": "1회",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASU-0",
+   "text": "09:28 발동",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASW-0",
+   "text": "3",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠"
+   ]
+  },
+  {
+   "id": "3ASY-0",
+   "text": "알테오젠",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ASZ-0",
+   "text": "196170 · 코스닥",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AT1-0",
+   "text": "391,000",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AT2-0",
+   "text": "+88,200 · +29.12%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AT5-0",
+   "text": "동적",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AT7-0",
+   "text": "정적 372,000",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AT8-0",
+   "text": "동적 381,100",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ATA-0",
+   "text": "정적 +5.1%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ATB-0",
+   "text": "동적 +2.6%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ATD-0",
+   "text": "110만주",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ATE-0",
+   "text": "시가대비 +2.6%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ATG-0",
+   "text": "1회",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ATH-0",
+   "text": "09:12 발동",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T6L-0",
+   "text": "4",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스"
+   ]
+  },
+  {
+   "id": "3T6N-0",
+   "text": "이수페타시스",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T6O-0",
+   "text": "007660 · 코스피",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T6Q-0",
+   "text": "64,500",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T6R-0",
+   "text": "+14,850 · +29.90%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T6U-0",
+   "text": "정적",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T6W-0",
+   "text": "정적 58,600",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T6X-0",
+   "text": "동적 62,600",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T6Z-0",
+   "text": "정적 +10.1%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T70-0",
+   "text": "동적 +3.0%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T72-0",
+   "text": "1,240만주",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T73-0",
+   "text": "시가대비 +8.0%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T75-0",
+   "text": "2회",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T76-0",
+   "text": "09:08 발동",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7U-0",
+   "text": "5",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스"
+   ]
+  },
+  {
+   "id": "3T7T-0",
+   "text": "레인보우로보틱스",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7S-0",
+   "text": "277810 · 코스닥",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7Q-0",
+   "text": "246,500",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7P-0",
+   "text": "+56,800 · +29.94%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7N-0",
+   "text": "정적",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7K-0",
+   "text": "정적 224,000",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7J-0",
+   "text": "동적 239,000",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7H-0",
+   "text": "정적 +10.0%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7G-0",
+   "text": "동적 +3.1%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7E-0",
+   "text": "92만주",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7D-0",
+   "text": "시가대비 +8.4%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7B-0",
+   "text": "2회",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7A-0",
+   "text": "09:06 발동",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8H-0",
+   "text": "6",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투"
+   ]
+  },
+  {
+   "id": "3T8G-0",
+   "text": "실리콘투",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8F-0",
+   "text": "257720 · 코스닥",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8D-0",
+   "text": "58,900",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8C-0",
+   "text": "+13,530 · +29.81%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T8A-0",
+   "text": "동적",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T87-0",
+   "text": "정적 53,500",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T86-0",
+   "text": "동적 57,200",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T84-0",
+   "text": "정적 +10.1%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T83-0",
+   "text": "동적 +3.0%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T81-0",
+   "text": "316만주",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T80-0",
+   "text": "시가대비 +7.3%",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7Y-0",
+   "text": "2회",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3T7X-0",
+   "text": "09:03 발동",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31K7-0",
+   "text": "전체 12건 · 6건 표시 ▸",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32GX-0",
+   "text": "발동 진행",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "VI Progress Band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32GY-0",
+   "text": "한미반도체 · 정적 VI",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "VI Progress Band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32H2-0",
+   "text": "09:41",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "VI Progress Band",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32H3-0",
+   "text": "발동",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "VI Progress Band",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32H7-0",
+   "text": "09:41~",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "VI Progress Band",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32H8-0",
+   "text": "단일가 접수",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "VI Progress Band",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32HC-0",
+   "text": "09:43",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "VI Progress Band",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32HD-0",
+   "text": "해제 예정",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "VI Progress Band",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OV6-0",
+   "text": "발동 현황",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 발동 현황",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OV7-0",
+   "text": "09:42:18 기준",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 발동 현황",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVA-0",
+   "text": "발동 중",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 발동 현황",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVB-0",
+   "text": "1건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 발동 현황",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVD-0",
+   "text": "해제 완료",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 발동 현황",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVE-0",
+   "text": "11건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 발동 현황",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVG-0",
+   "text": "해제 예정",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 발동 현황",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVH-0",
+   "text": "09:43",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 발동 현황",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVK-0",
+   "text": "최근 5일 발동",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVL-0",
+   "text": "합계 21건 · 일평균 4.2건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVO-0",
+   "text": "09-01",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVP-0",
+   "text": "12건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVR-0",
+   "text": "08-31",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVS-0",
+   "text": "2건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVU-0",
+   "text": "08-28",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVV-0",
+   "text": "4건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVX-0",
+   "text": "08-27",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OVY-0",
+   "text": "2건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OW0-0",
+   "text": "08-26",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OW1-0",
+   "text": "1건",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 최근 5일 발동",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "31IN-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "31IM-0",
+   "text": "마지막 조회 09:42:18",
+   "path": [
+    "CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "31II-0",
+   "name": "CC-03 / R01-T4-9 · 순위 — VI 발동",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "31IJ-0",
+   "name": "Instrument Root · 현재시세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "31IK-0",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "31NP-0",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "31O5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "31OA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31OB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31O6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31NQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "31O3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31O1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31NZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31NX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31NV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31NT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31NR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31N5-0",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "31NM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "31NI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "31NE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "31NA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "31N6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "31IO-0",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 594,
+   "depth": 3
+  },
+  {
+   "id": "31K1-0",
+   "name": "Quote Detail Mount",
+   "component": "Frame",
+   "w": 1000,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "31M9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "31ML-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31MU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "31N3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "31N1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "31MZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "31MX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "31MV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "31MM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "31MR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "31MP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "31MN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "31MA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "31MJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "31MH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "31MF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "31MD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "31MB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ARB-0",
+   "name": "순위 표",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ARC-0",
+   "name": "표 머리",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3ARL-0",
+   "name": "1 한미반도체",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3ARN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ARQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ART-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ARU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3ARW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ARZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AS2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AS5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AS8-0",
+   "name": "2 HD현대일렉트릭",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3ASA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ASD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ASG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ASH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3ASJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ASM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ASP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ASS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ASV-0",
+   "name": "3 알테오젠",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3ASX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AT0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AT3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AT4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3AT6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AT9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ATC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ATF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T6K-0",
+   "name": "4 이수페타시스",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3T6M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T6P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T6S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T6T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3T6V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T6Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T71-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T74-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T78-0",
+   "name": "5 레인보우로보틱스",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3T7R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T7O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T7L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T7M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3T7I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T7F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T7C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T79-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T7V-0",
+   "name": "6 실리콘투",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3T8E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T8B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T88-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T89-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3T85-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T82-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T7Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T7W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "31K2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32GV-0",
+   "name": "VI Progress Band",
+   "component": "Frame",
+   "w": 943,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32GW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "32GZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "32H0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 180,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32H1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "32H4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 7
+  },
+  {
+   "id": "32H5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 180,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32H6-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "32H9-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 7
+  },
+  {
+   "id": "32HA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 180,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32HB-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3OV3-0",
+   "name": "Rail",
+   "component": "Frame",
+   "w": 360,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "3OV4-0",
+   "name": "Block 1 · 발동 현황",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3OV5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3OV8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3OV9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OVC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OVF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OVI-0",
+   "name": "Block 2 · 최근 5일 발동",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3OVJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3OVM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3OVN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OVQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OVT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OVW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OVZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "31IL-0",
+   "name": "Chart Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "주식 순위": 1,
+  "KRX 전체 · 변동성완화장치 발동": 1,
+  "조회 스냅샷": 2,
+  "오늘 12건": 1,
+  "정적 8 · 동적 4": 1,
+  "09:42:18 조회": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 2,
+  "ELW": 2,
+  "금현물": 1,
+  "순위": 2,
+  "정렬 기준": 1,
+  "발동 시각순": 1,
+  "오늘 발동": 1,
+  "12건": 2,
+  "오늘 누적": 3,
+  "정적 VI": 1,
+  "8건": 1,
+  "동적 VI": 1,
+  "4건": 2,
+  "해제 대기": 1,
+  "1건": 3,
+  "발동 중": 2,
+  "신고저가": 1,
+  "상하한가": 1,
+  "고저가근접": 1,
+  "가격급등락": 1,
+  "거래량갱신": 1,
+  "범위": 1,
+  "주식": 1,
+  "매물대집중": 1,
+  "고저 PER": 1,
+  "시가대비 등락": 1,
+  "VI 발동": 1,
+  "당일·전일 체결량": 1,
+  "종목": 1,
+  "현재가": 1,
+  "구분": 1,
+  "기준가격": 1,
+  "괴리율": 1,
+  "누적거래량": 1,
+  "발동 횟수": 1,
+  "1": 1,
+  "한미반도체": 1,
+  "042700 · 코스피": 1,
+  "197,400": 1,
+  "+7,900 · +4.18%": 1,
+  "정적": 4,
+  "정적 180,000": 1,
+  "동적 192,200": 1,
+  "정적 +9.7%": 1,
+  "동적 +2.7%": 1,
+  "320만주": 1,
+  "시가대비 +3.5%": 1,
+  "1회": 3,
+  "09:41 발동": 1,
+  "2": 1,
+  "HD현대일렉트릭": 1,
+  "267260 · 코스피": 1,
+  "412,500": 1,
+  "+11,500 · +2.86%": 1,
+  "정적 377,500": 1,
+  "동적 403,000": 1,
+  "정적 +9.3%": 1,
+  "동적 +2.4%": 1,
+  "80만주": 1,
+  "시가대비 +2.7%": 1,
+  "09:28 발동": 1,
+  "3": 1,
+  "알테오젠": 1,
+  "196170 · 코스닥": 1,
+  "391,000": 1,
+  "+88,200 · +29.12%": 1,
+  "동적": 2,
+  "정적 372,000": 1,
+  "동적 381,100": 1,
+  "정적 +5.1%": 1,
+  "동적 +2.6%": 1,
+  "110만주": 1,
+  "시가대비 +2.6%": 1,
+  "09:12 발동": 1,
+  "4": 1,
+  "이수페타시스": 1,
+  "007660 · 코스피": 1,
+  "64,500": 1,
+  "+14,850 · +29.90%": 1,
+  "정적 58,600": 1,
+  "동적 62,600": 1,
+  "정적 +10.1%": 2,
+  "동적 +3.0%": 2,
+  "1,240만주": 1,
+  "시가대비 +8.0%": 1,
+  "2회": 3,
+  "09:08 발동": 1,
+  "5": 1,
+  "레인보우로보틱스": 1,
+  "277810 · 코스닥": 1,
+  "246,500": 1,
+  "+56,800 · +29.94%": 1,
+  "정적 224,000": 1,
+  "동적 239,000": 1,
+  "정적 +10.0%": 1,
+  "동적 +3.1%": 1,
+  "92만주": 1,
+  "시가대비 +8.4%": 1,
+  "09:06 발동": 1,
+  "6": 1,
+  "실리콘투": 1,
+  "257720 · 코스닥": 1,
+  "58,900": 1,
+  "+13,530 · +29.81%": 1,
+  "정적 53,500": 1,
+  "동적 57,200": 1,
+  "316만주": 1,
+  "시가대비 +7.3%": 1,
+  "09:03 발동": 1,
+  "전체 12건 · 6건 표시 ▸": 1,
+  "발동 진행": 1,
+  "한미반도체 · 정적 VI": 1,
+  "09:41": 1,
+  "발동": 1,
+  "09:41~": 1,
+  "단일가 접수": 1,
+  "09:43": 2,
+  "해제 예정": 2,
+  "발동 현황": 1,
+  "09:42:18 기준": 1,
+  "해제 완료": 1,
+  "11건": 1,
+  "최근 5일 발동": 1,
+  "합계 21건 · 일평균 4.2건": 1,
+  "09-01": 1,
+  "08-31": 1,
+  "2건": 2,
+  "08-28": 1,
+  "08-27": 1,
+  "08-26": 1,
+  "마지막 조회 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "acafb464b9bc1afe8eb0ed0cbb8057e876b930a3bc5110783f5b49fc9eebb6ce"
+}

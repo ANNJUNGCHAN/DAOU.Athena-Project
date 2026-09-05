@@ -1,0 +1,51 @@
+Frame "08 · 온보딩 — 계좌 연결 (AT-SY-003)" (1FN-0) 1680×900
+  Frame "Shell 창 · 온보딩 (#onboard)" (1FO-0) 1520×760
+    Frame "onb-col (800px)" (1FY-0) 800×734
+      Frame "onb-head" (1H6-0) 800×156
+        Text "onb-kicker" (1H9-0) 716×16 "3 / 3"
+        Text "onb-title" (1H8-0) 716×34 "증권 계좌를 연결합니다"
+        Text "onb-sub" (1H7-0) 716×44 "키움 모의투자 계좌를 연결합니다. 앱키는 이 컴퓨터의 자격증명 저장소에만 저장되고 화면에 다시 나타나지 않습"
+      Frame "onb-body · onb-form" (1HA-0) 800×508
+        Frame "onb-field · 별칭" (1HB-0) 716×91
+          Text "onb-field-label" (1HC-0) 716×16 "별칭"
+          Frame "onb-input-row" (1HD-0) 716×44
+            Text "모의-1" (1HE-0) 654×16 "모의-1"
+            Text "onb-input-right" (1HF-0) 22×14 "선택"
+          Text "onb-field-helper" (1HG-0) 716×15 "이 컴퓨터에서만 쓰는 이름이다. 증권사 계좌번호가 아니다."
+        Frame "onb-field · APP KEY" (1HH-0) 716×91
+          Text "onb-field-label" (1HI-0) 716×16 "APP KEY"
+          Frame "onb-input-row" (1HJ-0) 716×44
+            Text "onb-input-mono" (1HK-0) 588×16 "••••••••••••••••••••••••••••••••••••"
+            Text "onb-input-right" (1HL-0) 88×14 "붙여넣음 · 36자"
+          Text "onb-field-helper" (1HM-0) 716×15 "붙여넣기만 지원한다. 입력한 값은 저장 후 다시 표시되지 않는다."
+        Frame "onb-field · SECRET KEY" (1HN-0) 716×91
+          Text "onb-field-label" (1HO-0) 716×16 "SECRET KEY"
+          Frame "onb-input-row" (1HP-0) 716×44
+            Text "onb-input-mono" (1HQ-0) 581×16 "••••••••••••••••••••••••••••••••••••"
+            Text "onb-input-right" (1HR-0) 95×14 "붙여넣음 · 180자"
+          Text "onb-field-helper" (1HS-0) 716×15 "값이 아니라 문자 수만 보여준다 — 오타는 잡되 값은 노출하지 않는다."
+        Frame "onb-savebox" (1HT-0) 716×84
+          Frame "Frame" (1HU-0) 608×54
+            Text "onb-savebox-title" (1HV-0) 608×16 "저장 위치"
+            Text "onb-savebox-body" (1HW-0) 608×15 "Windows 자격증명 저장소(DPAPI)에 암호화되어 저장됩니다. 앱 화면·로그·스크린샷 어디에도 값이 다"
+            Text "onb-savebox-body" (1HX-0) 608×15 "여기서 등록한 계좌가 활성 계좌가 됩니다. 계좌는 나중에 더 추가할 수 있고, 활성은 항상 하나입니다."
+        Text "onb-field-helper" (1HY-0) 716×15 "검증에 성공한 키만 저장됩니다. 실패하면 다음으로 넘어가지 않습니다."
+      Frame "onb-foot" (1FZ-0) 800×70
+        Frame "uk-dots (3단계 중 2)" (1G5-0) 72×3
+          Rectangle "Rectangle" (1G8-0) 20×3
+          Rectangle "Rectangle" (1G7-0) 20×3
+          Rectangle "Rectangle" (1G6-0) 20×3
+        Rectangle "Rectangle" (1G4-0) 479×0
+        Frame "uk-btn-primary · 계속 (화면 내 유일 브랜드색)" (1G0-0) 135×36
+          Text "검증 후 시작" (1G3-0) 75×16 "검증 후 시작"
+          SVG "SVG" (1G1-0) 12×10
+            SVGVisualElement "Path" (1G2-0) 10×7
+    Frame "타이틀바" (1FX-0) 1518×26
+    Frame "창 제어" (1FP-0) 94×24
+      Frame "Frame" (1FV-0) 30×24
+        Rectangle "Rectangle" (1FW-0) 9×2
+      Frame "Frame" (1FT-0) 30×24
+        Rectangle "Rectangle" (1FU-0) 8×8
+      Frame "Frame" (1FQ-0) 30×24
+        SVG "SVG" (1FR-0) 10×10
+          SVGVisualElement "Path" (1FS-0) 9×9

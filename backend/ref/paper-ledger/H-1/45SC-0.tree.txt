@@ -1,0 +1,20 @@
+Frame "template/chart" (45SC-0) 360×420
+  Frame "Header" (45TC-0) 0×0
+    Frame "Meta row" (45TD-0) 0×0
+      Text "Eyebrow" (45TE-0) 0×0 "차트형"
+      Text "As of" (45TF-0) 0×0 "기준 09:42"
+    Text "Title" (45TG-0) 0×0 "주가 추이"
+  Frame "Body" (45UM-0) 0×0
+    Frame "Price hero" (45Y6-0) 0×0
+      Text "150,850원" (45Y7-0) 0×0 "150,850원"
+      Text "+1.24%" (45Y8-0) 0×0 "+1.24%"
+    Frame "Line chart" (45YA-0) 0×184
+      SVG "SVG" (45YB-0) 0×0
+        SVGVisualElement "Path" (45YC-0) 0×0
+        SVGVisualElement "Path" (45YD-0) 0×0
+        SVGVisualElement "Circle" (45YE-0) 0×0
+    Frame "Chart range" (45YG-0) 0×0
+      Text "06.03" (45YH-0) 0×0 "06.03"
+      Text "09.01" (45YI-0) 0×0 "09.01"
+  Frame "Fold note" (460X-0) 0×0
+    Text "이전 58개 접힘 · 원본에서 확인" (460Y-0) 0×0 "이전 58개 접힘 · 원본에서 확인"

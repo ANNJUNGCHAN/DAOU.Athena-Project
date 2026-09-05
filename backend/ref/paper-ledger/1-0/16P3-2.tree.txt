@@ -1,0 +1,298 @@
+Frame "06 · 부팅 — DIRECT SHELL EXPAND · 1440–1920ms" (16P3-2) 1680×900
+  Frame "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)" (16P4-2) 1520×760
+    Frame "타이틀바" (16XC-2) 1518×26
+    Frame "창 제어" (16X4-2) 94×24
+      Frame "Frame" (16XA-2) 30×24
+        Rectangle "Rectangle" (16XB-2) 9×2
+      Frame "Frame" (16X8-2) 30×24
+        Rectangle "Rectangle" (16X9-2) 8×8
+      Frame "Frame" (16X5-2) 30×24
+        SVG "SVG" (16X6-2) 10×10
+          SVGVisualElement "Path" (16X7-2) 9×9
+    Frame "04 · Project Recent Sidebar" (16V9-2) 268×717
+      Frame "Primary Actions" (16WC-2) 242×164
+        Frame "Frame" (16WZ-2) 242×28
+          Text "ATHENA" (16X3-2) 53×18 "ATHENA"
+          SVG "SVG" (16X0-2) 15×15
+            SVGVisualElement "Circle" (16X2-2) 8×8
+            SVGVisualElement "Path" (16X1-2) 3×3
+        Frame "Frame" (16WU-2) 242×30
+          SVG "SVG" (16WW-2) 15×15
+            SVGVisualElement "Path" (16WY-2) 6×0
+            SVGVisualElement "Path" (16WX-2) 10×10
+          Text "새 채팅" (16WV-2) 36×16 "새 채팅"
+        Frame "Frame" (16WN-2) 242×30
+          SVG "SVG" (16WP-2) 15×15
+            SVGVisualElement "Circle" (16WT-2) 3×3
+            SVGVisualElement "Circle" (16WS-2) 3×3
+            SVGVisualElement "Circle" (16WR-2) 3×3
+            SVGVisualElement "Path" (16WQ-2) 5×5
+          Text "그래프" (16WO-2) 33×16 "그래프"
+        Frame "Frame" (16WI-2) 242×30
+          SVG "SVG" (16WK-2) 15×15
+            SVGVisualElement "Circle" (16WM-2) 4×4
+            SVGVisualElement "Path" (16WL-2) 8×4
+          Text "에이전트" (16WJ-2) 44×16 "에이전트"
+        Frame "Frame" (16WD-2) 242×30
+          SVG "SVG" (16WF-2) 15×15
+            SVGVisualElement "Path" (16WH-2) 9×10
+            SVGVisualElement "Path" (16WG-2) 0×1
+          Text "플러그인" (16WE-2) 44×16 "플러그인"
+      Frame "Project Tree" (16VS-2) 242×129
+        Frame "Frame" (16WA-2) 242×16
+          Text "프로젝트" (16WB-2) 39×12 "프로젝트"
+        Frame "Frame" (16VY-2) 242×32
+          SVG "SVG" (16W7-2) 15×15
+            SVGVisualElement "Path" (16W9-2) 11×8
+            SVGVisualElement "Path" (16W8-2) 8×3
+          Text "아테나" (16W6-2) 155×16 "아테나"
+          SVG "SVG" (16W2-2) 17×17
+            SVGVisualElement "Circle" (16W5-2) 2×2
+            SVGVisualElement "Circle" (16W4-2) 2×2
+            SVGVisualElement "Circle" (16W3-2) 2×2
+          SVG "SVG" (16VZ-2) 17×17
+            SVGVisualElement "Path" (16W1-2) 6×0
+            SVGVisualElement "Path" (16W0-2) 11×11
+        Frame "Frame" (16VW-2) 242×27
+          Text "백엔드 API 개수 확인" (16VX-2) 96×14 "백엔드 API 개수 확인"
+        Frame "Frame" (16VT-2) 242×29
+          Text "앱 전체 기능 검수" (16VV-2) 80×14 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (16VU-2) 6×6
+      Frame "Recent Conversations" (16VH-2) 242×126
+        Frame "Frame" (16VP-2) 242×20
+          Text "최근" (16VR-2) 20×12 "최근"
+          Text "전체" (16VQ-2) 17×12 "전체"
+        Frame "Frame" (16VM-2) 242×27
+          Text "앱 전체 기능 검수" (16VO-2) 212×14 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (16VN-2) 6×6
+        Frame "Frame" (16VK-2) 242×27
+          Text "삼성전자 주요 변동 알림" (16VL-2) 109×14 "삼성전자 주요 변동 알림"
+        Frame "Frame" (16VI-2) 242×27
+          Text "ETF 자금 흐름" (16VJ-2) 66×14 "ETF 자금 흐름"
+      Frame "Account Footer" (16VA-2) 242×232
+        Frame "Frame" (16VB-2) 242×38
+          Frame "Frame" (16VF-2) 22×22
+            Text "AN" (16VG-2) 13×12 "AN"
+          Text "모의-주력" (16VE-2) 173×14 "모의-주력"
+          SVG "SVG" (16VC-2) 13×13
+            SVGVisualElement "Path" (16VD-2) 5×3
+    Frame "② 캔버스 영역" (16SX-2) 810×716
+      Frame "grid" (16SY-2) 810×716
+        Frame "Frame" (16U1-2) 788×252
+          Frame "card-head" (16V2-2) 754×32
+            Text "card-title" (16V8-2) 143×18 "네이버 뉴스 — 삼성전자"
+            Frame "card-head-right" (16V3-2) 94×22
+              Text "card-fresh" (16V7-2) 62×14 "00:43 갱신"
+              Frame "uk-card-close" (16V4-2) 22×22
+                SVG "SVG" (16V5-2) 9×9
+                  SVGVisualElement "Path" (16V6-2) 8×8
+          Frame "card-body · stream-list" (16U5-2) 754×190
+            Frame "stream-item" (16UX-2) 754×17
+              Text "00:43" (16V1-2) 76×16 "00:43"
+              Frame "Frame" (16UZ-2) 92×16
+                Text "중앙일보" (16V0-2) 52×16 "중앙일보"
+              Text "은퇴 앞두고 파랗게 질린 5060 개…" (16UY-2) 221×16 "은퇴 앞두고 파랗게 질린 5060 개미들"
+            Frame "stream-item" (16US-2) 754×17
+              Text "00:33" (16UW-2) 76×16 "00:33"
+              Frame "Frame" (16UU-2) 92×16
+                Text "중앙SUNDAY" (16UV-2) 77×16 "중앙SUNDAY"
+              Text "[선데이 칼럼] 포츠담의 실험, 대학…" (16UT-2) 265×16 "[선데이 칼럼] 포츠담의 실험, 대학을 바꾸는…"
+            Frame "stream-item" (16UN-2) 754×17
+              Text "00:20" (16UR-2) 76×16 "00:20"
+              Frame "Frame" (16UP-2) 92×16
+                Text "한국경제" (16UQ-2) 52×16 "한국경제"
+              Text "성인 5명 중 1명이 삼성전자 주주……" (16UO-2) 274×16 "성인 5명 중 1명이 삼성전자 주주…'800만 개미'"
+            Frame "stream-item" (16UI-2) 754×17
+              Text "00:11" (16UM-2) 76×16 "00:11"
+              Frame "Frame" (16UK-2) 92×16
+                Text "스포츠경향" (16UL-2) 65×16 "스포츠경향"
+              Text "김종국, 뜻밖의 삼성전자 저점매수…"…" (16UJ-2) 283×16 "김종국, 뜻밖의 삼성전자 저점매수…"평단가 5만""
+            Frame "stream-item" (16UD-2) 754×17
+              Text "00:06" (16UH-2) 76×16 "00:06"
+              Frame "Frame" (16UF-2) 92×16
+                Text "KDF World" (16UG-2) 64×16 "KDF World"
+              Text "美 구글, 도쿄 오모테산도에 첫 해외…" (16UE-2) 239×16 "美 구글, 도쿄 오모테산도에 첫 해외 매장"
+            Frame "stream-item" (16U8-2) 754×17
+              Text "00:02" (16UC-2) 76×16 "00:02"
+              Frame "Frame" (16UA-2) 92×16
+                Text "머니투데이" (16UB-2) 65×16 "머니투데이"
+              Text "반도체부터 우주까지…'미래 먹거리' …" (16U9-2) 263×16 "반도체부터 우주까지…'미래 먹거리' ETF 경쟁"
+            Frame "stream-more" (16U6-2) 754×20
+              Text "+ 24건 더" (16U7-2) 754×16 "+ 24건 더"
+          Frame "리사이즈 핸들" (16U2-2) 18×18
+            SVG "SVG" (16U3-2) 12×12
+              SVGVisualElement "Path" (16U4-2) 7×7
+        Frame "카드 · 표 (.card)" (16SZ-2) 788×252
+          Frame "card-head" (16TU-2) 754×32
+            Text "card-title" (16U0-2) 178×18 "재무상태표 — 삼성전자 (연결)"
+            Frame "card-head-right" (16TV-2) 153×22
+              Text "card-fresh" (16TZ-2) 121×14 "DART 2025 사업보고서"
+              Frame "uk-card-close" (16TW-2) 22×22
+                SVG "SVG" (16TX-2) 9×9
+                  SVGVisualElement "Path" (16TY-2) 8×8
+          Frame "fin-meta" (16TS-2) 754×24
+            Text "corp_code 00126380 ·…" (16TT-2) 754×16 "corp_code 00126380 · CFS · 단위 백만원"
+          Frame "card-body · fin-table" (16T3-2) 754×166
+            Frame "thead" (16TO-2) 754×27
+              Text "계정" (16TR-2) 474×16 "계정"
+              Text "당기" (16TQ-2) 130×16 "당기"
+              Text "전기" (16TP-2) 130×16 "전기"
+            Frame "row" (16TK-2) 754×27
+              Text "자산총계" (16TN-2) 474×16 "자산총계"
+              Text "566,942,110" (16TM-2) 130×16 "566,942,110"
+              Text "514,531,948" (16TL-2) 130×16 "514,531,948"
+            Frame "row" (16TG-2) 754×27
+              Text "유동자산" (16TJ-2) 474×16 "유동자산"
+              Text "247,684,612" (16TI-2) 130×16 "247,684,612"
+              Text "227,062,266" (16TH-2) 130×16 "227,062,266"
+            Frame "row" (16TC-2) 754×27
+              Text "현금및현금성자산" (16TF-2) 474×16 "현금및현금성자산"
+              Text "57,856,378" (16TE-2) 130×16 "57,856,378"
+              Text "53,705,579" (16TD-2) 130×16 "53,705,579"
+            Frame "row" (16T8-2) 754×27
+              Text "미수금" (16TB-2) 474×16 "미수금"
+              Text "7,481,327" (16TA-2) 130×16 "7,481,327"
+              Text "9,622,974" (16T9-2) 130×16 "9,622,974"
+            Frame "row" (16T4-2) 754×27
+              Text "선급비용" (16T7-2) 474×16 "선급비용"
+              Text "3,627,172" (16T6-2) 130×16 "3,627,172"
+              Text "3,362,824" (16T5-2) 130×16 "3,362,824"
+          Frame "리사이즈 핸들" (16T0-2) 18×18
+            SVG "SVG" (16T1-2) 12×12
+              SVGVisualElement "Path" (16T2-2) 7×7
+    Frame "③ 대화 영역 400px" (16P5-2) 400×716
+      Frame "④ 결과물 · 출처 도크" (16S5-2) 392×196
+        Frame "결과물" (16SS-2) 390×55
+          Frame "Frame" (16SU-2) 362×16
+            Text "결과물" (16SW-2) 303×16 "결과물"
+            Text "캔버스 2" (16SV-2) 51×16 "캔버스 2"
+          Text "네이버 뉴스 · 삼성전자 일봉" (16ST-2) 362×16 "네이버 뉴스 · 삼성전자 일봉"
+        Frame "출처" (16SH-2) 390×63
+          Frame "Frame" (16SP-2) 362×16
+            Text "출처" (16SR-2) 346×16 "출처"
+            Text "3" (16SQ-2) 8×16 "3"
+          Frame "Frame" (16SI-2) 362×22
+            Frame "Frame" (16SN-2) 71×22
+              Text "일봉 차트" (16SO-2) 53×16 "일봉 차트"
+            Frame "Frame" (16SL-2) 100×22
+              Text "DART 재무제표" (16SM-2) 82×16 "DART 재무제표"
+            Frame "Frame" (16SJ-2) 83×22
+              Text "네이버 뉴스" (16SK-2) 65×16 "네이버 뉴스"
+        Frame "하위 에이전트" (16S6-2) 390×76
+          Frame "Frame" (16SE-2) 362×16
+            Text "label" (16SG-2) 346×16 "하위 에이전트"
+            Text "count" (16SF-2) 8×16 "1"
+          Frame "agent-row" (16S7-2) 362×34
+            Frame "row-top" (16SB-2) 362×16
+              Text "name" (16SD-2) 310×16 "재무 해석"
+              Text "status" (16SC-2) 44×16 "진행 중"
+            Frame "row-bottom" (16S8-2) 362×16
+              Text "elapsed" (16SA-2) 29×16 "8.4s"
+              Text "last-tool" (16S9-2) 68×16 "현재가 조회"
+      Frame "history" (16PP-2) 400×428
+        Frame "완료 턴" (16RU-2) 368×143
+          Frame "⑤ 사용자 말풍선 (우측 정렬)" (16S2-2) 368×36
+            Frame "Frame" (16S3-2) 242×36
+              Text "삼성전자 흐름이랑 재무 같이 보여줘" (16S4-2) 214×20 "삼성전자 흐름이랑 재무 같이 보여줘"
+          Frame "⑥ 경과 헤더 — 접힌 상태" (16RW-2) 368×25
+            Frame "Frame" (16RY-2) 368×16
+              Text "38초 동안 작업함" (16S1-2) 94×16 "38초 동안 작업함"
+              SVG "SVG" (16RZ-2) 9×9
+                SVGVisualElement "Path" (16S0-2) 3×6
+            Rectangle "Rectangle" (16RX-2) 368×1
+          Text "일봉 60개를 폈습니다. 5월 하순부…" (16RV-2) 368×66 "일봉 60개를 폈습니다. 5월 하순부터 20일선이 60일선을 위로 뚫고 그대로 벌어졌고, 종가 88,100원"
+        Frame "진행 중 턴" (16QU-2) 368×263
+          Frame "사용자 말풍선" (16RR-2) 368×36
+            Frame "Frame" (16RS-2) 298×36
+              Text "재무 쪽은 하위 에이전트한테 맡겨서 …" (16RT-2) 270×20 "재무 쪽은 하위 에이전트한테 맡겨서 정리해줘"
+          Frame "⑥ 경과 헤더 — 진행 중" (16RO-2) 368×25
+            Text "29초 동안 작업 중입니다" (16RQ-2) 368×16 "29초 동안 작업 중입니다"
+            Rectangle "Rectangle" (16RP-2) 368×1
+          Text "재무 해석은 읽기 전용 하위 에이전트…" (16RN-2) 368×60 "재무 해석은 읽기 전용 하위 에이전트에게 맡기겠습니다. 2025 연결 재무상태표에서 유동비율·현금성자산 비중"
+          Frame "⑦ 하위 에이전트 블록" (16RD-2) 368×44
+            Frame "Frame" (16RI-2) 368×22
+              Frame "Frame" (16RK-2) 82×22
+                Rectangle "Rectangle" (16RM-2) 8×8
+                Text "재무 해석" (16RL-2) 47×16 "재무 해석"
+              Text "작업 시작됨" (16RJ-2) 65×16 "작업 시작됨"
+            Frame "사고 문구 — 앞은 진하고 뒤로 옅어진다" (16RE-2) 368×16
+              Text "유동비율 계산" (16RH-2) 77×16 "유동비율 계산"
+              Text "— 유동자산 ÷" (16RG-2) 78×16 "— 유동자산 ÷"
+              Text "유동부채 확인 중" (16RF-2) 93×16 "유동부채 확인 중"
+          Frame "⑧ 실행 라인 — 지금 부르고 있는 것" (16QV-2) 368×58
+            Frame "Frame" (16R7-2) 368×16
+              SVG "SVG" (16RA-2) 12×12
+                SVGVisualElement "Rect" (16RC-2) 11×9
+                SVGVisualElement "Path" (16RB-2) 2×3
+              Text "재무제표 조회 · 삼성전자 2025 …" (16R9-2) 311×16 "재무제표 조회 · 삼성전자 2025 연결"
+              Text "1.2s" (16R8-2) 29×16 "1.2s"
+            Frame "Frame" (16R1-2) 368×16
+              SVG "SVG" (16R4-2) 12×12
+                SVGVisualElement "Rect" (16R6-2) 11×9
+                SVGVisualElement "Path" (16R5-2) 2×3
+              Text "현재가 조회 · 삼성전자" (16R3-2) 311×16 "현재가 조회 · 삼성전자"
+              Text "0.4s" (16R2-2) 29×16 "0.4s"
+            Frame "Frame" (16QW-2) 368×16
+              SVG "SVG" (16QY-2) 12×12
+                SVGVisualElement "Rect" (16R0-2) 11×9
+                SVGVisualElement "Path" (16QZ-2) 2×3
+              Text "일별 주가 조회 · 대기 중" (16QX-2) 348×16 "일별 주가 조회 · 대기 중"
+        Frame "turn-agent (능동 턴) — 조건 패널 형식" (16PQ-2) 368×303
+          Frame "agent-head" (16QO-2) 368×20
+            Frame "agent-badge" (16QS-2) 72×20
+              Text "15:30 발화" (16QT-2) 56×16 "15:30 발화"
+            Text "주기 확인" (16QR-2) 53×16 "주기 확인"
+            Rectangle "Rectangle" (16QQ-2) 180×0
+            Text "2분 전" (16QP-2) 39×16 "2분 전"
+          Frame "본문 — 인라인 칩을 문장에 섞는다" (16QH-2) 368×90
+            Text "Text" (16QN-2) 0×24
+            Frame "Frame" (16QL-2) 119×18
+              Text "삼성전자 005930" (16QM-2) 107×16 "삼성전자 005930"
+            Text " 조건 도달 — 관측값 88,100 …" (16QK-2) 286×24 " 조건 도달 — 관측값 88,100 (임계 88,000)"
+            Frame "시점 단서 (템플릿 고정 문구)" (16QI-2) 368×42
+              Text "값은 발화 시점 기준입니다 — 최신 …" (16QJ-2) 368×40 "값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요."
+          Frame "조건 패널" (16PS-2) 368×145
+            Frame "패널 머리 바" (16Q7-2) 366×30
+              Text "감시 조건" (16QG-2) 296×16 "감시 조건"
+              Frame "캔버스로 보내기" (16QC-2) 16×16
+                SVG "SVG" (16QD-2) 11×11
+                  SVGVisualElement "Path" (16QF-2) 6×6
+                  SVGVisualElement "Path" (16QE-2) 8×8
+              Frame "복사" (16Q8-2) 16×16
+                SVG "SVG" (16Q9-2) 11×11
+                  SVGVisualElement "Rect" (16QB-2) 7×7
+                  SVGVisualElement "Path" (16QA-2) 6×6
+            Frame "패널 본문" (16PT-2) 366×113
+              Text "대상" (16Q6-2) 344×16 "삼성전자 005930"
+              Frame "조건 행 · 충족" (16Q2-2) 344×18
+                Text "✓" (16Q5-2) 11×16 "✓"
+                Text "종가 88,000 이상" (16Q4-2) 256×16 "종가 88,000 이상"
+                Text "88,100" (16Q3-2) 47×16 "88,100"
+              Frame "조건 행 · 충족" (16PY-2) 344×18
+                Text "✓" (16Q1-2) 11×16 "✓"
+                Text "거래량 1,000만주 이상" (16Q0-2) 225×16 "거래량 1,000만주 이상"
+                Text "11,689,068" (16PZ-2) 78×16 "11,689,068"
+              Frame "조건 행 · 참고" (16PU-2) 344×18
+                Text "△" (16PX-2) 11×16 "△"
+                Text "장중에만 확인" (16PW-2) 230×16 "장중에만 확인"
+                Text "15:30 마감" (16PV-2) 73×16 "15:30 마감"
+          Text "agent-source (각주)" (16PR-2) 368×17 "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다"
+      Frame "input-stack" (16P6-2) 400×84
+        Frame "input-row · 실행 중 (ESC 중단)" (16PJ-2) 392×44
+          Text "무엇이든 물어보세요" (16PO-2) 241×18 "무엇이든 물어보세요"
+          Frame "Frame" (16PK-2) 99×20
+            Text "29s" (16PN-2) 22×16 "29s"
+            Frame "Frame" (16PL-2) 67×20
+              Text "ESC 중단" (16PM-2) 53×16 "ESC 중단"
+        Frame "control-strip" (16P7-2) 392×40
+          Frame "키우미 (#dot 대체) · 호출 중 — 얼굴 열림" (16PF-2) 18×18
+            Frame "visor" (16PG-2) 11×11
+              Rectangle "Rectangle" (16PI-2) 2×4
+              Rectangle "Rectangle" (16PH-2) 2×4
+          Frame "Frame" (16PD-2) 73×28
+            Text "CLAUDE" (16PE-2) 47×14 "CLAUDE"
+          Frame "Frame" (16PB-2) 52×20
+            Text "감시 2" (16PC-2) 30×12 "감시 2"
+          Rectangle "Rectangle" (16PA-2) 66×0
+          Frame "Frame" (16P8-2) 111×28
+            Text "OPUS · HIGH" (16P9-2) 85×14 "OPUS · HIGH"

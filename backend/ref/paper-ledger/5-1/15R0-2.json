@@ -1,0 +1,1606 @@
+{
+ "board_id": "15R0-2",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-06 / R09 · 시장 체온·VI",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "15R3-2",
+   "text": "지금 시장이 뜨거운지, VI는 어디서 터지는지 보여줘",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15R4-2",
+   "text": "KOSPI · KOSDAQ · 오늘 VI 3건",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15R6-2",
+   "text": "시장 · VI",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15R7-2",
+   "text": "오전 9:42 · 실시간",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15RF-2",
+   "text": "KOSPI",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15RG-2",
+   "text": "2,684.21",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15RH-2",
+   "text": "+29.73 · +1.12%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15RJ-2",
+   "text": "KOSDAQ",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15RK-2",
+   "text": "842.15",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15RL-2",
+   "text": "+7.01 · +0.84%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15RU-2",
+   "text": "상승 1,486",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15RV-2",
+   "text": "보합 183",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15RW-2",
+   "text": "하락 621",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36EF-0",
+   "text": "상한 · 하한 종목",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "상한 · 하한 종목"
+   ]
+  },
+  {
+   "id": "36EG-0",
+   "text": "상한 4 · 하한 2",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "상한 · 하한 종목"
+   ]
+  },
+  {
+   "id": "36EI-0",
+   "text": "거래 형성 종목",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "거래 형성 종목"
+   ]
+  },
+  {
+   "id": "36EJ-0",
+   "text": "2,182개 / 2,290개 (95.3%)",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "거래 형성 종목"
+   ]
+  },
+  {
+   "id": "36EL-0",
+   "text": "52주 신고가 종목",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "52주 신고가 종목"
+   ]
+  },
+  {
+   "id": "36EM-0",
+   "text": "114",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "52주 신고가 종목"
+   ]
+  },
+  {
+   "id": "15S5-2",
+   "text": "외국인 현물 순매수",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "15S6-2",
+   "text": "+4,208억",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFA-0",
+   "text": "업종 등락 상위",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위"
+   ]
+  },
+  {
+   "id": "3SFE-0",
+   "text": "반도체",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFF-0",
+   "text": "G2510 · 제조",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFH-0",
+   "text": "3,184.52",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFI-0",
+   "text": "+87.96 · +2.84%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFQ-0",
+   "text": "의약품",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFP-0",
+   "text": "G3520 · 제조",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFN-0",
+   "text": "14,208.55",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFM-0",
+   "text": "+190.63 · +1.36%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 의약품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFX-0",
+   "text": "은행",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFW-0",
+   "text": "G4010 · 금융",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFU-0",
+   "text": "912.44",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SFT-0",
+   "text": "+8.32 · +0.92%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위",
+    "업종 행 · 은행",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SG4-0",
+   "text": "등락률 상위 3개 표시 · 전체 21개",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "Market breadth",
+    "업종 등락 상위"
+   ]
+  },
+  {
+   "id": "170I-2",
+   "text": "VI 영향 종목",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "170J-2",
+   "text": "오늘 3건",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "170L-2",
+   "text": "발동 중 2",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36HG-0",
+   "text": "종목",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI 표 헤더"
+   ]
+  },
+  {
+   "id": "36HH-0",
+   "text": "유형",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI 표 헤더"
+   ]
+  },
+  {
+   "id": "36HI-0",
+   "text": "발동가",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI 표 헤더"
+   ]
+  },
+  {
+   "id": "36HJ-0",
+   "text": "상태 · 시각",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI 표 헤더"
+   ]
+  },
+  {
+   "id": "36IU-0",
+   "text": "대성첨단",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36IV-0",
+   "text": "396300",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36IX-0",
+   "text": "정적 VI",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36IY-0",
+   "text": "정적 ±10%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36J0-0",
+   "text": "20,500",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36J1-0",
+   "text": "기준가 대비 +10.22%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36J3-0",
+   "text": "발동 중",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36J4-0",
+   "text": "09:40:44",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36J7-0",
+   "text": "이수페타시스",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36J8-0",
+   "text": "007660",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JA-0",
+   "text": "동적 VI",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JB-0",
+   "text": "동적 ±3%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JD-0",
+   "text": "64,500",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JE-0",
+   "text": "기준가 대비 +3.04%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JG-0",
+   "text": "발동 중",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JH-0",
+   "text": "09:41:08",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JK-0",
+   "text": "테마파워",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JL-0",
+   "text": "217500",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JN-0",
+   "text": "정적 VI",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JO-0",
+   "text": "정적 ±10%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JQ-0",
+   "text": "8,120",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JR-0",
+   "text": "기준가 대비 -10.1%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JT-0",
+   "text": "해제",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36JU-0",
+   "text": "09:06:12",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Instruments Table",
+    "테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "171J-2",
+   "text": "대성첨단 발동 상세",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Context Detail",
+    "Frame"
+   ]
+  },
+  {
+   "id": "171K-2",
+   "text": "해제 예정 09:42:44",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Context Detail",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36N0-0",
+   "text": "기준가",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Context Detail",
+    "발동 상세 4칸",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36N1-0",
+   "text": "18,600원",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Context Detail",
+    "발동 상세 4칸",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36Q7-0",
+   "text": "발동가",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Context Detail",
+    "발동 상세 4칸",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36Q8-0",
+   "text": "20,500원",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Context Detail",
+    "발동 상세 4칸",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36Q9-0",
+   "text": "+10.22%",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Context Detail",
+    "발동 상세 4칸",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36N8-0",
+   "text": "거래 상태",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Context Detail",
+    "발동 상세 4칸",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36N9-0",
+   "text": "단일가 접수",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Context Detail",
+    "발동 상세 4칸",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36NB-0",
+   "text": "추가 정보",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Context Detail",
+    "발동 상세 4칸",
+    "Frame"
+   ]
+  },
+  {
+   "id": "36NC-0",
+   "text": "미제공",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Context Detail",
+    "발동 상세 4칸",
+    "Frame"
+   ]
+  },
+  {
+   "id": "171Y-2",
+   "text": "이벤트 흐름",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Event Timeline"
+   ]
+  },
+  {
+   "id": "1722-2",
+   "text": "09:40:44",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Event Timeline",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1723-2",
+   "text": "정적 VI 발동",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Event Timeline",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1727-2",
+   "text": "09:41:12",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Event Timeline",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1728-2",
+   "text": "단일가 접수",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Event Timeline",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "172C-2",
+   "text": "09:42:44",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Event Timeline",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "172D-2",
+   "text": "해제 예정",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "VI Event Timeline",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1VDM-1",
+   "text": "발동 중 2종목 · 오늘 3건 전체 표시",
+   "path": [
+    "CC-06 / R09 · 시장 체온·VI",
+    "Workspace",
+    "VI Affected Instruments",
+    "List Footer · Complete"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "15R0-2",
+   "name": "CC-06 / R09 · 시장 체온·VI",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "15R1-2",
+   "name": "Header",
+   "component": "Frame",
+   "w": 1360,
+   "h": 122,
+   "depth": 1
+  },
+  {
+   "id": "15R2-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "15R5-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "15R9-2",
+   "name": "Workspace",
+   "component": "Frame",
+   "w": 1360,
+   "h": 690,
+   "depth": 1
+  },
+  {
+   "id": "15RA-2",
+   "name": "Market breadth",
+   "component": "Frame",
+   "w": 820,
+   "h": 690,
+   "depth": 2
+  },
+  {
+   "id": "15RD-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15RE-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15RI-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15RP-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 18,
+   "depth": 3
+  },
+  {
+   "id": "15RQ-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15RR-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15RS-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15RT-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "15RX-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "36EE-0",
+   "name": "상한 · 하한 종목",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "36EH-0",
+   "name": "거래 형성 종목",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "36EK-0",
+   "name": "52주 신고가 종목",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "15S4-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3SF9-0",
+   "name": "업종 등락 상위",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3SFC-0",
+   "name": "업종 행 · 반도체",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3SFD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SFG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SFK-0",
+   "name": "업종 행 · 의약품",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3SFO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SFL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SFR-0",
+   "name": "업종 행 · 은행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3SFV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3SFS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "170E-2",
+   "name": "VI Affected Instruments",
+   "component": "Frame",
+   "w": 520,
+   "h": 690,
+   "depth": 2
+  },
+  {
+   "id": "170G-2",
+   "name": "VI Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "170H-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "170K-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "36HF-0",
+   "name": "VI 표 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 3
+  },
+  {
+   "id": "36IR-0",
+   "name": "VI Instruments Table",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "36IS-0",
+   "name": "한미반도체",
+   "component": "Frame",
+   "w": 0,
+   "h": 72,
+   "depth": 4
+  },
+  {
+   "id": "36IT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36IW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 90,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36IZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36J2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 94,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36J5-0",
+   "name": "이수페타시스",
+   "component": "Frame",
+   "w": 0,
+   "h": 72,
+   "depth": 4
+  },
+  {
+   "id": "36J6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36J9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 90,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36JC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36JF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 94,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36JI-0",
+   "name": "테마파워",
+   "component": "Frame",
+   "w": 0,
+   "h": 72,
+   "depth": 4
+  },
+  {
+   "id": "36JJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36JM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 90,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36JP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 128,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36JS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 94,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "171H-2",
+   "name": "VI Context Detail",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "171I-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "36MY-0",
+   "name": "발동 상세 4칸",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "36MZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36Q6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36N7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "36NA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "171X-2",
+   "name": "VI Event Timeline",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "171Z-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1720-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 145,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1721-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 6
+  },
+  {
+   "id": "1724-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "1725-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 145,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1726-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 6
+  },
+  {
+   "id": "1729-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "172A-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 145,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "172B-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 6
+  },
+  {
+   "id": "1VDL-1",
+   "name": "List Footer · Complete",
+   "component": "Frame",
+   "w": 472,
+   "h": 38,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "지금 시장이 뜨거운지, VI는 어디서 터지는지 보여줘": 1,
+  "KOSPI · KOSDAQ · 오늘 VI 3건": 1,
+  "시장 · VI": 1,
+  "오전 9:42 · 실시간": 1,
+  "KOSPI": 1,
+  "2,684.21": 1,
+  "+29.73 · +1.12%": 1,
+  "KOSDAQ": 1,
+  "842.15": 1,
+  "+7.01 · +0.84%": 1,
+  "상승 1,486": 1,
+  "보합 183": 1,
+  "하락 621": 1,
+  "상한 · 하한 종목": 1,
+  "상한 4 · 하한 2": 1,
+  "거래 형성 종목": 1,
+  "2,182개 / 2,290개 (95.3%)": 1,
+  "52주 신고가 종목": 1,
+  "114": 1,
+  "외국인 현물 순매수": 1,
+  "+4,208억": 1,
+  "업종 등락 상위": 1,
+  "반도체": 1,
+  "G2510 · 제조": 1,
+  "3,184.52": 1,
+  "+87.96 · +2.84%": 1,
+  "의약품": 1,
+  "G3520 · 제조": 1,
+  "14,208.55": 1,
+  "+190.63 · +1.36%": 1,
+  "은행": 1,
+  "G4010 · 금융": 1,
+  "912.44": 1,
+  "+8.32 · +0.92%": 1,
+  "등락률 상위 3개 표시 · 전체 21개": 1,
+  "VI 영향 종목": 1,
+  "오늘 3건": 1,
+  "발동 중 2": 1,
+  "종목": 1,
+  "유형": 1,
+  "발동가": 2,
+  "상태 · 시각": 1,
+  "대성첨단": 1,
+  "396300": 1,
+  "정적 VI": 2,
+  "정적 ±10%": 2,
+  "20,500": 1,
+  "기준가 대비 +10.22%": 1,
+  "발동 중": 2,
+  "09:40:44": 2,
+  "이수페타시스": 1,
+  "007660": 1,
+  "동적 VI": 1,
+  "동적 ±3%": 1,
+  "64,500": 1,
+  "기준가 대비 +3.04%": 1,
+  "09:41:08": 1,
+  "테마파워": 1,
+  "217500": 1,
+  "8,120": 1,
+  "기준가 대비 -10.1%": 1,
+  "해제": 1,
+  "09:06:12": 1,
+  "대성첨단 발동 상세": 1,
+  "해제 예정 09:42:44": 1,
+  "기준가": 1,
+  "18,600원": 1,
+  "20,500원": 1,
+  "+10.22%": 1,
+  "거래 상태": 1,
+  "단일가 접수": 2,
+  "추가 정보": 1,
+  "미제공": 1,
+  "이벤트 흐름": 1,
+  "정적 VI 발동": 1,
+  "09:41:12": 1,
+  "09:42:44": 1,
+  "해제 예정": 1,
+  "발동 중 2종목 · 오늘 3건 전체 표시": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "dbba6580655e73d763e960038838cd9a2c1cfa2de2ee96822d2ab3119c84553d"
+}

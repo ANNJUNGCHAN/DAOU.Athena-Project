@@ -1,0 +1,2713 @@
+{
+ "board_id": "2QX1-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-04 / R02-T3 · 호가 — KRX 금현물",
+ "width": 1440,
+ "height": 1040,
+ "texts": [
+  {
+   "id": "2QX6-1",
+   "text": "금 99.99K 통합 호가",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QX9-1",
+   "text": "실시간",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QXA-1",
+   "text": "KRX 금시장 · 1g 단위 · 09:00~15:30",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32HT-0",
+   "text": "정규장",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Header",
+    "Frame",
+    "정규장"
+   ]
+  },
+  {
+   "id": "32HV-0",
+   "text": "시간외",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Header",
+    "Frame",
+    "시간외"
+   ]
+  },
+  {
+   "id": "32HX-0",
+   "text": "금현물",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Header",
+    "Frame",
+    "금현물"
+   ]
+  },
+  {
+   "id": "32I0-0",
+   "text": "5단",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Header",
+    "Frame",
+    "5단"
+   ]
+  },
+  {
+   "id": "32I2-0",
+   "text": "10단",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Header",
+    "Frame",
+    "10단"
+   ]
+  },
+  {
+   "id": "2QXK-1",
+   "text": "현재가",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QXM-1",
+   "text": "109,750",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QXN-1",
+   "text": "+850 · +0.78%",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QXO-1",
+   "text": "원/g · 09:42:21 기준",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QXQ-1",
+   "text": "최우선 매도호가",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QXR-1",
+   "text": "109,800",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QXS-1",
+   "text": "잔량 92g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QXU-1",
+   "text": "최우선 매수호가",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QXV-1",
+   "text": "109,700",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QXW-1",
+   "text": "잔량 320g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "343L-0",
+   "text": "누적 거래량",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "KPI Volume"
+   ]
+  },
+  {
+   "id": "343M-0",
+   "text": "348kg",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "KPI Volume"
+   ]
+  },
+  {
+   "id": "343N-0",
+   "text": "거래대금 382.4억",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "KPI Volume"
+   ]
+  },
+  {
+   "id": "343P-0",
+   "text": "전일 거래량 대비",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "KPI Volume Ratio"
+   ]
+  },
+  {
+   "id": "343Q-0",
+   "text": "108.4%",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "KPI Volume Ratio"
+   ]
+  },
+  {
+   "id": "343R-0",
+   "text": "거래회전율 2.7%",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "KPI Volume Ratio"
+   ]
+  },
+  {
+   "id": "2QY3-1",
+   "text": "매수비율",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QY4-1",
+   "text": "68.4%",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QY8-1",
+   "text": "체결강도 121.5 · 총 잔량 4,180g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QYK-1",
+   "text": "호가 (원/g)",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Ladder Head"
+   ]
+  },
+  {
+   "id": "2QYL-1",
+   "text": "등락",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Ladder Head"
+   ]
+  },
+  {
+   "id": "2QYM-1",
+   "text": "잔량 (g)",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Ladder Head"
+   ]
+  },
+  {
+   "id": "2QYO-1",
+   "text": "잔량 분포",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Ladder Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QYS-1",
+   "text": "110,000",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QYT-1",
+   "text": "+250",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QYU-1",
+   "text": "369",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QYZ-1",
+   "text": "109,950",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZ0-1",
+   "text": "+200",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZ1-1",
+   "text": "310",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZ6-1",
+   "text": "109,900",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZ7-1",
+   "text": "+150",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZ8-1",
+   "text": "286",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZD-1",
+   "text": "109,850",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZE-1",
+   "text": "+100",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZF-1",
+   "text": "264",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZK-1",
+   "text": "109,800",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZL-1",
+   "text": "+50",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZM-1",
+   "text": "92",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Ask Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZR-1",
+   "text": "현재가",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Current Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZS-1",
+   "text": "109,750",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Current Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZT-1",
+   "text": "▲ 850 · +0.78%",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Current Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZU-1",
+   "text": "체결강도 121.5 · 09:42:21",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Current Row"
+   ]
+  },
+  {
+   "id": "2QZY-1",
+   "text": "109,700",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QZZ-1",
+   "text": "−50",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R00-1",
+   "text": "320",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R05-1",
+   "text": "109,650",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R06-1",
+   "text": "−100",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R07-1",
+   "text": "412",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R0C-1",
+   "text": "109,600",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R0D-1",
+   "text": "−150",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R0E-1",
+   "text": "586",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R0J-1",
+   "text": "109,550",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R0K-1",
+   "text": "−200",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R0L-1",
+   "text": "680",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R0Q-1",
+   "text": "109,500",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R0R-1",
+   "text": "−250",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R0S-1",
+   "text": "861",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Bid Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2R0W-1",
+   "text": "매도 잔량 1,321g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Totals"
+   ]
+  },
+  {
+   "id": "2R0X-1",
+   "text": "총 4,180g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Totals"
+   ]
+  },
+  {
+   "id": "2R0Y-1",
+   "text": "매수 잔량 2,859g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Totals"
+   ]
+  },
+  {
+   "id": "3MM2-0",
+   "text": "거래 규격",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Spec Band",
+    "Band Head"
+   ]
+  },
+  {
+   "id": "3MM6-0",
+   "text": "거래 단위",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Spec Band",
+    "Band Cells",
+    "Cell 거래 단위"
+   ]
+  },
+  {
+   "id": "3MM7-0",
+   "text": "1g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Spec Band",
+    "Band Cells",
+    "Cell 거래 단위"
+   ]
+  },
+  {
+   "id": "3MM9-0",
+   "text": "결제",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Spec Band",
+    "Band Cells",
+    "Cell 결제"
+   ]
+  },
+  {
+   "id": "3MMA-0",
+   "text": "T+1 · 현금",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Spec Band",
+    "Band Cells",
+    "Cell 결제"
+   ]
+  },
+  {
+   "id": "3MMC-0",
+   "text": "실물 인출",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Spec Band",
+    "Band Cells",
+    "Cell 실물 인출"
+   ]
+  },
+  {
+   "id": "3MMD-0",
+   "text": "100g · 1kg 단위",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Ladder",
+    "Gold Spec Band",
+    "Band Cells",
+    "Cell 실물 인출"
+   ]
+  },
+  {
+   "id": "320O-0",
+   "text": "실시간 체결",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Head"
+   ]
+  },
+  {
+   "id": "320Q-0",
+   "text": "체결",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "320R-0",
+   "text": "잔량 추이",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Head",
+    "Frame"
+   ]
+  },
+  {
+   "id": "320U-0",
+   "text": "체결강도",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Strength",
+    "Frame"
+   ]
+  },
+  {
+   "id": "320V-0",
+   "text": "121.5",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Strength",
+    "Frame"
+   ]
+  },
+  {
+   "id": "320X-0",
+   "text": "최근 1분",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Strength",
+    "Frame"
+   ]
+  },
+  {
+   "id": "320Y-0",
+   "text": "매수 +181g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Strength",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MOO-0",
+   "text": "시각",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Head Row"
+   ]
+  },
+  {
+   "id": "3MOP-0",
+   "text": "체결가",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Head Row"
+   ]
+  },
+  {
+   "id": "3MOQ-0",
+   "text": "전일대비",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Head Row"
+   ]
+  },
+  {
+   "id": "3MOR-0",
+   "text": "체결량",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Head Row"
+   ]
+  },
+  {
+   "id": "3MOS-0",
+   "text": "구분",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Head Row"
+   ]
+  },
+  {
+   "id": "3MOT-0",
+   "text": "체결강도",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Head Row"
+   ]
+  },
+  {
+   "id": "3MOV-0",
+   "text": "09:42:21",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 1"
+   ]
+  },
+  {
+   "id": "3MOW-0",
+   "text": "109,750",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 1"
+   ]
+  },
+  {
+   "id": "3MOX-0",
+   "text": "+850",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 1"
+   ]
+  },
+  {
+   "id": "3MOY-0",
+   "text": "42g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 1"
+   ]
+  },
+  {
+   "id": "3MP1-0",
+   "text": "매수",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MP2-0",
+   "text": "121.5",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 1"
+   ]
+  },
+  {
+   "id": "3MP4-0",
+   "text": "09:42:18",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 2"
+   ]
+  },
+  {
+   "id": "3MP5-0",
+   "text": "109,700",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 2"
+   ]
+  },
+  {
+   "id": "3MP6-0",
+   "text": "+800",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 2"
+   ]
+  },
+  {
+   "id": "3MP7-0",
+   "text": "18g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 2"
+   ]
+  },
+  {
+   "id": "3MPA-0",
+   "text": "매도",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MPB-0",
+   "text": "121.4",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 2"
+   ]
+  },
+  {
+   "id": "3MRQ-0",
+   "text": "09:42:14",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 3"
+   ]
+  },
+  {
+   "id": "3MRR-0",
+   "text": "109,800",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 3"
+   ]
+  },
+  {
+   "id": "3MRS-0",
+   "text": "+900",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 3"
+   ]
+  },
+  {
+   "id": "3MRT-0",
+   "text": "65g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 3"
+   ]
+  },
+  {
+   "id": "3MRW-0",
+   "text": "매수",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MRX-0",
+   "text": "121.4",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 3"
+   ]
+  },
+  {
+   "id": "3MRZ-0",
+   "text": "09:42:10",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 4"
+   ]
+  },
+  {
+   "id": "3MS0-0",
+   "text": "109,750",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 4"
+   ]
+  },
+  {
+   "id": "3MS1-0",
+   "text": "+850",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 4"
+   ]
+  },
+  {
+   "id": "3MS2-0",
+   "text": "24g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 4"
+   ]
+  },
+  {
+   "id": "3MS5-0",
+   "text": "매수",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MS6-0",
+   "text": "121.3",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 4"
+   ]
+  },
+  {
+   "id": "3MS8-0",
+   "text": "09:42:05",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 5"
+   ]
+  },
+  {
+   "id": "3MS9-0",
+   "text": "109,700",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 5"
+   ]
+  },
+  {
+   "id": "3MSA-0",
+   "text": "+800",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 5"
+   ]
+  },
+  {
+   "id": "3MSB-0",
+   "text": "31g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 5"
+   ]
+  },
+  {
+   "id": "3MSE-0",
+   "text": "매도",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 5",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MSF-0",
+   "text": "121.2",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 5"
+   ]
+  },
+  {
+   "id": "3MSI-0",
+   "text": "09:41:59",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 6"
+   ]
+  },
+  {
+   "id": "3MSJ-0",
+   "text": "109,800",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 6"
+   ]
+  },
+  {
+   "id": "3MSK-0",
+   "text": "+900",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 6"
+   ]
+  },
+  {
+   "id": "3MSL-0",
+   "text": "12g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 6"
+   ]
+  },
+  {
+   "id": "3MSO-0",
+   "text": "매수",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 6",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MSP-0",
+   "text": "121.3",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 6"
+   ]
+  },
+  {
+   "id": "3MSR-0",
+   "text": "09:41:54",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 7"
+   ]
+  },
+  {
+   "id": "3MSS-0",
+   "text": "109,750",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 7"
+   ]
+  },
+  {
+   "id": "3MST-0",
+   "text": "+850",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 7"
+   ]
+  },
+  {
+   "id": "3MSU-0",
+   "text": "38g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 7"
+   ]
+  },
+  {
+   "id": "3MSX-0",
+   "text": "매수",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 7",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MSY-0",
+   "text": "121.2",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 7"
+   ]
+  },
+  {
+   "id": "3MT0-0",
+   "text": "09:41:48",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 8"
+   ]
+  },
+  {
+   "id": "3MT1-0",
+   "text": "109,700",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 8"
+   ]
+  },
+  {
+   "id": "3MT2-0",
+   "text": "+800",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 8"
+   ]
+  },
+  {
+   "id": "3MT3-0",
+   "text": "27g",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 8"
+   ]
+  },
+  {
+   "id": "3MT6-0",
+   "text": "매도",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 8",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3MT7-0",
+   "text": "121.1",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Row 8"
+   ]
+  },
+  {
+   "id": "3MT9-0",
+   "text": "8 / 20건 · 최신순",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "Gold Trade Count"
+   ]
+  },
+  {
+   "id": "3UK8-0",
+   "text": "금현물 정보",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "금현물 정보",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UK9-0",
+   "text": "KRX 금시장",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "금현물 정보",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKC-0",
+   "text": "전일 종가",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "금현물 정보",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKD-0",
+   "text": "108,900",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "금현물 정보",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKF-0",
+   "text": "가격 제한",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "금현물 정보",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKG-0",
+   "text": "98,010 ~ 119,790",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "금현물 정보",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKI-0",
+   "text": "LP 회원사",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "금현물 정보",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UKJ-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Workspace",
+    "Gold Side",
+    "금현물 정보",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QYF-1",
+   "text": "장중 실시간 · 갱신 중",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2QYG-1",
+   "text": "KRX 금시장 · 09:42:21 기준",
+   "path": [
+    "CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Gold Card Surface",
+    "Gold Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2QX1-1",
+   "name": "CC-04 / R02-T3 · 호가 — KRX 금현물",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1040,
+   "depth": 0
+  },
+  {
+   "id": "2QX2-1",
+   "name": "Gold Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "2QX3-1",
+   "name": "Gold Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QX4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QX5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QX7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QX8-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 6
+  },
+  {
+   "id": "2QXB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "32HS-0",
+   "name": "정규장",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "32HU-0",
+   "name": "시간외",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "32HW-0",
+   "name": "금현물",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "32HY-0",
+   "name": "Divider",
+   "component": "Frame",
+   "w": 1,
+   "h": 24,
+   "depth": 4
+  },
+  {
+   "id": "32HZ-0",
+   "name": "5단",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "32I1-0",
+   "name": "10단",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QXI-1",
+   "name": "Gold Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QXJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QXL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QXP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QXT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "343K-0",
+   "name": "KPI Volume",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "343O-0",
+   "name": "KPI Volume Ratio",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QY1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QY2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QY5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "2QY6-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "2QY7-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 5
+  },
+  {
+   "id": "2QY9-1",
+   "name": "Gold Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QYA-1",
+   "name": "Gold Ladder",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QYI-1",
+   "name": "Ladder Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QYN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QYP-1",
+   "name": "Gold Ask Rows",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QYQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QYV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QYW-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QYX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QZ2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QZ3-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QZ4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QZ9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QZA-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QZB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QZG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QZH-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QZI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QZN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QZO-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2QZP-1",
+   "name": "Gold Current Row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QZQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2QZV-1",
+   "name": "Gold Bid Rows",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2QZW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R01-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2R02-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2R03-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R08-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2R09-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2R0A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R0F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2R0G-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2R0H-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R0M-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2R0N-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2R0O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2R0T-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2R0U-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "2R0V-1",
+   "name": "Gold Totals",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3MM0-0",
+   "name": "Gold Spec Band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3MM1-0",
+   "name": "Band Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MM4-0",
+   "name": "Band Cells",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MM5-0",
+   "name": "Cell 거래 단위",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MM8-0",
+   "name": "Cell 결제",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MMB-0",
+   "name": "Cell 실물 인출",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2QYB-1",
+   "name": "Gold Side",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "320N-0",
+   "name": "Gold Trade Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 54,
+   "depth": 4
+  },
+  {
+   "id": "320P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "320S-0",
+   "name": "Gold Strength",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "320T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "320W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MON-0",
+   "name": "Gold Trade Head Row",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "3MOU-0",
+   "name": "Gold Trade Row 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "3MOZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MP0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MP3-0",
+   "name": "Gold Trade Row 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "3MP8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MP9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MRP-0",
+   "name": "Gold Trade Row 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "3MRU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MRV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MRY-0",
+   "name": "Gold Trade Row 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "3MS3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MS4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MS7-0",
+   "name": "Gold Trade Row 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "3MSC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MSD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MSH-0",
+   "name": "Gold Trade Row 6",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "3MSM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MSN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MSQ-0",
+   "name": "Gold Trade Row 7",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "3MSV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MSW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MSZ-0",
+   "name": "Gold Trade Row 8",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "3MT4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3MT5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3MT8-0",
+   "name": "Gold Trade Count",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 4
+  },
+  {
+   "id": "3UK6-0",
+   "name": "금현물 정보",
+   "component": "Frame",
+   "w": 0,
+   "h": 156,
+   "depth": 4
+  },
+  {
+   "id": "3UK7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "3UKA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UKB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UKE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UKH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "2QYC-1",
+   "name": "Gold Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2QYD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "2QYE-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "금 99.99K 통합 호가": 1,
+  "실시간": 1,
+  "KRX 금시장 · 1g 단위 · 09:00~15:30": 1,
+  "정규장": 1,
+  "시간외": 1,
+  "금현물": 1,
+  "5단": 1,
+  "10단": 1,
+  "현재가": 2,
+  "109,750": 5,
+  "+850 · +0.78%": 1,
+  "원/g · 09:42:21 기준": 1,
+  "최우선 매도호가": 1,
+  "109,800": 4,
+  "잔량 92g": 1,
+  "최우선 매수호가": 1,
+  "109,700": 5,
+  "잔량 320g": 1,
+  "누적 거래량": 1,
+  "348kg": 1,
+  "거래대금 382.4억": 1,
+  "전일 거래량 대비": 1,
+  "108.4%": 1,
+  "거래회전율 2.7%": 1,
+  "매수비율": 1,
+  "68.4%": 1,
+  "체결강도 121.5 · 총 잔량 4,180g": 1,
+  "호가 (원/g)": 1,
+  "등락": 1,
+  "잔량 (g)": 1,
+  "잔량 분포": 1,
+  "110,000": 1,
+  "+250": 1,
+  "369": 1,
+  "109,950": 1,
+  "+200": 1,
+  "310": 1,
+  "109,900": 1,
+  "+150": 1,
+  "286": 1,
+  "109,850": 1,
+  "+100": 1,
+  "264": 1,
+  "+50": 1,
+  "92": 1,
+  "▲ 850 · +0.78%": 1,
+  "체결강도 121.5 · 09:42:21": 1,
+  "−50": 1,
+  "320": 1,
+  "109,650": 1,
+  "−100": 1,
+  "412": 1,
+  "109,600": 1,
+  "−150": 1,
+  "586": 1,
+  "109,550": 1,
+  "−200": 1,
+  "680": 1,
+  "109,500": 1,
+  "−250": 1,
+  "861": 1,
+  "매도 잔량 1,321g": 1,
+  "총 4,180g": 1,
+  "매수 잔량 2,859g": 1,
+  "거래 규격": 1,
+  "거래 단위": 1,
+  "1g": 1,
+  "결제": 1,
+  "T+1 · 현금": 1,
+  "실물 인출": 1,
+  "100g · 1kg 단위": 1,
+  "실시간 체결": 1,
+  "체결": 1,
+  "잔량 추이": 1,
+  "체결강도": 2,
+  "121.5": 2,
+  "최근 1분": 1,
+  "매수 +181g": 1,
+  "시각": 1,
+  "체결가": 1,
+  "전일대비": 1,
+  "체결량": 1,
+  "구분": 1,
+  "09:42:21": 1,
+  "+850": 3,
+  "42g": 1,
+  "매수": 5,
+  "09:42:18": 1,
+  "+800": 3,
+  "18g": 1,
+  "매도": 3,
+  "121.4": 2,
+  "09:42:14": 1,
+  "+900": 2,
+  "65g": 1,
+  "09:42:10": 1,
+  "24g": 1,
+  "121.3": 2,
+  "09:42:05": 1,
+  "31g": 1,
+  "121.2": 2,
+  "09:41:59": 1,
+  "12g": 1,
+  "09:41:54": 1,
+  "38g": 1,
+  "09:41:48": 1,
+  "27g": 1,
+  "121.1": 1,
+  "8 / 20건 · 최신순": 1,
+  "금현물 정보": 1,
+  "KRX 금시장": 1,
+  "전일 종가": 1,
+  "108,900": 1,
+  "가격 제한": 1,
+  "98,010 ~ 119,790": 1,
+  "LP 회원사": 1,
+  "해당 없음": 1,
+  "장중 실시간 · 갱신 중": 1,
+  "KRX 금시장 · 09:42:21 기준": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "6d5ea6cfd52988ef143c59a056d5f3bb52e636fa569064660d30a82585381a0e"
+}

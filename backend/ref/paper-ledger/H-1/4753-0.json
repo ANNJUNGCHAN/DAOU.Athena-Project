@@ -1,0 +1,340 @@
+{
+ "board_id": "4753-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "4761-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "4760-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "475Y-0",
+   "text": "업종 지수·등락 탐색",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Header"
+   ]
+  },
+  {
+   "id": "475W-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "475V-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "475U-0",
+   "text": "값",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "475T-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "475R-0",
+   "text": "01",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "475Q-0",
+   "text": "누적거래량n",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "475P-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "475N-0",
+   "text": "누적 3억 4,200만주",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "475M-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "475K-0",
+   "text": "02",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "475J-0",
+   "text": "상승",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "475I-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "475G-0",
+   "text": "71 · 23",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "475F-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "475D-0",
+   "text": "03",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "475C-0",
+   "text": "시간n",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "475B-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4759-0",
+   "text": "09:30",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4758-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4755-0",
+   "text": "외 3개 행 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4753-0",
+   "name": "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "475X-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "475Z-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4756-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "475S-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "475L-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "475O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "475E-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "475H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4757-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "475A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4754-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "업종 지수·등락 탐색": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "누적거래량n": 1,
+  "누적 3억 4,200만주": 1,
+  "02": 1,
+  "상승": 1,
+  "71 · 23": 1,
+  "03": 1,
+  "시간n": 1,
+  "09:30": 1,
+  "외 3개 행 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "aa3541b3f9043d211915d626ceb4466d0d7827d7bd91fdf4184e11fa866ef33f"
+}
