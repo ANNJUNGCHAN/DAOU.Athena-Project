@@ -278,6 +278,54 @@ test('real-board verifier fixtures preserve authored state-board links for runti
   assert.doesNotMatch(realBoardFactory, /state_boards:\s*\[\]/);
 });
 
+// ---------- 스트립·정렬 칩이 Paper가 활성으로 그린 잎에 붙는가 ----------
+// 자식 보드가 제 스트립에서 활성(k-text 알약·brand 색)으로 그린 문구가 곧 부모
+// 레일에서 그 보드를 여는 칩이다. 유사도 매칭이 꼬리·부분 일치로 다른 잎을 집으면
+// 「5단」이 금현물을 열고 「등락률」 열 머리가 시간외 보드를 여는 오배선이 된다.
+function realSlots(boardId) {
+  return JSON.parse(fs.readFileSync(path.join(
+    __dirname, '..', '..', 'backend', 'ref', 'card-surface-templates', boardId, 'slots.json',
+  ), 'utf8'));
+}
+
+function leafTextOf(boardId, nodeId) {
+  const html = fs.readFileSync(path.join(
+    __dirname, '..', '..', 'backend', 'ref', 'card-surface-templates', boardId, 'board.html',
+  ), 'utf8');
+  const at = html.indexOf(`data-node="${nodeId}"`);
+  assert.notEqual(at, -1, `${boardId}에 ${nodeId} 노드가 없다`);
+  return (/>([^<]*)</.exec(html.slice(at)) || [, ''])[1].trim();
+}
+
+test('스트립·정렬 칩 표식이 Paper가 그 보드에 활성으로 그린 문구 잎에 붙는다', () => {
+  // [부모, 컨트롤, 붙어야 할 잎 노드, 그 잎의 문구, 목적지 보드]
+  const wiring = [
+    // 13BC-2(정규장·10단) 스트립 — 세션 축과 단수 축이 따로 있다.
+    ['13BC-2', '금현물 · 5단', '153O-2', '금현물', '2QX1-1'],
+    ['13BC-2', '정규장 · 5단', '153R-2', '5단', '2TRW-1'],
+    ['13BC-2', '시간외', '153M-2', '시간외', '2QRP-1'],
+    // 13K0-2 정렬 칩 줄과 세션 칩 줄 — 순위표 열 머리는 조작이 아니다.
+    ['13K0-2', '호가잔량 상위', '2WHD-0', '호가잔량', '2XTO-0'],
+    ['13K0-2', '호가잔량 급증', '2WHF-0', '잔량 급증', '2YA8-0'],
+    ['13K0-2', '시간외 등락률', '2WI2-0', '시간외 단일가', '2YNQ-0'],
+    ['13K0-2', '등락률', '2WH9-0', '등락률', '2XKO-0'],
+  ];
+  for (const [parent, control, nodeId, leafText, target] of wiring) {
+    const marks = realSlots(parent).state_controls.marks;
+    const mark = marks.find((item) => item.control === control);
+    assert.ok(mark, `${parent} 레일에 ${control} 표식이 없다`);
+    assert.equal(mark.node_id, nodeId, `${parent} ${control}가 다른 잎에 붙었다`);
+    assert.deepEqual(mark.boards, [target]);
+    assert.equal(leafTextOf(parent, nodeId), leafText);
+  }
+  // 한 잎이 두 컨트롤을 받지 않는다 — 먼저 집은 쪽이 이기는 자리가 없어야 한다.
+  for (const parent of ['13BC-2', '13K0-2']) {
+    const nodes = realSlots(parent).state_controls.marks.map((item) => item.node_id);
+    assert.equal(new Set(nodes).size, nodes.length, `${parent} 표식이 잎을 겹쳐 잡았다`);
+    assert.deepEqual(realSlots(parent).state_controls.unresolved, []);
+  }
+});
+
 test('canonical glyph verifier has no alternate diagnostic success path', () => {
   const verify = verifierSource();
   assert.match(verify, /waitForStableLayout/);

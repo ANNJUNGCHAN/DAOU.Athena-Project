@@ -7,7 +7,7 @@
     "node_id": "1538-2",
     "jsx_sha256": "c6e24ba33983cdba60c11e7c0e70e11f6c73100a560b78b3a63073c41db96439"
   },
-  "html_sha256": "7c7d8b5c51e33afec7b8ba43f4268c445c1a91776157b059180980ff9a28c09f",
+  "html_sha256": "abf4c674fac9b28d20b0848ed6f8265bfcd6b4d37d6e853e54739406ef3b83d9",
   "width_px": 1360.0,
   "height_px": 880.0,
   "artboard_px": [
@@ -140,8 +140,8 @@
         "boards": [
           "2QX1-1"
         ],
-        "node_id": "153R-2",
-        "how": "tail"
+        "node_id": "153O-2",
+        "how": "hand"
       },
       {
         "control": "단계별 낱값·거래소별",
@@ -167,8 +167,8 @@
         "boards": [
           "2TRW-1"
         ],
-        "node_id": "153K-2",
-        "how": "partial"
+        "node_id": "153R-2",
+        "how": "hand"
       }
     ],
     "unresolved": []

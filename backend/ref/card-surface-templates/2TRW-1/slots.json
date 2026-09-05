@@ -22,7 +22,7 @@
     "kind": "tab",
     "parent_board": "13BC-2",
     "control": "정규장 · 5단",
-    "control_text": null
+    "control_text": "5단"
   },
   "regions": {
     "2TZ3-1": "header",

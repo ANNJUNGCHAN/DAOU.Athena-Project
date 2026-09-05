@@ -7,7 +7,8 @@
   "state": {
     "kind": "sort",
     "parent_board": "13K0-2",
-    "control": "호가잔량 상위"
+    "control": "호가잔량 상위",
+    "control_text": "호가잔량"
   },
   "saved_at": "2026-09-02T11:26:22Z"
 }

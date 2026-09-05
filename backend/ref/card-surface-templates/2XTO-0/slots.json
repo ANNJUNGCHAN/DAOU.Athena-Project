@@ -21,7 +21,7 @@
     "kind": "sort",
     "parent_board": "13K0-2",
     "control": "호가잔량 상위",
-    "control_text": null
+    "control_text": "호가잔량"
   },
   "regions": {
     "2XXM-0": "header",

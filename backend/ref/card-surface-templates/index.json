@@ -349,8 +349,8 @@
             "boards": [
               "2QX1-1"
             ],
-            "node_id": "153R-2",
-            "how": "tail"
+            "node_id": "153O-2",
+            "how": "hand"
           },
           {
             "control": "단계별 낱값·거래소별",
@@ -376,13 +376,13 @@
             "boards": [
               "2TRW-1"
             ],
-            "node_id": "153K-2",
-            "how": "partial"
+            "node_id": "153R-2",
+            "how": "hand"
           }
         ],
         "unresolved": []
       },
-      "html_sha256": "7c7d8b5c51e33afec7b8ba43f4268c445c1a91776157b059180980ff9a28c09f"
+      "html_sha256": "abf4c674fac9b28d20b0848ed6f8265bfcd6b4d37d6e853e54739406ef3b83d9"
     },
     {
       "board_id": "13K0-2",
@@ -463,8 +463,8 @@
             "boards": [
               "2YNQ-0"
             ],
-            "node_id": "33WM-0",
-            "how": "partial"
+            "node_id": "2WI2-0",
+            "how": "hand"
           },
           {
             "control": "시장·VI",
@@ -535,8 +535,8 @@
             "boards": [
               "2YA8-0"
             ],
-            "node_id": "2WHD-0",
-            "how": "partial"
+            "node_id": "2WHF-0",
+            "how": "hand"
           },
           {
             "control": "호가잔량 상위",
@@ -544,13 +544,13 @@
             "boards": [
               "2XTO-0"
             ],
-            "node_id": "3449-0",
-            "how": "partial"
+            "node_id": "2WHD-0",
+            "how": "hand"
           }
         ],
         "unresolved": []
       },
-      "html_sha256": "c07bca19811099b3333bbc91898d5af9f706b88db8bcebf43537a829c1ec9c4e"
+      "html_sha256": "c73983aa76fbec68ff8101962fa58fda3d1bbbd9eb0b8d2ac17a2553e8925fca"
     },
     {
       "board_id": "15J9-2",
@@ -1134,7 +1134,7 @@
         "kind": "tab",
         "parent_board": "13BC-2",
         "control": "금현물 · 5단",
-        "control_text": null
+        "control_text": "금현물"
       },
       "operation_refs": [
         "base:ka50101"
@@ -1962,7 +1962,7 @@
         "kind": "tab",
         "parent_board": "13BC-2",
         "control": "정규장 · 5단",
-        "control_text": null
+        "control_text": "5단"
       },
       "operation_refs": [
         "detail:ka10004:after_hours_totals",
@@ -2857,7 +2857,7 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "호가잔량 상위",
-        "control_text": null
+        "control_text": "호가잔량"
       },
       "operation_refs": [
         "base:ka10020"
@@ -2979,7 +2979,7 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "호가잔량 급증",
-        "control_text": null
+        "control_text": "잔량 급증"
       },
       "operation_refs": [
         "base:ka10021"
@@ -3093,7 +3093,7 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "시간외 등락률",
-        "control_text": null
+        "control_text": "시간외 단일가"
       },
       "operation_refs": [
         "base:ka10098"
