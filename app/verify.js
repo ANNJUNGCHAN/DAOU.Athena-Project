@@ -1759,16 +1759,18 @@ app.whenReady().then(async () => {
       const requiredLabelCounts = ${JSON.stringify({
         kiumiMenu: { '파일 첨부': 1, '폴더 첨부': 1, '모델 설정': 1 },
         modelPopover: {
-          기본: 2,
+          기본: 4,
           fable: 1,
           opus: 1,
           sonnet: 1,
           haiku: 1,
-          low: 1,
-          medium: 1,
-          high: 1,
-          xhigh: 1,
+          low: 2,
+          medium: 2,
+          high: 2,
+          xhigh: 2,
           max: 1,
+          'grok-4.6': 1,
+          'grok-4.5': 1,
         },
       })}[${JSON.stringify(id)}];
       const requiredItems = Object.entries(requiredLabelCounts).map(([label, expectedCount]) => {
@@ -2330,7 +2332,7 @@ app.whenReady().then(async () => {
   const projectHover = await shellWin.webContents.executeJavaScript(`(() => {
     const main = document.querySelector('.sidebar-project-main');
     main.focus();
-    const description = main.querySelector('.sidebar-project-description');
+    const description = main.closest('.sidebar-project').querySelector('.sidebar-project-description');
     const add = document.querySelector('.sidebar-project-new-chat');
     const menu = document.querySelector('.sidebar-project-menu-trigger');
     const current = document.querySelector('.sidebar-project.is-current');

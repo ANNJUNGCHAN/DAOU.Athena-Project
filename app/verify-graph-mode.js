@@ -284,6 +284,7 @@ async function main() {
         estimatedPairs: [...document.querySelectorAll('#graphThemeClusters .theme-cluster-card')]
           .map((c) => [!!c.querySelector('.theme-cluster-name.is-estimated'), !!c.querySelector('.theme-cluster-unnamed-badge')]),
         warnCount: document.querySelectorAll('#graphThemeClusters .is-unnamed-warn, #graphThemeClusters .is-warn').length,
+        estimatedNote: [...document.querySelectorAll('#graphThemeClusters .theme-clusters-head .theme-clusters-subtitle')].map((n) => n.textContent),
         hiddenRows: document.querySelectorAll('#graphHiddenLinks .hidden-link-row').length,
         hiddenScores: [...document.querySelectorAll('#graphHiddenLinks .hidden-link-score')].map((n) => n.textContent),
         bannerHidden: document.getElementById('graphConfirmBanner').hidden,
@@ -328,12 +329,17 @@ async function main() {
     check('히어로 부제가 군집 수·신호 수를 실값으로 쓴다',
       /테마 군집 \d+개 · 성향 신호 \d+개/.test(summary.heroScope || ''), summary.heroScope);
     check('테마 군집 카드가 보인다', summary.themes > 0, summary.themeTitles);
-    check('추정 이름에는 "추정" 배지가 항상 함께 붙는다',
-      summary.estimatedPairs.every((pair) => pair[0] === pair[1]), summary.estimatedPairs);
+    check('추정 배지는 섞여 있을 때만 붙는다(전부 추정이면 헤더가 한 번 말한다 · Paper 그래프 07)',
+      (() => {
+        const est = summary.estimatedPairs.filter((pair) => pair[0]).length;
+        const mixed = est > 0 && est < summary.estimatedPairs.length;
+        return summary.estimatedPairs.every((pair) => pair[1] === (pair[0] && mixed))
+          && (mixed || est === 0 || summary.estimatedNote.some((t) => t.includes('이름은 추정')));
+      })(), summary.estimatedPairs);
     check('전부 무명인 현재 데이터에서 무명 경고가 켜지지 않는다', summary.warnCount === 0, summary.warnCount);
     check('숨은 연관 행이 보인다', summary.hiddenRows > 0, summary.hiddenRows);
-    check('숨은 연관 점수는 상대 표기다(절대 점수 금지)',
-      summary.hiddenScores.every((t) => /^상대 \d+\.\d$/.test(t)), summary.hiddenScores);
+    check('숨은 연관 배지는 자리 순위다(절대 점수 금지 · 2026-09-03)',
+      summary.hiddenScores.every((t, i) => t === `${i + 1}순위`), summary.hiddenScores);
     check('확인 필요 배너가 실개수로 뜬다',
       summary.bannerHidden === false && /^확인이 필요한 것 \d+건$/.test(summary.bannerTitle || ''),
       { hidden: summary.bannerHidden, title: summary.bannerTitle });
