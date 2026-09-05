@@ -19,6 +19,21 @@ function fakeStorage(initial) {
   };
 }
 
+// ---- 모델 카드 계정 카드 부제 (Paper 화면 18, 2026-09-05) — 순수 문자열 조합만 잰다 ----
+test('accountSubline: 출처 · 추가 시각 · 비활성이면 전환 안내 순으로 잇는다', () => {
+  const inactive = settingsCards.accountSubline({ addedAt: '2026-08-08T08:45:00.000Z', active: false }, '이전 CLI 로그인');
+  assert.match(inactive, /^이전 CLI 로그인 · \d+월 \d+일 (오전|오후) \d+:\d\d 추가 · 누르면 활성으로 전환$/);
+  const active = settingsCards.accountSubline({ addedAt: '2026-08-10T07:49:00.000Z', active: true }, '현재 CLI 로그인');
+  assert.match(active, /^현재 CLI 로그인 · \d+월 \d+일 (오전|오후) \d+:\d\d 추가$/);
+});
+
+test('accountSubline: addedAt이 없거나 깨졌으면 날짜 조각을 뺀다', () => {
+  assert.equal(settingsCards.accountSubline({ addedAt: null, active: true }, 'Athena 전용 로그인'), 'Athena 전용 로그인');
+  assert.equal(settingsCards.accountSubline({ addedAt: 'old', active: false }, '이전 CLI 로그인'), '이전 CLI 로그인 · 누르면 활성으로 전환');
+  assert.equal(settingsCards.formatAddedAt('old'), null);
+  assert.equal(settingsCards.formatAddedAt(undefined), null);
+});
+
 test('저장소가 비어 있으면 기본값(전부 켜짐)', () => {
   assert.deepEqual(settingsCards.readGraphSettings(fakeStorage()), settingsCards.GRAPH_SETTINGS_DEFAULTS);
 });
