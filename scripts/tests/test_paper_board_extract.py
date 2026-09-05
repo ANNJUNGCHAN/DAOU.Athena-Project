@@ -556,6 +556,50 @@ def test_explicit_table_discovery_fails_closed_on_missing_ambiguous_or_wrong_wid
         )
 
 
+def test_explicit_body_skips_the_elision_band_but_still_rejects_a_dropped_cell():
+    # 30HY-0 본표 한가운데에는 데이터 행이 아니라 구간을 접은 띠가 있다
+    # (`3SYD-0` 「7~48위 생략」, 셀 3개). 휴리스틱은 이런 줄을 이미 본문에서
+    # 빼고 있으므로(2V71-0) 명시 표도 같은 잣대로 건너뛴다.
+    _, elements, nodes = _parsed_template("30HY-0")
+    tables = pbe.detect_tables(
+        elements,
+        nodes,
+        {},
+        explicit_tables={
+            "34IW-0": {
+                "node_id": "34IW-0",
+                "traits": ("paired-table",),
+                "header_row": "34IX-0",
+            }
+        },
+    )
+    assert len(tables) == 1
+    assert tables[0]["columns"] == 8
+    assert tables[0]["body_rows"] == [
+        "34JR-0", "34J6-0", "34KC-0", "34S0-0",
+        "34SL-0", "34T6-0", "34VB-0", "34VW-0",
+    ]
+    assert "3SYD-0" not in tables[0]["body_rows"]
+
+    # 셀 하나를 흘린 행은 여전히 저작 실수다 — 띠로 봐주지 않는다.
+    _, elements, nodes = _parsed_template("30HY-0")
+    by_node = {node.node_id: element for element, node in zip(elements, nodes)}
+    by_node["34JR-0"].children.pop()
+    with pytest.raises(pbe.ExtractError, match="body column count"):
+        pbe.detect_tables(
+            elements,
+            nodes,
+            {},
+            explicit_tables={
+                "34IW-0": {
+                    "node_id": "34IW-0",
+                    "traits": ("paired-table",),
+                    "header_row": "34IX-0",
+                }
+            },
+        )
+
+
 def test_nonresponsive_13bc_extraction_remains_byte_equivalent():
     board_dir = pbe.TEMPLATE_ROOT / "13BC-2"
 
@@ -975,7 +1019,14 @@ def test_production_table_modes_use_scroll_fallback_after_interactive_cell_revie
         for item in manifest.get("responsive", []):
             if "paired-table" in item.get("traits", []):
                 paired_consumers.append((regions_path.parent.name, item["node_id"]))
-    assert sorted(paired_consumers) == [("2QFO-2", "2QH0-2"), ("2R3M-1", "3CRW-0")]
+    # 순위 본표 둘(2WZK-0·30HY-0)은 셀에 조작이 하나도 없어(state_controls.marks 0)
+    # scroll-table로 미뤄 둘 이유가 없다 — 8열이 접힐 때 라벨이 붙어야 한다.
+    assert sorted(paired_consumers) == [
+        ("2QFO-2", "2QH0-2"),
+        ("2R3M-1", "3CRW-0"),
+        ("2WZK-0", "3R2H-0"),
+        ("30HY-0", "34IW-0"),
+    ]
 
 
 def test_production_3crw_paired_table_generates_labeled_identity_free_body_mirrors():
