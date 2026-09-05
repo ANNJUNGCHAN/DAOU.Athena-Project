@@ -1526,10 +1526,10 @@ ipcMain.handle('athena:project-open-dialog', async () => {
   } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 
-// 아래 다섯 핸들러(add·pin·update·reveal·remove)는 35409b8에서 위 project-open-dialog
-// 핸들러의 본문 *안*에 들어가 있었다 — 백테스트의 폴더 대화상자를 한 번 열기 전에는
-// 등록조차 되지 않아 사이드바의 폴더 추가·고정·제거가 "No handler registered"로 죽었다
-// (2026-09-05 프로브 실측). 최상위로 꺼낸다.
+// 아래 핸들러 넷(add·pin·reveal·remove)은 35409b8에서 위 project-open-dialog 핸들러의
+// 본문 *안*에 들어가 있었다 — 백테스트의 폴더 대화상자를 한 번 열기 전에는 등록조차
+// 되지 않아 사이드바의 폴더 추가·고정·제거가 "No handler registered"로 죽었다
+// (2026-09-05 프로브 실측). 최상위로 꺼낸다. update는 같은 날 새로 얹은 것이다.
 // 사이드바 프로젝트(36·37번 보드) — 프로젝트는 폴더 하나다. 폴더는 대화상자로 사람이
 // 고르고, 백엔드 레지스트리가 등록하며(같은 폴더 두 번 등록은 백엔드가 409로 막는다),
 // 사이드바 레코드는 백엔드 id로 이어진다. 두 목록이 다른 id를 들면 같은 폴더가 두 얼굴이 된다.
