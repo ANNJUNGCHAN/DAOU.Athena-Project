@@ -1240,6 +1240,8 @@ html.is-boot-expanding #winControls { opacity: 0; }
   font-size: var(--text-xs);
   color: var(--color-k-soft);
 }
+/* 연결 실패 행(Paper 보드 33) — 대기 라벨과 같은 자리·같은 크기, 색만 경고색이다. */
+.onb-cli-waiting.is-failed { color: var(--color-warn); }
 
 .onb-cli-account-row {
   height: 42px;
