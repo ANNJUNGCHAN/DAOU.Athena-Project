@@ -1052,6 +1052,12 @@ function assertBoardChartAcks(label, shell, settled, shellMs) {
   if (shell.render_state !== expected) {
     throw new Error(`board chart ack(${label}): 껍질 ack의 상태가 마운트 결과와 어긋난다 — ${JSON.stringify(shell)}`);
   }
+  // 두 단으로 갔으면 확정 ack는 껍질 ack와 다른 메시지여야 한다 — 같은 메시지가
+  // 확정으로 통과하면 왕복이 끊겨도 초록으로 보인다. 어느 단으로 갔는지는
+  // 마운트가 껍질 ack보다 빨랐는지에 달렸으므로 영수증(two_stage)에 그대로 남긴다.
+  if (shell.pending === true && settled === shell) {
+    throw new Error(`board chart ack(${label}): 확정 ack가 껍질 ack 그 자체다 — ${JSON.stringify(shell)}`);
+  }
   if (!shell.panel_id || shell.renderer_id !== 'aits-chart-v1' || !Number.isInteger(shell.generation)) {
     throw new Error(`board chart ack(${label}): 껍질 ack에 패널 신원이 없다 — ${JSON.stringify(shell)}`);
   }
@@ -1153,11 +1159,15 @@ async function exerciseBoardChartPrimary(win) {
     board_id: BOARD_CHART_BOARD_ID,
     paint_receipt: { render_state: shell.render_state, verified_visible: shell.verified_visible },
     shell_ack_ms: shellMs,
+    // 껍질 ack가 pending으로 나갔는가 = 마운트가 껍질 ack보다 늦었는가. 두 단
+    // 왕복(pending→확정)이 실제로 돌았는지를 영수증에서 그대로 읽게 남긴다.
+    two_stage: shell.pending === true,
     settled_ack: {
       render_state: settled.render_state, panel_id: settled.panel_id, generation: settled.generation,
     },
     period_switch: {
       shell_ack_ms: secondShellMs,
+      two_stage: secondShell.pending === true,
       generation: secondSettled.generation,
       canvas_count: secondDom.canvas_count,
       error_notes: secondDom.error_notes,

@@ -504,8 +504,10 @@ test('보드 primary는 목업을 접고 얹으며, 실패하면 목업을 되�
     CANVAS.indexOf('async function mountBoardPrimary'),
     CANVAS.indexOf('// 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다.'),
   );
-  // 저작된 렌더러 자리에만 손댄다.
-  assert.match(primary, /primary\.renderer !== BOARD_CHART_RENDERER \|\| !primary\.mountPoint\) return null;/);
+  // 저작된 렌더러 자리에만 손댄다. 안 얹기로 한 것도 결과라, 껍질이 걸어둔 확정
+  // ack 자리를 맺고 빠진다 — 안 맺으면 main의 pending 한도 뒤 'timeout'으로 샌다.
+  assert.match(primary, /primary\.renderer !== BOARD_CHART_RENDERER \|\| !primary\.mountPoint \|\| !card/);
+  assert.match(primary, /\|\| !boardPrimaryAcceptsEnvelope\(primary, envelope\)\) \{\n\s*settleBoardChartMount\(state, 'error'\);\n\s*return null;/);
   // 껍질이 확정한 신원을 그대로 쓴다 — 다시 만들면 paint ack와 어긋난다.
   assert.match(primary, /let descriptor = state\.primaryDescriptor;/);
   // 목업은 지우지 않고 접는다(D1) — 실패하면 그대로 편다.
@@ -532,12 +534,35 @@ test('보드 primary는 목업을 접고 얹으며, 실패하면 목업을 되�
   assert.ok(
     primary.indexOf('releaseBoardChartPanel(descriptor.panelId)') < primary.indexOf('mountAitsChartPanel'),
   );
-  // 늦게 거부된 마운트가 그 사이 살아난 패널의 신원을 지우지 못하게 한다.
-  assert.match(primary, /if \(state\.primaryMount !== attempt\) return null;/);
+  // 늦게 끝난 마운트가 그 사이 살아난 패널의 신원을 지우지 못하게 한다 — 성공과
+  // 실패가 같은 문으로 판정해야 죽은 패널로 확정 ack가 새지 않는다.
+  assert.equal((primary.match(/if \(state\.primaryMount !== attempt\) \{/g) || []).length, 2);
+  assert.match(primary, /if \(state\.primaryMount !== attempt\) \{\n\s*session\.destroy\(\);/);
   assert.ok(
-    primary.indexOf('if (state.primaryMount !== attempt) return null;')
+    primary.indexOf('if (state.primaryMount !== attempt) {')
     < primary.lastIndexOf('primary.mountPoint.dataset.bsPrimaryError'),
   );
+});
+
+test('남의 보드로 갈아타면 그 봉투의 차트를 얹지 않는다', () => {
+  const accepts = CANVAS.slice(
+    CANVAS.indexOf('function boardPrimaryAcceptsEnvelope'),
+    CANVAS.indexOf('// 껍질(보드 HTML)이 선 뒤에'),
+  );
+  // 상태 보드를 갈아타면 같은 봉투가 다음 보드로 따라간다 — 그 보드가 부르는
+  // 조회(props_from)에 이 봉투의 조회가 없으면 남의 봉이다.
+  assert.match(accepts, /const sources = Array\.isArray\(primary\.propsFrom\) \? primary\.propsFrom : \[\];/);
+  assert.match(accepts, /if \(!sources\.length\) return true;/);
+  assert.match(accepts, /envelope\.operation_ref \|\| envelope\.operationRef/);
+  assert.match(accepts, /source\.mapping_id/);
+
+  // 색인이 그 판정을 할 수 있어야 한다 — 차트를 저작한 두 보드가 서로 다른 조회를
+  // 부르고, 그 목록이 겹치지 않아야 "남의 봉투"가 실제로 걸러진다.
+  const registry = require('./board-template-registry');
+  const stock = registry.contractFor('137X-2').primary.props_from.map((row) => row.mapping_id);
+  const index = registry.contractFor('32S7-0').primary.props_from.map((row) => row.mapping_id);
+  assert.ok(stock.length > 0 && index.length > 0);
+  assert.deepEqual(stock.filter((id) => index.includes(id)), []);
 });
 
 test('보드 껍질이 차트 신원을 찍어 paint ack에 넘긴다', () => {
