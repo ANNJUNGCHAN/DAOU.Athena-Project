@@ -22,6 +22,7 @@ const {
   normalizeRecommendations,
   runRestDataset,
 } = require('./rest-dataset-runner');
+const { isSimpleDailyChartQuery } = require('./simple-chart-fast-path');
 
 const RESOLVER_VECTOR_PATH = path.resolve(
   __dirname,
@@ -927,11 +928,32 @@ test('order book binder uses a closed standalone grammar and rejects every resid
   }
 });
 
-test('main.js REST 직행 체인은 compound를 quote보다 먼저 본다', () => {
-  const main = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
-  const compoundAt = main.indexOf('buildCompoundScreenDataset(query');
-  const quoteAt = main.indexOf('buildQuoteDataset(query');
-  assert.ok(compoundAt > 0 && quoteAt > compoundAt);
+// 소스 순서가 아니라 문법 계약을 잠근다 — 복합 문장은 단일 화면 문법과 단순
+// 차트 fast path 어디에도 안 걸려야 main.js 체인 순서가 실제로 무의미해진다.
+test('복합 문장은 단일 화면 문법과 단순 차트 fast path 어디에도 안 걸린다', () => {
+  const index = new StockEntityIndex();
+  index.replace([{ code: '005930', name: '삼성전자', aliases: ['Samsung Electronics'], market: '0' }]);
+
+  for (const compound of [
+    '삼성전자 시세랑 차트',
+    '삼성전자 차트랑 호가',
+    '삼성전자 시세랑 호가 보여줘',
+    '삼성전자 현재가와 차트 보여줘',
+    '삼성전자 호가하고 차트',
+  ]) {
+    const bound = buildCompoundScreenDataset(compound, index, { idFactory: () => 'compound-screen' });
+    assert.equal(bound.items.length, 2, compound);
+    assert.equal(buildQuoteDataset(compound, index), null, compound);
+    assert.equal(buildChartDataset(compound, index), null, compound);
+    assert.equal(buildOrderBookDataset(compound, index), null, compound);
+    assert.equal(isSimpleDailyChartQuery(compound), false, compound);
+  }
+
+  for (const simple of ['삼성전자 일봉 차트', '삼성전자 차트 보여줘']) {
+    assert.equal(isSimpleDailyChartQuery(simple), true, simple);
+    assert.equal(buildCompoundScreenDataset(simple, index), null, simple);
+    assert.ok(buildChartDataset(simple, index, { idFactory: () => 'single-chart' }), simple);
+  }
 });
 
 test('compound binder accepts 시세랑 호가 and rejects comparison or single-screen queries', () => {
