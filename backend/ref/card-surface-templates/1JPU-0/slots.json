@@ -746,8 +746,8 @@
     "footer": "호가 건수 상태"
   },
   "primary": {
-    "renderer": null,
-    "mount_slot": null,
+    "renderer": "orderbook-ladder",
+    "mount_slot": "1JQG-0",
     "module": null,
     "props_from": null
   },

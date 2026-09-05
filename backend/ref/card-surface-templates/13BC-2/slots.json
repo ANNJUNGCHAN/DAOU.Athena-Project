@@ -552,8 +552,8 @@
     "15BR-2": "호가 푸터"
   },
   "primary": {
-    "renderer": null,
-    "mount_slot": null,
+    "renderer": "orderbook-ladder",
+    "mount_slot": "154L-2",
     "module": null,
     "props_from": null
   },

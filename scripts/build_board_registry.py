@@ -91,6 +91,11 @@ def _check_slot_anchors(board_id: str, html: str, slots_path: Path) -> None:
     } - anchors)
     if missing:
         raise SystemExit(f"{board_id}: slots.json 앵커가 board.html에 없다 — {missing[:5]}")
+    # 전문 렌더러가 앉을 자리도 앵커다. 오타가 나면 프론트는 조용히 `.bs-primary`로
+    # 떨어져 다른 자리에 그린다 — 여기서 터뜨린다.
+    mount_slot = str((contract.get("primary") or {}).get("mount_slot") or "")
+    if mount_slot and mount_slot not in anchors:
+        raise SystemExit(f"{board_id}: primary.mount_slot이 board.html에 없다 — {mount_slot}")
 
 
 # 마운트 계약 투사 — board-mount가 실제로 읽는 필드만 싣는다. slots.json 전체(원장
@@ -116,6 +121,27 @@ def _mount_contract(slots_path: Path) -> list[dict]:
     return projected
 
 
+# primary는 슬롯이 아니라 보드 한 장짜리 계약이다 — 전문 렌더러가 어느 노드에 앉고
+# (`mount_slot`) 무엇을 그리는지(`renderer`), 그 렌더러가 어떤 op에서 값을 받는지
+# (`props_from`). 이 블록이 투사되지 않으면 프론트는 primary의 존재 자체를 모른다.
+# renderer가 저작되지 않은 보드는 실을 것이 없어 키를 아예 안 싣는다(청크 크기 방어).
+_PRIMARY_FIELDS = ("renderer", "mount_slot", "module", "props_from")
+
+
+def _primary_contract(slots_path: Path) -> dict | None:
+    if not slots_path.exists():
+        return None
+    contract = json.loads(slots_path.read_text(encoding="utf-8"))
+    primary = contract.get("primary") or {}
+    if not primary.get("renderer"):
+        return None
+    return {
+        field: primary[field]
+        for field in _PRIMARY_FIELDS
+        if primary.get(field) not in (None, "", [], {})
+    }
+
+
 def collect() -> list[dict]:
     boards = []
     for board_dir in sorted(p for p in TEMPLATE_DIR.iterdir() if p.is_dir()):
@@ -133,13 +159,17 @@ def collect() -> list[dict]:
             raise SystemExit(
                 f"{board_dir.name}: meta.json card_id가 없거나 파일명이 못 된다 — {card_id!r}"
             )
-        boards.append({
+        board = {
             "board_id": meta.get("board_id", board_dir.name),
             "card_id": card_id,
             "html": html,
             "html_sha256": hashlib.sha256(html.encode("utf-8")).hexdigest(),
             "slots": _mount_contract(slots_path),
-        })
+        }
+        primary = _primary_contract(slots_path)
+        if primary:
+            board["primary"] = primary
+        boards.append(board)
     return boards
 
 
@@ -208,6 +238,10 @@ def render_chunk(card_id: str, boards: list[dict]) -> str:
         parts.append(
             f"    slots: {json.dumps(board['slots'], ensure_ascii=False, separators=(',', ':'))},\n"
         )
+        if board.get("primary"):
+            parts.append(
+                f"    primary: {json.dumps(board['primary'], ensure_ascii=False, separators=(',', ':'))},\n"
+            )
         parts.append("  }),\n")
     parts.append("};\n")
     parts.append(CHUNK_FOOTER)
