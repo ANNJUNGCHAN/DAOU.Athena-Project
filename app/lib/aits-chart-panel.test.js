@@ -249,13 +249,59 @@ test('concurrent same-panel reload waits for one mount and never creates a dupli
   assert.equal(calls.length, 1);
 });
 
+// 차트는 3초 첫 피드백 계약 때문에 껍질만 붙인 채 첫 paint ack를 보낸다. 그 ack가
+// 낙관적 'data'를 실으면 마운트에 실패한 차트가 데이터 카드로 집계되고, 늦은 마운트가
+// 이미 지워진 임시 카드에 상태·오류를 써서 사용자에게는 빈 자리만 남는다.
+test('늦게 끝나는 차트 마운트는 pending ack와 살아 있는 카드로 결론난다', () => {
+  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
+  const live = canvas.slice(
+    canvas.indexOf('async function renderLiveChart'),
+    canvas.indexOf('function renderFreeCanvas'),
+  );
+  // 껍질만 붙은 상태는 'loading'이다 — 빈 dataset이 'data' 폴백으로 새지 않는다.
+  assert.match(live, /card\.dataset\.renderState = 'loading';/);
+  assert.doesNotMatch(live, /await mountAitsChartPanel/);
+  assert.match(live, /chartMountSettlements\.set\(descriptor\.panelId, settled\)/);
+  assert.match(live, /chartMountSettlements\.delete\(descriptor\.panelId\)/);
+  // 마운트 실패 오류는 살아 있는 카드(통합 root면 root)의 실제 부모에 붙는다.
+  assert.match(live, /const host = liveChartCard\(card, chartBody\) \|\| card;/);
+  assert.match(live, /const hostBody = chartBody\.parentElement \|\| body;/);
+  assert.match(live, /host\.dataset\.renderState = 'error';/);
+  assert.match(live, /hostBody\.appendChild\(errorNote\(`차트를 그리지 못했다/);
+  // 마운트 정착 구간에서 임시 카드에 직접 쓰는 경로는 남아 있으면 안 된다.
+  const settle = live.slice(live.indexOf('const settled = mountAitsChartPanel'));
+  assert.doesNotMatch(settle, /card\.dataset\.renderState = 'error';/);
+  assert.doesNotMatch(settle, /body\.appendChild\(errorNote/);
+
+  // 마운트 성공 기록도 임시 카드가 아니라 살아 있는 카드에 남는다.
+  const mount = canvas.slice(
+    canvas.indexOf('async function mountAitsChartPanel'),
+    canvas.indexOf('// TR이 Paper 보드'),
+  );
+  assert.match(mount, /const mounted = liveChartCard\(card, chartBody\) \|\| card;/);
+  assert.match(mount, /mounted\.dataset\.renderState = session\.body\.candles\.length \? 'data' : 'empty';/);
+  assert.match(mount, /Object\.defineProperty\(mounted, '__athenaChartSessionId'/);
+  assert.match(mount, /Object\.defineProperty\(mounted, '__athenaChartTrId'/);
+  assert.match(canvas, /function liveChartCard\(card, chartBody\)[\s\S]*chartBody\.closest\('\.card'\)/);
+
+  // 첫 ack는 pending, 마운트가 끝나면 같은 correlation으로 최종 상태를 한 번 더 보낸다.
+  const restAck = canvas.slice(
+    canvas.indexOf("window.athena.on('athena:add-rest-canvas'"),
+    canvas.indexOf('const REST_RETRY_STATES'),
+  );
+  assert.match(restAck, /const chartSettled = card && card\.dataset\.renderState === 'loading'/);
+  assert.match(restAck, /pending: !!chartSettled,/);
+  assert.match(restAck, /const mountedState = await chartSettled;[\s\S]*render_state: mountedState,[\s\S]*pending: false,/);
+  assert.equal((restAck.match(/athena:rest-canvas-painted/g) || []).length, 3);
+});
+
 test('all Athena chart entry points are statically locked to the AITS adapter', () => {
   const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
   const html = fs.readFileSync(path.join(__dirname, '..', 'shell.html'), 'utf8');
   const lowLevel = fs.readFileSync(path.join(__dirname, 'chart-card.js'), 'utf8');
   assert.match(canvas, /createAitsChartPanelAdapter\(\{ renderChart: createChartCard, maxPanels: 6 \}\)/);
   assert.equal((canvas.match(/createChartCard\(/g) || []).length, 0, 'entry point must not call low-level renderer directly');
-  assert.match(canvas, /async function renderLiveChart[\s\S]*void mountAitsChartPanel/);
+  assert.match(canvas, /async function renderLiveChart[\s\S]*mountAitsChartPanel\(card, chartBody, descriptor\)\.then\(/);
   assert.doesNotMatch(
     canvas.slice(canvas.indexOf('async function renderLiveChart'), canvas.indexOf('function renderFreeCanvas')),
     /await mountAitsChartPanel/,

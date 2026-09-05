@@ -114,6 +114,14 @@ test('only a real data chart session registers reload authority and exact result
   };
   assert.equal(reload.registerPaint({ renderState: 'timeout', rendererId: null, panelId: null, generation: null }, source), false);
   assert.equal(reload.has('panel-1'), false);
+  // 껍질만 뜬 차트('loading')와 마운트 결과를 못 받은 차트('timeout')는 완전한
+  // 패널 신원을 실어 와도 재조회 권위를 얻지 못한다.
+  const shellOnly = {
+    rendererId: AITS_CHART_RENDERER_ID, panelId: 'panel-1', generation: 4,
+  };
+  assert.equal(reload.registerPaint({ ...shellOnly, renderState: 'loading' }, source), false);
+  assert.equal(reload.registerPaint({ ...shellOnly, renderState: 'timeout' }, source), false);
+  assert.equal(reload.has('panel-1'), false);
   const active = authority();
   const request = active.buildDataset({ panelId: 'panel-1', generation: 4, period: 'D' });
   assert.throws(() => active.acceptResult(request, { ok: false, canvases: [] }), /데이터 카드/);

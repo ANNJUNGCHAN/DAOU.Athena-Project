@@ -551,6 +551,12 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
     const chartImportReadyAt = card && card.dataset.chartImportReadyAt
       ? Number(card.dataset.chartImportReadyAt) : null;
     const paint = await waitForVisiblePaint(card);
+    // 차트는 껍질만 먼저 뜬다. 마운트 결과가 아직이면 pending으로 알리고, 결과가
+    // 나오면 같은 correlation으로 최종 상태를 한 번 더 보낸다 — main은 그 값으로
+    // 재조회 권위·실시간 등록·데이터 카드 집계를 결정한다.
+    const chartSettled = card && card.dataset.renderState === 'loading' && card.dataset.chartPanelId
+      ? chartMountSettlements.get(card.dataset.chartPanelId) || null
+      : null;
     window.athena.send('athena:rest-canvas-painted', {
       dataset_id: correlation.dataset_id,
       item_id: correlation.item_id,
@@ -558,6 +564,7 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
       operation_ref: payload.operationRef,
       canvas_type: payload.canvasType,
       render_state: card && card.dataset.renderState ? card.dataset.renderState : 'data',
+      pending: !!chartSettled,
       renderer_id: card && card.dataset.rendererId ? card.dataset.rendererId : null,
       panel_id: card && card.dataset.chartPanelId ? card.dataset.chartPanelId : null,
       generation: card && card.dataset.chartGeneration ? Number(card.dataset.chartGeneration) : null,
@@ -572,6 +579,22 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
       dom_to_paint_ack_ms: Math.max(0, paint.visiblePaintAt - domAttachedAt),
       rect: paint.rect,
     });
+    if (chartSettled) {
+      const mountedState = await chartSettled;
+      window.athena.send('athena:rest-canvas-painted', {
+        dataset_id: correlation.dataset_id,
+        item_id: correlation.item_id,
+        ordinal: correlation.ordinal,
+        operation_ref: payload.operationRef,
+        canvas_type: payload.canvasType,
+        render_state: mountedState,
+        renderer_id: card.dataset.rendererId || null,
+        panel_id: card.dataset.chartPanelId || null,
+        generation: card.dataset.chartGeneration ? Number(card.dataset.chartGeneration) : null,
+        verified_visible: true,
+        pending: false,
+      });
+    }
   } catch (error) {
     window.athena.send('athena:rest-canvas-painted', {
       dataset_id: correlation.dataset_id,
@@ -1427,6 +1450,19 @@ async function reloadExistingAitsChartPanel(descriptor, envelope, integratedRoot
   return card;
 }
 
+// 통합 카드는 임시 카드의 body 자식을 root 패널로 옮기고 임시 카드를 지운다. 차트
+// 마운트는 그보다 늦게 끝나므로 늦은 기록은 살아 있는 카드를 다시 찾아 써야 한다 —
+// 안 그러면 renderState도 오류 문구도 이미 지워진 노드에만 남는다.
+function liveChartCard(card, chartBody) {
+  const host = chartBody && chartBody.isConnected ? chartBody.closest('.card') : null;
+  if (host) return host;
+  return card && card.isConnected ? card : null;
+}
+
+// panelId별 차트 마운트 결과('data'/'empty'/'error'). 첫 paint ack가 pending으로
+// 나간 뒤 후속 ack가 여기서 최종 상태를 기다린다.
+const chartMountSettlements = new Map();
+
 async function mountAitsChartPanel(card, chartBody, descriptor) {
   // panel identity와 provisional disposer를 await 전에 등록한다. 같은 panel의
   // 동시 reload/dataset 교체가 늦은 mount를 두 번째 renderer로 만들지 못한다.
@@ -1481,14 +1517,15 @@ async function mountAitsChartPanel(card, chartBody, descriptor) {
   });
   const session = await aitsChartPanels.openPanel(chartBody, descriptor.body, descriptor.context);
   mountedChartSessions.set(descriptor.panelId, session);
-  Object.defineProperty(card, '__athenaChartSessionId', {
+  const mounted = liveChartCard(card, chartBody) || card;
+  Object.defineProperty(mounted, '__athenaChartSessionId', {
     value: session.sessionId, configurable: true, writable: true,
   });
-  Object.defineProperty(card, '__athenaChartTrId', {
+  Object.defineProperty(mounted, '__athenaChartTrId', {
     value: session.body.trId, configurable: true, writable: true,
   });
-  card.dataset.chartGeneration = String(session.generation);
-  card.dataset.renderState = session.body.candles.length ? 'data' : 'empty';
+  mounted.dataset.chartGeneration = String(session.generation);
+  mounted.dataset.renderState = session.body.candles.length ? 'data' : 'empty';
   return session;
 }
 
@@ -2047,17 +2084,30 @@ async function renderLiveChart(envelope, integratedRoot = null) {
   chartBody.className = 'chart-card-body';
   body.appendChild(chartBody);
   // 첫 피드백 3초 계약 — AITS 라이브러리 로드를 기다리면 paint ack가 마감을
-  // 넘긴다. 카드 껍질을 먼저 붙이고 패널은 뒤에서 채운다.
-  void mountAitsChartPanel(card, chartBody, descriptor).catch((err) => {
-    chartBody.remove();
-    card.dataset.renderState = 'error';
-    delete card.dataset.chartAuthority;
-    delete card.dataset.rendererId;
-    delete card.dataset.chartPanelId;
-    delete card.dataset.chartGeneration;
-    delete card.__athenaChartSessionId;
-    delete card.__athenaChartTrId;
-    body.appendChild(errorNote(`차트를 그리지 못했다 — ${err && err.message ? err.message : String(err)}`));
+  // 넘긴다. 카드 껍질을 먼저 붙이고 패널은 뒤에서 채운다. 그 사이 상태는
+  // 'loading'이다 — 빈 dataset이 paint ack의 'data' 폴백으로 새면 마운트에
+  // 실패한 차트가 데이터 카드로 집계된다.
+  card.dataset.renderState = 'loading';
+  const settled = mountAitsChartPanel(card, chartBody, descriptor).then(
+    (session) => (session.body.candles.length ? 'data' : 'empty'),
+    (err) => {
+      const host = liveChartCard(card, chartBody) || card;
+      const hostBody = chartBody.parentElement || body;
+      chartBody.remove();
+      host.dataset.renderState = 'error';
+      delete host.dataset.chartAuthority;
+      delete host.dataset.rendererId;
+      delete host.dataset.chartPanelId;
+      delete host.dataset.chartGeneration;
+      delete host.__athenaChartSessionId;
+      delete host.__athenaChartTrId;
+      hostBody.appendChild(errorNote(`차트를 그리지 못했다 — ${err && err.message ? err.message : String(err)}`));
+      return 'error';
+    },
+  );
+  chartMountSettlements.set(descriptor.panelId, settled);
+  void settled.then(() => {
+    if (chartMountSettlements.get(descriptor.panelId) === settled) chartMountSettlements.delete(descriptor.panelId);
   });
   return card;
 }

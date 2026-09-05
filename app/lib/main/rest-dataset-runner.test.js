@@ -184,6 +184,28 @@ test('visible AITS renderer error is feedback, never a successful data canvas', 
   assert.equal(result.canvases[0].generation, 1);
 });
 
+test('마운트 결과를 못 받은 차트는 timeout으로 집계되고 데이터 카드가 아니다', async () => {
+  const result = await runRestDataset({
+    dataset: dataset(),
+    backendBase: 'http://backend',
+    fetchImpl: successfulFetch(),
+    emitCanvas: async (payload) => ({
+      verifiedVisible: true,
+      // 껍질은 3초 안에 떴다 — 첫 피드백 계약은 지켜진다.
+      visiblePaintAt: payload.requestStartedAt + 20,
+      renderState: 'timeout',
+      rendererId: 'aits-chart-v1',
+      panelId: 'panel-1',
+      generation: 1,
+    }),
+  });
+  assert.equal(result.feedbackOk, true);
+  assert.equal(result.canvases[0].renderState, 'timeout');
+  assert.equal(result.canvases[0].isDataCanvas, false);
+  assert.equal(result.dataCanvasCount, 0);
+  assert.equal(result.ok, false);
+});
+
 test('render-plan deadline uses the remaining three-second budget with paint reserve', async () => {
   let now = 10_000;
   let renderRequest = null;
