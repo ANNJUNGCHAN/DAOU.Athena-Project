@@ -122,9 +122,11 @@ test('AITS chart keeps its TR identity in internal state and never stamps it int
   const probe = fs.readFileSync(path.join(__dirname, '..', 'probe-live-chart.js'), 'utf8');
   assert.doesNotMatch(canvas, /dataset\.chart(?:TrId|SessionId)|data-chart-(?:tr|session)-id/i);
   assert.match(mount, /aitsChartPanels\.openPanel\(chartBody, descriptor\.body, descriptor\.context\)/);
-  assert.match(mount, /Object\.defineProperty\(card, '__athenaChartTrId'/);
+  // 마운트가 끝난 시점의 카드는 통합 root일 수 있다(liveChartCard) — 어느 쪽이든
+  // TR 신원은 JS 상태로만 남고 DOM 속성이 되지 않는다.
+  assert.match(mount, /Object\.defineProperty\(mounted, '__athenaChartTrId'/);
   assert.match(mount, /value: session\.body\.trId/);
-  assert.match(mount, /Object\.defineProperty\(card, '__athenaChartSessionId'/);
+  assert.match(mount, /Object\.defineProperty\(mounted, '__athenaChartSessionId'/);
   assert.match(probe, /card\.__athenaChartTrId/);
   assert.doesNotMatch(probe, /dataset\.chartTrId|data-chart-tr-id/i);
 });
